@@ -272,7 +272,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             ],
             'CSS with error does not get inlined' => [
                 '<html><p></p></html>',
-                \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX,
+                \Magento\Framework\Css\PreProcessor\AdapterInterface::ERROR_MESSAGE_PREFIX,
                 ['<html><p></p></html>'],
             ],
             'Ensure disableStyleBlocksParsing option is working' => [

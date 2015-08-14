@@ -284,7 +284,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             'File with compilation error results in error message' => [
                 TemplateTypesInterface::TYPE_HTML,
                 'file="css/file-with-error.css"',
-                Oyejorge::ERROR_MESSAGE_PREFIX,
+                \Magento\Framework\Css\PreProcessor\AdapterInterface::ERROR_MESSAGE_PREFIX,
             ],
         ];
     }
@@ -366,7 +366,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             ],
             'Developer mode - File with compilation error results in error message' => [
                 '<html><p></p> {{inlinecss file="css/file-with-error.css"}}</html>',
-                Oyejorge::ERROR_MESSAGE_PREFIX,
+                \Magento\Framework\Css\PreProcessor\AdapterInterface::ERROR_MESSAGE_PREFIX,
                 false,
             ],
         ];
