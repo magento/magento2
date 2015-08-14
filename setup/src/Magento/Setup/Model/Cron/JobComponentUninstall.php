@@ -127,7 +127,12 @@ class JobComponentUninstall extends AbstractJob
         }
 
         $componentName = $component[self::COMPONENT_NAME];
-        $type = $this->composerInformation->getInstalledMagentoPackages()[$componentName]['type'];
+        $installedPackages = $this->composerInformation->getInstalledMagentoPackages();
+        if (isset($installedPackages[$componentName]['type'])) {
+            $type = $installedPackages[$componentName]['type'];
+        } else {
+            throw new \RuntimeException('Component type not set');
+        }
 
         if (!in_array($type, [self::COMPONENT_MODULE, self::COMPONENT_THEME, self::COMPONENT_LANGUAGE])) {
             throw new \RuntimeException('Unknown component type');
