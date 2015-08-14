@@ -161,34 +161,6 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Processing object after save data
-     *
-     * @return $this
-     */
-    public function afterSave()
-    {
-        $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
-        if ($indexer->getState()->getStatus() !== StateInterface::STATUS_INVALID) {
-            $this->_getResource()->addCommitCallback([$this, 'reindex']);
-        }
-        return parent::afterSave();
-    }
-
-    /**
-     * Init indexing process after visitor save
-     *
-     * @return void
-     */
-    public function reindex()
-    {
-        if ($this->getCustomerId()) {
-            /** @var \Magento\Framework\Indexer\IndexerInterface $indexer */
-            $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
-            $indexer->reindexRow($this->getCustomerId());
-        }
-    }
-
-    /**
      * Save visitor by request
      *
      * Used in event "controller_action_postdispatch"
