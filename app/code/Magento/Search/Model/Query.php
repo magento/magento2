@@ -241,7 +241,6 @@ class Query extends AbstractModel implements QueryInterface
      */
     public function saveIncrementalPopularity()
     {
-        $this->incrementPopularity();
         $this->getResource()->saveIncrementalPopularity($this);
 
         return $this;
@@ -259,24 +258,6 @@ class Query extends AbstractModel implements QueryInterface
     {
         $this->setNumResults($numResults);
         $this->getResource()->saveNumResults($this);
-
-        return $this;
-    }
-
-    /**
-     * Increment popularity
-     *
-     * @return $this
-     */
-    public function incrementPopularity()
-    {
-        $popularity = $this->getPopularity();
-
-        if (is_numeric($popularity) && $popularity > 0) {
-            $this->setPopularity($popularity + 1);
-        } else {
-            $this->setPopularity(1);
-        }
 
         return $this;
     }
