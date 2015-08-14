@@ -3,6 +3,8 @@
  * @version v2.1.1
  * @link http://swagger.io
  * @license Apache-2.0
+ *
+ * Modified by X.Commerce, Inc. d/b/a/ Magento, Inc., Modifications © 2015 X.Commerce, Inc. d/b/a/ Magento, Inc
  */
 (function(){this["Handlebars"] = this["Handlebars"] || {};
 this["Handlebars"]["templates"] = this["Handlebars"]["templates"] || {};
