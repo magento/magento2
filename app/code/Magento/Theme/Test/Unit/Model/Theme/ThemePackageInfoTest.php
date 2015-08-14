@@ -35,15 +35,18 @@ class ThemePackageInfoTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPackageName()
     {
-        $this->dirRead->expects($this->once())->method('isExist')->willReturn(true);
-        $this->dirRead->expects($this->once())->method('readFile')->willReturn('{"name": "package"}');
+        $this->dirRead->expects($this->once())->method('isExist')->with('themeA/composer.json')->willReturn(true);
+        $this->dirRead->expects($this->once())
+            ->method('readFile')
+            ->with('themeA/composer.json')
+            ->willReturn('{"name": "package"}');
         $this->assertEquals('package', $this->themePackageInfo->getPackageName('themeA'));
     }
 
     public function testGetPackageNameNonExist()
     {
-        $this->dirRead->expects($this->once())->method('isExist')->willReturn(false);
-        $this->dirRead->expects($this->never())->method('readFile');
+        $this->dirRead->expects($this->once())->method('isExist')->with('themeA/composer.json')->willReturn(false);
+        $this->dirRead->expects($this->never())->method('readFile')->with('themeA/composer.json');
         $this->assertEquals('', $this->themePackageInfo->getPackageName('themeA'));
     }
 

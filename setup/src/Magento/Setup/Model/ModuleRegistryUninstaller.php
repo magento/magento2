@@ -86,13 +86,13 @@ class ModuleRegistryUninstaller
         $output->writeln(
             '<info>Removing ' . implode(', ', $modules) .  ' from module list in deployment configuration</info>'
         );
-        $existingModules = $this->deploymentConfig->getConfigData(
+        $configuredModules = $this->deploymentConfig->getConfigData(
             \Magento\Framework\Config\ConfigOptionsListConstants::KEY_MODULES
         );
-        $newSort = $this->loader->load($modules);
+        $existingModules = $this->loader->load($modules);
         $newModules = [];
-        foreach (array_keys($newSort) as $module) {
-            $newModules[$module] = isset($existingModules[$module]) ? $existingModules[$module] : 0;
+        foreach (array_keys($existingModules) as $module) {
+            $newModules[$module] = isset($configuredModules[$module]) ? $configuredModules[$module] : 0;
         }
         $this->writer->saveConfig(
             [
