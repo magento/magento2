@@ -48,6 +48,7 @@ class Request extends \Magento\Framework\Webapi\Request
      * Initialize dependencies
      *
      * @param \Magento\Framework\Stdlib\Cookie\CookieReaderInterface $cookieReader
+     * @param \Magento\Framework\Stdlib\StringUtils $converter
      * @param \Magento\Framework\App\AreaList $areaList
      * @param \Magento\Framework\Config\ScopeInterface $configScope
      * @param \Magento\Framework\Webapi\Rest\Request\DeserializerFactory $deserializerFactory
@@ -55,12 +56,13 @@ class Request extends \Magento\Framework\Webapi\Request
      */
     public function __construct(
         \Magento\Framework\Stdlib\Cookie\CookieReaderInterface $cookieReader,
+        \Magento\Framework\Stdlib\StringUtils $converter,
         \Magento\Framework\App\AreaList $areaList,
         \Magento\Framework\Config\ScopeInterface $configScope,
         \Magento\Framework\Webapi\Rest\Request\DeserializerFactory $deserializerFactory,
         $uri = null
     ) {
-        parent::__construct($cookieReader, $areaList, $configScope, $uri);
+        parent::__construct($cookieReader, $converter, $areaList, $configScope, $uri);
         $this->_deserializerFactory = $deserializerFactory;
     }
 
