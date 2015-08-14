@@ -237,6 +237,13 @@ define([
                         break;
                 }
             }, this);
+            var formValid = true;
+            _.each($('[data-role=attributes-values-form]'), function(form) {
+                formValid = $(form).valid() ? formValid : false;
+            });
+            if (!formValid) {
+                throw new Error($.mage.__('Please, fill correct values'));
+            }
         },
         validateImage: function() {
             switch (this.sections().images.type()) {
