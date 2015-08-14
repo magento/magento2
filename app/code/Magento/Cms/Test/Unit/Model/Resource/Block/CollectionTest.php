@@ -6,6 +6,7 @@
 namespace Magento\Cms\Test\Unit\Model\Resource\Block;
 
 use Magento\Cms\Test\Unit\Model\Resource\AbstractCollectionTest;
+use Magento\Framework\DataObject;
 
 class CollectionTest extends AbstractCollectionTest
 {
@@ -31,23 +32,17 @@ class CollectionTest extends AbstractCollectionTest
     {
         $storeId = 1;
 
+        $expectedFilter = new DataObject(
+            [
+                'field' => 'store',
+                'value' => ['in' => [1]],
+                'type' => 'public'
+            ]
+        );
+
         $this->assertSame($this->collection, $this->collection->addFieldToFilter('store_id', $storeId));
-    }
-
-    public function testFieldToFilterStoreAdded()
-    {
-        $field = 'store';
-        $value = ['in' => ['1']];
-        $type = 'public';
-
-        $dataObject = new \Magento\Framework\DataObject();
-        $dataObject->setData('field', $field);
-        $dataObject->setData('value', $value);
-        $dataObject->setData('type', $type);
-
-        $this->collection->addFilter($field, $value, $type);
-
-        $this->assertEquals($dataObject, $this->collection->getFilter($field));
+        // addition call to make sure that correct value was set to filter
+        $this->assertEquals($expectedFilter, $this->collection->getFilter('store'));
     }
 
     public function testAddFieldToFilter()
@@ -64,21 +59,5 @@ class CollectionTest extends AbstractCollectionTest
             ->with($searchSql, null, \Magento\Framework\DB\Select::TYPE_CONDITION);
 
         $this->assertSame($this->collection, $this->collection->addFieldToFilter($field, $value));
-    }
-
-    public function testFieldToFilterAdded()
-    {
-        $field = 'is_active';
-        $value = ['eq' => ['1']];
-        $type = 'public';
-
-        $dataObject = new \Magento\Framework\DataObject();
-        $dataObject->setData('field', $field);
-        $dataObject->setData('value', $value);
-        $dataObject->setData('type', $type);
-
-        $this->collection->addFilter($field, $value, $type);
-
-        $this->assertEquals($dataObject, $this->collection->getFilter($field));
     }
 }
