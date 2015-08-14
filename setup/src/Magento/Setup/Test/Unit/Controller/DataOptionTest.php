@@ -67,7 +67,7 @@ class DataOptionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($viewModel->terminate());
     }
 
-    public function testHasNoUninstallAction()
+    public function testNoHasUninstallAction()
     {
         $this->request->expects($this->any())->method('getContent')->willReturn('');
         $this->controller->setEvent($this->mvcEvent);
@@ -79,7 +79,7 @@ class DataOptionTest extends \PHPUnit_Framework_TestCase
      * @param string $content
      * @param array $expected
      * @param bool $result
-     * @dataProvider uninstallActionDataProvider
+     * @dataProvider hasUninstallActionDataProvider
      */
     public function testHasUninstallAction($content, $expected, $result)
     {
@@ -99,12 +99,12 @@ class DataOptionTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function uninstallActionDataProvider()
+    public function hasUninstallActionDataProvider()
     {
         $content = '{"moduleName": "some_module"}';
         return [
-            "option1" => [$content, ['module'], true],
-            "option2" => [$content, [], false],
+            'module has uninstall class' => [$content, ['module'], true],
+            'module does not have uninstall class' => [$content, [], false],
         ];
     }
 }
