@@ -8,6 +8,6 @@
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/layout_generic.xsd">
     <update handle="catalog_product_superconfig_config"/>
     <container name="root">
-        <block class="Magento\Backend\Block\Widget\Grid\Container" name="admin.product.edit.tab.super.config.grid.container" template="Magento_Backend::widget/grid/container/empty.phtml"/>
+        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Grid\AssociatedProduct" name="admin.product.edit.tab.super.config.grid.container"  template="Magento_ConfigurableProduct::catalog/product/edit/super/associated-product-grid.phtml"/>
     </container>
 </layout>
