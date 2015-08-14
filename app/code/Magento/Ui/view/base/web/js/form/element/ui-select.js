@@ -107,8 +107,17 @@ define([
          * @param {String} index - element index
          * @return {Boolean}
          */
-        isHovered: function (index) {
-            return this.hoverElIndex() === index;
+        isHovered: function (index, elem) {
+            var status = this.hoverElIndex() === index;
+            if (status &&
+                elem.offsetTop > elem.parentNode.offsetTop + elem.parentNode.offsetHeight ||
+                status &&
+                elem.parentNode.scrollTop > elem.offsetTop
+            ) {
+                elem.parentNode.scrollTop = elem.offsetTop;
+            }
+
+            return status;
         },
 
         /**
@@ -178,7 +187,7 @@ define([
         enterKeyHandler: function () {
             if (this.listVisible()) {
                 if (!_.isNull(this.hoverElIndex())) {
-                    this.toggleOptionSelected(this.options[this.hoverElIndex()]);
+                    this.toggleOptionSelected(this.options()[this.hoverElIndex()]);
                 }
             } else {
                 this.setListVisible(true);
@@ -198,7 +207,7 @@ define([
          */
         pageDownKeyHandler: function () {
             if (!_.isNull(this.hoverElIndex())) {
-                if (this.hoverElIndex() !== this.options.length - 1) {
+                if (this.hoverElIndex() !== this.options().length - 1) {
                     this.hoverElIndex(this.hoverElIndex() + 1);
                 } else {
                     this.hoverElIndex(0);
@@ -217,10 +226,10 @@ define([
                 if (this.hoverElIndex() !== 0) {
                     this.hoverElIndex(this.hoverElIndex() - 1);
                 } else {
-                    this.hoverElIndex(this.options.length - 1);
+                    this.hoverElIndex(this.options().length - 1);
                 }
             } else {
-                this.hoverElIndex(this.options.length - 1);
+                this.hoverElIndex(this.options().length - 1);
             }
         },
 
