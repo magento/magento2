@@ -185,13 +185,6 @@
         </arguments>
         <plugin name="categoryIdAggregation" type="Magento\CatalogSearch\Model\Adapter\Mysql\Plugin\Aggregation\Category\DataProvider" />
     </type>
-    <type name="Magento\Catalog\Model\Layer\Resolver">
-        <arguments>
-            <argument name="layersPool" xsi:type="array">
-                <item name="advanced" xsi:type="string">Magento\CatalogSearch\Model\Layer\Advanced</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Search\Adapter\Mysql\Mapper">
         <arguments>
             <argument name="indexProviders" xsi:type="array">

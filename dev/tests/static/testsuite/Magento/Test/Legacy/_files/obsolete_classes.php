@@ -3824,10 +3824,8 @@ return [
     ['Magento\Checkout\Model\Observer', 'corresponding classes in Magento\Checkout\Observer\*'],
     ['Magento\CurrencySymbol\Model\Observer', 'corresponding classes in Magento\CurrencySymbol\Observer\*'],
     ['Magento\Catalog\Model\Product\Image\View'],
-    [
-        'Magento\CatalogSearch\Model\Layer\Advanced',
-        'Magento\CatalogSearch\Model\Layer\Advanced\CollectionFilter',
-        'Magento\CatalogSearch\Model\Layer\Advanced\Context',
-        'Magento\CatalogSearch\Model\Layer\Advanced\FilterableAttributeList'
-    ],
+    ['Magento\CatalogSearch\Model\Layer\Advanced'],
+    ['Magento\CatalogSearch\Model\Layer\Advanced\CollectionFilter'],
+    ['Magento\CatalogSearch\Model\Layer\Advanced\Context'],
+    ['Magento\CatalogSearch\Model\Layer\Advanced\FilterableAttributeList'],
 ];
