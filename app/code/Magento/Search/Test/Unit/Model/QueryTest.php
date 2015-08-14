@@ -51,6 +51,5 @@ class QueryTest extends \PHPUnit_Framework_TestCase
         $result = $this->model->saveIncrementalPopularity();
 
         $this->assertEquals($this->model, $result);
-        $this->assertEquals(1, $this->model->getPopularity());
     }
 }
