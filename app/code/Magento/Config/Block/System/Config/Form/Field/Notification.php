@@ -6,7 +6,7 @@
 namespace Magento\Config\Block\System\Config\Form\Field;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
-use Magento\Framework\Stdlib\DateTime\DateTimeFormatter;
+use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
 /**
  * Backend system config datetime field renderer
@@ -14,18 +14,18 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatter;
 class Notification extends \Magento\Config\Block\System\Config\Form\Field
 {
     /**
-     * @var DateTimeFormatter
+     * @var DateTimeFormatterInterface
      */
     protected $dateTimeFormatter;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param DateTimeFormatter $dateTimeFormatter
+     * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        DateTimeFormatter $dateTimeFormatter,
+        DateTimeFormatterInterface $dateTimeFormatter,
         array $data = []
     ) {
         parent::__construct($context, $data);

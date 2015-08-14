@@ -18,18 +18,12 @@ class NotificationTest extends \PHPUnit_Framework_TestCase
         $testCacheValue = '1433259723';
         $testDatetime = (new \DateTime(null, new \DateTimeZone('UTC')))->setTimestamp($testCacheValue);
 
-        /** @var \Magento\Framework\Stdlib\DateTime\DateTimeFormatter $dateTimeFormatter */
+        /** @var \Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface $dateTimeFormatter */
         $dateTimeFormatter = $objectManager->getObject('Magento\Framework\Stdlib\DateTime\DateTimeFormatter');
         $formattedDate = $dateTimeFormatter->formatObject($testDatetime);
 
         $htmlId = 'test_HTML_id';
         $label = 'test_label';
-
-        $cacheMock = $this->getMockBuilder('Magento\Framework\App\CacheInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(['load', 'getFrontend', 'remove', 'save', 'clean'])
-            ->getMock();
-        $cacheMock->expects($this->any())->method('load')->willReturn($testCacheValue);
 
         $localeDateMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\TimezoneInterface')
             ->disableOriginalConstructor()
@@ -44,11 +38,18 @@ class NotificationTest extends \PHPUnit_Framework_TestCase
         $elementMock->expects($this->any())->method('getHtmlId')->willReturn($htmlId);
         $elementMock->expects($this->any())->method('getLabel')->willReturn($label);
 
+        $dateTimeFormatter = $this->getMock('Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface');
+        $dateTimeFormatter->expects($this->once())
+            ->method('formatObject')
+            ->with($testDatetime)
+            ->willReturn($formattedDate);
+
+        /** @var \Magento\Config\Block\System\Config\Form\Field\Notification $notification */
         $notification = $objectManager->getObject(
             'Magento\Config\Block\System\Config\Form\Field\Notification',
             [
-                'cache'      => $cacheMock,
                 'localeDate' => $localeDateMock,
+                'dateTimeFormatter' => $dateTimeFormatter,
             ]
         );
 

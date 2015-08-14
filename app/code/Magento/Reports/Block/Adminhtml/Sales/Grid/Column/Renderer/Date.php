@@ -6,7 +6,7 @@
 namespace Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer;
 
 use Magento\Framework\Locale\Bundle\DataBundle;
-use Magento\Framework\Stdlib\DateTime\DateTimeFormatter;
+use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
 /**
  * Adminhtml grid item renderer date
@@ -18,13 +18,13 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
      *
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param DateTimeFormatter $dateTimeFormatter
+     * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        DateTimeFormatter $dateTimeFormatter,
+        DateTimeFormatterInterface $dateTimeFormatter,
         array $data = []
     ) {
         parent::__construct($context, $dateTimeFormatter, $data);

@@ -8,9 +8,9 @@ namespace Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * @package Magento\Framework
+ * {@inheritdoc}
  */
-class DateTimeFormatter
+class DateTimeFormatter implements DateTimeFormatterInterface
 {
     /**
      * @var bool
@@ -28,12 +28,7 @@ class DateTimeFormatter
     }
 
     /**
-     * Returns a translated and localized date string
-     *
-     * @param \IntlCalendar|\DateTime $object
-     * @param string|int|array|null $format
-     * @param string|null $locale
-     * @return string
+     * {@inheritdoc}
      */
     public function formatObject($object, $format = null, $locale = null)
     {
