@@ -115,12 +115,13 @@ abstract class ImportResult extends Import
     protected function createErrorReport(ProcessingErrorAggregatorInterface $errorAggregator)
     {
         $this->historyModel->loadLastInsertItem();
-        $sourceFile = $this->reportHelper->getReportAbsolutePath($this->historyModel->getData('imported_file'));
-        $fileName = $this->reportProcessor->createReport($sourceFile, $errorAggregator, true);
-        $this->historyModel->addErrorFile($fileName);
+        $sourceFile = $this->reportHelper->getReportAbsolutePath($this->historyModel->getImportedFile());
+        $writeOnlyErrorItems = true;
         if ($this->historyModel->getData('execution_time') == History::IMPORT_VALIDATION) {
-            $fileName = $this->reportProcessor->createReport($sourceFile, $errorAggregator, false);
+            $writeOnlyErrorItems = false;
         }
+        $fileName = $this->reportProcessor->createReport($sourceFile, $errorAggregator, $writeOnlyErrorItems);
+        $this->historyModel->setErrorFile($fileName);
         return $fileName;
     }
 
