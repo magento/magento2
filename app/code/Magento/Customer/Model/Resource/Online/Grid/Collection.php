@@ -21,6 +21,11 @@ use Psr\Log\LoggerInterface as Logger;
 class Collection extends SearchResult
 {
     /**
+     * Value of seconds in one minute
+     */
+    const SECONDS_IN_MINUTE = 60;
+
+    /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $date;
@@ -64,7 +69,7 @@ class Collection extends SearchResult
     {
         parent::_initSelect();
         $connection = $this->getConnection();
-        $lastDate = $this->date->gmtTimestamp() - $this->visitorModel->getOnlineInterval() * 60;
+        $lastDate = $this->date->gmtTimestamp() - $this->visitorModel->getOnlineInterval() * self::SECONDS_IN_MINUTE;
         $this->getSelect()->joinLeft(
             ['customer' => $this->getTable('customer_entity')],
             'customer.entity_id = main_table.customer_id',
@@ -73,11 +78,10 @@ class Collection extends SearchResult
             'main_table.last_visit_at >= ?',
             $connection->formatDate($lastDate)
         );
-
         $expression = $connection->getCheckSql(
             'main_table.customer_id IS NOT NULL AND main_table.customer_id != 0',
-            '\'' . Visitor::VISITOR_TYPE_CUSTOMER . '\'',
-            '\'' . Visitor::VISITOR_TYPE_VISITOR . '\''
+            $connection->quote(Visitor::VISITOR_TYPE_CUSTOMER),
+            $connection->quote(Visitor::VISITOR_TYPE_VISITOR)
         );
         $this->getSelect()->columns(['visitor_type' => $expression]);
         return $this;
