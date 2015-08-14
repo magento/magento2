@@ -54,6 +54,11 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
     protected $_objectHelper;
 
     /**
+     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $_product;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -101,6 +106,8 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
+        $this->_product = $this->getMock('Magento\Catalog\Model\Product', ['getMediaGallery'], [], '', false);
 
         $this->_model = $this->_objectHelper->getObject(
             'Magento\ConfigurableProduct\Model\Product\VariationHandler',
@@ -258,5 +265,85 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
         $newSimpleProductMock->expects($this->once())->method('getId')->willReturn('product_id');
 
         $this->assertEquals(['product_id'], $this->_model->generateSimpleProducts($parentProductMock, $productsData));
+    }
+
+    public function testProcessMediaGalleryWithImagesAndGallery()
+    {
+        $this->_product->expects($this->atLeastOnce())->method('getMediaGallery')->with('images')->willReturn([]);
+        $productData['image'] = 'test11';
+        $productData['media_gallery']['images'] = [
+            [
+                'file' => 'test11'
+            ]
+        ];
+        $result = $this->_model->processMediaGallery($this->_product, $productData);
+        $this->assertEquals($productData,$result);
+    }
+
+    public function testProcessMediaGalleryIfImageIsEmptyButProductMediaGalleryIsNotEmpty()
+    {
+        $this->_product->expects($this->atLeastOnce())->method('getMediaGallery')->with('images')->willReturn([]);
+        $productData['image'] = false;
+        $productData['media_gallery']['images'] = [
+            [
+                'name' => 'test'
+            ]
+        ];
+        $result = $this->_model->processMediaGallery($this->_product, $productData);
+        $this->assertEquals($productData,$result);
+    }
+
+    public function testProcessMediaGalleryIfProductDataHasNoImagesAndGallery()
+    {
+        $this->_product->expects($this->once())->method('getMediaGallery')->with('images')->willReturn([]);
+        $productData['image'] = false;
+        $productData['media_gallery']['images'] = false;
+        $result = $this->_model->processMediaGallery($this->_product, $productData);
+        $this->assertEquals($productData,$result);
+    }
+
+    /**
+     * @dataProvider productDataProviderForProcessMediaGalleryForFillingGallery
+     */
+    public function testProcessMediaGalleryForFillingGallery($productArr, $expected)
+    {
+        $this->assertEquals($expected,$this->_model->processMediaGallery($this->_product, $productArr));
+    }
+
+    public function productDataProviderForProcessMediaGalleryForFillingGallery()
+    {
+        return [
+            'empty array' => [
+                [], []
+            ],
+            'array only with empty image' => [
+                'given' => [
+                    'image'
+                ],
+                'expected' => [
+                    'image'
+                ]
+            ],
+            'empty array with not empty image' => [
+                'given' => [
+                    'image' => 1
+                ],
+                'expected' => [
+                    'thumbnail' => 1,
+                    'media_gallery' => [
+                        'images' => [
+                            0 => [
+                                'position' => 1,
+                                'file' => '1',
+                                'disabled' => 0,
+                                'label' => '',
+                            ]
+                        ]
+                    ],
+                    'image' => 1,
+                    'small_image' => 1,
+                ],
+            ],
+        ];
     }
 }
