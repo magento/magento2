@@ -24,7 +24,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $installer = $setup;
         $installer->startSetup();
         $installer->getConnection()->addColumn(
-            $installer->getTable('importexport_history'),
+            $installer->getTable('import_history'),
             'error_file',
             [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
