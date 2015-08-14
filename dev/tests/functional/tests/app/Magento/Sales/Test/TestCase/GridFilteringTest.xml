@@ -71,7 +71,7 @@
             </data>
             <data name="pageClass" xsi:type="string">Magento\Shipping\Test\Page\Adminhtml\ShipmentIndex</data>
             <data name="gridRetriever" xsi:type="string">getShipmentsGrid</data>
-            <data name="idColumn" xsi:type="string">Order #</data>
+            <data name="idColumn" xsi:type="string">Order</data>
             <constraint name="Magento\Ui\Test\Constraint\AssertGridFiltering"/>
         </variation>
         <variation name="SalesCreditMemoGridFiltering">
@@ -99,7 +99,7 @@
             </data>
             <data name="pageClass" xsi:type="string">Magento\Sales\Test\Page\Adminhtml\CreditMemoIndex</data>
             <data name="gridRetriever" xsi:type="string">getCreditMemoGrid</data>
-            <data name="idColumn" xsi:type="string">Order #</data>
+            <data name="idColumn" xsi:type="string">Order</data>
             <constraint name="\Magento\Ui\Test\Constraint\AssertGridFiltering"/>
         </variation>
     </testCase>
