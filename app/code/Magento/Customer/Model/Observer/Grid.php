@@ -40,7 +40,7 @@ class Grid
 
     public function syncCustomerGrid()
     {
-        $indexer = $this->indexerRegistry->get(\Magento\Customer\Model\Customer::CUSTOMER_GRID_INDEXER_ID);
+        $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
         $customerIds = $this->getCustomerIdsForReindex();
         if ($customerIds) {
             $indexer->reindexList($customerIds);
@@ -56,13 +56,17 @@ class Grid
             ->from($connection->getTableName($gridTableName), 'last_visit_at')
             ->order('last_visit_at DESC')
             ->limit(1);
-
         $lastVisitAt = $connection->query($select)->fetchColumn();
 
         $select = $connection->select()
             ->from($connection->getTableName('customer_log'), 'customer_id')
             ->where('last_login_at > ?', $lastVisitAt);
 
-        return $connection->query($select)->fetch() ?: [];
+        $customerIds = [];
+        foreach ($connection->query($select)->fetchAll() as $row) {
+            $customerIds[] = $row['customer_id'];
+        }
+
+        return $customerIds;
     }
 }
