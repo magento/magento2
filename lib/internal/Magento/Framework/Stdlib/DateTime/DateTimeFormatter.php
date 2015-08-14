@@ -6,6 +6,7 @@
 namespace Magento\Framework\Stdlib\DateTime;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
 /**
  * {@inheritdoc}
@@ -59,7 +60,7 @@ class DateTimeFormatter implements DateTimeFormatterInterface
             $dateFormat = $timeFormat = \IntlDateFormatter::MEDIUM;
             $pattern = $format;
         } else {
-            throw new LocalizedException(__('Format type is invalid'));
+            throw new LocalizedException(new Phrase('Format type is invalid'));
         }
 
         $timezone = $object->getTimezone();
