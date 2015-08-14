@@ -72,12 +72,13 @@ class Request extends HttpRequest implements RequestInterface
     /**
      * Identify versions of resources that should be used for API configuration generation.
      *
+     * @param string|null $default
      * @return array|string
-     * @throws \Magento\Framework\Webapi\Exception When GET parameters are invalid
+     * @throws Exception
      */
-    public function getRequestedServices()
+    public function getRequestedServices($default = null)
     {
-        $param = $this->getParam(self::REQUEST_PARAM_SERVICES, 'all');
+        $param = $this->getParam(self::REQUEST_PARAM_SERVICES, $default);
         return $this->_convertRequestParamToServiceArray($param);
     }
 
