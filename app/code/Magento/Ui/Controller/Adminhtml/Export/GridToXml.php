@@ -7,16 +7,16 @@ namespace Magento\Ui\Controller\Adminhtml\Export;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Ui\Model\Export\ConvertToCsv;
+use Magento\Ui\Model\Export\ConvertToXml;
 use Magento\Framework\App\Response\Http\FileFactory;
 
 /**
  * Class Render
  */
-class GridToCsv extends Action
+class GridToXml extends Action
 {
     /**
-     * @var ConvertToCsv
+     * @var ConvertToXml
      */
     protected $converter;
 
@@ -27,12 +27,12 @@ class GridToCsv extends Action
 
     /**
      * @param Context $context
-     * @param ConvertToCsv $converter
+     * @param ConvertToXml $converter
      * @param FileFactory $fileFactory
      */
     public function __construct(
         Context $context,
-        ConvertToCsv $converter,
+        ConvertToXml $converter,
         FileFactory $fileFactory
     ) {
         parent::__construct($context);
@@ -41,13 +41,13 @@ class GridToCsv extends Action
     }
 
     /**
-     * Export data provider to CSV
+     * Export data provider to XML
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\App\ResponseInterface
      */
     public function execute()
     {
-        return $this->fileFactory->create('export.csv', $this->converter->getCsvFile(), 'var');
+        return $this->fileFactory->create('export.xml', $this->converter->getXmlFile(), 'var');
     }
 }
