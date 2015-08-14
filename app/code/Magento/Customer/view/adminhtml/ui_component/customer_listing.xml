@@ -23,7 +23,7 @@
     </argument>
     <dataSource name="customer_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument>
+            <argument name="class" xsi:type="string">Magento\Customer\Ui\Component\DataProvider</argument>
             <argument name="name" xsi:type="string">customer_listing_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">entity_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>
