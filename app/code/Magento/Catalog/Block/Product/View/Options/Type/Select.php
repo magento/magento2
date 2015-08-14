@@ -59,7 +59,7 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
                 );
                 $select->addOption(
                     $_value->getOptionTypeId(),
-                    $_value->getTitle() . ' ' . $priceStr . '',
+                    $_value->getTitle() . ' ' . strip_tags($priceStr) . '',
                     ['price' => $this->pricingHelper->currencyByStore($_value->getPrice(true), $store, false)]
                 );
             }
