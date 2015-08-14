@@ -44,19 +44,26 @@ define(
                 this._super();
                 registry.async('checkoutProvider')(function (checkoutProvider) {
                     checkoutDataResolver.resolveEstimationAddress();
-                    var shippingAddress = quote.shippingAddress();
-                    if (shippingAddress) {
-                        var shippingAddressData = addressConverter.quoteAddressToFormAddressData(shippingAddress);
+                    var address = quote.isVirtual() ? quote.billingAddress() : quote.shippingAddress();
+                    if (address) {
+                        var estimatedAddress = addressConverter.quoteAddressToFormAddressData(address);
                         checkoutProvider.set(
                             'shippingAddress',
-                            $.extend({}, checkoutProvider.get('shippingAddress'), shippingAddressData)
+                            $.extend({}, checkoutProvider.get('shippingAddress'), estimatedAddress)
                         );
                     }
-                    checkoutProvider.on('shippingAddress', function (shippingAddressData) {
-                        checkoutData.setShippingAddressFromData(shippingAddressData);
-                    });
+                    if (!quote.isVirtual()) {
+                        checkoutProvider.on('shippingAddress', function (shippingAddressData) {
+                            checkoutData.setShippingAddressFromData(shippingAddressData);
+                        });
+                    } else {
+                        checkoutProvider.on('shippingAddress', function (shippingAddressData) {
+                            checkoutData.setBillingAddressFromData(shippingAddressData);
+                        });
+                    }
                 });
             },
+
 
             /**
              * @override

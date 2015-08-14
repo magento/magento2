@@ -41,6 +41,11 @@ define([
                 selectShippingAddress(address);
             }
             this.applyShippingAddress();
+
+            if (quote.isVirtual && checkoutData.getBillingAddressFromData()) {
+                address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getBillingAddressFromData());
+                selectBillingAddress(address);
+            }
         },
 
         resolveShippingAddress: function () {
