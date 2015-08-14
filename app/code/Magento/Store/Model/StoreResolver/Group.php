@@ -36,7 +36,7 @@ class Group implements ReaderInterface
     {
         $stores = [];
         foreach ($this->storeRepository->getList() as $store) {
-            if ($store->getIsActive() && (int) $store->getGroupId() === $scopeCode) {
+            if ($store->isActive() && (int) $store->getGroupId() === $scopeCode) {
                 $stores[] = $store->getId();
             }
         }

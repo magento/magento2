@@ -108,8 +108,8 @@ class DataProvider implements DataProviderInterface
             $result = preg_match_all($pattern, $content, $matches);
 
             if ($result) {
-                if (isset($matches[1])) {
-                    foreach ($matches[1] as $match) {
+                if (isset($matches[2])) {
+                    foreach ($matches[2] as $match) {
                         $phrases[] = $match;
                     }
                 }

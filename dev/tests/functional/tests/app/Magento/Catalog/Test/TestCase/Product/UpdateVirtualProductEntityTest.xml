@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Catalog\Test\TestCase\Product\UpdateVirtualProductEntityTest">
+    <testCase name="Magento\Catalog\Test\TestCase\Product\UpdateVirtualProductEntityTest" summary="Update Virtual Product" ticketId="MAGETWO-26204">
         <variation name="UpdateVirtualProductEntityTestVariation1">
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
