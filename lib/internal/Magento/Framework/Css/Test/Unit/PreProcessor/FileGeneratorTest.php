@@ -97,7 +97,9 @@ class FileGeneratorTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->relatedGenerator = $this->getMockBuilder('Magento\Framework\Css\PreProcessor\FileGenerator\RelatedGenerator')
+        $this->relatedGenerator = $this->getMockBuilder(
+            'Magento\Framework\Css\PreProcessor\FileGenerator\RelatedGenerator'
+        )
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
