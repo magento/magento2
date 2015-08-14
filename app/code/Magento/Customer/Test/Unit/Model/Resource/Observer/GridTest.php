@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Customer\Test\Unit\Model\Observer;
+namespace Magento\Customer\Test\Unit\Model\Resource\Observer;
 
-use Magento\Customer\Model\Observer\Grid;
+use Magento\Customer\Model\Resource\Observer\Grid;
 
 class GridTest extends \PHPUnit_Framework_TestCase
 {
@@ -90,14 +90,12 @@ class GridTest extends \PHPUnit_Framework_TestCase
             ->with(\Magento\Customer\Model\Customer::CUSTOMER_GRID_INDEXER_ID, [])
             ->willReturn($gridTable);
 
-        $this->connection->expects($this->at(1))
+        $this->connection->expects($this->exactly(2))
             ->method('getTableName')
-            ->with($gridTable)
-            ->willReturnArgument(0);
-        $this->connection->expects($this->at(2))
-            ->method('getTableName')
-            ->with($customerLogTable)
-            ->willReturnArgument(0);
+            ->willReturnMap([
+                [$gridTable],
+                [$customerLogTable],
+            ]);
 
         $this->connection->expects($this->exactly(2))
             ->method('select')
@@ -125,10 +123,6 @@ class GridTest extends \PHPUnit_Framework_TestCase
             ->method('where')
             ->with('last_login_at > ?', '2015-08-13 10:36:44')
             ->willReturnSelf();
-        $this->connection->expects($this->at(0))
-            ->method('query')
-            ->with($this->select)
-            ->willReturn($this->queryResult);
         $this->queryResult->expects($this->once())
             ->method('fetchAll')
             ->willReturn([['customer_id' => 23], ['customer_id' => 65]]);
