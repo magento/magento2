@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\SalesRule\Test\TestCase\CreateSalesRuleEntityTest">
+    <testCase name="Magento\SalesRule\Test\TestCase\CreateSalesRuleEntityTest" summary="Create Cart Price Rule" ticketId="MAGETWO-24855">
         <variation name="CreateSalesRuleEntityTestVariation1">
             <data name="salesRule/data/name" xsi:type="string">Cart Price Rule1 %isolation%</data>
             <data name="salesRule/data/description" xsi:type="string">Cart Price Rule Description %isolation%</data>
