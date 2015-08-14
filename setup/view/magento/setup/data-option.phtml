@@ -18,7 +18,7 @@
             <button
                 type="button"
                 class="btn"
-                ng-click="previousState()"
+                ng-click="goToBackup()"
                 >Back</button>
         </div>
     </div>
@@ -26,7 +26,7 @@
 
 <h2 class="page-title">{{$state.current.header}}</h2>
 
-<div ng-init="dataOption=true">
+<div ng-controller="dataOptionController">
     <div class="message" ng-hide="component.hasUninstall">
         The selected component has no data to remove.
     </div>
@@ -39,9 +39,8 @@
                 id="keepData"
                 class="form-el-radio"
                 type="radio"
-                ng-model="dataOption"
-                value="true"
-                ng-checked="false"
+                ng-model="component.dataOption"
+                value="false"
                 >
             <label class="form-label" for="keepData">
                 Keep data
@@ -56,7 +55,7 @@
                 id="removeData"
                 class="form-el-radio"
                 type="radio"
-                ng-model="dataOption"
+                ng-model="component.dataOption"
                 value="true"
                 >
             <label class="form-label" for="removeData">
