@@ -27,6 +27,9 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Api\Data\OptionInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $option;
 
+    /** @var \Magento\Customer\Model\Indexer\Attribute\Filter|\PHPUnit_Framework_MockObject_MockObject */
+    protected $attributeFilter;
+
     /** @var AttributeRepository */
     protected $component;
 
@@ -64,11 +67,14 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
         );
         $this->option = $this->getMock('Magento\Customer\Api\Data\OptionInterface', [], [], '', false);
 
+        $this->attributeFilter = $this->getMock('Magento\Customer\Model\Indexer\Attribute\Filter', [], [], '', false);
+
         $this->component = new AttributeRepository(
             $this->customerMetadataManagement,
             $this->addressMetadataManagement,
             $this->customerMetadata,
-            $this->addressMetadata
+            $this->addressMetadata,
+            $this->attributeFilter
         );
     }
 
@@ -118,6 +124,9 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->option->expects($this->once())
             ->method('getValue')
             ->willReturn('Value');
+        $this->attributeFilter->expects($this->once())
+            ->method('filter')
+            ->willReturnArgument(0);
 
         $this->assertEquals(
             [
