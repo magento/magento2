@@ -2433,4 +2433,12 @@ return [
     ['getThumbnailSize', 'Magento\ProductAlert\Block\Email\AbstractEmail'],
     ['getThumbnailUrl', 'Magento\ProductAlert\Block\Email\AbstractEmail'],
     ['getProductThumbnail', 'Magento\Checkout\Block\Cart\Item\Renderer'],
+    ['getColumnsComponent', 'Magento\Ui\Model\Export\ConvertToCsv', 'Magento\Ui\Model\Export\MetadataProvider::getColumnsComponent'],
+    ['getColumns', 'Magento\Ui\Model\Export\ConvertToCsv', 'Magento\Ui\Model\Export\MetadataProvider::getColumns'],
+    ['getHeaders', 'Magento\Ui\Model\Export\ConvertToCsv', 'Magento\Ui\Model\Export\MetadataProvider::getHeaders'],
+    ['getFields', 'Magento\Ui\Model\Export\ConvertToCsv', 'Magento\Ui\Model\Export\MetadataProvider::getFields'],
+    ['getRowData', 'Magento\Ui\Model\Export\ConvertToCsv', 'Magento\Ui\Model\Export\MetadataProvider::getRowData'],
+    ['getComplexLabel', 'Magento\Ui\Model\Export\ConvertToCsv', 'Magento\Ui\Model\Export\MetadataProvider::getComplexLabel'],
+    ['getFilterOptions', 'Magento\Ui\Model\Export\ConvertToCsv', 'Magento\Ui\Model\Export\MetadataProvider::getFilterOptions'],
+    ['getOptions', 'Magento\Ui\Model\Export\ConvertToCsv', 'Magento\Ui\Model\Export\MetadataProvider::getOptions'],
 ];

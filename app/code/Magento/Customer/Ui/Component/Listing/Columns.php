@@ -8,6 +8,7 @@ namespace Magento\Customer\Ui\Component\Listing;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Customer\Ui\Component\ColumnFactory;
 use Magento\Customer\Api\Data\AttributeMetadataInterface as AttributeMetadata;
+
 class Columns extends \Magento\Ui\Component\Listing\Columns
 {
     /**
