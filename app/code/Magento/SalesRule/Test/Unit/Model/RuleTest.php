@@ -29,6 +29,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
         $couponFactory = $this->getMockBuilder('Magento\SalesRule\Model\CouponFactory')
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
         $couponFactory->expects($this->any())
             ->method('create')
@@ -63,7 +64,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->willReturn(1);
 
         $this->model->setId(1);
-        $this->model->setUsesPerCoupon(true);
+        $this->model->setUsesPerCoupon(null);
         $this->model->setUseAutoGeneration(false);
 
         $this->model->loadCouponCode();
