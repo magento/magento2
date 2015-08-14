@@ -61,7 +61,13 @@ angular.module('start-updater', ['ngStorage'])
                     $scope.errorMessage = 'Something went wrong. Please try again.';
                 });
         }
-        $scope.goToCreateBackup = function() {
-            $state.go('root.create-backup-' . $state.current.type);
+        $scope.goToPreviousState = function() {
+            if ($state.current.type === 'update') {
+                $state.go('root.create-backup-update');
+            } else if ($state.current.type === 'upgrade') {
+                $state.go('root.create-backup-upgrade');
+            } else if ($state.current.type === 'uninstall') {
+                $state.go('root.data-option');
+            }
         }
     }]);
