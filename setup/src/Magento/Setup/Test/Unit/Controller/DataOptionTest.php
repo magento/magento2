@@ -55,8 +55,7 @@ class DataOptionTest extends \PHPUnit_Framework_TestCase
 
         $this->controller->setEvent($mvcEvent);
         $this->controller->dispatch($request, $response);
-        $this->controller->hasUninstallAction();
-
+        $this->assertTrue($this->controller->hasUninstallAction()->getVariable("hasUninstall"));
     }
 
     public function testNoUninstallAction()
@@ -75,7 +74,31 @@ class DataOptionTest extends \PHPUnit_Framework_TestCase
         $this->uninstallCollector->expects($this->never())->method('collectUninstall');
         $this->controller->setEvent($mvcEvent);
         $this->controller->dispatch($request, $response);
-        $this->controller->hasUninstallAction();
+        $this->assertFalse($this->controller->hasUninstallAction()->getVariable("hasUninstall"));
+    }
 
+    public function testEmptyUninstallAction()
+    {
+        $request = $this->getMock('\Zend\Http\PhpEnvironment\Request', [], [], '', false);
+        $response = $this->getMock('\Zend\Http\PhpEnvironment\Response', [], [], '', false);
+        $routeMatch = $this->getMock('\Zend\Mvc\Router\RouteMatch', [], [], '', false);
+
+        $mvcEvent = $this->getMock('\Zend\Mvc\MvcEvent', [], [], '', false);
+        $mvcEvent->expects($this->once())->method('setRequest')->with($request)->willReturn($mvcEvent);
+        $mvcEvent->expects($this->once())->method('setResponse')->with($response)->willReturn($mvcEvent);
+        $mvcEvent->expects($this->once())->method('setTarget')->with($this->controller)->willReturn($mvcEvent);
+        $mvcEvent->expects($this->any())->method('getRouteMatch')->willReturn($routeMatch);
+        $content = '{"moduleName": "some_module"}';
+        $request->expects($this->any())->method('getContent')->willReturn($content);
+
+        $this->uninstallCollector
+            ->expects($this->once())
+            ->method('collectUninstall')
+            ->with(["some_module"])
+            ->willReturn([]);
+
+        $this->controller->setEvent($mvcEvent);
+        $this->controller->dispatch($request, $response);
+        $this->assertFalse($this->controller->hasUninstallAction()->getVariable("hasUninstall"));
     }
 }
