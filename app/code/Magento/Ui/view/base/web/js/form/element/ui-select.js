@@ -109,6 +109,7 @@ define([
          */
         isHovered: function (index, elem) {
             var status = this.hoverElIndex() === index;
+
             if (status &&
                 elem.offsetTop > elem.parentNode.offsetTop + elem.parentNode.offsetHeight ||
                 status &&
