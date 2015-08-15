@@ -21,6 +21,7 @@ class IndexerShowModeCommand extends AbstractIndexerManageCommand
         $this->setName('indexer:show-mode')
             ->setDescription('Shows Index Mode')
             ->setDefinition($this->getInputList());
+
         parent::configure();
     }
 
@@ -29,7 +30,7 @@ class IndexerShowModeCommand extends AbstractIndexerManageCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $indexers = $this->getIndexers($input, $output);
+        $indexers = $this->getIndexers($input);
         foreach ($indexers as $indexer) {
             $status = $indexer->isScheduled() ? 'Update by Schedule' : 'Update on Save';
             $output->writeln(sprintf('%-50s ', $indexer->getTitle() . ':') . $status);
