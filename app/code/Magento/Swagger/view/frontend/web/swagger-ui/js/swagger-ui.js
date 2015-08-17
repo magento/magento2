@@ -3,6 +3,10 @@
  * @version v2.1.1
  * @link http://swagger.io
  * @license Apache-2.0
+ *
+ * The original name of this file, as part of the swagger-ui package, was dist/index.html.
+ *
+ * Modified by X.Commerce, Inc. d/b/a/ Magento, Inc., Modifications © 2015 X.Commerce, Inc. d/b/a/ Magento, Inc
  */
 (function(){this["Handlebars"] = this["Handlebars"] || {};
     this["Handlebars"]["templates"] = this["Handlebars"]["templates"] || {};
@@ -10,7 +14,7 @@
         var helper, functionType="function", helperMissing=helpers.helperMissing, escapeExpression=this.escapeExpression;
         return "<!--div class='auth_button' id='apikey_button'><img class='auth_icon' alt='apply api key' src='images/apikey.jpeg'></div-->\n<div class='auth_container' id='apikey_container'>\n  <div class='key_input_container'>\n    <div class='auth_label'><label for='input_apiKey_entry'>"
             + escapeExpression(((helper = (helper = helpers.keyName || (depth0 != null ? depth0.keyName : depth0)) != null ? helper : helperMissing),(typeof helper === functionType ? helper.call(depth0, {"name":"keyName","hash":{},"data":data}) : helper)))
-            + "</label></div>\n    <input placeholder='api_key' class='auth_input' id='input_apiKey_entry' name='apiKey' type='text'/>\n    <div class='auth_submit'><a class='auth_submit_button' id='apply_api_key' href='#' data-sw-translate>apply</a></div>\n  </div>\n</div>\n";
+                + "</label></div>\n    <input placeholder='api_key' class='auth_input' id='input_apiKey_entry' name='apiKey' type='text'/>\n    <div class='auth_submit'><a class='auth_submit_button' id='apply_api_key' href='#' data-sw-translate>apply</a></div>\n  </div>\n</div>\n";
     },"useData":true});
     this["Handlebars"]["templates"]["basic_auth_button_view"] = Handlebars.template({"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
         return "<div class='auth_button' id='basic_auth_button'><img class='auth_icon' src='images/password.jpeg'></div>\n<div class='auth_container' id='basic_auth_container'>\n  <div class='key_input_container'>\n    <div class=\"auth_label\"><label for=\"input_username\" data-sw-translate>Username</label></div>\n    <input placeholder=\"username\" class=\"auth_input\" id=\"input_username\" name=\"username\" type=\"text\"/>\n    <div class=\"auth_label\"><label for=\"password\" data-sw-translate>Password</label></div>\n    <input placeholder=\"password\" class=\"auth_input\" id=\"input_password\" name=\"password\" type=\"password\"/>\n    <div class='auth_submit'><a class='auth_submit_button' id=\"apply_basic_auth\" href=\"#\">apply</a></div>\n  </div>\n</div>\n\n";
@@ -423,7 +427,7 @@
     },"22":function(depth0,helpers,partials,data) {
         return "";
     },"24":function(depth0,helpers,partials,data) {
-        return "          <div class='sandbox_header'>\n            <input class='submit' type='button' value='Try it out!' data-sw-translate/>\n            <a href='#' class='response_hider' style='display:none' data-sw-translate>Hide Response</a>\n            <span class='response_throbber' style='display:none'></span>\n          </div>\n";
+        return "          <div class='sandbox_header'>\n            <input class='submit' type='hidden' value='Try it out!' data-sw-translate/>\n            <a href='#' class='response_hider' style='display:none' data-sw-translate>Hide Response</a>\n            <span class='response_throbber' style='display:none'></span>\n          </div>\n";
     },"26":function(depth0,helpers,partials,data) {
         return "          <h4 data-sw-translate>Request Headers</h4>\n          <div class='block request_headers'></div>\n";
     },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
