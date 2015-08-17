@@ -40,6 +40,11 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     /**#@-*/
 
     /**
+     * Config path to UE country list
+     */
+    const XML_PATH_EU_COUNTRIES_LIST = 'general/country/eu_countries';
+
+    /**
      * Container types that could be customized
      *
      * @var string[]
@@ -924,7 +929,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                 $bodyXml = $this->_xmlElFactory->create(['data' => $responseBody]);
                 $code = $bodyXml->xpath('//GetQuoteResponse/Note/Condition/ConditionCode');
                 if (isset($code[0]) && (int)$code[0] == self::CONDITION_CODE_SERVICE_DATE_UNAVAILABLE) {
-                    $debugPoint['info'] = sprintf(__('DHL service is not available on %s.'), $date);
+                    $debugPoint['info'] = sprintf(__("DHL service is not available at %s date"), $date);
                 } else {
                     break;
                 }
@@ -1002,8 +1007,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $nodeTo->addChild('City', $rawRequest->getDestCity());
 
         $this->_checkDomesticStatus($rawRequest->getOrigCountryId(), $rawRequest->getDestCountryId());
-
-        if ($this->getConfigData('content_type') == self::DHL_CONTENT_TYPE_NON_DOC && !$this->_isDomestic) {
+        if ($this->isDutiable($rawRequest->getDestCountryId())) {
             // IsDutiable flag and Dutiable node indicates that cargo is not a documentation
             $nodeBkgDetails->addChild('IsDutiable', 'Y');
             $nodeDutiable = $nodeGetQuote->addChild('Dutiable');
@@ -1042,7 +1046,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      */
     protected function _parseResponse($response)
     {
-        $responseError = __('Please enter a response in the correct format.');
+        $responseError = __('The response is in wrong format.');
 
         if (strlen(trim($response)) > 0) {
             if (strpos(trim($response), '<?xml') === 0) {
@@ -1162,7 +1166,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                     if (!isset($rates[$currencyCode]) || !$totalEstimate) {
                         $totalEstimate = false;
                         $this->_errors[] = __(
-                            'We had to skip DHL method %1 because we can\'t find exchange rate %2 (Base Currency).',
+                            'We had to skip DHL method %1 because we couldn\'t find exchange rate %2 (Base Currency).',
                             $currencyCode,
                             $baseCurrencyCode
                         );
@@ -1284,7 +1288,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     {
         //Skip by item validation if there is no items in request
         if (!count($this->getAllItems($request))) {
-            $this->_errors[] = __('There are no items in this order.');
+            $this->_errors[] = __('There is no items in this order');
         }
 
         $countryParams = $this->getCountryParams(
@@ -1295,7 +1299,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             )
         );
         if (!$countryParams->getData()) {
-            $this->_errors[] = __('Please specify an origin country.');
+            $this->_errors[] = __('Please, specify origin country');
         }
 
         if (!empty($this->_errors)) {
@@ -1342,7 +1346,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             if ($params['width'] || $params['length'] || $params['height']) {
                 $minValue = $this->_getMinDimension($params['dimension_units']);
                 if ($params['width'] < $minValue || $params['length'] < $minValue || $params['height'] < $minValue) {
-                    $message = __('Height, width and length should be equal or greater than %1.', $minValue);
+                    $message = __('Height, width and length should be equal or greater than %1', $minValue);
                     throw new \Magento\Framework\Exception\LocalizedException($message);
                 }
             }
@@ -1651,7 +1655,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                 $packageType = 'CP';
             }
             $nodeShipmentDetails->addChild('PackageType', $packageType);
-            if ($this->getConfigData('content_type') == self::DHL_CONTENT_TYPE_NON_DOC) {
+            if ($this->isDutiable($rawRequest->getDestCountryId())) {
                 $nodeShipmentDetails->addChild('IsDutiable', 'Y');
             }
             $nodeShipmentDetails->addChild(
@@ -1775,7 +1779,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      */
     protected function _parseXmlTrackingResponse($trackings, $response)
     {
-        $errorTitle = __('For some reason we can\'t retrieve tracking info right now.');
+        $errorTitle = __('Unable to retrieve tracking');
         $resultArr = [];
 
         if (strlen(trim($response)) > 0) {
@@ -1799,7 +1803,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                     $awbinfoData = [];
                     $trackNum = isset($awbinfo->AWBNumber) ? (string)$awbinfo->AWBNumber : '';
                     if (!is_object($awbinfo) || !$awbinfo->ShipmentInfo) {
-                        $this->_errors[$trackNum] = __('For some reason we can\'t retrieve tracking info right now.');
+                        $this->_errors[$trackNum] = __('Unable to retrieve tracking');
                         continue;
                     }
                     $shipmentInfo = $awbinfo->ShipmentInfo;
@@ -1949,5 +1953,17 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         }
 
         return $result;
+    }
+
+    /**
+     * @param $countryId
+     * @return bool
+     */
+    protected function isDutiable($countryId)
+    {
+        return
+            self::DHL_CONTENT_TYPE_NON_DOC == $this->getConfigData('content_type')
+            && !$this->_isDomestic
+            && !$this->_carrierHelper->isCountryInEU($countryId);
     }
 }
