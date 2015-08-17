@@ -5,7 +5,8 @@
  */
 namespace Magento\ConfigurableProduct\Model\Product;
 
-use \Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Catalog\Model\Product\Type as ProductType;
 
 class VariationHandler
 {
@@ -24,9 +25,6 @@ class VariationHandler
     /** @var \Magento\Catalog\Model\ProductFactory */
     protected $productFactory;
 
-    /** @var \Magento\Framework\Json\Helper\Data */
-    protected $jsonHelper;
-
     /** @var \Magento\CatalogInventory\Api\StockConfigurationInterface */
     protected $stockConfiguration;
 
@@ -35,7 +33,6 @@ class VariationHandler
      * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory
      * @param \Magento\Eav\Model\EntityFactory $entityFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param \Magento\Catalog\Model\Product\Attribute\Backend\Media $media
      */
@@ -44,7 +41,6 @@ class VariationHandler
         \Magento\Eav\Model\Entity\Attribute\SetFactory $attributeSetFactory,
         \Magento\Eav\Model\EntityFactory $entityFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         \Magento\Catalog\Model\Product\Attribute\Backend\Media $media
     ) {
@@ -52,7 +48,6 @@ class VariationHandler
         $this->attributeSetFactory = $attributeSetFactory;
         $this->entityFactory = $entityFactory;
         $this->productFactory = $productFactory;
-        $this->jsonHelper = $jsonHelper;
         $this->stockConfiguration = $stockConfiguration;
         $this->media = $media;
     }
@@ -73,7 +68,7 @@ class VariationHandler
         foreach ($productsData as $simpleProductData) {
             $newSimpleProduct = $this->productFactory->create();
             if (isset($simpleProductData['configurable_attribute'])) {
-                $configurableAttribute = $this->jsonHelper->jsonDecode($simpleProductData['configurable_attribute']);
+                $configurableAttribute = json_decode($simpleProductData['configurable_attribute']);
                 unset($simpleProductData['configurable_attribute']);
             } else {
                 throw new LocalizedException(__('Configuration must have specified attributes'));
@@ -95,6 +90,8 @@ class VariationHandler
      * Prepare attribute set comprising all selected configurable attributes
      *
      * @param \Magento\Catalog\Model\Product $product
+     *
+     * @return void
      */
     protected function prepareAttributeSetToBeBaseForNewVariations(\Magento\Catalog\Model\Product $product)
     {
@@ -126,6 +123,8 @@ class VariationHandler
      * @param array $postData
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     *
+     * @return void
      */
     protected function fillSimpleProductData(
         \Magento\Catalog\Model\Product $product,
@@ -135,7 +134,7 @@ class VariationHandler
         $product->setStoreId(
             \Magento\Store\Model\Store::DEFAULT_STORE_ID
         )->setTypeId(
-            $postData['weight'] ? \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE : \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
+            $postData['weight'] ? ProductType::TYPE_SIMPLE : ProductType::TYPE_VIRTUAL
         )->setAttributeSetId(
             $parentProduct->getNewVariationsAttributeSetId()
         );
