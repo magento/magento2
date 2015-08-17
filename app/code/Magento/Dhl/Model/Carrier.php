@@ -1006,8 +1006,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $nodeTo->addChild('Postalcode', $rawRequest->getDestPostal());
         $nodeTo->addChild('City', $rawRequest->getDestCity());
 
-        $this->_checkDomesticStatus($rawRequest->getOrigCountryId(), $rawRequest->getDestCountryId());
-        if ($this->isDutiable($rawRequest->getDestCountryId())) {
+        if ($this->isDutiable($rawRequest->getOrigCountryId(), $rawRequest->getDestCountryId())) {
             // IsDutiable flag and Dutiable node indicates that cargo is not a documentation
             $nodeBkgDetails->addChild('IsDutiable', 'Y');
             $nodeDutiable = $nodeGetQuote->addChild('Dutiable');
@@ -1491,13 +1490,11 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $nodeCommodity = $xml->addChild('Commodity', '', '');
         $nodeCommodity->addChild('CommodityCode', '1');
 
-        $this->_checkDomesticStatus(
+        /** Dutiable */
+        if ($this->isDutiable(
             $rawRequest->getShipperAddressCountryCode(),
             $rawRequest->getRecipientAddressCountryCode()
-        );
-
-        /** Dutiable */
-        if ($this->getConfigData('content_type') == self::DHL_CONTENT_TYPE_NON_DOC && !$this->_isDomestic) {
+        )) {
             $nodeDutiable = $xml->addChild('Dutiable', '', '');
             $nodeDutiable->addChild(
                 'DeclaredValue',
@@ -1655,7 +1652,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                 $packageType = 'CP';
             }
             $nodeShipmentDetails->addChild('PackageType', $packageType);
-            if ($this->isDutiable($rawRequest->getDestCountryId())) {
+            if ($this->isDutiable($rawRequest->getOrigCountryId(), $rawRequest->getDestCountryId())) {
                 $nodeShipmentDetails->addChild('IsDutiable', 'Y');
             }
             $nodeShipmentDetails->addChild(
@@ -1956,14 +1953,18 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     }
 
     /**
-     * @param $countryId
+     * @param string $origCountryId
+     * @param string $destCountryId
+     *
      * @return bool
      */
-    protected function isDutiable($countryId)
+    protected function isDutiable($origCountryId, $destCountryId)
     {
+        $this->_checkDomesticStatus($origCountryId, $destCountryId);
+
         return
             self::DHL_CONTENT_TYPE_NON_DOC == $this->getConfigData('content_type')
             && !$this->_isDomestic
-            && !$this->_carrierHelper->isCountryInEU($countryId);
+            && !$this->_carrierHelper->isCountryInEU($destCountryId);
     }
 }
