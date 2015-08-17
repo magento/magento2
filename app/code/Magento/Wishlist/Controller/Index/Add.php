@@ -12,6 +12,9 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Wishlist\Controller\IndexInterface;
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Add extends Action\Action implements IndexInterface
 {
     /**
@@ -93,7 +96,7 @@ class Add extends Action\Action implements IndexInterface
         }
 
         try {
-            $buyRequest = new \Magento\Framework\Object($requestParams);
+            $buyRequest = new \Magento\Framework\DataObject($requestParams);
 
             $result = $wishlist->addNewItem($product, $buyRequest);
             if (is_string($result)) {

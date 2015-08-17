@@ -72,6 +72,11 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     protected $pageConfig;
 
     /**
+     * @var ImageBuilder
+     */
+    protected $imageBuilder;
+
+    /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -106,6 +111,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * @param \Magento\Wishlist\Helper\Data $wishlistHelper
      * @param \Magento\Catalog\Helper\Product\Compare $compareProduct
      * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @param ImageBuilder $imageBuilder
      * @param ReviewRendererInterface $reviewRenderer
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      *
@@ -146,10 +152,12 @@ class Context extends \Magento\Framework\View\Element\Template\Context
         \Magento\Wishlist\Helper\Data $wishlistHelper,
         \Magento\Catalog\Helper\Product\Compare $compareProduct,
         \Magento\Catalog\Helper\Image $imageHelper,
+        \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder,
         ReviewRendererInterface $reviewRenderer,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
     ) {
         $this->imageHelper = $imageHelper;
+        $this->imageBuilder = $imageBuilder;
         $this->compareProduct = $compareProduct;
         $this->wishlistHelper = $wishlistHelper;
         $this->cartHelper = $cartHelper;
@@ -235,6 +243,14 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     public function getImageHelper()
     {
         return $this->imageHelper;
+    }
+
+    /**
+     * @return \Magento\Catalog\Block\Product\ImageBuilder
+     */
+    public function getImageBuilder()
+    {
+        return $this->imageBuilder;
     }
 
     /**

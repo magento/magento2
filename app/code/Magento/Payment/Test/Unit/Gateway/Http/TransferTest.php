@@ -14,6 +14,7 @@ class TransferTest extends \PHPUnit_Framework_TestCase
         $clientConfig = ['config'];
         $headers = ['Header'];
         $body = ['data', 'data2'];
+        $auth = ['username', 'password'];
         $method = 'POST';
         $uri = 'https://gateway.com';
         $encode = false;
@@ -22,6 +23,7 @@ class TransferTest extends \PHPUnit_Framework_TestCase
             $clientConfig,
             $headers,
             $body,
+            $auth,
             $method,
             $uri,
             $encode
