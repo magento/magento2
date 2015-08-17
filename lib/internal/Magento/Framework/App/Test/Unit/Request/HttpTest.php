@@ -356,10 +356,10 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      * @backupGlobals
      * @param string $method value of $_SERVER['REQUEST_METHOD']
      */
-    public function testIsSafeMethodFalse()
+    public function testIsSafeMethodFalse($httpMethod)
     {
         $this->_model = $this->getModel();
-        $_SERVER['REQUEST_METHOD'] = 'OTHER';
+        $_SERVER['REQUEST_METHOD'] = $httpMethod;
         $this->assertEquals(false, $this->_model->IsSafeMethod());
     }
 
