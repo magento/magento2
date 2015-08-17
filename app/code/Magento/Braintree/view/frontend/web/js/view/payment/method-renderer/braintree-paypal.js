@@ -10,9 +10,10 @@ define(
         'Magento_Checkout/js/view/payment/default',
         'Magento_Checkout/js/model/quote',
         'braintree',
+        'Magento_Ui/js/model/messageList',
         'mage/translate'
     ],
-    function ($, Component, quote, braintreeClientSDK, $t) {
+    function ($, Component, quote, braintreeClientSDK, messageList, $t) {
         var braintreeConfig = window.checkoutConfig.payment.braintree_paypal;
 
         return Component.extend({
@@ -71,38 +72,49 @@ define(
                 }
             },
 
-            initPayPalContainer: function (element, viewModel) {
-                if (element) {
-                    // target container element is passed via afterRender data-bind
-                    this.containerElement = element;
+            canInitialise: function () {
+                if (!this.clientToken) {
+                    messageList.addErrorMessage({'message': 'Can not initialize PayPal (Braintree)'});
+                } else {
+                    return true;
                 }
-                var container = $(this.containerElement);
-                if (container.length == 0) {
-                    return;
-                }
+            },
 
-                var totals = quote.totals();
-                this.paymentMethodNonce(null);
-                // the following line is an optimization to prevent frequent re-initialization of the container
-                this.currentGrandTotal = totals.base_grand_total;
-                container.empty();
-
-                var self = this;
-                //TODO: check shipping address override
-                braintreeClientSDK.setup(this.clientToken, 'paypal', {
-                    container: container,
-                    singleUse: true,
-                    amount: totals.base_grand_total,
-                    currency: totals.base_currency_code,
-                    displayName: this.merchantName,
-                    locale: this.locale,
-                    onPaymentMethodReceived: function (response) {
-                        self.paymentMethodNonce(response.nonce);
-                    },
-                    onCancelled: function () {
-                        self.paymentMethodNonce(null);
+            initPayPalContainer: function (element) {
+                if (this.canInitialise()) {
+                    if (element) {
+                        // target container element is passed via afterRender data-bind
+                        this.containerElement = element;
                     }
-                });
+
+                    var container = $(this.containerElement);
+                    if (container.length == 0) {
+                        return;
+                    }
+
+                    var totals = quote.totals();
+                    this.paymentMethodNonce(null);
+                    // the following line is an optimization to prevent frequent re-initialization of the container
+                    this.currentGrandTotal = totals.base_grand_total;
+                    container.empty();
+
+                    var self = this;
+                    //TODO: check shipping address override
+                    braintreeClientSDK.setup(this.clientToken, 'paypal', {
+                        container: container,
+                        singleUse: true,
+                        amount: totals.base_grand_total,
+                        currency: totals.base_currency_code,
+                        displayName: this.merchantName,
+                        locale: this.locale,
+                        onPaymentMethodReceived: function (response) {
+                            self.paymentMethodNonce(response.nonce);
+                        },
+                        onCancelled: function () {
+                            self.paymentMethodNonce(null);
+                        }
+                    });
+                }
             }
         });
     }
