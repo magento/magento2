@@ -1469,13 +1469,15 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         if (!empty($rowData[self::COL_MEDIA_IMAGE]) && is_array($rowData[self::COL_MEDIA_IMAGE])) {
                             $position = array_search($mediaImage, $mediaGalleryImages);
                             foreach ($rowData[self::COL_MEDIA_IMAGE] as $mediaImage) {
-                                $mediaGallery[$rowSku][] = [
-                                    'attribute_id' => $this->getMediaGalleryAttributeId(),
-                                    'label' => isset($mediaGalleryLabels[$position]) ? $mediaGalleryLabels[$position] : '',
-                                    'position' => $position,
-                                    'disabled' => '',
-                                    'value' => $mediaImage,
-                                ];
+                                if (!empty($mediaImage)) {
+                                    $mediaGallery[$rowSku][] = [
+                                        'attribute_id' => $this->getMediaGalleryAttributeId(),
+                                        'label' => isset($mediaGalleryLabels[$position]) ? $mediaGalleryLabels[$position] : '',
+                                        'position' => $position,
+                                        'disabled' => '',
+                                        'value' => $mediaImage,
+                                    ];
+                                }
                             }
                         }
                     }
