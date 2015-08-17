@@ -45,7 +45,9 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
      */
     protected $_stockConfiguration;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\ConfigurableProduct\Model\Product\Type\Configurable*/
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\ConfigurableProduct\Model\Product\Type\Configurable
+     */
     protected $configurableProduct;
 
     /**
@@ -270,14 +272,14 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
     public function testProcessMediaGalleryWithImagesAndGallery()
     {
         $this->_product->expects($this->atLeastOnce())->method('getMediaGallery')->with('images')->willReturn([]);
-        $productData['image'] = 'test11';
+        $productData['image'] = 'test';
         $productData['media_gallery']['images'] = [
             [
-                'file' => 'test11'
-            ]
+                'file' => 'test',
+            ],
         ];
         $result = $this->_model->processMediaGallery($this->_product, $productData);
-        $this->assertEquals($productData,$result);
+        $this->assertEquals($productData, $result);
     }
 
     public function testProcessMediaGalleryIfImageIsEmptyButProductMediaGalleryIsNotEmpty()
@@ -286,11 +288,11 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
         $productData['image'] = false;
         $productData['media_gallery']['images'] = [
             [
-                'name' => 'test'
-            ]
+                'name' => 'test',
+            ],
         ];
         $result = $this->_model->processMediaGallery($this->_product, $productData);
-        $this->assertEquals($productData,$result);
+        $this->assertEquals($productData, $result);
     }
 
     public function testProcessMediaGalleryIfProductDataHasNoImagesAndGallery()
@@ -299,34 +301,39 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
         $productData['image'] = false;
         $productData['media_gallery']['images'] = false;
         $result = $this->_model->processMediaGallery($this->_product, $productData);
-        $this->assertEquals($productData,$result);
+        $this->assertEquals($productData, $result);
     }
 
     /**
      * @dataProvider productDataProviderForProcessMediaGalleryForFillingGallery
+     * @param $productArr
+     * @param $expected
      */
     public function testProcessMediaGalleryForFillingGallery($productArr, $expected)
     {
-        $this->assertEquals($expected,$this->_model->processMediaGallery($this->_product, $productArr));
+        $this->assertEquals($expected, $this->_model->processMediaGallery($this->_product, $productArr));
     }
 
+    /**
+     * @return array
+     */
     public function productDataProviderForProcessMediaGalleryForFillingGallery()
     {
         return [
             'empty array' => [
-                [], []
+                [], [],
             ],
             'array only with empty image' => [
                 'given' => [
-                    'image'
+                    'image',
                 ],
                 'expected' => [
-                    'image'
-                ]
+                    'image',
+                ],
             ],
             'empty array with not empty image' => [
                 'given' => [
-                    'image' => 1
+                    'image' => 1,
                 ],
                 'expected' => [
                     'thumbnail' => 1,
@@ -337,8 +344,8 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
                                 'file' => '1',
                                 'disabled' => 0,
                                 'label' => '',
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
                     'image' => 1,
                     'small_image' => 1,
