@@ -506,7 +506,7 @@
                     </div>
                 </li>
             </ul>
-            <form action="" data-role="attributes-values-form">
+            <form data-role="attributes-values-form">
             <fieldset class="admin__fieldset bulk-attribute-values" data-bind="visible: type() == 'single'">
                 <div class="admin__field _required">
                     <label for="apply-single-price-input" class="admin__field-label">
@@ -539,19 +539,19 @@
                     </div>
                 </fieldset>
 
-                <form action="" data-role="attributes-values-form">
+                <form data-role="attributes-values-form">
                     <fieldset class="admin__fieldset bulk-attribute-values" data-bind="if:attribute">
                         <!-- ko foreach: attribute().chosen -->
-                        <div class="admin__field _required"><!-- TODO: "For" should be the same ad input's ID! -->
-                            <label for="apply-single-price-input-index" class="admin__field-label">
+                        <div class="admin__field _required">
+                            <label data-bind="attr: {for: 'apply-single-price-input-' + $index()}" class="admin__field-label">
                                 <span data-bind="text:label"></span>
                             </label>
                             <div class="admin__field-control">
-                                <div class="currency-addon"> <!-- TODO: Input's ID should be generated dinamically! -->
-                                    <input id="apply-single-price-input-index"
-                                           class="admin__control-text required-entry validate-zero-or-greater"
+                                <div class="currency-addon">
+                                    <input class="admin__control-text required-entry validate-zero-or-greater"
                                            type="text"
-                                           data-bind="value:sections()[$parent.label], uniqueName: true"/>
+                                           data-bind="value:sections()[$parent.label], uniqueName: true,
+                                           attr: {id: 'apply-single-price-input-' + $index()}"/>
                                     <span class="currency-symbol" data-bind="text:$parent.currencySymbol"></span>
                                 </div>
                             </div>
@@ -608,7 +608,7 @@
                 </li>
             </ul>
 
-            <form action="" data-role="attributes-values-form">
+            <form data-role="attributes-values-form">
             <fieldset class="admin__fieldset bulk-attribute-values" data-bind="visible: type() == 'single'">
                 <div class="admin__field _required">
                     <label for="apply-single-inventory-input" class="admin__field-label">
@@ -639,17 +639,18 @@
                         </div>
                     </div>
                 </fieldset>
-                <form action="" data-role="attributes-values-form">
+                <form data-role="attributes-values-form">
                 <fieldset class="admin__fieldset bulk-attribute-values" data-bind="if:attribute">
                     <!-- ko foreach: attribute().chosen -->
                     <div class="admin__field _required">
-                        <label for="apply-single-price-input-value" class="admin__field-label">
+                        <label data-bind="attr: {for: 'apply-qty-input-' + $index()}" class="admin__field-label">
                             <span data-bind="text:label"></span>
                         </label>
                         <div class="admin__field-control">
                             <input id="apply-single-price-input-value"
                                    class="admin__control-text required-entry validate-zero-or-greater" type="text"
-                                   data-bind="value:sections()[$parent.label], uniqueName: true"/>
+                                   data-bind="value:sections()[$parent.label], uniqueName: true,
+                                   attr: {id: 'apply-qty-input-' + $index()}"/>
                         </div>
                     </div>
                     <!-- /ko -->
