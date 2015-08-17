@@ -340,8 +340,8 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider httpMethodProvider
-     *
+     * @dataProvider httpSafeMethodProvider
+     * @backupGlobals
      * @param string $method value of $_SERVER['REQUEST_METHOD']
      */
     public function testIsSafeMethodTrue($httpMethod)
@@ -351,6 +351,11 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(true, $this->_model->IsSafeMethod());
     }
 
+    /**
+     * @dataProvider httpNotSafeMethodProvider
+     * @backupGlobals
+     * @param string $method value of $_SERVER['REQUEST_METHOD']
+     */
     public function testIsSafeMethodFalse()
     {
         $this->_model = $this->getModel();
@@ -358,13 +363,23 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(false, $this->_model->IsSafeMethod());
     }
 
-    public function httpMethodProvider()
+    public function httpSafeMethodProvider()
     {
         return [
             'Test 1' => ['GET'],
             'Test 2' => ['HEAD'],
             'Test 3' => ['TRACE'],
             'Test 4' => ['CONNECT']
+        ];
+    }
+
+    public function httpNotSafeMethodProvider()
+    {
+        return [
+            'Test 1' => ['POST'],
+            'Test 2' => ['PUT'],
+            'Test 3' => ['DELETE'],
+            'Test 4' => ['PATCH']
         ];
     }
 
