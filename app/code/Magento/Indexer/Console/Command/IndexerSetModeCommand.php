@@ -5,6 +5,7 @@
  */
 namespace Magento\Indexer\Console\Command;
 
+use Magento\Framework\Exception\LocalizedException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -29,9 +30,9 @@ class IndexerSetModeCommand extends AbstractIndexerManageCommand
     protected function configure()
     {
         $this->setName('indexer:set-mode')
-            ->setDescription(
-                'Sets index mode type'
-            )->setDefinition($this->getInputList());
+            ->setDescription('Sets index mode type')
+            ->setDefinition($this->getInputList());
+
         parent::configure();
     }
 
@@ -45,7 +46,7 @@ class IndexerSetModeCommand extends AbstractIndexerManageCommand
             throw new \InvalidArgumentException(implode("\n", $errors));
         }
 
-        $indexers = $this->getIndexers($input, $output);
+        $indexers = $this->getIndexers($input);
 
         foreach ($indexers as $indexer) {
             try {
@@ -60,7 +61,7 @@ class IndexerSetModeCommand extends AbstractIndexerManageCommand
                 } else {
                     $output->writeln('Index mode for Indexer ' . $indexer->getTitle() . ' has not been changed');
                 }
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            } catch (LocalizedException $e) {
                 $output->writeln($e->getMessage() . PHP_EOL);
             } catch (\Exception $e) {
                 $output->writeln($indexer->getTitle() . " indexer process unknown error:" . PHP_EOL);
