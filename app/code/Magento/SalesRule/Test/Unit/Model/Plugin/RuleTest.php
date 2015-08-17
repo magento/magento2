@@ -29,7 +29,9 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         $this->subject = $this->getMockBuilder('Magento\SalesRule\Model\Rule')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->genericClosure = function (){};
+        $this->genericClosure = function() {
+            return;
+        };
 
         $this->plugin = $objectManager->getObject('Magento\SalesRule\Model\Plugin\Rule');
     }
