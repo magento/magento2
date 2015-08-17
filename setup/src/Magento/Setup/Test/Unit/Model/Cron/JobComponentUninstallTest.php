@@ -145,7 +145,7 @@ class JobComponentUninstallTest extends \PHPUnit_Framework_TestCase
                         JobComponentUninstall::COMPONENT_NAME => 'vendor/module-package',
                     ]
                 ],
-                'dataOption' => true
+                'dataOption' => 'true'
             ]
         );
 
