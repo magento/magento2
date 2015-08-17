@@ -23,6 +23,8 @@ class History extends \Magento\Framework\Model\AbstractModel
 
     const IMPORTED_FILE = 'imported_file';
 
+    const ERROR_FILE = 'error_file';
+
     const EXECUTION_TIME = 'execution_time';
 
     const SUMMARY = 'summary';
@@ -171,6 +173,16 @@ class History extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Get error file
+     *
+     * @return string
+     */
+    public function getErrorFile()
+    {
+        return $this->getData(self::ERROR_FILE);
+    }
+
+    /**
      * Get import execution time
      *
      * @return string
@@ -235,6 +247,16 @@ class History extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Set error file name
+     *
+     * @param string $errorFile
+     * @return $this
+     */
+    public function setErrorFile($errorFile)
+    {
+        return $this->setData(self::ERROR_FILE, $errorFile);
+    }
+    /**
      * Set Execution Time
      *
      * @param string $executionTime
@@ -254,6 +276,16 @@ class History extends \Magento\Framework\Model\AbstractModel
     public function setSummary($summary)
     {
         return $this->setData(self::SUMMARY, $summary);
+    }
+
+    /**
+     * @return $this
+     */
+    public function loadLastInsertItem()
+    {
+        $this->load($this->getLastItemId());
+
+        return $this;
     }
 
     /**
