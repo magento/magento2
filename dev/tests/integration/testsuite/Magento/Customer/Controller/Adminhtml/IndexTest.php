@@ -613,7 +613,6 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->getRequest()->setPostValue('namespace', 'customer_listing');
         $this->dispatch('backend/customer/index/massDelete');
         $this->assertSessionMessages(
-
             $this->equalTo(['Please select item(s).']),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
