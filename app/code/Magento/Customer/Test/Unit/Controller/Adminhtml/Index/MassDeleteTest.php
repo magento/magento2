@@ -164,7 +164,7 @@ class MassDeleteTest extends \PHPUnit_Framework_TestCase
 
         $this->messageManagerMock->expects($this->once())
             ->method('addSuccess')
-            ->with(__('A total of %1 record(s) have been deleted.', count($customersIds)));
+            ->with(__('A total of %1 record(s) were deleted.', count($customersIds)));
 
         $this->resultRedirectMock->expects($this->any())
             ->method('setPath')
