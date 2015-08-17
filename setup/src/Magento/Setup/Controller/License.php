@@ -46,6 +46,7 @@ class License extends AbstractActionController
             $view->setTemplate('error/404');
             $view->setVariable('message', 'Cannot find license file.');
         } else {
+            $view->setTerminal(true);
             $view->setVariable('license', $contents);
         }
         return $view;
