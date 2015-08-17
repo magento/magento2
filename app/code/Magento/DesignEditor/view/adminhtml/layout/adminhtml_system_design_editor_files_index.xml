@@ -7,7 +7,7 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
-        <remove name="footer"/>
+        <referenceContainer name="footer" remove="true"/>
         <referenceContainer name="left">
             <block class="Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Files\Content" name="editor_files.js" template="Magento_DesignEditor::editor/tools/files/js.phtml"/>
             <block class="Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Files\Tree" name="editor_files.tree" template="Magento_DesignEditor::editor/tools/files/tree.phtml"/>
