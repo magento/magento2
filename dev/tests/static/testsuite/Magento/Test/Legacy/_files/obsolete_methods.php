@@ -96,6 +96,7 @@ return [
     ['_getInitialXml', 'Magento\Framework\ObjectManager\Config\Reader\Dom'],
     ['_getInputHtml', 'Magento\ImportExport\Block\Adminhtml\Export\Filter'],
     ['_getItemPriceBlock', 'Magento\Wishlist\Block\AbstractBlock'],
+    ['getIsActive', 'Magento\Store\Model\Store', 'isActive'],
     ['_getLabelForStore', 'Magento\Catalog\Model\Resource\Eav\Attribute'],
     ['_getMultiSelectHtml', 'Magento\ImportExport\Block\Adminhtml\Export\Filter'],
     ['_getNumberFromToHtml', 'Magento\ImportExport\Block\Adminhtml\Export\Filter'],
