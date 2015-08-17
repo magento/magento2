@@ -7,7 +7,6 @@
 // @codingStandardsIgnoreFile
 
 /* @var $block \Magento\Wishlist\Block\Share\Wishlist */
-$imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
 ?>
 
 <?php if ($block->hasWishlistItems()): ?>
@@ -31,7 +30,7 @@ $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\I
                     <tr>
                         <td data-th="<?php echo $block->escapeHtml(__('Product')) ?>" class="col product">
                             <a class="product photo" href="<?php echo $block->getProductUrl($item) ?>" title="<?php echo $block->escapeHtml($product->getName()) ?>">
-                                <?php echo $imageBlock->init($product, 'customer_shared_wishlist')->toHtml() ?>
+                                <?php echo $block->getImage($product, 'customer_shared_wishlist')->toHtml(); ?>
                             </a>
                             <strong class="product name">
                                 <a href="<?php echo $block->getProductUrl($item) ?>">
