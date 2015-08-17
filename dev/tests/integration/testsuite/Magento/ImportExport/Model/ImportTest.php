@@ -5,6 +5,8 @@
  */
 namespace Magento\ImportExport\Model;
 
+use Magento\ImportExport\Model\Import;
+
 /**
  * @magentoDataFixture Magento/ImportExport/_files/import_data.php
  */
@@ -13,7 +15,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     /**
      * Model object which is used for tests
      *
-     * @var \Magento\ImportExport\Model\Import
+     * @var Import
      */
     protected $_model;
 
@@ -82,6 +84,10 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         $customersCollection->resetData();
         $customersCollection->clear();
 
+        $this->_model->setData(
+            Import::FIELD_NAME_VALIDATION_STRATEGY,
+            Import\ErrorProcessing\ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS
+        );
         $this->_model->importSource();
 
         $customers = $customersCollection->getItems();

@@ -6,11 +6,12 @@
 namespace Magento\CatalogImportExport\Model\Import\Product\Type;
 
 use Magento\Framework\App\Resource;
+use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
 /**
  * Import entity abstract product type model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 abstract class AbstractType
 {
@@ -20,6 +21,13 @@ abstract class AbstractType
      * @var array
      */
     public static $commonAttributesCache = [];
+
+    /**
+     * Attribute Code to Id cache
+     *
+     * @var array
+     */
+    public static $attributeCodeToId = [];
 
     /**
      * Product type attribute sets and attributes parameters.
@@ -53,11 +61,21 @@ abstract class AbstractType
     protected $_indexValueAttributes = [];
 
     /**
-     * Validation failure message template definitions
+     * Validation failure entity specific message template definitions
      *
      * @var array
      */
     protected $_messageTemplates = [];
+
+    /**
+     * Validation failure general message template definitions
+     *
+     * @var array
+     */
+    protected $_genericMessageTemplates = [
+        RowValidatorInterface::ERROR_INVALID_WEIGHT => 'Weight value is incorrect',
+        RowValidatorInterface::ERROR_INVALID_WEBSITE => 'Provided Website code doesn\'t exist'
+    ];
 
     /**
      * Column names that holds values with particular meaning.
@@ -107,6 +125,10 @@ abstract class AbstractType
      */
     protected $connection;
 
+    /**
+     * @var array
+     */
+    protected $codeToId;
 
     /**
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac
@@ -136,11 +158,25 @@ abstract class AbstractType
             $this->_entityModel = $params[0];
             $this->_type = $params[1];
 
-            foreach ($this->_messageTemplates as $errorCode => $message) {
-                $this->_entityModel->addMessageTemplate($errorCode, $message);
-            }
+            $this->initMessageTemplates(
+                array_merge($this->_genericMessageTemplates, $this->_messageTemplates)
+            );
+
             $this->_initAttributes();
         }
+    }
+
+    /**
+     * @param array $templateCollection
+     * @return $this
+     */
+    protected function initMessageTemplates(array $templateCollection)
+    {
+        foreach ($templateCollection as $errorCode => $message) {
+            $this->_entityModel->addMessageTemplate($errorCode, $message);
+        }
+
+        return $this;
     }
 
     /**
@@ -158,6 +194,21 @@ abstract class AbstractType
             $this->_attributes[$attrSetName][$attrParams['code']] = $attrParams;
         }
         return $this;
+    }
+
+    /**
+     * Retrieve product Attribute
+     *
+     * @param string $attributeCode
+     * @param string $attributeSet
+     * @return array
+     */
+    public function retrieveAttribute($attributeCode, $attributeSet)
+    {
+        if (isset($this->_attributes[$attributeSet]) && isset($this->_attributes[$attributeSet][$attributeCode])) {
+            return $this->_attributes[$attributeSet][$attributeCode];
+        }
+        return [];
     }
 
     /**
@@ -256,6 +307,7 @@ abstract class AbstractType
                         $this->_indexValueAttributes
                     ),
                 ];
+                self::$attributeCodeToId[$attributeCode] = $attributeId;
                 $this->_addAttributeParams(
                     $attributeSetName,
                     self::$commonAttributesCache[$attributeId],
@@ -263,6 +315,22 @@ abstract class AbstractType
                 );
             }
         }
+    }
+
+    /**
+     * Retrieve attribute from cache
+     *
+     * @param string $attributeCode
+     * @return mixed
+     */
+    public function retrieveAttributeFromCache($attributeCode)
+    {
+        if (isset(self::$attributeCodeToId[$attributeCode]) && $id = self::$attributeCodeToId[$attributeCode]) {
+            if (isset(self::$commonAttributesCache[$id])) {
+                return self::$commonAttributesCache[$id];
+            }
+        }
+        return [];
     }
 
     /**
@@ -354,8 +422,10 @@ abstract class AbstractType
     {
         $error = false;
         $rowScope = $this->_entityModel->getRowScope($rowData);
+        if ((\Magento\CatalogImportExport\Model\Import\Product::SCOPE_NULL != $rowScope) &&
+            !empty($rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_SKU])) {
 
-        if (\Magento\CatalogImportExport\Model\Import\Product::SCOPE_NULL != $rowScope) {
+
             foreach ($this->_getProductAttributes($rowData) as $attrCode => $attrParams) {
                 // check value for non-empty in the case of required attribute?
                 if (isset($rowData[$attrCode]) && strlen($rowData[$attrCode])) {

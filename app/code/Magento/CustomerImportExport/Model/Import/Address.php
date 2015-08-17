@@ -5,6 +5,8 @@
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -213,6 +215,13 @@ class Address extends AbstractCustomer
     protected $dateTime;
 
     /**
+     * Customer attributes
+     *
+     * @var string[]
+     */
+    protected $_customerAttributes = [];
+
+    /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
@@ -228,6 +237,7 @@ class Address extends AbstractCustomer
      * @param \Magento\Customer\Model\Resource\Address\CollectionFactory $addressColFactory
      * @param \Magento\Customer\Model\Resource\Address\Attribute\CollectionFactory $attributesFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param ProcessingErrorAggregatorInterface $errorAggregator,
      * @param array $data
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -248,6 +258,7 @@ class Address extends AbstractCustomer
         \Magento\Customer\Model\Resource\Address\CollectionFactory $addressColFactory,
         \Magento\Customer\Model\Resource\Address\Attribute\CollectionFactory $attributesFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
+        ProcessingErrorAggregatorInterface $errorAggregator,
         array $data = []
     ) {
         $this->_customerFactory = $customerFactory;
@@ -272,6 +283,7 @@ class Address extends AbstractCustomer
             $collectionFactory,
             $eavConfig,
             $storageFactory,
+            $errorAggregator,
             $data
         );
 
@@ -374,6 +386,7 @@ class Address extends AbstractCustomer
      *
      * @abstract
      * @return boolean
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _importData()
     {
@@ -387,7 +400,11 @@ class Address extends AbstractCustomer
 
             foreach ($bunch as $rowNumber => $rowData) {
                 // check row data
-                if (!$this->validateRow($rowData, $rowNumber)) {
+                if ($this->_isOptionalAddressEmpty($rowData) || !$this->validateRow($rowData, $rowNumber)) {
+                    continue;
+                }
+                if ($this->getErrorAggregator()->hasToBeTerminated()) {
+                    $this->getErrorAggregator()->addRowToSkip($rowNumber);
                     continue;
                 }
 
@@ -649,6 +666,32 @@ class Address extends AbstractCustomer
     }
 
     /**
+     * check if address for import is empty (for customer composite mode)
+     *
+     * @param array $rowData
+     * @return array
+     */
+    protected function _isOptionalAddressEmpty(array $rowData)
+    {
+        if (empty($this->_customerAttributes)) {
+            return false;
+        }
+        unset(
+            $rowData[Customer::COLUMN_WEBSITE],
+            $rowData[Customer::COLUMN_STORE],
+            $rowData['_email']
+        );
+
+        foreach ($rowData as $key => $value) {
+            if (!in_array($key, $this->_customerAttributes) && !empty($value)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Validate row for add/update action
      *
      * @param array $rowData
@@ -754,5 +797,17 @@ class Address extends AbstractCustomer
         } else {
             return false;
         }
+    }
+
+    /**
+     * set customer attributes
+     *
+     * @param array $customerAttributes
+     * @return $this
+     */
+    public function setCustomerAttributes($customerAttributes)
+    {
+        $this->_customerAttributes = $customerAttributes;
+        return $this;
     }
 }
