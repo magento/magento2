@@ -32,7 +32,7 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $pages = [];
 
-        $select = $this->_getWriteAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             ['main_table' => $this->getMainTable()],
             [$this->getIdFieldName(), 'url' => 'identifier', 'updated_at' => 'update_time']
         )->join(
@@ -49,7 +49,7 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
             [0, $storeId]
         );
 
-        $query = $this->_getWriteAdapter()->query($select);
+        $query = $this->getConnection()->query($select);
         while ($row = $query->fetch()) {
             $page = $this->_prepareObject($row);
             $pages[$page->getId()] = $page;
@@ -62,11 +62,11 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Prepare page object
      *
      * @param array $data
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     protected function _prepareObject(array $data)
     {
-        $object = new \Magento\Framework\Object();
+        $object = new \Magento\Framework\DataObject();
         $object->setId($data[$this->getIdFieldName()]);
         $object->setUrl($data['url']);
         $object->setUpdatedAt($data['updated_at']);

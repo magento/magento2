@@ -246,7 +246,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      * @param Address\RateRequestFactory $rateRequestFactory
      * @param \Magento\Quote\Model\Quote\Address\Total\CollectorFactory $totalCollectorFactory
      * @param Address\TotalFactory $addressTotalFactory
-     * @param \Magento\Framework\Object\Copy $objectCopyService
+     * @param \Magento\Framework\DataObject\Copy $objectCopyService
      * @param \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory
      * @param Address\Validator $validator
      * @param \Magento\Customer\Model\Address\Mapper $addressMapper
@@ -279,7 +279,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         \Magento\Quote\Model\Quote\Address\RateRequestFactory $rateRequestFactory,
         \Magento\Quote\Model\Quote\Address\Total\CollectorFactory $totalCollectorFactory,
         \Magento\Quote\Model\Quote\Address\TotalFactory $addressTotalFactory,
-        \Magento\Framework\Object\Copy $objectCopyService,
+        \Magento\Framework\DataObject\Copy $objectCopyService,
         \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory,
         Address\Validator $validator,
         \Magento\Customer\Model\Address\Mapper $addressMapper,

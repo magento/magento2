@@ -185,7 +185,7 @@
                 <item name="array" xsi:type="object">arrayArgumentInterpreterProxy</item>
                 <item name="boolean" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Boolean</item>
                 <item name="number" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Number</item>
-                <item name="string" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\String</item>
+                <item name="string" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\StringUtils</item>
                 <item name="null" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\NullType</item>
                 <item name="url" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Url</item>
             </argument>

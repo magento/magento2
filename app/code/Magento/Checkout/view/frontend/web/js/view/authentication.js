@@ -43,7 +43,7 @@ define(
                 if($(loginForm).validation()
                     && $(loginForm).validation('isValid')
                 ) {
-                    loginAction(loginData);
+                    loginAction(loginData, checkoutConfig.checkoutUrl);
                 }
             }
         });
