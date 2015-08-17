@@ -15,6 +15,10 @@ use Magento\Backend\App\Action\Context;
 use Magento\Framework\Registry;
 use Magento\Sales\Model\Service\InvoiceService;
 
+/**
+ * Class UpdateQty
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class UpdateQty extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
 {
     /**
