@@ -10,7 +10,7 @@
         <css src="Magento_Swatches::css/swatches.css"/>
     </head>
     <body>
-        <remove name="product.info.options.configurable"/>
+        <referenceContainer name="product.info.options.configurable" remove="true"/>
         <referenceBlock name="product.info.options.wrapper">
             <block class="Magento\Swatches\Block\Product\Renderer\Configurable" name="product.info.options.swatches" as="swatch_options" before="-" />
         </referenceBlock>
