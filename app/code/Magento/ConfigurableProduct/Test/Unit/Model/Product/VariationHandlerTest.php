@@ -306,12 +306,12 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider productDataProviderForProcessMediaGalleryForFillingGallery
-     * @param $productArr
-     * @param $expected
+     * @param array $productData
+     * @param array $expected
      */
-    public function testProcessMediaGalleryForFillingGallery($productArr, $expected)
+    public function testProcessMediaGalleryForFillingGallery($productData, $expected)
     {
-        $this->assertEquals($expected, $this->_model->processMediaGallery($this->_product, $productArr));
+        $this->assertEquals($expected, $this->_model->processMediaGallery($this->_product, $productData));
     }
 
     /**
