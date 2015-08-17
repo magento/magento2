@@ -3,15 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Store\Model;
+namespace Magento\Store\Model\Service;
 
 class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterface
 {
-    /**
-     * @var StoreFactory
-     */
-    protected $storeFactory;
-
     /**
      * @var \Magento\Store\Model\Resource\Store\CollectionFactory
      */
@@ -30,25 +25,22 @@ class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterfa
     protected $scopeConfig;
 
     protected $configPaths = [
-        'locale' => 'general/locale/code',
-        'base_currency_code' => 'currency/options/base',
-        'default_display_currency_code' => 'currency/options/default',
-        'timezone' => 'general/locale/timezone',
+        'setLocale' => 'general/locale/code',
+        'setBaseCurrencyCode' => 'currency/options/base',
+        'setDefaultDisplayCurrencyCode' => 'currency/options/default',
+        'setTimezone' => 'general/locale/timezone',
     ];
 
     /**
-     * @param StoreFactory $storeFactory
      * @param \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\Data\StoreConfigFactory $storeConfigFactory
      */
     public function __construct(
-        StoreFactory $storeFactory,
         \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\Data\StoreConfigFactory $storeConfigFactory
     ) {
-        $this->storeFactory = $storeFactory;
         $this->storeCollectionFactory = $storeCollectionFactory;
         $this->scopeConfig = $scopeConfig;
         $this->storeConfigFactory = $storeConfigFactory;
@@ -66,7 +58,7 @@ class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterfa
             $storeCollection->addFieldToFilter('code', ['in' => $storeCodes]);
         }
 
-        foreach ($storeCollection as $item) {
+        foreach ($storeCollection->load() as $item) {
             $storeConfigs[] = $this->getStoreConfig($item);
         }
         return $storeConfigs;
@@ -85,14 +77,18 @@ class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterfa
             ->setCode($store->getCode())
             ->setWebsiteId($store->getWebsiteId());
 
-        foreach ($this->configPaths as $attrName => $configPath) {
-            $methodName = 'set_' . $attrName;
-            $methodName = \Magento\Framework\Api\SimpleDataObjectConverter::snakeCaseToCamelCase($methodName);
-            $configValue = $this->scopeConfig->getValue($configPath, 'stores', $store->getCode());
+        foreach ($this->configPaths as $methodName => $configPath) {
+            $configValue = $this->scopeConfig->getValue(
+                $configPath,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORES,
+                $store->getCode()
+            );
             $storeConfig->$methodName($configValue);
         }
 
+        //Hard code the weight unit for now
         $storeConfig->setWeightUnit('lbs');
+
         $storeConfig->setBaseUrl($store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB, false));
         $storeConfig->setSecureBaseUrl($store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_WEB, true));
         $storeConfig->setBaseLinkUrl($store->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK, false));
