@@ -35,6 +35,7 @@ class LogStatusCommand extends AbstractLogCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->initApplicationArea();
         /** @var \Magento\Log\Model\Resource\ShellFactory $resourceFactory */
         $resourceFactory = $this->objectManager->create('Magento\Log\Model\Resource\ShellFactory');
         /** @var \Magento\Log\Model\Resource\Shell $resource */
