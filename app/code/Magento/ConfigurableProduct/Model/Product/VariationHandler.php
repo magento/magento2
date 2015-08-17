@@ -8,6 +8,10 @@ namespace Magento\ConfigurableProduct\Model\Product;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Catalog\Model\Product\Type as ProductType;
 
+/**
+ * Variation Handler
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class VariationHandler
 {
     /** @var \Magento\Catalog\Model\Product\Attribute\Backend\Media */
