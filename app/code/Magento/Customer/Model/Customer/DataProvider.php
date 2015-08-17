@@ -131,9 +131,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 $addresses[$addressId] = $address->getData();
                 $this->prepareAddressData($addressId, $addresses, $result['customer']);
             }
-            if (!empty($addresses)) {
-                $result['address'] = $addresses;
-            }
+            $result['address'] = $addresses;
 
             $this->loadedData[$customer->getId()] = $result;
         }
