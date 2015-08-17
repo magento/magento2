@@ -58,6 +58,15 @@ define(
             quoteAddressToFormAddressData: function (address) {
                 var self = this;
                 var output = {};
+
+                if ($.isArray(address.street)) {
+                    var streetObject = {};
+                    address.street.forEach(function(value, index) {
+                        streetObject[index] = value;
+                    });
+                    address.street = streetObject;
+                }
+
                 $.each(address, function (key) {
                     if (address.hasOwnProperty(key) && !$.isFunction(address[key])) {
                         output[self.toUnderscore(key)] = address[key];
