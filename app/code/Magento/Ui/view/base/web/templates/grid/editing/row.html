@@ -1,0 +1,18 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<tr
+    data-part="body.row"
+    class="data-grid-editable-row"
+    data-bind="
+        visible: active,
+        '_even-row': !($index() % 2),
+        foreach: {
+            data: fields,
+            as: 'field'
+        }">
+    <!-- ko template: $data.isEditor ? $parent.fieldTmpl : getBody() --><!-- /ko -->
+</tr>

@@ -36,18 +36,6 @@ define([
         obj[key] = ko[method](value);
     }
 
-    function notify(diffs, data, callback) {
-        diffs.changes.forEach(function (change) {
-            callback(change.path, change.value, change);
-        });
-
-        _.each(diffs.containers, function (changes, name) {
-            var value = utils.nested(data, name);
-
-            callback(name, value, changes);
-        });
-    }
-
     return {
         /**
          * Retrieves nested data.
@@ -75,7 +63,7 @@ define([
 
                 utils.nested(this, path, value);
 
-                notify(diffs, this, this.trigger);
+                this._notify(diffs);
             } else {
                 utils.nested(this, path, value);
             }
@@ -116,6 +104,18 @@ define([
             }
 
             return this;
+        },
+
+        _notify: function (diffs) {
+            diffs.changes.forEach(function (change) {
+                this.trigger(change.path, change.value, change);
+            }, this);
+
+            _.each(diffs.containers, function (changes, name) {
+                var value = utils.nested(this, name);
+
+                this.trigger(name, value, changes);
+            }, this);
         },
 
         restore: function () {

@@ -29,13 +29,11 @@
         </button>
         <ul
             class="action-menu"
-            data-bind="click: hideMenu">
-            <!-- ko foreach: actions -->
+            data-bind="click: hideMenu, foreach: actions">
             <li data-bind="click: $parent[value].bind($parent),
                            visible: $parent.isActionRelevant(value)">
                 <span class="action-menu-item" data-bind="text: label"></span>
             </li>
-            <!-- /ko -->
         </ul>
     </div>
 </th>

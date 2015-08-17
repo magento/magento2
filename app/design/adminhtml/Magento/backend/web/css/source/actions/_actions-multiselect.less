@@ -29,7 +29,7 @@
             border-color: @action__active__border-color;
         }
         .action-menu {
-            .appearing__on();
+            display: block;
         }
     }
     &._disabled {
@@ -74,10 +74,10 @@
         }
     }
     .action-menu {
-        left: -(@data-grid-cell__padding-horizontal + @data-grid-cell__border-width + .1rem);
+        left: 0;
         right: auto;
         text-align: left;
-        margin-top: 1px;
+        margin-top: 2px;
     }
     .action-menu-item {
         white-space: nowrap;
