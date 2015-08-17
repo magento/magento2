@@ -120,7 +120,7 @@
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="prices" xsi:type="array">
-                <item name="grandTotal" xsi:type="string">31.65</item>
+                <item name="grandTotal" xsi:type="string">21.91</item>
             </data>
             <data name="payment/method" xsi:type="string">checkmo</data>
             <data name="tag" xsi:type="string">test_type:acceptance_test</data>
@@ -138,7 +138,7 @@
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="prices" xsi:type="array">
-                <item name="grandTotal" xsi:type="string">31.65</item>
+                <item name="grandTotal" xsi:type="string">21.91</item>
             </data>
             <data name="payment/method" xsi:type="string">checkmo</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />

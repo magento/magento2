@@ -290,9 +290,6 @@ class ConfigurableAttributesData extends DataSource
                 );
             }
 
-            if (!isset($this->variationsMatrix[$key]['display'])) {
-                $this->variationsMatrix[$key]['display'] = 'Yes';
-            }
         }
     }
 
@@ -329,6 +326,7 @@ class ConfigurableAttributesData extends DataSource
                 $compositeKey = "{$attributeKey}:{$optionKey}";
                 $row['name'] .= ' ' . $index;
                 $row['sku'] .= '_' . $index;
+                $row['price'] = $option['pricing_value'];
                 $newRowKey = $rowKey ? "{$rowKey} {$compositeKey}" : $compositeKey;
                 $result[$newRowKey] = $row;
                 $index++;
@@ -363,7 +361,6 @@ class ConfigurableAttributesData extends DataSource
         ];
         $variationMatrixFields = [
             'configurable_attribute',
-            'display',
             'name',
             'sku',
             'price',
