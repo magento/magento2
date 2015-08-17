@@ -61,6 +61,7 @@ require([
     'mage/mage',
     'mage/backend/menu',
     'Magento_Ui/js/modal/modal',
+    'mage/translate',
     'domReady!'
 ], function($, mageTemplate){
     'use strict';
@@ -113,7 +114,7 @@ require([
         .collapse(hasVariations ? 'show' : 'hide');
 
     var $gridDialog = $('#associated-products-container').modal({
-        title: 'Select Associated Product',
+        title: $.mage.__('Select Associated Product'),
         type: 'popup'
     });
 
