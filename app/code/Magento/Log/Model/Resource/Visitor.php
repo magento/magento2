@@ -20,7 +20,7 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Magento string lib
      *
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
@@ -38,20 +38,20 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Stdlib\String $string
-     * @param string|null $resourcePrefix
+     * @param \Magento\Framework\Stdlib\StringUtils $string
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Stdlib\String $string,
-        $resourcePrefix = null
+        \Magento\Framework\Stdlib\StringUtils $string,
+        $connectionName = null
     ) {
         $this->_date = $date;
         $this->_storeManager = $storeManager;
         $this->string = $string;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -89,8 +89,8 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _saveUrlInfo($visitor)
     {
-        $adapter = $this->_getWriteAdapter();
-        $data = new \Magento\Framework\Object(
+        $connection = $this->getConnection();
+        $data = new \Magento\Framework\DataObject(
             [
                 'url' => $this->string->substr($visitor->getUrl(), 0, 250),
                 'referer' => $this->string->substr($visitor->getHttpReferer(), 0, 250),
@@ -98,9 +98,9 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
         );
         $bind = $this->_prepareDataForTable($data, $this->getTable('log_url_info'));
 
-        $adapter->insert($this->getTable('log_url_info'), $bind);
+        $connection->insert($this->getTable('log_url_info'), $bind);
 
-        $visitor->setLastUrlId($adapter->lastInsertId($this->getTable('log_url_info')));
+        $visitor->setLastUrlId($connection->lastInsertId($this->getTable('log_url_info')));
 
         return $this;
     }
@@ -145,15 +145,15 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Perform actions after object load
      *
-     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
     {
         parent::_afterLoad($object);
         // Add information about quote to visitor
-        $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             $this->getTable('log_quote'),
             'quote_id'
         )->where(
@@ -162,7 +162,7 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
         )->limit(
             1
         );
-        $result = $adapter->query($select)->fetch();
+        $result = $connection->query($select)->fetch();
         if (isset($result['quote_id'])) {
             $object->setQuoteId((int)$result['quote_id']);
         }
@@ -189,7 +189,7 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $language = $this->string->cleanString($visitor->getHttpAcceptLanguage());
         $language = $this->string->substr($language, 0, 255);
 
-        $data = new \Magento\Framework\Object(
+        $data = new \Magento\Framework\DataObject(
             [
                 'visitor_id' => $visitor->getId(),
                 'http_referer' => $referer,
@@ -203,8 +203,8 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         $bind = $this->_prepareDataForTable($data, $this->getTable('log_visitor_info'));
 
-        $adapter = $this->_getWriteAdapter();
-        $adapter->insert($this->getTable('log_visitor_info'), $bind);
+        $connection = $this->getConnection();
+        $connection->insert($this->getTable('log_visitor_info'), $bind);
 
         return $this;
     }
@@ -217,7 +217,7 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _saveVisitorUrl($visitor)
     {
-        $data = new \Magento\Framework\Object(
+        $data = new \Magento\Framework\DataObject(
             [
                 'url_id' => $visitor->getLastUrlId(),
                 'visitor_id' => $visitor->getId(),
@@ -226,7 +226,7 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
         );
         $bind = $this->_prepareDataForTable($data, $this->getTable('log_url'));
 
-        $this->_getWriteAdapter()->insert($this->getTable('log_url'), $bind);
+        $this->getConnection()->insert($this->getTable('log_url'), $bind);
         return $this;
     }
 
@@ -238,10 +238,10 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _saveCustomerInfo($visitor)
     {
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
 
         if ($visitor->getDoCustomerLogin()) {
-            $data = new \Magento\Framework\Object(
+            $data = new \Magento\Framework\DataObject(
                 [
                     'visitor_id' => $visitor->getVisitorId(),
                     'customer_id' => $visitor->getCustomerId(),
@@ -251,13 +251,13 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
             );
             $bind = $this->_prepareDataForTable($data, $this->getTable('log_customer'));
 
-            $adapter->insert($this->getTable('log_customer'), $bind);
-            $visitor->setCustomerLogId($adapter->lastInsertId($this->getTable('log_customer')));
+            $connection->insert($this->getTable('log_customer'), $bind);
+            $visitor->setCustomerLogId($connection->lastInsertId($this->getTable('log_customer')));
             $visitor->setDoCustomerLogin(false);
         }
 
         if ($visitor->getDoCustomerLogout() && ($logId = $visitor->getCustomerLogId())) {
-            $data = new \Magento\Framework\Object(
+            $data = new \Magento\Framework\DataObject(
                 [
                     'logout_at' => $this->_date->gmtDate(),
                     'store_id' => (int)$this->_storeManager->getStore()->getId(),
@@ -268,7 +268,7 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
             $condition = ['log_id = ?' => (int)$logId];
 
-            $adapter->update($this->getTable('log_customer'), $bind, $condition);
+            $connection->update($this->getTable('log_customer'), $bind, $condition);
 
             $visitor->setDoCustomerLogout(false);
             $visitor->setCustomerId(null);
@@ -286,9 +286,9 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _saveQuoteInfo($visitor)
     {
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         if ($visitor->getDoQuoteCreate()) {
-            $data = new \Magento\Framework\Object(
+            $data = new \Magento\Framework\DataObject(
                 [
                     'quote_id' => (int)$visitor->getQuoteId(),
                     'visitor_id' => (int)$visitor->getId(),
@@ -298,7 +298,7 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
             $bind = $this->_prepareDataForTable($data, $this->getTable('log_quote'));
 
-            $adapter->insert($this->getTable('log_quote'), $bind);
+            $connection->insert($this->getTable('log_quote'), $bind);
 
             $visitor->setDoQuoteCreate(false);
         }
@@ -310,7 +310,7 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
              */
             $condition = ['quote_id = ?' => (int)$visitor->getQuoteId()];
 
-            $adapter->delete($this->getTable('log_quote'), $condition);
+            $connection->delete($this->getTable('log_quote'), $condition);
 
             $visitor->setDoQuoteDestroy(false);
             $visitor->setQuoteId(null);

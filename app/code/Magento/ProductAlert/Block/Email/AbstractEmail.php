@@ -44,23 +44,23 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
     /**
      * @var \Magento\Catalog\Helper\Image
      */
-    protected $imageHelper;
+    protected $imageBuilder;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Filter\Input\MaliciousCode $maliciousCode
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @param \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Filter\Input\MaliciousCode $maliciousCode,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Catalog\Helper\Image $imageHelper,
+        \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder,
         array $data = []
     ) {
-        $this->imageHelper = $imageHelper;
+        $this->imageBuilder = $imageBuilder;
         $this->priceCurrency = $priceCurrency;
         $this->_maliciousCode = $maliciousCode;
         parent::__construct($context, $data);
@@ -212,23 +212,18 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Product thumbnail image url getter
+     * Retrieve product image
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return string
+     * @param string $imageId
+     * @param array $attributes
+     * @return \Magento\Catalog\Block\Product\Image
      */
-    public function getThumbnailUrl($product)
+    public function getImage($product, $imageId, $attributes = [])
     {
-        return (string)$this->imageHelper->init($product, 'thumbnail')->resize($this->getThumbnailSize());
-    }
-
-    /**
-     * Thumbnail image size getter
-     *
-     * @return int
-     */
-    public function getThumbnailSize()
-    {
-        return $this->getVar('product_thumbnail_image_size', 'Magento_Catalog');
+        return $this->imageBuilder->setProduct($product)
+            ->setImageId($imageId)
+            ->setAttributes($attributes)
+            ->create();
     }
 }

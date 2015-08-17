@@ -16,7 +16,7 @@ use Magento\Framework\View\Result\PageFactory;
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Account extends \Magento\Framework\App\Action\Action
+abstract class Account extends \Magento\Framework\App\Action\Action
 {
     /**
      * List of actions that are allowed for not authorized users

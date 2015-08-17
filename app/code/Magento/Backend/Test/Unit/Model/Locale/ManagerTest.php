@@ -41,7 +41,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $userMock = new \Magento\Framework\Object();
+        $userMock = new \Magento\Framework\DataObject();
 
         $this->_authSession->expects($this->any())->method('getUser')->will($this->returnValue($userMock));
 

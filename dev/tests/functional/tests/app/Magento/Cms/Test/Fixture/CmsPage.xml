@@ -18,7 +18,7 @@
         <field name="page_id" is_required="1" />
         <field name="title" is_required="" group="page_information" />
         <field name="is_active" is_required="" group="page_information" />
-        <field name="page_layout" is_required="" />
+        <field name="page_layout" is_required="" group="design" />
         <field name="meta_keywords" is_required="" group="meta_data" />
         <field name="meta_description" is_required="" group="meta_data" />
         <field name="identifier" group="page_information" is_required="" />

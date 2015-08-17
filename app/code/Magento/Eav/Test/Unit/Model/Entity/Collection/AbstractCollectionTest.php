@@ -110,11 +110,11 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->entityFactoryMock = $this->getMock('Magento\Eav\Model\EntityFactory', [], [], '', false);
-        /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject */
         $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
         $this->statementMock = $this->getMock('Magento\Framework\DB\Statement\Pdo\Mysql', ['fetch'], [], '', false);
-        /** @var $selectMock \Zend_Db_Select|\PHPUnit_Framework_MockObject_MockObject */
-        $selectMock = $this->getMock('Zend_Db_Select', [], [], '', false);
+        /** @var $selectMock \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject */
+        $selectMock = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
         $this->coreEntityFactoryMock->expects(
             $this->any()
         )->method(
@@ -133,7 +133,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($connectionMock)
         );
         $entityMock = $this->getMock('Magento\Eav\Model\Entity\AbstractEntity', [], [], '', false);
-        $entityMock->expects($this->any())->method('getReadConnection')->will($this->returnValue($connectionMock));
+        $entityMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
         $entityMock->expects($this->any())->method('getDefaultAttributes')->will($this->returnValue([]));
 
         $this->validatorFactoryMock->expects(
@@ -219,6 +219,6 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function getMagentoObject()
     {
-        return new \Magento\Framework\Object();
+        return new \Magento\Framework\DataObject();
     }
 }

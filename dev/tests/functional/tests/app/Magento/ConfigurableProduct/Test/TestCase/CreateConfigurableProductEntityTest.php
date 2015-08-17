@@ -42,7 +42,6 @@ class CreateConfigurableProductEntityTest extends Injectable
     const TEST_TYPE = 'acceptance_test';
     const MVP = 'yes';
     const DOMAIN = 'MX';
-    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**
@@ -80,7 +79,6 @@ class CreateConfigurableProductEntityTest extends Injectable
      */
     public function test(ConfigurableProduct $product)
     {
-        $this->markTestIncomplete('MAGETWO-40002');
         // Steps
         $this->productIndex->open();
         $this->productIndex->getGridPageActionBlock()->addProduct('configurable');

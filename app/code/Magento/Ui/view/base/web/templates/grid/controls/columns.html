@@ -11,7 +11,7 @@
         data-bind="click: toggleOpened"
         data-toggle="dropdown"
         aria-haspopup="true">
-        <span class="admin__action-dropdown-text" data-bind="text: $t('Columns')"></span>
+        <span class="admin__action-dropdown-text" data-bind="i18n: 'Columns'"></span>
     </button>
     <div data-bind="css: {_overflow: hasOverflow()}" class="admin__action-dropdown-menu admin__data-grid-action-columns-menu">
         <div class="admin__action-dropdown-menu-header">
@@ -29,12 +29,12 @@
         <div class="admin__action-dropdown-menu-footer">
             <div class="admin__action-dropdown-footer-secondary-actions">
                 <button data-bind="click: reset" class="action-tertiary" type="button">
-                    <span data-bind="text: $t('Reset')"></span>
+                    <span data-bind="i18n: 'Reset'"></span>
                 </button>
             </div>
             <div class="admin__action-dropdown-footer-main-actions">
                 <button data-bind="click: function () { $data.close().cancel(); }" class="action-tertiary" type="button">
-                    <span data-bind="text: $t('Cancel')"></span>
+                    <span data-bind="i18n: 'Cancel'"></span>
                 </button>
             </div>
         </div>

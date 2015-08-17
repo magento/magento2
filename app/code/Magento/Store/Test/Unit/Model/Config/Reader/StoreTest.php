@@ -32,6 +32,11 @@ class StoreTest extends \PHPUnit_Framework_TestCase
      */
     protected $_storeMock;
 
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_storeManagerMock;
+
     protected function setUp()
     {
         $this->_scopePullMock = $this->getMock('Magento\Framework\App\Config\ScopePool', [], [], '', false);
@@ -44,10 +49,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $storeFactoryMock = $this->getMock('Magento\Store\Model\StoreFactory', ['create'], [], '', false);
         $this->_storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
-        $storeFactoryMock->expects($this->any())->method('create')->will($this->returnValue($this->_storeMock));
-
         $placeholderProcessor = $this->getMock(
             'Magento\Store\Model\Config\Processor\Placeholder',
             [],
@@ -61,7 +63,6 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             $this->_scopePullMock,
             new \Magento\Store\Model\Config\Converter($placeholderProcessor),
             $this->_collectionFactory,
-            $storeFactoryMock,
             $this->_storeManagerMock
         );
     }
@@ -69,16 +70,14 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider readDataProvider
      * @param string|null $storeCode
-     * @param string $storeMethod
      */
-    public function testRead($storeCode, $storeMethod)
+    public function testRead($storeCode)
     {
         $websiteCode = 'default';
         $storeId = 1;
         $websiteMock = $this->getMock('Magento\Store\Model\Website', [], [], '', false);
         $websiteMock->expects($this->any())->method('getCode')->will($this->returnValue($websiteCode));
         $this->_storeMock->expects($this->any())->method('getWebsite')->will($this->returnValue($websiteMock));
-        $this->_storeMock->expects($this->any())->method('load')->with($storeCode);
         $this->_storeMock->expects($this->any())->method('getId')->will($this->returnValue($storeId));
         $this->_storeMock->expects($this->any())->method('getCode')->will($this->returnValue($websiteCode));
 
@@ -127,15 +126,16 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(
                 [
-                    new \Magento\Framework\Object(['path' => 'config/key1', 'value' => 'store_db_value1']),
-                    new \Magento\Framework\Object(['path' => 'config/key3', 'value' => 'store_db_value3']),
+                    new \Magento\Framework\DataObject(['path' => 'config/key1', 'value' => 'store_db_value1']),
+                    new \Magento\Framework\DataObject(['path' => 'config/key3', 'value' => 'store_db_value3']),
                 ]
             )
         );
 
         $this->_storeManagerMock
             ->expects($this->any())
-            ->method($storeMethod)
+            ->method('getStore')
+            ->with($storeCode)
             ->will($this->returnValue($this->_storeMock));
         $expectedData = [
             'config' => [
@@ -151,8 +151,8 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     public function readDataProvider()
     {
         return [
-            ['default', 'getDefaultStoreView'],
-            [null, 'getStore'],
+            ['default'],
+            [null],
             ['code', '']
         ];
     }
