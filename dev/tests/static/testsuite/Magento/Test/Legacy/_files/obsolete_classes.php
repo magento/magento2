@@ -3825,4 +3825,12 @@ return [
     ['Magento\CurrencySymbol\Model\Observer', 'corresponding classes in Magento\CurrencySymbol\Observer\*'],
     ['Magento\Catalog\Model\Product\Image\View'],
     ['Magento\Tools\Console\CommandList'],
+    ['Magento\Framework\Gdata\Gshopping\Content'],
+    ['Magento\Framework\Gdata\Gshopping\Entry'],
+    ['Magento\Framework\Gdata\Gshopping\HttpException'],
+    ['Magento\Framework\Gdata\Gshopping\ItemQuery'],
+    ['Magento\Framework\Gdata\Gshopping\Extension\Tax'],
+    ['Magento\Framework\Gdata\Gshopping\Extension\Shipping'],
+    ['Magento\Framework\Gdata\Gshopping\Extension\Control'],
+    ['Magento\Framework\Gdata\Gshopping\Extension\Attribute'],
 ];
