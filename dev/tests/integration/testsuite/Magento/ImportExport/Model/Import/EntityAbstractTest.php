@@ -37,7 +37,10 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
                 $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface'),
                 $objectManager->get('Magento\ImportExport\Model\ImportFactory'),
                 $objectManager->get('Magento\ImportExport\Model\Resource\Helper'),
-                $objectManager->get('Magento\Framework\App\Resource')
+                $objectManager->get('Magento\Framework\App\Resource'),
+                $objectManager->get(
+                    'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface'
+                )
             ],
             '',
             true,

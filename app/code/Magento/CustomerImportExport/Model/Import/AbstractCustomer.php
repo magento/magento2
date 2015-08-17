@@ -6,6 +6,7 @@
 namespace Magento\CustomerImportExport\Model\Import;
 
 use Magento\CustomerImportExport\Model\Resource\Import\Customer\Storage;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
  * Import entity abstract customer model
@@ -78,6 +79,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory
+     * @param ProcessingErrorAggregatorInterface $errorAggregator,
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -91,6 +93,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory,
+        ProcessingErrorAggregatorInterface $errorAggregator,
         array $data = []
     ) {
         $this->_storageFactory = $storageFactory;
@@ -103,6 +106,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
             $storeManager,
             $collectionFactory,
             $eavConfig,
+            $errorAggregator,
             $data
         );
 
@@ -168,7 +172,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     {
         if (isset($this->_validatedRows[$rowNumber])) {
             // check that row is already validated
-            return !isset($this->_invalidRows[$rowNumber]);
+            return !$this->getErrorAggregator()->isRowInvalid($rowNumber);
         }
         $this->_validatedRows[$rowNumber] = true;
         $this->_processedEntitiesCount++;
@@ -178,7 +182,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
             $this->_validateRowForDelete($rowData, $rowNumber);
         }
 
-        return !isset($this->_invalidRows[$rowNumber]);
+        return !$this->getErrorAggregator()->isRowInvalid($rowNumber);
     }
 
     /**
@@ -222,7 +226,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
                 $this->addRowError(static::ERROR_INVALID_WEBSITE, $rowNumber, static::COLUMN_WEBSITE);
             }
         }
-        return !isset($this->_invalidRows[$rowNumber]);
+        return !$this->getErrorAggregator()->isRowInvalid($rowNumber);
     }
 
     /**

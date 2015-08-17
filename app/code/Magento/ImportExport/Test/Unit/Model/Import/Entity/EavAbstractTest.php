@@ -9,7 +9,7 @@
  */
 namespace Magento\ImportExport\Test\Unit\Model\Import\Entity;
 
-class EavAbstractTest extends \PHPUnit_Framework_TestCase
+class EavAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
     /**
      * Entity type id
@@ -60,6 +60,8 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        parent::setUp();
+
         $this->_string = new \Magento\Framework\Stdlib\StringUtils();
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
@@ -99,6 +101,7 @@ class EavAbstractTest extends \PHPUnit_Framework_TestCase
                 $this->_storeManager,
                 $this->_collectionFactory,
                 $this->_eavConfig,
+                $this->getErrorAggregatorObject(),
                 $this->_getModelDependencies()
             ]
         );

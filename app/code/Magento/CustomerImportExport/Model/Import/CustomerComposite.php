@@ -5,6 +5,8 @@
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+
 /**
  * Import entity customer combined model
  *
@@ -137,6 +139,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * @param \Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\DataFactory $dataFactory
      * @param \Magento\CustomerImportExport\Model\Import\CustomerFactory $customerFactory
      * @param \Magento\CustomerImportExport\Model\Import\AddressFactory $addressFactory
+     * @param ProcessingErrorAggregatorInterface $errorAggregator,
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -150,9 +153,10 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
         \Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\DataFactory $dataFactory,
         \Magento\CustomerImportExport\Model\Import\CustomerFactory $customerFactory,
         \Magento\CustomerImportExport\Model\Import\AddressFactory $addressFactory,
+        ProcessingErrorAggregatorInterface $errorAggregator,
         array $data = []
     ) {
-        parent::__construct($string, $scopeConfig, $importFactory, $resourceHelper, $resource, $data);
+        parent::__construct($string, $scopeConfig, $importFactory, $resourceHelper, $resource, $errorAggregator, $data);
 
         $this->addMessageTemplate(
             self::ERROR_ROW_IS_ORPHAN,
@@ -248,7 +252,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     {
         $result = $this->_customerEntity->importData();
         if ($this->getBehavior() != \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE) {
-            return $result && $this->_addressEntity->importData();
+            return $result && $this->_addressEntity->setCustomerAttributes($this->_customerAttributes)->importData();
         }
 
         return $result;
@@ -415,53 +419,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
         $this->_addressEntity->setSource($source);
 
         return parent::setSource($source);
-    }
-
-    /**
-     * Returns error information grouped by error types and translated (if possible)
-     *
-     * @return array
-     */
-    public function getErrorMessages()
-    {
-        $errors = $this->_customerEntity->getErrorMessages();
-        $addressErrors = $this->_addressEntity->getErrorMessages();
-        foreach ($addressErrors as $message => $rowNumbers) {
-            if (isset($errors[$message])) {
-                foreach ($rowNumbers as $rowNumber) {
-                    $errors[$message][] = $rowNumber;
-                }
-                $errors[$message] = array_unique($errors[$message]);
-            } else {
-                $errors[$message] = $rowNumbers;
-            }
-        }
-
-        return array_merge($errors, parent::getErrorMessages());
-    }
-
-    /**
-     * Returns error counter value
-     *
-     * @return int
-     */
-    public function getErrorsCount()
-    {
-        return $this->_customerEntity->getErrorsCount() +
-            $this->_addressEntity->getErrorsCount() +
-            parent::getErrorsCount();
-    }
-
-    /**
-     * Returns invalid rows count
-     *
-     * @return int
-     */
-    public function getInvalidRowsCount()
-    {
-        return $this->_customerEntity->getInvalidRowsCount() +
-            $this->_addressEntity->getInvalidRowsCount() +
-            parent::getInvalidRowsCount();
     }
 
     /**

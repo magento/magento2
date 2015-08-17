@@ -5,6 +5,8 @@
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -129,6 +131,7 @@ class Customer extends AbstractCustomer
      * @param \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory
      * @param \Magento\Customer\Model\Resource\Attribute\CollectionFactory $attrCollectionFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
+     * @param ProcessingErrorAggregatorInterface $errorAggregator,
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -144,6 +147,7 @@ class Customer extends AbstractCustomer
         \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory,
         \Magento\Customer\Model\Resource\Attribute\CollectionFactory $attrCollectionFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
+        ProcessingErrorAggregatorInterface $errorAggregator,
         array $data = []
     ) {
         $this->_resourceHelper = $resourceHelper;
@@ -167,6 +171,7 @@ class Customer extends AbstractCustomer
             $collectionFactory,
             $eavConfig,
             $storageFactory,
+            $errorAggregator,
             $data
         );
 
@@ -395,6 +400,7 @@ class Customer extends AbstractCustomer
      *
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _importData()
     {
@@ -406,6 +412,10 @@ class Customer extends AbstractCustomer
 
             foreach ($bunch as $rowNumber => $rowData) {
                 if (!$this->validateRow($rowData, $rowNumber)) {
+                    continue;
+                }
+                if ($this->getErrorAggregator()->hasToBeTerminated()) {
+                    $this->getErrorAggregator()->addRowToSkip($rowNumber);
                     continue;
                 }
 
