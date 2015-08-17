@@ -29,6 +29,7 @@ define([
                     name: '${ $.$data.recordId }',
                     component: 'Magento_Ui/js/grid/editing/record',
                     columnsProvider: '${ $.$data.editor.columnsProvider }',
+                    editorProvider: '${ $.$data.editor.name }',
                     preserveFields: {
                         '${ $.$data.editor.indexField }': true
                     }
@@ -310,9 +311,7 @@ define([
          * @returns {Boolean}
          */
         isValid: function () {
-            return this.validate().every(function (result) {
-                return result.valid;
-            });
+            return _.every(this.validate(), 'valid');
         },
 
         /**
@@ -419,8 +418,8 @@ define([
                 record;
 
             if (isIndex === true) {
-                record = rowsData[id];
-                id = record ? record[this.indexField] : false;
+                record  = rowsData[id];
+                id      = record ? record[this.indexField] : false;
             }
 
             return id;

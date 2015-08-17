@@ -16,7 +16,7 @@
         }">
     <!-- ko if: $parent.isActionsColumn($data) -->
     <td class="data-grid-actions-cell">
-        <a class="admin__page-nav-link _changed" href="#" style="padding: 0 4rem 0 1rem;">
+        <a class="admin__page-nav-link _changed" href="#" data-bind="css: { _disabled: !$parent.hasChanges() }"style="padding: 0 4rem 0 1rem;">
             <span class="admin__page-nav-item-messages">
                <span class="admin__page-nav-item-message _changed">
                    <span class="admin__page-nav-item-message-icon"></span>
