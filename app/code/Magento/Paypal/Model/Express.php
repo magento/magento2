@@ -8,6 +8,7 @@ namespace Magento\Paypal\Model;
 use Magento\Paypal\Model\Api\Nvp;
 use Magento\Paypal\Model\Api\ProcessableException as ApiProcessableException;
 use Magento\Paypal\Model\Express\Checkout as ExpressCheckout;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Quote\Model\Quote;
@@ -167,6 +168,16 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_exception;
 
     /**
+     * @var \Magento\Sales\Api\TransactionRepositoryInterface
+     */
+    protected $transactionRepository;
+
+    /**
+     * @var Transaction\BuilderInterface
+     */
+    protected $transactionBuilder;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -180,6 +191,8 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * @param CartFactory $cartFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\Exception\LocalizedExceptionFactory $exception
+     * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
+     * @param Transaction\BuilderInterface $transactionBuilder
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -199,6 +212,8 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         \Magento\Paypal\Model\CartFactory $cartFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\Exception\LocalizedExceptionFactory $exception,
+        \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository,
+        \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -220,6 +235,8 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         $this->_cartFactory = $cartFactory;
         $this->_checkoutSession = $checkoutSession;
         $this->_exception = $exception;
+        $this->transactionRepository = $transactionRepository;
+        $this->transactionBuilder = $transactionBuilder;
 
         $proInstance = array_shift($data);
         if ($proInstance && $proInstance instanceof \Magento\Paypal\Model\Pro) {
@@ -380,7 +397,11 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
             $message = __('Ordered amount of %1', $formattedPrice);
         }
 
-        $payment->addTransaction(Transaction::TYPE_ORDER, null, false, $message);
+        $transaction = $this->transactionBuilder->setPayment($payment)
+            ->setOrder($order)
+            ->setTransactionId($payment->getTransactionId())
+            ->build(Transaction::TYPE_ORDER);
+        $payment->addTransactionCommentsToOrder($transaction, $message);
 
         $this->_pro->importPaymentInfo($api, $payment);
 
@@ -402,7 +423,11 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         $payment->setTransactionId($api->getTransactionId());
         $payment->setParentTransactionId($orderTransactionId);
 
-        $payment->addTransaction(Transaction::TYPE_AUTH, null, false, $message);
+        $transaction = $this->transactionBuilder->setPayment($payment)
+            ->setOrder($order)
+            ->setTransactionId($payment->getTransactionId())
+            ->build(Transaction::TYPE_AUTH);
+        $payment->addTransactionCommentsToOrder($transaction, $message);
 
         $order->setState($state)
             ->setStatus($status);
@@ -437,7 +462,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
             $this->_isOrderPaymentActionKey
         ) && !$payment->getVoidOnlyAuthorization()
         ) {
-            $orderTransaction = $payment->lookupTransaction(false, Transaction::TYPE_ORDER);
+            $orderTransaction = $this->getOrderTransaction($payment);
             if ($orderTransaction) {
                 $payment->setParentTransactionId($orderTransaction->getTxnId());
                 $payment->setTransactionId($orderTransaction->getTxnId() . '-void');
@@ -511,14 +536,19 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
                     $message = __('The authorized amount is %1.', $formatedPrice);
                 }
 
-                $transaction = $payment->addTransaction(Transaction::TYPE_AUTH, null, true, $message);
+                $transaction = $this->transactionBuilder->setPayment($payment)
+                    ->setOrder($order)
+                    ->setTransactionId($payment->getTransactionId())
+                    ->setFailSafe(true)
+                    ->build(Transaction::TYPE_AUTH);
+                $payment->addTransactionCommentsToOrder($transaction, $message);
 
                 $payment->setParentTransactionId($api->getTransactionId());
                 $isAuthorizationCreated = true;
             }
             //close order transaction if needed
             if ($payment->getShouldCloseParentTransaction()) {
-                $orderTransaction = $payment->lookupTransaction(false, Transaction::TYPE_ORDER);
+                $orderTransaction = $this->getOrderTransaction($payment);
 
                 if ($orderTransaction) {
                     $orderTransaction->setIsClosed(true);
@@ -737,7 +767,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
     {
         $info = $this->getInfoInstance();
         if ($info->getAdditionalInformation($this->_isOrderPaymentActionKey)) {
-            $orderTransaction = $info->lookupTransaction(false, Transaction::TYPE_ORDER);
+            $orderTransaction = $this->getOrderTransaction($info);
             if ($orderTransaction) {
                 $info->setParentTransactionId($orderTransaction->getTxnId());
             }
@@ -757,7 +787,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         $this->_pro->getConfig()->setStoreId($payment->getOrder()->getStore()->getId());
 
         if ($payment->getAdditionalInformation($this->_isOrderPaymentActionKey)) {
-            $orderTransaction = $payment->lookupTransaction(false, Transaction::TYPE_ORDER);
+            $orderTransaction = $this->getOrderTransaction($payment);
             if ($orderTransaction->getIsClosed()) {
                 return false;
             }
@@ -772,6 +802,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
                 return false;
             }
         }
+
         return $this->_canCapture;
     }
 
@@ -852,5 +883,20 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         return parent::isActive($storeId)
         || (bool)(int)$this->_scopeConfig->getValue($pathStandardExpress, ScopeInterface::SCOPE_STORE, $storeId)
         || (bool)(int)$this->_scopeConfig->getValue($pathPaypalExpress, ScopeInterface::SCOPE_STORE, $storeId);
+    }
+
+    /**
+     * Get transaction with type order
+     *
+     * @param OrderPaymentInterface $payment
+     * @return false|\Magento\Sales\Api\Data\TransactionInterface
+     */
+    protected function getOrderTransaction($payment)
+    {
+        return $this->transactionRepository->getByTransactionType(
+            Transaction::TYPE_ORDER,
+            $payment->getId(),
+            $payment->getOrder()->getId()
+        );
     }
 }
