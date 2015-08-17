@@ -68,7 +68,7 @@ class VariationHandler
         foreach ($productsData as $simpleProductData) {
             $newSimpleProduct = $this->productFactory->create();
             if (isset($simpleProductData['configurable_attribute'])) {
-                $configurableAttribute = json_decode($simpleProductData['configurable_attribute']);
+                $configurableAttribute = json_decode($simpleProductData['configurable_attribute'], true);
                 unset($simpleProductData['configurable_attribute']);
             } else {
                 throw new LocalizedException(__('Configuration must have specified attributes'));
