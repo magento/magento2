@@ -22,6 +22,10 @@ class BraintreeClientToken
      */
     public function generate(array $params = [])
     {
-        return \Braintree_ClientToken::generate($params);
+        try {
+            return \Braintree_ClientToken::generate($params);
+        } catch(\Exception $e){
+            return null;
+        }
     }
 }

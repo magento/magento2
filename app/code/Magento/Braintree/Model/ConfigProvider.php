@@ -5,6 +5,7 @@
  */
 namespace Magento\Braintree\Model;
 
+use Magento\Braintree\Model\Adapter\BraintreeClientToken;
 use Magento\Payment\Model\CcGenericConfigProvider;
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Payment\Model\CcConfig;
@@ -52,6 +53,13 @@ class ConfigProvider extends CcGenericConfigProvider
     protected $urlBuilder;
 
     /**
+     * Braintree Client Token
+     *
+     * @var \Magento\Braintree\Model\Adapter\BraintreeClientToken
+     */
+    protected $braintreeClientToken;
+
+    /**
      * @param CcConfig $ccConfig
      * @param PaymentHelper $paymentHelper
      * @param \Magento\Braintree\Model\Vault $vault
@@ -60,6 +68,7 @@ class ConfigProvider extends CcGenericConfigProvider
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Url $urlBuilder
      * @param \Magento\Braintree\Helper\Data $dataHelper
+     * @param \Magento\Braintree\Model\Adapter\BraintreeClientToken
      */
     public function __construct(
         CcConfig $ccConfig,
@@ -69,7 +78,8 @@ class ConfigProvider extends CcGenericConfigProvider
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Url $urlBuilder,
-        \Magento\Braintree\Helper\Data $dataHelper
+        \Magento\Braintree\Helper\Data $dataHelper,
+        \Magento\Braintree\Model\Adapter\BraintreeClientToken $braintreeClientToken
     ) {
         parent::__construct($ccConfig, $paymentHelper);
         $this->vault = $vault;
@@ -78,6 +88,7 @@ class ConfigProvider extends CcGenericConfigProvider
         $this->customerSession = $customerSession;
         $this->urlBuilder = $urlBuilder;
         $this->dataHelper = $dataHelper;
+        $this->braintreeClientToken = $braintreeClientToken;
     }
 
     /**
@@ -147,7 +158,7 @@ class ConfigProvider extends CcGenericConfigProvider
         }
         $config = parent::getConfig();
 
-        $clientToken = $this->config->getClientToken();
+        $clientToken = $this->braintreeClientToken->generate();
         $useVault = $this->config->useVault();
         $selectedCardToken = null;
         $storedCardOptions = [];
