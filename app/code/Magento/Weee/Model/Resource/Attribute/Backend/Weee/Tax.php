@@ -20,15 +20,15 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->_storeManager = $storeManager;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -50,7 +50,7 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function loadProductData($product, $attribute)
     {
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getMainTable(),
             ['website_id', 'country', 'state', 'value']
         )->where(
@@ -71,7 +71,7 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 );
             }
         }
-        return $this->_getReadAdapter()->fetchAll($select);
+        return $this->getConnection()->fetchAll($select);
     }
 
     /**
@@ -85,14 +85,14 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $where = ['entity_id = ?' => (int)$product->getId(), 'attribute_id = ?' => (int)$attribute->getId()];
 
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         if (!$attribute->isScopeGlobal()) {
             $storeId = $product->getStoreId();
             if ($storeId) {
                 $where['website_id IN(?)'] = [0, $this->_storeManager->getStore($storeId)->getWebsiteId()];
             }
         }
-        $adapter->delete($this->getMainTable(), $where);
+        $connection->delete($this->getMainTable(), $where);
         return $this;
     }
 
@@ -106,7 +106,7 @@ class Tax extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function insertProductData($product, $data)
     {
         $data['entity_id'] = (int)$product->getId();
-        $this->_getWriteAdapter()->insert($this->getMainTable(), $data);
+        $this->getConnection()->insert($this->getMainTable(), $data);
         return $this;
     }
 }

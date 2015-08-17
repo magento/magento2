@@ -8,7 +8,7 @@ namespace Magento\Paypal\Controller;
 /**
  * Payflow Checkout Controller
  */
-class Payflow extends \Magento\Framework\App\Action\Action
+abstract class Payflow extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Checkout\Model\Session

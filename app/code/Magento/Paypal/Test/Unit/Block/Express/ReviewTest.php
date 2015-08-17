@@ -89,7 +89,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
         $quote->expects($this->any())->method('getIsVirtual')->will($this->returnValue(false));
         $quote->setMayEditShippingMethod('MayEditShippingMethod');
 
-        $shippingRate = new \Magento\Framework\Object(['code' => 'Rate 1']);
+        $shippingRate = new \Magento\Framework\DataObject(['code' => 'Rate 1']);
         $shippingRates = [
             [$shippingRate],
         ];
@@ -141,7 +141,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getQuoteMock()
     {
-        $methodInstance = new \Magento\Framework\Object(['title' => 'Payment Method']);
+        $methodInstance = new \Magento\Framework\DataObject(['title' => 'Payment Method']);
         $payment = $this->getMock('Magento\Quote\Model\Quote\Payment', [], [], '', false);
         $payment->expects($this->any())->method('getMethodInstance')->will($this->returnValue($methodInstance));
 

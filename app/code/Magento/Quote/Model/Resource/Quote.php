@@ -28,16 +28,16 @@ class Quote extends AbstractDb
      * @param Snapshot $entitySnapshot,
      * @param RelationComposite $entityRelationComposite,
      * @param \Magento\SalesSequence\Model\Manager $sequenceManager
-     * @param null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         Snapshot $entitySnapshot,
         RelationComposite $entityRelationComposite,
         Manager $sequenceManager,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
-        parent::__construct($context, $entitySnapshot, $entityRelationComposite, $resourcePrefix);
+        parent::__construct($context, $entitySnapshot, $entityRelationComposite, $connectionName);
         $this->sequenceManager = $sequenceManager;
     }
 
@@ -84,7 +84,7 @@ class Quote extends AbstractDb
      */
     public function loadByCustomerId($quote, $customerId)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $select = $this->_getLoadSelect(
             'customer_id',
             $customerId,
@@ -98,7 +98,7 @@ class Quote extends AbstractDb
             1
         );
 
-        $data = $adapter->fetchRow($select);
+        $data = $connection->fetchRow($select);
 
         if ($data) {
             $quote->setData($data);
@@ -118,10 +118,10 @@ class Quote extends AbstractDb
      */
     public function loadActive($quote, $quoteId)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $select = $this->_getLoadSelect('entity_id', $quoteId, $quote)->where('is_active = ?', 1);
 
-        $data = $adapter->fetchRow($select);
+        $data = $connection->fetchRow($select);
         if ($data) {
             $quote->setData($data);
         }
@@ -140,11 +140,11 @@ class Quote extends AbstractDb
      */
     public function loadByIdWithoutStore($quote, $quoteId)
     {
-        $read = $this->_getReadAdapter();
-        if ($read) {
+        $connection = $this->getConnection();
+        if ($connection) {
             $select = parent::_getLoadSelect('entity_id', $quoteId, $quote);
 
-            $data = $read->fetchRow($select);
+            $data = $connection->fetchRow($select);
 
             if ($data) {
                 $quote->setData($data);
@@ -178,7 +178,7 @@ class Quote extends AbstractDb
     public function markQuotesRecollectOnCatalogRules()
     {
         $tableQuote = $this->getTable('quote');
-        $subSelect = $this->_getReadAdapter()->select()->from(
+        $subSelect = $this->getConnection()->select()->from(
             ['t2' => $this->getTable('quote_item')],
             ['entity_id' => 'quote_id']
         )->from(
@@ -190,7 +190,7 @@ class Quote extends AbstractDb
             'quote_id'
         );
 
-        $select = $this->_getReadAdapter()->select()->join(
+        $select = $this->getConnection()->select()->join(
             ['t2' => $subSelect],
             't1.entity_id = t2.entity_id',
             ['trigger_recollect' => new \Zend_Db_Expr('1')]
@@ -198,7 +198,7 @@ class Quote extends AbstractDb
 
         $updateQuery = $select->crossUpdateFromSelect(['t1' => $tableQuote]);
 
-        $this->_getWriteAdapter()->query($updateQuery);
+        $this->getConnection()->query($updateQuery);
 
         return $this;
     }
@@ -215,16 +215,16 @@ class Quote extends AbstractDb
         if (!$productId) {
             return $this;
         }
-        $adapter = $this->_getWriteAdapter();
-        $subSelect = $adapter->select();
+        $connection = $this->getConnection();
+        $subSelect = $connection->select();
 
         $subSelect->from(
             false,
             [
                 'items_qty' => new \Zend_Db_Expr(
-                    $adapter->quoteIdentifier('q.items_qty') . ' - ' . $adapter->quoteIdentifier('qi.qty')
+                    $connection->quoteIdentifier('q.items_qty') . ' - ' . $connection->quoteIdentifier('qi.qty')
                 ),
-                'items_count' => new \Zend_Db_Expr($adapter->quoteIdentifier('q.items_count') . ' - 1')
+                'items_count' => new \Zend_Db_Expr($connection->quoteIdentifier('q.items_count') . ' - 1')
             ]
         )->join(
             ['qi' => $this->getTable('quote_item')],
@@ -233,15 +233,15 @@ class Quote extends AbstractDb
                 [
                     'q.entity_id = qi.quote_id',
                     'qi.parent_item_id IS NULL',
-                    $adapter->quoteInto('qi.product_id = ?', $productId)
+                    $connection->quoteInto('qi.product_id = ?', $productId)
                 ]
             ),
             []
         );
 
-        $updateQuery = $adapter->updateFromSelect($subSelect, ['q' => $this->getTable('quote')]);
+        $updateQuery = $connection->updateFromSelect($subSelect, ['q' => $this->getTable('quote')]);
 
-        $adapter->query($updateQuery);
+        $connection->query($updateQuery);
 
         return $this;
     }
@@ -256,7 +256,7 @@ class Quote extends AbstractDb
     {
         $tableQuote = $this->getTable('quote');
         $tableItem = $this->getTable('quote_item');
-        $subSelect = $this->_getReadAdapter()->select()->from(
+        $subSelect = $this->getConnection()->select()->from(
             $tableItem,
             ['entity_id' => 'quote_id']
         )->where(
@@ -266,13 +266,13 @@ class Quote extends AbstractDb
             'quote_id'
         );
 
-        $select = $this->_getReadAdapter()->select()->join(
+        $select = $this->getConnection()->select()->join(
             ['t2' => $subSelect],
             't1.entity_id = t2.entity_id',
             ['trigger_recollect' => new \Zend_Db_Expr('1')]
         );
         $updateQuery = $select->crossUpdateFromSelect(['t1' => $tableQuote]);
-        $this->_getWriteAdapter()->query($updateQuery);
+        $this->getConnection()->query($updateQuery);
 
         return $this;
     }

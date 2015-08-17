@@ -8,7 +8,7 @@ namespace Magento\Paypal\Controller\Adminhtml\Paypal;
 /**
  * PayPal Settlement Reports Controller
  */
-class Reports extends \Magento\Backend\App\Action
+abstract class Reports extends \Magento\Backend\App\Action
 {
     /**
      * Core registry

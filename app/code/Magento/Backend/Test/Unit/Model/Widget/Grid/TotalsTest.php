@@ -36,7 +36,7 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_factoryMock = $this->getMock(
-            'Magento\Framework\Object\Factory',
+            'Magento\Framework\DataObject\Factory',
             ['create'],
             [],
             '',
@@ -46,8 +46,8 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
         );
 
         $createValueMap = [
-            [['test1' => 3, 'test2' => 2], new \Magento\Framework\Object(['test1' => 3, 'test2' => 2])],
-            [['test4' => 9, 'test5' => 2], new \Magento\Framework\Object(['test4' => 9, 'test5' => 2])],
+            [['test1' => 3, 'test2' => 2], new \Magento\Framework\DataObject(['test1' => 3, 'test2' => 2])],
+            [['test4' => 9, 'test5' => 2], new \Magento\Framework\DataObject(['test4' => 9, 'test5' => 2])],
         ];
         $this->_factoryMock->expects($this->any())->method('create')->will($this->returnValueMap($createValueMap));
 
@@ -76,15 +76,15 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
         );
         $items = [
-            new \Magento\Framework\Object(['test1' => '1', 'test2' => '2']),
-            new \Magento\Framework\Object(['test1' => '1', 'test2' => '2']),
-            new \Magento\Framework\Object(['test1' => '1', 'test2' => '2']),
+            new \Magento\Framework\DataObject(['test1' => '1', 'test2' => '2']),
+            new \Magento\Framework\DataObject(['test1' => '1', 'test2' => '2']),
+            new \Magento\Framework\DataObject(['test1' => '1', 'test2' => '2']),
         ];
         foreach ($items as $item) {
             $collection->addItem($item);
         }
 
-        $expected = new \Magento\Framework\Object(['test1' => 3, 'test2' => 2]);
+        $expected = new \Magento\Framework\DataObject(['test1' => 3, 'test2' => 2]);
         $this->assertEquals($expected, $this->_model->countTotals($collection));
     }
 
@@ -99,19 +99,19 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
         );
         $items = [
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 [
-                    'children' => new \Magento\Framework\Object(['test4' => '1', 'test5' => '2']),
+                    'children' => new \Magento\Framework\DataObject(['test4' => '1', 'test5' => '2']),
                 ]
             ),
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 [
-                    'children' => new \Magento\Framework\Object(['test4' => '1', 'test5' => '2']),
+                    'children' => new \Magento\Framework\DataObject(['test4' => '1', 'test5' => '2']),
                 ]
             ),
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 [
-                    'children' => new \Magento\Framework\Object(['test4' => '1', 'test5' => '2']),
+                    'children' => new \Magento\Framework\DataObject(['test4' => '1', 'test5' => '2']),
                 ]
             ),
         ];
@@ -120,12 +120,12 @@ class TotalsTest extends \PHPUnit_Framework_TestCase
             $subCollection = new \Magento\Framework\Data\Collection(
                 $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
             );
-            $subCollection->addItem(new \Magento\Framework\Object(['test4' => '1', 'test5' => '2']));
-            $subCollection->addItem(new \Magento\Framework\Object(['test4' => '2', 'test5' => '2']));
+            $subCollection->addItem(new \Magento\Framework\DataObject(['test4' => '1', 'test5' => '2']));
+            $subCollection->addItem(new \Magento\Framework\DataObject(['test4' => '2', 'test5' => '2']));
             $item->setChildren($subCollection);
             $collection->addItem($item);
         }
-        $expected = new \Magento\Framework\Object(['test4' => 9, 'test5' => 2]);
+        $expected = new \Magento\Framework\DataObject(['test4' => 9, 'test5' => 2]);
         $this->assertEquals($expected, $this->_model->countTotals($collection));
     }
 }

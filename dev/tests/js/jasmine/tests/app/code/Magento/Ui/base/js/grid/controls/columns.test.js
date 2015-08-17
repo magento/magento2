@@ -45,20 +45,6 @@ define([
             columnsInstance.viewportMaxSize = 4;
             columnsInstance.elems.push(new FakeElement());
             expect(columnsInstance.isDisabled(columnsInstance.elems()[0])).toBeTruthy();
-
-            columnsInstance.elems.push(new FakeElement());
-            expect(columnsInstance.isDisabled(columnsInstance.elems()[0])).toBeFalsy();
-
-            columnsInstance.elems.push(new FakeElement());
-            expect(columnsInstance.isDisabled(columnsInstance.elems()[0])).toBeFalsy();
-
-            columnsInstance.elems.push(new FakeElement());
-            expect(columnsInstance.isDisabled(columnsInstance.elems()[0])).toBeFalsy();
-
-            columnsInstance.elems.push(new FakeElement());
-            expect(columnsInstance.isDisabled(columnsInstance.elems()[0])).toBeTruthy();
-            expect(columnsInstance.isDisabled(columnsInstance.elems()[3])).toBeTruthy();
         });
-
     });
 });
