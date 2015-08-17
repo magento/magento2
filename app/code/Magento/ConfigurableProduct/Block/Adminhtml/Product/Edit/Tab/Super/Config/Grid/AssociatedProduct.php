@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Grid;
+
 /**
  * Associated Product Grid
  */
-namespace Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Grid;
-
 class AssociatedProduct extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**

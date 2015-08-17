@@ -11,15 +11,13 @@
 ?>
 <div data-role="configurable-attribute">
     <div data-role="messages" class="messages">
-        <div data-role="messages" id="messages">
-            <div class="message ">
-                <div>
-                    <?php if ($block->isHasRows()) :
-                        echo __('Choose a new product to delete and replace the current product configuration.');
-                    else :
-                        echo __('For better results, add attributes and attribute values to your products.');
-                    endif;?>
-                </div>
+        <div class="message ">
+            <div>
+                <?php if ($block->isHasRows()): ?>
+                    <?= __('Choose a new product to delete and replace the current product configuration.') ?>
+                <?php else: ?>
+                    <?=  __('For better results, add attributes and attribute values to your products.') ?>
+                <?php endif ?>
             </div>
         </div>
     </div>
