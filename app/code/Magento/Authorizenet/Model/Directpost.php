@@ -113,6 +113,11 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
     protected $orderFactory;
 
     /**
+     * @var \Magento\Sales\Api\TransactionRepositoryInterface
+     */
+    protected $transactionRepository;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -129,6 +134,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      * @param \Magento\Sales\Model\Order\Email\Sender\OrderSender $orderSender
+     * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -151,6 +157,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\Sales\Model\Order\Email\Sender\OrderSender $orderSender,
+        \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -160,6 +167,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
         $this->quoteRepository = $quoteRepository;
         $this->response = $responseFactory->create();
         $this->orderSender = $orderSender;
+        $this->transactionRepository = $transactionRepository;
         $this->_code = static::METHOD_CODE;
 
         parent::__construct(
@@ -795,7 +803,11 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      */
     protected function getRealParentTransactionId($payment)
     {
-        $transaction = $payment->getTransaction($payment->getParentTransactionId());
+        $transaction = $this->transactionRepository->getByTransactionId(
+            $payment->getParentTransactionId(),
+            $payment->getId(),
+            $payment->getOrder()->getId()
+        );
         return $transaction->getAdditionalInformation(self::REAL_TRANSACTION_ID_KEY);
     }
 
@@ -851,7 +863,11 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      */
     public function fetchTransactionInfo(\Magento\Payment\Model\InfoInterface $payment, $transactionId)
     {
-        $transaction = $payment->getTransaction($transactionId);
+        $transaction = $this->transactionRepository->getByTransactionId(
+            $transactionId,
+            $payment->getId(),
+            $payment->getOrder()->getId()
+        );
 
         $response = $this->getTransactionResponse($transactionId);
         if ($response->getXResponseCode() == self::RESPONSE_CODE_APPROVED) {
