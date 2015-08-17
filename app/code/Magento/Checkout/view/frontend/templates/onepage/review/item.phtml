@@ -19,7 +19,7 @@ $_item = $block->getItem();
     <tr>
         <td class="col item" data-th="<?php echo $block->escapeHtml(__('Product Name'));?>">
             <span class="product-item-photo">
-                <?php echo $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image')->init($block->getProductForThumbnail(), 'cart_page_product_thumbnail')->toHtml(); ?>
+                <?php echo $block->getImage($block->getProductForThumbnail(), 'cart_page_product_thumbnail')->toHtml(); ?>
             </span>
             <div class="product-item-details">
                 <strong class="product name product-item-name"><?php echo $block->escapeHtml($block->getProductName()) ?></strong>
