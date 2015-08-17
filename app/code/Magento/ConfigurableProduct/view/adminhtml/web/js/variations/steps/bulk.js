@@ -113,7 +113,7 @@ define([
         render: function (wizard) {
             this.wizard = wizard;
             this.attributes(wizard.data.attributes());
-            if (this.initData) {
+            if (this.mode == 'edit') {
                 this.setWizardNotifyMessageDependOnSectionType();
             }
             //fill option section data

@@ -138,6 +138,7 @@ define([
         },
         initElement: function (step) {
             step.initData = this.initData;
+            step.mode = _.all(this.initData, _.isEmpty) ? 'create' : 'edit';
             this.steps[this.getStepIndexByName(step.name)] = step;
         },
         initObservable: function () {
