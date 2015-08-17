@@ -39,6 +39,25 @@ class OyejorgeTest extends \PHPUnit_Framework_TestCase
 
         file_put_contents(__DIR__ . '/_files/actual.css', $actualCss);
         file_put_contents(__DIR__ . '/_files/expected.css', $expectedCss);
-        $this->assertEquals($expectedCss, $actualCss);
+        $this->assertEquals($this->cutCopyrights($expectedCss), $actualCss);
+    }
+
+    /**
+     * Cuts copyrights from css source
+     *
+     * @param string $cssSource
+     * @return string
+     */
+    private function cutCopyrights($cssSource)
+    {
+        $copyright = <<<'TAG'
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+TAG;
+        return (string)str_replace($copyright, '', $cssSource);
+
     }
 }
