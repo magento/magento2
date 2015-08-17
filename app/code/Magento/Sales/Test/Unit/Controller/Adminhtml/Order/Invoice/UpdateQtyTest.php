@@ -71,6 +71,11 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
     protected $resultJsonFactoryMock;
 
     /**
+     * @var \Magento\Sales\Model\Service\InvoiceService|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $invoiceServiceMock;
+
+    /**
      * SetUp method
      *
      * @return void
@@ -145,13 +150,18 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
+        $this->invoiceServiceMock = $this->getMockBuilder('Magento\Sales\Model\Service\InvoiceService')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->controller = $objectManager->getObject(
             'Magento\Sales\Controller\Adminhtml\Order\Invoice\UpdateQty',
             [
                 'context' => $contextMock,
                 'resultPageFactory' => $this->resultPageFactoryMock,
                 'resultRawFactory' => $this->resultRawFactoryMock,
-                'resultJsonFactory' => $this->resultJsonFactoryMock
+                'resultJsonFactory' => $this->resultJsonFactoryMock,
+                'invoiceService' => $this->invoiceServiceMock
             ]
         );
     }
@@ -199,10 +209,7 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
             ->method('canInvoice')
             ->willReturn(true);
 
-        $invoiceManagement = $this->getMockBuilder('Magento\Sales\Model\Service\InvoiceService')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $invoiceManagement->expects($this->once())
+        $this->invoiceServiceMock->expects($this->once())
             ->method('prepareInvoice')
             ->with($orderMock, [])
             ->willReturn($invoiceMock);
@@ -211,10 +218,6 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with('Magento\Sales\Model\Order')
             ->willReturn($orderMock);
-        $this->objectManagerMock->expects($this->at(1))
-            ->method('create')
-            ->with('Magento\Sales\Model\Service\InvoiceService')
-            ->willReturn($invoiceManagement);
 
         $blockItemMock = $this->getMockBuilder('Magento\Sales\Block\Order\Items')
             ->disableOriginalConstructor()
