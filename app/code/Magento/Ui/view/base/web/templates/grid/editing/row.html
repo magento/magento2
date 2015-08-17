@@ -14,5 +14,20 @@
             data: fields,
             as: 'field'
         }">
-    <!-- ko template: $data.isEditor ? $parent.fieldTmpl : getBody() --><!-- /ko -->
+    <!-- ko if: $parent.isActionsColumn($data) -->
+    <td class="data-grid-actions-cell">
+        <a class="admin__page-nav-link _changed" href="#" style="padding: 0 4rem 0 1rem;">
+            <span class="admin__page-nav-item-messages">
+               <span class="admin__page-nav-item-message _changed">
+                   <span class="admin__page-nav-item-message-icon"></span>
+                   <span class="admin__page-nav-item-message-tooltip" data-bind="i18n: 'Changes have been made to this section that have not been saved.'"></span>
+               </span>
+            </span> 
+        </a>
+    </td>
+    <!-- /ko -->
+
+    <!-- ko ifnot: $parent.isActionsColumn($data) -->
+        <!-- ko template: $data.isEditor ? $parent.fieldTmpl : getBody() --><!-- /ko -->
+    <!-- /ko -->
 </tr>
