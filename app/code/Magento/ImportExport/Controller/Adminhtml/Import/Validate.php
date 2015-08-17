@@ -48,7 +48,7 @@ class Validate extends ImportResultController
             } else {
                 $errorAggregator = $import->getErrorAggregator();
                 if (!$validationResult) {
-                    $resultBlock->addNotice(
+                    $resultBlock->addError(
                         __('Data validation is failed. Please fix errors and re-upload the file..')
                     );
                     $this->addErrorMessages($resultBlock, $errorAggregator);
