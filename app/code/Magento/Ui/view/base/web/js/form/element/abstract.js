@@ -144,7 +144,7 @@ define([
                 return !utils.isEmpty(value = v);
             });
 
-            return utils.isEmpty(value) ? '' : value;
+            return this.normalizeData(value);
         },
 
         /**
@@ -189,6 +189,11 @@ define([
             return !this.visible() ? false : notEqual;
         },
 
+        /**
+         * Checks if 'value' is not empty.
+         *
+         * @returns {Boolean}
+         */
         hasData: function () {
             return !utils.isEmpty(this.value());
         },
@@ -209,6 +214,16 @@ define([
             this.value('');
 
             return this;
+        },
+
+        /**
+         * Converts values like 'null' or 'undefined' to an empty string.
+         *
+         * @param {*} value - Value to be processed.
+         * @returns {*}
+         */
+        normalizeData: function (value) {
+            return utils.isEmpty(value) ? '' : value;
         },
 
         /**

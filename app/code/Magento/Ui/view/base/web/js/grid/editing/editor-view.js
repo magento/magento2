@@ -96,6 +96,13 @@ define([
             return this;
         },
 
+        /**
+         * Initializes bulk editor element
+         * for the provided table.
+         *
+         * @param {HTMLTableElement} table
+         * @returns {View} Chainable.
+         */
         initBulk: function (table) {
             var model = this.model,
                 bulkHtml = $(this.bulkTmpl);

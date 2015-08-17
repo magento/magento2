@@ -27,7 +27,7 @@ define([
             template: 'ui/grid/editing/bulk',
             active: false,
             templates: {
-                editors: {
+                fields: {
                     select: {
                         caption: ' '
                     }
@@ -39,9 +39,6 @@ define([
             listens: {
                 data: 'updateState',
                 active: 'updateState'
-            },
-            modules: {
-                editor: '${ $.editorProvider }'
             }
         },
 
@@ -63,17 +60,17 @@ define([
          * Extends original method to disable possible
          * 'required-entry' validation rule.
          *
-         * @returns {Object} Columns' editor definition.
+         * @returns {Object} Columns' field definition.
          */
-        buildEditor: function () {
-            var editor = this._super(),
-                rules = editor.validation;
+        buildField: function () {
+            var field = this._super(),
+                rules = field.validation;
 
             if (rules) {
                 delete rules['required-entry'];
             }
 
-            return editor;
+            return field;
         },
 
         /**
