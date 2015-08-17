@@ -38,10 +38,10 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
             true,
             true,
             true,
-            ['getConfigPath']
+            ['getPath']
         );
         $this->assetRepoMock->expects($this->once())->method('getStaticViewFileContext')->willReturn($contextMock);
-        $contextMock->expects($this->once())->method('getConfigPath')->willReturn($path);
+        $contextMock->expects($this->once())->method('getPath')->willReturn($path);
         $this->assetRepoMock
             ->expects($this->once())
             ->method('createArbitrary')
