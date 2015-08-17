@@ -37,12 +37,11 @@ define([
         }
     };
 
-    var saveAttributes = _.memoize(function (attributes) {
+    /**
+     * Memorize results by attributeIds
+     */
+    var saveAttributes = _.memoize(function (attributeIds, attributes) {
         return _.map(attributes, this.createAttribute, this);
-    }, function(attributes) {
-        return _.reduce(attributes, function (memo, attribute) {
-            return (_.isObject(memo) ? memo.id : memo) + attribute.id;
-        });
     });
 
     return Collapsible.extend({
@@ -147,7 +146,7 @@ define([
                 data: {attributes: attributeIds},
                 showLoader: true
             }).done(function(attributes){
-                this.attributes(saveAttributes.call(this, attributes));
+                this.attributes(saveAttributes.call(this, attributeIds, attributes));
                 this.doInitSavedOptions();
             }.bind(this));
         },
