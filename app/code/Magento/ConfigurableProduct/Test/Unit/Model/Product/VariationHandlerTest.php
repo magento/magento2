@@ -36,11 +36,6 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
     protected $_productFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Json\Helper\Data
-     */
-    protected $jsonHelperMock;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogInventory\Api\StockConfigurationInterface
      */
     protected $_stockConfiguration;
@@ -66,13 +61,6 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->jsonHelperMock = $this->getMock(
-            'Magento\Framework\Json\Helper\Data',
-            ['jsonDecode'],
-            [],
-            '',
-            false
-        );
         $this->_productFactoryMock = $this->getMock(
             'Magento\Catalog\Model\ProductFactory',
             ['create'],
@@ -117,7 +105,6 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
                 'productFactory' => $this->_productFactoryMock,
                 'entityFactory' => $this->_entityFactoryMock,
                 'attributeSetFactory' => $this->_attributeSetFactory,
-                'jsonHelper' => $this->jsonHelperMock,
                 'stockConfiguration' => $this->_stockConfiguration,
                 'configurableProduct' => $this->configurableProduct
             ]
@@ -230,10 +217,6 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $attributeMock->expects($this->once())->method('save')->willReturnSelf();
         $this->_productFactoryMock->expects($this->once())->method('create')->willReturn($newSimpleProductMock);
-        $this->jsonHelperMock->expects($this->once())
-            ->method('jsonDecode')
-            ->with('{"new_attr":"6"}')
-            ->willReturn(['new_attr' => 6]);
         $newSimpleProductMock->expects($this->once())->method('setStoreId')->with(0)->willReturnSelf();
         $newSimpleProductMock->expects($this->once())->method('setTypeId')->with('simple')->willReturnSelf();
         $newSimpleProductMock->expects($this->once())
