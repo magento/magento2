@@ -73,10 +73,10 @@ abstract class Attribute extends \Magento\Backend\App\Action
     }
 
     /**
-     * @param null|\Magento\Framework\Phrase $item
+     * @param \Magento\Framework\Phrase|null $title
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    protected function createActionPage($item = null)
+    protected function createActionPage($title = null)
     {
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
@@ -89,12 +89,12 @@ abstract class Attribute extends \Magento\Backend\App\Action
             $pageConfig = $resultPage->getConfig();
             $pageConfig->addBodyClass('attribute-popup');
         } else {
-            if (!empty($item)) {
-                $resultPage->addBreadcrumb($item, $item);
-            }
             $resultPage->addBreadcrumb(__('Catalog'), __('Catalog'))
                 ->addBreadcrumb(__('Manage Product Attributes'), __('Manage Product Attributes'))
                 ->setActiveMenu('Magento_Catalog::catalog_attributes_attributes');
+            if (!empty($title)) {
+                $resultPage->addBreadcrumb($title, $title);
+            }
         }
         $resultPage->getConfig()->getTitle()->prepend(__('Product Attributes'));
         return $resultPage;

@@ -76,6 +76,7 @@ class Page extends View\Result\Page
      */
     public function addBreadcrumb($label, $title, $link = null)
     {
+        /** @var \Magento\Backend\Block\Widget\Breadcrumbs $block */
         $block = $this->layout->getBlock('breadcrumbs');
         if ($block) {
             $block->addLink($label, $title, $link);
