@@ -17,7 +17,7 @@ class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
     /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param \Magento\Catalog\Model\Product\Image\ViewFactory $imageFactory
+     * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param array $components
      * @param array $data
@@ -25,13 +25,13 @@ class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        \Magento\Catalog\Model\Product\Image\ViewFactory $imageFactory,
+        \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Framework\UrlInterface $urlBuilder,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
-        $this->imageFactory = $imageFactory;
+        $this->imageHelper = $imageHelper;
         $this->urlBuilder = $urlBuilder;
     }
 
@@ -47,17 +47,15 @@ class Thumbnail extends \Magento\Ui\Component\Listing\Columns\Column
             $fieldName = $this->getData('name');
             foreach ($dataSource['data']['items'] as & $item) {
                 $product = new \Magento\Framework\DataObject($item);
-                $imageView = $this->imageFactory->create()
-                    ->init($product, 'product_listing_thumbnail', 'Magento_Catalog');
-                $origImageView = $this->imageFactory->create()
-                    ->init($product, 'product_listing_thumbnail_preview', 'Magento_Catalog');
-                $item[$fieldName . '_src'] = $imageView->getUrl();
-                $item[$fieldName . '_alt'] = $this->getAlt($item) ?: $imageView->getLabel();
+                $imageHelper = $this->imageHelper->init($product, 'product_listing_thumbnail');
+                $item[$fieldName . '_src'] = $imageHelper->getUrl();
+                $item[$fieldName . '_alt'] = $this->getAlt($item) ?: $imageHelper->getLabel();
                 $item[$fieldName . '_link'] = $this->urlBuilder->getUrl(
                     'catalog/product/edit',
                     ['id' => $product->getEntityId(), 'store' => $this->context->getRequestParam('store')]
                 );
-                $item[$fieldName . '_orig_src'] = $origImageView->getUrl();
+                $origImageHelper = $this->imageHelper->init($product, 'product_listing_thumbnail_preview');
+                $item[$fieldName . '_orig_src'] = $origImageHelper->getUrl();
             }
         }
     }

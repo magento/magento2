@@ -52,7 +52,9 @@ if ($variations) {
             $productMatrix[] = [
                 'product_id' => $product->getId(),
                 'images' => [
-                    'preview' => (string)$this->helper('Magento\Catalog\Helper\Image')->init($product, 'thumbnail')
+                    'preview' => $this->helper('Magento\Catalog\Helper\Image')
+                        ->init($product, 'product_thumbnail_image')
+                        ->getUrl()
                 ],
                 'sku' => $product->getSku(),
                 'name' => $product->getName(),
@@ -239,7 +241,7 @@ if ($variations) {
                             },
                             outerClick: $parent.closeList.bind($parent, $index())">
                             <button class="action-select" data-bind="click: $parent.toggleList.bind($parent, $index())">
-                                <span data-bind="text: $t('Select')"></span>
+                                <span data-bind="i18n: 'Select'"></span>
                             </button>
                             <ul class="action-menu _active" data-bind="css: {'_active': $parent.opened() === $index()}">
                                 <li>
@@ -248,7 +250,7 @@ if ($variations) {
                                 </li>
                                 <li>
                                     <a class="action-menu-item" data-bind="
-                                    text: variation.status == 1 ? $t('Disable Product') : $t('Enable Product'),
+                                    i18n: variation.status == 1 ? 'Disable Product' : 'Enable Product',
                                     click: $parent.toggleProduct.bind($parent, $index())"></a>
                                 </li>
                                 <li>
