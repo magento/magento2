@@ -40,7 +40,6 @@ define([
                 var address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getShippingAddressFromData());
                 selectShippingAddress(address);
             }
-            this.applyShippingAddress();
 
             if (quote.isVirtual && checkoutData.getBillingAddressFromData()) {
                 address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getBillingAddressFromData());
