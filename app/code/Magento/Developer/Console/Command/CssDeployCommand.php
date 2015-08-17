@@ -238,7 +238,7 @@ class CssDeployCommand extends Command
             $destination = $asset->getPath();
             $rootDir->copyFile($source, $destination, $targetDir);
 
-            $output->writeln("<info>Successfully processed LESS and/or SCSS files</info>");
+            $output->writeln("<info>Successfully processed dynamic stylesheet into CSS</info>");
         }
     }
 }

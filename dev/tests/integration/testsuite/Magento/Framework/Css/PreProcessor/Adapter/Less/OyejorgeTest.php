@@ -56,6 +56,7 @@ class OyejorgeTest extends \PHPUnit_Framework_TestCase
  * See COPYING.txt for license details.
  */
 
+
 TAG;
         return (string)str_replace($copyright, '', $cssSource);
 

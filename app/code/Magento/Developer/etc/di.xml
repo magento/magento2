@@ -54,7 +54,6 @@
         <arguments>
             <argument name="alternativeExtensions" xsi:type="array">
                 <item name="css" xsi:type="array">
-                    <item name="scss" xsi:type="string">scss</item>
                     <item name="less" xsi:type="string">less</item>
                 </item>
             </argument>
@@ -71,18 +70,6 @@
                         <item name="css_min" xsi:type="string">cssMinificationProcessor</item>
                     </item>
                     <item name="less" xsi:type="array">
-                        <item name="magento_import" xsi:type="string">Magento\Framework\Css\PreProcessor\Instruction\MagentoImport</item>
-                        <item name="import" xsi:type="string">Magento\Framework\Css\PreProcessor\Instruction\Import</item>
-                    </item>
-                </item>
-                <item name="scss" xsi:type="array">
-                    <item name="css" xsi:type="array">
-                        <item name="scss" xsi:type="string">Magento\Framework\Css\PreProcessor\Scss</item>
-                        <item name="variable_notation" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\VariableNotation</item>
-                        <item name="module_notation" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\ModuleNotation</item>
-                        <item name="css_min" xsi:type="string">cssMinificationProcessor</item>
-                    </item>
-                    <item name="scss" xsi:type="array">
                         <item name="magento_import" xsi:type="string">Magento\Framework\Css\PreProcessor\Instruction\MagentoImport</item>
                         <item name="import" xsi:type="string">Magento\Framework\Css\PreProcessor\Instruction\Import</item>
                     </item>
@@ -105,11 +92,6 @@
     <type name="Magento\Framework\Css\PreProcessor\Less">
         <arguments>
             <argument name="adapter" xsi:type="object">Magento\Framework\Css\PreProcessor\Adapter\Less\Oyejorge</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\Css\PreProcessor\Scss">
-        <arguments>
-            <argument name="adapter" xsi:type="object">Magento\Framework\Css\PreProcessor\Adapter\Scss\Leafo</argument>
         </arguments>
     </type>
 
@@ -152,7 +134,6 @@
         <arguments>
             <argument name="fileGeneratorTypes" xsi:type="array">
                 <item name="less" xsi:type="object">fileAssemblerFileGenerator</item>
-                <item name="scss" xsi:type="object">fileAssemblerFileGenerator</item>
             </argument>
         </arguments>
     </type>
