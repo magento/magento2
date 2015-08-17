@@ -239,7 +239,7 @@ define([
             }, this);
             var formValid = true;
             _.each($('[data-role=attributes-values-form]'), function(form) {
-                formValid = $(form).valid() ? formValid : false;
+                formValid = $(form).valid() && formValid;
             });
             if (!formValid) {
                 throw new Error($.mage.__('Please, fill correct values'));
