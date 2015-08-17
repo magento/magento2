@@ -1,0 +1,13 @@
+.import-error-wrapper {
+    background-color: #fff;
+    padding: 10px;
+    margin: 10px 0;
+}
+
+.import-error-list {
+    max-height: 120px;
+    overflow-y: scroll;
+    padding: 0 10px;
+    background-color: #fcc;
+    margin: 10px 0 0 0;
+}
