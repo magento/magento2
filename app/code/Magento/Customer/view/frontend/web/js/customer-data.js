@@ -7,8 +7,8 @@ define([
     'underscore',
     'ko',
     'Magento_Customer/js/section-config',
-    'jquery/jquery-storageapi',
-    'jquery/jquery.cookie'
+    'jquery/jquery.cookie',
+    'jquery/jquery-storageapi'
 ], function ($, _, ko, sectionConfig) {
     'use strict';
 
