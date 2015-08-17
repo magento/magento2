@@ -32,6 +32,7 @@ class JobComponentUninstall extends AbstractJob
     const COMPONENT_MODULE = 'magento2-module';
     const COMPONENT_THEME = 'magento2-theme';
     const COMPONENT_LANGUAGE = 'magento2-language';
+    const COMPONENT = 'magento2-component';
     /**#@-*/
 
     /**
@@ -134,7 +135,12 @@ class JobComponentUninstall extends AbstractJob
             throw new \RuntimeException('Component type not set');
         }
 
-        if (!in_array($type, [self::COMPONENT_MODULE, self::COMPONENT_THEME, self::COMPONENT_LANGUAGE])) {
+        if (!in_array($type, [
+            self::COMPONENT_MODULE,
+            self::COMPONENT_THEME,
+            self::COMPONENT_LANGUAGE,
+            self::COMPONENT
+        ])) {
             throw new \RuntimeException('Unknown component type');
         }
 
