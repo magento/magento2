@@ -86,8 +86,8 @@ class Context
             $this->httpRequest->getParam(
                 StoreResolverInterface::PARAM_NAME,
                 $this->storeCookieManager->getStoreCodeFromCookie()
-            ),
-            $this->storeManager->getWebsite()->getDefaultStore()->getCode()
+            ) ?: $defaultStore->getCode(),
+            $this->storeManager->getDefaultStoreView()->getCode()
         );
         return $proceed($request);
     }

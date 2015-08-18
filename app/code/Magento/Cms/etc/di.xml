@@ -56,6 +56,30 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="cms_page_listing_data_source" xsi:type="string">Magento\Cms\Model\Resource\Page\Grid\Collection</item>
+                <item name="cms_block_listing_data_source" xsi:type="string">Magento\Cms\Model\Resource\Block\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Cms\Model\Resource\Page\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">cms_page</argument>
+            <argument name="eventPrefix" xsi:type="string">cms_page_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">page_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\Cms\Model\Resource\Page</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Cms\Model\Resource\Block\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">cms_block</argument>
+            <argument name="eventPrefix" xsi:type="string">cms_block_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">block_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\Cms\Model\Resource\Block</argument>
+        </arguments>
+    </type>
     <virtualType name="CmsGirdFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
         <arguments>
             <argument name="appliers" xsi:type="array">
