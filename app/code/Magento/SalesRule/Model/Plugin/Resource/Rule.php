@@ -10,6 +10,7 @@ class Rule
     /**
      * @param \Magento\SalesRule\Model\Resource\Rule $subject
      * @param \Closure $proceed
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return \Magento\Framework\Model\AbstractModel
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -24,6 +25,7 @@ class Rule
     /**
      * @param \Magento\SalesRule\Model\Resource\Rule $subject
      * @param \Closure $proceed
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return \Magento\Framework\Model\AbstractModel
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
