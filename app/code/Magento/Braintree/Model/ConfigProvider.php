@@ -5,7 +5,6 @@
  */
 namespace Magento\Braintree\Model;
 
-use Magento\Braintree\Model\Adapter\BraintreeClientToken;
 use Magento\Payment\Model\CcGenericConfigProvider;
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Payment\Model\CcConfig;
