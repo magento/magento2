@@ -13,7 +13,6 @@ use Magento\Framework\DataObject\IdentityInterface;
  *
  * @method \Magento\Cms\Model\Resource\Page _getResource()
  * @method \Magento\Cms\Model\Resource\Page getResource()
- * @method int[] getStores()
  */
 class Page extends \Magento\Framework\Model\AbstractModel implements PageInterface, IdentityInterface
 {
@@ -79,6 +78,14 @@ class Page extends \Magento\Framework\Model\AbstractModel implements PageInterfa
     public function noRoutePage()
     {
         return $this->load(self::NOROUTE_PAGE_ID, $this->getIdFieldName());
+    }
+
+    /**
+     * @return int[]
+     */
+    public function getStores()
+    {
+        return $this->hasData('stores') ? $this->getData('stores') : $this->getData('store_id');
     }
 
     /**
