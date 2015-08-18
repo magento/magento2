@@ -193,6 +193,7 @@ return [
     'oauth_nonce'                                 => 'Magento\Integration',
     'oauth_token'                                 => 'Magento\Integration',
     'authorizenet_debug'                          => 'Magento\Authorizenet',
+    'admin_passwords'                             => 'Magento\PasswordManagement',
     'paypal_cert'                                 => 'Magento\Paypal',
     'paypal_payment_transaction'                  => 'Magento\Paypal',
     'paypal_settlement_report'                    => 'Magento\Paypal',

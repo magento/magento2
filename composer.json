@@ -123,6 +123,7 @@
         "magento/module-offline-payments": "self.version",
         "magento/module-offline-shipping": "self.version",
         "magento/module-page-cache": "self.version",
+        "magento/module-password-management": "self.version",
         "magento/module-payment": "self.version",
         "magento/module-paypal": "self.version",
         "magento/module-persistent": "self.version",
