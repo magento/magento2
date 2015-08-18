@@ -68,14 +68,14 @@ abstract class ImportResult extends Import
             if ($errorAggregator->hasFatalExceptions()) {
                 foreach ($this->getSystemExceptions($errorAggregator) as $error) {
                     $message .= $error->getErrorMessage()
-                        . '<a href="#" onclick="$(this).next().show();$(this).hide();return false;">'
+                        . ' <a href="#" onclick="$(this).next().show();$(this).hide();return false;">'
                         . __('Show more') . '</a><div style="display:none;">' . __('Additional data') . ': '
                         . $error->getErrorDescription() . '</div>';
                 }
             }
             $resultBlock->addNotice(
                 '<strong>' . __('Following Error(s) has been occurred during importing process:') . '</strong><br>'
-                . '<div class="import-error-wrapper">' . __('Only first 100 error are displayed here. ')
+                . '<div class="import-error-wrapper">' . __('Only first 100 errors are displayed here. ')
                 . '<a href="'
                 . $this->createDownloadUrlImportHistoryFile($this->createErrorReport($errorAggregator))
                 . '">' . __('Download full report') . '</a><br>'
