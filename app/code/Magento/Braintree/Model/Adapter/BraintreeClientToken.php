@@ -18,7 +18,7 @@ class BraintreeClientToken
 {
     /**
      * @param array $params
-     * @return \Braintree_Result_Successful|\Braintree_Result_Error
+     * @return \Braintree_Result_Successful|\Braintree_Result_Error|null
      */
     public function generate(array $params = [])
     {

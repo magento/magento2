@@ -75,9 +75,9 @@ define(
             canInitialise: function () {
                 if (!this.clientToken) {
                     messageList.addErrorMessage({'message': 'Can not initialize PayPal (Braintree)'});
-                } else {
-                    return true;
+                    return false;
                 }
+                return true
             },
 
             initPayPalContainer: function (element) {
