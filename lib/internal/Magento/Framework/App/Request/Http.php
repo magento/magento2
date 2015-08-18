@@ -85,7 +85,7 @@ class Http extends Request implements RequestInterface
     /**
      * @var array
      */
-    protected $safeRequestTypes = ['GET', 'HEAD', 'TRACE', 'CONNECT'];
+    protected $safeRequestTypes = ['GET', 'HEAD', 'TRACE', 'OPTIONS'];
 
     /**
      * @param CookieReaderInterface $cookieReader
