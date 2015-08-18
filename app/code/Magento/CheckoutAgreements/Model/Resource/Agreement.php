@@ -3,9 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\CheckoutAgreements\Model\Resource;
 
 /**
@@ -92,12 +89,10 @@ class Agreement extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
     {
-        $select = $this->getConnection()->select()->from(
-            $this->getTable('checkout_agreement_store'),
-            ['store_id']
-        )->where(
-            'agreement_id = :agreement_id'
-        );
+        $select = $this->getConnection()
+            ->select()
+            ->from($this->getTable('checkout_agreement_store'), ['store_id'])
+            ->where('agreement_id = :agreement_id');
 
         if ($stores = $this->getConnection()->fetchCol($select, [':agreement_id' => $object->getId()])) {
             $object->setData('store_id', $stores);
