@@ -97,7 +97,7 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
             $quote
         ) && null !== $quote && $this->priceCurrency->round(
             $quote->getGrandTotal()
-        ) === 0;
+        ) == 0;
     }
 
     /**
