@@ -35,25 +35,15 @@ class PayPal implements ConfigProviderInterface
     protected $localeResolver;
 
     /**
-     * Braintree Client Token
-     *
-     * @var \Magento\Framework\Url
-     */
-    protected $braintreeClientToken;
-
-    /**
      * @param PayPalConfig $config
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param \Magento\Braintree\Model\Adapter\BraintreeClientToken
      */
     public function __construct(
         PayPalConfig $config,
-        \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        \Magento\Braintree\Model\Adapter\BraintreeClientToken $braintreeClientToken
+        \Magento\Framework\Locale\ResolverInterface $localeResolver
     ) {
         $this->config = $config;
         $this->localeResolver = $localeResolver;
-        $this->braintreeClientToken = $braintreeClientToken;
     }
 
     /**
@@ -64,7 +54,7 @@ class PayPal implements ConfigProviderInterface
         if (!$this->config->isActive()) {
             return [];
         }
-        $clientToken = $this->braintreeClientToken->generate();
+        $clientToken = $this->config->getClientToken();
 
         $config = [
             'payment' => [

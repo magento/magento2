@@ -72,11 +72,10 @@ define(
             },
             canInitialise: function () {
                 if (!this.clientToken) {
-                    messageList.addErrorMessage({'message': 'Can not initialize PayPal (Braintree)'});
+                    messageList.addErrorMessage({'message': 'Can not initialize Braintree (Credit Cart)'});
                     return false;
-                } else {
-                    return true;
                 }
+                return true
             },
             /**
              * @override
@@ -103,7 +102,7 @@ define(
                     });
                 }
 
-                if (this.clientToken) {
+                if (this.canInitialise()) {
                     this.braintreeClient = new braintreeClientSDK.api.Client({
                         clientToken: this.clientToken
                     });
