@@ -380,6 +380,7 @@ define([
             var $checkbox = $(event.currentTarget);
             var $imageContainer = $checkbox.closest('[data-role=dialog]').data('imageContainer');
             $imageContainer.toggleClass('hidden-for-front', $checkbox.is(':checked'));
+            $imageContainer.find('[name*="disabled"]').val($checkbox.is(':checked') ? 1 : 0);
         },
 
         /**

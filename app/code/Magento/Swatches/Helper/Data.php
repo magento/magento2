@@ -383,12 +383,18 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param string $imageFile
      * @return array
      */
-    protected function getAllSizeImages (Product $product, $imageFile)
+    protected function getAllSizeImages(Product $product, $imageFile)
     {
         return [
-            'large'   => (string)$this->imageHelper->init($product, 'image', $imageFile),
-            'medium'  => (string)$this->imageHelper->init($product, 'thumbnail', $imageFile),
-            'small'   => (string)$this->imageHelper->init($product, 'small_image', $imageFile),
+            'large' => $this->imageHelper->init($product, 'product_page_image_large')
+                ->setImageFile($imageFile)
+                ->getUrl(),
+            'medium' => $this->imageHelper->init($product, 'product_page_image_medium')
+                ->setImageFile($imageFile)
+                ->getUrl(),
+            'small' => $this->imageHelper->init($product, 'product_page_image_small')
+                ->setImageFile($imageFile)
+                ->getUrl(),
         ];
     }
 
