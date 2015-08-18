@@ -18,6 +18,11 @@ abstract class ImportResult extends Import
     const IMPORT_HISTORY_FILE_DOWNLOAD_ROUTE = '*/history/download';
 
     /**
+     * Limit view errors
+     */
+    const LIMIT_ERRORS_MESSAGE = 1;
+
+    /**
      * @var \Magento\ImportExport\Model\Report\ReportProcessorInterface
      */
     protected $reportProcessor;
@@ -64,6 +69,9 @@ abstract class ImportResult extends Import
             $counter = 0;
             foreach ($this->getErrorMessages($errorAggregator) as $error) {
                 $message .= ++$counter . '. ' . $error . '<br>';
+                if ($counter >= self::LIMIT_ERRORS_MESSAGE) {
+                    break;
+                }
             }
             if ($errorAggregator->hasFatalExceptions()) {
                 foreach ($this->getSystemExceptions($errorAggregator) as $error) {
@@ -78,8 +86,10 @@ abstract class ImportResult extends Import
                 . '<div class="import-error-wrapper">' . __('Only first 100 errors are displayed here. ')
                 . '<a href="'
                 . $this->createDownloadUrlImportHistoryFile($this->createErrorReport($errorAggregator))
+
                 . '">' . __('Download full report') . '</a><br>'
                 . '<div class="import-error-list">' . $message . '</div></div>'
+                .  $this->getUrl('*/*/download', ['filename' => $this->createErrorReport($errorAggregator)])
             );
         }
 
