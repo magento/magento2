@@ -86,10 +86,8 @@ abstract class ImportResult extends Import
                 . '<div class="import-error-wrapper">' . __('Only first 100 error are displayed here. ')
                 . '<a href="'
                 . $this->createDownloadUrlImportHistoryFile($this->createErrorReport($errorAggregator))
-
                 . '">' . __('Download full report') . '</a><br>'
                 . '<div class="import-error-list">' . $message . '</div></div>'
-                .  $this->getUrl('*/*/download', ['filename' => $this->createErrorReport($errorAggregator)])
             );
         }
 
