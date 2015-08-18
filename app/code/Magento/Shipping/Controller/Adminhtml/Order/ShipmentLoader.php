@@ -54,12 +54,18 @@ class ShipmentLoader extends DataObject
     protected $trackFactory;
 
     /**
+     * @var \Magento\Sales\Api\OrderRepositoryInterface
+     */
+    protected $orderRepository;
+
+    /**
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Sales\Model\Order\ShipmentRepository $shipmentRepository
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory
      * @param \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory
+     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param array $data
      */
     public function __construct(
@@ -69,6 +75,7 @@ class ShipmentLoader extends DataObject
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory,
         \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory,
+        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
         array $data = []
     ) {
         $this->messageManager = $messageManager;
@@ -77,6 +84,7 @@ class ShipmentLoader extends DataObject
         $this->orderFactory = $orderFactory;
         $this->shipmentFactory = $shipmentFactory;
         $this->trackFactory = $trackFactory;
+        $this->orderRepository = $orderRepository;
         parent::__construct($data);
     }
 
@@ -106,7 +114,7 @@ class ShipmentLoader extends DataObject
         if ($shipmentId) {
             $shipment = $this->shipmentRepository->get($shipmentId);
         } elseif ($orderId) {
-            $order = $this->orderFactory->create()->load($orderId);
+            $order = $this->orderRepository->get($orderId);
 
             /**
              * Check order existing

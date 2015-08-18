@@ -42,7 +42,6 @@ class Observer
      * @var \Magento\Framework\DB\TransactionFactory
      */
     protected $transactionFactory;
-
     /**
      * @param Vault $vault
      * @param \Magento\Braintree\Model\Config\Cc $config
@@ -81,7 +80,11 @@ class Observer
             && $order->canInvoice() && $this->shouldInvoice()) {
             $qtys = [];
             foreach ($shipment->getAllItems() as $shipmentItem) {
-                $qtys[$shipmentItem->getOrderItem()->getId()] = $shipmentItem->getQty();
+                if ($shipmentItem->getOrderItem()->getQtyToInvoice() >= $shipmentItem->getQty()) {
+                    $qtys[$shipmentItem->getOrderItem()->getId()] = $shipmentItem->getQty();
+                } else {
+                    $qtys[$shipmentItem->getOrderItem()->getId()] = $shipmentItem->getOrderItem()->getQtyToInvoice();
+                }
             }
             foreach ($order->getAllItems() as $orderItem) {
                 if (!array_key_exists($orderItem->getId(), $qtys)) {
@@ -89,6 +92,7 @@ class Observer
                 }
             }
             $invoice = $order->prepareInvoice($qtys);
+            $invoice->setOrder($order);
             $invoice->setRequestedCaptureCase(\Magento\Sales\Model\Order\Invoice::CAPTURE_ONLINE);
             $invoice->register();
             /** @var \Magento\Framework\DB\Transaction $transaction */
