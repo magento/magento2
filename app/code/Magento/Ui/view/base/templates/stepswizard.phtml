@@ -8,20 +8,15 @@
 
 /** @var $block \Magento\Ui\Block\Component\StepsWizard */
 ?>
-<div data-role="step-wizard-dialog"
-     data-mage-init='{"Magento_Ui/js/modal/modal":{"type":"slide","title":"<?= __('Create Product Configurations') ?>",
-     "buttons":[]}}'
-     style="display: none">
-    <div class="steps-wizard" data-mage-init='{"Magento_Ui/js/lib/step-wizard":{
-        "steps": <?= $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getStepComponents()) ?>,
-        "stepRegistryComponent": "<?= $block->getComponentName()?>"}}'>
+    <div data-role="steps-wizard-main" class="steps-wizard" data-bind="scope: '<?= $block->getComponentName()?>'">
         <div data-role="messages" class="messages"></div>
 
-        <div class="steps-wizard-navigation">
+        <div data-role="steps-wizard-controls" class="steps-wizard-navigation">
             <ul class="nav-bar">
                 <?php foreach ($block->getSteps() as $step) { ?>
-                    <li data-role="collapsible">
-                        <a href="#<?= $step->getComponentName() ?>">
+                    <li data-role="collapsible" data-bind="css: { 'active': selectedStep() == '<?= $step->getComponentName() ?>'}">
+                        <a href="#<?= $step->getComponentName() ?>"
+                           data-bind="click: showSpecificStep">
                             <?= $step->getCaption() ?>
                         </a>
                     </li>
@@ -30,31 +25,35 @@
             <div class="nav-bar-outer-actions">
                 <div class="action-wrap action-wrap-next" data-role="step-wizard-next">
                     <button type="button"
-                            class="action-default action-primary action-next-step">
+                            class="action-default action-primary action-next-step" data-bind="click: next">
                         <span><?= __('Next') ?></span>
                     </button>
                 </div>
                 <div class="action-wrap action-wrap-prev" data-role="step-wizard-prev">
                     <button type="button"
-                            class="action-default action-back-step disabled">
+                            class="action-default action-back-step"
+                            data-bind="click: back, css: { 'disabled': disabled}">
                         <span><?= __('Back') ?></span>
                     </button>
                 </div>
                 <div class="action-wrap" data-role="closeBtn">
                     <button type="button"
-                            class="action-cancel action-tertiary">
+                            class="action-cancel action-tertiary" data-bind="click: close">
                         <span><?= __('Cancel') ?></span>
                     </button>
                 </div>
             </div>
         </div>
-        <?php foreach ($block->getSteps() as $step) { ?>
-        <div class="content" id="<?= $step->getComponentName() ?>" data-role="content">
-            <?= $step->getContent() ?>
+        <div data-role="steps-wizard-tab">
+            <?php foreach ($block->getSteps() as $step) { ?>
+            <div data-bind="visible: selectedStep() == $element.id"
+                 class="content" id="<?=$step->getComponentName() ?>"
+                 data-role="content">
+                <?= $step->getContent() ?>
+            </div>
+            <?php } ?>
         </div>
-        <?php } ?>
     </div>
-</div>
 
 <script type="text/x-magento-init">
     {
@@ -62,7 +61,9 @@
             "Magento_Ui/js/core/app": {
                 "components": {
                         "<?= $block->getComponentName()?>": {
-                            "component": "Magento_Ui/js/lib/step-registry"
+                            "component": "Magento_Ui/js/lib/step-wizard",
+                            "initData": <?= $this->helper("Magento\Framework\Json\Helper\Data")->jsonEncode($block->getInitData()) ?>,
+                            "stepsNames": <?= $this->helper("Magento\Framework\Json\Helper\Data")->jsonEncode($block->getStepComponents()) ?>
                         }
                     }
                 }

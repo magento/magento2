@@ -1,0 +1,49 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!--@subject Footer @-->
+<!--@vars {
+"var store.getFrontendName()":"Store Name"
+} @-->
+
+                    <!-- End Content -->
+                    </td>
+                </tr>
+                <tr>
+                    <td class="footer">
+                        <table>
+                            <tr>
+                                <td>
+                                    <p><a href="#">{{trans "About Us"}}</a></p>
+                                    <p><a href="#">{{trans "Customer Service"}}</a></p>
+                                </td>
+                                <td>
+                                    {{depend store_phone}}
+                                        <p class="phone">
+                                            {{trans '<a href="tel:%store_phone">%store_phone</a>' store_phone=$store_phone |raw}}
+                                        </p>
+                                    {{/depend}}
+                                    {{depend store_hours}}
+                                        <p class="hours">
+                                            {{trans 'Hours of Operation:<br /><span class="no-link">%store_hours</span>.' store_hours=$store_hours |raw}}
+                                        </p>
+                                    {{/depend}}
+                                </td>
+                                <td>
+                                    <p class="address">
+                                        {{var store.getFormattedAddress()|raw}}
+                                    </p>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+<!-- End wrapper table -->
+</body>

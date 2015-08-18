@@ -508,10 +508,10 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(
                 [
-                    new \Magento\Framework\Object(
+                    new \Magento\Framework\DataObject(
                         ['url' => 'category.html', 'updated_at' => '2012-12-21 00:00:00']
                     ),
-                    new \Magento\Framework\Object(
+                    new \Magento\Framework\DataObject(
                         ['url' => '/category/sub-category.html', 'updated_at' => '2012-12-21 00:00:00']
                     ),
                 ]
@@ -524,20 +524,20 @@ class SitemapTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(
                 [
-                    new \Magento\Framework\Object(
+                    new \Magento\Framework\DataObject(
                         ['url' => 'product.html', 'updated_at' => '2012-12-21 00:00:00']
                     ),
-                    new \Magento\Framework\Object(
+                    new \Magento\Framework\DataObject(
                         [
                             'url' => 'product2.html',
                             'updated_at' => '2012-12-21 00:00:00',
-                            'images' => new \Magento\Framework\Object(
+                            'images' => new \Magento\Framework\DataObject(
                                 [
                                     'collection' => [
-                                        new \Magento\Framework\Object(
+                                        new \Magento\Framework\DataObject(
                                             ['url' => 'image1.png', 'caption' => 'caption & > title < "']
                                         ),
-                                        new \Magento\Framework\Object(
+                                        new \Magento\Framework\DataObject(
                                             ['url' => 'image_no_caption.png', 'caption' => null]
                                         ),
                                     ],

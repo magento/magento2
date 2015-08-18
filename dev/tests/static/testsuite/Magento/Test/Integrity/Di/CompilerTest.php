@@ -86,10 +86,10 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $argumentInterpreter = new \Magento\Framework\Data\Argument\Interpreter\Composite(
             [
                 'boolean' => new \Magento\Framework\Data\Argument\Interpreter\Boolean($booleanUtils),
-                'string' => new \Magento\Framework\Data\Argument\Interpreter\String($booleanUtils),
+                'string' => new \Magento\Framework\Data\Argument\Interpreter\StringUtils($booleanUtils),
                 'number' => new \Magento\Framework\Data\Argument\Interpreter\Number(),
                 'null' => new \Magento\Framework\Data\Argument\Interpreter\NullType(),
-                'object' => new \Magento\Framework\Data\Argument\Interpreter\Object($booleanUtils),
+                'object' => new \Magento\Framework\Data\Argument\Interpreter\DataObject($booleanUtils),
                 'const' => $constInterpreter,
                 'init_parameter' => new \Magento\Framework\App\Arguments\ArgumentInterpreter($constInterpreter),
             ],

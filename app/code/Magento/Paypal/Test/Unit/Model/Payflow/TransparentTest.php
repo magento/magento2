@@ -30,19 +30,19 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Payment\Model\Method\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $configMock;
 
-    /** @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject */
     protected $responseMock;
 
     /** @var \Magento\Sales\Model\Order\Payment\Info|\PHPUnit_Framework_MockObject_MockObject */
     protected $paymentMock;
 
-    /** @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject */
     protected $orderMock;
 
-    /** @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject */
     protected $addressBillingMock;
 
-    /** @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject */
     protected $addressShippingMock;
 
     /**
@@ -89,7 +89,7 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
         $this->configFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->configMock);
-        $this->responseMock = $this->getMockBuilder('\Magento\Framework\Object')
+        $this->responseMock = $this->getMockBuilder('\Magento\Framework\DataObject')
             ->setMethods(['getResultCode', 'getOrigresult', 'getRespmsg', 'getPnref'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -118,11 +118,11 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
      */
     protected function initializationAuthorizeMock()
     {
-        $this->orderMock = $this->getMockBuilder('Magento\Framework\Object')
+        $this->orderMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->setMethods(['getCustomerId', 'getBillingAddress', 'getShippingAddress', 'getCustomerEmail'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->addressBillingMock = $this->getMockBuilder('Magento\Framework\Object')
+        $this->addressBillingMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->setMethods(
                 [
                     'getFirstname',
@@ -135,7 +135,7 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
                 ]
             )->disableOriginalConstructor()
             ->getMock();
-        $this->addressShippingMock = $this->getMockBuilder('Magento\Framework\Object')
+        $this->addressShippingMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->setMethods(
                 [
                     'getFirstname',
@@ -218,7 +218,7 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
      */
     protected function crateVoidResponseMock()
     {
-        $voidResponseMock = $this->getMockBuilder('Magento\Framework\Object')
+        $voidResponseMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->setMethods(
                 [
                     'getResultCode',

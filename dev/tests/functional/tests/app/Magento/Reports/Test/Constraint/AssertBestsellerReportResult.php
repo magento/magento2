@@ -23,8 +23,6 @@ class AssertBestsellerReportResult extends AbstractConstraint
      * @param OrderInjectable $order
      * @param string $date
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function processAssert(Bestsellers $bestsellers, OrderInjectable $order, $date)
     {
@@ -39,7 +37,7 @@ class AssertBestsellerReportResult extends AbstractConstraint
         ];
 
         \PHPUnit_Framework_Assert::assertTrue(
-            $bestsellers->getGridBlock()->isRowVisible($filter),
+            $bestsellers->getGridBlock()->isRowVisible($filter, false),
             'Bestseller does not present in report grid.'
         );
     }

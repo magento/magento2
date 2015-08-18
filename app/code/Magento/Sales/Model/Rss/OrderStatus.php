@@ -133,7 +133,11 @@ class OrderStatus implements DataProviderInterface
             return $this->order;
         }
 
-        $data = json_decode(base64_decode((string)$this->request->getParam('data')), true);
+        $data = null;
+        $json = base64_decode((string)$this->request->getParam('data'));
+        if ($json) {
+            $data = json_decode($json, true);
+        }
         if (!is_array($data)) {
             return null;
         }

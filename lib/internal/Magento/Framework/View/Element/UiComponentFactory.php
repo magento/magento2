@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Element;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Data\Argument\InterpreterInterface;
@@ -16,7 +16,7 @@ use Magento\Framework\View\Element\UiComponent\ContextFactory;
 /**
  * Class UiComponentFactory
  */
-class UiComponentFactory extends Object
+class UiComponentFactory extends DataObject
 {
     /**
      * Object manager
@@ -173,7 +173,7 @@ class UiComponentFactory extends Object
             /** @var \Magento\Framework\View\Element\UiComponentInterface $component */
             $component = $this->objectManager->create(
                 $className,
-                array_merge_recursive($componentArguments, $arguments)
+                array_replace_recursive($componentArguments, $arguments)
             );
 
             return $component;
