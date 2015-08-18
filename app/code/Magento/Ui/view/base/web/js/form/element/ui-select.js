@@ -43,8 +43,8 @@ define([
             options: [],
             listVisible: false,
             value: [],
-            filterOptions: true,
-            chipsEnabled: true,
+            filterOptions: false,
+            chipsEnabled: false,
             filterInputValue: '',
             filterOptionsFocus: false,
             multiselectFocus: false,
@@ -326,6 +326,10 @@ define([
          * @returns {Bollean}
          */
         hasData: function () {
+            if (!this.value()) {
+                this.value([]);
+            }
+
             return this.value() ? !!this.value().length : false;
         },
 
