@@ -21,15 +21,6 @@ define([
             provider: 'provider'
         });
 
-        registry.set('provider', {
-            on: function () {
-            },
-            get: function () {
-            },
-            set: function () {
-            }
-        });
-
         describe('"initialize" method', function () {
             it('Check for defined ', function () {
                 expect(obj.hasOwnProperty('initialize')).toBeDefined();
@@ -49,6 +40,90 @@ define([
                 var type = typeof obj.initialize;
 
                 expect(type).toEqual('function');
+            });
+        });
+
+        describe('"outerClick" method', function () {
+            it('Check for defined ', function () {
+                expect(obj.hasOwnProperty('outerClick')).toBeDefined();
+            });
+            it('Check method type', function () {
+                var type = typeof obj.outerClick;
+
+                expect(type).toEqual('function');
+            });
+            it('Variable "this.listVisible" must be false ', function () {
+                obj.listVisible(true);
+                obj.outerClick();
+                expect(obj.listVisible()).toEqual(false);
+            });
+        });
+
+        describe('"hasSelected" method', function () {
+            it('Check for defined ', function () {
+                expect(obj.hasOwnProperty('hasSelected')).toBeDefined();
+            });
+            it('Check method type', function () {
+                var type = typeof obj.hasSelected;
+
+                expect(type).toEqual('function');
+            });
+            it('Check returned value type if method called without arguments', function () {
+                var type = typeof obj.hasSelected();
+
+                expect(type).toEqual('boolean');
+            });
+            it('Must be false if selected array length is 0', function () {
+                obj.selected([]);
+                obj.hasSelected();
+                expect(obj.selected()).toEqual(false);
+            });
+            it('Must be true if selected array length is 0', function () {
+                obj.selected(['magento']);
+                obj.hasSelected();
+                expect(obj.selected()).toEqual(true);
+            });
+        });
+
+        describe('"removeSelected" method', function () {
+            it('Check for defined ', function () {
+                expect(obj.hasOwnProperty('removeSelected')).toBeDefined();
+            });
+            it('Check method type', function () {
+                var type = typeof obj.removeSelected;
+
+                expect(type).toEqual('function');
+            });
+            it('Must remove data from selected array', function () {
+                obj.selected(['magento', 'magento2']);
+                obj.removeSelected('magento');
+                expect(obj.selected()).toEqual(['magento2']);
+            });
+        });
+
+        describe('"isTabKey" method', function () {
+            it('Check for defined ', function () {
+                expect(obj.hasOwnProperty('isTabKey')).toBeDefined();
+            });
+            it('Check method type', function () {
+                var type = typeof obj.isTabKey;
+
+                expect(type).toEqual('function');
+            });
+            it('Check returned value type if method called without arguments', function () {
+                var type = typeof obj.hasSelected();
+
+                expect(type).toEqual('boolean');
+            });
+            it('Must return false if pressed not tab key', function () {
+                var event = {keyCode: 9};
+
+                expect(obj.isTabKey(event)).toEqual(true);
+            });
+            it('Must return true if pressed tab key', function () {
+                var event = {keyCode: 33};
+
+                expect(obj.isTabKey(event)).toEqual(false);
             });
         });
 
@@ -458,6 +533,16 @@ define([
                 obj.selected(array);
                 obj.setValue();
                 expect(obj.value()).toEqual(array);
+            });
+        });
+        describe('"keyDownHandlers" method', function () {
+            it('Check for defined ', function () {
+                expect(obj.hasOwnProperty('keyDownHandlers')).toBeDefined();
+            });
+            it('Check answer type', function () {
+                var type = typeof obj.keyDownHandlers;
+
+                expect(type).toEqual('function');
             });
         });
         describe('"setListVisible" method', function () {
