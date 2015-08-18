@@ -42,13 +42,12 @@ define([
         defaults: {
             options: [],
             listVisible: false,
-            multiselectFocus: false,
-            selected: [],
+            value: [],
             filterOptions: false,
             chipsEnabled: true,
-            cacheUiSelect: null,
             filterInputValue: '',
             filterOptionsFocus: false,
+            multiselectFocus: false,
             selectedPlaceholders: {
                 defaultPlaceholder: $t('Select...'),
                 lotPlaceholders: $t('Selected')
@@ -59,10 +58,8 @@ define([
             },
             hoverElIndex: null,
             listens: {
-                selected: 'setCaption setValue',
                 listVisible: 'cleanHoveredElement',
-                filterInputValue: 'filterOptionsList',
-                value: 'setSelected'
+                filterInputValue: 'filterOptionsList'
             },
             imports: {
                 options: '${ $.optionsConfig.name }:options'
@@ -83,10 +80,6 @@ define([
                 .initOptions();
 
             return this;
-        },
-
-        setSelected: function(){
-            this.selected(this.value());
         },
 
         /**
@@ -130,7 +123,6 @@ define([
         initObservable: function () {
             this._super();
             this.observe(['listVisible',
-                          'selected',
                           'hoverElIndex',
                           'placeholder',
                           'multiselectFocus',
@@ -212,20 +204,11 @@ define([
         },
 
         /**
-         * Checked has selected elements or not
-         *
-         * @returns {Boolean}
-         */
-        hasSelected: function () {
-            return !!this.selected().length;
-        },
-
-        /**
          * Remove element from selected array
          */
-        removeSelected: function (data, event) {
+        removeSelected: function (value, data, event) {
             event ? event.stopPropagation() : false;
-            this.selected(_.without(this.selected(), data));
+            this.value.remove(value);
         },
 
         /**
@@ -257,7 +240,7 @@ define([
          * @return {Boolean}
          */
         isSelected: function (label) {
-            return _.contains(this.selected(), label);
+            return _.contains(this.value(), label);
         },
 
         /**
@@ -292,19 +275,57 @@ define([
         },
 
         /**
+         * get filtered value
+         *
+         * @returns {Array} filtered array
+         */
+        getValue: function () {
+            var options = this.options(),
+                selected = this.value();
+
+            _.chain(options)
+                .pluck(options, 'value')
+                .filter(function (opt) {
+                    return _.contains(selected, opt);
+                });
+        },
+
+        /**
+         * get selected element labels
+         *
+         * @returns {Array} array labels
+         */
+        getSelected: function () {
+            var selected = this.value();
+
+            return this.cacheOptions.filter(function (opt) {
+                return _.contains(selected, opt.value);
+            });
+        },
+
+        /**
          * Toggle activity list element
          *
          * @param {Object} data - selected option data
          * @returns {Object} Chainable
          */
         toggleOptionSelected: function (data) {
-            if (!_.contains(this.selected(), data.label)) {
-                this.selected.push(data.label);
+            if (!_.contains(this.value(), data.value)) {
+                this.value.push(data.value);
             } else {
-                this.selected(_.without(this.selected(), data.label));
+                this.value(_.without(this.value(), data.value));
             }
 
             return this;
+        },
+
+        /**
+         * Check selected elements
+         *
+         * @returns {Bollean}
+         */
+        hasData: function () {
+            return this.value() ? !!this.value().length : false;
         },
 
         /**
@@ -404,7 +425,7 @@ define([
         keydownSwitcher: function (data, event) {
             var keyName = keyCodes[event.keyCode];
 
-            if (this.isTabKey(event)) {
+            if (this.isTabKey(event) && this.filterOptions) {
                 if (!this.filterOptionsFocus() && this.listVisible()) {
                     this.cacheUiSelect.blur();
                     this.filterOptionsFocus(true);
@@ -428,35 +449,17 @@ define([
          * Set caption
          */
         setCaption: function () {
-            var length = this.selected().length;
+            var length = this.value().length;
 
             if (length > 1) {
                 this.placeholder(length + ' ' + this.selectedPlaceholders.lotPlaceholders);
             } else if (length) {
-                this.placeholder(this.selected()[0]);
+                this.placeholder(this.getSelected()[0].label);
             } else {
                 this.placeholder(this.selectedPlaceholders.defaultPlaceholder);
             }
 
             return this.placeholder();
-        },
-
-        /**
-         * Preprocessing array values to string and set to value variable
-         */
-        setValue: function () {
-            var selected = this.selected(),
-                result;
-
-            result = _.chain(this.cacheOptions)
-                .filter(function (opt){
-                    return _.contains(selected, opt.label);
-                })
-                .sortBy('value')
-                .pluck('value')
-                .value();
-
-            this.value(result);
         },
 
         /**
@@ -475,7 +478,16 @@ define([
          * @returns {String}
          */
         getPreview: function () {
-            return this.selected().toString();
+            var i = 0,
+                selected = this.getSelected(),
+                length = selected.length,
+                result = [];
+
+            for (i; i < length; i++) {
+                result.push(selected[i].label);
+            }
+
+            return result.join(', ');
         }
     });
 });
