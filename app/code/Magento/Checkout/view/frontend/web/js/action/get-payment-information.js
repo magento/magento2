@@ -4,6 +4,7 @@
  */
 define(
     [
+        'jquery',
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/url-builder',
         'mage/storage',
@@ -12,13 +13,13 @@ define(
         'Magento_Checkout/js/model/payment/method-converter',
         'Magento_Checkout/js/model/payment-service'
     ],
-    function (quote, urlBuilder, storage, errorProcessor, customer, methodConverter, paymentService) {
+    function ($, quote, urlBuilder, storage, errorProcessor, customer, methodConverter, paymentService) {
         'use strict';
 
-        return function () {
-            var serviceUrl,
-                payload;
+        return function (deferred) {
+            var serviceUrl;
 
+            deferred = deferred || $.Deferred();
             /**
              * Checkout for guest and registered customer.
              */
@@ -29,19 +30,19 @@ define(
             } else {
                 serviceUrl = urlBuilder.createUrl('/carts/mine/payment-information', {});
             }
-            payload = {
-                cartId: quote.getQuoteId()
-            };
+
             return storage.get(
-                serviceUrl, JSON.stringify(payload)
+                serviceUrl, false
             ).done(
                 function (response) {
                     quote.setTotals(response.totals);
                     paymentService.setPaymentMethods(methodConverter(response.payment_methods));
+                    deferred.resolve();
                 }
             ).fail(
                 function (response) {
                     errorProcessor.process(response);
+                    deferred.reject();
                 }
             );
         };
