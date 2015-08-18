@@ -1,7 +1,5 @@
 <?php
 /**
- * Http request
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -13,7 +11,11 @@ use Magento\Framework\App\Route\ConfigInterface\Proxy as ConfigInterface;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
+use Magento\Framework\Stdlib\StringUtils;
 
+/**
+ * Http request
+ */
 class Http extends Request implements RequestInterface
 {
     /**#@+
@@ -89,6 +91,7 @@ class Http extends Request implements RequestInterface
 
     /**
      * @param CookieReaderInterface $cookieReader
+     * @param StringUtils $converter
      * @param ConfigInterface $routeConfig
      * @param PathInfoProcessorInterface $pathInfoProcessor
      * @param ObjectManagerInterface  $objectManager
@@ -97,13 +100,14 @@ class Http extends Request implements RequestInterface
      */
     public function __construct(
         CookieReaderInterface $cookieReader,
+        StringUtils $converter,
         ConfigInterface $routeConfig,
         PathInfoProcessorInterface $pathInfoProcessor,
         ObjectManagerInterface $objectManager,
         $uri = null,
         $directFrontNames = []
     ) {
-        parent::__construct($cookieReader, $uri);
+        parent::__construct($cookieReader, $converter, $uri);
         $this->routeConfig = $routeConfig;
         $this->pathInfoProcessor = $pathInfoProcessor;
         $this->objectManager = $objectManager;
@@ -312,6 +316,7 @@ class Http extends Request implements RequestInterface
     public function getDistroBaseUrl()
     {
         $headerHttpHost = $this->getServer('HTTP_HOST');
+        $headerHttpHost = $this->converter->cleanString($headerHttpHost);
         $headerServerPort = $this->getServer('SERVER_PORT');
         $headerScriptName = $this->getServer('SCRIPT_NAME');
         $headerHttps = $this->getServer('HTTPS');
