@@ -79,7 +79,7 @@ class GridSortingTest extends Injectable
         array $steps = []
     ) {
         // Fill grid before sorting if needed
-        if  ($fixtureName && $fixtureDataSet && $itemsCount && $steps) {
+        if ($fixtureName && $fixtureDataSet && $itemsCount && $steps) {
             $this->createItems($itemsCount, $fixtureName, $fixtureDataSet, $steps);
         }
 
