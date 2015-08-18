@@ -63,7 +63,8 @@ interface ListsInterface
      * Returns the localized country name
      *
      * @param  $value string Name to get detailed information about
+     * @param  $locale optional locale string
      * @return string
      */
-    public function getCountryTranslation($value);
+    public function getCountryTranslation($value, $locale = null);
 }
