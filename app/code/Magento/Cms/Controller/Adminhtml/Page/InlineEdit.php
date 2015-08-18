@@ -55,6 +55,13 @@ class InlineEdit extends \Magento\Backend\App\Action
                     /** @var \Magento\Cms\Model\Page $page */
                     $page = $this->pageRepository->getById($pageId);
                     $pageData = $this->dataProcessor->filter($postData[$pageId]);
+
+                    if (!$this->dataProcessor->validate($pageData)) {
+                        $error = true;
+                        foreach ($this->messageManager->getMessages(true)->getItems() as $error) {
+                            $messages[] = $error->toString();
+                        }
+                    }
                     $page->setData(array_merge($page->getData(), $pageData));
                     $this->pageRepository->save($page);
                 } catch (\Magento\Framework\Exception\LocalizedException $e) {
@@ -75,4 +82,5 @@ class InlineEdit extends \Magento\Backend\App\Action
             'error' => $error
         ]);
     }
+
 }
