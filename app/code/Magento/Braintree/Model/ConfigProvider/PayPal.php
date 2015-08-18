@@ -5,7 +5,6 @@
  */
 namespace Magento\Braintree\Model\ConfigProvider;
 
-use Magento\Braintree\Model\Adapter\BraintreeClientToken;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use \Magento\Braintree\Model\Config\PayPal as PayPalConfig;
 use Magento\Braintree\Model\PaymentMethod\PayPal as PayPalPaymentMethod;
