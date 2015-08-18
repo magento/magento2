@@ -206,6 +206,9 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
         if (!$this->_order instanceof \Magento\Sales\Model\Order) {
             $this->_order = $this->orderRepository->get($this->getOrderId());
         }
+        if (!$this->_order instanceof \Magento\Sales\Model\Order) {
+            $this->_order = $this->_orderFactory->create()->load($this->getOrderId());
+        }
         return $this->_order->setHistoryEntityName($this->entityType);
     }
 
