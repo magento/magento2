@@ -440,7 +440,17 @@ define([
          * Preprocessing array values to string and set to value variable
          */
         setValue: function () {
-            this.value(this.selected());
+            var selected = this.selected(),
+                length = selected.length,
+                i = 0,
+                array = [];
+
+            for (i; i < length; i++) {
+                if (this.cacheOptions[i].label === selected[i])
+                array.push(this.cacheOptions[i].value);
+            }
+
+            this.value(array);
         },
 
         /**
