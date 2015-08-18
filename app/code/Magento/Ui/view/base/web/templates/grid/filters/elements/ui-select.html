@@ -16,7 +16,7 @@
     tabindex="0"
     data-bind="css: {_active: listVisible},
                 event: {
-                    focusin: onFocusIn($element),
+                    focusin: function() { onFocusIn($element) },
                     focusout: onFocusOut,
                     keydown: keydownSwitcher
                 },
@@ -41,18 +41,18 @@
                         toggleListVisible(data, event)
                     }">
             <span data-bind="
-                visible: !hasSelected(),
+                visible: !hasData(),
                 text: selectedPlaceholders.defaultPlaceholder">
             </span>
-            <!-- ko foreach: { data: selected, as: 'label'}  -->
+            <!-- ko foreach: { data: getSelected(), as: 'option'}  -->
                 <span class="admin__action-multiselect-crumb">
-                    <span data-bind="text:label">
+                    <span data-bind="text: label">
                     </span>
                     <button
                             class="action-close"
                             type="button"
                             tabindex="-1"
-                            data-bind="click: function(data, event){ $parent.removeSelected(data, event)}">
+                            data-bind="click: $parent.removeSelected.bind($parent, value)">
                         <span
                                 class="action-close-text"
                                 data-bind="text: 'Close'">
@@ -89,7 +89,7 @@
                 class="action-menu-item"
                 data-bind="
                             css: {
-                                _selected: $parent.isSelected(option.label),
+                                _selected: $parent.isSelected(option.value),
                                 _hover: $parent.isHovered($index(), $element)
                             },
                             event: {
@@ -101,7 +101,7 @@
                     class="admin__control-checkbox"
                     type="checkbox"
                     tabindex="-1"
-                    data-bind="attr: { 'checked': $parent.isSelected(option.label) }">
+                    data-bind="attr: { 'checked': $parent.isSelected(option.value) }">
                 <label
                     class="admin__action-multiselect-label"
                     data-bind="text: option.label">

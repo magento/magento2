@@ -362,7 +362,6 @@
                         <item name="template" xsi:type="string">ui/grid/filters/elements/ui-select</item>
                         <item name="dataScope" xsi:type="string">page_layout</item>
                         <item name="label" xsi:type="string" translate="true">uiSelect</item>
-                        <item name="filterOptions" xsi:type="boolean">true</item>
                     </item>
                 </argument>
             </filterSelect>
