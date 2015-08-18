@@ -35,9 +35,6 @@
             overflow-y: inherit;
         }
     }
-    .action-menu {
-      padding: 1rem;
-    }
     .action-menu-item {
         transition: background-color .1s linear;
         &._selected {
@@ -75,6 +72,7 @@
 
 .admin__action-multiselect-search-wrap {
     margin-bottom: 1rem;
+    padding: 1rem;
     position: relative;
     + .admin__action-multiselect-menu-inner {
         border-bottom: 1px solid @border__color;
@@ -100,8 +98,8 @@
     height: 1em;
     overflow: hidden;
     position: absolute;
-    right: 1.2rem;
-    top: .7rem;
+    right: 2.2rem;
+    top: 1.7rem;
     width: 1em;
     &:before {
         &:extend(.abs-icon all);

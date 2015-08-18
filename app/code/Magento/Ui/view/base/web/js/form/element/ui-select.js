@@ -43,7 +43,7 @@ define([
             options: [],
             listVisible: false,
             value: [],
-            filterOptions: false,
+            filterOptions: true,
             chipsEnabled: true,
             filterInputValue: '',
             filterOptionsFocus: false,
@@ -252,12 +252,13 @@ define([
         isHovered: function (index, elem) {
             var status = this.hoverElIndex() === index;
 
-            if (status &&
-                elem.offsetTop > elem.parentNode.offsetTop + elem.parentNode.offsetHeight ||
+            if (
                 status &&
-                elem.parentNode.scrollTop > elem.offsetTop
+                elem.offsetTop > elem.parentNode.offsetHeight ||
+                status &&
+                elem.parentNode.scrollTop > elem.offsetTop - elem.parentNode.offsetTop
             ) {
-                elem.parentNode.scrollTop = elem.offsetTop;
+                elem.parentNode.scrollTop = elem.offsetTop - elem.parentNode.offsetTop;
             }
 
             return status;
@@ -425,8 +426,8 @@ define([
         keydownSwitcher: function (data, event) {
             var keyName = keyCodes[event.keyCode];
 
-            if (this.isTabKey(event) && this.filterOptions) {
-                if (!this.filterOptionsFocus() && this.listVisible()) {
+            if (this.isTabKey(event)) {
+                if (!this.filterOptionsFocus() && this.listVisible() && this.filterOptions ) {
                     this.cacheUiSelect.blur();
                     this.filterOptionsFocus(true);
                     this.cleanHoveredElement();
