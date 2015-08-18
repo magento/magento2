@@ -73,11 +73,7 @@ define(
             },
 
             canInitialise: function () {
-                if (!this.clientToken) {
-                    messageList.addErrorMessage({'message': 'Can not initialize PayPal (Braintree)'});
-                    return false;
-                }
-                return true
+                return this.clientToken
             },
 
             initPayPalContainer: function (element) {
@@ -114,6 +110,8 @@ define(
                             self.paymentMethodNonce(null);
                         }
                     });
+                } else {
+                    messageList.addErrorMessage({'message': 'Can not initialize PayPal (Braintree)'});
                 }
             }
         });
