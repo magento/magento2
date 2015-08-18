@@ -177,6 +177,22 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getMode()
+    {
+        return $this->getData(self::MODE);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setMode($mode)
+    {
+        return $this->setData(self::MODE, $mode);
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @return \Magento\CheckoutAgreements\Api\Data\AgreementExtensionInterface|null
