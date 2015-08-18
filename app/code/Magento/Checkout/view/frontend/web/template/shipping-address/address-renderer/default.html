@@ -10,12 +10,14 @@
     <!-- ko text: address().city --><!-- /ko -->, <!-- ko text: address().region --><!-- /ko --> <!-- ko text: address().postcode --><!-- /ko --><br/>
     <!-- ko text: getCountryName(address().countryId) --><!-- /ko --><br/>
     <!-- ko text: address().telephone --><!-- /ko --><br/>
+    <!-- ko if: (address().isEditable()) -->
     <button type="button"
             class="action edit-address-link"
             data-bind="click: editAddress, visible: address().isEditable()">
-        <span data-bind="text: $t('Edit')"></span>
+        <span data-bind="i18n: 'Edit'"></span>
     </button>
+    <!-- /ko -->
     <button type="button" data-bind="click: selectAddress" class="action action-select-shipping-item">
-        <span data-bind="text: $t('Ship Here')"></span>
+        <span data-bind="i18n: 'Ship Here'"></span>
     </button>
 </div>

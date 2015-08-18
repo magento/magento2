@@ -130,11 +130,6 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($this->_product, $this->_block->getProduct());
     }
 
-    public function testGetImageLabel()
-    {
-        $this->assertEquals('Image Alt Text', $this->_block->getImageLabel());
-    }
-
     /**
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/product_simple.php
      * @magentoAppIsolation enabled
@@ -170,47 +165,5 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     public function testGetCanShowProductPrice()
     {
         $this->assertTrue($this->_block->getCanShowProductPrice($this->_product));
-    }
-
-    public function testThumbnail()
-    {
-        $size = $this->_block->getThumbnailSize();
-        $this->assertGreaterThan(1, $size);
-        $this->assertContains('/' . $size, $this->_block->getThumbnailUrl($this->_product));
-    }
-
-    public function testThumbnailSidebar()
-    {
-        $size = $this->_block->getThumbnailSidebarSize();
-        $this->assertGreaterThan(1, $size);
-        $this->assertContains('/' . $size, $this->_block->getThumbnailSidebarUrl($this->_product));
-    }
-
-    public function testSmallImage()
-    {
-        $size = $this->_block->getSmallImageSize();
-        $this->assertGreaterThan(1, $size);
-        $this->assertContains('/' . $size, $this->_block->getSmallImageUrl($this->_product));
-    }
-
-    public function testSmallImageSidebar()
-    {
-        $size = $this->_block->getSmallImageSidebarSize();
-        $this->assertGreaterThan(1, $size);
-        $this->assertContains('/' . $size, $this->_block->getSmallImageSidebarUrl($this->_product));
-    }
-
-    public function testBaseImage()
-    {
-        $size = $this->_block->getBaseImageSize();
-        $this->assertGreaterThan(1, $size);
-        $this->assertContains('/' . $size, $this->_block->getBaseImageUrl($this->_product));
-    }
-
-    public function testBaseImageIcon()
-    {
-        $size = $this->_block->getBaseImageIconSize();
-        $this->assertGreaterThan(1, $size);
-        $this->assertContains('/' . $size, $this->_block->getBaseImageIconUrl($this->_product));
     }
 }

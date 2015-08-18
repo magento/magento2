@@ -48,7 +48,7 @@ class StockItem
      * @param \Magento\Quote\Model\Quote\Item $quoteItem
      * @param int $qty
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)

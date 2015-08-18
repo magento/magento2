@@ -19,7 +19,7 @@ use Magento\Framework\Exception\LocalizedException;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Multishipping extends \Magento\Framework\Object
+class Multishipping extends \Magento\Framework\DataObject
 {
     /**
      * Quote shipping addresses items cache

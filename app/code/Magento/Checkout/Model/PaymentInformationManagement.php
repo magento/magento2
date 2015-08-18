@@ -24,19 +24,37 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
      */
     protected $cartManagement;
 
+
+    /**
+     * @var PaymentDetailsFactory
+     */
+    protected $paymentDetailsFactory;
+
+
+    /**
+     * @var \Magento\Quote\Api\CartTotalRepositoryInterface
+     */
+    protected $cartTotalsRepository;
+
     /**
      * @param \Magento\Quote\Api\BillingAddressManagementInterface $billingAddressManagement
      * @param \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement
      * @param \Magento\Quote\Api\CartManagementInterface $cartManagement
+     * @param PaymentDetailsFactory $paymentDetailsFactory
+     * @param \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository
      */
     public function __construct(
         \Magento\Quote\Api\BillingAddressManagementInterface $billingAddressManagement,
         \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement,
-        \Magento\Quote\Api\CartManagementInterface $cartManagement
+        \Magento\Quote\Api\CartManagementInterface $cartManagement,
+        \Magento\Checkout\Model\PaymentDetailsFactory $paymentDetailsFactory,
+        \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository
     ) {
         $this->billingAddressManagement = $billingAddressManagement;
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->cartManagement = $cartManagement;
+        $this->paymentDetailsFactory = $paymentDetailsFactory;
+        $this->cartTotalsRepository = $cartTotalsRepository;
     }
 
     /**
@@ -62,5 +80,17 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         $this->billingAddressManagement->assign($cartId, $billingAddress);
         $this->paymentMethodManagement->set($cartId, $paymentMethod);
         return true;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPaymentInformation($cartId)
+    {
+        /** @var \Magento\Checkout\Api\Data\PaymentDetailsInterface $paymentDetails */
+        $paymentDetails = $this->paymentDetailsFactory->create();
+        $paymentDetails->setPaymentMethods($this->paymentMethodManagement->getList($cartId));
+        $paymentDetails->setTotals($this->cartTotalsRepository->get($cartId));
+        return $paymentDetails;
     }
 }

@@ -5,6 +5,10 @@
  */
 namespace Magento\Checkout\Api;
 
+/**
+ * Interface for managing guest payment information
+ * @api
+ */
 interface GuestPaymentInformationManagementInterface
 {
     /**
@@ -40,4 +44,12 @@ interface GuestPaymentInformationManagementInterface
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
         \Magento\Quote\Api\Data\AddressInterface $billingAddress
     );
+
+    /**
+     * Get payment information
+     *
+     * @param string $cartId
+     * @return \Magento\Checkout\Api\Data\PaymentDetailsInterface
+     */
+    public function getPaymentInformation($cartId);
 }

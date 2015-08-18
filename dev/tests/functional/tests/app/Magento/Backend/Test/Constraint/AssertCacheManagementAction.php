@@ -11,7 +11,7 @@ use Magento\Backend\Test\Page\Adminhtml\AdminCache;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Assert Cache Management Action
+ * Assert Cache Management Action.
  */
 class AssertCacheManagementAction extends AbstractConstraint
 {
@@ -27,7 +27,7 @@ class AssertCacheManagementAction extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             $successMessage,
             $adminCache->getMessagesBlock()->getSuccessMessages(),
-            'Action is not successful'
+            'Action is not successful.'
         );
     }
 
@@ -38,6 +38,6 @@ class AssertCacheManagementAction extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Cache management action is successful';
+        return 'Cache management action is successful.';
     }
 }

@@ -16,7 +16,6 @@
 if ($exist = ($block->getRecentlyViewedProducts() && $block->getRecentlyViewedProducts()->getSize())) {
     $type = 'widget-viewed';
 
-    $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
     $image = 'recently_viewed_products_images_only_widget';
     $title = __('Recently Viewed');
     $items = $block->getRecentlyViewedProducts();
@@ -40,7 +39,7 @@ if ($exist = ($block->getRecentlyViewedProducts() && $block->getRecentlyViewedPr
                 <?php foreach ($items as $_product): ?>
                     <?php echo($iterator++ == 1) ? '<li class="product-item">' : '</li><li class="product-item">' ?>
                         <a class="product-item-photo" href="<?php echo $_product->getProductUrl() ?>" title="<?php echo $block->stripTags($_product->getName(), null, true) ?>">
-                            <?php echo $imageBlock->init($_product, $image)->toHtml() ?>
+                            <?php echo $block->getImage($_product, $image)->toHtml(); ?>
                         </a>
                     <?php echo($iterator == count($items)+1) ? '</li>' : '' ?>
             <?php endforeach; ?>

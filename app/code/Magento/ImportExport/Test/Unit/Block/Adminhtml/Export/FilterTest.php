@@ -254,7 +254,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $attribute->setOptions($attributeData['options']);
         $attribute->setFilterOptions($attributeData['filter_options']);
         $attribute->setBackendType($backendType);
-        $column = new \Magento\Framework\Object();
+        $column = new \Magento\Framework\DataObject();
         $column->setData($columnValue, 'value');
         $isExport = true;
         $this->filter->decorateFilter($value, $attribute, $column, $isExport);
