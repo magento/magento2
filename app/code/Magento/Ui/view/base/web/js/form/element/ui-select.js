@@ -454,7 +454,14 @@ define([
          * Set caption
          */
         setCaption: function () {
-            var length = this.value().length;
+            var length;
+
+            if (this.value()) {
+                length = this.value().length;
+            } else {
+                this.value([]);
+                length = 0;
+            }
 
             if (length > 1) {
                 this.placeholder(length + ' ' + this.selectedPlaceholders.lotPlaceholders);
