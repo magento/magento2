@@ -928,13 +928,14 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 array_keys($this->_websiteIdToCode),
                 $item->getWebsites()
             );
-            $rowCategories[$item->getId()] = $item->getCategoryIds();
+            $rowCategories[$item->getId()] = array_combine($item->getCategoryIds(), $item->getCategoryIds());
         }
         $collection->clear();
 
         $allCategoriesIds = array_merge(array_keys($this->_categories), array_keys($this->_rootCategories));
+        $allCategoriesIds = array_combine($allCategoriesIds, $allCategoriesIds);
         foreach ($rowCategories as &$categories) {
-            $categories = array_intersect($categories, $allCategoriesIds);
+            $categories = array_intersect_key($categories, $allCategoriesIds);
         }
 
         $data['rowWebsites'] = $rowWebsites;
@@ -1218,6 +1219,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     public function filterAttributeCollection(\Magento\Eav\Model\Resource\Entity\Attribute\Collection $collection)
     {
         $validTypes = array_keys($this->_productTypeModels);
+        $validTypes = array_combine($validTypes, $validTypes);
 
         foreach (parent::filterAttributeCollection($collection) as $attribute) {
             if (in_array($attribute->getAttributeCode(), $this->_bannedAttributes)) {
@@ -1225,7 +1227,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 continue;
             }
             $attrApplyTo = $attribute->getApplyTo();
-            $attrApplyTo = $attrApplyTo ? array_intersect($attrApplyTo, $validTypes) : $validTypes;
+            $attrApplyTo = array_combine($attrApplyTo, $attrApplyTo);
+            $attrApplyTo = $attrApplyTo ? array_intersect_key($attrApplyTo, $validTypes) : $validTypes;
 
             if ($attrApplyTo) {
                 foreach ($attrApplyTo as $productType) {

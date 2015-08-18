@@ -19,7 +19,6 @@ if ($exist = ($block->getRecentlyViewedProducts() && $block->getRecentlyViewedPr
 
     $type = $type . '-' . $mode;
 
-    $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
     $image = 'recently_viewed_products_grid_content_widget';
     $title = __('Recently Viewed');
     $items = $block->getRecentlyViewedProducts();
@@ -45,7 +44,7 @@ if ($exist = ($block->getRecentlyViewedProducts() && $block->getRecentlyViewedPr
                         <?php echo($iterator++ == 1) ? '<li class="product-item">' : '</li><li class="product-item">' ?>
                         <div class="product-item-info">
                             <a href="<?php echo $block->getProductUrl($_item) ?>" class="product-item-photo">
-                                <?php echo $imageBlock->init($_item, $image)->toHtml() ?>
+                                <?php echo $block->getImage($_item, $image)->toHtml(); ?>
                             </a>
                             <div class="product-item-details">
                                 <strong class="product-item-name">
