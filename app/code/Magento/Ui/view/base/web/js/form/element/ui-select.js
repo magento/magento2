@@ -13,12 +13,42 @@ define([
 ], function (_, ko, Abstract, keyCodes, $t, layout) {
     'use strict';
 
+    /**
+     * Preprocessing options list
+     */
+    function parseOptions(nodes) {
+        var caption,
+            value;
+
+        nodes = _.map(nodes, function (node) {
+            value = node.value;
+
+            if (value == null || value === '') {
+                if (_.isUndefined(caption)) {
+                    caption = node.label;
+                }
+            } else {
+                return node;
+            }
+        });
+
+        return {
+            options: _.compact(nodes),
+            cacheOptions: _.compact(nodes)
+        };
+    }
+
     return Abstract.extend({
         defaults: {
             options: [],
             listVisible: false,
             multiselectFocus: false,
             selected: [],
+            filterOptions: false,
+            chipsEnabled: true,
+            cacheUiSelect: null,
+            filterInputValue: '',
+            filterOptionsFocus: false,
             selectedPlaceholders: {
                 defaultPlaceholder: $t('Select...'),
                 lotPlaceholders: $t('Selected')
@@ -30,7 +60,8 @@ define([
             hoverElIndex: null,
             listens: {
                 selected: 'setCaption setValue',
-                listVisible: 'cleanHoveredElement'
+                listVisible: 'cleanHoveredElement',
+                filterInputValue: 'filterOptionsList'
             },
             imports: {
                 options: '${ $.optionsConfig.name }:options'
@@ -54,6 +85,38 @@ define([
         },
 
         /**
+         * Parses options and merges the result with instance
+         *
+         * @param  {Object} config
+         * @returns {Object} Chainable.
+         */
+        initConfig: function (config) {
+            var result = parseOptions(config.options);
+
+            _.extend(config, result);
+
+            this._super();
+
+            return this;
+        },
+
+        /**
+         * object with key - keyname and value - handler function for this key
+         *
+         * @returns {Object} Object with handlers function name.
+         */
+        keyDownHandlers: function () {
+
+            return {
+                enterKey: this.enterKeyHandler,
+                escapeKey: this.escapeKeyHandler,
+                spaceKey: this.enterKeyHandler,
+                pageUpKey: this.pageUpKeyHandler,
+                pageDownKey: this.pageDownKeyHandler
+            };
+        },
+
+        /**
          * Calls 'initObservable' of parent, initializes 'options' and 'initialOptions'
          *     properties, calls 'setOptions' passing options to it
          *
@@ -61,7 +124,15 @@ define([
          */
         initObservable: function () {
             this._super();
-            this.observe(['listVisible', 'selected', 'hoverElIndex', 'placeholder', 'multiselectFocus', 'options']);
+            this.observe(['listVisible',
+                          'selected',
+                          'hoverElIndex',
+                          'placeholder',
+                          'multiselectFocus',
+                          'options',
+                          'filterInputValue',
+                          'filterOptionsFocus'
+            ]);
 
             return this;
         },
@@ -79,12 +150,95 @@ define([
         },
 
         /**
+         * Handler outerClick event. Closed options list
+         */
+        outerClick: function () {
+            this.listVisible() ? this.listVisible(false) : false;
+        },
+
+        /**
+         * Handler keydown event to filter options input
+         *
+         * @returns {Boolean} Returned true for emersion events
+         */
+        filterOptionsKeydown: function (data, event) {
+            var key = keyCodes[event.keyCode];
+
+            !this.isTabKey(event) ? event.stopPropagation() : false;
+
+            if (key === 'pageDownKey' || key === 'pageUpKey') {
+                event.preventDefault();
+                this.filterOptionsFocus(false);
+                this.cacheUiSelect.focus();
+            }
+            this.keydownSwitcher(data, event);
+
+            return true;
+        },
+
+        /**
+         * Filtered options list by value from filter options list
+         */
+        filterOptionsList: function () {
+            var i = 0,
+                array = [],
+                curOption,
+                value;
+
+            this.options(this.cacheOptions);
+
+            if (this.filterInputValue()) {
+                for (i; i < this.options().length; i++) {
+                    curOption = this.options()[i].label.toLowerCase();
+                    value = this.filterInputValue().trim().toLowerCase();
+
+                    if (curOption.indexOf(value) > -1) {
+                        array.push(this.options()[i]);
+                    }
+                }
+
+                if (!value.length) {
+                    this.options(this.cacheOptions);
+                } else {
+                    this.options(array);
+                }
+                this.cleanHoveredElement();
+            }
+        },
+
+        /**
+         * Checked has selected elements or not
+         *
+         * @returns {Boolean}
+         */
+        hasSelected: function () {
+            return !!this.selected().length;
+        },
+
+        /**
+         * Remove element from selected array
+         */
+        removeSelected: function (data, event) {
+            event ? event.stopPropagation() : false;
+            this.selected(_.without(this.selected(), data));
+        },
+
+        /**
+         * Checked key name
+         *
+         * @returns {Boolean}
+         */
+        isTabKey: function (event) {
+            return keyCodes[event.keyCode] === 'tabKey';
+        },
+
+        /**
          * Clean hoverElIndex variable
          *
          * @returns {Object} Chainable
          */
         cleanHoveredElement: function () {
-            if (!this.listVisible() && !_.isNull(this.hoverElIndex())) {
+            if (!_.isNull(this.hoverElIndex())) {
                 this.hoverElIndex(null);
             }
 
@@ -168,7 +322,8 @@ define([
         /**
          * Set true to observable variable multiselectFocus
          */
-        onFocusIn: function () {
+        onFocusIn: function (elem) {
+            !this.cacheUiSelect ? this.cacheUiSelect = elem : false;
             this.multiselectFocus(true);
         },
 
@@ -178,7 +333,6 @@ define([
          */
         onFocusOut: function () {
             this.multiselectFocus(false);
-            this.listVisible() ? this.listVisible(false) : false;
         },
 
         /**
@@ -186,6 +340,7 @@ define([
          * if select list is open toggle selected current option
          */
         enterKeyHandler: function () {
+
             if (this.listVisible()) {
                 if (!_.isNull(this.hoverElIndex())) {
                     this.toggleOptionSelected(this.options()[this.hoverElIndex()]);
@@ -242,17 +397,23 @@ define([
          * @returns {Boolean} if handler for this event doesn't found return true
          */
         keydownSwitcher: function (data, event) {
-            var handlers = {
-                    enterKey: this.enterKeyHandler,
-                    escapeKey: this.escapeKeyHandler,
-                    spaceKey: this.enterKeyHandler,
-                    pageUpKey: this.pageUpKeyHandler,
-                    pageDownKey: this.pageDownKeyHandler
-                },
-                keyName = keyCodes[event.keyCode];
+            var keyName = keyCodes[event.keyCode];
 
-            if (handlers.hasOwnProperty(keyName)) {
-                handlers[keyName].apply(this, arguments);
+            if (this.isTabKey(event)) {
+                if (!this.filterOptionsFocus() && this.listVisible()) {
+                    this.cacheUiSelect.blur();
+                    this.filterOptionsFocus(true);
+                    this.cleanHoveredElement();
+
+                    return false;
+                }
+                this.listVisible(false);
+
+                return true;
+            }
+
+            if (this.keyDownHandlers().hasOwnProperty(keyName)) {
+                this.keyDownHandlers()[keyName].apply(this, arguments);
             } else {
                 return true;
             }
