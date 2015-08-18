@@ -13,9 +13,9 @@ $orderCollection = $objectManager->create('Magento\Sales\Model\Order')->getColle
 $order = $orderCollection->getFirstItem();
 
 $creditmemoItemFactory = $objectManager->create('Magento\Sales\Model\Order\Creditmemo\ItemFactory');
-/** @var Magento\Sales\Model\Service\Order  $service */
-$service = $objectManager->get('Magento\Sales\Model\Service\Order');
-$creditmemo = $service->prepareCreditmemo($order->getData());
+/** @var \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory */
+$creditmemoFactory = $objectManager->get('Magento\Sales\Model\Order\CreditmemoFactory');
+$creditmemo = $creditmemoFactory->createByOrder($order, $order->getData());
 $creditmemo->setOrder($order);
 $creditmemo->setState(Magento\Sales\Model\Order\Creditmemo::STATE_OPEN);
 foreach ($order->getItems() as $item) {

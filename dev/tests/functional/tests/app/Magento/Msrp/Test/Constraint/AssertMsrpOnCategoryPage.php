@@ -58,8 +58,10 @@ class AssertMsrpOnCategoryPage extends AbstractConstraint
             $mapBlock->getOldPrice(),
             'Displayed on Category page MAP is incorrect.'
         );
+        $priceData = $product->getDataFieldConfig('price')['source']->getPriceData();
+        $price = isset($priceData['category_price']) ? $priceData['category_price'] : $product->getPrice();
         \PHPUnit_Framework_Assert::assertEquals(
-            $product->getPrice(),
+            $price,
             $mapBlock->getActualPrice(),
             'Displayed on Category page price is incorrect.'
         );

@@ -9,7 +9,8 @@ module.exports = {
     file: {
         options: {
             configFile: 'dev/tests/static/testsuite/Magento/Test/Js/_files/eslint/.eslintrc',
-            reset: true
+            reset: true,
+            useEslintrc: false
         },
         src: ''
     },
