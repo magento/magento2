@@ -6,13 +6,13 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="Magento\CatalogSearch\Test\TestCase\MassDeleteSearchTermEntityTest">
-    <variation name="MassDeleteSearchTermEntityTestVariation1">
-      <data name="searchTerms" xsi:type="string">catalogSearchQuery::default,catalogSearchQuery::default,catalogSearchQuery::default</data>
-      <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSuccessMassDeleteMessage"/>
-      <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermMassActionsNotInGrid"/>
-      <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermMassActionNotOnFrontend"/>
-      <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchSynonymMassActionNotOnFrontend"/>
-    </variation>
-  </testCase>
+    <testCase name="Magento\CatalogSearch\Test\TestCase\MassDeleteSearchTermEntityTest" summary="Mass Delete Search Term" ticketId="MAGETWO-26599">
+        <variation name="MassDeleteSearchTermEntityTestVariation1">
+            <data name="searchTerms" xsi:type="string">catalogSearchQuery::default,catalogSearchQuery::default,catalogSearchQuery::default</data>
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermSuccessMassDeleteMessage" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermMassActionsNotInGrid" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchTermMassActionNotOnFrontend" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertSearchSynonymMassActionNotOnFrontend" />
+        </variation>
+    </testCase>
 </config>
