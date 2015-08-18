@@ -217,3 +217,35 @@
 .mselect-input-container .mselect-save {
     top: 3px;
 }
+
+.mselect-button-add,
+.mselect-button-add-disabled {
+    background: none repeat scroll 0 0 #e3e3e3;
+    border: #adadad 1px solid;
+    border-radius: 0;
+    color: #514943;
+    font-size: 1.4rem;
+    font-weight: 600;
+    font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+    display: inline-block;
+    line-height: 1.36;
+    padding: 0.6rem 1em;
+    text-align: center;
+    vertical-align: baseline;
+    cursor: pointer;
+}
+
+.mselect-button-add:hover,
+.mselect-button-add:active,
+.mselect-button-add:focus {
+    background: none repeat scroll 0 0 #dbdbdb;
+    color: #514943;
+}
+
+.mselect-button-add-disabled,
+.mselect-button-add-disabled:hover {
+    cursor: not-allowed;
+    opacity: 0.5;
+    background: #d9d6cf;
+    pointer-events: none;
+}
