@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Sales\Test\TestCase\HoldCreatedOrderTest">
+    <testCase name="Magento\Sales\Test\TestCase\HoldCreatedOrderTest" summary="Hold Created Order" ticketId="MAGETWO-28214">
         <variation name="HoldCreatedOrderTestVariation1">
             <data name="description" xsi:type="string">hold order and check status in my account on storefront</data>
             <data name="order/dataset" xsi:type="string">default</data>

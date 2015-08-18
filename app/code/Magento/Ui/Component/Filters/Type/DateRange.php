@@ -10,10 +10,8 @@ use Magento\Ui\Component\Form\Element\DataType\Date as DataTypeDate;
 /**
  * Class DateRange
  */
-class DateRange extends AbstractFilter
+class DateRange extends Range
 {
-    const NAME = 'filter_range';
-
     const COMPONENT = 'date';
 
     /**
@@ -22,16 +20,6 @@ class DateRange extends AbstractFilter
      * @var DataTypeDate
      */
     protected $wrappedComponent;
-
-    /**
-     * Get component name
-     *
-     * @return string
-     */
-    public function getComponentName()
-    {
-        return static::NAME;
-    }
 
     /**
      * Prepare component configuration
@@ -45,59 +33,30 @@ class DateRange extends AbstractFilter
             static::COMPONENT,
             ['context' => $this->getContext()]
         );
-        $this->wrappedComponent->prepare();
 
-        $this->applyFilter();
+        $this->wrappedComponent->prepare();
 
         parent::prepare();
     }
 
     /**
-     * Apply filter
+     * Apply filter by its type
      *
+     * @param string $type
+     * @param string $value
      * @return void
      */
-    protected function applyFilter()
+    protected function applyFilterByType($type, $value)
     {
-        $condition = $this->getCondition();
-        if ($condition !== null) {
-            $this->getContext()->getDataProvider()->addFilter($condition, $this->getName());
-        }
-    }
+        if (!empty($value)) {
+            $value = $this->wrappedComponent->convertDate($value);
 
-    /**
-     * Get condition by data type
-     *
-     * @return array|null
-     */
-    public function getCondition()
-    {
-        $value = isset($this->filterData[$this->getName()]) ? $this->filterData[$this->getName()] : null;
-        if (!empty($value['from']) || !empty($value['to'])) {
-            if (!empty($value['from'])) {
-                $value['orig_from'] = $value['from'];
-                $value['from'] = $this->wrappedComponent->convertDate(
-                    $value['from'],
-                    $this->wrappedComponent->getLocale()
-                );
-            } else {
-                unset($value['from']);
-            }
-            if (!empty($value['to'])) {
-                $value['orig_to'] = $value['to'];
-                $value['to'] = $this->wrappedComponent->convertDate(
-                    $value['to'],
-                    $this->wrappedComponent->getLocale()
-                );
-            } else {
-                unset($value['to']);
-            }
-            $value['datetime'] = true;
-            $value['locale'] = $this->wrappedComponent->getLocale();
-        } else {
-            $value = null;
-        }
+            $filter = $this->filterBuilder->setConditionType($type)
+                ->setField($this->getName())
+                ->setValue($value->format('Y-m-d H:i:s'))
+                ->create();
 
-        return $value;
+            $this->getContext()->getDataProvider()->addFilter($filter);
+        }
     }
 }
