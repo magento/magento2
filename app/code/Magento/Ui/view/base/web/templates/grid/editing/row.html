@@ -16,14 +16,9 @@
         }">
     <!-- ko if: $parent.isActionsColumn($data) -->
     <td class="data-grid-actions-cell">
-        <a class="admin__page-nav-link _changed" href="#" data-bind="css: { _disabled: !$parent.hasChanges() }"style="padding: 0 4rem 0 1rem;">
-            <span class="admin__page-nav-item-messages">
-               <span class="admin__page-nav-item-message _changed">
-                   <span class="admin__page-nav-item-message-icon"></span>
-                   <span class="admin__page-nav-item-message-tooltip" data-bind="i18n: 'Changes have been made to this section that have not been saved.'"></span>
-               </span>
-            </span> 
-        </a>
+        <span class="data-grid-row-changed" data-bind="css: { _changed: $parent.hasChanges() }">
+            <span class="data-grid-row-changed-tooltip" data-bind="i18n: 'Record contains unsaved changes.'"></span>
+        </span>
     </td>
     <!-- /ko -->
 

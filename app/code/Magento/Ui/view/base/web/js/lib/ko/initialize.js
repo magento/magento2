@@ -3,6 +3,7 @@
  * See COPYING.txt for license details.
  */
 /** Loads all available knockout bindings, sets custom template engine, initializes knockout on page */
+
 define([
     'ko',
     './template/engine',

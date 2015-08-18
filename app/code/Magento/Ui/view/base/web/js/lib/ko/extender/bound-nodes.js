@@ -2,6 +2,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'ko',
     'underscore',
@@ -90,10 +91,11 @@ define([
          * @param {Function} orig - Original 'applyBindings' method.
          */
         applyBindings: function (orig, ctx, node) {
-            var data;
+            var result = orig(),
+                data;
 
             if (!node || node.nodeType !== 1) {
-                return orig();
+                return result;
             }
 
             data = ctx && (ctx.$data || ctx);
@@ -102,7 +104,7 @@ define([
                 addBounded(data, node);
             }
 
-            return orig();
+            return result;
         },
 
         /**
@@ -112,10 +114,11 @@ define([
          * @param {Function} orig - Original 'cleanNode' method.
          */
         cleanNode: function (orig, node) {
-            var data;
+            var result = orig(),
+                data;
 
             if (node.nodeType !== 1) {
-                return orig();
+                return result;
             }
 
             data = ko.dataFor(node);
@@ -124,7 +127,7 @@ define([
                 removeBounded(data, node);
             }
 
-            return orig();
+            return result;
         }
     });
 
