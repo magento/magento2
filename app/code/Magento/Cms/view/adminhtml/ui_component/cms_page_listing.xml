@@ -361,7 +361,7 @@
                         <item name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</item>
                         <item name="template" xsi:type="string">ui/grid/filters/elements/ui-select</item>
                         <item name="dataScope" xsi:type="string">page_layout</item>
-                        <item name="label" xsi:type="string" translate="true">uiSelect</item>
+                        <item name="label" xsi:type="string" translate="true">Layout</item>
                     </item>
                 </argument>
             </filterSelect>
