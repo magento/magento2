@@ -68,7 +68,7 @@ abstract class ImportResult extends Import
             if ($errorAggregator->hasFatalExceptions()) {
                 foreach ($this->getSystemExceptions($errorAggregator) as $error) {
                     $message .= $error->getErrorMessage()
-                        . '<a href="#" onclick="$(this).next().show();$(this).hide();return false;">'
+                        . ' <a href="#" onclick="$(this).next().show();$(this).hide();return false;">'
                         . __('Show more') . '</a><div style="display:none;">' . __('Additional data') . ': '
                         . $error->getErrorDescription() . '</div>';
                 }
