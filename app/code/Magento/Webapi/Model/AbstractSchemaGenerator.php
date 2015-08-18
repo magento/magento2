@@ -96,8 +96,7 @@ abstract class AbstractSchemaGenerator
         }
 
         $this->collectCallInfo($requestedServiceMetadata);
-        $basePath = strstr($endPointUrl, Rest::SCHEMA_PATH, true);
-        $schemaContent = $this->generateSchema($requestedServiceMetadata, $requestScheme, $requestHost, $basePath);
+        $schemaContent = $this->generateSchema($requestedServiceMetadata, $requestScheme, $requestHost, $endPointUrl);
         $this->cache->save($schemaContent, $cacheId, [Webapi::CACHE_TAG]);
 
         return $schemaContent;

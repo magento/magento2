@@ -6,6 +6,7 @@
 namespace Magento\Webapi\Model\Rest\Swagger;
 
 use Magento\Framework\Reflection\TypeProcessor;
+use Magento\Webapi\Controller\Rest;
 use Magento\Webapi\Model\AbstractSchemaGenerator;
 use Magento\Webapi\Model\Config\Converter;
 use Magento\Webapi\Model\Rest\Swagger;
@@ -128,7 +129,7 @@ class Generator extends AbstractSchemaGenerator
     /**
      * {@inheritdoc}
      */
-    protected function generateSchema($requestedServiceMetadata, $requestScheme, $requestHost, $basePath)
+    protected function generateSchema($requestedServiceMetadata, $requestScheme, $requestHost, $endpointUrl)
     {
         /** @var Swagger $swagger */
         $swagger = $this->swaggerFactory->create();
@@ -137,7 +138,7 @@ class Generator extends AbstractSchemaGenerator
 
         $this->addCustomAttributeTypes();
         $swagger->setHost($requestHost);
-        $swagger->setBasePath($basePath);
+        $swagger->setBasePath(strstr($endpointUrl, Rest::SCHEMA_PATH, true));
         $swagger->setSchemes([$requestScheme]);
 
         foreach ($requestedServiceMetadata as $serviceName => $serviceData) {
