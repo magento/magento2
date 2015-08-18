@@ -286,7 +286,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                     [] // mustNot
                 ),
                 'conditionType' => RequestBoolQuery::QUERY_CONDITION_MUST,
-                'expectedResult' => '((term1 = 1) AND (range1 >= 0 AND range1 < 10))',
+                'expectedResult' => '(((term1 = 1)) AND ((range1 >= 0 AND range1 < 10)))',
             ],
             'boolFilterWithShould' => [
                 'filter' => $this->createBoolFilter(
@@ -298,7 +298,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                     [] // mustNot
                 ),
                 'conditionType' => RequestBoolQuery::QUERY_CONDITION_MUST,
-                'expectedResult' => '(((term1 = 1) OR (range1 >= 0 AND range1 < 10)))',
+                'expectedResult' => '((((term1 = 1)) OR ((range1 >= 0 AND range1 < 10))))',
             ],
             'boolFilterWithMustNot' => [
                 'filter' => $this->createBoolFilter(
@@ -310,7 +310,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                     ]
                 ),
                 'conditionType' => RequestBoolQuery::QUERY_CONDITION_MUST,
-                'expectedResult' => '(((term1 != 1) AND (range1 < 0 OR range1 >= 10)))',
+                'expectedResult' => '((((term1 != 1)) AND ((range1 < 0 OR range1 >= 10))))',
             ],
             'boolFilterWithAllFields' => [
                 'filter' => $this->createBoolFilter(
@@ -328,9 +328,9 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                     ]
                 ),
                 'conditionType' => RequestBoolQuery::QUERY_CONDITION_MUST,
-                'expectedResult' => '((term1 = 1) AND (range1 >= 0 AND range1 < 10)'
-                    . ' AND ((term2 = 1) OR (range2 >= 0 AND range2 < 10))'
-                    . ' AND ((term3 != 1) AND (range3 < 0 OR range3 >= 10)))',
+                'expectedResult' => '(((term1 = 1)) AND ((range1 >= 0 AND range1 < 10))'
+                    . ' AND (((term2 = 1)) OR ((range2 >= 0 AND range2 < 10)))'
+                    . ' AND (((term3 != 1)) AND ((range3 < 0 OR range3 >= 10))))'
             ],
             'boolFilterInBoolFilter' => [
                 'filter' => $this->createBoolFilter(
@@ -362,14 +362,12 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                     ]
                 ),
                 'conditionType' => RequestBoolQuery::QUERY_CONDITION_MUST,
-                'expectedResult' => '((term1 = 1) AND (range1 >= 0 AND range1 < 10)'
-                    . ' AND ((term2 = 1) OR (range2 >= 0 AND range2 < 10))'
-                    . ' AND ((term3 != 1) AND (range3 < 0 OR range3 >= 10)'
-                    . ' AND ((term4 != 1) AND (range4 < 0 OR range4 >= 10)'
-                    . ' AND ((term5 != 1) OR (range5 < 0 OR range5 >= 10))'
-                    . ' AND ((term6 = 1) AND (range6 >= 0 AND range6 < 10)))'
-                    . '))',
-
+                'expectedResult' => '(((term1 = 1)) AND ((range1 >= 0 AND range1 < 10))'
+                    . ' AND (((term2 = 1)) OR ((range2 >= 0 AND range2 < 10)))'
+                    . ' AND (((term3 != 1)) AND ((range3 < 0 OR range3 >= 10))'
+                    . ' AND ((((term4 != 1)) AND ((range4 < 0 OR range4 >= 10))'
+                    . ' AND (((term5 != 1)) OR ((range5 < 0 OR range5 >= 10)))'
+                    . ' AND (((term6 = 1)) AND ((range6 >= 0 AND range6 < 10)))))))',
             ],
             'boolEmpty' => [
                 'filter' => $this->createBoolFilter([], [], []),
