@@ -61,7 +61,8 @@ define([
             listens: {
                 selected: 'setCaption setValue',
                 listVisible: 'cleanHoveredElement',
-                filterInputValue: 'filterOptionsList'
+                filterInputValue: 'filterOptionsList',
+                value: 'setSelected'
             },
             imports: {
                 options: '${ $.optionsConfig.name }:options'
@@ -82,6 +83,10 @@ define([
                 .initOptions();
 
             return this;
+        },
+
+        setSelected: function(){
+            this.selected(this.value());
         },
 
         /**
@@ -441,16 +446,17 @@ define([
          */
         setValue: function () {
             var selected = this.selected(),
-                length = selected.length,
-                i = 0,
-                array = [];
+                result;
 
-            for (i; i < length; i++) {
-                if (this.cacheOptions[i].label === selected[i])
-                array.push(this.cacheOptions[i].value);
-            }
+            result = _.chain(this.cacheOptions)
+                .filter(function (opt){
+                    return _.contains(selected, opt.label);
+                })
+                .sortBy('value')
+                .pluck('value')
+                .value();
 
-            this.value(array);
+            this.value(result);
         },
 
         /**
