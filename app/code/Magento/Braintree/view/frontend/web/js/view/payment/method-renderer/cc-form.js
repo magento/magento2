@@ -71,11 +71,7 @@ define(
                     this.quoteBaseGrandTotals = quote.totals().base_grand_total;
             },
             canInitialise: function () {
-                if (!this.clientToken) {
-                    messageList.addErrorMessage({'message': 'Can not initialize Braintree (Credit Cart)'});
-                    return false;
-                }
-                return true
+                return this.clientToken
             },
             /**
              * @override
@@ -106,6 +102,8 @@ define(
                     this.braintreeClient = new braintreeClientSDK.api.Client({
                         clientToken: this.clientToken
                     });
+                } else {
+                    messageList.addErrorMessage({'message': 'Can not initialize PayPal (Braintree)'});
                 }
 
                 return this;
