@@ -75,7 +75,7 @@ abstract class ImportResult extends Import
             }
             $resultBlock->addNotice(
                 '<strong>' . __('Following Error(s) has been occurred during importing process:') . '</strong><br>'
-                . '<div class="import-error-wrapper">' . __('Only first 100 error are displayed here. ')
+                . '<div class="import-error-wrapper">' . __('Only first 100 errors are displayed here. ')
                 . '<a href="'
                 . $this->createDownloadUrlImportHistoryFile($this->createErrorReport($errorAggregator))
                 . '">' . __('Download full report') . '</a><br>'
