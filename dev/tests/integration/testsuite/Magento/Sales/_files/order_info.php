@@ -75,7 +75,7 @@ $item = $order->getAllItems()[0];
 $invoiceFactory = $objectManager->get('Magento\Sales\Api\InvoiceManagementInterface');
 
 /** @var $invoice \Magento\Sales\Model\Order\Invoice */
-$invoice = $invoiceFactory->prepareInvoice($order->getId(), [$item->getId() => 10]);
+$invoice = $invoiceFactory->prepareInvoice($order, [$item->getId() => 10]);
 $invoice->register();
 $invoice->save();
 
