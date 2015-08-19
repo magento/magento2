@@ -10,20 +10,19 @@ use Magento\Backend\Test\Block\Widget\Tab;
 use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\CreditMemos\Grid;
 
 /**
- * Class CreditMemos
- * CreditMemos tab
+ * CreditMemos tab.
  */
 class CreditMemos extends Tab
 {
     /**
-     * Grid block css selector
+     * Grid block css selector.
      *
      * @var string
      */
-    protected $grid = '#order_creditmemos';
+    protected $grid = '[data-bind*=sales_order_view_creditmemo_grid]';
 
     /**
-     * Get grid block
+     * Get grid block.
      *
      * @return Grid
      */
