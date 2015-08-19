@@ -21,7 +21,7 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     protected $context;
 
     /**
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
