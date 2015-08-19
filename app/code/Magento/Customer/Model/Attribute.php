@@ -7,6 +7,7 @@ namespace Magento\Customer\Model;
 
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Catalog\Api\Data\EavAttributeInterface;
+use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
 
 /**
  * Customer attribute model
@@ -79,6 +80,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Catalog\Model\Product\ReservedAttributeList $reservedAttributeList,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        DateTimeFormatterInterface $dateTimeFormatter,
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
@@ -101,6 +103,7 @@ class Attribute extends \Magento\Eav\Model\Attribute
             $localeDate,
             $reservedAttributeList,
             $localeResolver,
+            $dateTimeFormatter,
             $resource,
             $resourceCollection,
             $data
