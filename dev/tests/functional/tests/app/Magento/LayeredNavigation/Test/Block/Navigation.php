@@ -62,7 +62,7 @@ class Navigation extends Block
         $options = $this->_rootElement->getElements(sprintf($this->optionTitle, ''), Locator::SELECTOR_XPATH);
         $data = [];
         foreach ($options as $option) {
-            $data[] = $option->getText();
+            $data[] = strtoupper($option->getText());
         }
         return $data;
     }

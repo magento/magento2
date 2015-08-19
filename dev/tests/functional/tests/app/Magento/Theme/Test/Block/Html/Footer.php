@@ -75,6 +75,17 @@ class Footer extends Block
     }
 
     /**
+     * Check is link is visible.
+     *
+     * @param string $linkName
+     * @return bool
+     */
+    public function isLinkVisible($linkName)
+    {
+        return $this->_rootElement->find(sprintf($this->linkSelector, $linkName), Locator::SELECTOR_XPATH)->isVisible();
+    }
+
+    /**
      * Check Variable visibility by html value.
      *
      * @param string $htmlValue
