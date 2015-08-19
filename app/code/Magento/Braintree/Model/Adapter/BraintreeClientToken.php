@@ -24,7 +24,7 @@ class BraintreeClientToken
     {
         try {
             return \Braintree_ClientToken::generate($params);
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             return null;
         }
     }
