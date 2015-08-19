@@ -26,7 +26,7 @@ class License extends Block
      *
      * @var string
      */
-    protected $license = '.container.ng-scope';
+    protected $license = '.license-text';
 
     /**
      * Click on 'Back' button.
