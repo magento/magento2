@@ -571,7 +571,7 @@ class AccountManagement implements AccountManagementInterface
         try {
             $hash = $this->customerRegistry->retrieveSecureData($customer->getId())->getPasswordHash();
             $templateType = self::NEW_ACCOUNT_EMAIL_REGISTERED;
-            if ($hash != '' && $this->isConfirmationRequired($customer)) {
+            if ($this->isConfirmationRequired($customer) && $hash != '') {
                 $templateType = self::NEW_ACCOUNT_EMAIL_CONFIRMATION;
             } elseif ($hash == '') {
                 $templateType = self::NEW_ACCOUNT_EMAIL_REGISTERED_NO_PASSWORD;
