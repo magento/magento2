@@ -15,7 +15,7 @@ use Magento\ImportExport\Model\History;
  */
 abstract class ImportResult extends Import
 {
-    const IMPORT_HISTORY_FILE_DOWNLOAD_ROUTE = 'admin/history/download';
+    const IMPORT_HISTORY_FILE_DOWNLOAD_ROUTE = '*/history/download';
 
     /**
      * @var \Magento\ImportExport\Model\Report\ReportProcessorInterface
