@@ -8,32 +8,32 @@ $base = basename($_SERVER['SCRIPT_FILENAME']);
 
 return [
     'navUpdaterTitles' => [
-        'uninstall'    => 'Uninstall ',
+        'enable'    => 'Enable ',
     ],
     'navUpdater' => [
         [
-            'id'          => 'root.readiness-check-uninstall',
-            'url'         => 'readiness-check-uninstall',
+            'id'          => 'root.readiness-check-enable',
+            'url'         => 'readiness-check-enable',
             'templateUrl' => "{$base}/readiness-check-updater",
             'title'       => "Readiness \n Check",
             'header'      => 'Step 1: Readiness Check',
             'nav'         => true,
             'order'       => 2,
-            'type'        => 'uninstall'
+            'type'        => 'enable'
         ],
         [
-            'id'          => 'root.readiness-check-uninstall.progress',
-            'url'         => 'readiness-check-uninstall/progress',
+            'id'          => 'root.readiness-check-enable.progress',
+            'url'         => 'readiness-check-enable/progress',
             'templateUrl' => "$base/readiness-check-updater/progress",
             'title'       => 'Readiness Check',
             'header'      => 'Step 1: Readiness Check',
             'controller'  => 'readinessCheckController',
             'nav'         => false,
             'order'       => 3,
-            'type'        => 'uninstall'
+            'type'        => 'enable'
         ],
         [
-            'id'          => 'root.create-backup-uninstall',
+            'id'          => 'root.create-backup-enable',
             'url'         => 'create-backup',
             'templateUrl' => "$base/create-backup",
             'title'       => "Create \n Backup",
@@ -42,10 +42,10 @@ return [
             'nav'         => true,
             'validate'    => true,
             'order'       => 4,
-            'type'        => 'uninstall'
+            'type'        => 'enable'
         ],
         [
-            'id'          => 'root.create-backup-uninstall.progress',
+            'id'          => 'root.create-backup-enable.progress',
             'url'         => 'create-backup/progress',
             'templateUrl' => "$base/complete-backup/progress",
             'title'       => "Create \n Backup",
@@ -53,36 +53,25 @@ return [
             'controller'  => 'completeBackupController',
             'nav'         => false,
             'order'       => 5,
-            'type'        => 'uninstall'
+            'type'        => 'enable'
         ],
         [
-            'id'          => 'root.data-option',
-            'url'         => 'data-option',
-            'templateUrl' => "$base/data-option",
-            'title'       => "Data \n Option",
-            'controller'  => 'dataOptionController',
-            'header'      => 'Step 3: Data Option',
+            'id'          => 'root.start-updater-enable',
+            'url'         => 'enable',
+            'templateUrl' => "$base/start-updater",
+            'title'       => "Enable Module",
+            'controller'  => 'startUpdaterController',
+            'header'      => 'Step 3: Enable Module',
             'nav'         => true,
             'order'       => 6,
-            'type'        => 'uninstall'
+            'type'        => 'enable'
         ],
         [
-            'id'          => 'root.start-updater-uninstall',
-            'url'         => 'uninstall',
-            'templateUrl' => "$base/start-updater",
-            'title'       => "Uninstall",
-            'controller'  => 'startUpdaterController',
-            'header'      => 'Step 4: Uninstall',
-            'nav'         => true,
-            'order'       => 7,
-            'type'        => 'uninstall'
-        ],
-        [
-            'id'          => 'root.uninstall-success',
-            'url'         => 'uninstall-success',
+            'id'          => 'root.enable-success',
+            'url'         => 'enable-success',
             'templateUrl' => "$base/updater-success",
             'controller'  => 'updaterSuccessController',
-            'order'       => 8,
+            'order'       => 7,
             'main'        => true,
             'noMenu'      => true
         ],
