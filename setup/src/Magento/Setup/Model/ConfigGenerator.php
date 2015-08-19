@@ -197,6 +197,22 @@ class ConfigGenerator
     }
 
     /**
+     * Creates resource config data
+     *
+     * @return ConfigData
+     */
+    public function createResourceConfig()
+    {
+        $configData = new ConfigData(ConfigFilePool::APP_ENV);
+
+        if ($this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_RESOURCE_DEFAULT_SETUP) === null) {
+            $configData->set(ConfigOptionsListConstants::CONFIG_PATH_RESOURCE_DEFAULT_SETUP, 'default');
+        }
+
+        return $configData;
+    }
+
+    /**
      * Creates x-frame-options header config data
      *
      * @return ConfigData
