@@ -22,11 +22,11 @@ define([
         },
 
         /**
-         * Converts initial value to the specified date format.
+         * Formats provided value according to 'dateFormat' property.
          *
          * @returns {String}
          */
-        getInitialValue: function () {
+        normalizeData: function () {
             var value = this._super();
 
             if (value) {
