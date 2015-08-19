@@ -68,10 +68,10 @@ class CountryInformationAcquirerTest extends WebapiAbstract
     }
 
     /**
-     * Retrieve existing currency information for the store
+     * Retrieve existing country information for the store
      *
      * @param string $storeCode
-     * @return \Magento\Directory\Api\Data\CurrencyInformationInterface
+     * @return \Magento\Directory\Api\Data\CountryInformationInterface
      */
     protected function getCountriesInfo($storeCode = 'default')
     {
@@ -92,10 +92,10 @@ class CountryInformationAcquirerTest extends WebapiAbstract
     }
 
     /**
-     * Retrieve existing currency information for the store
+     * Retrieve existing country information for the store
      *
      * @param string $storeCode
-     * @return \Magento\Directory\Api\Data\CurrencyInformationInterface
+     * @return \Magento\Directory\Api\Data\CountryInformationInterface
      */
     protected function getCountryInfo($storeCode = 'default')
     {

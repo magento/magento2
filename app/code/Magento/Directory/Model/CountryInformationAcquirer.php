@@ -74,7 +74,7 @@ class CountryInformationAcquirer implements \Magento\Directory\Api\CountryInform
 
         $countries = $this->directoryHelper->getCountryCollection($store);
         $regions = $this->directoryHelper->getRegionData();
-        foreach ($countries as $code => $data) {
+        foreach ($countries as $data) {
             $countryInfo = $this->setCountryInfo($data, $regions, $storeLocale);
             $countriesInfo[] = $countryInfo;
         }
@@ -103,8 +103,13 @@ class CountryInformationAcquirer implements \Magento\Directory\Api\CountryInform
         return $countryInfo;
     }
 
-    /*
+    /**
      * Creates and initializes the information for \Magento\Directory\Model\Data\CountryInformation
+     *
+     * @param \Magento\Directory\Model\Resource\Country $country
+     * @param array $regions
+     * @param string $storeLocale
+     * @return \Magento\Directory\Model\Data\CountryInformation
      */
     protected function setCountryInfo($country, $regions, $storeLocale)
     {
