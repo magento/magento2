@@ -54,7 +54,7 @@ class Columns extends AbstractComponent
         if (isset($config['editorConfig']) && isset($config['editorConfig']['clientConfig'])) {
             foreach ($config['editorConfig']['clientConfig'] as $key => &$value) {
                 if (in_array($key, ['saveUrl', 'validateUrl'])) {
-                    $value = $this->context->getUrl($value);
+                    $value = $this->getContext()->getUrl($value);
                 }
             }
         }
