@@ -186,6 +186,8 @@
         <!-- New gallery theme settings -->
         <var name="gallery_nav">dots</var> <!-- Gallery navigation style (false/thumbs/dots) -->
         <var name="gallery_loop">false</var> <!-- Gallery navigation loop (true/false) -->
+        <var name="magnifier_width">200</var>
+        <var name="magnifier_height">200</var>
         <!-- end -->
 
         <var name="product_small_image_sidebar_size">100</var>  <!-- Override for small product image -->
