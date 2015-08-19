@@ -7,6 +7,9 @@ namespace Magento\Cms\Test\Unit\Controller\Page;
 
 use Magento\Cms\Controller\Adminhtml\Page\InlineEdit;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class InlineEditTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
