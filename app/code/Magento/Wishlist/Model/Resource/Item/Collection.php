@@ -93,11 +93,6 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     protected $_date;
 
     /**
-     * @var \Magento\Wishlist\Model\Config
-     */
-    protected $_wishlistConfig;
-
-    /**
      * @var \Magento\Catalog\Model\Product\Visibility
      */
     protected $_productVisibility;
@@ -163,7 +158,6 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Sales\Helper\Admin $adminhtmlSales,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Magento\Wishlist\Model\Config $wishlistConfig,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
         \Magento\Framework\App\Resource $coreResource,
         \Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory $optionCollectionFactory,
@@ -178,7 +172,6 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         $this->_adminhtmlSales = $adminhtmlSales;
         $this->_storeManager = $storeManager;
         $this->_date = $date;
-        $this->_wishlistConfig = $wishlistConfig;
         $this->_productVisibility = $productVisibility;
         $this->_coreResource = $coreResource;
         $this->_optionCollectionFactory = $optionCollectionFactory;
@@ -257,7 +250,6 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         $productIds = [];
 
         $this->_productIds = array_merge($this->_productIds, array_keys($productIds));
-        $attributes = $this->_wishlistConfig->getProductAttributes();
         /** @var \Magento\Catalog\Model\Resource\Product\Collection $productCollection */
         $productCollection = $this->_productCollectionFactory->create();
 
@@ -268,7 +260,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         $productCollection->addPriceData()
             ->addTaxPercents()
             ->addIdFilter($this->_productIds)
-            ->addAttributeToSelect($attributes)
+            ->addAttributeToSelect('*')
             ->addOptionsToResult()
             ->addUrlRewrite();
 
