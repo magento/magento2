@@ -72,7 +72,7 @@ var tierPriceRowTemplate = '<tr>'
     + '</td>'
     + '<td class="col-price"><input class="<?php echo $_htmlClass ?> required-entry <?php echo $_priceValueValidation ?>" type="text" name="<?php echo $_htmlName ?>[<%- data.index %>][price]" value="<%- data.price %>" id="tier_price_row_<%- data.index %>_price" /></td>'
     + '<td class="col-delete"><input type="hidden" name="<?php echo $_htmlName ?>[<%- data.index %>][delete]" class="delete" value="" id="tier_price_row_<%- data.index %>_delete" />'
-    + '<button title="<?php echo $block->escapeHtml("Delete Tier") ?>" type="button" class="action- scalable delete icon-btn delete-product-option" id="tier_price_row_<%- data.index %>_delete_button" onclick="return tierPriceControl.deleteItem(event);">'
+    + '<button title="<?php echo $block->escapeHtml(__('Delete Tier')); ?>" type="button" class="action- scalable delete icon-btn delete-product-option" id="tier_price_row_<%- data.index %>_delete_button" onclick="return tierPriceControl.deleteItem(event);">'
     + '<span><?php echo __("Delete") ?></span></button></td>'
     + '</tr>';
 
