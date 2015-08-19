@@ -32,8 +32,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $constructArgs = [];
         if ('Magento\Sales\Model\Order\Shipment' == $modelName) {
-            $orderFactory = $this->_getMockOrderFactory($code);
-            $constructArgs['orderFactory'] = $orderFactory;
+            $orderRepository = $this->_getMockOrderRepository($code);
+            $constructArgs['orderRepository'] = $orderRepository;
         } elseif ('Magento\Sales\Model\Order\Shipment\Track' == $modelName) {
             $shipmentRepository = $this->_getMockShipmentRepository($code);
             $constructArgs['shipmentRepository'] = $shipmentRepository;
@@ -52,16 +52,16 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param $code
-     * @return \Magento\Sales\Model\OrderFactory
+     * @return \Magento\Sales\Api\OrderRepositoryInterface
      */
-    protected function _getMockOrderFactory($code)
+    protected function _getMockOrderRepository($code)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $order = $objectManager->create('Magento\Sales\Model\Order');
         $order->setProtectCode($code);
-        $orderFactory = $this->getMock('Magento\Sales\Model\OrderFactory', ['create'], [], '', false);
-        $orderFactory->expects($this->atLeastOnce())->method('create')->will($this->returnValue($order));
-        return $orderFactory;
+        $orderRepository = $this->getMock('Magento\Sales\Api\OrderRepositoryInterface', [], [], '', false);
+        $orderRepository->expects($this->atLeastOnce())->method('get')->will($this->returnValue($order));
+        return $orderRepository;
     }
 
     /**
@@ -71,8 +71,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected function _getMockShipmentRepository($code)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $orderFactory = $this->_getMockOrderFactory($code);
-        $shipmentArgs = ['orderFactory' => $orderFactory];
+        $orderRepository = $this->_getMockOrderRepository($code);
+        $shipmentArgs = ['orderRepository' => $orderRepository];
 
         $shipment = $objectManager->create('Magento\Sales\Model\Order\Shipment', $shipmentArgs);
         $shipmentRepository = $this->getMock(
