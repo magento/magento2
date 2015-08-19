@@ -265,7 +265,7 @@ class CouponManagementTest extends WebapiAbstract
         $cartId = $quote->getId();
         $salesRule = $this->objectManager->create('Magento\SalesRule\Model\Rule');
         $salesRule->load('Test Coupon for General', 'name');
-        $couponCode = $salesRule->getPrimaryCoupon()->getCode();;
+        $couponCode = $salesRule->getPrimaryCoupon()->getCode();
 
         /* Since this isn't a full quote fixture, need to assign it to the right customer */
         $cartManagementService = $this->objectManager->create(
