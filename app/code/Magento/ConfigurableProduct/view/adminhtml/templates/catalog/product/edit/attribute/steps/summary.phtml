@@ -11,7 +11,7 @@
 <div data-bind="scope: '<?= $block->getComponentName()?>'">
     <h2 class="steps-wizard-title"><?= __('Step 4: Summary') ?></h2>
 
-    <div class="admin__data-grid-wrap">
+    <div class="admin__data-grid-wrap admin__data-grid-wrap-static">
         <!-- ko if: gridNew().length -->
             <!-- ko template: {name: getGridTemplate(), data: {
                 grid: gridNew(),
