@@ -17,8 +17,8 @@ class Resetpassword extends \Magento\Framework\View\Element\Template
      */
     public function isAutocompleteDisabled()
     {
-        return (bool)$this->_scopeConfig->getValue(
-            \Magento\Customer\Model\Form::XML_PATH_DISABLE_AUTOCOMPLETE,
+        return (bool)!$this->_scopeConfig->getValue(
+            \Magento\Customer\Model\Form::XML_PATH_ENABLE_AUTOCOMPLETE,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
     }
