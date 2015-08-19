@@ -439,6 +439,7 @@ class Customer extends AbstractCustomer
                     }
                 }
             }
+            $this->updateItemsCounterStats($entitiesToCreate, $entitiesToUpdate, $entitiesToDelete);
             /**
              * Save prepared data
              */
