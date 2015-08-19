@@ -133,6 +133,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
                         'class' => '',
                         'template' => '',
                         'ttl' => '',
+                        'display' => ''
                     ],
                     'actions' => [
                         ['someMethod', [], 'action_config_path', 'scope'],
@@ -213,6 +214,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
                         ['someMethod', [], 'action_config_path', 'scope'],
                     ],
                     'arguments' => [],
+                    'attributes' => ['display' => '']
                 ]
             );
 
