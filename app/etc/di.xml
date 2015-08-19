@@ -139,6 +139,7 @@
     <preference for="Magento\Framework\Api\ImageContentValidatorInterface" type="Magento\Framework\Api\ImageContentValidator" />
     <preference for="Magento\Framework\Api\ImageProcessorInterface" type="Magento\Framework\Api\ImageProcessor" />
     <preference for="Magento\Framework\Code\Reader\ClassReaderInterface" type="Magento\Framework\Code\Reader\ClassReader" />
+    <preference for="Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface" type="Magento\Framework\Stdlib\DateTime\DateTimeFormatter"/>
     <type name="Magento\Framework\Model\Resource\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Logger\Handler\Base">
         <arguments>
