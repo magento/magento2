@@ -62,8 +62,10 @@ angular.module('select-version', ['ngStorage'])
                         success(function (data) {
                             if (data.responseType != 'error') {
                                 $scope.components = data.components;
-                                $scope.totalComponents = data.total;
-                                $scope.totalForGrid = data.total;
+                                $scope.total = data.total;
+                                $scope.currentPage = 0;
+                                $scope.rowLimit = 1;
+                                $scope.numberOfPages = Math.ceil(data.total/$scope.rowLimit);
                                 var keys = Object.keys($scope.components);
                                 for (var i = 0; i < $scope.totalForGrid; i++) {
                                     $scope.packages.push({

@@ -84,7 +84,7 @@ class OtherComponentsGrid extends AbstractActionController
             }
             return new JsonModel(
                 [
-                    'components' => $components,
+                    'components' => array_values($components),
                     'total' => count($components),
                     'responseType' => ResponseTypeInterface::RESPONSE_TYPE_SUCCESS
                 ]
