@@ -425,7 +425,6 @@
                 <item name="container" xsi:type="string">Magento\Framework\View\Layout\Reader\Container</item>
                 <item name="block" xsi:type="string">Magento\Framework\View\Layout\Reader\Block</item>
                 <item name="move" xsi:type="string">Magento\Framework\View\Layout\Reader\Move</item>
-                <item name="remove" xsi:type="string">Magento\Framework\View\Layout\Reader\Remove</item>
                 <item name="uiComponent" xsi:type="string">Magento\Framework\View\Layout\Reader\UiComponent</item>
             </argument>
         </arguments>
@@ -449,7 +448,6 @@
                 <item name="container" xsi:type="string">Magento\Framework\View\Layout\Reader\Container</item>
                 <item name="block" xsi:type="string">Magento\Framework\View\Layout\Reader\Block</item>
                 <item name="move" xsi:type="string">Magento\Framework\View\Layout\Reader\Move</item>
-                <item name="remove" xsi:type="string">Magento\Framework\View\Layout\Reader\Remove</item>
                 <item name="uiComponent" xsi:type="string">Magento\Framework\View\Layout\Reader\UiComponent</item>
             </argument>
         </arguments>
@@ -468,7 +466,6 @@
                 <item name="container" xsi:type="string">Magento\Framework\View\Layout\Reader\Container</item>
                 <item name="block" xsi:type="string">Magento\Framework\View\Layout\Reader\Block</item>
                 <item name="move" xsi:type="string">Magento\Framework\View\Layout\Reader\Move</item>
-                <item name="remove" xsi:type="string">Magento\Framework\View\Layout\Reader\Remove</item>
                 <item name="uiComponent" xsi:type="string">Magento\Framework\View\Layout\Reader\UiComponent</item>
             </argument>
         </arguments>
@@ -485,7 +482,6 @@
                 <item name="container" xsi:type="string">Magento\Framework\View\Layout\Reader\Container</item>
                 <item name="block" xsi:type="string">Magento\Framework\View\Layout\Reader\Block</item>
                 <item name="move" xsi:type="string">Magento\Framework\View\Layout\Reader\Move</item>
-                <item name="remove" xsi:type="string">Magento\Framework\View\Layout\Reader\Remove</item>
                 <item name="uiComponent" xsi:type="string">Magento\Framework\View\Layout\Reader\UiComponent</item>
             </argument>
         </arguments>
@@ -927,7 +923,6 @@
             <argument name="readers" xsi:type="array">
                 <item name="container" xsi:type="string">Magento\Framework\View\Layout\Reader\Container</item>
                 <item name="move" xsi:type="string">Magento\Framework\View\Layout\Reader\Move</item>
-                <item name="remove" xsi:type="string">Magento\Framework\View\Layout\Reader\Remove</item>
             </argument>
         </arguments>
     </virtualType>

@@ -15,6 +15,5 @@
                 </arguments>
             </block>
         </referenceBlock>
-        <remove name="newsletter_subscription"/>
     </body>
 </page>
