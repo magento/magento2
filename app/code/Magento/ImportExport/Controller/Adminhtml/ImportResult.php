@@ -33,13 +33,13 @@ abstract class ImportResult extends Import
     protected $reportHelper;
 
     /**
-     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\ImportExport\Model\Report\ReportProcessorInterface $reportProcessor
      * @param \Magento\ImportExport\Model\History $historyModel
      * @param \Magento\ImportExport\Helper\Report $reportHelper
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\ImportExport\Model\Report\ReportProcessorInterface $reportProcessor,
         \Magento\ImportExport\Model\History $historyModel,
         \Magento\ImportExport\Helper\Report $reportHelper
@@ -122,7 +122,7 @@ abstract class ImportResult extends Import
             $writeOnlyErrorItems = false;
         }
         $fileName = $this->reportProcessor->createReport($sourceFile, $errorAggregator, $writeOnlyErrorItems);
-        $this->historyModel->addErrorReportFile($fileName);
+        $this->historyModel->setErrorFile($fileName);
         return $fileName;
     }
 
