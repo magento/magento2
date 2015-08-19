@@ -90,7 +90,7 @@ class InlineEdit extends \Magento\Backend\App\Action
      * Add page title to error message
      *
      * @param PageInterface $page
-     * @param $errorText
+     * @param string $errorText
      * @return string
      */
     protected function getErrorWithPageTitle(PageInterface $page, $errorText)
