@@ -14,9 +14,6 @@ use \Magento\Store\Model\Store;
 /**
  * Class Downloadable
  *
- * @SuppressWarnings(PHPMD.TooManyFields)
- * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
@@ -248,13 +245,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     ];
 
     /**
-     * List file for delete
-     *
-     * @var array
-     */
-    protected $fileForDelete = [];
-
-    /**
      * Num row parsing file
      */
     protected $rowNum;
@@ -284,13 +274,17 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Downloadable\Helper\File $fileHelper
     ) {
-        $this->uploaderFactory = $uploaderFactory;
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params);
         $this->parameters = $this->_entityModel->getParameters();
         $this->_resource = $resource;
         $this->connection = $resource->getConnection('write');
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $this->fileHelper = $fileHelper;
+        $this->fileUploader = $uploaderFactory->create();
+        $this->fileUploader->init();
+        $this->fileUploader->setAllowedExtensions($this->getAllowedExtensions());
+        $this->fileUploader->removeValidateCallback('catalog_product_image');
+
     }
 
     /**
@@ -940,12 +934,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     protected function getUploader($type)
     {
-        if ($this->fileUploader === null) {
-            $this->fileUploader = $this->uploaderFactory->create();
-            $this->fileUploader->init();
-            $this->fileUploader->setAllowedExtensions($this->getAllowedExtensions());
-            $this->fileUploader->removeValidateCallback('catalog_product_image');
-        }
         $dirConfig = DirectoryList::getDefaultConfig();
         $dirAddon = $dirConfig[DirectoryList::MEDIA][DirectoryList::PATH];
 

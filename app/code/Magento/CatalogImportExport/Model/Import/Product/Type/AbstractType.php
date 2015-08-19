@@ -126,11 +126,6 @@ abstract class AbstractType
     protected $connection;
 
     /**
-     * @var array
-     */
-    protected $codeToId;
-
-    /**
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac
      * @param \Magento\Framework\App\Resource $resource
