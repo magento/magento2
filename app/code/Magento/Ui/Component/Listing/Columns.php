@@ -17,25 +17,6 @@ class Columns extends AbstractComponent
 {
     const NAME = 'columns';
 
-    /** @var UrlInterface */
-    protected $urlBuilder;
-
-    /**
-     * @param ContextInterface $context
-     * @param UrlInterface $urlBuilder
-     * @param array $components
-     * @param array $data
-     */
-    public function __construct(
-        ContextInterface $context,
-        UrlInterface $urlBuilder,
-        array $components = [],
-        array $data = []
-    ) {
-        parent::__construct($context, $components, $data);
-        $this->urlBuilder = $urlBuilder;
-    }
-
     /**
      * Get component name
      *
@@ -73,7 +54,7 @@ class Columns extends AbstractComponent
         if (isset($config['editorConfig']) && isset($config['editorConfig']['clientConfig'])) {
             foreach ($config['editorConfig']['clientConfig'] as $key => &$value) {
                 if (in_array($key, ['saveUrl', 'validateUrl'])) {
-                    $value = $this->urlBuilder->getUrl($value);
+                    $value = $this->context->getUrl($value);
                 }
             }
         }
