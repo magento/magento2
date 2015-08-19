@@ -132,21 +132,21 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
 
     /**
      * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
-     * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Eav\Model\Config $config
      * @param \Magento\ImportExport\Model\Resource\Import\Data $importData
+     * @param \Magento\Eav\Model\Config $config
      * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Framework\Stdlib\StringUtils $string
+     * @param ProcessingErrorAggregatorInterface $errorAggregator
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory $resourceFactory
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param ImportProduct\StoreResolver $storeResolver
      * @param AdvancedPricing\Validator $validator
      * @param AdvancedPricing\Validator\Website $websiteValidator
      * @param AdvancedPricing\Validator\GroupPrice $groupPriceValidator
-     * @param \Magento\Framework\Stdlib\StringUtils $string
-     * @param ProcessingErrorAggregatorInterface $errorAggregator
      */
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
