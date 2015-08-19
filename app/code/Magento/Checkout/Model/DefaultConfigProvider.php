@@ -315,9 +315,9 @@ class DefaultConfigProvider implements ConfigProviderInterface
     private function isAutocompleteEnabled()
     {
          return $this->scopeConfig->getValue(
-             \Magento\Customer\Model\Form::XML_PATH_DISABLE_AUTOCOMPLETE,
+             \Magento\Customer\Model\Form::XML_PATH_ENABLE_AUTOCOMPLETE,
              \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-         ) ? 'off' : 'on';
+         ) ? 'on' : 'off';
     }
 
     /**

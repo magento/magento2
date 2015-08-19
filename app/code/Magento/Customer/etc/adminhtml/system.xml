@@ -234,7 +234,7 @@
             </group>
             <group id="restriction">
                 <field id="autocomplete_on_storefront" type="select" translate="label" sortOrder="65" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Disable Autocomplete on Storefront</label>
+                    <label>Enable Autocomplete on login/forgot password forms</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
