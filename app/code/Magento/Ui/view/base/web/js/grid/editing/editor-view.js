@@ -2,6 +2,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'ko',
     'jquery',
@@ -80,8 +81,7 @@ define([
          * @returns {View} Chainable.
          */
         initTable: function (table) {
-            var model = this.model,
-                ctx = ko.contextFor(table);
+            var model = this.model;
 
             ko.applyBindingsToNode(table, {
                 css: {
@@ -89,13 +89,20 @@ define([
                         return model.hasActive();
                     })
                 }
-            }, ctx);
+            });
 
             domObserver.get(this.rowSelector, this.onRowAdd, table);
 
             return this;
         },
 
+        /**
+         * Initializes bulk editor element
+         * for the provided table.
+         *
+         * @param {HTMLTableElement} table
+         * @returns {View} Chainable.
+         */
         initBulk: function (table) {
             var model = this.model,
                 bulkHtml = $(this.bulkTmpl);
@@ -121,7 +128,7 @@ define([
                 visible: ko.computed(function () {
                     return !model.isActive(ctx.$index(), true);
                 })
-            }, ctx);
+            });
 
             ctx._editor = model;
 

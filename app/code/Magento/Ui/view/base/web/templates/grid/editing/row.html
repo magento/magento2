@@ -14,5 +14,15 @@
             data: fields,
             as: 'field'
         }">
-    <!-- ko template: $data.isEditor ? $parent.fieldTmpl : getBody() --><!-- /ko -->
+    <!-- ko if: $parent.isActionsColumn($data) -->
+    <td class="data-grid-actions-cell">
+        <span class="data-grid-row-changed" data-bind="css: { _changed: $parent.hasChanges() }">
+            <span class="data-grid-row-changed-tooltip" data-bind="i18n: 'Record contains unsaved changes.'"></span>
+        </span>
+    </td>
+    <!-- /ko -->
+
+    <!-- ko ifnot: $parent.isActionsColumn($data) -->
+        <!-- ko template: $data.isEditor ? $parent.fieldTmpl : getBody() --><!-- /ko -->
+    <!-- /ko -->
 </tr>

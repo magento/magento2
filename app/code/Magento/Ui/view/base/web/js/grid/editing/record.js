@@ -2,6 +2,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'underscore',
     'mageUtils',
@@ -13,12 +14,13 @@ define([
     return Component.extend({
         defaults: {
             active: true,
+            hasChanges: false,
             fields: [],
             errorsCount: 0,
             fieldTmpl: 'ui/grid/editing/field',
             rowTmpl: 'ui/grid/editing/row',
             templates: {
-                editors: {
+                fields: {
                     base: {
                         parent: '${ $.$data.record.name }',
                         name: '${ $.$data.column.index }',
@@ -46,13 +48,15 @@ define([
                 }
             },
             listens: {
-                elems: 'updateFields'
+                elems: 'updateFields',
+                data: 'updateState'
             },
             imports: {
                 onColumnsUpdate: '${ $.columnsProvider }:elems'
             },
             modules: {
-                columns: '${ $.columnsProvider }'
+                columns: '${ $.columnsProvider }',
+                editor: '${ $.editorProvider }'
             }
         },
 
@@ -63,6 +67,7 @@ define([
          */
         initialize: function () {
             _.bindAll(this, 'countErrors');
+            utils.limit(this, 'updateState', 10);
 
             return this._super();
         },
@@ -74,7 +79,7 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe('active fields errorsCount');
+                .observe('active fields errorsCount hasChanges');
 
             return this;
         },
@@ -91,56 +96,56 @@ define([
         },
 
         /**
-         * Creates new instance of an editor.
+         * Creates new instance of a field.
          *
-         * @param {Column} column - Column instance which contains editor definition.
+         * @param {Column} column - Column instance which contains field definition.
          * @returns {Record} Chainable.
          */
-        initEditor: function (column) {
-            var editor = this.buildEditor(column);
+        initField: function (column) {
+            var field = this.buildField(column);
 
-            layout([editor]);
+            layout([field]);
 
             return this;
         },
 
         /**
-         * Builds editors' configuration described in a provided column.
+         * Builds fields' configuration described in a provided column.
          *
-         * @param {Column} column - Column instance which contains editor definition.
-         * @returns {Object} Complete editors' configuration.
+         * @param {Column} column - Column instance which contains field definition.
+         * @returns {Object} Complete fields' configuration.
          */
-        buildEditor: function (column) {
-            var editors = this.templates.editors,
-                editor  = column.editor;
+        buildField: function (column) {
+            var fields = this.templates.fields,
+                field  = column.editor;
 
-            if (typeof editor === 'object' && editor.editorType) {
-                editor = utils.extend({}, editors[editor.editorType], editor);
-            } else if (typeof editor == 'string') {
-                editor = editors[editor];
+            if (typeof field === 'object' && field.editorType) {
+                field = utils.extend({}, fields[field.editorType], field);
+            } else if (typeof field == 'string') {
+                field = fields[field];
             }
 
-            editor = utils.extend({}, editors.base, editor);
-            editor = utils.template(editor, {
+            field = utils.extend({}, fields.base, field);
+            field = utils.template(field, {
                 record: this,
                 column: column
             }, true, true);
 
-            editor.visible  = column.visible;
+            field.visible  = column.visible;
 
-            return editor;
+            return field;
         },
 
         /**
-         * Creates editors for the specfied columns.
+         * Creates fields for the specfied columns.
          *
          * @param {Array} columns - An array of column instances.
          * @returns {Record} Chainable.
          */
-        createEditors: function (columns) {
+        createFields: function (columns) {
             columns.forEach(function (column) {
-                if (column.editor && !this.getEditor(column.index)) {
-                    this.initEditor(column);
+                if (column.editor && !this.getField(column.index)) {
+                    this.initField(column);
                 }
             }, this);
 
@@ -148,34 +153,39 @@ define([
         },
 
         /**
-         * Returns instance of an editor found by provided identifier.
+         * Returns instance of a field found by provided identifier.
          *
-         * @param {String} index - Identifier of an editor inside record.
+         * @param {String} index - Identifier of a field inside record.
          * @returns {Object}
          */
-        getEditor: function (index) {
+        getField: function (index) {
             return this.elems.findWhere({
                 index: index
             });
         },
 
         /**
-         * Returns records' data object.
+         * Returns records' current data object.
          *
          * @returns {Object}
          */
         getData: function () {
-            var fields = this.elems.map(function (elem) {
-                return elem.index;
-            });
+            return this.filterData(this.data);
+        },
 
-            _.each(this.preserveFields, function (enabled, field) {
-                if (enabled && !_.contains(fields, field)) {
-                    fields.push(field);
-                }
-            });
+        /**
+         * Returns saved records' data. Data will be processed
+         * with a 'filterData' and 'normalizeData' methods.
+         *
+         * @returns {Object} Saved records' data.
+         */
+        getSavedData: function () {
+            var editor      = this.editor(),
+                savedData   = editor.getRowData(this.index);
 
-            return _.pick(this.data, fields);
+            savedData = this.filterData(savedData);
+
+            return this.normalizeData(savedData);
         },
 
         /**
@@ -189,11 +199,52 @@ define([
         setData: function (data, partial) {
             var currentData = partial ? this.data : {};
 
+            data = this.normalizeData(data);
             data = utils.extend({}, currentData, data);
 
             this.set('data', data);
 
             return this;
+        },
+
+        /**
+         * Filters provided object extracting from it values
+         * that can be matched with an existing fields.
+         *
+         * @param {Object} data - Object to be processed.
+         * @returns {Object}
+         */
+        filterData: function (data) {
+            var fields = _.pluck(this.elems(), 'index');
+
+            _.each(this.preserveFields, function (enabled, field) {
+                if (enabled && !_.contains(fields, field)) {
+                    fields.push(field);
+                }
+            });
+
+            return _.pick(data, fields);
+        },
+
+        /**
+         * Parses values of a provided object with
+         * a 'normalizeData' method of a corresponding field.
+         *
+         * @param {Object} data - Data to be processed.
+         * @returns {Object}
+         */
+        normalizeData: function (data) {
+            var index;
+
+            this.elems.each(function (elem) {
+                index = elem.index;
+
+                if (data.hasOwnProperty(index)) {
+                    data[index] = elem.normalizeData(data[index]);
+                }
+            });
+
+            return data;
         },
 
         /**
@@ -222,11 +273,7 @@ define([
          * @returns {Boolean}
          */
         isValid: function () {
-            var result = this.validate();
-
-            return result.every(function (data) {
-                return data.valid;
-            });
+            return _.every(this.validate(), 'valid');
         },
 
         /**
@@ -243,8 +290,21 @@ define([
         },
 
         /**
+         * Returns difference between current data and its'
+         * initial state, retrieved from the records collection.
+         *
+         * @returns {Object} Object with changes descriptions.
+         */
+        checkChanges: function () {
+            var savedData   = this.getSavedData(),
+                data        = this.getData();
+
+            return utils.compare(savedData, data);
+        },
+
+        /**
          * Updates 'fields' array filling it with available edtiors
-         * or with column instances if associated editor is not present.
+         * or with column instances if associated field is not present.
          *
          * @returns {Record} Chainable.
          */
@@ -252,10 +312,23 @@ define([
             var fields;
 
             fields = this.columns().elems.map(function (column) {
-                return this.getEditor(column.index) || column;
+                return this.getField(column.index) || column;
             }, this);
 
             this.fields(fields);
+
+            return this;
+        },
+
+        /**
+         * Updates state of a 'hasChanges' property.
+         *
+         * @returns {Record} Chainable.
+         */
+        updateState: function () {
+            var diff = this.checkChanges();
+
+            this.hasChanges(!diff.equal);
 
             return this;
         },
@@ -276,7 +349,7 @@ define([
          * @param {Array} columns - Modified child elements array.
          */
         onColumnsUpdate: function (columns) {
-            this.createEditors(columns)
+            this.createFields(columns)
                 .updateFields();
         }
     });
