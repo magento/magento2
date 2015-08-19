@@ -31,7 +31,7 @@ class Block implements Layout\ReaderInterface
     /**
      * @var array
      */
-    protected $attributes = ['group', 'class', 'template', 'ttl'];
+    protected $attributes = ['group', 'class', 'template', 'ttl', 'display'];
 
     /**
      * @var \Magento\Framework\View\Layout\ScheduledStructure\Helper
@@ -165,6 +165,7 @@ class Block implements Layout\ReaderInterface
             $data = $scheduledStructure->getStructureElementData($elementName, []);
             $this->updateScheduledData($currentElement, $data);
             $this->evaluateArguments($currentElement, $data);
+            $data['attributes']['display'] = $currentElement->getAttribute('display');
             $scheduledStructure->setStructureElementData($elementName, $data);
         }
     }
