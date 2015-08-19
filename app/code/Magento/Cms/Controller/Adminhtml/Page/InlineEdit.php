@@ -8,6 +8,7 @@ namespace Magento\Cms\Controller\Adminhtml\Page;
 use Magento\Backend\App\Action\Context;
 use Magento\Cms\Api\PageRepositoryInterface as PageRepository;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Cms\Api\Data\PageInterface;
 
 class InlineEdit extends \Magento\Backend\App\Action
 {
@@ -51,27 +52,29 @@ class InlineEdit extends \Magento\Backend\App\Action
         if ($this->getRequest()->getParam('isAjax')) {
             $postData = $this->getRequest()->getParam('data', []);
             foreach (array_keys($postData) as $pageId) {
+                /** @var \Magento\Cms\Model\Page $page */
+                $page = $this->pageRepository->getById($pageId);
                 try {
-                    /** @var \Magento\Cms\Model\Page $page */
-                    $page = $this->pageRepository->getById($pageId);
                     $pageData = $this->dataProcessor->filter($postData[$pageId]);
-
                     if (!$this->dataProcessor->validate($pageData)) {
                         $error = true;
                         foreach ($this->messageManager->getMessages(true)->getItems() as $error) {
-                            $messages[] = $error->toString();
+                            $messages[] = $this->getErrorWithPageTitle($page, $error->toString());
                         }
                     }
                     $page->setData(array_merge($page->getData(), $pageData));
                     $this->pageRepository->save($page);
                 } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                    $messages[] = $e->getMessage();
+                    $messages[] = $this->getErrorWithPageTitle($page, $e->getMessage());
                     $error = true;
                 } catch (\RuntimeException $e) {
-                    $messages[] = $e->getMessage();
+                    $messages[] = $this->getErrorWithPageTitle($page, $e->getMessage());
                     $error = true;
                 } catch (\Exception $e) {
-                    $messages[] = __('Something went wrong while saving the page.');
+                    $messages[] = $this->getErrorWithPageTitle(
+                        $page,
+                        __('Something went wrong while saving the page.')
+                    );
                     $error = true;
                 }
             }
@@ -81,5 +84,15 @@ class InlineEdit extends \Magento\Backend\App\Action
             'messages' => $messages,
             'error' => $error
         ]);
+    }
+
+    /**
+     * @param PageInterface $page
+     * @param $errorText
+     * @return string
+     */
+    protected function getErrorWithPageTitle(PageInterface $page, $errorText)
+    {
+        return '[Page: ' . $page->getTitle() . '] ' . $errorText;
     }
 }
