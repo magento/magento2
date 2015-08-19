@@ -141,13 +141,13 @@ class Customer extends AbstractCustomer
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\App\Resource $resource,
+        ProcessingErrorAggregatorInterface $errorAggregator,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory,
         \Magento\Customer\Model\Resource\Attribute\CollectionFactory $attrCollectionFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
-        ProcessingErrorAggregatorInterface $errorAggregator,
         array $data = []
     ) {
         $this->_resourceHelper = $resourceHelper;
