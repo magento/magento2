@@ -10,7 +10,7 @@ namespace Magento\Directory\Api\Data;
  *
  * @api
  */
-interface CountryInformationInterface
+interface CountryInformationInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * Get the country id for the store.
