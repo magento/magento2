@@ -19,21 +19,6 @@ class MassDeleteTest extends AbstractMassDeleteTest
      */
     protected $collectionFactoryMock;
 
-    /**
-     * @var \Magento\Cms\Model\Resource\Block\Collection|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $blockCollectionMock;
-
-    /**
-     * @var \Magento\Cms\Model\Resource\Block\Collection|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $headerBlockCollectionMock;
-
-    /**
-     * @var \Magento\Cms\Model\Resource\Block\Collection|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $footerBlockCollectionMock;
-
     protected function setUp()
     {
         parent::setUp();
@@ -41,30 +26,6 @@ class MassDeleteTest extends AbstractMassDeleteTest
         $this->collectionFactoryMock = $this->getMock(
             'Magento\Cms\Model\Resource\Block\CollectionFactory',
             ['create'],
-            [],
-            '',
-            false
-        );
-
-        $this->blockCollectionMock = $this->getMock(
-            'Magento\Cms\Model\Resource\Block\Collection',
-            ['delete'],
-            [],
-            '',
-            false
-        );
-
-        $this->headerBlockCollectionMock = $this->getMock(
-            'Magento\Cms\Model\Resource\Block\Collection',
-            ['delete'],
-            [],
-            '',
-            false
-        );
-
-        $this->footerBlockCollectionMock = $this->getMock(
-            'Magento\Cms\Model\Resource\Block\Collection',
-            ['delete'],
             [],
             '',
             false
@@ -85,19 +46,16 @@ class MassDeleteTest extends AbstractMassDeleteTest
         $deletedBlocks = 2;
 
         $collection = [
-            $this->headerBlockCollectionMock,
-            $this->footerBlockCollectionMock
+            $this->getBlockMock(),
+            $this->getBlockMock()
         ];
 
-        $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($this->blockCollectionMock);
+        $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($this->getBlockMock());
 
         $this->filterMock->expects($this->once())
             ->method('getCollection')
-            ->with($this->blockCollectionMock)
+            ->with($this->getBlockMock())
             ->willReturn($collection);
-
-        $this->headerBlockCollectionMock->expects($this->exactly(1))->method('delete')->willReturn(true);
-        $this->footerBlockCollectionMock->expects($this->exactly(1))->method('delete')->willReturn(true);
 
         $this->messageManagerMock->expects($this->once())
             ->method('addSuccess')
@@ -110,5 +68,18 @@ class MassDeleteTest extends AbstractMassDeleteTest
             ->willReturnSelf();
 
         $this->assertSame($this->resultRedirectMock, $this->massDeleteController->execute());
+    }
+
+    /**
+     * Create Cms Block Collection Mock
+     *
+     * @return \Magento\Cms\Model\Resource\Block\Collection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getBlockMock()
+    {
+        $blockMock = $this->getMock('Magento\Cms\Model\Resource\Block\Collection', ['delete'], [], '', false);
+        $blockMock->expects($this->any())->method('delete')->willReturn(true);
+
+        return $blockMock;
     }
 }
