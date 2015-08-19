@@ -20,7 +20,7 @@ abstract class ImportResult extends Import
     /**
      * Limit view errors
      */
-    const LIMIT_ERRORS_MESSAGE = 1;
+    const LIMIT_ERRORS_MESSAGE = 100;
 
     /**
      * @var \Magento\ImportExport\Model\Report\ReportProcessorInterface
