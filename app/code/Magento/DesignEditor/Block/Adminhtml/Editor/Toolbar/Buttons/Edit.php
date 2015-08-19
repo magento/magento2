@@ -5,6 +5,8 @@
  */
 namespace Magento\DesignEditor\Block\Adminhtml\Editor\Toolbar\Buttons;
 
+use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
+
 /**
  * Edit button block
  */
@@ -21,20 +23,28 @@ class Edit extends \Magento\Backend\Block\Widget\Button\SplitButton
     protected $_changeFactory;
 
     /**
+     * @var DateTimeFormatterInterface
+     */
+    protected $dateTimeFormatter;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\DesignEditor\Model\Theme\Context $themeContext
      * @param \Magento\DesignEditor\Model\Theme\ChangeFactory $changeFactory
+     * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\DesignEditor\Model\Theme\Context $themeContext,
         \Magento\DesignEditor\Model\Theme\ChangeFactory $changeFactory,
+        DateTimeFormatterInterface $dateTimeFormatter,
         array $data = []
     ) {
         $this->_themeContext = $themeContext;
         $this->_changeFactory = $changeFactory;
         parent::__construct($context, $data);
+        $this->dateTimeFormatter = $dateTimeFormatter;
     }
 
     /**
@@ -151,7 +161,7 @@ class Edit extends \Magento\Backend\Block\Widget\Button\SplitButton
     {
         $sourceChange = $this->_changeFactory->create();
         $sourceChange->loadByThemeId($this->_themeContext->getEditableTheme()->getId());
-        $dateMessage = \IntlDateFormatter::formatObject(
+        $dateMessage = $this->dateTimeFormatter->formatObject(
             $this->_localeDate->date($sourceChange->getChangeTime())
         );
         $message = __('Do you want to restore the version saved at %1?', $dateMessage);
