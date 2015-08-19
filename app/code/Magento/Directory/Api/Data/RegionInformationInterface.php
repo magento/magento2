@@ -16,7 +16,6 @@ interface RegionInformationInterface extends \Magento\Framework\Api\ExtensibleDa
     /**
      * Get region id
      *
-     * @api
      * @return string
      */
     public function getId();
@@ -24,7 +23,6 @@ interface RegionInformationInterface extends \Magento\Framework\Api\ExtensibleDa
     /**
      * Set region id
      *
-     * @api
      * @param string $regionId
      * @return $this
      */
@@ -33,7 +31,6 @@ interface RegionInformationInterface extends \Magento\Framework\Api\ExtensibleDa
     /**
      * Get region code
      *
-     * @api
      * @return string
      */
     public function getCode();
@@ -41,7 +38,6 @@ interface RegionInformationInterface extends \Magento\Framework\Api\ExtensibleDa
     /**
      * Set region code
      *
-     * @api
      * @param string $regionCode
      * @return $this
      */
@@ -50,7 +46,6 @@ interface RegionInformationInterface extends \Magento\Framework\Api\ExtensibleDa
     /**
      * Get region name
      *
-     * @api
      * @return string
      */
     public function getName();
@@ -58,7 +53,6 @@ interface RegionInformationInterface extends \Magento\Framework\Api\ExtensibleDa
     /**
      * Set region name
      *
-     * @api
      * @param string $region
      * @return $this
      */
@@ -67,7 +61,6 @@ interface RegionInformationInterface extends \Magento\Framework\Api\ExtensibleDa
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @api
      * @return \Magento\Customer\Api\Data\RegionExtensionInterface|null
      */
     public function getExtensionAttributes();
@@ -75,7 +68,6 @@ interface RegionInformationInterface extends \Magento\Framework\Api\ExtensibleDa
     /**
      * Set an extension attributes object.
      *
-     * @api
      * @param \Magento\Customer\Api\Data\RegionExtensionInterface $extensionAttributes
      * @return $this
      */
