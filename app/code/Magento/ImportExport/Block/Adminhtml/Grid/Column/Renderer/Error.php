@@ -20,7 +20,11 @@ class Error extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      */
     public function _getValue(\Magento\Framework\DataObject $row)
     {
-        return '<p> ' . $row->getData('error_file') .  '</p><a href="'
-        . $this->getUrl('*/*/download', ['filename' => $row->getData('error_file')]) . '">Download</a>';
+        $result = '';
+        if ($row->getData('error_file') != '') {
+            $result = '<p> ' . $row->getData('error_file') .  '</p><a href="'
+                . $this->getUrl('*/*/download', ['filename' => $row->getData('error_file')]) . '">Download</a>';
+        }
+        return $result;
     }
 }
