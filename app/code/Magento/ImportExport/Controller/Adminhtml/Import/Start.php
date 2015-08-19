@@ -16,14 +16,14 @@ class Start extends ImportResultController
     protected $importModel;
 
     /**
-     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\ImportExport\Model\Report\ReportProcessorInterface $reportProcessor
      * @param \Magento\ImportExport\Model\History $historyModel
      * @param \Magento\ImportExport\Helper\Report $reportHelper
      * @param \Magento\ImportExport\Model\Import $importModel
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
+        \Magento\Backend\App\Action\Context $context,
         \Magento\ImportExport\Model\Report\ReportProcessorInterface $reportProcessor,
         \Magento\ImportExport\Model\History $historyModel,
         \Magento\ImportExport\Helper\Report $reportHelper,
