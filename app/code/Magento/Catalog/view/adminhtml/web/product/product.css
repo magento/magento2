@@ -327,7 +327,7 @@
     margin-right: 5px;
 }
 
-.admin__scope-old .tiers_table .col-qty > .nobr {
+.admin__scope-old .tiers_table .col-qty span {
     font-size: 1rem;
 }
 
