@@ -25,6 +25,10 @@ class CountryInformationAcquirer implements \Magento\Directory\Api\CountryInform
      */
     protected $directoryHelper;
 
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $scopeConfig;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -33,19 +37,22 @@ class CountryInformationAcquirer implements \Magento\Directory\Api\CountryInform
 
     /**
      * @param \Magento\Directory\Model\Data\CountryInformationFactory $countryInformationFactory
-     *
+     * @param \Magento\Directory\Model\Data\RegionInformationFactory $regionInformationFactory
      * @param \Magento\Directory\Helper\Data $directoryHelper
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Directory\Model\Data\CountryInformationFactory $countryInformationFactory,
         \Magento\Directory\Model\Data\RegionInformationFactory $regionInformationFactory,
         \Magento\Directory\Helper\Data $directoryHelper,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->countryInformationFactory = $countryInformationFactory;
         $this->regionInformationFactory = $regionInformationFactory;
         $this->directoryHelper = $directoryHelper;
+        $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
     }
 
@@ -59,33 +66,16 @@ class CountryInformationAcquirer implements \Magento\Directory\Api\CountryInform
         /** @var \Magento\Store\Model\Store $store */
         $store = $this->storeManager->getStore();
 
+        $storeLocale = $this->scopeConfig->getValue(
+            'general/locale/code',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORES,
+            $store->getCode()
+        );
+
         $countries = $this->directoryHelper->getCountryCollection($store);
         $regions = $this->directoryHelper->getRegionData();
         foreach ($countries as $code => $data) {
-            $countryInfo = $this->countryInformationFactory->create();
-            $countryInfo->setId($code);
-            $countryInfo->setTwoLetterAbbreviation($data->getData('iso2_code'));
-            $countryInfo->setThreeLetterAbbreviation($data->getData('iso3_code'));
-            $countryInfo->setFullNameLocale($data->getName());
-            $countryInfo->setFullNameEnglish($data->getName('en_US'));
-            if (array_key_exists($code, $regions)) {
-                $regionsInfo = [];
-                foreach ($regions as $key => $regionsData) {
-                    if ($key == 'config') {
-                        continue;
-                    } else if ($key == $code) {
-                        foreach ($regionsData as $key => $regionData) {
-                            $regionInfo = $this->regionInformationFactory->create();
-                            $regionInfo->setId($key);
-                            $regionInfo->setCode($regionData['code']);
-                            $regionInfo->setName($regionData['name']);
-                            $regionsInfo[] = $regionInfo;
-                        }
-                        break;
-                    }
-                }
-                $countryInfo->setAvailableRegions($regionsInfo);
-            }
+            $countryInfo = $this->setCountryInfo($data, $regions, $storeLocale);
             $countriesInfo[] = $countryInfo;
         }
 
@@ -97,29 +87,43 @@ class CountryInformationAcquirer implements \Magento\Directory\Api\CountryInform
      */
     public function getCountryInfo($countryId)
     {
-        /** @var \Magento\Store\Model\Store $store */
         $store = $this->storeManager->getStore();
+        $storeLocale = $this->scopeConfig->getValue(
+            'general/locale/code',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORES,
+            $store->getCode()
+        );
 
         $countries = $this->directoryHelper->getCountryCollection($store);
         $regions = $this->directoryHelper->getRegionData();
-
         $country = $countries->getItemById($countryId);
+
+        $countryInfo = $this->setCountryInfo($country, $regions, $storeLocale);
+
+        return $countryInfo;
+    }
+
+    /*
+     * Creates and initializes the information for \Magento\Directory\Model\Data\CountryInformation
+     */
+    protected function setCountryInfo($country, $regions, $storeLocale)
+    {
         $countryInfo = $this->countryInformationFactory->create();
         $countryInfo->setId($country->getCountryId());
         $countryInfo->setTwoLetterAbbreviation($country->getData('iso2_code'));
         $countryInfo->setThreeLetterAbbreviation($country->getData('iso3_code'));
-        $countryInfo->setFullNameLocale($country->getName());
+        $countryInfo->setFullNameLocale($country->getName($storeLocale));
         $countryInfo->setFullNameEnglish($country->getName('en_US'));
 
         if (array_key_exists($country->getCountryId(), $regions)) {
             $regionsInfo = [];
-            foreach ($regions as $key => $regionsData) {
-                if ($key == 'config') {
+            foreach ($regions as $id => $regionsData) {
+                if ($id == 'config') {
                     continue;
-                } else if ($key == $country->getCountryId()) {
-                    foreach ($regionsData as $key => $regionData) {
+                } else if ($id == $country->getCountryId()) {
+                    foreach ($regionsData as $id => $regionData) {
                         $regionInfo = $this->regionInformationFactory->create();
-                        $regionInfo->setId($key);
+                        $regionInfo->setId($id);
                         $regionInfo->setCode($regionData['code']);
                         $regionInfo->setName($regionData['name']);
                         $regionsInfo[] = $regionInfo;

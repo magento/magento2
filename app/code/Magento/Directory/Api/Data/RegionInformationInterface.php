@@ -11,7 +11,7 @@ namespace Magento\Directory\Api\Data;
  *
  * @api
  */
-interface RegionInformationInterface
+interface RegionInformationInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * Get region id
