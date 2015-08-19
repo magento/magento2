@@ -14,6 +14,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Module\ModuleListInterface;
+use Magento\Framework\Module\ModuleRegistryInterface;
 
 class Reader
 {
@@ -44,6 +45,11 @@ class Reader
     protected $modulesDirectory;
 
     /**
+     * @var  ModuleRegistryInterface
+     */
+    protected $moduleRegistry;
+
+    /**
      * @var FileIteratorFactory
      */
     protected $fileIteratorFactory;
@@ -53,15 +59,18 @@ class Reader
      * @param ModuleListInterface $moduleList
      * @param Filesystem $filesystem
      * @param FileIteratorFactory $fileIteratorFactory
+     * @param ModuleRegistryInterface $moduleRegistry
      */
     public function __construct(
         Dir $moduleDirs,
         ModuleListInterface $moduleList,
         Filesystem $filesystem,
-        FileIteratorFactory $fileIteratorFactory
+        FileIteratorFactory $fileIteratorFactory,
+        ModuleRegistryInterface $moduleRegistry
     ) {
         $this->moduleDirs = $moduleDirs;
         $this->modulesList = $moduleList;
+        $this->moduleRegistry   = $moduleRegistry;
         $this->fileIteratorFactory = $fileIteratorFactory;
         $this->modulesDirectory = $filesystem->getDirectoryRead(DirectoryList::MODULES);
     }
@@ -78,6 +87,9 @@ class Reader
         foreach ($this->modulesList->getNames() as $moduleName) {
             $file = $this->getModuleDir('etc', $moduleName) . '/' . $filename;
             $path = $this->modulesDirectory->getRelativePath($file);
+            if ($this->moduleRegistry->getModulePath($moduleName) !== null) {
+                $path = str_replace(BP, '/../..', $path);
+            }
             if ($this->modulesDirectory->isExist($path)) {
                 $result[] = $path;
             }
