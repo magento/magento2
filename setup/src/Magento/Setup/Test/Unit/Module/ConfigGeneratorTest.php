@@ -106,4 +106,11 @@ class ConfigGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('active', $dbData['connection']['default']);
         $this->assertSame('1', $dbData['connection']['default']['active']);
     }
+
+    public function testCreateResourceConfig()
+    {
+        $returnValue = $this->configGeneratorObject->createResourceConfig();
+        $this->assertEquals(ConfigFilePool::APP_ENV, $returnValue->getFileKey());
+        $this->assertEquals(['resource' => ['default_setup' => ['connection' => 'default']]], $returnValue->getData());
+    }
 }
