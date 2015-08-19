@@ -1516,7 +1516,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                     continue;
                 }
                 $image['url'] = $this->getMediaConfig()->getMediaUrl($image['file']);
-                $image['id'] = isset($image['value_id']) ? $image['value_id'] : null;
+                $image['id'] = !empty($image['value_id']) ? $image['value_id'] : null;
                 $image['path'] = $directory->getAbsolutePath($this->getMediaConfig()->getMediaPath($image['file']));
                 $images->addItem(new \Magento\Framework\DataObject($image));
             }
