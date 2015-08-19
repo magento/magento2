@@ -7,6 +7,7 @@
  * See COPYING.txt for license details.
  */
 -->
+<!-- ko if: (canInitialise())-->
 <div class="payment-method" data-bind="css: {'_active': (getCode() == isChecked())}">
     <div class="payment-method-title field choice">
         <input type="radio"
@@ -219,5 +220,5 @@
         </div>
      </form>
     </div>
-
 </div>
+<!-- /ko -->
