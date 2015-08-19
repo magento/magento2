@@ -426,7 +426,7 @@
             </argument>
         </paging>
     </container>
-    <columns name="cms_page_columns">
+    <columns name="cms_page_columns" class="Magento\Cms\Ui\Component\Listing\Columns">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="storageConfig" xsi:type="array">
@@ -438,7 +438,7 @@
                     <item name="enabled" xsi:type="boolean">true</item>
                     <item name="indexField" xsi:type="string">page_id</item>
                     <item name="clientConfig" xsi:type="array">
-                        <item name="saveUrl" xsi:type="string">/admin_6hiww0/cms/page/inlineEdit</item>
+                        <item name="saveUrl" xsi:type="string">cms/page/inlineEdit</item>
                         <item name="validateUrl" xsi:type="string">/path/to</item>
                         <item name="validateBeforeSave" xsi:type="boolean">false</item>
                     </item>
