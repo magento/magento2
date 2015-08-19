@@ -39,11 +39,6 @@ class ShipmentLoader extends DataObject
     protected $shipmentRepository;
 
     /**
-     * @var \Magento\Sales\Model\OrderFactory
-     */
-    protected $orderFactory;
-
-    /**
      * @var \Magento\Sales\Model\Order\ShipmentFactory
      */
     protected $shipmentFactory;
@@ -62,7 +57,6 @@ class ShipmentLoader extends DataObject
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Sales\Model\Order\ShipmentRepository $shipmentRepository
-     * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory
      * @param \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
@@ -72,7 +66,6 @@ class ShipmentLoader extends DataObject
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\Registry $registry,
         \Magento\Sales\Model\Order\ShipmentRepository $shipmentRepository,
-        \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory,
         \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory,
         \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
@@ -81,7 +74,6 @@ class ShipmentLoader extends DataObject
         $this->messageManager = $messageManager;
         $this->registry = $registry;
         $this->shipmentRepository = $shipmentRepository;
-        $this->orderFactory = $orderFactory;
         $this->shipmentFactory = $shipmentFactory;
         $this->trackFactory = $trackFactory;
         $this->orderRepository = $orderRepository;

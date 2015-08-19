@@ -69,11 +69,6 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     protected $_eventObject = 'shipment';
 
     /**
-     * @var \Magento\Sales\Model\OrderFactory
-     */
-    protected $_orderFactory;
-
-    /**
      * @var \Magento\Sales\Model\Resource\Order\Shipment\Item\CollectionFactory
      */
     protected $_shipmentItemCollectionFactory;
@@ -103,7 +98,6 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Sales\Model\Resource\Order\Shipment\Item\CollectionFactory $shipmentItemCollectionFactory
      * @param \Magento\Sales\Model\Resource\Order\Shipment\Track\CollectionFactory $trackCollectionFactory
      * @param Shipment\CommentFactory $commentFactory
@@ -119,7 +113,6 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
-        \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Sales\Model\Resource\Order\Shipment\Item\CollectionFactory $shipmentItemCollectionFactory,
         \Magento\Sales\Model\Resource\Order\Shipment\Track\CollectionFactory $trackCollectionFactory,
         \Magento\Sales\Model\Order\Shipment\CommentFactory $commentFactory,
@@ -129,7 +122,6 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        $this->_orderFactory = $orderFactory;
         $this->_shipmentItemCollectionFactory = $shipmentItemCollectionFactory;
         $this->_trackCollectionFactory = $trackCollectionFactory;
         $this->_commentFactory = $commentFactory;
@@ -205,9 +197,6 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     {
         if (!$this->_order instanceof \Magento\Sales\Model\Order) {
             $this->_order = $this->orderRepository->get($this->getOrderId());
-        }
-        if (!$this->_order instanceof \Magento\Sales\Model\Order) {
-            $this->_order = $this->_orderFactory->create()->load($this->getOrderId());
         }
         return $this->_order->setHistoryEntityName($this->entityType);
     }
