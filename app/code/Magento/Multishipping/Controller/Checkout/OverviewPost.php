@@ -68,7 +68,7 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
         }
 
         try {
-            $agreementsValidator = $this->_objectManager->get('Magento\Checkout\Model\Agreements\AgreementsValidator');
+            $agreementsValidator = $this->_objectManager->get('Magento\CheckoutAgreements\Model\AgreementsValidator');
             if (!$agreementsValidator->isValid(array_keys($this->getRequest()->getPost('agreement', [])))) {
                 $this->messageManager->addError(
                     __('Please agree to all Terms and Conditions before placing the order.')

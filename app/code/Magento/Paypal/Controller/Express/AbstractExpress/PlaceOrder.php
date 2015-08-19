@@ -19,7 +19,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
     public function execute()
     {
         try {
-            $agreementsValidator = $this->_objectManager->get('Magento\Checkout\Model\Agreements\AgreementsValidator');
+            $agreementsValidator = $this->_objectManager->get('Magento\CheckoutAgreements\Model\AgreementsValidator');
             if (!$agreementsValidator->isValid(array_keys($this->getRequest()->getPost('agreement', [])))) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Please agree to all the terms and conditions before placing the order.')
