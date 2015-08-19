@@ -81,7 +81,7 @@ class Detail extends \Magento\Backend\Block\Widget\Container
 
         if ($this->_authorization->isAllowed(
             'Magento_Sales::transactions_fetch'
-        ) && $this->orderPaymentRepository->get($this->_txn->getId())->getMethodInstance()->canFetchTransactionInfo()
+        ) && $this->orderPaymentRepository->get($this->_txn->getPaymentId())->getMethodInstance()->canFetchTransactionInfo()
         ) {
             $fetchUrl = $this->getUrl('sales/*/fetch', ['_current' => true]);
             $this->buttonList->add(
