@@ -5,7 +5,6 @@
  */
 namespace Magento\CheckoutAgreements\Model;
 
-use Magento\Checkout\Model\Agreements\AgreementsProviderInterface;
 use Magento\Store\Model\ScopeInterface;
 
 /**
