@@ -10,20 +10,19 @@ use Magento\Backend\Test\Block\Widget\Tab;
 use Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Shipments\Grid;
 
 /**
- * Class Shipments
- * Shipments tab
+ * Shipments tab.
  */
 class Shipments extends Tab
 {
     /**
-     * Grid block css selector
+     * Grid block css selector.
      *
      * @var string
      */
-    protected $grid = '#order_shipments';
+    protected $grid = '[data-bind*=sales_order_view_shipment_grid]';
 
     /**
-     * Get grid block
+     * Get grid block.
      *
      * @return Grid
      */
