@@ -31,14 +31,14 @@ define([
             this._super().observe('actions opened attributes productMatrix');
             return this;
         },
-        getProductValue: function(name) {
+        getProductValue: function (name) {
             return $('[name="product[' + name.split('/').join('][') + ']"]', this.productForm).val();
         },
-        getRowId: function(data, field) {
+        getRowId: function (data, field) {
             var key = data.variationKey;
             return 'variations-matrix-' + key + '-' + field;
         },
-        getVariationRowName: function(variation, field) {
+        getVariationRowName: function (variation, field) {
             if (variation.product_id) {
                 return 'configurations[' + variation.product_id + '][' + field.split('/').join('][') + ']';
             } else {
@@ -46,14 +46,14 @@ define([
                 return 'variations-matrix[' + key + '][' + field.split('/').join('][') + ']';
             }
         },
-        getAttributeRowName: function(attribute, field) {
-            return 'product[configurable_attributes_data][' + attribute.id  + '][' + field + ']';
+        getAttributeRowName: function (attribute, field) {
+            return 'product[configurable_attributes_data][' + attribute.id + '][' + field + ']';
         },
-        getOptionRowName: function(attribute, option, field) {
-            return 'product[configurable_attributes_data][' + attribute.id  + '][values][' + option.value + ']['
+        getOptionRowName: function (attribute, option, field) {
+            return 'product[configurable_attributes_data][' + attribute.id + '][values][' + option.value + ']['
                 + field + ']';
         },
-        render: function(variations, attributes) {
+        render: function (variations, attributes) {
             this.changeButtonWizard();
             this.populateVariationMatrix(variations);
             this.attributes(attributes);
@@ -63,15 +63,15 @@ define([
             var $button = $('[data-action=open-steps-wizard] [data-role=button-label]');
             $button.text($button.attr('data-edit-label'));
         },
-        getAttributesOptions: function() {
+        getAttributesOptions: function () {
             return this.showVariations() ? this.productMatrix()[0].options : [];
         },
-        showVariations: function() {
+        showVariations: function () {
             return this.productMatrix().length > 0;
         },
-        populateVariationMatrix: function(variations) {
+        populateVariationMatrix: function (variations) {
             this.productMatrix([]);
-            _.each(variations, function(variation) {
+            _.each(variations, function (variation) {
                 var attributes = _.reduce(variation.options, function (memo, option) {
                     var attribute = {};
                     attribute[option.attribute_code] = option.value;
@@ -90,6 +90,7 @@ define([
             }, this);
         },
         removeProduct: function (rowIndex) {
+            this.opened(false);
             this.productMatrix.splice(rowIndex, 1);
         },
         toggleProduct: function (rowIndex) {
@@ -133,26 +134,26 @@ define([
         initProductAttributesMap: function () {
             if (null === this.productAttributesMap) {
                 this.productAttributesMap = {};
-                _.each(this.variations, function(product) {
+                _.each(this.variations, function (product) {
                     this.productAttributesMap[this.getVariationKey(product.options)] = product.product_id;
                 }.bind(this));
             }
         },
-        isShowPreviewImage: function(variation) {
+        isShowPreviewImage: function (variation) {
             return variation.images.preview && (!variation.editable || variation.images.file);
         },
-        generateImageGallery: function(variation) {
+        generateImageGallery: function (variation) {
             var gallery = [];
             var imageFields = ['position', 'file', 'disabled', 'label'];
-            _.each(variation.images.images, function(image) {
-                _.each(imageFields, function(field) {
+            _.each(variation.images.images, function (image) {
+                _.each(imageFields, function (field) {
                     gallery.push(
                         '<input type="hidden" name="'
                         + this.getVariationRowName(variation, 'media_gallery/images/' + image.file_id + '/' + field)
                         + '" value="' + (image[field] || '') + '" />'
                     );
                 }, this);
-                _.each(image.galleryTypes, function(imageType) {
+                _.each(image.galleryTypes, function (imageType) {
                     gallery.push(
                         '<input type="hidden" name="' + this.getVariationRowName(variation, imageType)
                         + '" value="' + image.file + '" />'
@@ -161,18 +162,18 @@ define([
             }, this);
             return gallery.join('\n');
         },
-        initImageUpload: function() {
+        initImageUpload: function () {
             require([
                 "jquery",
                 "mage/template",
                 "jquery/file-uploader",
                 "mage/mage",
                 "mage/translate"
-            ], function(jQuery, mageTemplate){
+            ], function (jQuery, mageTemplate) {
 
                 jQuery(function ($) {
                     var matrix = $('[data-role=product-variations-matrix]');
-                    matrix.find('[data-action=upload-image]').find('[name=image]').each(function() {
+                    matrix.find('[data-action=upload-image]').find('[name=image]').each(function () {
                         var imageColumn = $(this).closest('[data-column=image]');
                         if (imageColumn.find('[data-role=image]').length) {
                             imageColumn.find('[data-toggle=dropdown]').dropdown().show();
@@ -207,10 +208,10 @@ define([
                                     alert($.mage.__('We don\'t recognize or support this file extension type.'));
                                 }
                             },
-                            start: function(event) {
+                            start: function (event) {
                                 $(event.target).closest('[data-action=upload-image]').addClass('loading');
                             },
-                            stop: function(event) {
+                            stop: function (event) {
                                 $(event.target).closest('[data-action=upload-image]').removeClass('loading');
                             }
                         });
