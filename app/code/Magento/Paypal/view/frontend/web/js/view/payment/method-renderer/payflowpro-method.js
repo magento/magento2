@@ -5,9 +5,10 @@
 /*global define*/
 define(
     [
-        'Magento_Payment/js/view/payment/iframe'
+        'Magento_Payment/js/view/payment/iframe',
+        'Magento_Checkout/js/model/payment/additional-validators'
     ],
-    function (Component) {
+    function (Component, additionalValidators) {
         'use strict';
 
         return Component.extend({
@@ -42,7 +43,7 @@ define(
             },
 
             placeOrder: function() {
-                if (this.validateHandler()) {
+                if (this.validateHandler() && additionalValidators.validate()) {
                     this.placeOrderHandler();
                 }
             }

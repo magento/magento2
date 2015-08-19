@@ -7,9 +7,10 @@
 define(
     [
         'jquery',
-        'Magento_Ui/js/modal/modal'
+        'Magento_Ui/js/modal/modal',
+        'mage/translate'
     ],
-    function ($, modal) {
+    function ($, modal, $t) {
         'use strict';
         return {
             modalWindow: null,
@@ -23,7 +24,15 @@ define(
                     'responsive': true,
                     'innerScroll': true,
                     'trigger': '.show-modal',
-                    'buttons': []
+                    'buttons': [
+                        {
+                            text: $t('Close'),
+                            class: 'action secondary action-hide-popup',
+                            click: function() {
+                                this.closeModal();
+                            }
+                        }
+                    ]
                 };
                 modal(options, $(this.modalWindow));
             },
