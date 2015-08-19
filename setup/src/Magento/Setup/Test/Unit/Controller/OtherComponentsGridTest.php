@@ -86,7 +86,7 @@ class OtherComponentsGridTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(ResponseTypeInterface::RESPONSE_TYPE_SUCCESS, $variables['responseType']);
         $this->assertArrayHasKey('components', $variables);
         $expected = [
-            'magento/sample-module1' => [
+            '0' => [
                 'name' => 'magento/sample-module1',
                 'type' => 'magento2-module',
                 'version' => '1.0.0',
