@@ -10,6 +10,8 @@ namespace Magento\Framework\Css\PreProcessor;
  */
 interface AdapterInterface
 {
+    const ERROR_MESSAGE_PREFIX = 'CSS compilation from source ';
+
     /**
      * @param string $sourceFilePath
      * @return string
