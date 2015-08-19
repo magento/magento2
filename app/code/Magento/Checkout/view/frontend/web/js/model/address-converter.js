@@ -112,6 +112,16 @@ define(
                 });
 
                 return convertedArray.slice(0);
+            },
+
+            addressToEstimationAddress: function (address) {
+                var estimatedAddressData = {
+                    country_id: address.countryId,
+                    region: address.region,
+                    region_id: address.regionId,
+                    postcode: address.postcode
+                };
+               return this.formAddressDataToQuoteAddress(estimatedAddressData);
             }
         };
     }

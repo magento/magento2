@@ -40,7 +40,7 @@ define([
                 var address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getShippingAddressFromData());
                 selectShippingAddress(address);
             }
-
+            this.resolveShippingAddress(true);
             if (quote.isVirtual && checkoutData.getBillingAddressFromData()) {
                 address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getBillingAddressFromData());
                 selectBillingAddress(address);
@@ -52,20 +52,25 @@ define([
             if (newCustomerShippingAddress) {
                 createShippingAddress(newCustomerShippingAddress);
             }
+            this.applyShippingAddress();
+        },
+
+        applyShippingAddress: function (isEstimatedAddress) {
 
             if (addressList().length == 0) {
                 var address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getShippingAddressFromData());
                 selectShippingAddress(address);
             }
-            this.applyShippingAddress();
-        },
-
-        applyShippingAddress: function () {
-            var shippingAddress = quote.shippingAddress();
+            var shippingAddress = quote.shippingAddress(),
+                isConvertAddress = isEstimatedAddress || false,
+                addressData;
             if (!shippingAddress) {
                 var isShippingAddressInitialized = addressList.some(function (address) {
                     if (checkoutData.getSelectedShippingAddress() == address.getKey()) {
-                        selectShippingAddress(address);
+                        addressData = isConvertAddress
+                            ? addressConverter.addressToEstimationAddress(address)
+                            : address;
+                        selectShippingAddress(addressData);
                         return true;
                     }
                     return false;
@@ -74,14 +79,20 @@ define([
                 if (!isShippingAddressInitialized) {
                     isShippingAddressInitialized = addressList.some(function (address) {
                         if (address.isDefaultShipping()) {
-                            selectShippingAddress(address);
+                            addressData = isConvertAddress
+                                ? addressConverter.addressToEstimationAddress(address)
+                                : address;
+                            selectShippingAddress(addressData);
                             return true;
                         }
                         return false;
                     });
                 }
                 if (!isShippingAddressInitialized && addressList().length == 1) {
-                    selectShippingAddress(addressList()[0]);
+                    addressData = isConvertAddress
+                        ? addressConverter.addressToEstimationAddress(addressList()[0])
+                        : addressList()[0];
+                    selectShippingAddress(addressData);
                 }
             }
         },
