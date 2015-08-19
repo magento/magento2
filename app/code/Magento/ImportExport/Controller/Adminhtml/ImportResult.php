@@ -15,7 +15,12 @@ use Magento\ImportExport\Model\History;
  */
 abstract class ImportResult extends Import
 {
-    const IMPORT_HISTORY_FILE_DOWNLOAD_ROUTE = 'admin/history/download';
+    const IMPORT_HISTORY_FILE_DOWNLOAD_ROUTE = '*/history/download';
+
+    /**
+     * Limit view errors
+     */
+    const LIMIT_ERRORS_MESSAGE = 100;
 
     /**
      * @var \Magento\ImportExport\Model\Report\ReportProcessorInterface
@@ -64,6 +69,9 @@ abstract class ImportResult extends Import
             $counter = 0;
             foreach ($this->getErrorMessages($errorAggregator) as $error) {
                 $message .= ++$counter . '. ' . $error . '<br>';
+                if ($counter >= self::LIMIT_ERRORS_MESSAGE) {
+                    break;
+                }
             }
             if ($errorAggregator->hasFatalExceptions()) {
                 foreach ($this->getSystemExceptions($errorAggregator) as $error) {
