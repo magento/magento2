@@ -67,6 +67,8 @@ class Module implements
             include __DIR__ . '/../../../config/states.home.config.php',
             include __DIR__ . '/../../../config/states.upgrade.config.php',
             include __DIR__ . '/../../../config/states.uninstall.config.php',
+            include __DIR__ . '/../../../config/states.enable.config.php',
+            include __DIR__ . '/../../../config/states.disable.config.php',
             include __DIR__ . '/../../../config/languages.config.php'
         );
         return $result;
