@@ -2441,4 +2441,19 @@ return [
     ['getComplexLabel', 'Magento\Ui\Model\Export\ConvertToCsv', 'Magento\Ui\Model\Export\MetadataProvider::getComplexLabel'],
     ['getFilterOptions', 'Magento\Ui\Model\Export\ConvertToCsv', 'Magento\Ui\Model\Export\MetadataProvider::getFilterOptions'],
     ['getOptions', 'Magento\Ui\Model\Export\ConvertToCsv', 'Magento\Ui\Model\Export\MetadataProvider::getOptions'],
+    [
+        'generateSimpleProducts',
+        'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
+        'Magento\ConfigurableProduct\Model\Product\VariationHandler::generateSimpleProducts'
+    ],
+    [
+        '_prepareAttributeSetToBeBaseForNewVariations',
+        'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
+        'Magento\ConfigurableProduct\Model\Product\VariationHandler::prepareAttributeSetToBeBaseForNewVariations'
+    ],
+    [
+        '_fillSimpleProductData',
+        'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
+        'Magento\ConfigurableProduct\Model\Product\VariationHandler::fillSimpleProductData'
+    ],
 ];
