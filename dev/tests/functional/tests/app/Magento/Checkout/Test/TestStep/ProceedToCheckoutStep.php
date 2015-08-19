@@ -38,7 +38,6 @@ class ProceedToCheckoutStep implements TestStepInterface
      */
     public function run()
     {
-        $this->checkoutCart->open();
         $this->checkoutCart->getProceedToCheckoutBlock()->proceedToCheckout();
     }
 }
