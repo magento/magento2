@@ -33,11 +33,12 @@ class DownloadsTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Repo
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->downloads = new Downloads(
-            $this->contextMock,
-            $this->fileFactoryMock,
-            $this->dateMock
-        );
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->downloads = $objectManager->getObject('Magento\Reports\Controller\Adminhtml\Report\Product\Downloads', [
+            'context' => $this->contextMock,
+            'fileFactory' => $this->fileFactoryMock,
+            'dateFilter' => $this->dateMock,
+        ]);
     }
 
     /**
