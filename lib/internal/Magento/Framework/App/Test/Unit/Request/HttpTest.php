@@ -381,7 +381,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             'Test 2' => ['HEAD'],
             'Test 3' => ['TRACE'],
             'Test 4' => ['OPTIONS']
-
         ];
     }
 
