@@ -75,11 +75,11 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\App\Resource $resource
+     * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory
-     * @param ProcessingErrorAggregatorInterface $errorAggregator,
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */

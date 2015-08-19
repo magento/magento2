@@ -136,10 +136,10 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\App\Resource $resource
+     * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param \Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\DataFactory $dataFactory
      * @param \Magento\CustomerImportExport\Model\Import\CustomerFactory $customerFactory
      * @param \Magento\CustomerImportExport\Model\Import\AddressFactory $addressFactory
-     * @param ProcessingErrorAggregatorInterface $errorAggregator,
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
