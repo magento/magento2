@@ -11,6 +11,8 @@
         <!-- New gallery theme settings -->
         <var name="gallery_nav">thumbs</var> <!-- Gallery navigation style (false/thumbs/dots) -->
         <var name="gallery_loop">true</var> <!-- Gallery navigation loop (true/false) -->
+        <var name="magnifier_width">32%</var>
+        <var name="magnifier_height">400</var>
         <!-- end -->
 
         <var name="product_small_image_sidebar_size">100</var>  <!-- Override for small product image -->
