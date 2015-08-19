@@ -8,6 +8,7 @@ namespace Magento\Setup\Controller;
 
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Module\PackageInfo;
+use Magento\Framework\Module\ModuleList;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
@@ -31,6 +32,13 @@ class ComponentGrid extends AbstractActionController
     private $packageInfo;
 
     /**
+     * Module  info
+     *
+     * @var ModuleList
+     */
+    private $moduleList;
+
+    /**
      * @param ComposerInformation $composerInformation
      * @param ObjectManagerProvider $objectManagerProvider
      */
@@ -39,8 +47,9 @@ class ComponentGrid extends AbstractActionController
         ObjectManagerProvider $objectManagerProvider
     ) {
         $this->composerInformation = $composerInformation;
-        $this->packageInfo = $objectManagerProvider->get()
-            ->get('Magento\Framework\Module\PackageInfoFactory')->create();
+        $objectManager = $objectManagerProvider->get();
+        $this->packageInfo = $objectManager->get('Magento\Framework\Module\PackageInfoFactory')->create();
+        $this->moduleList = $objectManager->get('Magento\Framework\Module\ModuleList');
     }
 
     /**
@@ -68,8 +77,12 @@ class ComponentGrid extends AbstractActionController
         foreach ($components as $component) {
             $components[$component['name']]['update'] = false;
             $components[$component['name']]['uninstall'] = false;
+            $components[$component['name']]['moduleName'] = $this->packageInfo->getModuleName($component['name']);
             if ($this->composerInformation->isPackageInComposerJson($component['name'])
                 && ($component['type'] !== ComposerInformation::METAPACKAGE_PACKAGE_TYPE)) {
+                $components[$component['name']]['uninstall'] = true;
+                $components[$component['name']]['enable'] =
+                    $this->moduleList->has($components[$component['name']]['moduleName']);
                 if (isset($lastSyncData['packages'][$component['name']]['latestVersion'])
                     && version_compare(
                         $lastSyncData['packages'][$component['name']]['latestVersion'],
@@ -77,14 +90,10 @@ class ComponentGrid extends AbstractActionController
                         '>'
                     )) {
                     $components[$component['name']]['update'] = true;
-                    $components[$component['name']]['uninstall'] = true;
-                } else {
-                    $components[$component['name']]['uninstall'] = true;
                 }
             }
             $componentNameParts = explode('/', $component['name']);
             $components[$component['name']]['vendor'] = $componentNameParts[0];
-            $components[$component['name']]['moduleName'] = $this->packageInfo->getModuleName($component['name']);
         }
         return new JsonModel(
             [
