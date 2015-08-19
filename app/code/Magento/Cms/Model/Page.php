@@ -81,6 +81,8 @@ class Page extends \Magento\Framework\Model\AbstractModel implements PageInterfa
     }
 
     /**
+     * Receive page store ids
+     *
      * @return int[]
      */
     public function getStores()

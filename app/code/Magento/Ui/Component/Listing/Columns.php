@@ -48,6 +48,11 @@ class Columns extends AbstractComponent
         parent::prepare();
     }
 
+    /**
+     * Build urls for inline editing
+     *
+     * @return void
+     */
     protected function buildUrlsForInlineEditing()
     {
         $config = $this->getConfiguration();
