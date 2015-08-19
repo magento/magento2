@@ -331,15 +331,12 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
 
     /**
      * Check whether payment method can be used
-     * @param Quote|null $quote
+     * @param \Magento\Quote\Api\Data\CartInterface|Quote|null $quote
      * @return bool
      */
-    public function isAvailable($quote = null)
+    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
-        if (parent::isAvailable($quote) && $this->_pro->getConfig()->isMethodAvailable()) {
-            return true;
-        }
-        return false;
+        return parent::isAvailable($quote) && $this->_pro->getConfig()->isMethodAvailable();
     }
 
     /**

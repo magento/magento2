@@ -816,7 +816,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
      * @param \Magento\Quote\Api\Data\CartInterface|null $quote
      * @return bool
      */
-    public function isAvailable($quote = null)
+    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         if (parent::isAvailable($quote)) {
             if ($quote != null) {

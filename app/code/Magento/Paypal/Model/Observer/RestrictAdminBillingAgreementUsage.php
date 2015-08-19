@@ -39,7 +39,9 @@ class RestrictAdminBillingAgreementUsage
                 'Magento_Paypal::use'
             )
         ) {
-            $event->getResult()->isAvailable = false;
+            /** @var \Magento\Framework\DataObject $result */
+            $result = $observer->getEvent()->getResult();
+            $result->setData('is_available', false);
         }
     }
 }
