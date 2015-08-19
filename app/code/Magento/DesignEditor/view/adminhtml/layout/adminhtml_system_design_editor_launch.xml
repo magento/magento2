@@ -13,7 +13,7 @@
     </head>
     <body>
         <attribute name="id" value="html-body"/>
-        <remove name="backend.page"/>
+        <referenceContainer name="backend.page" remove="true"/>
         <referenceContainer name="root">
             <block name="preview.page.content" class="Magento\Backend\Block\Page" template="Magento_DesignEditor::editor.phtml">
                 <block class="Magento\DesignEditor\Block\Adminhtml\Editor\Container" name="design_editor" template="Magento_DesignEditor::editor/container.phtml">
