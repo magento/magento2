@@ -33,10 +33,14 @@ class SoldTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\Ab
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->sold = new Sold(
-            $this->contextMock,
-            $this->fileFactoryMock,
-            $this->dateMock
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->sold = $objectManager->getObject(
+            'Magento\Reports\Controller\Adminhtml\Report\Product\Sold',
+            [
+                'context' => $this->contextMock,
+                'fileFactory' => $this->fileFactoryMock,
+                'dateFilter' => $this->dateMock,
+            ]
         );
     }
 
