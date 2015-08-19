@@ -352,7 +352,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider httpSafeMethodProvider
-     * @backupGlobals
+     * @backupGlobals enabled
      * @param string $method value of $_SERVER['REQUEST_METHOD']
      */
     public function testIsSafeMethodTrue($httpMethod)
@@ -364,7 +364,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider httpNotSafeMethodProvider
-     * @backupGlobals
+     * @backupGlobals enabled
      * @param string $method value of $_SERVER['REQUEST_METHOD']
      */
     public function testIsSafeMethodFalse($httpMethod)
@@ -380,7 +380,8 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             'Test 1' => ['GET'],
             'Test 2' => ['HEAD'],
             'Test 3' => ['TRACE'],
-            'Test 4' => ['CONNECT']
+            'Test 4' => ['OPTIONS']
+
         ];
     }
 
@@ -390,7 +391,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             'Test 1' => ['POST'],
             'Test 2' => ['PUT'],
             'Test 3' => ['DELETE'],
-            'Test 4' => ['PATCH']
+            'Test 4' => ['PATCH'],
+            'Test 5' => ['CONNECT'],
+            'Test 6' => ['']
         ];
     }
 
