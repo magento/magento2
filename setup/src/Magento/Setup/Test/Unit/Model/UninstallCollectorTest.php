@@ -32,17 +32,32 @@ class UninstallCollectorTest extends \PHPUnit_Framework_TestCase
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
 
         $setup = $this->getMock('Magento\Setup\Module\DataSetup', [], [], '', false);
+<<<<<<< HEAD
         $this->adapterInterface = $this->getMockForAbstractClass(
+=======
+        $connectionMock = $this->getMockForAbstractClass(
+>>>>>>> mainline/develop
             'Magento\Framework\DB\Adapter\AdapterInterface',
             [],
             '',
             false
         );
         $select = $this->getMock('Magento\Framework\DB\Select', ['from'], [], '', false);
+<<<<<<< HEAD
         $this->adapterInterface->expects($this->once())->method('select')->willReturn($select);
         $setup->expects($this->exactly(2))->method('getConnection')->willReturn($this->adapterInterface);
         $this->result = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
         $select->expects($this->once())->method('from')->willReturn($this->result);
+=======
+        $connectionMock->expects($this->once())->method('select')->willReturn($select);
+        $setup->expects($this->exactly(2))->method('getConnection')->willReturn($connectionMock);
+        $result = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
+        $select->expects($this->once())->method('from')->willReturn($result);
+        $connectionMock->expects($this->once())
+            ->method('fetchAll')
+            ->with($result)
+            ->willReturn([['module' => 'Magento_A'], ['module' => 'Magento_B'], ['module' => 'Magento_C']]);
+>>>>>>> mainline/develop
 
         $uninstallA = 'Uninstall Class A';
         $uninstallB = 'Uninstall Class B';

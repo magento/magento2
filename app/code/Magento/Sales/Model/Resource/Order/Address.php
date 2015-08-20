@@ -39,7 +39,7 @@ class Address extends SalesResource implements OrderAddressResourceInterface
      * @param \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite
      * @param \Magento\Sales\Model\Order\Address\Validator $validator
      * @param \Magento\Sales\Model\Resource\GridPool $gridPool
-     * @param string $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -49,7 +49,7 @@ class Address extends SalesResource implements OrderAddressResourceInterface
         \Magento\SalesSequence\Model\Manager $sequenceManager,
         \Magento\Sales\Model\Order\Address\Validator $validator,
         \Magento\Sales\Model\Resource\GridPool $gridPool,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->_validator = $validator;
         $this->gridPool = $gridPool;
@@ -59,7 +59,7 @@ class Address extends SalesResource implements OrderAddressResourceInterface
             $entityRelationComposite,
             $attribute,
             $sequenceManager,
-            $resourcePrefix
+            $connectionName
         );
     }
 
@@ -126,7 +126,7 @@ class Address extends SalesResource implements OrderAddressResourceInterface
     /**
      * Update related grid table after object save
      *
-     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)

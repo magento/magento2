@@ -6,6 +6,8 @@
 namespace Magento\RequireJs\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\State as AppState;
+use Magento\Framework\RequireJs\Config;
 
 /**
  * A service for handling RequireJS files in the application
@@ -13,7 +15,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class FileManager
 {
     /**
-     * @var \Magento\Framework\RequireJs\Config
+     * @var Config
      */
     private $config;
 
@@ -23,7 +25,7 @@ class FileManager
     private $filesystem;
 
     /**
-     * @var \Magento\Framework\App\State
+     * @var AppState
      */
     private $appState;
 
@@ -33,15 +35,15 @@ class FileManager
     private $assetRepo;
 
     /**
-     * @param \Magento\Framework\RequireJs\Config $config
+     * @param Config $config
      * @param \Magento\Framework\Filesystem $appFilesystem
-     * @param \Magento\Framework\App\State $appState
+     * @param AppState $appState
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      */
     public function __construct(
-        \Magento\Framework\RequireJs\Config $config,
+        Config $config,
         \Magento\Framework\Filesystem $appFilesystem,
-        \Magento\Framework\App\State $appState,
+        AppState $appState,
         \Magento\Framework\View\Asset\Repository $assetRepo
     ) {
         $this->config = $config;
@@ -60,6 +62,28 @@ class FileManager
         $relPath = $this->config->getConfigFileRelativePath();
         $this->ensureSourceFile($relPath);
         return $this->assetRepo->createArbitrary($relPath, '');
+    }
+
+    /**
+     * Create '.min' files resolver asset
+     *
+     * @return \Magento\Framework\View\Asset\File
+     */
+    public function createMinResolverAsset()
+    {
+        $relPath = $this->config->getMinResolverRelativePath();
+        $this->ensureMinResolverFile($relPath);
+        return $this->assetRepo->createArbitrary($relPath, '');
+    }
+
+    /**
+     * Create a view asset representing the aggregated configuration file
+     *
+     * @return \Magento\Framework\View\Asset\File
+     */
+    public function createRequireJsMixinsAsset()
+    {
+        return $this->assetRepo->createArbitrary($this->config->getMixinsFileRelativePath(), '');
     }
 
     /**
@@ -83,8 +107,22 @@ class FileManager
     private function ensureSourceFile($relPath)
     {
         $dir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
-        if ($this->appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER || !$dir->isExist($relPath)) {
+        if ($this->appState->getMode() == AppState::MODE_DEVELOPER || !$dir->isExist($relPath)) {
             $dir->writeFile($relPath, $this->config->getConfig());
+        }
+    }
+
+    /**
+     * Make sure the '.min' assets resolver is materialized
+     *
+     * @param string $relPath
+     * @return void
+     */
+    private function ensureMinResolverFile($relPath)
+    {
+        $dir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
+        if ($this->appState->getMode() == AppState::MODE_DEVELOPER || !$dir->isExist($relPath)) {
+            $dir->writeFile($relPath, $this->config->getMinResolverCode());
         }
     }
 
@@ -95,11 +133,11 @@ class FileManager
      */
     public function createStaticJsAsset()
     {
-        if ($this->appState->getMode() != \Magento\Framework\App\State::MODE_PRODUCTION) {
+        if ($this->appState->getMode() != AppState::MODE_PRODUCTION) {
             return false;
         }
         $libDir = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
-        $relPath = $libDir->getRelativePath(\Magento\Framework\RequireJs\Config::STATIC_FILE_NAME);
+        $relPath = $libDir->getRelativePath(Config::STATIC_FILE_NAME);
         /** @var $context \Magento\Framework\View\Asset\File\FallbackContext */
         $context = $this->assetRepo->getStaticViewFileContext();
 
@@ -114,12 +152,12 @@ class FileManager
     public function createBundleJsPool()
     {
         $bundles = [];
-        if ($this->appState->getMode() == \Magento\Framework\App\State::MODE_PRODUCTION) {
+        if ($this->appState->getMode() == AppState::MODE_PRODUCTION) {
             $libDir = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
             /** @var $context \Magento\Framework\View\Asset\File\FallbackContext */
             $context = $this->assetRepo->getStaticViewFileContext();
 
-            $bundleDir = $context->getPath() . '/' .\Magento\Framework\RequireJs\Config::BUNDLE_JS_DIR;
+            $bundleDir = $context->getPath() . '/' . Config::BUNDLE_JS_DIR;
 
             if (!$libDir->isExist($bundleDir)) {
                 return [];

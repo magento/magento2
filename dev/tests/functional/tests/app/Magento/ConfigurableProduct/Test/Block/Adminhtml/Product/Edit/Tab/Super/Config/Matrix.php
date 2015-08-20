@@ -28,7 +28,11 @@ class Matrix extends Form
             'strategy' => Locator::SELECTOR_CSS,
         ],
         'sku' => [
-            'selector' => 'td[data-column="sku"] > span',
+            'selector' => 'td[data-column="sku"]',
+            'strategy' => Locator::SELECTOR_CSS,
+        ],
+        'price' => [
+            'selector' => 'td[data-column="price"]',
             'strategy' => Locator::SELECTOR_CSS,
         ],
         'quantity_and_stock_status' => [
@@ -77,13 +81,6 @@ class Matrix extends Form
     // @codingStandardsIgnoreEnd
 
     /**
-     * Title of variation matrix css selector.
-     *
-     * @var string
-     */
-    protected $matrixTitle = 'h3.title';
-
-    /**
      * Selector for template block.
      *
      * @var string
@@ -98,7 +95,6 @@ class Matrix extends Form
      */
     public function fillVariations(array $matrix)
     {
-        $this->_rootElement->find($this->matrixTitle)->click();
         $count = 1;
         foreach ($matrix as $variation) {
             $variationRow = $this->_rootElement->find(

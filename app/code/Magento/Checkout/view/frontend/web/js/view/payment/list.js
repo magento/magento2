@@ -9,8 +9,9 @@ define([
     'uiComponent',
     'Magento_Checkout/js/model/payment/method-list',
     'Magento_Checkout/js/model/payment/renderer-list',
-    'Magento_Ui/js/core/renderer/layout'
-], function (_, ko, utils, Component, paymentMethods, rendererList, layout) {
+    'Magento_Ui/js/core/renderer/layout',
+    'Magento_Checkout/js/model/checkout-data-resolver'
+], function (_, ko, utils, Component, paymentMethods, rendererList, layout, checkoutDataResolver) {
     'use strict';
 
     return Component.extend({
@@ -28,6 +29,7 @@ define([
             this._super().initChildren();
             paymentMethods.subscribe(
                 function (changes) {
+                    checkoutDataResolver.resolvePaymentMethod();
                     _.each(changes, function (change) {
                         if (change.status === 'added') {
                             this.createRenderer(change.value);

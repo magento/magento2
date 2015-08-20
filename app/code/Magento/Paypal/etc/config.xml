@@ -89,6 +89,7 @@
                 <avs_zip>0</avs_zip>
                 <avs_international>0</avs_international>
                 <avs_security_code>1</avs_security_code>
+                <cc_year_length>2</cc_year_length>
             </payflowpro>
             <paypal_billing_agreement>
                 <active>1</active>

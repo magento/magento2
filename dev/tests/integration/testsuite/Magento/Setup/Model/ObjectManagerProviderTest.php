@@ -20,16 +20,10 @@ class ObjectManagerProviderTest extends \PHPUnit_Framework_TestCase
      */
     private $locator;
 
-    /**
-     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $deploymentConfig;
-
     protected function setUp()
     {
         $this->locator = $this->getMockForAbstractClass('Zend\ServiceManager\ServiceLocatorInterface');
-        $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $this->object = new ObjectManagerProvider($this->locator, $this->deploymentConfig);
+        $this->object = new ObjectManagerProvider($this->locator);
     }
 
     public function testGet()

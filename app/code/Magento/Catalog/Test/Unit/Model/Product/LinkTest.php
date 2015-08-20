@@ -57,11 +57,9 @@ class LinkTest extends \PHPUnit_Framework_TestCase
                 'getAttributeTypeTable',
                 'getAttributesByType',
                 'getTable',
-                '_getWriteAdapter',
-                '_getReadAdapter',
+                'getConnection',
                 '_construct',
                 'getIdFieldName',
-                'getConnection'
             ]
         );
 

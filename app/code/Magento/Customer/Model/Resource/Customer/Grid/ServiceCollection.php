@@ -64,7 +64,7 @@ class ServiceCollection extends AbstractServiceCollection
      * Creates a collection item that represents a customer for the customer Grid.
      *
      * @param CustomerInterface $customer Input data for creating the item.
-     * @return \Magento\Framework\Object Collection item that represents a customer
+     * @return \Magento\Framework\DataObject Collection item that represents a customer
      */
     protected function createCustomerItem(CustomerInterface $customer)
     {
@@ -75,7 +75,7 @@ class ServiceCollection extends AbstractServiceCollection
             $customer->getLastname(),
             $customer->getSuffix(),
         ];
-        $customerItem = new \Magento\Framework\Object();
+        $customerItem = new \Magento\Framework\DataObject();
         $customerItem->setId($customer->getId());
         $customerItem->setEntityId($customer->getId());
         // All parts of the customer name must be displayed in the name column of the grid

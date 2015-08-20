@@ -168,7 +168,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $response = new \Magento\Framework\Object(
+        $response = new \Magento\Framework\DataObject(
             [
                 'result' => '0',
                 'pnref' => 'V19A3D27B61E',
@@ -212,13 +212,13 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
     {
         return [
            [
-                'response' => new \Magento\Framework\Object(
+                'response' => new \Magento\Framework\DataObject(
                     [
                         'pnref' => 'V19A3D27B61E',
                         'result_code' => Payflowpro::RESPONSE_CODE_APPROVED,
                     ]
                 ),
-                'paymentExpected' => new \Magento\Framework\Object(
+                'paymentExpected' => new \Magento\Framework\DataObject(
                     [
                         'transaction_id' => 'V19A3D27B61E',
                         'is_transaction_closed' => 0,
@@ -226,13 +226,13 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
                 ),
             ],
             [
-                'response' => new \Magento\Framework\Object(
+                'response' => new \Magento\Framework\DataObject(
                     [
                         'pnref' => 'V19A3D27B61E',
                         'result_code' => Payflowpro::RESPONSE_CODE_FRAUDSERVICE_FILTER
                     ]
                 ),
-                'paymentExpected' => new \Magento\Framework\Object(
+                'paymentExpected' => new \Magento\Framework\DataObject(
                     [
                         'transaction_id' => 'V19A3D27B61E',
                         'is_transaction_closed' => 0,
