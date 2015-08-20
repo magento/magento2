@@ -23,8 +23,9 @@ define([
         },
 
         getLabel: function(id) {
-            return $t(this.selected.indexOf(id) > -1) ? $t('On') : $t('Off');
+            return this.selected.indexOf(id) !== -1 ? $t('On') : $t('Off');
         },
+
         /**
          * Initializes components' static properties.
          *
@@ -42,22 +43,21 @@ define([
             return this._super();
         },
 
-
         /**
          * Sets the ids for preselected elements
          * @returns void
          */
         setDefaultSelections: function() {
-            if(this.selected().length != this.selectedData.length) {
+            if (this.selected().length != this.selectedData.length) {
                 for (var key in this.selectedData) {
-                    if(this.selected().indexOf(key) == -1) {
+                    if (this.selected().indexOf(key) === -1) {
                         this.selected.push(key);
                         this.currentSelectData.push(key);
                     }
                 }
                 for (var i = 0; i < this.currentSelectData.length; i++) {
                     var removalKey = this.currentSelectData[i];
-                    if(!this.selectedData.hasOwnProperty(removalKey) && this.selected().indexOf(removalKey) > -1) {
+                    if (!this.selectedData.hasOwnProperty(removalKey) && this.selected().indexOf(removalKey) !== -1) {
                         this.selected.splice(this.selected().indexOf(removalKey), 1);
                         this.currentSelectData.splice(this.currentSelectData.indexOf(removalKey), 1);
                     }
