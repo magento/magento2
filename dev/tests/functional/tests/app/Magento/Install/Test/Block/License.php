@@ -26,7 +26,11 @@ class License extends Block
      *
      * @var string
      */
+<<<<<<< HEAD
     protected $license = 'license-text';
+=======
+    protected $license = '.license-text';
+>>>>>>> mainline/develop
 
     /**
      * Click on 'Back' button.

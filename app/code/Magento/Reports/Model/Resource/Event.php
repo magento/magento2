@@ -26,15 +26,15 @@ class Event extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
         $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
     }
@@ -62,7 +62,7 @@ class Event extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function updateCustomerType(\Magento\Reports\Model\Event $model, $visitorId, $customerId, $types = [])
     {
         if ($types) {
-            $this->_getWriteAdapter()->update(
+            $this->getConnection()->update(
                 $this->getMainTable(),
                 ['subject_id' => (int) $customerId, 'subtype' => 0],
                 ['subject_id = ?' => (int) $visitorId, 'subtype = ?' => 1, 'event_type_id IN(?)' => $types]
@@ -92,7 +92,7 @@ class Event extends \Magento\Framework\Model\Resource\Db\AbstractDb
     ) {
         $idFieldName = $collection->getResource()->getIdFieldName();
 
-        $derivedSelect = $this->getReadConnection()
+        $derivedSelect = $this->getConnection()
             ->select()
             ->from(
                 $this->getTable('report_event'),
@@ -177,23 +177,23 @@ class Event extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function clean(\Magento\Reports\Model\Event $object)
     {
         while (true) {
-            $select = $this->_getReadAdapter()->select()->from(
+            $select = $this->getConnection()->select()->from(
                 ['event_table' => $this->getMainTable()],
                 ['event_id']
             )->joinLeft(
-                ['visitor_table' => $this->getTable('log_visitor')],
+                ['visitor_table' => $this->getTable('customer_visitor')],
                 'event_table.subject_id = visitor_table.visitor_id',
                 []
             )->where('visitor_table.visitor_id IS NULL')
                 ->where('event_table.subtype = ?', 1)
                 ->limit(1000);
-            $eventIds = $this->_getReadAdapter()->fetchCol($select);
+            $eventIds = $this->getConnection()->fetchCol($select);
 
             if (!$eventIds) {
                 break;
             }
 
-            $this->_getWriteAdapter()->delete($this->getMainTable(), ['event_id IN(?)' => $eventIds]);
+            $this->getConnection()->delete($this->getMainTable(), ['event_id IN(?)' => $eventIds]);
         }
         return $this;
     }

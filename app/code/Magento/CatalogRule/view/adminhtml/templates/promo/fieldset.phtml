@@ -13,7 +13,9 @@
         <legend class="legend"><span><?php echo $_element->getLegend() ?></span></legend>
         <br>
     <?php if ($_element->getComment()): ?>
-        <p class="comment"><?php echo $block->escapeHtml($_element->getComment()) ?></p>
+        <div class="messages">
+            <div class="message message-notice"><?php echo $block->escapeHtml($_element->getComment()) ?></div>
+        </div>
     <?php endif; ?>
     <div class="rule-tree-wrapper">
         <?php echo $_element->getChildrenHtml() ?>

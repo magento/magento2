@@ -157,7 +157,7 @@ class ListAssociatedProductsTest extends \PHPUnit_Framework_TestCase
     protected function generateAssociatedProduct($productKey = 0)
     {
         $associatedProduct = $this->getMock(
-            'Magento\Framework\Object',
+            'Magento\Framework\DataObject',
             ['getQty', 'getPosition', 'getId', 'getSku', 'getName', 'getPrice'],
             [],
             '',

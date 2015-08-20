@@ -32,22 +32,6 @@ interface ConfigInterface
     public function isBundlingJsFiles();
 
     /**
-     * Check whether asset minification is on for specified content type
-     *
-     * @param string $contentType
-     * @return bool
-     */
-    public function isAssetMinification($contentType);
-
-    /**
-     * Get asset minification adapter for specified content type
-     *
-     * @param string $contentType
-     * @return string
-     */
-    public function getAssetMinificationAdapter($contentType);
-
-    /**
      * Check whether minify of HTML is on
      *
      * @return bool

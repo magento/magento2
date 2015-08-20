@@ -12,6 +12,7 @@
             <field name="sku" xsi:type="string">sku_test_configurable_product_%isolation%</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">10</item>
+                <item name="dataset" xsi:type="string">default</item>
             </field>
             <field name="weight" xsi:type="string">30</field>
             <field name="tax_class_id" xsi:type="array">

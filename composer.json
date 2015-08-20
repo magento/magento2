@@ -14,13 +14,14 @@
         }
     ],
     "require": {
-        "php": "~5.5.0|~5.6.0",
+        "php": "~5.5.0|~5.6.0|~7.0.0",
         "zendframework/zend-stdlib": "2.4.0",
         "zendframework/zend-code": "2.4.0",
         "zendframework/zend-server": "2.4.0",
         "zendframework/zend-soap": "2.4.0",
         "zendframework/zend-uri": "2.4.0",
         "zendframework/zend-validator": "2.4.0",
+        "zendframework/zend-crypt": "2.4.0",
         "zendframework/zend-console": "2.4.0",
         "zendframework/zend-modulemanager": "2.4.0",
         "zendframework/zend-mvc": "2.4.0",
@@ -45,6 +46,8 @@
         "magento/magento-composer-installer": "*",
         "braintree/braintree_php": "2.39.0",
         "symfony/console": "~2.3 <2.7",
+        "phpseclib/phpseclib": "~0.3",
+        "tedivm/jshrink": "~1.0.1",
         "magento/composer": "~1.0.0"
     },
     "require-dev": {
@@ -119,7 +122,6 @@
         "magento/module-indexer": "self.version",
         "magento/module-integration": "self.version",
         "magento/module-layered-navigation": "self.version",
-        "magento/module-log": "self.version",
         "magento/module-media-storage": "self.version",
         "magento/module-msrp": "self.version",
         "magento/module-multishipping": "self.version",
@@ -145,6 +147,7 @@
         "magento/module-shipping": "self.version",
         "magento/module-sitemap": "self.version",
         "magento/module-store": "self.version",
+        "magento/module-swatches": "self.version",
         "magento/module-tax": "self.version",
         "magento/module-tax-import-export": "self.version",
         "magento/module-theme": "self.version",
@@ -174,8 +177,6 @@
         "trentrichardson/jquery-timepicker-addon": "1.4.3",
         "colinmollenhour/cache-backend-redis": "1.8",
         "colinmollenhour/credis": "1.5",
-        "linkorb/jsmin-php": "1.1.2",
-        "phpseclib/phpseclib": "0.2.1",
         "components/jquery": "1.11.0",
         "blueimp/jquery-file-upload": "5.6.14",
         "components/jqueryui": "1.10.4",
@@ -187,8 +188,6 @@
             "trentrichardson/jquery-timepicker-addon": "lib/web/jquery/jquery-ui-timepicker-addon.js",
             "colinmollenhour/cache-backend-redis": "lib/internal/Cm/Cache/Backend/Redis.php",
             "colinmollenhour/credis": "lib/internal/Credis",
-            "linkorb/jsmin-php": "lib/internal/JSMin",
-            "phpseclib/phpseclib": "lib/internal/phpseclib",
             "components/jquery": [
                 "lib/web/jquery.js",
                 "lib/web/jquery/jquery.min.js",

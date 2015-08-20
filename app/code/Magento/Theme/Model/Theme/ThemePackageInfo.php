@@ -44,15 +44,19 @@ class ThemePackageInfo
     /**
      * Get package name of a theme by its full theme path
      *
-     * @param string $fullThemePath
+     * @param string $themePath
      * @return string
      * @throws \Zend_Json_Exception
      */
-    public function getPackageName($fullThemePath)
+    public function getPackageName($themePath)
     {
         $themesDirRead = $this->filesystem->getDirectoryRead(DirectoryList::THEMES);
-        if ($themesDirRead->isExist($fullThemePath . '/composer.json')) {
-            $rawData = \Zend_Json::decode($themesDirRead->readFile($fullThemePath . '/composer.json'));
+        if ($themesDirRead->isExist($themePath . '/composer.json')) {
+            $rawData = [];
+            $themeFile = $themesDirRead->readFile($themePath . '/composer.json');
+            if ($themeFile) {
+                $rawData = \Zend_Json::decode($themeFile);
+            }
             return isset($rawData['name']) ? $rawData['name'] : '';
         }
         return '';

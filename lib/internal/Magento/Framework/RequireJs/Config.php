@@ -6,6 +6,7 @@
 namespace Magento\Framework\RequireJs;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\View\Asset\Minification;
 
 /**
  * Provider of RequireJs config information
@@ -23,6 +24,11 @@ class Config
     const CONFIG_FILE_NAME = 'requirejs-config.js';
 
     /**
+     * File name of RequireJs mixins
+     */
+    const MIXINS_FILE_NAME = 'mage/requirejs/mixins.js';
+
+    /**
      * File name of RequireJs
      */
     const REQUIRE_JS_FILE_NAME = 'requirejs/require.js';
@@ -31,6 +37,11 @@ class Config
      * File name of StaticJs
      */
     const STATIC_FILE_NAME = 'mage\requirejs\static.js';
+
+    /**
+     * File name of minified files resolver
+     */
+    const MIN_RESOLVER_FILENAME = 'requirejs-min-resolver.js';
 
     /**
      * File name of StaticJs
@@ -81,21 +92,37 @@ config;
     private $staticContext;
 
     /**
+     * @var \Magento\Framework\Code\Minifier\AdapterInterface
+     */
+    private $minifyAdapter;
+
+    /**
+     * @var Minification
+     */
+    private $minification;
+
+    /**
      * @param \Magento\Framework\RequireJs\Config\File\Collector\Aggregated $fileSource
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Filesystem $appFilesystem
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
+     * @param \Magento\Framework\Code\Minifier\AdapterInterface $minifyAdapter
+     * @param Minification $minification
      */
     public function __construct(
         \Magento\Framework\RequireJs\Config\File\Collector\Aggregated $fileSource,
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\Filesystem $appFilesystem,
-        \Magento\Framework\View\Asset\Repository $assetRepo
+        \Magento\Framework\View\Asset\Repository $assetRepo,
+        \Magento\Framework\Code\Minifier\AdapterInterface $minifyAdapter,
+        Minification $minification
     ) {
         $this->fileSource = $fileSource;
         $this->design = $design;
         $this->baseDir = $appFilesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->staticContext = $assetRepo->getStaticViewFileContext();
+        $this->minifyAdapter = $minifyAdapter;
+        $this->minification = $minification;
     }
 
     /**
@@ -123,6 +150,10 @@ config;
             self::FULL_CONFIG_TEMPLATE
         );
 
+        if ($this->minification->isEnabled('js')) {
+            $fullConfig = $this->minifyAdapter->minify($fullConfig);
+        }
+
         return $fullConfig;
     }
 
@@ -133,7 +164,17 @@ config;
      */
     public function getConfigFileRelativePath()
     {
-        return self::DIR_NAME . '/' . $this->staticContext->getConfigPath() . '/' . self::CONFIG_FILE_NAME;
+        return self::DIR_NAME . '/' . $this->staticContext->getConfigPath() . '/' . $this->getConfigFileName();
+    }
+
+    /**
+     * Get path to config file relative to directory, where all config files with different context are located
+     *
+     * @return string
+     */
+    public function getMixinsFileRelativePath()
+    {
+        return $this->staticContext->getConfigPath() . '/' . self::MIXINS_FILE_NAME;
     }
 
     /**
@@ -143,7 +184,7 @@ config;
      */
     public function getRequireJsFileRelativePath()
     {
-        return $this->staticContext->getConfigPath() . '/' .self::REQUIRE_JS_FILE_NAME;
+        return $this->staticContext->getConfigPath() . '/' . self::REQUIRE_JS_FILE_NAME;
     }
 
     /**
@@ -157,6 +198,58 @@ config;
             'baseUrl' => $this->staticContext->getBaseUrl() . $this->staticContext->getPath(),
         ];
         $config = json_encode($config, JSON_UNESCAPED_SLASHES);
-        return "require.config($config);";
+        $result = "require.config($config);";
+        return $result;
+    }
+
+    /**
+     * Get path to '.min' files resolver relative to config files directory
+     *
+     * @return string
+     */
+    public function getMinResolverRelativePath()
+    {
+        return
+            $this->staticContext->getConfigPath() .
+            '/' .
+            $this->minification->addMinifiedSign(self::MIN_RESOLVER_FILENAME);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getConfigFileName()
+    {
+        return $this->minification->addMinifiedSign(self::CONFIG_FILE_NAME);
+    }
+
+    /**
+     * @return string
+     */
+    public function getMinResolverCode()
+    {
+        $excludes = [];
+        foreach ($this->minification->getExcludes('js') as $expression) {
+            $excludes[] = '!url.match(/' . str_replace('/', '\/', $expression) . '/)';
+        }
+        $excludesCode = empty($excludes) ? 'true' : implode('&&', $excludes);
+
+        $result = <<<code
+    if (!require.s.contexts._.__load) {
+        require.s.contexts._.__load = require.s.contexts._.load;
+        require.s.contexts._.load = function(id, url) {
+            if ({$excludesCode}) {
+                url = url.replace(/(\.min)?\.js$/, '.min.js');
+            }
+            return require.s.contexts._.__load.apply(require.s.contexts._, [id, url]);
+        }
+    }
+
+code;
+
+        if ($this->minification->isEnabled('js')) {
+            $result = $this->minifyAdapter->minify($result);
+        }
+        return $result;
     }
 }

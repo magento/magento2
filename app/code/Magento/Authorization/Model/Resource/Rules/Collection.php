@@ -43,7 +43,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     {
         $length = $this->getConnection()->getLengthSql('{{resource_id}}');
         $this->addExpressionFieldToSelect('length', $length, 'resource_id');
-        $this->getSelect()->order('length ' . \Zend_Db_Select::SQL_DESC);
+        $this->getSelect()->order('length ' . \Magento\Framework\DB\Select::SQL_DESC);
 
         return $this;
     }
