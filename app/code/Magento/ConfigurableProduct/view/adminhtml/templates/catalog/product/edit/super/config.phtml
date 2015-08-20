@@ -27,6 +27,11 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
                     </div>
                 </div>
                 <div class="product-create-configuration-actions">
+                    <a class="action-menu-item" data-action="choose" onclick="jQuery('#associated-products-container').trigger('openModal');" href="#">
+                        <?= __('Add Products Manually');?>
+                    </a>
+                </div>
+                <div class="product-create-configuration-actions">
                     <button data-action="open-steps-wizard" title="Create Product Configurations"
                             class="action-secondary" data-bind="click: open">
                         <span data-role="button-label" data-edit-label="<?= __('Edit Configurations') ?>">
@@ -124,7 +129,7 @@ require([
         })
         .on('click', '[data-action=choose]', function(event) {
             event.preventDefault();
-            var grid = window.<?php echo $block->getGridJsObject() ?>;
+            var grid = window;
             var $button = $(this);
             var attributeIds = [];
             variationsContainer.find("input[name='attributes[]']").each(function () {

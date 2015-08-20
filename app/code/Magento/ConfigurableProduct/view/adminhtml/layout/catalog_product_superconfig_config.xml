@@ -8,7 +8,10 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="admin.product.edit.tab.super.config.grid.container">
-            <block class="Magento\Backend\Block\Widget\Grid" name="admin.product.edit.tab.super.config.grid" as="grid">
+            <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Grid\ManualProduct" name="manual.product.grid" template="Magento_ConfigurableProduct::catalog/product/edit/super/manual-product-grid.phtml" as="grid">
+                <uiComponent name="product_listing"/>
+            </block>
+            <!--<block class="Magento\Backend\Block\Widget\Grid" name="admin.product.edit.tab.super.config.grid" as="grid">
                 <arguments>
                     <argument name="id" xsi:type="string">configurable_associated_products_grid</argument>
                     <argument name="dataSource" xsi:type="object">Magento\ConfigurableProduct\Model\Resource\Product\Collection\AssociatedProduct</argument>
@@ -100,7 +103,7 @@
                         </arguments>
                     </block>
                 </block>
-            </block>
+            </block>-->
         </referenceBlock>
         <referenceBlock name="product_tabs">
             <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config" name="admin.product.edit.tab.super.config.grid.container">
