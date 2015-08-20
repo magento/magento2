@@ -124,7 +124,7 @@
             <div class="admin__data-grid-header-row row row-gutter">
                 <div class="col-xs-3">
                     <div class="admin__control-support-text">
-                        <span>{{total}}</span> records found
+                        <span>{{totalForGrid}} of {{total}} </span> components are selected.
                     </div>
                 </div>
                 <div class="col-xs-9 admin__data-grid-pager-wrap">
@@ -189,7 +189,8 @@
                         <div class="onoffswitch">
                             <input type="checkbox" name="{{component.checkboxId}}"
                                    class="onoffswitch-checkbox" id="{{component.checkboxId}}"
-                                   ng-click="AddRemoveComponentOnSliderMove(component.name)" checked>
+                                   ng-click="AddRemoveComponentOnSliderMove(component)"
+                                   ng-checked="isSelected(component.name)">
                             <label class="onoffswitch-label" for="{{component.checkboxId}}">
                                 <span class="onoffswitch-inner"></span>
                                 <span class="onoffswitch-switch"></span>

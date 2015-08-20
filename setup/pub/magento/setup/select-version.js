@@ -62,15 +62,15 @@ angular.module('select-version', ['ngStorage'])
                         success(function (data) {
                             if (data.responseType != 'error') {
                                 $scope.components = data.components;
+                                $scope.totalForGrid = data.total;
                                 $scope.total = data.total;
                                 $scope.currentPage = 0;
                                 $scope.rowLimit = 20;
                                 $scope.numberOfPages = Math.ceil(data.total/$scope.rowLimit);
-                                var keys = Object.keys($scope.components);
                                 for (var i = 0; i < $scope.totalForGrid; i++) {
                                     $scope.packages.push({
-                                        name: keys[i],
-                                        version: $scope.components[keys[i]].updates[0].id
+                                        name: $scope.components[i].name,
+                                        version: $scope.components[i].updates[0].id
                                     });
                                 }
                                 $scope.componentsReadyForNext = true;
@@ -94,22 +94,31 @@ angular.module('select-version', ['ngStorage'])
             }
         };
 
-        $scope.AddRemoveComponentOnSliderMove = function(name) {
+        $scope.AddRemoveComponentOnSliderMove = function(component) {
             var found = false;
-            for (var i = 0; i < $scope.totalForGrid; i++) {
-                if ($scope.packages[i + 1].name === name) {
-                    $scope.packages.splice(i + 1, 1);
+            for (var i = 0; i < $scope.packages.length; i++) {
+                if ($scope.packages[i].name === component.name) {
+                    $scope.packages.splice(i, 1);
                     $scope.totalForGrid = $scope.totalForGrid - 1;
                     found = true;
                 }
             }
             if (!found) {
                 $scope.packages.push({
-                    name: name,
-                    version: $scope.components[name].dropdownId
+                    name: component.name,
+                    version: component.dropdownId
                 });
                 $scope.totalForGrid = $scope.totalForGrid + 1;
             }
+        };
+
+        $scope.isSelected = function(name) {
+            for (var i = 0; i < $scope.packages.length; i++) {
+                if ($scope.packages[i].name === name) {
+                    return true;
+                }
+            }
+            return false;
         };
 
         $scope.update = function() {
