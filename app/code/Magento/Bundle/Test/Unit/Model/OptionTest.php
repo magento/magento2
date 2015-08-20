@@ -47,7 +47,12 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         );
         $this->resource = $this->getMock(
             'Magento\Framework\Model\Resource\AbstractResource',
-            ['_construct', '_getReadAdapter', '_getWriteAdapter', 'getIdFieldName', 'getSearchableData'],
+            [
+                '_construct',
+                'getConnection',
+                'getIdFieldName',
+                'getSearchableData',
+            ],
             [],
             '',
             false

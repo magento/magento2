@@ -80,12 +80,14 @@ class Attribute extends Form
      */
     protected $attributeOptionByName = '[data-attribute-option-title="%s"]';
 
+    // @codingStandardsIgnoreStart
     /**
      * Selector for attribute block
      *
      * @var string
      */
-    protected $attributeBlock = '//div[@id="configurable-attributes-container"]/div[contains(@class,"entry-edit")][%d]';
+    protected $attributeBlock = '//div[@data-role="configurable-attributes-container"]/div[@data-role="attribute-info"][%d]';
+    // @codingStandardsIgnoreEnd
 
     /**
      * Selector for "Create New Value" button
@@ -99,7 +101,7 @@ class Attribute extends Form
      *
      * @var string
      */
-    protected $nextButton = '[data-role=step-wizard-next]';
+    protected $nextButton = '[data-role=step-wizard-next] button';
 
     /**
      * Selector for option container
@@ -144,6 +146,13 @@ class Attribute extends Form
     protected $configContent = '#super_config-content';
 
     /**
+     * Backend abstract block.
+     *
+     * @var string
+     */
+    protected $templateBlock = './ancestor::body';
+
+    /**
      * Fill attributes
      *
      * @param array $attributes
@@ -151,37 +160,21 @@ class Attribute extends Form
      */
     public function fillAttributes(array $attributes)
     {
-        $grid = $this->getAttributesGrid();
         foreach ($attributes as $attribute) {
-            $isExistAttribute = true;
-            try {
-                $grid->searchAndSelect(['frontend_label' => $attribute['frontend_label']]);
-            } catch (\Exception $e) {
-                if ($e->getMessage() === 'Searched item was not found.') {
-                    $isExistAttribute = false;
-                } else {
-                    throw $e;
-                }
-            }
-
-            if (!$isExistAttribute && empty($attribute['attribute_id'])) {
+            if (empty($attribute['attribute_id'])) {
                 $this->createNewVariationSet($attribute);
-                $this->waitBlock($this->newAttributeFrame);
-                $grid->searchAndSelect(['frontend_label' => $attribute['frontend_label']]);
-            } else {
-                if (!$isExistAttribute) {
-                    $this->getAttributeSelector()->setValue($attribute['frontend_label']);
-                }
             }
+            $this->getAttributesGrid()->searchAndSelect(['frontend_label' => $attribute['frontend_label']]);
         }
-
         $this->browser->find($this->nextButton)->click();
+        $this->getTemplateBlock()->waitLoader();
 
         foreach ($attributes as $attribute) {
             $this->updateOptions($attribute);
         }
 
         $this->browser->find($this->nextButton)->click();
+        $this->getTemplateBlock()->waitLoader();
         $this->browser->find($this->nextButton)->click();
     }
 
@@ -212,6 +205,7 @@ class Attribute extends Form
         $this->browser->find($this->createNewVariationSet)->click();
         $this->getEditAttributeForm()->fill($attributeFixture);
         $this->getEditAttributeForm()->saveAttributeForm();
+        $this->waitBlock($this->newAttributeFrame);
     }
 
     /**
@@ -246,7 +240,6 @@ class Attribute extends Form
         );
         $count = 0;
 
-        $this->showAttributeContent($attributeBlock);
         if (isset($attribute['label'])) {
             $attributeBlock->find($this->attributeLabel)->setValue($attribute['label']);
         }
@@ -274,13 +267,10 @@ class Attribute extends Form
         $attributeBlock = $this->browser->find(sprintf($this->attributeBlockByName, $attribute['frontend_label']));
         $count = 0;
 
-        if (isset($attribute['label'])) {
-            // label is not editable anymore
-            // $attributeBlock->find($this->attributeLabel)->setValue($attribute['label']);
-        }
         foreach ($attribute['options'] as $option) {
             $count++;
-            $optionContainer = $attributeBlock->find(sprintf($this->attributeOptionByName, $option['label']));
+            $label = isset($option['admin']) ? $option['admin'] : $option['label'];
+            $optionContainer = $attributeBlock->find(sprintf($this->attributeOptionByName, $label));
 
             if (!$optionContainer->isVisible()) {
                 $mapping = $this->dataMapping($option);
@@ -341,6 +331,7 @@ class Attribute extends Form
     /**
      * Get attributes data
      *
+     * @deprecated
      * @return array
      */
     public function getAttributesData()
@@ -352,7 +343,6 @@ class Attribute extends Form
         /** @var SimpleElement $attributeBlock */
         $attributeBlock = $this->_rootElement->find(sprintf($this->attributeBlock, $count), Locator::SELECTOR_XPATH);
         while ($attributeBlock->isVisible()) {
-            $this->showAttributeContent($attributeBlock);
             $attribute = [
                 'frontend_label' => $attributeBlock->find($this->attributeTitle)->getText(),
                 'label' => $attributeBlock->find($this->attributeLabel)->getValue(),
@@ -431,5 +421,18 @@ class Attribute extends Form
         }
 
         return $data;
+    }
+
+    /**
+     * Get backend abstract block.
+     *
+     * @return \Magento\Backend\Test\Block\Template
+     */
+    protected function getTemplateBlock()
+    {
+        return $this->blockFactory->create(
+            'Magento\Backend\Test\Block\Template',
+            ['element' => $this->_rootElement->find($this->templateBlock, Locator::SELECTOR_XPATH)]
+        );
     }
 }

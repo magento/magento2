@@ -6,25 +6,27 @@
 
 // @codingStandardsIgnoreFile
 
-?>
-<?php $_item = $block->getItem() ?>
+/** @var $_item \Magento\Sales\Model\Order\Item */
+$_item = $block->getItem() ?>
 <tr>
-    <td align="left" valign="top" style="font-size:11px; padding:3px 9px;">
-        <strong><?php echo $block->escapeHtml($_item->getName()) ?></strong>
+    <td class="item-info<?php if ($block->getItemOptions()): ?> has-extra<?php endif; ?>">
+        <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
+        <p class="sku"><?= __('SKU'); ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
         <?php if ($block->getItemOptions()): ?>
-        <dl style="margin:0; padding:0;">
-            <?php foreach ($block->getItemOptions() as $option): ?>
-            <dt><strong><em><?php echo $option['label'] ?></em></strong></dt>
-            <dd style="margin:0; padding:0 0 0 9px;"><?php echo nl2br($option['value']) ?></dd>
-            <?php endforeach; ?>
-        </dl>
+            <dl class="item-options">
+                <?php foreach ($block->getItemOptions() as $option): ?>
+                    <dt><strong><em><?= $option['label'] ?></em></strong></dt>
+                    <dd>
+                        <?= nl2br($option['value']) ?>
+                    </dd>
+                <?php endforeach; ?>
+            </dl>
         <?php endif; ?>
         <?php $addInfoBlock = $block->getProductAdditionalInformationBlock(); ?>
         <?php if ($addInfoBlock) :?>
-            <?php echo $addInfoBlock->setItem($_item->getOrderItem())->toHtml(); ?>
+            <?= $addInfoBlock->setItem($_item->getOrderItem())->toHtml() ?>
         <?php endif; ?>
-        <?php echo $block->escapeHtml($_item->getDescription()) ?>
+        <?= $block->escapeHtml($_item->getDescription()) ?>
     </td>
-    <td align="left" valign="top" style="font-size:11px; padding:3px 9px;"><?php echo $block->escapeHtml($block->getSku($_item)) ?></td>
-    <td align="center" valign="top" style="font-size:11px; padding:3px 9px;"><?php echo $_item->getQty()*1 ?></td>
+    <td class="item-qty"><?= $_item->getQty() * 1 ?></td>
 </tr>

@@ -13,7 +13,7 @@ use Magento\Framework\Exception\LocalizedException;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Cart extends \Magento\Backend\App\Action
+abstract class Cart extends \Magento\Backend\App\Action
 {
     /**
      * Customer we're working with

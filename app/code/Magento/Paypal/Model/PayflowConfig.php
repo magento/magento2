@@ -11,7 +11,7 @@ use Magento\Payment\Model\Method\AbstractMethod;
  * Class PayflowConfig
  * @todo ELiminate current configuration class
  */
-class PayflowConfig extends AbstractConfig
+class PayflowConfig extends Config
 {
     /**#@-*/
 
@@ -88,5 +88,20 @@ class PayflowConfig extends AbstractConfig
     {
         return parent::isMethodActive(Config::METHOD_PAYMENT_PRO)
             || parent::isMethodActive(Config::METHOD_PAYFLOWPRO);
+    }
+
+    /**
+     * Map any supported payment method into a config path by specified field name
+     *
+     * @param string $fieldName
+     * @return string|null
+     */
+    protected function _getSpecificConfigPath($fieldName)
+    {
+        if ($this->pathPattern) {
+            return sprintf($this->pathPattern, $this->_methodCode, $fieldName);
+        }
+
+        return "payment/{$this->_methodCode}/{$fieldName}";
     }
 }

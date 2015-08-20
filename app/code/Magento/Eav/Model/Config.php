@@ -459,7 +459,7 @@ class Config
      * Get codes of all entity type attributes
      *
      * @param  mixed $entityType
-     * @param  \Magento\Framework\Object $object
+     * @param  \Magento\Framework\DataObject $object
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -469,7 +469,7 @@ class Config
         $entityType = $this->getEntityType($entityType);
         $attributeSetId = 0;
         $storeId = 0;
-        if ($object instanceof \Magento\Framework\Object) {
+        if ($object instanceof \Magento\Framework\DataObject) {
             $attributeSetId = $object->getAttributeSetId() ?: $attributeSetId;
             $storeId = $object->getStoreId() ?: $storeId;
         }

@@ -54,7 +54,7 @@ class FieldsProvider
      */
     public function checkConnection()
     {
-        $this->connection = $this->getConnection('core_write');
+        $this->connection = $this->getConnection('core');
         if (!$this->connection || $this->connection instanceof \Zend_Db_Adapter_Exception) {
             echo ('Connection to Magento 2 database is absent. Fixture data has not been fetched.' . PHP_EOL);
             return false;

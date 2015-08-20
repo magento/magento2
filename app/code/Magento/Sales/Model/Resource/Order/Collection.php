@@ -16,6 +16,11 @@ use Magento\Sales\Model\Resource\Collection\AbstractCollection;
 class Collection extends AbstractCollection implements OrderSearchResultInterface
 {
     /**
+     * @var string
+     */
+    protected $_idFieldName = 'entity_id';
+
+    /**
      * Event prefix
      *
      * @var string
@@ -51,7 +56,7 @@ class Collection extends AbstractCollection implements OrderSearchResultInterfac
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
         \Magento\Framework\DB\Helper $coreResourceHelper,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         parent::__construct(

@@ -75,7 +75,7 @@ class Validator
     }
 
     /**
-     * Validate address attribute for payment operations
+     * Validate address attribute for customer creation
      *
      * @return bool|array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -83,7 +83,7 @@ class Validator
      *
      * @param Address $address
      */
-    public function validateForPayment(Address $address)
+    public function validateForCustomer(Address $address)
     {
         if ($address->getShouldIgnoreValidation()) {
             return true;

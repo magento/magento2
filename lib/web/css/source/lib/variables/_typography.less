@@ -27,14 +27,17 @@
 
 //  Sizes
 @root__font-size: 62.5%; // Defines ratio between root font size and base font size, 1rem = 10px
-@font-size-ratio__base: 1.4;
-@font-rem-ratio: unit(@root__font-size * 16/100);
+@font-size-ratio__base: 1.4; // Defines ratio of the root font-size to the base font-size
 
-@font-size__base: unit((@root__font-size / 100) * 16 * @font-size-ratio__base, px); // Base font size value in <b>px</b>
-@font-size__xl: ceil(1.5 * @font-size__base); // 21
-@font-size__l: ceil(1.25 * @font-size__base); // 18
-@font-size__s: ceil(.85 * @font-size__base); // 12
-@font-size__xs: floor(.75 * @font-size__base); // 11
+@font-size-unit: rem; // The unit to which most typography values will be converted by default
+@font-size-unit-ratio: unit(@root__font-size * 16/100); // Ratio of the root font-size to the font-size unit
+@font-size-unit-convert: true; // Controls whether font-size values are converted to the specified font-size unit
+
+@font-size__base: unit(@font-size-unit-ratio * @font-size-ratio__base, px); // Base font size value in <b>px</b>
+@font-size__xl: ceil(1.5 * @font-size__base); // 21px
+@font-size__l: ceil(1.25 * @font-size__base); // 18px
+@font-size__s: ceil(.85 * @font-size__base); // 12px
+@font-size__xs: floor(.75 * @font-size__base); // 11px
 
 //  Weights
 @font-weight__light: 300;

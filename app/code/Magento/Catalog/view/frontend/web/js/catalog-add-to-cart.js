@@ -74,8 +74,8 @@ define([
                         $('body').trigger(self.options.processStop);
                     }
 
-                    if (res.redirect) {
-                        window.location = res.redirect;
+                    if (res.backUrl) {
+                        window.location = res.backUrl;
                         return;
                     }
                     if (res.messages) {

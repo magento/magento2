@@ -200,7 +200,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $quoteMock->expects($this->once())
             ->method('getBillingAddress')
-            ->willReturn(new \Magento\Framework\Object(['country_id' => 'US']));
+            ->willReturn(new \Magento\Framework\DataObject(['country_id' => 'US']));
         $this->checkoutSessionMock->expects($this->once())
             ->method('getQuote')
             ->willReturn($quoteMock);

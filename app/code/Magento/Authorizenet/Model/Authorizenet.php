@@ -194,13 +194,13 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * Fetch fraud details
      *
      * @param string $transactionId
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function fetchTransactionFraudDetails($transactionId)
     {
         $responseXmlDocument = $this->getTransactionDetails($transactionId);
-        $response = new \Magento\Framework\Object();
+        $response = new \Magento\Framework\DataObject();
 
         if (empty($responseXmlDocument->transaction->FDSFilters->FDSFilter)) {
             return $response;
@@ -257,14 +257,14 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
     /**
      * Prepare request to gateway
      *
-     * @param \Magento\Framework\Object|\Magento\Payment\Model\InfoInterface $payment
+     * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface $payment
      * @return \Magento\Authorizenet\Model\Request
      * @link http://www.authorize.net/support/AIM_guide.pdf
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function buildRequest(\Magento\Framework\Object $payment)
+    protected function buildRequest(\Magento\Framework\DataObject $payment)
     {
         /** @var \Magento\Sales\Model\Order $order */
         $order = $payment->getOrder();
@@ -435,7 +435,7 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * This function returns full transaction details for a specified transaction ID.
      *
      * @param string $transactionId
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
      * @link http://www.authorize.net/support/ReportingGuide_XML.pdf
      * @link http://developer.authorize.net/api/transaction_details/
@@ -444,7 +444,7 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
     {
         $responseXmlDocument = $this->getTransactionDetails($transactionId);
 
-        $response = new \Magento\Framework\Object();
+        $response = new \Magento\Framework\DataObject();
         $response->setXResponseCode((string)$responseXmlDocument->transaction->responseCode)
             ->setXResponseReasonCode((string)$responseXmlDocument->transaction->responseReasonCode)
             ->setTransactionStatus((string)$responseXmlDocument->transaction->transactionStatus);

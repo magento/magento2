@@ -31,8 +31,8 @@ class Usage extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function updateCustomerCouponTimesUsed($customerId, $couponId)
     {
-        $read = $this->_getReadAdapter();
-        $select = $read->select();
+        $connection = $this->getConnection();
+        $select = $connection->select();
         $select->from(
             $this->getMainTable(),
             ['times_used']
@@ -42,16 +42,16 @@ class Usage extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'customer_id = :customer_id'
         );
 
-        $timesUsed = $read->fetchOne($select, [':coupon_id' => $couponId, ':customer_id' => $customerId]);
+        $timesUsed = $connection->fetchOne($select, [':coupon_id' => $couponId, ':customer_id' => $customerId]);
 
         if ($timesUsed > 0) {
-            $this->_getWriteAdapter()->update(
+            $this->getConnection()->update(
                 $this->getMainTable(),
                 ['times_used' => $timesUsed + 1],
                 ['coupon_id = ?' => $couponId, 'customer_id = ?' => $customerId]
             );
         } else {
-            $this->_getWriteAdapter()->insert(
+            $this->getConnection()->insert(
                 $this->getMainTable(),
                 ['coupon_id' => $couponId, 'customer_id' => $customerId, 'times_used' => 1]
             );
@@ -61,23 +61,23 @@ class Usage extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Load an object by customer_id & coupon_id
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @param int $customerId
      * @param mixed $couponId
      * @return $this
      */
-    public function loadByCustomerCoupon(\Magento\Framework\Object $object, $customerId, $couponId)
+    public function loadByCustomerCoupon(\Magento\Framework\DataObject $object, $customerId, $couponId)
     {
-        $read = $this->_getReadAdapter();
-        if ($read && $couponId && $customerId) {
-            $select = $read->select()->from(
+        $connection = $this->getConnection();
+        if ($connection && $couponId && $customerId) {
+            $select = $connection->select()->from(
                 $this->getMainTable()
             )->where(
                 'customer_id =:customet_id'
             )->where(
                 'coupon_id = :coupon_id'
             );
-            $data = $read->fetchRow($select, [':coupon_id' => $couponId, ':customet_id' => $customerId]);
+            $data = $connection->fetchRow($select, [':coupon_id' => $couponId, ':customet_id' => $customerId]);
             if ($data) {
                 $object->setData($data);
             }

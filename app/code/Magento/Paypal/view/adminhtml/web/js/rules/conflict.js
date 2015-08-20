@@ -22,7 +22,11 @@
 
                 if (!isDisabled && !executed) {
                     executed = true;
-                    alert("The following error(s) occured:\n\rSome PayPal solutions conflict.\n\rPlease re-enable the previously enabled payment solutions.");
+                    alert(
+                        "The following error(s) occured:\n\r"
+                        + "Some PayPal solutions conflict.\n\r"
+                        + "Please re-enable the previously enabled payment solutions."
+                    );
                 }
             }
         };
