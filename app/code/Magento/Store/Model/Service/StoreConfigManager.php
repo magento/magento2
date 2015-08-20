@@ -24,6 +24,11 @@ class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterfa
      */
     protected $scopeConfig;
 
+    /**
+     * Map the setters to config path
+     *
+     * @var array
+     */
     protected $configPaths = [
         'setLocale' => 'general/locale/code',
         'setBaseCurrencyCode' => 'currency/options/base',
