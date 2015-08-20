@@ -164,11 +164,6 @@ class Installer
     private $deploymentConfig;
 
     /**
-     * @var SampleData
-     */
-    private $sampleData;
-
-    /**
      * @var ObjectManagerProvider
      */
     private $objectManagerProvider;
@@ -207,7 +202,6 @@ class Installer
      * @param ConnectionFactory $connectionFactory
      * @param MaintenanceMode $maintenanceMode
      * @param Filesystem $filesystem
-     * @param SampleData $sampleData
      * @param ObjectManagerProvider $objectManagerProvider
      * @param Context $context
      * @param SetupConfigModel $setupConfigModel
@@ -228,7 +222,6 @@ class Installer
         ConnectionFactory $connectionFactory,
         MaintenanceMode $maintenanceMode,
         Filesystem $filesystem,
-        SampleData $sampleData,
         ObjectManagerProvider $objectManagerProvider,
         Context $context,
         SetupConfigModel $setupConfigModel,
@@ -245,7 +238,6 @@ class Installer
         $this->connectionFactory = $connectionFactory;
         $this->maintenanceMode = $maintenanceMode;
         $this->filesystem = $filesystem;
-        $this->sampleData = $sampleData;
         $this->installInfo[self::INFO_MESSAGE] = [];
         $this->deploymentConfig = $deploymentConfig;
         $this->objectManagerProvider = $objectManagerProvider;
@@ -282,7 +274,9 @@ class Installer
         }
         $script[] = ['Installing admin user...', 'installAdminUser', [$request]];
         $script[] = ['Enabling caches:', 'enableCaches', []];
-        if (!empty($request[InstallCommand::INPUT_KEY_USE_SAMPLE_DATA]) && $this->sampleData->isDeployed()) {
+        if (!empty($request[InstallCommand::INPUT_KEY_USE_SAMPLE_DATA])
+            && $this->filesystem->getDirectoryRead(DirectoryList::MODULES)->isExist('Magento/SampleData')
+        ) {
             $script[] = ['Installing sample data:', 'installSampleData', [$request]];
         }
         $script[] = ['Disabling Maintenance Mode:', 'setMaintenanceMode', [0]];
@@ -1117,7 +1111,8 @@ class Installer
         try {
             $userName = isset($request[AdminAccount::KEY_USER]) ? $request[AdminAccount::KEY_USER] : '';
             $this->objectManagerProvider->reset();
-            $this->sampleData->install($this->objectManagerProvider->get(), $this->log, $userName);
+            $sampleData = $this->objectManagerProvider->get()->get('Magento\SampleData\Model\SampleData');
+            $sampleData->install($this->objectManagerProvider->get(), $this->log, $userName);
         } catch (\Exception $e) {
             throw new \Magento\Setup\SampleDataException(
                 "Error during sample data installation: {$e->getMessage()}",
