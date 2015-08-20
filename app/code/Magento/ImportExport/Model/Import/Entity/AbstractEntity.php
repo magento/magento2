@@ -36,6 +36,7 @@ abstract class AbstractEntity
     const ERROR_CODE_ATTRIBUTE_NOT_VALID = 'attributeNotInvalid';
     const ERROR_CODE_DUPLICATE_UNIQUE_ATTRIBUTE = 'duplicateUniqueAttribute';
     const ERROR_CODE_ILLEGAL_CHARACTERS = 'illegalCharacters';
+    const ERROR_CODE_INVALID_ATTRIBUTE = 'invalidAttributeName';
     const ERROR_CODE_WRONG_QUOTES = 'wrongQuotes';
     const ERROR_CODE_COLUMNS_NUMBER = 'wrongColumnsNumber';
 
@@ -47,6 +48,7 @@ abstract class AbstractEntity
         self::ERROR_CODE_ATTRIBUTE_NOT_VALID => "Please correct the value for '%s'.",
         self::ERROR_CODE_DUPLICATE_UNIQUE_ATTRIBUTE => "Duplicate Unique Attribute for '%s'",
         self::ERROR_CODE_ILLEGAL_CHARACTERS => "Illegal character used for attribute %s",
+        self::ERROR_CODE_INVALID_ATTRIBUTE => 'Header contains invalid attribute(s): "%s"',
         self::ERROR_CODE_WRONG_QUOTES => "Curly quotes used instead of straight quotes",
         self::ERROR_CODE_COLUMNS_NUMBER => "Number of columns does not correspond to the number of rows in the header",
     ];
@@ -59,11 +61,25 @@ abstract class AbstractEntity
     protected $_connection;
 
     /**
-     * Has data process validation done?
+     * Has data process validation done?8
      *
      * @var bool
      */
     protected $_dataValidated = false;
+
+    /**
+     * Valid column names
+     *
+     * @array
+     */
+    protected $validColumnNames = [];
+
+    /**
+     * If we should check column names
+     *
+     * @var bool
+     */
+    protected $needColumnCheck = false;
 
     /**
      * DB data source model.
@@ -705,6 +721,7 @@ abstract class AbstractEntity
                 $columnNumber = 0;
                 $emptyHeaderColumns = [];
                 $invalidColumns = [];
+                $invalidAttributes = [];
                 foreach ($this->getSource()->getColNames() as $columnName) {
                     $columnNumber++;
                     if (!$this->isAttributeParticular($columnName)) {
@@ -712,10 +729,20 @@ abstract class AbstractEntity
                             $emptyHeaderColumns[] = $columnNumber;
                         } elseif (!preg_match('/^[a-z][a-z0-9_]*$/', $columnName)) {
                             $invalidColumns[] = $columnName;
+                        } elseif ($this->needColumnCheck && !in_array($columnName, $this->validColumnNames)) {
+                            $invalidAttributes[] = $columnName;
                         }
                     }
                 }
 
+                if ($invalidAttributes) {
+                    $this->getErrorAggregator()->addError(
+                        self::ERROR_CODE_INVALID_ATTRIBUTE,
+                        ProcessingError::ERROR_LEVEL_CRITICAL,
+                        null,
+                        implode('", "', $invalidAttributes)
+                    );
+                }
                 if ($emptyHeaderColumns) {
                     $this->getErrorAggregator()->addError(
                         self::ERROR_CODE_COLUMN_EMPTY_HEADER,

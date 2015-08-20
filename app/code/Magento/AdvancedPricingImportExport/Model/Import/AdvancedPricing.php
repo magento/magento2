@@ -65,6 +65,29 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     ];
 
     /**
+     * If we should check column names
+     *
+     * @var bool
+     */
+    protected $needColumnCheck = true;
+
+    /**
+     * Valid column names
+     *
+     * @array
+     */
+    protected $validColumnNames = [
+        self::COL_SKU,
+        self::COL_TIER_PRICE_WEBSITE,
+        self::COL_TIER_PRICE_CUSTOMER_GROUP,
+        self::COL_TIER_PRICE_QTY,
+        self::COL_TIER_PRICE,
+        self::COL_GROUP_PRICE_WEBSITE,
+        self::COL_GROUP_PRICE_CUSTOMER_GROUP,
+        self::COL_GROUP_PRICE,
+    ];
+
+    /**
      * Need to log in import history
      *
      * @var bool
@@ -197,7 +220,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         $this->errorAggregator = $errorAggregator;
         $this->_catalogProductEntity = $this->_resourceFactory->create()->getTable('catalog_product_entity');
 
-        foreach ($this->errorMessageTemplates as $errorCode => $message) {
+        foreach (array_merge($this->errorMessageTemplates, $this->_messageTemplates) as $errorCode => $message) {
             $this->getErrorAggregator()->addErrorMessageTemplate($errorCode, $message);
         }
     }
