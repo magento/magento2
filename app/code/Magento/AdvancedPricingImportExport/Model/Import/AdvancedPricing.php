@@ -82,9 +82,19 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     protected $_catalogData;
 
     /**
+     * @var \Magento\Catalog\Model\Product
+     */
+    protected $_productModel;
+
+    /**
      * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver
      */
     protected $_storeResolver;
+
+    /**
+     * @var ImportProduct
+     */
+    protected $_importProduct;
 
     /**
      * @var AdvancedPricing\Validator
@@ -140,8 +150,10 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param \Magento\ImportExport\Model\Resource\Import\Data $importData
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory $resourceFactory
+     * @param \Magento\Catalog\Model\Product $productModel
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param ImportProduct\StoreResolver $storeResolver
+     * @param ImportProduct $importProduct
      * @param AdvancedPricing\Validator $validator
      * @param AdvancedPricing\Validator\Website $websiteValidator
      * @param AdvancedPricing\Validator\GroupPrice $groupPriceValidator
@@ -157,8 +169,10 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         \Magento\ImportExport\Model\Resource\Import\Data $importData,
         \Magento\Framework\App\Resource $resource,
         \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory $resourceFactory,
+        \Magento\Catalog\Model\Product $productModel,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver,
+        ImportProduct $importProduct,
         AdvancedPricing\Validator $validator,
         AdvancedPricing\Validator\Website $websiteValidator,
         AdvancedPricing\Validator\GroupPrice $groupPriceValidator,
@@ -166,26 +180,26 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         ProcessingErrorAggregatorInterface $errorAggregator
     ) {
         $this->_localeDate = $localeDate;
+        $this->jsonHelper = $jsonHelper;
+        $this->_importExportData = $importExportData;
+        $this->_resourceHelper = $resourceHelper;
+        $this->_dataSourceModel = $importData;
         $this->_connection = $resource->getConnection('write');
         $this->_resourceFactory = $resourceFactory;
+        $this->_productModel = $productModel;
         $this->_catalogData = $catalogData;
         $this->_storeResolver = $storeResolver;
+        $this->_importProduct = $importProduct;
         $this->_validator = $validator;
         $this->_oldSkus = $this->retrieveOldSkus();
         $this->websiteValidator = $websiteValidator;
         $this->groupPriceValidator = $groupPriceValidator;
+        $this->errorAggregator = $errorAggregator;
         $this->_catalogProductEntity = $this->_resourceFactory->create()->getTable('catalog_product_entity');
 
-        parent::__construct(
-            $jsonHelper,
-            $importExportData,
-            $importData,
-            $config,
-            $resource,
-            $resourceHelper,
-            $string,
-            $errorAggregator
-        );
+        foreach ($this->errorMessageTemplates as $errorCode => $message) {
+            $this->getErrorAggregator()->addErrorMessageTemplate($errorCode, $message);
+        }
     }
 
     /**
