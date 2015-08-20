@@ -6,13 +6,14 @@
 namespace Magento\Customer\Test\Unit\Model\Customer\Attribute\Source;
 
 use Magento\Customer\Model\Customer\Attribute\Source\Website;
+use Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory;
 
 class WebsiteTest extends \PHPUnit_Framework_TestCase
 {
     /** @var Website */
     protected $model;
 
-    /** @var \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $collectionFactoryMock;
 
     /** @var \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory|\PHPUnit_Framework_MockObject_MockObject */
@@ -23,9 +24,8 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->collectionFactoryMock = $this->getMockBuilder(
-            'Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory'
-            )
+        $this->collectionFactoryMock =
+            $this->getMockBuilder('Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory')
             ->disableOriginalConstructor()
             ->getMock();
         $this->optionFactoryMock = $this->getMockBuilder('Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory')
