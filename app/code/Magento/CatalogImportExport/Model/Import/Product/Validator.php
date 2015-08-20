@@ -134,7 +134,11 @@ class Validator extends AbstractValidator implements RowValidatorInterface
                 break;
             case 'select':
             case 'multiselect':
-                $valid = isset($attrParams['options'][strtolower($rowData[$attrCode])]);
+                $values = explode(Product::PSEUDO_MULTI_LINE_SEPARATOR, $rowData[$attrCode]);
+                $valid = true;
+                foreach ($values as $value) {
+                    $valid = $valid || isset($attrParams['options'][strtolower($value)]);
+                }
                 if (!$valid) {
                     $this->_addMessages(
                         [
