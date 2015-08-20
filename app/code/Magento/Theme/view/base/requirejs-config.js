@@ -21,6 +21,7 @@ var config = {
         "mage/requirejs/plugin/id-normalizer": ["jquery"],
         "mage/webapi": ["jquery"],
         "jquery/ui": ["jquery"],
+        "MutationObserver": ["es6-collections"],
         "tinymce": {
             "exports": "tinymce"
         },
