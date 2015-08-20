@@ -20,7 +20,19 @@ class UpgradeSchema implements UpgradeSchemaInterface
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
-        if (version_compare($context->getVersion(), '2.0.1', '<')) {
+        $setup->startSetup();
+
+        if (version_compare($context->getVersion(), '2.0.0.1') < 0) {
+            $connection = $setup->getConnection();
+
+            $connection->addIndex(
+                $setup->getTable('customer_visitor'),
+                $setup->getIdxName('customer_visitor', ['last_visit_at']),
+                ['last_visit_at']
+            );
+        }
+
+        if (version_compare($context->getVersion(), '2.0.0.2', '<')) {
             $setup->getConnection()->addColumn(
                 $setup->getTable('customer_eav_attribute'),
                 'is_used_in_grid',
@@ -66,5 +78,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 ]
             );
         }
+
+        $setup->endSetup();
     }
 }
