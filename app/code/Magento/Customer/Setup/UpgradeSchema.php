@@ -32,7 +32,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             );
         }
 
-        if (version_compare($context->getVersion(), '2.0.0.2', '<')) {
+        if (version_compare($context->getVersion(), '2.0.1', '<')) {
             $setup->getConnection()->addColumn(
                 $setup->getTable('customer_eav_attribute'),
                 'is_used_in_grid',
