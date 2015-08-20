@@ -9,11 +9,11 @@ define([
 
     return Abstract.extend({
         /**
-         * Converts provided value to boolean.
+         * Converts the result of parent 'getInitialValue' call to boolean
          *
-         * @returns {Boolean}
+         * @return {Boolean}
          */
-        normalizeData: function () {
+        getInitialValue: function () {
             return !!+this._super();
         },
 

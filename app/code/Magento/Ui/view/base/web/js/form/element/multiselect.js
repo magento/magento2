@@ -2,6 +2,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'underscore',
     'mageUtils',
@@ -18,7 +19,7 @@ define([
          * Calls 'getInitialValue' of parent and if the result of it is not empty
          * string, returs it, else returnes caption or first found option's value
          *
-         * @returns {Number|String}
+         * @returns {Array|String}
          */
         getInitialValue: function () {
             var value = this._super();

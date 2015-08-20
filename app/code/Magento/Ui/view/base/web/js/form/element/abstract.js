@@ -144,7 +144,7 @@ define([
                 return !utils.isEmpty(value = v);
             });
 
-            return this.normalizeData(value);
+            return utils.isEmpty(value) ? '' : value;
         },
 
         /**
@@ -214,16 +214,6 @@ define([
             this.value('');
 
             return this;
-        },
-
-        /**
-         * Converts values like 'null' or 'undefined' to an empty string.
-         *
-         * @param {*} value - Value to be processed.
-         * @returns {*}
-         */
-        normalizeData: function (value) {
-            return utils.isEmpty(value) ? '' : value;
         },
 
         /**
