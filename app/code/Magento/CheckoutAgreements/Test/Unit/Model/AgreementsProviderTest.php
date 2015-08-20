@@ -7,6 +7,7 @@ namespace Magento\CheckoutAgreements\Test\Unit\Model;
 
 use Magento\Store\Model\ScopeInterface;
 use Magento\CheckoutAgreements\Model\AgreementsProvider;
+use Magento\CheckoutAgreements\Model\AgreementModeOptions;
 
 class AgreementsProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -77,9 +78,13 @@ class AgreementsProviderTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock->expects($this->once())->method('getStore')->willReturn($storeMock);
 
         $agreementCollection->expects($this->once())->method('addStoreFilter')->with($storeId)->willReturnSelf();
-        $agreementCollection->expects($this->once())
+        $agreementCollection->expects($this->at(1))
             ->method('addFieldToFilter')
             ->with('is_active', 1)
+            ->willReturnSelf();
+        $agreementCollection->expects($this->at(2))
+            ->method('addFieldToFilter')
+            ->with('mode', AgreementModeOptions::MODE_MANUAL)
             ->willReturnSelf();
         $agreementCollection->expects($this->once())->method('getAllIds')->willReturn($expectedResult);
 

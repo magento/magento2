@@ -59,6 +59,7 @@ class AgreementsProvider implements AgreementsProviderInterface
             $agreementCollection = $this->agreementCollectionFactory->create();
             $agreementCollection->addStoreFilter($this->storeManager->getStore()->getId());
             $agreementCollection->addFieldToFilter('is_active', 1);
+            $agreementCollection->addFieldToFilter('mode', AgreementModeOptions::MODE_MANUAL);
             $agreementIds = $agreementCollection->getAllIds();
         }
         return $agreementIds;

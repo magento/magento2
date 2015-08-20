@@ -10,7 +10,11 @@
             <!-- ko if: ($parent.isAgreementRequired($data)) -->
             <div class="checkout-agreement">
                 <input type="checkbox"
-                       data-bind="attr: {'id': 'agreement_' + agreementId, 'name': 'agreement[' + agreementId + ']'}"
+                       data-bind="attr: {
+                                    'id': 'agreement_' + agreementId,
+                                    'name': 'agreement[' + agreementId + ']',
+                                    'value': agreementId
+                                    }"
                        data-validate="{required:true}"
                         >
                 <label data-bind="attr: {'for': 'agreement_' + agreementId}">
