@@ -92,11 +92,6 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     private $filesystem;
 
     /**
-     * @var \Magento\Setup\Model\SampleData|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $sampleData;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $objectManager;
@@ -155,7 +150,6 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->connection = $this->getMockForAbstractClass('Magento\Framework\DB\Adapter\AdapterInterface');
         $this->maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
         $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->sampleData = $this->getMock('Magento\Setup\Model\SampleData', [], [], '', false);
         $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
         $this->contextMock = $this->getMock('Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
         $this->configModel = $this->getMock('Magento\Setup\Model\ConfigModel', [], [], '', false);
@@ -194,7 +188,6 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             $connectionFactory,
             $this->maintenanceMode,
             $this->filesystem,
-            $this->sampleData,
             $objectManagerProvider,
             $this->contextMock,
             $this->configModel,
