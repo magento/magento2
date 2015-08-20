@@ -18,9 +18,6 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $context;
 
-    /** @var \Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor|\PHPUnit_Framework_MockObject_MockObject */
-    protected $dataProcessor;
-
     /** @var \Magento\Cms\Api\BlockRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $blockRepository;
 
@@ -128,7 +125,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with([
                 'messages' => [
-                    '[Page: Catalog Events Lister] Exception'
+                    '[Block: Catalog Events Lister] Exception'
                 ],
                 'error' => true
             ])
