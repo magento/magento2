@@ -53,20 +53,21 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
     /** @var array|mixed */
     protected $paramsArray;
 
-    /** @var \Magento\CatalogImportExport\Model\Import\UploaderFactory|\PHPUnit_Framework_MockObject_MockObject */
-    protected $uploaderFactoryMock;
-
     /** @var \Magento\CatalogImportExport\Model\Import\Uploader|\PHPUnit_Framework_MockObject_MockObject */
     protected $uploaderMock;
-
-    /** @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
-    protected $filesystemMock;
 
     /** @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit_Framework_MockObject_MockObject */
     protected $directoryWriteMock;
 
-    /** @var \Magento\Downloadable\Helper\File|\PHPUnit_Framework_MockObject_MockObject */
-    protected $fileHelperMock;
+    /**
+     * @var |\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $uploaderHelper;
+
+    /**
+     * @var |\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $downloadableHelper;
 
     /**
      * Set up
@@ -186,36 +187,34 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
             'downloadable'
         ];
 
-
-        // 5. $uploaderFactory
-        $this->uploaderFactoryMock = $this->getMock(
-            '\Magento\CatalogImportExport\Model\Import\UploaderFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
-
         $this->uploaderMock = $this->getMock(
             '\Magento\CatalogImportExport\Model\Import\Uploader',
-            [],
+            ['move'],
             [],
             '',
             false
         );
 
-        $this->uploaderFactoryMock->expects($this->any())->method('create')->willReturn($this->uploaderMock);
-
         // 6. $filesystem
-        $this->filesystemMock = $this->getMock('\Magento\Framework\Filesystem', ['getDirectoryWrite'], [], '', false);
         $this->directoryWriteMock = $this->getMock('Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
-        $this->filesystemMock->expects($this->any())->method('getDirectoryWrite')->with('base')->willReturn(
-            $this->directoryWriteMock
-        );
 
         // 7. $fileHelper
-        $this->fileHelperMock = $this->getMock('\Magento\Downloadable\Helper\File', null, [], '', false);
-
+        $this->uploaderHelper = $this->getMock(
+            '\Magento\DownloadableImportExport\Helper\Uploader',
+            ['getUploader'],
+            [],
+            '',
+            false
+        );
+        $this->uploaderHelper->expects($this->any())->method('getUploader')->willReturn($this->uploaderMock);
+        $this->downloadableHelper = $this->getMock(
+            '\Magento\DownloadableImportExport\Helper\Data',
+            ['prepareDataForSave'],
+            [],
+            '',
+            false
+        );
+        $this->downloadableHelper->expects($this->any())->method('prepareDataForSave')->willReturn([]);
         $this->downloadableModelMock = $objectManager->getObject(
             '\Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable',
             [
@@ -223,9 +222,8 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
                 'prodAttrColFac' => $this->prodAttrColFacMock,
                 'resource' => $this->resourceMock,
                 'params' => $this->paramsArray,
-                'uploaderFactory' => $this->uploaderFactoryMock,
-                'filesystem' => $this->filesystemMock,
-                'fileHelper' => $this->fileHelperMock
+                'uploaderHelper' => $this->uploaderHelper,
+                'downloadableHelper' => $this->downloadableHelper
             ]
         );
     }
@@ -662,46 +660,10 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
         $this->entityModelMock->expects($this->at(1))->method('getNextBunch')->will($this->returnValue($bunch));
         $this->entityModelMock->expects($this->at(2))->method('getNextBunch')->will($this->returnValue(null));
         $this->entityModelMock->expects($this->any())->method('isRowAllowedToImport')->willReturn($allowImport);
-
+        $exception = new \Magento\Framework\Exception\LocalizedException(new \Magento\Framework\Phrase('Error'));
         $this->setExpectedException('\Magento\Framework\Exception\LocalizedException');
         $this->setExpectedException('\Exception');
-        $this->uploaderMock->expects($this->any())->method('setTmpDir')->willReturn(false);
-
-        $this->downloadableModelMock->saveData();
-    }
-
-    /**
-     * @dataProvider dataForUploaderDir
-     */
-    public function testSetDestDirFalse($newSku, $bunch, $allowImport)
-    {
-        $this->entityModelMock->expects($this->once())->method('getNewSku')->will($this->returnValue($newSku));
-        $this->entityModelMock->expects($this->at(1))->method('getNextBunch')->will($this->returnValue($bunch));
-        $this->entityModelMock->expects($this->at(2))->method('getNextBunch')->will($this->returnValue(null));
-        $this->entityModelMock->expects($this->any())->method('isRowAllowedToImport')->willReturn($allowImport);
-
-        $this->setExpectedException('\Magento\Framework\Exception\LocalizedException');
-        $this->setExpectedException('\Exception');
-        $this->uploaderMock->expects($this->any())->method('setTmpDir')->willReturn(true);
-        $this->uploaderMock->expects($this->any())->method('setDestDir')->with('pub/media/')->willReturn(false);
-
-        $this->downloadableModelMock->saveData();
-    }
-
-    /**
-     * @dataProvider dataForUploaderDir
-     */
-    public function testDirWithoutPermissions($newSku, $bunch, $allowImport)
-    {
-        $this->entityModelMock->expects($this->once())->method('getNewSku')->will($this->returnValue($newSku));
-        $this->entityModelMock->expects($this->at(1))->method('getNextBunch')->will($this->returnValue($bunch));
-        $this->entityModelMock->expects($this->at(2))->method('getNextBunch')->will($this->returnValue(null));
-        $this->entityModelMock->expects($this->any())->method('isRowAllowedToImport')->willReturn($allowImport);
-
-        $this->setPropertyValue($this->downloadableModelMock, 'parameters', ['import_images_file_dir' => 'some_dir']);
-        $this->setExpectedException('\Magento\Framework\Exception\LocalizedException');
-        $this->setExpectedException('\Exception');
-        $this->uploaderMock->expects($this->any())->method('setTmpDir')->willReturn(false);
+        $this->uploaderMock->expects($this->any())->method('move')->will($this->throwException($exception));
 
         $this->downloadableModelMock->saveData();
     }
