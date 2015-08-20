@@ -59,12 +59,12 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
     protected $_dataFactory;
 
     /**
-     * @var CustomerFactory
+     * @var \Magento\CustomerImportExport\Model\Import\CustomerFactory
      */
     protected $_customerFactory;
 
     /**
-     * @var AddressFactory
+     * @var \Magento\CustomerImportExport\Model\Import\AddressFactory
      */
     protected $_addressFactory;
 
@@ -180,10 +180,10 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
             $this->_importFactory,
             $this->_resourceHelper,
             $this->_resource,
+            $this->errorAggregator,
             $this->_dataFactory,
             $this->_customerFactory,
             $this->_addressFactory,
-            $this->errorAggregator,
             $data
         );
     }
