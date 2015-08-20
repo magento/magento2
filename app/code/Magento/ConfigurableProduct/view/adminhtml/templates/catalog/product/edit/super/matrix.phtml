@@ -236,10 +236,11 @@ if ($variations) {
                         <input type="hidden" name="associated_product_ids[]" data-bind="value: variation.productId" data-column="entity_id"/>
 
                         <div class="action-select-wrap" data-bind="
-                            css : {
-                                '_active' : $parent.opened() === $index()
-                            },
-                            outerClick: $parent.closeList.bind($parent, $index())">
+                                css : {
+                                    '_active' : $parent.opened() === $index()
+                                },
+                                outerClick: $parent.closeList.bind($parent, $index())"
+                        >
                             <button class="action-select" data-bind="click: $parent.toggleList.bind($parent, $index())">
                                 <span data-bind="i18n: 'Select'"></span>
                             </button>
@@ -248,7 +249,7 @@ if ($variations) {
                                     <a class="action-menu-item"
                                        data-bind="
                                             attr: {'data-attributes': variation.attribute},
-                                            click: jQuery('#associated-products-container').trigger('openModal')
+                                            click: $parent.showGrid.bind($parent, $index())
                                         "
                                        data-action="choose"
                                        href="#">
@@ -257,8 +258,9 @@ if ($variations) {
                                 </li>
                                 <li>
                                     <a class="action-menu-item" data-bind="
-                                    i18n: variation.status == 1 ? 'Disable Product' : 'Enable Product',
-                                    click: $parent.toggleProduct.bind($parent, $index())"></a>
+                                        i18n: variation.status == 1 ? 'Disable Product' : 'Enable Product',
+                                        click: $parent.toggleProduct.bind($parent, $index())">
+                                    </a>
                                 </li>
                                 <li>
                                     <a class="action-menu-item" data-bind="click: $parent.removeProduct.bind($parent, $index())">

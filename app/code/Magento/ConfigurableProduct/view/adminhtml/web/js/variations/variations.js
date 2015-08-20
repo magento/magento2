@@ -16,7 +16,10 @@ define([
             opened: false,
             attributes: [],
             productMatrix: [],
-            productAttributesMap: null
+            productAttributesMap: null,
+            modules: {
+                gridProvider: '${ "configurable_associated_product_listing.product_listing_data_source" }'
+            }
         },
         variations: [],
         productAttributes: [],
@@ -91,6 +94,9 @@ define([
         },
         removeProduct: function (rowIndex) {
             this.productMatrix.splice(rowIndex, 1);
+        },
+        showGrid: function (rowIndex) {
+            jQuery('#associated-products-container').trigger('openModal');
         },
         toggleProduct: function (rowIndex) {
             var productChanged = {};
