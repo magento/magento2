@@ -11,6 +11,7 @@ use Magento\Catalog\Pricing\Price;
 use Magento\Framework\Pricing\Price\AbstractPrice;
 use Magento\Framework\Pricing\Object\SaleableInterface;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
+use Magento\Framework\Pricing\Amount\AmountInterface;
 
 /**
  * Class OptionPrice
@@ -110,22 +111,6 @@ class CustomOptionPrice extends AbstractPrice implements CustomOptionPriceInterf
         return $optionValues;
     }
 
-    /**
-     * Get Price Amount object
-     *
-     * @return AmountInterface
-     */
-    public function getAmount()
-    {
-        if (null === $this->amount) {
-            $exclude = null;
-            if ($this->getProduct()->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
-                $exclude = $this->excludeAdjustment;
-            }
-            $this->amount = $this->calculator->getAmount($this->getValue(), $this->getProduct(), $exclude);
-        }
-        return $this->amount;
-    }
     /**
      * @param float $amount
      * @param null|bool|string $exclude
