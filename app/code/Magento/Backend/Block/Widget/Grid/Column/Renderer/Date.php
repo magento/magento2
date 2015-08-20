@@ -5,6 +5,8 @@
  */
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
+use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
+
 /**
  * Backend grid item renderer date
  */
@@ -23,12 +25,22 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
     protected static $_format = null;
 
     /**
+     * @var DateTimeFormatterInterface
+     */
+    protected $dateTimeFormatter;
+
+    /**
      * @param \Magento\Backend\Block\Context $context
+     * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param array $data
      */
-    public function __construct(\Magento\Backend\Block\Context $context, array $data = [])
-    {
+    public function __construct(
+        \Magento\Backend\Block\Context $context,
+        DateTimeFormatterInterface $dateTimeFormatter,
+        array $data = []
+    ) {
         parent::__construct($context, $data);
+        $this->dateTimeFormatter = $dateTimeFormatter;
     }
 
     /**
@@ -63,8 +75,10 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
     public function render(\Magento\Framework\DataObject $row)
     {
         if ($data = $row->getData($this->getColumn()->getIndex())) {
-            $format = $this->_getFormat();
-            return \IntlDateFormatter::formatObject($this->_localeDate->date(new \DateTime($data)), $format);
+            return $this->dateTimeFormatter->formatObject(
+                $this->_localeDate->date(new \DateTime($data)),
+                $this->_getFormat()
+            );
         }
         return $this->getColumn()->getDefault();
     }
