@@ -9,11 +9,11 @@ define([
 
     return Abstract.extend({
         /**
-         * Converts the result of parent 'getInitialValue' call to boolean
+         * Converts provided value to boolean.
          *
-         * @return {Boolean}
+         * @returns {Boolean}
          */
-        getInitialValue: function () {
+        normalizeData: function () {
             return !!+this._super();
         },
 
@@ -21,7 +21,6 @@ define([
          * Calls 'store' method of parent, if value is defined and instance's
          *     'unique' property set to true, calls 'setUnique' method
          *
-         * @param  {*} value
          * @return {Object} - reference to instance
          */
         onUpdate: function () {

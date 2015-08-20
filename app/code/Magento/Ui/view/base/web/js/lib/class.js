@@ -5,7 +5,7 @@
 define([
     'underscore',
     'mageUtils',
-    'mage/utils/super'
+    'mage/utils/wrapper'
 ], function (_, utils, wrapper) {
     'use strict';
 
@@ -83,7 +83,7 @@ define([
                 ignored     = config.ignoreTmpls || {},
                 cached      = utils.omit(config, ignored);
 
-            config = utils.template(config, this);
+            config = utils.template(config, this, false, true);
 
             _.each(cached, function (value, key) {
                 utils.nested(config, key, value);

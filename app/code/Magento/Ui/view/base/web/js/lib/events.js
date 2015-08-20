@@ -4,37 +4,72 @@
  */
 define([
     'ko',
-    'underscore'
+    'underscore',
+    'es6-collections'
 ], function (ko, _) {
     'use strict';
 
-    function addHandler(obj, events, ns, callback, name) {
+    var eventsMap = new WeakMap();
+
+    /**
+     * Returns events map or a specific event
+     * data associated with a provided object.
+     *
+     * @param {Object} obj - Key in the events weakmap.
+     * @param {String} [name] - Name of the event.
+     * @returns {Map|Array|Boolean}
+     */
+    function getEvents(obj, name) {
+        var events = eventsMap.get(obj);
+
+        if (!events) {
+            return false;
+        }
+
+        return name ? events.get(name) : events;
+    }
+
+    /**
+     * Adds new event handler.
+     *
+     * @param {Object} obj - Key in the events weakmap.
+     * @param {String} ns - Callback namespace.
+     * @param {Fucntion} callback - Event callback.
+     * @param {String} name - Name of the event.
+     */
+    function addHandler(obj, ns, callback, name) {
+        var events = getEvents(obj),
+            data;
+
         if (ko.isObservable(obj[name])) {
             obj[name].subscribe(callback);
 
             return;
         }
 
-        (events[name] = events[name] || []).push({
-            callback: callback,
-            ns: ns
-        });
-    }
+        if (!events) {
+            events = new Map();
 
-    function getEvents(obj, name) {
-        var events = obj._events = obj._events || {};
-
-        return name ? events[name] : events;
-    }
-
-    function keepHandler(ns, handler) {
-        if (!ns) {
-            return false;
+            eventsMap.set(obj, events);
         }
 
-        return handler.ns !== ns;
+        data = {
+            callback: callback,
+            ns: ns
+        };
+
+        events.has(name) ?
+            events.get(name).push(data) :
+            events.set(name, [data]);
     }
 
+    /**
+     * Invokes provided callbacks with a specified arguments.
+     *
+     * @param {Array} handlers
+     * @param {Array} args
+     * @returns {Boolean}
+     */
     function trigger(handlers, args) {
         var bubble = true,
             callback;
@@ -58,14 +93,13 @@ define([
          * @return {Object} reference to this
          */
         on: function (events, callback, ns) {
-            var storage = getEvents(this),
-                iterator;
+            var iterator;
 
             if (arguments.length < 2) {
                 ns = callback;
             }
 
-            iterator = addHandler.bind(null, this, storage, ns);
+            iterator = addHandler.bind(null, this, ns);
 
             _.isObject(events) ?
                 _.each(events, iterator) :
@@ -80,15 +114,20 @@ define([
          * @return {Object} reference to this
          */
         off: function (ns) {
-            var storage = getEvents(this),
-                filter = keepHandler.bind(null, ns);
+            var storage = getEvents(this);
 
-            _.each(storage, function (handlers, name) {
-                handlers = handlers.filter(filter);
+            if (!storage) {
+                return this;
+            }
+
+            storage.forEach(function (handlers, name) {
+                handlers = handlers.filter(function (handler) {
+                    return !ns ? false : handler.ns !== ns;
+                });
 
                 handlers.length ?
-                    storage[name] = handlers :
-                    delete storage[name];
+                    storage.set(name, handlers) :
+                    storage.delete(name);
             });
 
             return this;
@@ -103,7 +142,7 @@ define([
             var handlers = getEvents(this, name),
                 args = _.toArray(arguments).slice(1);
 
-            if (_.isUndefined(handlers)) {
+            if (!handlers) {
                 return true;
             }
 

@@ -177,16 +177,19 @@ define([
         },
 
         /**
-         * Calls 'getInitialValue' of parent and if the result of it is not empty
-         * string, returs it, else returnes caption or first found option's value
+         * Matches specfied value with an existing options
+         * or, if value is not specified, returns value of the first option.
          *
-         * @returns {Number|String}
+         * @returns {*}
          */
-        getInitialValue: function () {
-            var value = this._super();
+        normalizeData: function () {
+            var value = this._super(),
+                option;
 
             if (value !== '') {
-                return value;
+                option = this.getOption(value);
+
+                return option && option.value;
             }
 
             if (!this.caption) {
@@ -260,6 +263,10 @@ define([
             this.preview(preview);
 
             return preview;
+        },
+
+        getOption: function (value) {
+            return this.indexedOptions[value];
         }
     });
 });
