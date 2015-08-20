@@ -54,11 +54,6 @@ class LayoutProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testProcess()
     {
-        $customerId = 100;
-        $city = 'New York';
-        $countryId = 'US';
-        $regionId = 'NY';
-        $postcode = '04086';
         $countries = [];
         $regions = [];
 
