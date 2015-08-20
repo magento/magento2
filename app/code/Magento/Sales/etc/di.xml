@@ -60,7 +60,7 @@
     <preference for="Magento\Sales\Api\TransactionRepositoryInterface" type="Magento\Sales\Model\Order\Payment\Transaction\Repository"/>
     <preference for="Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface" type="Magento\Sales\Model\Order\Payment\Transaction\Manager"/>
     <preference for="Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface" type="Magento\Sales\Model\Order\Payment\Transaction\Builder"/>
-    <preference for="Magento\Sales\Api\OrderCustomerManagementInterface" type="Magento\Sales\Model\Order\Customer\Management" />
+    <preference for="Magento\Sales\Api\OrderCustomerManagementInterface" type="Magento\Sales\Model\Order\CustomerManagement" />
     <preference for="Magento\Sales\Model\Spi\CreditmemoCommentResourceInterface" type="Magento\Sales\Model\Resource\Order\Creditmemo\Comment"/>
     <preference for="Magento\Sales\Model\Spi\CreditmemoItemResourceInterface" type="Magento\Sales\Model\Resource\Order\Creditmemo\Item"/>
     <preference for="Magento\Sales\Model\Spi\CreditmemoResourceInterface" type="Magento\Sales\Model\Resource\Order\Creditmemo"/>
@@ -288,6 +288,11 @@
                     <item name="origin_column" xsi:type="string">billing_address_id</item>
                     <item name="target_column" xsi:type="string">entity_id</item>
                 </item>
+                <item name="sales_order_payment" xsi:type="array">
+                    <item name="table" xsi:type="string">sales_order_payment</item>
+                    <item name="origin_column" xsi:type="string">entity_id</item>
+                    <item name="target_column" xsi:type="string">parent_id</item>
+                </item>
             </argument>
             <argument name="columns" xsi:type="array">
                 <item name="entity_id" xsi:type="string">sales_order.entity_id</item>
@@ -314,7 +319,7 @@
                 <item name="subtotal" xsi:type="string">sales_order.base_subtotal</item>
                 <item name="shipping_and_handling" xsi:type="string">sales_order.base_shipping_amount</item>
                 <item name="customer_name" xsi:type="object">CustomerNameAggregator</item>
-                <item name="payment_method" xsi:type="object">PaymentMethodSubSelect</item>
+                <item name="payment_method" xsi:type="string">sales_order_payment.method</item>
                 <item name="total_refunded" xsi:type="string">sales_order.total_refunded</item>
             </argument>
         </arguments>
@@ -340,6 +345,11 @@
                     <item name="origin_column" xsi:type="string">billing_address_id</item>
                     <item name="target_column" xsi:type="string">entity_id</item>
                 </item>
+                <item name="sales_order_payment" xsi:type="array">
+                    <item name="table" xsi:type="string">sales_order_payment</item>
+                    <item name="origin_column" xsi:type="string">order_id</item>
+                    <item name="target_column" xsi:type="string">parent_id</item>
+                </item>
             </argument>
             <argument name="columns" xsi:type="array">
                 <item name="entity_id" xsi:type="string">sales_shipment.entity_id</item>
@@ -357,7 +367,7 @@
                 <item name="shipping_name" xsi:type="object">ShippingNameAggregator</item>
                 <item name="customer_email" xsi:type="string">sales_order.customer_email</item>
                 <item name="customer_group_id" xsi:type="string">sales_order.customer_group_id</item>
-                <item name="payment_method" xsi:type="object">PaymentMethodSubSelect</item>
+                <item name="payment_method" xsi:type="string">sales_order_payment.method</item>
                 <item name="created_at" xsi:type="string">sales_shipment.created_at</item>
                 <item name="updated_at" xsi:type="string">sales_shipment.updated_at</item>
                 <item name="order_id" xsi:type="string">sales_shipment.order_id</item>
@@ -386,6 +396,11 @@
                     <item name="origin_column" xsi:type="string">order_id</item>
                     <item name="target_column" xsi:type="string">entity_id</item>
                 </item>
+                <item name="sales_order_payment" xsi:type="array">
+                    <item name="table" xsi:type="string">sales_order_payment</item>
+                    <item name="origin_column" xsi:type="string">order_id</item>
+                    <item name="target_column" xsi:type="string">parent_id</item>
+                </item>
             </argument>
             <argument name="columns" xsi:type="array">
                 <item name="entity_id" xsi:type="string">sales_creditmemo.entity_id</item>
@@ -405,7 +420,7 @@
                 <item name="customer_name" xsi:type="object">CustomerNameAggregator</item>
                 <item name="customer_email" xsi:type="string">sales_order.customer_email</item>
                 <item name="customer_group_id" xsi:type="string">sales_order.customer_group_id</item>
-                <item name="payment_method" xsi:type="object">PaymentMethodSubSelect</item>
+                <item name="payment_method" xsi:type="string">sales_order_payment.method</item>
                 <item name="shipping_information" xsi:type="string">sales_order.shipping_description</item>
                 <item name="subtotal" xsi:type="string">sales_creditmemo.subtotal</item>
                 <item name="shipping_and_handling" xsi:type="string">sales_creditmemo.shipping_amount</item>
@@ -436,6 +451,11 @@
                     <item name="origin_column" xsi:type="string">billing_address_id</item>
                     <item name="target_column" xsi:type="string">entity_id</item>
                 </item>
+                <item name="sales_order_payment" xsi:type="array">
+                    <item name="table" xsi:type="string">sales_order_payment</item>
+                    <item name="origin_column" xsi:type="string">order_id</item>
+                    <item name="target_column" xsi:type="string">parent_id</item>
+                </item>
             </argument>
             <argument name="columns" xsi:type="array">
                 <item name="entity_id" xsi:type="string">sales_invoice.entity_id</item>
@@ -449,7 +469,7 @@
                 <item name="customer_name" xsi:type="object">CustomerNameAggregator</item>
                 <item name="customer_email" xsi:type="string">sales_order.customer_email</item>
                 <item name="customer_group_id" xsi:type="string">sales_order.customer_group_id</item>
-                <item name="payment_method" xsi:type="object">PaymentMethodSubSelect</item>
+                <item name="payment_method" xsi:type="string">sales_order_payment.method</item>
                 <item name="store_currency_code" xsi:type="string">sales_invoice.store_currency_code</item>
                 <item name="order_currency_code" xsi:type="string">sales_invoice.order_currency_code</item>
                 <item name="base_currency_code" xsi:type="string">sales_invoice.base_currency_code</item>
