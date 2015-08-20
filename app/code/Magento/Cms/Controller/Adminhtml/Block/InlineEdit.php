@@ -76,6 +76,6 @@ class InlineEdit extends \Magento\Backend\App\Action
      */
     protected function getErrorWithBlockTitle(BlockInterface $block, $errorText)
     {
-        return '[Page: ' . $block->getTitle() . '] ' . $errorText;
+        return '[Block: ' . $block->getTitle() . '] ' . $errorText;
     }
 }
