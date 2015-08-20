@@ -130,7 +130,7 @@ abstract class ImportResult extends Import
             $writeOnlyErrorItems = false;
         }
         $fileName = $this->reportProcessor->createReport($sourceFile, $errorAggregator, $writeOnlyErrorItems);
-        $this->historyModel->setErrorFile($fileName);
+        $this->historyModel->addErrorReportFile($fileName);
         return $fileName;
     }
 
