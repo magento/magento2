@@ -41,10 +41,15 @@ define([
                 selectShippingAddress(address);
             }
             this.resolveShippingAddress(true);
-            if (quote.isVirtual && checkoutData.getBillingAddressFromData()) {
-                address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getBillingAddressFromData());
-                selectBillingAddress(address);
+            if (quote.isVirtual) {
+               if  (checkoutData.getBillingAddressFromData()) {
+                    address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getBillingAddressFromData());
+                    selectBillingAddress(address);
+                } else {
+                   this.resolveBillingAddress();
+               }
             }
+
         },
 
         resolveShippingAddress: function () {
@@ -163,11 +168,15 @@ define([
                         }
                     });
                 }
-            } else if (
-                shippingAddress
+            } else {
+                this.applyBillingAddress()
+            }
+        },
+        applyBillingAddress: function () {
+            var shippingAddress = quote.shippingAddress();
+            if (shippingAddress
                 && shippingAddress.canUseForBilling()
-                && (shippingAddress.isDefaultShipping() || !quote.isVirtual())
-            ) {
+                && (shippingAddress.isDefaultShipping() || !quote.isVirtual())) {
                 //set billing address same as shipping by default if it is not empty
                 selectBillingAddress(quote.shippingAddress());
             }

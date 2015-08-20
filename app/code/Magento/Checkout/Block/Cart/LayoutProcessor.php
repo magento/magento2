@@ -23,21 +23,6 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     protected $regionCollection;
 
     /**
-     * @var \Magento\Customer\Model\Session
-     */
-    protected $customerSession;
-
-    /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface
-     */
-    protected $customerRepository;
-
-    /**
-     * @var \Magento\Customer\Api\Data\CustomerInterface
-     */
-    protected $customer;
-
-    /**
      * @var \Magento\Customer\Api\Data\AddressInterface
      */
     protected $defaultShippingAddress = null;
@@ -46,36 +31,15 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * @param \Magento\Checkout\Block\Checkout\AttributeMerger $merger
      * @param \Magento\Directory\Model\Resource\Country\Collection $countryCollection
      * @param \Magento\Directory\Model\Resource\Region\Collection $regionCollection
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      */
     public function __construct(
         \Magento\Checkout\Block\Checkout\AttributeMerger $merger,
         \Magento\Directory\Model\Resource\Country\Collection $countryCollection,
-        \Magento\Directory\Model\Resource\Region\Collection $regionCollection,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
+        \Magento\Directory\Model\Resource\Region\Collection $regionCollection
     ) {
         $this->merger = $merger;
         $this->countryCollection = $countryCollection;
         $this->regionCollection = $regionCollection;
-        $this->customerSession = $customerSession;
-        $this->customerRepository = $customerRepository;
-    }
-
-    /**
-     * @return \Magento\Customer\Api\Data\CustomerInterface|null
-     */
-    protected function getCustomer()
-    {
-        if (!$this->customer) {
-            if ($this->customerSession->isLoggedIn()) {
-                $this->customer = $this->customerRepository->getById($this->customerSession->getCustomerId());
-            } else {
-                return null;
-            }
-        }
-        return $this->customer;
     }
 
     /**
@@ -99,25 +63,6 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
     }
 
     /**
-     * @return \Magento\Customer\Api\Data\AddressInterface|null
-     */
-    protected function getDefaultShippingAddress()
-    {
-        if ($this->defaultShippingAddress == null) {
-            $customer = $this->getCustomer();
-            if ($customer && $customer->getAddresses()) {
-                foreach ($customer->getAddresses() as $address) {
-                    if ($address->isDefaultShipping()) {
-                        $this->defaultShippingAddress = $address;
-                        return $this->defaultShippingAddress;
-                    }
-                }
-            }
-        }
-        return $this->defaultShippingAddress;
-    }
-
-    /**
      * Process js Layout of block
      *
      * @param array $jsLayout
@@ -126,33 +71,32 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      */
     public function process($jsLayout)
     {
-        $defaultAddress = $this->getDefaultShippingAddress();
         $elements = [
             'city' => [
                 'visible' => $this->isCityActive(),
                 'formElement' => 'input',
                 'label' => __('City'),
-                'value' => $defaultAddress ? $defaultAddress->getCity() : null
+                'value' =>  null
             ],
             'country_id' => [
                 'visible' => true,
                 'formElement' => 'select',
                 'label' => __('Country'),
                 'options' => $this->countryCollection->load()->toOptionArray(),
-                'value' => $defaultAddress ? $defaultAddress->getCountryId() : null
+                'value' => null
             ],
             'region_id' => [
                 'visible' => true,
                 'formElement' => 'select',
                 'label' => __('State/Province'),
                 'options' => $this->regionCollection->load()->toOptionArray(),
-                'value' => $defaultAddress ? $defaultAddress->getRegionId() : null
+                'value' => null
             ],
             'postcode' => [
                 'visible' => true,
                 'formElement' => 'input',
                 'label' => __('Zip/Postal Code'),
-                'value' => $defaultAddress ? $defaultAddress->getPostcode() : null
+                'value' => null
             ]
         ];
 
