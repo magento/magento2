@@ -55,10 +55,14 @@ class ExportViewedExcelTest extends \Magento\Reports\Test\Unit\Controller\Adminh
 
         $this->contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->objectManagerMock);
 
-        $this->exportViewedExcel = new ExportViewedExcel(
-            $this->contextMock,
-            $this->fileFactoryMock,
-            $this->dateMock
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->exportViewedExcel = $objectManager->getObject(
+            'Magento\Reports\Controller\Adminhtml\Report\Product\ExportViewedExcel',
+            [
+                'context' => $this->contextMock,
+                'fileFactory' => $this->fileFactoryMock,
+                'dateFilter' => $this->dateMock,
+            ]
         );
     }
 
