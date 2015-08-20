@@ -7,68 +7,95 @@ define([
     'jquery',
     'ko',
     'underscore',
-    'uiRegistry'
-], function (Component, $, ko, _, uiRegistry) {
+    'mage/translate'
+], function (Component, $, ko, _) {
     'use strict';
 
-    var viewModel;
-    viewModel = Component.extend({
-        sections: ko.observableArray([]),
-        attributes: ko.observableArray([]),
-        grid: ko.observableArray([]),
-        attributesName: ko.observableArray([]),
-        nextLabelText: $.mage.__('Generate Products'),
-        variationsComponent: uiRegistry.async('configurableVariations'),
-        variations: [],
-        /**
-         * @param attributes example [['b1', 'b2'],['a1', 'a2', 'a3'],['c1', 'c2', 'c3'],['d1']]
-         * @returns {*} example [['b1','a1','c1','d1'],['b1','a1','c2','d1']...]
-         */
-        generateVariation: function (attributes) {
-            return _.reduce(attributes, function(matrix, attribute) {
-                var tmp = [];
-                _.each(matrix, function(variations){
-                    _.each(attribute.chosen, function(option){
-                        option.attribute_code = attribute.code;
-                        option.attribute_label = attribute.label;
-                        tmp.push(_.union(variations, [option]));
-                    });
-                });
-                if (!tmp.length) {
-                    return _.map(attribute.chosen, function(option){
-                        option.attribute_code = attribute.code;
-                        option.attribute_label = attribute.label;
-                        return [option];
-                    });
-                }
-                return tmp;
-            }, []);
+    return Component.extend({
+        defaults: {
+            modules: {
+                variationsComponent: '${ $.variationsComponent }'
+            },
+            notificationMessage: {
+                text: null,
+                error: null
+            },
+            gridExisting: [],
+            gridNew: [],
+            gridDeleted: [],
+            attributes: [],
+            attributesName: [],
+            sections: [],
+            gridTemplate: 'Magento_ConfigurableProduct/variations/steps/summary-grid'
         },
+        initObservable: function () {
+            this._super().observe('gridExisting gridNew gridDeleted attributes attributesName sections');
+
+            return this;
+        },
+        nextLabelText: $.mage.__('Generate Products'),
+        variations: [],
         generateGrid: function (variations, getSectionValue) {
-            //['a1','b1','c1','d1'] option = {label:'a1', value:'', section:{img:'',inv:'',pri:''}}
             var productName = this.variationsComponent().getProductValue('name');
             var productPrice = this.variationsComponent().getProductValue('price');
+            var variationsKeys = [];
             this.variations = [];
-            return _.map(variations, function (options) {
-                var variation = [], images, sku, quantity, price;
+
+            _.each(variations, function (options) {
+                var images, sku, quantity, price;
                 images = getSectionValue('images', options);
-                variation.push(images);
                 sku = productName + _.reduce(options, function (memo, option) {
                     return memo + '-' + option.label;
                 }, '');
-                variation.push(sku);
                 quantity = getSectionValue('quantity', options);
-                variation.push(quantity);
-                //attributes
-                _.each(options, function (option) {
-                    variation.push(option.label);
-                });
                 price = getSectionValue('price', options);
                 price = price || productPrice;
-                variation.push('$ ' + price);
-                this.variations.push({options: options, images: images, sku: sku, quantity: quantity, price: price});
-                return variation;
+                var productId = this.variationsComponent().getProductIdByOptions(options);
+                if (productId && !images.file) {
+                    var product = _.findWhere(this.variationsComponent().variations, {product_id: productId});
+                    images = product.images;
+                }
+                var variation = {
+                    options: options,
+                    images: images,
+                    sku: sku,
+                    quantity: quantity,
+                    price: price,
+                    product_id: productId,
+                    editable: true
+                };
+                this.variations.push(variation);
+                if (productId) {
+                    this.gridExisting.push(this.prepareRowForGrid(variation));
+                } else {
+                    this.gridNew.push(this.prepareRowForGrid(variation));
+                }
+                variationsKeys.push(this.variationsComponent().getVariationKey(options));
             }, this);
+
+            _.each(_.omit(this.variationsComponent().productAttributesMap, variationsKeys), function (productId) {
+                this.gridDeleted.push(this.prepareRowForGrid(
+                    _.findWhere(this.variationsComponent().variations, {product_id: productId})
+                ));
+            }.bind(this));
+        },
+        prepareRowForGrid: function(variation) {
+            var row = [];
+            row.push(_.extend({images: []}, variation.images));
+            row.push(variation.sku);
+            row.push(variation.quantity);
+            _.each(variation.options, function (option) {
+                row.push(option.label);
+            });
+            row.push('$ ' + variation.price);
+
+            return row;
+        },
+        getGridTemplate: function() {
+            return this.gridTemplate;
+        },
+        getGridId: function() {
+            return _.uniqueId('grid_');
         },
         render: function (wizard) {
             this.wizard = wizard;
@@ -80,7 +107,10 @@ define([
                 this.attributesName.splice(3 + index, 0, attribute.label);
             }, this);
 
-            this.grid(this.generateGrid(this.generateVariation(this.attributes()), wizard.data.sectionHelper));
+            this.gridNew([]);
+            this.gridExisting([]);
+            this.gridDeleted([]);
+            this.generateGrid(wizard.data.variations, wizard.data.sectionHelper);
         },
         force: function (wizard) {
             this.variationsComponent().render(this.variations, this.attributes());
@@ -89,5 +119,4 @@ define([
         back: function (wizard) {
         }
     });
-    return viewModel;
 });
