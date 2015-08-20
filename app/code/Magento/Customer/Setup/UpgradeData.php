@@ -55,11 +55,11 @@ class UpgradeData implements UpgradeDataInterface
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
+        $setup->startSetup();
+
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
             /** @var CustomerSetup $customerSetup */
             $customerSetup = $this->customerSetupFactory->create(['setup' => $setup]);
-
-            $setup->startSetup();
 
             $entityAttributes = [
                 'customer' => [
