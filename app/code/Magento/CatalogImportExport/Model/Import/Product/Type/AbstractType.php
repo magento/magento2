@@ -484,10 +484,16 @@ abstract class AbstractType
         foreach ($this->_getProductAttributes($rowData) as $attrCode => $attrParams) {
             if (!$attrParams['is_static']) {
                 if (isset($rowData[$attrCode]) && strlen($rowData[$attrCode])) {
-                    $resultAttrs[$attrCode] = 'select' == $attrParams['type'] ||
-                        'multiselect' == $attrParams['type'] ? $attrParams['options'][strtolower(
-                            $rowData[$attrCode]
-                        )] : $rowData[$attrCode];
+                    $resultAttrs[$attrCode] = 'select' == $attrParams['type'] ? $attrParams['options'][strtolower(
+                        $rowData[$attrCode]
+                    )] : $rowData[$attrCode];
+                    if ('multiselect' == $attrParams['type']) {
+                        $resultAttrs[$attrCode] = [];
+                        foreach (explode('|', $rowData[$attrCode]) as $value) {
+                            $resultAttrs[$attrCode][] = $attrParams['options'][strtolower($value)];
+                        }
+                        $resultAttrs[$attrCode] = implode(',', $resultAttrs[$attrCode]);
+                    }
                 } elseif (array_key_exists($attrCode, $rowData)) {
                     $resultAttrs[$attrCode] = $rowData[$attrCode];
                 } elseif ($withDefaultValue && null !== $attrParams['default_value']) {

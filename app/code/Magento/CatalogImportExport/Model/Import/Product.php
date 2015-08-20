@@ -1612,16 +1612,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         }
                     }
                     foreach ($storeIds as $storeId) {
-                        if ('multiselect' == $attribute->getFrontendInput()) {
-                            if (!isset($attributes[$attrTable][$rowSku][$attrId][$storeId])) {
-                                $attributes[$attrTable][$rowSku][$attrId][$storeId] = '';
-                            } else {
-                                $attributes[$attrTable][$rowSku][$attrId][$storeId] .= ',';
-                            }
-                            $attributes[$attrTable][$rowSku][$attrId][$storeId] .= $attrValue;
-                        } else {
-                            $attributes[$attrTable][$rowSku][$attrId][$storeId] = $attrValue;
-                        }
+                        $attributes[$attrTable][$rowSku][$attrId][$storeId] = $attrValue;
                     }
                     // restore 'backend_model' to avoid 'default' setting
                     $attribute->setBackendModel($backModel);
