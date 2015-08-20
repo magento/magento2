@@ -42,4 +42,9 @@
             <argument name="excludeAdjustment" xsi:type="const">Magento\Weee\Pricing\Adjustment::ADJUSTMENT_CODE</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Pricing\Price\CustomOptionPrice">
+        <arguments>
+            <argument name="excludeAdjustment" xsi:type="const">Magento\Weee\Pricing\Adjustment::ADJUSTMENT_CODE</argument>
+        </arguments>
+    </type>
 </config>
