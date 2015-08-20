@@ -32,9 +32,14 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
     protected $storeResolver;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Product|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogImportExport\Model\Import\Product|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $importProduct;
+
+    /**
+     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $productModel;
 
     /**
      * @var AdvancedPricing\Validator |\PHPUnit_Framework_MockObject_MockObject
@@ -203,6 +208,13 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         );
         $this->importProduct = $this->getMock(
             '\Magento\CatalogImportExport\Model\Import\Product',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->productModel = $this->getMock(
+            '\Magento\Catalog\Model\Product',
             [],
             [],
             '',
@@ -823,21 +835,23 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
             '\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing',
             $methods,
             [
-                $this->localeDate,
                 $this->jsonHelper,
                 $this->importExportData,
-                $this->resourceHelper,
-                $this->eavConfig,
                 $this->dataSourceModel,
+                $this->eavConfig,
                 $this->resource,
+                $this->resourceHelper,
+                $this->stringObject,
+                $this->errorAggregator,
+                $this->localeDate,
                 $this->resourceFactory,
+                $this->productModel,
                 $this->catalogData,
                 $this->storeResolver,
+                $this->importProduct,
                 $this->validator,
                 $this->websiteValidator,
-                $this->groupPriceValidator,
-                $this->stringObject,
-                $this->errorAggregator
+                $this->groupPriceValidator
             ],
             ''
         );
