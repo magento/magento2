@@ -103,10 +103,10 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
             $importFactory,
             $resourceHelper,
             $resource,
+            $errorAggregator,
             $storeManager,
             $collectionFactory,
             $eavConfig,
-            $errorAggregator,
             $data
         );
 

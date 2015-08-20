@@ -273,17 +273,16 @@ class Address extends AbstractCustomer
             $attributeCollection->addSystemHiddenFilter()->addExcludeHiddenFrontendFilter();
             $data['attribute_collection'] = $attributeCollection;
         }
-        parent::__construct(
-            $string,
+        parent::__construct($string,
             $scopeConfig,
             $importFactory,
             $resourceHelper,
             $resource,
+            $errorAggregator,
             $storeManager,
             $collectionFactory,
             $eavConfig,
             $storageFactory,
-            $errorAggregator,
             $data
         );
 
