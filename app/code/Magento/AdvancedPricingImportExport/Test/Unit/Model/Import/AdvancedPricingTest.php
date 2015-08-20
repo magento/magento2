@@ -847,8 +847,8 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                 $this->resourceFactory,
                 $this->productModel,
                 $this->catalogData,
-                $this->importProduct,
                 $this->storeResolver,
+                $this->importProduct,
                 $this->validator,
                 $this->websiteValidator,
                 $this->groupPriceValidator
