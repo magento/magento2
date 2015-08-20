@@ -71,7 +71,7 @@ class InlineEdit extends \Magento\Backend\App\Action
      * Add block title to error message
      *
      * @param BlockInterface $block
-     * @param $errorText
+     * @param string $errorText
      * @return string
      */
     protected function getErrorWithBlockTitle(BlockInterface $block, $errorText)
