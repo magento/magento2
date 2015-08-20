@@ -27,16 +27,6 @@ class LayoutProcessorTest extends \PHPUnit_Framework_TestCase
      */
     protected $regionCollection;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $customerSession;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $customerRepository;
-
     protected function setUp()
     {
         $this->merger = $this->getMock('\Magento\Checkout\Block\Checkout\AttributeMerger', [], [], '', false);
@@ -54,15 +44,11 @@ class LayoutProcessorTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->customerSession = $this->getMock('\Magento\Customer\Model\Session', [], [], '', false);
-        $this->customerRepository = $this->getMock('\Magento\Customer\Api\CustomerRepositoryInterface');
 
         $this->model = new \Magento\Checkout\Block\Cart\LayoutProcessor(
             $this->merger,
             $this->countryCollection,
-            $this->regionCollection,
-            $this->customerSession,
-            $this->customerRepository
+            $this->regionCollection
         );
     }
 
@@ -85,24 +71,6 @@ class LayoutProcessorTest extends \PHPUnit_Framework_TestCase
         $layoutPointer = &$layout['components']['block-summary']['children']['block-shipping']
         ['children']['address-fieldsets']['children'];
 
-        $this->customerSession->expects($this->once())->method('isLoggedIn')->willReturn(true);
-        $this->customerSession->expects($this->once())->method('getCustomerId')->willReturn($customerId);
-
-        $customerAddressMock = $this->getMock('\Magento\Customer\Api\Data\AddressInterface');
-        $customerAddressMock->expects($this->once())->method('isDefaultShipping')->willReturn(true);
-        $customerAddressMock->expects($this->once())->method('getCity')->willReturn($city);
-        $customerAddressMock->expects($this->once())->method('getCountryId')->willReturn($countryId);
-        $customerAddressMock->expects($this->once())->method('getRegionId')->willReturn($regionId);
-        $customerAddressMock->expects($this->once())->method('getPostcode')->willReturn($postcode);
-
-        $customerMock = $this->getMock('\Magento\Customer\Api\Data\CustomerInterface');
-        $customerMock->expects($this->exactly(2))->method('getAddresses')->willReturn([$customerAddressMock]);
-
-        $this->customerRepository->expects($this->once())
-            ->method('getById')
-            ->with($customerId)
-            ->willReturn($customerMock);
-
         $this->countryCollection->expects($this->once())->method('load')->willReturnSelf();
         $this->countryCollection->expects($this->once())->method('toOptionArray')->willReturn($countries);
 
@@ -120,27 +88,27 @@ class LayoutProcessorTest extends \PHPUnit_Framework_TestCase
                 'visible' => false,
                 'formElement' => 'input',
                 'label' => __('City'),
-                'value' => 'New York'
+                'value' => null
             ],
             'country_id' => [
                 'visible' => 1,
                 'formElement' => 'select',
                 'label' => __('Country'),
                 'options' => [],
-                'value' => 'US'
+                'value' => null
             ],
             'region_id' => [
                 'visible' => 1,
                 'formElement' => 'select',
                 'label' => __('State/Province'),
                 'options' => [],
-                'value' => 'NY'
+                'value' => null
             ],
             'postcode' => [
                 'visible' => 1,
                 'formElement' => 'input',
                 'label' => __('Zip/Postal Code'),
-                'value' => '04086'
+                'value' => null
             ]
         ];
 

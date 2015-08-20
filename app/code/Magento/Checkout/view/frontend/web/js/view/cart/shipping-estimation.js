@@ -44,9 +44,12 @@ define(
                 this._super();
                 registry.async('checkoutProvider')(function (checkoutProvider) {
                     checkoutDataResolver.resolveEstimationAddress();
-                    var address = quote.isVirtual() ? quote.billingAddress() : quote.shippingAddress();
+                    var address = quote.isVirtual() ? quote.billingAddress() : quote.shippingAddress(),
+                        estimatedAddress;
                     if (address) {
-                        var estimatedAddress = addressConverter.quoteAddressToFormAddressData(address);
+                        estimatedAddress = address.isEditable()
+                            ? addressConverter.quoteAddressToFormAddressData(address)
+                            : addressConverter.quoteAddressToFormAddressData(addressConverter.addressToEstimationAddress(address));
                         checkoutProvider.set(
                             'shippingAddress',
                             $.extend({}, checkoutProvider.get('shippingAddress'), estimatedAddress)
