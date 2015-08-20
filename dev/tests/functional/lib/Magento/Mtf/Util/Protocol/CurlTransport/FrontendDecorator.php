@@ -117,7 +117,8 @@ class FrontendDecorator implements CurlInterface
      */
     public function write($url, $params = [], $method = CurlInterface::POST, $headers = [])
     {
-        $this->transport->write($url, http_build_query($params), $method, ['Set-Cookie:' . $this->cookies]);
+        $headers = ['Set-Cookie:' . $this->cookies];
+        $this->transport->write($url, http_build_query($params), $method, $headers);
     }
 
     /**
