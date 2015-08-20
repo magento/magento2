@@ -146,7 +146,7 @@ abstract class AbstractEntity
      *
      * @var bool
      */
-    protected $logInHistory = false;
+    protected $logInHistory = true;
 
     /**
      * Rows which will be skipped during import
