@@ -182,6 +182,7 @@
         <arguments>
             <argument name="collections" xsi:type="array">
                 <item name="customer_listing_data_source" xsi:type="string">Magento\Customer\Model\Resource\Grid\Collection</item>
+                <item name="customer_online_grid_data_source" xsi:type="string">Magento\Customer\Model\Resource\Online\Grid\Collection</item>
             </argument>
         </arguments>
     </type>
@@ -299,13 +300,6 @@
     <type name="Magento\Customer\Model\Indexer\Address\AttributeProvider">
         <arguments>
             <argument name="collection" xsi:type="object" shared="false">Magento\Customer\Model\Resource\Address\Attribute\Collection</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
-        <arguments>
-            <argument name="collections" xsi:type="array">
-                <item name="customer_online_grid_data_source" xsi:type="string">Magento\Customer\Model\Resource\Online\Grid\Collection</item>
-            </argument>
         </arguments>
     </type>
     <type name="Magento\Customer\Model\Resource\Online\Grid\Collection">
