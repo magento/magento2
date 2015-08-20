@@ -443,6 +443,13 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\ImportExport\Model\ImportFactory', [], [], '', false),
             $this->getMock('Magento\ImportExport\Model\Resource\Helper', [], [], '', false),
             $this->getMock('Magento\Framework\App\Resource', [], [], '', false),
+            $this->getMock(
+                'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface',
+                [],
+                [],
+                '',
+                false
+            ),
             $this->_storeManager,
             $this->getMock('Magento\ImportExport\Model\Export\Factory', [], [], '', false),
             $this->getMock('Magento\Eav\Model\Config', [], [], '', false),
@@ -459,13 +466,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Customer\Model\Resource\Address\CollectionFactory', [], [], '', false),
             $this->getMock('Magento\Customer\Model\Resource\Address\Attribute\CollectionFactory', [], [], '', false),
             new \Magento\Framework\Stdlib\DateTime(),
-            $this->getMock(
-                'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface',
-                [],
-                [],
-                '',
-                false
-            ),
             $this->_getModelDependencies()
         );
 
