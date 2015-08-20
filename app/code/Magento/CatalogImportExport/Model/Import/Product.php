@@ -963,20 +963,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
-     * Retrieve message template
-     *
-     * @param string $errorCode
-     * @return null|string
-     */
-    public function retrieveMessageTemplate($errorCode)
-    {
-        if (isset($this->_messageTemplates[$errorCode])) {
-            return $this->_messageTemplates[$errorCode];
-        }
-        return null;
-    }
-
-    /**
      * Set valid attribute set and product type to rows with all scopes
      * to ensure that existing products doesn't changed.
      *

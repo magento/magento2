@@ -54,6 +54,13 @@ abstract class AbstractEntity
     ];
 
     /**
+     * Validation failure message template definitions
+     *
+     * @var array
+     */
+    protected $_messageTemplates = [];
+
+    /**
      * DB connection.
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
@@ -638,6 +645,20 @@ abstract class AbstractEntity
     {
         $this->validateRow($rowData, $rowNum);
         return !$this->getErrorAggregator()->isRowInvalid($rowNum);
+    }
+
+    /**
+     * Retrieve message template
+     *
+     * @param string $errorCode
+     * @return null|string
+     */
+    public function retrieveMessageTemplate($errorCode)
+    {
+        if (isset($this->_messageTemplates[$errorCode])) {
+            return $this->_messageTemplates[$errorCode];
+        }
+        return null;
     }
 
     /**

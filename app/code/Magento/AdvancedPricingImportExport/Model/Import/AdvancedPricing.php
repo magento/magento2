@@ -62,6 +62,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         ValidatorInterface::ERROR_INVALID_GROUP_PRICE_SITE => 'Group Price data website is invalid',
         ValidatorInterface::ERROR_INVALID_GROUP_PRICE_GROUP => 'Group Price customer group is invalid',
         ValidatorInterface::ERROR_GROUP_PRICE_DATA_INCOMPLETE => 'Group Price data is incomplete',
+        ValidatorInterface::ERROR_INVALID_ATTRIBUTE_DECIMAL => 'Value for \'%s\' attribute contains incorrect value, acceptable values are in decimal format',
     ];
 
     /**
@@ -213,7 +214,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         $this->_catalogData = $catalogData;
         $this->_storeResolver = $storeResolver;
         $this->_importProduct = $importProduct;
-        $this->_validator = $validator;
+        $this->_validator = $validator->init($this);
         $this->_oldSkus = $this->retrieveOldSkus();
         $this->websiteValidator = $websiteValidator;
         $this->groupPriceValidator = $groupPriceValidator;
