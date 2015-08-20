@@ -84,6 +84,41 @@ define([
             }
 
             return relevant;
+        },
+
+        /**
+         * Updates values of the 'allSelected'
+         * and 'indetermine' properties.
+         *
+         * @returns {Multiselect} Chainable.
+         */
+        updateState: function () {
+            var totalRecords = this.totalRecords();
+
+            // When filters are enabled then totalRecords is unknown
+            if (this.getFiltering()) {
+                if (this.getFiltering().search !== "") {
+                    totalRecords = -1;
+                }
+            }
+
+            var selected        = this.selected().length,
+                excluded        = this.excluded().length,
+                totalSelected   = this.totalSelected(),
+                allSelected     = totalRecords && totalSelected === totalRecords;
+
+            if (this.excludeMode()) {
+                if (excluded === totalRecords) {
+                    this.deselectAll();
+                }
+            } else if (totalRecords && selected === totalRecords) {
+                this.selectAll();
+            }
+
+            this.allSelected(allSelected);
+            this.indetermine(totalSelected && !allSelected);
+
+            return this;
         }
     });
 });
