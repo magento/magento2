@@ -153,7 +153,7 @@
                             <span>Select</span>
                         </button>
                         <ul class="action-menu" ng-class="{'_active' : isActiveActionsCell(component)}">
-                            <li ng-class="{'hide': component.enable}"
+                            <li ng-class="{'hide': !component.disable}"
                                 ng-mousedown="enableDisable('enable', component)">
                                 <a class="action-menu-item">Enable</a>
                             </li>

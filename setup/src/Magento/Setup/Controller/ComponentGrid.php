@@ -81,8 +81,14 @@ class ComponentGrid extends AbstractActionController
             if ($this->composerInformation->isPackageInComposerJson($component['name'])
                 && ($component['type'] !== ComposerInformation::METAPACKAGE_PACKAGE_TYPE)) {
                 $components[$component['name']]['uninstall'] = true;
-                $components[$component['name']]['enable'] =
-                    $this->moduleList->has($components[$component['name']]['moduleName']);
+                if ($component['type'] === ComposerInformation::MODULE_PACKAGE_TYPE) {
+                    $components[$component['name']]['enable'] =
+                        $this->moduleList->has($components[$component['name']]['moduleName']);
+                    $components[$component['name']]['disable'] = !$components[$component['name']]['enable'];
+                } else {
+                    $components[$component['name']]['enable'] = false;
+                    $components[$component['name']]['disable'] = false;
+                }
                 if (isset($lastSyncData['packages'][$component['name']]['latestVersion'])
                     && version_compare(
                         $lastSyncData['packages'][$component['name']]['latestVersion'],
