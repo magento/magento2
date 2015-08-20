@@ -7,6 +7,7 @@ namespace Magento\CatalogImportExport\Model\Import\Product\Type;
 
 use Magento\Framework\App\Resource;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
+use Magento\CatalogImportExport\Model\Import\Product;
 
 /**
  * Import entity abstract product type model
@@ -489,7 +490,7 @@ abstract class AbstractType
                     )] : $rowData[$attrCode];
                     if ('multiselect' == $attrParams['type']) {
                         $resultAttrs[$attrCode] = [];
-                        foreach (explode('|', $rowData[$attrCode]) as $value) {
+                        foreach (explode(Product::PSEUDO_MULTI_LINE_SEPARATOR, $rowData[$attrCode]) as $value) {
                             $resultAttrs[$attrCode][] = $attrParams['options'][strtolower($value)];
                         }
                         $resultAttrs[$attrCode] = implode(',', $resultAttrs[$attrCode]);
