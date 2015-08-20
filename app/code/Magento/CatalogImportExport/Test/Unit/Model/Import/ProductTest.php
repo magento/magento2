@@ -334,6 +334,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             $this->resource,
             $this->resourceHelper,
             $this->string,
+            $this->errorAggregator,
             $this->_eventManager,
             $this->stockRegistry,
             $this->stockConfiguration,
@@ -360,7 +361,6 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             $this->objectRelationProcessor,
             $this->transactionManager,
             $this->taxClassProcessor,
-            $this->errorAggregator,
             $this->data
         );
     }
