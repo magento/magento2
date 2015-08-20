@@ -15,13 +15,6 @@ use Magento\Mtf\Client\Locator;
 class Links extends Block
 {
     /**
-     * Locator value for qty of Products in Compare list.
-     *
-     * @var string
-     */
-    protected $qtyCompareProducts = '.compare .counter.qty';
-
-    /**
      * Locator value for correspondent link.
      *
      * @var string
@@ -102,19 +95,6 @@ class Links extends Block
                 return $element->isVisible() ? true : null;
             }
         );
-    }
-
-    /**
-     * Get qty of Products in Compare list.
-     *
-     * @return string
-     */
-    public function getQtyInCompareList()
-    {
-        $this->waitForElementVisible($this->qtyCompareProducts);
-        $compareProductLink = $this->_rootElement->find($this->qtyCompareProducts);
-        preg_match_all('/^\d+/', $compareProductLink->getText(), $matches);
-        return $matches[0][0];
     }
 
     /**
