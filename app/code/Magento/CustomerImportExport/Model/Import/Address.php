@@ -279,11 +279,11 @@ class Address extends AbstractCustomer
             $importFactory,
             $resourceHelper,
             $resource,
+            $errorAggregator,
             $storeManager,
             $collectionFactory,
             $eavConfig,
             $storageFactory,
-            $errorAggregator,
             $data
         );
 

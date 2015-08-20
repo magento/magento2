@@ -43,6 +43,9 @@ class Csv implements ReportProcessorInterface
 
     /**
      * @param \Magento\ImportExport\Helper\Report $reportHelper
+     * @param Import\Source\CsvFactory $sourceCsvFactory
+     * @param \Magento\ImportExport\Model\Export\Adapter\CsvFactory $outputCsvFactory
+     * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
         \Magento\ImportExport\Helper\Report $reportHelper,
@@ -77,7 +80,7 @@ class Csv implements ReportProcessorInterface
         array_push($columnsName, self::REPORT_ERROR_COLUMN_NAME);
         $outputCsv->setHeaderCols($columnsName);
 
-        foreach($sourceCsv as $rowNum => $rowData) {
+        foreach ($sourceCsv as $rowNum => $rowData) {
             $errorMessages = $this->retrieveErrorMessagesByRowNumber($rowNum, $errorAggregator);
             if (!$writeOnlyErrorItems || ($writeOnlyErrorItems && $errorMessages)) {
                 $rowData[self::REPORT_ERROR_COLUMN_NAME] = $errorMessages;
@@ -96,7 +99,7 @@ class Csv implements ReportProcessorInterface
     public function retrieveErrorMessagesByRowNumber($rowNumber, ProcessingErrorAggregatorInterface $errorAggregator)
     {
         $messages = '';
-        foreach($errorAggregator->getErrorByRowNumber((int)$rowNumber) as $error) {
+        foreach ($errorAggregator->getErrorByRowNumber((int)$rowNumber) as $error) {
             $messages .= $error->getErrorMessage() . ',';
         }
         $messages = rtrim($messages, ',');
