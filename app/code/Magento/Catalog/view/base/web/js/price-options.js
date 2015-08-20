@@ -29,16 +29,6 @@ define([
         options: globalOptions,
 
         /**
-         * @private
-         */
-        _init: function initPriceBundle() {
-            var form = this.element,
-                options = $(this.options.optionsSelector, form);
-
-            options.trigger('change');
-        },
-
-        /**
          * Widget creating method.
          * Triggered once.
          * @private
@@ -117,20 +107,22 @@ define([
                             label: optionConfig[optionValue] && optionConfig[optionValue].name
                         }
                     };
-                    prices = optionConfig[optionValue].prices;
+                    prices = optionConfig[optionValue] ? optionConfig[optionValue].prices : null;
 
-                    _.each(prices, function (price, type) {
-                        var value = +(price.amount);
-                        value += _.reduce(price.adjustments, function (sum, x) {
-                            return sum + x;
-                        }, 0);
-                        toTemplate.data[type] = {
-                            value: value,
-                            formatted: utils.formatPrice(value, format)
-                        };
-                    });
+                    if (prices) {
+                        _.each(prices, function (price, type) {
+                            var value = +(price.amount);
+                            value += _.reduce(price.adjustments, function (sum, x) {
+                                return sum + x;
+                            }, 0);
+                            toTemplate.data[type] = {
+                                value: value,
+                                formatted: utils.formatPrice(value, format)
+                            };
+                        });
 
-                    $option.text(template(toTemplate));
+                        $option.text(template(toTemplate));
+                    }
                 });
             });
         },
