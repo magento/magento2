@@ -11,16 +11,22 @@ use Magento\CheckoutAgreements\Test\Page\Adminhtml\CheckoutAgreementNew;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
- * Create term entity
+ * Update term entity
  */
-class CreateTermEntityStep implements TestStepInterface
+class UpdateTermEntityStep implements TestStepInterface
 {
     /**
-     * Checkout agreement data.
+     * Updated checkout agreement data.
      *
      * @var CheckoutAgreement
      */
     protected $agreement;
+    /**
+     * Original checkout agreement data.
+     *
+     * @var CheckoutAgreement
+     */
+    protected $agreementUpdated;
 
     /**
      * Checkout agreement index page
@@ -37,51 +43,34 @@ class CreateTermEntityStep implements TestStepInterface
     protected $agreementNew;
 
     /**
-     * Delete all terms step.
-     *
-     * @var DeleteAllTermsEntityStep
-     */
-    protected $deleteAllTermsEntityStep;
-
-    /**
-     * @param DeleteAllTermsEntityStep $deleteAllTermsEntityStep
      * @param CheckoutAgreementIndex $agreementIndex
      * @param CheckoutAgreementNew $agreementNew
      * @param CheckoutAgreement $agreement
+     * @param CheckoutAgreement $agreementUpdated
      */
     public function __construct(
-        DeleteAllTermsEntityStep $deleteAllTermsEntityStep,
         CheckoutAgreementIndex $agreementIndex,
         CheckoutAgreementNew $agreementNew,
-        CheckoutAgreement $agreement
+        CheckoutAgreement $agreement,
+        CheckoutAgreement $agreementUpdated
     ) {
-        $this->deleteAllTermsEntityStep = $deleteAllTermsEntityStep;
         $this->agreementIndex = $agreementIndex;
         $this->agreementNew = $agreementNew;
         $this->agreement = $agreement;
+        $this->agreementUpdated = $agreementUpdated;
     }
 
     /**
-     * Create checkout agreement.
+     * Update checkout agreement.
      *
      * @return array
      */
     public function run()
     {
         $this->agreementIndex->open();
-        $this->agreementIndex->getPageActionsBlock()->addNew();
-        $this->agreementNew->getAgreementsForm()->fill($this->agreement);
+        $this->agreementIndex->getAgreementGridBlock()->searchAndOpen(['name' => $this->agreement->getName()]);
+        $this->agreementNew->getAgreementsForm()->fill($this->agreementUpdated);
         $this->agreementNew->getPageActionsBlock()->save();
-        return ['agreement' => $this->agreement];
-    }
-
-    /**
-     * Remove all created terms.
-     *
-     * @return void
-     */
-    public function cleanup()
-    {
-        $this->deleteAllTermsEntityStep->run();
+        return ['agreement' => $this->agreementUpdated];
     }
 }

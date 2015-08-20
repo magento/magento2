@@ -6,14 +6,12 @@
 namespace Magento\CheckoutAgreements\Test\TestStep;
 
 use Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement;
-use Magento\CheckoutAgreements\Test\Page\Adminhtml\CheckoutAgreementIndex;
-use Magento\CheckoutAgreements\Test\Page\Adminhtml\CheckoutAgreementNew;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
- * Create term entity
+ * Setup term entity
  */
-class CreateTermEntityStep implements TestStepInterface
+class SetupTermEntityStep implements TestStepInterface
 {
     /**
      * Checkout agreement data.
@@ -21,20 +19,6 @@ class CreateTermEntityStep implements TestStepInterface
      * @var CheckoutAgreement
      */
     protected $agreement;
-
-    /**
-     * Checkout agreement index page
-     *
-     * @var CheckoutAgreementIndex
-     */
-    protected $agreementIndex;
-
-    /**
-     * Checkout agreement new and edit page
-     *
-     * @var CheckoutAgreementNew
-     */
-    protected $agreementNew;
 
     /**
      * Delete all terms step.
@@ -45,19 +29,13 @@ class CreateTermEntityStep implements TestStepInterface
 
     /**
      * @param DeleteAllTermsEntityStep $deleteAllTermsEntityStep
-     * @param CheckoutAgreementIndex $agreementIndex
-     * @param CheckoutAgreementNew $agreementNew
      * @param CheckoutAgreement $agreement
      */
     public function __construct(
         DeleteAllTermsEntityStep $deleteAllTermsEntityStep,
-        CheckoutAgreementIndex $agreementIndex,
-        CheckoutAgreementNew $agreementNew,
         CheckoutAgreement $agreement
     ) {
         $this->deleteAllTermsEntityStep = $deleteAllTermsEntityStep;
-        $this->agreementIndex = $agreementIndex;
-        $this->agreementNew = $agreementNew;
         $this->agreement = $agreement;
     }
 
@@ -68,10 +46,7 @@ class CreateTermEntityStep implements TestStepInterface
      */
     public function run()
     {
-        $this->agreementIndex->open();
-        $this->agreementIndex->getPageActionsBlock()->addNew();
-        $this->agreementNew->getAgreementsForm()->fill($this->agreement);
-        $this->agreementNew->getPageActionsBlock()->save();
+        $this->agreement->persist();
         return ['agreement' => $this->agreement];
     }
 

@@ -11,9 +11,9 @@ use Magento\CheckoutAgreements\Test\Page\Adminhtml\CheckoutAgreementNew;
 use Magento\Mtf\TestStep\TestStepInterface;
 
 /**
- * Create term entity
+ * Delete term entity.
  */
-class CreateTermEntityStep implements TestStepInterface
+class DeleteTermEntityStep implements TestStepInterface
 {
     /**
      * Checkout agreement data.
@@ -23,25 +23,18 @@ class CreateTermEntityStep implements TestStepInterface
     protected $agreement;
 
     /**
-     * Checkout agreement index page
+     * Checkout agreement index page.
      *
      * @var CheckoutAgreementIndex
      */
     protected $agreementIndex;
 
     /**
-     * Checkout agreement new and edit page
+     * Checkout agreement new and edit page.
      *
      * @var CheckoutAgreementNew
      */
     protected $agreementNew;
-
-    /**
-     * Delete all terms step.
-     *
-     * @var DeleteAllTermsEntityStep
-     */
-    protected $deleteAllTermsEntityStep;
 
     /**
      * @param DeleteAllTermsEntityStep $deleteAllTermsEntityStep
@@ -62,26 +55,13 @@ class CreateTermEntityStep implements TestStepInterface
     }
 
     /**
-     * Create checkout agreement.
+     * Delete checkout agreement.
      *
      * @return array
      */
     public function run()
     {
-        $this->agreementIndex->open();
-        $this->agreementIndex->getPageActionsBlock()->addNew();
-        $this->agreementNew->getAgreementsForm()->fill($this->agreement);
-        $this->agreementNew->getPageActionsBlock()->save();
-        return ['agreement' => $this->agreement];
-    }
-
-    /**
-     * Remove all created terms.
-     *
-     * @return void
-     */
-    public function cleanup()
-    {
-        $this->deleteAllTermsEntityStep->run();
+        $this->agreementIndex->open()->getAgreementGridBlock()->searchAndOpen(['name' => $this->agreement->getName()]);
+        $this->agreementNew->getPageActionsBlock()->delete();
     }
 }
