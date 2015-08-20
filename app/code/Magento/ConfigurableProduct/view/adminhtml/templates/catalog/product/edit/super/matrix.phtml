@@ -245,8 +245,15 @@ if ($variations) {
                             </button>
                             <ul class="action-menu _active" data-bind="css: {'_active': $parent.opened() === $index()}">
                                 <li>
-                                    <a class="action-menu-item" data-bind="attr: {'data-attributes': variation.attribute}"
-                                       data-action="choose" href="#"><?= __('Choose a different Product');?></a>
+                                    <a class="action-menu-item"
+                                       data-bind="
+                                            attr: {'data-attributes': variation.attribute},
+                                            click: jQuery('#associated-products-container').trigger('openModal')
+                                        "
+                                       data-action="choose"
+                                       href="#">
+                                        <?= __('Choose a different Product');?>
+                                    </a>
                                 </li>
                                 <li>
                                     <a class="action-menu-item" data-bind="
