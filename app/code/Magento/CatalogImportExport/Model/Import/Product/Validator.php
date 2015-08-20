@@ -187,6 +187,9 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     protected function isValidAttributes()
     {
         $this->_clearMessages();
+        if (!isset($this->_rowData['product_type'])) {
+            return false;
+        }
         $entityTypeModel = $this->context->retrieveProductTypeByName($this->_rowData['product_type']);
         if ($entityTypeModel) {
             foreach ($this->_rowData as $attrCode => $attrValue) {

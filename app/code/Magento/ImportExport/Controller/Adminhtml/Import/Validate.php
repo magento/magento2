@@ -44,7 +44,13 @@ class Validate extends ImportResultController
             $validationResult = $import->validateSource($source);
 
             if (!$import->getProcessedRowsCount()) {
-                $resultBlock->addError(__('This file is empty. Please try another one.'));
+                if (!$import->getErrorAggregator()->getErrorsCount()) {
+                    $resultBlock->addError(__('This file is empty. Please try another one.'));
+                } else {
+                    foreach ($import->getErrorAggregator()->getAllErrors() as $error) {
+                        $resultBlock->addError($error->getErrorMessage(), false);
+                    }
+                }
             } else {
                 $errorAggregator = $import->getErrorAggregator();
                 if (!$validationResult) {

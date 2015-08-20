@@ -61,7 +61,7 @@ abstract class AbstractEntity
         self::ERROR_CODE_ATTRIBUTE_NOT_VALID => "Please correct the value for '%s'.",
         self::ERROR_CODE_DUPLICATE_UNIQUE_ATTRIBUTE => "Duplicate Unique Attribute for '%s'",
         self::ERROR_CODE_ILLEGAL_CHARACTERS => "Illegal character used for attribute %s",
-        self::ERROR_CODE_INVALID_ATTRIBUTE => 'Header contains invalid attribute(s): "%1"',
+        self::ERROR_CODE_INVALID_ATTRIBUTE => 'Header contains invalid attribute(s): "%s"',
         self::ERROR_CODE_WRONG_QUOTES => "Curly quotes used instead of straight quotes",
         self::ERROR_CODE_COLUMNS_NUMBER => "Number of columns does not correspond to the number of rows in the header",
     ];
