@@ -392,7 +392,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             'Test 3' => ['DELETE'],
             'Test 4' => ['PATCH'],
             'Test 5' => ['CONNECT'],
-            'Test 6' => ['']
+            'Test 6' => [null]
         ];
     }
 
