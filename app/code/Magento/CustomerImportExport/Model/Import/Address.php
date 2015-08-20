@@ -273,7 +273,8 @@ class Address extends AbstractCustomer
             $attributeCollection->addSystemHiddenFilter()->addExcludeHiddenFrontendFilter();
             $data['attribute_collection'] = $attributeCollection;
         }
-        parent::__construct($string,
+        parent::__construct(
+            $string,
             $scopeConfig,
             $importFactory,
             $resourceHelper,
@@ -421,7 +422,6 @@ class Address extends AbstractCustomer
                     $deleteRowIds[] = $rowData[self::COLUMN_ADDRESS_ID];
                 }
             }
-            $this->updateItemsCounterStats($newRows, $updateRows, $deleteRowIds);
 
             $this->_saveAddressEntities(
                 $newRows,
