@@ -211,9 +211,9 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      */
     protected function _getEntityAdapter()
     {
+
         if (!$this->_entityAdapter) {
             $entities = $this->_importConfig->getEntities();
-
             if (isset($entities[$this->getEntity()])) {
                 try {
                     $this->_entityAdapter = $this->_entityFactory->create($entities[$this->getEntity()]['model']);
@@ -561,8 +561,20 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     public function validateSource(\Magento\ImportExport\Model\Import\AbstractSource $source)
     {
         $this->addLogComment(__('Begin data validation'));
-        $adapter = $this->_getEntityAdapter()->setSource($source);
-        $errorAggregator = $adapter->validateData();
+        try {
+            $adapter = $this->_getEntityAdapter()->setSource($source);
+            $errorAggregator = $adapter->validateData();
+        } catch (\Exception $e) {
+            $errorAggregator = $this->getErrorAggregator();
+            $errorAggregator->addError(
+                \Magento\ImportExport\Model\Import\Entity\AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION,
+                ProcessingError::ERROR_LEVEL_CRITICAL,
+                null,
+                null,
+                null,
+                $e->getMessage()
+            );
+        }
 
         $messages = $this->getOperationResultMessages($errorAggregator);
         $this->addLogComment($messages);
@@ -668,8 +680,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
             $entities = $this->_importConfig->getEntities();
             if (isset($entities[$this->getEntity()])) {
                 try {
-                    $adapter = $this->_entityFactory->create($entities[$entity]['model']);
-                    $result = $adapter->isNeedToLogInHistory();
+                    $result = $this->_getEntityAdapter()->isNeedToLogInHistory();
                 } catch (\Exception $e) {
                     throw new \Magento\Framework\Exception\LocalizedException(__('Please enter a correct entity model'));
                 }

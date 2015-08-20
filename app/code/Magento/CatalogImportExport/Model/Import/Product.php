@@ -756,7 +756,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     public function retrieveProductTypeByName($name)
     {
-        return $this->_productTypeModels[$name];
+        if (isset($this->_productTypeModels[$name])) {
+            return $this->_productTypeModels[$name];
+        }
+        return null;
     }
 
     /**
@@ -957,20 +960,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         foreach ($this->_messageTemplates as $errorCode => $template) {
             $this->addMessageTemplate($errorCode, $template);
         }
-    }
-
-    /**
-     * Retrieve message template
-     *
-     * @param string $errorCode
-     * @return null|string
-     */
-    public function retrieveMessageTemplate($errorCode)
-    {
-        if (isset($this->_messageTemplates[$errorCode])) {
-            return $this->_messageTemplates[$errorCode];
-        }
-        return null;
     }
 
     /**

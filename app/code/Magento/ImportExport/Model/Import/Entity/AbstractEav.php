@@ -180,6 +180,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
                 'type' => \Magento\ImportExport\Model\Import::getAttributeType($attribute),
                 'options' => $this->getAttributeOptions($attribute),
             ];
+            $this->validColumnNames[] = $attribute->getAttributeCode();
         }
         return $this;
     }

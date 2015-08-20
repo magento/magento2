@@ -65,6 +65,8 @@ interface RowValidatorInterface extends \Magento\Framework\Validator\ValidatorIn
 
     const ERROR_INVALID_ATTRIBUTE_TYPE = 'invalidAttributeType';
 
+    const ERROR_INVALID_ATTRIBUTE_DECIMAL = 'invalidAttributeDecimal';
+
     const ERROR_ABSENT_REQUIRED_ATTRIBUTE = 'absentRequiredAttribute';
 
     const ERROR_INVALID_ATTRIBUTE_OPTION = 'absentAttributeOption';
