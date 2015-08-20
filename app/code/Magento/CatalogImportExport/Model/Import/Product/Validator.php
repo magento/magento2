@@ -107,15 +107,23 @@ class Validator extends AbstractValidator implements RowValidatorInterface
         if (!empty($attrParams['apply_to']) && !in_array($rowData['product_type'], $attrParams['apply_to'])) {
             return true;
         }
-
         if ($attrCode == Product::COL_SKU || $attrParams['is_required']
             && ($this->context->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE
                 || ($this->context->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND
                     && !isset($this->context->getOldSku()[$rowData[$attrCode]])))
         ) {
-            if (!isset($rowData[$attrCode]) && !strlen(trim($rowData[$attrCode]))) {
+            if (!isset($rowData[$attrCode]) || !strlen(trim($rowData[$attrCode]))) {
                 $valid = false;
-                $this->_addMessages([RowValidatorInterface::ERROR_VALUE_IS_REQUIRED]);
+                $this->_addMessages(
+                    [
+                        sprintf(
+                            $this->context->retrieveMessageTemplate(
+                                RowValidatorInterface::ERROR_VALUE_IS_REQUIRED
+                            ),
+                            $attrCode
+                        )
+                    ]
+                );
                 return $valid;
             }
         }
@@ -183,15 +191,20 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     protected function isValidAttributes()
     {
         $this->_clearMessages();
-        $entityTypeModel = $this->context->retrieveProductTypeByName($this->_rowData['product_type']);
-        foreach ($this->_rowData as $attrCode => $attrValue) {
-            $attrParams = $entityTypeModel->retrieveAttributeFromCache($attrCode);
-            if ($attrParams) {
-                $this->isAttributeValid($attrCode, $attrParams, $this->_rowData);
-            }
-        }
-        if ($this->getMessages()) {
+        if (!isset($this->_rowData['product_type'])) {
             return false;
+        }
+        $entityTypeModel = $this->context->retrieveProductTypeByName($this->_rowData['product_type']);
+        if ($entityTypeModel) {
+            foreach ($this->_rowData as $attrCode => $attrValue) {
+                $attrParams = $entityTypeModel->retrieveAttributeFromCache($attrCode);
+                if ($attrParams) {
+                    $this->isAttributeValid($attrCode, $attrParams, $this->_rowData);
+                }
+            }
+            if ($this->getMessages()) {
+                return false;
+            }
         }
         return true;
     }
