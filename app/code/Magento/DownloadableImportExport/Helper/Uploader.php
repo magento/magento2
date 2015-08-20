@@ -41,11 +41,11 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Construct
      *
-     * @param \Magento\Framework\App\Helper\Context                     $context
-     * @param \Magento\Downloadable\Helper\File                         $fileHelper
+     * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Downloadable\Helper\File $fileHelper
      * @param \Magento\CatalogImportExport\Model\Import\UploaderFactory $uploaderFactory
-     * @param \Magento\Framework\App\Resource                           $resource
-     * @param \Magento\Framework\Filesystem                             $filesystem
+     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -68,7 +68,7 @@ class Uploader extends \Magento\Framework\App\Helper\AbstractHelper
      * Returns an object for upload a media files
      *
      * @param string $type
-     * @param array  $parameters
+     * @param array $parameters
      * @return \Magento\CatalogImportExport\Model\Import\Uploader
      * @throws \Magento\Framework\Exception\LocalizedException
      */

@@ -242,12 +242,14 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected $downloadableHelper;
 
     /**
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory  $attrSetColFac
+     * Constructor
+     *
+     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac
-     * @param \Magento\Framework\App\Resource                                     $resource
-     * @param array                                                               $params
-     * @param \Magento\DownloadableImportExport\Helper\Uploader                   $uploaderHelper
-     * @param \Magento\DownloadableImportExport\Helper\Data                       $downloadableHelper
+     * @param \Magento\Framework\App\Resource $resource
+     * @param array $params
+     * @param \Magento\DownloadableImportExport\Helper\Uploader $uploaderHelper
+     * @param \Magento\DownloadableImportExport\Helper\Data $downloadableHelper
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
@@ -340,7 +342,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             $result = $this->isTitle($this->prepareSampleData($rowData[self::COL_DOWNLOADABLE_SAMPLES]));
         }
         return $result;
-
     }
 
     /**
@@ -365,7 +366,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             $result = $this->isTitle($this->prepareLinkData($rowData[self::COL_DOWNLOADABLE_LINKS]));
         }
         return $result;
-
     }
 
     /**
@@ -444,7 +444,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             }
         }
         return $result;
-
     }
 
     /**
@@ -728,7 +727,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             $rowCol
         );
         foreach ($options as $option) {
-            $result[] =  array_merge(
+            $result[] = array_merge(
                 $this->dataSample,
                 ['product_id' => $entityId],
                 $this->parseSampleOption(explode($this->_entityModel->getMultipleValueSeparator(), $option))
