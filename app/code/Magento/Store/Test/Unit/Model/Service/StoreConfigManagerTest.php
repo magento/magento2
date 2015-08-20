@@ -36,10 +36,12 @@ class StoresConfigTest extends \PHPUnit_Framework_TestCase
     {
         $this->storeConfigFactoryMock = $this->getMockBuilder('\Magento\Store\Model\Data\StoreConfigFactory')
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
         $this->storeCollectionFactoryMock = $this->getMockBuilder(
             '\Magento\Store\Model\Resource\Store\CollectionFactory'
         )->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
         $this->scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
 
@@ -106,7 +108,7 @@ class StoresConfigTest extends \PHPUnit_Framework_TestCase
     {
         $id = 1;
         $code = 'default';
-        $website_id = 1;
+        $websiteId = 1;
         $baseUrl = 'http://magento/base_url';
         $secureBaseUrl = 'https://magento/base_url';
         $baseLinkUrl = 'http://magento/base_url/links';
@@ -124,7 +126,7 @@ class StoresConfigTest extends \PHPUnit_Framework_TestCase
         $storeConfigs = [
             'id' => $id,
             'code' => $code,
-            'website_id' => $website_id,
+            'website_id' => $websiteId,
             'base_url' => $baseUrl,
             'secure_base_url' => $secureBaseUrl,
             'base_link_url' => $baseLinkUrl,
