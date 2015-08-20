@@ -126,7 +126,10 @@ define([
         it('Clears filters data.', function () {
             var elem = {
                 value: '',
-                clear: function() {
+                getPreview: function () {
+                    return true;
+                },
+                clear: function () {
                     this.value = '';
                     return this.value;
                 }
@@ -143,7 +146,10 @@ define([
         });
         it('Set active elements where exist value from elems.', function () {
             var elem = {
-                hasData: function() {
+                getPreview: function () {
+                    return true;
+                },
+                hasData: function () {
                     return false;
                 }
             };
@@ -166,11 +172,9 @@ define([
                 }
             };
 
-            filters.extractPreviews(filters.elems);
-            expect(filters.previews().length).toEqual(0);
             filters.elems.push(elem);
-            filters.extractPreviews(filters.elems);
-            expect(filters.previews().length).toEqual(1);
+            filters.extractActive(filters.elems);
+            expect(filters.active().length).toEqual(0);
         });
     });
 });

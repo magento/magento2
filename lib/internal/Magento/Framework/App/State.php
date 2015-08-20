@@ -49,6 +49,13 @@ class State
      */
     protected $_areaCode;
 
+    /**
+     * Is area code being emulated
+     *
+     * @var bool
+     */
+    protected $_isAreaCodeEmulated = false;
+
     /**#@+
      * Application modes
      */
@@ -89,28 +96,6 @@ class State
     public function getMode()
     {
         return $this->_appMode;
-    }
-
-    /**
-     * Set update mode flag
-     *
-     * @param bool $value
-     * @return void
-     */
-    public function setUpdateMode($value)
-    {
-        $this->_updateMode = $value;
-    }
-
-    /**
-     * Get update mode flag
-     *
-     * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     */
-    public function getUpdateMode()
-    {
-        return $this->_updateMode;
     }
 
     /**
@@ -159,6 +144,16 @@ class State
     }
 
     /**
+     * Checks whether area code is being emulated
+     *
+     * @return bool
+     */
+    public function isAreaCodeEmulated()
+    {
+        return $this->_isAreaCodeEmulated;
+    }
+
+    /**
      * Emulate callback inside some area code
      *
      * @param string $areaCode
@@ -171,13 +166,16 @@ class State
     {
         $currentArea = $this->_areaCode;
         $this->_areaCode = $areaCode;
+        $this->_isAreaCodeEmulated = true;
         try {
             $result = call_user_func_array($callback, $params);
         } catch (\Exception $e) {
             $this->_areaCode = $currentArea;
+            $this->_isAreaCodeEmulated = false;
             throw $e;
         }
         $this->_areaCode = $currentArea;
+        $this->_isAreaCodeEmulated = false;
         return $result;
     }
 }

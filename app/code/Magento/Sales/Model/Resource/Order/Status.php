@@ -52,12 +52,12 @@ class Status extends \Magento\Framework\Model\Resource\Db\VersionControl\Abstrac
      * @param string $field
      * @param mixed $value
      * @param \Magento\Framework\Model\AbstractModel $object
-     * @return \Zend_Db_Select
+     * @return \Magento\Framework\DB\Select
      */
     protected function _getLoadSelect($field, $value, $object)
     {
         if ($field == 'default_state') {
-            $select = $this->_getReadAdapter()->select()->from(
+            $select = $this->getConnection()->select()->from(
                 $this->getMainTable(),
                 ['label']
             )->join(
@@ -86,14 +86,14 @@ class Status extends \Magento\Framework\Model\Resource\Db\VersionControl\Abstrac
      */
     public function getStoreLabels(\Magento\Sales\Model\Order\Status $status)
     {
-        $select = $this->_getWriteAdapter()->select()
+        $select = $this->getConnection()->select()
             ->from(['ssl' => $this->labelsTable], [])
             ->where('status = ?', $status->getStatus())
             ->columns([
                 'store_id',
                 'label',
             ]);
-        return $this->_getReadAdapter()->fetchPairs($select);
+        return $this->getConnection()->fetchPairs($select);
     }
 
     /**
@@ -106,7 +106,7 @@ class Status extends \Magento\Framework\Model\Resource\Db\VersionControl\Abstrac
     {
         if ($object->hasStoreLabels()) {
             $labels = $object->getStoreLabels();
-            $this->_getWriteAdapter()->delete($this->labelsTable, ['status = ?' => $object->getStatus()]);
+            $this->getConnection()->delete($this->labelsTable, ['status = ?' => $object->getStatus()]);
             $data = [];
             foreach ($labels as $storeId => $label) {
                 if (empty($label)) {
@@ -115,7 +115,7 @@ class Status extends \Magento\Framework\Model\Resource\Db\VersionControl\Abstrac
                 $data[] = ['status' => $object->getStatus(), 'store_id' => $storeId, 'label' => $label];
             }
             if (!empty($data)) {
-                $this->_getWriteAdapter()->insertMultiple($this->labelsTable, $data);
+                $this->getConnection()->insertMultiple($this->labelsTable, $data);
             }
         }
         return parent::_afterSave($object);
@@ -133,13 +133,13 @@ class Status extends \Magento\Framework\Model\Resource\Db\VersionControl\Abstrac
     public function assignState($status, $state, $isDefault, $visibleOnFront = false)
     {
         if ($isDefault) {
-            $this->_getWriteAdapter()->update(
+            $this->getConnection()->update(
                 $this->stateTable,
                 ['is_default' => 0],
                 ['state = ?' => $state]
             );
         }
-        $this->_getWriteAdapter()->insertOnDuplicate(
+        $this->getConnection()->insertOnDuplicate(
             $this->stateTable,
             [
                 'status' => $status,
@@ -161,10 +161,10 @@ class Status extends \Magento\Framework\Model\Resource\Db\VersionControl\Abstrac
      */
     public function unassignState($status, $state)
     {
-        $this->_getWriteAdapter()->beginTransaction();
+        $this->getConnection()->beginTransaction();
         try {
             $isStateDefault = $this->checkIsStateDefault($state, $status);
-            $this->_getWriteAdapter()->delete(
+            $this->getConnection()->delete(
                 $this->stateTable,
                 [
                     'state = ?' => $state,
@@ -174,7 +174,7 @@ class Status extends \Magento\Framework\Model\Resource\Db\VersionControl\Abstrac
             if ($isStateDefault) {
                 $newDefaultStatus = $this->getStatusByState($state);
                 if ($newDefaultStatus) {
-                    $this->_getWriteAdapter()->update(
+                    $this->getConnection()->update(
                         $this->stateTable,
                         ['is_default' => 1],
                         [
@@ -184,9 +184,9 @@ class Status extends \Magento\Framework\Model\Resource\Db\VersionControl\Abstrac
                     );
                 }
             }
-            $this->_getWriteAdapter()->commit();
+            $this->getConnection()->commit();
         } catch (\Exception $e) {
-            $this->_getWriteAdapter()->rollBack();
+            $this->getConnection()->rollBack();
             throw new LocalizedException(__('Cannot unassign status from state'));
         }
 
@@ -201,8 +201,8 @@ class Status extends \Magento\Framework\Model\Resource\Db\VersionControl\Abstrac
      */
     public function checkIsStateLast($state)
     {
-        return (1 == $this->_getWriteAdapter()->fetchOne(
-            $this->_getWriteAdapter()->select()
+        return (1 == $this->getConnection()->fetchOne(
+            $this->getConnection()->select()
                 ->from(['sss' => $this->stateTable], [])
                 ->where('state = ?', $state)
                 ->columns([new\Zend_Db_Expr('COUNT(1)')])
@@ -217,8 +217,8 @@ class Status extends \Magento\Framework\Model\Resource\Db\VersionControl\Abstrac
      */
     public function checkIsStatusUsed($status)
     {
-        return (bool)$this->_getWriteAdapter()->fetchOne(
-            $this->_getWriteAdapter()->select()
+        return (bool)$this->getConnection()->fetchOne(
+            $this->getConnection()->select()
                 ->from(['sfo' => $this->getTable('sales_order')], [])
                 ->where('status = ?', $status)
                 ->limit(1)
@@ -235,8 +235,8 @@ class Status extends \Magento\Framework\Model\Resource\Db\VersionControl\Abstrac
      */
     protected function checkIsStateDefault($state, $status)
     {
-        return (bool)$this->_getWriteAdapter()->fetchOne(
-            $this->_getWriteAdapter()->select()
+        return (bool)$this->getConnection()->fetchOne(
+            $this->getConnection()->select()
                 ->from(['sss' => $this->stateTable], [])
                 ->where('state = ?', $state)
                 ->where('status = ?', $status)
@@ -254,8 +254,8 @@ class Status extends \Magento\Framework\Model\Resource\Db\VersionControl\Abstrac
      */
     protected function getStatusByState($state)
     {
-        return (string)$this->_getWriteAdapter()->fetchOne(
-            $select = $this->_getWriteAdapter()->select()
+        return (string)$this->getConnection()->fetchOne(
+            $select = $this->getConnection()->select()
                 ->from(['sss' => $this->stateTable, []])
                 ->where('state = ?', $state)
                 ->limit(1)

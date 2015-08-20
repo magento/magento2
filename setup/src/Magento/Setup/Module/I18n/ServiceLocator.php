@@ -53,6 +53,7 @@ class ServiceLocator
             $phraseCollector = new Parser\Adapter\Php\Tokenizer\PhraseCollector(new Parser\Adapter\Php\Tokenizer());
             $adapters = [
                 'php' => new Parser\Adapter\Php($phraseCollector),
+                'html' => new Parser\Adapter\Html(),
                 'js' => new Parser\Adapter\Js(),
                 'xml' => new Parser\Adapter\Xml(),
             ];

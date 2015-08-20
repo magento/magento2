@@ -42,6 +42,7 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
         $objectManager = Bootstrap::getObjectManager();
         $this->_soapConfig = $objectManager->get('Magento\Webapi\Model\Soap\Config');
         $this->_converter = $objectManager->get('Magento\Framework\Api\SimpleDataObjectConverter');
+        ini_set('default_socket_timeout', 120);
     }
 
     /**

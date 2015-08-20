@@ -40,8 +40,12 @@ define([
     return Collapsible.extend({
         defaults: {
             template: 'ui/grid/filters/filters',
-            applied: {},
-            filters: {},
+            applied: {
+                placeholder: true
+            },
+            filters: {
+                placeholder: true
+            },
             chipsConfig: {
                 name: '${ $.name }_chips',
                 provider: '${ $.chipsConfig.name }',
@@ -151,21 +155,7 @@ define([
          * @returns {Filters} Chainable.
          */
         cancel: function () {
-            this.convertToObject();
             this.set('filters', utils.copy(this.applied));
-
-            return this;
-        },
-
-        /**
-         * Convert empty array to empty object.
-         *
-         * @returns {Filters} Chainable.
-         */
-        convertToObject: function() {
-            if ( _.isArray(this.applied) && _.isEmpty(this.applied) ) {
-                this.applied = {};
-            }
 
             return this;
         },

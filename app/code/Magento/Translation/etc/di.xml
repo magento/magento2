@@ -57,7 +57,9 @@
     <type name="Magento\Translation\Model\Js\Config">
         <arguments>
             <argument name="patterns" xsi:type="array">
-                <item name="mage_translation_widget" xsi:type="string">~\$\.mage\.__\([\'|\"](.+?)[\'|\"]\)~</item>
+                <item name="i18n_translation" xsi:type="string"><![CDATA[~i18n\:\s*(["'])(.*?)(?<!\\)\1~]]></item>
+                <item name="mage_translation_widget" xsi:type="string">~\$\.mage\.__\((['"])(.+?)\1\)~</item>
+                <item name="mage_translation_static" xsi:type="string">~\$t\((["'])(.+?)\1\)~</item>
             </argument>
         </arguments>
     </type>

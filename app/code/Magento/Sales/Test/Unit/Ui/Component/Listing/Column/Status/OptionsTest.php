@@ -29,7 +29,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
         $objectManager = new ObjectManager($this);
         $this->collectionFactoryMock = $this->getMock(
             'Magento\Sales\Model\Resource\Order\Status\CollectionFactory',
-            [],
+            ['create'],
             [],
             '',
             false

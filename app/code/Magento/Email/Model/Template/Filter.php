@@ -15,6 +15,16 @@ namespace Magento\Email\Model\Template;
 class Filter extends \Magento\Framework\Filter\Template
 {
     /**
+     * The name used in the {{trans}} directive
+     */
+    const TRANS_DIRECTIVE_NAME = 'trans';
+
+    /**
+     * The regex to match interior portion of a {{trans "foo"}} translation directive
+     */
+    const TRANS_DIRECTIVE_REGEX = '/^\s*([\'"])([^\1]*?)(?<!\\\)\1(\s.*)?$/si';
+
+    /**
      * Use absolute links flag
      *
      * @var bool
@@ -126,9 +136,9 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $_appState;
 
     /**
-     * @var \Magento\Backend\Model\UrlInterface
+     * @var \Magento\Framework\UrlInterface
      */
-    protected $backendUrlBuilder;
+    protected $urlModel;
 
     /**
      * @var \Pelago\Emogrifier
@@ -136,7 +146,7 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $emogrifier;
 
     /**
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
@@ -146,14 +156,14 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Backend\Model\UrlInterface $backendUrlBuilder
+     * @param \Magento\Framework\UrlInterface $urlModel
      * @param \Pelago\Emogrifier $emogrifier
      * @param array $variables
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\View\Asset\Repository $assetRepo,
@@ -163,7 +173,7 @@ class Filter extends \Magento\Framework\Filter\Template
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Framework\App\State $appState,
-        \Magento\Backend\Model\UrlInterface $backendUrlBuilder,
+        \Magento\Framework\UrlInterface $urlModel,
         \Pelago\Emogrifier $emogrifier,
         $variables = []
     ) {
@@ -177,7 +187,7 @@ class Filter extends \Magento\Framework\Filter\Template
         $this->_layout = $layout;
         $this->_layoutFactory = $layoutFactory;
         $this->_appState = $appState;
-        $this->backendUrlBuilder = $backendUrlBuilder;
+        $this->urlModel = $urlModel;
         $this->emogrifier = $emogrifier;
         parent::__construct($string, $variables);
     }
@@ -309,7 +319,7 @@ class Filter extends \Magento\Framework\Filter\Template
     public function blockDirective($construction)
     {
         $skipParams = ['class', 'id', 'output'];
-        $blockParameters = $this->_getParameters($construction[2]);
+        $blockParameters = $this->getParameters($construction[2]);
         $block = null;
 
         if (isset($blockParameters['class'])) {
@@ -354,9 +364,9 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function layoutDirective($construction)
     {
-        $this->_directiveParams = $this->_getParameters($construction[2]);
+        $this->_directiveParams = $this->getParameters($construction[2]);
         if (!isset($this->_directiveParams['area'])) {
-            $this->_directiveParams['area'] = 'frontend';
+            $this->_directiveParams['area'] = \Magento\Framework\App\Area::AREA_FRONTEND;
         }
         if ($this->_directiveParams['area'] != $this->_appState->getAreaCode()) {
             return $this->_appState->emulateAreaCode(
@@ -433,7 +443,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function viewDirective($construction)
     {
-        $params = $this->_getParameters($construction[2]);
+        $params = $this->getParameters($construction[2]);
         $url = $this->_assetRepo->getUrlWithParams($params['url'], $params);
         return $url;
     }
@@ -446,7 +456,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function mediaDirective($construction)
     {
-        $params = $this->_getParameters($construction[2]);
+        $params = $this->getParameters($construction[2]);
         return $this->_storeManager->getStore()
             ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $params['url'];
     }
@@ -460,7 +470,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function storeDirective($construction)
     {
-        $params = $this->_getParameters($construction[2]);
+        $params = $this->getParameters($construction[2]);
         if (!isset($params['_query'])) {
             $params['_query'] = [];
         }
@@ -485,66 +495,109 @@ class Filter extends \Magento\Framework\Filter\Template
             unset($params['url']);
         }
 
-        return $this->getUrl($path, $params);
+        return $this->urlModel->getUrl($path, $params);
     }
 
     /**
-     * @param string $path
-     * @param array $params
-     * @return string
+     * Set current URL model, which will be used for URLs generation.
+     *
+     * @param \Magento\Framework\UrlInterface $urlModel
+     * @return $this
      */
-    protected function getUrl($path, $params)
+    public function setUrlModel(\Magento\Framework\UrlInterface $urlModel)
     {
-        $isBackendStore = \Magento\Store\Model\Store::DEFAULT_STORE_ID === $this->getStoreId()
-            || \Magento\Store\Model\Store::ADMIN_CODE === $this->getStoreId();
-
-        return $isBackendStore
-            ? $this->backendUrlBuilder->getUrl($path, $params)
-            : $this->_storeManager->getStore($this->getStoreId())->getUrl($path, $params);
+        $this->urlModel = $urlModel;
+        return $this;
     }
 
     /**
-     * Directive for converting special characters to HTML entities
-     * Supported options:
-     *     allowed_tags - Comma separated html tags that have not to be converted
+     * Trans directive for localized strings support
+     *
+     * Usage:
+     *
+     *   {{trans "string to translate"}}
+     *   {{trans "string to %var" var="$variable"}}
+     *
+     * The |escape modifier is applied by default, use |raw to override
      *
      * @param string[] $construction
      * @return string
      */
-    public function escapehtmlDirective($construction)
+    public function transDirective($construction)
     {
-        $params = $this->_getParameters($construction[2]);
-        if (!isset($params['var'])) {
+        list($directive, $modifiers) = $this->explodeModifiers($construction[2], 'escape');
+
+        list($text, $params) = $this->getTransParameters($directive);
+        if (empty($text)) {
             return '';
         }
 
-        $allowedTags = null;
-        if (isset($params['allowed_tags'])) {
-            $allowedTags = preg_split('/\s*\,\s*/', $params['allowed_tags'], 0, PREG_SPLIT_NO_EMPTY);
+        $text = __($text, $params)->render();
+        return $this->applyModifiers($text, $modifiers);
+    }
+
+    /**
+     * Parses directive construction into a multipart array containing the text value and key/value pairs of parameters
+     *
+     * @param string $value raw parameters
+     * @return array always a two-part array in the format [value, [param, ...]]
+     */
+    protected function getTransParameters($value)
+    {
+        if (preg_match(self::TRANS_DIRECTIVE_REGEX, $value, $matches) !== 1) {
+            return ['', []];  // malformed directive body; return without breaking list
         }
 
-        return $this->_escaper->escapeHtml($params['var'], $allowedTags);
+        $text = stripslashes($matches[2]);
+
+        $params = [];
+        if (!empty($matches[3])) {
+            $params = $this->getParameters($matches[3]);
+        }
+
+        return [$text, $params];
     }
 
     /**
      * Var directive with modifiers support
+     *
+     * The |escape modifier is applied by default, use |raw to override
      *
      * @param string[] $construction
      * @return string
      */
     public function varDirective($construction)
     {
-        if (count($this->_templateVars) == 0) {
-            // If template preprocessing
+        // just return the escaped value if no template vars exist to process
+        if (count($this->templateVars) == 0) {
             return $construction[0];
         }
 
-        $parts = explode('|', $construction[2], 2);
+        list($directive, $modifiers) = $this->explodeModifiers($construction[2], 'escape');
+        return $this->applyModifiers($this->getVariable($directive, ''), $modifiers);
+    }
+
+    /**
+     * Explode modifiers out of a given string
+     *
+     * This will return the value and modifiers in a two-element array. Where no modifiers are present in the passed
+     * value an array with a null modifier string will be returned
+     *
+     * Syntax: some text value, etc|modifier string
+     *
+     * Result: ['some text value, etc', 'modifier string']
+     *
+     * @param string $value
+     * @param string $default assumed modifier if none present
+     * @return array
+     */
+    protected function explodeModifiers($value, $default = null)
+    {
+        $parts = explode('|', $value, 2);
         if (2 === count($parts)) {
-            list($variableName, $modifiersString) = $parts;
-            return $this->_amplifyModifiers($this->_getVariable($variableName, ''), $modifiersString);
+            return $parts;
         }
-        return $this->_getVariable($construction[2], '');
+        return [$value, $default];
     }
 
     /**
@@ -556,7 +609,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param string $modifiers
      * @return string
      */
-    protected function _amplifyModifiers($value, $modifiers)
+    protected function applyModifiers($value, $modifiers)
     {
         foreach (explode('|', $modifiers) as $part) {
             if (empty($part)) {
@@ -614,7 +667,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function protocolDirective($construction)
     {
-        $params = $this->_getParameters($construction[2]);
+        $params = $this->getParameters($construction[2]);
         $store = null;
         if (isset($params['store'])) {
             try {
@@ -648,7 +701,7 @@ class Filter extends \Magento\Framework\Filter\Template
     public function configDirective($construction)
     {
         $configValue = '';
-        $params = $this->_getParameters($construction[2]);
+        $params = $this->getParameters($construction[2]);
         $storeId = $this->getStoreId();
         if (isset($params['path'])) {
             $configValue = $this->_scopeConfig->getValue(
@@ -669,7 +722,7 @@ class Filter extends \Magento\Framework\Filter\Template
     public function customvarDirective($construction)
     {
         $customVarValue = '';
-        $params = $this->_getParameters($construction[2]);
+        $params = $this->getParameters($construction[2]);
         if (isset($params['code'])) {
             $variable = $this->_variableFactory->create()->setStoreId(
                 $this->getStoreId()
@@ -700,7 +753,11 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function cssDirective($construction)
     {
-        $params = $this->_getParameters($construction[2]);
+        if ($this->isPlainTemplateMode()) {
+            return '';
+        }
+
+        $params = $this->getParameters($construction[2]);
         $file = isset($params['file']) ? $params['file'] : null;
         if (!$file) {
             // Return CSS comment for debugging purposes
@@ -750,7 +807,7 @@ class Filter extends \Magento\Framework\Filter\Template
             return $construction[0];
         }
 
-        $params = $this->_getParameters($construction[2]);
+        $params = $this->getParameters($construction[2]);
         if (!isset($params['file']) || !$params['file']) {
             throw new \Magento\Framework\Exception\MailException(
                 __('"file" parameter must be specified and must not be empty')

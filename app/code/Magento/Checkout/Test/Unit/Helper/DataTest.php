@@ -140,15 +140,18 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function testSendPaymentFailedEmail()
     {
-        $shippingAddress = new \Magento\Framework\Object(['shipping_method' => 'ground_transportation']);
-        $billingAddress = new \Magento\Framework\Object(['street' => 'Fixture St']);
+        $shippingAddress = new \Magento\Framework\DataObject(['shipping_method' => 'ground_transportation']);
+        $billingAddress = new \Magento\Framework\DataObject(['street' => 'Fixture St']);
 
         $this->_transportBuilder->expects(
             $this->once()
         )->method(
             'setTemplateOptions'
         )->with(
-            ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => 8]
+            [
+                'area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
+                'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
+            ]
         )->will(
             $this->returnSelf()
         );
@@ -226,7 +229,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $productTwo->expects($this->once())->method('getName')->will($this->returnValue('Product Two'));
         $productTwo->expects($this->once())->method('getFinalPrice')->with(3)->will($this->returnValue(60));
 
-        $quote = new \Magento\Framework\Object(
+        $quote = new \Magento\Framework\DataObject(
             [
                 'store_id' => 8,
                 'store_currency_code' => 'USD',
@@ -236,10 +239,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'customer_email' => 'john.doe@example.com',
                 'billing_address' => $billingAddress,
                 'shipping_address' => $shippingAddress,
-                'payment' => new \Magento\Framework\Object(['method' => 'fixture-payment-method']),
+                'payment' => new \Magento\Framework\DataObject(['method' => 'fixture-payment-method']),
                 'all_visible_items' => [
-                    new \Magento\Framework\Object(['product' => $productOne, 'qty' => 2]),
-                    new \Magento\Framework\Object(['product' => $productTwo, 'qty' => 3])
+                    new \Magento\Framework\DataObject(['product' => $productOne, 'qty' => 2]),
+                    new \Magento\Framework\DataObject(['product' => $productTwo, 'qty' => 3])
                 ]
             ]
         );
@@ -321,7 +324,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPriceInclTax()
     {
-        $itemMock = $this->getMock('Magento\Framework\Object', ['getPriceInclTax'], [], '', false);
+        $itemMock = $this->getMock('Magento\Framework\DataObject', ['getPriceInclTax'], [], '', false);
         $itemMock->expects($this->exactly(2))->method('getPriceInclTax')->will($this->returnValue(5.5));
         $this->assertEquals(5.5, $this->_helper->getPriceInclTax($itemMock));
     }
@@ -344,7 +347,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $itemMock = $this->getMock(
-            'Magento\Framework\Object',
+            'Magento\Framework\DataObject',
             ['getPriceInclTax', 'getQty', 'getTaxAmount', 'getDiscountTaxCompensation', 'getRowTotal'],
             [],
             '',
@@ -365,7 +368,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $rowTotalInclTax = 5.5;
         $expected = 5.5;
-        $itemMock = $this->getMock('Magento\Framework\Object', ['getRowTotalInclTax'], [], '', false);
+        $itemMock = $this->getMock('Magento\Framework\DataObject', ['getRowTotalInclTax'], [], '', false);
         $itemMock->expects($this->exactly(2))->method('getRowTotalInclTax')->will($this->returnValue($rowTotalInclTax));
         $this->assertEquals($expected, $this->_helper->getSubtotalInclTax($itemMock));
     }
@@ -377,7 +380,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $rowTotal = 15;
         $expected = 17;
         $itemMock = $this->getMock(
-            'Magento\Framework\Object',
+            'Magento\Framework\DataObject',
             ['getRowTotalInclTax', 'getTaxAmount', 'getDiscountTaxCompensation', 'getRowTotal'],
             [],
             '',
@@ -402,7 +405,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'priceCurrency' => $this->priceCurrency,
             ]
         );
-        $itemMock = $this->getMock('Magento\Framework\Object', ['getQty'], [], '', false);
+        $itemMock = $this->getMock('Magento\Framework\DataObject', ['getQty'], [], '', false);
         $itemMock->expects($this->once())->method('getQty');
         $this->priceCurrency->expects($this->once())->method('round');
         $helper->getPriceInclTax($itemMock);
@@ -419,7 +422,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'priceCurrency' => $this->priceCurrency,
             ]
         );
-        $itemMock = $this->getMock('Magento\Framework\Object', ['getQty', 'getQtyOrdered'], [], '', false);
+        $itemMock = $this->getMock('Magento\Framework\DataObject', ['getQty', 'getQtyOrdered'], [], '', false);
         $itemMock->expects($this->once())->method('getQty')->will($this->returnValue(false));
         $itemMock->expects($this->exactly(2))->method('getQtyOrdered')->will($this->returnValue(5.5));
         $this->priceCurrency->expects($this->once())->method('round');
@@ -429,7 +432,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testGetBaseSubtotalInclTax()
     {
         $itemMock = $this->getMock(
-            'Magento\Framework\Object',
+            'Magento\Framework\DataObject',
             ['getBaseTaxAmount', 'getBaseDiscountTaxCompensation', 'getBaseRowTotal'],
             [],
             '',

@@ -19,7 +19,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     {
         $resourceMock = $this->getMock(
             'Magento\Framework\Model\Resource\AbstractResource',
-            ['_construct', '_getReadAdapter', '_getWriteAdapter', 'getIdFieldName'],
+            ['_construct', 'getConnection', 'getIdFieldName'],
             [],
             '',
             false

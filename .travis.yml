@@ -28,7 +28,7 @@ before_install:
            $HOME/.cache/bin/composer self-update; echo '';
          else
            mkdir -p $HOME/.cache/bin;
-           curl --connect-timeout 30 -sS https://getcomposer.org/installer \
+           curl --connect-timeout 30 -sS https://getcomposer.org/installer
            | php -- --install-dir $HOME/.cache/bin/ --filename composer;
          fi
        fi'

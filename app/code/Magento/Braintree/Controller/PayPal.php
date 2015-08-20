@@ -10,7 +10,7 @@ use Magento\Framework\App\RequestInterface;
 /**
  * Braintree PayPal Checkout Controller
  */
-class PayPal extends \Magento\Framework\App\Action\Action
+abstract class PayPal extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Braintree\Model\CheckoutFactory

@@ -31,15 +31,15 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Processor $processor
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         Processor $processor,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->stockIndexerProcessor = $processor;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -63,7 +63,7 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function loadByProductId(\Magento\CatalogInventory\Api\Data\StockItemInterface $item, $productId, $websiteId)
     {
         $select = $this->_getLoadSelect('product_id', $productId, $item)->where('website_id = :website_id');
-        $data = $this->_getReadAdapter()->fetchRow($select, [':website_id' => $websiteId]);
+        $data = $this->getConnection()->fetchRow($select, [':website_id' => $websiteId]);
         if ($data) {
             $item->setData($data);
         } else {
@@ -92,14 +92,14 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Use qty correction for qty column update
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @param string $table
      * @return array
      */
-    protected function _prepareDataForTable(\Magento\Framework\Object $object, $table)
+    protected function _prepareDataForTable(\Magento\Framework\DataObject $object, $table)
     {
         $data = parent::_prepareDataForTable($object, $table);
-        $ifNullSql = $this->_getWriteAdapter()->getIfNullSql('qty');
+        $ifNullSql = $this->getConnection()->getIfNullSql('qty');
         if (!$object->isObjectNew() && $object->getQtyCorrection()) {
             if ($object->getQty() === null) {
                 $data['qty'] = null;

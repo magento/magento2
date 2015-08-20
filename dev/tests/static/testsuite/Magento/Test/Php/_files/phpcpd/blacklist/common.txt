@@ -107,7 +107,6 @@ Magento/Wishlist/Model
 lib/internal/Magento/Framework/Archive
 lib/internal/Magento/Framework/HTTP/Client
 lib/internal/Magento/Framework/Acl
-lib/internal/phpseclib
 lib/internal/Magento/Framework/Convert
 lib/internal/Magento/Framework/App/Config
 Magento/Cron/Model

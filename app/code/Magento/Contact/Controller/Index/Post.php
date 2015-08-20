@@ -24,7 +24,7 @@ class Post extends \Magento\Contact\Controller\Index
 
         $this->inlineTranslation->suspend();
         try {
-            $postObject = new \Magento\Framework\Object();
+            $postObject = new \Magento\Framework\DataObject();
             $postObject->setData($post);
 
             $error = false;
@@ -50,8 +50,8 @@ class Post extends \Magento\Contact\Controller\Index
                 ->setTemplateIdentifier($this->scopeConfig->getValue(self::XML_PATH_EMAIL_TEMPLATE, $storeScope))
                 ->setTemplateOptions(
                     [
-                        'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
-                        'store' => $this->storeManager->getStore()->getId(),
+                        'area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
+                        'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
                     ]
                 )
                 ->setTemplateVars(['data' => $postObject])

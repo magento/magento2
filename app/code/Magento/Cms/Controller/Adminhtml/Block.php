@@ -10,7 +10,7 @@ namespace Magento\Cms\Controller\Adminhtml;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Block extends \Magento\Backend\App\Action
+abstract class Block extends \Magento\Backend\App\Action
 {
     /**
      * Core registry

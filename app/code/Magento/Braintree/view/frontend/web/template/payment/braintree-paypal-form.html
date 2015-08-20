@@ -34,14 +34,14 @@
                 <button data-role="review-save"
                         type="submit"
                         data-bind="
-                        attr: {title: $t('Place order')},
+                        attr: {title: $t('Place Order')},
                         enable: (getCode() == isChecked()),
                         click: placeOrder,
                         css: {disabled: !isPlaceOrderActionAllowed()}
                         "
                         class="action primary checkout"
                         disabled>
-                    <span data-bind="text: $t('Place order')"></span>
+                    <span data-bind="i18n: 'Place Order'"></span>
                 </button>
             </div>
         </div>

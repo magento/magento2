@@ -32,7 +32,7 @@ class Submit
     }
 
     /**
-     * @param \Magento\Framework\Object $observer
+     * @param \Magento\Framework\DataObject $observer
      *
      * @return void
      */

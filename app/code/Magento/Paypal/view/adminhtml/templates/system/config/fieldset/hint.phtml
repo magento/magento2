@@ -23,7 +23,7 @@
 ?>
 <script>
 require(['jquery', 'prototype'], function(jQuery){
-    paypalToggleSolution = function(id, url) {
+    window.paypalToggleSolution = function (id, url) {
         var doScroll = false;
         Fieldset.toggleCollapse(id, url);
         if ($(this).hasClassName("open")) {
