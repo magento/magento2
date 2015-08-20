@@ -11,6 +11,7 @@ define(
     ],
     function ($) {
         'use strict';
+        var agreementsConfig = window.checkoutConfig.checkoutAgreements;
         return {
             /**
              * Validate checkout agreements
@@ -18,6 +19,10 @@ define(
              * @returns {boolean}
              */
             validate: function() {
+                if (!agreementsConfig.isEnabled) {
+                    return true;
+                }
+
                 var form = $('.payment-method._active form[data-role=checkout-agreements]');
                 form.validation();
                 return form.validation('isValid');

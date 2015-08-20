@@ -15,5 +15,7 @@
             </argument>
         </arguments>
     </type>
-
+    <type name="Magento\Checkout\Api\PaymentInformationManagementInterface">
+        <plugin name="validate-agreements" type="Magento\CheckoutAgreements\Model\Checkout\Plugin\Validation"/>
+    </type>
 </config>
