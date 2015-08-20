@@ -5,6 +5,7 @@
  */
 namespace Magento\Directory\Test\Unit\Model;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 /**
  * Class CountryInformationAcquirerTest
  */
@@ -75,6 +76,7 @@ class CountryInformationAcquirerTest extends \PHPUnit_Framework_TestCase
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);
 
         $testCountryInfo = $this->objectManager->getObject('\Magento\Directory\Model\Country');
+        $testCountryInfo->setData('country_id', 'US');
         $testCountryInfo->setData('iso2_code', 'US');
         $testCountryInfo->setData('iso3_code', 'USA');
         $testCountryInfo->setData('name_default', 'United States of America');
@@ -120,7 +122,11 @@ class CountryInformationAcquirerTest extends \PHPUnit_Framework_TestCase
         $testCountryInfo->setData('name_en_US', 'United Arab Emirates');
 
         $countryCollection = $this->getMock('\Magento\Directory\Model\Resource\Country\Collection', [], [], '', false);
-        $countryCollection->expects($this->once())->method('getItemById')->willReturn($testCountryInfo);
+        $countryCollection->expects($this->once())->method('addCountryIdFilter')->willReturnSelf();
+        $countryCollection->expects($this->once())->method('load')->willReturnSelf();
+        $countryCollection->expects($this->once())->method('count')->willReturn(1);
+        $countryCollection->expects($this->once())->method('getItemById')->with('AE')->willReturn($testCountryInfo);
+
         $this->directoryHelper->expects($this->once())->method('getCountryCollection')->willReturn($countryCollection);
         $this->directoryHelper->expects($this->once())->method('getRegionData')->willReturn([]);
 
@@ -133,5 +139,33 @@ class CountryInformationAcquirerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('ARE', $result->getThreeLetterAbbreviation());
         $this->assertEquals('United Arab Emirates', $result->getFullNameLocale());
         $this->assertEquals('United Arab Emirates', $result->getFullNameEnglish());
+    }
+
+    /**
+     * test GetGetCountryInfoNotFound
+     *
+     * @expectedException        \Magento\Framework\Exception\NoSuchEntityException
+     * @expectedExceptionMessage Requested country is not available.
+     */
+    public function testGetCountryInfoNotFound()
+    {
+        /** @var \Magento\Store\Model\Store $store */
+        $store = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+        $this->storeManager->expects($this->once())->method('getStore')->willReturn($store);
+
+        $testCountryInfo = $this->objectManager->getObject('\Magento\Directory\Model\Country');
+        $testCountryInfo->setData('country_id', 'AE');
+        $testCountryInfo->setData('iso2_code', 'AE');
+        $testCountryInfo->setData('iso3_code', 'ARE');
+        $testCountryInfo->setData('name_default', 'United Arab Emirates');
+        $testCountryInfo->setData('name_en_US', 'United Arab Emirates');
+
+        $countryCollection = $this->getMock('\Magento\Directory\Model\Resource\Country\Collection', [], [], '', false);
+        $countryCollection->expects($this->once())->method('addCountryIdFilter')->willReturnSelf();
+        $countryCollection->expects($this->once())->method('load')->willReturnSelf();
+        $countryCollection->expects($this->once())->method('count')->willReturn(0);
+
+        $this->directoryHelper->expects($this->once())->method('getCountryCollection')->willReturn($countryCollection);
+        $result = $this->model->getCountryInfo('AE');
     }
 }

@@ -61,14 +61,14 @@ interface RegionInformationInterface extends \Magento\Framework\Api\ExtensibleDa
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return \Magento\Customer\Api\Data\RegionExtensionInterface|null
+     * @return \Magento\Directory\Api\Data\RegionInformationInterface|null
      */
     public function getExtensionAttributes();
 
     /**
      * Set an extension attributes object.
      *
-     * @param \Magento\Customer\Api\Data\RegionExtensionInterface $extensionAttributes
+     * @param \Magento\Directory\Api\Data\RegionInformationInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(\Magento\Customer\Api\Data\RegionExtensionInterface $extensionAttributes);

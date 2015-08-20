@@ -5,6 +5,8 @@
  */
 namespace Magento\Directory\Model;
 
+use Magento\Framework\Exception\NoSuchEntityException;
+
 /**
  * Currency information acquirer class
  */
@@ -94,10 +96,16 @@ class CountryInformationAcquirer implements \Magento\Directory\Api\CountryInform
             $store->getCode()
         );
 
-        $countries = $this->directoryHelper->getCountryCollection($store);
+        $countries = $this->directoryHelper->getCountryCollection($store)->addCountryIdFilter($countryId)->load();
+        if ($countries->count() == 0) {
+            throw new NoSuchEntityException(
+                __(
+                    'Requested country is not available.'
+                )
+            );
+        }
         $regions = $this->directoryHelper->getRegionData();
         $country = $countries->getItemById($countryId);
-
         $countryInfo = $this->setCountryInfo($country, $regions, $storeLocale);
 
         return $countryInfo;
