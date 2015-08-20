@@ -227,6 +227,27 @@ abstract class AbstractEntity
     protected $_scopeConfig;
 
     /**
+     * Count if created items
+     *
+     * @var int
+     */
+    protected $countItemsCreated = 0;
+
+    /**
+     * Count if updated items
+     *
+     * @var int
+     */
+    protected $countItemsUpdated = 0;
+
+    /**
+     * Count if deleted items
+     *
+     * @var int
+     */
+    protected $countItemsDeleted = 0;
+
+    /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
@@ -748,5 +769,51 @@ abstract class AbstractEntity
             }
         }
         return $this->getErrorAggregator();
+    }
+
+    /**
+     * Get count of created items
+     *
+     * @return int
+     */
+    public function getCreatedItemsCount()
+    {
+        return $this->countItemsCreated;
+    }
+
+    /**
+     * Get count of updated items
+     *
+     * @return int
+     */
+    public function getUpdatedItemsCount()
+    {
+        return $this->countItemsUpdated;
+    }
+
+    /**
+     * Get count of deleted items
+     *
+     * @return int
+     */
+    public function getDeletedItemsCount()
+    {
+        return $this->countItemsDeleted;
+    }
+
+    /**
+     * Update proceed items counter
+     *
+     * @param array $created
+     * @param array $updated
+     * @param array $deleted
+     * @return $this
+     */
+    protected function updateItemsCounterStats(array $created = [], array $updated = [], array $deleted = [])
+    {
+        $this->countItemsCreated = count($created);
+        $this->countItemsUpdated = count($updated);
+        $this->countItemsDeleted = count($deleted);
+        return $this;
     }
 }
