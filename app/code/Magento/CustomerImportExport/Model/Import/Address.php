@@ -422,6 +422,7 @@ class Address extends AbstractCustomer
                     $deleteRowIds[] = $rowData[self::COLUMN_ADDRESS_ID];
                 }
             }
+            $this->updateItemsCounterStats($newRows, $updateRows, $deleteRowIds);
 
             $this->_saveAddressEntities(
                 $newRows,
