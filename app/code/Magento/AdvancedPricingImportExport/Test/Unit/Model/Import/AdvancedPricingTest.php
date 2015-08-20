@@ -823,21 +823,21 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
             '\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing',
             $methods,
             [
-                $this->localeDate,
                 $this->jsonHelper,
                 $this->importExportData,
-                $this->resourceHelper,
-                $this->eavConfig,
                 $this->dataSourceModel,
+                $this->eavConfig,
                 $this->resource,
+                $this->resourceHelper,
+                $this->stringObject,
+                $this->errorAggregator,
+                $this->localeDate,
                 $this->resourceFactory,
                 $this->catalogData,
                 $this->storeResolver,
                 $this->validator,
                 $this->websiteValidator,
-                $this->groupPriceValidator,
-                $this->stringObject,
-                $this->errorAggregator
+                $this->groupPriceValidator
             ],
             ''
         );
