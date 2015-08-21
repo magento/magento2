@@ -55,9 +55,9 @@ abstract class AbstractEntity
 
     protected $errorMessageTemplates = [
         self::ERROR_CODE_SYSTEM_EXCEPTION => 'General system exception happened',
-        self::ERROR_CODE_COLUMN_NOT_FOUND => 'We can\'t find required columns: %1.',
-        self::ERROR_CODE_COLUMN_EMPTY_HEADER => 'Columns number: "%1" have empty headers',
-        self::ERROR_CODE_COLUMN_NAME_INVALID => 'Column names: "%1" are invalid',
+        self::ERROR_CODE_COLUMN_NOT_FOUND => 'We can\'t find required columns: %s.',
+        self::ERROR_CODE_COLUMN_EMPTY_HEADER => 'Columns number: "%s" have empty headers',
+        self::ERROR_CODE_COLUMN_NAME_INVALID => 'Column names: "%s" are invalid',
         self::ERROR_CODE_ATTRIBUTE_NOT_VALID => "Please correct the value for '%s'.",
         self::ERROR_CODE_DUPLICATE_UNIQUE_ATTRIBUTE => "Duplicate Unique Attribute for '%s'",
         self::ERROR_CODE_ILLEGAL_CHARACTERS => "Illegal character used for attribute %s",
@@ -785,7 +785,7 @@ abstract class AbstractEntity
                     self::ERROR_CODE_COLUMN_NAME_INVALID,
                     ProcessingError::ERROR_LEVEL_CRITICAL,
                     null,
-                    $invalidColumns
+                    implode('", "', $invalidColumns)
                 );
             }
 
