@@ -105,17 +105,17 @@ interface CountryInformationInterface extends \Magento\Framework\Api\ExtensibleD
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return \Magento\Directory\Api\Data\CountryInformationInterface|null
+     * @return \Magento\Directory\Api\Data\CountryInformationExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
      * Set an extension attributes object.
      *
-     * @param \Magento\Directory\Api\Data\CountryInformationInterface $extensionAttributes
+     * @param \Magento\Directory\Api\Data\CountryInformationExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        \Magento\Directory\Api\Data\CountryInformationInterface $extensionAttributes
+        \Magento\Directory\Api\Data\CountryInformationExtensionInterface $extensionAttributes
     );
 }
