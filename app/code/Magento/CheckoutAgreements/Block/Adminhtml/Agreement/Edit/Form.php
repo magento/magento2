@@ -114,7 +114,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'title' => __('Applied'),
                 'name' => 'mode',
                 'required' => true,
-                'note' => __('Applies to one-page checkout only'),
                 'options' => $this->agreementModeOptions->getOptionsArray()
             ]
         );
