@@ -23,13 +23,13 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\Resource\AbstractR
      * Class constructor
      *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
-     * @param \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy
+     * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy,
+        \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
         $connectionName = null
     ) {

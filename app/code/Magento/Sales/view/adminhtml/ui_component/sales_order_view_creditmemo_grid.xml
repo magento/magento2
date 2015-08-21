@@ -68,19 +68,6 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="selectProvider" xsi:type="string">sales_order_view_creditmemo_grid.sales_order_view_creditmemo_grid.sales_order_view_creditmemo_columns.ids</item>
-                    <item name="displayArea" xsi:type="string">dataGridActions</item>
-                    <item name="options" xsi:type="array">
-                        <item name="cvs" xsi:type="array">
-                            <item name="value" xsi:type="string">csv</item>
-                            <item name="label" xsi:type="string" translate="true">CSV</item>
-                            <item name="url" xsi:type="string">sales/creditmemo/exportCsv</item>
-                        </item>
-                        <item name="xml" xsi:type="array">
-                            <item name="value" xsi:type="string">xml</item>
-                            <item name="label" xsi:type="string" translate="true">Excel XML</item>
-                            <item name="url" xsi:type="string">sales/creditmemo/exportExcel</item>
-                        </item>
-                    </item>
                 </item>
             </argument>
         </exportButton>
