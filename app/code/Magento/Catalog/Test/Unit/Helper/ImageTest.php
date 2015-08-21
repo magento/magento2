@@ -419,4 +419,78 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             ],
         ];
     }
+
+    /**
+     * @param string $imageId
+     * @param string $imageFile
+     * @param string $destination
+     * @param boolean $setImageFile
+     * @param boolean $isCached
+     * @dataProvider getResizedImageInfoDataProvider
+     */
+    public function testGetResizedImageInfo(
+        $imageId,
+        $imageFile,
+        $destination,
+        $setImageFile,
+        $isCached
+    ) {
+        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $productMock->expects($this->any())
+            ->method('getData')
+            ->with($destination)
+            ->willReturn($imageFile);
+
+        $this->image->expects($this->once())
+            ->method('setBaseFile')
+            ->with($imageFile)
+            ->willReturnSelf();
+        $this->image->expects($this->any())
+            ->method('getDestinationSubdir')
+            ->willReturn($destination);
+        $this->image->expects($this->any())
+            ->method('isCached')
+            ->willReturn($isCached);
+        $this->image->expects($this->any())
+            ->method('resize')
+            ->willReturnSelf();
+        $this->image->expects($this->any())
+            ->method('saveFile')
+            ->willReturnSelf();
+
+        $this->prepareAttributes([], $imageId);
+
+        $this->helper->init($productMock, $imageId);
+        if ($setImageFile) {
+            $this->helper->setImageFile($imageFile);
+        }
+
+        $this->helper->getResizedImageInfo();
+    }
+
+    /**
+     * @return array
+     */
+    public function getResizedImageInfoDataProvider()
+    {
+        return [
+            [
+                'image_id' => 'test_image_id',
+                'image_file' => '/path/to/test_image_id.png',
+                'destination' => 'small_image',
+                'set_image_file' => true,
+                'is_cached' => false,
+            ],
+            [
+                'image_id' => 'test_image_id',
+                'image_file' => '/path/to/test_image_id.png',
+                'destination' => 'small_image',
+                'set_image_file' => false,
+                'is_cached' => false,
+            ],
+        ];
+    }
 }
