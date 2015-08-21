@@ -3826,4 +3826,6 @@ return [
     ['Magento\Catalog\Model\Product\Image\View'],
     ['Magento\Tools\Console\CommandList'],
     ['Magento\Customer\Model\Resource\Customer\CustomersTypeOptions'],
+    ['Magento\Checkout\Model\Agreements\AgreementsValidator', 'Magento\CheckoutAgreements\Model\AgreementsValidator'],
+    ['Magento\Checkout\Model\Agreements\AgreementsProviderInterface', 'Magento\CheckoutAgreements\Model\AgreementsProviderInterface'],
 ];
