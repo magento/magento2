@@ -31,7 +31,8 @@ class Collection extends BlockCollection implements SearchResultInterface
      * @param string $resourceModel
      * @param string $model
      * @param string|null $connection
-     * @param \Magento\Framework\Model\Resource\Db\AbstractDb|null $resource
+     * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
