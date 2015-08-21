@@ -78,7 +78,7 @@ class RegionInformation extends \Magento\Framework\Api\AbstractExtensibleObject 
      * @inheritDoc
      */
     public function setExtensionAttributes(
-        \Magento\Customer\Api\Data\RegionExtensionInterface $extensionAttributes
+        \Magento\Directory\Api\Data\RegionInformationInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
