@@ -174,7 +174,8 @@
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">is_active</item>
                         <item name="label" xsi:type="string" translate="true">Status</item>
-                        <item name="caption" xsi:type="string" translate="true">Select...</item>
+                        <item name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</item>
+                        <item name="template" xsi:type="string">ui/grid/filters/elements/ui-select</item>
                         <item name="options" xsi:type="array">
                             <item name="disable" xsi:type="array">
                                 <item name="value" xsi:type="string">0</item>
@@ -319,8 +320,9 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">custom_theme</item>
-                        <item name="caption" xsi:type="string" translate="true">Select...</item>
                         <item name="label" xsi:type="string" translate="true">Custom Theme</item>
+                        <item name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</item>
+                        <item name="template" xsi:type="string">ui/grid/filters/elements/ui-select</item>
                     </item>
                 </argument>
             </filterSelect>
@@ -331,8 +333,9 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">custom_root_template</item>
-                        <item name="caption" xsi:type="string" translate="true">Select...</item>
                         <item name="label" xsi:type="string" translate="true">Custom Layout</item>
+                        <item name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</item>
+                        <item name="template" xsi:type="string">ui/grid/filters/elements/ui-select</item>
                     </item>
                 </argument>
             </filterSelect>
@@ -352,6 +355,19 @@
                     </item>
                 </argument>
             </filterInput>
+            <filterSelect name="page_layout">
+                <argument name="optionsProvider" xsi:type="configurableObject">
+                    <argument name="class" xsi:type="string">Magento\Cms\Model\Page\Source\PageLayout</argument>
+                </argument>
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</item>
+                        <item name="template" xsi:type="string">ui/grid/filters/elements/ui-select</item>
+                        <item name="dataScope" xsi:type="string">page_layout</item>
+                        <item name="label" xsi:type="string" translate="true">Layout</item>
+                    </item>
+                </argument>
+            </filterSelect>
         </filters>
         <massaction name="listing_massaction">
             <argument name="data" xsi:type="array">
