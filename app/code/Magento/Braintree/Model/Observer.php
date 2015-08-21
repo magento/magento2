@@ -91,15 +91,17 @@ class Observer
                     $qtys[$orderItem->getId()] = 0;
                 }
             }
-            $invoice = $order->prepareInvoice($qtys);
-            $invoice->setOrder($order);
-            $invoice->setRequestedCaptureCase(\Magento\Sales\Model\Order\Invoice::CAPTURE_ONLINE);
-            $invoice->register();
-            /** @var \Magento\Framework\DB\Transaction $transaction */
-            $transaction = $this->transactionFactory->create();
-            $transaction->addObject($invoice)
-                ->addObject($invoice->getOrder())
-                ->save();
+            if (array_sum($qtys)>0) {
+                $invoice = $order->prepareInvoice($qtys);
+                $invoice->setOrder($order);
+                $invoice->setRequestedCaptureCase(\Magento\Sales\Model\Order\Invoice::CAPTURE_ONLINE);
+                $invoice->register();
+                /** @var \Magento\Framework\DB\Transaction $transaction */
+                $transaction = $this->transactionFactory->create();
+                $transaction->addObject($invoice)
+                    ->addObject($invoice->getOrder())
+                    ->save();
+            }
         }
         return $this;
     }
