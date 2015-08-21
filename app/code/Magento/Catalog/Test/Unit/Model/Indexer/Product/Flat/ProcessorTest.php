@@ -28,7 +28,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
     protected $_stateMock;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $indexerRegistryMock;
 
@@ -52,7 +52,13 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->indexerRegistryMock = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
+        $this->indexerRegistryMock = $this->getMock(
+            'Magento\Framework\Indexer\IndexerRegistry',
+            ['get'],
+            [],
+            '',
+            false
+        );
         $this->_model = $this->_objectManager->getObject('Magento\Catalog\Model\Indexer\Product\Flat\Processor', [
             'indexerRegistry' => $this->indexerRegistryMock,
             'state'  => $this->_stateMock
