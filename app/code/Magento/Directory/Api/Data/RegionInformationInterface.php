@@ -71,5 +71,7 @@ interface RegionInformationInterface extends \Magento\Framework\Api\ExtensibleDa
      * @param \Magento\Directory\Api\Data\RegionInformationExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(\Magento\Directory\Api\Data\RegionInformationExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(
+        \Magento\Directory\Api\Data\RegionInformationExtensionInterface $extensionAttributes
+    );
 }
