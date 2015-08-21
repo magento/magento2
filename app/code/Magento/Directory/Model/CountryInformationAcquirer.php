@@ -121,28 +121,23 @@ class CountryInformationAcquirer implements \Magento\Directory\Api\CountryInform
      */
     protected function setCountryInfo($country, $regions, $storeLocale)
     {
+        $countryId = $country->getCountryId();
         $countryInfo = $this->countryInformationFactory->create();
-        $countryInfo->setId($country->getCountryId());
+        $countryInfo->setId($countryId);
         $countryInfo->setTwoLetterAbbreviation($country->getData('iso2_code'));
         $countryInfo->setThreeLetterAbbreviation($country->getData('iso3_code'));
         $countryInfo->setFullNameLocale($country->getName($storeLocale));
         $countryInfo->setFullNameEnglish($country->getName('en_US'));
 
-        if (array_key_exists($country->getCountryId(), $regions)) {
+
+        if (array_key_exists($countryId, $regions)) {
             $regionsInfo = [];
-            foreach ($regions as $id => $regionsData) {
-                if ($id == 'config') {
-                    continue;
-                } else if ($id == $country->getCountryId()) {
-                    foreach ($regionsData as $id => $regionData) {
-                        $regionInfo = $this->regionInformationFactory->create();
-                        $regionInfo->setId($id);
-                        $regionInfo->setCode($regionData['code']);
-                        $regionInfo->setName($regionData['name']);
-                        $regionsInfo[] = $regionInfo;
-                    }
-                    break;
-                }
+            foreach ($regions[$countryId] as $id => $regionData) {
+                $regionInfo = $this->regionInformationFactory->create();
+                $regionInfo->setId($id);
+                $regionInfo->setCode($regionData['code']);
+                $regionInfo->setName($regionData['name']);
+                $regionsInfo[] = $regionInfo;
             }
             $countryInfo->setAvailableRegions($regionsInfo);
         }
