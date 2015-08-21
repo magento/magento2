@@ -33,6 +33,7 @@ class CustomizeYourStore extends AbstractActionController
     /**
      * @param Filesystem $filesystem
      * @param Lists $list
+     * @param ObjectManagerProvider $objectManagerProvider
      */
     public function __construct(Filesystem $filesystem, Lists $list, ObjectManagerProvider $objectManagerProvider)
     {
