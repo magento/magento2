@@ -7,6 +7,7 @@ namespace Magento\Framework\App\Request;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\RequestSafetyInterface;
 use Magento\Framework\App\Route\ConfigInterface\Proxy as ConfigInterface;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
 use Magento\Framework\ObjectManagerInterface;
@@ -16,7 +17,7 @@ use Magento\Framework\Stdlib\StringUtils;
 /**
  * Http request
  */
-class Http extends Request implements RequestInterface
+class Http extends Request implements RequestInterface, RequestSafetyInterface
 {
     /**#@+
      * HTTP Ports
@@ -427,9 +428,7 @@ class Http extends Request implements RequestInterface
     }
 
     /**
-     * Check that this is safe request
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function isSafeMethod()
     {
