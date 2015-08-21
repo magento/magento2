@@ -6,7 +6,10 @@
 /*global alert*/
 define([
     'jquery',
-    'mage/utils/super' /** TODO: rename this dependency to 'mage/utils/wrapper' after Vanilla PR will merged */
+    /** TODO: rename this dependency to 'mage/utils/wrapper' after Vanilla PR will merged.
+     * Moved in scope of MAGETWO-40661
+     */
+    'mage/utils/super'
 ], function ($, wrapper) {
     'use strict';
     var agreementsConfig = window.checkoutConfig.checkoutAgreements;
