@@ -85,5 +85,10 @@ T: {{var telephone}}
 {{depend vat_id}}<br/>VAT: {{var vat_id}}{{/depend}}|]]></pdf>
             </address_templates>
         </customer>
+        <general>
+            <restriction>
+                <autocomplete_on_storefront>0</autocomplete_on_storefront>
+            </restriction>
+        </general>
     </default>
 </config>
