@@ -66,8 +66,7 @@ abstract class AbstractJob
         ObjectManagerProvider $objectManagerProvider,
         $name,
         array $params = []
-    )
-    {
+    ) {
         $this->output = $output;
         $this->status = $status;
         $this->name = $name;
@@ -98,6 +97,10 @@ abstract class AbstractJob
         return $this->name . ' ' . json_encode($this->params, JSON_UNESCAPED_SLASHES);
     }
 
+    /**
+     * Do the cleanup
+     * @return void
+     */
     protected function performCleanup()
     {
         $this->status->add('Cleaning generated files...');

@@ -49,7 +49,7 @@ class Updater
         try {
             // write to .update_queue.json file
             $params = [];
-            if(!empty($packages)) {
+            if (!empty($packages)) {
                 $params['components'] = $packages;
             }
             $params += $additionalOptions;

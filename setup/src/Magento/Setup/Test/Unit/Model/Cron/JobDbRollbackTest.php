@@ -59,7 +59,7 @@ class JobDbRollbackTest extends \PHPUnit_Framework_TestCase
         $output = $this->getMockForAbstractClass('Symfony\Component\Console\Output\OutputInterface', [], '', false);
         $this->objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
         $this->cleanupFiles = $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false);
-        $this->cache = $this->getMock('\Magento\Framework\App\Cache', [],[],'', false);
+        $this->cache = $this->getMock('\Magento\Framework\App\Cache', [], [], '', false);
         $valueMap = [
             ['Magento\Framework\App\State\CleanupFiles', $this->cleanupFiles],
             ['Magento\Framework\App\Cache', $this->cache],
