@@ -67,18 +67,8 @@ class MassAction extends AbstractComponent
         $actionOptions = ($this->optionsProvider) ? $this->optionsProvider->toOptionArray() : [];
         $config = $this->getData('config');
         if (isset($config['actions'])) {
-            /* Process dynamic actions */
-            foreach ($config['actions'] as $key => &$data) {
-                $additionalActions = isset($actionOptions[$key]) ? $actionOptions[$key] : [];
-                $removeParent = false;
-                foreach ($additionalActions as $additionalAction) {
-                    $additionalAction['url'] = $this->getContext()->getUrl($data['url'], $additionalAction['url']);
-                    $removeParent = true;
-                    $data['actions'][] = $additionalAction;
-                }
-                if ($removeParent) {
-                    unset($data['url']);
-                }
+            if (!empty($actionOptions)) {
+                $this->processDymanicActions($config['actions'], $actionOptions);
             }
             $config['actions'] = array_values($config['actions']);
             array_walk_recursive(
@@ -95,5 +85,28 @@ class MassAction extends AbstractComponent
         }
 
         parent::prepare();
+    }
+
+    /**
+     * Process dynamic action
+     *
+     * @param array $actions
+     * @param array $actionOptions
+     * @return void
+     */
+    protected function processDymanicActions(&$actions, $actionOptions)
+    {
+        foreach ($actions as $key => &$data) {
+            $additionalActions = isset($actionOptions[$key]) ? $actionOptions[$key] : [];
+            $removeParent = false;
+            foreach ($additionalActions as $additionalAction) {
+                $additionalAction['url'] = $this->getContext()->getUrl($data['url'], $additionalAction['url']);
+                $removeParent = true;
+                $data['actions'][] = $additionalAction;
+            }
+            if ($removeParent) {
+                unset($data['url']);
+            }
+        }
     }
 }
