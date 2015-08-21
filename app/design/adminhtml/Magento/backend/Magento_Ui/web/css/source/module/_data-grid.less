@@ -84,6 +84,10 @@
     }
 }
 
+._hideOverflow {
+  overflow: hidden;
+}
+
 .data-grid {
     border-bottom: @data-grid-cell__border-width @data-grid-td__border-outer-style @data-grid-td__border-color;
     border-left: none;
@@ -91,9 +95,11 @@
     border-top: none;
     box-sizing: border-box; // ToDo UI: Rewrite old styles. Should be deleted afterwards
     font-size: @data-grid__font-size;
+    table-layout: fixed;
     max-width: 100%;
     margin-bottom: 0;
     width: 100%;
+
     &._in-resize {
         -webkit-user-select: none;
            -moz-user-select: none;
@@ -248,6 +254,7 @@
         color: @data-grid-th__color;
         padding: @data-grid-th__padding-vertical @data-grid-th__padding-horizontal;
         vertical-align: middle;
+        position: relative;
         &._draggable {
             cursor: -webkit-grab;
                cursor: -moz-grab;

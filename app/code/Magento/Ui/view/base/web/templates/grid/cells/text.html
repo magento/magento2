@@ -12,5 +12,10 @@
             applyFieldAction.bind($data, $parentContext.$index()) :
             false"
     data-action="grid-row-edit">
-    <div data-bind="text: getLabel(row[field.index])"></div>
+    <div
+        data-bind="
+            text: getLabel(row[field.index]),
+            style: { maxHeight: $parents[1].resize('getMaxHeight')}"
+        class="_hideOverflow">
+    </div>
 </td>
