@@ -14,7 +14,7 @@ use Magento\Tax\Test\Fixture\TaxClass as FixtureTaxClass;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
 /**
- * Taz class data source.
+ * Tax class data source.
  *
  * Data keys:
  *  - dataset
