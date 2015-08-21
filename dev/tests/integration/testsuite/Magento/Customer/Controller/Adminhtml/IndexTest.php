@@ -626,7 +626,10 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $customer = $this->customerRepository->getById(1);
         $this->assertEquals(1, $customer->getGroupId());
 
-        $this->getRequest()->setParam('group', 0)->setPostValue('customer', [1]);
+        $this->getRequest()
+            ->setParam('group', 0)
+            ->setPostValue('namespace', 'customer_listing')
+            ->setPostValue('selected', [1]);
         $this->dispatch('backend/customer/index/massAssignGroup');
         $this->assertSessionMessages(
             $this->equalTo(['A total of 1 record(s) were updated.']),
@@ -639,54 +642,17 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
     }
 
     /**
-     * Valid group Id but no data fixture so no customer exists with customer Id = 1
-     * @magentoDbIsolation enabled
-     */
-    public function testMassAssignGroupActionInvalidCustomerId()
-    {
-        $this->getRequest()->setParam('group', 0)->setPostValue('customer', [1]);
-        $this->dispatch('backend/customer/index/massAssignGroup');
-        $this->assertSessionMessages(
-            $this->equalTo(['No such entity with customerId = 1']),
-            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
-        );
-    }
-
-    /**
      * Valid group Id but no customer Ids specified
      * @magentoDbIsolation enabled
      */
     public function testMassAssignGroupActionNoCustomerIds()
     {
-        $this->getRequest()->setParam('group', 0);
+        $this->getRequest()->setParam('group', 0)->setPostValue('namespace', 'customer_listing');
         $this->dispatch('backend/customer/index/massAssignGroup');
         $this->assertSessionMessages(
-            $this->equalTo(['Please select customer(s).']),
+            $this->equalTo(['Please select item(s).']),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
-    }
-
-    /**
-     * @magentoDataFixture Magento/Customer/_files/two_customers.php
-     */
-    public function testMassAssignGroupActionPartialUpdate()
-    {
-        $this->assertEquals(1, $this->customerRepository->getById(1)->getGroupId());
-        $this->assertEquals(1, $this->customerRepository->getById(2)->getGroupId());
-
-        $this->getRequest()->setParam('group', 0)->setPostValue('customer', [1, 4200, 2]);
-        $this->dispatch('backend/customer/index/massAssignGroup');
-        $this->assertSessionMessages(
-            $this->equalTo(['A total of 2 record(s) were updated.']),
-            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
-        );
-        $this->assertSessionMessages(
-            $this->equalTo(['No such entity with customerId = 4200']),
-            \Magento\Framework\Message\MessageInterface::TYPE_ERROR
-        );
-
-        $this->assertEquals(0, $this->customerRepository->getById(1)->getGroupId());
-        $this->assertEquals(0, $this->customerRepository->getById(2)->getGroupId());
     }
 
     /**
