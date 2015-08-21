@@ -5,8 +5,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\PasswordManagement\Controller\Adminhtml\Crypt\Key;
 
 class Save extends \Magento\PasswordManagement\Controller\Adminhtml\Crypt\Key
@@ -48,7 +46,6 @@ class Save extends \Magento\PasswordManagement\Controller\Adminhtml\Crypt\Key
      * Process saving new encryption key
      *
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function execute()
     {
@@ -69,16 +66,15 @@ class Save extends \Magento\PasswordManagement\Controller\Adminhtml\Crypt\Key
             if (!$key) {
                 $this->messageManager->addNotice(
                     __(
-                        'This is your new encryption key: <span style="font-family:monospace;">%1</span>. Be sure to write it down and take good care of it!',
+                        'This is your new encryption key: <span style="font-family:monospace;">%1</span>. ' .
+                        'Be sure to write it down and take good care of it!',
                         $newKey
                     )
                 );
             }
             $this->cache->clean();
         } catch (\Exception $e) {
-            if ($message = $e->getMessage()) {
-                $this->messageManager->addError($e->getMessage());
-            }
+            $this->messageManager->addError($e->getMessage());
             $this->_session->setFormData(['crypt_key' => $key]);
         }
         $this->_redirect('adminhtml/*/');
