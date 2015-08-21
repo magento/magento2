@@ -78,8 +78,7 @@ class JobModuleEnable extends AbstractJob
         try {
             //convert composer package names to internal magento module name
             $packageInfo = $this->packageInfoFactory->create();
-            $packages = [];
-            foreach($this->params['components'] as $compObj) {
+            foreach ($this->params['components'] as $compObj) {
                 if(isset($compObj['name']) && (!empty($compObj['name']))) {
                     $moduleNames[] = $packageInfo->getModuleName($compObj['name']);
                 }
