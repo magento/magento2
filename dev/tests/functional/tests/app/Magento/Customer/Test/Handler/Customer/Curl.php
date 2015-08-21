@@ -37,6 +37,7 @@ class Curl extends AbstractCurl implements CustomerInterface
         'gender' => [
             'Male' => 1,
             'Female' => 2,
+            'Not Specified' => 3
         ],
         'region_id' => [
             'California' => 12,
