@@ -36,25 +36,26 @@ define(
                 });
             },
 
-            bindChangeHandlers: function(elements) {
+            bindChangeHandlers: function(elements, force, delay) {
                 var self = this;
                 var observableFields = shippingRatesValidationRules.getObservableFields();
                 $.each(elements, function(index, elem) {
-                    if (elem && observableFields.indexOf(elem.index) != -1) {
+                    if (elem && (observableFields.indexOf(elem.index) != -1 || force)) {
                         if (elem.index !== 'postcode') {
-                            self.bindHandler(elem);
+                            self.bindHandler(elem, delay);
                         }
                     }
 
                     if (elem.index === 'postcode') {
-                        self.bindHandler(elem);
+                        self.bindHandler(elem, delay);
                         postcodeElement = elem;
                     }
                 });
             },
 
-            bindHandler: function(element) {
+            bindHandler: function(element, delay) {
                 var self = this;
+                delay = typeof delay === "undefined" ? self.validateDelay : delay;
                 if (element.component.indexOf('/group') != -1) {
                     $.each(element.elems(), function(index, elem) {
                         self.bindHandler(elem);
@@ -66,7 +67,7 @@ define(
                             if (self.postcodeValidation()) {
                                 self.validateFields();
                             }
-                        }, self.validateDelay);
+                        }, delay);
                     });
                     observedElements.push(element);
                 }

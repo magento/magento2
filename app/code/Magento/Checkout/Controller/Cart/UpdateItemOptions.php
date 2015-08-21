@@ -4,9 +4,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Checkout\Controller\Cart;
 
 class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
@@ -62,7 +59,8 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
                 if (!$this->cart->getQuote()->getHasError()) {
                     $message = __(
                         '%1 was updated in your shopping cart.',
-                        $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($item->getProduct()->getName())
+                        $this->_objectManager->get('Magento\Framework\Escaper')
+                            ->escapeHtml($item->getProduct()->getName())
                     );
                     $this->messageManager->addSuccess($message);
                 }

@@ -118,7 +118,8 @@ class EstimateShippingAndTaxStep implements TestStepInterface
             if (!empty($this->shipping)) {
                 $this->checkoutCart->getShippingBlock()->selectShippingMethod($this->shipping);
             }
-            $this->assertEstimateShippingAndTax->processAssert($this->checkoutCart, $cart);
+            $this->checkoutCart->getTotalsBlock()->waitForUpdatedTotals();
+            $this->assertEstimateShippingAndTax->processAssert($this->checkoutCart, $cart, false);
         }
     }
 }
