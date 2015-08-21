@@ -20,7 +20,7 @@ class Shipments extends Tab
      *
      * @var string
      */
-    protected $grid = '#order_shipments';
+    protected $grid = '#sales_order_view_tabs_order_shipments_content';
 
     /**
      * Get grid block
