@@ -63,10 +63,24 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testRollback()
     {
-        $this->objectManager->expects($this->once())
+        $valueMap = [
+            [
+                'Magento\Framework\App\State\CleanupFiles',
+                $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false)
+            ],
+            [
+                'Magento\Framework\App\Cache',
+                $this->getMock('Magento\Framework\App\Cache', [], [], '', false)
+            ],
+            [
+                'Magento\Framework\Setup\BackupRollbackFactory',
+                $this->getMock('Magento\Framework\Setup\BackupRollbackFactory', [], [], '', false)
+            ],
+        ];
+        $this->objectManager->expects($this->any())
             ->method('get')
-            ->with('Magento\Framework\Setup\BackupRollbackFactory')
-            ->willReturn($this->getMock('Magento\Framework\Setup\BackupRollbackFactory', [], [], '', false));
+            ->will($this->returnValueMap($valueMap));
+
         $this->assertInstanceOf(
             'Magento\Setup\Model\Cron\AbstractJob',
             $this->jobFactory->create('setup:rollback', [])

@@ -11,6 +11,7 @@ use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
+
 /**
  * DB Rollback job
  */
@@ -34,11 +35,12 @@ class JobDbRollback extends AbstractJob
         BackupRollbackFactory $backupRollbackFactory,
         OutputInterface $output,
         Status $status,
+        ObjectManagerProvider $objectManagerProvider,
         $name,
         $params = []
     ) {
         $this->backupRollbackFactory = $backupRollbackFactory;
-        parent::__construct($output, $status, $name, $params);
+        parent::__construct($output, $status, $objectManagerProvider, $name, $params);
     }
 
     /**

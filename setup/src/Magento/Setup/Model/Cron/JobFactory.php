@@ -69,6 +69,7 @@ class JobFactory
                     $objectManager->get('Magento\Framework\Setup\BackupRollbackFactory'),
                     $multipleStreamOutput,
                     $cronStatus,
+                    $objectManagerProvider,
                     $name,
                     $params
                 );

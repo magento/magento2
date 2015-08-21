@@ -87,30 +87,14 @@ class StartUpdater extends AbstractActionController
         ) {
             $errorMessage .= $this->validatePayload($postPayload);
             if (empty($errorMessage)) {
+
                 $packages = $postPayload[self::KEY_POST_PACKAGES];
                 $jobType = $postPayload[self::KEY_POST_JOB_TYPE];
                 $this->createTypeFlag($jobType, $postPayload[self::KEY_POST_HEADER_TITLE]);
+
                 $additionalOptions = [];
-                switch($jobType) {
-                    case 'uninstall':
-                        $additionalOptions = [
-                            JobComponentUninstall::DATA_OPTION => $postPayload[self::KEY_POST_DATA_OPTION]
-                        ];
-                        $cronTaskType = \Magento\Setup\Model\Cron\JobFactory::JOB_COMPONENT_UNINSTALL;
-                        break;
-
-                    case 'update':
-                        $cronTaskType = ModelUpdater::TASK_TYPE_UPDATE;
-                        break;
-
-                    case 'enable':
-                        $cronTaskType = \Magento\Setup\Model\Cron\JobFactory::JOB_MODULE_ENABLE;
-                        break;
-
-                    case 'disable':
-                        $cronTaskType = \Magento\Setup\Model\Cron\JobFactory::JOB_MODULE_DISABLE;
-                        break;
-                }
+                $cronTaskType = '';
+                $this->getCronTaskConfigInfo($jobType, $postPayload, $additionalOptions, $cronTaskType);
 
                 $errorMessage .= $this->updater->createUpdaterTask(
                     $packages,
@@ -182,5 +166,38 @@ class StartUpdater extends AbstractActionController
         $data['titles'] = $titles;
         $directoryWrite = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $directoryWrite->writeFile('.type.json', Json::encode($data));
+    }
+
+    /**
+     * @param string $jobType
+     * @param array $addtionalOptions
+     * @param string $cronTaskType
+     */
+    private function getCronTaskConfigInfo($jobType, $postPayload, &$addtionalOptions, &$cronTaskType)
+    {
+        $addtionalOptions = [];
+        switch($jobType) {
+            case 'uninstall':
+                $additionalOptions = [
+                    JobComponentUninstall::DATA_OPTION => $postPayload[self::KEY_POST_DATA_OPTION]
+                ];
+                $cronTaskType = \Magento\Setup\Model\Cron\JobFactory::JOB_COMPONENT_UNINSTALL;
+                break;
+
+            //upgrade or update are handled by same task type on updater side
+            case 'upgrade':
+                ;
+            case 'update':
+                $cronTaskType = ModelUpdater::TASK_TYPE_UPDATE;
+                break;
+
+            case 'enable':
+                $cronTaskType = \Magento\Setup\Model\Cron\JobFactory::JOB_MODULE_ENABLE;
+                break;
+
+            case 'disable':
+                $cronTaskType = \Magento\Setup\Model\Cron\JobFactory::JOB_MODULE_DISABLE;
+                break;
+        }
     }
 }
