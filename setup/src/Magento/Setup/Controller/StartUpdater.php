@@ -186,8 +186,9 @@ class StartUpdater extends AbstractActionController
                 $cronTaskType = \Magento\Setup\Model\Cron\JobFactory::JOB_COMPONENT_UNINSTALL;
                 break;
 
-            //upgrade or update are handled by same task type on updater side
             case 'upgrade':
+                //upgrade or update are handled by same task type on updater side
+                //the fall through is intentional here
                 ;
             case 'update':
                 $cronTaskType = ModelUpdater::TASK_TYPE_UPDATE;
