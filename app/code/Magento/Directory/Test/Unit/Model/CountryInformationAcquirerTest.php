@@ -167,6 +167,6 @@ class CountryInformationAcquirerTest extends \PHPUnit_Framework_TestCase
         $countryCollection->expects($this->once())->method('count')->willReturn(0);
 
         $this->directoryHelper->expects($this->once())->method('getCountryCollection')->willReturn($countryCollection);
-        $result = $this->model->getCountryInfo('AE');
+        $this->model->getCountryInfo('AE');
     }
 }
