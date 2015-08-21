@@ -239,6 +239,9 @@ class PhpScanner implements ScannerInterface
             if (($tokens[$tokenIterator][0] == T_CLASS || $tokens[$tokenIterator][0] == T_INTERFACE)
                 && $tokens[$tokenIterator - 1][0] != T_DOUBLE_COLON
             ) {
+                if ($tokens[$tokenIterator - 1][0] == T_PAAMAYIM_NEKUDOTAYIM) {
+                    continue;
+                }
                 $classes = array_merge($classes, $this->_fetchClasses($namespace, $tokenIterator, $count, $tokens));
             }
         }
