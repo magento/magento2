@@ -77,9 +77,9 @@ class GridFilteringTest extends Injectable
         $idGetter,
         array $filters,
         $fixtureName,
-        $fixtureDataSet = null,
         $itemsCount,
         array $steps = [],
+        $fixtureDataSet = null,
         $idColumn = null
     ) {
         $items = $this->createItems($itemsCount, $fixtureName, $fixtureDataSet, $steps);
