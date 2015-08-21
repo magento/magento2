@@ -18,7 +18,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
     protected $_resourceMock;
 
     /**
-     * @var \Magento\Indexer\Model\Indexer\Table\StrategyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\Table\StrategyInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_tableStrategyInterface;
 
@@ -30,7 +30,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->_tableStrategyInterface = $this->getMock(
-            'Magento\Indexer\Model\Indexer\Table\StrategyInterface',
+            'Magento\Framework\Indexer\Table\StrategyInterface',
             [],
             [],
             '',
