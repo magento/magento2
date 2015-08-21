@@ -26,10 +26,16 @@ abstract class AbstractMessage implements MessageInterface
     protected $isSticky = false;
 
     /**
+     * @var array
+     */
+    protected $data;
+
+    /**
      * @param string $text
      */
-    public function __construct($text)
-    {
+    public function __construct(
+        $text = null
+    ) {
         $this->text = $text;
     }
 
@@ -114,7 +120,29 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function toString()
     {
-        $out = $this->getType() . ': ' . $this->getText();
+        $out = $this->getType() . ': ' . $this->getIdentifier() . '| ' . $this->getText();
         return $out;
+    }
+
+    /**
+     * Sets message data
+     *
+     * @param array $data
+     * @return $this
+     */
+    public function setData(array $data = [])
+    {
+        $this->data = $data;
+        return $this;
+    }
+
+    /**
+     * Returns message data
+     *
+     * @return array
+     */
+    public function getData()
+    {
+        return (array)$this->data;
     }
 }
