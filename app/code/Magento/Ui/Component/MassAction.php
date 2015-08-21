@@ -68,7 +68,7 @@ class MassAction extends AbstractComponent
         $config = $this->getData('config');
         if (isset($config['actions'])) {
             if (!empty($actionOptions)) {
-                $this->processDymanicActions($config['actions'], $actionOptions);
+                $this->processDynamicActions($config['actions'], $actionOptions);
             }
             $config['actions'] = array_values($config['actions']);
             array_walk_recursive(
@@ -94,7 +94,7 @@ class MassAction extends AbstractComponent
      * @param array $actionOptions
      * @return void
      */
-    protected function processDymanicActions(&$actions, $actionOptions)
+    protected function processDynamicActions(&$actions, $actionOptions)
     {
         foreach ($actions as $key => &$data) {
             $additionalActions = isset($actionOptions[$key]) ? $actionOptions[$key] : [];
