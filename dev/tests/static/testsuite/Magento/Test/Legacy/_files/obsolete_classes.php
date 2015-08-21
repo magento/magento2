@@ -3826,4 +3826,5 @@ return [
     ['Magento\Catalog\Model\Product\Image\View'],
     ['Magento\Tools\Console\CommandList'],
     ['Magento\Customer\Model\Resource\Customer\CustomersTypeOptions'],
+    ['Magento\Setup\Model\SampleData', 'Magento\SampleData\Model\SampleData'],
 ];
