@@ -39,6 +39,9 @@ define([
             var productName = this.variationsComponent().getProductValue('name');
             var productPrice = this.variationsComponent().getProductValue('price');
             var variationsKeys = [];
+            var gridExs = [];
+            var gridNew = [];
+            var gridDeleted = [];
             this.variations = [];
 
             _.each(variations, function (options) {
@@ -66,18 +69,30 @@ define([
                 };
                 this.variations.push(variation);
                 if (productId) {
-                    this.gridExisting.push(this.prepareRowForGrid(variation));
+                    gridExs.push(this.prepareRowForGrid(variation));
                 } else {
-                    this.gridNew.push(this.prepareRowForGrid(variation));
+                    gridNew.push(this.prepareRowForGrid(variation));
                 }
                 variationsKeys.push(this.variationsComponent().getVariationKey(options));
             }, this);
 
+            if (gridExs.length > 0) {
+                this.gridExisting(gridExs);
+            }
+
+            if (gridNew.length > 0) {
+                this.gridNew(gridNew);
+            }
+
             _.each(_.omit(this.variationsComponent().productAttributesMap, variationsKeys), function (productId) {
-                this.gridDeleted.push(this.prepareRowForGrid(
+                gridDeleted.push(this.prepareRowForGrid(
                     _.findWhere(this.variationsComponent().variations, {product_id: productId})
                 ));
             }.bind(this));
+
+            if (gridDeleted.length > 0) {
+                this.gridDeleted(gridDeleted);
+            }
         },
         prepareRowForGrid: function(variation) {
             var row = [];
