@@ -74,7 +74,7 @@
             <div class="action-dropdown-menu-item-edit" data-bind="keyboard: {
                 13: applyCustom
             }">
-                <input class="admin__control-text" type="text" style="min-width: 5rem;" data-bind="value: custom.value">
+                <input class="admin__control-text" type="text" style="min-width: 5rem;" data-bind="value: custom.value, hasFocus: isCustomVisible()">
                 <button
                     class="action-submit"
                     data-bind="click: applyCustom"

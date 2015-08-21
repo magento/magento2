@@ -13,6 +13,7 @@ define([
     /**
      * Returns closest existing page number to page argument
      * @param {Number} value
+     * @param {Number} min
      * @param {Number} max
      * @returns {Number} closest existing page number
      */
@@ -29,7 +30,7 @@ define([
             minSize: 1,
             maxSize: 1000,
             links: {
-                size: '${ $.storageConfig.path }.value',
+                value: '${ $.storageConfig.path }.value',
                 options: '${ $.storageConfig.path }.options'
             },
             listens: {
@@ -269,6 +270,15 @@ define([
                 .discardCustom();
 
             return this;
+        },
+
+        /**
+         * Checks if custom field is visible.
+         *
+         * @returns {Boolean}
+         */
+        isCustomVisible: function () {
+            return this.custom.visible();
         },
 
         /**
