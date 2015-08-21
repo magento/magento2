@@ -81,14 +81,20 @@ abstract class ImportResult extends Import
                         . $error->getErrorDescription() . '</div>';
                 }
             }
-            $resultBlock->addNotice(
-                '<strong>' . __('Following Error(s) has been occurred during importing process:') . '</strong><br>'
-                . '<div class="import-error-wrapper">' . __('Only first 100 errors are displayed here. ')
-                . '<a href="'
-                . $this->createDownloadUrlImportHistoryFile($this->createErrorReport($errorAggregator))
-                . '">' . __('Download full report') . '</a><br>'
-                . '<div class="import-error-list">' . $message . '</div></div>'
-            );
+            try {
+                $resultBlock->addNotice(
+                    '<strong>' . __('Following Error(s) has been occurred during importing process:') . '</strong><br>'
+                    . '<div class="import-error-wrapper">' . __('Only first 100 errors are displayed here. ')
+                    . '<a href="'
+                    . $this->createDownloadUrlImportHistoryFile($this->createErrorReport($errorAggregator))
+                    . '">' . __('Download full report') . '</a><br>'
+                    . '<div class="import-error-list">' . $message . '</div></div>'
+                );
+            } catch (\Exception $e) {
+                foreach ($this->getErrorMessages($errorAggregator) as $errorMessage) {
+                    $resultBlock->addError($errorMessage);
+                }
+            }
         }
 
         return $this;
