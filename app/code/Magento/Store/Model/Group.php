@@ -12,7 +12,11 @@
  */
 namespace Magento\Store\Model;
 
-
+/**
+ * Class Group
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Framework\DataObject\IdentityInterface,
     \Magento\Store\Api\Data\GroupInterface
@@ -102,6 +106,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
