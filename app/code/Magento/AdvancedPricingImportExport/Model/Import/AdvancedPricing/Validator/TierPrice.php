@@ -47,7 +47,7 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
         foreach ($this->groupRepository->getList($this->searchCriteriaBuilder->create())->getItems() as $group) {
             $this->customerGroups[$group->getCode()] = $group->getId();
         }
-        return parent::init($context);
+        $this->context = $context;
     }
 
     /**
