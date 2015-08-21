@@ -140,7 +140,7 @@ class GridFullTextSearchTest extends Injectable
             $item = $this->fixtureFactory->createByCode($fixtureName, ['dataset' => $fixtureDataSet]);
             $item->persist();
             $items[$i] = $item;
-            if(!empty($steps)){
+            if (!empty($steps)) {
                 $this->processSteps($item, $steps[$i]);
             }
         }
