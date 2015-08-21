@@ -53,7 +53,7 @@ class Options implements OptionSourceInterface
         $paramName = isset($this->data['paramName']) ? $this->data['paramName'] : null;
 
         if ($this->options === null) {
-            $options = $this->collectionFactory->create()->toOptionArray();
+            $options = $this->collectionFactory->create()->setRealGroupsFilter()->toOptionArray();
             foreach ($options as $optionCode) {
                 $this->options[$reference][] = [
                     'type' => 'customer_group_' . $optionCode['value'],
