@@ -91,19 +91,42 @@ class StartUpdater extends AbstractActionController
                 $jobType = $postPayload[self::KEY_POST_JOB_TYPE];
                 $this->createTypeFlag($jobType, $postPayload[self::KEY_POST_HEADER_TITLE]);
                 $additionalOptions = [];
-                if ($jobType == 'uninstall') {
-                    $additionalOptions = [
-                        JobComponentUninstall::DATA_OPTION => $postPayload[self::KEY_POST_DATA_OPTION]
-                    ];
-                    $cronTaskType = \Magento\Setup\Model\Cron\JobFactory::COMPONENT_UNINSTALL;
-                } else {
-                    $cronTaskType = ModelUpdater::TASK_TYPE_UPDATE;
+                switch($jobType) {
+                    case 'uninstall':
+                        $additionalOptions = [
+                            JobComponentUninstall::DATA_OPTION => $postPayload[self::KEY_POST_DATA_OPTION]
+                        ];
+                        $cronTaskType = \Magento\Setup\Model\Cron\JobFactory::JOB_COMPONENT_UNINSTALL;
+                        break;
+
+                    case 'update':
+                        $cronTaskType = ModelUpdater::TASK_TYPE_UPDATE;
+                        break;
+
+                    case 'enable':
+                        $cronTaskType = \Magento\Setup\Model\Cron\JobFactory::JOB_MODULE_ENABLE;
+                        break;
+
+                    case 'disable':
+                        $cronTaskType = \Magento\Setup\Model\Cron\JobFactory::JOB_MODULE_DISABLE;
+                        break;
                 }
+
                 $errorMessage .= $this->updater->createUpdaterTask(
                     $packages,
                     $cronTaskType,
                     $additionalOptions
                 );
+
+                // for module enable job types, we need to follow up with 'setup:upgrade' task to
+                // make sure enabled modules are properly registered
+                if ($jobType == 'enable') {
+                    $errorMessage .= $this->updater->createUpdaterTask(
+                        [],
+                        \Magento\Setup\Model\Cron\JobFactory::JOB_UPGRADE,
+                        []
+                    );
+                }
             }
         } else {
             $errorMessage .= 'Invalid request';
@@ -128,8 +151,7 @@ class StartUpdater extends AbstractActionController
         }
         foreach ($packages as $package) {
             if (!isset($package[self::KEY_POST_PACKAGE_NAME])
-                || ($jobType != 'uninstall' && !isset($package[self::KEY_POST_PACKAGE_VERSION]))
-            ) {
+                || ($jobType == 'update' && !isset($package[self::KEY_POST_PACKAGE_VERSION]))) {
                 $errorMessage .= 'Missing package information' . PHP_EOL;
                 break;
             }
