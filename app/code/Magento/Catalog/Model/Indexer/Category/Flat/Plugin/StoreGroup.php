@@ -7,7 +7,7 @@ namespace Magento\Catalog\Model\Indexer\Category\Flat\Plugin;
 
 class StoreGroup
 {
-    /** @var \Magento\Indexer\Model\IndexerRegistry */
+    /** @var \Magento\Framework\Indexer\IndexerRegistry */
     protected $indexerRegistry;
 
     /**
@@ -16,11 +16,11 @@ class StoreGroup
     protected $state;
 
     /**
-     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
+     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @param \Magento\Catalog\Model\Indexer\Category\Flat\State $state
      */
     public function __construct(
-        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
+        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\Catalog\Model\Indexer\Category\Flat\State $state
     ) {
         $this->indexerRegistry = $indexerRegistry;
