@@ -5,9 +5,9 @@
  */
 -->
 
-<th class="data-grid-multiselect-cell">
+<th class="data-grid-multicheck-cell">
     <div
-        class="action-multiselect-wrap"
+        class="action-multicheck-wrap"
         data-bind="css: { '_active': menuVisible, '_disabled': !totalRecords()},
                    outerClick: hideMenu">
         <input
@@ -20,7 +20,7 @@
                        enable: totalRecords">
         <label for="mass-select-checkbox"></label>
         <button
-            class="action-multiselect-toggle"
+            class="action-multicheck-toggle"
             data-toggle="dropdown"
             data-bind="css: { '_active': menuVisible },
                        click: toggleMenu,
