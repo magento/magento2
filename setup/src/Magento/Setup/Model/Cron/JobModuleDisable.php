@@ -6,15 +6,16 @@
 namespace Magento\Setup\Model\Cron;
 
 use Magento\Framework\App\Cache;
+use Magento\Framework\Module\PackageInfoFactory;
 use Magento\Setup\Console\Command\AbstractSetupCommand;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Upgrade job
+ * Job that handles module disable
  */
-class JobUpgrade extends AbstractJob
+class JobModuleDisable extends AbstractJob
 {
     /**
      * @var \Magento\Framework\App\Cache
@@ -27,6 +28,11 @@ class JobUpgrade extends AbstractJob
     private $cleanupFiles;
 
     /**
+     * @var Magento\Framework\Module\PackageInfoFactory
+     */
+    private $packageInfoFactory;
+
+    /**
      * @var Status
      */
     protected $status;
@@ -37,6 +43,7 @@ class JobUpgrade extends AbstractJob
      * @param AbstractSetupCommand $command
      * @param ObjectManagerProvider $objectManagerProvider
      * @param OutputInterface $output
+     * @param PackageInfoFactory $packageInfoFactory
      * @param Status $status
      * @param string $name
      * @param array $params
@@ -45,6 +52,7 @@ class JobUpgrade extends AbstractJob
         AbstractSetupCommand $command,
         ObjectManagerProvider $objectManagerProvider,
         OutputInterface $output,
+        PackageInfoFactory $packageInfoFactory,
         Status $status,
         $name,
         $params = []
@@ -55,6 +63,7 @@ class JobUpgrade extends AbstractJob
         $this->command = $command;
         $this->output = $output;
         $this->status = $status;
+        $this->packageInfoFactory = $packageInfoFactory;
         parent::__construct($output, $status, $name, $params);
     }
 
@@ -67,14 +76,38 @@ class JobUpgrade extends AbstractJob
     public function execute()
     {
         try {
-            $this->params['command'] = 'setup:upgrade';
-            $this->command->run(new ArrayInput($this->params), $this->output);
+            $this->params['command'] = 'module:disable';
+            $this->params['--clear-static-content'] = true;
+
+            //convert composer package names to internal magento module name
+            $packageInfo = $this->packageInfoFactory->create();
+            $packages = [];
+            foreach($this->params['components'] as $compObj) {
+                if(isset($compObj['name']) && (!empty($compObj['name']))) {
+                    $moduleNames[] = $packageInfo->getModuleName($compObj['name']);
+                }
+                else {
+                    throw new \RuntimeException('component name is not set.');
+                }
+            }
+
+            //prepare the arguments to invoke Symfony run()
+            $arguments['command'] = 'module:disable';
+            $arguments['--clear-static-content'] = true;
+            $arguments['module'] = $moduleNames;
+
+            $this->command->run(new ArrayInput($arguments), $this->output);
+
+            //perform the generated file cleanup
             $this->status->add('Cleaning generated files...');
             $this->cleanupFiles->clearCodeGeneratedFiles();
             $this->status->add('complete!');
+
+            //perform the cache cleanup
             $this->status->add('Clearing cache...');
             $this->cache->clean();
             $this->status->add('complete!');
+
         } catch (\Exception $e) {
             $this->status->toggleUpdateError(true);
             throw new \RuntimeException(sprintf('Could not complete %s successfully: %s', $this, $e->getMessage()));
