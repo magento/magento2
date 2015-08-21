@@ -1,0 +1,71 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div
+    class="admin__action-dropdown-wrap admin__data-grid-action-bookmarks" style="text-align: left" data-bind="css: {_active: opened}, outerClick: close">
+    <button
+        class="admin__action-dropdown"
+        type="button"
+        data-bind="click: toggleOpened"
+        data-toggle="dropdown"
+        aria-haspopup="true">
+        <span class="admin__action-dropdown-text" data-bind="text: size"></span>
+    </button>
+    <ul class="admin__action-dropdown-menu" style="width: 100px">
+    <!-- ko foreach: options -->
+        <li data-bind="css: { _edit: $parent.isEditing(value)}">
+        <!-- ko if: $data.editable -->
+            <div class="action-dropdown-menu-item-edit">
+                <input class="admin__control-text" style="min-width: 5rem;" type="text" data-bind="value: _value, hasFocus: $parent.isEditing(value)">
+                <button
+                    class="action-submit"
+                    data-bind="click: $parent.updateSize.bind($parent, value)"
+                    type="button">
+                    <span data-bind="i18n: 'Submit'"></span>
+                </button>
+                <div class="action-dropdown-menu-item-actions">
+                    <button
+                        class="action-delete"
+                        data-bind="click: $parent.removeSize.bind($parent, value, false)"
+                        type="button">
+                        <span data-bind="i18n: 'Delete'"></span>
+                    </button>
+                </div>
+            </div>
+        <!-- /ko -->
+            <div class="action-dropdown-menu-item">
+                <a
+                    class="action-dropdown-menu-link"
+                    href=""
+                    data-bind="text: label, click: $parent.setSize.bind($parent, value)"></a>
+                <!-- ko if: $data.editable -->
+                <div class="action-dropdown-menu-item-actions">
+                    <button
+                        class="action-edit"
+                        data-bind="click: $parent.edit.bind($parent, value)"
+                        type="button">
+                        <span data-bind="i18n: 'Edit'"></span>
+                    </button>
+                </div>
+                <!-- /ko -->
+            </div>
+        </li> 
+    <!-- /ko -->
+        <li class="action-dropdown-menu-action action-dropdown-menu-item-last" data-bind="css: { _edit: custom.visible }">
+            <a href="" data-bind="click: showCustom, visible: !custom.visible(), i18n: 'Custom'"></a>
+            <div class="action-dropdown-menu-item-edit">
+                <input class="admin__control-text" type="text" style="min-width: 5rem;" data-bind="value: custom.value">
+                <button
+                    class="action-submit"
+                    data-bind="click: applyCustom"
+                    type="button">
+                    <span data-bind="i18n: 'Submit'"></span>
+                </button>
+            </div>
+        </li>
+    </ul>
+</div>
+<label class="admin__control-support-text" for="perPage">per page</label>

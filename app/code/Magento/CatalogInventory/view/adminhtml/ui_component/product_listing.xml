@@ -43,7 +43,7 @@
         <column name="qty">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/sortable</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
                     <item name="add_field" xsi:type="boolean">true</item>
