@@ -29,7 +29,7 @@ define([
 
             sizesConfig: {
                 component: 'Magento_Ui/js/grid/paging/sizes',
-                name: '${ $.names }_sizes'
+                name: '${ $.name }_sizes'
             },
 
             imports: {
@@ -117,8 +117,7 @@ define([
          */
         initSizes: function () {
             _.extend(this.sizesConfig, {
-                options: this.options,
-                pageSize: this.pageSize
+                options: this.options
             });
 
             layout([this.sizesConfig]);
