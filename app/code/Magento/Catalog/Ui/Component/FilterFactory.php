@@ -43,7 +43,7 @@ class FilterFactory
             'dataScope' => $columnName,
             'label' => __($attribute->getDefaultFrontendLabel()),
         ];
-        if ($attribute->usesSource()) {
+        if ($attribute->usesSource() && $attribute->getSourceModel()) {
             $config['options'] = $attribute->getSource()->getAllOptions();
             $config['caption'] = __('Select...');
         }
