@@ -31,7 +31,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     {
         $connection = $setup->getConnection();
 
-        if (version_compare($context->getVersion(), '2.0.0.1', '<')) {
+        if (version_compare($context->getVersion(), '2.0.1', '<')) {
             $column = [
                 'type' => Table::TYPE_SMALLINT,
                 'length' => 6,
