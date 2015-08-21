@@ -6,6 +6,8 @@
 
 namespace Magento\Paypal\Test\Unit\Block\Express;
 
+use Magento\Paypal\Block\Express\Review;
+
 class ReviewTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -156,5 +158,23 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
         $quote->expects($this->any())->method('getShippingAddress')->will($this->returnValue($address));
 
         return $quote;
+    }
+
+    public function testGetEmail()
+    {
+        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $billingAddressMock = $this->getMock('\Magento\Quote\Model\Quote\Address', [], [], '', false);
+        $quoteMock->expects($this->once())->method('getBillingAddress')->willReturn($billingAddressMock);
+        $billingAddressMock->expects($this->once())->method('getEmail')->willReturn('test@example.com');
+        $this->model->setQuote($quoteMock);
+        $this->assertEquals('test@example.com', $this->model->getEmail());
+    }
+
+    public function testGetEmailWhenBillingAddressNotExist()
+    {
+        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $quoteMock->expects($this->once())->method('getBillingAddress')->willReturn(null);
+        $this->model->setQuote($quoteMock);
+        $this->assertEquals('', $this->model->getEmail());
     }
 }

@@ -120,7 +120,7 @@ define(
 
             initElement: function(element) {
                 if (element.index === 'shipping-address-fieldset') {
-                    shippingRatesValidator.bindChangeHandlers(element.elems());
+                    shippingRatesValidator.bindChangeHandlers(element.elems(), false);
                 }
             },
 
@@ -176,7 +176,7 @@ define(
             },
 
             /** Shipping Method View **/
-            rates: shippingService.getSippingRates(),
+            rates: shippingService.getShippingRates(),
             isLoading: shippingService.isLoading,
             isSelected: ko.computed(function () {
                     return quote.shippingMethod()

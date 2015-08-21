@@ -4,13 +4,17 @@
  * See COPYING.txt for license details.
  */
  -->
+
 <div class="block-authentication"
      data-bind="afterRender: setModalElement, blockLoader: isLoading"
      style="display: none">
     <div class="block block-new-customer"
-         data-label="or">
+         data-bind="attr: {'data-label': $t('or')}">
         <div class="block-title">
-            <strong id="block-new-customer-heading" role="heading" aria-level="2" data-bind="i18n: 'Checkout out as a new customer'"></strong>
+            <strong id="block-new-customer-heading"
+                    role="heading"
+                    aria-level="2"
+                    data-bind="i18n: 'Checkout out as a new customer'"></strong>
         </div>
         <div class="block-content" aria-labelledby="block-new-customer-heading">
             <p data-bind="i18n: 'Creating an account has many benefits:'"></p>
@@ -28,10 +32,14 @@
             </div>
         </div>
     </div>
+
     <div class="block block-customer-login"
-         data-label="or">
+         data-bind="attr: {'data-label': $t('or')}">
         <div class="block-title">
-            <strong id="block-customer-login-heading" role="heading" aria-level="2" data-bind="i18n: 'Checkout out using your account'"></strong>
+            <strong id="block-customer-login-heading"
+                    role="heading"
+                    aria-level="2"
+                    data-bind="i18n: 'Checkout out using your account'"></strong>
         </div>
         <!-- ko foreach: getRegion('messages') -->
         <!-- ko template: getTemplate() --><!-- /ko -->
@@ -44,7 +52,7 @@
                   method="post"
                   data-bind="submit:login"
                   id="login-form">
-                <div class="fieldset login" data-hasrequired="* Required Fields">
+                <div class="fieldset login" data-bind="attr: {'data-hasrequired': $t('* Required Fields')}">
                     <div class="field email required">
                         <label class="label" for="email"><span data-bind="i18n: 'Email Address'"></span></label>
                         <div class="control">

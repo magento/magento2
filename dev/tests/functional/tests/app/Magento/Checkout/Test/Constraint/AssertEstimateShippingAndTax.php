@@ -81,21 +81,22 @@ class AssertEstimateShippingAndTax extends AbstractConstraint
      *
      * @param CheckoutCart $checkoutCart
      * @param Cart $cart
+     * @param boolean $requireReload
      * @return void
      */
-    public function processAssert(CheckoutCart $checkoutCart, Cart $cart)
+    public function processAssert(CheckoutCart $checkoutCart, Cart $cart, $requireReload = true)
     {
         if ($cart->hasData('tax_amount')) {
-            $this->assertTaxInShoppingCart->processAssert($checkoutCart, $cart);
+            $this->assertTaxInShoppingCart->processAssert($checkoutCart, $cart, $requireReload);
         }
         if ($cart->hasData('subtotal')) {
-            $this->assertSubtotalInShoppingCart->processAssert($checkoutCart, $cart);
+            $this->assertSubtotalInShoppingCart->processAssert($checkoutCart, $cart, $requireReload);
         }
         if ($cart->hasData('grand_total')) {
-            $this->assertGrandTotalInShoppingCart->processAssert($checkoutCart, $cart);
+            $this->assertGrandTotalInShoppingCart->processAssert($checkoutCart, $cart, $requireReload);
         }
         if ($cart->hasData('shipping_amount')) {
-            $this->assertShippingInShoppingCart->processAssert($checkoutCart, $cart);
+            $this->assertShippingInShoppingCart->processAssert($checkoutCart, $cart, $requireReload);
         }
     }
 

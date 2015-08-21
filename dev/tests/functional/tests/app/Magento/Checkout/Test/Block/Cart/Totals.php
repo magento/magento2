@@ -93,6 +93,13 @@ class Totals extends Block
     protected $shippingPriceBlockSelector = '.totals.shipping.excl';
 
     /**
+     * Block wait element.
+     *
+     * @var string
+     */
+    protected $blockWaitElement = '._block-content-loading';
+
+    /**
      * Get Grand Total Text
      *
      * @return string
@@ -232,5 +239,16 @@ class Totals extends Block
     public function isVisibleShippingPriceBlock()
     {
         return  $this->_rootElement->find($this->shippingPriceBlockSelector, Locator::SELECTOR_CSS)->isVisible();
+    }
+
+    /**
+     * Wait for totals block to update contents asynchronously.
+     *
+     * @return void
+     */
+    public function waitForUpdatedTotals()
+    {
+        $this->waitForElementVisible($this->blockWaitElement);
+        $this->waitForElementNotVisible($this->blockWaitElement);
     }
 }

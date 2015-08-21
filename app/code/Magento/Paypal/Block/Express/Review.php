@@ -191,6 +191,17 @@ class Review extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Get quote email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        $billingAddress = $this->getBillingAddress();
+        return $billingAddress ? $billingAddress->getEmail() : '';
+    }
+
+    /**
      * Set controller path
      *
      * @param string $prefix

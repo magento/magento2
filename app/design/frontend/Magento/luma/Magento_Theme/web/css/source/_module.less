@@ -509,10 +509,12 @@
                         }
                     }
                 }
-                > .authorization-link:after {
-                    content: 'or';
-                    display: inline-block;
-                    margin: 0 -@indent__xs 0 @indent__xs;
+                > .authorization-link {
+                    &:after {
+                        content: attr(data-label);
+                        display: inline-block;
+                        margin: 0 -@indent__xs 0 @indent__xs;
+                    }
                 }
                 > .customer-welcome + .authorization-link {
                     display: none;

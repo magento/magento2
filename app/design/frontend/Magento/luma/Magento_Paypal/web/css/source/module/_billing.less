@@ -1,0 +1,40 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+
+    //  Paypal billing agreement
+    .table-wrapper {
+        &.billing-agreements {
+            margin-bottom: @indent__xl;
+        }
+    }
+}
+
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+    .account {
+        .table-billing-agreements,
+        .table-billing-agreements-related {
+            .col {
+                &.actions {
+                    &:extend(.abs-col-no-prefix all);
+                }
+            }
+        }
+    }
+    .form-new-agreement {
+        select {
+            width: auto;
+        }
+    }
+}
