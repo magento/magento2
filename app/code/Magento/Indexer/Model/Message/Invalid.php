@@ -31,7 +31,7 @@ class Invalid implements \Magento\Framework\Notification\MessageInterface
     {
         /** @var \Magento\Indexer\Model\Indexer $indexer */
         foreach ($this->collection->getItems() as $indexer) {
-            if ($indexer->getStatus() == \Magento\Indexer\Model\Indexer\State::STATUS_INVALID) {
+            if ($indexer->getStatus() == \Magento\Framework\Indexer\StateInterface::STATUS_INVALID) {
                 return true;
             }
         }

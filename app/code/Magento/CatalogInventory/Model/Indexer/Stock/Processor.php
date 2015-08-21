@@ -8,7 +8,7 @@
 
 namespace Magento\CatalogInventory\Model\Indexer\Stock;
 
-class Processor extends \Magento\Indexer\Model\Indexer\AbstractProcessor
+class Processor extends \Magento\Framework\Indexer\AbstractProcessor
 {
     /**
      * Indexer ID
