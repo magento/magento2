@@ -33,6 +33,7 @@ define([
             },
 
             imports: {
+                pageSize: '${ $.sizesConfig.name }:size',
                 totalSelected: '${ $.selectProvider }:totalSelected',
                 totalRecords: '${ $.provider }:data.totalRecords'
             },
@@ -41,10 +42,6 @@ define([
                 pageSize: '${ $.provider }:params.paging.pageSize',
                 current: '${ $.provider }:params.paging.current',
                 pages: '${ $.provider }:data.pages'
-            },
-
-            links: {
-                pageSize: '${ $.storageConfig.path }.pageSize'
             },
 
             listens: {
