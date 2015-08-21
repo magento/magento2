@@ -24,16 +24,17 @@ define([
         defaults: {
             template: 'ui/grid/paging/sizes',
             editing: false,
-            size: 20,
+            value: 20,
             options: [],
             minSize: 1,
             maxSize: 1000,
             links: {
-                size: '${ $.storageConfig.path }.size',
+                size: '${ $.storageConfig.path }.value',
                 options: '${ $.storageConfig.path }.options'
             },
             listens: {
-                size: 'onSizeChange'
+                value: 'onValueChange',
+                options: 'onSizesChange'
             }
         },
 
@@ -43,7 +44,7 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe('options editing size');
+                .observe('options editing value');
 
             this.custom = {
                 value: ko.observable(),
@@ -54,24 +55,43 @@ define([
         },
 
         /**
+         * Starts editing of the specified size.
          *
+         * @param {Number} value - Value of the size.
          * @returns {Sizes} Chainable.
          */
-        edit: function (size) {
-            this.editing(size);
+        edit: function (value) {
+            this.editing(value);
 
             return this;
         },
 
         /**
+         * Discards changes made to the currently editable size.
          *
+         * @returns {Sizes} Chainable.
+         */
+        discard: function () {
+            var value = this.editing();
+
+            if (value) {
+                this.updateSize(value, value);
+            }
+
+            return this;
+        },
+
+        /**
+         * Creates new editable size instance with the provided value.
+         *
+         * @param {Number} value - Value of the size.
          * @returns {Object}
          */
-        createSize: function (size) {
+        createSize: function (value) {
             return {
-                value: size,
-                label: size,
-                _value: size,
+                value: value,
+                label: value,
+                _value: value,
                 editable: true
             };
         },
@@ -88,10 +108,10 @@ define([
         },
 
         /**
-         * Returns size which matches specified value
+         * Returns size which matches specified value.
          *
-         * @param {Number} value
-         * @returns {Object}
+         * @param {Number} value - Value of the item in sizes array.
+         * @returns {Object|Undefined}
          */
         getSize: function (value) {
             return _.findWhere(this.options(), {
@@ -104,12 +124,13 @@ define([
          * @returns {Sizes} Chainable.
          */
         setSize: function (value) {
-            this.size(value);
+            this.value(value);
 
             return this;
         },
 
         /**
+         * Chechks if provided value exists in the sizes list.
          *
          * @returns {Boolean}
          */
@@ -118,25 +139,34 @@ define([
         },
 
         /**
+         * Adds a new value to sizes list.
          *
+         * @param {Number} value - Value to be added.
          * @returns {Sizes} Chainable.
          */
         addSize: function (value) {
-            var options = this.options();
+            var options = this.options(),
+                size;
 
             if (this.hasSize(value)) {
                 return this;
             }
 
-            options.push(this.createSize(value));
+            size = this.createSize(value);
 
-            this.options(this.sort(options));
+            options.push(size);
+
+            options = this.sort(options);
+
+            this.options(options);
 
             return this;
         },
 
         /**
+         * Removes provided value from the sizes list.
          *
+         * @param {Number} value - Value to be removed.
          * @returns {Sizes} Chainable.
          */
         removeSize: function (value, isUpdate) {
@@ -159,17 +189,18 @@ define([
          *
          * @returns {Sizes} Chainable.
          */
-        updateSize: function (value) {
-            var newValue = this.getSize(value)._value;
+        updateSize: function (value, newValue) {
+            var size = this.getSize(value);
 
-            newValue = this.normalizeValue(newValue);
-
-            if (value !== newValue) {
-                this.removeSize(value, true)
-                    .addSize(newValue);
+            if (!size) {
+                return this;
             }
 
-            this.editing(false);
+            newValue = newValue || size._value;
+            newValue = this.normalize(newValue);
+
+            this.removeSize(value, true)
+                .addSize(newValue);
 
             if (this.isSelected(value)) {
                 this.setSize(newValue);
@@ -179,6 +210,19 @@ define([
         },
 
         /**
+         * Hides and empties custom field.
+         *
+         * @returns {Sizes} Chainable.
+         */
+        discardCustom: function () {
+            this.hideCustom()
+                .clearCustom();
+
+            return this;
+        },
+
+        /**
+         * Shows custom field.
          *
          * @returns {Sizes} Chainable.
          */
@@ -189,6 +233,7 @@ define([
         },
 
         /**
+         * Hides custom field.
          *
          * @returns {Sizes} Chainable.
          */
@@ -199,6 +244,7 @@ define([
         },
 
         /**
+         * Empties value of the custom field.
          *
          * @returns {Sizes} Chainable.
          */
@@ -209,18 +255,18 @@ define([
         },
 
         /**
+         * Adds a new size specified in the custom field.
          *
          * @returns {Sizes} Chainable.
          */
         applyCustom: function () {
             var value = this.custom.value();
 
-            value = this.normalizeValue(value);
+            value = this.normalize(value);
 
             this.addSize(value)
                 .setSize(value)
-                .hideCustom()
-                .clearCustom();
+                .discardCustom();
 
             return this;
         },
@@ -230,13 +276,10 @@ define([
          * @param {(Number|String)} value
          * @returns {Number|Boolean}
          */
-        normalizeValue: function (value) {
-            var result;
+        normalize: function (value) {
+            var result = +value;
 
-            value = (value || '').trim();
-            result = +value;
-
-            if (value !== +result + '') {
+            if (_.isString(value) && value.trim() !== +result + '') {
                 result = this.getFirst();
             }
 
@@ -244,6 +287,7 @@ define([
         },
 
         /**
+         * Checks if provided value is in editing state.
          *
          * @returns {Boolean}
          */
@@ -256,12 +300,15 @@ define([
          * @returns {Boolean}
          */
         isSelected: function (value) {
-            return this.size() === value;
+            return this.value() === value;
         },
 
         /**
+         * Sorts provided array in ascending order by
+         * the 'value' property of its' items.
          *
-         * @returns {Array}
+         * @param {Array} [data=this.options] - Array to be sorted.
+         * @returns {Array} Sorted array.
          */
         sort: function (data) {
             data = data || this.options();
@@ -270,10 +317,31 @@ define([
         },
 
         /**
+         * Overrides original method to
+         * discard all unapplied editings.
          *
+         * @returns {Sizes} Chainable.
          */
-        onSizeChange: function () {
+        close: function () {
+            this._super()
+                .discardCustom()
+                .discard();
+
+            return this;
+        },
+
+        /**
+         * Listener of the 'value' property changes.
+         */
+        onValueChange: function () {
             this.close();
+        },
+
+        /**
+         * Listener of the 'options' array changes.
+         */
+        onSizesChange: function () {
+            this.editing(false);
         }
     });
 });

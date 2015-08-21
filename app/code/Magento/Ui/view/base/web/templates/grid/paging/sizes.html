@@ -12,17 +12,20 @@
         data-bind="click: toggleOpened"
         data-toggle="dropdown"
         aria-haspopup="true">
-        <span class="admin__action-dropdown-text" data-bind="text: size"></span>
+        <span class="admin__action-dropdown-text" data-bind="text: value"></span>
     </button>
     <ul class="admin__action-dropdown-menu" style="width: 100px">
     <!-- ko foreach: options -->
         <li data-bind="css: { _edit: $parent.isEditing(value)}">
         <!-- ko if: $data.editable -->
-            <div class="action-dropdown-menu-item-edit">
+            <div class="action-dropdown-menu-item-edit" data-bind="keyboard: {
+                            13: $parent.updateSize.bind($parent, value, false)
+                        }">
                 <input class="admin__control-text" style="min-width: 5rem;" type="text" data-bind="value: _value, hasFocus: $parent.isEditing(value)">
                 <button
                     class="action-submit"
-                    data-bind="click: $parent.updateSize.bind($parent, value)"
+                    data-bind="
+                        click: $parent.updateSize.bind($parent, value, false)"
                     type="button">
                     <span data-bind="i18n: 'Submit'"></span>
                 </button>
@@ -45,7 +48,12 @@
                 <div class="action-dropdown-menu-item-actions">
                     <button
                         class="action-edit"
-                        data-bind="click: $parent.edit.bind($parent, value)"
+                        data-bind="
+                            click: function () {
+                                $parent
+                                    .discardCustom()
+                                    .edit(value);
+                            }"
                         type="button">
                         <span data-bind="i18n: 'Edit'"></span>
                     </button>
@@ -55,8 +63,17 @@
         </li> 
     <!-- /ko -->
         <li class="action-dropdown-menu-action action-dropdown-menu-item-last" data-bind="css: { _edit: custom.visible }">
-            <a href="" data-bind="click: showCustom, visible: !custom.visible(), i18n: 'Custom'"></a>
-            <div class="action-dropdown-menu-item-edit">
+            <a href=""
+                data-bind="
+                    click: function () {
+                        $data.showCustom()
+                            .discard();
+                    },
+                    visible: !custom.visible(),
+                    i18n: 'Custom'"></a>
+            <div class="action-dropdown-menu-item-edit" data-bind="keyboard: {
+                13: applyCustom
+            }">
                 <input class="admin__control-text" type="text" style="min-width: 5rem;" data-bind="value: custom.value">
                 <button
                     class="action-submit"
