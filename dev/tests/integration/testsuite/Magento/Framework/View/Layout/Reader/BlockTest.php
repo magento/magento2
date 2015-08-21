@@ -61,7 +61,13 @@ class BlockTest extends \PHPUnit_Framework_TestCase
         $resultElementData = $structure->getStructureElementData($this->blockName);
 
         $this->assertEquals(
-            ['group' => 'test.group', 'class' => 'Dummy\Class', 'template' => 'test.phtml', 'ttl' => 3],
+            [
+                'group' => 'test.group',
+                'class' => 'Dummy\Class',
+                'template' => 'test.phtml',
+                'ttl' => 3,
+                'display' => ''
+            ],
             $resultElementData['attributes']
         );
         $this->assertEquals(
