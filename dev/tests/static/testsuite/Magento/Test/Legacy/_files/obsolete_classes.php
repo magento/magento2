@@ -3825,4 +3825,6 @@ return [
     ['Magento\CurrencySymbol\Model\Observer', 'corresponding classes in Magento\CurrencySymbol\Observer\*'],
     ['Magento\Catalog\Model\Product\Image\View'],
     ['Magento\Framework\View\Layout\Reader\Remove'],
+    ['Magento\Tools\Console\CommandList'],
+    ['Magento\Customer\Model\Resource\Customer\CustomersTypeOptions'],
 ];
