@@ -7,7 +7,6 @@
 namespace Magento\Review\Test\Handler\Review;
 
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Review\Test\Fixture\Rating;
 use Magento\Backend\Test\Handler\Extractor;
@@ -51,7 +50,7 @@ class Curl extends AbstractCurl implements ReviewInterface
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $data = $this->replaceMappingData($this->getPreparedData($review));
 
-        $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
+        $curl->write($url, $data);
         $response = $curl->read();
         $curl->close();
         if (!strpos($response, 'data-ui-id="messages-message-success"')) {
