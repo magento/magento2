@@ -40,7 +40,13 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
         $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
         $this->objectManager = $this->getMock('Magento\Framework\App\ObjectManager', [], [], '', false);
         $objectManagerProvider->expects($this->any())->method('get')->willReturn($this->objectManager);
-        $this->sampleData = $this->getMock('Magento\SampleData\Model\SampleData', [], [], '', false);
+        $this->sampleData = $this->getMock(
+            'Magento\SampleData\Model\SampleData',
+            ['isInstalledSuccessfully', 'isInstallationError'],
+            [],
+            '',
+            false
+        );
         $this->lists = $this->getMock('\Magento\Framework\Setup\Lists', [], [], '', false);
         $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $this->dirRead = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
