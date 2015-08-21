@@ -10,7 +10,7 @@ namespace Magento\Store\Test\Unit\Model\Service;
 
 use Magento\Store\Model\ScopeInterface;
 
-class StoresConfigTest extends \PHPUnit_Framework_TestCase
+class StoreConfigManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Store\Model\Service\StoreConfigManager
