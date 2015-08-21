@@ -18,7 +18,8 @@ define([
             productMatrix: [],
             productAttributesMap: null,
             modules: {
-                gridProvider: '${ "configurable_associated_product_listing.product_listing_data_source" }'
+                associatedProductsFilter: '${ $.associatedProductsFilter }',
+                associatedProductsProvider: '${ $.associatedProductsProvider }'
             }
         },
         variations: [],
@@ -96,7 +97,10 @@ define([
             this.productMatrix.splice(rowIndex, 1);
         },
         showGrid: function (rowIndex) {
-            jQuery('#associated-products-container').trigger('openModal');
+            var attributes = JSON.parse(this.productMatrix()[rowIndex].attribute);
+            this.associatedProductsProvider().params.attribute_ids = _.keys(attributes);
+            this.associatedProductsFilter().set('filters', attributes).apply();
+            $('#associated-products-container').trigger('openModal');
         },
         toggleProduct: function (rowIndex) {
             var productChanged = {};

@@ -8,15 +8,15 @@
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Ui/etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">configurable_associated_product_listing.product_listing_data_source</item>
-            <item name="deps" xsi:type="string">configurable_associated_product_listing.product_listing_data_source</item>
+            <item name="provider" xsi:type="string">configurable_associated_product_listing.data_source</item>
+            <item name="deps" xsi:type="string">configurable_associated_product_listing.data_source</item>
         </item>
         <item name="spinner" xsi:type="string">product_columns</item>
     </argument>
-    <dataSource name="product_listing_data_source">
+    <dataSource name="data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
             <argument name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider</argument>
-            <argument name="name" xsi:type="string">product_listing_data_source</argument>
+            <argument name="name" xsi:type="string">data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">entity_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>
             <argument name="data" xsi:type="array">
@@ -37,12 +37,102 @@
                 <item name="template" xsi:type="string">ui/grid/toolbar</item>
             </item>
         </argument>
+        <filters name="listing_filters" class="Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Filters">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="links" xsi:type="array">
+                        <item name="applied" xsi:type="string">not-save-filter</item>
+                    </item>
+                    <item name="displayArea" xsi:type="string">dataGridFilters</item>
+                    <item name="dataScope" xsi:type="string">filters</item>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="provider" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.listing_top.bookmarks</item>
+                        <item name="namespace" xsi:type="string">current.filters</item>
+                    </item>
+                    <item name="childDefaults" xsi:type="array">
+                        <item name="provider" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.listing_top.listing_filters</item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.listing_top.bookmarks:current.columns.${ $.index }.visible</item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+            <filterInput name="name">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">name</item>
+                        <item name="label" xsi:type="string" translate="true">Name</item>
+                    </item>
+                </argument>
+            </filterInput>
+            <filterSelect name="attribute_set_id">
+                <argument name="optionsProvider" xsi:type="configurableObject">
+                    <argument name="class" xsi:type="string">Magento\Catalog\Model\Product\AttributeSet\Options</argument>
+                </argument>
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">attribute_set_id</item>
+                        <item name="caption" xsi:type="string" translate="true">Select...</item>
+                        <item name="label" xsi:type="string" translate="true">Attribute Set</item>
+                    </item>
+                </argument>
+            </filterSelect>
+            <filterInput name="sku">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">sku</item>
+                        <item name="label" xsi:type="string" translate="true">SKU</item>
+                    </item>
+                </argument>
+            </filterInput>
+            <filterRange name="price">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">price</item>
+                        <item name="label" xsi:type="string" translate="true">Price</item>
+                        <item name="childDefaults" xsi:type="array">
+                            <item name="provider" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.listing_top.listing_filters</item>
+                        </item>
+                    </item>
+                </argument>
+                <filterInput name="from">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">from</item>
+                            <item name="label" xsi:type="string" translate="true">from</item>
+                            <item name="placeholder" xsi:type="string" translate="true">From</item>
+                        </item>
+                    </argument>
+                </filterInput>
+                <filterInput name="to">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">to</item>
+                            <item name="label" xsi:type="string" translate="true">to</item>
+                            <item name="placeholder" xsi:type="string" translate="true">To</item>
+                        </item>
+                    </argument>
+                </filterInput>
+            </filterRange>
+            <filterSelect name="status">
+                <argument name="optionsProvider" xsi:type="configurableObject">
+                    <argument name="class" xsi:type="string">Magento\Catalog\Model\Product\Attribute\Source\Status</argument>
+                </argument>
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">status</item>
+                        <item name="caption" xsi:type="string" translate="true">Select...</item>
+                        <item name="label" xsi:type="string" translate="true">Status</item>
+                    </item>
+                </argument>
+            </filterSelect>
+        </filters>
         <paging name="listing_paging">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="selectProvider" xsi:type="string">configurable_associated_product_listing.product_listing.product_columns.ids</item>
+                    <item name="selectProvider" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.product_columns.ids</item>
                     <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">configurable_associated_product_listing.product_listing.listing_top.bookmarks</item>
+                        <item name="provider" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.listing_top.bookmarks</item>
                         <item name="namespace" xsi:type="string">current.paging</item>
                     </item>
                     <item name="displayArea" xsi:type="string">bottom</item>
@@ -76,12 +166,12 @@
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="storageConfig" xsi:type="array">
-                    <item name="provider" xsi:type="string">configurable_associated_product_listing.product_listing.listing_top.bookmarks</item>
+                    <item name="provider" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.listing_top.bookmarks</item>
                     <item name="namespace" xsi:type="string">current</item>
                 </item>
                 <item name="childDefaults" xsi:type="array">
                     <item name="fieldAction" xsi:type="array">
-                        <item name="provider" xsi:type="string">configurable_associated_product_listing.product_listing.product_columns.actions</item>
+                        <item name="provider" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.product_columns.actions</item>
                         <item name="target" xsi:type="string">applyAction</item>
                         <item name="params" xsi:type="array">
                             <item name="0" xsi:type="string">edit</item>
@@ -90,7 +180,7 @@
                     </item>
                     <item name="controlVisibility" xsi:type="boolean">true</item>
                     <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">configurable_associated_product_listing.product_listing.listing_top.bookmarks</item>
+                        <item name="provider" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.listing_top.bookmarks</item>
                         <item name="root" xsi:type="string">columns.${ $.index }</item>
                         <item name="namespace" xsi:type="string">current.${ $.storageConfig.root}</item>
                     </item>
