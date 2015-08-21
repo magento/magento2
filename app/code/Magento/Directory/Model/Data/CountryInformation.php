@@ -129,7 +129,7 @@ class CountryInformation extends \Magento\Framework\Api\AbstractExtensibleObject
      * @inheritDoc
      */
     public function setExtensionAttributes(
-        \Magento\Directory\Api\Data\CountryInformationInterface $extensionAttributes
+        \Magento\Directory\Api\Data\CountryInformationExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
