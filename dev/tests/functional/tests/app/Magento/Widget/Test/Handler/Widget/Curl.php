@@ -97,7 +97,7 @@ class Curl extends AbstractCurl
         }
         unset($data['code']);
         unset($data['theme_id']);
-        $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
+        $curl->write($url, $data);
         $response = $curl->read();
         $curl->close();
 
@@ -208,7 +208,7 @@ class Curl extends AbstractCurl
         $filter = $this->encodeFilter(['theme_title' => $title]);
         $url = $_ENV['app_backend_url'] . 'admin/system_design_theme/grid/filter/' . $filter;
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
-        $curl->write(CurlInterface::POST, $url, '1.0');
+        $curl->write($url, [], CurlInterface::GET);
         $response = $curl->read();
         $curl->close();
 

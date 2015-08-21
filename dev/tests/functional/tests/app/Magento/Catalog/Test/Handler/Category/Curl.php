@@ -66,7 +66,7 @@ class Curl extends AbstractCurl implements CategoryInterface
         $data = $this->prepareData($fixture);
         $url = $_ENV['app_backend_url'] . 'catalog/category/save/store/0/parent/' . $data['general']['parent_id'] . '/';
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
-        $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
+        $curl->write($url, $data);
         $response = $curl->read();
         $curl->close();
 
@@ -138,7 +138,7 @@ class Curl extends AbstractCurl implements CategoryInterface
     {
         $url = $_ENV['app_backend_url'] . 'catalog/category';
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
-        $curl->write(CurlInterface::POST, $url, '1.0', [], []);
+        $curl->write($url, [], CurlInterface::GET);
         $response = $curl->read();
         $curl->close();
         preg_match('~<option.*value="(\d+)".*>' . preg_quote($landingName) . '</option>~', $response, $matches);
