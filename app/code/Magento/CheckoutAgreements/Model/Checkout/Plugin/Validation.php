@@ -5,6 +5,9 @@
  */
 namespace Magento\CheckoutAgreements\Model\Checkout\Plugin;
 
+/**
+ * Class Validation
+ */
 class Validation
 {
     /**
@@ -23,7 +26,7 @@ class Validation
 
     /**
      * @param \Magento\Checkout\Api\PaymentInformationManagementInterface $subject
-     * @param $cartId
+     * @param int $cartId
      * @param \Magento\Quote\Api\Data\PaymentInterface $paymentMethod
      * @param \Magento\Quote\Api\Data\AddressInterface $billingAddress
      * @return void
@@ -40,7 +43,7 @@ class Validation
 
     /**
      * @param \Magento\Checkout\Api\PaymentInformationManagementInterface $subject
-     * @param $cartId
+     * @param int $cartId
      * @param \Magento\Quote\Api\Data\PaymentInterface $paymentMethod
      * @param \Magento\Quote\Api\Data\AddressInterface $billingAddress
      * @return void
@@ -56,7 +59,7 @@ class Validation
     }
 
     /**
-     * @param $agreements
+     * @param int[] $agreements
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return void
      */
