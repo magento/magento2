@@ -5,7 +5,6 @@
  */
 namespace Magento\Setup\Model\Cron;
 
-use Magento\Framework\App\Cache;
 use Magento\Framework\Module\PackageInfoFactory;
 use Magento\Setup\Console\Command\AbstractSetupCommand;
 use Magento\Setup\Model\ObjectManagerProvider;
@@ -18,24 +17,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 class JobModuleEnable extends AbstractJob
 {
     /**
-     * @var \Magento\Framework\App\Cache
-     */
-    private $cache;
-
-    /**
-     * @var \Magento\Framework\App\State\CleanupFiles
-     */
-    private $cleanupFiles;
-
-    /**
      * @var Magento\Framework\Module\PackageInfoFactory
      */
     private $packageInfoFactory;
-
-    /**
-     * @var Status
-     */
-    protected $status;
 
     /**
      * Constructor
@@ -57,14 +41,11 @@ class JobModuleEnable extends AbstractJob
         $name,
         $params = []
     ) {
-        $objectManager = $objectManagerProvider->get();
-        $this->cleanupFiles = $objectManager->get('Magento\Framework\App\State\CleanupFiles');
-        $this->cache = $objectManager->get('Magento\Framework\App\Cache');
         $this->command = $command;
         $this->output = $output;
         $this->status = $status;
         $this->packageInfoFactory = $packageInfoFactory;
-        parent::__construct($output, $status, $name, $params);
+        parent::__construct($output, $status, $objectManagerProvider, $name, $params);
     }
 
     /**
@@ -94,14 +75,7 @@ class JobModuleEnable extends AbstractJob
             $this->command->run(new ArrayInput($arguments), $this->output);
 
             //perform the generated file cleanup
-            $this->status->add('Cleaning generated files...');
-            $this->cleanupFiles->clearCodeGeneratedFiles();
-            $this->status->add('complete!');
-
-            //perform the cache cleanup
-            $this->status->add('Clearing cache...');
-            $this->cache->clean();
-            $this->status->add('complete!');
+            $this->performCleanup();
 
         } catch (\Exception $e) {
             $this->status->toggleUpdateError(true);

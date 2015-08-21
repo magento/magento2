@@ -89,7 +89,7 @@ class JobComponentUninstall extends AbstractJob
         $this->themeUninstall = $themeUninstall;
         $this->objectManager = $objectManagerProvider->get();
         $this->updater = $updater;
-        parent::__construct($output, $status, $name, $params);
+        parent::__construct($output, $status, $objectManagerProvider, $name, $params);
     }
 
     /**
