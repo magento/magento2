@@ -170,12 +170,14 @@ class StartUpdater extends AbstractActionController
 
     /**
      * @param string $jobType
+     * @param array $postPayload
      * @param array $addtionalOptions
      * @param string $cronTaskType
+     * @return void
      */
-    private function getCronTaskConfigInfo($jobType, $postPayload, &$addtionalOptions, &$cronTaskType)
+    private function getCronTaskConfigInfo($jobType, $postPayload, &$additionalOptions, &$cronTaskType)
     {
-        $addtionalOptions = [];
+        $additionalOptions = [];
         switch($jobType) {
             case 'uninstall':
                 $additionalOptions = [
