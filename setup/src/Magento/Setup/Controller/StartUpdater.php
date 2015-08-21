@@ -187,8 +187,8 @@ class StartUpdater extends AbstractActionController
                 break;
 
             case 'upgrade':
-                //upgrade or update are handled by same task type on updater side
-                //the fall through is intentional here
+                // upgrade or update are handled by same task type on updater side
+                // the fall through is intentional here
                 ;
             case 'update':
                 $cronTaskType = ModelUpdater::TASK_TYPE_UPDATE;
