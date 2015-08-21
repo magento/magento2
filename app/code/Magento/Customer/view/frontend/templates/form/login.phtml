@@ -32,13 +32,13 @@
                 <div class="field email required">
                     <label class="label" for="email"><span><?php echo __('Email') ?></span></label>
                     <div class="control">
-                        <input name="login[username]" value="<?php echo $block->escapeHtml($block->getUsername()) ?>" id="email" type="email" class="input-text" title="<?php echo __('Email') ?>" data-validate="{required:true, 'validate-email':true}">
+                        <input name="login[username]" value="<?php echo $block->escapeHtml($block->getUsername()) ?>" <?php if ($block->isAutocompleteDisabled()) :?> autocomplete="off"<?php endif; ?> id="email" type="email" class="input-text" title="<?php echo __('Email') ?>" data-validate="{required:true, 'validate-email':true}">
                     </div>
                 </div>
                 <div class="field password required">
                     <label for="pass" class="label"><span><?php echo __('Password') ?></span></label>
                     <div class="control">
-                        <input name="login[password]" type="password" class="input-text" id="pass" title="<?php echo __('Password') ?>" data-validate="{required:true, 'validate-password':true}">
+                        <input name="login[password]" type="password" <?php if ($block->isAutocompleteDisabled()) :?> autocomplete="off"<?php endif; ?> class="input-text" id="pass" title="<?php echo __('Password') ?>" data-validate="{required:true, 'validate-password':true}">
                     </div>
                 </div>
                 <?php echo $block->getChildHtml('form_additional_info'); ?>
