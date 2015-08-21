@@ -21,4 +21,9 @@
         <baseUrl>http://magento2ce.com/</baseUrl>
         <backendName>backend</backendName>
     </install>
+    <handler>
+        <webapi priority="0" />
+        <curl priority="1"/>
+        <ui priority="2" />
+    </handler>
 </config>
