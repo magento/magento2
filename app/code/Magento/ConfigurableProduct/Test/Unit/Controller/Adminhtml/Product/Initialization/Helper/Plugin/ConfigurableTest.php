@@ -5,6 +5,9 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
 
+use \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Configurable;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableProduct;
+
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -30,6 +33,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    protected $variationHandler;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $subjectMock;
 
     protected function setUp()
@@ -41,11 +49,19 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->variationHandler = $this->getMock(
+            'Magento\ConfigurableProduct\Model\Product\VariationHandler',
+            [],
+            [],
+            '',
+            false
+        );
         $this->requestMock = $this->getMock('\Magento\Framework\App\Request\Http', [], [], '', false);
         $methods = [
             'setNewVariationsAttributeSetId',
             'setAssociatedProductIds',
             'setCanSaveConfigurableAttributes',
+            'getTypeId',
             '__wakeup',
         ];
         $this->productMock = $this->getMock('Magento\Catalog\Model\Product', $methods, [], '', false);
@@ -56,11 +72,12 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->plugin = new \Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Configurable($this->productTypeMock, $this->requestMock);
+        $this->plugin = new Configurable($this->variationHandler, $this->productTypeMock, $this->requestMock);
     }
 
     public function testAfterInitializeIfAttributesNotEmptyAndActionNameNotGenerateVariations()
     {
+        $this->productMock->expects($this->once())->method('getTypeId')->willReturn(ConfigurableProduct::TYPE_CODE);
         $associatedProductIds = ['key' => 'value'];
         $generatedProductIds = ['key_one' => 'value_one'];
         $expectedArray = ['key' => 'value', 'key_one' => 'value_one'];
@@ -87,7 +104,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             $this->productMock
         );
         $this->productMock->expects($this->once())->method('setNewVariationsAttributeSetId')->with($postValue);
-        $this->productTypeMock->expects(
+        $this->variationHandler->expects(
             $this->once()
         )->method(
             'generateSimpleProducts'
@@ -104,6 +121,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterInitializeIfAttributesNotEmptyAndActionNameGenerateVariations()
     {
+        $this->productMock->expects($this->once())->method('getTypeId')->willReturn(ConfigurableProduct::TYPE_CODE);
         $associatedProductIds = ['key' => 'value'];
         $attributes = ['key' => 'value'];
         $postValue = 'postValue';
@@ -135,6 +153,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterInitializeIfAttributesEmpty()
     {
+        $this->productMock->expects($this->once())->method('getTypeId')->willReturn(ConfigurableProduct::TYPE_CODE);
         $this->requestMock->expects(
             $this->once()
         )->method(
@@ -144,6 +163,15 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue([])
         );
+        $this->productTypeMock->expects($this->never())->method('setUsedProductAttributeIds');
+        $this->requestMock->expects($this->never())->method('getPost');
+        $this->productTypeMock->expects($this->never())->method('generateSimpleProducts');
+        $this->plugin->afterInitialize($this->subjectMock, $this->productMock);
+    }
+
+    public function testAfterInitializeForNotConfigurableProduct()
+    {
+        $this->productMock->expects($this->once())->method('getTypeId')->willReturn('non-configurable');
         $this->productTypeMock->expects($this->never())->method('setUsedProductAttributeIds');
         $this->requestMock->expects($this->never())->method('getPost');
         $this->productTypeMock->expects($this->never())->method('generateSimpleProducts');
