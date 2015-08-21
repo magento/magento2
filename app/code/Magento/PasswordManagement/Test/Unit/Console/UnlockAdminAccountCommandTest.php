@@ -40,7 +40,7 @@ class UnlockAdminAccountCommandTest extends \PHPUnit_Framework_TestCase
         $this->command = $this->objectManager
             ->getObject('Magento\PasswordManagement\Console\UnlockAdminAccountCommand');
 
-        $this->assertEquals(UnlockAdminAccountCommand::COMMAND_ADMIN_ACCOUT_UNLOCK, $this->command->getName());
+        $this->assertEquals(UnlockAdminAccountCommand::COMMAND_ADMIN_ACCOUNT_UNLOCK, $this->command->getName());
         $this->assertEquals(UnlockAdminAccountCommand::COMMAND_DESCRIPTION, $this->command->getDescription());
         $this->command->getDefinition()->getArgument(UnlockAdminAccountCommand::ARGUMENT_ADMIN_USERNAME);
         $this->assertContains('This command unlocks admin by its username', $this->command->getHelp());
