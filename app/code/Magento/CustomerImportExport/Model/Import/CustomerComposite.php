@@ -126,6 +126,24 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     protected $_dataSourceModels;
 
     /**
+     * If we should check column names
+     *
+     * @var bool
+     */
+    protected $needColumnCheck = true;
+
+    /**
+     * Valid column names
+     *
+     * @array
+     */
+    protected $validColumnNames = [
+        Customer::COLUMN_DEFAULT_BILLING,
+        Customer::COLUMN_DEFAULT_SHIPPING,
+        Customer::COLUMN_PASSWORD,
+    ];
+
+    /**
      * {@inheritdoc}
      */
     protected $masterAttributeCode = 'email';
@@ -205,6 +223,13 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
             unset($data['data_source_model']);
         }
         $this->_initAddressAttributes();
+
+        $this->validColumnNames = array_merge(
+            $this->validColumnNames,
+            $this->_customerAttributes,
+            $this->_addressAttributes,
+            $this->_customerEntity->customerFields
+        );
 
         // next customer id
         if (isset($data['next_customer_id'])) {

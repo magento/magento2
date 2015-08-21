@@ -24,6 +24,11 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
 
     const COLUMN_EMAIL = '_email';
 
+    const COLUMN_DEFAULT_BILLING = 'default_billing';
+
+    const COLUMN_DEFAULT_SHIPPING = 'default_shipping';
+
+
     /**#@-*/
 
     /**#@+
@@ -50,7 +55,8 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      *
      * @var string[]
      */
-    protected $_ignoredAttributes = ['website_id', 'store_id', 'default_billing', 'default_shipping'];
+    protected $_ignoredAttributes = ['website_id', 'store_id',
+        self::COLUMN_DEFAULT_BILLING, self::COLUMN_DEFAULT_SHIPPING];
 
     /**
      * Customer collection wrapper
@@ -63,6 +69,13 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * @var \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory
      */
     protected $_storageFactory;
+
+    /**
+     * If we should check column names
+     *
+     * @var bool
+     */
+    protected $needColumnCheck = true;
 
     /**
      * {@inheritdoc}

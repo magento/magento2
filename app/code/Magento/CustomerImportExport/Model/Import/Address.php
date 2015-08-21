@@ -222,6 +222,15 @@ class Address extends AbstractCustomer
     protected $_customerAttributes = [];
 
     /**
+     * Valid column names
+     *
+     * @array
+     */
+    protected $validColumnNames = [
+        "region_id", "vat_is_valid", "vat_request_date", "vat_request_id", "vat_request_success"
+    ];
+
+    /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory

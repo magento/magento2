@@ -27,6 +27,8 @@ class Customer extends AbstractCustomer
 
     const COLUMN_STORE = '_store';
 
+    const COLUMN_PASSWORD = 'password';
+
     /**#@-*/
 
     /**#@+
@@ -120,11 +122,38 @@ class Customer extends AbstractCustomer
     protected $masterAttributeCode = 'email';
 
     /**
-     * If we should check column names
+     * Valid column names
      *
-     * @var bool
+     * @array
      */
-    protected $needColumnCheck = true;
+    protected $validColumnNames = [
+        self::COLUMN_DEFAULT_BILLING,
+        self::COLUMN_DEFAULT_SHIPPING,
+        self::COLUMN_PASSWORD,
+    ];
+
+    /**
+     * Customer fields in file
+     */
+    public $customerFields = [
+        'group_id',
+        'store_id',
+        'updated_at',
+        'created_at',
+        'created_in',
+        'prefix',
+        'firstname',
+        'middlename',
+        'lastname',
+        'suffix',
+        'dob',
+        'password_hash',
+        'taxvat',
+        'confirmation',
+        'gender',
+        'rp_token',
+        'rp_token_created_at',
+        ];
 
     /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
@@ -208,6 +237,11 @@ class Customer extends AbstractCustomer
 
         $this->_initStores(true)->_initAttributes();
 
+        $this->validColumnNames = array_merge(
+            $this->validColumnNames,
+            $this->customerFields
+        );
+
         $this->_customerModel = $customerFactory->create();
         /** @var $customerResource \Magento\Customer\Model\Resource\Customer */
         $customerResource = $this->_customerModel->getResource();
@@ -227,30 +261,11 @@ class Customer extends AbstractCustomer
             $this->_connection->insertMultiple($this->_entityTable, $entitiesToCreate);
         }
 
-        $customerFields = [
-            'group_id',
-            'store_id',
-            'updated_at',
-            'created_at',
-            'created_in',
-            'prefix',
-            'firstname',
-            'middlename',
-            'lastname',
-            'suffix',
-            'dob',
-            'password_hash',
-            'taxvat',
-            'confirmation',
-            'gender',
-            'rp_token',
-            'rp_token_created_at',
-        ];
         if ($entitiesToUpdate) {
             $this->_connection->insertOnDuplicate(
                 $this->_entityTable,
                 $entitiesToUpdate,
-                $customerFields
+                $this->customerFields
             );
         }
 
