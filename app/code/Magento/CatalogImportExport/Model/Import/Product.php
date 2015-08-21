@@ -1783,15 +1783,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         return $this->_fileUploader;
     }
 
-    public function getDestinationDir()
-    {
-        /*$dirConfig = DirectoryList::getDefaultConfig();
-        $dirAddon = $dirConfig[DirectoryList::MEDIA][DirectoryList::PATH];
-        $DS = DIRECTORY_SEPARATOR;
-        $destinationDir = "catalog/product";
-        $destinationPath = $dirAddon . $DS . $this->_mediaDirectory->getRelativePath($destinationDir);*/
-    }
-
     /**
      * Uploading files into the "catalog/product" media folder.
      * Return a new file name if the same file is already exists.
