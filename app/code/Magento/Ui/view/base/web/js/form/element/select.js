@@ -189,7 +189,7 @@ define([
         },
 
         /**
-         * Matches specfied value with an existing options
+         * Matches specfied value with existing options
          * or, if value is not specified, returns value of the first option.
          *
          * @returns {*}
