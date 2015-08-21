@@ -65,8 +65,7 @@ class Relation implements RelationInterface
     public function processRelation(\Magento\Framework\Model\AbstractModel $object)
     {
         /** @var \Magento\Sales\Model\Order $object */
-        $this->addressHandler->removeEmptyAddresses($object);
-        $this->addressHandler->process($object);
+
         if (null !== $object->getItems()) {
             /** @var \Magento\Sales\Model\Order\Item $item */
             foreach ($object->getItems() as $item) {
@@ -98,5 +97,7 @@ class Relation implements RelationInterface
                 $relatedObject->save();
             }
         }
+        $this->addressHandler->removeEmptyAddresses($object);
+        $this->addressHandler->process($object);
     }
 }

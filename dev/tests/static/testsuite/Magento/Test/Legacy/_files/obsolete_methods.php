@@ -2434,4 +2434,19 @@ return [
     ['getThumbnailUrl', 'Magento\ProductAlert\Block\Email\AbstractEmail'],
     ['getProductThumbnail', 'Magento\Checkout\Block\Cart\Item\Renderer'],
     ['prepareInvoice', 'Magento\Sales\Api\InvoiceManagementInterface'],
+    [
+        'generateSimpleProducts',
+        'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
+        'Magento\ConfigurableProduct\Model\Product\VariationHandler::generateSimpleProducts'
+    ],
+    [
+        '_prepareAttributeSetToBeBaseForNewVariations',
+        'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
+        'Magento\ConfigurableProduct\Model\Product\VariationHandler::prepareAttributeSetToBeBaseForNewVariations'
+    ],
+    [
+        '_fillSimpleProductData',
+        'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
+        'Magento\ConfigurableProduct\Model\Product\VariationHandler::fillSimpleProductData'
+    ],
 ];

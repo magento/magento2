@@ -92,10 +92,14 @@ class ViewedTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\
         $this->contextMock->expects($this->any())->method('getActionFlag')->willReturn($flagMock);
         $this->contextMock->expects($this->any())->method('getResponse')->willReturn($responseMock);
 
-        $this->viewed = new Viewed(
-            $this->contextMock,
-            $this->fileFactoryMock,
-            $this->dateMock
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->viewed = $objectManager->getObject(
+            'Magento\Reports\Controller\Adminhtml\Report\Product\Viewed',
+            [
+                'context' => $this->contextMock,
+                'fileFactory' => $this->fileFactoryMock,
+                'dateFilter' => $this->dateMock,
+            ]
         );
     }
 
