@@ -33,7 +33,7 @@ define([
             },
 
             imports: {
-                pageSize: '${ $.sizesConfig.name }:size',
+                pageSize: '${ $.sizesConfig.name }:value',
                 totalSelected: '${ $.selectProvider }:totalSelected',
                 totalRecords: '${ $.provider }:data.totalRecords'
             },
