@@ -52,18 +52,24 @@ abstract class AbstractEntity
     const ERROR_CODE_INVALID_ATTRIBUTE = 'invalidAttributeName';
     const ERROR_CODE_WRONG_QUOTES = 'wrongQuotes';
     const ERROR_CODE_COLUMNS_NUMBER = 'wrongColumnsNumber';
+    const ERROR_EXCEEDED_MAX_LENGTH = 'exceededMaxLength';
+    const ERROR_INVALID_ATTRIBUTE_TYPE = 'invalidAttributeType';
+    const ERROR_INVALID_ATTRIBUTE_OPTION = 'absentAttributeOption';
 
     protected $errorMessageTemplates = [
         self::ERROR_CODE_SYSTEM_EXCEPTION => 'General system exception happened',
         self::ERROR_CODE_COLUMN_NOT_FOUND => 'We can\'t find required columns: %s.',
         self::ERROR_CODE_COLUMN_EMPTY_HEADER => 'Columns number: "%s" have empty headers',
         self::ERROR_CODE_COLUMN_NAME_INVALID => 'Column names: "%s" are invalid',
-        self::ERROR_CODE_ATTRIBUTE_NOT_VALID => "Please correct the value for '%s'.",
+        self::ERROR_CODE_ATTRIBUTE_NOT_VALID => "Please correct the value for '%s'",
         self::ERROR_CODE_DUPLICATE_UNIQUE_ATTRIBUTE => "Duplicate Unique Attribute for '%s'",
         self::ERROR_CODE_ILLEGAL_CHARACTERS => "Illegal character used for attribute %s",
         self::ERROR_CODE_INVALID_ATTRIBUTE => 'Header contains invalid attribute(s): "%s"',
         self::ERROR_CODE_WRONG_QUOTES => "Curly quotes used instead of straight quotes",
         self::ERROR_CODE_COLUMNS_NUMBER => "Number of columns does not correspond to the number of rows in the header",
+        self::ERROR_EXCEEDED_MAX_LENGTH => 'Attribute %s exceeded max length',
+        self::ERROR_INVALID_ATTRIBUTE_TYPE => 'Value for \'%s\' attribute contains incorrect value, acceptable values are in %s format',
+        self::ERROR_INVALID_ATTRIBUTE_OPTION => 'Value for \'%s\' attribute contains incorrect value, see acceptable values on settings specified for Admin',
     ];
 
     /**#@-*/
@@ -616,30 +622,37 @@ abstract class AbstractEntity
      */
     public function isAttributeValid($attributeCode, array $attributeParams, array $rowData, $rowNumber)
     {
+        $message = '';
         switch ($attributeParams['type']) {
             case 'varchar':
                 $value = $this->string->cleanString($rowData[$attributeCode]);
                 $valid = $this->string->strlen($value) < self::DB_MAX_VARCHAR_LENGTH;
+                $message = self::ERROR_EXCEEDED_MAX_LENGTH;
                 break;
             case 'decimal':
                 $value = trim($rowData[$attributeCode]);
                 $valid = (double)$value == $value && is_numeric($value);
+                $message = self::ERROR_INVALID_ATTRIBUTE_TYPE;
                 break;
             case 'select':
             case 'multiselect':
                 $valid = isset($attributeParams['options'][strtolower($rowData[$attributeCode])]);
+                $message = self::ERROR_INVALID_ATTRIBUTE_OPTION;
                 break;
             case 'int':
                 $value = trim($rowData[$attributeCode]);
                 $valid = (int)$value == $value && is_numeric($value);
+                $message = self::ERROR_INVALID_ATTRIBUTE_TYPE;
                 break;
             case 'datetime':
                 $value = trim($rowData[$attributeCode]);
                 $valid = strtotime($value) !== false;
+                $message = self::ERROR_INVALID_ATTRIBUTE_TYPE;
                 break;
             case 'text':
                 $value = $this->string->cleanString($rowData[$attributeCode]);
                 $valid = $this->string->strlen($value) < self::DB_MAX_TEXT_LENGTH;
+                $message = self::ERROR_EXCEEDED_MAX_LENGTH;
                 break;
             default:
                 $valid = true;
@@ -647,7 +660,14 @@ abstract class AbstractEntity
         }
 
         if (!$valid) {
-            $this->addRowError(self::ERROR_CODE_ATTRIBUTE_NOT_VALID, $rowNumber, $attributeCode);
+            if ($message == self::ERROR_INVALID_ATTRIBUTE_TYPE) {
+                $message = sprintf(
+                    $this->errorMessageTemplates[$message],
+                    $attributeCode,
+                    $attributeParams['type']
+                );
+            }
+            $this->addRowError($message, $rowNumber, $attributeCode);
         } elseif (!empty($attributeParams['is_unique'])) {
             if (isset($this->_uniqueAttributes[$attributeCode][$rowData[$attributeCode]])) {
                 $this->addRowError(self::ERROR_CODE_DUPLICATE_UNIQUE_ATTRIBUTE, $rowNumber, $attributeCode);
