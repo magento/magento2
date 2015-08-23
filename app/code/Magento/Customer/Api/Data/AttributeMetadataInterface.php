@@ -31,6 +31,10 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
     const SYSTEM = 'system';
     const NOTE = 'note';
     const BACKEND_TYPE = 'backend_type';
+    const IS_USED_IN_GRID = 'is_used_in_grid';
+    const IS_VISIBLE_IN_GRID = 'is_visible_in_grid';
+    const IS_FILTERABLE_IN_GRID = 'is_filterable_in_grid';
+    const IS_SEARCHABLE_IN_GRID = 'is_searchable_in_grid';
     /**#@-*/
 
     /**
@@ -304,4 +308,64 @@ interface AttributeMetadataInterface extends \Magento\Framework\Api\MetadataObje
      * @return $this
      */
     public function setBackendType($backendType);
+
+    /**
+     * Whether it is used in customer grid
+     *
+     * @return bool|null
+     */
+    public function getIsUsedInGrid();
+
+    /**
+     * Whether it is visible in customer grid
+     *
+     * @return bool|null
+     */
+    public function getIsVisibleInGrid();
+
+    /**
+     * Whether it is filterable in customer grid
+     *
+     * @return bool|null
+     */
+    public function getIsFilterableInGrid();
+
+    /**
+     * Whether it is searchable in customer grid
+     *
+     * @return bool|null
+     */
+    public function getIsSearchableInGrid();
+
+    /**
+     * Set whether it is used in customer grid
+     *
+     * @param bool $isUsedInGrid
+     * @return $this
+     */
+    public function setIsUsedInGrid($isUsedInGrid);
+
+    /**
+     * Set whether it is visible in customer grid
+     *
+     * @param bool $isVisibleInGrid
+     * @return $this
+     */
+    public function setIsVisibleInGrid($isVisibleInGrid);
+
+    /**
+     * Set whether it is filterable in customer grid
+     *
+     * @param bool $isFilterableInGrid
+     * @return $this
+     */
+    public function setIsFilterableInGrid($isFilterableInGrid);
+
+    /**
+     * Set whether it is searchable in customer grid
+     *
+     * @param bool $isSearchableInGrid
+     * @return $this
+     */
+    public function setIsSearchableInGrid($isSearchableInGrid);
 }
