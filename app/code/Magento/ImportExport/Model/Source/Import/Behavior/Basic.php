@@ -29,4 +29,14 @@ class Basic extends \Magento\ImportExport\Model\Source\Import\AbstractBehavior
     {
         return 'basic';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function  getNotes()
+    {
+        return [
+            \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE => __("Note: Product IDs will be regenerated.")
+        ];
+    }
 }
