@@ -22,23 +22,13 @@ class JobModule extends AbstractJob
     private $packageInfoFactory;
 
     /**
-     * Constructor
-     *
-     * @param AbstractSetupCommand $command
-     * @param ObjectManagerProvider $objectManagerProvider
-     * @param OutputInterface $output
-     * @param PackageInfoFactory $packageInfoFactory
-     * @param Status $status
-     * @param string $name
-     * @param array $params
-     */
-
-    /**
      * @var string $cmdString
      */
     protected $cmdString;
 
     /**
+     * Constructor
+     *
      * @param AbstractSetupCommand $command
      * @param ObjectManagerProvider $objectManagerProvider
      * @param OutputInterface $output
@@ -62,7 +52,7 @@ class JobModule extends AbstractJob
         $this->packageInfoFactory = $packageInfoFactory;
         parent::__construct($output, $status, $objectManagerProvider, $name, $params);
 
-        //map name to command string
+        // map name to command string
         $this->setCommandString($name);
     }
 
@@ -72,7 +62,7 @@ class JobModule extends AbstractJob
      */
     private function setCommandString($name)
     {
-       if($name == 'setup:module:enable') {
+       if ($name == 'setup:module:enable') {
            $this->cmdString = 'module:enable';
        } else {
            $this->cmdString = 'module:disable';
