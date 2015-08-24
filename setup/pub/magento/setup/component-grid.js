@@ -108,7 +108,7 @@ angular.module('component-grid', ['ngStorage'])
                 if (component.type.indexOf('module') >= 0 ) {
                     $localStorage.packages = [
                         {
-                            name: component.name
+                            name: component.moduleName
                         }
                     ];
                     if ($localStorage.titles[type].indexOf(component.moduleName) < 0 ) {
