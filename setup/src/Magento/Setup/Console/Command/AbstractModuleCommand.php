@@ -90,9 +90,8 @@ abstract class AbstractModuleCommand extends AbstractSetupCommand
             $output->writeln('<info>Generated static view files cleared successfully.</info>');
         } else {
             $output->writeln(
-                '<error>Alert: Generated static view files were not cleared.'
-                . ' You can clear them using the --' . self::INPUT_KEY_CLEAR_STATIC_CONTENT . ' option.'
-                . ' Failure to clear static view files might cause display issues in the Admin and storefront.</error>'
+                '<info>Info: Some modules might require static view files to be cleared. Use the optional --' .
+                self::INPUT_KEY_CLEAR_STATIC_CONTENT . ' option to clear them.</info>'
             );
         }
     }
