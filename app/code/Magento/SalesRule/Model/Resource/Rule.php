@@ -31,9 +31,19 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
     ];
 
     /**
+     * @var array
+     */
+    protected $customerGroupIds = [];
+
+    /**
+     * @var array
+     */
+    protected $websiteIds = [];
+
+    /**
      * Magento string lib
      *
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
@@ -44,13 +54,13 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
 
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\SalesRule\Model\Resource\Coupon $resourceCoupon
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\SalesRule\Model\Resource\Coupon $resourceCoupon,
         $connectionName = null
     ) {
@@ -77,11 +87,36 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
      */
     protected function _afterLoad(AbstractModel $object)
     {
-        $object->setData('customer_group_ids', (array)$this->getCustomerGroupIds($object->getId()));
-        $object->setData('website_ids', (array)$this->getWebsiteIds($object->getId()));
+        $this->loadCustomerGroupIds($object);
+        $this->loadWebsiteIds($object);
 
         parent::_afterLoad($object);
         return $this;
+    }
+
+    /**
+     * @param AbstractModel $object
+     * @return void
+     */
+    public function loadCustomerGroupIds(AbstractModel $object)
+    {
+        if (!$this->customerGroupIds) {
+            $this->customerGroupIds = (array)$this->getCustomerGroupIds($object->getId());
+        }
+        $object->setData('customer_group_ids', $this->customerGroupIds);
+    }
+
+    /**
+     * @param AbstractModel $object
+     * @return void
+     */
+    public function loadWebsiteIds(AbstractModel $object)
+    {
+        if (!$this->websiteIds) {
+            $this->websiteIds = (array)$this->getWebsiteIds($object->getId());
+        }
+
+        $object->setData('website_ids', $this->websiteIds);
     }
 
     /**

@@ -188,7 +188,7 @@ class Data extends AbstractHelper
      * @param \Magento\Payment\Model\InfoInterface $payment
      * @param string $requestType
      * @param string $lastTransactionId
-     * @param \Magento\Framework\Object $card
+     * @param \Magento\Framework\DataObject $card
      * @param bool|float $amount
      * @param bool|string $exception
      * @param bool|string $additionalMessage

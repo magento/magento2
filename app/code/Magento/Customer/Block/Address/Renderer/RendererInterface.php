@@ -18,15 +18,15 @@ interface RendererInterface
     /**
      * Set format type object
      *
-     * @param \Magento\Framework\Object $type
+     * @param \Magento\Framework\DataObject $type
      * @return void
      */
-    public function setType(\Magento\Framework\Object $type);
+    public function setType(\Magento\Framework\DataObject $type);
 
     /**
      * Retrieve format type object
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getType();
 

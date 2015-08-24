@@ -23,7 +23,7 @@ class Shipment extends AbstractPdf
 
     /**
      * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param Config $pdfConfig
@@ -40,7 +40,7 @@ class Shipment extends AbstractPdf
      */
     public function __construct(
         \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Filesystem $filesystem,
         Config $pdfConfig,
@@ -104,7 +104,7 @@ class Shipment extends AbstractPdf
     /**
      * Return PDF document
      *
-     * @param  array $shipments
+     * @param \Magento\Sales\Model\Order\Shipment[] $shipments
      * @return \Zend_Pdf
      */
     public function getPdf($shipments = [])

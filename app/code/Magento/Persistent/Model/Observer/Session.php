@@ -209,7 +209,11 @@ class Session
         /** @var $request \Magento\Framework\App\RequestInterface */
         $request = $observer->getEvent()->getRequest();
         if ($request && $request->isXmlHttpRequest()) {
-            $requestData = \Zend_Json::decode($request->getContent());
+            $requestData = [];
+            $content = $request->getContent();
+            if ($content) {
+                $requestData = \Zend_Json::decode($content);
+            }
             $isRememberMeChecked = empty($requestData['persistent_remember_me']) ? false : true;
             $this->_persistentSession->setRememberMeChecked((bool)$isRememberMeChecked);
         }
