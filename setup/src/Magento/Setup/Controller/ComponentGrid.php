@@ -33,14 +33,14 @@ class ComponentGrid extends AbstractActionController
     private $packageInfo;
 
     /**
-     * Module  info
+     * Enabled Module info
      *
      * @var ModuleList
      */
-    private $moduleList;
+    private $enabledModuleList;
 
     /**
-     * Module  info
+     * Full Module info
      *
      * @var FullModuleList
      */
@@ -57,7 +57,7 @@ class ComponentGrid extends AbstractActionController
         $this->composerInformation = $composerInformation;
         $objectManager = $objectManagerProvider->get();
         $this->packageInfo = $objectManager->get('Magento\Framework\Module\PackageInfoFactory')->create();
-        $this->moduleList = $objectManager->get('Magento\Framework\Module\ModuleList');
+        $this->enabledModuleList = $objectManager->get('Magento\Framework\Module\ModuleList');
         $this->fullModuleList = $objectManager->get('Magento\Framework\Module\FullModuleList');
     }
 
@@ -103,7 +103,7 @@ class ComponentGrid extends AbstractActionController
             }
             if ($component['type'] === ComposerInformation::MODULE_PACKAGE_TYPE) {
                 $components[$component['name']]['enable'] =
-                    $this->moduleList->has($components[$component['name']]['moduleName']);
+                    $this->enabledModuleList->has($components[$component['name']]['moduleName']);
                 $components[$component['name']]['disable'] = !$components[$component['name']]['enable'];
             } else {
                 $components[$component['name']]['enable'] = false;
@@ -148,7 +148,7 @@ class ComponentGrid extends AbstractActionController
     {
         $modules = [];
         $allModules = $this->fullModuleList->getNames();
-        foreach($allModules as $module){
+        foreach ($allModules as $module) {
             $moduleName = $this->packageInfo->getPackageName($module);
             $modules[$moduleName]['name'] = $moduleName;
             $modules[$moduleName]['type'] = ComposerInformation::MODULE_PACKAGE_TYPE;
