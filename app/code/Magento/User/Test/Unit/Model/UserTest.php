@@ -84,7 +84,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
             []
         )->getMock();
         $objectFactoryMock = $this->getMockBuilder(
-            'Magento\Framework\Validator\ObjectFactory'
+            'Magento\Framework\Validator\DataObjectFactory'
         )->disableOriginalConstructor()->setMethods(
             ['create']
         )->getMock();
@@ -364,7 +364,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->_model->setIsActive(false);
         $this->setExpectedException(
             'Magento\\Framework\\Exception\\AuthenticationException',
-            'This account is inactive.'
+            'You did not sign in correctly or your account is temporarily disabled.'
         );
         $this->_model->verifyIdentity($password);
     }

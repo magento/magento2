@@ -36,6 +36,11 @@ class DateTest extends \PHPUnit_Framework_TestCase
     private $globalStateLocaleBackup;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dateTimeFormatter;
+
+    /**
      * @param string $locale
      */
     private function mockGridDateRendererBehaviorWithLocale($locale)
@@ -92,11 +97,14 @@ class DateTest extends \PHPUnit_Framework_TestCase
         $this->resolverMock = $this->getMockBuilder('Magento\Framework\Locale\ResolverInterface')
             ->getMock();
 
-        $this->date = new Date(
-            $this->contextMock,
-            $this->resolverMock
-        );
-        
+        $this->dateTimeFormatter = $this->getMock('Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface');
+
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->date = $objectManager->getObject('Magento\Reports\Block\Adminhtml\Sales\Grid\Column\Renderer\Date', [
+            'context' => $this->contextMock,
+            'localeResolver' => $this->resolverMock,
+            'dateTimeFormatter' => $this->dateTimeFormatter,
+        ]);
         $this->globalStateLocaleBackup = \Locale::getDefault();
     }
 
@@ -126,11 +134,15 @@ class DateTest extends \PHPUnit_Framework_TestCase
         $this->mockGridDateRendererBehaviorWithLocale($locale);
         $this->mockGridDateColumnConfig($index, $period);
 
-        $objectMock = $this->getMockBuilder('Magento\Framework\Object')
+        $objectMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->setMethods(['getData'])
             ->getMock();
         $objectMock->expects($this->once())->method('getData')->willReturn($data);
 
+        $this->dateTimeFormatter->expects($this->once())
+            ->method('formatObject')
+            ->with($this->isInstanceOf('DateTime'), $this->isType('string'), $locale)
+            ->willReturn($result);
 
         $this->assertEquals($result, $this->date->render($objectMock));
     }
@@ -181,15 +193,22 @@ class DateTest extends \PHPUnit_Framework_TestCase
 
     public function testDateIsRenderedIndependentOfSystemDefaultLocale()
     {
+        $locale = 'en_US';
+        $result = 'Jun 25, 2014';
         \Locale::setDefault('de_DE');
-        $this->mockGridDateRendererBehaviorWithLocale('en_US');
+        $this->mockGridDateRendererBehaviorWithLocale($locale);
         $this->mockGridDateColumnConfig('period', 'day');
 
-        $objectMock = $this->getMockBuilder('Magento\Framework\Object')
+        $objectMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->setMethods(['getData'])
             ->getMock();
         $objectMock->expects($this->any())->method('getData')->willReturn('2014-06-25');
-        
-        $this->assertEquals('Jun 25, 2014', $this->date->render($objectMock));
+
+        $this->dateTimeFormatter->expects($this->once())
+            ->method('formatObject')
+            ->with($this->isInstanceOf('DateTime'), $this->isType('string'), $locale)
+            ->willReturn($result);
+
+        $this->assertEquals($result, $this->date->render($objectMock));
     }
 }

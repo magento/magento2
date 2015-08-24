@@ -5,7 +5,7 @@
  */
 namespace Magento\Ui\Component;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
@@ -14,7 +14,7 @@ use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
  * Abstract class AbstractComponent
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-abstract class AbstractComponent extends Object implements UiComponentInterface
+abstract class AbstractComponent extends DataObject implements UiComponentInterface
 {
     /**
      * Render context

@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Indexer\Category;
 
-class Product implements \Magento\Indexer\Model\ActionInterface, \Magento\Framework\Mview\ActionInterface
+class Product implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
     /**
      * Indexer ID in configuration
@@ -22,18 +22,18 @@ class Product implements \Magento\Indexer\Model\ActionInterface, \Magento\Framew
      */
     protected $rowsActionFactory;
 
-    /** @var \Magento\Indexer\Model\IndexerRegistry */
+    /** @var \Magento\Framework\Indexer\IndexerRegistry */
     protected $indexerRegistry;
 
     /**
      * @param Product\Action\FullFactory $fullActionFactory
      * @param Product\Action\RowsFactory $rowsActionFactory
-     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
+     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      */
     public function __construct(
         Product\Action\FullFactory $fullActionFactory,
         Product\Action\RowsFactory $rowsActionFactory,
-        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
+        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
     ) {
         $this->fullActionFactory = $fullActionFactory;
         $this->rowsActionFactory = $rowsActionFactory;

@@ -116,6 +116,7 @@ app/code/Magento/Checkout/view/frontend/web/js/view/authentication.js
 app/code/Magento/Checkout/view/frontend/web/js/view/beforePlaceOrder.js
 app/code/Magento/Checkout/view/frontend/web/js/view/billing-address.js
 app/code/Magento/Checkout/view/frontend/web/js/view/estimation.js
+app/code/Magento/Checkout/view/frontend/web/js/view/form/element/email.js
 app/code/Magento/Checkout/view/frontend/web/js/view/minicart.js
 app/code/Magento/Checkout/view/frontend/web/js/view/payment.js
 app/code/Magento/Checkout/view/frontend/web/js/view/payment/default.js
@@ -173,7 +174,6 @@ app/code/Magento/Customer/view/frontend/web/js/model/customer.js
 app/code/Magento/Customer/view/frontend/web/js/model/customer/address.js
 app/code/Magento/Customer/view/frontend/web/js/section-config.js
 app/code/Magento/Customer/view/frontend/web/js/view/authentication-popup.js
-app/code/Magento/Customer/view/frontend/web/js/view/customer-email.js
 app/code/Magento/Customer/view/frontend/web/js/view/customer.js
 app/code/Magento/Customer/view/frontend/web/set-password.js
 app/code/Magento/DesignEditor/view/adminhtml/requirejs-config.js
@@ -327,6 +327,9 @@ app/code/Magento/Shipping/view/frontend/web/js/model/config.js
 app/code/Magento/Shipping/view/frontend/web/js/view/checkout/shipping/shipping-policy.js
 app/code/Magento/Store/view/base/requirejs-config.js
 app/code/Magento/Store/view/base/web/js/listing/filter/store.js
+app/code/Magento/Swatches/view/adminhtml/web/js/TypeChanger.js
+app/code/Magento/Swatches/view/frontend/requirejs-config.js
+app/code/Magento/Swatches/view/frontend/web/js/SwatchRenderer.js
 app/code/Magento/Tax/view/adminhtml/web/js/bootstrap.js
 app/code/Magento/Tax/view/frontend/web/js/view/checkout/minicart/subtotal/totals.js
 app/code/Magento/Tax/view/frontend/web/js/view/checkout/shipping_method/price.js

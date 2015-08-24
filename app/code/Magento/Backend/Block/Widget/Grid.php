@@ -114,7 +114,7 @@ class Grid extends \Magento\Backend\Block\Widget
     /**
      * Totals
      *
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\DataObject
      */
     protected $_varTotals;
 
@@ -789,10 +789,10 @@ class Grid extends \Magento\Backend\Block\Widget
     /**
      * Set totals
      *
-     * @param \Magento\Framework\Object $totals
+     * @param \Magento\Framework\DataObject $totals
      * @return void
      */
-    public function setTotals(\Magento\Framework\Object $totals)
+    public function setTotals(\Magento\Framework\DataObject $totals)
     {
         $this->_varTotals = $totals;
     }
@@ -800,7 +800,7 @@ class Grid extends \Magento\Backend\Block\Widget
     /**
      * Retrieve totals
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getTotals()
     {

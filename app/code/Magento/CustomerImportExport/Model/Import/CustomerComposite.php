@@ -129,7 +129,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     protected $masterAttributeCode = 'email';
 
     /**
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
@@ -142,7 +142,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
@@ -285,7 +285,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
                 // Add new customer data into customer storage for address entity instance
                 $websiteId = $this->_customerEntity->getWebsiteId($this->_currentWebsiteCode);
                 if (!$this->_addressEntity->getCustomerStorage()->getCustomerId($this->_currentEmail, $websiteId)) {
-                    $customerData = new \Magento\Framework\Object(
+                    $customerData = new \Magento\Framework\DataObject(
                         [
                             'id' => $this->_nextCustomerId,
                             'email' => $this->_currentEmail,

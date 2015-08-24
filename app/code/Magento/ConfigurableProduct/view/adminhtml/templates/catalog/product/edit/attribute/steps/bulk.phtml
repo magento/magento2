@@ -240,16 +240,21 @@
         </div>
         <div data-role="step-gallery-each" class="attribute-image-selector" data-bind="visible: type() == 'each'">
             <fieldset class="admin__fieldset bulk-attribute-values">
-                <div class="admin__field">
-                    <label class="admin__field-label"><span><?= __('Select attribute')?></span></label>
+                <div class="admin__field _required">
+                    <label class="admin__field-label" for="apply-images-attributes">
+                        <span><?= __('Select attribute')?></span>
+                    </label>
                     <div class="admin__field-control">
                         <select
+                            id="apply-images-attributes"
                             class="admin__control-select"
                             data-bind="
                                 options: $parent.attributes,
                                 optionsText: 'label',
                                 value: attribute,
-                                optionsCaption: '<?= __("Select")?>'"></select>
+                                optionsCaption: '<?= __("Select")?>'
+                                ">
+                        </select>
                     </div>
                 </div>
             </fieldset>
@@ -501,28 +506,31 @@
                     </div>
                 </li>
             </ul>
+            <form data-role="attributes-values-form">
             <fieldset class="admin__fieldset bulk-attribute-values" data-bind="visible: type() == 'single'">
-                <div class="admin__field">
+                <div class="admin__field _required">
                     <label for="apply-single-price-input" class="admin__field-label">
                         <span><?= __('Price') ?></span>
                     </label>
                     <div class="admin__field-control">
                         <div class="currency-addon">
-                            <input class="admin__control-text" type="text" data-bind="value:value">
+                            <input class="admin__control-text required-entry validate-zero-or-greater" type="text"
+                                   data-bind="value:value, uniqueName: true" id="apply-single-price-input"/>
                             <span class="currency-symbol" data-bind="text:currencySymbol"></span>
                         </div>
                     </div>
                 </div>
             </fieldset>
+            </form>
 
             <div data-bind="visible: type() == 'each'">
                 <fieldset class="admin__fieldset bulk-attribute-values">
-                    <div class="admin__field">
-                        <label for="apply-single-price-input" class="admin__field-label">
+                    <div class="admin__field _required">
+                        <label for="select-each-price" class="admin__field-label">
                             <span><?= __('Select attribute') ?></span>
                         </label>
                         <div class="admin__field-control">
-                            <select class="admin__control-select" data-bind="
+                            <select id="select-each-price" class="admin__control-select" data-bind="
                                     options: $parent.attributes,
                                     optionsText: 'label',
                                     value: attribute,
@@ -530,21 +538,27 @@
                         </div>
                     </div>
                 </fieldset>
-                <fieldset class="admin__fieldset bulk-attribute-values" data-bind="if:attribute">
-                    <!-- ko foreach: attribute().chosen -->
-                    <div class="admin__field">
-                        <label for="apply-single-price-input" class="admin__field-label">
-                            <span data-bind="text:label"></span>
-                        </label>
-                        <div class="admin__field-control">
-                            <div class="currency-addon">
-                                <input class="admin__control-text" type="text" data-bind="value:sections()[$parent.label]">
-                                <span class="currency-symbol" data-bind="text:$parent.currencySymbol"></span>
+
+                <form data-role="attributes-values-form">
+                    <fieldset class="admin__fieldset bulk-attribute-values" data-bind="if:attribute">
+                        <!-- ko foreach: attribute().chosen -->
+                        <div class="admin__field _required">
+                            <label data-bind="attr: {for: 'apply-single-price-input-' + $index()}" class="admin__field-label">
+                                <span data-bind="text:label"></span>
+                            </label>
+                            <div class="admin__field-control">
+                                <div class="currency-addon">
+                                    <input class="admin__control-text required-entry validate-zero-or-greater"
+                                           type="text"
+                                           data-bind="value:sections()[$parent.label], uniqueName: true,
+                                           attr: {id: 'apply-single-price-input-' + $index()}"/>
+                                    <span class="currency-symbol" data-bind="text:$parent.currencySymbol"></span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- /ko -->
-                </fieldset>
+                        <!-- /ko -->
+                    </fieldset>
+                </form>
             </div>
         </div>
     </div>
@@ -594,28 +608,30 @@
                 </li>
             </ul>
 
+            <form data-role="attributes-values-form">
             <fieldset class="admin__fieldset bulk-attribute-values" data-bind="visible: type() == 'single'">
-                <div class="admin__field">
+                <div class="admin__field _required">
                     <label for="apply-single-inventory-input" class="admin__field-label">
                         <span><?= __('Quantity') ?></span>
                     </label>
                     <div class="admin__field-control">
                         <input type="text"
                                id="apply-single-inventory-input"
-                               class="admin__control-text"
-                               data-bind="value: value" />
+                               class="admin__control-text required-entry validate-zero-or-greater"
+                               data-bind="value: value, uniqueName: true" />
                     </div>
                 </div>
             </fieldset>
+            </form>
 
             <div data-bind="visible: type() == 'each'">
                 <fieldset class="admin__fieldset bulk-attribute-values">
-                    <div class="admin__field">
-                        <label for="apply-single-price-input" class="admin__field-label">
+                    <div class="admin__field _required">
+                        <label for="apply-single-price-input-qty" class="admin__field-label">
                             <span><?= __('Select attribute') ?></span>
                         </label>
                         <div class="admin__field-control">
-                            <select class="admin__control-select" data-bind="
+                            <select id="apply-single-price-input-qty" class="admin__control-select" data-bind="
                                 options: $parent.attributes,
                                 optionsText: 'label',
                                 value: attribute,
@@ -623,22 +639,27 @@
                         </div>
                     </div>
                 </fieldset>
+                <form data-role="attributes-values-form">
                 <fieldset class="admin__fieldset bulk-attribute-values" data-bind="if:attribute">
                     <!-- ko foreach: attribute().chosen -->
-                    <div class="admin__field">
-                        <label for="apply-single-price-input" class="admin__field-label">
+                    <div class="admin__field _required">
+                        <label data-bind="attr: {for: 'apply-qty-input-' + $index()}" class="admin__field-label">
                             <span data-bind="text:label"></span>
                         </label>
                         <div class="admin__field-control">
-                            <input class="admin__control-text" type="text" data-bind="value:sections()[$parent.label]">
+                            <input id="apply-single-price-input-value"
+                                   class="admin__control-text required-entry validate-zero-or-greater" type="text"
+                                   data-bind="value:sections()[$parent.label], uniqueName: true,
+                                   attr: {id: 'apply-qty-input-' + $index()}"/>
                         </div>
                     </div>
                     <!-- /ko -->
                 </fieldset>
+                </form>
             </div>
         </div>
     </div>
-
+</form>
 </div>
 
 <script type="text/x-magento-init">
@@ -650,7 +671,8 @@
                     "component": "Magento_ConfigurableProduct/js/variations/steps/bulk",
                     "appendTo": "<?= $block->getParentComponentName()?>",
                     "noImage": "<?= $block->getNoImageUrl() ?>",
-                    "currencySymbol": "<?= $block->getCurrencySymbol() ?>"
+                    "currencySymbol": "<?= $block->getCurrencySymbol() ?>",
+                    "variationsComponent": "configurableVariations"
                 }
             }
         }

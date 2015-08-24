@@ -9,7 +9,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Escaper;
-use Magento\Framework\Stdlib\String;
+use Magento\Framework\Stdlib\StringUtils;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Search\Model\Query as SearchQuery;
 use Magento\Search\Model\QueryFactory;
@@ -87,7 +87,7 @@ class Data extends AbstractHelper
      */
     public function __construct(
         Context $context,
-        String $string,
+        StringUtils $string,
         QueryFactory $queryFactory,
         Escaper $escaper,
         StoreManagerInterface $storeManager

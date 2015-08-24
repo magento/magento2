@@ -12,7 +12,7 @@ class Sidebar
      *
      * @param \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar $subject
      * @param callable $proceed
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      *
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -20,7 +20,7 @@ class Sidebar
     public function aroundGetItemQty(
         \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar $subject,
         \Closure $proceed,
-        \Magento\Framework\Object $item
+        \Magento\Framework\DataObject $item
     ) {
         if ($item->getProduct()->getTypeId() == \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE) {
             return '';
