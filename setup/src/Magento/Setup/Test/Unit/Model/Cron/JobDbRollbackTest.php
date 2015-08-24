@@ -30,17 +30,6 @@ class JobDbRollbackTest extends \PHPUnit_Framework_TestCase
     private $status;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Cache
-     */
-    private $cache;
-
-    /*
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\State\CleanupFiles
-     */
-    private $cleanupFiles;
-
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject||\Magento\Setup\Model\ObjectManagerProvider
      */
     private $objectManagerProvider;

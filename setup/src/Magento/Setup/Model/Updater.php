@@ -54,9 +54,7 @@ class Updater
             }
             $params += $additionalOptions;
 
-            $this->queue->addJobs(
-                [['name' => $type, 'params' => $params]]
-            );
+            $this->queue->addJobs([['name' => $type, 'params' => $params]]);
             return '';
         } catch (\Exception $e) {
             return $e->getMessage();

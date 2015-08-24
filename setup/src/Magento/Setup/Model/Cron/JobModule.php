@@ -12,9 +12,9 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Job that handles module enable command
+ * Job that handles module commands. E.g. "module:enable", "module:disable"
  */
-class JobModuleEnable extends AbstractJob
+class JobModule extends AbstractJob
 {
     /**
      * @var Magento\Framework\Module\PackageInfoFactory
@@ -24,6 +24,21 @@ class JobModuleEnable extends AbstractJob
     /**
      * Constructor
      *
+     * @param AbstractSetupCommand $command
+     * @param ObjectManagerProvider $objectManagerProvider
+     * @param OutputInterface $output
+     * @param PackageInfoFactory $packageInfoFactory
+     * @param Status $status
+     * @param string $name
+     * @param array $params
+     */
+
+    /**
+     * @var string $cmdString
+     */
+    protected $cmdString;
+
+    /**
      * @param AbstractSetupCommand $command
      * @param ObjectManagerProvider $objectManagerProvider
      * @param OutputInterface $output
@@ -46,6 +61,22 @@ class JobModuleEnable extends AbstractJob
         $this->status = $status;
         $this->packageInfoFactory = $packageInfoFactory;
         parent::__construct($output, $status, $objectManagerProvider, $name, $params);
+
+        //map name to command string
+        $this->setCommandString($name);
+    }
+
+    /**
+     * @param string $name
+     * @return void
+     */
+    private function setCommandString($name)
+    {
+       if($name == 'setup:module:enable') {
+           $this->cmdString = 'module:enable';
+       } else {
+           $this->cmdString = 'module:disable';
+       }
     }
 
     /**
@@ -67,8 +98,8 @@ class JobModuleEnable extends AbstractJob
                 }
             }
 
-            //prepare the arguments to invoke Symfony run()
-            $arguments['command'] = 'module:enable';
+            // prepare the arguments to invoke Symfony run()
+            $arguments['command'] = $this->cmdString;
             $arguments['module'] = $moduleNames;
 
             $this->command->run(new ArrayInput($arguments), $this->output);
@@ -78,7 +109,7 @@ class JobModuleEnable extends AbstractJob
 
         } catch (\Exception $e) {
             $this->status->toggleUpdateError(true);
-            throw new \RuntimeException(sprintf('Could not complete %s successfully: %s', $this, $e->getMessage()));
+            throw new \RuntimeException(sprintf('Could not complete %s successfully: %s', $this->cmdString, $e->getMessage()));
         }
     }
 }
