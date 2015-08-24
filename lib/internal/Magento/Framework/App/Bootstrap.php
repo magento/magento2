@@ -403,7 +403,15 @@ class Bootstrap
      */
     public function isDeveloperMode()
     {
-        return isset($this->server[State::PARAM_MODE]) && $this->server[State::PARAM_MODE] == State::MODE_DEVELOPER;
+        if (isset($this->server[State::PARAM_MODE]) && $this->server[State::PARAM_MODE] == State::MODE_DEVELOPER) {
+            return true;
+        }
+        /** @var \Magento\Framework\App\DeploymentConfig $deploymentConfig */
+        $deploymentConfig = $this->getObjectManager()->get('Magento\Framework\App\DeploymentConfig');
+        if ($deploymentConfig->get(State::PARAM_MODE) == State::MODE_DEVELOPER) {
+            return true;
+        }
+        return false;
     }
 
     /**

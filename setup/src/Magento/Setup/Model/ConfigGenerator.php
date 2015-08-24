@@ -11,6 +11,7 @@ use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Math\Random;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\App\State;
 use Magento\Framework\App\ObjectManagerFactory;
 
 /**
@@ -223,6 +224,18 @@ class ConfigGenerator
         if ($this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_X_FRAME_OPT) === null) {
             $configData->set(ConfigOptionsListConstants::CONFIG_PATH_X_FRAME_OPT, 'SAMEORIGIN');
         }
+        return $configData;
+    }
+
+    /**
+     * Create default entry for mode config option
+     *
+     * @return ConfigData
+     */
+    public function createModeConfig()
+    {
+        $configData = new ConfigData(ConfigFilePool::APP_ENV);
+        $configData->set(State::PARAM_MODE, State::MODE_DEFAULT);
         return $configData;
     }
 }
