@@ -38,7 +38,7 @@ class Action extends \Magento\Catalog\Model\Resource\AbstractResource
      */
     public function updateAttributes($entityIds, $attrData, $storeId)
     {
-        $object = new \Magento\Framework\Object();
+        $object = new \Magento\Framework\DataObject();
         $object->setStoreId($storeId);
 
         $this->getConnection()->beginTransaction();

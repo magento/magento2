@@ -31,7 +31,7 @@ interface BlockInterface
      *
      * @param string|array $key
      * @param mixed $value
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function setData($key, $value = null);
 }

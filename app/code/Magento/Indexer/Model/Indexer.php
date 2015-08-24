@@ -5,7 +5,18 @@
  */
 namespace Magento\Indexer\Model;
 
-class Indexer extends \Magento\Framework\Object implements IndexerInterface
+use Magento\Framework\Indexer\ActionFactory;
+use Magento\Framework\Indexer\ActionInterface;
+use Magento\Framework\Indexer\ConfigInterface;
+use Magento\Framework\Indexer\IndexerInterface as IdxInterface;
+use Magento\Framework\Indexer\IndexStructureInterface;
+use Magento\Framework\Indexer\StateInterface;
+use Magento\Framework\Indexer\StructureFactory;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class Indexer extends \Magento\Framework\DataObject implements IdxInterface
 {
     /**
      * @var string
@@ -21,6 +32,11 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
      * @var ActionFactory
      */
     protected $actionFactory;
+
+    /**
+     * @var StructureFactory
+     */
+    protected $structureFactory;
 
     /**
      * @var \Magento\Framework\Mview\ViewInterface
@@ -45,6 +61,7 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
     /**
      * @param ConfigInterface $config
      * @param ActionFactory $actionFactory
+     * @param StructureFactory $structureFactory
      * @param \Magento\Framework\Mview\ViewInterface $view
      * @param Indexer\StateFactory $stateFactory
      * @param Indexer\CollectionFactory $indexersFactory
@@ -53,6 +70,7 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
     public function __construct(
         ConfigInterface $config,
         ActionFactory $actionFactory,
+        StructureFactory $structureFactory,
         \Magento\Framework\Mview\ViewInterface $view,
         Indexer\StateFactory $stateFactory,
         Indexer\CollectionFactory $indexersFactory,
@@ -60,6 +78,7 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
     ) {
         $this->config = $config;
         $this->actionFactory = $actionFactory;
+        $this->structureFactory = $structureFactory;
         $this->view = $view;
         $this->stateFactory = $stateFactory;
         $this->indexersFactory = $indexersFactory;
@@ -192,7 +211,7 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
      * Fill indexer data from config
      *
      * @param string $indexerId
-     * @return IndexerInterface
+     * @return IdxInterface
      * @throws \InvalidArgumentException
      */
     public function load($indexerId)
@@ -224,7 +243,7 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
     /**
      * Return related state object
      *
-     * @return Indexer\State
+     * @return StateInterface
      */
     public function getState()
     {
@@ -238,10 +257,10 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
     /**
      * Set indexer state object
      *
-     * @param Indexer\State $state
-     * @return IndexerInterface
+     * @param StateInterface $state
+     * @return IdxInterface
      */
-    public function setState(Indexer\State $state)
+    public function setState(StateInterface $state)
     {
         $this->state = $state;
         return $this;
@@ -280,7 +299,7 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
      */
     public function isValid()
     {
-        return $this->getState()->getStatus() == Indexer\State::STATUS_VALID;
+        return $this->getState()->getStatus() == StateInterface::STATUS_VALID;
     }
 
     /**
@@ -290,7 +309,7 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
      */
     public function isInvalid()
     {
-        return $this->getState()->getStatus() == Indexer\State::STATUS_INVALID;
+        return $this->getState()->getStatus() == StateInterface::STATUS_INVALID;
     }
 
     /**
@@ -300,7 +319,7 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
      */
     public function isWorking()
     {
-        return $this->getState()->getStatus() == Indexer\State::STATUS_WORKING;
+        return $this->getState()->getStatus() == StateInterface::STATUS_WORKING;
     }
 
     /**
@@ -311,7 +330,7 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
     public function invalidate()
     {
         $state = $this->getState();
-        $state->setStatus(Indexer\State::STATUS_INVALID);
+        $state->setStatus(StateInterface::STATUS_INVALID);
         $state->save();
     }
 
@@ -352,7 +371,26 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
      */
     protected function getActionInstance()
     {
-        return $this->actionFactory->create($this->getActionClass(), ['data' => $this->getData()]);
+        return $this->actionFactory->create(
+            $this->getActionClass(),
+            [
+                'indexStructure' => $this->getStructureInstance(),
+                'data' => $this->getData(),
+            ]
+        );
+    }
+
+    /**
+     * Return indexer structure instance
+     *
+     * @return IndexStructureInterface
+     */
+    protected function getStructureInstance()
+    {
+        if (!$this->getData('structure')) {
+            return null;
+        }
+        return $this->structureFactory->create($this->getData('structure'));
     }
 
     /**
@@ -363,20 +401,20 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
      */
     public function reindexAll()
     {
-        if ($this->getState()->getStatus() != Indexer\State::STATUS_WORKING) {
+        if ($this->getState()->getStatus() != StateInterface::STATUS_WORKING) {
             $state = $this->getState();
-            $state->setStatus(Indexer\State::STATUS_WORKING);
+            $state->setStatus(StateInterface::STATUS_WORKING);
             $state->save();
             if ($this->getView()->isEnabled()) {
                 $this->getView()->suspend();
             }
             try {
                 $this->getActionInstance()->executeFull();
-                $state->setStatus(Indexer\State::STATUS_VALID);
+                $state->setStatus(StateInterface::STATUS_VALID);
                 $state->save();
                 $this->getView()->resume();
             } catch (\Exception $exception) {
-                $state->setStatus(Indexer\State::STATUS_INVALID);
+                $state->setStatus(StateInterface::STATUS_INVALID);
                 $state->save();
                 $this->getView()->resume();
                 throw $exception;
@@ -398,7 +436,7 @@ class Indexer extends \Magento\Framework\Object implements IndexerInterface
 
     /**
      * Regenerate rows in index by ID list
-     *
+     *5
      * @param int[] $ids
      * @return void
      */

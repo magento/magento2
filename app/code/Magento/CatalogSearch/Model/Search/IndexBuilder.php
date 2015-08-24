@@ -15,7 +15,7 @@ use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\QueryInterface;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 use Magento\Framework\Search\RequestInterface;
-use Magento\Indexer\Model\ScopeResolver\IndexScopeResolver;
+use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -183,7 +183,7 @@ class IndexBuilder implements IndexBuilderInterface
         $hasFilters = false;
         switch ($query->getType()) {
             case RequestQueryInterface::TYPE_BOOL:
-                /** @var \Magento\Framework\Search\Request\Query\Bool $query */
+                /** @var \Magento\Framework\Search\Request\Query\BoolExpression $query */
                 foreach ($query->getMust() as $subQuery) {
                     $hasFilters |= $this->hasFilters($subQuery);
                 }
