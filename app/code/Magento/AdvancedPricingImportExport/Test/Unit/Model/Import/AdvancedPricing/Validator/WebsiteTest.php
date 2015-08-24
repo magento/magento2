@@ -63,11 +63,11 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider isValidReturnDataProvider
      *
-     * @param array  $value
-     * @param string $allWebsitesValue
-     * @param string $colTierPriceWebsite
-     * @param string $colGroupPriceWebsite
-     * @param bool   $expectedResult
+     * @param $value
+     * @param $allWebsites
+     * @param $colTierPriceWebsite
+     * @param $colGroupPriceWebsite
+     * @param $expectedResult
      */
     public function testIsValidReturn(
         $value,
@@ -84,6 +84,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $result = $this->website->isValid($value);
+file_put_contents('/home/vagrant/magnimex-ee/magento2ce/var/amafuingtests/' . time() . '.log', var_export($expectedResult . '||' . $result ,true));
         $this->assertEquals($expectedResult, $result);
     }
 
