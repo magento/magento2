@@ -87,7 +87,6 @@ class StartUpdater extends AbstractActionController
         ) {
             $errorMessage .= $this->validatePayload($postPayload);
             if (empty($errorMessage)) {
-
                 $packages = $postPayload[self::KEY_POST_PACKAGES];
                 $jobType = $postPayload[self::KEY_POST_JOB_TYPE];
                 $this->createTypeFlag($jobType, $postPayload[self::KEY_POST_HEADER_TITLE]);
@@ -135,7 +134,8 @@ class StartUpdater extends AbstractActionController
         }
         foreach ($packages as $package) {
             if (!isset($package[self::KEY_POST_PACKAGE_NAME])
-                || ($jobType == 'update' && !isset($package[self::KEY_POST_PACKAGE_VERSION]))) {
+                || ($jobType == 'update' && !isset($package[self::KEY_POST_PACKAGE_VERSION]))
+            ) {
                 $errorMessage .= 'Missing package information' . PHP_EOL;
                 break;
             }
@@ -169,6 +169,8 @@ class StartUpdater extends AbstractActionController
     }
 
     /**
+     * Returns cron config info based on passed in job type
+     *
      * @param string $jobType
      * @param array $postPayload
      * @param array $addtionalOptions

@@ -99,17 +99,19 @@ abstract class AbstractJob
 
     /**
      * Do the cleanup
+     *
      * @return void
      */
     protected function performCleanup()
     {
         $this->status->add('Cleaning generated files...');
         $this->cleanupFiles->clearCodeGeneratedFiles();
-        $this->status->add('complete!');
+        $this->status->add('Complete!');
         $this->status->add('Clearing cache...');
         $this->cache->clean();
-        $this->status->add('complete!');
+        $this->status->add('Complete!');
     }
+
     /**
      * Execute job
      *
