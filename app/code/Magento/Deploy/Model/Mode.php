@@ -72,6 +72,8 @@ class Mode
     /** @var \Magento\Framework\Shell */
     private $shell;
 
+    /** @var  string */
+    private $functionCallPath;
     /**
      * @param InputInterface $input
      * @param OutputInterface $output
@@ -109,6 +111,7 @@ class Mode
         $this->storeView = $storeView;
         $this->shell = $shell;
         $this->maintenanceMode = $maintenanceMode;
+        $this->functionCallPath = 'php -f ' . BP . DIRECTORY_SEPARATOR . 'bin' . DIRECTORY_SEPARATOR . 'magento ';
     }
 
     /**
@@ -232,10 +235,10 @@ class Mode
         $themeLocalePairs = $this->storeView->retrieveThemeLocalePairs();
         foreach ($themeLocalePairs as $themeLocalePair) {
             $theme = $themeLocalePair['theme'] ?: self::DEFAULT_THEME;
-            $cmd = 'php -f ' . BP . '/bin/magento dev:css:deploy less'
-                . ' --' . CssDeployCommand::LOCALE_OPTION . '="' . $themeLocalePair['locale'] . '"'
-                . ' --' . CssDeployCommand::THEME_OPTION . '="' . $theme . '"';
-            $cmd = str_replace('/', DIRECTORY_SEPARATOR, $cmd);
+            $cmd = $this->functionCallPath . 'dev:css:deploy less'
+                . ' --' . CssDeployCommand::THEME_OPTION . '="' . $theme . '"'
+                . ' --' . CssDeployCommand::LOCALE_OPTION . '="' . $themeLocalePair['locale'] . '"';
+
             /**
              * @todo build a solution that does not depend on exec
              */
@@ -254,9 +257,9 @@ class Mode
      */
     private function deployStaticContent(OutputInterface $output)
     {
-        $cmd = 'php -f ' . BP . '/bin/magento setup:static-content:deploy '
+        $cmd = $this->functionCallPath . 'setup:static-content:deploy '
             . implode(' ', $this->storeView->retrieveLocales());
-        $cmd = str_replace('/', DIRECTORY_SEPARATOR, $cmd);
+
         /**
          * @todo build a solution that does not depend on exec
          */
@@ -280,8 +283,8 @@ class Mode
                 DirectoryList::DI,
             ]
         );
-        $cmd = 'php -f ' . BP . '/bin/magento setup:di:compile-multi-tenant';
-        $cmd = str_replace('/', DIRECTORY_SEPARATOR, $cmd);
+        $cmd = $this->functionCallPath . 'setup:di:compile-multi-tenant';
+
         /**
          * exec command is necessary for now to isolate the autoloaders in the compiler from the memory state
          * of this process, which would prevent some classes from being generated
