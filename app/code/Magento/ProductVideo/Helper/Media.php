@@ -35,7 +35,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     /*
      * Cached video config
      */
-    protected $videoConfig;
+    protected $cachedVideoConfig;
 
     /**
      * @param \Magento\Framework\View\ConfigInterface $configInterface
@@ -56,7 +56,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getVideoConfig()
     {
-        $this->videoConfig = $this->viewConfig->getViewConfig([
+        $this->cachedVideoConfig = $this->viewConfig->getViewConfig([
             'area' => Area::AREA_FRONTEND,
             'themeModel' => $this->currentTheme
         ]);
@@ -71,10 +71,10 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getVideoPlayAttribute()
     {
-        if (!isset($this->videoConfig) || empty($this->videoConfig)) {
+        if (!isset($this->cachedVideoConfig) || empty($this->cachedVideoConfig)) {
             $this->getVideoConfig();
         }
-        return $this->videoConfig->getVarValue(self::MODULE_NAME, 'video_play');
+        return $this->cachedVideoConfig->getVarValue(self::MODULE_NAME, 'video_play');
     }
 
     /**
@@ -84,10 +84,10 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getVideoStopAttribute()
     {
-        if (!isset($this->videoConfig) || empty($this->videoConfig)) {
+        if (!isset($this->cachedVideoConfig) || empty($this->cachedVideoConfig)) {
             $this->getVideoConfig();
         }
-        return $this->videoConfig->getVarValue(self::MODULE_NAME, 'video_stop');
+        return $this->cachedVideoConfig->getVarValue(self::MODULE_NAME, 'video_stop');
     }
 
     /**
@@ -97,10 +97,10 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getVideoColorAttribute()
     {
-        if (!isset($this->videoConfig) || empty($this->videoConfig)) {
+        if (!isset($this->cachedVideoConfig) || empty($this->cachedVideoConfig)) {
             $this->getVideoConfig();
         }
-        return $this->videoConfig->getVarValue(self::MODULE_NAME, 'video_color');
+        return $this->cachedVideoConfig->getVarValue(self::MODULE_NAME, 'video_color');
     }
 
 }
