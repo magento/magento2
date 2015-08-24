@@ -47,16 +47,9 @@ class JobDbRollbackTest extends \PHPUnit_Framework_TestCase
         $this->status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
         $output = $this->getMockForAbstractClass('Symfony\Component\Console\Output\OutputInterface', [], '', false);
         $this->objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
-        $this->cleanupFiles = $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false);
-        $this->cache = $this->getMock('\Magento\Framework\App\Cache', [], [], '', false);
-        $valueMap = [
-            ['Magento\Framework\App\State\CleanupFiles', $this->cleanupFiles],
-            ['Magento\Framework\App\Cache', $this->cache],
-        ];
 
         $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface', [], '', false);
         $this->objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
-        $objectManager->expects($this->atLeastOnce())->method('get')->will($this->returnValueMap($valueMap));
 
         $this->jobDbRollback = new JobDbRollback(
             $this->backupRollbackFactory,

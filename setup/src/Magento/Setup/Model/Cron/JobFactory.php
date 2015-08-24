@@ -97,15 +97,6 @@ class JobFactory
                 );
                 break;
             case self::JOB_MODULE_ENABLE:
-//                return new JobModuleEnable(
-//                    $this->serviceLocator->get('Magento\Setup\Console\Command\ModuleEnableCommand'),
-//                    $objectManagerProvider,
-//                    $multipleStreamOutput,
-//                    $objectManager->get('Magento\Framework\Module\PackageInfoFactory'),
-//                    $cronStatus,
-//                    $name,
-//                    $params
-//                );
                 return new JobModule(
                     $this->serviceLocator->get('Magento\Setup\Console\Command\ModuleEnableCommand'),
                     $objectManagerProvider,
@@ -117,17 +108,8 @@ class JobFactory
                 );
                 break;
             case self::JOB_MODULE_DISABLE:
-//                return new JobModuleDisable(
-//                    $this->serviceLocator->get('Magento\Setup\Console\Command\ModuleDisableCommand'),
-//                    $objectManagerProvider,
-//                    $multipleStreamOutput,
-//                    $objectManager->get('Magento\Framework\Module\PackageInfoFactory'),
-//                    $cronStatus,
-//                    $name,
-//                    $params
-//                );
                 return new JobModule(
-                    $this->serviceLocator->get('Magento\Setup\Console\Command\ModuleEnableCommand'),
+                    $this->serviceLocator->get('Magento\Setup\Console\Command\ModuleDisableCommand'),
                     $objectManagerProvider,
                     $multipleStreamOutput,
                     $objectManager->get('Magento\Framework\Module\PackageInfoFactory'),
