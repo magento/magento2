@@ -482,4 +482,6 @@
             </argument>
         </arguments>
     </type>
+    <!--<virtualType name="">-->
+    <!--</virtualType>-->
 </config>
