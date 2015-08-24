@@ -147,7 +147,7 @@
                     <!-- wrapper and .action-menu to show actions                                  -->
                     <div class="action-select-wrap" ng-class="{'_active' : isActiveActionsCell(component)}">
                         <button class="action-select"
-                                ng-show="component.update || component.uninstall"
+                            ng-show="component.update || component.uninstall || !component.disable || !component.update"
                             ng-click="toggleActiveActionsCell(component)"
                             ng-blur="closeActiveActionsCell(component)">
                             <span>Select</span>
