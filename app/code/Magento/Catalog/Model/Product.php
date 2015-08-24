@@ -2542,6 +2542,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
             if (!isset($image['types'])) {
                 $image['types'] = array_keys($productImages, $image['file']);
             }
+            $image['provider'] = 'youtube';
             $entry = $this->mediaGalleryEntryFactory->create();
             $this->dataObjectHelper->populateWithArray(
                 $entry,
@@ -2603,6 +2604,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
             "position" => $entry->getPosition(),
             "disabled" => $entry->isDisabled(),
             "types" => $entry->getTypes(),
+            "provider" => $entry->getProvider(),
             "content" => $this->convertFromMediaGalleryEntryContentInterface($entry->getContent()),
         ];
 
