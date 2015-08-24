@@ -634,6 +634,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                 $behaviourData[$entityCode] = [
                     'token' => $behaviorClassName,
                     'code' => $behavior->getCode() . '_behavior',
+                    'notes' => $behavior->getNotes(),
                 ];
             } else {
                 throw new \Magento\Framework\Exception\LocalizedException(
