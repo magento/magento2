@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Webapi\Test\Unit\Model\Soap\Config;
+namespace Magento\Webapi\Test\Unit\Model\Config;
 
 /**
  * Test for class reflector.
@@ -13,7 +13,7 @@ class ClassReflectorTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Reflection\TypeProcessor|\PHPUnit_Framework_MockObject_MockObject */
     protected $_typeProcessor;
 
-    /** @var \Magento\Webapi\Model\Soap\Config\ClassReflector */
+    /** @var \Magento\Webapi\Model\Config\ClassReflector */
     protected $_classReflector;
 
     /**
@@ -35,7 +35,7 @@ class ClassReflectorTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValueMap([['string', 'str'], ['int', 'int']])
         );
-        $this->_classReflector = new \Magento\Webapi\Model\Soap\Config\ClassReflector($this->_typeProcessor);
+        $this->_classReflector = new \Magento\Webapi\Model\Config\ClassReflector($this->_typeProcessor);
     }
 
     public function testReflectClassMethods()
