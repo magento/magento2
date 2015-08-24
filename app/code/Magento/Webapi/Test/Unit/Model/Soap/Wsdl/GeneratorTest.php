@@ -17,8 +17,8 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     protected $customAttributeTypeLocator = null;
 
-    /**  @var \Magento\Webapi\Model\Soap\Config|\PHPUnit_Framework_MockObject_MockObject */
-    protected $_soapConfigMock;
+    /**  @var \Magento\Webapi\Model\ServiceMetadata|\PHPUnit_Framework_MockObject_MockObject */
+    protected $serviceMetadata;
 
     /**  @var \Magento\Webapi\Model\Soap\WsdlFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $_wsdlFactoryMock;
@@ -34,8 +34,8 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_soapConfigMock = $this->getMockBuilder(
-            'Magento\Webapi\Model\Soap\Config'
+        $this->serviceMetadata = $this->getMockBuilder(
+            'Magento\Webapi\Model\ServiceMetadata'
         )->disableOriginalConstructor()->getMock();
 
         $_wsdlMock = $this->getMockBuilder(
@@ -101,12 +101,12 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->_wsdlGenerator = $objectManager->getObject(
             'Magento\Webapi\Model\Soap\Wsdl\Generator',
             [
-                'apiConfig' => $this->_soapConfigMock,
                 'wsdlFactory' => $this->_wsdlFactoryMock,
                 'cache' => $this->_cacheMock,
                 'typeProcessor' => $this->_typeProcessor,
-                'storeManagerMock' => $this->storeManagerMock,
-                'customAttributeTypeLocator' => $this->customAttributeTypeLocator
+                'storeManager' => $this->storeManagerMock,
+                'customAttributeTypeLocator' => $this->customAttributeTypeLocator,
+                'serviceMetadata' => $this->serviceMetadata
             ]
         );
 
@@ -154,14 +154,6 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * test getOperationName
-     */
-    public function testGetOperationName()
-    {
-        $this->assertEquals("resNameMethodName", $this->_wsdlGenerator->getOperationName("resName", "methodName"));
-    }
-
-    /**
      * @test
      */
     public function testGetInputMessageName()
@@ -188,26 +180,18 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $genWSDL = 'generatedWSDL';
         $exceptionMsg = 'exception message';
         $requestedService = ['catalogProduct'];
+        $serviceMetadata = ['methods' => ['methodName' => ['interface' => 'aInterface']]];
 
-        $wsdlGeneratorMock = $this->getMockBuilder(
-            'Magento\Webapi\Model\Soap\Wsdl\Generator'
-        )->setMethods(
-            ['_collectCallInfo']
-        )->setConstructorArgs(
-            [
-                $this->_soapConfigMock,
-                $this->_wsdlFactoryMock,
-                $this->_cacheMock,
-                $this->_typeProcessor,
-                $this->storeManagerMock,
-                $this->customAttributeTypeLocator
-            ]
-        )->getMock();
-
-        $wsdlGeneratorMock->expects($this->once())
-            ->method('_collectCallInfo')
+        $this->serviceMetadata->expects($this->any())
+            ->method('getServiceMetadata')
+            ->willReturn($serviceMetadata);
+        $this->_typeProcessor->expects($this->once())
+            ->method('processInterfaceCallInfo')
             ->willThrowException(new \Magento\Framework\Webapi\Exception(__($exceptionMsg)));
 
-        $this->assertEquals($genWSDL, $wsdlGeneratorMock->generate($requestedService, 'http://magento.host'));
+        $this->assertEquals(
+            $genWSDL,
+            $this->_wsdlGenerator->generate($requestedService, 'http://', 'magento.host', '/soap/default')
+        );
     }
 }
