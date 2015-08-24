@@ -19,6 +19,10 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
     const GALLERY_VALUE_TABLE = 'catalog_product_entity_media_gallery_value';
 
+    const GALLERY_VALUE_VIDEO_TABLE = 'catalog_product_entity_media_gallery_value_video';
+
+    const GALLERY_VALUE_TO_ENTITY_TABLE = 'catalog_product_entity_media_gallery_value_to_entity';
+
     /**
      * Resource initialization
      *
@@ -51,7 +55,8 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ['main' => $this->getMainTable()],
             [
                 'value_id',
-                'file' => 'value'
+                'file' => 'value',
+                'media_type' => 'media_type'
             ]
         )->joinLeft(
             ['value' => $this->getTable(self::GALLERY_VALUE_TABLE)],
@@ -66,11 +71,26 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ['default_value' => $this->getTable(self::GALLERY_VALUE_TABLE)],
             'main.value_id = default_value.value_id AND default_value.store_id = 0',
             ['label_default' => 'label', 'position_default' => 'position', 'disabled_default' => 'disabled']
+        )->joinLeft(
+            ['entity' => $this->getTable(self::GALLERY_VALUE_TO_ENTITY_TABLE)],
+            'main.value_id = entity.value_id AND default_value.store_id = 0',
+            ['entity_id' => 'entity_id']
+        )->joinLeft(
+            ['video' => $this->getTable(self::GALLERY_VALUE_VIDEO_TABLE)],
+            'main.value_id = video.value_id AND default_value.store_id = 0',
+            [
+                'video_value_id' => 'value_id',
+                'video_provider' => 'provider',
+                'video_url' => 'url',
+                'video_title' => 'title',
+                'video_description' => 'description',
+                'video_metadata' => 'metadata'
+            ]
         )->where(
             'main.attribute_id = ?',
             $object->getAttribute()->getId()
         )->where(
-            'main.entity_id = ?',
+            'entity.entity_id = ?',
             $product->getId()
         )
         ->where($positionCheckSql . ' IS NOT NULL')
