@@ -9,6 +9,7 @@ namespace Magento\Setup\Controller;
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Module\PackageInfo;
 use Magento\Framework\Module\ModuleList;
+use Magento\Framework\Module\FullModuleList;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
@@ -39,6 +40,13 @@ class ComponentGrid extends AbstractActionController
     private $moduleList;
 
     /**
+     * Module  info
+     *
+     * @var FullModuleList
+     */
+    private $fullModuleList;
+
+    /**
      * @param ComposerInformation $composerInformation
      * @param ObjectManagerProvider $objectManagerProvider
      */
@@ -50,6 +58,7 @@ class ComponentGrid extends AbstractActionController
         $objectManager = $objectManagerProvider->get();
         $this->packageInfo = $objectManager->get('Magento\Framework\Module\PackageInfoFactory')->create();
         $this->moduleList = $objectManager->get('Magento\Framework\Module\ModuleList');
+        $this->fullModuleList = $objectManager->get('Magento\Framework\Module\FullModuleList');
     }
 
     /**
@@ -74,6 +83,8 @@ class ComponentGrid extends AbstractActionController
     {
         $lastSyncData = $this->composerInformation->getPackagesForUpdate();
         $components = $this->composerInformation->getInstalledMagentoPackages();
+        $allModules = $this->getAllModules();
+        $components = array_replace_recursive($components, $allModules);
         foreach ($components as $component) {
             $components[$component['name']]['update'] = false;
             $components[$component['name']]['uninstall'] = false;
@@ -126,5 +137,23 @@ class ComponentGrid extends AbstractActionController
                 'lastSyncData' => $lastSyncData
             ]
         );
+    }
+
+    /**
+     * Get full list of modules as an associative array
+     *
+     * @return array
+     */
+    private function getAllModules()
+    {
+        $modules = [];
+        $allModules = $this->fullModuleList->getNames();
+        foreach($allModules as $module){
+            $moduleName = $this->packageInfo->getPackageName($module);
+            $modules[$moduleName]['name'] = $moduleName;
+            $modules[$moduleName]['type'] = ComposerInformation::MODULE_PACKAGE_TYPE;
+            $modules[$moduleName]['version'] = $this->packageInfo->getVersion($module);
+        }
+        return $modules;
     }
 }
