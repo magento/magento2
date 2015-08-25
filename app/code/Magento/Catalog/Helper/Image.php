@@ -446,12 +446,14 @@ class Image extends AbstractHelper
     protected function applyScheduledActions()
     {
         $model = $this->_getModel();
-        if ($this->getImageFile()) {
-            $model->setBaseFile($this->getImageFile());
-        } else {
-            $model->setBaseFile($this->getProduct()->getData($model->getDestinationSubdir()));
+        $baseFile = $model->getBaseFile();
+        if (!$baseFile) {
+            if ($this->getImageFile()) {
+                $model->setBaseFile($this->getImageFile());
+            } else {
+                $model->setBaseFile($this->getProduct()->getData($model->getDestinationSubdir()));
+            }
         }
-
         if (!$model->isCached()) {
             if ($this->_scheduleRotate) {
                 $model->rotate($this->getAngle());
