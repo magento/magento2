@@ -25,7 +25,7 @@ class AgreementModeOptionsTest extends \PHPUnit_Framework_TestCase
         $expected = [
             AgreementModeOptions::MODE_AUTO => __('Automatically'),
             AgreementModeOptions::MODE_MANUAL => __('Manually')
-        ];;
+        ];
         $this->assertEquals($expected, $this->model->getOptionsArray());
     }
 }

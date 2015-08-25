@@ -11,6 +11,46 @@ use Magento\Paypal\Model\Api\ProcessableException as ApiProcessableException;
 class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
 {
     /**
+     * @var \Magento\Checkout\Api\AgreementsValidatorInterface
+     */
+    protected $agreementsValidator;
+
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Sales\Model\OrderFactory $orderFactory
+     * @param \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory
+     * @param \Magento\Framework\Session\Generic $paypalSession
+     * @param \Magento\Framework\Url\Helper\Data $urlHelper
+     * @param \Magento\Customer\Model\Url $customerUrl
+     * @param \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator
+     */
+    public function __construct(
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Sales\Model\OrderFactory $orderFactory,
+        \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory,
+        \Magento\Framework\Session\Generic $paypalSession,
+        \Magento\Framework\Url\Helper\Data $urlHelper,
+        \Magento\Customer\Model\Url $customerUrl,
+        \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator
+    ) {
+        $this->agreementsValidator = $agreementValidator;
+        parent::__construct(
+            $context,
+            $customerSession,
+            $checkoutSession,
+            $orderFactory,
+            $checkoutFactory,
+            $paypalSession,
+            $urlHelper,
+            $customerUrl
+        );
+    }
+
+    /**
      * Submit the order
      *
      * @return void
@@ -19,8 +59,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
     public function execute()
     {
         try {
-            $agreementsValidator = $this->_objectManager->get('Magento\CheckoutAgreements\Model\AgreementsValidator');
-            if (!$agreementsValidator->isValid(array_keys($this->getRequest()->getPost('agreement', [])))) {
+            if (!$this->agreementsValidator->isValid(array_keys($this->getRequest()->getPost('agreement', [])))) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Please agree to all the terms and conditions before placing the order.')
                 );
