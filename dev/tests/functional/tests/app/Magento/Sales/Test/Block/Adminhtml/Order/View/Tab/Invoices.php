@@ -20,7 +20,7 @@ class Invoices extends Tab
      *
      * @var string
      */
-    protected $grid = '[data-bind*=sales_order_view_invoice_grid]';
+    protected $grid = '#sales_order_view_tabs_order_invoices_content';
 
     /**
      * Get grid block

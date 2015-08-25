@@ -103,10 +103,10 @@ class Weee extends AbstractTotal
         $this->weeeTotalExclTax = 0;
         $this->weeeBaseTotalExclTax = 0;
         foreach ($items as $item) {
-            if ($item->getParentItemId()) {
+            $this->_resetItemData($item);
+            if ($item->getParentItem()) {
                 continue;
             }
-            $this->_resetItemData($item);
             if ($item->getHasChildren() && $item->isChildrenCalculated()) {
                 foreach ($item->getChildren() as $child) {
                     $this->_resetItemData($child);
@@ -166,7 +166,7 @@ class Weee extends AbstractTotal
         }
 
         foreach ($attributes as $key => $attribute) {
-            $title          = $attribute->getName();
+            $title = $attribute->getName();
 
             $baseValueExclTax = $baseValueInclTax = $attribute->getAmount();
             $valueExclTax = $valueInclTax = $this->priceCurrency->round(
@@ -286,6 +286,11 @@ class Weee extends AbstractTotal
      */
     protected function _recalculateParent(\Magento\Quote\Model\Quote\Item\AbstractItem $item)
     {
+        $associatedTaxables = [];
+        foreach ($item->getChildren() as $child) {
+            $associatedTaxables = array_merge($associatedTaxables, $child->getAssociatedTaxables());
+        }
+        $item->setAssociatedTaxables($associatedTaxables);
     }
 
     /**
@@ -297,6 +302,7 @@ class Weee extends AbstractTotal
     protected function _resetItemData($item)
     {
         $this->weeeData->setApplied($item, []);
+        $item->setAssociatedTaxables([]);
 
         $item->setBaseWeeeTaxDisposition(0);
         $item->setWeeeTaxDisposition(0);
