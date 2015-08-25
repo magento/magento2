@@ -6,6 +6,8 @@
 namespace Magento\Search\Api;
 
 /**
+ * Search API for all requests
+ *
  * @api
  */
 interface SearchInterface
