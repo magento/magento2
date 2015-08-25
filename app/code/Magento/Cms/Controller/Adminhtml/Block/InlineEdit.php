@@ -45,18 +45,23 @@ class InlineEdit extends \Magento\Backend\App\Action
 
         if ($this->getRequest()->getParam('isAjax')) {
             $postData = $this->getRequest()->getParam('data', []);
-            foreach (array_keys($postData) as $blockId) {
-                /** @var \Magento\Cms\Model\Block $block */
-                $block = $this->blockRepository->getById($blockId);
-                try {
-                    $block->setData(array_merge($block->getData(), $postData[$blockId]));
-                    $this->blockRepository->save($block);
-                } catch (\Exception $e) {
-                    $messages[] = $this->getErrorWithBlockTitle(
-                        $block,
-                        __($e->getMessage())
-                    );
-                    $error = true;
+            if (!count($postData)) {
+                $messages[] = __('Please correct the data sent.');
+                $error = true;
+            } else {
+                foreach (array_keys($postData) as $blockId) {
+                    /** @var \Magento\Cms\Model\Block $block */
+                    $block = $this->blockRepository->getById($blockId);
+                    try {
+                        $block->setData(array_merge($block->getData(), $postData[$blockId]));
+                        $this->blockRepository->save($block);
+                    } catch (\Exception $e) {
+                        $messages[] = $this->getErrorWithBlockTitle(
+                            $block,
+                            __($e->getMessage())
+                        );
+                        $error = true;
+                    }
                 }
             }
         }
