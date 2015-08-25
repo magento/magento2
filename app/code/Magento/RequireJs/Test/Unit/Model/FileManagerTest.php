@@ -14,7 +14,7 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\RequireJs\Config|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $config;
+    private $configMock;
 
     /**
      * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
@@ -44,15 +44,15 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $assetRepo;
+    private $assetRepoMock;
 
     protected function setUp()
     {
-        $this->config = $this->getMock('\Magento\Framework\RequireJs\Config', [], [], '', false);
+        $this->configMock = $this->getMock('\Magento\Framework\RequireJs\Config', [], [], '', false);
         $this->fileSystem = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
         $this->appState = $this->getMock('\Magento\Framework\App\State', [], [], '', false);
-        $this->assetRepo = $this->getMock('\Magento\Framework\View\Asset\Repository', [], [], '', false);
-        $this->object = new FileManager($this->config, $this->fileSystem, $this->appState, $this->assetRepo);
+        $this->assetRepoMock = $this->getMock('\Magento\Framework\View\Asset\Repository', [], [], '', false);
+        $this->object = new FileManager($this->configMock, $this->fileSystem, $this->appState, $this->assetRepoMock);
         $this->dir = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\WriteInterface');
         $this->asset = $this->getMock('\Magento\Framework\View\Asset\File', [], [], '', false);
     }
@@ -63,14 +63,14 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateRequireJsConfigAsset($exists)
     {
-        $this->config->expects($this->once())
+        $this->configMock->expects($this->once())
             ->method('getConfigFileRelativePath')
             ->will($this->returnValue('requirejs/file.js'));
         $this->fileSystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::STATIC_VIEW)
             ->will($this->returnValue($this->dir));
-        $this->assetRepo->expects($this->once())
+        $this->assetRepoMock->expects($this->once())
             ->method('createArbitrary')
             ->with('requirejs/file.js', '')
             ->will($this->returnValue($this->asset));
@@ -81,11 +81,11 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
             ->with('requirejs/file.js')
             ->will($this->returnValue($exists));
         if ($exists) {
-            $this->config->expects($this->never())->method('getConfig');
+            $this->configMock->expects($this->never())->method('getConfig');
             $this->dir->expects($this->never())->method('writeFile');
         } else {
             $data = 'requirejs config data';
-            $this->config->expects($this->once())->method('getConfig')->will($this->returnValue($data));
+            $this->configMock->expects($this->once())->method('getConfig')->will($this->returnValue($data));
             $this->dir->expects($this->once())->method('writeFile')->with('requirejs/file.js', $data);
         }
         $this->assertSame($this->asset, $this->object->createRequireJsConfigAsset());
@@ -101,14 +101,14 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateRequireJsAssetDevMode()
     {
-        $this->config->expects($this->once())
+        $this->configMock->expects($this->once())
             ->method('getConfigFileRelativePath')
             ->will($this->returnValue('requirejs/file.js'));
         $this->fileSystem->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::STATIC_VIEW)
             ->will($this->returnValue($this->dir));
-        $this->assetRepo->expects($this->once())
+        $this->assetRepoMock->expects($this->once())
             ->method('createArbitrary')
             ->with('requirejs/file.js', '')
             ->will($this->returnValue($this->asset));
@@ -118,14 +118,14 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(\Magento\Framework\App\State::MODE_DEVELOPER));
         $this->dir->expects($this->never())->method('isExist');
         $data = 'requirejs config data';
-        $this->config->expects($this->once())->method('getConfig')->will($this->returnValue($data));
+        $this->configMock->expects($this->once())->method('getConfig')->will($this->returnValue($data));
         $this->dir->expects($this->once())->method('writeFile')->with('requirejs/file.js', $data);
         $this->assertSame($this->asset, $this->object->createRequireJsConfigAsset());
     }
 
     public function testCreateBundleJsPool()
     {
-        unset($this->config);
+        unset($this->configMock);
         $dirRead = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], 'libDir', false);
         $context = $this->getMock('Magento\Framework\View\Asset\File\FallbackContext', [], [], '', false);
         $assetRepo = $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false);
@@ -188,5 +188,39 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('0', $result);
         $this->assertArrayHasKey('1', $result);
+    }
+
+    public function testCreateMinResolverAsset()
+    {
+        $this->configMock
+            ->expects($this->any())
+            ->method('getMinResolverRelativePath')
+            ->willReturn('relative path');
+        $this->assetRepoMock
+            ->expects($this->once())
+            ->method('createArbitrary')
+            ->with('relative path');
+        $this->fileSystem->expects($this->once())
+            ->method('getDirectoryWrite')
+            ->with(DirectoryList::STATIC_VIEW)
+            ->will($this->returnValue($this->dir));
+
+        $this->object->createMinResolverAsset();
+    }
+
+    public function testCreateRequireJsMixinsAsset()
+    {
+        $path = 'relative path';
+        $this->configMock
+            ->expects($this->once())
+            ->method('getMixinsFileRelativePath')
+            ->will($this->returnValue($path));
+        $this->assetRepoMock
+            ->expects($this->once())
+            ->method('createArbitrary')
+            ->with($path, '')
+            ->willReturn($this->asset);
+
+        $this->assertSame($this->asset, $this->object->createRequireJsMixinsAsset());
     }
 }

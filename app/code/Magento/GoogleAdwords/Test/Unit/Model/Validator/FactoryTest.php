@@ -6,7 +6,7 @@
  */
 namespace Magento\GoogleAdwords\Test\Unit\Model\Validator;
 
-use Magento\Framework\Validator\Int;
+use Magento\Framework\Validator\IntUtils;
 use Magento\Framework\Validator\Regex;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
@@ -135,12 +135,12 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
                     [
                         'alias' => 'Int',
                         'type' => '',
-                        'class' => 'Magento\Framework\Validator\Int',
+                        'class' => 'Magento\Framework\Validator\IntUtils',
                         'options' => [
                             'methods' => [
                                 [
                                     'method' => 'setMessages',
-                                    'arguments' => [[Int::NOT_INT => $message, Int::INVALID => $message]],
+                                    'arguments' => [[IntUtils::NOT_INT => $message, IntUtils::INVALID => $message]],
                                 ],
                             ],
                         ],

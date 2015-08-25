@@ -17,7 +17,7 @@ namespace Magento\Framework\View\Element;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-abstract class AbstractBlock extends \Magento\Framework\Object implements BlockInterface
+abstract class AbstractBlock extends \Magento\Framework\DataObject implements BlockInterface
 {
     /**
      * Cache group Tag

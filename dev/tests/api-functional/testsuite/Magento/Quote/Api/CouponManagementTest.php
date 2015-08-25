@@ -121,9 +121,10 @@ class CouponManagementTest extends WebapiAbstract
         $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test01', 'reserved_order_id');
         $cartId = $quote->getId();
+        /** @var \Magento\SalesRule\Model\Rule $salesRule */
         $salesRule = $this->objectManager->create('Magento\SalesRule\Model\Rule');
         $salesRule->load('Test Coupon', 'name');
-        $couponCode = $salesRule->getCouponCode();
+        $couponCode = $salesRule->getPrimaryCoupon()->getCode();
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . $cartId . '/coupons/' . $couponCode,
@@ -264,7 +265,7 @@ class CouponManagementTest extends WebapiAbstract
         $cartId = $quote->getId();
         $salesRule = $this->objectManager->create('Magento\SalesRule\Model\Rule');
         $salesRule->load('Test Coupon for General', 'name');
-        $couponCode = $salesRule->getCouponCode();
+        $couponCode = $salesRule->getPrimaryCoupon()->getCode();
 
         /* Since this isn't a full quote fixture, need to assign it to the right customer */
         $cartManagementService = $this->objectManager->create(

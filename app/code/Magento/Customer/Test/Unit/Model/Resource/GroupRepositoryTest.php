@@ -409,7 +409,7 @@ class GroupRepositoryTest extends \PHPUnit_Framework_TestCase
             ->with('Field', 'ASC');
         $sortOrder->expects($this->once())
             ->method('getDirection')
-            ->willReturn(1);
+            ->willReturn(\Magento\Framework\Api\SortOrder::SORT_ASC);
         $searchCriteria->expects($this->once())
             ->method('getCurrentPage')
             ->willReturn(1);

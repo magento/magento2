@@ -86,6 +86,7 @@ class Payment extends Block
             $paymentSelector->click();
         } else {
             $paymentLabel = $this->_rootElement->find(sprintf($this->paymentMethodLabel, $payment['method']));
+            $this->waitForElementNotVisible($this->waitElement);
             if (!$paymentLabel->isVisible()) {
                 throw new \Exception('Such payment method is absent.');
             }
@@ -118,21 +119,14 @@ class Payment extends Block
         );
     }
 
-    /*
+    /**
      * Press "Place Order" button.
      *
      * @return void
-    */
+     */
     public function placeOrder()
     {
         $this->_rootElement->find($this->placeOrder)->click();
-        $browser = $this->browser;
-        $selector = $this->waitElement;
-        $browser->waitUntil(
-            function () use ($browser, $selector) {
-                $element = $browser->find($selector);
-                return $element->isVisible() == false ? true : null;
-            }
-        );
+        $this->waitForElementNotVisible($this->waitElement);
     }
 }
