@@ -80,6 +80,17 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
     protected $errorAggregator;
 
     /**
+     * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError $newError
+     */
+    protected $error;
+
+    /**
+     * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory
+     * |\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $errorFactory;
+
+    /**
      * Expected prepared data after method CustomerComposite::_prepareRowForDb
      *
      * @var array
@@ -157,12 +168,31 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->errorAggregator = $this->getMock(
-            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator',
-            ['hasToBeTerminated'],
+        $this->errorFactory = $this->getMock(
+            '\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory',
+            ['create'],
             [],
             '',
             false
+        );
+
+        $this->error = $this->getMock(
+            '\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError',
+            ['init'],
+            [],
+            '',
+            false
+        );
+
+        $this->errorFactory->expects($this->any())->method('create')->will($this->returnValue($this->error));
+        $this->error->expects($this->any())->method('init')->will($this->returnValue(true));
+
+        $this->errorAggregator = $this->getMock(
+            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator',
+            ['hasToBeTerminated'],
+            [$this->errorFactory],
+            '',
+            true
         );
 
         $this->_scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
