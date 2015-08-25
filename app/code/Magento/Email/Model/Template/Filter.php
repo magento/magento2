@@ -146,6 +146,11 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $emogrifier;
 
     /**
+     * @var \Magento\Email\Model\Source\Variables
+     */
+    protected $configVariables;
+
+    /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Escaper $escaper
@@ -158,6 +163,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\UrlInterface $urlModel
      * @param \Pelago\Emogrifier $emogrifier
+     * @param \Magento\Email\Model\Source\Variables $configVariables
      * @param array $variables
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -175,6 +181,7 @@ class Filter extends \Magento\Framework\Filter\Template
         \Magento\Framework\App\State $appState,
         \Magento\Framework\UrlInterface $urlModel,
         \Pelago\Emogrifier $emogrifier,
+        \Magento\Email\Model\Source\Variables $configVariables,
         $variables = []
     ) {
         $this->_escaper = $escaper;
@@ -189,6 +196,7 @@ class Filter extends \Magento\Framework\Filter\Template
         $this->_appState = $appState;
         $this->urlModel = $urlModel;
         $this->emogrifier = $emogrifier;
+        $this->configVariables = $configVariables;
         parent::__construct($string, $variables);
     }
 
@@ -225,7 +233,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function setPlainTemplateMode($plainTemplateMode)
     {
-        $this->plainTemplateMode = (bool) $plainTemplateMode;
+        $this->plainTemplateMode = (bool)$plainTemplateMode;
         return $this;
     }
 
@@ -247,7 +255,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function setIsChildTemplate($isChildTemplate)
     {
-        $this->isChildTemplate = (bool) $isChildTemplate;
+        $this->isChildTemplate = (bool)$isChildTemplate;
         return $this;
     }
 
@@ -703,7 +711,7 @@ class Filter extends \Magento\Framework\Filter\Template
         $configValue = '';
         $params = $this->getParameters($construction[2]);
         $storeId = $this->getStoreId();
-        if (isset($params['path'])) {
+        if (isset($params['path']) && $this->isAvailableConfigVariable($params['path'])) {
             $configValue = $this->_scopeConfig->getValue(
                 $params['path'],
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
@@ -711,6 +719,20 @@ class Filter extends \Magento\Framework\Filter\Template
             );
         }
         return $configValue;
+    }
+
+    /**
+     * Check if given variable is available for directive "Config"
+     *
+     * @param string $variable
+     * @return bool
+     */
+    private function isAvailableConfigVariable($variable)
+    {
+        return in_array(
+            $variable,
+            array_column($this->configVariables->getData(), 'value')
+        );
     }
 
     /**
