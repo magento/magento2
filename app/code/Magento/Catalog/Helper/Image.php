@@ -445,16 +445,9 @@ class Image extends AbstractHelper
      */
     protected function applyScheduledActions()
     {
-        $model = $this->_getModel();
-        $baseFile = $model->getBaseFile();
-        if (!$baseFile) {
-            if ($this->getImageFile()) {
-                $model->setBaseFile($this->getImageFile());
-            } else {
-                $model->setBaseFile($this->getProduct()->getData($model->getDestinationSubdir()));
-            }
-        }
-        if (!$model->isCached()) {
+        $this->initBaseFile();
+        if ($this->isScheduledActionsAllowed()) {
+            $model = $this->_getModel();
             if ($this->_scheduleRotate) {
                 $model->rotate($this->getAngle());
             }
@@ -467,6 +460,42 @@ class Image extends AbstractHelper
             $model->saveFile();
         }
         return $this;
+    }
+
+    /**
+     * Initialize base image file
+     *
+     * @return $this
+     */
+    protected function initBaseFile()
+    {
+        $model = $this->_getModel();
+        $baseFile = $model->getBaseFile();
+        if (!$baseFile) {
+            if ($this->getImageFile()) {
+                $model->setBaseFile($this->getImageFile());
+            } else {
+                $model->setBaseFile($this->getProduct()->getData($model->getDestinationSubdir()));
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Check if scheduled actions is allowed
+     *
+     * @return bool
+     */
+    protected function isScheduledActionsAllowed()
+    {
+        $model = $this->_getModel();
+        if ($model->isBaseFilePlaceholder()
+            && $model->getNewFile() === true
+            || $model->isCached()
+        ) {
+            return false;
+        }
+        return true;
     }
 
     /**
