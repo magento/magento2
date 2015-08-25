@@ -45,17 +45,17 @@ interface ExchangeRateInterface extends \Magento\Framework\Api\ExtensibleDataInt
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return \Magento\Directory\Api\Data\ExchangeRateInterface|null
+     * @return \Magento\Directory\Api\Data\ExchangeRateExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
      * Set an extension attributes object.
      *
-     * @param \Magento\Directory\Api\Data\ExchangeRateInterface $extensionAttributes
+     * @param \Magento\Directory\Api\Data\ExchangeRateExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        \Magento\Directory\Api\Data\ExchangeRateInterface $extensionAttributes
+        \Magento\Directory\Api\Data\ExchangeRateExtensionInterface $extensionAttributes
     );
 }
