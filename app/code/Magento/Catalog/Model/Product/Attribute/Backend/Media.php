@@ -113,17 +113,35 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $value['values'] = [];
         $localAttributes = ['label', 'position', 'disabled'];
 
-        foreach ($this->_getResource()->loadGallery($object, $this) as $image) {
+        foreach ($this->_getResource()->loadGallery($object, $this) as $mediaEntry) {
             foreach ($localAttributes as $localAttribute) {
-                if ($image[$localAttribute] === null) {
-                    $image[$localAttribute] = $this->_getDefaultValue($localAttribute, $image);
+                if ($mediaEntry[$localAttribute] === null) {
+                    $mediaEntry[$localAttribute] = $this->_getDefaultValue($localAttribute, $mediaEntry);
                 }
             }
-            $value['images'][] = $image;
+            $mediaEntry = $this->cleanEmptyVideoInfo($mediaEntry);
+            $value['images'][] = $mediaEntry;
         }
 
         $object->setData($attrCode, $value);
         return $this;
+    }
+
+    protected function cleanEmptyVideoInfo($mediaEntry)
+    {
+        $video_properties = [
+            'video_value_id',
+            'video_provider',
+            'video_url',
+            'video_title',
+            'video_description',
+            'video_metadata'
+        ];
+        if (null === $mediaEntry['video_value_id']) {
+            $mediaEntry = array_diff_key($mediaEntry, array_flip($video_properties));
+        }
+
+        return $mediaEntry;
     }
 
     /**
