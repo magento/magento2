@@ -228,7 +228,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     {
         $directory = $this->getDirectoryInstance('newDir1', 0777);
         $directory->create('test_directory');
-        $this->assertTrue($directory->changePermissions('test_directory', 0644));
+        $this->assertTrue($directory->changePermissions('test_directory', 0640));
     }
 
     /**
