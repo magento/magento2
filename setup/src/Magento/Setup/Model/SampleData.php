@@ -86,7 +86,7 @@ class SampleData
         if (!$state) {
             return false;
         }
-        return \Magento\SampleData\Helper\State::STATE_STARTED == $state->getState();
+        return $state->isError();
     }
 
     /**
