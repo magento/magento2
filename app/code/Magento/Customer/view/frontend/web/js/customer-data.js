@@ -33,6 +33,12 @@ define([
         }
     };
 
+    var invalidateCacheBySections = function(settings) {
+        if (settings.mutableSections && _.intersection(storage.keys(), settings.mutableSections).length > 0) {
+            storage.removeAll();
+        }
+    }
+
     var dataProvider = {
         getFromStorage: function (sectionNames) {
             var result = {};
@@ -129,6 +135,7 @@ define([
             options = settings;
             invalidateCacheBySessionTimeOut(settings);
             invalidateCacheByCloseCookieSession();
+            invalidateCacheBySections(settings);
             customerData.init();
         }
     };

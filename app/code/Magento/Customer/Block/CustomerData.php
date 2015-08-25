@@ -29,4 +29,13 @@ class CustomerData extends \Magento\Framework\View\Element\Template
     {
         return $this->getUrl($route, ['_secure' => $this->getRequest()->isSecure()]);
     }
+
+    /**
+     * Get sections that can not be cached on client-side
+     *
+     * @return array
+     */
+    public function getMutableSections() {
+        return ['banner'];
+    }
 }
