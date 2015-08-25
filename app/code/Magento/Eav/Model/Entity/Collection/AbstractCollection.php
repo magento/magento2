@@ -1042,10 +1042,21 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      */
     public function getRowIdFieldName()
     {
+        return $this->getIdFieldName();
+    }
+
+    /**
+     * Id field name getter
+     *
+     * @return string
+     */
+    public function getIdFieldName()
+    {
         if ($this->_idFieldName === null) {
             $this->_setIdFieldName($this->getEntity()->getIdFieldName());
         }
-        return $this->getIdFieldName();
+
+        return $this->_idFieldName;
     }
 
     /**
