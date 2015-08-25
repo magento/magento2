@@ -424,9 +424,11 @@ class ImageTest extends \PHPUnit_Framework_TestCase
      * @param string $imageId
      * @param string $imageFile
      * @param string $baseFile
+     * @param string $newFile
      * @param string $destination
      * @param boolean $setImageFile
      * @param boolean $isCached
+     * @param boolean $isBaseFilePlaceholder
      * @param array $resizedImageInfo
      * @dataProvider getResizedImageInfoDataProvider
      */
@@ -434,9 +436,11 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $imageId,
         $imageFile,
         $baseFile,
+        $newFile,
         $destination,
         $setImageFile,
         $isCached,
+        $isBaseFilePlaceholder,
         $resizedImageInfo
     ) {
         $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
@@ -470,6 +474,12 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $this->image->expects($this->once())
             ->method('getResizedImageInfo')
             ->willReturn($resizedImageInfo);
+        $this->image->expects($this->any())
+            ->method('isBaseFilePlaceholder')
+            ->willReturn($isBaseFilePlaceholder);
+        $this->image->expects($this->any())
+            ->method('getNewFile')
+            ->willReturn($newFile);
 
         $this->prepareAttributes([], $imageId);
 
@@ -492,9 +502,11 @@ class ImageTest extends \PHPUnit_Framework_TestCase
                 'image_id' => 'test_image_id',
                 'image_file' => '/path/to/test_image_id.png',
                 'base_file' => '/path/to/base_image.png',
+                'new_file' => '/path/to/base_image.png',
                 'destination' => 'small_image',
                 'set_image_file' => true,
                 'is_cached' => false,
+                'is_base_file_placeholder' => false,
                 'resized_image_info' => [
                     'x' => 100,
                     'y' => 100,
@@ -504,9 +516,53 @@ class ImageTest extends \PHPUnit_Framework_TestCase
                 'image_id' => 'test_image_id',
                 'image_file' => '/path/to/test_image_id.png',
                 'base_file' => null,
+                'new_file' => true,
                 'destination' => 'small_image',
                 'set_image_file' => false,
                 'is_cached' => false,
+                'is_base_file_placeholder' => false,
+                'resized_image_info' => [
+                    'x' => 100,
+                    'y' => 100,
+                ],
+            ],
+            [
+                'image_id' => 'test_image_id',
+                'image_file' => '/path/to/test_image_id.png',
+                'base_file' => null,
+                'new_file' => false,
+                'destination' => 'small_image',
+                'set_image_file' => true,
+                'is_cached' => false,
+                'is_base_file_placeholder' => false,
+                'resized_image_info' => [
+                    'x' => 100,
+                    'y' => 100,
+                ],
+            ],
+            [
+                'image_id' => 'test_image_id',
+                'image_file' => '/path/to/test_image_id.png',
+                'base_file' => null,
+                'new_file' => true,
+                'destination' => 'small_image',
+                'set_image_file' => true,
+                'is_cached' => false,
+                'is_base_file_placeholder' => true,
+                'resized_image_info' => [
+                    'x' => 100,
+                    'y' => 100,
+                ],
+            ],
+            [
+                'image_id' => 'test_image_id',
+                'image_file' => '/path/to/test_image_id.png',
+                'base_file' => null,
+                'new_file' => '/path/to/test_image_id.png',
+                'destination' => 'small_image',
+                'set_image_file' => true,
+                'is_cached' => false,
+                'is_base_file_placeholder' => false,
                 'resized_image_info' => [
                     'x' => 100,
                     'y' => 100,
