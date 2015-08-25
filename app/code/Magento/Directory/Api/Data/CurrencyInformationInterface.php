@@ -105,17 +105,17 @@ interface CurrencyInformationInterface extends \Magento\Framework\Api\Extensible
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
-     * @return \Magento\Directory\Api\Data\CurrencyInformationInterface|null
+     * @return \Magento\Directory\Api\Data\CurrencyInformationExtensionInterface|null
      */
     public function getExtensionAttributes();
 
     /**
      * Set an extension attributes object.
      *
-     * @param \Magento\Directory\Api\Data\CurrencyInformationInterface $extensionAttributes
+     * @param \Magento\Directory\Api\Data\CurrencyInformationExtensionInterface $extensionAttributes
      * @return $this
      */
     public function setExtensionAttributes(
-        \Magento\Directory\Api\Data\CurrencyInformationInterface $extensionAttributes
+        \Magento\Directory\Api\Data\CurrencyInformationExtensionInterface $extensionAttributes
     );
 }
