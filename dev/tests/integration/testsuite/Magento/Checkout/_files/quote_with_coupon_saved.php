@@ -14,7 +14,7 @@ require 'quote_with_address_saved.php';
 
 $salesRule = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\SalesRule\Model\Rule');
 $salesRule->load('Test Coupon', 'name');
-$couponCode = $salesRule->getCouponCode();
+$couponCode = $salesRule->getPrimaryCoupon()->getCode();
 
 $quote->setCouponCode(trim($couponCode));
 $quote->collectTotals()->save();
