@@ -35,7 +35,8 @@ class UpdateTermEntityTest extends Scenario
      *
      * @return void
      */
-    public function test() {
+    public function test()
+    {
         $this->executeScenario();
     }
 }
