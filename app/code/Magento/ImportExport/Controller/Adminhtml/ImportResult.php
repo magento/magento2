@@ -8,7 +8,7 @@ namespace Magento\ImportExport\Controller\Adminhtml;
 use Magento\Backend\App\Action;
 use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
-use Magento\ImportExport\Model\History;
+use Magento\ImportExport\Model\History as ModelHistory;
 
 /**
  * Import controller
@@ -132,7 +132,7 @@ abstract class ImportResult extends Import
         $this->historyModel->loadLastInsertItem();
         $sourceFile = $this->reportHelper->getReportAbsolutePath($this->historyModel->getImportedFile());
         $writeOnlyErrorItems = true;
-        if ($this->historyModel->getData('execution_time') == History::IMPORT_VALIDATION) {
+        if ($this->historyModel->getData('execution_time') == ModelHistory::IMPORT_VALIDATION) {
             $writeOnlyErrorItems = false;
         }
         $fileName = $this->reportProcessor->createReport($sourceFile, $errorAggregator, $writeOnlyErrorItems);
