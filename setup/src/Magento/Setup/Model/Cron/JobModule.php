@@ -49,6 +49,7 @@ class JobModule extends AbstractJob
     }
 
     /**
+     * Sets up the command to be run through bin/magento
      * @param string $name
      * @return void
      */
