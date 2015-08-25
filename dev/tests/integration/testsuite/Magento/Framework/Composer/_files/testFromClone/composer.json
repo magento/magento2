@@ -88,7 +88,6 @@
         "magento/module-currency-symbol": "self.version",
         "magento/module-customer": "self.version",
         "magento/module-customer-import-export": "self.version",
-        "magento/module-design-editor": "self.version",
         "magento/module-developer": "self.version",
         "magento/module-dhl": "self.version",
         "magento/module-directory": "self.version",

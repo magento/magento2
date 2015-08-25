@@ -88,4 +88,5 @@ return [
     ['Magento\Paypal\Controller\Standard'],
     ['Magento\Framework\View\Asset\ModuleNotation'],
     ['Magento\Framework\Object', 'Magento\Framework\DataObject'],
+    ['Magento\DesignEditor'],
 ];

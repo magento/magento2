@@ -290,7 +290,6 @@ return [
     ['_inlineFactory', 'Magento\Framework\App\Helper\AbstractHelper', 'translateInline'],
     ['_storeManager', 'Magento\Translation\Model\Resource\Translate'],
     ['_storeManager', 'Magento\Translation\Model\Resource\StringUtils'],
-    ['_isVdeRequest', 'Magento\DesignEditor\Helper\Data'],
     ['_translator', 'Magento\Framework\Phrase\Renderer\Translate', 'translator'],
     ['_translator', 'Magento\Core\Model\Validator\Factory'],
     ['_configFactory', 'Magento\Core\Model\App\Emulation', 'inlineConfig'],
