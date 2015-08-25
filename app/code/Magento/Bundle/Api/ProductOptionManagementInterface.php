@@ -6,6 +6,11 @@
  */
 namespace Magento\Bundle\Api;
 
+/**
+ * Option manager for bundle products
+ *
+ * @api
+ */
 interface ProductOptionManagementInterface
 {
     /**

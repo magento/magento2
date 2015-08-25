@@ -74,7 +74,7 @@ class Builder implements BuilderInterface
      */
     private function processFilter(RequestFilterInterface $filter, $isNegation, QueryContainer $queryContainer)
     {
-        if ($filter->getType() == RequestFilterInterface::TYPE_BOOL) {
+        if ($filter->getType() === RequestFilterInterface::TYPE_BOOL) {
             $query = $this->processBoolFilter($filter, $isNegation, $queryContainer);
             $query = $this->conditionManager->wrapBrackets($query);
         } else {
@@ -125,7 +125,8 @@ class Builder implements BuilderInterface
     {
         $queries = [];
         foreach ($filters as $filter) {
-            $queries[] = $this->processFilter($filter, $isNegation, $queryContainer);
+            $filterQuery = $this->processFilter($filter, $isNegation, $queryContainer);
+            $queries[] = $this->conditionManager->wrapBrackets($filterQuery);
         }
         return $this->conditionManager->combineQueries($queries, $unionOperator);
     }
