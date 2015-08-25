@@ -8,11 +8,11 @@ namespace Magento\CatalogSearch\Model\Indexer;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\IndexerInterface;
+use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
-use Magento\Indexer\Model\SaveHandler\Batch;
-use Magento\Indexer\Model\ScopeResolver\IndexScopeResolver;
+use Magento\Framework\Indexer\SaveHandler\Batch;
+use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 
 class IndexerHandler implements IndexerInterface
 {
@@ -61,7 +61,7 @@ class IndexerHandler implements IndexerInterface
      * @param Resource|Resource $resource
      * @param Config $eavConfig
      * @param Batch $batch
-     * @param \Magento\Indexer\Model\ScopeResolver\IndexScopeResolver $indexScopeResolver
+     * @param \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver $indexScopeResolver
      * @param array $data
      * @param int $batchSize
      */
@@ -113,7 +113,7 @@ class IndexerHandler implements IndexerInterface
     public function cleanIndex($dimensions)
     {
         $this->indexStructure->delete($this->getIndexName(), $dimensions);
-        $this->indexStructure->create($this->getIndexName(), $dimensions);
+        $this->indexStructure->create($this->getIndexName(), [], $dimensions);
     }
 
     /**
