@@ -10,7 +10,7 @@ namespace Magento\Directory\Api\Data;
  *
  * @api
  */
-interface CurrencyInformationInterface
+interface CurrencyInformationInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * Get the base currency code for the store.
