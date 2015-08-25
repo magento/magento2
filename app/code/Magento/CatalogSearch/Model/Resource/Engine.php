@@ -84,25 +84,16 @@ class Engine implements EngineInterface
      */
     public function processAttributeValue($attribute, $value)
     {
+        $result = false;
         if ($attribute->getIsSearchable()
             && in_array($attribute->getFrontendInput(), ['text', 'textarea'])
         ) {
-            return $value;
-        } elseif ($this->isTermFilterableAttribute($attribute)
-            || in_array($attribute->getAttributeCode(), ['visibility', 'status'])
-        ) {
-            if ($attribute->getFrontendInput() == 'multiselect') {
-                $value = explode(',', $value);
-            }
-            if (!is_array($value)) {
-                $value = [$value];
-            }
-            $valueMapper = function ($value) use ($attribute) {
-                return Engine::ATTRIBUTE_PREFIX . $attribute->getAttributeCode() . '_' . $value;
-            };
-
-            return implode(' ', array_map($valueMapper, $value));
+            $result = $value;
+        } elseif ($this->isTermFilterableAttribute($attribute)) {
+            $result = '';
         }
+
+        return $result;
     }
 
     /**
