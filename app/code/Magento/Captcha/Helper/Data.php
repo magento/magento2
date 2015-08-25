@@ -149,7 +149,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $mediaDir = $this->_filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $captchaDir = '/captcha/' . $this->_getWebsiteCode($website);
         $mediaDir->create($captchaDir);
-        $mediaDir->changePermissions($captchaDir, 0775);
+        $mediaDir->changePermissions($captchaDir, Filesystem\DriverInterface::WRITEABLE_DIRECTORY_MODE);
 
         return $mediaDir->getAbsolutePath($captchaDir) . '/';
     }

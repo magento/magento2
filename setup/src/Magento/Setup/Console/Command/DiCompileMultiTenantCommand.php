@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Framework\App\ObjectManager;
 use Symfony\Component\Console\Input\InputInterface;
@@ -351,7 +352,7 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
         $relations = $directoryInstancesNamesList->getRelations();
         // 2.2 Compression
         if (!file_exists(dirname($relationsFile))) {
-            mkdir(dirname($relationsFile), 0777, true);
+            mkdir(dirname($relationsFile), DriverInterface::WRITEABLE_DIRECTORY_MODE, true);
         }
         $relations = array_filter($relations);
         file_put_contents($relationsFile, $serializer->serialize($relations));
@@ -368,7 +369,7 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
         }
         $outputContent = $serializer->serialize($pluginDefinitions);
         if (!file_exists(dirname($pluginDefFile))) {
-            mkdir(dirname($pluginDefFile), 0777, true);
+            mkdir(dirname($pluginDefFile), DriverInterface::WRITEABLE_DIRECTORY_MODE, true);
         }
         file_put_contents($pluginDefFile, $outputContent);
     }
