@@ -90,7 +90,7 @@ class File
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function open($mode = 'w+', $chmod = 0666)
+    public function open($mode = 'w+', $chmod = 0660)
     {
         $this->_isInWriteMode = $this->_isWritableMode($mode);
 

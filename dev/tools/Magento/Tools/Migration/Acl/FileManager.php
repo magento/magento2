@@ -5,6 +5,8 @@
  */
 namespace Magento\Tools\Migration\Acl;
 
+use Magento\Framework\Filesystem\DriverInterface;
+
 class FileManager
 {
     /**
@@ -15,7 +17,7 @@ class FileManager
     public function write($fileName, $contents)
     {
         if (false == is_dir(dirname($fileName))) {
-            mkdir(dirname($fileName), 0777, true);
+            mkdir(dirname($fileName), DriverInterface::WRITEABLE_DIRECTORY_MODE, true);
         }
         file_put_contents($fileName, $contents);
     }
