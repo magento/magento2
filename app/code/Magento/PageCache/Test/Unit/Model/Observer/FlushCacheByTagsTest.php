@@ -81,4 +81,29 @@ class FlushCacheByTagsTest extends \PHPUnit_Framework_TestCase
             'full_page cache type is disabled' => [false]
         ];
     }
+
+    public function testExecuteWithEmptyTags()
+    {
+        $this->_configMock->expects($this->any())->method('isEnabled')->will($this->returnValue(true));
+        $observerObject = $this->getMock('Magento\Framework\Event\Observer');
+        $observedObject = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+
+        $tags = [];
+
+        $eventMock = $this->getMock('Magento\Framework\Event', ['getObject'], [], '', false);
+        $eventMock->expects($this->once())->method('getObject')->will($this->returnValue($observedObject));
+        $observerObject->expects($this->once())->method('getEvent')->will($this->returnValue($eventMock));
+        $this->_configMock->expects(
+            $this->once()
+        )->method(
+            'getType'
+        )->will(
+            $this->returnValue(\Magento\PageCache\Model\Config::BUILT_IN)
+        );
+        $observedObject->expects($this->once())->method('getIdentities')->will($this->returnValue($tags));
+
+        $this->_cacheMock->expects($this->never())->method('clean');
+
+        $this->_model->execute($observerObject);
+    }
 }
