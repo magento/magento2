@@ -6,804 +6,75 @@
 
 namespace Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 
-use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Repository\RepositoryFactory;
+use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
 /**
- * Class ConfigurableAttributesData
- * Source configurable attributes data of the configurable products
+ * Source configurable attributes data of the configurable products.
  */
-class ConfigurableAttributesData implements FixtureInterface
+class ConfigurableAttributesData extends DataSource
 {
     /**
-     * Fixture factory
+     * Fixture factory.
      *
      * @var FixtureFactory
      */
     protected $fixtureFactory;
 
     /**
-     * Data set configuration settings
-     *
-     * @var array
-     */
-    protected $params;
-
-    /**
-     * Prepared dataSet data
-     *
-     * @var array
-     */
-    protected $data = [];
-
-    /**
-     * Prepared attributes data
+     * Prepared attributes data.
      *
      * @var array
      */
     protected $attributesData = [];
 
     /**
-     * Prepared variation matrix
+     * Prepared variation matrix.
      *
      * @var array
      */
     protected $variationsMatrix = [];
 
     /**
-     * Prepared attributes
+     * Prepared attributes.
      *
      * @var array
      */
     protected $attributes = [];
 
     /**
-     * Prepared products
+     * Prepared products.
      *
      * @var array
      */
     protected $products = [];
 
     /**
-     * Presets data
-     *
-     * @var array
-     */
-    protected $presets = [
-        'default' => [
-            'attributes_data' => [
-                'attribute_key_0' => [
-                    'options' => [
-                        'option_key_0' => [
-                            'pricing_value' => 12.00,
-                            'include' => 'Yes',
-                            'is_percent' => 'No',
-                        ],
-                        'option_key_1' => [
-                            'pricing_value' => 20.00,
-                            'include' => 'Yes',
-                            'is_percent' => 'No',
-                        ],
-                        'option_key_2' => [
-                            'pricing_value' => 18.00,
-                            'include' => 'Yes',
-                            'is_percent' => 'No',
-                        ],
-                    ],
-                ],
-                'attribute_key_1' => [
-                    'options' => [
-                        'option_key_0' => [
-                            'pricing_value' => 42.00,
-                            'include' => 'Yes',
-                            'is_percent' => 'No',
-                        ],
-                        'option_key_1' => [
-                            'pricing_value' => 40.00,
-                            'include' => 'Yes',
-                            'is_percent' => 'No',
-                        ],
-                        'option_key_2' => [
-                            'pricing_value' => 48.00,
-                            'include' => 'Yes',
-                            'is_percent' => 'No',
-                        ],
-                    ],
-                ],
-            ],
-            'products' => [],
-            'attributes' => [
-                'attribute_key_0' => 'catalogProductAttribute::attribute_type_dropdown',
-                'attribute_key_1' => 'catalogProductAttribute::attribute_type_dropdown',
-            ],
-            'matrix' => [
-                'attribute_key_0:option_key_0 attribute_key_1:option_key_0' => [
-                    'quantity_and_stock_status' => [
-                        'qty' => 10,
-                    ],
-                    'weight' => 1,
-                ],
-                'attribute_key_0:option_key_0 attribute_key_1:option_key_1' => [
-                    'quantity_and_stock_status' => [
-                        'qty' => 10,
-                    ],
-                    'weight' => 1,
-                ],
-                'attribute_key_0:option_key_0 attribute_key_1:option_key_2' => [
-                    'quantity_and_stock_status' => [
-                        'qty' => 10,
-                    ],
-                    'weight' => 1,
-                ],
-                'attribute_key_0:option_key_1 attribute_key_1:option_key_0' => [
-                    'quantity_and_stock_status' => [
-                        'qty' => 10,
-                    ],
-                    'weight' => 1,
-                ],
-                'attribute_key_0:option_key_1 attribute_key_1:option_key_1' => [
-                    'quantity_and_stock_status' => [
-                        'qty' => 10,
-                    ],
-                    'weight' => 1,
-                ],
-                'attribute_key_0:option_key_1 attribute_key_1:option_key_2' => [
-                    'quantity_and_stock_status' => [
-                        'qty' => 10,
-                    ],
-                    'weight' => 1,
-                ],
-                'attribute_key_0:option_key_2 attribute_key_1:option_key_0' => [
-                    'quantity_and_stock_status' => [
-                        'qty' => 10,
-                    ],
-                    'weight' => 1,
-                ],
-                'attribute_key_0:option_key_2 attribute_key_1:option_key_1' => [
-                    'quantity_and_stock_status' => [
-                        'qty' => 10,
-                    ],
-                    'weight' => 1,
-                ],
-                'attribute_key_0:option_key_2 attribute_key_1:option_key_2' => [
-                    'quantity_and_stock_status' => [
-                        'qty' => 10,
-                    ],
-                    'weight' => 1,
-                ],
-            ],
-        ],
-
-        'one_variation' => [
-            'attributes_data' => [
-                'attribute_key_0' => [
-                    'options' => [
-                        'option_key_0' => [
-                            'pricing_value' => 12.00,
-                            'include' => 'Yes',
-                            'is_percent' => 'No',
-                        ],
-                    ],
-                ],
-            ],
-            'products' => [],
-            'attributes' => [
-                'attribute_key_0' => 'catalogProductAttribute::attribute_type_dropdown_one_option',
-            ],
-            'matrix' => [
-                'attribute_key_0:option_key_0' => [
-                    'display' => 'Yes',
-                    'quantity_and_stock_status' => [
-                        'qty' => 10,
-                    ],
-                    'weight' => 1,
-                ],
-            ],
-        ],
-
-        'one_variation_one_dollar' => [
-            'attributes_data' => [
-                'attribute_key_0' => [
-                    'options' => [
-                        'option_key_0' => [
-                            'pricing_value' => 1.00,
-                            'include' => 'Yes',
-                            'is_percent' => 'No',
-                        ],
-                    ],
-                ],
-            ],
-            'products' => [],
-            'attributes' => [
-                'attribute_key_0' => 'catalogProductAttribute::attribute_type_dropdown_one_option',
-            ],
-            'matrix' => [
-                'attribute_key_0:option_key_0' => [
-                    'display' => 'Yes',
-                    'quantity_and_stock_status' => [
-                        'qty' => 10,
-                    ],
-                    'weight' => 1,
-                ],
-            ],
-        ],
-
-        'two_options' => [
-            'attributes_data' => [
-                'attribute_key_0' => [
-                    'options' => [
-                        'option_key_0' => [
-                            'label' => 'option_key_1_%isolation%',
-                            'pricing_value' => 1,
-                            'is_percent' => 'Yes',
-                            'include' => 'Yes',
-                        ],
-                        'option_key_1' => [
-                            'label' => 'option_2_%isolation%',
-                            'pricing_value' => 2,
-                            'is_percent' => 'Yes',
-                            'include' => 'Yes',
-                        ],
-                    ],
-                ],
-            ],
-            'attributes' => [
-                'attribute_key_0' => 'catalogProductAttribute::attribute_type_dropdown_two_options',
-            ],
-            'products' => [],
-            'matrix' => [
-                'attribute_key_0:option_key_0' => [
-                    'display' => 'Yes',
-                    'quantity_and_stock_status' => [
-                        'qty' => 10,
-                    ],
-                    'weight' => 1,
-                ],
-                'attribute_key_0:option_key_1' => [
-                    'display' => 'Yes',
-                    'quantity_and_stock_status' => [
-                        'qty' => 20,
-                    ],
-                    'weight' => 2,
-                ],
-            ],
-        ],
-
-        'filterable_two_options_with_zero_price' => [
-            'attributes_data' => [
-                'attribute_key_0' => [
-                    'options' => [
-                        'option_key_0' => [
-                            'label' => 'option_key_1_%isolation%',
-                            'pricing_value' => 0,
-                            'is_percent' => 'No',
-                            'include' => 'Yes',
-                        ],
-                        'option_key_1' => [
-                            'label' => 'option_2_%isolation%',
-                            'pricing_value' => 0,
-                            'is_percent' => 'No',
-                            'include' => 'Yes',
-                        ],
-                    ],
-                ],
-            ],
-            'attributes' => [
-                'attribute_key_0' => 'catalogProductAttribute::filterable_dropdown_two_options',
-            ],
-            'products' => [],
-            'matrix' => [
-                'attribute_key_0:option_key_0' => [
-                    'display' => 'Yes',
-                    'quantity_and_stock_status' => [
-                        'qty' => 10,
-                    ],
-                    'weight' => 1,
-                ],
-                'attribute_key_0:option_key_1' => [
-                    'display' => 'Yes',
-                    'quantity_and_stock_status' => [
-                        'qty' => 20,
-                    ],
-                    'weight' => 2,
-                ],
-            ],
-        ],
-
-        'two_new_options' => [
-            'attributes_data' => [
-                'attribute_key_0' => [
-                    'frontend_label' => 'two_new_options_title_%isolation%',
-                    'frontend_input' => 'Dropdown',
-                    'label' => 'two_new_options_title_%isolation%',
-                    'is_required' => 'No',
-                    'options' => [
-                        'option_key_0' => [
-                            'label' => 'option_key_1_%isolation%',
-                            'pricing_value' => 1,
-                            'is_percent' => 'No',
-                            'include' => 'Yes',
-                        ],
-                        'option_key_1' => [
-                            'label' => 'option_key_2_%isolation%',
-                            'pricing_value' => 2,
-                            'is_percent' => 'No',
-                            'include' => 'Yes',
-                        ],
-                    ],
-                ],
-            ],
-            'attributes' => [],
-            'products' => [],
-            'matrix' => [
-                'attribute_key_0:option_key_0' => [
-                    'display' => 'Yes',
-                    'quantity_and_stock_status' => [
-                        'qty' => 10,
-                    ],
-                    'weight' => 1,
-                ],
-                'attribute_key_0:option_key_1' => [
-                    'display' => 'Yes',
-                    'quantity_and_stock_status' => [
-                        'qty' => 20,
-                    ],
-                    'weight' => 2,
-                ],
-            ],
-        ],
-
-        'two_searchable_options' => [
-            'attributes_data' => [
-                'attribute_key_0' => [
-                    'frontend_label' => 'two_searchable_options_%isolation%',
-                    'frontend_input' => 'Dropdown',
-                    'label' => 'two_searchable_options_%isolation%',
-                    'is_required' => 'No',
-                    'is_searchable' => 'Yes',
-                    'is_visible_in_advanced_search' => 'Yes',
-                    'is_filterable' => 'Filterable (with results)',
-                    'is_filterable_in_search' => 'Yes',
-                    'options' => [
-                        'option_key_0' => [
-                            'label' => 'option_key_1_%isolation%',
-                            'pricing_value' => 1,
-                            'is_percent' => 'No',
-                            'include' => 'Yes',
-                        ],
-                        'option_key_1' => [
-                            'label' => 'option_key_2_%isolation%',
-                            'pricing_value' => 2,
-                            'is_percent' => 'No',
-                            'include' => 'Yes',
-                        ],
-                    ],
-                ],
-            ],
-            'attributes' => [],
-            'products' => [],
-            'matrix' => [
-                'attribute_key_0:option_key_0' => [
-                    'display' => 'Yes',
-                    'quantity_and_stock_status' => [
-                        'qty' => 100,
-                    ],
-                    'weight' => 1,
-                ],
-                'attribute_key_0:option_key_1' => [
-                    'display' => 'Yes',
-                    'quantity_and_stock_status' => [
-                        'qty' => 100,
-                    ],
-                    'weight' => 2,
-                ],
-            ],
-        ],
-
-        'one_new_options' => [
-            'attributes_data' => [
-                'attribute_key_0' => [
-                    'options' => [
-                        'option_key_0' => [
-                            'label' => 'option_key_1_%isolation%',
-                            'pricing_value' => 1,
-                            'is_percent' => 'No',
-                            'include' => 'Yes',
-                        ],
-                    ],
-                ],
-            ],
-            'attributes' => [],
-            'products' => [],
-            'matrix' => [],
-        ],
-
-        'two_new_options_with_zero_products' => [
-            'attributes_data' => [
-                'attribute_key_0' => [
-                    'options' => [
-                        'option_key_0' => [
-                            'label' => 'option_key_1_%isolation%',
-                            'pricing_value' => 1,
-                            'is_percent' => 'No',
-                            'include' => 'Yes',
-                        ],
-                    ],
-                ],
-            ],
-            'attributes' => [
-                'attribute_key_0' => 'catalogProductAttribute::attribute_type_dropdown_one_option',
-            ],
-            'products' => [
-                'attribute_key_0:option_key_0' => 'catalogProductSimple::out_of_stock',
-            ],
-            'matrix' => [],
-        ],
-
-        'two_options_with_assigned_product' => [
-            'attributes_data' => [
-                'attribute_key_0' => [
-                    'options' => [
-                        'option_key_0' => [
-                            'label' => 'option_key_1_%isolation%',
-                            'pricing_value' => 1,
-                            'is_percent' => 'Yes',
-                            'include' => 'Yes',
-                        ],
-                        'option_key_1' => [
-                            'label' => 'option_key_2_%isolation%',
-                            'pricing_value' => 2,
-                            'is_percent' => 'Yes',
-                            'include' => 'Yes',
-                        ],
-                    ],
-                ],
-            ],
-            'attributes' => [
-                'attribute_key_0' => 'catalogProductAttribute::attribute_type_dropdown_two_options',
-            ],
-            'products' => [
-                'attribute_key_0:option_key_0' => 'catalogProductSimple::default',
-                'attribute_key_0:option_key_1' => 'catalogProductSimple::default',
-            ],
-            'matrix' => [
-                'attribute_key_0:option_key_0' => [
-                    'display' => 'Yes',
-                    'quantity_and_stock_status' => [
-                        'qty' => 10,
-                    ],
-                    'weight' => 1,
-                ],
-                'attribute_key_0:option_key_1' => [
-                    'display' => 'Yes',
-                    'quantity_and_stock_status' => [
-                        'qty' => 20,
-                    ],
-                    'weight' => 2,
-                ],
-            ],
-        ],
-
-        'color_and_size' => [
-            'attributes_data' => [
-                'attribute_key_0' => [
-                    'options' => [
-                        'option_key_0' => [
-                            'pricing_value' => 0.00,
-                            'include' => 'Yes',
-                            'is_percent' => 'No',
-                        ],
-                        'option_key_1' => [
-                            'pricing_value' => 0.00,
-                            'include' => 'Yes',
-                            'is_percent' => 'No',
-                        ],
-                    ],
-                ],
-                'attribute_key_1' => [
-                    'options' => [
-                        'option_key_0' => [
-                            'pricing_value' => 5.00,
-                            'include' => 'Yes',
-                            'is_percent' => 'No',
-                        ],
-                        'option_key_1' => [
-                            'pricing_value' => 10.00,
-                            'include' => 'Yes',
-                            'is_percent' => 'No',
-                        ],
-                    ],
-                ],
-            ],
-            'products' => [
-
-            ],
-            'attributes' => [
-                'attribute_key_0' => 'catalogProductAttribute::color',
-                'attribute_key_1' => 'catalogProductAttribute::size',
-            ],
-            'matrix' => [
-                'attribute_key_0:option_key_0 attribute_key_1:option_key_0' => [
-                    'quantity_and_stock_status' => [
-                        'qty' => 100,
-                    ],
-                    'weight' => 1,
-                ],
-                'attribute_key_0:option_key_0 attribute_key_1:option_key_1' => [
-                    'quantity_and_stock_status' => [
-                        'qty' => 100,
-                    ],
-                    'weight' => 1,
-                ],
-                'attribute_key_0:option_key_1 attribute_key_1:option_key_0' => [
-                    'quantity_and_stock_status' => [
-                        'qty' => 100,
-                    ],
-                    'weight' => 1,
-                ],
-                'attribute_key_0:option_key_1 attribute_key_1:option_key_1' => [
-                    'quantity_and_stock_status' => [
-                        'qty' => 100,
-                    ],
-                    'weight' => 1,
-                ],
-            ],
-        ],
-
-        'size' => [
-            'attributes_data' => [
-                'attribute_key_0' => [
-                    'options' => [
-                        'option_key_0' => [
-                            'pricing_value' => 0.00,
-                            'include' => 'Yes',
-                            'is_percent' => 'No',
-                        ],
-                        'option_key_1' => [
-                            'pricing_value' => 0.00,
-                            'include' => 'Yes',
-                            'is_percent' => 'No',
-                        ],
-                    ],
-                ],
-            ],
-            'products' => [
-
-            ],
-            'attributes' => [
-                'attribute_key_0' => 'catalogProductAttribute::size',
-            ],
-            'matrix' => [
-                'attribute_key_0:option_key_0' => [
-                    'quantity_and_stock_status' => [
-                        'qty' => 10,
-                    ],
-                    'weight' => 1,
-                ],
-                'attribute_key_0:option_key_1' => [
-                    'quantity_and_stock_status' => [
-                        'qty' => 10,
-                    ],
-                    'weight' => 1,
-                ],
-            ],
-        ],
-
-        'with_one_option' => [
-            'attributes_data' => [
-                'attribute_key_0' => [
-                    'options' => [
-                        'option_key_0' => [
-                            'pricing_value' => 1,
-                            'include' => 'Yes',
-                            'is_percent' => 'No',
-                        ],
-                        'option_key_1' => [
-                            'pricing_value' => 2,
-                            'include' => 'Yes',
-                            'is_percent' => 'No',
-                        ],
-                        'option_key_2' => [
-                            'pricing_value' => 3,
-                            'include' => 'Yes',
-                            'is_percent' => 'No',
-                        ],
-                    ],
-                ],
-            ],
-            'products' => [],
-            'attributes' => [
-                'attribute_key_0' => 'catalogProductAttribute::attribute_type_dropdown',
-            ],
-            'matrix' => [
-                'attribute_key_0:option_key_0' => [
-                    'quantity_and_stock_status' => [
-                        'qty' => 10,
-                    ],
-                    'weight' => 1,
-                ],
-                'attribute_key_0:option_key_1' => [
-                    'quantity_and_stock_status' => [
-                        'qty' => 10,
-                    ],
-                    'weight' => 1,
-                ],
-                'attribute_key_0:option_key_2' => [
-                    'quantity_and_stock_status' => [
-                        'qty' => 10,
-                    ],
-                    'weight' => 1,
-                ],
-            ],
-        ],
-
-        'with_out_of_stock_item' => [
-            'attributes_data' => [
-                'attribute_key_0' => [
-                    'options' => [
-                        'option_key_0' => [
-                            'pricing_value' => 12.00,
-                            'include' => 'Yes',
-                            'is_percent' => 'No',
-                        ],
-                    ],
-                ],
-            ],
-            'products' => [
-                'attribute_key_0:option_key_0' => 'catalogProductSimple::out_of_stock',
-            ],
-            'attributes' => [
-                'attribute_key_0' => 'catalogProductAttribute::attribute_type_dropdown_one_option',
-            ],
-            'matrix' => [],
-        ],
-
-        'two_options_with_fixed_price' => [
-            'attributes_data' => [
-                'attribute_key_0' => [
-                    'options' => [
-                        'option_key_0' => [
-                            'label' => 'option_key_1_%isolation%',
-                            'pricing_value' => 11,
-                            'is_percent' => 'No',
-                            'include' => 'Yes',
-                        ],
-                        'option_key_1' => [
-                            'label' => 'option_2_%isolation%',
-                            'pricing_value' => 12,
-                            'is_percent' => 'No',
-                            'include' => 'Yes',
-                        ],
-                    ],
-                ],
-            ],
-            'attributes' => [
-                'attribute_key_0' => 'catalogProductAttribute::attribute_type_dropdown_two_options',
-            ],
-            'products' => [],
-            'matrix' => [
-                'attribute_key_0:option_key_0' => [
-                    'display' => 'Yes',
-                    'quantity_and_stock_status' => [
-                        'qty' => 100,
-                    ],
-                    'weight' => 1,
-                ],
-                'attribute_key_0:option_key_1' => [
-                    'display' => 'Yes',
-                    'quantity_and_stock_status' => [
-                        'qty' => 200,
-                    ],
-                    'weight' => 1,
-                ],
-            ],
-        ],
-
-        'two_options_by_one_dollar' => [
-            'attributes_data' => [
-                'attribute_key_0' => [
-                    'options' => [
-                        'option_key_0' => [
-                            'label' => 'option_key_1_%isolation%',
-                            'pricing_value' => 1,
-                            'is_percent' => 'No',
-                            'include' => 'Yes',
-                        ],
-                        'option_key_1' => [
-                            'label' => 'option_2_%isolation%',
-                            'pricing_value' => 1,
-                            'is_percent' => 'No',
-                            'include' => 'Yes',
-                        ],
-                    ],
-                ],
-            ],
-            'attributes' => [
-                'attribute_key_0' => 'catalogProductAttribute::attribute_type_dropdown_two_options',
-            ],
-            'products' => [],
-            'matrix' => [
-                'attribute_key_0:option_key_0' => [
-                    'display' => 'Yes',
-                    'quantity_and_stock_status' => [
-                        'qty' => 100,
-                    ],
-                    'weight' => 1,
-                ],
-                'attribute_key_0:option_key_1' => [
-                    'display' => 'Yes',
-                    'quantity_and_stock_status' => [
-                        'qty' => 200,
-                    ],
-                    'weight' => 1,
-                ],
-            ],
-        ],
-
-        'two_variations_with_fixed_price' => [
-            'attributes_data' => [
-                'attribute_key_0' => [
-                    'options' => [
-                        'option_key_0' => [
-                            'label' => 'option_key_1_%isolation%',
-                            'pricing_value' => 1,
-                            'is_percent' => 'No',
-                            'include' => 'Yes',
-                        ],
-                        'option_key_1' => [
-                            'label' => 'option_2_%isolation%',
-                            'pricing_value' => 2,
-                            'is_percent' => 'No',
-                            'include' => 'Yes',
-                        ],
-                    ],
-                ],
-            ],
-            'attributes' => [
-                'attribute_key_0' => 'catalogProductAttribute::attribute_type_dropdown_two_options',
-            ],
-            'products' => [
-                'attribute_key_0:option_key_0' => 'catalogProductSimple::product_without_category',
-                'attribute_key_0:option_key_1' => 'catalogProductSimple::product_without_category',
-            ],
-            'matrix' => [
-                'attribute_key_0:option_key_0' => [
-                    'display' => 'Yes',
-                    'quantity_and_stock_status' => [
-                        'qty' => 100,
-                    ],
-                    'weight' => 1,
-                ],
-                'attribute_key_0:option_key_1' => [
-                    'display' => 'Yes',
-                    'quantity_and_stock_status' => [
-                        'qty' => 200,
-                    ],
-                    'weight' => 1,
-                ],
-            ],
-        ],
-    ];
-
-    /**
      * @constructor
+     * @param RepositoryFactory $repositoryFactory
      * @param FixtureFactory $fixtureFactory
      * @param array $data
      * @param array $params [optional]
      */
-    public function __construct(FixtureFactory $fixtureFactory, array $data, array $params = [])
-    {
+    public function __construct(
+        RepositoryFactory $repositoryFactory,
+        FixtureFactory $fixtureFactory,
+        array $data,
+        array $params = []
+    ) {
         $this->fixtureFactory = $fixtureFactory;
         $this->params = $params;
-        $preset = [];
-        if (isset($data['preset'])) {
-            $preset = $this->getPreset($data['preset']);
-            unset($data['preset']);
+        $dataset = [];
+        if (isset($data['dataset']) && isset($this->params['repository'])) {
+            $dataset = $repositoryFactory->get($this->params['repository'])->get($data['dataset']);
+            unset($data['dataset']);
         }
-        $data = array_replace_recursive($data, $preset);
+
+        $data = array_replace_recursive($data, $dataset);
 
         if (!empty($data)) {
             $this->prepareAttributes($data);
@@ -815,32 +86,22 @@ class ConfigurableAttributesData implements FixtureInterface
     }
 
     /**
-     * Persist configurable attribute data
-     *
-     * @return void
-     */
-    public function persist()
-    {
-        //
-    }
-
-    /**
-     * Prepare attributes
+     * Prepare attributes.
      *
      * @param array $data
      * @return void
      */
     protected function prepareAttributes(array $data)
     {
-        if (empty($data['attributes'])) {
+        if (!isset($data['attributes'])) {
             return;
         }
 
         foreach ($data['attributes'] as $key => $attribute) {
             if (is_string($attribute)) {
-                list($fixture, $dataSet) = explode('::', $attribute);
+                list($fixture, $dataset) = explode('::', $attribute);
                 /** @var InjectableFixture $attribute */
-                $attribute = $this->fixtureFactory->createByCode($fixture, ['dataSet' => $dataSet]);
+                $attribute = $this->fixtureFactory->createByCode($fixture, ['dataset' => $dataset]);
             }
             if (!$attribute->hasData('attribute_id')) {
                 $attribute->persist();
@@ -850,7 +111,7 @@ class ConfigurableAttributesData implements FixtureInterface
     }
 
     /**
-     * Prepare attributes data
+     * Prepare attributes data.
      *
      * @param array $data
      * @return void
@@ -876,14 +137,14 @@ class ConfigurableAttributesData implements FixtureInterface
     }
 
     /**
-     * Prepare products
+     * Prepare products.
      *
      * @param array $data
      * @return void
      */
     protected function prepareProducts(array $data)
     {
-        if (empty($data['products'])) {
+        if (!isset($data['products'])) {
             return;
         }
 
@@ -894,7 +155,7 @@ class ConfigurableAttributesData implements FixtureInterface
 
         foreach ($data['products'] as $key => $product) {
             if (is_string($product)) {
-                list($fixture, $dataSet) = explode('::', $product);
+                list($fixture, $dataset) = explode('::', $product);
                 $attributeData = ['attributes' => $this->getProductAttributeData($key)];
                 $stock = [];
 
@@ -908,7 +169,7 @@ class ConfigurableAttributesData implements FixtureInterface
                 $product = $this->fixtureFactory->createByCode(
                     $fixture,
                     [
-                        'dataSet' => $dataSet,
+                        'dataset' => $dataset,
                         'data' => array_merge($attributeSetData, $attributeData, $stock)
                     ]
                 );
@@ -922,7 +183,7 @@ class ConfigurableAttributesData implements FixtureInterface
     }
 
     /**
-     * Create attribute set
+     * Create attribute set.
      *
      * @return FixtureInterface
      */
@@ -931,7 +192,7 @@ class ConfigurableAttributesData implements FixtureInterface
         $attributeSet = $this->fixtureFactory->createByCode(
             'catalogAttributeSet',
             [
-                'dataSet' => 'custom_attribute_set',
+                'dataset' => 'custom_attribute_set',
                 'data' => [
                     'assigned_attributes' => [
                         'attributes' => array_values($this->attributes),
@@ -944,7 +205,7 @@ class ConfigurableAttributesData implements FixtureInterface
     }
 
     /**
-     * Get prepared attribute data for persist product
+     * Get prepared attribute data for persist product.
      *
      * @param string $key
      * @return array
@@ -967,7 +228,7 @@ class ConfigurableAttributesData implements FixtureInterface
     }
 
     /**
-     * Get id of attribute option by composite key
+     * Get id of attribute option by composite key.
      *
      * @param string $compositeKey
      * @return int|null
@@ -981,7 +242,7 @@ class ConfigurableAttributesData implements FixtureInterface
     }
 
     /**
-     * Prepare data for matrix
+     * Prepare data for matrix.
      *
      * @param array $data
      * @return void
@@ -1029,14 +290,11 @@ class ConfigurableAttributesData implements FixtureInterface
                 );
             }
 
-            if (!isset($this->variationsMatrix[$key]['display'])) {
-                $this->variationsMatrix[$key]['display'] = 'Yes';
-            }
         }
     }
 
     /**
-     * Add matrix variation
+     * Add matrix variation.
      *
      * @param array $variationsMatrix
      * @param array $attribute
@@ -1068,6 +326,7 @@ class ConfigurableAttributesData implements FixtureInterface
                 $compositeKey = "{$attributeKey}:{$optionKey}";
                 $row['name'] .= ' ' . $index;
                 $row['sku'] .= '_' . $index;
+                $row['price'] = $option['pricing_value'];
                 $newRowKey = $rowKey ? "{$rowKey} {$compositeKey}" : $compositeKey;
                 $result[$newRowKey] = $row;
                 $index++;
@@ -1078,7 +337,7 @@ class ConfigurableAttributesData implements FixtureInterface
     }
 
     /**
-     * Prepare data from source
+     * Prepare data from source.
      *
      * @return void
      */
@@ -1102,7 +361,6 @@ class ConfigurableAttributesData implements FixtureInterface
         ];
         $variationMatrixFields = [
             'configurable_attribute',
-            'display',
             'name',
             'sku',
             'price',
@@ -1133,28 +391,7 @@ class ConfigurableAttributesData implements FixtureInterface
     }
 
     /**
-     * Return data set configuration settings
-     *
-     * @return array
-     */
-    public function getDataConfig()
-    {
-        return $this->params;
-    }
-
-    /**
-     * Return prepared data set
-     *
-     * @param string|null $key
-     * @return array
-     */
-    public function getData($key = null)
-    {
-        return isset($this->data[$key]) ? $this->data[$key] : $this->data;
-    }
-
-    /**
-     * Get prepared attributes data
+     * Get prepared attributes data.
      *
      * @return array
      */
@@ -1164,7 +401,7 @@ class ConfigurableAttributesData implements FixtureInterface
     }
 
     /**
-     * Get prepared variations matrix
+     * Get prepared variations matrix.
      *
      * @return array
      */
@@ -1174,7 +411,7 @@ class ConfigurableAttributesData implements FixtureInterface
     }
 
     /**
-     * Get prepared attributes
+     * Get prepared attributes.
      *
      * @return array
      */
@@ -1184,23 +421,12 @@ class ConfigurableAttributesData implements FixtureInterface
     }
 
     /**
-     * Get prepared products
+     * Get prepared products.
      *
      * @return array
      */
     public function getProducts()
     {
         return $this->products;
-    }
-
-    /**
-     * Preset array
-     *
-     * @param string $name
-     * @return mixed|null
-     */
-    protected function getPreset($name)
-    {
-        return isset($this->presets[$name]) ? $this->presets[$name] : null;
     }
 }

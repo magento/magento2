@@ -102,7 +102,7 @@ class CartTotalRepository implements CartTotalRepositoryInterface
         $weeeTaxAppliedAmount = 0;
         foreach ($quote->getAllVisibleItems() as $index => $item) {
             $items[$index] = $this->itemConverter->modelToDataObject($item);
-            $weeeTaxAppliedAmount += $item->getWeeeTaxAppliedAmount();
+            $weeeTaxAppliedAmount += $item->getWeeeTaxAppliedRowAmount();
         }
         $totals->setCouponCode($this->couponService->get($cartId));
         $calculatedTotals = $this->totalsConverter->process($quote->getTotals());

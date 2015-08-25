@@ -45,6 +45,11 @@ class SoapTest extends \PHPUnit_Framework_TestCase
     protected $_localeMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\State
+     */
+    protected $_appStateMock;
+
+    /**
      * Set up Controller object.
      */
     protected function setUp()
@@ -71,7 +76,8 @@ class SoapTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['maskException'])
             ->getMock();
-        $this->_appStateMock =  $this->getMock('\Magento\Framework\App\State', [], [], '', false);
+
+        $this->_appStateMock =  $this->getMock('Magento\Framework\App\State', [], [], '', false);
 
         $localeResolverMock = $this->getMockBuilder(
             'Magento\Framework\Locale\Resolver'
@@ -93,6 +99,10 @@ class SoapTest extends \PHPUnit_Framework_TestCase
         $areaListMock = $this->getMock('Magento\Framework\App\AreaList', [], [], '', false);
         $areaMock = $this->getMock('Magento\Framework\App\AreaInterface');
         $areaListMock->expects($this->any())->method('getArea')->will($this->returnValue($areaMock));
+
+        $rendererMock = $this->getMockBuilder('Magento\Framework\Webapi\Rest\Response\RendererFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->_soapController = new \Magento\Webapi\Controller\Soap(
             $this->_requestMock,
             $this->_responseMock,
@@ -102,6 +112,7 @@ class SoapTest extends \PHPUnit_Framework_TestCase
             $this->_appStateMock,
             $localeResolverMock,
             $pathProcessorMock,
+            $rendererMock,
             $areaListMock
         );
     }

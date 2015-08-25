@@ -12,7 +12,7 @@ use Magento\Backend\App\Action;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Variable extends Action
+abstract class Variable extends Action
 {
     /**
      * Core registry

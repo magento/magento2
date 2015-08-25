@@ -120,7 +120,7 @@ class Register extends \Magento\Directory\Block\Data
         $data = $this->getData('form_data');
         if ($data === null) {
             $formData = $this->_customerSession->getCustomerFormData(true);
-            $data = new \Magento\Framework\Object();
+            $data = new \Magento\Framework\DataObject();
             if ($formData) {
                 $data->addData($formData);
                 $data->setCustomerData(1);

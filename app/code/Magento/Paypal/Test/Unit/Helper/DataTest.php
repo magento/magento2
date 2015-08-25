@@ -13,9 +13,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected $_paymentDataMock;
 
     /**
-     * @var \Magento\Paypal\Model\ConfigFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Paypal\Model\Config | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $configFactoryMock;
+    protected $configMock;
 
     /**
      * @var \Magento\Paypal\Helper\Data
@@ -30,15 +30,19 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ['getStoreMethods', 'getPaymentMethods']
         )->getMock();
 
-        $this->configFactoryMock = $this->getMock(
-            'Magento\Paypal\Model\ConfigFactory',
-            ['create', 'setMethod', 'getValue'],
+        $this->configMock = $this->getMock(
+            'Magento\Paypal\Model\Config',
+            [],
             [],
             '',
             false
         );
-        $this->configFactoryMock->expects($this->any())->method('create')->will($this->returnSelf());
-        $this->configFactoryMock->expects($this->any())->method('setMethod')->will($this->returnSelf());
+        $configMockFactory = $this->getMockBuilder('Magento\Paypal\Model\ConfigFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $configMockFactory->expects($this->any())->method('create')->willReturn($this->configMock);
+        $this->configMock->expects($this->any())->method('setMethod')->will($this->returnSelf());
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_helper = $objectManager->getObject(
@@ -46,7 +50,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             [
                 'paymentData' => $this->_paymentDataMock,
                 'methodCodes' => ['expressCheckout' => 'paypal_express', 'hostedPro' => 'hosted_pro'],
-                'configFactory' => $this->configFactoryMock
+                'configFactory' => $configMockFactory
             ]
         );
     }
@@ -103,7 +107,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $txnId = 'XXX123123XXX';
         $htmlTransactionId = sprintf($htmlTransactionId, 'sandbox', $txnId);
 
-        $this->configFactoryMock->expects($this->any())
+        $this->configMock->expects($this->any())
             ->method('getValue')
             ->with($this->stringContains('sandboxFlag'))
             ->willReturn(true);

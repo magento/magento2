@@ -76,8 +76,10 @@ class Template extends \Magento\Email\Model\AbstractTemplate
      * @param \Magento\Email\Model\Template\Config $emailConfig
      * @param \Magento\Email\Model\TemplateFactory $templateFactory The template directive requires an email
      *        template model, not newsletter model, as templates overridden in backend are loaded from email table.
+     * @param \Magento\Framework\Filter\FilterManager $filterManager
+     * @param \Magento\Framework\Url|\Magento\Framework\UrlInterface $urlModel
      * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Newsletter\Model\Template\FilterFactory $filterFactory,
+     * @param \Magento\Newsletter\Model\Template\FilterFactory $filterFactory ,
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -92,6 +94,8 @@ class Template extends \Magento\Email\Model\AbstractTemplate
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Email\Model\Template\Config $emailConfig,
         \Magento\Email\Model\TemplateFactory $templateFactory,
+        \Magento\Framework\Filter\FilterManager $filterManager,
+        \Magento\Framework\UrlInterface $urlModel,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Newsletter\Model\Template\FilterFactory $filterFactory,
         array $data = []
@@ -107,6 +111,8 @@ class Template extends \Magento\Email\Model\AbstractTemplate
             $scopeConfig,
             $emailConfig,
             $templateFactory,
+            $filterManager,
+            $urlModel,
             $data
         );
         $this->_storeManager = $storeManager;

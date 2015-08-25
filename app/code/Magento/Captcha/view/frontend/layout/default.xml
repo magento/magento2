@@ -7,21 +7,17 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
-        <referenceBlock name="minicart">
+        <referenceBlock name="authentication-popup">
             <arguments>
                 <argument name="jsLayout" xsi:type="array">
                     <item name="components" xsi:type="array">
-                        <item name="minicart_content" xsi:type="array">
+                        <item name="authenticationPopup" xsi:type="array">
                             <item name="children" xsi:type="array">
-                                <item name="sign-in-popup" xsi:type="array">
-                                    <item name="children" xsi:type="array">
-                                        <item name="captcha" xsi:type="array">
-                                            <item name="component" xsi:type="string">Magento_Captcha/js/view/checkout/loginCaptcha</item>
-                                            <item name="displayArea" xsi:type="string">additional-login-form-fields</item>
-                                            <item name="formId" xsi:type="string">user_login</item>
-                                            <item name="configSource" xsi:type="string">checkout</item>
-                                        </item>
-                                    </item>
+                                <item name="captcha" xsi:type="array">
+                                    <item name="component" xsi:type="string">Magento_Captcha/js/view/checkout/loginCaptcha</item>
+                                    <item name="displayArea" xsi:type="string">additional-login-form-fields</item>
+                                    <item name="formId" xsi:type="string">user_login</item>
+                                    <item name="configSource" xsi:type="string">checkout</item>
                                 </item>
                             </item>
                         </item>

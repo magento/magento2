@@ -166,7 +166,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this|void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -258,7 +258,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -624,6 +624,15 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
+     * @param string $file
+     * @return string
+     */
+    protected function getFilenameFromTmp($file)
+    {
+        return strrpos($file, '.tmp') == strlen($file) - 4 ? substr($file, 0, strlen($file) - 4) : $file;
+    }
+
+    /**
      * Move image from temporary directory to normal
      *
      * @param string $file
@@ -631,9 +640,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     protected function _moveImageFromTmp($file)
     {
-        if (strrpos($file, '.tmp') == strlen($file) - 4) {
-            $file = substr($file, 0, strlen($file) - 4);
-        }
+        $file = $this->getFilenameFromTmp($file);
         $destinationFile = $this->_getUniqueFileName($file);
 
         /** @var $storageHelper \Magento\MediaStorage\Helper\File\Storage\Database */
@@ -658,12 +665,39 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
-     * Check whether file to move exists. Getting unique name
+     * Duplicate temporary images
      *
-     * @param <type> $file
+     * @param string $file
      * @return string
      */
-    protected function _getUniqueFileName($file)
+    public function duplicateImageFromTmp($file)
+    {
+        $file = $this->getFilenameFromTmp($file);
+
+        $destinationFile = $this->_getUniqueFileName($file, true);
+        if ($this->_fileStorageDb->checkDbUsage()) {
+            $this->_fileStorageDb->copyFile(
+                $this->_mediaDirectory->getAbsolutePath($this->_mediaConfig->getTmpMediaShortUrl($file)),
+                $this->_mediaConfig->getTmpMediaShortUrl($destinationFile)
+            );
+        } else {
+            $this->_mediaDirectory->copyFile(
+                $this->_mediaConfig->getTmpMediaPath($file),
+                $this->_mediaConfig->getTmpMediaPath($destinationFile)
+            );
+        }
+        return str_replace('\\', '/', $destinationFile);
+    }
+
+
+    /**
+     * Check whether file to move exists. Getting unique name
+     *
+     * @param string $file
+     * @param bool $forTmp
+     * @return string
+     */
+    protected function _getUniqueFileName($file, $forTmp = false)
     {
         if ($this->_fileStorageDb->checkDbUsage()) {
             $destFile = $this->_fileStorageDb->getUniqueFilename(
@@ -671,10 +705,13 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
                 $file
             );
         } else {
+            $destinationFile = $forTmp
+                ? $this->_mediaDirectory->getAbsolutePath($this->_mediaConfig->getTmpMediaPath($file))
+                : $this->_mediaDirectory->getAbsolutePath($this->_mediaConfig->getMediaPath($file));
             $destFile = dirname(
                 $file
             ) . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
-                $this->_mediaDirectory->getAbsolutePath($this->_mediaConfig->getMediaPath($file))
+                $destinationFile
             );
         }
 
@@ -720,7 +757,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      */
     public function duplicate($object)
@@ -781,6 +818,9 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $images = (array)$object->getData($this->getAttribute()->getName());
         $tableName = $this->_getResource()->getMainTable();
         foreach ($images['images'] as $value) {
+            if (empty($value['value_id'])) {
+                continue;
+            }
             $data[$tableName][] = [
                 'attribute_id' => $this->getAttribute()->getAttributeId(),
                 'value_id' => $value['value_id'],

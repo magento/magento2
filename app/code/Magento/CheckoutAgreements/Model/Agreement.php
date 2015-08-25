@@ -6,7 +6,6 @@
 namespace Magento\CheckoutAgreements\Model;
 
 use Magento\CheckoutAgreements\Api\Data\AgreementInterface;
-use Magento\Framework\Model\AbstractModel;
 
 class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel implements AgreementInterface
 {
@@ -26,7 +25,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     /**
-     * @param \Magento\Framework\Object $agreementData
+     * @param \Magento\Framework\DataObject $agreementData
      * @return array|bool
      */
     public function validateData($agreementData)

@@ -12,6 +12,8 @@ use Magento\Framework\Data\Form\Element\Renderer\RendererInterface;
 
 /**
  * Adminhtml group price item abstract renderer
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractGroup extends Widget implements RendererInterface
 {
@@ -71,6 +73,11 @@ abstract class AbstractGroup extends Widget implements RendererInterface
     protected $_searchCriteriaBuilder;
 
     /**
+     * @var \Magento\Framework\Locale\CurrencyInterface
+     */
+    protected $_localeCurrency;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param GroupRepositoryInterface $groupRepository
      * @param \Magento\Directory\Helper\Data $directoryHelper
@@ -78,6 +85,7 @@ abstract class AbstractGroup extends Widget implements RendererInterface
      * @param \Magento\Framework\Registry $registry
      * @param GroupManagementInterface $groupManagement
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
      * @param array $data
      */
     public function __construct(
@@ -88,6 +96,7 @@ abstract class AbstractGroup extends Widget implements RendererInterface
         \Magento\Framework\Registry $registry,
         GroupManagementInterface $groupManagement,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
+        \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
         array $data = []
     ) {
         $this->_groupRepository = $groupRepository;
@@ -96,6 +105,7 @@ abstract class AbstractGroup extends Widget implements RendererInterface
         $this->_coreRegistry = $registry;
         $this->_groupManagement = $groupManagement;
         $this->_searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->_localeCurrency = $localeCurrency;
         parent::__construct($context, $data);
     }
 
@@ -157,10 +167,14 @@ abstract class AbstractGroup extends Widget implements RendererInterface
             $values = $this->_sortValues($data);
         }
 
+        $currency = $this->_localeCurrency->getCurrency($this->_directoryHelper->getBaseCurrencyCode());
+
         foreach ($values as &$value) {
             $value['readonly'] = $value['website_id'] == 0 &&
                 $this->isShowWebsiteColumn() &&
                 !$this->isAllowChangeWebsite();
+            $value['price'] =
+                $currency->toCurrency($value['price'], ['display' => \Magento\Framework\Currency::NO_SYMBOL]);
         }
 
         return $values;
@@ -258,7 +272,7 @@ abstract class AbstractGroup extends Widget implements RendererInterface
                 'currency' => $website->getBaseCurrencyCode()
             ];
         } elseif (!$this->isScopeGlobal()) {
-            $websites = $this->_storeManager->getWebsites(false);
+            $websites = $this->_storeManager->getWebsites();
             $productWebsiteIds = $this->getProduct()->getWebsiteIds();
             foreach ($websites as $website) {
                 /** @var $website \Magento\Store\Model\Website */

@@ -5,9 +5,9 @@
  */
 namespace Magento\Ui\Test\Unit\Component\Filters\Type;
 
+use Magento\Framework\View\Element\UiComponent\ContextInterface as UiContext;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Ui\Component\Filters\Type\AbstractFilter;
 use Magento\Ui\Component\Filters\Type\Range;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 
@@ -25,6 +25,11 @@ class RangeTest extends \PHPUnit_Framework_TestCase
      * @var UiComponentFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $uiComponentFactory;
+
+    /**
+     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $filterBuilderMock;
 
     /**
      * Set up
@@ -45,6 +50,13 @@ class RangeTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->filterBuilderMock = $this->getMock(
+            'Magento\Framework\Api\FilterBuilder',
+            [],
+            [],
+            '',
+            false
+        );
     }
 
     /**
@@ -54,7 +66,12 @@ class RangeTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetComponentName()
     {
-        $range = new Range($this->contextMock, $this->uiComponentFactory, []);
+        $range = new Range(
+            $this->contextMock,
+            $this->uiComponentFactory,
+            $this->filterBuilderMock,
+            []
+        );
 
         $this->assertTrue($range->getComponentName() === Range::NAME);
     }
@@ -78,7 +95,7 @@ class RangeTest extends \PHPUnit_Framework_TestCase
             ->with(Range::NAME, ['extends' => Range::NAME]);
         $this->contextMock->expects($this->any())
             ->method('getRequestParam')
-            ->with(AbstractFilter::FILTER_VAR)
+            ->with(UiContext::FILTER_VAR)
             ->willReturn($filterData);
 
         if ($expectedCondition !== null) {
@@ -91,14 +108,20 @@ class RangeTest extends \PHPUnit_Framework_TestCase
             );
             $dataProvider->expects($this->any())
                 ->method('addFilter')
-                ->with($name, $expectedCondition);
+                ->with($expectedCondition, $name);
 
             $this->contextMock->expects($this->any())
                 ->method('getDataProvider')
                 ->willReturn($dataProvider);
         }
 
-        $range = new Range($this->contextMock, $this->uiComponentFactory, [], ['name' => $name]);
+        $range = new Range(
+            $this->contextMock,
+            $this->uiComponentFactory,
+            $this->filterBuilderMock,
+            [],
+            ['name' => $name]
+        );
         $range->prepare();
     }
 

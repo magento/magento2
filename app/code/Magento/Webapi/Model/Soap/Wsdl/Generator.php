@@ -81,6 +81,16 @@ class Generator
     }
 
     /**
+     * Retrieve an array of services
+     *
+     * @return array
+     */
+    public function getListOfServices()
+    {
+        return $this->_apiConfig->getSoapServicesConfig();
+    }
+
+    /**
      * Generate WSDL file based on requested services (uses cache)
      *
      * @param array $requestedServices
@@ -180,7 +190,7 @@ class Generator
     {
         foreach ($this->customAttributeTypeLocator->getAllServiceDataInterfaces() as $customAttributeClass) {
             $typeName = $this->_typeProcessor->register($customAttributeClass);
-            $wsdl->addComplexType($typeName);
+            $wsdl->addComplexType($this->_typeProcessor->getArrayItemType($typeName));
         }
         return $wsdl;
     }

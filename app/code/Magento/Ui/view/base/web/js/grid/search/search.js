@@ -16,6 +16,7 @@ define([
             template: 'ui/grid/search/search',
             placeholder: $t('Search by keyword'),
             label: $t('Keyword'),
+            value: '',
             imports: {
                 inputValue: 'value',
                 updatePreview: 'value'

@@ -21,15 +21,15 @@ class Sidebar extends AbstractCart
     const XML_PATH_CHECKOUT_SIDEBAR_DISPLAY = 'checkout/sidebar/display';
 
     /**
-     * @var \Magento\Catalog\Model\Product\Image\View
+     * @var \Magento\Catalog\Helper\Image
      */
-    protected $imageView;
+    protected $imageHelper;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Catalog\Model\Product\Image\View $imageView
+     * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Customer\CustomerData\JsLayoutDataProviderPoolInterface $jsLayoutDataProvider
      * @param array $data
      */
@@ -37,7 +37,7 @@ class Sidebar extends AbstractCart
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Catalog\Model\Product\Image\View $imageView,
+        \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Customer\CustomerData\JsLayoutDataProviderPoolInterface $jsLayoutDataProvider,
         array $data = []
     ) {
@@ -49,7 +49,7 @@ class Sidebar extends AbstractCart
         }
         parent::__construct($context, $customerSession, $checkoutSession, $data);
         $this->_isScopePrivate = false;
-        $this->imageView = $imageView;
+        $this->imageHelper = $imageHelper;
     }
 
     /**
@@ -65,8 +65,6 @@ class Sidebar extends AbstractCart
             'updateItemQtyUrl' => $this->getUpdateItemQtyUrl(),
             'removeItemUrl' => $this->getRemoveItemUrl(),
             'imageTemplate' => $this->getImageHtmlTemplate(),
-            'customerRegisterUrl' => $this->getCustomerRegisterUrlUrl(),
-            'customerForgotPasswordUrl' => $this->getCustomerForgotPasswordUrl(),
             'baseUrl' => $this->getBaseUrl()
         ];
     }
@@ -76,7 +74,7 @@ class Sidebar extends AbstractCart
      */
     public function getImageHtmlTemplate()
     {
-        return $this->imageView->isWhiteBorders()
+        return $this->imageHelper->getFrame()
             ? 'Magento_Catalog/product/image'
             : 'Magento_Catalog/product/image_with_borders';
     }
@@ -157,26 +155,6 @@ class Sidebar extends AbstractCart
     public function getTotalsHtml()
     {
         return $this->getLayout()->getBlock('checkout.cart.minicart.totals')->toHtml();
-    }
-
-    /**
-     * Get customer register url
-     *
-     * @return string
-     */
-    public function getCustomerRegisterUrlUrl()
-    {
-        return $this->getUrl('customer/account/create');
-    }
-
-    /**
-     * Get customer forgot password url
-     *
-     * @return string
-     */
-    public function getCustomerForgotPasswordUrl()
-    {
-        return $this->getUrl('customer/account/forgotpassword');
     }
 
     /**

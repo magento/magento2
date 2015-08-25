@@ -8,19 +8,13 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper">
         <plugin name="configurable" type="Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Configurable" sortOrder="50" />
+        <plugin name="updateConfigurations" type="Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\UpdateConfigurations" sortOrder="60" />
     </type>
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Builder">
         <plugin name="configurable" type="Magento\ConfigurableProduct\Controller\Adminhtml\Product\Builder\Plugin" sortOrder="50" />
     </type>
     <type name="Magento\Catalog\Model\Product\Validator">
         <plugin name="configurable" type="Magento\ConfigurableProduct\Model\Product\Validator\Plugin" sortOrder="50" />
-    </type>
-    <type name="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\Composite">
-        <arguments>
-            <argument name="handlers" xsi:type="array">
-                <item name="configurableProducts" xsi:type="string">Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\ProductType\Configurable</item>
-            </argument>
-        </arguments>
     </type>
     <type name="Magento\ConfigurableProduct\Block\Adminhtml\Product\Attribute\Edit\Tab\Variations\Main">
         <arguments>

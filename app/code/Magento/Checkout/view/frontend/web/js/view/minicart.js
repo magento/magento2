@@ -7,18 +7,22 @@ define([
     'Magento_Customer/js/customer-data',
     'jquery',
     'ko',
-    'mage/url',
     'sidebar'
-], function (Component, customerData, $, ko, url) {
+], function (Component, customerData, $, ko) {
     'use strict';
 
     var sidebarInitialized = false;
     var addToCartCalls = 0;
-    url.setBaseUrl(window.checkout.baseUrl);
+
+    var minicart = $("[data-block='minicart']");
+    minicart.on('dropdowndialogopen', function () {
+        initSidebar();
+    });
 
     function initSidebar() {
-        var minicart = $("[data-block='minicart']");
-
+        if (!$('[data-role=product-item]').length) {
+            return false;
+        }
         minicart.trigger('contentUpdated');
         if (sidebarInitialized) {
             return false;
@@ -52,7 +56,7 @@ define([
                 "button": ":button.update-cart-item"
             },
             "confirmMessage": $.mage.__(
-                'Are you sure you want to remove this item from your Compare Products list?'
+                'Are you sure you would like to remove this item from the shopping cart?'
             )
         });
     }
@@ -67,6 +71,7 @@ define([
                 addToCartCalls--;
                 this.isLoading(addToCartCalls > 0);
                 sidebarInitialized = false;
+                initSidebar();
             }, this);
             $('[data-block="minicart"]').on('contentLoading', function(event) {
                 addToCartCalls++;
@@ -74,15 +79,13 @@ define([
             });
         },
         isLoading: ko.observable(false),
-        initSidebar: ko.observable(initSidebar),
+        initSidebar: initSidebar,
         closeSidebar: function() {
             var minicart = $('[data-block="minicart"]');
-
             minicart.on('click', '[data-action="close"]', function(event) {
                 event.stopPropagation();
                 minicart.find('[data-role="dropdownDialog"]').dropdownDialog("close");
             });
-
             return true;
         },
         getItemRenderer: function (productType) {

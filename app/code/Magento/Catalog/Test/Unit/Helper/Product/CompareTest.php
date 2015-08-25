@@ -6,6 +6,8 @@
 
 namespace Magento\Catalog\Test\Unit\Helper\Product;
 
+use Magento\Framework\App\Action\Action;
+
 /**
  * Class CompareTest
  */
@@ -41,12 +43,17 @@ class CompareTest extends \PHPUnit_Framework_TestCase
      */
     protected $urlEncoder;
 
+    /**
+     * @var \Magento\Catalog\Model\Session | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $catalogSessionMock;
+
     public function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->urlBuilder = $this->getMock('Magento\Framework\Url', ['getUrl'], [], '', false);
-        $this->request = $this->getMock('Magento\Framework\App\Request\Http', ['getServer'], [], '', false);
+        $this->request = $this->getMock('Magento\Framework\App\Request\Http', ['getServer', 'isSecure'], [], '', false);
         /** @var \Magento\Framework\App\Helper\Context $context */
         $this->context = $this->getMock(
             'Magento\Framework\App\Helper\Context',
@@ -58,7 +65,9 @@ class CompareTest extends \PHPUnit_Framework_TestCase
         $this->urlEncoder = $this->getMockBuilder('Magento\Framework\Url\EncoderInterface')->getMock();
         $this->urlEncoder->expects($this->any())
             ->method('encode')
-            ->will($this->returnArgument(0));
+            ->willReturnCallback(function ($url) {
+                return strtr(base64_encode($url), '+/=', '-_,');
+            });
         $this->context->expects($this->once())
             ->method('getUrlBuilder')
             ->will($this->returnValue($this->urlBuilder));
@@ -75,10 +84,21 @@ class CompareTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->catalogSessionMock = $this->getMock(
+            '\Magento\Catalog\Model\Session',
+            ['getBeforeCompareUrl'],
+            [],
+            '',
+            false
+        );
 
         $this->compareHelper = $objectManager->getObject(
             'Magento\Catalog\Helper\Product\Compare',
-            ['context' => $this->context, 'postHelper' => $this->postDataHelper]
+            [
+                'context' => $this->context,
+                'postHelper' => $this->postDataHelper,
+                'catalogSession' => $this->catalogSessionMock
+            ]
         );
     }
 
@@ -89,7 +109,7 @@ class CompareTest extends \PHPUnit_Framework_TestCase
         $removeUrl = 'catalog/product_compare/remove';
         $compareListUrl = 'catalog/product_compare';
         $postParams = [
-            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $compareListUrl,
+            Action::PARAM_NAME_URL_ENCODED => strtr(base64_encode($compareListUrl), '+/=', '-_,'),
             'product' => $productId
         ];
 
@@ -136,7 +156,7 @@ class CompareTest extends \PHPUnit_Framework_TestCase
         $refererUrl = 'home/';
         $clearUrl = 'catalog/product_compare/clear';
         $postParams = [
-            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $refererUrl
+            Action::PARAM_NAME_URL_ENCODED => strtr(base64_encode($refererUrl), '+/=', '-_,')
         ];
 
         //Verification
@@ -156,5 +176,28 @@ class CompareTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
 
         $this->assertTrue($this->compareHelper->getPostDataClearList());
+    }
+
+    public function testGetAddToCartUrl()
+    {
+        $productId = 42;
+        $isRequestSecure = false;
+        $beforeCompareUrl = 'http://magento.com/compare/before';
+        $encodedCompareUrl = strtr(base64_encode($beforeCompareUrl), '+/=', '-_,');
+        $expectedResult = [
+            'product' => $productId,
+            Action::PARAM_NAME_URL_ENCODED => $encodedCompareUrl,
+            '_secure' => $isRequestSecure
+        ];
+
+        $productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
+        $this->catalogSessionMock->expects($this->once())->method('getBeforeCompareUrl')->willReturn($beforeCompareUrl);
+        $productMock->expects($this->once())->method('getId')->willReturn($productId);
+        $this->urlEncoder->expects($this->once())->method('encode')->with($beforeCompareUrl)
+            ->willReturn($encodedCompareUrl);
+        $this->request->expects($this->once())->method('isSecure')->willReturn($isRequestSecure);
+
+        $this->urlBuilder->expects($this->once())->method('getUrl')->with('checkout/cart/add', $expectedResult);
+        $this->compareHelper->getAddToCartUrl($productMock);
     }
 }

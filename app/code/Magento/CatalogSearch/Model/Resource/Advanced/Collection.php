@@ -6,6 +6,7 @@
 namespace Magento\CatalogSearch\Model\Resource\Advanced;
 
 use Magento\Catalog\Model\Product;
+use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
 
 /**
  * Collection Advanced
@@ -32,6 +33,11 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     private $searchEngine;
 
     /**
+     * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory
+     */
+    private $temporaryStorageFactory;
+
+    /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -53,6 +59,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\CatalogSearch\Model\Advanced\Request\Builder $requestBuilder
      * @param \Magento\Search\Model\SearchEngine $searchEngine
+     * @param \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory
      * @param \Zend_Db_Adapter_Abstract $connection
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -78,10 +85,12 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\CatalogSearch\Model\Advanced\Request\Builder $requestBuilder,
         \Magento\Search\Model\SearchEngine $searchEngine,
+        \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory,
         $connection = null
     ) {
         $this->requestBuilder = $requestBuilder;
         $this->searchEngine = $searchEngine;
+        $this->temporaryStorageFactory = $temporaryStorageFactory;
         parent::__construct(
             $entityFactory,
             $logger,
@@ -138,9 +147,16 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
             $queryRequest = $this->requestBuilder->create();
             $queryResponse = $this->searchEngine->search($queryRequest);
 
-            $ids = $this->getResponseIds($queryResponse);
+            $temporaryStorage = $this->temporaryStorageFactory->create();
+            $table = $temporaryStorage->storeDocuments($queryResponse->getIterator());
 
-            $this->addIdFilter($ids);
+            $this->getSelect()->joinInner(
+                [
+                    'search_result' => $table->getName(),
+                ],
+                'e.entity_id = search_result.' . TemporaryStorage::FIELD_ENTITY_ID,
+                []
+            );
         }
         return parent::_renderFiltersBefore();
     }
@@ -157,19 +173,5 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         }
 
         return $attributeCode;
-    }
-
-    /**
-     * @param \Magento\Framework\Search\Document[] $queryResponse
-     * @return int[]
-     */
-    private function getResponseIds($queryResponse)
-    {
-        $ids = [0];
-        foreach ($queryResponse as $document) {
-            $ids[] = $document->getId();
-        }
-
-        return $ids;
     }
 }

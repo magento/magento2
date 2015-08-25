@@ -135,9 +135,7 @@ class ConfigurableProductsFixture extends Fixture
             '_super_products_sku',
             '_super_attribute_code',
             '_super_attribute_option',
-            '_super_attribute_price_corr',
             'configurable_variations',
-            'configurable_variation_prices',
         ];
     }
 
@@ -262,7 +260,6 @@ class ConfigurableProductsFixture extends Fixture
                 '_super_products_sku' => '',
                 '_super_attribute_code' => '',
                 '_super_attribute_option' => '',
-                '_super_attribute_price_corr' => '',
             ],
             [
                 'sku' => 'Configurable Product %s-option 2',
@@ -582,7 +579,6 @@ class ConfigurableProductsFixture extends Fixture
                 '_media_position' => '',
                 '_media_is_disabled' => '',
                 'configurable_variations' => 'sku=Configurable Product %s-option 1,configurable_variation=option 1|sku=Configurable Product %s-option 2,configurable_variation=option 2|sku=Configurable Product %s-option 3,configurable_variation=option 3',
-                'configurable_variation_prices' => 'name=configurable_variation,value=option 1,price=10.0000|name=configurable_variation,value=option 2,price=20.0000|name=configurable_variation,value=option 3,price=30.0000',
             ],
         ];
 

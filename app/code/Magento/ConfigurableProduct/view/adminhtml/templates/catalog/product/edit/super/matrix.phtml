@@ -10,310 +10,290 @@
 ?>
 <?php
 $variations = $block->getVariations();
-if (!$variations) {
-    return;
+$productMatrix = [];
+$attributes = [];
+if ($variations) {
+    $usedProductAttributes = $block->getUsedAttributes();
+    $productByUsedAttributes = $block->getAssociatedProducts();
+    $productPrice = (float)$block->getProduct()->getPrice();
+    foreach ($variations as $variation) {
+        $attributeValues = [];
+        $price = $productPrice;
+        foreach ($usedProductAttributes as $attribute) {
+            $attributeValues[$attribute->getAttributeCode()] = $variation[$attribute->getId()]['value'];
+        }
+        $key = implode('-', $attributeValues);
+        if (isset($productByUsedAttributes[$key])) {
+            $product = $productByUsedAttributes[$key];
+            $price = $originPrice = $product->getPrice();
+            $variationOptions = [];
+            foreach ($usedProductAttributes as $attribute) {
+                if (!isset($attributes[$attribute->getAttributeId()])) {
+                    $attributes[$attribute->getAttributeId()] = [
+                        'code' => $attribute->getAttributeCode(),
+                        'label' => $attribute->getStoreLabel(),
+                        'id' => $attribute->getAttributeId(),
+                        'position' => $attribute->getPosition(),
+                        'chosen' => [],
+                    ];
+                }
+                $optionId = $variation[$attribute->getId()]['value'];
+                $variationOption = [
+                    'attribute_code' => $attribute->getAttributeCode(),
+                    'attribute_label' => $attribute->getStoreLabel(0),
+                    'id' => $optionId,
+                    'label' => $variation[$attribute->getId()]['label'],
+                    'value' => $optionId,
+                ];
+                $variationOptions[] = $variationOption;
+                $attributes[$attribute->getAttributeId()]['chosen'][$optionId] = $variationOption;
+            }
+
+            $productMatrix[] = [
+                'product_id' => $product->getId(),
+                'images' => [
+                    'preview' => $this->helper('Magento\Catalog\Helper\Image')
+                        ->init($product, 'product_thumbnail_image')
+                        ->getUrl()
+                ],
+                'sku' => $product->getSku(),
+                'name' => $product->getName(),
+                'quantity' => $block->getProductStockQty($product),
+                'price' => $price,
+                'options' => $variationOptions,
+                'weight' => $product->getWeight(),
+                'status' => $product->getStatus()
+            ];
+        }
+    }
+    $attributes = array_values($attributes);
 }
-$usedProductAttributes = $block->getUsedAttributes();
-$productByUsedAttributes = $block->getAssociatedProducts();
 ?>
 
-<h3 class="title"><?php echo __('Current Variations'); ?></h3>
+<div data-bind="scope: 'configurableVariations'">
+    <h3 class="hidden" data-bind="css: {hidden: !showVariations() }" class="title"><?php echo __('Current Variations'); ?></h3>
 
-<div class="field">
-    <div class="control">
-        <table class="admin__table-secondary">
-            <thead>
+    <script data-template-for="variation-image" type="text/x-magento-template">
+        <img src="<%= data.url %>" class="variation" data-role="image"/>
+    </script>
+    <!-- ko if: showVariations() -->
+        <div class="field hidden" data-bind="css: {hidden: !showVariations() }">
+            <div data-role="configurable-attributes-container">
+                <!-- ko foreach: {data: attributes, as: 'attribute'} -->
+                <div data-role="attribute-info">
+                    <input name="attributes[]"
+                           data-bind="value: attribute.id, attr:{id: 'configurable_attribute_' + attribute.id}"
+                           type="hidden"/>
+                    <input
+                        data-bind="value: attribute.id, attr: {name: $parent.getAttributeRowName(attribute, 'attribute_id')}"
+                        type="hidden"/>
+                    <input
+                        data-bind="value: attribute.code, attr: {name: $parent.getAttributeRowName(attribute, 'code')}"
+                        type="hidden"/>
+                    <input
+                        data-bind="value: attribute.label, attr: {name: $parent.getAttributeRowName(attribute, 'label')}"
+                        type="hidden"/>
+                    <input data-bind="value: $index(), attr: {name: $parent.getAttributeRowName(attribute, 'position')}"
+                           type="hidden"/>
+                    <!-- ko foreach: {data: attribute.chosen, as: 'option'} -->
+                    <div data-role="option-info">
+                        <input value="1"
+                               data-bind="attr: {name: $parents[1].getOptionRowName(attribute, option, 'include')}"
+                               type="hidden"/>
+                        <input
+                            data-bind="value: option.value, attr: {name: $parents[1].getOptionRowName(attribute, option, 'value_index')}"
+                            type="hidden"/>
+                    </div>
+                    <!-- /ko -->
+                </div>
+                <!-- /ko -->
+            </div>
+            <div class="admin__data-grid-wrap">
+                <table class="data-grid"
+                ">
+                <thead>
                 <tr>
-                    <th class="col-display" data-column="display">
-                        <?php echo __('Display'); ?>
+                    <th class="data-grid-th data-grid-thumbnail-cell col-image" data-column="image">
+                        <?= __('Image'); ?>
                     </th>
-                    <th class="col-image" data-column="image">
-                        <?php echo __('Image'); ?>
+                    <th class="data-grid-th col-name" data-column="name">
+                        <?= __('Name'); ?>
                     </th>
-                    <th class="col-name <?php echo $block->getAttributeFrontendClass('name'); ?>" data-column="name">
-                        <?php echo __('Name'); ?>
+                    <th class="data-grid-th col-sku" data-column="sku">
+                        <?= __('SKU'); ?>
                     </th>
-                    <th class="col-sku <?php echo $block->getAttributeFrontendClass('sku'); ?>" data-column="sku">
-                        <?php echo __('SKU'); ?>
+                    <th class="data-grid-th col-price" data-column="price">
+                        <?= __('Price'); ?>
                     </th>
-                    <th class="col-price" data-column="price">
-                        <?php echo __('Price'); ?>
+                    <th class="data-grid-th col-qty" data-column="qty">
+                        <?= __('Quantity'); ?>
                     </th>
-                    <th class="col-qty" data-column="qty">
-                        <?php echo __('Quantity'); ?>
+                    <th class="data-grid-th col-weight" data-column="weight">
+                        <?= __('Weight'); ?>
                     </th>
-                    <th class="col-weight <?php echo str_replace('required-entry', '', $block->getAttributeFrontendClass('weight')); ?>" data-column="weight">
-                        <?php echo __('Weight'); ?>
+                    <!-- ko foreach: getAttributesOptions() -->
+                    <th data-bind="attr: {class:'data-grid-th col-' + $data.attribute_code}, text: $data.attribute_label"></th>
+                    <!-- /ko -->
+                    <th class="data-grid-th">
+                        <?= __('Actions'); ?>
                     </th>
-                    <?php
-                    foreach ($usedProductAttributes as $attribute) {
-                        /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
-                        echo '<th class="col-' . preg_replace('#[^a-z0-9]+#', '-', strtolower($attribute->getStoreLabel(0))) . '">', $attribute->getStoreLabel(0), '</th>', PHP_EOL;
-                    }
-                    ?>
-                    <th class="col-actions hidden"></th>
                 </tr>
-            </thead>
-            <tbody>
-            <?php
-            $isEven = true;
-            $productPrice = (float)$block->getProduct()->getPrice();
-            foreach ($variations as $variation) {
-                $attributeValues = [];
-                $attributeLabels = [];
-                $attributeStoreLabels = [];
-                $price = $productPrice;
-                foreach ($usedProductAttributes as $attribute) {
-                    /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
-
-                    $attributeValues[$attribute->getAttributeCode()] = $variation[$attribute->getId()]['value'];
-                    $attributeLabels[$attribute->getAttributeCode()] = $variation[$attribute->getId()]['label'];
-
-                    if (isset($variation[$attribute->getId()]['price'])) {
-                        $priceInfo = $variation[$attribute->getId()]['price'];
-                        $price += ($priceInfo['is_percent'] ? $productPrice / 100.0 : 1.0) * $priceInfo['pricing_value'];
-                    }
-                }
-                $attributeLabels = $block->escapeHtml($attributeLabels);
-                $key = implode('-', $attributeValues);
-                if (isset($productByUsedAttributes[$key])) {
-                    $product = $productByUsedAttributes[$key];
-                    ?>
-
-                <tr data-role="row" class="<?php echo $isEven ? 'even' : '' ?>">
-                    <td class="col-display" data-column="display">
-                        <input type="checkbox" name="associated_product_ids[]" data-column="entity_id"
-                               value="<?php echo $product->getId()?>" class="checkbox"
-                               checked="checked"/>
-                    </td>
-                    <td class="col-image" data-column="image">
-                        <img src="<?php echo $this->helper('Magento\Catalog\Helper\Image')->init($product, 'image')->resize(32);
-                    ?>"
-                             class="variation" data-role="image"/>
-                    </td>
-                    <td class="col-name" data-column="name">
-                        <a href="<?php echo $block->getEditProductUrl($product->getId())?>"
-                           target="_blank"><?php echo $block->escapeHtml($product->getName())?></a>
-
-                        <button type="button" data-action="choose" class="action-choose" title="<?php echo __('Choose');
-                    ?>"
-                                data-attributes="<?php echo $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($attributeValues));
-                    ?>">
-                            <span><?php echo __('Choose');
-                    ?></span>
-                        </button>
-                    </td>
-                    <td class="col-sku" data-column="sku">
-                        <span data-column="sku"><?php echo $block->escapeHtml($product->getSku())?></span>
-                    </td>
-                    <td class="col-price" data-column="price">
-                        <?php echo $block->renderPrice($price);
-                    ?>
-                    </td>
-                    <td class="col-qty" data-column="qty"><?php echo $block->getProductStockQty($product) ?></td>
-                    <td class="col-weight" data-column="weight"><?php echo $product->getWeight()?></td>
-                    <?php
-                    foreach ($usedProductAttributes as $attribute) {
-                        /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
-                        echo '<td class="col-' . preg_replace('#[^a-z0-9]+#', '-', strtolower($attribute->getStoreLabel())) . '">',
-                            $block->escapeHtml($variation[$attribute->getId()]['label']), '</td>', PHP_EOL;
-                    }
-                    ?>
-                    <td class="col-actions hidden" data-column="actions">
-                        <div class="actions-split">
-                            <button type="button" class="action-default">
-                                <span>Edit</span>
-                            </button>
-                            <button type="button" class="action-toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown">
-                                <span>Select</span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a class="item">Reset Variation</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-                    <?php
-
-                } else {
-                    $checked = $block->getProduct()->getId() && !$block->getProduct()->dataHasChangedFor('type_id') ? '' : ' checked="checked"';
-                    $disabled = $block->getProduct()->getId() && !$block->getProduct()->dataHasChangedFor('type_id') ? ' disabled="disabled"' : '';
-                    ?>
-                <tr data-role="row" class="<?php echo $isEven ? 'even' : '' ?>">
-                    <td class="col-display" data-column="display">
-                        <input type="checkbox" name="associated_product_ids[]" value=""
-                               class="checkbox" data-column="entity_id" <?php echo $checked?> />
-                    </td>
+                </thead>
+                <tbody data-bind="foreach: {data: productMatrix, as: 'variation'}">
+                <tr data-role="row" data-bind="css: { _disabled: !variation.status, even: $index() % 2 }, attr: { 'data-row-number': $index() }">
                     <td class="col-image" data-column="image">
                         <div class="actions split actions-image-uploader">
                             <div class="action-upload action split" data-action="upload-image">
-                                <span><?php echo __('Upload Image');
-                    ?></span>
-                                <input name="image" type="file" <?php echo $disabled;
-                    ?>
-                                       data-url="<?php echo $block->escapeHtml($block->getImageUploadUrl()) ?>"
-                                       title="<?php echo __('Upload Image');
-                    ?>" />
-                                <input id="variations-matrix-<?php echo $key?>-image"
-                                       name="variations-matrix[<?php echo $key?>][image]"
-                                       type="hidden" <?php echo $disabled;
-                    ?>/>
+                                <!-- ko if: $parent.isShowPreviewImage(variation) -->
+                                <img data-bind='attr: {src: variation.images.preview}' class="variation" data-role="image"/>
+                                <!-- /ko -->
+                                <!-- ko if: variation.editable-->
+                                <input type="hidden" data-bind="attr: {id: $parent.getRowId(variation, 'image'), name: $parent.getVariationRowName(variation, 'image')}"/>
+                                <span><?= __('Upload Image'); ?></span>
+                                <input name="image" type="file"
+                                       data-url="<?= $block->escapeHtml($block->getImageUploadUrl()) ?>"
+                                       title="<?= $block->escapeHtml(__('Upload image')); ?>"/>
+                                <!-- /ko -->
                             </div>
-                            <button type="button" class="action toggle no-display" data-toggle="dropdown" data-mage-init='{"dropdown":{}}'>
-                                <span><?php echo __('Select');
-                    ?></span>
+                            <!-- ko if: variation.editable -->
+                            <!-- ko if: variation.images.file -->
+                                <span data-bind="html: $parent.generateImageGallery(variation)" data-block="variation-images"></span>
+                            <!-- /ko -->
+                            <!-- /ko -->
+                            <button type="button" class="action toggle no-display" data-toggle="dropdown"
+                                    data-mage-init='{"dropdown":{}}'>
+                                <span><?= __('Select'); ?></span>
                             </button>
                             <ul class="dropdown">
                                 <li>
-                                    <a class="item" data-action="no-image"><?php echo __('No Image');
-                    ?></a>
+                                    <a class="item" data-action="no-image"><?= __('No Image'); ?></a>
                                 </li>
                             </ul>
                         </div>
                     </td>
                     <td class="col-name" data-column="name">
-                        <input type="text"
-                               id="variations-matrix-<?php echo $key?>-name"
-                               name="variations-matrix[<?php echo $key?>][name]"
-                               value="<?php echo $block->escapeHtml($block->getProduct()->getName()), '-', implode('-', $attributeLabels)?>"
-                               class="<?php echo $block->getAttributeFrontendClass('name');
-                    ?>"<?php echo $disabled?>/>
-                        <input type="hidden" name="variations-matrix[<?php echo $key?>][configurable_attribute]"
-                               value="<?php echo $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($attributeValues));
-                    ?>"<?php echo $disabled?>/>
-
-                        <button type="button" data-action="choose" class="action-choose" title="<?php echo __('Choose');
-                    ?>"
-                                data-attributes="<?php echo $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($attributeValues));
-                    ?>"<?php echo $disabled;
-                    ?>>
-                            <span><?php echo __('Choose');
-                    ?></span>
-                        </button>
+                        <!-- ko ifnot: variation.editable -->
+                        <a target="_blank" data-bind="text: variation.name,
+                            attr: {href: variation.productUrl}">
+                        </a>
+                        <!-- /ko -->
+                        <!-- ko if: variation.editable -->
+                        <input type="text" class="required-entry" data-bind="attr: {id: $parent.getRowId(variation, 'name'), name: $parent.getVariationRowName(variation, 'name'), value: variation.sku}"/>
+                        <input type="hidden" data-bind="attr: {id: $parent.getRowId(variation, 'configurable_attribute'), name: $parent.getVariationRowName(variation, 'configurable_attribute'), value: variation.attribute}"/>
+                        <!-- /ko -->
+                        <input type="hidden" data-role="status" data-bind="attr: {name: $parent.getVariationRowName(variation, 'status'), value: variation.status}"/>
                     </td>
                     <td class="col-sku" data-column="sku">
-                        <input type="text"
-                               id="variations-matrix-<?php echo $key?>-sku"
-                               name="variations-matrix[<?php echo $key?>][sku]"
-                               value="<?php echo $block->escapeHtml($block->getProduct()->getSku()), '-', implode('-', $attributeLabels)?>"
-                               class="<?php echo $block->getAttributeFrontendClass('sku');
-                    ?>"<?php echo $disabled?>/>
+                        <!-- ko ifnot: variation.editable -->
+                            <!-- ko text: variation.sku --><!--/ko-->
+                        <!-- /ko -->
+                        <!-- ko if: variation.editable -->
+                        <input type="text" class="required-entry"
+                               data-bind="attr: {id: $parent.getRowId(variation, 'sku'), name: $parent.getVariationRowName(variation, 'sku'), value: variation.sku}"/>
+                        <!-- /ko -->
                     </td>
                     <td class="col-price" data-column="price">
-                        <?php echo $block->renderPrice($price) ?>
+                        <!-- ko ifnot: variation.editable -->
+                            <!-- ko text: variation.price --><!--/ko-->
+                        <!-- /ko -->
+                        <!-- ko if: variation.editable -->
+                        <div class="addon">
+                            <input type="text"
+                                   id=""
+                                   class="required-entry validate-zero-or-greater"
+                                   data-bind="attr: {id: $parent.getRowId(variation, 'price'), name: $parent.getVariationRowName(variation, 'price'), value: variation.price}"/>
+                            <label class="addafter"
+                                   data-bind="attr: {for: $parent.getRowId(variation, 'price')"><strong>$</strong></label>
+                        </div>
+                        <!-- /ko -->
+
                     </td>
                     <td class="col-qty" data-column="qty">
+                        <!-- ko ifnot: variation.editable -->
+                            <!-- ko text: variation.quantity --><!--/ko-->
+                        <!-- /ko -->
+                        <!-- ko if: variation.editable -->
                         <input type="text"
-                               id="variations-matrix-<?php echo $key?>-qty"
-                               name="variations-matrix[<?php echo $key?>][quantity_and_stock_status][qty]"
-                               class="validate-number"
-                               value=""<?php echo $disabled?>>
+                               class="validate-zero-or-greater"
+                               data-bind="attr: {id: $parent.getRowId(variation, 'qty'), name: $parent.getVariationRowName(variation, 'quantity_and_stock_status/qty'), value: variation.quantity}"/>
+                        <!-- /ko -->
+
                     </td>
                     <td class="col-weight" data-column="weight">
-                        <input type="text"
-                               id="variations-matrix-<?php echo $key?>-weight"
-                               name="variations-matrix[<?php echo $key?>][weight]"
-                               class="<?php echo str_replace('required-entry', '', $block->getAttributeFrontendClass('weight'));
-                    ?>"
-                               value="<?php echo $block->getProduct()->getWeight()?>"<?php echo $disabled?>>
+                        <!-- ko ifnot: variation.editable -->
+                            <!-- ko text: variation.weight --><!--/ko-->
+                        <!-- /ko -->
+                        <!-- ko if: variation.editable -->
+                        <input type="text" class="validate-zero-or-greater"
+                               data-bind="attr: {id: $parent.getRowId(variation, 'weight'), name: $parent.getVariationRowName(variation, 'weight'), value: variation.weight}"/>
+                        <!-- /ko -->
+
                     </td>
-                    <?php
-                    foreach ($usedProductAttributes as $attribute) {
-                        /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
-                        echo '<td class="col-'
-                            . preg_replace('#[^a-z0-9]+#', '-', strtolower($attribute->getStoreLabel())) . '">',
-                            $block->escapeHtml($variation[$attribute->getId()]['label']),
-                            '</td>', PHP_EOL;
-                    }
-                    ?>
-                    <td class="col-actions hidden" data-column="actions">
-                        <div class="actions-split">
-                            <button type="button" class="action-default">
-                                <span>Edit</span>
+                    <!-- ko foreach: variation.options -->
+                    <td data-bind="text: label"></td>
+                    <!-- /ko -->
+                    <td class="data-grid-actions-cell">
+                        <input type="hidden" name="associated_product_ids[]" data-bind="value: variation.productId" data-column="entity_id"/>
+
+                        <div class="action-select-wrap" data-bind="
+                            css : {
+                                '_active' : $parent.opened() === $index()
+                            },
+                            outerClick: $parent.closeList.bind($parent, $index())">
+                            <button class="action-select" data-bind="click: $parent.toggleList.bind($parent, $index())">
+                                <span data-bind="i18n: 'Select'"></span>
                             </button>
-                            <button type="button" class="action-toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown">
-                                <span>Select</span>
-                            </button>
-                            <ul class="dropdown-menu">
+                            <ul class="action-menu _active" data-bind="css: {'_active': $parent.opened() === $index()}">
                                 <li>
-                                    <a>Reset Variation</a>
+                                    <a class="action-menu-item" data-bind="attr: {'data-attributes': variation.attribute}"
+                                       data-action="choose" href="#"><?= __('Choose a different Product');?></a>
                                 </li>
+                                <li>
+                                    <a class="action-menu-item" data-bind="
+                                    i18n: variation.status == 1 ? 'Disable Product' : 'Enable Product',
+                                    click: $parent.toggleProduct.bind($parent, $index())"></a>
+                                </li>
+                                <li>
+                                    <a class="action-menu-item" data-bind="click: $parent.removeProduct.bind($parent, $index())">
+                                        <?= __('Remove Product');?>
+                                    </a>
+                                </li>
+
                             </ul>
                         </div>
                     </td>
                 </tr>
-                    <?php
-
-                }
-                $isEven = !$isEven;
-            }
-            ?>
-            </tbody>
-        </table>
-    </div>
+                </tbody>
+                </table>
+            </div>
+        </div>
+    <!-- /ko -->
 </div>
-<script data-template-for="variation-image" type="text/x-magento-template">
-    <img src="<%- data.url %>" class="variation" data-role="image"/>
-</script>
-<script>
-require([
-    "jquery",
-    "mage/template",
-    "jquery/file-uploader",
-    "mage/mage",
-    "mage/translate"
-], function(jQuery, mageTemplate){
-
-jQuery(function ($) {
-    var matrix = $('[data-role=product-variations-matrix]');
-    matrix.find('[data-action=upload-image] [name=image]').each(function() {
-        $(this).fileupload({
-            dataType: 'json',
-            dropZone: $(this).closest('[data-role=row]'),
-            acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-            done: function (event, data) {
-                var tmpl;
-
-                if (!data.result) {
-                    return;
-                }
-                if (!data.result.error) {
-                    var parentElement = $(event.target).closest('[data-column=image]'),
-                        uploaderControl = parentElement.find('[data-action=upload-image]'),
-                        imageElement = parentElement.find('[data-role=image]');
-
-                    if (imageElement.length) {
-                        imageElement.attr('src', data.result.url);
-                    } else {
-                        tmpl = mageTemplate(matrix.find('[data-template-for=variation-image]').html());
-
-                        $(tmpl({
-                            data: data.result
-                        })).prependTo(uploaderControl);
+<div data-role="step-wizard-dialog"
+     data-mage-init='{"Magento_Ui/js/modal/modal":{"type":"slide","title":"<?= __('Create Product Configurations') ?>",
+     "buttons":[]}}'
+     class="no-display">
+    <?php
+    echo $block->getVariationWizard([
+        'attributes' => $attributes,
+        'configurations' => $productMatrix
+    ]);
+    ?>
+</div>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "configurableVariations": {
+                        "component": "Magento_ConfigurableProduct/js/variations/variations",
+                        "variations": <?= $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($productMatrix) ?>,
+                        "productAttributes": <?= $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($attributes) ?>,
+                        "productUrl": "<?= $block->getUrl('catalog/product/edit', ['id' => '%id%']) ?>"
                     }
-                    parentElement.find('[name$="[image]"]').val(data.result.file);
-                    parentElement.find('[data-toggle=dropdown]').show();
-                } else {
-                    alert($.mage.__('We don\'t recognize or support this file extension type.'));
                 }
-            },
-            start: function(event) {
-                $(event.target).closest('[data-action=upload-image]').addClass('loading');
-            },
-            stop: function(event) {
-                $(event.target).closest('[data-action=upload-image]').removeClass('loading');
             }
-        });
-    });
-    matrix.find('[data-action=no-image]').click(function (event) {
-        var parentElement = $(event.target).closest('[data-column=image]');
-        parentElement.find('[data-role=image]').remove();
-        parentElement.find('[name$="[image]"]').val('');
-        parentElement.find('[data-toggle=dropdown]').trigger('close.dropdown').hide();
-    });
-});
+        }
+    }
 
-});
 </script>

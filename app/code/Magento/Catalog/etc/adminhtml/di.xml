@@ -66,4 +66,17 @@
     <type name="Magento\Catalog\Model\Resource\Attribute">
         <plugin name="invalidate_pagecache_after_attribute_save" type="Magento\Catalog\Plugin\Model\Resource\Attribute\Save" />
     </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider">
+        <arguments>
+            <argument name="addFieldStrategies" xsi:type="array">
+                <item name="websites" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\AddWebsitesFieldToCollection</item>
+            </argument>
+            <argument name="addFilterStrategies" xsi:type="array">
+                <item name="store_id" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\AddStoreFieldToCollection</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Action">
+        <plugin name="invalidate_pagecache_after_update_product_attributes" type="Magento\Catalog\Plugin\Model\Product\Action\UpdateAttributesFlushCache"/>
+    </type>
 </config>

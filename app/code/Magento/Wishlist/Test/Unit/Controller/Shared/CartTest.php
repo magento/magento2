@@ -332,6 +332,37 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->resultRedirect, $this->model->execute());
     }
 
+    public function testExecuteProductException()
+    {
+        $itemId = 1;
+        $refererUrl = 'referer_url';
+
+        $this->request->expects($this->once())
+            ->method('getParam')
+            ->with('item')
+            ->willReturn($itemId);
+
+        $this->item->expects($this->once())
+            ->method('load')
+            ->with($itemId)
+            ->willReturnSelf();
+
+        $this->redirect->expects($this->once())
+            ->method('getRefererUrl')
+            ->willReturn($refererUrl);
+
+        $this->option->expects($this->once())
+            ->method('getCollection')
+            ->willThrowException(new \Magento\Catalog\Model\Product\Exception(__('LocalizedException')));
+
+        $this->resultRedirect->expects($this->once())
+            ->method('setUrl')
+            ->with($refererUrl)
+            ->willReturnSelf();
+
+        $this->assertEquals($this->resultRedirect, $this->model->execute());
+    }
+
     public function testExecuteException()
     {
         $itemId = 1;

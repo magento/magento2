@@ -47,7 +47,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Paypal\Block\Payflow\Info">
+    <type name="Magento\Paypal\Block\Payment\Info">
         <arguments>
             <argument name="data" xsi:type="array">
                 <item xsi:type="string" name="is_secure_mode">0</item>

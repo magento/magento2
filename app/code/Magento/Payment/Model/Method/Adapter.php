@@ -225,7 +225,7 @@ class Adapter implements MethodInterface
      */
     public function isInitializeNeeded()
     {
-        return false;
+        return (bool)(int)$this->getConfiguredValue('can_initialize');
     }
 
     /**
@@ -579,7 +579,7 @@ class Adapter implements MethodInterface
     {
         if (is_array($data)) {
             $this->getInfoInstance()->addData($data);
-        } elseif ($data instanceof \Magento\Framework\Object) {
+        } elseif ($data instanceof \Magento\Framework\DataObject) {
             $this->getInfoInstance()->addData($data->getData());
         }
         return $this;
@@ -591,6 +591,11 @@ class Adapter implements MethodInterface
      */
     public function initialize($paymentAction, $stateObject)
     {
+        $this->executeCommand(
+            'initialize',
+            $this->getInfoInstance(),
+            ['paymentAction' => $paymentAction, 'stateObject' => $stateObject]
+        );
         return $this;
     }
 

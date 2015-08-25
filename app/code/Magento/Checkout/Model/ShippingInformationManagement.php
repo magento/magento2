@@ -119,8 +119,9 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
             $addressData = $this->addressRepository->getById($customerAddressId);
             $address = $quote->getShippingAddress()->importCustomerAddressData($addressData);
         }
-        $address->setSameAsBilling($sameAsBilling);
+
         $address->setSaveInAddressBook($saveInAddressBook);
+        $address->setSameAsBilling($sameAsBilling);
         $address->setCollectShippingRates(true);
 
         if (!$address->getCountryId()) {

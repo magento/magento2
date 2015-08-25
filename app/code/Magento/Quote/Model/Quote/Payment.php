@@ -145,7 +145,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      */
     public function importData(array $data)
     {
-        $data = new \Magento\Framework\Object($data);
+        $data = new \Magento\Framework\DataObject($data);
         $this->_eventManager->dispatch(
             $this->_eventPrefix . '_import_data_before',
             [$this->_eventObject => $this, 'input' => $data]
@@ -211,8 +211,8 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     public function getOrderPlaceRedirectUrl()
     {
         $method = $this->getMethodInstance();
-        if ($method && $method instanceof AbstractMethod) {
-            return $method->getOrderPlaceRedirectUrl();
+        if ($method) {
+            return $method->getConfigData('order_place_redirect_url');
         }
         return '';
     }

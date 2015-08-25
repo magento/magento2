@@ -18,6 +18,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     const KEY_GROUP_PRICES = 'group_prices';
     const KEY_TIER_PRICES = 'tier_prices';
 
+    /**
+     * @var array
+     */
     private $productData = [
         [
             ProductInterface::SKU => 'simple',

@@ -16,7 +16,7 @@ define([
     $.widget('mage.productGallery', {
         options: {
             imageSelector: '[data-role=image]',
-            template: '.image-template',
+            template: '[data-template=image]',
             types: null,
             initialized: false
         },
@@ -140,7 +140,6 @@ define([
             });
 
             element = $(element).data('imageData', imageData);
-
             if (count === 0) {
                 element.prependTo(this.element);
             } else {
@@ -170,6 +169,7 @@ define([
          */
         _removeItem: function (event, imageData) {
             var $imageContainer = this.findElement(imageData);
+            imageData.isRemoved = true;
             $imageContainer.addClass('removed').hide().find('.is-removed').val(1);
         },
 
@@ -246,7 +246,10 @@ define([
 
         _create: function () {
             this._super();
-            this.dialogTmpl = mageTemplate(this.element.find(this.options.dialogTemplate).html());
+            var template = this.element.find(this.options.dialogTemplate);
+            if (template.length) {
+                this.dialogTmpl = mageTemplate(template.html());
+            }
         },
 
         /**
@@ -268,11 +271,6 @@ define([
                     $(event.currentTarget).addClass('active');
                     this._showDialog($(event.currentTarget).data('imageData'));
                 }
-            };
-            events['click .action-remove'] = function (event) {
-                var $imageContainer = $(event.currentTarget).closest('[data-role=dialog]').data('imageContainer');
-                this.element.find('[data-role=dialog]').trigger('close');
-                this.element.trigger('removeItem', $imageContainer.data('imageData'));
             };
             this._on(events);
             this.element.on('sortstart', $.proxy(function () {
@@ -320,7 +318,7 @@ define([
             }
             this.element.find('[data-role=dialog]').trigger('close');
 
-            if (!dialogElement) {
+            if (!dialogElement && this.dialogTmpl) {
                 var $template = this.dialogTmpl({
                         data: imageData
                     }),
@@ -367,7 +365,9 @@ define([
 
                 $imageContainer.data('dialog', dialogElement);
             }
-            dialogElement.trigger('open');
+            if (dialogElement) {
+                dialogElement.trigger('open');
+            }
         },
 
         /**
@@ -380,6 +380,7 @@ define([
             var $checkbox = $(event.currentTarget);
             var $imageContainer = $checkbox.closest('[data-role=dialog]').data('imageContainer');
             $imageContainer.toggleClass('hidden-for-front', $checkbox.is(':checked'));
+            $imageContainer.find('[name*="disabled"]').val($checkbox.is(':checked') ? 1 : 0);
         },
 
         /**

@@ -60,9 +60,9 @@ class Management implements \Magento\Tax\Api\TaxClassManagementInterface
                 case TaxClassKeyInterface::TYPE_ID:
                     return $taxClassKey->getValue();
                 case TaxClassKeyInterface::TYPE_NAME:
-                    $searchCriteria = $this->searchCriteriaBuilder->addFilter(
+                    $searchCriteria = $this->searchCriteriaBuilder->addFilters(
                         [$this->filterBuilder->setField(ClassModel::KEY_TYPE)->setValue($taxClassType)->create()]
-                    )->addFilter(
+                    )->addFilters(
                         [
                             $this->filterBuilder->setField(ClassModel::KEY_NAME)
                                 ->setValue($taxClassKey->getValue())

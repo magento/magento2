@@ -34,7 +34,7 @@ class AssertSalesReportIntervalResult extends AbstractAssertSalesReportResult
         $this->order = $order;
         $this->searchInSalesReportGrid($salesReport);
         $salesResult = $this->prepareSalesResult($salesReportPage->getGridBlock()->getLastResult());
-        $prepareInitialResult = $this->prepareExpectedResult($initialSalesResult);
+        $prepareInitialResult = $this->prepareSalesResult($this->prepareExpectedResult($initialSalesResult));
         \PHPUnit_Framework_Assert::assertEquals(
             $prepareInitialResult,
             $salesResult,
@@ -52,7 +52,7 @@ class AssertSalesReportIntervalResult extends AbstractAssertSalesReportResult
     {
         $data = [];
         foreach ($salesResult as $key => $result) {
-            $data[$key] = intval($result);
+            $data[$key] = floatval($result);
         }
 
         return $data;

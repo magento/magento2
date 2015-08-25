@@ -6,6 +6,9 @@
 namespace Magento\CatalogSearch\Model\Resource\Fulltext;
 
 use Magento\Framework\DB\Select;
+use Magento\Framework\Exception\StateException;
+use Magento\Framework\Search\Adapter\Mysql\Adapter;
+use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
 use Magento\Framework\Search\Response\Aggregation\Value;
 use Magento\Framework\Search\Response\QueryResponse;
 
@@ -48,6 +51,14 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     /** @var string|null */
     private $order = null;
 
+    /** @var string */
+    private $searchRequestName;
+
+    /**
+     * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory
+     */
+    private $temporaryStorageFactory;
+
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
@@ -72,7 +83,9 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * @param \Magento\CatalogSearch\Model\Fulltext $catalogSearchFulltext
      * @param \Magento\Framework\Search\Request\Builder $requestBuilder
      * @param \Magento\Search\Model\SearchEngine $searchEngine
-     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
+     * @param string $searchRequestName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -99,7 +112,9 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         \Magento\CatalogSearch\Model\Fulltext $catalogSearchFulltext,
         \Magento\Framework\Search\Request\Builder $requestBuilder,
         \Magento\Search\Model\SearchEngine $searchEngine,
-        $connection = null
+        \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        $searchRequestName = 'catalog_view_container'
     ) {
         $this->_catalogSearchFulltext = $catalogSearchFulltext;
         $this->queryFactory = $catalogSearchData;
@@ -127,6 +142,8 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         );
         $this->requestBuilder = $requestBuilder;
         $this->searchEngine = $searchEngine;
+        $this->temporaryStorageFactory = $temporaryStorageFactory;
+        $this->searchRequestName = $searchRequestName;
     }
 
     /**
@@ -184,27 +201,26 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
             $this->requestBuilder->bind('price_dynamic_algorithm', $priceRangeCalculation);
         }
 
-        $this->requestBuilder->setRequestName('quick_search_container');
+        $this->requestBuilder->setRequestName($this->searchRequestName);
         $queryRequest = $this->requestBuilder->create();
 
         $this->queryResponse = $this->searchEngine->search($queryRequest);
-        $ids = [0];
-        /** @var \Magento\Framework\Search\Document $document */
-        foreach ($this->queryResponse as $document) {
-            $ids[] = $document->getId();
-        }
-        parent::addFieldToFilter('entity_id', ['in' => $ids]);
-        $this->_totalRecords = count($ids) - 1;
 
-        if ($this->order && $this->order['field'] == 'relevance') {
-            $this->getSelect()->order(
-                new \Zend_Db_Expr(
-                    $this->_conn->quoteInto(
-                        'FIELD(e.entity_id, ?) ' . $this->order['dir'],
-                        $ids
-                    )
-                )
-            );
+        $temporaryStorage = $this->temporaryStorageFactory->create();
+        $table = $temporaryStorage->storeDocuments($this->queryResponse->getIterator());
+
+        $this->getSelect()->joinInner(
+            [
+                'search_result' => $table->getName(),
+            ],
+            'e.entity_id = search_result.' . TemporaryStorage::FIELD_ENTITY_ID,
+            []
+        );
+
+        $this->_totalRecords = $this->queryResponse->count();
+
+        if ($this->order && 'relevance' === $this->order['field']) {
+            $this->getSelect()->order('search_result.'. TemporaryStorage::FIELD_SCORE . ' ' . $this->order['dir']);
         }
         return parent::_renderFiltersBefore();
     }
@@ -249,16 +265,21 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      *
      * @param string $field
      * @return array
+     * @throws StateException
      */
     public function getFacetedData($field)
     {
         $this->_renderFilters();
-        $aggregations = $this->queryResponse->getAggregations();
-        $values = $aggregations->getBucket($field . '_bucket')->getValues();
         $result = [];
-        foreach ($values as $value) {
-            $metrics = $value->getMetrics();
-            $result[$metrics['value']] = $metrics;
+        $aggregations = $this->queryResponse->getAggregations();
+        $bucket = $aggregations->getBucket($field . '_bucket');
+        if ($bucket) {
+            foreach ($bucket->getValues() as $value) {
+                $metrics = $value->getMetrics();
+                $result[$metrics['value']] = $metrics;
+            }
+        } else {
+            throw new StateException(__('Bucket do not exists'));
         }
         return $result;
     }

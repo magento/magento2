@@ -6,6 +6,7 @@
 
 namespace Magento\Tax\Test\Constraint;
 
+use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
@@ -65,6 +66,7 @@ abstract class AbstractAssertTaxCalculationAfterCheckout extends AbstractConstra
      * @param CheckoutOnepage $checkoutOnepage
      * @param CheckoutOnepageSuccess $checkoutOnepageSuccess
      * @param CustomerOrderView $customerOrderView
+     * @param CmsIndex $cmsIndex
      * @return void
      */
     public function processAssert(
@@ -73,27 +75,32 @@ abstract class AbstractAssertTaxCalculationAfterCheckout extends AbstractConstra
         CheckoutCart $checkoutCart,
         CheckoutOnepage $checkoutOnepage,
         CheckoutOnepageSuccess $checkoutOnepageSuccess,
-        CustomerOrderView $customerOrderView
+        CustomerOrderView $customerOrderView,
+        CmsIndex $cmsIndex
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->customerOrderView = $customerOrderView;
 
         $checkoutCart->getProceedToCheckoutBlock()->proceedToCheckout();
-        $checkoutOnepage->getBillingBlock()->clickContinue();
+        $cmsIndex->getCmsPageBlock()->waitPageInit();
+
         $shippingMethod = ['shipping_service' => 'Flat Rate', 'shipping_method' => 'Fixed'];
         $checkoutOnepage->getShippingMethodBlock()->selectShippingMethod($shippingMethod);
         $checkoutOnepage->getShippingMethodBlock()->clickContinue();
-        $checkoutOnepage->getPaymentMethodsBlock()->selectPaymentMethod(['method' => 'check_money_order']);
-        $checkoutOnepage->getPaymentMethodsBlock()->clickContinue();
+        $checkoutOnepage->getPaymentBlock()->selectPaymentMethod(['method' => 'checkmo']);
         $actualPrices = [];
         $actualPrices = $this->getReviewPrices($actualPrices, $product);
         $actualPrices = $this->getReviewTotals($actualPrices);
         $prices = $this->preparePrices($prices);
         //Order review prices verification
         $message = 'Prices on order review should be equal to defined in dataset.';
-        \PHPUnit_Framework_Assert::assertEquals($prices, $actualPrices, $message);
+        \PHPUnit_Framework_Assert::assertEquals(
+            array_diff_key($prices, ['cart_item_price_excl_tax' => null, 'cart_item_price_incl_tax' => null]),
+            $actualPrices,
+            $message
+        );
 
-        $checkoutOnepage->getReviewBlock()->placeOrder();
+        $checkoutOnepage->getPaymentBlock()->placeOrder();
         $checkoutOnepageSuccess->getSuccessBlock()->getGuestOrderId();
         $checkoutOnepageSuccess->getSuccessBlock()->openOrder();
         $actualPrices = [];
@@ -109,23 +116,23 @@ abstract class AbstractAssertTaxCalculationAfterCheckout extends AbstractConstra
      * Prepare expected prices prices.
      *
      * @param array $prices
-     * @return array $prices
+     * @return array
      */
     protected function preparePrices($prices)
     {
-        if (isset($prices['category_price_excl_tax'])) {
-            unset($prices['category_price_excl_tax']);
-        }
-        if (isset($prices['category_price_incl_tax'])) {
-            unset($prices['category_price_incl_tax']);
-        }
-        if (isset($prices['product_view_price_excl_tax'])) {
-            unset($prices['product_view_price_excl_tax']);
-        }
-        if (isset($prices['product_view_price_incl_tax'])) {
-            unset($prices['product_view_price_incl_tax']);
-        }
-        return $prices;
+        return array_diff_key(
+            $prices,
+            array_flip([
+                'category_price',
+                'category_special_price',
+                'category_price_excl_tax',
+                'category_price_incl_tax',
+                'product_view_price',
+                'product_view_special_price',
+                'product_view_price_excl_tax',
+                'product_view_price_incl_tax'
+            ])
+        );
     }
 
     /**

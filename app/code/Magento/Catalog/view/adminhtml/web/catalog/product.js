@@ -79,5 +79,5 @@ require([
     window.onUrlkeyChanged = onUrlkeyChanged;
     window.toogleFieldEditMode = toogleFieldEditMode;
 
-    $(window).load(onCompleteDisableInited);
+    $(onCompleteDisableInited);
 });

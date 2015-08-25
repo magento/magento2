@@ -125,8 +125,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
                     'getIdFieldName',
                     'deleteOldEntries',
                     '_construct',
-                    '_getReadAdapter',
-                    '_getWriteAdapter',
+                    'getConnection',
                     'selectTokenByType',
                     'save',
                     'selectTokenByConsumerIdAndUserType',
@@ -136,7 +135,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
                 ]
             )
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->resourceMock->expects($this->any())
             ->method('getIdFieldName')

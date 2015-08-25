@@ -6,29 +6,20 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
-  <fixture name="currencySymbolEntity" module="Magento_CurrencySymbol" type="flat" entity_type="core_config_data" repository_class="Magento\CurrencySymbol\Test\Repository\CurrencySymbolEntity" handler_interface="Magento\CurrencySymbol\Test\Handler\CurrencySymbolEntity\CurrencySymbolEntityInterface" class="Magento\CurrencySymbol\Test\Fixture\CurrencySymbolEntity">
-    <dataset name="default">
-        <field name="inherit_custom_currency_symbol" xsi:type="string">Yes</field>
-    </dataset>
-    <field name="config_id" is_required="1">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="scope" is_required="">
-      <default_value xsi:type="string">default</default_value>
-    </field>
-    <field name="scope_id" is_required="">
-      <default_value xsi:type="number">0</default_value>
-    </field>
-    <field name="path" is_required="">
-      <default_value xsi:type="string">general</default_value>
-    </field>
-    <field name="value" is_required="">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="inherit_custom_currency_symbol">
-      <default_value xsi:type="string">Yes</default_value>
-    </field>
-    <field name="custom_currency_symbol"/>
-    <field name="code"/>
-  </fixture>
+    <fixture name="currencySymbolEntity"
+             module="Magento_CurrencySymbol"
+             type="flat"
+             entity_type="core_config_data"
+             repository_class="Magento\CurrencySymbol\Test\Repository\CurrencySymbolEntity"
+             handler_interface="Magento\CurrencySymbol\Test\Handler\CurrencySymbolEntity\CurrencySymbolEntityInterface"
+             class="Magento\CurrencySymbol\Test\Fixture\CurrencySymbolEntity">
+        <field name="config_id" is_required="1" />
+        <field name="scope" is_required="" />
+        <field name="scope_id" is_required="" />
+        <field name="path" is_required="" />
+        <field name="value" is_required="" />
+        <field name="inherit_custom_currency_symbol" />
+        <field name="custom_currency_symbol" />
+        <field name="code" />
+    </fixture>
 </config>

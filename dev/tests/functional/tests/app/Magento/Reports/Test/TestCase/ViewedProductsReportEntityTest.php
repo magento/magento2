@@ -13,7 +13,6 @@ use Magento\Reports\Test\Page\Adminhtml\ProductReportView;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 
 /**
- * Test Flow:
  * Preconditions:
  * 1. Create products
  * 2. Open product page on frontend
@@ -97,7 +96,7 @@ class ViewedProductsReportEntityTest extends Injectable
     {
         // Preconditions
         $this->catalogProductIndexPage->open();
-        $this->catalogProductIndexPage->getProductGrid()->massaction([], 'Delete', true, 'Select All');
+        $this->catalogProductIndexPage->getProductGrid()->massaction([], 'Delete', true, 'Select all');
         $productsList = $this->prepareProducts($products);
         $this->openProducts($productsList, $total);
         $this->productReportView->open();
@@ -121,7 +120,7 @@ class ViewedProductsReportEntityTest extends Injectable
         $products = [];
         foreach ($productsData as $productConfig) {
             $product = explode('::', $productConfig);
-            $productFixture = $this->fixtureFactory->createByCode($product[0], ['dataSet' => $product[1]]);
+            $productFixture = $this->fixtureFactory->createByCode($product[0], ['dataset' => $product[1]]);
             $productFixture->persist();
             $products[] = $productFixture;
         }

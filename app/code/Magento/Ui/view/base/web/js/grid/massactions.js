@@ -55,7 +55,7 @@ define([
                 return this;
             }
 
-            action   = this.getAction(actionIndex),
+            action   = this.getAction(actionIndex);
             callback = this._getCallback(action, data);
 
             action.confirm ?
@@ -98,7 +98,7 @@ define([
          */
         addAction: function (action) {
             var actions = this.actions(),
-                index = _.findIdnex(actions, {
+                index = _.findIndex(actions, {
                     type: action.type
                 });
 
@@ -141,17 +141,20 @@ define([
          * Default action callback. Sends selections data
          * via POST request.
          *
-         * @param {Object} data - Selections data.
          * @param {Object} action - Action data.
+         * @param {Object} data - Selections data.
          */
-        defaultCallback: function (data, action) {
-            var selections = {};
+        defaultCallback: function (action, data) {
+            var itemsType = data.excludeMode ? 'excluded' : 'selected',
+                selections = {};
 
-            if (data.excludeMode) {
-                selections.excluded = data.excluded;
-            } else {
-                selections.selected = data.selected;
+            selections[itemsType] = data[itemsType];
+
+            if (!selections[itemsType].length) {
+                selections[itemsType] = false;
             }
+
+            _.extend(selections, data.params || {});
 
             utils.submit({
                 url: action.url,

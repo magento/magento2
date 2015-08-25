@@ -48,6 +48,11 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
                         'fileMask' => '/\.(php|phtml)$/',
                     ],
                     [
+                        'type' => 'html',
+                        'paths' => [$sourceFirst . '/app/code/', $sourceFirst . '/app/design/'],
+                        'fileMask' => '/\.html$/',
+                    ],
+                    [
                         'type' => 'js',
                         'paths' => [
                             $sourceFirst . '/app/code/',
@@ -69,6 +74,7 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
                 false,
                 [
                     ['type' => 'php', 'paths' => [$sourceSecond], 'fileMask' => '/\.(php|phtml)$/'],
+                    ['type' => 'html', 'paths' => [$sourceSecond], 'fileMask' => '/\.html/'],
                     ['type' => 'js', 'paths' => [$sourceSecond], 'fileMask' => '/\.(js|phtml)$/'],
                     ['type' => 'xml', 'paths' => [$sourceSecond], 'fileMask' => '/\.xml$/']
                 ]

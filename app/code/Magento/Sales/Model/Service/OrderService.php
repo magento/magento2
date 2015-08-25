@@ -78,7 +78,13 @@ class OrderService implements OrderManagementInterface
      */
     public function cancel($id)
     {
-        return (bool)$this->orderRepository->get($id)->cancel();
+        $order = $this->orderRepository->get($id);
+        if ((bool)$order->cancel()) {
+            $this->orderRepository->save($order);
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -89,8 +95,8 @@ class OrderService implements OrderManagementInterface
      */
     public function getCommentsList($id)
     {
-        $this->criteriaBuilder->addFilter(
-            ['eq' => $this->filterBuilder->setField('parent_id')->setValue($id)->create()]
+        $this->criteriaBuilder->addFilters(
+            [$this->filterBuilder->setField('parent_id')->setValue($id)->setConditionType('eq')->create()]
         );
         $criteria = $this->criteriaBuilder->create();
         return $this->historyRepository->getList($criteria);
@@ -142,7 +148,9 @@ class OrderService implements OrderManagementInterface
      */
     public function hold($id)
     {
-        return (bool)$this->orderRepository->get($id)->hold();
+        $order = $this->orderRepository->get($id);
+        $order->hold();
+        return (bool)$this->orderRepository->save($order);
     }
 
     /**
@@ -153,7 +161,9 @@ class OrderService implements OrderManagementInterface
      */
     public function unHold($id)
     {
-        return (bool)$this->orderRepository->get($id)->unhold();
+        $object = $this->orderRepository->get($id);
+        $object->unhold();
+        return (bool)$this->orderRepository->save($object);
     }
 
     /**
@@ -209,7 +219,7 @@ class OrderService implements OrderManagementInterface
             }
         }
 
-        $transport = new \Magento\Framework\Object(
+        $transport = new \Magento\Framework\DataObject(
             [
                 'state'     => $state,
                 'status'    => $status,

@@ -22,8 +22,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     const ERROR_ATTRIBUTE_CODE_IS_NOT_SUPER = 'attrCodeIsNotSuper';
 
-    const ERROR_INVALID_PRICE_CORRECTION = 'invalidPriceCorr';
-
     const ERROR_INVALID_OPTION_VALUE = 'invalidOptionValue';
 
     const ERROR_INVALID_WEBSITE = 'invalidSuperAttrWebsite';
@@ -35,7 +33,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     protected $_messageTemplates = [
         self::ERROR_ATTRIBUTE_CODE_IS_NOT_SUPER => 'Attribute with this code is not super',
-        self::ERROR_INVALID_PRICE_CORRECTION => 'Super attribute price correction value is invalid',
         self::ERROR_INVALID_OPTION_VALUE => 'Invalid option value',
         self::ERROR_INVALID_WEBSITE => 'Invalid website code for super attribute',
     ];
@@ -49,7 +46,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         '_super_products_sku',
         '_super_attribute_code',
         '_super_attribute_option',
-        '_super_attribute_price_corr',
         '_super_attribute_price_website',
     ];
 
@@ -133,9 +129,9 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected $_resource;
 
     /**
-     * Instance of mysql database adapter.
+     * Instance of database adapter.
      *
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected $_connection;
 
@@ -285,14 +281,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     $this->_entityModel->addRowError(self::ERROR_INVALID_OPTION_VALUE, $rowNum);
                     return false;
                 }
-                // check price value
-                if (!empty($rowData['_super_attribute_price_corr']) && !$this->_isPriceCorr(
-                    $rowData['_super_attribute_price_corr']
-                )
-                ) {
-                    $this->_entityModel->addRowError(self::ERROR_INVALID_PRICE_CORRECTION, $rowNum);
-                    return false;
-                }
             }
         }
         return true;
@@ -362,25 +350,25 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     {
         if (!$this->_skuSuperData) {
             $mainTable = $this->_resource->getTableName('catalog_product_super_attribute');
-            $priceTable = $this->_resource->getTableName('catalog_product_super_attribute_pricing');
+            $optionTable = $this->_resource->getTableName('eav_attribute_option');
             $select = $this->_connection->select()->from(
                 ['m' => $mainTable],
                 ['product_id', 'attribute_id', 'product_super_attribute_id']
             )->joinLeft(
-                ['p' => $priceTable],
+                ['o' => $optionTable],
                 $this->_connection->quoteIdentifier(
-                    'p.product_super_attribute_id'
+                    'o.attribute_id'
                 ) . ' = ' . $this->_connection->quoteIdentifier(
-                    'm.product_super_attribute_id'
+                    'o.attribute_id'
                 ),
-                ['value_index']
+                ['option_id']
             );
 
             foreach ($this->_connection->fetchAll($select) as $row) {
                 $attrId = $row['attribute_id'];
                 $productId = $row['product_id'];
-                if ($row['value_index']) {
-                    $this->_skuSuperData[$productId][$attrId][$row['value_index']] = true;
+                if ($row['option_id']) {
+                    $this->_skuSuperData[$productId][$attrId][$row['option_id']] = true;
                 }
                 $this->_productSuperAttrs["{$productId}_{$attrId}"] = $row['product_super_attribute_id'];
             }
@@ -433,20 +421,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     'child_id' => $assocId,
                 ];
             }
-            // clean up unused values pricing
-            //@codingStandardsIgnoreStart
-            foreach ($this->_productSuperData['used_attributes'] as $usedAttrId => $usedValues) {
-                foreach ($usedValues as $optionId => $isUsed) {
-                    if (!$isUsed && isset($this->_superAttributesData['pricing'])) {
-                        foreach ($this->_superAttributesData['pricing'] as $k => $params) {
-                            if (($optionId == $params['value_index']) && ($usedAttrId == $params['product_super_attribute_id'])) {
-                                unset($this->_superAttributesData['pricing'][$this->_productSuperData['product_id']][$usedAttrId][$k]);
-                            }
-                        }
-                    }
-                }
-            }
-            //@codingStandardsIgnoreEnd
         }
         return $this;
     }
@@ -462,7 +436,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     protected function _parseVariations($rowData)
     {
-        $prices = $this->_parseVariationPrices($rowData);
         $additionalRows = [];
         if (!isset($rowData['configurable_variations'])) {
             return $additionalRows;
@@ -492,9 +465,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 foreach ($fieldAndValuePairs as $attrCode => $attrValue) {
                     $additionalRow['_super_attribute_code'] = $attrCode;
                     $additionalRow['_super_attribute_option'] = $attrValue;
-                    $additionalRow['_super_attribute_price_corr'] = isset($prices[$attrCode][$attrValue])
-                        ? $prices[$attrCode][$attrValue]
-                        : '';
                     $additionalRows[] = $additionalRow;
                     $additionalRow = [];
                 }
@@ -537,52 +507,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     }
 
     /**
-     * Parse variation prices to array
-     *  ...[attribute_code][value] => price1 ...
-     *  ...[attribute_code][value2] => price2 ...
-     *
-     * @param array $rowData
-     *
-     * @return array
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
-    protected function _parseVariationPrices($rowData)
-    {
-        $prices = [];
-        if (!isset($rowData['configurable_variation_prices'])) {
-            return $prices;
-        }
-        $optionRows = explode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $rowData['configurable_variation_prices']);
-        foreach ($optionRows as $optionRow) {
-
-            $pairFieldAndValue = explode($this->_entityModel->getMultipleValueSeparator(), $optionRow);
-
-            $oneOptionValuePrice = [];
-            foreach ($pairFieldAndValue as $nameAndValue) {
-                $nameAndValue = explode(ImportProduct::PAIR_NAME_VALUE_SEPARATOR, $nameAndValue);
-                if (!empty($nameAndValue)) {
-                    $value = isset($nameAndValue[1]) ? trim($nameAndValue[1]) : '';
-                    $paramName = trim($nameAndValue[0]);
-                    if ($paramName) {
-                        $oneOptionValuePrice[$paramName] = $value;
-                    }
-                }
-            }
-
-            if (!empty($oneOptionValuePrice['name']) &&
-                !empty($oneOptionValuePrice['value']) &&
-                isset($oneOptionValuePrice['price'])
-            ) {
-                $postfix = !empty($oneOptionValuePrice['price_type'])
-                && ($oneOptionValuePrice['price_type'] == 'percent') ? '%' : '';
-                $prices[$oneOptionValuePrice['name']][$oneOptionValuePrice['value']] =
-                    $oneOptionValuePrice['price'] . $postfix;
-            }
-        }
-        return $prices;
-    }
-
-    /**
      * Delete unnecessary links.
      *
      * @return $this
@@ -614,7 +538,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     {
         $mainTable = $this->_resource->getTableName('catalog_product_super_attribute');
         $labelTable = $this->_resource->getTableName('catalog_product_super_attribute_label');
-        $priceTable = $this->_resource->getTableName('catalog_product_super_attribute_pricing');
         $linkTable = $this->_resource->getTableName('catalog_product_super_link');
         $relationTable = $this->_resource->getTableName('catalog_product_relation');
 
@@ -631,13 +554,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         }
         if ($this->_superAttributesData['labels']) {
             $this->_connection->insertOnDuplicate($labelTable, $this->_superAttributesData['labels']);
-        }
-        if ($this->_superAttributesData['pricing']) {
-            $this->_connection->insertOnDuplicate(
-                $priceTable,
-                $this->_superAttributesData['pricing'],
-                ['is_percent', 'pricing_value']
-            );
         }
         if ($this->_superAttributesData['super_link']) {
             $this->_connection->insertOnDuplicate($linkTable, $this->_superAttributesData['super_link']);
@@ -703,42 +619,9 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 $productSuperAttrId = $this->_getNextAttrId();
                 $this->_collectSuperDataLabels($data, $productSuperAttrId, $productId, $variationLabels);
             }
-
-            if ($productSuperAttrId) {
-                $this->_collectSuperDataPrice($data, $productSuperAttrId);
-            }
         }
         //@codingStandardsIgnoreEnd
 
-        return $this;
-    }
-
-    /**
-     *  Collect super data price.
-     *
-     * @param array $data
-     * @param integer|string $productSuperAttrId
-     * @return $this
-     */
-    protected function _collectSuperDataPrice($data, $productSuperAttrId)
-    {
-        $attrParams = $this->_superAttributes[$data['_super_attribute_code']];
-        if (isset($data['_super_attribute_option']) && strlen($data['_super_attribute_option'])) {
-            $optionId = $attrParams['options'][strtolower($data['_super_attribute_option'])];
-
-            if (!isset($this->_productSuperData['used_attributes'][$attrParams['id']][$optionId])) {
-                $this->_productSuperData['used_attributes'][$attrParams['id']][$optionId] = false;
-            }
-            if (!empty($data['_super_attribute_price_corr'])) {
-                $this->_superAttributesData['pricing'][] = [
-                    'product_super_attribute_id' => $productSuperAttrId,
-                    'value_index' => $optionId,
-                    'is_percent' => '%' == substr($data['_super_attribute_price_corr'], -1),
-                    'pricing_value' => (double)rtrim($data['_super_attribute_price_corr'], '%'),
-                    'website_id' => 0,
-                ];
-            }
-        }
         return $this;
     }
 
@@ -772,7 +655,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     }
 
     /**
-     *  Collect super data price.
+     *  Collect super data labels.
      *
      * @param array $data
      * @param integer|string $productSuperAttrId
@@ -825,7 +708,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             $this->_superAttributesData = [
                 'attributes' => [],
                 'labels' => [],
-                'pricing' => [],
                 'super_link' => [],
                 'relation' => [],
             ];

@@ -62,7 +62,16 @@ class InstallTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($variables['success']);
     }
 
-    public function testStartActionWithError()
+    public function testStartActionException()
+    {
+        $this->webLogger->expects($this->once())->method('clear');
+        $this->installer->expects($this->once())->method('install')
+            ->willThrowException($this->getMock('\Magento\Setup\SampleDataException'));
+        $jsonModel = $this->controller->startAction();
+        $this->assertTrue($jsonModel->getVariable('isSampleDataError'));
+    }
+
+    public function testStartActionWithSampleDataError()
     {
         $this->webLogger->expects($this->once())->method('clear');
         $this->webLogger->expects($this->once())->method('logError');
@@ -105,7 +114,21 @@ class InstallTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $variables);
         $this->assertArrayHasKey('console', $variables);
         $this->assertFalse($variables['success']);
-        $this->assertStringStartsWith('exception \'LogicException\' with message \'' . $e, $variables['console'][0]);
+        $this->assertContains('LogicException', $variables['console'][0]);
+        $this->assertContains($e, $variables['console'][0]);
+    }
+
+    public function testProgressActionWithSampleDataError()
+    {
+        $this->progressFactory->expects($this->once())->method('createFromLog')
+            ->willThrowException($this->getMock('\Magento\Setup\SampleDataException'));
+        $jsonModel = $this->controller->progressAction();
+        $this->assertInstanceOf('\Zend\View\Model\JsonModel', $jsonModel);
+        $variables = $jsonModel->getVariables();
+        $this->assertArrayHasKey('success', $variables);
+        $this->assertArrayHasKey('console', $variables);
+        $this->assertFalse($variables['success']);
+        $this->assertTrue($jsonModel->getVariable('isSampleDataError'));
     }
 
     public function testDispatch()

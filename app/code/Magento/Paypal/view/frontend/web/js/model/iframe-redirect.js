@@ -17,6 +17,7 @@ define(
             }
 
             if (!!errorMessage.message) {
+                document.removeEventListener('click', iframe.stopEventPropagation, true);
                 iframe.isInAction(false);
                 messageList.addErrorMessage(errorMessage);
             } else if (!!goToSuccessPage) {

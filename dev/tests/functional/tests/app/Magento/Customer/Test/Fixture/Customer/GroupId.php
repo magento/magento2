@@ -6,40 +6,24 @@
 
 namespace Magento\Customer\Test\Fixture\Customer;
 
-use Magento\Customer\Test\Fixture\CustomerGroup;
+use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Customer\Test\Fixture\CustomerGroup;
 
 /**
- * Class GroupId
- * Addresses source for customer fixture
+ * Addresses source for customer fixture.
  */
-class GroupId implements FixtureInterface
+class GroupId extends DataSource
 {
     /**
-     * Source data
-     *
-     * @var array
-     */
-    protected $data = [];
-
-    /**
-     * Source parameters
-     *
-     * @var array
-     */
-    protected $params;
-
-    /**
-     * Customer Group fixture
+     * Customer Group fixture.
      *
      * @var array
      */
     protected $customerGroupFixture;
 
     /**
-     * Source constructor
-     *
+     * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param array $params
      * @param array $data
@@ -47,9 +31,9 @@ class GroupId implements FixtureInterface
     public function __construct(FixtureFactory $fixtureFactory, array $params, array $data = [])
     {
         $this->params = $params;
-        if (isset($data['dataSet'])) {
+        if (isset($data['dataset'])) {
             /** @var CustomerGroup $customerGroup */
-            $customerGroup = $fixtureFactory->createByCode('customerGroup', ['dataSet' => $data['dataSet']]);
+            $customerGroup = $fixtureFactory->createByCode('customerGroup', ['dataset' => $data['dataset']]);
             if (!$customerGroup->hasData('customer_group_id')) {
                 $customerGroup->persist();
             }
@@ -66,39 +50,7 @@ class GroupId implements FixtureInterface
     }
 
     /**
-     * Persists prepared data into application
-     *
-     * @return void
-     */
-    public function persist()
-    {
-        //
-    }
-
-    /**
-     * Return prepared data set
-     *
-     * @param int|null $key [optional]
-     * @return array
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function getData($key = null)
-    {
-        return $this->data;
-    }
-
-    /**
-     * Return data set configuration settings
-     *
-     * @return array
-     */
-    public function getDataConfig()
-    {
-        return $this->params;
-    }
-
-    /**
-     * Getting customerGroup fixture
+     * Getting customer group fixture.
      *
      * @return array
      */

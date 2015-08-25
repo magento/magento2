@@ -5,6 +5,9 @@
  */
 namespace Magento\Payment\Gateway\Data;
 
+/**
+ * Interface OrderAdapterInterface
+ */
 interface OrderAdapterInterface
 {
     /**
@@ -62,4 +65,18 @@ interface OrderAdapterInterface
      * @return float
      */
     public function getGrandTotalAmount();
+
+    /**
+     * Returns list of line items in the cart
+     *
+     * @return array
+     */
+    public function getItems();
+
+    /**
+     * Gets the remote IP address for the order.
+     *
+     * @return string|null Remote IP address.
+     */
+    public function getRemoteIp();
 }

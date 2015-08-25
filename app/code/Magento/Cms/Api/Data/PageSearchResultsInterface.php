@@ -26,5 +26,5 @@ interface PageSearchResultsInterface extends SearchResultsInterface
      * @param \Magento\Cms\Api\Data\PageInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(array $items);
 }
