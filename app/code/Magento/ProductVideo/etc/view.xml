@@ -6,9 +6,15 @@
 */
 -->
 <view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Config/etc/view.xsd">
-    <vars module="Magento_ProductVideo">
-        <var name="video_play">1</var>
-        <var name="video_stop">1</var>
-        <var name="video_color">000000</var>
-    </vars>
+    <media module="Magento_ProductVideo">
+        <mediaItem id="video_play" type="video_play">
+            <video_play>1</video_play>
+        </mediaItem>
+        <mediaItem id="video_stop" type="video_stop">
+            <video_stop>1</video_stop>
+        </mediaItem>
+        <mediaItem id="video_background" type="video_background">
+            <video_background>[255, 255, 255]</video_background>
+        </mediaItem>
+    </media>
 </view>
