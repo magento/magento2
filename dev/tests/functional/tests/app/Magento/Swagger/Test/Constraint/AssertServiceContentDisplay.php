@@ -22,12 +22,9 @@ class AssertServiceContentDisplay extends AbstractConstraint
      * @param array $endpoints
      * @return void
      */
-    public function processAssert(
-        SwaggerUiPage $swaggerPage,
-        $serviceName,
-        array $endpoints)
+    public function processAssert(SwaggerUiPage $swaggerPage, $serviceName, array $endpoints)
     {
-        foreach($endpoints as $endpoint) {
+        foreach ($endpoints as $endpoint) {
             /**
              * Selector for operation
              */
