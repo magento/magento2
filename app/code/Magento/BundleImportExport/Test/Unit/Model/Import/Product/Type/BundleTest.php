@@ -82,8 +82,15 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $connection->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
         $select->expects($this->any())->method('getConnection')->willReturn($connection);
         $this->connection->expects($this->any())->method('select')->will($this->returnValue($select));
-        $this->connection->expects($this->any())->method('fetchPairs')->will($this->returnValue([
-            '1' => '1', '2' => '2'
+        $this->connection->expects($this->any())->method('fetchAll')->will($this->returnValue([
+            [
+                'attribute_set_name' => '1',
+                'attribute_id' => '1',
+            ],
+            [
+                'attribute_set_name' => '2',
+                'attribute_id' => '2',
+            ],
         ]));
         $this->connection->expects($this->any())->method('insertOnDuplicate')->willReturnSelf();
         $this->connection->expects($this->any())->method('delete')->willReturnSelf();
