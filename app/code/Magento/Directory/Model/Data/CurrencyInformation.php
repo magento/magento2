@@ -131,7 +131,7 @@ class CurrencyInformation extends \Magento\Framework\Api\AbstractExtensibleObjec
      * @inheritDoc
      */
     public function setExtensionAttributes(
-        \Magento\Directory\Api\Data\CurrencyInformationInterface $extensionAttributes
+        \Magento\Directory\Api\Data\CurrencyInformationExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
