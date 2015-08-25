@@ -17,11 +17,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 class JobModule extends AbstractJob
 {
     /**
-     * @var Magento\Framework\Module\PackageInfoFactory
-     */
-    private $packageInfoFactory;
-
-    /**
      * @var string $cmdString
      */
     protected $cmdString;
@@ -32,7 +27,6 @@ class JobModule extends AbstractJob
      * @param AbstractSetupCommand $command
      * @param ObjectManagerProvider $objectManagerProvider
      * @param OutputInterface $output
-     * @param PackageInfoFactory $packageInfoFactory
      * @param Status $status
      * @param string $name
      * @param array $params
@@ -41,7 +35,6 @@ class JobModule extends AbstractJob
         AbstractSetupCommand $command,
         ObjectManagerProvider $objectManagerProvider,
         OutputInterface $output,
-        PackageInfoFactory $packageInfoFactory,
         Status $status,
         $name,
         $params = []
@@ -49,7 +42,6 @@ class JobModule extends AbstractJob
         $this->command = $command;
         $this->output = $output;
         $this->status = $status;
-        $this->packageInfoFactory = $packageInfoFactory;
         parent::__construct($output, $status, $objectManagerProvider, $name, $params);
 
         // map name to command string
@@ -78,11 +70,9 @@ class JobModule extends AbstractJob
     public function execute()
     {
         try {
-            //convert composer package names to internal magento module name
-            $packageInfo = $this->packageInfoFactory->create();
             foreach ($this->params['components'] as $compObj) {
                 if (isset($compObj['name']) && (!empty($compObj['name']))) {
-                    $moduleNames[] = $packageInfo->getModuleName($compObj['name']);
+                    $moduleNames[] = $compObj['name'];
                 } else {
                     throw new \RuntimeException('component name is not set.');
                 }
@@ -92,7 +82,12 @@ class JobModule extends AbstractJob
             $arguments['command'] = $this->cmdString;
             $arguments['module'] = $moduleNames;
 
-            $this->command->run(new ArrayInput($arguments), $this->output);
+            $statusCode = $this->command->run(new ArrayInput($arguments), $this->output);
+
+            // check for return statusCode to catch any Symfony errors
+            if( $statusCode != 0 ) {
+                throw new \RuntimeException('Symfony run() returned StatusCode: ' . $statusCode);
+            }
 
             //perform the generated file cleanup
             $this->performCleanup();

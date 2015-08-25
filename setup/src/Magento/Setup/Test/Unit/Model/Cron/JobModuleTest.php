@@ -29,18 +29,11 @@ class JobModuleTest extends \PHPUnit_Framework_TestCase
         $status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
         $status->expects($this->atLeastOnce())->method('add');
         $output = $this->getMockForAbstractClass('Symfony\Component\Console\Output\OutputInterface', [], '', false);
-        $packageInfoFactory = $this->getMock('Magento\Framework\Module\PackageInfoFactory', [], [], '', false);
-        $packageInfoFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($this->getMock('Magento\Framework\Module\PackageInfo', [], [], '', false));
-        $packageInfo = $this->getMock('Magento\Framework\Module\PackageInfo', [], [], '', false);
-        $packageInfo->expects($this->any())->method('getModuleName');
         $params['components'][] = ['name' => 'vendor/module'];
         $jobModuleDisable = new JobModule(
             $command,
             $objectManagerProvider,
             $output,
-            $packageInfoFactory,
             $status,
             'setup:module:disable',
             $params
@@ -68,18 +61,11 @@ class JobModuleTest extends \PHPUnit_Framework_TestCase
         $status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
         $status->expects($this->atLeastOnce())->method('add');
         $output = $this->getMockForAbstractClass('Symfony\Component\Console\Output\OutputInterface', [], '', false);
-        $packageInfoFactory = $this->getMock('Magento\Framework\Module\PackageInfoFactory', [], [], '', false);
-        $packageInfoFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($this->getMock('Magento\Framework\Module\PackageInfo', [], [], '', false));
-        $packageInfo = $this->getMock('Magento\Framework\Module\PackageInfo', [], [], '', false);
-        $packageInfo->expects($this->any())->method('getModuleName');
         $params['components'][] = ['name' => 'vendor/module'];
         $jobModuleEnable = new JobModule(
             $command,
             $objectManagerProvider,
             $output,
-            $packageInfoFactory,
             $status,
             'setup:module:enable',
             $params

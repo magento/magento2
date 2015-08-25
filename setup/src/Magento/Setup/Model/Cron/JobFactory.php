@@ -101,7 +101,6 @@ class JobFactory
                     $this->serviceLocator->get('Magento\Setup\Console\Command\ModuleEnableCommand'),
                     $objectManagerProvider,
                     $multipleStreamOutput,
-                    $objectManager->get('Magento\Framework\Module\PackageInfoFactory'),
                     $cronStatus,
                     $name,
                     $params
@@ -112,7 +111,6 @@ class JobFactory
                     $this->serviceLocator->get('Magento\Setup\Console\Command\ModuleDisableCommand'),
                     $objectManagerProvider,
                     $multipleStreamOutput,
-                    $objectManager->get('Magento\Framework\Module\PackageInfoFactory'),
                     $cronStatus,
                     $name,
                     $params
