@@ -52,7 +52,7 @@ class Updater
             if (!empty($packages)) {
                 $params['components'] = $packages;
             }
-            $params += $additionalOptions;
+            $params = array_push($params, $additionalOptions);
 
             $this->queue->addJobs([['name' => $type, 'params' => $params]]);
             return '';
