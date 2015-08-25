@@ -81,9 +81,7 @@ class SwaggerUiPage
      * @param string $strategy
      * @return bool
      */
-    public function isElementVisible(
-        $selector,
-        $strategy = Locator::SELECTOR_CSS)
+    public function isElementVisible($selector, $strategy = Locator::SELECTOR_CSS)
     {
         return $this->browser->find($selector, $strategy)->isVisible();
     }
@@ -141,9 +139,7 @@ class SwaggerUiPage
      * @param string $endpoint
      * @return void
      */
-    public function expandEndpointContent(
-        $serviceName,
-        $endpoint)
+    public function expandEndpointContent($serviceName, $endpoint)
     {
         $this->expandServiceContent($serviceName);
         /**
@@ -168,9 +164,7 @@ class SwaggerUiPage
      * @param string $endpoint
      * @return void
      */
-    public function closeEndpointContent(
-        $serviceName,
-        $endpoint)
+    public function closeEndpointContent($serviceName, $endpoint)
     {
         $this->expandServiceContent($serviceName);
         /**
@@ -205,9 +199,7 @@ class SwaggerUiPage
      * @param string $strategy
      * @return bool|null
      */
-    private function waitForElementVisible(
-        $selector,
-        $strategy = Locator::SELECTOR_CSS)
+    private function waitForElementVisible($selector, $strategy = Locator::SELECTOR_CSS)
     {
         $browser = $this->browser;
         return $browser->waitUntil(

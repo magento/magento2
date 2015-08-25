@@ -5,6 +5,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model;
+
 use Magento\Webapi\Controller\Rest;
 use Magento\Framework\App\Cache\Type\Webapi;
 

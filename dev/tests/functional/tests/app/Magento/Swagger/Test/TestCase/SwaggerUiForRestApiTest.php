@@ -79,8 +79,7 @@ class SwaggerUiForRestApiTest extends Injectable
         $this->endpoints = $endpoints;
         $this->swaggerPage->open();
         $this->swaggerPage->expandServiceContent($this->serviceName);
-        foreach ($endpoints as $endpoint)
-        {
+        foreach ($endpoints as $endpoint) {
             $this->swaggerPage->expandEndpointContent($serviceName, $endpoint);
         }
     }
@@ -92,8 +91,7 @@ class SwaggerUiForRestApiTest extends Injectable
      */
     public function tearDown()
     {
-        foreach ($this->endpoints as $endpoint)
-        {
+        foreach ($this->endpoints as $endpoint) {
             $this->swaggerPage->closeEndpointContent($this->serviceName, $endpoint);
         }
         $this->swaggerPage->closeServiceContent($this->serviceName);
