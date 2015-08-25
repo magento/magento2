@@ -5,6 +5,8 @@
  */
 namespace Magento\Indexer\Model;
 
+use Magento\Framework\Indexer\ConfigInterface;
+
 class Config implements ConfigInterface
 {
     /**
