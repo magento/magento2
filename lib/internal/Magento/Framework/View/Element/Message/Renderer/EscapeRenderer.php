@@ -34,4 +34,15 @@ class EscapeRenderer implements RendererInterface
     {
         return $this->escaper->escapeHtml($message->getText());
     }
+
+    /**
+     * Initialize renderer with state
+     *
+     * @param array $data
+     * @return void
+     */
+    public function initialize(array $data)
+    {
+        return;
+    }
 }

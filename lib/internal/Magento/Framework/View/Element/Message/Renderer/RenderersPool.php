@@ -10,22 +10,30 @@ class RenderersPool implements PoolInterface
     /**
      * @var RendererInterface[]
      */
-    private $renders;
+    private $renderers;
 
     /**
-     * @param array $renders
+     * @var array
+     */
+    private $renderersConfiguration;
+
+    /**
+     * @param array $renderers
+     * @param array $renderersConfiguration
      */
     public function __construct(
-        array $renders = []
+        array $renderers = [],
+        array $renderersConfiguration = []
     ) {
         array_walk(
-            $renders,
+            $renderers,
             function (RendererInterface $renderer) {
                 return $renderer;
             }
         );
 
-        $this->renders = $renders;
+        $this->renderers = $renderers;
+        $this->renderersConfiguration = $renderersConfiguration;
     }
 
     /**
@@ -36,6 +44,15 @@ class RenderersPool implements PoolInterface
      */
     public function get($identifier)
     {
-        return !isset($this->renders[$identifier]) ? null : $this->renders[$identifier];
+        if (!isset($this->renderers[$identifier])) {
+            return null;
+        }
+
+        $renderer = $this->renderers[$identifier];
+        $renderer->initialize(
+            !isset($this->renderersConfiguration[$identifier])
+            ? null
+            : $this->renderersConfiguration[$identifier]
+        );
     }
 }

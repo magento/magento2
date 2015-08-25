@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Cart;
+
 use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 
 /**

@@ -102,6 +102,7 @@ interface MessageInterface
      *
      * @param array $data
      * @return $this
+     * @throws \InvalidArgumentException
      */
     public function setData(array $data = []);
 

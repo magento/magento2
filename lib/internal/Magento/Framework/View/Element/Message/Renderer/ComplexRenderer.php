@@ -6,14 +6,25 @@
 namespace Magento\Framework\View\Element\Message\Renderer;
 
 use Magento\Framework\Message\MessageInterface;
-use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\Template;
 
-class ComplexRenderer extends AbstractBlock implements RendererInterface
+class ComplexRenderer extends Template implements RendererInterface
 {
     /**
      * @var array
      */
     private $configuration;
+
+    /**
+     * @param Template\Context $context
+     * @param array $data
+     */
+    public function __construct(
+        Template\Context $context,
+        array $data = []
+    ) {
+        parent::__construct($context, $data);
+    }
 
     /**
      * Renders complex message
@@ -25,6 +36,14 @@ class ComplexRenderer extends AbstractBlock implements RendererInterface
     {
         $this->setUpConfiguration($message->getData());
         return $this->toHtml();
+    }
+
+    /**
+     * @return array
+     */
+    public function getCacheKeyInfo()
+    {
+        return array_merge((array)$this->configuration, [$this->getTemplate()]);
     }
 
     /**
@@ -46,6 +65,8 @@ class ComplexRenderer extends AbstractBlock implements RendererInterface
             $this->unsetData($key);
             unset($this->configuration[$key]);
         }
+
+        unset($this->_template);
     }
 
     /**
@@ -58,5 +79,20 @@ class ComplexRenderer extends AbstractBlock implements RendererInterface
     {
         $this->tearDownConfiguration();
         return parent::_afterToHtml($html);
+    }
+
+    /**
+     * Initialize renderer with state
+     *
+     * @param array $data
+     * @return void
+     */
+    public function initialize(array $data)
+    {
+        if (!isset($data['template'])) {
+            throw new \InvalidArgumentException('Template should be provided for renderer.');
+        }
+
+        $this->setTemplate($data['template']);
     }
 }

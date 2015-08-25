@@ -16,4 +16,12 @@ interface RendererInterface
      * @return string
      */
     public function render(MessageInterface $message);
+
+    /**
+     * Initialize renderer with state
+     *
+     * @param array $data
+     * @return void
+     */
+    public function initialize(array $data);
 }
