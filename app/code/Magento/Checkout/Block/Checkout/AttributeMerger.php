@@ -34,6 +34,11 @@ class AttributeMerger
         'image' => 'media',
     ];
 
+    /**
+     * Map input_validation and validation rule from js
+     *
+     * @var array
+     */
     protected $inputValidation = [
         'alpha' => 'letters-only',
         'numeric' => 'validate-number',
