@@ -19,6 +19,11 @@ class MassDeleteTest extends AbstractMassDeleteTest
      */
     protected $collectionFactoryMock;
 
+    /**
+     * @var \Magento\Cms\Model\Resource\Page\Collection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $pageCollectionMock;
+
     protected function setUp()
     {
         parent::setUp();
@@ -30,6 +35,8 @@ class MassDeleteTest extends AbstractMassDeleteTest
             '',
             false
         );
+
+        $this->pageCollectionMock = $this->getMock('Magento\Cms\Model\Resource\Page\Collection', [], [], '', false);
 
         $this->massDeleteController = $this->objectManager->getObject(
             'Magento\Cms\Controller\Adminhtml\Page\MassDelete',
@@ -50,11 +57,11 @@ class MassDeleteTest extends AbstractMassDeleteTest
             $this->getPageMock()
         ];
 
-        $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($this->getPageMock());
+        $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($this->pageCollectionMock);
 
         $this->filterMock->expects($this->once())
             ->method('getCollection')
-            ->with($this->getPageMock())
+            ->with($this->pageCollectionMock)
             ->willReturn($collection);
 
         $this->messageManagerMock->expects($this->once())
@@ -78,7 +85,7 @@ class MassDeleteTest extends AbstractMassDeleteTest
     protected function getPageMock()
     {
         $pageMock = $this->getMock('Magento\Cms\Model\Resource\Page\Collection', ['delete'], [], '', false);
-        $pageMock->expects($this->any())->method('delete')->willReturn(true);
+        $pageMock->expects($this->once())->method('delete')->willReturn(true);
 
         return $pageMock;
     }
