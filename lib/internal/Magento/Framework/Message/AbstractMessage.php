@@ -129,9 +129,19 @@ abstract class AbstractMessage implements MessageInterface
      *
      * @param array $data
      * @return $this
+     * @throws \InvalidArgumentException
      */
     public function setData(array $data = [])
     {
+        array_walk_recursive(
+            $data,
+            function ($element) {
+                if (is_object($element) && !$element instanceof \Serializable) {
+                    throw new \InvalidArgumentException('Only serializable content is allowed.');
+                }
+            }
+        );
+
         $this->data = $data;
         return $this;
     }

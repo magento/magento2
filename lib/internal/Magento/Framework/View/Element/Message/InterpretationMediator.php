@@ -10,12 +10,12 @@ use Magento\Framework\Message\MessageInterface;
 class InterpretationMediator implements InterpretationStrategyInterface
 {
     /**
-     * @var InterpretationStrategyInterface
+     * @var InterpretationStrategy
      */
     private $interpretationStrategy;
 
     public function __construct(
-        InterpretationStrategyInterface $interpretationStrategy
+        InterpretationStrategy $interpretationStrategy
     ) {
         $this->interpretationStrategy = $interpretationStrategy;
     }
