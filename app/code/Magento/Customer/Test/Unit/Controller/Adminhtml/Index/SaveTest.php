@@ -299,7 +299,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             \Magento\Customer\Api\Data\CustomerInterface::DEFAULT_BILLING => $addressId,
             \Magento\Customer\Api\Data\CustomerInterface::DEFAULT_SHIPPING => $addressId,
             'confirmation' => false,
-            'sendemail' => false,
             'id' => $customerId,
         ];
         $mergedAddressData = [
@@ -561,7 +560,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             \Magento\Customer\Api\Data\CustomerInterface::DEFAULT_BILLING => null,
             \Magento\Customer\Api\Data\CustomerInterface::DEFAULT_SHIPPING => null,
             'confirmation' => false,
-            'sendemail' => false,
         ];
         $mergedAddressData = [
             'entity_id' => $addressId,

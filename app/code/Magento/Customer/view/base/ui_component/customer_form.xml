@@ -245,26 +245,6 @@
                 </item>
             </argument>
         </field>
-        <field name="sendemail_store_id">
-            <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Magento\Store\Model\System\Store</item>
-                <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">Send From</item>
-                    <item name="dataType" xsi:type="string">number</item>
-                    <item name="formElement" xsi:type="string">select</item>
-                </item>
-            </argument>
-        </field>
-        <field name="sendemail">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="label" xsi:type="string">Welcome Email</item>
-                    <item name="description" xsi:type="string">Send a Welcome email</item>
-                    <item name="dataType" xsi:type="string">boolean</item>
-                    <item name="formElement" xsi:type="string">checkbox</item>
-                </item>
-            </argument>
-        </field>
     </fieldset>
     <fieldset name="address">
         <argument name="data" xsi:type="array">
