@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Backup\Filesystem\Rollback;
+use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Rollback worker for rolling back via ftp
@@ -124,7 +125,7 @@ class Ftp extends AbstractRollback
     {
         $tmpDir = $this->_snapshot->getBackupsDir() . '/~tmp-' . microtime(true);
 
-        $result = @mkdir($tmpDir);
+        $result = @mkdir($tmpDir, DriverInterface::WRITEABLE_DIRECTORY_MODE);
 
         if (false === $result) {
             throw new \Magento\Framework\Backup\Exception\NotEnoughPermissions(
