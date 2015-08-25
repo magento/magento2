@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Model\Product\Attribute\Backend\Media;
 
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
+use Magento\Catalog\Model\Product;
 
 /**
  * Converter for Image media gallery type
@@ -29,7 +30,7 @@ class ImageMediaEntryConverter implements MediaGalleryEntryConverterInterface
     /**
      * {@inheritdoc}
      */
-    public function convertTo(array $rowData)
+    public function convertTo(Product $product, array $rowData)
     {
         // TODO: Implement convertTo() method.
     }
