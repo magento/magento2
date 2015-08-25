@@ -35,7 +35,6 @@ define([
          */
         _showLoader: function() {
             if ($(this.options.agreements).find('input[type="checkbox"]:not(:checked)').length > 0) {
-                alert($.mage.__('Please agree to all Terms and Conditions before placing the orders.'));
                 return false;
             }
             this.element.find(this.options.pleaseWaitLoader).show().end()
