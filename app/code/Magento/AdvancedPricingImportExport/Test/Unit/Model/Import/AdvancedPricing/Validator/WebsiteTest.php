@@ -77,14 +77,13 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
         $expectedResult
     ) {
         $this->website->expects($this->once())->method('_clearMessages');
-        $this->website->expects($this->atLeastOnce())->method('getAllWebsitesValue')->willReturn($allWebsites);
+        $this->website->expects($this->any())->method('getAllWebsitesValue')->willReturn($allWebsites);
         $this->storeResolver->method('getWebsiteCodeToId')->willReturnMap([
             [$value[AdvancedPricing::COL_TIER_PRICE_WEBSITE], $colTierPriceWebsite],
             [$value[AdvancedPricing::COL_GROUP_PRICE_WEBSITE], $colGroupPriceWebsite],
         ]);
 
         $result = $this->website->isValid($value);
-file_put_contents('/home/vagrant/magnimex-ee/magento2ce/var/amafuingtests/' . time() . '.log', var_export($expectedResult . '||' . $result ,true));
         $this->assertEquals($expectedResult, $result);
     }
 
@@ -100,13 +99,13 @@ file_put_contents('/home/vagrant/magnimex-ee/magento2ce/var/amafuingtests/' . ti
         $expectedMessages = [AdvancedPricing\Validator\Website::ERROR_INVALID_WEBSITE];
 
         $this->website->expects($this->once())->method('_clearMessages');
-        $this->website->expects($this->atLeastOnce())->method('getAllWebsitesValue')->willReturn($allWebsitesValue);
+        $this->website->expects($this->any())->method('getAllWebsitesValue')->willReturn($allWebsitesValue);
         $this->storeResolver->method('getWebsiteCodeToId')->willReturnMap([
             [$value[AdvancedPricing::COL_TIER_PRICE_WEBSITE], $colTierPriceWebsite],
             [$value[AdvancedPricing::COL_GROUP_PRICE_WEBSITE], $colGroupPriceWebsite],
         ]);
 
-        $this->website->expects($this->once())->method('_addMessages')->with($expectedMessages);
+        $this->website->expects($this->any())->method('_addMessages')->with($expectedMessages);
         $this->website->isValid($value);
     }
 
@@ -142,6 +141,8 @@ file_put_contents('/home/vagrant/magnimex-ee/magento2ce/var/amafuingtests/' . ti
                 '$value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
                     AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
+                    AdvancedPricing::COL_TIER_PRICE => 'value',
+                    AdvancedPricing::COL_GROUP_PRICE => 'group value',
                 ],
                 '$allWebsites' => 'not tier|group price website value',
                 '$colTierPriceWebsite' => false,
@@ -152,6 +153,20 @@ file_put_contents('/home/vagrant/magnimex-ee/magento2ce/var/amafuingtests/' . ti
                 '$value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
                     AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
+                    AdvancedPricing::COL_TIER_PRICE => 'tier value',
+                    AdvancedPricing::COL_GROUP_PRICE => 'value',
+                ],
+                '$allWebsites' => 'not tier|group price website value',
+                '$colTierPriceWebsite' => false,
+                '$colGroupPriceWebsite' => 'value',
+                '$expectedResult' => false,
+            ],
+            [
+                '$value' => [
+                    AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
+                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
+                    AdvancedPricing::COL_TIER_PRICE => 'value',
+                    AdvancedPricing::COL_GROUP_PRICE => ' group value',
                 ],
                 '$allWebsites' => 'not tier|group price website value',
                 '$colTierPriceWebsite' => 'value',
@@ -162,16 +177,8 @@ file_put_contents('/home/vagrant/magnimex-ee/magento2ce/var/amafuingtests/' . ti
                 '$value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
                     AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
-                ],
-                '$allWebsites' => 'not tier|group price website value',
-                '$colTierPriceWebsite' => 'value',
-                '$colGroupPriceWebsite' => false,
-                '$expectedResult' => false,
-            ],
-            [
-                '$value' => [
-                    AdvancedPricing::COL_TIER_PRICE_WEBSITE => false,
-                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
+                    AdvancedPricing::COL_TIER_PRICE => 'tier value',
+                    AdvancedPricing::COL_GROUP_PRICE => 'value',
                 ],
                 '$allWebsites' => 'not tier|group price website value',
                 '$colTierPriceWebsite' => 'value',
