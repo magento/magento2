@@ -200,8 +200,12 @@ class TranslatedLists implements ListsInterface
     /**
      * @inheritdoc
      */
-    public function getCountryTranslation($value)
+    public function getCountryTranslation($value, $locale = null)
     {
-        return (new RegionBundle())->get($this->localeResolver->getLocale())['Countries'][$value];
+        if ($locale == null) {
+            return (new RegionBundle())->get($this->localeResolver->getLocale())['Countries'][$value];
+        } else {
+            return (new RegionBundle())->get($locale)['Countries'][$value];
+        }
     }
 }
