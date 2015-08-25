@@ -10,7 +10,7 @@ namespace Magento\Directory\Api\Data;
  *
  * @api
  */
-interface ExchangeRateInterface
+interface ExchangeRateInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
      * Get the currency code associated with the exchange rate.

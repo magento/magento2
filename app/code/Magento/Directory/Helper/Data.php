@@ -138,7 +138,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve country collection
      *
-     * @param mixed $store
+     * @param null|int|string|\Magento\Store\Model\Store $store
      * @return \Magento\Directory\Model\Resource\Country\Collection
      */
     public function getCountryCollection($store = null)
