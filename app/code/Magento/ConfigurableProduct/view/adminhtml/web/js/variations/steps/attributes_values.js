@@ -37,13 +37,6 @@ define([
         }
     };
 
-    /**
-     * Memorize results by attributeIds
-     */
-    var saveAttributes = _.memoize(function (attributeIds, attributes) {
-        return _.map(attributes, this.createAttribute, this);
-    });
-
     return Collapsible.extend({
         stepInitialized: false,
         attributes: ko.observableArray([]),
@@ -52,6 +45,14 @@ define([
                 text: null,
                 error: null
             }
+        },
+        initialize: function () {
+            this._super();
+            this.createAttribute = _.wrap(this.createAttribute.bind(this), function () {
+                var args = Array.prototype.slice.call(arguments);
+                return this.doInitSavedOptions.call(this, args.shift().apply(this, args));
+            });
+            this.createAttribute = _.memoize(this.createAttribute.bind(this), _.property('id'));
         },
         createOption: function () {
             // this - current attribute
@@ -146,25 +147,21 @@ define([
                 data: {attributes: attributeIds},
                 showLoader: true
             }).done(function(attributes){
-                this.attributes(saveAttributes.call(this, attributeIds, attributes));
-                this.doInitSavedOptions();
+                this.attributes(_.map(attributes, this.createAttribute));
             }.bind(this));
         },
-        doInitSavedOptions: function() {
-            if (false === this.stepInitialized) {
-                this.stepInitialized = true;
-                _.each(this.attributes(), function(attribute) {
-                    var selectedAttribute = _.findWhere(this.initData.attributes, {id: attribute.id});
+        doInitSavedOptions: function(attribute) {
+            var selectedAttribute = _.findWhere(this.initData.attributes, {id: attribute.id});
 
-                    if (selectedAttribute) {
-                        var selectedOptions = _.pluck(selectedAttribute.chosen, 'value');
-                        var selectedOptionsIds = _.pluck(_.filter(attribute.options(), function (option) {
-                            return _.contains(selectedOptions, option.value)
-                        }), 'id');
-                        attribute.chosenOptions(selectedOptionsIds);
-                    }
-                }.bind(this));
+            if (selectedAttribute) {
+                var selectedOptions = _.pluck(selectedAttribute.chosen, 'value');
+                var selectedOptionsIds = _.pluck(_.filter(attribute.options(), function (option) {
+                    return _.contains(selectedOptions, option.value);
+                }), 'id');
+                attribute.chosenOptions(selectedOptionsIds);
+                this.initData.attributes = _.without(this.initData.attributes, selectedAttribute);
             }
+            return attribute;
         },
         render: function(wizard) {
             this.wizard = wizard;
