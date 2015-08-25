@@ -102,7 +102,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $config = new \Magento\Webapi\Model\Config($cacheMock, $readerMock);
 
         /** @var $config \Magento\Webapi\Model\ServiceMetadata */
-        $serviceMetadata = new \Magento\Webapi\Model\ServiceMetadata($config, $cacheMock, $classReflection);
+        $serviceMetadata = new \Magento\Webapi\Model\ServiceMetadata(
+            $config,
+            $cacheMock,
+            $classReflection,
+            $typeProcessor);
 
         $this->_soapConfig = $this->objectManager->getObject(
             'Magento\Webapi\Model\Soap\Config',

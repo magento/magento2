@@ -28,9 +28,11 @@ class ServiceMetadata
 
     const KEY_ACL_RESOURCES = 'resources';
 
-    const SERVICES_CACHE_ID = 'services-services-config';
+    const SERVICES_CONFIG_CACHE_ID = 'services-services-config';
 
-    const ROUTES_CACHE_ID = 'routes-services-config';
+    const ROUTES_CONFIG_CACHE_ID = 'routes-services-config';
+
+    const REFLECTED_TYPES_CACHE_ID = 'soap-reflected-types';
 
     /**#@-*/
 
@@ -62,21 +64,28 @@ class ServiceMetadata
     protected $classReflector;
 
     /**
+     * @var \Magento\Framework\Reflection\TypeProcessor
+     */
+    protected $typeProcessor;
+
+    /**
      * Initialize dependencies.
      *
      * @param \Magento\Webapi\Model\Config $config
      * @param WebApiCache $cache
      * @param \Magento\Webapi\Model\Config\ClassReflector $classReflector
+     * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
      */
     public function __construct(
         \Magento\Webapi\Model\Config $config,
         WebApiCache $cache,
-        \Magento\Webapi\Model\Config\ClassReflector $classReflector
+        \Magento\Webapi\Model\Config\ClassReflector $classReflector,
+        \Magento\Framework\Reflection\TypeProcessor $typeProcessor
     ) {
         $this->config = $config;
         $this->cache = $cache;
         $this->classReflector = $classReflector;
-        $this->services = $this->initServicesMetadata();
+        $this->typeProcessor = $typeProcessor;
     }
 
     /**
@@ -124,12 +133,15 @@ class ServiceMetadata
     public function getServicesConfig()
     {
         if (null === $this->services) {
-            $servicesConfig = $this->cache->load(self::SERVICES_CACHE_ID);
-            if ($servicesConfig && is_string($servicesConfig)) {
+            $servicesConfig = $this->cache->load(self::SERVICES_CONFIG_CACHE_ID);
+            $typesData = $this->cache->load(self::REFLECTED_TYPES_CACHE_ID);
+            if ($servicesConfig && is_string($servicesConfig) && $typesData && is_string($typesData)) {
                 $this->services = unserialize($servicesConfig);
+                $this->typeProcessor->setTypesData(unserialize($typesData));
             } else {
                 $this->services = $this->initServicesMetadata();
-                $this->cache->save(serialize($this->services), self::SERVICES_CACHE_ID);
+                $this->cache->save(serialize($this->services), self::SERVICES_CONFIG_CACHE_ID);
+                $this->cache->save(serialize($this->typeProcessor->getTypesData()), self::REFLECTED_TYPES_CACHE_ID);
             }
         }
         return $this->services;
@@ -235,12 +247,12 @@ class ServiceMetadata
     public function getRoutesConfig()
     {
         if (null === $this->routes) {
-            $routesConfig = $this->cache->load(self::ROUTES_CACHE_ID);
+            $routesConfig = $this->cache->load(self::ROUTES_CONFIG_CACHE_ID);
             if ($routesConfig && is_string($routesConfig)) {
                 $this->routes = unserialize($routesConfig);
             } else {
                 $this->routes = $this->initRoutesMetadata();
-                $this->cache->save(serialize($this->routes), self::ROUTES_CACHE_ID);
+                $this->cache->save(serialize($this->routes), self::ROUTES_CONFIG_CACHE_ID);
             }
         }
         return $this->routes;
