@@ -86,7 +86,7 @@ class UpdateCustomerCookiesTest extends \PHPUnit_Framework_TestCase
         $customerId = 1;
         $customerGroupId = 2;
         $cookieMock =
-            $this->getMock('Magento\Framework\Object',
+            $this->getMock('Magento\Framework\DataObject',
                 ['setCustomerId', 'setCustomerGroupId', '__wakeUp'],
                 [], '', false);
         $this->sessionHelperMock->expects($this->once())->method('isPersistent')->will($this->returnValue(true));

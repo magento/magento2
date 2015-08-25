@@ -70,6 +70,20 @@ class TypeProcessor
     }
 
     /**
+     * Set processed types data.
+     *
+     * Should be used carefully since no data consistency checks are performed.
+     *
+     * @param array $typesData
+     * @return $this
+     */
+    public function setTypesData($typesData)
+    {
+        $this->_types = $typesData;
+        return $this;
+    }
+
+    /**
      * Retrieve data type details for the given type name.
      *
      * @param string $typeName
@@ -591,9 +605,9 @@ class TypeProcessor
             $methodName = $boolAccessorName;
             return $methodName;
         } else {
-            throw new \Exception(
+            throw new \LogicException(
                 sprintf(
-                    'Property :"%s" does not exist in the provided class: "%s".',
+                    'Property "%s" does not have corresponding setter in class "%s".',
                     $camelCaseProperty,
                     $class->getName()
                 )

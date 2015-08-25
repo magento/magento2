@@ -7,7 +7,8 @@
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
 use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
-use \Magento\Framework\Model\Resource\Db\AbstractDb as DbResource;
+use Magento\Framework\Model\Resource\Db\AbstractDb as DbResource;
+use Magento\Framework\Api\Filter;
 
 /**
  * Class Fulltext
@@ -17,14 +18,13 @@ class FulltextFilter implements FilterApplierInterface
     /**
      * Returns list of columns from fulltext index (doesn't support more then one FTI per table)
      *
-     * @param DbResource $resource
+     * @param DbCollection $collection
      * @param string $indexTable
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function getFulltextIndexColumns(DbResource $resource, $indexTable)
+    protected function getFulltextIndexColumns(DbCollection $collection, $indexTable)
     {
-        $indexes = $resource->getReadConnection()->getIndexList($indexTable);
+        $indexes = $collection->getConnection()->getIndexList($indexTable);
         foreach ($indexes as $index) {
             if (strtoupper($index['INDEX_TYPE']) == 'FULLTEXT') {
                 return $index['COLUMNS_LIST'];
@@ -37,21 +37,19 @@ class FulltextFilter implements FilterApplierInterface
      * Apply fulltext filters
      *
      * @param DbCollection $collection
-     * @param array $filters
+     * @param Filter $filter
      * @return void
      */
-    public function apply(DbCollection $collection, $filters)
+    public function apply(DbCollection $collection, Filter $filter)
     {
-        $columns = $this->getFulltextIndexColumns($collection->getResource(), $collection->getMainTable());
+        $columns = $this->getFulltextIndexColumns($collection, $collection->getMainTable());
         if (!$columns) {
             return;
         }
-        foreach ($filters as $filter) {
-            $collection->getSelect()
-                ->where(
-                    'MATCH(' . implode(',', $columns) . ') AGAINST(?)',
-                    $filter['condition']
-                );
-        }
+        $collection->getSelect()
+            ->where(
+                'MATCH(' . implode(',', $columns) . ') AGAINST(?)',
+                $filter->getValue()
+            );
     }
 }

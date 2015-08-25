@@ -6,6 +6,7 @@
 namespace Magento\OfflineShipping\Model\Carrier;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Quote\Model\Quote\Address\RateRequest;
 
 class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     \Magento\Shipping\Model\Carrier\CarrierInterface
@@ -74,13 +75,13 @@ class Tablerate extends \Magento\Shipping\Model\Carrier\AbstractCarrier implemen
     }
 
     /**
-     * @param \Magento\Framework\Object $request
+     * @param RateRequest $request
      * @return \Magento\Shipping\Model\Rate\Result
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function collectRates(\Magento\Framework\Object $request)
+    public function collectRates(RateRequest $request)
     {
         if (!$this->getConfigFlag('active')) {
             return false;

@@ -5,12 +5,16 @@
  */
 namespace Magento\Customer\Model\Address;
 
+use Magento\Framework\Config\Data as ConfigData;
+use Magento\Framework\DataObject;
+use Magento\Store\Model\ScopeInterface;
+
 /**
  * Customer address config
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Config extends \Magento\Framework\Config\Data
+class Config extends ConfigData
 {
     const DEFAULT_ADDRESS_RENDERER = 'Magento\Customer\Block\Address\Renderer\DefaultRenderer';
 
@@ -111,29 +115,22 @@ class Config extends \Magento\Framework\Config\Data
     {
         $store = $this->getStore();
         $storeId = $store->getId();
+
         if (!isset($this->_types[$storeId])) {
             $this->_types[$storeId] = [];
             foreach ($this->get() as $typeCode => $typeConfig) {
                 $path = sprintf('%s%s', self::XML_PATH_ADDRESS_TEMPLATE, $typeCode);
-                $type = new \Magento\Framework\Object();
-                if (isset(
-                    $typeConfig['escapeHtml']
-                ) && ($typeConfig['escapeHtml'] == 'true' || $typeConfig['escapeHtml'] == '1')
-                ) {
-                    $escapeHtml = true;
+                $type = new DataObject();
+                if (isset($typeConfig['escapeHtml'])) {
+                    $escapeHtml = $typeConfig['escapeHtml'] == 'true' || $typeConfig['escapeHtml'] == '1';
                 } else {
                     $escapeHtml = false;
                 }
 
-                $type->setCode(
-                    $typeCode
-                )->setTitle(
-                    (string)$typeConfig['title']
-                )->setDefaultFormat(
-                    $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store)
-                )->setEscapeHtml(
-                    $escapeHtml
-                );
+                $type->setCode($typeCode)
+                    ->setTitle((string)$typeConfig['title'])
+                    ->setDefaultFormat($this->_scopeConfig->getValue($path, ScopeInterface::SCOPE_STORE, $store))
+                    ->setEscapeHtml($escapeHtml);
 
                 $renderer = isset($typeConfig['renderer']) ? (string)$typeConfig['renderer'] : null;
                 if (!$renderer) {
@@ -152,14 +149,14 @@ class Config extends \Magento\Framework\Config\Data
     /**
      * Retrieve default address format
      *
-     * @return \Magento\Framework\Object
+     * @return DataObject
      */
     protected function _getDefaultFormat()
     {
         $store = $this->getStore();
         $storeId = $store->getId();
         if (!isset($this->_defaultTypes[$storeId])) {
-            $this->_defaultTypes[$storeId] = new \Magento\Framework\Object();
+            $this->_defaultTypes[$storeId] = new DataObject();
             $this->_defaultTypes[$storeId]->setCode(
                 'default'
             )->setDefaultFormat(
@@ -168,13 +165,9 @@ class Config extends \Magento\Framework\Config\Data
                 '{{var street}}, {{var city}}, {{var region}} {{var postcode}}, {{var country}}'
             );
 
-            $this->_defaultTypes[$storeId]->setRenderer(
-                $this->_addressHelper->getRenderer(
-                    self::DEFAULT_ADDRESS_RENDERER
-                )->setType(
-                    $this->_defaultTypes[$storeId]
-                )
-            );
+            $renderer = $this->_addressHelper->getRenderer(self::DEFAULT_ADDRESS_RENDERER)
+                ->setType($this->_defaultTypes[$storeId]);
+            $this->_defaultTypes[$storeId]->setRenderer($renderer);
         }
         return $this->_defaultTypes[$storeId];
     }
@@ -183,7 +176,7 @@ class Config extends \Magento\Framework\Config\Data
      * Retrieve address format by code
      *
      * @param string $typeCode
-     * @return \Magento\Framework\Object
+     * @return DataObject
      */
     public function getFormatByCode($typeCode)
     {

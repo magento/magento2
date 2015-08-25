@@ -137,9 +137,9 @@ abstract class AbstractServiceCollection extends \Magento\Framework\Data\Collect
             $this->searchCriteriaBuilder->addFilters($filterGroup);
         }
         foreach ($this->_orders as $field => $direction) {
-            /** @var \Magento\Framework\Api\SortOrder $sortOrder */
+            /** @var SortOrder $sortOrder */
             /** @var string $direction */
-            $direction = ($direction == 'ASC') ? SearchCriteria::SORT_ASC : SearchCriteria::SORT_DESC;
+            $direction = ($direction == 'ASC') ? SortOrder::SORT_ASC : SortOrder::SORT_DESC;
             $sortOrder = $this->sortOrderBuilder->setField($field)->setDirection($direction)->create();
             $this->searchCriteriaBuilder->addSortOrder($sortOrder);
         }

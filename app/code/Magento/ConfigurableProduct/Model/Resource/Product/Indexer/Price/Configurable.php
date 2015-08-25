@@ -83,7 +83,7 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
      */
     protected function _prepareConfigurableOptionAggregateTable()
     {
-        $this->_getWriteAdapter()->delete($this->_getConfigurableOptionAggregateTable());
+        $this->getConnection()->delete($this->_getConfigurableOptionAggregateTable());
         return $this;
     }
 
@@ -94,7 +94,7 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
      */
     protected function _prepareConfigurableOptionPriceTable()
     {
-        $this->_getWriteAdapter()->delete($this->_getConfigurableOptionPriceTable());
+        $this->getConnection()->delete($this->_getConfigurableOptionPriceTable());
         return $this;
     }
 
@@ -107,14 +107,14 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
      */
     protected function _applyConfigurableOption()
     {
-        $write = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         $coaTable = $this->_getConfigurableOptionAggregateTable();
         $copTable = $this->_getConfigurableOptionPriceTable();
 
         $this->_prepareConfigurableOptionAggregateTable();
         $this->_prepareConfigurableOptionPriceTable();
 
-        $select = $write->select()->from(
+        $select = $connection->select()->from(
             ['i' => $this->_getDefaultFinalPriceTable()],
             []
         )->join(
@@ -134,24 +134,24 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
             ['l.parent_id', 'i.customer_group_id', 'i.website_id', 'l.product_id']
         );
         $priceColumn = $this->_addAttributeToSelect($select, 'price', 'l.product_id', 0, null, true);
-        $tierPriceColumn = $write->getCheckSql("MIN(i.tier_price) IS NOT NULL", "i.tier_price", 'NULL');
-        $groupPriceColumn = $write->getCheckSql("MIN(i.group_price) IS NOT NULL", "i.group_price", 'NULL');
+        $tierPriceColumn = $connection->getCheckSql("MIN(i.tier_price) IS NOT NULL", "i.tier_price", 'NULL');
+        $groupPriceColumn = $connection->getCheckSql("MIN(i.group_price) IS NOT NULL", "i.group_price", 'NULL');
 
         $select->columns(
             ['price' => $priceColumn, 'tier_price' => $tierPriceColumn, 'group_price' => $groupPriceColumn]
         );
 
         $query = $select->insertFromSelect($coaTable);
-        $write->query($query);
+        $connection->query($query);
 
-        $select = $write->select()->from(
+        $select = $connection->select()->from(
             [$coaTable],
             [
                 'parent_id',
                 'customer_group_id',
                 'website_id',
-                $write->getCheckSql("MIN(group_price) IS NOT NULL", "group_price", 'MIN(price)'),
-                $write->getCheckSql("MIN(group_price) IS NOT NULL", "group_price", 'MAX(price)'),
+                $connection->getCheckSql("MIN(group_price) IS NOT NULL", "group_price", 'MIN(price)'),
+                $connection->getCheckSql("MIN(group_price) IS NOT NULL", "group_price", 'MAX(price)'),
                 'MIN(tier_price)',
                 'MIN(group_price)'
             ]
@@ -160,10 +160,10 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
         );
 
         $query = $select->insertFromSelect($copTable);
-        $write->query($query);
+        $connection->query($query);
 
         $table = ['i' => $this->_getDefaultFinalPriceTable()];
-        $select = $write->select()->join(
+        $select = $connection->select()->join(
             ['io' => $copTable],
             'i.entity_id = io.entity_id AND i.customer_group_id = io.customer_group_id' .
             ' AND i.website_id = io.website_id',
@@ -179,10 +179,10 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
         );
 
         $query = $select->crossUpdateFromSelect($table);
-        $write->query($query);
+        $connection->query($query);
 
-        $write->delete($coaTable);
-        $write->delete($copTable);
+        $connection->delete($coaTable);
+        $connection->delete($copTable);
 
         return $this;
     }

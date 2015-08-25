@@ -6,10 +6,11 @@
 
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Filter;
 
+use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Request\FilterInterface;
-use Magento\Framework\Search\Request\Query\Bool as RequestBoolQuery;
+use Magento\Framework\Search\Request\Query\BoolExpression as RequestBoolQuery;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class BuilderTest extends \PHPUnit_Framework_TestCase
@@ -101,7 +102,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                                 $filter->getTo()
                             );
                         }
-                        $unionOperator = $isNegation ? \Zend_Db_Select::SQL_OR : \Zend_Db_Select::SQL_AND;
+                        $unionOperator = $isNegation ? Select::SQL_OR : Select::SQL_AND;
 
                         return $this->conditionManager->combineQueries([$fromCondition, $toCondition], $unionOperator);
                     }
@@ -202,7 +203,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @param $field
      * @param $value
-     * @return \Magento\Framework\Search\Request\Filter\Bool|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Search\Request\Filter\BoolExpression|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createTermFilter($field, $value)
     {
@@ -246,7 +247,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      * @param $field
      * @param $from
      * @param $to
-     * @return \Magento\Framework\Search\Request\Filter\Bool|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Search\Request\Filter\BoolExpression|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createRangeFilter($field, $from, $to)
     {
@@ -285,7 +286,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                     [] // mustNot
                 ),
                 'conditionType' => RequestBoolQuery::QUERY_CONDITION_MUST,
-                'expectedResult' => '((term1 = 1) AND (range1 >= 0 AND range1 < 10))',
+                'expectedResult' => '(((term1 = 1)) AND ((range1 >= 0 AND range1 < 10)))',
             ],
             'boolFilterWithShould' => [
                 'filter' => $this->createBoolFilter(
@@ -297,7 +298,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                     [] // mustNot
                 ),
                 'conditionType' => RequestBoolQuery::QUERY_CONDITION_MUST,
-                'expectedResult' => '(((term1 = 1) OR (range1 >= 0 AND range1 < 10)))',
+                'expectedResult' => '((((term1 = 1)) OR ((range1 >= 0 AND range1 < 10))))',
             ],
             'boolFilterWithMustNot' => [
                 'filter' => $this->createBoolFilter(
@@ -309,7 +310,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                     ]
                 ),
                 'conditionType' => RequestBoolQuery::QUERY_CONDITION_MUST,
-                'expectedResult' => '(((term1 != 1) AND (range1 < 0 OR range1 >= 10)))',
+                'expectedResult' => '((((term1 != 1)) AND ((range1 < 0 OR range1 >= 10))))',
             ],
             'boolFilterWithAllFields' => [
                 'filter' => $this->createBoolFilter(
@@ -327,9 +328,9 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                     ]
                 ),
                 'conditionType' => RequestBoolQuery::QUERY_CONDITION_MUST,
-                'expectedResult' => '((term1 = 1) AND (range1 >= 0 AND range1 < 10)'
-                    . ' AND ((term2 = 1) OR (range2 >= 0 AND range2 < 10))'
-                    . ' AND ((term3 != 1) AND (range3 < 0 OR range3 >= 10)))',
+                'expectedResult' => '(((term1 = 1)) AND ((range1 >= 0 AND range1 < 10))'
+                    . ' AND (((term2 = 1)) OR ((range2 >= 0 AND range2 < 10)))'
+                    . ' AND (((term3 != 1)) AND ((range3 < 0 OR range3 >= 10))))'
             ],
             'boolFilterInBoolFilter' => [
                 'filter' => $this->createBoolFilter(
@@ -361,14 +362,12 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
                     ]
                 ),
                 'conditionType' => RequestBoolQuery::QUERY_CONDITION_MUST,
-                'expectedResult' => '((term1 = 1) AND (range1 >= 0 AND range1 < 10)'
-                    . ' AND ((term2 = 1) OR (range2 >= 0 AND range2 < 10))'
-                    . ' AND ((term3 != 1) AND (range3 < 0 OR range3 >= 10)'
-                    . ' AND ((term4 != 1) AND (range4 < 0 OR range4 >= 10)'
-                    . ' AND ((term5 != 1) OR (range5 < 0 OR range5 >= 10))'
-                    . ' AND ((term6 = 1) AND (range6 >= 0 AND range6 < 10)))'
-                    . '))',
-
+                'expectedResult' => '(((term1 = 1)) AND ((range1 >= 0 AND range1 < 10))'
+                    . ' AND (((term2 = 1)) OR ((range2 >= 0 AND range2 < 10)))'
+                    . ' AND (((term3 != 1)) AND ((range3 < 0 OR range3 >= 10))'
+                    . ' AND ((((term4 != 1)) AND ((range4 < 0 OR range4 >= 10))'
+                    . ' AND (((term5 != 1)) OR ((range5 < 0 OR range5 >= 10)))'
+                    . ' AND (((term6 = 1)) AND ((range6 >= 0 AND range6 < 10)))))))',
             ],
             'boolEmpty' => [
                 'filter' => $this->createBoolFilter([], [], []),
@@ -382,11 +381,11 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      * @param array $must
      * @param array $should
      * @param array $mustNot
-     * @return \Magento\Framework\Search\Request\Filter\Bool|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Search\Request\Filter\BoolExpression|\PHPUnit_Framework_MockObject_MockObject
      */
     private function createBoolFilter(array $must, array $should, array $mustNot)
     {
-        $filter = $this->getMockBuilder('Magento\Framework\Search\Request\Filter\Bool')
+        $filter = $this->getMockBuilder('Magento\Framework\Search\Request\Filter\BoolExpression')
             ->setMethods(['getMust', 'getShould', 'getMustNot'])
             ->disableOriginalConstructor()
             ->getMock();
