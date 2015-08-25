@@ -1130,7 +1130,6 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         ];
         $scopeResult = \Magento\CatalogImportExport\Model\Import\Product::SCOPE_DEFAULT;
         $scopeMock->expects($this->any())->method('getRowScope')->with($scopeRowData)->willReturn($scopeResult);
-
         $oldSku = [
             $sku => [
                 'type_id' => 'type_id_val',
