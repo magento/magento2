@@ -495,7 +495,9 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     protected function displayElement($name)
     {
         $display = $this->structure->getAttribute($name, 'display');
-        if ($display === false || $display === null || filter_var($display, FILTER_VALIDATE_BOOLEAN)) {
+        if ($display === '' || $display === false || $display === null
+            || filter_var($display, FILTER_VALIDATE_BOOLEAN)) {
+
             return true;
         }
         return false;
