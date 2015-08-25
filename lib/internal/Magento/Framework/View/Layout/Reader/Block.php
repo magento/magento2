@@ -28,10 +28,26 @@ class Block implements Layout\ReaderInterface
     const TYPE_ACTION = 'action';
     /**#@-*/
 
+    /**#@+
+     * Names of block attributes in layout
+     */
+    const ATTRIBUTE_GROUP = 'group';
+    const ATTRIBUTE_CLASS = 'class';
+    const ATTRIBUTE_TEMPLATE = 'template';
+    const ATTRIBUTE_TTL = 'ttl';
+    const ATTRIBUTE_DISPLAY = 'display';
+    /**#@-*/
+
     /**
      * @var array
      */
-    protected $attributes = ['group', 'class', 'template', 'ttl', 'display'];
+    protected $attributes = [
+        self::ATTRIBUTE_GROUP,
+        self::ATTRIBUTE_CLASS,
+        self::ATTRIBUTE_TEMPLATE,
+        self::ATTRIBUTE_TTL,
+        self::ATTRIBUTE_DISPLAY
+    ];
 
     /**
      * @var \Magento\Framework\View\Layout\ScheduledStructure\Helper
@@ -135,6 +151,7 @@ class Block implements Layout\ReaderInterface
             $currentElement->getParent()
         );
         $data = $scheduledStructure->getStructureElementData($elementName, []);
+        $data['attributes'] = $this->mergeBlockAttributes($data, $currentElement);
         $this->updateScheduledData($currentElement, $data);
         $this->evaluateArguments($currentElement, $data);
         $scheduledStructure->setStructureElementData($elementName, $data);
@@ -143,6 +160,34 @@ class Block implements Layout\ReaderInterface
         if (!empty($configPath)) {
             $scheduledStructure->setElementToIfconfigList($elementName, $configPath, $this->scopeType);
         }
+    }
+
+    /**
+     * Merge Block attributes
+     *
+     * @param array $elementData
+     * @param \Magento\Framework\View\Layout\Element $currentElement
+     * @return array
+     */
+    protected function mergeBlockAttributes(array $elementData, Layout\Element $currentElement)
+    {
+        if (isset($elementData['attributes'])) {
+            $keys = array_keys($elementData['attributes']);
+            foreach ($keys as $key) {
+                if (isset($currentElement[$key])) {
+                    $elementData['attributes'][$key] = (string)$currentElement[$key];
+                }
+            }
+        } else {
+            $elementData['attributes'] = [
+                self::ATTRIBUTE_CLASS    => (string)$currentElement[self::ATTRIBUTE_CLASS],
+                self::ATTRIBUTE_GROUP    => (string)$currentElement[self::ATTRIBUTE_GROUP],
+                self::ATTRIBUTE_TEMPLATE => (string)$currentElement[self::ATTRIBUTE_TEMPLATE],
+                self::ATTRIBUTE_TTL      => (string)$currentElement[self::ATTRIBUTE_TTL],
+                self::ATTRIBUTE_DISPLAY  => (string)$currentElement[self::ATTRIBUTE_DISPLAY],
+            ];
+        }
+        return $elementData['attributes'];
     }
 
     /**
@@ -162,9 +207,9 @@ class Block implements Layout\ReaderInterface
             $scheduledStructure->setElementToRemoveList($elementName);
         } else {
             $data = $scheduledStructure->getStructureElementData($elementName, []);
+            $data['attributes'] = $this->mergeBlockAttributes($data, $currentElement);
             $this->updateScheduledData($currentElement, $data);
             $this->evaluateArguments($currentElement, $data);
-            $data['attributes']['display'] = $currentElement->getAttribute('display');
             $scheduledStructure->setStructureElementData($elementName, $data);
         }
     }
@@ -180,13 +225,9 @@ class Block implements Layout\ReaderInterface
     {
         $actions = $this->getActions($currentElement);
         $arguments = $this->getArguments($currentElement);
-        $attributes = $this->getAttributes($currentElement);
         $data['actions'] = isset($data['actions'])
             ? array_merge($data['actions'], $actions)
             : $actions;
-        $data['attributes'] = isset($data['attributes'])
-            ? array_merge($data['attributes'], $attributes)
-            : $attributes;
         $data['arguments'] = isset($data['arguments'])
             ? array_replace_recursive($data['arguments'], $arguments)
             : $arguments;
@@ -202,11 +243,8 @@ class Block implements Layout\ReaderInterface
     protected function getAttributes(Layout\Element $blockElement)
     {
         $attributes = [];
-        $blockAttributes = $blockElement->attributes();
         foreach ($this->attributes as $attributeName) {
-            if (isset($blockAttributes[$attributeName])) {
-                $attributes[$attributeName] = (string)$blockElement->getAttribute($attributeName);
-            }
+            $attributes[$attributeName] = (string)$blockElement->getAttribute($attributeName);
         }
         return $attributes;
     }
