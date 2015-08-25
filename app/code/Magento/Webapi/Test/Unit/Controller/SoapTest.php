@@ -66,8 +66,11 @@ class SoapTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->_requestMock = $this->getMockBuilder('Magento\Framework\Webapi\Request')
             ->disableOriginalConstructor()
-            ->setMethods(['getParams', 'getParam', 'getRequestedServices'])
+            ->setMethods(['getParams', 'getParam', 'getRequestedServices', 'getHttpHost'])
             ->getMock();
+        $this->_requestMock->expects($this->any())
+            ->method('getHttpHost')
+            ->willReturn('testHostName.com');
         $this->_responseMock = $this->getMockBuilder('Magento\Framework\Webapi\Response')
             ->disableOriginalConstructor()
             ->setMethods(['clearHeaders', 'setHeader', 'sendResponse', 'getHeaders'])

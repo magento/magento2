@@ -5,6 +5,10 @@
  */
 namespace Magento\Swagger\Controller\Index;
 
+/**
+ * Class Index
+ * @package Magento\Swagger\Controller\Index
+ */
 class Index extends \Magento\Framework\App\Action\Action
 {
     /** @var \Magento\Framework\View\Page\Config */
@@ -28,6 +32,9 @@ class Index extends \Magento\Framework\App\Action\Action
         $this->pageFactory = $pageFactory;
     }
 
+    /**
+     * @return \Magento\Framework\View\Result\Page
+     */
     public function execute()
     {
         $this->pageConfig->addBodyClass('swagger-section');

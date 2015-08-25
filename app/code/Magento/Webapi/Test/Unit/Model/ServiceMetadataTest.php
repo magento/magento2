@@ -147,7 +147,9 @@ class ServiceMetadataTest extends \PHPUnit_Framework_TestCase
         $typeProcessor = $objectManager->getObject('Magento\Framework\Reflection\TypeProcessor');
 
         /** @var $config \Magento\Webapi\Model\ServiceMetadata */
-        $this->serviceMetadata = new \Magento\Webapi\Model\ServiceMetadata($config, $cacheMock, $classReflection, $typeProcessor);
+        $this->serviceMetadata = new \Magento\Webapi\Model\ServiceMetadata(
+            $config, $cacheMock, $classReflection, $typeProcessor
+        );
 
         parent::setUp();
     }
