@@ -8,11 +8,10 @@ namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Plugin;
 
 use \Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product;
 
-
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Indexer\Model\IndexerInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Indexer\IndexerInterface
      */
     protected $indexerMock;
 
@@ -22,7 +21,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected $subjectMock;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $indexerRegistryMock;
 
@@ -36,7 +35,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->subjectMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
 
         $this->indexerMock = $this->getMockForAbstractClass(
-            'Magento\Indexer\Model\IndexerInterface',
+            'Magento\Framework\Indexer\IndexerInterface',
             [],
             '',
             false,
@@ -45,7 +44,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ['getId', 'getState', '__wakeup']
         );
 
-        $this->indexerRegistryMock = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
+        $this->indexerRegistryMock = $this->getMock(
+            'Magento\Framework\Indexer\IndexerRegistry',
+            ['get'],
+            [],
+            '',
+            false
+        );
 
         $this->model = new Product($this->indexerRegistryMock);
     }

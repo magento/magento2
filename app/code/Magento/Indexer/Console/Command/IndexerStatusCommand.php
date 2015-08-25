@@ -34,13 +34,13 @@ class IndexerStatusCommand extends AbstractIndexerManageCommand
         foreach ($indexers as $indexer) {
             $status = 'unknown';
             switch ($indexer->getStatus()) {
-                case \Magento\Indexer\Model\Indexer\State::STATUS_VALID:
+                case \Magento\Framework\Indexer\StateInterface::STATUS_VALID:
                     $status = 'Ready';
                     break;
-                case \Magento\Indexer\Model\Indexer\State::STATUS_INVALID:
+                case \Magento\Framework\Indexer\StateInterface::STATUS_INVALID:
                     $status = 'Reindex required';
                     break;
-                case \Magento\Indexer\Model\Indexer\State::STATUS_WORKING:
+                case \Magento\Framework\Indexer\StateInterface::STATUS_WORKING:
                     $status = 'Processing';
                     break;
             }
