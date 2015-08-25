@@ -26,6 +26,8 @@ use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Model\ConfigModel as SetupConfigModel;
+use Magento\Setup\Module\DataSetupFactory;
+use Magento\Setup\Module\SetupFactory;
 use Magento\Store\Model\Store;
 use Magento\Setup\Module\ConnectionFactory;
 use Magento\Setup\Module\Setup;
@@ -194,6 +196,16 @@ class Installer
     private $dbValidator;
 
     /**
+     * @var SetupFactory
+     */
+    private $setupFactory;
+
+    /**
+     * @var DataSetupFactory
+     */
+    private $dataSetupFactory;
+
+    /**
      * Constructor
      *
      * @param FilePermissions $filePermissions
@@ -233,7 +245,9 @@ class Installer
         Context $context,
         SetupConfigModel $setupConfigModel,
         CleanupFiles $cleanupFiles,
-        DbValidator $dbValidator
+        DbValidator $dbValidator,
+        SetupFactory $setupFactory,
+        DataSetupFactory $dataSetupFactory
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;
@@ -253,6 +267,8 @@ class Installer
         $this->setupConfigModel = $setupConfigModel;
         $this->cleanupFiles = $cleanupFiles;
         $this->dbValidator = $dbValidator;
+        $this->setupFactory = $setupFactory;
+        $this->dataSetupFactory = $dataSetupFactory;
     }
 
     /**
@@ -690,10 +706,7 @@ class Installer
      */
     public function installSchema()
     {
-        $setup = $this->objectManagerProvider->get()->create(
-            'Magento\Setup\Module\Setup',
-            ['resource' => $this->context->getResources()]
-        );
+        $setup = $this->setupFactory->create($this->context->getResources());
         $this->setupModuleRegistry($setup);
         $this->setupCoreTables($setup);
         $this->log->log('Schema creation/updates:');
@@ -708,7 +721,7 @@ class Installer
      */
     public function installDataFixtures()
     {
-        $setup = $this->objectManagerProvider->get()->create('Magento\Setup\Module\DataSetup');
+        $setup = $this->dataSetupFactory->create();
         $this->checkInstallationFilePermissions();
         $this->log->log('Data install/update:');
         $this->handleDBSchemaData($setup, 'data');
@@ -848,10 +861,7 @@ class Installer
      */
     private function installOrderIncrementPrefix($orderIncrementPrefix)
     {
-        $setup = $this->objectManagerProvider->get()->create(
-            'Magento\Setup\Module\Setup',
-            ['resource' => $this->context->getResources()]
-        );
+        $setup = $this->setupFactory->create($this->context->getResources());
         $dbConnection = $setup->getConnection();
 
         // get entity_type_id for order
@@ -894,10 +904,7 @@ class Installer
     public function installAdminUser($data)
     {
         $this->assertDeploymentConfigExists();
-        $setup = $this->objectManagerProvider->get()->create(
-            'Magento\Setup\Module\Setup',
-            ['resource' => $this->context->getResources()]
-        );
+        $setup = $this->setupFactory->create($this->context->getResources());
         $adminAccount = $this->adminAccountFactory->create($setup, (array)$data);
         $adminAccount->save();
     }

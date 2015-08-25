@@ -54,5 +54,6 @@ class UpgradeCommand extends AbstractSetupCommand
         $installer->updateModulesSequence();
         $installer->installSchema();
         $installer->installDataFixtures();
+        $output->writeln('<info>Please re-run Magento compile command</info>');
     }
 }

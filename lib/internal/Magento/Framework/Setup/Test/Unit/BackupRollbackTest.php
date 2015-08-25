@@ -83,7 +83,7 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnValueMap([
                 ['Magento\Framework\App\State', $this->getMock('Magento\Framework\App\State', [], [], '', false)],
-                ['Magento\Framework\App\ObjectManager\ConfigLoader', $configLoader],
+                ['Magento\Framework\ObjectManager\ConfigLoaderInterface', $configLoader],
             ]));
         $this->objectManager->expects($this->any())
             ->method('create')
