@@ -51,31 +51,36 @@ class InlineEdit extends \Magento\Backend\App\Action
 
         if ($this->getRequest()->getParam('isAjax')) {
             $postData = $this->getRequest()->getParam('data', []);
-            foreach (array_keys($postData) as $pageId) {
-                /** @var \Magento\Cms\Model\Page $page */
-                $page = $this->pageRepository->getById($pageId);
-                try {
-                    $pageData = $this->dataProcessor->filter($postData[$pageId]);
-                    if (!$this->dataProcessor->validate($pageData)) {
-                        $error = true;
-                        foreach ($this->messageManager->getMessages(true)->getItems() as $error) {
-                            $messages[] = $this->getErrorWithPageTitle($page, $error->toString());
+            if (!count($postData)) {
+                $messages[] = __('Please correct the data sent.');
+                $error = true;
+            } else {
+                foreach (array_keys($postData) as $pageId) {
+                    /** @var \Magento\Cms\Model\Page $page */
+                    $page = $this->pageRepository->getById($pageId);
+                    try {
+                        $pageData = $this->dataProcessor->filter($postData[$pageId]);
+                        if (!$this->dataProcessor->validate($pageData)) {
+                            $error = true;
+                            foreach ($this->messageManager->getMessages(true)->getItems() as $error) {
+                                $messages[] = $this->getErrorWithPageTitle($page, $error->toString());
+                            }
                         }
+                        $page->setData(array_merge($page->getData(), $pageData));
+                        $this->pageRepository->save($page);
+                    } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                        $messages[] = $this->getErrorWithPageTitle($page, $e->getMessage());
+                        $error = true;
+                    } catch (\RuntimeException $e) {
+                        $messages[] = $this->getErrorWithPageTitle($page, $e->getMessage());
+                        $error = true;
+                    } catch (\Exception $e) {
+                        $messages[] = $this->getErrorWithPageTitle(
+                            $page,
+                            __('Something went wrong while saving the page.')
+                        );
+                        $error = true;
                     }
-                    $page->setData(array_merge($page->getData(), $pageData));
-                    $this->pageRepository->save($page);
-                } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                    $messages[] = $this->getErrorWithPageTitle($page, $e->getMessage());
-                    $error = true;
-                } catch (\RuntimeException $e) {
-                    $messages[] = $this->getErrorWithPageTitle($page, $e->getMessage());
-                    $error = true;
-                } catch (\Exception $e) {
-                    $messages[] = $this->getErrorWithPageTitle(
-                        $page,
-                        __('Something went wrong while saving the page.')
-                    );
-                    $error = true;
                 }
             }
         }
