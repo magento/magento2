@@ -135,7 +135,6 @@ class Block implements Layout\ReaderInterface
             $currentElement->getParent()
         );
         $data = $scheduledStructure->getStructureElementData($elementName, []);
-        $data['attributes'] = $this->getAttributes($currentElement);
         $this->updateScheduledData($currentElement, $data);
         $this->evaluateArguments($currentElement, $data);
         $scheduledStructure->setStructureElementData($elementName, $data);
@@ -181,9 +180,13 @@ class Block implements Layout\ReaderInterface
     {
         $actions = $this->getActions($currentElement);
         $arguments = $this->getArguments($currentElement);
+        $attributes = $this->getAttributes($currentElement);
         $data['actions'] = isset($data['actions'])
             ? array_merge($data['actions'], $actions)
             : $actions;
+        $data['attributes'] = isset($data['attributes'])
+            ? array_merge($data['attributes'], $attributes)
+            : $attributes;
         $data['arguments'] = isset($data['arguments'])
             ? array_replace_recursive($data['arguments'], $arguments)
             : $arguments;
@@ -199,8 +202,11 @@ class Block implements Layout\ReaderInterface
     protected function getAttributes(Layout\Element $blockElement)
     {
         $attributes = [];
+        $blockAttributes = $blockElement->attributes();
         foreach ($this->attributes as $attributeName) {
-            $attributes[$attributeName] = (string)$blockElement->getAttribute($attributeName);
+            if (isset($blockAttributes[$attributeName])) {
+                $attributes[$attributeName] = (string)$blockElement->getAttribute($attributeName);
+            }
         }
         return $attributes;
     }
