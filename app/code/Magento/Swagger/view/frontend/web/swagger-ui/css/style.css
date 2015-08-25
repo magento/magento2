@@ -1,8 +1,9 @@
+/* Modified by X.Commerce, Inc. d/b/a/ Magento, Inc., Modifications © 2015 X.Commerce, Inc. d/b/a/ Magento, Inc */
 .swagger-section #header a#logo {
   font-size: 1.5em;
   font-weight: bold;
   text-decoration: none;
-  background: transparent url(../images/logo.png) no-repeat left center;
+  background: transparent no-repeat left center;
   padding: 20px 0 20px 40px;
 }
 #text-head {
@@ -64,7 +65,6 @@ h1 {
   width: 1500px;
   margin: auto;
   margin-top: 0;
-  background-image: url('../images/shield.png');
   background-repeat: no-repeat;
   background-position: -40px -20px;
   margin-bottom: 210px;
