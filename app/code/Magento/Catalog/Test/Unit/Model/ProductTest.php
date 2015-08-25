@@ -44,7 +44,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected $stockItemFactoryMock;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $categoryIndexerMock;
 
@@ -99,7 +99,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     private $website;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $indexerRegistryMock;
 
@@ -168,7 +168,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->categoryIndexerMock = $this->getMockForAbstractClass('\Magento\Indexer\Model\IndexerInterface');
+        $this->categoryIndexerMock = $this->getMockForAbstractClass('\Magento\Framework\Indexer\IndexerInterface');
 
         $this->moduleManager = $this->getMock(
             'Magento\Framework\Module\Manager',
@@ -269,7 +269,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $storeManager->expects($this->any())
             ->method('getWebsite')
             ->will($this->returnValue($this->website));
-        $this->indexerRegistryMock = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
+        $this->indexerRegistryMock = $this->getMock('Magento\Framework\Indexer\IndexerRegistry', ['get'], [], '', false);
         $this->categoryRepository = $this->getMock('Magento\Catalog\Api\CategoryRepositoryInterface');
 
         $this->_catalogProduct = $this->getMock(
