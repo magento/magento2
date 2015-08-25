@@ -16,6 +16,11 @@ use Magento\Framework\Data\Collection;
 class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
 {
     /**
+     * @var \Magento\Framework\Config\View
+     */
+    protected $configView;
+
+    /**
      * Retrieve collection of gallery images
      *
      * @return Collection
@@ -26,7 +31,6 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
         $images = $product->getMediaGalleryImages();
         if ($images instanceof \Magento\Framework\Data\Collection) {
             foreach ($images as &$image) {
-                /* @var \Magento\Framework\DataObject $image */
                 $image->setData(
                     'small_image_url',
                     $this->_imageHelper->init($product, 'product_page_image_small')
@@ -47,6 +51,8 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
                 );
             }
         }
+
+
         return $images;
     }
 
@@ -58,22 +64,14 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     public function getGalleryImagesJson()
     {
         $imagesItems = [];
-
-        $imageWidth = $this->getVar("product_page_main_image:width");
-        $imageHeight = $this->getVar("product_page_main_image:height") ?: $imageWidth;
-        $whiteBorders =  $this->getVar("product_image_white_borders");
-        $thumbWidth =  $this->getVar("product_page_more_views:width");
-        $thumbHeight =  $this->getVar("product_page_more_views:height") ?: $thumbWidth;
-
-        foreach ($this->getProduct()->getMediaGalleryImages() as $image) {
-            $imageSmall = $this->getImageUrl($image, 'thumbnail', $whiteBorders, $thumbWidth, $thumbHeight);
-            $imageMedium = $this->getImageUrl($image, 'image', $whiteBorders, $imageWidth, $imageHeight);
-
+        foreach ($this->getGalleryImages() as $image) {
             $imagesItems[] = [
-                'img' => $imageMedium,
-                'thumb' => $imageSmall,
+                'thumb' => $image->getData('small_image_url'),
+                'img' => $image->getData('medium_image_url'),
+                'original' => $image->getData('large_image_url'),
                 'caption' => $image->getLabel(),
                 'position' => $image->getPosition(),
+                'is_main' => $this->isMainImage($image),
             ];
         }
         return json_encode($imagesItems);
@@ -104,5 +102,30 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     {
         $product = $this->getProduct();
         return $product->getImage() == $image->getFile();
+    }
+
+    /**
+     * @param string $imageId
+     * @param string $attributeName
+     * @param string $default
+     * @return string
+     */
+    public function getImageAttribute($imageId, $attributeName, $default = null)
+    {
+        $attributes = $this->getConfigView()->getImageAttributes('Magento_Catalog', $imageId);
+        return isset($attributes[$attributeName]) ? $attributes[$attributeName] : $default;
+    }
+
+    /**
+     * Retrieve config view
+     *
+     * @return \Magento\Framework\Config\View
+     */
+    private function getConfigView()
+    {
+        if (!$this->configView) {
+            $this->configView = $this->_viewConfig->getViewConfig();
+        }
+        return $this->configView;
     }
 }
