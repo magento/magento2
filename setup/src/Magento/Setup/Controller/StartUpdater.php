@@ -13,6 +13,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Magento\Setup\Model\Updater as ModelUpdater;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
+use Magento\Framework\Module\FullModuleList;
 
 /**
  * Controller for updater tasks
@@ -46,18 +47,26 @@ class StartUpdater extends AbstractActionController
     private $updater;
 
     /**
+     * @var FullModuleList
+     */
+    private $moduleList;
+
+    /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Setup\Model\Navigation $navigation
      * @param ModelUpdater $updater
+     * @param FullModuleList $moduleList
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Setup\Model\Navigation $navigation,
-        ModelUpdater $updater
+        ModelUpdater $updater,
+        FullModuleList $moduleList
     ) {
         $this->filesystem = $filesystem;
         $this->navigation = $navigation;
         $this->updater = $updater;
+        $this->moduleList = $moduleList;
     }
 
     /**
@@ -138,6 +147,15 @@ class StartUpdater extends AbstractActionController
             ) {
                 $errorMessage .= 'Missing package information' . PHP_EOL;
                 break;
+            }
+
+            // enable or disable job types expect magento module name
+            if(($jobType == 'enable') || ($jobType == 'disable')) {
+                //check to make sure that the passed in magento module name is valid
+                if(!$this->moduleList->has($package[self::KEY_POST_PACKAGE_NAME])) {
+                    $errorMessage .= 'Invalid Magento module name: ' . $package[self::KEY_POST_PACKAGE_NAME] . PHP_EOL;
+                    break;
+                }
             }
         }
         return $errorMessage;
