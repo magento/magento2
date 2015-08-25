@@ -56,7 +56,7 @@ abstract class AbstractAction
     protected $_isNeedUseIdxTable = false;
 
     /**
-     * @var \Magento\Indexer\Model\CacheContext
+     * @var \Magento\Framework\Indexer\CacheContext
      */
     private $cacheContext;
 
@@ -70,14 +70,14 @@ abstract class AbstractAction
      * @param Resource $resource
      * @param \Magento\CatalogInventory\Model\Resource\Indexer\StockFactory $indexerFactory
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
-     * @param \Magento\Indexer\Model\CacheContext $cacheContext
+     * @param \Magento\Framework\Indexer\CacheContext $cacheContext
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      */
     public function __construct(
         Resource $resource,
         \Magento\CatalogInventory\Model\Resource\Indexer\StockFactory $indexerFactory,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
-        \Magento\Indexer\Model\CacheContext $cacheContext,
+        \Magento\Framework\Indexer\CacheContext $cacheContext,
         \Magento\Framework\Event\ManagerInterface $eventManager
     ) {
         $this->_resource = $resource;
