@@ -8,6 +8,10 @@ namespace Magento\Paypal\Controller\Express\AbstractExpress;
 
 use Magento\Paypal\Model\Api\ProcessableException as ApiProcessableException;
 
+/**
+ * Class PlaceOrder
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
 {
     /**
