@@ -14,23 +14,12 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  */
 interface VideoContentInterface extends ExtensibleDataInterface
 {
-    const BASE64_ENCODED_DATA = 'base64_encoded_data';
-    const TYPE = 'type';
-
-    /**
-     * Retrieve media data (base64 encoded content)
-     *
-     * @return string
-     */
-    public function getBase64EncodedData();
-
-    /**
-     * Set media data (base64 encoded content)
-     *
-     * @param string $data
-     * @return $this
-     */
-    public function setBase64EncodedData($data);
+    const TYPE = 'media_type';
+    const PROVIDER = 'video_provider';
+	const URL = 'video_url';
+	const TITLE = 'video_title';
+	const DESCRIPTION = 'video_description';
+	const METADATA = 'video_metadata';
 
     /**
      * Retrieve MIME type
