@@ -17,9 +17,4 @@
             <argument name="filterList" xsi:type="object">searchFilterList</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\LayeredNavigation\Block\Navigation\AdvancedSearch" type="Magento\LayeredNavigation\Block\Navigation">
-        <arguments>
-            <argument name="filterList" xsi:type="object">advancedSearchFilterList</argument>
-        </arguments>
-    </virtualType>
 </config>
