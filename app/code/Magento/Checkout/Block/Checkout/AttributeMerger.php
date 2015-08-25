@@ -13,6 +13,36 @@ use Magento\Customer\Helper\Address as AddressHelper;
 class AttributeMerger
 {
     /**
+     * Map form element
+     *
+     * @var array
+     */
+    protected $formElementMap = [
+        'checkbox'    => 'Magento_Ui/js/form/element/select',
+        'select'      => 'Magento_Ui/js/form/element/select',
+        'textarea'    => 'Magento_Ui/js/form/element/textarea',
+        'multiline'   => 'Magento_Ui/js/form/components/group',
+        'multiselect' => 'Magento_Ui/js/form/element/multiselect',
+    ];
+
+    /**
+     * Map template
+     *
+     * @var array
+     */
+    protected $templateMap = [
+        'image' => 'media',
+    ];
+
+    protected $inputValidation = [
+        'alpha' => 'letters-only',
+        'numeric' => 'validate-number',
+        'alphanumeric' => 'alphanumeric',
+        'url' => 'url2',
+        'email' => 'email2',
+    ];
+
+    /**
      * @var AddressHelper
      */
     private $addressHelper;
@@ -102,16 +132,22 @@ class AttributeMerger
         $dataScopePrefix
     ) {
         // street attribute is unique in terms of configuration, so it has its own configuration builder
-        if ($attributeCode == 'street') {
-            return $this->getStreetFieldConfig($attributeCode, $attributeConfig, $providerName, $dataScopePrefix);
+        if (isset($attributeConfig['validation']) && isset($attributeConfig['validation']['input_validation'])) {
+            $validationRule = $attributeConfig['validation']['input_validation'];
+            $attributeConfig['validation'][$this->inputValidation[$validationRule]] = true;
+            unset($attributeConfig['validation']['input_validation']);
         }
 
-        $uiComponent = $attributeConfig['formElement'] == 'select'
-            ? 'Magento_Ui/js/form/element/select'
+        if ($attributeConfig['formElement'] == 'multiline') {
+            return $this->getMultilineFieldConfig($attributeCode, $attributeConfig, $providerName, $dataScopePrefix);
+        }
+
+        $uiComponent = isset($this->formElementMap[$attributeConfig['formElement']])
+            ? $this->formElementMap[$attributeConfig['formElement']]
             : 'Magento_Ui/js/form/element/abstract';
-        $elementTemplate = $attributeConfig['formElement'] == 'select'
-            ? 'ui/form/element/select'
-            : 'ui/form/element/input';
+        $elementTemplate = isset($this->templateMap[$attributeConfig['formElement']])
+            ? 'ui/form/element/' . $this->templateMap[$attributeConfig['formElement']]
+            : 'ui/form/element/' . $attributeConfig['formElement'];
 
         $element = [
             'component' => isset($additionalConfig['component']) ? $additionalConfig['component'] : $uiComponent,
@@ -195,12 +231,12 @@ class AttributeMerger
      * @param string $dataScopePrefix
      * @return array
      */
-    protected function getStreetFieldConfig($attributeCode, array $attributeConfig, $providerName, $dataScopePrefix)
+    protected function getMultilineFieldConfig($attributeCode, array $attributeConfig, $providerName, $dataScopePrefix)
     {
-        $streetLines = [];
-        for ($lineIndex = 0; $lineIndex < $this->addressHelper->getStreetLines(); $lineIndex++) {
+        $lines = [];
+        for ($lineIndex = 0; $lineIndex < (int)$attributeConfig['size']; $lineIndex++) {
             $isFirstLine = $lineIndex === 0;
-            $streetLines[] = [
+            $lines[] = [
                 'component' => 'Magento_Ui/js/form/element/abstract',
                 'config' => [
                     // customScope is used to group elements within a single form e.g. they can be validated separately
@@ -210,23 +246,23 @@ class AttributeMerger
                 ],
                 'dataScope' => $lineIndex,
                 'provider' => $providerName,
-                'validation' => $isFirstLine ? ['required-entry' => true] : [],
+                'validation' => $isFirstLine ? ['required-entry' => (bool)$attributeConfig['required']] : [],
                 'additionalClasses' => $isFirstLine ? : 'additional'
             ];
         }
         return [
             'component' => 'Magento_Ui/js/form/components/group',
-            'label' => __('Address'),
-            'required' => true,
+            'label' => $attributeConfig['label'],
+            'required' => (bool)$attributeConfig['required'],
             'dataScope' => $dataScopePrefix . '.' . $attributeCode,
             'provider' => $providerName,
             'sortOrder' => $attributeConfig['sortOrder'],
             'type' => 'group',
             'config' => [
                 'template' => 'ui/group/group',
-                'additionalClasses' => 'street'
+                'additionalClasses' => $attributeCode
             ],
-            'children' => $streetLines,
+            'children' => $lines,
         ];
     }
 
