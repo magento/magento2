@@ -54,5 +54,7 @@ class RenderersPool implements PoolInterface
             ? null
             : $this->renderersConfiguration[$identifier]
         );
+
+        return $renderer;
     }
 }
