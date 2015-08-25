@@ -52,7 +52,7 @@ class CleanupFiles
      */
     public function clearCodeGeneratedClasses()
     {
-        return $this->emptyDir(DirectoryList::GENERATION);
+        return array_merge($this->emptyDir(DirectoryList::GENERATION), $this->emptyDir(DirectoryList::DI));
     }
 
     /**
