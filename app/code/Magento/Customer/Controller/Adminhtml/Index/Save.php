@@ -32,7 +32,6 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 CustomerInterface::DEFAULT_BILLING,
                 CustomerInterface::DEFAULT_SHIPPING,
                 'confirmation',
-                'sendemail',
             ];
 
             $customerData = $this->_extractData(
