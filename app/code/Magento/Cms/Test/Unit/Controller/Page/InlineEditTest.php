@@ -240,4 +240,30 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
 
         $this->controller->execute();
     }
+
+    public function testExecuteWithoutData()
+    {
+        $this->request->expects($this->at(0))
+            ->method('getParam')
+            ->with('isAjax')
+            ->willReturn(true);
+        $this->request->expects($this->at(1))
+            ->method('getParam')
+            ->with('data', [])
+            ->willReturn([]);
+        $this->jsonFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultJson);
+        $this->resultJson->expects($this->once())
+            ->method('setData')
+            ->with([
+                'messages' => [
+                    'Please correct the data sent.'
+                ],
+                'error' => true
+            ])
+            ->willReturnSelf();
+
+        $this->controller->execute();
+    }
 }
