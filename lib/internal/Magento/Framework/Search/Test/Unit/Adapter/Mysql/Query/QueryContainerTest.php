@@ -78,7 +78,7 @@ class QueryContainerTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals($this->select, $result);
 
-        $queries = $this->queryContainer->getDerivedQueries();
+        $queries = $this->queryContainer->getMatchQueries();
         $this->assertCount(1, $queries);
         $this->assertEquals('asdf', reset($queries));
     }
