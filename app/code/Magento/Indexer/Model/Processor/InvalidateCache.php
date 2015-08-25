@@ -12,7 +12,7 @@ namespace Magento\Indexer\Model\Processor;
 class InvalidateCache
 {
     /**
-     * @var \Magento\Indexer\Model\CacheContext
+     * @var \Magento\Framework\Indexer\CacheContext
      */
     protected $context;
 
@@ -27,12 +27,12 @@ class InvalidateCache
     protected $moduleManager;
 
     /**
-     * @param \Magento\Indexer\Model\CacheContext $context
+     * @param \Magento\Framework\Indexer\CacheContext $context
      * @param \Magento\Framework\Event\Manager $eventManager
      * @param \Magento\Framework\Module\Manager $moduleManager
      */
     public function __construct(
-        \Magento\Indexer\Model\CacheContext $context,
+        \Magento\Framework\Indexer\CacheContext $context,
         \Magento\Framework\Event\Manager $eventManager,
         \Magento\Framework\Module\Manager $moduleManager
     ) {
