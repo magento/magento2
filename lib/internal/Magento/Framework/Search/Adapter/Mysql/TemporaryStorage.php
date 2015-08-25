@@ -45,7 +45,7 @@ class TemporaryStorage
         }
 
         $table = $this->createTemporaryTable();
-        if (!empty($data)) {
+        if (count($data)) {
             $this->getConnection()->insertArray(
                 $table->getName(),
                 [
@@ -85,7 +85,8 @@ class TemporaryStorage
     private function createTemporaryTable()
     {
         $connection = $this->getConnection();
-        $table = $connection->newTable($this->resource->getTableName(self::TEMPORARY_TABLE_PREFIX . time()));
+        $tableName = $this->resource->getTableName(str_replace('.', '_', uniqid(self::TEMPORARY_TABLE_PREFIX, true)));
+        $table = $connection->newTable($tableName);
         $connection->dropTable($table->getName());
         $table->addColumn(
             self::FIELD_ENTITY_ID,
