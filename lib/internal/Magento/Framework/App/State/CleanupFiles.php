@@ -99,7 +99,7 @@ class CleanupFiles
             return $messages;
         }
         foreach ($dir->search('*', $subPath) as $path) {
-            if (false === strpos($path, '.')) {
+            if (0 !== strpos($path, '.')) {
                 $messages[] = $dirPath . $path;
                 try {
                     $dir->delete($path);
