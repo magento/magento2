@@ -18,14 +18,17 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Webapi\Model\Soap\Config */
     protected $_soapConfig;
 
+    /** @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    protected $objectManager;
+
     /**
      * Set up helper.
      */
     protected function setUp()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $typeProcessor = $objectManager->getObject('Magento\Framework\Reflection\TypeProcessor');
+        $typeProcessor = $this->objectManager->getObject('Magento\Framework\Reflection\TypeProcessor');
 
         $objectManagerMock = $this->getMockBuilder(
             'Magento\Framework\App\ObjectManager'
@@ -101,11 +104,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         /** @var $config \Magento\Webapi\Model\ServiceMetadata */
         $serviceMetadata = new \Magento\Webapi\Model\ServiceMetadata($config, $cacheMock, $classReflection);
 
-        $this->_soapConfig = new \Magento\Webapi\Model\Soap\Config(
-            $objectManagerMock,
-            $fileSystemMock,
-            $registryMock,
-            $serviceMetadata
+        $this->_soapConfig = $this->objectManager->getObject(
+            'Magento\Webapi\Model\Soap\Config',
+            [
+                'objectManager' => $objectManagerMock,
+                'filesystem' => $fileSystemMock,
+                'registry' => $registryMock,
+                'serviceMetadata' => $serviceMetadata,
+            ]
         );
         parent::setUp();
     }

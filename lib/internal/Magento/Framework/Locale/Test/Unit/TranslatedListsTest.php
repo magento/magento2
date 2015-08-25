@@ -44,6 +44,7 @@ class TranslatedListsTest extends \PHPUnit_Framework_TestCase
     public function testGetCountryTranslation()
     {
         $this->assertNull($this->listsModel->getCountryTranslation(null));
+        $this->assertNull($this->listsModel->getCountryTranslation(null, 'en_US'));
     }
 
     public function testGetOptionAllCurrencies()
