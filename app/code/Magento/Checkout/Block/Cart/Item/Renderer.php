@@ -90,7 +90,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * @var InterpretationStrategyInterface
      */
-    private $messageIterpretationStrategy;
+    private $messageInterpretationStrategy;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -101,7 +101,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Module\Manager $moduleManager
-     * @param InterpretationStrategyInterface $messageIterpretationStrategy
+     * @param InterpretationStrategyInterface $messageInterpretationStrategy
      * @param array $data
      */
     public function __construct(
@@ -113,7 +113,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
         \Magento\Framework\Message\ManagerInterface $messageManager,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Module\Manager $moduleManager,
-        InterpretationStrategyInterface $messageIterpretationStrategy,
+        InterpretationStrategyInterface $messageInterpretationStrategy,
         array $data = []
     ) {
         $this->priceCurrency = $priceCurrency;
@@ -125,7 +125,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
         $this->moduleManager = $moduleManager;
-        $this->messageIterpretationStrategy = $messageIterpretationStrategy;
+        $this->messageInterpretationStrategy = $messageInterpretationStrategy;
     }
 
     /**
@@ -325,7 +325,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
             foreach ($additionalMessages as $message) {
                 /* @var $message \Magento\Framework\Message\MessageInterface */
                 $messages[] = [
-                    'text' => $this->messageIterpretationStrategy->interpret($message),
+                    'text' => $this->messageInterpretationStrategy->interpret($message),
                     'type' => $message->getType()
                 ];
             }

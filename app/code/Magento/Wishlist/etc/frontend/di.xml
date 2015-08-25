@@ -35,11 +35,6 @@
             <argument name="wishlistSession" xsi:type="object">Magento\Wishlist\Model\Session</argument>
         </arguments>
     </type>
-    <virtualType name="addProductSuccessMessageRenderer" type="Magento\Framework\View\Element\Message\Renderer\ComplexRenderer">
-        <arguments>
-            <argument name="template" xsi:type="string">Magento_Wishlist::messages/addProductSuccessMessage.phtml</argument>
-        </arguments>
-    </virtualType>
     <type name="Magento\Framework\View\Element\Message\Renderer\RenderersPool">
         <arguments>
             <argument name="renderers" xsi:type="array">

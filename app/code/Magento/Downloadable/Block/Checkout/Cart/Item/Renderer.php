@@ -32,7 +32,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Module\Manager $moduleManager
-     * @param InterpretationStrategyInterface $messageIterpretationStrategy
+     * @param InterpretationStrategyInterface $messageInterpretationStrategy
      * @param \Magento\Downloadable\Helper\Catalog\Product\Configuration $downloadableProductConfiguration
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -46,7 +46,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
         \Magento\Framework\Message\ManagerInterface $messageManager,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Module\Manager $moduleManager,
-        InterpretationStrategyInterface $messageIterpretationStrategy,
+        InterpretationStrategyInterface $messageInterpretationStrategy,
         \Magento\Downloadable\Helper\Catalog\Product\Configuration $downloadableProductConfiguration,
         array $data = []
     ) {
@@ -60,7 +60,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
             $messageManager,
             $priceCurrency,
             $moduleManager,
-            $messageIterpretationStrategy,
+            $messageInterpretationStrategy,
             $data
         );
     }
