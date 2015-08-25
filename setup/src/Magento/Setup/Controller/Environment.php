@@ -16,8 +16,8 @@ use Zend\View\Model\JsonModel;
 use Magento\Setup\Model\FilePermissions;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Setup\Model\ModuleStatusFactory;
+use Magento\Framework\Module\Status;
 
 /**
  * Class Environment
@@ -69,11 +69,11 @@ class Environment extends AbstractActionController
     protected $phpReadinessCheck;
 
     /**
-     * Object manager
+     * Module/Status Object
      *
-     * @var ObjectManagerInterface
+     * @var Status
      */
-    protected $objectManager;
+    protected $moduleStatus;
 
     /**
      * Constructor
@@ -84,7 +84,7 @@ class Environment extends AbstractActionController
      * @param DependencyReadinessCheck $dependencyReadinessCheck
      * @param UninstallDependencyCheck $uninstallDependencyCheck
      * @param PhpReadinessCheck $phpReadinessCheck
-     * @param ObjectManagerProvider $objectManagerProvider
+     * @param ModuleStatusFactory $moduleStatusFactory
      */
     public function __construct(
         FilePermissions $permissions,
@@ -93,7 +93,7 @@ class Environment extends AbstractActionController
         DependencyReadinessCheck $dependencyReadinessCheck,
         UninstallDependencyCheck $uninstallDependencyCheck,
         PhpReadinessCheck $phpReadinessCheck,
-        ObjectManagerProvider $objectManagerProvider
+        ModuleStatusFactory $moduleStatusFactory
     ) {
         $this->permissions = $permissions;
         $this->filesystem = $filesystem;
@@ -101,7 +101,7 @@ class Environment extends AbstractActionController
         $this->dependencyReadinessCheck = $dependencyReadinessCheck;
         $this->uninstallDependencyCheck = $uninstallDependencyCheck;
         $this->phpReadinessCheck = $phpReadinessCheck;
-        $this->objectManager = $objectManagerProvider->get();
+        $this->moduleStatus = $moduleStatusFactory->create();
     }
 
     /**
@@ -319,12 +319,7 @@ class Environment extends AbstractActionController
             $modulesToChange[] = $module['name'];
         }
 
-        /**
-         * @var \Magento\Framework\Module\Status $status
-         */
-        $status = $this->objectManager->get('Magento\Framework\Module\Status');
-
-        $constraints = $status->checkConstraints($isEnable, $modulesToChange);
+        $constraints = $this->moduleStatus->checkConstraints($isEnable, $modulesToChange);
 
         $data = [];
         if ($constraints) {

@@ -44,6 +44,11 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
     protected $uninstallDependencyCheck;
 
     /**
+     * @var \Magento\Setup\Model\ModuleStatusFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $moduleStatusFactory;
+
+    /**
      * @var Environment
      */
     private $environment;
@@ -75,13 +80,21 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->moduleStatusFactory = $this->getMock(
+            'Magento\Setup\Model\ModuleStatusFactory',
+            [],
+            [],
+            '',
+            false
+        );
         $this->environment = new Environment(
             $this->permissions,
             $this->filesystem,
             $this->cronScriptReadinessCheck,
             $this->dependencyReadinessCheck,
             $this->uninstallDependencyCheck,
-            $this->phpReadinessCheck
+            $this->phpReadinessCheck,
+            $this->moduleStatusFactory
         );
     }
 
