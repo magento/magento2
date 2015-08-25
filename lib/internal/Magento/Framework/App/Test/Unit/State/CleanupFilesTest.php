@@ -32,9 +32,13 @@ class CleanupFilesTest extends \PHPUnit_Framework_TestCase
     public function testClearCodeGeneratedClasses()
     {
         $dir = $this->getDirectoryCleanMock();
-        $this->filesystem->expects($this->once())
+        $this->filesystem->expects($this->at(0))
             ->method('getDirectoryWrite')
             ->with(DirectoryList::GENERATION)
+            ->willReturn($dir);
+        $this->filesystem->expects($this->at(1))
+            ->method('getDirectoryWrite')
+            ->with(DirectoryList::DI)
             ->willReturn($dir);
         $this->object->clearCodeGeneratedClasses();
     }
@@ -59,9 +63,9 @@ class CleanupFilesTest extends \PHPUnit_Framework_TestCase
     private function getDirectoryCleanMock($subPath = null)
     {
         $dir = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
-        $dir->expects($this->once())->method('search')->with('*', $subPath)->willReturn(['one', 'two']);
-        $dir->expects($this->exactly(2))->method('delete');
-        $dir->expects($this->once())->method('isExist')->will($this->returnValue(true));
+        $dir->expects($this->exactly(2))->method('search')->with('*', $subPath)->willReturn(['one', 'two']);
+        $dir->expects($this->exactly(4))->method('delete');
+        $dir->expects($this->exactly(2))->method('isExist')->will($this->returnValue(true));
         return $dir;
     }
 }
