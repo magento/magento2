@@ -15,7 +15,6 @@ use Magento\Framework\Api\Filter;
  */
 class FulltextFilter implements FilterApplierInterface
 {
-
     /**
      * Returns list of columns from fulltext index (doesn't support more then one FTI per table)
      *

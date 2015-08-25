@@ -89,18 +89,22 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $readerMock = $this->getMockBuilder('Magento\Webapi\Model\Config\Reader')
             ->disableOriginalConstructor()
             ->getMock();
-        $readerMock->expects($this->once())->method('read')->will($this->returnValue($servicesConfig));
+        $readerMock->expects($this->any())->method('read')->will($this->returnValue($servicesConfig));
 
         /** @var $config \Magento\Webapi\Model\Config */
         $config = new \Magento\Webapi\Model\Config($cacheMock, $readerMock);
 
-        $this->_soapConfig = new \Magento\Webapi\Model\Soap\Config(
-            $objectManagerMock,
-            $fileSystemMock,
-            $config,
-            $classReflection,
-            $cacheMock,
-            $registryMock
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->_soapConfig = $objectManager->getObject(
+            'Magento\Webapi\Model\Soap\Config',
+            [
+                'objectManager' => $objectManagerMock,
+                'filesystem' => $fileSystemMock,
+                'config' => $config,
+                'classReflector' => $classReflection,
+                'cache' => $cacheMock,
+                'registry' => $registryMock
+            ]
         );
         parent::setUp();
     }
