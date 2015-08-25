@@ -10,6 +10,37 @@ use Magento\Framework\Controller\ResultFactory;
 class Send extends \Magento\SendFriend\Controller\Product
 {
     /**
+     * @var \Magento\Catalog\Model\Session
+     */
+    protected $catalogSession;
+
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
+     * @param \Magento\SendFriend\Model\SendFriend $sendFriend
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @param \Magento\Catalog\Model\Session $catalogSession
+     */
+    public function __construct(
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
+        \Magento\SendFriend\Model\SendFriend $sendFriend,
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
+        \Magento\Catalog\Model\Session $catalogSession
+    ) {
+        $this->catalogSession = $catalogSession;
+        parent::__construct(
+            $context,
+            $coreRegistry,
+            $formKeyValidator,
+            $sendFriend,
+            $productRepository
+        );
+    }
+
+    /**
      * Show Send to a Friend Form
      *
      * @return \Magento\Framework\Controller\ResultInterface
@@ -24,8 +55,6 @@ class Send extends \Magento\SendFriend\Controller\Product
             $resultForward->forward('noroute');
             return $resultForward;
         }
-        /* @var $session \Magento\Catalog\Model\Session */
-        $catalogSession = $this->_objectManager->get('Magento\Catalog\Model\Session');
 
         if ($this->sendFriend->getMaxSendsToFriend() && $this->sendFriend->isExceedLimit()) {
             $this->messageManager->addNotice(
@@ -37,11 +66,12 @@ class Send extends \Magento\SendFriend\Controller\Product
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
 
         $this->_eventManager->dispatch('sendfriend_product', ['product' => $product]);
-        $data = $catalogSession->getSendfriendFormData();
+        $data = $this->catalogSession->getSendfriendFormData();
         if ($data) {
-            $catalogSession->setSendfriendFormData(true);
+            $this->catalogSession->setSendfriendFormData(true);
             $block = $resultPage->getLayout()->getBlock('sendfriend.send');
             if ($block) {
+                /** @var \Magento\SendFriend\Block\Send $block */
                 $block->setFormData($data);
             }
         }

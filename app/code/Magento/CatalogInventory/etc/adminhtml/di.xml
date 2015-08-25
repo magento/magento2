@@ -19,4 +19,14 @@
             <argument name="qtyCheckApplicable" xsi:type="boolean">false</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider">
+        <arguments>
+            <argument name="addFieldStrategies" xsi:type="array">
+                <item name="qty" xsi:type="object">Magento\CatalogInventory\Ui\DataProvider\Product\AddQuantityFieldToCollection</item>
+            </argument>
+            <argument name="addFilterStrategies" xsi:type="array">
+                <item name="qty" xsi:type="object">Magento\CatalogInventory\Ui\DataProvider\Product\AddQuantityFilterToCollection</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

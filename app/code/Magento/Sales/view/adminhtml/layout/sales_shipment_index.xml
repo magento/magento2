@@ -6,10 +6,10 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <update handle="sales_shipment_grid_block"/>
+    <update handle="styles"/>
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Sales\Block\Adminhtml\Shipment" name="sales_shipment.grid.container"/>
+            <uiComponent name="sales_order_shipment_grid"/>
         </referenceContainer>
     </body>
 </page>

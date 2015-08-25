@@ -8,7 +8,7 @@ namespace Magento\Newsletter\Controller\Adminhtml;
 /**
  * Newsletter subscribers controller
  */
-class Problem extends \Magento\Backend\App\Action
+abstract class Problem extends \Magento\Backend\App\Action
 {
     /**
      * Check if user has enough privileges

@@ -27,7 +27,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 5. Save Status Assignment.
  * 6. Call assert assertOrderStatusSuccessAssignMessage.
  * 7. Create Order.
- * 8. Perform all assertions from dataSet.
+ * 8. Perform all assertions from dataset.
  *
  * @group Order_Management_(CS)
  * @ZephyrId MAGETWO-29382

@@ -21,6 +21,8 @@ class Server
 
     const REQUEST_PARAM_WSDL = 'wsdl';
 
+    const REQUEST_PARAM_LIST_WSDL = 'wsdl_list';
+
     /**
      * @var \Magento\Framework\App\AreaLIst
      */

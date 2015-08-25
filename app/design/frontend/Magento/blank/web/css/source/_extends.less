@@ -1046,18 +1046,6 @@
     input {
         .css(margin-right, @indent__s);
         width: calc(~"100% - (@{checkout-tooltip-icon__font-size} + @{indent__s} + @{indent__xs})");
-        &:focus {
-            + .field-tooltip {
-                .field-tooltip-action {
-                    &:before {
-                        .css(color, @checkout-tooltip-icon__hover__color);
-                    }
-                }
-                .field-tooltip-content {
-                    display: block;
-                }
-            }
-        }
     }
 }
 

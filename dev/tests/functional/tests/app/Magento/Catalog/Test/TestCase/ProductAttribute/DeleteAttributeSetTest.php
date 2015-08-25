@@ -80,7 +80,7 @@ class DeleteAttributeSetTest extends Injectable
         $product = $fixtureFactory->createByCode(
             'catalogProductSimple',
             [
-                'dataSet' => 'default',
+                'dataset' => 'default',
                 'data' => [
                     'attribute_set_id' => ['attribute_set' => $productTemplate],
                 ],

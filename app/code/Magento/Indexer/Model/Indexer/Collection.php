@@ -12,10 +12,10 @@ class Collection extends \Magento\Framework\Data\Collection
      *
      * @var string
      */
-    protected $_itemObjectClass = 'Magento\Indexer\Model\IndexerInterface';
+    protected $_itemObjectClass = 'Magento\Framework\Indexer\IndexerInterface';
 
     /**
-     * @var \Magento\Indexer\Model\ConfigInterface
+     * @var \Magento\Framework\Indexer\ConfigInterface
      */
     protected $config;
 
@@ -26,12 +26,12 @@ class Collection extends \Magento\Framework\Data\Collection
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
-     * @param \Magento\Indexer\Model\ConfigInterface $config
+     * @param \Magento\Framework\Indexer\ConfigInterface $config
      * @param \Magento\Indexer\Model\Resource\Indexer\State\CollectionFactory $statesFactory
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
-        \Magento\Indexer\Model\ConfigInterface $config,
+        \Magento\Framework\Indexer\ConfigInterface $config,
         \Magento\Indexer\Model\Resource\Indexer\State\CollectionFactory $statesFactory
     ) {
         $this->config = $config;
@@ -53,7 +53,7 @@ class Collection extends \Magento\Framework\Data\Collection
         if (!$this->isLoaded()) {
             $states = $this->statesFactory->create();
             foreach (array_keys($this->config->getIndexers()) as $indexerId) {
-                /** @var \Magento\Indexer\Model\IndexerInterface $indexer */
+                /** @var \Magento\Framework\Indexer\IndexerInterface $indexer */
                 $indexer = $this->getNewEmptyItem();
                 $indexer->load($indexerId);
                 foreach ($states->getItems() as $state) {

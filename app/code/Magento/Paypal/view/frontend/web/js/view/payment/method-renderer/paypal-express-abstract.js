@@ -7,9 +7,10 @@
 define(
     [
         'jquery',
-        'Magento_Checkout/js/view/payment/default'
+        'Magento_Checkout/js/view/payment/default',
+        'Magento_Paypal/js/action/set-payment-method'
     ],
-    function ($, Component) {
+    function ($, Component, setPaymentMethodAction) {
         'use strict';
 
         return Component.extend({
@@ -67,8 +68,10 @@ define(
             },
 
             /** Redirect to paypal */
-            continueToPayPal: function() {
-                $.mage.redirect(window.checkoutConfig.payment.paypalExpress.redirectUrl[this.item.method]);
+            continueToPayPal: function () {
+                //update payment method information if additional data was changed
+                this.selectPaymentMethod();
+                setPaymentMethodAction();
                 return false;
             }
         });

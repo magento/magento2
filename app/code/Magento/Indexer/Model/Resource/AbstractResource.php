@@ -19,7 +19,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
     /**
      * Constructor
      *
-     * @var \Magento\Indexer\Model\Indexer\Table\StrategyInterface
+     * @var \Magento\Framework\Indexer\Table\StrategyInterface
      */
     protected $tableStrategy;
 
@@ -27,16 +27,16 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
      * Class constructor
      *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
-     * @param \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy
-     * @param null $resourcePrefix
+     * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy,
-        $resourcePrefix = null
+        \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
+        $connectionName = null
     ) {
         $this->tableStrategy = $tableStrategy;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -57,7 +57,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
      */
     protected function _getIndexAdapter()
     {
-        return $this->_getWriteAdapter();
+        return $this->getConnection();
     }
 
     /**
@@ -86,7 +86,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
             /**
              * Can't use truncate because of transaction
              */
-            $this->_getWriteAdapter()->delete($this->getMainTable());
+            $this->getConnection()->delete($this->getMainTable());
             $this->insertFromTable($this->getIdxTable(), $this->getMainTable(), false);
             $this->commit();
         } catch (\Exception $e) {
@@ -107,11 +107,11 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
     public function insertFromTable($sourceTable, $destTable, $readToIndex = true)
     {
         if ($readToIndex) {
-            $sourceColumns = array_keys($this->_getWriteAdapter()->describeTable($sourceTable));
-            $targetColumns = array_keys($this->_getWriteAdapter()->describeTable($destTable));
+            $sourceColumns = array_keys($this->getConnection()->describeTable($sourceTable));
+            $targetColumns = array_keys($this->getConnection()->describeTable($destTable));
         } else {
             $sourceColumns = array_keys($this->_getIndexAdapter()->describeTable($sourceTable));
-            $targetColumns = array_keys($this->_getWriteAdapter()->describeTable($destTable));
+            $targetColumns = array_keys($this->getConnection()->describeTable($destTable));
         }
         $select = $this->_getIndexAdapter()->select()->from($sourceTable, $sourceColumns);
 
@@ -132,11 +132,11 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
     public function insertFromSelect($select, $destTable, array $columns, $readToIndex = true)
     {
         if ($readToIndex) {
-            $from = $this->_getWriteAdapter();
+            $from = $this->getConnection();
             $to = $this->_getIndexAdapter();
         } else {
             $from = $this->_getIndexAdapter();
-            $to = $this->_getWriteAdapter();
+            $to = $this->getConnection();
         }
 
         if ($from === $to) {
@@ -170,6 +170,6 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
      */
     public function clearTemporaryIndexTable()
     {
-        $this->_getWriteAdapter()->delete($this->getIdxTable());
+        $this->getConnection()->delete($this->getIdxTable());
     }
 }

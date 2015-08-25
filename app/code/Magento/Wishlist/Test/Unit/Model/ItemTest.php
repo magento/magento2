@@ -165,7 +165,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->model->addOption($option);
         $this->assertEquals(1, count($this->model->getOptions()));
         $this->model->removeOption($code);
-        $actualOptions  = $this->model->getOptions();
+        $actualOptions = $this->model->getOptions();
         $actualOption = array_pop($actualOptions);
         $this->assertTrue($actualOption->isDeleted());
     }
@@ -185,8 +185,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         return [
             ['first_key', ['code' => 'first_key', 'value' => 'first_data']],
-            ['second_key',$optionMock],
-            ['third_key', new \Magento\Framework\Object(['code' => 'third_key', 'product' => $productMock])],
+            ['second_key', $optionMock],
+            ['third_key', new \Magento\Framework\DataObject(['code' => 'third_key', 'product' => $productMock])],
         ];
     }
 
@@ -261,5 +261,64 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertFalse($result);
+    }
+
+    public function testSetAndSaveItemOptions()
+    {
+        $this->assertEmpty($this->model->getOptions());
+        $firstOptionMock = $this->getMockBuilder('Magento\Wishlist\Model\Item\Option')
+            ->disableOriginalConstructor()
+            ->setMethods(['getCode', 'isDeleted', 'delete', '__wakeup'])
+            ->getMock();
+        $firstOptionMock->expects($this->any())
+            ->method('getCode')
+            ->willReturn('first_code');
+        $firstOptionMock->expects($this->any())
+            ->method('isDeleted')
+            ->willReturn(true);
+        $firstOptionMock->expects($this->once())
+            ->method('delete');
+
+        $secondOptionMock = $this->getMockBuilder('Magento\Wishlist\Model\Item\Option')
+            ->disableOriginalConstructor()
+            ->setMethods(['getCode', 'save', '__wakeup'])
+            ->getMock();
+        $secondOptionMock->expects($this->any())
+            ->method('getCode')
+            ->willReturn('second_code');
+        $secondOptionMock->expects($this->once())
+            ->method('save');
+
+        $this->model->setOptions([$firstOptionMock, $secondOptionMock]);
+        $this->assertNull($this->model->isOptionsSaved());
+        $this->model->saveItemOptions();
+        $this->assertTrue($this->model->isOptionsSaved());
+    }
+
+    public function testGetProductWithException()
+    {
+        $this->setExpectedException('Magento\Framework\Exception\LocalizedException', __('Cannot specify product.'));
+        $this->model->getProduct();
+    }
+
+    public function testGetProduct()
+    {
+        $productId = 1;
+        $storeId = 0;
+        $this->model->setData('product_id', $productId);
+        $this->model->setData('store_id', $storeId);
+        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $productMock->expects($this->any())
+            ->method('setFinalPrice')
+            ->with(null);
+        $productMock->expects($this->any())
+            ->method('setCustomOprtions')
+            ->with([]);
+        $this->productRepository->expects($this->once())
+            ->method('getById')
+            ->willReturn($productMock);
+        $this->assertEquals($productMock, $this->model->getProduct());
     }
 }

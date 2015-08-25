@@ -52,7 +52,7 @@ class AssertProductTemplateOnProductForm extends AbstractConstraint
         $productSimple = $fixtureFactory->createByCode(
             'catalogProductSimple',
             [
-                'dataSet' => 'default',
+                'dataset' => 'default',
                 'data' => [
                     'attribute_set_id' => ['attribute_set' => $attributeSet],
                 ],

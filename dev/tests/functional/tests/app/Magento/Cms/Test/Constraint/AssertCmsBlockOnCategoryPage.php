@@ -36,7 +36,7 @@ class AssertCmsBlockOnCategoryPage extends AbstractConstraint
         $category = $fixtureFactory->createByCode(
             'category',
             [
-                'dataSet' => 'default_subcategory',
+                'dataset' => 'default_subcategory',
                 'data' => [
                     'display_mode' => 'Static block and products',
                     'landing_page' => $cmsBlock->getTitle(),

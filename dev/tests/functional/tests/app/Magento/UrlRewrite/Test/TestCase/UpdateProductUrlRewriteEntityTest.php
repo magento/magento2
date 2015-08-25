@@ -54,7 +54,7 @@ class UpdateProductUrlRewriteEntityTest extends Injectable
     protected $urlRewriteEdit;
 
     /**
-     * Prepare dataSets and pages
+     * Prepare datasets and pages
      *
      * @param UrlRewriteIndex $urlRewriteIndex
      * @param UrlRewriteEdit $urlRewriteEdit
@@ -81,7 +81,7 @@ class UpdateProductUrlRewriteEntityTest extends Injectable
         $productRedirect = $fixtureFactory->createByCode(
             'urlRewrite',
             [
-                'dataSet' => 'default',
+                'dataset' => 'default',
                 'data' => ['target_path' => $urlRewrite->getTargetPath()]
             ]
         );

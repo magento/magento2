@@ -152,11 +152,15 @@ class OrderServiceTest extends \PHPUnit_Framework_TestCase
             ->with(123)
             ->willReturnSelf();
         $this->filterBuilderMock->expects($this->once())
+            ->method('setConditionType')
+            ->with('eq')
+            ->willReturnSelf();
+        $this->filterBuilderMock->expects($this->once())
             ->method('create')
             ->willReturn($this->filterMock);
         $this->searchCriteriaBuilderMock->expects($this->once())
-            ->method('addFilter')
-            ->with(['eq' => $this->filterMock])
+            ->method('addFilters')
+            ->with([$this->filterMock])
             ->willReturn($this->filterBuilderMock);
         $this->searchCriteriaBuilderMock->expects($this->once())
             ->method('create')
@@ -216,6 +220,10 @@ class OrderServiceTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with(123)
             ->willReturn($this->orderMock);
+        $this->orderRepositoryMock->expects($this->once())
+            ->method('save')
+            ->with($this->orderMock)
+            ->willReturn($this->orderMock);
         $this->orderMock->expects($this->once())
             ->method('hold')
             ->willReturn($this->orderMock);
@@ -227,6 +235,10 @@ class OrderServiceTest extends \PHPUnit_Framework_TestCase
         $this->orderRepositoryMock->expects($this->once())
             ->method('get')
             ->with(123)
+            ->willReturn($this->orderMock);
+        $this->orderRepositoryMock->expects($this->once())
+            ->method('save')
+            ->with($this->orderMock)
             ->willReturn($this->orderMock);
         $this->orderMock->expects($this->once())
             ->method('unHold')

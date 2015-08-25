@@ -5,112 +5,82 @@
  */
 namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Query;
 
+use Magento\Framework\Search\Adapter\Mysql\Query\MatchContainerFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer;
-use Magento\Framework\Search\Request\Query\Bool;
+use Magento\Framework\Search\Request\Query\BoolExpression;
 
 class QueryContainerTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject */
     private $select;
 
-    /** @var \Magento\Framework\Search\Adapter\Mysql\ScoreBuilder|\PHPUnit_Framework_MockObject_MockObject */
-    private $scoreBuilder;
-
-    /** @var \Magento\Framework\Search\Adapter\Mysql\ScoreBuilderFactory|\PHPUnit_Framework_MockObject_MockObject */
-    private $scoreBuilderFactory;
+    /** @var MatchContainerFactory|\PHPUnit_Framework_MockObject_MockObject */
+    private $matchContainerFactory;
 
     /** @var \Magento\Framework\Search\Request\QueryInterface|\PHPUnit_Framework_MockObject_MockObject */
-    private $query;
-
-    /** @var \Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match|\PHPUnit_Framework_MockObject_MockObject */
-    private $matchBuilder;
-
-    /** @var \Magento\Framework\Search\Adapter\Mysql\IndexBuilderInterface|\PHPUnit_Framework_MockObject_MockObject */
-    private $indexBuilder;
-
-    /** @var \Magento\Framework\Search\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
-    private $request;
+    private $requestQuery;
 
     /** @var \Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer */
     private $queryContainer;
 
     protected function setUp()
     {
+        if (version_compare('5.5.23', phpversion(), '=')) {
+            $this->markTestSkipped('This test fails with Segmentation fault on PHP 5.5.23');
+        }
         $helper = new ObjectManager($this);
 
         $this->select = $this->getMockBuilder('Magento\Framework\DB\Select')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->scoreBuilder = $this->getMockBuilder('Magento\Framework\Search\Adapter\Mysql\ScoreBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->scoreBuilderFactory = $this->getMockBuilder('Magento\Framework\Search\Adapter\Mysql\ScoreBuilderFactory')
+        $this->matchContainerFactory = $this->getMockBuilder(
+            'Magento\Framework\Search\Adapter\Mysql\Query\MatchContainerFactory'
+        )
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scoreBuilderFactory->expects($this->any())->method('create')->willReturn($this->scoreBuilder);
 
-        $this->query = $this->getMockBuilder('Magento\Framework\Search\Request\QueryInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->matchBuilder = $this->getMockBuilder('Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match')
-            ->setMethods(['build'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->matchBuilder->expects($this->any())->method('build')->willReturnArgument(1);
-
-        $this->indexBuilder = $this->getMockBuilder('Magento\Framework\Search\Adapter\Mysql\IndexBuilderInterface')
-            ->setMethods(['build'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->request = $this->getMockBuilder('\Magento\Framework\Search\RequestInterface')
+        $this->requestQuery = $this->getMockBuilder('Magento\Framework\Search\Request\QueryInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->queryContainer = $helper->getObject(
             'Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer',
             [
-                'scoreBuilderFactory' => $this->scoreBuilderFactory,
-                'matchBuilder' => $this->matchBuilder,
-                'indexBuilder' => $this->indexBuilder,
-                'request' => $this->request
+                'matchContainerFactory' => $this->matchContainerFactory,
             ]
         );
     }
 
     public function testBuild()
     {
+        $this->matchContainerFactory->expects($this->once())->method('create')
+            ->willReturn('asdf');
 
-        $this->scoreBuilder->expects($this->once())->method('build')->willReturn('score condition');
-        $subSelect = $this->getMockBuilder('Magento\Framework\DB\Select')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->indexBuilder->expects($this->once())->method('build')->willReturn($subSelect);
-        $subSelect->expects($this->once())->method('columns')->with('score condition');
-        $this->request->expects($this->once())->method('getSize')->willReturn(1000);
-        $subSelect->expects($this->once())->method('limit')->with(1000);
-
-        $result = $this->queryContainer->addMatchQuery($this->select, $this->query, Bool::QUERY_CONDITION_MUST);
+        $result = $this->queryContainer->addMatchQuery(
+            $this->select,
+            $this->requestQuery,
+            BoolExpression::QUERY_CONDITION_MUST
+        );
         $this->assertEquals($this->select, $result);
-    }
-
-    public function testGetDerivedQueryNames()
-    {
-        $this->testBuild();
-        $expected = [QueryContainer::DERIVED_QUERY_PREFIX . '0'];
-        $this->assertEquals($expected, $this->queryContainer->getDerivedQueryNames());
     }
 
     public function testGetDerivedQueries()
     {
-        $this->testBuild();
-        $queries = $this->queryContainer->getDerivedQueries();
+        $this->matchContainerFactory->expects($this->once())->method('create')
+            ->willReturn('asdf');
+
+        $result = $this->queryContainer->addMatchQuery(
+            $this->select,
+            $this->requestQuery,
+            BoolExpression::QUERY_CONDITION_MUST
+        );
+        $this->assertEquals($this->select, $result);
+
+        $queries = $this->queryContainer->getMatchQueries();
         $this->assertCount(1, $queries);
-        $this->assertEquals($this->select, reset($queries));
+        $this->assertEquals('asdf', reset($queries));
     }
 
     public function testFilters()

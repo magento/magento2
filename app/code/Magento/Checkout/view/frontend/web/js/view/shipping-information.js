@@ -9,10 +9,10 @@ define(
         'jquery',
         'uiComponent',
         'Magento_Checkout/js/model/quote',
-        'Magento_Checkout/js/model/shipping-service',
-        'Magento_Checkout/js/model/step-navigator'
+        'Magento_Checkout/js/model/step-navigator',
+        'Magento_Checkout/js/model/sidebar'
     ],
-    function($, Component, quote, shippingService, stepNavigator) {
+    function($, Component, quote, stepNavigator, sidebarModel) {
         'use strict';
         return Component.extend({
             defaults: {
@@ -24,13 +24,13 @@ define(
             },
 
             getShippingMethodTitle: function() {
-                return shippingService.getTitleByCode(quote.shippingMethod())
+                var shippingMethod = quote.shippingMethod();
+                return shippingMethod ? shippingMethod.carrier_title + " - " + shippingMethod.method_title : '';
             },
 
             back: function() {
-                // Temp solution for closing summary sliding panel on mobile MAGETWO-3864
-                $('#opc-sidebar').modal('toggleModal');
-                stepNavigator.back();
+                sidebarModel.hide();
+                stepNavigator.navigateTo('shipping');
             }
         });
     }

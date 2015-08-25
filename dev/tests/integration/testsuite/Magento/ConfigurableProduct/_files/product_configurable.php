@@ -54,8 +54,6 @@ foreach ($options as $option) {
         'label' => 'test',
         'attribute_id' => $attribute->getId(),
         'value_index' => $option->getValue(),
-        'is_percent' => false,
-        'pricing_value' => 5,
     ];
     $productIds[] = $product->getId();
 }

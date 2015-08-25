@@ -7,7 +7,7 @@
 namespace Magento\CatalogRule\Test\TestCase;
 
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple\CategoryIds;
+use Magento\Catalog\Test\Fixture\Product\CategoryIds;
 use Magento\CatalogRule\Test\Fixture\CatalogRule;
 
 /**
@@ -18,7 +18,7 @@ use Magento\CatalogRule\Test\Fixture\CatalogRule;
  * 1. Login to backend.
  * 2. Navigate to MARKETING > Catalog Price Rules.
  * 3. Click Catalog Price Rule from grid.
- * 4. Edit test value(s) according to dataSet.
+ * 4. Edit test value(s) according to dataset.
  * 5. Click 'Save'/ 'Apply' button.
  * 6. Create simple product with category.
  * 7. Perform all asserts.
@@ -31,7 +31,6 @@ class UpdateCatalogPriceRuleEntityTest extends AbstractCatalogRuleEntityTest
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'MX';
-    const STABLE = 'no';
     /* end tags */
 
     /**
@@ -53,7 +52,7 @@ class UpdateCatalogPriceRuleEntityTest extends AbstractCatalogRuleEntityTest
         //Prepare data
         $productSimple = $this->fixtureFactory->createByCode(
             'catalogProductSimple',
-            ['dataSet' => 'product_with_category']
+            ['dataset' => 'product_with_category']
         );
         if ($saveAction == 'saveAndApply') {
             /** @var CategoryIds $sourceCategories */

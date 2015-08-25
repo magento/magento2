@@ -66,4 +66,16 @@ class RemoteAddress
 
         return $ipToLong ? ip2long($this->remoteAddress) : $this->remoteAddress;
     }
+
+    /**
+     * Returns internet host name corresponding to remote server
+     *
+     * @return string|null
+     */
+    public function getRemoteHost()
+    {
+        return $this->getRemoteAddress()
+            ? gethostbyaddr($this->getRemoteAddress())
+            : null;
+    }
 }

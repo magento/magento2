@@ -5,8 +5,7 @@
  */
 namespace Magento\Ui\Model;
 
-use Magento\Framework\Json\Decoder;
-use Magento\Framework\Json\Encoder;
+use Magento\Framework\Json\DecoderInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
@@ -20,18 +19,12 @@ use Magento\Ui\Model\Resource\Bookmark as ResourceBookmark;
 class Bookmark extends AbstractModel implements BookmarkInterface
 {
     /**
-     * @var Encoder
-     */
-    protected $jsonEncoder;
-
-    /**
-     * @var Decoder
+     * @var DecoderInterface
      */
     protected $jsonDecoder;
 
     /**
-     * @param Encoder $jsonEncoder
-     * @param Decoder $jsonDecoder
+     * @param DecoderInterface $jsonDecoder
      * @param Context $context
      * @param Registry $registry
      * @param ResourceBookmark $resource
@@ -43,11 +36,9 @@ class Bookmark extends AbstractModel implements BookmarkInterface
         Registry $registry,
         ResourceBookmark $resource,
         Collection $resourceCollection,
-        Encoder $jsonEncoder,
-        Decoder $jsonDecoder,
+        DecoderInterface $jsonDecoder,
         array $data = []
     ) {
-        $this->jsonEncoder = $jsonEncoder;
         $this->jsonDecoder = $jsonDecoder;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -119,7 +110,11 @@ class Bookmark extends AbstractModel implements BookmarkInterface
      */
     public function getConfig()
     {
-        return $this->jsonDecoder->decode($this->getData(self::CONFIG));
+        $config = $this->getData(self::CONFIG);
+        if ($config) {
+            return $this->jsonDecoder->decode($config);
+        }
+        return [];
     }
 
     /**
@@ -211,12 +206,12 @@ class Bookmark extends AbstractModel implements BookmarkInterface
     /**
      * Set config
      *
-     * @param array $config
+     * @param string $config
      * @return $this
      */
     public function setConfig($config)
     {
-        return $this->setData(self::CONFIG, $this->jsonEncoder->encode($config));
+        return $this->setData(self::CONFIG, $config);
     }
 
     /**

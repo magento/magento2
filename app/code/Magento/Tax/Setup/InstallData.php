@@ -69,7 +69,10 @@ class InstallData implements InstallDataInterface
                 'visible_in_advanced_search' => true,
                 'used_in_product_listing' => true,
                 'unique' => false,
-                'apply_to' => implode(',', $taxSetup->getTaxableItems())
+                'apply_to' => implode(',', $taxSetup->getTaxableItems()),
+                'is_used_in_grid' => true,
+                'is_visible_in_grid' => false,
+                'is_filterable_in_grid' => true,
             ]
         );
 

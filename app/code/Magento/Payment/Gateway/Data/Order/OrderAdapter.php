@@ -9,6 +9,9 @@ use Magento\Payment\Gateway\Data\AddressAdapterInterface;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 
+/**
+ * Class OrderAdapter
+ */
 class OrderAdapter implements OrderAdapterInterface
 {
     /**
@@ -115,5 +118,25 @@ class OrderAdapter implements OrderAdapterInterface
     public function getGrandTotalAmount()
     {
         return $this->order->getBaseGrandTotal();
+    }
+
+    /**
+     * Returns list of line items in the cart
+     *
+     * @return \Magento\Sales\Api\Data\OrderItemInterface[]
+     */
+    public function getItems()
+    {
+        return $this->order->getItems();
+    }
+
+    /**
+     * Gets the remote IP address for the order.
+     *
+     * @return string|null Remote IP address.
+     */
+    public function getRemoteIp()
+    {
+        return $this->order->getRemoteIp();
     }
 }

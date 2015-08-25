@@ -122,6 +122,8 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
             );
         } catch (\Magento\Framework\Exception\State\InitException $e) {
             throw NoSuchEntityException::singleField('storeId', $storeId);
+        } catch (NoSuchEntityException $e) {
+            throw NoSuchEntityException::singleField('storeId', $storeId);
         }
         try {
             return $this->groupRepository->getById($groupId);
@@ -154,8 +156,8 @@ class GroupManagement implements \Magento\Customer\Api\GroupManagementInterface
             ->setValue(self::CUST_GROUP_ALL)
             ->create();
         $searchCriteria = $this->searchCriteriaBuilder
-            ->addFilter($notLoggedInFilter)
-            ->addFilter($groupAll)
+            ->addFilters($notLoggedInFilter)
+            ->addFilters($groupAll)
             ->create();
         return $this->groupRepository->getList($searchCriteria)->getItems();
     }

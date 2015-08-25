@@ -133,8 +133,8 @@ class Observer
                 )
             )->setTemplateOptions(
                 [
-                    'area' => \Magento\Framework\App\Area::AREA_ADMIN,
-                    'store' => $this->_storeManager->getStore()->getId(),
+                    'area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE,
+                    'store' => \Magento\Store\Model\Store::DEFAULT_STORE_ID,
                 ]
             )->setTemplateVars(
                 ['warnings' => join("\n", $errors)]

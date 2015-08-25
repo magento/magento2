@@ -5,8 +5,11 @@
  */
 namespace Magento\Framework\DB;
 
+use Magento\Framework\Flag;
+
 class TransactionTest extends \PHPUnit_Framework_TestCase
 {
+    protected $objectManager;
     /**
      * @var \Magento\Framework\DB\Transaction
      */
@@ -14,7 +17,8 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->_model = $this->objectManager
             ->create('Magento\Framework\DB\Transaction');
     }
 
@@ -23,15 +27,11 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveDelete()
     {
-        $first = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Group');
-        $first->setData(
-            ['website_id' => 1, 'name' => 'test 1', 'root_category_id' => 1, 'default_store_id' => 1]
-        );
-
-        $second = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Group');
-        $second->setData(
-            ['website_id' => 1, 'name' => 'test 2', 'root_category_id' => 1, 'default_store_id' => 1]
-        );
+        /** @var Flag $first */
+        $first = $this->objectManager->create(Flag::class, ['data' => ['flag_code' => 'test1']]);
+        $first->setFlagData('test1data');
+        $second = $this->objectManager->create(Flag::class, ['data' => ['flag_code' => 'test2']]);
+        $second->setFlagData('test2data');
 
         $first->save();
         $this->_model->addObject($first)->addObject($second, 'second');
@@ -41,7 +41,7 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->delete();
 
-        $test = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Store\Model\Group');
+        $test = $this->objectManager->create(Flag::class);
         $test->load($first->getId());
         $this->assertEmpty($test->getId());
     }

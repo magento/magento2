@@ -13,7 +13,6 @@ use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\Api\ImageContentValidatorInterface;
 use Magento\Framework\Api\ImageProcessorInterface;
-use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -76,12 +75,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $linkInitializer;
 
     /*
-     * @param \Magento\Catalog\Model\Product\LinkTypeProvider
+     * @var \Magento\Catalog\Model\Product\LinkTypeProvider
      */
     protected $linkTypeProvider;
 
     /*
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -94,11 +93,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
      */
     protected $metadataService;
-
-    /**
-     * @var \Magento\Eav\Model\Config
-     */
-    protected $eavConfig;
 
     /**
      * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
@@ -183,7 +177,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         ImageContentValidatorInterface $contentValidator,
         ImageContentInterfaceFactory $contentFactory,
         MimeTypeExtensionMap $mimeTypeExtensionMap,
-        \Magento\Eav\Model\Config $eavConfig,
         ImageProcessorInterface $imageProcessor,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
     ) {
@@ -205,7 +198,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->contentValidator = $contentValidator;
         $this->contentFactory = $contentFactory;
         $this->mimeTypeExtensionMap = $mimeTypeExtensionMap;
-        $this->eavConfig = $eavConfig;
         $this->imageProcessor = $imageProcessor;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
     }
@@ -649,19 +641,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         /** @var \Magento\Catalog\Model\Resource\Product\Collection $collection */
         $collection = $this->collectionFactory->create();
         $this->extensionAttributesJoinProcessor->process($collection);
-        $defaultAttributeSetId = $this->eavConfig
-            ->getEntityType(\Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE)
-            ->getDefaultAttributeSetId();
-        $extendedSearchCriteria = $this->searchCriteriaBuilder->addFilter(
-            [
-                $this->filterBuilder
-                    ->setField('attribute_set_id')
-                    ->setValue($defaultAttributeSetId)
-                    ->create(),
-            ]
-        );
 
-        foreach ($this->metadataService->getList($extendedSearchCriteria->create())->getItems() as $metadata) {
+        foreach ($this->metadataService->getList($this->searchCriteriaBuilder->create())->getItems() as $metadata) {
             $collection->addAttributeToSelect($metadata->getAttributeCode());
         }
         $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
@@ -676,7 +657,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $field = $sortOrder->getField();
             $collection->addOrder(
                 $field,
-                ($sortOrder->getDirection() == SearchCriteriaInterface::SORT_ASC) ? 'ASC' : 'DESC'
+                ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
             );
         }
         $collection->setCurPage($searchCriteria->getCurrentPage());

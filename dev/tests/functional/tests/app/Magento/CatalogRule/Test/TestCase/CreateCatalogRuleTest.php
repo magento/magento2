@@ -41,12 +41,9 @@ class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
      * @param string $product
      * @return array
      */
-    public function testCreate(
-        CatalogRule $catalogPriceRule,
-        $product,
-        Customer $customer = null
-    ) {
-        $productSimple = $this->fixtureFactory->createByCode('catalogProductSimple', ['dataSet' => $product]);
+    public function testCreate(CatalogRule $catalogPriceRule, $product, Customer $customer = null)
+    {
+        $productSimple = $this->fixtureFactory->createByCode('catalogProductSimple', ['dataset' => $product]);
         // Prepare data
         $catalogPriceRule = $this->applyCustomerGroup($catalogPriceRule, $customer);
         $replace = [

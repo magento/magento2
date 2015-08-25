@@ -38,10 +38,10 @@ class AssertProductAttributeIsFilterable extends AbstractConstraint
         $fixtureFactory->createByCode(
             'catalogProductSimple',
             [
-                'dataSet' => 'product_with_category_with_anchor',
+                'dataset' => 'product_with_category_with_anchor',
                 'data' => [
                     'category_ids' => [
-                        'presets' => null,
+                        'dataset' => null,
                         'category' => $product->getDataFieldConfig('category_ids')['source']->getCategories()[0]
                     ]
                 ],

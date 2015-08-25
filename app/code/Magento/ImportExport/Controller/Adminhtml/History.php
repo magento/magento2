@@ -10,7 +10,7 @@ use Magento\Backend\App\Action;
 /**
  * History controller
  */
-class History extends Action
+abstract class History extends Action
 {
     /**
      * Check access (in the ACL) for current user

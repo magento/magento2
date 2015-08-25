@@ -18,6 +18,17 @@
     (function() {
         'use strict';
 
+        function redirect(cartUrl, errorMessage, goToSuccessPage, successUrl) {
+            if (!!errorMessage.message) {
+                alert(errorMessage.message);
+                window.location = cartUrl;
+            } else if (!!goToSuccessPage) {
+                window.location = successUrl;
+            } else {
+                window.location = cartUrl;
+            }
+        }
+
         var cartUrl = '<?php echo $block->getUrl('checkout/cart') ?>',
             successUrl = '<?php echo $block->getUrl('checkout/onepage/success') ?>',
             goToSuccessPage = '<?php echo $block->getGotoSuccessPage() ?>',
@@ -27,12 +38,18 @@
                 message: '<?php echo $block->getErrorMsg() ?>'
             };
 
-        require([
-            'underscore',
-            'Magento_Paypal/js/model/iframe-redirect'
-        ], function(_, iframeRedirect) {
-            _.bind(iframeRedirect, windowContext)(cartUrl, errorMessage, goToSuccessPage, successUrl);
-        })
+        if(typeof(require) == "undefined") {
+            redirect(cartUrl, errorMessage, goToSuccessPage, successUrl);
+        } else {
+            require([
+                'underscore',
+                'Magento_Paypal/js/model/iframe-redirect'
+            ], function(_, iframeRedirect) {
+                _.bind(iframeRedirect, windowContext)(cartUrl, errorMessage, goToSuccessPage, successUrl);
+            })
+        }
+
+
     })();
 </script>
 </body>

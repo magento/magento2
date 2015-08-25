@@ -77,7 +77,11 @@ class Cart extends \Magento\Framework\Url\Helper\Data
         $continueUrl = $this->urlEncoder->encode($this->_urlBuilder->getCurrentUrl());
         $urlParamName = \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED;
 
-        $routeParams = [$urlParamName => $continueUrl, 'product' => $product->getEntityId()];
+        $routeParams = [
+            $urlParamName => $continueUrl,
+            'product' => $product->getEntityId(),
+            '_secure' => $this->_getRequest()->isSecure()
+        ];
 
         if (!empty($additional)) {
             $routeParams = array_merge($routeParams, $additional);

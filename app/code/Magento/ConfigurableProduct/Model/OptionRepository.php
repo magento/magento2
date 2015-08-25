@@ -186,7 +186,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
             }
             $configurableAttribute->addData($option->getData());
             $configurableAttribute->setValues(
-                $option->getValues() !== null ? $option->getValues() : $configurableAttribute->getPrices()
+                $option->getValues() !== null ? $option->getValues() : $configurableAttribute->getOptions()
             );
 
             try {
@@ -299,12 +299,6 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
             foreach ($option->getValues() as $optionValue) {
                 if (!$optionValue->getValueIndex()) {
                     $inputException->addError(__('Value index is not specified for an option.'));
-                }
-                if (null === $optionValue->getPricingValue()) {
-                    $inputException->addError(__('Price is not specified for an option.'));
-                }
-                if (null === $optionValue->getIsPercent()) {
-                    $inputException->addError(__('Percent/absolute is not specified for an option.'));
                 }
             }
         }

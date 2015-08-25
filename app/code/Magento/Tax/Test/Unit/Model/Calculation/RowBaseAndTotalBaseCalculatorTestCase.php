@@ -124,7 +124,7 @@ class RowBaseAndTotalBaseCalculatorTestCase extends \PHPUnit_Framework_TestCase
         $this->mockAppliedTax = $this->getMockBuilder('Magento\Tax\Api\Data\AppliedTaxInterface')->getMock();
 
         $this->mockAppliedTax->expects($this->any())->method('getTaxRateKey')->will($this->returnValue('taxKey'));
-        $this->addressRateRequest = new \Magento\Framework\Object();
+        $this->addressRateRequest = new \Magento\Framework\DataObject();
     }
 
     /**

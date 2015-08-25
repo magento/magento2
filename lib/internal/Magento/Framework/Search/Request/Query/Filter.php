@@ -63,6 +63,7 @@ class Filter implements QueryInterface
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getType()
     {
@@ -71,6 +72,7 @@ class Filter implements QueryInterface
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getName()
     {
@@ -89,6 +91,7 @@ class Filter implements QueryInterface
      * Get Reference
      *
      * @return mixed
+     * @codeCoverageIgnore
      */
     public function getReference()
     {
@@ -99,6 +102,7 @@ class Filter implements QueryInterface
      * Get Reference Type
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getReferenceType()
     {

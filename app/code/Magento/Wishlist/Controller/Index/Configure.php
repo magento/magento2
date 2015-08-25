@@ -74,7 +74,7 @@ class Configure extends Action\Action implements IndexInterface
 
             $this->_coreRegistry->register('wishlist_item', $item);
 
-            $params = new \Magento\Framework\Object();
+            $params = new \Magento\Framework\DataObject();
             $params->setCategoryId(false);
             $params->setConfigureMode(true);
             $buyRequest = $item->getBuyRequest();

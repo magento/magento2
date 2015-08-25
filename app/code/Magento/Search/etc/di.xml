@@ -7,6 +7,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Search\Api\SearchInterface" type="Magento\Search\Model\Search"/>
     <type name="Magento\Framework\Module\Setup\Migration">
         <arguments>
             <argument name="compositeModules" xsi:type="array">
@@ -32,4 +33,5 @@
     </type>
     <preference for="Magento\Search\Model\AutocompleteInterface" type="Magento\Search\Model\Autocomplete" />
     <preference for="Magento\Search\Model\Autocomplete\ItemInterface" type="Magento\Search\Model\Autocomplete\Item" />
+    <preference for="Magento\Framework\Search\SearchEngineInterface" type="Magento\Search\Model\SearchEngine"/>
 </config>

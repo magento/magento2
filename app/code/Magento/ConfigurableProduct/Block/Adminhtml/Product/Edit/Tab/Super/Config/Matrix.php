@@ -139,7 +139,7 @@ class Matrix extends \Magento\Backend\Block\Template
      *
      * @return array
      */
-    public function getAttributes()
+    protected function getAttributes()
     {
         if (!$this->hasData('attributes')) {
             $attributes = (array)$this->_configurableType->getConfigurableAttributesAsArray($this->getProduct());
@@ -248,5 +248,20 @@ class Matrix extends \Magento\Backend\Block\Template
     public function getProductStockQty(Product $product)
     {
         return $this->stockRegistry->getStockItem($product->getId(), $product->getStore()->getWebsiteId())->getQty();
+    }
+
+    /**
+     * @param array $initData
+     * @return string
+     */
+    public function getVariationWizard($initData)
+    {
+        /** @var \Magento\Ui\Block\Component\StepsWizard $wizardBlock */
+        $wizardBlock = $this->getChildBlock('variation-steps-wizard');
+        if ($wizardBlock) {
+            $wizardBlock->setInitData($initData);
+            return $wizardBlock->toHtml();
+        }
+        return '';
     }
 }

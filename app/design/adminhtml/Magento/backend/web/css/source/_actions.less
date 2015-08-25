@@ -13,124 +13,6 @@
 @import 'actions/_actions-multiselect.less';
 
 //
-//  Variables
-//  _____________________________________________
-
-//  Base button
-@button__background-color: @color-gray89;
-@button__border-color: @action__border-color;
-@button__border-size: 1px;
-@button__border-style: solid;
-@button__color: @color-brownie;
-@button__font-family: @font-family__base;
-@button__font-size: @action__font-size;
-@button__line-height: @action__line-height;
-@button__padding-top: @action__padding-top;
-@button__padding-bottom: @action__padding-bottom;
-@button__padding-horizontal: 1em;
-@button__padding-vertical__l: .6875em;
-
-@button__active__background-color: darken(@button__background-color, 5%);
-@button__hover__background-color: darken(@button__background-color, 3%);
-@button__hover__border-color: @color-blue-pure;
-@button__hover__box-shadow: 0 0 0 1px @button__hover__border-color;
-
-@button__large__font-size: 1.6rem;
-@button__large__padding-horizontal: 1.45em;
-@button__large__padding-vertical: .7em;
-
-//  Primary button
-@button-primary__background-color: @primary__color;
-@button-primary__color: @color-white;
-@button-primary__hover__background-color: @color-phoenix-brown-almost;
-@button-primary__hover__border-color: @color-phoenix-brown;
-
-//  Secondary button
-@button-secondary__background-color: @color-brownie;
-@button-secondary__border-color: @button-secondary__background-color;
-@button-secondary__color: @color-white;
-@button-secondary__active__background-color: @color-very-dark-gray-black2;
-@button-secondary__hover__background-color: @color-very-dark-gray-black2;
-@button-secondary__hover__border-color: @button-secondary__hover__background-color;
-
-//  Triangle marker
-@button-marker-triangle__height: .5rem;
-@button-marker-triangle__width: .8rem;
-
-@button-marker-triangle__height__xl: .9rem;
-@button-marker-triangle__width__xl: 1.2rem;
-
-//
-//  Utilities
-//  _____________________________________________
-
-.action-reset() {
-    background-color: transparent;
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
-    margin: 0;
-    padding: 0;
-    &:hover {
-        background-color: transparent;
-        border: none;
-        box-shadow: none;
-    }
-}
-
-.action-icon() {
-    background-color: transparent;
-    border-color: transparent;
-    box-shadow: none;
-    &:hover {
-        background-color: transparent;
-        border-color: transparent;
-        box-shadow: none;
-    }
-}
-
-//  Used in action dropdown, actions split & all other actions with triangle marker
-.action-toggle-triangle (
-    @_dropdown__padding-right: 3rem;
-    @_triangle__height: @button-marker-triangle__height;
-    @_triangle__width: @button-marker-triangle__width;
-    @_triangle__color: @color-black;
-    @_triangle__hover__color: darken(@_triangle__color, 10%);
-    @_triangle__right: (@_dropdown__padding-right / 2) - (@_triangle__width / 2);
-) {
-    padding-right: @_dropdown__padding-right;
-    &._active,
-    &.active {
-        &:after {
-            transform: rotate(180deg);
-        }
-    }
-    &:after {
-        border-color: @_triangle__color transparent transparent transparent;
-        border-style: solid;
-        border-width: @_triangle__height @_triangle__width / 2 0 @_triangle__width / 2;
-        content: '';
-        height: 0;
-        margin-top: -((@_triangle__width / 2) / 2);
-        position: absolute;
-        right: @_triangle__right;
-        top: 50%;
-        transition: all .2s linear;
-        width: 0;
-        ._active &,
-        .active & {
-            transform: rotate(180deg);
-        }
-    }
-    &:hover {
-        &:after {
-            border-color: @_triangle__hover__color transparent transparent transparent;
-        }
-    }
-}
-
-
-//
 //  Extends
 //  _____________________________________________
 
@@ -211,6 +93,145 @@
     .action-menu();
 }
 
+//  Triangle Wrap
+.abs-action-wrap-triangle {
+    position: relative;
+    .action-default {
+        width: 100%;
+        &:before,
+        &:after {
+            border-style: solid;
+            content: '';
+            height: 0;
+            position: absolute;
+            top: 0;
+            width: 0;
+        }
+        &:active,
+        &:hover,
+        &:focus {
+            box-shadow: none;
+        }
+        &:focus {
+            ._keyfocus & {
+                box-shadow: @button__hover__box-shadow;
+            }
+        }
+        &[disabled],
+        &.disabled {
+            .ie9 &,
+            .ie10 & {
+                background-color: @button-triangle__base__disabled__background-color;
+                opacity: 1;
+                text-shadow: none;
+            }
+        }
+    }
+}
+
+//  Right Triangle
+.abs-action-wrap-triangle-right {
+    display: inline-block;
+    padding-right: @button-triangle__base__size - .1;
+    position: relative;
+
+    .action-default {
+        &:before,
+        &:after {
+            border-color: transparent transparent transparent @button__background-color;
+            border-width: @button-triangle__base__size 0 (@button-triangle__base__size - .1) @button-triangle__base__size;
+            left: 100%;
+            margin-left: -(@button-triangle__base__size);
+        }
+        &:before {
+            border-left-color: @button-triangle__base__border-color;
+            right: -1px;
+        }
+        &:hover,
+        &:active,
+        &:focus {
+            &:after {
+                border-left-color: @button__hover__background-color;
+            }
+        }
+        //  Disabled state for IE9, IE10
+        &.disabled,
+        &[disabled] {
+            &:after {
+                .ie9 &,
+                .ie10 & {
+                    border-color: transparent transparent transparent @button-triangle__base__disabled__background-color;
+                }
+            }
+        }
+    }
+
+    .action-primary {
+        &:after {
+            border-color: transparent transparent transparent @button-primary__background-color;
+        }
+        &:hover,
+        &:active,
+        &:focus {
+            &:after {
+                border-left-color: @button-primary__hover__background-color;
+            }
+        }
+    }
+}
+
+//  Left Triangle
+.abs-action-wrap-triangle-left {
+    display: inline-block;
+    padding-left: @button-triangle__base__size - .1;
+
+    .action-default {
+        text-indent: -(@button-triangle__base__size) / 2;
+        &:before,
+        &:after {
+            border-color: transparent @button__background-color transparent transparent;
+            border-width: @button-triangle__base__size @button-triangle__base__size (@button-triangle__base__size - .1) 0;
+            margin-right: -(@button-triangle__base__size);
+            right: 100%;
+        }
+        &:before {
+            border-right-color: @button-triangle__base__border-color;
+            left: -1px;
+        }
+        &:hover,
+        &:active,
+        &:focus {
+            &:after {
+                border-right-color: @button__hover__background-color;
+            }
+        }
+        //  Disabled state for IE9, IE10
+        &.disabled,
+        &[disabled] {
+            &:after {
+                .ie9 &,
+                .ie10 & {
+                    border-color: transparent @button-triangle__base__disabled__background-color transparent transparent;
+                }
+            }
+        }
+    }
+
+    .action-primary {
+        &:after {
+            border-color: transparent @button-primary__background-color transparent transparent;
+        }
+        &:hover,
+        &:active,
+        &:focus {
+            &:after {
+                border-right-color: @button-primary__hover__background-color;
+            }
+        }
+    }
+}
+
+
 //
 //  Default action
 //  ---------------------------------------------
@@ -221,7 +242,9 @@ button {
     background: @button__background-color;
     border-color: @button__border-color;
     color: @button__color;
-    &:hover {
+    &:hover,
+    &:active,
+    &:focus {
         background-color: @button__hover__background-color;
         color: @button__color;
         text-decoration: none;
@@ -367,14 +390,18 @@ button {
         .appearing__on();
     }
     > li {
-        display: block;
         border: none; // ToDo UI: Should be deleted with old styles
+        display: block;
         padding: 0;
+        position: relative;
         transition: background-color .1s linear;
         > a {
             &:hover {
                 text-decoration: none;
             }
+        }
+        &._visible {
+            background-color: @action-menu__hover__background-color;
         }
         &:hover {
             background-color: @action-menu__hover__background-color;
@@ -388,6 +415,14 @@ button {
         display: block;
         padding: .6875em 1em;
         cursor: pointer;
+    }
+    .action-submenu {
+        &:extend(.action-menu all);
+        left: 100%;
+        margin-top: -1px;
+        position: absolute;
+        right: auto;
+        top: 0;
     }
     a {
         &.action-menu-item {

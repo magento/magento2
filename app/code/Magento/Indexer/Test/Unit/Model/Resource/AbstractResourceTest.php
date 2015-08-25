@@ -18,7 +18,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
     protected $_resourceMock;
 
     /**
-     * @var \Magento\Indexer\Model\Indexer\Table\StrategyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\Table\StrategyInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_tableStrategyInterface;
 
@@ -30,7 +30,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->_tableStrategyInterface = $this->getMock(
-            'Magento\Indexer\Model\Indexer\Table\StrategyInterface',
+            'Magento\Framework\Indexer\Table\StrategyInterface',
             [],
             [],
             '',
@@ -125,7 +125,9 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
         $tableColumns = ['column' => 'column'];
 
         $selectMock = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
-        $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
+        $connectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $connectionMock->expects($this->any())->method('describeTable')->will($this->returnValue($tableColumns));
         $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
@@ -145,21 +147,18 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
             $connectionCustomMock->expects($this->any())->method('describeTable')->will(
                 $this->returnValue($tableColumns)
             );
-            $connectionCustomMock->expects($this->exactly(1))->method('insertArray')->with(
+            $connectionCustomMock->expects($this->any())->method('insertArray')->with(
                 $destTable,
                 $resultColumns
             )->will($this->returnValue(1));
             $connectionMock->expects($this->any())->method('query')->will($this->returnValue($pdoMock));
-            $pdoMock->expects($this->at(0))->method('fetch')->will($this->returnValue([$tableColumns]));
-            $pdoMock->expects($this->at(1))->method('fetch')->will($this->returnValue([$tableColumns]));
+            $pdoMock->expects($this->any())->method('fetch')->will($this->returnValue([$tableColumns]));
 
             $this->model->newIndexAdapter();
-            $this->_resourceMock->expects($this->at(0))->method('getConnection')->with('core_write')->will(
+            $this->_resourceMock->expects($this->any())->method('getConnection')->will(
                 $this->returnValue($connectionMock)
             );
-            $this->_resourceMock->expects($this->at(1))->method('getConnection')->with('core_new_write')->will(
-                $this->returnValue($connectionCustomMock)
-            );
+
         } else {
             $selectMock->expects($this->once())->method('insertFromSelect')->with(
                 $destTable,
@@ -167,7 +166,7 @@ class AbstractResourceTest extends \PHPUnit_Framework_TestCase
             )->will($this->returnSelf());
 
             $this->_resourceMock->expects($this->any())->method('getTableName')->will($this->returnArgument(0));
-            $this->_resourceMock->expects($this->any())->method('getConnection')->with('core_write')->will(
+            $this->_resourceMock->expects($this->any())->method('getConnection')->will(
                 $this->returnValue($connectionMock)
             );
         }

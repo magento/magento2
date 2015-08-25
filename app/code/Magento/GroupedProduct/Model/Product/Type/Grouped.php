@@ -135,11 +135,11 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * Return relation info about used products
      *
-     * @return \Magento\Framework\Object Object with information data
+     * @return \Magento\Framework\DataObject Object with information data
      */
     public function getRelationInfo()
     {
-        $info = new \Magento\Framework\Object();
+        $info = new \Magento\Framework\DataObject();
         $info->setTable(
             'catalog_product_link'
         )->setParentFieldName(
@@ -327,12 +327,12 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
-     * @param \Magento\Framework\Object $buyRequest
+     * @param \Magento\Framework\DataObject $buyRequest
      * @param \Magento\Catalog\Model\Product $product
      * @param bool $isStrictProcessMode
      * @return array|string
      */
-    protected function getProductInfo(\Magento\Framework\Object $buyRequest, $product, $isStrictProcessMode)
+    protected function getProductInfo(\Magento\Framework\DataObject $buyRequest, $product, $isStrictProcessMode)
     {
         $productsInfo = $buyRequest->getSuperGroup() ?: [];
         $associatedProducts = $this->getAssociatedProducts($product);
@@ -356,14 +356,14 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Prepare product and its configuration to be added to some products list.
      * Perform standard preparation process and add logic specific to Grouped product type.
      *
-     * @param \Magento\Framework\Object $buyRequest
+     * @param \Magento\Framework\DataObject $buyRequest
      * @param \Magento\Catalog\Model\Product $product
      * @param string $processMode
      * @return \Magento\Framework\Phrase|array|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function _prepareProduct(\Magento\Framework\Object $buyRequest, $product, $processMode)
+    protected function _prepareProduct(\Magento\Framework\DataObject $buyRequest, $product, $processMode)
     {
         $products = [];
         $associatedProductsInfo = [];
@@ -392,6 +392,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
 
             if ($isStrictProcessMode) {
                 $_result[0]->setCartQty($qty);
+                $_result[0]->addCustomOption('product_type', self::TYPE_CODE, $product);
                 $_result[0]->addCustomOption(
                     'info_buyRequest',
                     serialize(
@@ -440,7 +441,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Prepare selected qty for grouped product's options
      *
      * @param  \Magento\Catalog\Model\Product $product
-     * @param  \Magento\Framework\Object $buyRequest
+     * @param  \Magento\Framework\DataObject $buyRequest
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

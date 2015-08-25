@@ -42,7 +42,6 @@ class AVSResponseTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['get'])
             ->getMockForAbstractClass();
         $this->configMock = $this->getMockBuilder('Magento\Payment\Model\Method\ConfigInterface')
-            ->setMethods(['getValue'])
             ->getMockForAbstractClass();
 
         $this->setToExpectedCallsInConstructor(
@@ -108,7 +107,7 @@ class AVSResponseTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param bool $expectedResult
-     * @param \Magento\Framework\Object $response
+     * @param \Magento\Framework\DataObject $response
      * @param array $configMap
      * @param int $exactlyCount
      *
@@ -116,7 +115,7 @@ class AVSResponseTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidation(
         $expectedResult,
-        \Magento\Framework\Object $response,
+        \Magento\Framework\DataObject $response,
         array $configMap,
         $exactlyCount
     ) {
@@ -141,7 +140,7 @@ class AVSResponseTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 'expectedResult' => true,
-                'response' => new \Magento\Framework\Object(
+                'response' => new \Magento\Framework\DataObject(
                     [
                         'avsaddr' => 'Y',
                         'avszip' => 'Y',
@@ -157,7 +156,7 @@ class AVSResponseTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'expectedResult' => true,
-                'response' => new \Magento\Framework\Object(
+                'response' => new \Magento\Framework\DataObject(
                     [
                         'avsaddr' => 'Y',
                         'avszip' => 'Y',
@@ -173,7 +172,7 @@ class AVSResponseTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'expectedResult' => false,
-                'response' => new \Magento\Framework\Object(
+                'response' => new \Magento\Framework\DataObject(
                     [
                         'avsaddr' => 'Y',
                         'avszip' => 'N',
@@ -189,7 +188,7 @@ class AVSResponseTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'expectedResult' => true,
-                'response' => new \Magento\Framework\Object(
+                'response' => new \Magento\Framework\DataObject(
                     [
                         'avsaddr' => 'Y',
                         'avszip' => 'N',
@@ -205,7 +204,7 @@ class AVSResponseTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'expectedResult' => true,
-                'response' => new \Magento\Framework\Object(
+                'response' => new \Magento\Framework\DataObject(
                     [
                         'avsaddr' => 'Y',
                         'avszip' => 'N',
@@ -221,7 +220,7 @@ class AVSResponseTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'expectedResult' => true,
-                'response' => new \Magento\Framework\Object(
+                'response' => new \Magento\Framework\DataObject(
                     [
                         'avsaddr' => 'X',
                         'avszip' => 'Y',
@@ -237,7 +236,7 @@ class AVSResponseTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'expectedResult' => true,
-                'response' => new \Magento\Framework\Object(
+                'response' => new \Magento\Framework\DataObject(
                     [
                         'avsaddr' => 'X',
                         'avszip' => 'Y',

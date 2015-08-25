@@ -6,7 +6,7 @@
 /*global confirm:true*/
 define([
     "jquery",
-    'Magento_Checkout/js/model/cart/authentication-popup',
+    'Magento_Customer/js/model/authentication-popup',
     'Magento_Customer/js/customer-data',
     "jquery/ui",
     "mage/decorate"
@@ -55,7 +55,7 @@ define([
             };
             events['click ' + this.options.item.button] = function(event) {
                 event.stopPropagation();
-                self._updateItemQty($(event.target));
+                self._updateItemQty($(event.currentTarget));
             };
 
             this._on(this.element, events);

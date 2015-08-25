@@ -23,9 +23,9 @@
     </argument>
     <dataSource name="cms_page_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Magento\Cms\Model\Page\DataProvider</argument>
+            <argument name="class" xsi:type="string">PageGridDataProvider</argument>
             <argument name="name" xsi:type="string">cms_page_listing_data_source</argument>
-            <argument name="primaryFieldName" xsi:type="string">block_id</argument>
+            <argument name="primaryFieldName" xsi:type="string">page_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -69,7 +69,7 @@
                 </item>
             </argument>
         </container>
-        <container name="search">
+        <filterSearch name="fulltext">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/search/search</item>
@@ -82,7 +82,7 @@
                     </item>
                 </item>
             </argument>
-        </container>
+        </filterSearch>
         <filters name="listing_filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -250,6 +250,108 @@
                     </argument>
                 </filterDate>
             </filterRange>
+            <filterRange name="custom_theme_from" class="Magento\Ui\Component\Filters\Type\DateRange">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">custom_theme_from</item>
+                        <item name="label" xsi:type="string" translate="true">Custom design from</item>
+                        <item name="childDefaults" xsi:type="array">
+                            <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing.listing_top.listing_filters</item>
+                        </item>
+                    </item>
+                </argument>
+                <filterDate name="from">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">from</item>
+                            <item name="label" xsi:type="string" translate="true">from</item>
+                            <item name="placeholder" xsi:type="string" translate="true">From</item>
+                            <item name="dateFormat" xsi:type="string" translate="true">MM/dd/YYYY</item>
+                        </item>
+                    </argument>
+                </filterDate>
+                <filterDate name="to">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">to</item>
+                            <item name="label" xsi:type="string" translate="true">to</item>
+                            <item name="placeholder" xsi:type="string" translate="true">To</item>
+                            <item name="dateFormat" xsi:type="string" translate="true">MM/dd/YYYY</item>
+                        </item>
+                    </argument>
+                </filterDate>
+            </filterRange>
+            <filterRange name="custom_theme_to" class="Magento\Ui\Component\Filters\Type\DateRange">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">custom_theme_to</item>
+                        <item name="label" xsi:type="string" translate="true">Custom design to</item>
+                        <item name="childDefaults" xsi:type="array">
+                            <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing.listing_top.listing_filters</item>
+                        </item>
+                    </item>
+                </argument>
+                <filterDate name="from">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">from</item>
+                            <item name="label" xsi:type="string" translate="true">from</item>
+                            <item name="placeholder" xsi:type="string" translate="true">From</item>
+                            <item name="dateFormat" xsi:type="string" translate="true">MM/dd/YYYY</item>
+                        </item>
+                    </argument>
+                </filterDate>
+                <filterDate name="to">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataScope" xsi:type="string">to</item>
+                            <item name="label" xsi:type="string" translate="true">to</item>
+                            <item name="placeholder" xsi:type="string" translate="true">To</item>
+                            <item name="dateFormat" xsi:type="string" translate="true">MM/dd/YYYY</item>
+                        </item>
+                    </argument>
+                </filterDate>
+            </filterRange>
+            <filterSelect name="custom_theme">
+                <argument name="optionsProvider" xsi:type="configurableObject">
+                    <argument name="class" xsi:type="string">Magento\Cms\Model\Page\Source\Theme</argument>
+                </argument>
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">custom_theme</item>
+                        <item name="caption" xsi:type="string" translate="true">Select...</item>
+                        <item name="label" xsi:type="string" translate="true">Custom Theme</item>
+                    </item>
+                </argument>
+            </filterSelect>
+            <filterSelect name="custom_root_template">
+                <argument name="optionsProvider" xsi:type="configurableObject">
+                    <argument name="class" xsi:type="string">Magento\Cms\Model\Page\Source\PageLayout</argument>
+                </argument>
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">custom_root_template</item>
+                        <item name="caption" xsi:type="string" translate="true">Select...</item>
+                        <item name="label" xsi:type="string" translate="true">Custom Layout</item>
+                    </item>
+                </argument>
+            </filterSelect>
+            <filterInput name="meta_keywords">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">meta_keywords</item>
+                        <item name="label" xsi:type="string" translate="true">Meta Keywords</item>
+                    </item>
+                </argument>
+            </filterInput>
+            <filterInput name="meta_description">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="dataScope" xsi:type="string">meta_description</item>
+                        <item name="label" xsi:type="string" translate="true">Meta Description</item>
+                    </item>
+                </argument>
+            </filterInput>
         </filters>
         <massaction name="listing_massaction">
             <argument name="data" xsi:type="array">
@@ -542,6 +644,7 @@
                     <item name="draggable" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">actions</item>
                     <item name="indexField" xsi:type="string">page_id</item>
+                    <item name="blockVisibility" xsi:type="boolean">true</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Action</item>
                     <item name="data_type" xsi:type="string">actions</item>

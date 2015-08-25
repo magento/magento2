@@ -62,7 +62,7 @@ return [
     ['Magento\Gdata', 'Magento\Framework\Gdata'],
     ['Magento\Image', 'Magento\Framework\Image'],
     ['Magento\Oauth', 'Magento\Framework\Oauth'],
-    ['Magento\Object', 'Magento\Framework\Object'],
+    ['Magento\Object', 'Magento\Framework\DataObject'],
     ['Magento\Connect'],
     ['Magento\Framework\Connect'],
     ['Magento\Bundle\Service'],
@@ -85,5 +85,7 @@ return [
     ['Magento\Framework\Test\Utility', 'Magento\Framework\App\Utility'],
     ['Magento\GoogleShopping'],
     ['Magento\Paypal\Block\Standard'],
-    ['Magento\Paypal\Controller\Standard']
+    ['Magento\Paypal\Controller\Standard'],
+    ['Magento\Framework\View\Asset\ModuleNotation'],
+    ['Magento\Framework\Object', 'Magento\Framework\DataObject'],
 ];

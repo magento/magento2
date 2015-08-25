@@ -13,6 +13,8 @@ use Magento\Customer\Api\GroupManagementInterface;
 
 /**
  * Catalog product abstract group price backend attribute model
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractGroupPrice extends Price
 {
@@ -48,6 +50,7 @@ abstract class AbstractGroupPrice extends Price
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param GroupManagementInterface $groupManagement
      */
@@ -56,12 +59,13 @@ abstract class AbstractGroupPrice extends Price
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         GroupManagementInterface $groupManagement
     ) {
         $this->_catalogProductType = $catalogProductType;
         $this->_groupManagement = $groupManagement;
-        parent::__construct($currencyFactory, $storeManager, $catalogData, $config);
+        parent::__construct($currencyFactory, $storeManager, $catalogData, $config, $localeFormat);
     }
 
     /**
@@ -164,7 +168,7 @@ abstract class AbstractGroupPrice extends Price
                 throw new \Magento\Framework\Exception\LocalizedException(__($this->_getDuplicateErrorMessage()));
             }
 
-            if (!preg_match('/^\d*(\.|,)?\d{0,4}$/i', $priceRow['price']) || $priceRow['price'] < 0) {
+            if (!$this->isPositiveOrZero($priceRow['price'])) {
                 return __('Group price must be a number greater than 0.');
             }
 
@@ -380,7 +384,7 @@ abstract class AbstractGroupPrice extends Price
 
         if (!empty($insert)) {
             foreach ($insert as $data) {
-                $price = new \Magento\Framework\Object($data);
+                $price = new \Magento\Framework\DataObject($data);
                 $price->setEntityId($productId);
                 $this->_getResource()->savePriceData($price);
 
@@ -391,7 +395,7 @@ abstract class AbstractGroupPrice extends Price
         if (!empty($update)) {
             foreach ($update as $k => $v) {
                 if ($old[$k]['price'] != $v['value']) {
-                    $price = new \Magento\Framework\Object(['value_id' => $old[$k]['price_id'], 'value' => $v['value']]);
+                    $price = new \Magento\Framework\DataObject(['value_id' => $old[$k]['price_id'], 'value' => $v['value']]);
                     $this->_getResource()->savePriceData($price);
 
                     $isChanged = true;
@@ -427,5 +431,15 @@ abstract class AbstractGroupPrice extends Price
         }
 
         return $data;
+    }
+
+    /**
+     * Get resource model instance
+     *
+     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Backend\GroupPrice
+     */
+    public function getResource()
+    {
+        return $this->_getResource();
     }
 }

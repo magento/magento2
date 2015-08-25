@@ -12,7 +12,11 @@ define(
         var isInAction = ko.observable(false);
 
         return {
-            isInAction: isInAction
+            isInAction: isInAction,
+            stopEventPropagation: function (event) {
+                event.stopImmediatePropagation();
+                event.preventDefault();
+            }
         };
     }
 );

@@ -111,7 +111,9 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
         $categoryMock->expects($this->once())->method('getParentId')->willReturn(3);
         $categoryMock->expects($this->once())->method('getPath')->willReturn('path');
         $categoryMock->expects($this->once())->method('getIsActive')->willReturn(true);
-        $this->categoryResourceMock->expects($this->once())->method('save')->willReturn('\Magento\Framework\Object');
+        $this->categoryResourceMock->expects($this->once())
+            ->method('save')
+            ->willReturn('\Magento\Framework\DataObject');
         $this->assertEquals($categoryMock, $this->model->save($categoryMock));
     }
 
@@ -132,7 +134,9 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
         $parentCategoryMock->expects($this->once())->method('getPath')->willReturn('path');
         $categoryMock->expects($this->once())->method('validate')->willReturn(true);
         $categoryMock->expects($this->once())->method('getParentId')->willReturn(3);
-        $this->categoryResourceMock->expects($this->once())->method('save')->willReturn('\Magento\Framework\Object');
+        $this->categoryResourceMock->expects($this->once())
+            ->method('save')
+            ->willReturn('\Magento\Framework\DataObject');
         $this->assertEquals($categoryMock, $this->model->save($categoryMock));
     }
 
@@ -165,7 +169,7 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException($expectedException, $expectedExceptionMessage);
         $categoryId = 5;
         $categoryMock = $this->getMock('\Magento\Catalog\Model\Category', [], [], '', false);
-        $objectMock = $this->getMock('\Magento\Framework\Object', ['getFrontend', 'getLabel'], [], '', false);
+        $objectMock = $this->getMock('\Magento\Framework\DataObject', ['getFrontend', 'getLabel'], [], '', false);
         $categoryMock->expects(
             $this->atLeastOnce()
         )->method('getId')->willReturn($categoryId);

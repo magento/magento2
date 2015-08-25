@@ -33,6 +33,7 @@ AdminOrder.prototype = {
         this.collectElementsValue = true;
         this.isOnlyVirtualProduct = false;
         this.excludedPaymentMethods = [];
+        this.summarizePrice = true;
         Event.observe(window, 'load',  (function(){
             this.dataArea = new OrderFormArea('data', $(this.getAreaId('data')), this);
             this.itemsArea = Object.extend(new OrderFormArea('items', $(this.getAreaId('items')), this), {
@@ -524,7 +525,11 @@ AdminOrder.prototype = {
                             qtyElement.value = confirmedCurrentQty.value;
                         }
                         // calc and set product price
-                        var productPrice = parseFloat(this._calcProductPrice() + this.productPriceBase[productId]);
+                        var productPrice = this._calcProductPrice();
+                        if (this._isSummarizePrice()) {
+                            productPrice += this.productPriceBase[productId];
+                        }
+                        productPrice = parseFloat(productPrice);
                         priceColl.innerHTML = this.currencySymbol + productPrice.toFixed(2);
                         // and set checkbox checked
                         grid.setCheckboxChecked(checkbox, true);
@@ -547,6 +552,15 @@ AdminOrder.prototype = {
         }
     },
 
+    /**
+     * Is need to summarize price
+     */
+    _isSummarizePrice: function(elm) {
+        if (elm && elm.hasAttribute('summarizePrice')) {
+            this.summarizePrice = parseInt(elm.readAttribute('summarizePrice'));
+        }
+        return this.summarizePrice;
+    },
     /**
      * Calc product price through its options
      */
@@ -572,7 +586,11 @@ AdminOrder.prototype = {
                 if (elms[i].type == 'select-one' || elms[i].type == 'select-multiple') {
                     for(var ii = 0; ii < elms[i].options.length; ii++) {
                         if (elms[i].options[ii].selected) {
-                            productPrice += getPrice(elms[i].options[ii]);
+                            if (this._isSummarizePrice(elms[i].options[ii])) {
+                                productPrice += getPrice(elms[i].options[ii]);
+                            } else {
+                                productPrice = getPrice(elms[i].options[ii]);
+                            }
                         }
                     }
                 }
@@ -580,7 +598,11 @@ AdminOrder.prototype = {
                         || ((elms[i].type == 'file' || elms[i].type == 'text' || elms[i].type == 'textarea' || elms[i].type == 'hidden')
                             && Form.Element.getValue(elms[i]))
                 ) {
-                    productPrice += getPrice(elms[i]);
+                    if (this._isSummarizePrice(elms[i])) {
+                        productPrice += getPrice(elms[i]);
+                    } else {
+                        productPrice = getPrice(elms[i]);
+                    }
                 }
             }
             return productPrice;
@@ -1109,6 +1131,7 @@ AdminOrder.prototype = {
             disableElements('save');
             jQuery('#edit_form').on('invalid-form.validate', function() {
                 enableElements('save');
+                jQuery('#edit_form').trigger('processStop');
                 jQuery('#edit_form').off('invalid-form.validate');
             });
             jQuery('#edit_form').triggerHandler('save');

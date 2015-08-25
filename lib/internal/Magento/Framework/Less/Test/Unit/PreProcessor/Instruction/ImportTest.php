@@ -11,7 +11,7 @@ namespace Magento\Framework\Less\Test\Unit\PreProcessor\Instruction;
 class ImportTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\View\Asset\ModuleNotation\Resolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Asset\NotationResolver\Module|\PHPUnit_Framework_MockObject_MockObject
      */
     private $notationResolver;
 
@@ -28,7 +28,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->notationResolver = $this->getMock(
-            '\Magento\Framework\View\Asset\ModuleNotation\Resolver', [], [], '', false
+            '\Magento\Framework\View\Asset\NotationResolver\Module', [], [], '', false
         );
         $this->asset = $this->getMock('\Magento\Framework\View\Asset\File', [], [], '', false);
         $this->asset->expects($this->any())->method('getContentType')->will($this->returnValue('css'));
@@ -45,7 +45,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcess($originalContent, $foundPath, $resolvedPath, $expectedContent)
     {
-        $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain($this->asset, $originalContent, 'css');
+        $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain($this->asset, $originalContent, 'css', 'path');
         $this->notationResolver->expects($this->once())
             ->method('convertModuleNotationToPath')
             ->with($this->asset, $foundPath)
@@ -91,6 +91,21 @@ class ImportTest extends \PHPUnit_Framework_TestCase
                 'Magento_Module/something.css',
                 "@import (type) 'Magento_Module/something.css';",
             ],
+            'with single line comment' => [
+                '@import (type) "some/file.css" media;' . PHP_EOL
+                    . '// @import (type) "unnecessary/file.css" media;',
+                'some/file.css',
+                'some/file.css',
+                "@import (type) 'some/file.css' media;" . PHP_EOL,
+            ],
+            'with multi line comment' => [
+                '@import (type) "some/file.css" media;' . PHP_EOL
+                    . '/* @import (type) "unnecessary/file.css" media;' . PHP_EOL
+                    . '@import (type) "another/unnecessary/file.css" media; */',
+                'some/file.css',
+                'some/file.css',
+                "@import (type) 'some/file.css' media;" . PHP_EOL,
+            ],
         ];
     }
 
@@ -99,7 +114,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         $originalContent = 'color: #000000;';
         $expectedContent = 'color: #000000;';
 
-        $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain($this->asset, $originalContent, 'css');
+        $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain($this->asset, $originalContent, 'css', 'path');
         $this->notationResolver->expects($this->never())
             ->method('convertModuleNotationToPath');
         $this->object->process($chain);
@@ -121,10 +136,11 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain(
             $this->asset,
             '@import (type) "Magento_Module::something.css" media;',
-            'css'
+            'css',
+            'path'
         );
         $this->object->process($chain);
-        $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain($this->asset, 'color: #000000;', 'css');
+        $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain($this->asset, 'color: #000000;', 'css', 'path');
         $this->object->process($chain);
 
         $expected = [['Magento_Module::something.css', $this->asset]];

@@ -24,6 +24,7 @@ class AbstractKeyValuePair
     /**
      * @param string $name
      * @param mixed $value
+     * @codeCoverageIgnore
      */
     public function __construct($name, $value)
     {
@@ -35,6 +36,7 @@ class AbstractKeyValuePair
      * Get field name
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getName()
     {
@@ -45,6 +47,7 @@ class AbstractKeyValuePair
      * Get field values
      *
      * @return mixed
+     * @codeCoverageIgnore
      */
     public function getValue()
     {

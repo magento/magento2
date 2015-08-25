@@ -22,23 +22,26 @@ class FullTest extends \PHPUnit_Framework_TestCase
         );
         $resourceMock = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
         $productTypeMock = $this->getMock('Magento\Catalog\Model\Product\Type', [], [], '', false);
-        $adapterMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface');
+        $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface');
 
         $exceptionMessage = 'exception message';
-        $exception = new \Exception($exceptionMessage);
 
-        $adapterMock->expects($this->once())
+        $connectionMock->expects($this->once())
             ->method('delete')
-            ->will($this->throwException($exception));
+            ->will($this->throwException(new \Exception($exceptionMessage)));
 
         $resourceMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($adapterMock));
+            ->will($this->returnValue($connectionMock));
 
-        $model = new \Magento\CatalogInventory\Model\Indexer\Stock\Action\Full(
-            $resourceMock,
-            $indexerFactoryMock,
-            $productTypeMock
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $model = $objectManager->getObject(
+            'Magento\CatalogInventory\Model\Indexer\Stock\Action\Full',
+            [
+               'resource' => $resourceMock,
+               'indexerFactory' => $indexerFactoryMock,
+               'catalogProductType' => $productTypeMock,
+            ]
         );
 
         $this->setExpectedException('\Magento\Framework\Exception\LocalizedException', $exceptionMessage);
