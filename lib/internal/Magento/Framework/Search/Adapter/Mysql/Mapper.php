@@ -6,6 +6,7 @@
 namespace Magento\Framework\Search\Adapter\Mysql;
 
 use Magento\Framework\App\Resource;
+use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Filter\Builder;
 use Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match;
@@ -59,10 +60,16 @@ class Mapper
      * @var QueryContainerFactory
      */
     private $queryContainerFactory;
+
     /**
      * @var Query\Builder\Match
      */
     private $matchBuilder;
+
+    /**
+     * @var TemporaryStorage
+     */
+    private $temporaryStorage;
 
     /**
      * @param ScoreBuilderFactory $scoreBuilderFactory
@@ -72,6 +79,7 @@ class Mapper
      * @param EntityMetadata $entityMetadata
      * @param QueryContainerFactory $queryContainerFactory
      * @param Query\Builder\Match $matchBuilder
+     * @param TemporaryStorageFactory $temporaryStorageFactory
      * @param IndexBuilderInterface[] $indexProviders
      */
     public function __construct(
@@ -82,6 +90,7 @@ class Mapper
         EntityMetadata $entityMetadata,
         QueryContainerFactory $queryContainerFactory,
         Match $matchBuilder,
+        TemporaryStorageFactory $temporaryStorageFactory,
         array $indexProviders
     ) {
         $this->scoreBuilderFactory = $scoreBuilderFactory;
@@ -92,6 +101,7 @@ class Mapper
         $this->indexProviders = $indexProviders;
         $this->queryContainerFactory = $queryContainerFactory;
         $this->matchBuilder = $matchBuilder;
+        $this->temporaryStorage = $temporaryStorageFactory->create();
     }
 
     /**
@@ -112,7 +122,7 @@ class Mapper
         $queryContainer = $this->queryContainerFactory->create(
             [
                 'indexBuilder' => $indexBuilder,
-                'request' => $request
+                'request' => $request,
             ]
         );
         $select = $indexBuilder->build($request);
@@ -132,9 +142,9 @@ class Mapper
             $select->having('COUNT(DISTINCT search_index.attribute_id) = ' . $filtersCount);
         }
 
-        $select = $this->addMatchQueries(
+        $select = $this->addDerivedQueries(
             $request,
-            $queryContainer->getDerivedQueries(),
+            $queryContainer,
             $scoreBuilder,
             $select,
             $indexBuilder
@@ -148,11 +158,12 @@ class Mapper
     /**
      * @param Select $select
      * @param ScoreBuilder $scoreBuilder
+     * @param string $scorePattern
      * @return Select
      */
     private function createAroundSelect(Select $select, ScoreBuilder $scoreBuilder)
     {
-        $parentSelect = $this->resource->getConnection()->select();
+        $parentSelect = $this->getConnection()->select();
         $parentSelect->from(
             ['main_select' => $select],
             [
@@ -320,25 +331,26 @@ class Mapper
 
     /**
      * @param RequestInterface $request
-     * @param MatchContainer[] $matchQueries
+     * @param QueryContainer $queryContainer
      * @param ScoreBuilder $scoreBuilder
      * @param Select $select
      * @param IndexBuilderInterface $indexBuilder
      * @return Select
-     * @internal param QueryContainer $queryContainer
+     * @throws \Zend_Db_Exception
      */
-    private function addMatchQueries(
+    private function addDerivedQueries(
         RequestInterface $request,
-        array $matchQueries,
+        QueryContainer $queryContainer,
         ScoreBuilder $scoreBuilder,
         Select $select,
         IndexBuilderInterface $indexBuilder
     ) {
+        $matchQueries = $queryContainer->getMatchQueries();
         if (!$matchQueries) {
             $select->columns($scoreBuilder->build());
             $select = $this->createAroundSelect($select, $scoreBuilder);
-        } elseif (count($matchQueries) === 1) {
-            $matchContainer = reset($matchQueries);
+        } else {
+            $matchContainer = array_shift($matchQueries);
             $this->matchBuilder->build(
                 $scoreBuilder,
                 $select,
@@ -347,39 +359,72 @@ class Mapper
             );
             $select->columns($scoreBuilder->build());
             $select = $this->createAroundSelect($select, $scoreBuilder);
-        } elseif (count($matchQueries) > 1) {
-            $select->columns($scoreBuilder->build());
-            $select = $this->createAroundSelect($select, $scoreBuilder);
-            $subSelect = $select;
-            $select = $this->resource->getConnection()->select();
-            $tables = array_merge(array_keys($matchQueries), ['main_select.relevance']);
-            $relevance = implode('.relevance + ', $tables);
-            $select
-                ->from(
-                    ['main_select' => $subSelect],
-                    [
-                        $this->entityMetadata->getEntityId() => 'entity_id',
-                        'score' => sprintf('(%s)', $relevance),
-                    ]
-                );
+            $select = $this->addMatchQueries($request, $select, $indexBuilder, $matchQueries);
+        }
 
-            foreach ($matchQueries as $matchName => $matchContainer) {
-                $matchSelect = $indexBuilder->build($request);
+        return $select;
+    }
+
+    /**
+     * @return false|\Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    private function getConnection()
+    {
+        return $this->resource->getConnection();
+    }
+
+    /**
+     * @param RequestInterface $request
+     * @param Select $select
+     * @param IndexBuilderInterface $indexBuilder
+     * @param MatchContainer[] $matchQueries
+     * @return Select
+     */
+    private function addMatchQueries(
+        RequestInterface $request,
+        Select $select,
+        IndexBuilderInterface $indexBuilder,
+        array $matchQueries
+    ) {
+        if (count($matchQueries)) {
+            $table = $this->temporaryStorage->storeDocumentsFromSelect($select);
+            foreach ($matchQueries as $matchContainer) {
                 $matchScoreBuilder = $this->scoreBuilderFactory->create();
                 $matchSelect = $this->matchBuilder->build(
                     $matchScoreBuilder,
-                    $matchSelect,
+                    $indexBuilder->build($request),
                     $matchContainer->getRequest(),
                     $matchContainer->getConditionType()
                 );
-                $matchSelect->columns($matchScoreBuilder->build());
-                $select->join(
-                    [$matchName => $this->createAroundSelect($matchSelect, $scoreBuilder)],
-                    $matchName . '.entity_id = main_select.entity_id',
-                    []
-                );
+                $table = $this->mergeWithPreviousResult($matchSelect, $table, $matchScoreBuilder);
             }
+            $select = $this->getConnection()->select()->from($table->getName());
         }
         return $select;
+    }
+
+    /**
+     * @param Select $query
+     * @param Table $previousResultTable
+     * @param ScoreBuilder $scoreBuilder
+     * @return Table
+     * @throws \Zend_Db_Exception
+     */
+    private function mergeWithPreviousResult(Select $query, Table $previousResultTable, ScoreBuilder $scoreBuilder)
+    {
+        $query->joinInner(
+            ['previous_results' => $previousResultTable->getName()],
+            'previous_results.entity_id = search_index.entity_id',
+            []
+        );
+        $scoreBuilder->addCondition('previous_results.score', false);
+        $query->columns($scoreBuilder->build());
+
+        $query = $this->createAroundSelect($query, $scoreBuilder);
+
+        $table = $this->temporaryStorage->storeDocumentsFromSelect($query);
+
+        $this->getConnection()->dropTable($previousResultTable->getName());
+        return $table;
     }
 }
