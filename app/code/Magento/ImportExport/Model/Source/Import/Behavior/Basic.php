@@ -33,10 +33,11 @@ class Basic extends \Magento\ImportExport\Model\Source\Import\AbstractBehavior
     /**
      * {@inheritdoc}
      */
-    public function  getNotes()
+    public function  getNotes($entityCode)
     {
-        return [
+        $messages = ['catalog_product' => [
             \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE => __("Note: Product IDs will be regenerated.")
-        ];
+        ]];
+        return isset($messages[$entityCode]) ? $messages[$entityCode] : [];
     }
 }
