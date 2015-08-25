@@ -9,7 +9,7 @@ namespace Magento\ProductVideo\Helper;
 use Magento\Framework\App\Area;
 
 /**
- * Helper to move images from tmp to catalog directory
+ * Helper to get attributes for video
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -19,6 +19,21 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      * Catalog Module
      */
     const MODULE_NAME = 'Magento_ProductVideo';
+
+    /*
+     * Video play attribute
+     */
+    const VIDEO_PLAY = 'video_play';
+
+    /*
+     * Video stop attribute
+     */
+    const VIDEO_STOP = 'video_stop';
+
+    /*
+     * Video color attribute
+     */
+    const VIDEO_BACKGROUND = 'video_background';
 
     /**
      * @var \Magento\Framework\View\ConfigInterface
@@ -47,19 +62,22 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     ) {
         $this->viewConfig = $configInterface;
         $this->currentTheme = $designInterface->getDesignTheme();
+        $this->initConfig();
     }
 
     /**
-     * Get video config from view.xml
+     * Cached video config
      *
      * @return $this
      */
-    public function getVideoConfig()
+    public function initConfig()
     {
-        $this->cachedVideoConfig = $this->viewConfig->getViewConfig([
-            'area' => Area::AREA_FRONTEND,
-            'themeModel' => $this->currentTheme
-        ]);
+        if($this->cachedVideoConfig === null) {
+            $this->cachedVideoConfig = $this->viewConfig->getViewConfig([
+                'area' => Area::AREA_FRONTEND,
+                'themeModel' => $this->currentTheme
+            ]);
+        }
 
         return $this;
     }
@@ -71,10 +89,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getVideoPlayAttribute()
     {
-        if (!isset($this->cachedVideoConfig) || empty($this->cachedVideoConfig)) {
-            $this->getVideoConfig();
-        }
-        return $this->cachedVideoConfig->getVarValue(self::MODULE_NAME, 'video_play');
+        return $this->cachedVideoConfig->getMediaValue(self::MODULE_NAME, self::VIDEO_PLAY);
     }
 
     /**
@@ -84,10 +99,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getVideoStopAttribute()
     {
-        if (!isset($this->cachedVideoConfig) || empty($this->cachedVideoConfig)) {
-            $this->getVideoConfig();
-        }
-        return $this->cachedVideoConfig->getVarValue(self::MODULE_NAME, 'video_stop');
+        return $this->cachedVideoConfig->getMediaValue(self::MODULE_NAME, self::VIDEO_STOP);
     }
 
     /**
@@ -95,12 +107,9 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return mixed
      */
-    public function getVideoColorAttribute()
+    public function getVideoBackgroundAttribute()
     {
-        if (!isset($this->cachedVideoConfig) || empty($this->cachedVideoConfig)) {
-            $this->getVideoConfig();
-        }
-        return $this->cachedVideoConfig->getVarValue(self::MODULE_NAME, 'video_color');
+        return $this->cachedVideoConfig->getMediaValue(self::MODULE_NAME, self::VIDEO_BACKGROUND);
     }
 
 }

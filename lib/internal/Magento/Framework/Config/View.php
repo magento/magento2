@@ -58,6 +58,21 @@ class View extends \Magento\Framework\Config\AbstractXml
                         }
                     }
                     break;
+                case 'media':
+                    $moduleName = $childNode->getAttribute('module');
+                    /** @var \DOMElement $node */
+                    foreach ($childNode->getElementsByTagName('mediaItem') as $node) {
+                        $imageId = $node->getAttribute('id');
+                        $result[$childNode->tagName][$moduleName][$imageId]['type'] = $node->getAttribute('type');
+                        foreach ($node->childNodes as $attribute) {
+                            if ($attribute->nodeType != XML_ELEMENT_NODE) {
+                                continue;
+                            }
+                            $nodeValue = $attribute->nodeValue;
+                            $result[$childNode->tagName][$moduleName][$imageId][$attribute->tagName] = $nodeValue;
+                        }
+                    }
+                    break;
                 case 'exclude':
                     /** @var $itemNode \DOMElement */
                     foreach ($childNode->getElementsByTagName('item') as $itemNode) {
@@ -107,6 +122,17 @@ class View extends \Magento\Framework\Config\AbstractXml
     }
 
     /**
+     * Retrieve a list images attributes in scope of specified module
+     *
+     * @param string $module
+     * @return array
+     */
+    public function getMediaValue($module, $var)
+    {
+        return isset($this->_data['media'][$module][$var][$var]) ? $this->_data['media'][$module][$var][$var] : [];
+    }
+
+    /**
      * Retrieve array of image attributes
      *
      * @param string $module
@@ -152,8 +178,10 @@ class View extends \Magento\Framework\Config\AbstractXml
             '/view/vars' => 'module',
             '/view/vars/var' => 'name',
             '/view/exclude/item' => ['type', 'item'],
-            '/view/images' => 'modulle',
+            '/view/images' => 'module',
             '/view/images/image' => ['id', 'type'],
+            '/view/media' => 'module',
+            '/view/media/mediaItem' => ['id', 'mediaItem'],
         ];
     }
 

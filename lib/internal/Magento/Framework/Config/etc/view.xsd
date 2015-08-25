@@ -30,6 +30,7 @@
                     </xs:unique>
                 </xs:element>
                 <xs:element name="images" minOccurs="0" type="imagesType"/>
+                <xs:element name="media" minOccurs="0" type="mediaType"/>
                 <xs:element name="exclude" minOccurs="0" type="excludeType"/>
             </xs:choice>
         </xs:complexType>
@@ -66,6 +67,36 @@
                                 <xs:enumeration value="image"/>
                                 <xs:enumeration value="swatch_image"/>
                                 <xs:enumeration value="swatch_thumb"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="module" type="xs:string" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="mediaType">
+        <xs:sequence>
+            <xs:element name="mediaItem" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="video_play" type="xs:boolean" minOccurs="0"/>
+                        <xs:element name="video_stop" type="xs:boolean" minOccurs="0"/>
+                        <xs:element name="video_background" minOccurs="0">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:pattern value="\[(\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\]"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:element>
+                    </xs:sequence>
+                    <xs:attribute name="id" type="xs:string" use="required"/>
+                    <xs:attribute name="type" use="required">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="video_play"/>
+                                <xs:enumeration value="video_stop"/>
+                                <xs:enumeration value="video_background"/>
                             </xs:restriction>
                         </xs:simpleType>
                     </xs:attribute>
