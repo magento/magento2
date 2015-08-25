@@ -106,12 +106,18 @@ abstract class AbstractServiceCollection extends \Magento\Framework\Data\Collect
      */
     public function addFieldToFilter($field, $condition)
     {
-        if (is_array($field) && count($field) != count($condition)) {
+        if (is_array($field) && is_array($condition) && count($field) != count($condition)) {
             throw new LocalizedException(
                 new \Magento\Framework\Phrase('When passing in a field array there must be a matching condition array.')
             );
         }
-        $this->fieldFilters[] = ['field' => $field, 'condition' => $condition];
+        if (!is_array($field) && is_array($condition)) {
+            foreach ($condition as $key => $value) {
+                $this->fieldFilters[] = ['field' => $field, 'condition' => [$key => $value]];
+            }
+        } else {
+            $this->fieldFilters[] = ['field' => $field, 'condition' => $condition];
+        }
         return $this;
     }
 
