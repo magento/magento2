@@ -23,12 +23,12 @@ class ModeTest extends \PHPUnit_Framework_TestCase
     protected $indexerStateMock;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $indexerRegistry;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $flatIndexer;
 
@@ -42,9 +42,9 @@ class ModeTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->indexerRegistry = $this->getMock('Magento\Indexer\Model\IndexerRegistry', [], [], '', false);
+        $this->indexerRegistry = $this->getMock('Magento\Framework\Indexer\IndexerRegistry', [], [], '', false);
 
-        $this->flatIndexer = $this->getMock('Magento\Indexer\Model\IndexerInterface');
+        $this->flatIndexer = $this->getMock('Magento\Framework\Indexer\IndexerInterface');
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
