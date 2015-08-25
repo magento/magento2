@@ -389,6 +389,7 @@
                         <item name="editorType" xsi:type="string">text</item>
                         <item name="validation" xsi:type="array">
                             <item name="validate-xml-identifier" xsi:type="boolean">true</item>
+                            <item name="required-entry" xsi:type="boolean">true</item>
                         </item>
                     </item>
                     <item name="dataType" xsi:type="string">text</item>
