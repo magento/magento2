@@ -43,7 +43,7 @@
     <type name="Magento\Framework\View\Element\Message\Renderer\RenderersPool">
         <arguments>
             <argument name="renderers" xsi:type="array">
-                <item name="addProductSuccessMessage" xsi:type="string">Magento\Framework\View\Element\Message\Renderer\ComplexRenderer</item>
+                <item name="addProductSuccessMessage" xsi:type="object">Magento\Framework\View\Element\Message\Renderer\ComplexRenderer</item>
             </argument>
             <argument name="renderersConfiguration" xsi:type="array">
                 <item name="addProductSuccessMessage" xsi:type="array">
