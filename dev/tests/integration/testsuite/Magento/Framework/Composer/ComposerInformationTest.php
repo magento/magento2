@@ -71,7 +71,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
     {
         $this->setupDirectoryMock($composerDir);
         $composerInfo = new ComposerInformation($this->filesystemMock, $this->bufferIoFactoryMock);
-        $this->assertEquals("~5.5.0|~5.6.0", $composerInfo->getRequiredPhpVersion());
+        $this->assertEquals("~5.5.0|~5.6.0|~7.0.0", $composerInfo->getRequiredPhpVersion());
     }
 
     /**
