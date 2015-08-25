@@ -63,11 +63,11 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider isValidReturnDataProvider
      *
-     * @param array $value
+     * @param array  $value
      * @param string $allWebsites
      * @param string $colTierPriceWebsite
      * @param string $colGroupPriceWebsite
-     * @param bool $expectedResult
+     * @param bool   $expectedResult
      */
     public function testIsValidReturn(
         $value,
