@@ -32,6 +32,7 @@
 @header-panel__text-color: @color-white;
 @header-icons-color: @color-gray56;
 @header-icons-color-hover: @color-gray20;
+@customer-welcome__z-index: @dropdown-list__z-index + 1;
 
 @addto-color: @color-gray60;
 @addto-hover-color: @primary__color;
@@ -160,13 +161,13 @@
             &:extend(.abs-visually-hidden all);
         }
         &:focus {
-            position: absolute;
-            z-index: 15;
             box-sizing: border-box;
-            width: 100%;
             left: 0;
-            top: 0;
+            position: absolute;
             text-align: center;
+            top: 0;
+            width: 100%;
+            z-index: 15;
             .css(background, @color-gray94);
             .css(padding, @indent__s);
         }
@@ -444,7 +445,8 @@
         @_icon-font-size: 10px,
         @_icon-font-line-height: 22px,
         @_dropdown-list-pointer-position: right,
-        @_dropdown-list-position-right: 0
+        @_dropdown-list-position-right: 0,
+        @_dropdown-list-z-index: @customer-welcome__z-index
         );
         li:extend(.switcher li all) {
             a {
@@ -492,8 +494,8 @@
     .header {
         &.panel {
             > .header.links {
-                float: right;
                 .list-inline();
+                float: right;
                 margin-left: auto;
                 > li {
                     margin: 0 0 0 15px;
@@ -509,10 +511,12 @@
                         }
                     }
                 }
-                > .authorization-link:after {
-                    content: 'or';
-                    display: inline-block;
-                    margin: 0 -@indent__xs 0 @indent__xs;
+                > .authorization-link {
+                    &:after {
+                        content: attr(data-label);
+                        display: inline-block;
+                        margin: 0 -@indent__xs 0 @indent__xs;
+                    }
                 }
                 > .customer-welcome + .authorization-link {
                     display: none;
@@ -535,7 +539,7 @@
         .vendor-prefix-display(flex);
         .vendor-prefix-flex-direction(column);
         margin: 0;
-        min-height: 100%; //  Stretch content area for sticky footer
+        min-height: 100%; // Stretch content area for sticky footer
         position: relative;
         transition: margin .3s ease-out 0;
         > .breadcrumbs,

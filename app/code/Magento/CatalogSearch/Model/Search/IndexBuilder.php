@@ -6,13 +6,15 @@
 
 namespace Magento\CatalogSearch\Model\Search;
 
+use Magento\CatalogSearch\Model\Search\TableMapper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Resource;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Adapter\Mysql\IndexBuilderInterface;
 use Magento\Framework\Search\Request\Dimension;
-use Magento\Framework\Search\Request\QueryInterface;
+use Magento\Framework\Search\Request\Filter\BoolExpression;
+use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
@@ -39,14 +41,21 @@ class IndexBuilder implements IndexBuilderInterface
      * @var StoreManagerInterface
      */
     private $storeManager;
+
     /**
      * @var IndexScopeResolver
      */
     private $scopeResolver;
+
     /**
      * @var ConditionManager
      */
     private $conditionManager;
+
+    /**
+     * @var TableMapper
+     */
+    private $tableMapper;
 
     /**
      * @param \Magento\Framework\App\Resource $resource
@@ -54,19 +63,22 @@ class IndexBuilder implements IndexBuilderInterface
      * @param StoreManagerInterface $storeManager
      * @param ConditionManager $conditionManager
      * @param IndexScopeResolver $scopeResolver
+     * @param TableMapper $tableMapper
      */
     public function __construct(
         Resource $resource,
         ScopeConfigInterface $config,
         StoreManagerInterface $storeManager,
         ConditionManager $conditionManager,
-        IndexScopeResolver $scopeResolver
+        IndexScopeResolver $scopeResolver,
+        TableMapper $tableMapper
     ) {
         $this->resource = $resource;
         $this->config = $config;
         $this->storeManager = $storeManager;
         $this->conditionManager = $conditionManager;
         $this->scopeResolver = $scopeResolver;
+        $this->tableMapper = $tableMapper;
     }
 
     /**
@@ -89,19 +101,7 @@ class IndexBuilder implements IndexBuilderInterface
                 []
             );
 
-        if ($this->isNeedToAddFilters($request)) {
-            $select
-                ->joinLeft(
-                    ['category_index' => $this->resource->getTableName('catalog_category_product_index')],
-                    'search_index.entity_id = category_index.product_id',
-                    []
-                )
-                ->joinLeft(
-                    ['cpie' => $this->resource->getTableName('catalog_product_index_eav')],
-                    'search_index.entity_id = cpie.entity_id AND search_index.attribute_id = cpie.attribute_id',
-                    []
-                );
-        }
+        $select = $this->tableMapper->addTables($select, $request);
 
         $select = $this->processDimensions($request, $select);
 
@@ -163,44 +163,5 @@ class IndexBuilder implements IndexBuilderInterface
         }
 
         return $preparedDimensions;
-    }
-
-    /**
-     * @param RequestInterface $request
-     * @return bool
-     */
-    private function isNeedToAddFilters(RequestInterface $request)
-    {
-        return $this->hasFilters($request->getQuery());
-    }
-
-    /**
-     * @param QueryInterface $query
-     * @return bool
-     */
-    private function hasFilters(QueryInterface $query)
-    {
-        $hasFilters = false;
-        switch ($query->getType()) {
-            case RequestQueryInterface::TYPE_BOOL:
-                /** @var \Magento\Framework\Search\Request\Query\BoolExpression $query */
-                foreach ($query->getMust() as $subQuery) {
-                    $hasFilters |= $this->hasFilters($subQuery);
-                }
-                foreach ($query->getShould() as $subQuery) {
-                    $hasFilters |= $this->hasFilters($subQuery);
-                }
-                foreach ($query->getMustNot() as $subQuery) {
-                    $hasFilters |= $this->hasFilters($subQuery);
-                }
-                break;
-            case RequestQueryInterface::TYPE_FILTER:
-                $hasFilters |= true;
-                break;
-            default:
-                $hasFilters |= false;
-                break;
-        }
-        return $hasFilters;
     }
 }

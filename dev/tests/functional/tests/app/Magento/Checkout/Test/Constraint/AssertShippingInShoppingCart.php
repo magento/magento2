@@ -24,11 +24,14 @@ class AssertShippingInShoppingCart extends AbstractConstraint
      *
      * @param CheckoutCart $checkoutCart
      * @param Cart $cart
+     * @param boolean $requireReload
      * @return void
      */
-    public function processAssert(CheckoutCart $checkoutCart, Cart $cart)
+    public function processAssert(CheckoutCart $checkoutCart, Cart $cart, $requireReload = true)
     {
-        $checkoutCart->open();
+        if ($requireReload) {
+            $checkoutCart->open();
+        }
 
         $fixtureShippingAmount = number_format((float)$cart->getShippingAmount(), 2);
         $pageShippingAmount = $checkoutCart->getTotalsBlock()->getShippingPrice();
