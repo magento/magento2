@@ -48,7 +48,6 @@ class CommandList
             'Magento\Setup\Console\Command\DependenciesShowFrameworkCommand',
             'Magento\Setup\Console\Command\DependenciesShowModulesCircularCommand',
             'Magento\Setup\Console\Command\DependenciesShowModulesCommand',
-            'Magento\Setup\Console\Command\DeployStaticContentCommand',
             'Magento\Setup\Console\Command\DiCompileCommand',
             'Magento\Setup\Console\Command\DiCompileMultiTenantCommand',
             'Magento\Setup\Console\Command\GenerateFixturesCommand',
