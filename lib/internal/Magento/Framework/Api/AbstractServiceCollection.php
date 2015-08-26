@@ -110,6 +110,10 @@ abstract class AbstractServiceCollection extends \Magento\Framework\Data\Collect
             throw new LocalizedException(
                 new \Magento\Framework\Phrase('When passing in a field array there must be a matching condition array.')
             );
+        } elseif (is_array($field) && !count($field)>0) {
+            throw new LocalizedException(
+                new \Magento\Framework\Phrase('When passing in a field array there must one field into the array.')
+            );
         }
         if (!is_array($field) && is_array($condition)) {
             foreach ($condition as $key => $value) {
