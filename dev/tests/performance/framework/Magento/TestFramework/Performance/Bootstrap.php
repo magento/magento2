@@ -64,7 +64,7 @@ class Bootstrap
                 );
             }
         }
-        mkdir($reportDir, 0777, true);
+        mkdir($reportDir, 0770, true);
     }
 
     /**

@@ -103,7 +103,7 @@ abstract class AbstractFactory
      * @return bool
      * @throws \Exception
      */
-    protected function checkAndCreateFolder($folder, $mode = 0777)
+    protected function checkAndCreateFolder($folder, $mode = 0770)
     {
         if (is_dir($folder)) {
             return true;
@@ -125,7 +125,7 @@ abstract class AbstractFactory
      * @param bool $recursive
      * @return bool
      */
-    protected function mkDir($dir, $mode = 0777, $recursive = true)
+    protected function mkDir($dir, $mode = 0770, $recursive = true)
     {
         return @mkdir($dir, $mode, $recursive);
     }
