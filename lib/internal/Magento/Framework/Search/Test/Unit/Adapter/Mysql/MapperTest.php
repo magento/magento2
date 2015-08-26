@@ -219,8 +219,6 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ->method('getMatchQueries')
             ->willReturn($derivedQueries);
 
-//        $select->expects($this->any())->method('columns')->will($this->returnValue($select));
-
         $this->request->expects($this->once())->method('getQuery')->will($this->returnValue($query));
 
         $response = $this->mapper->buildQuery($this->request);
