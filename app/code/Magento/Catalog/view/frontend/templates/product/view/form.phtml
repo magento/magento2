@@ -13,7 +13,9 @@
  */
 ?>
 <?php $_helper = $this->helper('Magento\Catalog\Helper\Output'); ?>
-<?php $_product = $block->getProduct(); ?>
+<?php $_product = $block->getProduct();
+$tmp = $block->getProduct()->getMediaGalleryEntries();
+?>
 
 <div class="product-add-form">
     <form action="<?php echo $block->getSubmitUrl($_product) ?>" method="post"
