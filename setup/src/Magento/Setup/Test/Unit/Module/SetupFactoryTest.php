@@ -25,8 +25,7 @@ class SetupFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateWithParam()
     {
         $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface', [], '', false);
-        $objectManager->expects($this->never())
-            ->method('get');
+        $objectManager->expects($this->never())->method('get');
         $resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
         $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);

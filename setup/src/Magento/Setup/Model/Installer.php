@@ -196,11 +196,15 @@ class Installer
     private $dbValidator;
 
     /**
+     * Factory to create \Magento\Setup\Module\Setup
+     *
      * @var SetupFactory
      */
     private $setupFactory;
 
     /**
+     * Factory to create \Magento\Setup\Module\DataSetup
+     *
      * @var DataSetupFactory
      */
     private $dataSetupFactory;
@@ -225,6 +229,8 @@ class Installer
      * @param SetupConfigModel $setupConfigModel
      * @param CleanupFiles $cleanupFiles
      * @param DbValidator $dbValidator
+     * @param SetupFactory $setupFactory
+     * @param DataSetupFactory $dataSetupFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
