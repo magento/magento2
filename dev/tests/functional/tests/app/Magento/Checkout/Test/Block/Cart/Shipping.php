@@ -95,8 +95,8 @@ class Shipping extends Form
         $this->openEstimateShippingAndTax();
         $data = $address->getData();
         $mapping = $this->dataMapping(array_intersect_key($data, array_flip($this->estimationFields)));
-        $this->waitForUpdatedShippingMethods();
         $this->_fill($mapping, $this->_rootElement);
+        $this->waitForUpdatedShippingMethods();
     }
 
     /**
@@ -126,7 +126,8 @@ class Shipping extends Form
      */
     public function waitForUpdatedShippingMethods()
     {
-        $this->waitForElementVisible($this->blockWaitElement);
+        // Code under test uses JavaScript delay at this point as well.
+        sleep(1);
         $this->waitForElementNotVisible($this->blockWaitElement);
     }
 }
