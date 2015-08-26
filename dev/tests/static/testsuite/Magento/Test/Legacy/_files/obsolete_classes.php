@@ -3809,6 +3809,15 @@ return [
         'Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\ProductType'
         . '\Configurable'
     ],
+    ['Magento\Setup\Model\Deployer', 'Magento\Deploy\Model\Deployer'],
+    [
+        'Magento\Setup\Console\Command\DeployStaticContentCommand',
+        'Magento\Deploy\Console\Command\DeployStaticContentCommand'
+    ],
+    [
+        'Magento\Setup\Test\Unit\Console\Command\DeployStaticContentCommandTest',
+        'Magento\Deploy\Test\Unit\Console\Command\DeployStaticContentCommandTest'
+    ],
     ['Magento\Store\Model\Storage\Db', 'Magento\Store\Model\StoreManagerInterface'],
     ['Magento\Store\Model\Storage\DefaultStorage', 'Magento\Store\Model\StoreManagerInterface'],
     ['Magento\Store\Model\StorageFactory'],
