@@ -9,7 +9,7 @@ define([
      *
      */
     function isDomElement(node) {
-        return node.tagName && node.nodeType;
+        return node && node.tagName && node.nodeType;
     }
 
     /**
