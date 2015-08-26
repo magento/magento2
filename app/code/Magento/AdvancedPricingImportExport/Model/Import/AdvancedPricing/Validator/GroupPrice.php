@@ -47,7 +47,7 @@ class GroupPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valid
         foreach ($this->groupRepository->getList($this->searchCriteriaBuilder->create())->getItems() as $group) {
             $this->customerGroups[$group->getCode()] = $group->getId();
         }
-        return parent::init($context);
+        return $this;
     }
 
     /**
