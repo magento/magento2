@@ -36,6 +36,7 @@ class Block implements Layout\ReaderInterface
     const ATTRIBUTE_TEMPLATE = 'template';
     const ATTRIBUTE_TTL = 'ttl';
     const ATTRIBUTE_DISPLAY = 'display';
+    const ATTRIBUTE_ACL = 'acl';
     /**#@-*/
 
     /**
@@ -185,6 +186,7 @@ class Block implements Layout\ReaderInterface
                 self::ATTRIBUTE_TEMPLATE => (string)$currentElement[self::ATTRIBUTE_TEMPLATE],
                 self::ATTRIBUTE_TTL      => (string)$currentElement[self::ATTRIBUTE_TTL],
                 self::ATTRIBUTE_DISPLAY  => (string)$currentElement[self::ATTRIBUTE_DISPLAY],
+                self::ATTRIBUTE_ACL  => (string)$currentElement[self::ATTRIBUTE_ACL],
             ];
         }
         return $elementData['attributes'];
