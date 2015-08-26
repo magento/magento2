@@ -122,6 +122,11 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
             'attribute_id' => 'attributeSetName'
         ];
 
+        $entityAttributes2 = [[
+            'attribute_id' => 'attribute_id',
+            'attribute_set_name' => 'attributeSetName',
+        ]];
+
         $this->entityModel->expects($this->any())->method('getEntityTypeId')->willReturn(3);
         $this->entityModel->expects($this->any())->method('getAttributeOptions')->willReturn(['option1', 'option2']);
         $attrSetColFactory->expects($this->any())->method('create')->willReturn($attrSetCollection);
@@ -147,9 +152,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
             ->method('addFieldToFilter')
             ->with(
                 'main_table.attribute_id',
-                ['in' => [
-                    key($entityAttributes)
-                ]]
+                ['in' => ['attribute_id']]
             )
             ->willReturn([$attribute]);
 
@@ -192,8 +195,8 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $this->connection->expects($this->any())->method('quoteInto')->willReturn('');
         $this->connection
             ->expects($this->any())
-            ->method('fetchPairs')
-            ->will($this->returnValue($entityAttributes));
+            ->method('fetchAll')
+            ->will($this->returnValue($entityAttributes2));
 
         $this->resource = $this->getMock(
             '\Magento\Framework\App\Resource',
