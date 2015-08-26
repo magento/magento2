@@ -7,6 +7,7 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\Framework\Backup;
+use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Class to work with filesystem backups
@@ -263,7 +264,7 @@ class Filesystem extends AbstractBackup
             }
 
             mkdir($backupsDir);
-            chmod($backupsDir, 0777);
+            chmod($backupsDir, DriverInterface::WRITEABLE_DIRECTORY_MODE);
         }
 
         if (!is_writable($backupsDir)) {

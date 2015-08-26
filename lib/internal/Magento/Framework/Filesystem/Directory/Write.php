@@ -6,6 +6,7 @@
 namespace Magento\Framework\Filesystem\Directory;
 
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Filesystem\DriverInterface;
 
 class Write extends Read implements WriteInterface
 {
@@ -14,7 +15,7 @@ class Write extends Read implements WriteInterface
      *
      * @var int
      */
-    protected $permissions = 0777;
+    protected $permissions = DriverInterface::WRITEABLE_DIRECTORY_MODE;
 
     /**
      * Constructor
