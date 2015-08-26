@@ -7,6 +7,7 @@
 namespace Magento\ProductVideo\Model\Product\Attribute\Media;
 
 use Magento\Catalog\Model\Product\Attribute\Backend\Media\AbstractMediaGalleryEntryProcessor;
+use \Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Catalog\Model\Product;
 
 /**
@@ -14,6 +15,8 @@ use Magento\Catalog\Model\Product;
  */
 class ExternalVideoMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryProcessor
 {
+    const GALLERY_VALUE_VIDEO_TABLE = 'catalog_product_entity_media_gallery_value_video';
+
     protected $videoProperties = [
         'video_value_id',
         'video_provider',
@@ -25,28 +28,78 @@ class ExternalVideoMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryP
 
     /**
      * @param Product $product
+     * @param AbstractAttribute $attribute
      * @return void
      */
-    public function afterLoad(Product $product, $attributeCode)
+    public function afterLoad(Product $product, AbstractAttribute $attribute)
+    {
+        $attributeCode = $attribute->getAttributeCode();
+        $mediaCollection = $this->getMediaEntriesDataCollection($product->getData($attributeCode));
+        if (!empty($mediaCollection)) {
+            $ids = $this->collectVideoEntriesIds($mediaCollection);
+            $videoDataCollection = $this->loadVideoDataById($ids);
+            $mediaEntriesDataCollection = $this->addVideoDataToMediaEntries($mediaCollection, $videoDataCollection);
+            $product->setData($attributeCode, $mediaEntriesDataCollection);
+        }
+    }
+
+    /**
+     * @param Product $product
+     * @param AbstractAttribute $attribute
+     * @return void
+     */
+    public function beforeSave(Product $product, AbstractAttribute $attribute)
     {
 
     }
 
     /**
      * @param Product $product
+     * @param AbstractAttribute $attribute
      * @return void
      */
-    public function beforeSave(Product $product, $attributeCode)
+    public function afterSave(Product $product, AbstractAttribute $attribute)
     {
 
     }
 
     /**
-     * @param Product $product
-     * @return void
+     * @param array $mediaData
+     * @return array
      */
-    public function afterSave(Product $product, $attributeCode)
+    protected function getMediaEntriesDataCollection(array $mediaData)
     {
+        if (is_array($mediaData['images'])) {
+            return $mediaData['images'];
+        }
+        return [];
+    }
 
+    /**
+     * @param array $mediaCollection
+     * @return array
+     */
+    protected function collectVideoEntriesIds(array $mediaCollection)
+    {
+        $ids = [];
+        foreach ($mediaCollection as $item) {
+            if ($item['media_type'] == ExternalVideoMediaEntryConverter::MEDIA_TYPE_CODE) {
+                $ids[] = $item['value_id'];
+            }
+        }
+        return $ids;
+    }
+
+    protected function loadVideoDataById(array $ids)
+    {
+        foreach ($ids as $id) {
+
+        }
+
+    }
+
+    protected function addVideoDataToMediaEntries(array $mediaCollection, array $data)
+    {
+        return ['image' => $mediaCollection];
     }
 }

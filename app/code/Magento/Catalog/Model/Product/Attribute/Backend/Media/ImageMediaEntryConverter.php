@@ -18,7 +18,7 @@ class ImageMediaEntryConverter implements MediaGalleryEntryConverterInterface
     /**
      * Media Entry type code
      */
-    const MEDIA_ENTRY_TYPE_IMAGE = 'image';
+    const MEDIA_TYPE_CODE = 'image';
 
     /**
      * @var \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory
@@ -48,7 +48,7 @@ class ImageMediaEntryConverter implements MediaGalleryEntryConverterInterface
      */
     public function getMediaEntryType()
     {
-        return self::MEDIA_ENTRY_TYPE_IMAGE;
+        return self::MEDIA_TYPE_CODE;
     }
 
     /**
