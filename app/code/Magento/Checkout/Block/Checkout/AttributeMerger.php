@@ -40,9 +40,9 @@ class AttributeMerger
      * @var array
      */
     protected $inputValidation = [
-        'alpha' => 'letters-only',
+        'alpha' => 'validate-alpha',
         'numeric' => 'validate-number',
-        'alphanumeric' => 'alphanumeric',
+        'alphanumeric' => 'validate-alphanum',
         'url' => 'url2',
         'email' => 'email2',
     ];
