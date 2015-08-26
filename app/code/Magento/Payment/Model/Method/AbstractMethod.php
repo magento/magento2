@@ -8,6 +8,7 @@
 
 namespace Magento\Payment\Model\Method;
 
+use Magento\Framework\DataObject;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Sales\Model\Order\Invoice;
@@ -778,12 +779,15 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * @param \Magento\Quote\Api\Data\CartInterface|null $quote
      * @return bool
      */
-    public function isAvailable($quote = null)
+    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
-        $checkResult = new \StdClass();
-        $isActive = $this->isActive($quote ? $quote->getStoreId() : null);
-        $checkResult->isAvailable = $isActive;
-        $checkResult->isDeniedInConfig = !$isActive;
+        if (!$this->isActive($quote ? $quote->getStoreId() : null)) {
+            return false;
+        }
+
+        $checkResult = new DataObject();
+        $checkResult->setData('is_available', true);
+
         // for future use in observers
         $this->_eventManager->dispatch(
             'payment_method_is_active',
@@ -794,7 +798,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
             ]
         );
 
-        return $checkResult->isAvailable;
+        return $checkResult->getData('is_available');
     }
 
     /**

@@ -32,6 +32,9 @@ var config = {
         },
         "matchMedia": {
             "exports": "mediaCheck"
+        },
+        "jquery/jquery-storageapi": {
+            "deps": ["jquery/jquery.cookie"]
         }
     },
     "paths": {
