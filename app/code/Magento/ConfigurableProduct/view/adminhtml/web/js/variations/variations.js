@@ -10,8 +10,7 @@ define([
 ], function (Component, $, ko, _) {
     'use strict';
 
-    var viewModel;
-    viewModel = Component.extend({
+    return Component.extend({
         defaults: {
             opened: false,
             attributes: [],
@@ -22,8 +21,17 @@ define([
                 associatedProductsProvider: '${ $.associatedProductsProvider }'
             }
         },
+        rowIndexToEdit: false,
         variations: [],
         productAttributes: [],
+        selectProduct: function (rowIndex) {
+            var productToEdit = this.productMatrix.splice(this.rowIndexToEdit, 1)[0];
+            var newProduct = this.associatedProductsProvider().data.items[rowIndex];
+            newProduct = _.extend(productToEdit, newProduct);
+            newProduct.status = !newProduct.status * 1;
+            this.productMatrix.splice(this.rowIndexToEdit, 0, newProduct);
+            $('#associated-products-container').trigger('closeModal');
+        },
         initialize: function () {
             this._super();
             if (this.variations.length) {
@@ -98,6 +106,7 @@ define([
         },
         showGrid: function (rowIndex) {
             var attributes = JSON.parse(this.productMatrix()[rowIndex].attribute);
+            this.rowIndexToEdit = rowIndex;
             this.associatedProductsProvider().params.attribute_ids = _.keys(attributes);
             this.associatedProductsFilter().set('filters', attributes).apply();
             $('#associated-products-container').trigger('openModal');
@@ -235,5 +244,4 @@ define([
             });
         }
     });
-    return viewModel;
 });
