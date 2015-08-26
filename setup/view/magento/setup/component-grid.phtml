@@ -1,0 +1,175 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<h2 class="page-title">{{$state.current.header}}</h2>
+<div class="componenet-manager-wrap">
+    <div class="component-manager-title">
+        My Account
+        <div class="componenet-manager-account">
+            <span class="user-name"></span>
+            <a href="#" class="sign-in-out"></a>
+        </div>
+    </div>
+    <div class="component-manager-content">
+        <ul class="componenet-manager-items row">
+            <li class="item col-m-4">
+                <div class="item-title"></div>
+                <div class="item-number"></div>
+            </li>
+            <li class="item col-m-4">
+                <div class="item-title"></div>
+                <div class="item-number"></div>
+                <div class="item-install">
+                    <button type="button" class="btn"></button>
+                </div>
+            </li>
+            <li class="item col-m-4">
+                <div class="item-title">Last Sync</div>
+                <div class="item-date">
+                    <span ng-hide="isOutOfSync">
+                        at {{lastSyncDate|date:"h:mm:ssa"}} on {{lastSyncDate|date:"d MMM yyyy"}}
+                    </span>
+                    <span ng-show="isOutOfSync">No sync history</span></div>
+                <button type="button" class="btn" ng-click="sync()">Sync</button>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div class="message message-spinner" ng-show="!componentsProcessed">
+        <span class="spinner">
+            <span></span><span></span><span></span><span></span>
+            <span></span><span></span><span></span><span></span>
+        </span>
+    <span class="message-text">Retrieving information for components...</span>
+</div>
+<div class="row" ng-show="componentsProcessed && total == 0">
+    <label class="form-label">
+        <b>We didn't find any components to update at this time. Please try later.<br/>
+    </label>
+</div>
+<div class="admin__data-grid-outer-wrap" ng-show="componentsProcessed && total > 0">
+    <div class="admin__data-grid-header">
+        <div class="admin__data-grid-header-row row row-gutter">
+            <div class="col-xs-3">
+                <div class="admin__control-support-text">
+                    <span>{{total}}</span> records found
+                </div>
+            </div>
+            <div class="col-xs-9 admin__data-grid-pager-wrap">
+                <select id="perPage" class="admin__control-select" ng-model="rowLimit">
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="200">200</option>
+                </select>
+                <label class="admin__control-support-text" for="perPage">per page</label>
+                <div class="admin__data-grid-pager">
+                    <button class="action-previous"
+                            ng-disabled="currentPage == 0"
+                            ng-click="currentPage = currentPage - 1; start = start - rowLimit"
+                            type="button"
+                        >
+                        <span>Previous page</span>
+                    </button>
+                    <input id="pageCurrent" class="admin__control-text" type="number" value="{{currentPage+1}}">
+                    <label class="admin__control-support-text" for="pageCurrent">
+                        of {{numberOfPages}}
+                    </label>
+                    <button class="action-next"
+                            ng-disabled="currentPage >= numberOfPages-1"
+                            ng-click="currentPage = currentPage + 1; start = start + rowLimit"
+                            type="button"
+                        >
+                        <span>Next page</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="admin__data-grid-wrap" ng-show="$state.is('root.update')">
+        <table class="data-grid">
+            <thead data-part="head">
+            <tr>
+                <th class="data-grid-th _sortable _col-xs">
+                    <span></span>
+                </th>
+                <th class="data-grid-th _sortable _ascend">
+                    <span>Component Name</span>
+                </th>
+                <th class="data-grid-th _sortable">
+                    <span>Module Name</span>
+                </th>
+                <th class="data-grid-th  _sortable">
+                    <span>Version</span>
+                </th>
+                <th class="data-grid-th  _sortable">
+                    <span>Type</span>
+                </th>
+                <th class="data-grid-th  _sortable">
+                    <span>Vendor</span>
+                </th>
+                <th class="data-grid-actions-cell data-grid-th">
+                    <span>Actions</span>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="component in components | startFrom:start | limitTo:rowLimit">
+                <td class="data-grid-indicator-cell">
+                    <span class="component-indicator"
+                          ng-class="getIndicatorInfo(component, 'icon')"
+                          data-label="{{getIndicatorInfo(component, 'label')}}"
+                        ><span>{{getIndicatorInfo(component, 'label')}}</span>
+                    </span>
+                </td>
+                <td>
+                    <span class="data-grid-data">{{component.name}}</span>
+                </td>
+                <td>
+                    <span class="data-grid-data">{{component.moduleName}}</span>
+                </td>
+                <td>
+                    <span class="data-grid-data">{{component.version}}</span>
+                </td>
+                <td>
+                    <span class="data-grid-data">{{component.type.replace("magento2-", "")}}</span>
+                </td>
+                <td>
+                    <span class="data-grid-data">{{component.vendor}}</span>
+                </td>
+                <td class="data-grid-actions-cell">
+                    <!-- "_active" class should be added when .action-select button clicked to the -->
+                    <!-- wrapper and .action-menu to show actions                                  -->
+                    <div class="action-select-wrap" ng-class="{'_active' : isActiveActionsCell(component)}">
+                        <button class="action-select"
+                                ng-show="component.update || component.uninstall"
+                            ng-click="toggleActiveActionsCell(component)"
+                            ng-blur="closeActiveActionsCell(component)">
+                            <span>Select</span>
+                        </button>
+                        <ul class="action-menu" ng-class="{'_active' : isActiveActionsCell(component)}">
+                            <li ng-class="{'hide': !component.update}"
+                                ng-mousedown="update(component)">
+                                <a class="action-menu-item">Update</a>
+                            </li>
+                            <li ng-class="{'hide': !component.uninstall}"
+                                ng-mousedown="uninstall(component)">
+                                <a class="action-menu-item">Uninstall</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- loading indicator overlay and loader -->
+<div data-role="spinner" class="admin__data-grid-loading-mask hide" ng-class="{'hide':isHiddenSpinner}">
+    <div class="grid-loader"></div>
+</div>
