@@ -17,7 +17,7 @@
         }
     }
 
-    // Checkout Agreements in popup
+    //  Checkout Agreements in popup
     .checkout-agreements-items {
         &:extend(.abs-reset-list all);
         padding-bottom: @indent__l;
@@ -29,6 +29,16 @@
         .checkout-agreements-item-title {
             &:extend(.abs-checkout-title all);
             border-bottom: 0;
+        }
+        .checkout-agreements-item-content {
+            overflow: auto;
+        }
+    }
+
+    //  Order review agreements
+    .agreements {
+        .agreement-content {
+            overflow: auto;
         }
     }
 }
