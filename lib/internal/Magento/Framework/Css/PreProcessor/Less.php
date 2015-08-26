@@ -11,7 +11,7 @@ use Magento\Framework\View\Asset\PreProcessorInterface;
 class Less implements PreProcessorInterface
 {
     /**
-     * @var \Magento\Framework\Less\FileGenerator
+     * @var \Magento\Framework\Css\PreProcessor\FileGenerator
      */
     protected $fileGenerator;
 
@@ -21,11 +21,11 @@ class Less implements PreProcessorInterface
     protected $adapter;
 
     /**
-     * @param \Magento\Framework\Less\FileGenerator $fileGenerator
+     * @param \Magento\Framework\Css\PreProcessor\FileGenerator $fileGenerator
      * @param AdapterInterface $adapter
      */
     public function __construct(
-        \Magento\Framework\Less\FileGenerator $fileGenerator,
+        \Magento\Framework\Css\PreProcessor\FileGenerator $fileGenerator,
         AdapterInterface $adapter
     ) {
         $this->fileGenerator = $fileGenerator;
@@ -38,8 +38,8 @@ class Less implements PreProcessorInterface
     public function process(\Magento\Framework\View\Asset\PreProcessor\Chain $chain)
     {
         $chain->setContentType('less');
-        $tmpLessFile = $this->fileGenerator->generateFileTree($chain);
-        $cssContent = $this->adapter->process($tmpLessFile);
+        $tmpFile = $this->fileGenerator->generateFileTree($chain);
+        $cssContent = $this->adapter->process($tmpFile);
         $cssTrimmedContent = trim($cssContent);
         if (!empty($cssTrimmedContent)) {
             $chain->setContent($cssContent);
