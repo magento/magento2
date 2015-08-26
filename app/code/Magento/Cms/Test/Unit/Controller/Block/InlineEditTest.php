@@ -96,8 +96,8 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->with(1)
             ->willReturn($this->cmsBlock);
         $this->cmsBlock->expects($this->atLeastOnce())
-            ->method('getTitle')
-            ->willReturn('Catalog Events Lister');
+            ->method('getId')
+            ->willReturn('1');
         $this->cmsBlock->expects($this->once())
             ->method('getData')
             ->willReturn([
@@ -125,7 +125,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with([
                 'messages' => [
-                    '[Block: Catalog Events Lister] Exception'
+                    '[Block id: 1] Exception'
                 ],
                 'error' => true
             ])

@@ -60,22 +60,24 @@ class InlineEdit extends \Magento\Backend\App\Action
                     $page = $this->pageRepository->getById($pageId);
                     try {
                         $pageData = $this->dataProcessor->filter($postData[$pageId]);
-                        if (!$this->dataProcessor->validate($pageData)) {
+                        if (!$this->dataProcessor->validate($pageData)
+                            || !$this->dataProcessor->validateRequireEntry($pageData)
+                        ) {
                             $error = true;
                             foreach ($this->messageManager->getMessages(true)->getItems() as $error) {
-                                $messages[] = $this->getErrorWithPageTitle($page, $error->toString());
+                                $messages[] = $this->getErrorWithPageId($page, $error->getText());
                             }
                         }
                         $page->setData(array_merge($page->getData(), $pageData));
                         $this->pageRepository->save($page);
                     } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                        $messages[] = $this->getErrorWithPageTitle($page, $e->getMessage());
+                        $messages[] = $this->getErrorWithPageId($page, $e->getMessage());
                         $error = true;
                     } catch (\RuntimeException $e) {
-                        $messages[] = $this->getErrorWithPageTitle($page, $e->getMessage());
+                        $messages[] = $this->getErrorWithPageId($page, $e->getMessage());
                         $error = true;
                     } catch (\Exception $e) {
-                        $messages[] = $this->getErrorWithPageTitle(
+                        $messages[] = $this->getErrorWithPageId(
                             $page,
                             __('Something went wrong while saving the page.')
                         );
@@ -98,8 +100,8 @@ class InlineEdit extends \Magento\Backend\App\Action
      * @param string $errorText
      * @return string
      */
-    protected function getErrorWithPageTitle(PageInterface $page, $errorText)
+    protected function getErrorWithPageId(PageInterface $page, $errorText)
     {
-        return '[Page: ' . $page->getTitle() . '] ' . $errorText;
+        return '[Page id: ' . $page->getId() . '] ' . $errorText;
     }
 }

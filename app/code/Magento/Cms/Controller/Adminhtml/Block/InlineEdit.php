@@ -56,7 +56,7 @@ class InlineEdit extends \Magento\Backend\App\Action
                         $block->setData(array_merge($block->getData(), $postData[$blockId]));
                         $this->blockRepository->save($block);
                     } catch (\Exception $e) {
-                        $messages[] = $this->getErrorWithBlockTitle(
+                        $messages[] = $this->getErrorWithBlockId(
                             $block,
                             __($e->getMessage())
                         );
@@ -79,8 +79,8 @@ class InlineEdit extends \Magento\Backend\App\Action
      * @param string $errorText
      * @return string
      */
-    protected function getErrorWithBlockTitle(BlockInterface $block, $errorText)
+    protected function getErrorWithBlockId(BlockInterface $block, $errorText)
     {
-        return '[Block: ' . $block->getTitle() . '] ' . $errorText;
+        return '[Block id: ' . $block->getId() . '] ' . $errorText;
     }
 }

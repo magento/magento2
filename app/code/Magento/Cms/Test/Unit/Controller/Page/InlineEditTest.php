@@ -155,11 +155,11 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->method('getItems')
             ->willReturn([$this->message]);
         $this->message->expects($this->once())
-            ->method('toString')
+            ->method('getText')
             ->willReturn('Error message');
         $this->cmsPage->expects($this->atLeastOnce())
-            ->method('getTitle')
-            ->willReturn('404 Not Found');
+            ->method('getId')
+            ->willReturn('1');
         $this->cmsPage->expects($this->once())
             ->method('getData')
             ->willReturn([
@@ -189,8 +189,8 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with([
                 'messages' => [
-                    '[Page: 404 Not Found] Error message',
-                    '[Page: 404 Not Found] LocalizedException'
+                    '[Page id: 1] Error message',
+                    '[Page id: 1] LocalizedException'
                 ],
                 'error' => true
             ])
@@ -210,8 +210,8 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with([
                 'messages' => [
-                    '[Page: 404 Not Found] Error message',
-                    '[Page: 404 Not Found] RuntimeException'
+                    '[Page id: 1] Error message',
+                    '[Page id: 1] RuntimeException'
                 ],
                 'error' => true
             ])
@@ -231,8 +231,8 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with([
                 'messages' => [
-                    '[Page: 404 Not Found] Error message',
-                    '[Page: 404 Not Found] Something went wrong while saving the page.'
+                    '[Page id: 1] Error message',
+                    '[Page id: 1] Something went wrong while saving the page.'
                 ],
                 'error' => true
             ])
