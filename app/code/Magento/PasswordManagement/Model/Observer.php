@@ -41,7 +41,7 @@ class Observer
         $password = $observer->getEvent()->getPassword();
         /** @var \Magento\Customer\Model\Customer $model */
         $model = $observer->getEvent()->getModel();
-        $isValidHash = $this->_encryptor->validateHashByVersion(
+        $isValidHash = $this->_encryptor->isValidHashByVersion(
             $password,
             $model->getPasswordHash(),
             Encryptor::HASH_VERSION_LATEST

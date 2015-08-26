@@ -149,14 +149,27 @@ class Encryptor implements EncryptorInterface
      * @param string $password
      * @param string $hash
      * @return bool
+     * @deprecated
      */
     public function validateHash($password, $hash)
     {
-        return $this->validateHashByVersion(
+        return $this->isValidHash($password, $hash);
+    }
+
+    /**
+     * Validate hash against hashing method (with or without salt)
+     *
+     * @param string $password
+     * @param string $hash
+     * @return bool
+     */
+    public function isValidHash($password, $hash)
+    {
+        return $this->isValidHashByVersion(
             $password,
             $hash,
             self::HASH_VERSION_SHA256
-        ) || $this->validateHashByVersion(
+        ) || $this->isValidHashByVersion(
             $password,
             $hash,
             self::HASH_VERSION_MD5
@@ -171,7 +184,7 @@ class Encryptor implements EncryptorInterface
      * @param int $version
      * @return bool
      */
-    public function validateHashByVersion($password, $hash, $version)
+    public function isValidHashByVersion($password, $hash, $version)
     {
         // look for salt
         $hashArr = explode(':', $hash, 2);

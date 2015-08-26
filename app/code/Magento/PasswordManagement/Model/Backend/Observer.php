@@ -207,7 +207,7 @@ class Observer
         }
 
         // upgrade admin password
-        $isValidHash = $this->_encryptor->validateHashByVersion(
+        $isValidHash = $this->_encryptor->isValidHashByVersion(
             $password,
             $user->getPassword(),
             Encryptor::HASH_VERSION_LATEST
