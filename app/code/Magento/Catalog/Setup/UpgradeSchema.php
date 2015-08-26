@@ -10,7 +10,7 @@ use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media;
-use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
+use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageMediaEntryConverter;
 
 /**
  * Upgrade the Catalog module DB scheme
@@ -22,84 +22,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
-
         /** Add support video media attribute */
         if (version_compare($context->getVersion(), '2.0.0', '<=')) {
             $installer = $setup;
-
-            /**
-             * Create table 'catalog_product_entity_media_gallery_value_video'
-             */
-            $table = $installer->getConnection()
-                ->newTable($installer->getTable(Media::GALLERY_VALUE_VIDEO_TABLE))
-                ->addColumn(
-                    'value_id',
-                    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-                    null,
-                    ['unsigned' => true, 'nullable' => false],
-                    'Media Entity ID'
-                )
-                ->addColumn(
-                    'store_id',
-                    \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-                    null,
-                    ['unsigned' => true, 'nullable' => false, 'default' => '0'],
-                    'Store ID'
-                )
-                ->addColumn(
-                    'provider',
-                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                    32,
-                    ['nullable' => false],
-                    'Video provider ID'
-                )
-                ->addColumn(
-                    'url',
-                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                    null,
-                    [],
-                    'Video URL'
-                )
-                ->addColumn(
-                    'title',
-                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                    255,
-                    [],
-                    'Title'
-                )
-                ->addColumn(
-                    'description',
-                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                    null,
-                    ['nullable' => true, 'default' => null],
-                    'Page Meta Description'
-                )
-                ->addColumn(
-                    'metadata',
-                    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                    null,
-                    ['nullable' => true, 'default' => null],
-                    'Video meta data'
-                )
-                ->addIndex(
-                    $installer->getIdxName(Media::GALLERY_VALUE_VIDEO_TABLE, ['store_id']),
-                    ['store_id']
-                )
-                ->addForeignKey(
-                    $installer->getFkName(
-                        Media::GALLERY_VALUE_VIDEO_TABLE,
-                        'value_id',
-                        Media::GALLERY_VALUE_TABLE,
-                        'value_id'
-                    ),
-                    'value_id',
-                    $installer->getTable(Media::GALLERY_VALUE_TABLE),
-                    'value_id',
-                    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-                )
-                ->setComment('Catalog Product Video Table');
-            $installer->getConnection()->createTable($table);
-
             /**
              * Create table 'catalog_product_entity_media_gallery_value_to_entity'
              */
@@ -127,11 +52,11 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     $installer->getFkName(
                         Media::GALLERY_VALUE_TO_ENTITY_TABLE,
                         'value_id',
-                        Media::GALLERY_VALUE_TABLE,
+                        Media::GALLERY_TABLE,
                         'value_id'
                     ),
                     'value_id',
-                    $installer->getTable(Media::GALLERY_VALUE_TABLE),
+                    $installer->getTable(Media::GALLERY_TABLE),
                     'value_id',
                     \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
                 )
@@ -160,7 +85,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                     'length' => 32,
                     'nullable' => false,
-                    'default' => ProductAttributeMediaGalleryEntryInterface::MEDIA_TYPE_IMAGE,
+                    'default' => ImageMediaEntryConverter::MEDIA_TYPE_CODE,
                     'comment' => 'Media entry type'
                 ]
             );

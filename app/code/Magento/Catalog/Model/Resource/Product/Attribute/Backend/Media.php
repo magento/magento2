@@ -46,14 +46,85 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
         return $result;
     }
 
-    public function loadDataFromTableByValueId($tableNameAlias, array $ids, array $cols = [])
+    /**
+     * @param string $tableNameAlias
+     * @param array $ids
+     * @param array|null $cols
+     * @return array
+     */
+    public function loadDataFromTableByValueId($tableNameAlias, array $ids, array $cols = null)
     {
-        $connection = $this->getConnection();
-        $mainTableAlias = $this->getMainTableAlias();
-        if (empty($cols)) {
+        if (null == $cols) {
             $cols = '*';
         }
-        $select = $connection->select()->from([$mainTableAlias => $this->getTable($tableNameAlias)], $cols);
+        $connection = $this->getConnection();
+        $mainTableAlias = $this->getMainTableAlias();
+        $select = $connection->select()
+            ->from(
+                [$mainTableAlias => $this->getTable($tableNameAlias)], $cols
+            )->where(
+                $mainTableAlias.'.value_id IN(?)',
+                $ids
+            );
+        $result = $this->getConnection()->fetchAll($select);
+
+        return $result;
+    }
+
+    /**
+     * @param string $tableName
+     * @param array $data
+     * @param string $idKeyName
+     * @return mixed
+     */
+    public function updateTable($tableName, array $data, $idKeyName = 'value_id')
+    {
+        $tableName = $this->getTable($tableName);
+        $data = $this->_prepareDataForTable(
+            new \Magento\Framework\DataObject($data),
+            $tableName
+        );
+        $id = $data[$idKeyName];
+        $selectCondition = $this->getConnection()->quoteInto($idKeyName . ' = ? ', $id);
+        if (empty($data[$idKeyName]) || !$this->isRecordsExist($tableName, $selectCondition)) {
+            $this->getConnection()->insert($tableName, $data);
+            $id = $this->getConnection()->lastInsertId($tableName);
+        } else {
+            $this->getConnection()->update($tableName, $data, $selectCondition);
+        }
+
+        return $id;
+    }
+
+    /**
+     * @param int $valueId
+     * @param int $entityId
+     */
+    public function bindValueToEntity($valueId, $entityId)
+    {
+        $table = $this->getTable(self::GALLERY_VALUE_TO_ENTITY_TABLE);
+        $conditions = implode(
+            ' AND ',
+            [
+                $this->getConnection()->quoteInto('value_id = ?', (int)$valueId),
+                $this->getConnection()->quoteInto('entity_id = ?', (int)$entityId)
+            ]
+        );
+        if (!$this->isRecordsExist($table, $conditions)) {
+            $this->getConnection()->insert($table, ['value_id' => $valueId, 'entity_id' => $entityId]);
+        }
+    }
+
+    /**
+     * @param $tableName
+     * @param $condition
+     * @return bool
+     */
+    protected function isRecordsExist($tableName, $condition)
+    {
+        $select = $this->getConnection()->select()->from($tableName)->where($condition);
+        $result = $this->getConnection()->fetchAll($select);
+        return (bool)$result;
     }
 
     /**
@@ -116,74 +187,6 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ->order($positionCheckSql . ' ' . \Magento\Framework\DB\Select::SQL_ASC);
 
         return $select;
-    }
-
-    /**
-     * Load gallery images for product
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param int $attributeId
-     * @return array
-     */
-    public function loadGallery($product, $attributeId)
-    {
-        $connection = $this->getConnection();
-
-        $positionCheckSql = $connection->getCheckSql(
-            'value.position IS NULL',
-            'default_value.position',
-            'value.position'
-        );
-
-        // Select gallery images for product
-        $select = $connection->select()->from(
-            ['main' => $this->getMainTable()],
-            [
-                'value_id',
-                'file' => 'value',
-                'media_type' => 'media_type'
-            ]
-        )->joinLeft(
-            ['value' => $this->getTable(self::GALLERY_VALUE_TABLE)],
-            $connection->quoteInto('main.value_id = value.value_id AND value.store_id = ?', (int)$product->getStoreId()),
-            [
-                'label',
-                'position',
-                'disabled'
-            ]
-        )->joinLeft(
-            // Joining default values
-            ['default_value' => $this->getTable(self::GALLERY_VALUE_TABLE)],
-            'main.value_id = default_value.value_id AND default_value.store_id = 0',
-            ['label_default' => 'label', 'position_default' => 'position', 'disabled_default' => 'disabled']
-        )->joinLeft(
-            ['entity' => $this->getTable(self::GALLERY_VALUE_TO_ENTITY_TABLE)],
-            'main.value_id = entity.value_id AND default_value.store_id = 0',
-            ['entity_id' => 'entity_id']
-        )->joinLeft(
-            ['video' => $this->getTable(self::GALLERY_VALUE_VIDEO_TABLE)],
-            'main.value_id = video.value_id AND default_value.store_id = 0',
-            [
-                'video_value_id' => 'value_id',
-                'video_provider' => 'provider',
-                'video_url' => 'url',
-                'video_title' => 'title',
-                'video_description' => 'description',
-                'video_metadata' => 'metadata'
-            ]
-        )->where(
-            'main.attribute_id = ?',
-            $attributeId
-        )->where(
-            'entity.entity_id = ?',
-            $product->getId()
-        )
-        ->where($positionCheckSql . ' IS NOT NULL')
-        ->order($positionCheckSql . ' ' . \Magento\Framework\DB\Select::SQL_ASC);
-
-        $result = $connection->fetchAll($select);
-        $this->_removeDuplicates($result);
-        return $result;
     }
 
     /**
@@ -252,7 +255,10 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function insertGalleryValueInStore($data)
     {
-        $data = $this->_prepareDataForTable(new \Magento\Framework\DataObject($data), $this->getTable(self::GALLERY_VALUE_TABLE));
+        $data = $this->_prepareDataForTable(
+            new \Magento\Framework\DataObject($data),
+            $this->getTable(self::GALLERY_VALUE_TABLE)
+        );
         $this->getConnection()->insert($this->getTable(self::GALLERY_VALUE_TABLE), $data);
 
         return $this;

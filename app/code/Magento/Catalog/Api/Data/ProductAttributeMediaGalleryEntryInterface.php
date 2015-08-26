@@ -23,9 +23,6 @@ interface ProductAttributeMediaGalleryEntryInterface extends ExtensibleDataInter
     const FILE = 'file';
     const CONTENT = 'content';
 
-    const MEDIA_TYPE_IMAGE = 'image';
-    const MEDIA_TYPE_EXTERNAL_VIDEO = 'external_video';
-
     /**
      * Retrieve gallery entry ID
      *

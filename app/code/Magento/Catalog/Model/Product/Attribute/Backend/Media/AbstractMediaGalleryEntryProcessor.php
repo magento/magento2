@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\Product\Attribute\Backend\Media;
 
 use Magento\Catalog\Model\Product;
 use \Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Class AbstractMediaGalleryEntryProcessor
@@ -42,6 +43,11 @@ abstract class AbstractMediaGalleryEntryProcessor
     protected $filesystem;
 
     /**
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     */
+    protected $mediaDirectory;
+
+    /**
      * @var \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media
      */
     protected $resourceEntryMediaGallery;
@@ -67,6 +73,7 @@ abstract class AbstractMediaGalleryEntryProcessor
         $this->jsonHelper = $jsonHelper;
         $this->mediaConfig = $mediaConfig;
         $this->filesystem = $filesystem;
+        $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->resourceEntryMediaGallery = $resourceEntryMediaGallery;
     }
 

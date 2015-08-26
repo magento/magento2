@@ -17,13 +17,13 @@ class ExternalVideoMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryP
 {
     const GALLERY_VALUE_VIDEO_TABLE = 'catalog_product_entity_media_gallery_value_video';
 
-    protected $videoProperties = [
-        'video_value_id',
-        'video_provider',
-        'video_url',
-        'video_title',
-        'video_description',
-        'video_metadata'
+    protected $videoPropertiesDbMapping = [
+        'video_value_id' => 'value_id',
+        'video_provider' => 'provider',
+        'video_url' => 'url',
+        'video_title' => 'title',
+        'video_description' => 'description',
+        'video_metadata' => 'metadata'
     ];
 
     /**
@@ -48,19 +48,70 @@ class ExternalVideoMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryP
      * @param AbstractAttribute $attribute
      * @return void
      */
-    public function beforeSave(Product $product, AbstractAttribute $attribute)
+    public function afterSave(Product $product, AbstractAttribute $attribute)
     {
-
+        $attributeCode = $attribute->getAttributeCode();
+        $mediaCollection = $this->getMediaEntriesDataCollection($product->getData($attributeCode));
+        if (!empty($mediaCollection)) {
+            $videoDataCollection = $this->collectVideoData($mediaCollection);
+            $this->saveVideoData($videoDataCollection);
+        }
     }
 
     /**
-     * @param Product $product
-     * @param AbstractAttribute $attribute
-     * @return void
+     * @param array $videoDataCollection
      */
-    public function afterSave(Product $product, AbstractAttribute $attribute)
+    protected function saveVideoData(array $videoDataCollection)
     {
+        foreach ($videoDataCollection as $item) {
+            $this->resourceEntryMediaGallery->updateTable(
+                self::GALLERY_VALUE_VIDEO_TABLE,
+                $this->prepareVideoRowDataForSave($item)
+            );
+        }
+    }
 
+    /**
+     * @param array $rowData
+     * @return array
+     */
+    protected function prepareVideoRowDataForSave(array $rowData)
+    {
+        foreach ($this->videoPropertiesDbMapping as $sourceKey => $dbKey) {
+            if (array_key_exists($sourceKey, $rowData)) {
+                $rowData[$dbKey] = $rowData[$sourceKey];
+                unset($rowData[$sourceKey]);
+            }
+        }
+
+        return $rowData;
+    }
+
+    /**
+     * @param array $mediaCollection
+     * @return array
+     */
+    protected function collectVideoData(array $mediaCollection)
+    {
+        $videoDataCollection = [];
+        foreach ($mediaCollection as $item) {
+            if ($item['media_type'] == ExternalVideoMediaEntryConverter::MEDIA_TYPE_CODE) {
+                $videoData = $this->extractVideoDataFromRowData($item);
+                $videoData['video_value_id'] = $item['value_id'];
+                $videoDataCollection[] = $videoData;
+            }
+        }
+
+        return $videoDataCollection;
+    }
+
+    /**
+     * @param $rowData
+     * @return array
+     */
+    protected function extractVideoDataFromRowData($rowData)
+    {
+        return array_intersect($rowData, array_keys($this->videoPropertiesDbMapping));
     }
 
     /**
@@ -90,16 +141,50 @@ class ExternalVideoMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryP
         return $ids;
     }
 
+    /**
+     * @param array $ids
+     * @return array
+     */
     protected function loadVideoDataById(array $ids)
     {
-        foreach ($ids as $id) {
-
-        }
-
+        $result = $this->resourceEntryMediaGallery->loadDataFromTableByValueId(
+            self::GALLERY_VALUE_VIDEO_TABLE,
+            $ids,
+            $this->videoPropertiesDbMapping
+        );
+        return $result;
     }
 
+    /**
+     * @param array $mediaCollection
+     * @param array $data
+     * @return array
+     */
     protected function addVideoDataToMediaEntries(array $mediaCollection, array $data)
     {
-        return ['image' => $mediaCollection];
+        $data = $this->createIndexedCollection($data);
+        foreach ($mediaCollection as &$mediaItem) {
+            if (array_key_exists($mediaItem['value_id'], $data)) {
+                $mediaItem = array_merge($mediaItem, $data[$mediaItem['value_id']]);
+            }
+        }
+
+        return ['images' => $mediaCollection];
+    }
+
+    /**
+     * @param array $mediaEntriesCollection
+     * @return array
+     */
+    protected function createIndexedCollection(array $mediaEntriesCollection)
+    {
+        $indexedCollection = [];
+        foreach ($mediaEntriesCollection as $item) {
+            $id = $item['video_value_id'];
+            unset($item['video_value_id']);
+            $indexedCollection[$id] = $item;
+        }
+
+        return $indexedCollection;
     }
 }
