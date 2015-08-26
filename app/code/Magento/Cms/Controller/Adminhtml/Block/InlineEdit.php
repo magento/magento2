@@ -81,6 +81,6 @@ class InlineEdit extends \Magento\Backend\App\Action
      */
     protected function getErrorWithBlockId(BlockInterface $block, $errorText)
     {
-        return '[Block id: ' . $block->getId() . '] ' . $errorText;
+        return '[Block ID: ' . $block->getId() . '] ' . $errorText;
     }
 }

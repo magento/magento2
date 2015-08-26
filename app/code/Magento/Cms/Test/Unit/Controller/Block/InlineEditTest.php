@@ -125,7 +125,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with([
                 'messages' => [
-                    '[Block id: 1] Exception'
+                    '[Block ID: 1] Exception'
                 ],
                 'error' => true
             ])
