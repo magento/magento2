@@ -41,7 +41,7 @@ class MediaGalleryEntryConverterPool
     public function getConverterByMediaType($mediaType)
     {
         foreach ($this->mediaGalleryEntryConvertersCollection as $converter) {
-            if ($converter->getMediaType() == $mediaType) {
+            if ($converter->getMediaEntryType() == $mediaType) {
                 return $converter;
             }
         }

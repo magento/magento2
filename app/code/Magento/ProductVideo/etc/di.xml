@@ -6,11 +6,18 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\Api\Data\VideoContentInterface" type="Magento\Catalog\Model\Product\Gallery\VideoEntry" />
+    <preference for="Magento\Framework\Api\Data\VideoContentInterface" type="Magento\ProductVideo\Model\Product\Attribute\Media\VideoEntry" />
     <type name="Magento\Catalog\Model\Product\Attribute\Backend\Media\MediaGalleryEntryProcessorPool">
         <arguments>
             <argument name="mediaGalleryEntryProcessorsCollection" xsi:type="array">
                 <item name="20" xsi:type="object">Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoMediaGalleryEntryProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Attribute\Backend\Media\MediaGalleryEntryConverterPool">
+        <arguments>
+            <argument name="mediaGalleryEntryConvertersCollection" xsi:type="array">
+                <item name="video" xsi:type="object">Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoMediaEntryConverter</item>
             </argument>
         </arguments>
     </type>

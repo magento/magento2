@@ -16,12 +16,39 @@ use Magento\Catalog\Model\Product;
 class ExternalVideoMediaEntryConverter extends ImageMediaEntryConverter
 {
     /**
-     * Media Entry type code
+     * @var \Magento\Framework\Api\Data\VideoContentInterfaceFactory
      */
-    const MEDIA_ENTRY_TYPE_EXTERNAL_VIDEO = 'external-video';
+    protected $videoEntryFactory;
 
     /**
-     * {@inheritdoc}
+     * @var \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory
+     */
+    protected $mediaGalleryEntryExtensionFactory;
+
+    /**
+     * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param \Magento\Framework\Api\Data\VideoContentInterfaceFactory $videoEntryFactory
+     * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory $mediaGalleryEntryExtensionFactory
+     */
+    public function __construct(
+        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        \Magento\Framework\Api\Data\VideoContentInterfaceFactory $videoEntryFactory,
+        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory $mediaGalleryEntryExtensionFactory
+    )
+    {
+        $this->videoEntryFactory = $videoEntryFactory;
+        $this->mediaGalleryEntryExtensionFactory = $mediaGalleryEntryExtensionFactory;
+        parent::__construct($mediaGalleryEntryFactory, $dataObjectHelper);
+    }
+    /**
+     * Media Entry type code
+     */
+    const MEDIA_ENTRY_TYPE_EXTERNAL_VIDEO = 'video';
+
+    /**
+     * @return string
      */
     public function getMediaEntryType()
     {
@@ -29,12 +56,23 @@ class ExternalVideoMediaEntryConverter extends ImageMediaEntryConverter
     }
 
     /**
-     * {@inheritdoc}
+     * @param Product $product
+     * @param array $rowData
+     * @return ProductAttributeMediaGalleryEntryInterface
      */
     public function convertTo(Product $product, array $rowData)
     {
-        $previewImageEntry = parent::convertTo($product, $rowData);
-        // TODO: Implement convertTo() method.
+        $entry = parent::convertTo($product, $rowData);
+        $videoEntry = $this->videoEntryFactory->create();
+        $this->dataObjectHelper->populateWithArray(
+            $videoEntry,
+            $rowData,
+            'Magento\Framework\Api\Data\VideoContentInterface'
+        );
+        $entryExtension = $this->mediaGalleryEntryExtensionFactory->create();
+        $entryExtension->setVideoContent($videoEntry);
+        $entry->setExtensionAttributes($entryExtension);
+        return $entry;
     }
 
     /**
@@ -42,9 +80,17 @@ class ExternalVideoMediaEntryConverter extends ImageMediaEntryConverter
      */
     public function convertFrom(ProductAttributeMediaGalleryEntryInterface $entry)
     {
-        // TODO: Implement convertFrom() method.
         $dataFromPreviewImageEntry = parent::convertFrom($entry);
-        // TODO: Merge data from image and video
+        $videoContent = $entry->getExtensionAttributes()->getVideoContent();
+        $entryArray = [
+            "video_provider" => $videoContent->getVideoProvider(),
+            "video_url" => $videoContent->getVideoUrl(),
+            "video_title" => $videoContent->getVideoTitle(),
+            "video_description" => $videoContent->getVideoDescription(),
+            "video_metadata" => $videoContent->getVideoMetadata(),
+        ];
+        $entryArray = array_merge($dataFromPreviewImageEntry, $entryArray);
+        return $entryArray;
     }
 
 }
