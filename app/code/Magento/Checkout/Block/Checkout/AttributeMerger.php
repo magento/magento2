@@ -239,6 +239,7 @@ class AttributeMerger
     protected function getMultilineFieldConfig($attributeCode, array $attributeConfig, $providerName, $dataScopePrefix)
     {
         $lines = [];
+        unset($attributeConfig['validation']['required-entry']);
         for ($lineIndex = 0; $lineIndex < (int)$attributeConfig['size']; $lineIndex++) {
             $isFirstLine = $lineIndex === 0;
             $lines[] = [
