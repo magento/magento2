@@ -9,6 +9,11 @@
 
 namespace Magento\Paypal\Test\Unit\Model\Observer;
 
+use Magento\Framework\DataObject;
+
+/**
+ * Class RestrictAdminBillingAgreementUsageTest
+ */
 class RestrictAdminBillingAgreementUsageTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -22,7 +27,7 @@ class RestrictAdminBillingAgreementUsageTest extends \PHPUnit_Framework_TestCase
     protected $_observer;
 
     /**
-     * @var \Magento\Framework\DataObject
+     * @var DataObject
      */
     protected $_event;
 
@@ -33,7 +38,7 @@ class RestrictAdminBillingAgreementUsageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_event = new \Magento\Framework\DataObject();
+        $this->_event = new DataObject();
 
         $this->_observer = new \Magento\Framework\Event\Observer();
         $this->_observer->setEvent($this->_event);
@@ -88,10 +93,10 @@ class RestrictAdminBillingAgreementUsageTest extends \PHPUnit_Framework_TestCase
             )->will(
                 $this->returnValue($isAllowed)
             );
-        $result = new \stdClass();
-        $result->isAvailable = true;
+        $result = new DataObject();
+        $result->setData('is_available', true);
         $this->_event->setResult($result);
         $this->_model->execute($this->_observer);
-        $this->assertEquals($isAvailable, $result->isAvailable);
+        $this->assertEquals($isAvailable, $result->getData('is_available'));
     }
 }
