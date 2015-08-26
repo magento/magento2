@@ -11,6 +11,11 @@ use Magento\Framework\Message\MessageInterface;
 class EscapeRenderer implements RendererInterface
 {
     /**
+     * complex_renderer
+     */
+    const CODE = 'escape_renderer';
+
+    /**
      * @var Escaper
      */
     private $escaper;
@@ -28,21 +33,11 @@ class EscapeRenderer implements RendererInterface
      * Renders complex message
      *
      * @param MessageInterface $message
+     * @param array $initializationData
      * @return string
      */
-    public function render(MessageInterface $message)
+    public function render(MessageInterface $message, array $initializationData)
     {
         return $this->escaper->escapeHtml($message->getText());
-    }
-
-    /**
-     * Initialize renderer with state
-     *
-     * @param array $data
-     * @return void
-     */
-    public function initialize(array $data)
-    {
-        return;
     }
 }

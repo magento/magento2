@@ -8,8 +8,13 @@ namespace Magento\Framework\View\Element\Message\Renderer;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\View\Element\Template;
 
-class ComplexRenderer extends Template implements RendererInterface
+class BlockRenderer extends Template implements RendererInterface
 {
+    /**
+     * complex_renderer
+     */
+    const CODE = 'block_renderer';
+
     /**
      * @var array
      */
@@ -30,11 +35,12 @@ class ComplexRenderer extends Template implements RendererInterface
      * Renders complex message
      *
      * @param MessageInterface $message
+     * @param array $initializationData
      * @return string
      */
-    public function render(MessageInterface $message)
+    public function render(MessageInterface $message, array $initializationData)
     {
-        $this->setUpConfiguration($message->getData());
+        $this->setUpConfiguration($message->getData(), $initializationData);
         return $this->toHtml();
     }
 
@@ -48,10 +54,16 @@ class ComplexRenderer extends Template implements RendererInterface
 
     /**
      * @param array $configuration
-     * @return void
+     * @param array $initializationData
      */
-    private function setUpConfiguration(array $configuration)
+    private function setUpConfiguration(array $configuration, array $initializationData)
     {
+        if (!isset($initializationData['template'])) {
+            throw new \InvalidArgumentException('Template should be provided for renderer.');
+        }
+
+        $this->setTemplate($initializationData['template']);
+
         $this->configuration = $configuration;
         $this->setData($configuration);
     }
@@ -79,20 +91,5 @@ class ComplexRenderer extends Template implements RendererInterface
     {
         $this->tearDownConfiguration();
         return parent::_afterToHtml($html);
-    }
-
-    /**
-     * Initialize renderer with state
-     *
-     * @param array $data
-     * @return void
-     */
-    public function initialize(array $data)
-    {
-        if (!isset($data['template'])) {
-            throw new \InvalidArgumentException('Template should be provided for renderer.');
-        }
-
-        $this->setTemplate($data['template']);
     }
 }

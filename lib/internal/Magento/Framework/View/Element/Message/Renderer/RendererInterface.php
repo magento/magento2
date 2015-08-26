@@ -10,18 +10,11 @@ use Magento\Framework\Message\MessageInterface;
 interface RendererInterface
 {
     /**
-     * Renders complex message
+     * Renders message
      *
      * @param MessageInterface $message
+     * @param array $initializationData
      * @return string
      */
-    public function render(MessageInterface $message);
-
-    /**
-     * Initialize renderer with state
-     *
-     * @param array $data
-     * @return void
-     */
-    public function initialize(array $data);
+    public function render(MessageInterface $message, array $initializationData);
 }
