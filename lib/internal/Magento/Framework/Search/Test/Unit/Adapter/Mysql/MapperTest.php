@@ -233,38 +233,38 @@ class MapperTest extends \PHPUnit_Framework_TestCase
     public function buildQueryDataProvider()
     {
         return [
-//            'one' => [
-//                $this->createBoolQuery(
-//                    [
-//                        $this->createMatchQuery(),
-//                        $this->createFilterQuery(Filter::REFERENCE_QUERY, $this->createMatchQuery()),
-//                    ],
-//                    [
-//                        $this->createMatchQuery(),
-//                        $this->createFilterQuery(Filter::REFERENCE_FILTER, $this->createFilter()),
-//                    ],
-//                    [
-//                        $this->createMatchQuery(),
-//                        $this->createFilterQuery(Filter::REFERENCE_FILTER, $this->createFilter()),
-//                    ]
-//                ),
-//            ],
-//            'two' => [
-//                $this->createBoolQuery(
-//                    [
-//                        $this->createMatchQuery(),
-//                        $this->createMatchQuery(),
-//                    ],
-//                    [],
-//                    []
-//                ),
-//                [
-//                    $this->createMatchContainer(
-//                        $this->createMatchQuery(),
-//                        'mustNot'
-//                    ),
-//                ],
-//            ],
+            'one' => [
+                $this->createBoolQuery(
+                    [
+                        $this->createMatchQuery(),
+                        $this->createFilterQuery(Filter::REFERENCE_QUERY, $this->createMatchQuery()),
+                    ],
+                    [
+                        $this->createMatchQuery(),
+                        $this->createFilterQuery(Filter::REFERENCE_FILTER, $this->createFilter()),
+                    ],
+                    [
+                        $this->createMatchQuery(),
+                        $this->createFilterQuery(Filter::REFERENCE_FILTER, $this->createFilter()),
+                    ]
+                ),
+            ],
+            'two' => [
+                $this->createBoolQuery(
+                    [
+                        $this->createMatchQuery(),
+                        $this->createMatchQuery(),
+                    ],
+                    [],
+                    []
+                ),
+                [
+                    $this->createMatchContainer(
+                        $this->createMatchQuery(),
+                        'mustNot'
+                    ),
+                ],
+            ],
             'three' => [
                 $this->createBoolQuery(
                     [
@@ -503,6 +503,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
      * @param bool $isGrouped
      * @return Select|MockObject
      * @internal param bool $isOrderExpected
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function createSelectMock(Select $from = null, $isInternal = true, $isGrouped = true)
     {
