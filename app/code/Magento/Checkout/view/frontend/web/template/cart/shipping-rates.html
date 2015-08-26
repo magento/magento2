@@ -1,0 +1,40 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form id="co-shipping-method-form" data-bind="blockLoader: isLoading, visible: isVisible()">
+    <p class="field note" data-bind="visible: (shippingRates().length <= 0)">
+        <!-- ko text: $t('Sorry, no quotes are available for this order at this time')--><!-- /ko -->
+    </p>
+    <fieldset class="fieldset rate" data-bind="visible: (shippingRates().length > 0)">
+        <dl class="items methods" data-bind="foreach: shippingRateGroups">
+            <dt class="item-title"><span data-bind="text: $data"></span></dt>
+            <dd class="item-options" data-bind="foreach: $parent.getRatesForGroup($data)">
+                <div data-bind="css: {'field choice item': available, 'message error': !available} ">
+                    <!-- ko ifnot: (available) -->
+                    <div data-bind="text: error_message"></div>
+                    <!-- /ko -->
+                    <!-- ko if: (available) -->
+                    <input name="estimate_method"
+                           type="radio"
+                           class="radio"
+                           data-bind="
+                                click: $parents[1].selectShippingMethod,
+                                checked: $parents[1].selectedShippingMethod,
+                                attr: {
+                                        value: carrier_code + '_' + method_code,
+                                        id: 's_method_' + method_code
+                                        }
+                                "/>
+                    <label class="label" data-bind="attr: {for: 's_method_' + method_code}">
+                        <!-- ko text: method_title --><!-- /ko -->
+                        <!-- ko text: $parents[1].getFormattedPrice(amount) --><!-- /ko -->
+                    </label>
+                    <!-- /ko -->
+                </div>
+            </dd>
+        </dl>
+    </fieldset>
+</form>
