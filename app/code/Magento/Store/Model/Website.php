@@ -10,7 +10,6 @@ namespace Magento\Store\Model;
  *
  * @method \Magento\Store\Model\Resource\Website _getResource()
  * @method \Magento\Store\Model\Resource\Website getResource()
- * @method \Magento\Store\Model\Website setCode(string $value)
  * @method string getName()
  * @method string getGroupTitle()
  * @method string getStoreTitle()
@@ -21,13 +20,12 @@ namespace Magento\Store\Model;
  * @method \Magento\Store\Model\Website setName(string $value)
  * @method int getSortOrder()
  * @method \Magento\Store\Model\Website setSortOrder(int $value)
- * @method \Magento\Store\Model\Website setDefaultGroupId(int $value)
  * @method int getIsDefault()
  * @method \Magento\Store\Model\Website setIsDefault(int $value)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Website extends \Magento\Framework\Model\AbstractModel implements
+class Website extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Framework\DataObject\IdentityInterface,
     \Magento\Framework\App\ScopeInterface,
     \Magento\Store\Api\Data\WebsiteInterface
@@ -166,6 +164,8 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Config\Model\Resource\Config\Data $configDataResource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
      * @param \Magento\Store\Model\Resource\Store\CollectionFactory $storeListFactory
@@ -181,6 +181,8 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Config\Model\Resource\Config\Data $configDataResource,
         \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
         \Magento\Store\Model\Resource\Store\CollectionFactory $storeListFactory,
@@ -192,7 +194,15 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $resource,
+            $resourceCollection,
+            $data
+        );
         $this->_configDataResource = $configDataResource;
         $this->_coreConfig = $coreConfig;
         $this->storeListFactory = $storeListFactory;
@@ -495,11 +505,27 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
     }
 
     /**
+     * @inheritdoc
+     */
+    public function setDefaultGroupId($defaultGroupId)
+    {
+        return $this->setData('default_group_id', $defaultGroupId);
+    }
+
+    /**
      * @return mixed
      */
     public function getCode()
     {
         return $this->_getData('code');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setCode($code)
+    {
+        return $this->setData('code', $code);
     }
 
     /**
@@ -613,5 +639,22 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
     public function getIdentities()
     {
         return [self::CACHE_TAG . '_' . $this->getId()];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setExtensionAttributes(
+        \Magento\Store\Api\Data\WebsiteExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

@@ -210,7 +210,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ValidatorInterface::ERROR_INVALID_ATTR_SET => 'Invalid value for Product Template column (set doesn\'t exist?)',
         ValidatorInterface::ERROR_INVALID_TYPE => 'Product Type is invalid or not supported',
         ValidatorInterface::ERROR_INVALID_CATEGORY => 'Category does not exists',
-        ValidatorInterface::ERROR_VALUE_IS_REQUIRED => 'Please make sure attribute "%s" is not empty',
+        ValidatorInterface::ERROR_VALUE_IS_REQUIRED => 'Please make sure attribute "%s" is not empty.',
         ValidatorInterface::ERROR_TYPE_CHANGED => 'Trying to change type of existing products',
         ValidatorInterface::ERROR_SKU_IS_EMPTY => 'SKU is empty',
         ValidatorInterface::ERROR_NO_DEFAULT_ROW => 'Default values row does not exists',
@@ -236,6 +236,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ValidatorInterface::ERROR_INVALID_MEDIA_URL_OR_PATH => 'Wrong URL/path used for attribute %s',
         ValidatorInterface::ERROR_MEDIA_PATH_NOT_ACCESSIBLE => 'Imported resource (image) does not exist in the local media storage',
         ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE => 'Imported resource (image) could not be downloaded from external resource due to timeout or access permissions',
+        ValidatorInterface::ERROR_INVALID_WEIGHT => 'Product weight is invalid',
     ];
 
     /**
@@ -490,7 +491,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $dateTime;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerRegistry
+     * @var \Magento\Framework\Indexer\IndexerRegistry
      */
     protected $indexerRegistry;
 
@@ -595,7 +596,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param DateTime\TimezoneInterface $localeDate
      * @param DateTime $dateTime
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
+     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @param Product\StoreResolver $storeResolver
      * @param Product\SkuProcessor $skuProcessor
      * @param Product\CategoryProcessor $categoryProcessor
@@ -635,7 +636,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         DateTime $dateTime,
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
+        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         Product\StoreResolver $storeResolver,
         Product\SkuProcessor $skuProcessor,
         Product\CategoryProcessor $categoryProcessor,
@@ -1773,7 +1774,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $destinationDir = "catalog/product";
             $destinationPath = $dirAddon . $DS . $this->_mediaDirectory->getRelativePath($destinationDir);
 
-            $this->_mediaDirectory->create($destinationDir);
+            $this->_mediaDirectory->create($destinationPath);
             if (!$this->_fileUploader->setDestDir($destinationPath)) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('File directory \'%1\' is not writable.', $destinationPath)

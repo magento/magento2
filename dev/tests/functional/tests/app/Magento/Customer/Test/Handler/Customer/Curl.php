@@ -120,14 +120,22 @@ class Curl extends AbstractCurl implements CustomerInterface
      */
     protected function getCustomerId($email)
     {
-        $url = $_ENV['app_backend_url'] . 'customer/index/grid/filter/' . $this->encodeFilter(['email' => $email]);
+        $url = $_ENV['app_backend_url'] . 'mui/index/render/';
+        $data = [
+            'namespace' => 'customer_listing',
+            'filters' => [
+                'placeholder' => true,
+                'email' => $email
+            ],
+            'isAjax' => true
+        ];
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
 
-        $curl->write(CurlInterface::GET, $url, '1.0');
+        $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
         $response = $curl->read();
         $curl->close();
 
-        preg_match('/data-column="entity_id"[^>]*>\s*([0-9]+)\s*</', $response, $match);
+        preg_match('/customer_listing_data_source.+items.+"entity_id":"(\d+)"/', $response, $match);
         return empty($match[1]) ? null : $match[1];
     }
 

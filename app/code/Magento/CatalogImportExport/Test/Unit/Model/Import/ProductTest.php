@@ -119,7 +119,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     /** @var  \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $_localeDate;
 
-    /** @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject  */
     protected $indexerRegistry;
 
     /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject  */
@@ -277,7 +277,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->indexerRegistry =
-            $this->getMockBuilder('\Magento\Indexer\Model\IndexerRegistry')
+            $this->getMockBuilder('\Magento\Framework\Indexer\IndexerRegistry')
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->_logger =

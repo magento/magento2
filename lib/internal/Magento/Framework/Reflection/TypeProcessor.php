@@ -70,6 +70,20 @@ class TypeProcessor
     }
 
     /**
+     * Set processed types data.
+     *
+     * Should be used carefully since no data consistency checks are performed.
+     *
+     * @param array $typesData
+     * @return $this
+     */
+    public function setTypesData($typesData)
+    {
+        $this->_types = $typesData;
+        return $this;
+    }
+
+    /**
      * Retrieve data type details for the given type name.
      *
      * @param string $typeName
