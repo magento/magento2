@@ -307,25 +307,33 @@ class Environment extends AbstractActionController
     {
         $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
         $data = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
-        $modules = $data['packages'];
 
-        $isEnable = true;
-        if ($data['type'] === 'disable') {
-            $isEnable = false;
-        }
+        try {
+            if (empty($data['packages'])) {
+                throw new \Exception('No packages has been found.');
+            }
 
-        $modulesToChange = [];
-        foreach ($modules as $module) {
-            $modulesToChange[] = $module['name'];
-        }
+            $modules = $data['packages'];
 
-        $constraints = $this->moduleStatus->checkConstraints($isEnable, $modulesToChange);
+            $isEnable = ($data['type'] !== 'disable');
 
-        $data = [];
-        if ($constraints) {
-            $data['errorMessage'] = "Unable to change status of modules because of the following constraints: "
-                . implode("<br>", $constraints);
+            $modulesToChange = [];
+            foreach ($modules as $module) {
+                $modulesToChange[] = $module['name'];
+            }
+
+            $constraints = $this->moduleStatus->checkConstraints($isEnable, $modulesToChange);
+            $data = [];
+
+            if ($constraints) {
+                $data['errorMessage'] = "Unable to change status of modules because of the following constraints: "
+                    . implode("<br>", $constraints);
+                $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
+            }
+
+        } catch (\Exception $e) {
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
+            $data['errorMessage'] = $e->getMessage();
         }
 
         $data['responseType'] = $responseType;
