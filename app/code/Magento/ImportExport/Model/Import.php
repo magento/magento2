@@ -677,9 +677,12 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     public function isReportEntityType($entity = null)
     {
         $result = false;
+        if (!$entity) {
+            $entity = $this->getEntity();
+        }
         if ($entity !== null && $this->_getEntityAdapter()->getEntityTypeCode() != $entity) {
             $entities = $this->_importConfig->getEntities();
-            if (isset($entities[$this->getEntity()])) {
+            if (isset($entities[$entity])) {
                 try {
                     $result = $this->_getEntityAdapter()->isNeedToLogInHistory();
                 } catch (\Exception $e) {
