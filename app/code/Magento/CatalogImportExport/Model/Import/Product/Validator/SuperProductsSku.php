@@ -27,7 +27,7 @@ class SuperProductsSku extends AbstractValidator implements RowValidatorInterfac
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init($context)
     {
         return $this;
     }

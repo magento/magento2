@@ -13,7 +13,7 @@ class Weight extends AbstractValidator implements RowValidatorInterface
     /**
      * {@inheritdoc}
      */
-    public function init()
+    public function init($context)
     {
         return $this;
     }

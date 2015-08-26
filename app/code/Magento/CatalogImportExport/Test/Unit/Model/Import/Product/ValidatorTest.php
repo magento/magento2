@@ -75,6 +75,6 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->validatorOne->expects($this->once())->method('init');
         $this->validatorTwo->expects($this->once())->method('init');
-        $this->validator->init();
+        $this->validator->init(null);
     }
 }

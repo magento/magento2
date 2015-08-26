@@ -71,5 +71,5 @@ interface RowValidatorInterface extends \Magento\Framework\Validator\ValidatorIn
      *
      * @return $this
      */
-    public function init();
+    public function init($context);
 }

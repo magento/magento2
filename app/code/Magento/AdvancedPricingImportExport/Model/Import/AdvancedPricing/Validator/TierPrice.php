@@ -43,11 +43,12 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
      *
      * @return $this
      */
-    public function init()
+    public function init($context)
     {
         foreach ($this->groupRepository->getList($this->searchCriteriaBuilder->create())->getItems() as $group) {
             $this->customerGroups[$group->getCode()] = $group->getId();
         }
+        return parent::init($context);
     }
 
     /**
@@ -62,7 +63,7 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
     {
         $this->_clearMessages();
         if (!$this->customerGroups) {
-            $this->init();
+            $this->init($this->context);
         }
         if ($this->isValidValueAndLength($value)) {
             if (!isset($value[AdvancedPricing::COL_TIER_PRICE_WEBSITE])

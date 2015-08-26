@@ -92,7 +92,7 @@ class GroupPriceTest extends \PHPUnit_Framework_TestCase
         $groups = [$groupTest];
         $groupSearchResult->expects($this->once())->method('getItems')->willReturn($groups);
 
-        $this->groupPrice->init();
+        $this->groupPrice->init(null);
     }
 
     public function testInitAddToCustomerGroups()
@@ -126,7 +126,7 @@ class GroupPriceTest extends \PHPUnit_Framework_TestCase
         $groups = [$groupTest];
         $groupSearchResult->expects($this->once())->method('getItems')->willReturn($groups);
 
-        $this->groupPrice->init();
+        $this->groupPrice->init(null);
         $this->assertEquals($expectedCustomerGroups, $this->getPropertyValue($this->groupPrice, 'customerGroups'));
     }
 

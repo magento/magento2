@@ -5,10 +5,10 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Validator;
 
-use \Magento\Framework\Validator\AbstractValidator;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
+use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
 
-class Website extends AbstractValidator implements RowValidatorInterface
+class Website extends AbstractImportValidator implements RowValidatorInterface
 {
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver
@@ -26,22 +26,19 @@ class Website extends AbstractValidator implements RowValidatorInterface
     /**
      * {@inheritdoc}
      */
-    public function init()
-    {
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function isValid($value)
     {
         $this->_clearMessages();
-        if (!empty($value['_product_websites'])
-            && !$this->storeResolver->getWebsiteCodeToId($value['_product_websites'])
-        ) {
-            $this->_addMessages([self::ERROR_INVALID_WEBSITE]);
-            return false;
+        if (empty($value[ImportProduct::COL_PRODUCT_WEBSITES])) {
+            return true;
+        }
+        $separator = $this->context->getMultipleValueSeparator();
+        $websites = explode($separator, $value[ImportProduct::COL_PRODUCT_WEBSITES]);
+        foreach ($websites as $website) {
+            if (!$this->storeResolver->getWebsiteCodeToId($website)) {
+                $this->_addMessages([self::ERROR_INVALID_WEBSITE]);
+                return false;
+            }
         }
         return true;
     }

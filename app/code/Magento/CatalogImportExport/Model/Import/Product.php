@@ -660,7 +660,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->_initAttributeSets()
             ->_initTypeModels()
             ->_initSkus();
-        $this->validator->init();
+        $this->validator->init($this);
     }
 
     /**

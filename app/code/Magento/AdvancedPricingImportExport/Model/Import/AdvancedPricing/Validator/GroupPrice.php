@@ -42,11 +42,12 @@ class GroupPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valid
      *
      * @return $this
      */
-    public function init()
+    public function init($context)
     {
         foreach ($this->groupRepository->getList($this->searchCriteriaBuilder->create())->getItems() as $group) {
             $this->customerGroups[$group->getCode()] = $group->getId();
         }
+        return parent::init($context);
     }
 
     /**
@@ -59,7 +60,7 @@ class GroupPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valid
     {
         $this->_clearMessages();
         if (!$this->customerGroups) {
-            $this->init();
+            $this->init($this->context);
         }
         if ($this->isValidValueAndLength($value)) {
             if (!isset($value[AdvancedPricing::COL_GROUP_PRICE_WEBSITE])
@@ -86,7 +87,7 @@ class GroupPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valid
     public function getCustomerGroups()
     {
         if (!$this->customerGroups) {
-            $this->init();
+            $this->init($this->context);
         }
         return $this->customerGroups;
     }

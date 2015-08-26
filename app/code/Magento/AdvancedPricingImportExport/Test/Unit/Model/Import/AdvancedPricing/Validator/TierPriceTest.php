@@ -93,7 +93,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
         $groups = [$groupTest];
         $groupSearchResult->expects($this->once())->method('getItems')->willReturn($groups);
 
-        $this->tierPrice->init();
+        $this->tierPrice->init(null);
     }
 
     public function testInitAddToCustomerGroups()
@@ -127,7 +127,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
         $groups = [$groupTest];
         $groupSearchResult->expects($this->once())->method('getItems')->willReturn($groups);
 
-        $this->tierPrice->init();
+        $this->tierPrice->init(null);
         $this->assertEquals($expectedCustomerGroups, $this->getPropertyValue($this->tierPrice, 'customerGroups'));
     }
 

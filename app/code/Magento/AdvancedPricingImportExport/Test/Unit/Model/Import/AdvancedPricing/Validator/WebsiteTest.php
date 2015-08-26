@@ -55,7 +55,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
 
     public function testInit()
     {
-        $result = $this->website->init();
+        $result = $this->website->init(null);
 
         $this->assertEquals($this->website, $result);
     }

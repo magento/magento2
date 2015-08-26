@@ -43,14 +43,12 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
-     * Init validators
-     *
-     * @return void
+     * {@inheritdoc}
      */
-    public function init()
+    public function init($context)
     {
         foreach ($this->validators as $validator) {
-            $validator->init();
+            $validator->init($context);
         }
     }
 }

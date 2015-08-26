@@ -38,7 +38,7 @@ class Website extends AbstractValidator implements RowValidatorInterface
      *
      * @return $this
      */
-    public function init()
+    public function init($context)
     {
         return $this;
     }
