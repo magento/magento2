@@ -556,6 +556,10 @@
 
         //  Products table
         &.table-wrapper {
+            .items { // Google Chrome version 44.0.2403.107 m fix
+                min-width: 100%;
+                width: auto;
+            }
             tbody td {
                 padding-top: @cart-item-cell-padding-top;
             }
