@@ -3,9 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Checkout\Block\Cart\Item;
 
 use Magento\Checkout\Block\Cart\Item\Renderer\Actions;
@@ -24,7 +21,8 @@ use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
  * @method \Magento\Checkout\Block\Cart\Item\Renderer setDeleteUrl(string)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Renderer extends \Magento\Framework\View\Element\Template implements \Magento\Framework\DataObject\IdentityInterface
+class Renderer extends \Magento\Framework\View\Element\Template implements
+    \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var \Magento\Checkout\Model\Session
@@ -211,7 +209,6 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
                 }
             }
         }
-
         return false;
     }
 
@@ -222,7 +219,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
      */
     public function getProductUrl()
     {
-        if (!is_null($this->_productUrl)) {
+        if ($this->_productUrl !== null) {
             return $this->_productUrl;
         }
         if ($this->getItem()->getRedirectUrl()) {

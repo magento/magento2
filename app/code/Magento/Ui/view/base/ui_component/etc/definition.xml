@@ -283,6 +283,21 @@
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/grid/export</item>
             </item>
+            <item name="config" xsi:type="array">
+                <item name="displayArea" xsi:type="string">dataGridActions</item>
+                <item name="options" xsi:type="array">
+                    <item name="cvs" xsi:type="array">
+                        <item name="value" xsi:type="string">csv</item>
+                        <item name="label" xsi:type="string" translate="true">CSV</item>
+                        <item name="url" xsi:type="string">mui/export/gridToCsv</item>
+                    </item>
+                    <item name="xml" xsi:type="array">
+                        <item name="value" xsi:type="string">xml</item>
+                        <item name="label" xsi:type="string" translate="true">Excel XML</item>
+                        <item name="url" xsi:type="string">mui/export/gridToXml</item>
+                    </item>
+                </item>
+            </item>
         </argument>
     </exportButton>
 </components>
