@@ -419,4 +419,155 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             ],
         ];
     }
+
+    /**
+     * @param string $imageId
+     * @param string $imageFile
+     * @param string $baseFile
+     * @param string $newFile
+     * @param string $destination
+     * @param boolean $setImageFile
+     * @param boolean $isCached
+     * @param boolean $isBaseFilePlaceholder
+     * @param array $resizedImageInfo
+     * @dataProvider getResizedImageInfoDataProvider
+     */
+    public function testGetResizedImageInfo(
+        $imageId,
+        $imageFile,
+        $baseFile,
+        $newFile,
+        $destination,
+        $setImageFile,
+        $isCached,
+        $isBaseFilePlaceholder,
+        $resizedImageInfo
+    ) {
+        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $productMock->expects($this->any())
+            ->method('getData')
+            ->with($destination)
+            ->willReturn($imageFile);
+
+        $this->image->expects($this->any())
+            ->method('setBaseFile')
+            ->with($imageFile)
+            ->willReturnSelf();
+        $this->image->expects($this->once())
+            ->method('getBaseFile')
+            ->willReturn($baseFile);
+        $this->image->expects($this->any())
+            ->method('getDestinationSubdir')
+            ->willReturn($destination);
+        $this->image->expects($this->any())
+            ->method('isCached')
+            ->willReturn($isCached);
+        $this->image->expects($this->any())
+            ->method('resize')
+            ->willReturnSelf();
+        $this->image->expects($this->any())
+            ->method('saveFile')
+            ->willReturnSelf();
+        $this->image->expects($this->once())
+            ->method('getResizedImageInfo')
+            ->willReturn($resizedImageInfo);
+        $this->image->expects($this->any())
+            ->method('isBaseFilePlaceholder')
+            ->willReturn($isBaseFilePlaceholder);
+        $this->image->expects($this->any())
+            ->method('getNewFile')
+            ->willReturn($newFile);
+
+        $this->prepareAttributes([], $imageId);
+
+        $this->helper->init($productMock, $imageId);
+        if ($setImageFile) {
+            $this->helper->setImageFile($imageFile);
+        }
+
+        $result = $this->helper->getResizedImageInfo();
+        $this->assertEquals($resizedImageInfo, $result);
+    }
+
+    /**
+     * @return array
+     */
+    public function getResizedImageInfoDataProvider()
+    {
+        return [
+            [
+                'image_id' => 'test_image_id',
+                'image_file' => '/path/to/test_image_id.png',
+                'base_file' => '/path/to/base_image.png',
+                'new_file' => '/path/to/base_image.png',
+                'destination' => 'small_image',
+                'set_image_file' => true,
+                'is_cached' => false,
+                'is_base_file_placeholder' => false,
+                'resized_image_info' => [
+                    'x' => 100,
+                    'y' => 100,
+                ],
+            ],
+            [
+                'image_id' => 'test_image_id',
+                'image_file' => '/path/to/test_image_id.png',
+                'base_file' => null,
+                'new_file' => true,
+                'destination' => 'small_image',
+                'set_image_file' => false,
+                'is_cached' => false,
+                'is_base_file_placeholder' => false,
+                'resized_image_info' => [
+                    'x' => 100,
+                    'y' => 100,
+                ],
+            ],
+            [
+                'image_id' => 'test_image_id',
+                'image_file' => '/path/to/test_image_id.png',
+                'base_file' => null,
+                'new_file' => false,
+                'destination' => 'small_image',
+                'set_image_file' => true,
+                'is_cached' => false,
+                'is_base_file_placeholder' => false,
+                'resized_image_info' => [
+                    'x' => 100,
+                    'y' => 100,
+                ],
+            ],
+            [
+                'image_id' => 'test_image_id',
+                'image_file' => '/path/to/test_image_id.png',
+                'base_file' => null,
+                'new_file' => true,
+                'destination' => 'small_image',
+                'set_image_file' => true,
+                'is_cached' => false,
+                'is_base_file_placeholder' => true,
+                'resized_image_info' => [
+                    'x' => 100,
+                    'y' => 100,
+                ],
+            ],
+            [
+                'image_id' => 'test_image_id',
+                'image_file' => '/path/to/test_image_id.png',
+                'base_file' => null,
+                'new_file' => '/path/to/test_image_id.png',
+                'destination' => 'small_image',
+                'set_image_file' => true,
+                'is_cached' => false,
+                'is_base_file_placeholder' => false,
+                'resized_image_info' => [
+                    'x' => 100,
+                    'y' => 100,
+                ],
+            ],
+        ];
+    }
 }
