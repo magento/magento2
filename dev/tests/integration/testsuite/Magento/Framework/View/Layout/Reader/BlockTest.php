@@ -62,11 +62,12 @@ class BlockTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             [
-                'group' => 'test.group',
-                'class' => 'Dummy\Class',
-                'template' => 'test.phtml',
-                'ttl' => 3,
-                'display' => ''
+                Block::ATTRIBUTE_GROUP => 'test.group',
+                Block::ATTRIBUTE_CLASS => 'Dummy\Class',
+                Block::ATTRIBUTE_TEMPLATE => 'test.phtml',
+                Block::ATTRIBUTE_TTL => 3,
+                Block::ATTRIBUTE_DISPLAY => '',
+                Block::ATTRIBUTE_ACL => ''
             ],
             $resultElementData['attributes']
         );
