@@ -4,13 +4,20 @@
  * See COPYING.txt for license details.
  */
 ?>
-<div ng-include="'index.php/navigation/menu'"></div>
-<div
-    id="main"
-    class="main {{class}}"
-    ng-controller="mainController"
-    >
-    <div ui-view="root">
-        <div ui-view></div>
-    </div>
+
+<div ng-include="'index.php/navigation/side-menu'" style="display: inline-block"></div>
+<div class="page-wrapper">
+    <div ng-include="'index.php/navigation/header-bar'"></div>
+    <main id="anchor-content" class="page-content">
+        <div style="display: inline-block"><?php echo $this->render('navigation/menu.phtml');?></div>
+        <div
+            id="main"
+            class="main {{class}}"
+            ng-controller="mainController"
+            >
+            <div ui-view="root">
+                <div ui-view></div>
+            </div>
+        </div>
+    </main>
 </div>

@@ -7,7 +7,10 @@
 $base = basename($_SERVER['SCRIPT_FILENAME']);
 
 return [
-    'nav' => [
+    'navInstallerTitles' => [
+        'installer'    => 'Magento Installer',
+    ],
+    'navInstaller' => [
         [
             'id'          => 'root',
             'step'        => 0,
@@ -19,37 +22,41 @@ return [
             'templateUrl' => "$base/license",
             'title'       => 'License',
             'main'        => true,
-            'nav-bar'     => false,
+            'nav'         => false,
             'order'       => -1,
+            'type'        => 'installer'
         ],
         [
-            'id'          => 'root.landing',
-            'url'         => 'landing',
-            'templateUrl' => "$base/landing",
+            'id'          => 'root.landing-installer',
+            'url'         => 'landing-installer',
+            'templateUrl' => "$base/landing-installer",
             'title'       => 'Landing',
             'controller'  => 'landingController',
             'main'        => true,
             'default'     => true,
             'order'       => 0,
+            'type'        => 'installer'
         ],
         [
-            'id'          => 'root.readiness-check',
-            'url'         => 'readiness-check',
-            'templateUrl' => "{$base}/readiness-check",
+            'id'          => 'root.readiness-check-installer',
+            'url'         => 'readiness-check-installer',
+            'templateUrl' => "{$base}/readiness-check-installer",
             'title'       => "Readiness \n Check",
             'header'      => 'Step 1: Readiness Check',
-            'nav-bar'     => true,
+            'nav'         => true,
             'order'       => 1,
+            'type'        => 'installer'
         ],
         [
-            'id'          => 'root.readiness-check.progress',
-            'url'         => 'readiness-check/progress',
-            'templateUrl' => "{$base}/readiness-check/progress",
+            'id'          => 'root.readiness-check-installer.progress',
+            'url'         => 'readiness-check-installer/progress',
+            'templateUrl' => "{$base}/readiness-check-installer/progress",
             'title'       => 'Readiness Check',
             'header'      => 'Step 1: Readiness Check',
             'controller'  => 'readinessCheckController',
-            'nav-bar'     => false,
+            'nav'         => false,
             'order'       => 2,
+            'type'        => 'installer'
         ],
         [
             'id'          => 'root.add-database',
@@ -58,9 +65,10 @@ return [
             'title'       => "Add \n a Database",
             'header'      => 'Step 2: Add a Database',
             'controller'  => 'addDatabaseController',
-            'nav-bar'     => true,
+            'nav'         => true,
             'validate'    => true,
             'order'       => 3,
+            'type'        => 'installer'
         ],
         [
             'id'          => 'root.web-configuration',
@@ -69,9 +77,10 @@ return [
             'title'       => "Web \n Configuration",
             'header'      => 'Step 3: Web Configuration',
             'controller'  => 'webConfigurationController',
-            'nav-bar'     => true,
+            'nav'         => true,
             'validate'    => true,
             'order'       => 4,
+            'type'        => 'installer'
         ],
         [
             'id'          => 'root.customize-your-store',
@@ -80,8 +89,9 @@ return [
             'title'       => "Customize \n Your Store",
             'header'      => 'Step 4: Customize Your Store',
             'controller'  => 'customizeYourStoreController',
-            'nav-bar'     => true,
+            'nav'         => true,
             'order'       => 5,
+            'type'        => 'installer'
         ],
         [
             'id'          => 'root.create-admin-account',
@@ -90,9 +100,10 @@ return [
             'title'       => "Create \n Admin Account",
             'header'      => 'Step 5: Create Admin Account',
             'controller'  => 'createAdminAccountController',
-            'nav-bar'     => true,
+            'nav'         => true,
             'validate'    => true,
             'order'       => 6,
+            'type'        => 'installer'
         ],
         [
             'id'          => 'root.install',
@@ -101,8 +112,9 @@ return [
             'title'       => 'Install',
             'header'      => 'Step 6: Install',
             'controller'  => 'installController',
-            'nav-bar'     => true,
+            'nav'         => true,
             'order'       => 7,
+            'type'        => 'installer'
         ],
         [
             'id'          => 'root.success',
@@ -111,6 +123,7 @@ return [
             'controller'  => 'successController',
             'main'        => true,
             'order'       => 8,
+            'type'        => 'installer'
         ],
-    ]
+    ],
 ];
