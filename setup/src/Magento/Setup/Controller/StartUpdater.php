@@ -149,7 +149,7 @@ class StartUpdater extends AbstractActionController
                 break;
             }
 
-            // enable or disable job types expect magento module name
+            // enable or disable job types expect Magento module name
             if (($jobType == 'enable') || ($jobType == 'disable')) {
                 // check to make sure that the passed in Magento module name is valid
                 if (!$this->moduleList->has($package[self::KEY_POST_PACKAGE_NAME])) {
