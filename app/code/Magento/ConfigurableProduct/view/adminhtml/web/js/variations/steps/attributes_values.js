@@ -151,6 +151,9 @@ define([
                 data: {attributes: attributeIds},
                 showLoader: true
             }).done(function(attributes){
+                attributes = _.sortBy(attributes, function(attribute) {
+                    return this.wizard.data.attributesIds.indexOf(attribute.id);
+                }.bind(this));
                 this.attributes(_.map(attributes, this.createAttribute));
             }.bind(this));
         },
