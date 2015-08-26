@@ -48,9 +48,10 @@ abstract class AbstractBehavior implements \Magento\Framework\Option\ArrayInterf
     /**
      * Get array of notes for possible values
      *
+     * @param string $entityCode
      * @return array
      */
-    public function getNotes()
+    public function getNotes($entityCode)
     {
         return [];
     }
