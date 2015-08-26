@@ -13,10 +13,8 @@
         data-bind="click: open"
         class="selectmenu-value">
         <input
-            data-bind="value: value"
-            id="per-page"
-            type="text"
-            value="1" />
+            data-bind="value: _value, attr: {id: index}"
+            type="text" />
     </div>
 
     <button
@@ -102,4 +100,4 @@
         </li>
     </ul>
 </div>
-<label class="admin__control-support-text" for="per-page" data-bind="i18n: 'per page'"></label>
+<label class="admin__control-support-text" data-bind="i18n: 'per page', attr: { for: index }"></label>

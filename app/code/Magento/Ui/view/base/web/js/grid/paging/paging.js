@@ -86,9 +86,7 @@ define([
                 ]);
 
             this._current = ko.pureComputed({
-                read: function () {
-                    return +this.current();
-                },
+                read: this.current,
 
                 /**
                  * Validates page change according to user's input.

@@ -50,6 +50,22 @@ define([
                 visible: ko.observable(false)
             };
 
+            this._value = ko.pureComputed({
+                read: this.value,
+
+                /**
+                 * Validates input field prior to updating 'value' property.
+                 */
+                write: function (value) {
+                    value = this.normalize(value);
+
+                    this.value(value);
+                    this._value.notifySubscribers(value);
+                },
+
+                owner: this
+            });
+
             return this;
         },
 
