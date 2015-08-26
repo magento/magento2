@@ -6,6 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\Api\Data\VideoContentInterface" type="Magento\Catalog\Model\Product\Gallery\VideoEntry" />
     <type name="Magento\Catalog\Model\Product\Attribute\Backend\Media\MediaGalleryEntryProcessorPool">
         <arguments>
             <argument name="mediaGalleryEntryProcessorsCollection" xsi:type="array">

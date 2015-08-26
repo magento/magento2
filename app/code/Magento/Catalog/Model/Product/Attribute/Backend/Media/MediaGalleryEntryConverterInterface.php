@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Model\Product\Attribute\Backend\Media;
 
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
-use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Product;
 
 /**
  * Interface MediaGalleryEntryConverterInterface. Create Media Gallery Entry and extract Entry data
@@ -24,10 +24,11 @@ interface MediaGalleryEntryConverterInterface
     /**
      * Create Media Gallery Entry entity from a row input data
      *
-     * @param ProductInterface $product
+     * @param Product $product
+     * @param array $rowData
      * @return ProductAttributeMediaGalleryEntryInterface[]
      */
-    public function convertTo(ProductInterface $product);
+    public function convertTo(Product $product, array $rowData);
 
     /**
      * Convert given Media Gallery Entry to raw data collection

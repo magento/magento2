@@ -8,6 +8,7 @@ namespace Magento\ProductVideo\Model\Product\Attribute\Media;
 
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageMediaEntryConverter;
+use Magento\Catalog\Model\Product;
 
 /**
  * Converter for External Video media gallery type
@@ -30,9 +31,9 @@ class ExternalVideoMediaEntryConverter extends ImageMediaEntryConverter
     /**
      * {@inheritdoc}
      */
-    public function convertTo(array $rowData)
+    public function convertTo(Product $product, array $rowData)
     {
-        $previewImageEntry = parent::convertTo($rowData);
+        $previewImageEntry = parent::convertTo($product, $rowData);
         // TODO: Implement convertTo() method.
     }
 
