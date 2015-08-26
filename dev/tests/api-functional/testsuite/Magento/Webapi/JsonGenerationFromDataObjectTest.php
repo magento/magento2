@@ -12,7 +12,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\ProductMetadataInterface;
 
 /**
- * Test WSDL generation mechanisms.
+ * Test REST schema generation mechanisms.
  */
 class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
@@ -42,7 +42,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
         parent::setUp();
     }
 
-    public function testMultiServiceJson()
+    public function testMultiServiceRetrieval()
     {
         $this->isSingleService = false;
 
@@ -59,7 +59,7 @@ class JsonGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
         $this->checkActualData($this->getExpectedMultiServiceData(), $schemaContent);
     }
 
-    public function testSingleServiceWsdl()
+    public function testSingleServiceRetrieval()
     {
         $this->isSingleService = false;
 
