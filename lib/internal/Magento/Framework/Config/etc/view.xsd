@@ -29,7 +29,6 @@
                         <xs:field xpath="@name"/>
                     </xs:unique>
                 </xs:element>
-                <xs:element name="images" minOccurs="0" type="imagesType"/>
                 <xs:element name="media" minOccurs="0" type="mediaType"/>
                 <xs:element name="exclude" minOccurs="0" type="excludeType"/>
             </xs:choice>
@@ -39,9 +38,9 @@
             <xs:field xpath="@module"/>
         </xs:unique>
     </xs:element>
-    <xs:complexType name="imagesType">
+    <xs:complexType name="mediaType">
         <xs:sequence>
-            <xs:element name="image" maxOccurs="unbounded">
+            <xs:element name="image" minOccurs="0" maxOccurs="unbounded">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="width" type="xs:positiveInteger" minOccurs="0"/>
@@ -72,12 +71,7 @@
                     </xs:attribute>
                 </xs:complexType>
             </xs:element>
-        </xs:sequence>
-        <xs:attribute name="module" type="xs:string" use="required"/>
-    </xs:complexType>
-    <xs:complexType name="mediaType">
-        <xs:sequence>
-            <xs:element name="mediaItem" maxOccurs="unbounded">
+            <xs:element name="video" minOccurs="0" maxOccurs="unbounded">
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="video_play" type="xs:boolean" minOccurs="0"/>

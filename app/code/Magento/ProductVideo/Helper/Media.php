@@ -70,7 +70,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return $this
      */
-    public function initConfig()
+    protected function initConfig()
     {
         if($this->cachedVideoConfig === null) {
             $this->cachedVideoConfig = $this->viewConfig->getViewConfig([
@@ -89,7 +89,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getVideoPlayAttribute()
     {
-        return $this->cachedVideoConfig->getMediaValue(self::MODULE_NAME, self::VIDEO_PLAY);
+        return $this->cachedVideoConfig->getVideoAttributeValue(self::MODULE_NAME, self::VIDEO_PLAY);
     }
 
     /**
@@ -99,7 +99,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getVideoStopAttribute()
     {
-        return $this->cachedVideoConfig->getMediaValue(self::MODULE_NAME, self::VIDEO_STOP);
+        return $this->cachedVideoConfig->getVideoAttributeValue(self::MODULE_NAME, self::VIDEO_STOP);
     }
 
     /**
@@ -109,7 +109,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getVideoBackgroundAttribute()
     {
-        return $this->cachedVideoConfig->getMediaValue(self::MODULE_NAME, self::VIDEO_BACKGROUND);
+        return $this->cachedVideoConfig->getVideoAttributeValue(self::MODULE_NAME, self::VIDEO_BACKGROUND);
     }
 
 }
