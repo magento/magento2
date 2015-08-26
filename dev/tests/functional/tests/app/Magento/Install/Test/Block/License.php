@@ -45,6 +45,6 @@ class License extends Block
      */
     public function getLicense()
     {
-        return $this->_rootElement->find($this->license, Locator::SELECTOR_CLASS_NAME)->getText();
+        return $this->_rootElement->find($this->license, Locator::SELECTOR_CSS)->getText();
     }
 }
