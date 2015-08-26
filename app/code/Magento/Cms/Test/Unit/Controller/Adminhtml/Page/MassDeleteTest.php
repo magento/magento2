@@ -50,7 +50,7 @@ class MassDeleteTest extends AbstractMassDeleteTest
 
     public function testMassDeleteAction()
     {
-        $deletedPages = 2;
+        $deletedPagesCount = 2;
 
         $collection = [
             $this->getPageMock(),
@@ -62,11 +62,16 @@ class MassDeleteTest extends AbstractMassDeleteTest
         $this->filterMock->expects($this->once())
             ->method('getCollection')
             ->with($this->pageCollectionMock)
-            ->willReturn($collection);
+            ->willReturn($this->pageCollectionMock);
+
+        $this->pageCollectionMock->expects($this->once())->method('getSize')->willReturn($deletedPagesCount);
+        $this->pageCollectionMock->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator($collection));
 
         $this->messageManagerMock->expects($this->once())
             ->method('addSuccess')
-            ->with(__('A total of %1 record(s) have been deleted.', $deletedPages));
+            ->with(__('A total of %1 record(s) have been deleted.', $deletedPagesCount));
         $this->messageManagerMock->expects($this->never())->method('addError');
 
         $this->resultRedirectMock->expects($this->once())
