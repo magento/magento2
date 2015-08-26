@@ -165,7 +165,7 @@ class CssDeployCommand extends Command
                     self::AREA_OPTION,
                     null,
                     InputOption::VALUE_REQUIRED,
-                    'Area, one of [frontend|adminhtml|doc]',
+                    'Area, one of [frontend|adminhtml]',
                     'frontend'
                 ),
                 new InputOption(
@@ -239,7 +239,7 @@ class CssDeployCommand extends Command
             $destination = $asset->getPath();
             $rootDir->copyFile($source, $destination, $targetDir);
 
-            $output->writeln("<info>Successfully processed LESS and/or SASS files</info>");
+            $output->writeln("<info>Successfully processed dynamic stylesheet into CSS</info>");
         }
     }
 }
