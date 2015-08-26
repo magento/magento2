@@ -71,12 +71,13 @@ require([
         collapsableArea = $('> .collapse', collapsableWrapper),
         stockAvailabilityField = $('#quantity_and_stock_status'),
         productAttributes = <?= $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode(array_values($block->getAttributes())) ?>,
+        productDetails =  $('[data-tab-panel="product-details"]'),
         qtyField = $('#qty'),
         inventoryQty = $('#inventory_qty'),
         inventoryAvailabilityField = $('#inventory_stock_availability'),
         currentProductTemplateControl = $('#product-template-suggest-container .action-dropdown > .action-toggle'),
         attributesInput = $("input[name='attributes[]']", variationsContainer),
-        hasVariations = <?php echo($block->getProduct()->getTypeId() == Configurable::TYPE_CODE || $block->getRequest()->has('attributes')) ? 'true' : 'false' ?>,
+        hasVariations = <?php echo($block->getProduct()->getTypeId() === Configurable::TYPE_CODE || $block->getRequest()->has('attributes')) ? 'true' : 'false' ?>,
         noImageUrl = '<?= $block->getNoImageUrl() ?>',
         isLocked = function (element) {
             return element.is('[data-locked]');
@@ -88,6 +89,9 @@ require([
                     element.trigger('change')
                 }
             }
+        },
+        getConfigurableProductAttribute = function(attribute_code) {
+            return $('[data-attribute-code="' + attribute_code + '"] select', productDetails);
         };
 
     collapsableArea
@@ -103,8 +107,8 @@ require([
             setElementDisabled(qtyField, true, true);
             setElementDisabled(stockAvailabilityField, false, false);
             $.each(productAttributes, function() {
-                $('#attribute-' + this.attribute_code + '-container select').prop('disabled', true);
-            })
+                getConfigurableProductAttribute(this.attribute_code).prop('disabled', true);
+            });
         })
         .on('hide', function() {
             if (productAttributes.length) {
@@ -119,8 +123,8 @@ require([
             setElementDisabled(stockAvailabilityField, true, false);
             setElementDisabled(qtyField, false, true);
             $.each(productAttributes, function() {
-                $('#attribute-' + this.attribute_code + '-container select').removeProp('disabled');
-            })
+                getConfigurableProductAttribute(this.attribute_code).removeProp('disabled');
+            });
         })
         .collapse(hasVariations ? 'show' : 'hide');
 
