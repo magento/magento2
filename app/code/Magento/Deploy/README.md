@@ -1,0 +1,1 @@
+Deploy is a module that holds collection of command line tools to help with Magento application deployment. To execute this command, please, run "bin/magento setup:static-content:deploy" from the Magento root directory.

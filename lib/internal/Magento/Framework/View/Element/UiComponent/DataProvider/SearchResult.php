@@ -93,6 +93,7 @@ class SearchResult extends AbstractCollection implements Api\Search\SearchResult
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {

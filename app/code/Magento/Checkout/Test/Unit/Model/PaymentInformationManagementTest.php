@@ -67,6 +67,22 @@ class PaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testSavePaymentInformationAndPlaceOrderIfBillingAddressNotExist()
+    {
+        $cartId = 100;
+        $orderId = 200;
+        $paymentMock = $this->getMock('\Magento\Quote\Api\Data\PaymentInterface');
+
+        $this->billingAddressManagementMock->expects($this->never())->method('assign');
+        $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
+        $this->cartManagementMock->expects($this->once())->method('placeOrder')->with($cartId)->willReturn($orderId);
+
+        $this->assertEquals(
+            $orderId,
+            $this->model->savePaymentInformationAndPlaceOrder($cartId, $paymentMock)
+        );
+    }
+
     public function testSavePaymentInformation()
     {
         $cartId = 100;
@@ -79,5 +95,16 @@ class PaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
         $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
 
         $this->assertTrue($this->model->savePaymentInformation($cartId, $paymentMock, $billingAddressMock));
+    }
+
+    public function testSavePaymentInformationWithoutBillingAddress()
+    {
+        $cartId = 100;
+        $paymentMock = $this->getMock('\Magento\Quote\Api\Data\PaymentInterface');
+
+        $this->billingAddressManagementMock->expects($this->never())->method('assign');
+        $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
+
+        $this->assertTrue($this->model->savePaymentInformation($cartId, $paymentMock));
     }
 }
