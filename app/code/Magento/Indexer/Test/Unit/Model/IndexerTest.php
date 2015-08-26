@@ -5,6 +5,7 @@
  */
 namespace Magento\Indexer\Test\Unit\Model;
 
+use Magento\Framework\Indexer\StateInterface;
 use Magento\Indexer\Model\Indexer\State;
 
 class IndexerTest extends \PHPUnit_Framework_TestCase
@@ -15,12 +16,12 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Indexer\Model\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\Indexer\Model\ActionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\ActionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $actionFactoryMock;
 
@@ -42,7 +43,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->configMock = $this->getMockForAbstractClass(
-            'Magento\Indexer\Model\ConfigInterface',
+            'Magento\Framework\Indexer\ConfigInterface',
             [],
             '',
             false,
@@ -51,7 +52,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             ['getIndexer']
         );
         $this->actionFactoryMock = $this->getMock(
-            'Magento\Indexer\Model\ActionFactory',
+            'Magento\Framework\Indexer\ActionFactory',
             ['create'],
             [],
             '',
@@ -80,9 +81,16 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $structureFactory = $this->getMockBuilder('Magento\Framework\Indexer\StructureFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        /** @var \Magento\Framework\Indexer\StructureFactory $structureFactory */
         $this->model = new \Magento\Indexer\Model\Indexer(
             $this->configMock,
             $this->actionFactoryMock,
+            $structureFactory,
             $this->viewMock,
             $this->stateFactoryMock,
             $this->indexFactoryMock
@@ -219,7 +227,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $this->viewMock->expects($this->once())->method('resume');
 
         $actionMock = $this->getMock(
-            'Magento\Indexer\Model\ActionInterface',
+            'Magento\Framework\Indexer\ActionInterface',
             ['executeFull', 'executeList', 'executeRow'],
             [],
             '',
@@ -267,7 +275,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         $this->viewMock->expects($this->once())->method('resume');
 
         $actionMock = $this->getMock(
-            'Magento\Indexer\Model\ActionInterface',
+            'Magento\Framework\Indexer\ActionInterface',
             ['executeFull', 'executeList', 'executeRow'],
             [],
             '',
@@ -392,7 +400,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetStatus()
     {
-        $status = State::STATUS_WORKING;
+        $status = StateInterface::STATUS_WORKING;
         $stateMock = $this->getMock(
             '\Magento\Indexer\Model\Indexer\State',
             ['load', 'getStatus'],
@@ -432,9 +440,9 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
     public function statusDataProvider()
     {
         return [
-            ['isValid', State::STATUS_VALID],
-            ['isInvalid', State::STATUS_INVALID],
-            ['isWorking', State::STATUS_WORKING]
+            ['isValid', StateInterface::STATUS_VALID],
+            ['isInvalid', StateInterface::STATUS_INVALID],
+            ['isWorking', StateInterface::STATUS_WORKING]
         ];
     }
 
@@ -449,7 +457,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->stateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($stateMock));
-        $stateMock->expects($this->once())->method('setStatus')->with(State::STATUS_INVALID)->will(
+        $stateMock->expects($this->once())->method('setStatus')->with(StateInterface::STATUS_INVALID)->will(
             $this->returnSelf()
         );
         $stateMock->expects($this->once())->method('save')->will($this->returnSelf());
@@ -468,7 +476,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             false
         );
         $actionMock = $this->getMock(
-            'Magento\Indexer\Model\ActionInterface',
+            'Magento\Framework\Indexer\ActionInterface',
             ['executeFull', 'executeList', 'executeRow'],
             [],
             '',
@@ -501,7 +509,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
             false
         );
         $actionMock = $this->getMock(
-            'Magento\Indexer\Model\ActionInterface',
+            'Magento\Framework\Indexer\ActionInterface',
             ['executeFull', 'executeList', 'executeRow'],
             [],
             '',
