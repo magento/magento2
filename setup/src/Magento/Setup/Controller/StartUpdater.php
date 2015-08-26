@@ -7,13 +7,13 @@
 namespace Magento\Setup\Controller;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Module\FullModuleList;
 use Magento\Setup\Model\Cron\JobComponentUninstall;
 use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
 use Magento\Setup\Model\Updater as ModelUpdater;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
-use Magento\Framework\Module\FullModuleList;
 
 /**
  * Controller for updater tasks
@@ -150,9 +150,9 @@ class StartUpdater extends AbstractActionController
             }
 
             // enable or disable job types expect magento module name
-            if(($jobType == 'enable') || ($jobType == 'disable')) {
-                //check to make sure that the passed in magento module name is valid
-                if(!$this->moduleList->has($package[self::KEY_POST_PACKAGE_NAME])) {
+            if (($jobType == 'enable') || ($jobType == 'disable')) {
+                // check to make sure that the passed in Magento module name is valid
+                if (!$this->moduleList->has($package[self::KEY_POST_PACKAGE_NAME])) {
                     $errorMessage .= 'Invalid Magento module name: ' . $package[self::KEY_POST_PACKAGE_NAME] . PHP_EOL;
                     break;
                 }

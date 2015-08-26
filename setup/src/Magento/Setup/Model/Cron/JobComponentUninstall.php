@@ -110,6 +110,7 @@ class JobComponentUninstall extends AbstractJob
         $this->cleanUp();
         $errorMessage = $this->updater->createUpdaterTask($components, Updater::TASK_TYPE_UNINSTALL);
         if ($errorMessage) {
+            $this->status->toggleUpdateError(true);
             throw new \RuntimeException($errorMessage);
         }
     }
@@ -124,6 +125,7 @@ class JobComponentUninstall extends AbstractJob
     private function executeComponent(array $component)
     {
         if (!isset($component[self::COMPONENT_NAME])) {
+            $this->status->toggleUpdateError(true);
             throw new \RuntimeException('Job parameter format is incorrect');
         }
 
@@ -132,6 +134,7 @@ class JobComponentUninstall extends AbstractJob
         if (isset($installedPackages[$componentName]['type'])) {
             $type = $installedPackages[$componentName]['type'];
         } else {
+            $this->status->toggleUpdateError(true);
             throw new \RuntimeException('Component type not set');
         }
 
@@ -141,6 +144,7 @@ class JobComponentUninstall extends AbstractJob
             self::COMPONENT_LANGUAGE,
             self::COMPONENT
         ])) {
+            $this->status->toggleUpdateError(true);
             throw new \RuntimeException('Unknown component type');
         }
 
