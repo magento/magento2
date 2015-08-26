@@ -310,7 +310,11 @@ class Environment extends AbstractActionController
 
         try {
             if (empty($data['packages'])) {
-                throw new \Exception('No packages has been found.');
+                throw new \Exception('No packages have been found.');
+            }
+
+            if (empty($data['type'])) {
+                throw new \Exception('Can not determine the flow.');
             }
 
             $modules = $data['packages'];
@@ -319,6 +323,9 @@ class Environment extends AbstractActionController
 
             $modulesToChange = [];
             foreach ($modules as $module) {
+                if (!isset($module['name'])) {
+                    throw new \Exception('Can not find module name.');
+                }
                 $modulesToChange[] = $module['name'];
             }
 
