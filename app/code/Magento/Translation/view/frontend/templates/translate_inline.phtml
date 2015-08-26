@@ -57,20 +57,17 @@
 
 <div data-role="translate-dialog"
      data-mage-init='{"translateInline":{"ajaxUrl":"<?php echo $block->getAjaxUrl() ?>"},"loader":{}}'></div>
-<script>
-    require([
-        "jquery",
-        "mage/edit-trigger",
-        "mage/translate-inline"
-    ], function($){
-        $('body').editTrigger(
-            {
-                img: '<?php echo $block->getViewFileUrl('Magento_Theme::fam_book_open.png') ?>',
-                alwaysShown:true,
-                singleElement:false
+<script type="text/x-magento-init">
+    {
+        "body": {
+            "editTrigger": {
+                "img": "<?php echo $block->getViewFileUrl('Magento_Theme::fam_book_open.png') ?>",
+                "alwaysShown":true,
+                "singleElement":false
+            },
+            "addClass": {
+                "class": "trnslate-inline-area"
             }
-        );
-        
-        $('body').addClass('trnslate-inline-area');
-    });
+        }
+    }
 </script>

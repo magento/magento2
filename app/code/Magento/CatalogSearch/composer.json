@@ -8,7 +8,6 @@
         "magento/module-search": "1.0.0-beta",
         "magento/module-customer": "1.0.0-beta",
         "magento/module-directory": "1.0.0-beta",
-        "magento/module-indexer": "1.0.0-beta",
         "magento/module-eav": "1.0.0-beta",
         "magento/module-backend": "1.0.0-beta",
         "magento/module-theme": "1.0.0-beta",

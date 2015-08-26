@@ -5,7 +5,6 @@
  */
 namespace Magento\Braintree\Model;
 
-use Magento\Braintree\Model\Config\PayPal as PayPalConfig;
 
 class Observer
 {
@@ -169,5 +168,18 @@ class Observer
             $observer->getEvent()->getOrPosition()
         );
         $shortcutButtons->addShortcut($shortcut);
+    }
+
+    /**
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return void
+     */
+    public function processBraintreeAddress(\Magento\Framework\Event\Observer $observer)
+    {
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $observer->getEvent()->getQuote();
+        if ($quote->getPayment()->getMethod() === \Magento\Braintree\Model\PaymentMethod\PayPal:: METHOD_CODE) {
+            $quote->getBillingAddress()->setShouldIgnoreValidation(true);
+        }
     }
 }
