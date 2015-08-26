@@ -22,6 +22,7 @@ angular.module('readiness-check', [])
             packages: null
         };
         switch($state.current.type) {
+            
             case 'uninstall':
                 $scope.dependencyUrl = 'index.php/environment/uninstall-dependency-check';
                 if ($localStorage.packages) {
