@@ -6,7 +6,7 @@
 namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\IndexerInterface;
+use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 

@@ -475,7 +475,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $dateTime;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerRegistry
+     * @var \Magento\Framework\Indexer\IndexerRegistry
      */
     protected $indexerRegistry;
 
@@ -579,7 +579,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param DateTime $dateTime
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
+     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @param Product\StoreResolver $storeResolver
      * @param Product\SkuProcessor $skuProcessor
      * @param Product\CategoryProcessor $categoryProcessor
@@ -615,7 +615,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         DateTime $dateTime,
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
+        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         Product\StoreResolver $storeResolver,
         Product\SkuProcessor $skuProcessor,
         Product\CategoryProcessor $categoryProcessor,
@@ -1469,13 +1469,15 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         if (!empty($rowData[self::COL_MEDIA_IMAGE]) && is_array($rowData[self::COL_MEDIA_IMAGE])) {
                             $position = array_search($mediaImage, $mediaGalleryImages);
                             foreach ($rowData[self::COL_MEDIA_IMAGE] as $mediaImage) {
-                                $mediaGallery[$rowSku][] = [
-                                    'attribute_id' => $this->getMediaGalleryAttributeId(),
-                                    'label' => isset($mediaGalleryLabels[$position]) ? $mediaGalleryLabels[$position] : '',
-                                    'position' => $position,
-                                    'disabled' => '',
-                                    'value' => $mediaImage,
-                                ];
+                                if (!empty($mediaImage)) {
+                                    $mediaGallery[$rowSku][] = [
+                                        'attribute_id' => $this->getMediaGalleryAttributeId(),
+                                        'label' => isset($mediaGalleryLabels[$position]) ? $mediaGalleryLabels[$position] : '',
+                                        'position' => $position,
+                                        'disabled' => '',
+                                        'value' => $mediaImage,
+                                    ];
+                                }
                             }
                         }
                     }
@@ -1753,7 +1755,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $destinationDir = "catalog/product";
             $destinationPath = $dirAddon . $DS . $this->_mediaDirectory->getRelativePath($destinationDir);
 
-            $this->_mediaDirectory->create($destinationDir);
+            $this->_mediaDirectory->create($destinationPath);
             if (!$this->_fileUploader->setDestDir($destinationPath)) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('File directory \'%1\' is not writable.', $destinationPath)
