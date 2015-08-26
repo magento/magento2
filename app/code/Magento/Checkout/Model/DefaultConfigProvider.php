@@ -302,7 +302,21 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $output['activeCarriers'] = $this->getActiveCarriers();
         $output['originCountryCode'] = $this->getOriginCountryCode();
         $output['paymentMethods'] = $this->getPaymentMethods();
+        $output['autocomplete'] = $this->isAutocompleteEnabled();
         return $output;
+    }
+
+    /**
+     * Is autocomplete enabled for storefront
+     *
+     * @return string
+     */
+    private function isAutocompleteEnabled()
+    {
+         return $this->scopeConfig->getValue(
+             \Magento\Customer\Model\Form::XML_PATH_ENABLE_AUTOCOMPLETE,
+             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+         ) ? 'on' : 'off';
     }
 
     /**
