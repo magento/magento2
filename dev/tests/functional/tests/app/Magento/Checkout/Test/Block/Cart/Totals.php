@@ -248,7 +248,8 @@ class Totals extends Block
      */
     public function waitForUpdatedTotals()
     {
-        $this->waitForElementVisible($this->blockWaitElement);
+        // Code under may use JavaScript delay at this point as well.
+        sleep(1);
         $this->waitForElementNotVisible($this->blockWaitElement);
     }
 }
