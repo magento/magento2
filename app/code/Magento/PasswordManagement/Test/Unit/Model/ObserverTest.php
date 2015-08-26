@@ -27,7 +27,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->encryptorMock = $this->getMockBuilder(
             '\Magento\Framework\Encryption\Encryptor'
         )->disableOriginalConstructor()->getMock();
-        $this->encryptorMock->expects($this->any())->method('validateHashByVersion')->will(
+        $this->encryptorMock->expects($this->any())->method('isValidHashByVersion')->will(
             $this->returnCallback(
                 function ($arg1, $arg2) {
                     return $arg1 == $arg2;
