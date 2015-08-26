@@ -84,6 +84,11 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultRedirectFactoryMock;
 
+    /**
+     * @var \Magento\Sales\Model\Service\InvoiceService|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $invoiceServiceMock;
+
 
     public function setUp()
     {
@@ -192,11 +197,16 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             ->method('getTitle')
             ->willReturn($this->pageTitleMock);
 
+        $this->invoiceServiceMock = $this->getMockBuilder('Magento\Sales\Model\Service\InvoiceService')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->controller = $objectManager->getObject(
             'Magento\Sales\Controller\Adminhtml\Order\Invoice\NewAction',
             [
                 'context' => $contextMock,
-                'resultPageFactory' => $this->resultPageFactoryMock
+                'resultPageFactory' => $this->resultPageFactoryMock,
+                'invoiceService' => $this->invoiceServiceMock
             ]
         );
     }
@@ -239,12 +249,9 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             ->method('canInvoice')
             ->willReturn(true);
 
-        $invoiceManagement = $this->getMockBuilder('Magento\Sales\Api\InvoiceManagementInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $invoiceManagement->expects($this->once())
+        $this->invoiceServiceMock->expects($this->once())
             ->method('prepareInvoice')
-            ->with($orderId, [])
+            ->with($orderMock, [])
             ->willReturn($invoiceMock);
 
         $menuBlockMock = $this->getMockBuilder('Magento\Backend\Block\Menu')
@@ -269,10 +276,6 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             ->with('Magento\Sales\Model\Order')
             ->willReturn($orderMock);
         $this->objectManagerMock->expects($this->at(1))
-            ->method('create')
-            ->with('Magento\Sales\Api\InvoiceManagementInterface')
-            ->willReturn($invoiceManagement);
-        $this->objectManagerMock->expects($this->at(2))
             ->method('get')
             ->with('Magento\Backend\Model\Session')
             ->will($this->returnValue($this->sessionMock));
