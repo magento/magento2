@@ -244,22 +244,7 @@ define([
     return {
         /**
          * Adds listener for the appearance of nodes that matches provided
-         * selector and which are inside of the provided context.
-         *
-         * @param {String} selector - CSS selector.
-         * @param {Function} callback - Function that will invoked when node appears.
-         * @param {HTMLElement} [ctx=document.body] - Context inside of which to search for the node.
-         */
-        add: function (selector, callback, ctx) {
-            addSelectorListener(selector, {
-                ctx: ctx,
-                callback: callback,
-                type: 'add'
-            });
-        },
-
-        /**
-         * Same as the 'add' method but callback will be
+         * selector and which are inside of the provided context. Callback will be
          * also invoked on elements which a currently present.
          *
          * @param {String} selector - CSS selector.
@@ -267,16 +252,19 @@ define([
          * @param {HTMLElement} [ctx=document.body] - Context inside of which to search for the node.
          */
         get: function (selector, callback, ctx) {
-            var data = {
-                ctx: ctx,
-                callback: callback
+            var data;
+
+            data = {
+                ctx: ctx || document.body,
+                callback: callback,
+                type: 'add'
             };
 
-            getNodes(selector, ctx).forEach(function (node) {
+            getNodes(selector, data.ctx).forEach(function (node) {
                 trigger(node, data);
             });
 
-            this.add.apply(this, arguments);
+            addSelectorListener(selector, data);
         },
 
         /**
@@ -285,21 +273,21 @@ define([
          * @param {(jQueryObject|HTMLElement|Array|String)} selector
          * @param {Function} callback - Function that will invoked when node is removed.
          * @param {HTMLElement} [ctx=document.body] - Context inside of which to search for the node.
-         * @param {Boolean} existing - Flag that indicates whether to listen
-         *      only for a currently present elements.
          */
-        remove: function (selector, callback, ctx, existing) {
-            var data = {
-                ctx: ctx,
+        remove: function (selector, callback, ctx) {
+            var data;
+
+            data = {
+                ctx: ctx || document.body,
                 callback: callback,
                 type: 'remove'
             };
 
-            getNodes(selector, ctx).forEach(function (node) {
+            getNodes(selector, data.ctx).forEach(function (node) {
                 addRemovalListener(node, data);
             });
 
-            if (typeof selector === 'string' && !existing) {
+            if (typeof selector === 'string') {
                 addSelectorListener(selector, data);
             }
         },
