@@ -32,14 +32,16 @@ class CleanupFilesTest extends \PHPUnit_Framework_TestCase
     public function testClearCodeGeneratedClasses()
     {
         $dir = $this->getDirectoryCleanMock();
-        $this->filesystem->expects($this->at(0))
+        $this->filesystem->expects($this->exactly(2))
             ->method('getDirectoryWrite')
-            ->with(DirectoryList::GENERATION)
-            ->willReturn($dir);
-        $this->filesystem->expects($this->at(1))
-            ->method('getDirectoryWrite')
-            ->with(DirectoryList::DI)
-            ->willReturn($dir);
+            ->will(
+                $this->returnValueMap(
+                    [
+                        [DirectoryList::GENERATION, DriverPool::FILE, $dir],
+                        [DirectoryList::DI, DriverPool::FILE, $dir],
+                    ]
+                )
+            );
         $this->object->clearCodeGeneratedClasses();
     }
 
