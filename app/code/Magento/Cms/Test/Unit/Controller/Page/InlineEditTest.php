@@ -189,8 +189,8 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with([
                 'messages' => [
-                    '[Page id: 1] Error message',
-                    '[Page id: 1] LocalizedException'
+                    '[Page ID: 1] Error message',
+                    '[Page ID: 1] LocalizedException'
                 ],
                 'error' => true
             ])
@@ -210,8 +210,8 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with([
                 'messages' => [
-                    '[Page id: 1] Error message',
-                    '[Page id: 1] RuntimeException'
+                    '[Page ID: 1] Error message',
+                    '[Page ID: 1] RuntimeException'
                 ],
                 'error' => true
             ])
@@ -231,8 +231,8 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with([
                 'messages' => [
-                    '[Page id: 1] Error message',
-                    '[Page id: 1] Something went wrong while saving the page.'
+                    '[Page ID: 1] Error message',
+                    '[Page ID: 1] Something went wrong while saving the page.'
                 ],
                 'error' => true
             ])

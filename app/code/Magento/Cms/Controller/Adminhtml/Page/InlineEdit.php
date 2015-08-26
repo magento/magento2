@@ -102,6 +102,6 @@ class InlineEdit extends \Magento\Backend\App\Action
      */
     protected function getErrorWithPageId(PageInterface $page, $errorText)
     {
-        return '[Page id: ' . $page->getId() . '] ' . $errorText;
+        return '[Page ID: ' . $page->getId() . '] ' . $errorText;
     }
 }
