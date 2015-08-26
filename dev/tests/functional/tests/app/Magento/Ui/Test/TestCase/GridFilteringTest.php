@@ -66,6 +66,7 @@ class GridFilteringTest extends Injectable
      * @param array $steps
      * @param string $pageClass
      * @param string $gridRetriever
+     * @param string $idGetter
      * @param array $filters
      * @param string $idColumn
      * @return array
@@ -73,11 +74,12 @@ class GridFilteringTest extends Injectable
     public function test(
         $pageClass,
         $gridRetriever,
+        $idGetter,
         array $filters,
         $fixtureName,
-        $fixtureDataSet,
         $itemsCount,
-        array $steps,
+        array $steps = [],
+        $fixtureDataSet = null,
         $idColumn = null
     ) {
         $items = $this->createItems($itemsCount, $fixtureName, $fixtureDataSet, $steps);
@@ -106,8 +108,8 @@ class GridFilteringTest extends Injectable
                     }
                     $idsInGrid = $filteredTargetIds;
                 }
-                $filteredIds = $this->getActualIds($idsInGrid, $items);
-                $filterResults[$items[$index]->getId()][$itemFiltersName] = $filteredIds;
+                $filteredIds = $this->getActualIds($idsInGrid, $items, $idGetter);
+                $filterResults[$items[$index]->$idGetter()][$itemFiltersName] = $filteredIds;
             }
         }
 
@@ -117,14 +119,15 @@ class GridFilteringTest extends Injectable
     /**
      * @param string[] $ids
      * @param FixtureInterface[] $items
+     * @param string $idGetter
      * @return string[]
      */
-    protected function getActualIds(array $ids, array $items)
+    protected function getActualIds(array $ids, array $items, $idGetter)
     {
         $actualIds = [];
         foreach ($items as $item) {
-            if (in_array($item->getId(), $ids)) {
-                $actualIds[] = $item->getId();
+            if (in_array($item->$idGetter(), $ids)) {
+                $actualIds[] = $item->$idGetter();
             }
         }
         return  $actualIds;
@@ -144,7 +147,9 @@ class GridFilteringTest extends Injectable
             $item = $this->fixtureFactory->createByCode($fixtureName, ['dataset' => $fixtureDataSet]);
             $item->persist();
             $items[$i] = $item;
-            $this->processSteps($item, $steps[$i]);
+            if (!empty($steps)) {
+                $this->processSteps($item, $steps[$i]);
+            }
         }
 
         return $items;
