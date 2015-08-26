@@ -68,10 +68,10 @@
         }
     }
     .nav-sections {
+        height: 100%;
         overflow: auto;
         position: fixed;
         top: 0;
-        height: 100%;
         left: -80%;
         left: calc(~"-1 * (100% - @{active-nav-indent})");
         width: 80%;
@@ -232,6 +232,8 @@
         display: none;
     }
     .nav-sections {
+        .vendor-prefix-flex-shrink(0);
+        .vendor-prefix-flex-basis(auto);
         margin-bottom: @indent__m;
         &-item-title {
             display: none;

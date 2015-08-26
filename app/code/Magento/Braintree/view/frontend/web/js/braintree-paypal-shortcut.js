@@ -29,7 +29,7 @@ define([
             var paymentDetailsId = this.options.paymentDetailsId;
             var submitFormId = this.options.submitFormId;
             var self = this;
-            $('#'.concat(this.container)).empty();
+            $('#'.concat(this.options.container)).empty();
             braintree.setup(clientToken, "paypal", {
                 container: this.options.container,
                 singleUse: true,
