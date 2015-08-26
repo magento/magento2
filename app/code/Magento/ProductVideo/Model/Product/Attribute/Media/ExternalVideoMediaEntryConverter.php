@@ -18,14 +18,14 @@ class ExternalVideoMediaEntryConverter extends ImageMediaEntryConverter
     /**
      * Media Entry type code
      */
-    const MEDIA_ENTRY_TYPE_EXTERNAL_VIDEO = 'external-video';
+    const MEDIA_TYPE_CODE = 'external-video';
 
     /**
      * {@inheritdoc}
      */
     public function getMediaEntryType()
     {
-        return self::MEDIA_ENTRY_TYPE_EXTERNAL_VIDEO;
+        return self::MEDIA_TYPE_CODE;
     }
 
     /**

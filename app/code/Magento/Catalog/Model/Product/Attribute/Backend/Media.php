@@ -114,24 +114,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     public function afterLoad($object)
     {
-        $attrCode = $this->getAttribute()->getAttributeCode();
-        $value = [];
-        $value['images'] = [];
-        $value['values'] = [];
-        $localAttributes = ['label', 'position', 'disabled'];
-
-        foreach ($this->_getResource()->loadGallery($object, $this) as $mediaEntry) {
-            foreach ($localAttributes as $localAttribute) {
-                if ($mediaEntry[$localAttribute] === null) {
-                    $mediaEntry[$localAttribute] = $this->_getDefaultValue($localAttribute, $mediaEntry);
-                }
-            }
-            $mediaEntry = $this->cleanEmptyVideoInfo($mediaEntry);
-            $value['images'][] = $mediaEntry;
-        }
-
-        $object->setData($attrCode, $value);
-        return $this;
+        $this->mediaEntryProcessorPool->processAfterLoad($object, $this->getAttribute());
     }
 
     protected function cleanEmptyVideoInfo($mediaEntry)
@@ -149,20 +132,6 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         }
 
         return $mediaEntry;
-    }
-
-    /**
-     * @param string $key
-     * @param string[] &$image
-     * @return string
-     */
-    protected function _getDefaultValue($key, &$image)
-    {
-        if (isset($image[$key . '_default'])) {
-            return $image[$key . '_default'];
-        }
-
-        return '';
     }
 
     /**

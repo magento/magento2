@@ -8,6 +8,8 @@
 
 namespace Magento\Catalog\Model\Resource\Product\Attribute\Backend;
 
+use Magento\Catalog\Model\Product;
+
 /**
  * Catalog product media gallery attribute backend resource
  *
@@ -18,8 +20,6 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
     const GALLERY_TABLE = 'catalog_product_entity_media_gallery';
 
     const GALLERY_VALUE_TABLE = 'catalog_product_entity_media_gallery_value';
-
-    const GALLERY_VALUE_VIDEO_TABLE = 'catalog_product_entity_media_gallery_value_video';
 
     const GALLERY_VALUE_TO_ENTITY_TABLE = 'catalog_product_entity_media_gallery_value_to_entity';
 
@@ -34,13 +34,98 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
     }
 
     /**
+     * @param Product $product
+     * @param int $attributeId
+     * @return array
+     */
+    public function loadProductGalleryByAttributeId(Product $product, $attributeId)
+    {
+        $select = $this->createBaseLoadSelect($product->getId(), $product->getStoreId(), $attributeId);
+        $result = $this->getConnection()->fetchAll($select);
+        $this->_removeDuplicates($result);
+        return $result;
+    }
+
+    public function loadDataFromTableByValueId($tableNameAlias, array $ids, array $cols = [])
+    {
+        $connection = $this->getConnection();
+        $mainTableAlias = $this->getMainTableAlias();
+        if (empty($cols)) {
+            $cols = '*';
+        }
+        $select = $connection->select()->from([$mainTableAlias => $this->getTable($tableNameAlias)], $cols);
+    }
+
+    /**
+     * @return string
+     */
+    public function getMainTableAlias()
+    {
+        return 'main';
+    }
+
+    /**
+     * @param int $entityId
+     * @param int $storeId
+     * @param int $attributeId
+     * @return \Magento\Framework\DB\Select
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function createBaseLoadSelect($entityId, $storeId, $attributeId)
+    {
+        $connection = $this->getConnection();
+
+        $positionCheckSql = $connection->getCheckSql(
+            'value.position IS NULL',
+            'default_value.position',
+            'value.position'
+        );
+
+        $mainTableAlias = $this->getMainTableAlias();
+        $select = $connection->select()->from(
+            [$mainTableAlias => $this->getMainTable()],
+            [
+                'value_id',
+                'file' => 'value',
+                'media_type' => 'media_type'
+            ]
+        )->joinInner(
+            ['entity' => $this->getTable(self::GALLERY_VALUE_TO_ENTITY_TABLE)],
+            $mainTableAlias.'.value_id = entity.value_id',
+            ['entity_id' => 'entity_id']
+        )->joinLeft(
+            ['value' => $this->getTable(self::GALLERY_VALUE_TABLE)],
+            $connection->quoteInto($mainTableAlias.'.value_id = value.value_id AND value.store_id = ?', (int)$storeId),
+            [
+                'label',
+                'position',
+                'disabled'
+            ]
+        )->joinLeft(
+            ['default_value' => $this->getTable(self::GALLERY_VALUE_TABLE)],
+            $mainTableAlias.'.value_id = default_value.value_id AND default_value.store_id = 0',
+            ['label_default' => 'label', 'position_default' => 'position', 'disabled_default' => 'disabled']
+        )->where(
+            $mainTableAlias.'.attribute_id = ?',
+            $attributeId
+        )->where(
+            'entity.entity_id = ?',
+            $entityId
+        )
+            ->where($positionCheckSql . ' IS NOT NULL')
+            ->order($positionCheckSql . ' ' . \Magento\Framework\DB\Select::SQL_ASC);
+
+        return $select;
+    }
+
+    /**
      * Load gallery images for product
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Catalog\Model\Product\Attribute\Backend\Media $object
+     * @param int $attributeId
      * @return array
      */
-    public function loadGallery($product, $object)
+    public function loadGallery($product, $attributeId)
     {
         $connection = $this->getConnection();
 
@@ -88,7 +173,7 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ]
         )->where(
             'main.attribute_id = ?',
-            $object->getAttribute()->getId()
+            $attributeId
         )->where(
             'entity.entity_id = ?',
             $product->getId()
