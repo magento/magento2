@@ -101,6 +101,7 @@ class JobComponentUninstall extends AbstractJob
     public function execute()
     {
         if (!isset($this->params['components']) || !is_array($this->params['components'])) {
+            $this->status->toggleUpdateError(true);
             throw new \RunTimeException('Job parameter format is incorrect');
         }
         $components = $this->params['components'];
