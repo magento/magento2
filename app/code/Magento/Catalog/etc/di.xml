@@ -30,7 +30,6 @@
     <preference for="Magento\Catalog\Api\Data\ProductTypeInterface" type="Magento\Catalog\Model\ProductType" />
     <preference for="Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface" type="Magento\Catalog\Model\Product\Gallery\GalleryManagement" />
     <preference for="Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface" type="Magento\Catalog\Model\Product\Gallery\Entry" />
-    <preference for="Magento\Framework\Api\Data\VideoContentInterface" type="Magento\Catalog\Model\Product\Gallery\VideoEntry" />
     <preference for="Magento\Catalog\Api\ProductMediaAttributeManagementInterface" type="Magento\Catalog\Model\Product\Media\AttributeManagement" />
     <preference for="Magento\Catalog\Api\ProductAttributeTypesListInterface" type="Magento\Catalog\Model\Product\Attribute\TypesList" />
     <preference for="Magento\Catalog\Api\Data\ProductAttributeTypeInterface" type="Magento\Catalog\Model\Product\Attribute\Type" />
@@ -67,6 +66,13 @@
         <arguments>
             <argument name="mediaGalleryEntryProcessorsCollection" xsi:type="array">
                 <item name="10" xsi:type="object">Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageMediaGalleryEntryProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Attribute\Backend\Media\MediaGalleryEntryConverterPool">
+        <arguments>
+            <argument name="mediaGalleryEntryConvertersCollection" xsi:type="array">
+                <item name="image" xsi:type="object">Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageMediaEntryConverter</item>
             </argument>
         </arguments>
     </type>
@@ -490,6 +496,4 @@
             </argument>
         </arguments>
     </type>
-    <!--<virtualType name="">-->
-    <!--</virtualType>-->
 </config>

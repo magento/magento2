@@ -4,7 +4,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\ProductVideo\Model\Product\Media;
+namespace Magento\ProductVideo\Model\Product\Attribute\Media;
 
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Framework\Api\Data\VideoContentInterface;
@@ -19,7 +19,7 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
      *
      * @return string
      */
-    public function getType()
+    public function getMediaType()
     {
         return $this->getData(self::TYPE);
     }
@@ -30,7 +30,7 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
      * @param string $mimeType
      * @return $this
      */
-    public function setType($mimeType)
+    public function setMediaType($mimeType)
     {
         return $this->setData(self::TYPE, $mimeType);
     }
@@ -40,7 +40,7 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
      *
      * @return string
      */
-    public function getProvider()
+    public function getVideoProvider()
     {
         return $this->getData(self::PROVIDER);
     }
@@ -51,7 +51,7 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
      * @param string $data
      * @return $this
      */
-    public function setProvider($data)
+    public function setVideoProvider($data)
     {
         return $this->setData(self::PROVIDER, $data);
     }
@@ -61,7 +61,7 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
      *
      * @return string
      */
-    public function getUrl()
+    public function getVideoUrl()
     {
         return $this->getData(self::URL);
     }
@@ -72,7 +72,7 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
      * @param string $data
      * @return $this
      */
-    public function setUrl($data)
+    public function setVideoUrl($data)
     {
         return $this->setData(self::URL, $data);
     }
@@ -82,7 +82,7 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
      *
      * @return string
      */
-    public function getTitle()
+    public function getVideoTitle()
     {
         return $this->getData(self::TITLE);
     }
@@ -93,7 +93,7 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
      * @param string $data
      * @return $this
      */
-    public function setTitle($data)
+    public function setVideoTitle($data)
     {
         return $this->setData(self::TITLE, $data);
     }
@@ -103,7 +103,7 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
      *
      * @return string
      */
-    public function getDescription()
+    public function getVideoDescription()
     {
         return $this->getData(self::DESCRIPTION);
     }
@@ -114,9 +114,9 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
      * @param string $data
      * @return $this
      */
-    public function setDescription($data)
+    public function setVideoDescription($data)
     {
-        return $this->setData(self::DESCRIPTION);
+        return $this->setData(self::DESCRIPTION, $data);
     }
 
     /**
@@ -124,7 +124,7 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
      *
      * @return string
      */
-    public function getMetadata()
+    public function getVideoMetadata()
     {
         return $this->getData(self::METADATA);
     }
@@ -135,7 +135,7 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
      * @param string $data
      * @return $this
      */
-    public function setMetadata($data)
+    public function setVideoMetadata($data)
     {
         return $this->setData(self::METADATA, $data);
     }

@@ -26,7 +26,7 @@ interface VideoContentInterface extends ExtensibleDataInterface
      *
      * @return string
      */
-    public function getType();
+    public function getMediaType();
 
     /**
      * Set MIME type
@@ -34,14 +34,14 @@ interface VideoContentInterface extends ExtensibleDataInterface
      * @param string $mimeType
      * @return $this
      */
-    public function setType($mimeType);
+    public function setMediaType($mimeType);
 
     /**
      * Get provider YouTube|Vimeo
      *
      * @return string
      */
-    public function getProvider();
+    public function getVideoProvider();
 
     /**
      * Set provider
@@ -49,14 +49,14 @@ interface VideoContentInterface extends ExtensibleDataInterface
      * @param string $data
      * @return $this
      */
-    public function setProvider($data);
+    public function setVideoProvider($data);
 
     /**
      * Get video URL
      *
      * @return string
      */
-    public function getUrl();
+    public function getVideoUrl();
 
     /**
      * Set video URL
@@ -64,14 +64,14 @@ interface VideoContentInterface extends ExtensibleDataInterface
      * @param string $data
      * @return $this
      */
-    public function setUrl($data);
+    public function setVideoUrl($data);
 
     /**
      * Get Title
      *
      * @return string
      */
-    public function getTitle();
+    public function getVideoTitle();
 
     /**
      * Set Title
@@ -79,14 +79,14 @@ interface VideoContentInterface extends ExtensibleDataInterface
      * @param string $data
      * @return $this
      */
-    public function setTitle($data);
+    public function setVideoTitle($data);
 
     /**
      * Get video Description
      *
      * @return string
      */
-    public function getDescription();
+    public function getVideoDescription();
 
     /**
      * Set video Description
@@ -94,14 +94,14 @@ interface VideoContentInterface extends ExtensibleDataInterface
      * @param string $data
      * @return $this
      */
-    public function setDescription($data);
+    public function setVideoDescription($data);
 
     /**
      * Get Metadata
      *
      * @return string
      */
-    public function getMetadata();
+    public function getVideoMetadata();
 
     /**
      * Set Metadata
@@ -109,5 +109,5 @@ interface VideoContentInterface extends ExtensibleDataInterface
      * @param string $data
      * @return $this
      */
-    public function setMetadata($data);
+    public function setVideoMetadata($data);
 }
