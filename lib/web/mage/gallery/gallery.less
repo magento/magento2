@@ -204,17 +204,6 @@
     min-width: 1px;
 }
 
-.fotorama-fullscreen {
-    overflow: hidden !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    height: 100% !important;
-    max-height: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    background: @color-black;
-}
-
 .fotorama--fullscreen {
     position: absolute !important;
     z-index: @z-index-10 !important;
@@ -321,6 +310,7 @@
 
 .fotorama__img {
     opacity: 0;
+    max-width: inherit;
     border: none !important;
     .fotorama__loaded &,
     .fotorama__error & {
@@ -334,10 +324,11 @@
         height: auto;
     }
 }
-.fotorama_vertical_ratio{
+
+.fotorama_vertical_ratio {
     .fotorama__img {
-        height: 100%;
         width: auto;
+        height: 100%;
     }
 }
 
@@ -358,27 +349,13 @@
     &:extend(.fotorama-stretch);
 }
 
-.fotorama__wrap--only-active {
-    .fotorama__stage,
-    .fotorama__nav {
-        max-width: 99999px !important;
-    }
-    .fotorama__stage__frame {
-        visibility: hidden;
-    }
-    .fotorama__stage__frame.fotorama__active {
-        visibility: visible;
-    }
-}
-
 .fotorama__nav {
-    font-size: 0;
-    line-height: 0;
     &:extend(.fotorama-auto-margin);
     &:extend(.fotorama-no-tap);
+    font-size: 0;
+    line-height: 0;
     z-index: 5;
     display: none;
-    text-align: center;
     white-space: nowrap;
 }
 
@@ -403,6 +380,7 @@
 
 .fotorama__nav--dots {
     display: block;
+    text-align: center;
     .fotorama__nav__frame {
         width: 18px;
         height: 30px;
@@ -632,9 +610,6 @@
     bottom: 0;
     width: @fotorama-arw-size;
     margin-top: -(@fotorama-arw-size / 2);
-    &:hover {
-        border: 1px dashed @color-pink1;
-    }
     .fotorama__arr__arr {
         &:extend(.fotorama-sprite);
         .fotorama-abs-center();
@@ -871,6 +846,7 @@
 .fotorama__nav-wrap {
     .fotorama_vertical_ratio {
         .fotorama__img {
+
             width: 100%;
             height: auto;
             position: absolute;
@@ -891,6 +867,7 @@
 
 .fotorama__stage__shaft {
     .fotorama_vertical_ratio {
+        height: 100%;
         .fotorama__img {
             width: auto;
             height: 100%;
@@ -901,21 +878,11 @@
     }
     .fotorama_horisontal_ratio {
         text-align:center;
-        line-height: 400px;
-        width: 100%;
         position: absolute;
-        top: 50%;
-        .translateY(-50%);
-        .fotorama__img {
-            vertical-align: middle;
-        }
-    }
-}
-
-.fotorama__active {
-    .fotorama__img {
         width: 100%;
+        top: 50%;
         height: auto;
+        .translateY(-50%);
     }
 }
 
@@ -960,8 +927,8 @@
     padding: 0;
     position: absolute;
     width: 32%;
-    height: 400px;
-    right: 10%;
+    height: 100%;
+    left: 62%;
     top: 215px;
     bottom: 0;
     overflow: hidden;
@@ -975,6 +942,15 @@
         left: 0;
     }
 }
+
+
+
+.fotorama__stage__frame {
+    .fotorama__img {
+        width: 100%;
+    }
+}
+
 
 .opaque {
     opacity: .5;

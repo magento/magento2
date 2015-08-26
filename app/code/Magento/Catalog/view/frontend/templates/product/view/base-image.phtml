@@ -10,34 +10,31 @@
  * @var $block \Magento\Catalog\Block\Product\View\Gallery
  */
 ?>
-
 <div class="gallery-placeholder"></div>
-
 <script type="text/x-magento-init">
     {
         ".gallery-placeholder": {
             "mage/gallery/gallery": {
                 "mixins":["magnifier/magnify"],
                 "magnifierOpts": {
-                    "enabled": true,
-                    "thumb": ".fotorama__img",
-                    "zoom": 1,
-                    "largeWrapper": "#preview",
-                    "eventType": "click",
-                    "zoomable": false,
-                    "width": "<?php echo $block->getVar("magnifier_width"); ?>",
-                    "height": "<?php echo $block->getVar("magnifier_height"); ?>"
+                    "enabled": <?php echo $block->getVar("magnifier:enabled"); ?>,
+                    "eventType": "<?php echo $block->getVar("magnifier:action"); ?>",
+                    "width": "<?php echo $block->getVar("magnifier:width"); ?>",
+                    "height": "<?php echo $block->getVar("magnifier:height"); ?>",
+                    "top": "<?php echo $block->getVar("magnifier:top"); ?>",
+                    "left": "<?php echo $block->getVar("magnifier:left"); ?>"
                 },
                 "data": <?php echo $block->getGalleryImagesJson(); ?>,
                 "options": {
-                    "nav": "<?php echo $block->getVar("gallery_nav"); ?>",
-                    "loop": <?php echo $block->getVar("gallery_loop"); ?>,
-                    "keyboard": true,
-                    "allowfullscreen": false,
-                    "width": "100%",
-                    "height": 400,
-                    "showCaption": true,
-                    "targetblank": true
+                    "nav": "<?php echo $block->getVar("gallery:navigation"); ?>",
+                    "loop": <?php echo $block->getVar("gallery:loop"); ?>,
+                    "keyboard": <?php echo $block->getVar("gallery:keyboard"); ?>,
+                    "arrows": <?php echo $block->getVar("gallery:arrows"); ?>,
+                    "showCaption": <?php echo $block->getVar("gallery:show_caption"); ?>,
+                    "width": <?php echo $block->getImageAttribute('product_page_image_medium', 'width'); ?>,
+                    "thumbwidth": <?php echo $block->getImageAttribute('product_page_image_small', 'width'); ?>,
+                    "thumbheight": <?php echo $block->getImageAttribute('product_page_image_small', 'height')  ?: $block->getImageAttribute('product_page_image_small', 'width'); ?>,
+                    "ratio": 1
                 },
                 "breakpoints": {
                     "mobile": {
@@ -45,7 +42,9 @@
                             "max-width": "767px"
                         },
                         "options": {
-                            "nav": false,
+                            "options": {
+                                "nav": false
+                            },
                             "magnifierOpts": {
                                 "enabled": false
                             }
@@ -57,7 +56,9 @@
                             "max-width": "1023px"
                         },
                         "options": {
-                            "nav": "dots",
+                            "options": {
+                                "nav": "dots"
+                            },
                             "magnifierOpts": {
                                 "enabled": true
                             }
@@ -68,8 +69,10 @@
                             "min-width": "1024px"
                         },
                         "options": {
-                            "nav": "thumbs",
-                            "magnifierOpts": {
+                            "options": {
+                                "nav": "thumbs"
+                            },
+                             "magnifierOpts": {
                                 "enabled": true
                             }
                         }
