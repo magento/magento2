@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Model\Product\Attribute\Backend\Media;
 
 use Magento\Catalog\Model\Product;
+use \Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 
 /**
  * Class aggregate all Media Gallery Entry Converters
@@ -36,44 +37,74 @@ class MediaGalleryEntryProcessorPool
 
     /**
      * @param Product $product
-     * @param $attributeCode
+     * @param AbstractAttribute $attribute
      * @return void
      */
-    public function processAfterLoad(Product $product, $attributeCode)
+    public function processBeforeLoad(Product $product, AbstractAttribute $attribute)
     {
-        $this->processAction('afterLoad', $product, $attributeCode);
+        $this->processAction('beforeLoad', $product, $attribute);
     }
 
     /**
      * @param Product $product
-     * @param $attributeCode
+     * @param AbstractAttribute $attribute
      * @return void
      */
-    public function processBeforeSave(Product $product, $attributeCode)
+    public function processAfterLoad(Product $product, AbstractAttribute $attribute)
     {
-        $this->processAction('beforeSave', $product, $attributeCode);
+        $this->processAction('afterLoad', $product, $attribute);
     }
 
     /**
      * @param Product $product
-     * @param $attributeCode
+     * @param AbstractAttribute $attribute
      * @return void
      */
-    public function processAfterSave(Product $product, $attributeCode)
+    public function processBeforeSave(Product $product, AbstractAttribute $attribute)
     {
-        $this->processAction('afterSave', $product, $attributeCode);
+        $this->processAction('beforeSave', $product, $attribute);
     }
 
     /**
-     * @param string $actionName
      * @param Product $product
-     * @param $attributeCode
+     * @param AbstractAttribute $attribute
      * @return void
      */
-    protected function processAction($actionName, Product $product, $attributeCode)
+    public function processAfterSave(Product $product, AbstractAttribute $attribute)
+    {
+        $this->processAction('afterSave', $product, $attribute);
+    }
+
+    /**
+     * @param Product $product
+     * @param AbstractAttribute $attribute
+     * @return void
+     */
+    public function processBeforeDelete(Product $product, AbstractAttribute $attribute)
+    {
+        $this->processAction('beforeDelete', $product, $attribute);
+    }
+
+    /**
+     * @param Product $product
+     * @param AbstractAttribute $attribute
+     * @return void
+     */
+    public function processAfterDelete(Product $product, AbstractAttribute $attribute)
+    {
+        $this->processAction('afterDelete', $product, $attribute);
+    }
+
+    /**
+     * @param $actionName
+     * @param Product $product
+     * @param AbstractAttribute $attribute
+     * @return void
+     */
+    protected function processAction($actionName, Product $product, AbstractAttribute $attribute)
     {
         foreach ($this->mediaGalleryEntryProcessorsCollection as $processor) {
-            $processor->$actionName($product, $attributeCode);
+            $processor->$actionName($product, $attribute);
         }
     }
 }
