@@ -50,16 +50,16 @@ class InlineEdit extends \Magento\Backend\App\Action
         $messages = [];
 
         if ($this->getRequest()->getParam('isAjax')) {
-            $postData = $this->getRequest()->getParam('data', []);
-            if (!count($postData)) {
+            $postItems = $this->getRequest()->getParam('items', []);
+            if (!count($postItems)) {
                 $messages[] = __('Please correct the data sent.');
                 $error = true;
             } else {
-                foreach (array_keys($postData) as $pageId) {
+                foreach (array_keys($postItems) as $pageId) {
                     /** @var \Magento\Cms\Model\Page $page */
                     $page = $this->pageRepository->getById($pageId);
                     try {
-                        $pageData = $this->dataProcessor->filter($postData[$pageId]);
+                        $pageData = $this->dataProcessor->filter($postItems[$pageId]);
                         if (!$this->dataProcessor->validate($pageData)
                             || !$this->dataProcessor->validateRequireEntry($pageData)
                         ) {

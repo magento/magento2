@@ -132,7 +132,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
         $this->request->expects($this->at(1))
             ->method('getParam')
-            ->with('data', [])
+            ->with('items', [])
             ->willReturn($postData);
         $this->pageRepository->expects($this->once())
             ->method('getById')
@@ -249,7 +249,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
         $this->request->expects($this->at(1))
             ->method('getParam')
-            ->with('data', [])
+            ->with('items', [])
             ->willReturn([]);
         $this->jsonFactory->expects($this->once())
             ->method('create')
