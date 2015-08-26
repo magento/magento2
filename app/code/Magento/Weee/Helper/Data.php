@@ -757,7 +757,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                     $product->getStore()->getWebsiteId()
                 );
                 foreach ($weeAttributes as $weeAttribute) {
-                    $insertedWeeCodesArray[$weeAttribute->getCode()]=$weeAttribute;
+                    $insertedWeeCodesArray[$selectionItem->getId()][$weeAttribute->getCode()]=$weeAttribute;
                 }
             }
             return $insertedWeeCodesArray;
