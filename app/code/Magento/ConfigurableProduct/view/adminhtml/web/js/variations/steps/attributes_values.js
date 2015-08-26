@@ -88,15 +88,19 @@ define([
             return index < 3;
         },
         saveAttribute: function () {
+            var errorMessage = $.mage.__('Select options for all attributes or remove unused attributes.');
             this.attributes.each(function(attribute) {
                 attribute.chosen = [];
                 if (!attribute.chosenOptions.getLength()) {
-                    throw new Error($.mage.__('Select options for all attributes or remove unused attributes.'));
+                    throw new Error(errorMessage);
                 }
                 attribute.chosenOptions.each(function(id) {
                     attribute.chosen.push(attribute.options.findWhere({id:id}));
                 });
             });
+            if (!this.attributes().length) {
+                throw new Error(errorMessage);
+            }
         },
         selectAllAttributes: function (attribute) {
             this.chosenOptions(_.pluck(attribute.options(), 'id'));
