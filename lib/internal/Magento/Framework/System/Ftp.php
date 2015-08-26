@@ -5,6 +5,7 @@
  */
 
 namespace Magento\Framework\System;
+
 use Magento\Framework\Filesystem\DriverInterface;
 
 /**
