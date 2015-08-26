@@ -1973,8 +1973,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             implode(",\n", $sqlFragment),
             implode(" ", $tableOptions)
         );
+        $result = $this->query($sql);
+        $this->resetDdlCache($table->getName(), $table->getSchema());
 
-        return $this->query($sql);
+        return $result;
     }
 
     /**
@@ -2379,7 +2381,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $table = $this->quoteIdentifier($this->_getTableName($tableName, $schemaName));
         $query = 'DROP TABLE IF EXISTS ' . $table;
         $this->query($query);
-
+        $this->resetDdlCache($tableName, $schemaName);
         return true;
     }
 
