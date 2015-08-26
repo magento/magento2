@@ -58,14 +58,6 @@ define(
                 };
             },
 
-            validate: function () {
-                if (!this.paymentMethodNonce()) {
-                    alert($t('Please click on PayPal button to authorize the payment.'));
-                    return false;
-                }
-                return true;
-            },
-
             disposeSubscriptions: function () {
                 if (this.totalSubscription) {
                     this.totalSubscription.dispose();
@@ -113,6 +105,9 @@ define(
                 } else {
                     messageList.addErrorMessage({'message': 'Can not initialize PayPal (Braintree)'});
                 }
+            },
+            isValid: function () {
+                return this.paymentMethodNonce() ? true : false;
             }
         });
     }

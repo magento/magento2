@@ -6,6 +6,8 @@
 
 namespace Magento\Checkout\Model;
 
+use Magento\Quote\Api\CartRepositoryInterface;
+
 class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPaymentInformationManagementInterface
 {
 
@@ -35,24 +37,32 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
     protected $quoteIdMaskFactory;
 
     /**
+     * @var CartRepositoryInterface
+     */
+    protected $cartRepository;
+
+    /**
      * @param \Magento\Quote\Api\GuestBillingAddressManagementInterface $billingAddressManagement
      * @param \Magento\Quote\Api\GuestPaymentMethodManagementInterface $paymentMethodManagement
      * @param \Magento\Quote\Api\GuestCartManagementInterface $cartManagement
      * @param PaymentInformationManagement $paymentInformationManagement
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
+     * @param CartRepositoryInterface $cartRepository
      */
     public function __construct(
         \Magento\Quote\Api\GuestBillingAddressManagementInterface $billingAddressManagement,
         \Magento\Quote\Api\GuestPaymentMethodManagementInterface $paymentMethodManagement,
         \Magento\Quote\Api\GuestCartManagementInterface $cartManagement,
         \Magento\Checkout\Model\PaymentInformationManagement $paymentInformationManagement,
-        \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
+        \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory,
+        CartRepositoryInterface $cartRepository
     ) {
         $this->billingAddressManagement = $billingAddressManagement;
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->cartManagement = $cartManagement;
         $this->paymentInformationManagement = $paymentInformationManagement;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
+        $this->cartRepository = $cartRepository;
     }
 
     /**
@@ -62,7 +72,7 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         $cartId,
         $email,
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
-        \Magento\Quote\Api\Data\AddressInterface $billingAddress
+        \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
         $this->savePaymentInformation($cartId, $email, $paymentMethod, $billingAddress);
         return $this->cartManagement->placeOrder($cartId);
@@ -75,10 +85,16 @@ class GuestPaymentInformationManagement implements \Magento\Checkout\Api\GuestPa
         $cartId,
         $email,
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
-        \Magento\Quote\Api\Data\AddressInterface $billingAddress
+        \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     ) {
-        $billingAddress->setEmail($email);
-        $this->billingAddressManagement->assign($cartId, $billingAddress);
+        if ($billingAddress) {
+            $billingAddress->setEmail($email);
+            $this->billingAddressManagement->assign($cartId, $billingAddress);
+        } else {
+            $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
+            $this->cartRepository->getActive($quoteIdMask->getQuoteId())->getBillingAddress()->setEmail($email);
+        }
+
         $this->paymentMethodManagement->set($cartId, $paymentMethod);
         return true;
     }
