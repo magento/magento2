@@ -30,8 +30,8 @@ class IndexerConfigFilesTest extends \PHPUnit_Framework_TestCase
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\Filesystem'
         );
-        $this->schemeFile = $filesystem->getDirectoryRead(DirectoryList::APP)
-            ->getAbsolutePath('code/Magento/Indexer/etc/indexer.xsd');
+        $this->schemeFile = $filesystem->getDirectoryRead(DirectoryList::ROOT)
+            ->getAbsolutePath('lib/internal/Magento/Framework/Indexer/etc/indexer.xsd');
     }
 
     /**

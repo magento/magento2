@@ -30,25 +30,11 @@ class Shipping extends Form
     protected $openForm = '.title';
 
     /**
-     * Get quote selector.
-     *
-     * @var string
-     */
-    protected $getQuote = '.action.quote';
-
-    /**
-     * Update total selector.
-     *
-     * @var string
-     */
-    protected $updateTotalSelector = '.action.update';
-
-    /**
      * Selector to access the shipping carrier method.
      *
      * @var string
      */
-    protected $shippingMethod = '//span[text()="%s"]/following::*//*[contains(text(), "%s")]';
+    protected $shippingMethod = '//span[text()="%s"]/following::label[contains(., "%s")]/../input';
 
     /**
      * From with shipping available shipping methods.
@@ -65,6 +51,13 @@ class Shipping extends Form
     protected $estimationFields = ['country_id', 'region_id', 'region', 'postcode'];
 
     /**
+     * Block wait element.
+     *
+     * @var string
+     */
+    protected $blockWaitElement = '._block-content-loading';
+
+    /**
      * Open estimate shipping and tax form.
      *
      * @return void
@@ -74,16 +67,6 @@ class Shipping extends Form
         if (!$this->_rootElement->find($this->formWrapper)->isVisible()) {
             $this->_rootElement->find($this->openForm)->click();
         }
-    }
-
-    /**
-     * Click Get quote button.
-     *
-     * @return void
-     */
-    public function clickGetQuote()
-    {
-        $this->_rootElement->find($this->getQuote)->click();
     }
 
     /**
@@ -99,7 +82,6 @@ class Shipping extends Form
             $this->openEstimateShippingAndTax();
         }
         $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->click();
-        $this->_rootElement->find($this->updateTotalSelector, Locator::SELECTOR_CSS)->click();
     }
 
     /**
@@ -114,7 +96,7 @@ class Shipping extends Form
         $data = $address->getData();
         $mapping = $this->dataMapping(array_intersect_key($data, array_flip($this->estimationFields)));
         $this->_fill($mapping, $this->_rootElement);
-        $this->clickGetQuote();
+        $this->waitForUpdatedShippingMethods();
     }
 
     /**
@@ -135,5 +117,17 @@ class Shipping extends Form
         $selector = sprintf($this->shippingMethod, $carrier, $method);
 
         return $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->isVisible();
+    }
+
+    /**
+     * Wait for shipping methods block to update contents asynchronously.
+     *
+     * @return void
+     */
+    public function waitForUpdatedShippingMethods()
+    {
+        // Code under test uses JavaScript delay at this point as well.
+        sleep(1);
+        $this->waitForElementNotVisible($this->blockWaitElement);
     }
 }

@@ -3,9 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Checkout\Helper;
 
 /**
@@ -92,7 +89,8 @@ class Cart extends \Magento\Framework\Url\Helper\Data
             $routeParams['_scope_to_url'] = true;
         }
 
-        if ($this->_getRequest()->getRouteName() == 'checkout' && $this->_getRequest()->getControllerName() == 'cart'
+        if ($this->_getRequest()->getRouteName() == 'checkout'
+            && $this->_getRequest()->getControllerName() == 'cart'
         ) {
             $routeParams['in_cart'] = 1;
         }
@@ -202,6 +200,10 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      */
     public function getShouldRedirectToCart($store = null)
     {
-        return $this->scopeConfig->isSetFlag(self::XML_PATH_REDIRECT_TO_CART, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $store);
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_REDIRECT_TO_CART,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
     }
 }

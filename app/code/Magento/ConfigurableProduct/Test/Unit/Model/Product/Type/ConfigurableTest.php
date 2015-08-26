@@ -54,31 +54,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     protected $_productCollectionFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Eav\Model\Entity\Attribute\SetFactory
-     */
-    protected $_attributeSetFactory;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Eav\Model\EntityFactory
-     */
-    protected $_entityFactoryMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ProductFactory
-     */
-    protected $_productFactoryMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Json\Helper\Data
-     */
-    protected $jsonHelperMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogInventory\Api\StockConfigurationInterface
-     */
-    protected $_stockConfiguration;
-
-    /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $productRepository;
@@ -100,13 +75,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
-        $this->jsonHelperMock = $this->getMock(
-            'Magento\Framework\Json\Helper\Data',
-            ['jsonDecode'],
-            [],
-            '',
-            false
-        );
         $fileStorageDbMock = $this->getMock('Magento\MediaStorage\Helper\File\Storage\Database', [], [], '', false);
         $filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
             ->disableOriginalConstructor()
@@ -116,30 +84,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMockForAbstractClass();
-        $this->_productFactoryMock = $this->getMock(
-            'Magento\Catalog\Model\ProductFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
         $this->_typeConfigurableFactory = $this->getMock(
             'Magento\ConfigurableProduct\Model\Resource\Product\Type\ConfigurableFactory',
             ['create', 'saveProducts'],
-            [],
-            '',
-            false
-        );
-        $this->_entityFactoryMock = $this->getMock(
-            'Magento\Eav\Model\EntityFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $attributeFactoryMock = $this->getMock(
-            'Magento\Catalog\Model\Resource\Eav\AttributeFactory',
-            [],
             [],
             '',
             false
@@ -165,20 +112,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_attributeSetFactory = $this->getMock(
-            'Magento\Eav\Model\Entity\Attribute\SetFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $this->_stockConfiguration = $this->getMock(
-            'Magento\CatalogInventory\Api\StockConfigurationInterface',
-            [],
-            [],
-            '',
-            false
-        );
         $this->productRepository = $this->getMock('Magento\Catalog\Api\ProductRepositoryInterface');
         $this->extensionAttributesJoinProcessorMock = $this->getMock(
             'Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface',
@@ -191,21 +124,15 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->_model = $this->_objectHelper->getObject(
             'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
             [
-                'productFactory' => $this->_productFactoryMock,
                 'typeConfigurableFactory' => $this->_typeConfigurableFactory,
-                'entityFactory' => $this->_entityFactoryMock,
-                'attributeSetFactory' => $this->_attributeSetFactory,
-                'eavAttributeFactory' => $attributeFactoryMock,
                 'configurableAttributeFactory' => $this->_configurableAttributeFactoryMock,
                 'productCollectionFactory' => $this->_productCollectionFactory,
                 'attributeCollectionFactory' => $this->_attributeCollectionFactory,
                 'eventManager' => $eventManager,
-                'jsonHelper' => $this->jsonHelperMock,
                 'fileStorageDb' => $fileStorageDbMock,
                 'filesystem' => $filesystem,
                 'coreRegistry' => $coreRegistry,
                 'logger' => $logger,
-                'stockConfiguration' => $this->_stockConfiguration,
                 'productRepository' => $this->productRepository,
                 'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock,
             ]
@@ -803,159 +730,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $productMock->expects($this->once())->method('setImage')->with('image_data')->willReturnSelf();
 
         $this->_model->setImageFromChildProduct($productMock);
-    }
-
-    /**
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    public function testGenerateSimpleProducts()
-    {
-        $productsData = [
-            6 =>
-                [
-                    'image' => 'image.jpg',
-                    'name' => 'config-red',
-                    'configurable_attribute' => '{"new_attr":"6"}',
-                    'sku' => 'config-red',
-                    'quantity_and_stock_status' =>
-                        [
-                            'qty' => '',
-                        ],
-                    'weight' => '333',
-                ]
-        ];
-        $stockData = [
-            'manage_stock' => '0',
-            'use_config_enable_qty_increments' => '1',
-            'use_config_qty_increments' => '1',
-            'use_config_manage_stock' => 0,
-            'is_decimal_divided' => 0
-        ];
-
-        $parentProductMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
-            ->setMethods(
-                [
-                    '__wakeup',
-                    'hasData',
-                    'getData',
-                    'getNewVariationsAttributeSetId',
-                    'getStockData',
-                    'getQuantityAndStockStatus',
-                    'getWebsiteIds'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $newSimpleProductMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
-            ->setMethods(
-                [
-                    '__wakeup',
-                    'save',
-                    'getId',
-                    'setStoreId',
-                    'setTypeId',
-                    'setAttributeSetId',
-                    'getTypeInstance',
-                    'getStoreId',
-                    'addData',
-                    'setWebsiteIds',
-                    'setStatus',
-                    'setVisibility'
-                ]
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $attributeMock = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute')
-            ->setMethods(['isInSet', 'setAttributeSetId', 'setAttributeGroupId', 'save'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $attributeSetMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\Set')
-            ->setMethods(['load', 'addSetInfo', 'getDefaultGroupId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $eavEntityMock = $this->getMockBuilder('\Magento\Eav\Model\Entity')
-            ->setMethods(['setType', 'getTypeId'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $productTypeMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Type')
-            ->setMethods(['getEditableAttributes'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $editableAttributeMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute')
-            ->setMethods(['getIsUnique', 'getAttributeCode', 'getFrontend', 'getIsVisible'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $frontendAttributeMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\Frontend')
-            ->setMethods(['getInputType'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $parentProductMock->expects($this->once())
-            ->method('hasData')
-            ->with('_cache_instance_used_product_attributes')
-            ->willReturn(true);
-        $parentProductMock->expects($this->once())
-            ->method('getData')
-            ->with('_cache_instance_used_product_attributes')
-            ->willReturn([$attributeMock]);
-        $parentProductMock->expects($this->any())
-            ->method('getNewVariationsAttributeSetId')
-            ->willReturn('new_attr_set_id');
-        $this->_attributeSetFactory->expects($this->once())->method('create')->willReturn($attributeSetMock);
-        $attributeSetMock->expects($this->once())->method('load')->with('new_attr_set_id')->willReturnSelf();
-        $this->_entityFactoryMock->expects($this->once())->method('create')->willReturn($eavEntityMock);
-        $eavEntityMock->expects($this->once())->method('setType')->with('catalog_product')->willReturnSelf();
-        $eavEntityMock->expects($this->once())->method('getTypeId')->willReturn('type_id');
-        $attributeSetMock->expects($this->once())->method('addSetInfo')->with('type_id', [$attributeMock]);
-        $attributeMock->expects($this->once())->method('isInSet')->with('new_attr_set_id')->willReturn(false);
-        $attributeMock->expects($this->once())->method('setAttributeSetId')->with('new_attr_set_id')->willReturnSelf();
-        $attributeSetMock->expects($this->once())
-            ->method('getDefaultGroupId')
-            ->with('new_attr_set_id')
-            ->willReturn('default_group_id');
-        $attributeMock->expects($this->once())
-            ->method('setAttributeGroupId')
-            ->with('default_group_id')
-            ->willReturnSelf();
-        $attributeMock->expects($this->once())->method('save')->willReturnSelf();
-        $this->_productFactoryMock->expects($this->once())->method('create')->willReturn($newSimpleProductMock);
-        $this->jsonHelperMock->expects($this->once())
-            ->method('jsonDecode')
-            ->with('{"new_attr":"6"}')
-            ->willReturn(['new_attr' => 6]);
-        $newSimpleProductMock->expects($this->once())->method('setStoreId')->with(0)->willReturnSelf();
-        $newSimpleProductMock->expects($this->once())->method('setTypeId')->with('simple')->willReturnSelf();
-        $newSimpleProductMock->expects($this->once())
-            ->method('setAttributeSetId')
-            ->with('new_attr_set_id')
-            ->willReturnSelf();
-        $newSimpleProductMock->expects($this->once())->method('getTypeInstance')->willReturn($productTypeMock);
-        $productTypeMock->expects($this->once())
-            ->method('getEditableAttributes')
-            ->with($newSimpleProductMock)
-            ->willReturn([$editableAttributeMock]);
-        $editableAttributeMock->expects($this->once())->method('getIsUnique')->willReturn(false);
-        $editableAttributeMock->expects($this->once())->method('getAttributeCode')->willReturn('some_code');
-        $editableAttributeMock->expects($this->any())->method('getFrontend')->willReturn($frontendAttributeMock);
-        $frontendAttributeMock->expects($this->any())->method('getInputType')->willReturn('input_type');
-        $editableAttributeMock->expects($this->any())->method('getIsVisible')->willReturn(false);
-        $parentProductMock->expects($this->once())->method('getStockData')->willReturn($stockData);
-        $parentProductMock->expects($this->once())
-            ->method('getQuantityAndStockStatus')
-            ->willReturn(['is_in_stock' => 1]);
-        $newSimpleProductMock->expects($this->once())->method('getStoreId')->willReturn('store_id');
-        $this->_stockConfiguration->expects($this->once())
-            ->method('getManageStock')
-            ->with('store_id')
-            ->willReturn(1);
-        $newSimpleProductMock->expects($this->once())->method('addData')->willReturnSelf();
-        $parentProductMock->expects($this->once())->method('getWebsiteIds')->willReturn('website_id');
-        $newSimpleProductMock->expects($this->once())->method('setWebsiteIds')->with('website_id')->willReturnSelf();
-        $newSimpleProductMock->expects($this->once())->method('setVisibility')->with(1)->willReturnSelf();
-        $newSimpleProductMock->expects($this->once())->method('save')->willReturnSelf();
-        $newSimpleProductMock->expects($this->once())->method('getId')->willReturn('product_id');
-
-        $this->assertEquals(['product_id'], $this->_model->generateSimpleProducts($parentProductMock, $productsData));
     }
 }
 
