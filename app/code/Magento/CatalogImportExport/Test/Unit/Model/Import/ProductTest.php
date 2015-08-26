@@ -1109,7 +1109,59 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
 
     public function testValidateDefaultScopeNotValidAttributesResetSku()
     {
-        $this->markTestSkipped('No chance to assert sku resetting because it is not used later in method.');
+        $sku = 'sku';
+        $rowNum = 0;
+        $attrCode = 'code';
+        $stringUtilsMock = $this->getMockBuilder('\Magento\Framework\Stdlib\StringUtils')->setMethods(null)->getMock();
+        $this->setPropertyValue($this->importProduct, 'string', $stringUtilsMock);
+
+        $scopeMock = $this->getMock(
+            '\Magento\CatalogImportExport\Model\Import\Product',
+            ['getRowScope'],
+            [],
+            '',
+            false
+        );
+
+        $colStore = \Magento\CatalogImportExport\Model\Import\Product::COL_STORE;
+        $scopeRowData = [
+            $sku => 'sku',
+            $colStore => null,
+        ];
+        $scopeResult = \Magento\CatalogImportExport\Model\Import\Product::SCOPE_DEFAULT;
+        $scopeMock->expects($this->any())->method('getRowScope')->with($scopeRowData)->willReturn($scopeResult);
+        $oldSku = [
+            $sku => [
+                'type_id' => 'type_id_val',
+            ],
+        ];
+
+        $this->setPropertyValue($this->importProduct, '_oldSku', $oldSku);
+
+        $expectedSku = false;
+        $newSku = [
+            'attr_set_code' => 'new_attr_set_code',
+            'type_id' => 'new_type_id_val',
+        ];
+        $this->skuProcessor->expects($this->any())->method('getNewSku')->with($expectedSku)->willReturn($newSku);
+        $this->setPropertyValue($this->importProduct, 'skuProcessor', $this->skuProcessor);
+
+        $attrParams = [
+            'type' => 'varchar',
+        ];
+        $attrRowData = [
+            'code' => str_repeat(
+                'a',
+                \Magento\CatalogImportExport\Model\Import\Product::DB_MAX_VARCHAR_LENGTH + 1
+            ),
+        ];
+
+        $this->validator->expects($this->once())->method('isAttributeValid')->willReturn(false);
+        $messages = ['validator message'];
+        $this->validator->expects($this->once())->method('getMessages')->willReturn($messages);
+
+        $result = $this->importProduct->isAttributeValid($attrCode, $attrParams, $attrRowData, $rowNum);
+        $this->assertFalse($result);
     }
 
     public function testValidateRowSetAttributeSetCodeIntoRowData()
