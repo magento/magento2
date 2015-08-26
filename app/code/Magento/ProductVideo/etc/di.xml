@@ -17,7 +17,7 @@
     <type name="Magento\Catalog\Model\Product\Attribute\Backend\Media\MediaGalleryEntryConverterPool">
         <arguments>
             <argument name="mediaGalleryEntryConvertersCollection" xsi:type="array">
-                <item name="video" xsi:type="object">Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoMediaEntryConverter</item>
+                <item name="external-video" xsi:type="object">Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoMediaEntryConverter</item>
             </argument>
         </arguments>
     </type>
