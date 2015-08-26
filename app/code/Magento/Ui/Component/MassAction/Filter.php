@@ -14,6 +14,8 @@ use Magento\Framework\Data\Collection\AbstractDb;
 
 /**
  * Class Filter
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Filter
 {
