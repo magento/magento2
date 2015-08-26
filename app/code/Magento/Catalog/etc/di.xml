@@ -267,7 +267,7 @@
     </type>
     <type name="Magento\Catalog\Model\Indexer\Product\Price\Processor">
         <arguments>
-            <argument name="indexer" xsi:type="object" shared="false">Magento\Indexer\Model\IndexerInterface</argument>
+            <argument name="indexer" xsi:type="object" shared="false">Magento\Framework\Indexer\IndexerInterface</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Indexer\Product\Flat">
