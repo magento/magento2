@@ -287,9 +287,9 @@ class Observer extends \Magento\Framework\Model\AbstractModel
      */
     private function insertWeePrice($holder, $key, $weeeAttributes)
     {
-        if (count($weeeAttributes)>0) {
+        if (count($weeeAttributes[$holder['optionId']])>0) {
             $weeSum = 0;
-            foreach ($weeeAttributes as $weeAttribute) {
+            foreach ($weeeAttributes[$holder['optionId']] as $weeAttribute) {
                 $holder[$key]['weeePrice' . $weeAttribute->getCode()] =
                     ['amount' => (float)$weeAttribute->getAmount()];
                 $weeSum += (float)$weeAttribute->getAmount();
@@ -305,6 +305,7 @@ class Observer extends \Magento\Framework\Model\AbstractModel
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function updateProductOptions(\Magento\Framework\Event\Observer $observer)
     {
@@ -330,14 +331,18 @@ class Observer extends \Magento\Framework\Model\AbstractModel
                         . '<% } %>';
                 }
 
-                foreach ($this->_weeeData->getWeeAttributesForBundle($product) as $weeAttribute) {
-                    $options['optionTemplate'] .= sprintf(
-                        ' <%% if (data.weeePrice' . $weeAttribute->getCode() . ') { %%>'
-                        . '  (' . $weeAttribute->getName()
-                        . ':<%%= data.weeePrice' . $weeAttribute->getCode()
-                        . '.formatted %%>)'
-                        . '<%% } %%>'
-                    );
+                foreach ($this->_weeeData->getWeeAttributesForBundle($product) as $weeAttributeCode) {
+                    foreach ($weeAttributeCode as $weeAttribute) {
+                        if (!preg_match('/'.$weeAttribute->getCode().'/', $options['optionTemplate'])) {
+                            $options['optionTemplate'] .= sprintf(
+                                ' <%% if (data.weeePrice' . $weeAttribute->getCode() . ') { %%>'
+                                . '  (' . $weeAttribute->getName()
+                                . ':<%%= data.weeePrice' . $weeAttribute->getCode()
+                                . '.formatted %%>)'
+                                . '<%% } %%>'
+                            );
+                        }
+                    }
                 }
 
                 if ($this->_weeeData->geDisplayExlDescIncl($product->getStoreId())) {
