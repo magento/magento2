@@ -121,6 +121,11 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
      */
     private $extensionAttributesFactory;
 
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dateTimeFormatter;
+
     protected function setUp()
     {
         $this->contextMock = $this->getMockBuilder('Magento\Framework\Model\Context')
@@ -172,6 +177,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->lockValidatorMock = $this->getMockBuilder('Magento\Catalog\Model\Attribute\LockValidatorInterface')
             ->getMock();
+        $this->dateTimeFormatter = $this->getMock('Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface');
 
         $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\Resource\AbstractResource')
             ->setMethods(['_construct', 'getConnection', 'getIdFieldName', 'saveInSetIncluding'])
@@ -206,6 +212,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             $this->timezoneMock,
             $this->reservedAttributeListMock,
             $this->resolverMock,
+            $this->dateTimeFormatter,
             $this->lockValidatorMock,
             $this->resourceMock
         );

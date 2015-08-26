@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-/* @var \Magento\Indexer\Model\IndexerInterface $model */
-$model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Indexer\Model\IndexerRegistry')
+/* @var \Magento\Framework\Indexer\IndexerInterface $model */
+$model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Indexer\IndexerRegistry')
     ->get('catalogsearch_fulltext');
 $model->setScheduled(true);

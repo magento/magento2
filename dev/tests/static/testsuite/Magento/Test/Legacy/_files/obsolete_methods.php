@@ -2382,6 +2382,12 @@ return [
     ['prepareShipment', 'Magento\Sales\Model\Order'],
     ['prepareShipment', 'Magento\Sales\Model\Service\Order'],
     ['prepareInvoice', 'Magento\Sales\Model\Service\Order'],
+    ['getEstimatePostCode', 'Magento\Checkout\Block\Cart\Shipping'],
+    ['getEstimateCity', 'Magento\Checkout\Block\Cart\Shipping'],
+    ['getEstimateRegionId', 'Magento\Checkout\Block\Cart\Shipping'],
+    ['getEstimateRegion', 'Magento\Checkout\Block\Cart\Shipping'],
+    ['formatPrice', 'Magento\Checkout\Block\Cart\Shipping'],
+    ['isMultipleCountriesAllowed', 'Magento\Checkout\Block\Cart\Shipping'],
     ['loadProductOptions', 'Magento\Bundle\Model\Observer', 'Magento\Bundle\Observer\LoadProductOptions::invoke'],
     ['initOptionRenderer', 'Magento\Bundle\Model\Observer', 'Magento\Bundle\Observer\InitOptionRenderer::invoke'],
     ['setAttributeTabBlock', 'Magento\Bundle\Model\Observer', 'Magento\Bundle\Observer\SetAttributeTabBlock::invoke'],
@@ -2433,4 +2439,27 @@ return [
     ['getThumbnailSize', 'Magento\ProductAlert\Block\Email\AbstractEmail'],
     ['getThumbnailUrl', 'Magento\ProductAlert\Block\Email\AbstractEmail'],
     ['getProductThumbnail', 'Magento\Checkout\Block\Cart\Item\Renderer'],
+    ['getColumnsComponent', 'Magento\Ui\Model\Export\ConvertToCsv', 'Magento\Ui\Model\Export\MetadataProvider::getColumnsComponent'],
+    ['getColumns', 'Magento\Ui\Model\Export\ConvertToCsv', 'Magento\Ui\Model\Export\MetadataProvider::getColumns'],
+    ['getHeaders', 'Magento\Ui\Model\Export\ConvertToCsv', 'Magento\Ui\Model\Export\MetadataProvider::getHeaders'],
+    ['getFields', 'Magento\Ui\Model\Export\ConvertToCsv', 'Magento\Ui\Model\Export\MetadataProvider::getFields'],
+    ['getRowData', 'Magento\Ui\Model\Export\ConvertToCsv', 'Magento\Ui\Model\Export\MetadataProvider::getRowData'],
+    ['getComplexLabel', 'Magento\Ui\Model\Export\ConvertToCsv', 'Magento\Ui\Model\Export\MetadataProvider::getComplexLabel'],
+    ['getFilterOptions', 'Magento\Ui\Model\Export\ConvertToCsv', 'Magento\Ui\Model\Export\MetadataProvider::getFilterOptions'],
+    ['getOptions', 'Magento\Ui\Model\Export\ConvertToCsv', 'Magento\Ui\Model\Export\MetadataProvider::getOptions'],
+    [
+        'generateSimpleProducts',
+        'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
+        'Magento\ConfigurableProduct\Model\Product\VariationHandler::generateSimpleProducts'
+    ],
+    [
+        '_prepareAttributeSetToBeBaseForNewVariations',
+        'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
+        'Magento\ConfigurableProduct\Model\Product\VariationHandler::prepareAttributeSetToBeBaseForNewVariations'
+    ],
+    [
+        '_fillSimpleProductData',
+        'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
+        'Magento\ConfigurableProduct\Model\Product\VariationHandler::fillSimpleProductData'
+    ],
 ];
