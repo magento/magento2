@@ -51,7 +51,12 @@ class Import implements PreProcessorInterface
             return $this->replace($matchContent, $asset);
         };
         $content = $this->removeComments($chain->getContent());
-        $chain->setContent(preg_replace_callback(self::REPLACE_PATTERN, $replaceCallback, $content));
+
+        $processedContent = preg_replace_callback(self::REPLACE_PATTERN, $replaceCallback, $content);
+
+        if ($processedContent !== $content) {
+            $chain->setContent($processedContent);
+        }
     }
 
     /**
