@@ -52,7 +52,10 @@ class UnlockAdminAccountCommand extends Command
             if (isset($userData[self::USER_ID]) && $this->adminUser->unlock($userData[self::USER_ID])) {
                 $outputMessage = sprintf('The user account "%s" has been unlocked', $adminUserName);
             } else {
-                $outputMessage = sprintf('Couldn\'t unlock the user account "%s"', $adminUserName);
+                $outputMessage = sprintf(
+                    'The user account "%s" was not locked or could not be unlocked',
+                    $adminUserName
+                );
             }
         }
         $output->writeln('<info>' . $outputMessage . '</info>');
