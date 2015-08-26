@@ -120,7 +120,7 @@ class AssertFptApplied extends AbstractConstraint
         // Get prices with fpt on cart page
         $actualPrices = $this->getCartPrice($product, $actualPrices);
 
-        return $actualPrices;
+        return array_filter($actualPrices);
     }
 
     /**
