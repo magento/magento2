@@ -108,13 +108,13 @@ class Mapper
      * Build adapter dependent query
      *
      * @param RequestInterface $request
-     * @throws \Exception
+     * @throws \LogicException
      * @return Select
      */
     public function buildQuery(RequestInterface $request)
     {
-        if (!isset($this->indexProviders[$request->getIndex()])) {
-            throw new \Exception('Index provider not configured');
+        if (!array_key_exists($request->getIndex(), $this->indexProviders)) {
+            throw new \LogicException('Index provider not configured');
         }
 
         $indexBuilder = $this->indexProviders[$request->getIndex()];
