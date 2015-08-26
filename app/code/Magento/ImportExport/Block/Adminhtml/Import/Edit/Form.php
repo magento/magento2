@@ -110,6 +110,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'disabled' => true,
                     'values' => $this->_behaviorFactory->create($behaviorClass)->toOptionArray(),
                     'class' => $behaviorCode,
+                    'onchange' => 'varienImport.handleImportBehaviorSelector();',
+                    'note' => ' ',
                 ]
             );
             $fieldsets[$behaviorCode]->addField(
