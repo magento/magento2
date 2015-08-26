@@ -370,9 +370,10 @@ class AccountManagement implements AccountManagementInterface
             throw new EmailNotConfirmedException(__('This account is not confirmed.'));
         }
 
+        $customerModel = $this->customerFactory->create()->updateData($customer);
         $this->eventManager->dispatch(
             'customer_customer_authenticated',
-            ['model' => $this->getFullCustomerObject($customer), 'password' => $password]
+            ['model' => $customerModel, 'password' => $password]
         );
 
         $this->eventManager->dispatch('customer_data_object_login', ['customer' => $customer]);

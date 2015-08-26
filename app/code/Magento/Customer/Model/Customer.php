@@ -210,7 +210,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * @param CollectionFactory $addressesFactory
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param GroupRepositoryInterface $groupRepository
-     * @param AttributeFactory $attributeFactory
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param CustomerInterfaceFactory $customerDataFactory

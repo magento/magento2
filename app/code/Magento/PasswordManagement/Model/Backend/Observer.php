@@ -206,7 +206,7 @@ class Observer
         }
 
         // upgrade admin password
-        if (!$this->_encryptor->validateHashByVersion($password, $user->getPassword())) {
+        if (!$this->_encryptor->validateHash($password, $user->getPassword())) {
             $this->_userFactory->create()->load(
                 $user->getId()
             )->setNewPassword(

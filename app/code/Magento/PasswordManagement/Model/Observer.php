@@ -38,8 +38,9 @@ class Observer
     public function upgradeCustomerPassword($observer)
     {
         $password = $observer->getEvent()->getPassword();
+        /** @var \Magento\Customer\Model\Customer $model */
         $model = $observer->getEvent()->getModel();
-        if (!$this->_encryptor->validateHashByVersion($password, $model->getPasswordHash())) {
+        if (!$this->_encryptor->validateHash($password, $model->getPasswordHash())) {
             $model->changePassword($password);
         }
     }
