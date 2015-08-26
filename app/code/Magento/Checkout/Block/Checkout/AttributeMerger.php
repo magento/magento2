@@ -251,7 +251,12 @@ class AttributeMerger
                 ],
                 'dataScope' => $lineIndex,
                 'provider' => $providerName,
-                'validation' => $isFirstLine ? ['required-entry' => (bool)$attributeConfig['required']] : [],
+                'validation' => $isFirstLine
+                    ? array_merge(
+                        ['required-entry' => (bool)$attributeConfig['required']],
+                        $attributeConfig['validation']
+                    )
+                    : $attributeConfig['validation'],
                 'additionalClasses' => $isFirstLine ? : 'additional'
             ];
         }
