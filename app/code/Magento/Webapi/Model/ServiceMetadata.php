@@ -248,11 +248,14 @@ class ServiceMetadata
     {
         if (null === $this->routes) {
             $routesConfig = $this->cache->load(self::ROUTES_CONFIG_CACHE_ID);
-            if ($routesConfig && is_string($routesConfig)) {
+            $typesData = $this->cache->load(self::REFLECTED_TYPES_CACHE_ID);
+            if ($routesConfig && is_string($routesConfig) && $typesData && is_string($typesData)) {
                 $this->routes = unserialize($routesConfig);
+                $this->typeProcessor->setTypesData(unserialize($typesData));
             } else {
                 $this->routes = $this->initRoutesMetadata();
                 $this->cache->save(serialize($this->routes), self::ROUTES_CONFIG_CACHE_ID);
+                $this->cache->save(serialize($this->typeProcessor->getTypesData()), self::REFLECTED_TYPES_CACHE_ID);
             }
         }
         return $this->routes;
