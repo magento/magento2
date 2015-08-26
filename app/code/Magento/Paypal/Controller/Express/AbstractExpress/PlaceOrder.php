@@ -63,7 +63,9 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
     public function execute()
     {
         try {
-            if (!$this->agreementsValidator->isValid(array_keys($this->getRequest()->getPost('agreement', [])))) {
+            if ($this->isValidationRequired() &&
+                !$this->agreementsValidator->isValid(array_keys($this->getRequest()->getPost('agreement', [])))
+            ) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Please agree to all the terms and conditions before placing the order.')
                 );
@@ -173,5 +175,16 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
     {
         $this->messageManager->addError($errorMessage);
         $this->_redirect('checkout/cart');
+    }
+
+    /**
+     * Return true if agreements validation required
+     *
+     * @return bool
+     */
+    protected function isValidationRequired()
+    {
+        return is_array($this->getRequest()->getBeforeForwardInfo())
+        && empty($this->getRequest()->getBeforeForwardInfo());
     }
 }
