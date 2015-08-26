@@ -71,6 +71,11 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     protected $_productFactory;
 
     /**
+     * @var Media\MediaGalleryEntryProcessorPool
+     */
+    protected $mediaEntryProcessorPool;
+
+    /**
      * Construct
      *
      * @param \Magento\Catalog\Model\Resource\ProductFactory $productFactory
@@ -88,7 +93,8 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $resourceProductAttribute
+        \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $resourceProductAttribute,
+        \Magento\Catalog\Model\Product\Attribute\Backend\Media\MediaGalleryEntryProcessorPool $mediaEntryProcessorPool
     ) {
         $this->_productFactory = $productFactory;
         $this->_eventManager = $eventManager;
@@ -97,6 +103,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $this->_resourceModel = $resourceProductAttribute;
         $this->_mediaConfig = $mediaConfig;
         $this->_mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->mediaEntryProcessorPool = $mediaEntryProcessorPool;
     }
 
     /**
