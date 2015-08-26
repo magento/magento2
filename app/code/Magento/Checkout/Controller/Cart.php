@@ -7,7 +7,6 @@ namespace Magento\Checkout\Controller;
 
 use Magento\Catalog\Controller\Product\View\ViewInterface;
 use Magento\Checkout\Model\Cart as CustomerCart;
-use Magento\Store\Model\ScopeInterface;
 
 /**
  * Shopping cart controller

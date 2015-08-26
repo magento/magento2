@@ -17,7 +17,7 @@ interface GuestPaymentInformationManagementInterface
      * @param string $cartId
      * @param string $email
      * @param \Magento\Quote\Api\Data\PaymentInterface $paymentMethod
-     * @param \Magento\Quote\Api\Data\AddressInterface $billingAddress
+     * @param \Magento\Quote\Api\Data\AddressInterface|null $billingAddress
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return int Order ID.
      */
@@ -25,7 +25,7 @@ interface GuestPaymentInformationManagementInterface
         $cartId,
         $email,
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
-        \Magento\Quote\Api\Data\AddressInterface $billingAddress
+        \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     );
 
     /**
@@ -34,7 +34,7 @@ interface GuestPaymentInformationManagementInterface
      * @param string $cartId
      * @param string $email
      * @param \Magento\Quote\Api\Data\PaymentInterface $paymentMethod
-     * @param \Magento\Quote\Api\Data\AddressInterface $billingAddress
+     * @param \Magento\Quote\Api\Data\AddressInterface|null $billingAddress
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @return int Order ID.
      */
@@ -42,7 +42,7 @@ interface GuestPaymentInformationManagementInterface
         $cartId,
         $email,
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
-        \Magento\Quote\Api\Data\AddressInterface $billingAddress
+        \Magento\Quote\Api\Data\AddressInterface $billingAddress = null
     );
 
     /**

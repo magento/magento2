@@ -324,6 +324,8 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             $quote->setCustomerGroupId(\Magento\Customer\Api\Data\GroupInterface::NOT_LOGGED_IN_ID);
         }
 
+        $this->eventManager->dispatch('checkout_submit_before', ['quote' => $quote]);
+
         $order = $this->submit($quote);
 
         if (null == $order) {

@@ -26,6 +26,34 @@
             <parameter name="cartId" force="true">%cart_id%</parameter>
         </data>
     </route>
+
+    <!-- Managing totals information -->
+    <route url="/V1/carts/:cartId/totals-information" method="POST">
+        <service class="Magento\Checkout\Api\TotalsInformationManagementInterface" method="calculate"/>
+        <resources>
+            <resource ref="Magento_Cart::manage" />
+        </resources>
+    </route>
+
+    <!-- Managing guest totals information -->
+    <route url="/V1/guest-carts/:cartId/totals-information" method="POST">
+        <service class="Magento\Checkout\Api\GuestTotalsInformationManagementInterface" method="calculate"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+
+    <!-- Managing My totals information -->
+    <route url="/V1/carts/mine/totals-information" method="POST">
+        <service class="Magento\Checkout\Api\TotalsInformationManagementInterface" method="calculate"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+
     <!-- Guest place order with payment information saving -->
     <route url="/V1/guest-carts/:cartId/payment-information" method="POST">
         <service class="Magento\Checkout\Api\GuestPaymentInformationManagementInterface" method="savePaymentInformationAndPlaceOrder"/>
