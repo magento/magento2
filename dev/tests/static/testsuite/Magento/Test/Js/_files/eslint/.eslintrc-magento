@@ -59,6 +59,9 @@
         "operator-assignment": [2, "always"],
         "semi": [2, "always"],
         "strict": 2,
-        "consistent-return": 2
+        "consistent-return": 2,
+        "no-debugger": 2,
+        "no-alert": 2,
+        "no-eval": 2
     }
 }
