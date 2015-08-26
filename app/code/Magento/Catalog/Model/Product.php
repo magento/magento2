@@ -13,6 +13,7 @@ use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Pricing\Object\SaleableInterface;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Framework\Api\Data\ImageContentInterface;
+use Magento\Framework\Api\Data\VideoContentInterface;
 
 /**
  * Catalog product model
@@ -322,6 +323,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     protected $joinProcessor;
 
+    protected $videoEntryFactory;
+    protected $mediaGalleryEntryExtensionFactory;
+
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -355,6 +359,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory
      * @param \Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory
      * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory
+     * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory $mediaGalleryEntryExtensionFactory
+     * @param \Magento\Framework\Api\Data\VideoContentInterfaceFactory $videoEntryFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      * @param array $data
@@ -394,6 +400,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory,
         \Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory,
         \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory,
+        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory $mediaGalleryEntryExtensionFactory,
+        \Magento\Framework\Api\Data\VideoContentInterfaceFactory $videoEntryFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
         array $data = []
@@ -423,6 +431,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->productLinkFactory = $productLinkFactory;
         $this->productLinkExtensionFactory = $productLinkExtensionFactory;
         $this->mediaGalleryEntryFactory = $mediaGalleryEntryFactory;
+        $this->mediaGalleryEntryExtensionFactory        = $mediaGalleryEntryExtensionFactory;
+        $this->videoEntryFactory = $videoEntryFactory;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->joinProcessor = $joinProcessor;
         parent::__construct(
@@ -2533,7 +2543,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param array $mediaGallery
      * @return \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface[]
      */
-    protected function convertToMediaGalleryInterface(array $mediaGallery)
+    protected function convertToMediaGalleryInterface(array $mediaGallery, VideoContentInterface $content = null)
     {
         $productImages = $this->getMediaAttributeValues();
 
@@ -2542,12 +2552,23 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
             if (!isset($image['types'])) {
                 $image['types'] = array_keys($productImages, $image['file']);
             }
+
             $entry = $this->mediaGalleryEntryFactory->create();
+            $videoEntry = $this->videoEntryFactory->create();
+            $this->dataObjectHelper->populateWithArray(
+                $videoEntry,
+                $image,
+                'Magento\Framework\Api\Data\VideoContentInterface'
+            );
+
+            $tmpentry = $this->mediaGalleryEntryExtensionFactory->create();
             $this->dataObjectHelper->populateWithArray(
                 $entry,
                 $image,
                 '\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface'
             );
+            $tmpentry->setVideoContent($videoEntry);
+            $entry->setExtensionAttributes($tmpentry);
             if (isset($image['value_id'])) {
                 $entry->setId($image['value_id']);
             }
@@ -2603,6 +2624,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
             "position" => $entry->getPosition(),
             "disabled" => $entry->isDisabled(),
             "types" => $entry->getTypes(),
+            "provider" => $entry->getProvider(),
             "content" => $this->convertFromMediaGalleryEntryContentInterface($entry->getContent()),
         ];
 
