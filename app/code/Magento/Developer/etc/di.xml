@@ -7,6 +7,9 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\View\Asset\PreProcessor\ChainFactoryInterface" type="Magento\Developer\Model\View\Asset\PreProcessor\DeveloperChainFactory"/>
+    <preference for="Magento\Framework\Css\PreProcessor\ErrorHandlerInterface" type="Magento\Framework\Css\PreProcessor\ErrorHandler" />
+    <preference for="Magento\Framework\Css\PreProcessor\AdapterInterface" type="Magento\Framework\Css\PreProcessor\Adapter\Less\Oyejorge" />
+
     <type name="Magento\Framework\View\TemplateEngineFactory">
         <plugin name="debug_hints" type="Magento\Developer\Model\TemplateEngine\Plugin\DebugHints" sortOrder="10"/>
     </type>
@@ -32,4 +35,116 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="cssMinificationAdapter" type="Magento\Framework\Code\Minifier\Adapter\Css\CSSmin" />
+    <virtualType name="jsMinificationAdapter" type="Magento\Framework\Code\Minifier\Adapter\Js\JShrink" />
+    <virtualType name="cssMinificationProcessor" type="Magento\Framework\View\Asset\PreProcessor\Minify">
+        <arguments>
+            <argument name="adapter" xsi:type="object">cssMinificationAdapter</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="jsMinificationProcessor" type="Magento\Framework\View\Asset\PreProcessor\Minify">
+        <arguments>
+            <argument name="adapter" xsi:type="object">jsMinificationAdapter</argument>
+        </arguments>
+    </virtualType>
+
+
+
+    <virtualType name="viewFileFallbackResolver" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Alternative">
+        <arguments>
+            <argument name="alternativeExtensions" xsi:type="array">
+                <item name="css" xsi:type="array">
+                    <item name="less" xsi:type="string">less</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Asset\PreProcessor\Pool">
+        <arguments>
+            <argument name="preProcessors" xsi:type="array">
+                <item name="less" xsi:type="array">
+                    <item name="css" xsi:type="array">
+                        <item name="less" xsi:type="string">Magento\Framework\Css\PreProcessor\Less</item>
+                        <item name="variable_notation" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\VariableNotation</item>
+                        <item name="module_notation" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\ModuleNotation</item>
+                        <item name="css_min" xsi:type="string">cssMinificationProcessor</item>
+                    </item>
+                    <item name="less" xsi:type="array">
+                        <item name="magento_import" xsi:type="string">Magento\Framework\Css\PreProcessor\Instruction\MagentoImport</item>
+                        <item name="import" xsi:type="string">Magento\Framework\Css\PreProcessor\Instruction\Import</item>
+                    </item>
+                </item>
+                <item name="css" xsi:type="array">
+                    <item name="css" xsi:type="array">
+                        <item name="variable_notation" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\VariableNotation</item>
+                        <item name="module_notation" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\ModuleNotation</item>
+                        <item name="css_min" xsi:type="string">cssMinificationProcessor</item>
+                    </item>
+                </item>
+                <item name="js" xsi:type="array">
+                    <item name="js" xsi:type="array">
+                        <item name="js_min" xsi:type="string">jsMinificationProcessor</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Css\PreProcessor\Less">
+        <arguments>
+            <argument name="adapter" xsi:type="object">Magento\Framework\Css\PreProcessor\Adapter\Less\Oyejorge</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\Css\PreProcessor\Instruction\MagentoImport">
+        <arguments>
+            <argument name="fileSource" xsi:type="object">Magento\Framework\Css\PreProcessor\File\Collector\Aggregated</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Css\PreProcessor\File\Collector\Aggregated">
+        <arguments>
+            <argument name="libraryFiles" xsi:type="object">Magento\Framework\Css\PreProcessor\File\Collector\Library</argument>
+            <argument name="baseFiles" xsi:type="object">cssSourceBaseFilesSorted</argument>
+            <argument name="overriddenBaseFiles" xsi:type="object">cssSourceOverriddenBaseFiles</argument>
+        </arguments>
+    </type>
+
+    <virtualType name="cssSourceBaseFilesSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+        <arguments>
+            <argument name="subject" xsi:type="object">cssSourceBaseFilesFiltered</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="cssSourceBaseFilesFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">cssSourceBaseFiles</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="cssSourceBaseFiles" type="Magento\Framework\View\File\Collector\Base">
+        <arguments>
+            <argument name="subDir" xsi:type="string">web</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="cssSourceOverriddenBaseFiles" type="Magento\Framework\View\File\Collector\Override\Base">
+        <arguments>
+            <argument name="subDir" xsi:type="string">web</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\Framework\View\Asset\SourceFileGeneratorPool">
+        <arguments>
+            <argument name="fileGeneratorTypes" xsi:type="array">
+                <item name="less" xsi:type="object">fileAssemblerFileGenerator</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="fileAssemblerFileGenerator" type="Magento\Framework\Css\PreProcessor\FileGenerator">
+        <arguments>
+            <argument name="relatedGenerator" xsi:type="object">fileAssemblerRelatedFilesGenerator</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="fileAssemblerRelatedFilesGenerator" type="Magento\Developer\Model\Css\PreProcessor\FileGenerator\PublicationDecorator">
+        <arguments>
+            <argument name="publisher" xsi:type="object">developerPublisher</argument>
+        </arguments>
+    </virtualType>
 </config>
