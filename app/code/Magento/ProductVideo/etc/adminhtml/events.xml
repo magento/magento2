@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
+    <event name="controller_action_catalog_product_save_entity_after">
+        <observer name="catalog_wysiwyg" instance="Magento\ProductVideo\Model\Observer" method="saveVideoAttributes" />
+    </event>
+    <event name="catalog_product_gallery_prepare_layout">
+        <observer name="change_template" instance="Magento\ProductVideo\Model\Observer" method="changeTemplate" />
+    </event>
+</config>

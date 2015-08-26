@@ -269,6 +269,8 @@ define([
             events['mouseup ' + this.options.imageSelector] = function (event) {
                 if (!$(event.currentTarget).is('.ui-sortable-helper')) {
                     $(event.currentTarget).addClass('active');
+                    var itemId = $(event.currentTarget).find('input')[0].name.match(/\[([^\]]*)\]/g)[2];
+                    $('#item_id').val(itemId);
                     this._showDialog($(event.currentTarget).data('imageData'));
                 }
             };
@@ -311,6 +313,20 @@ define([
          */
         _showDialog: function (imageData) {
             var $imageContainer = this.findElement(imageData);
+
+            if ($imageContainer.find('input[name*="entity_type"]').val() == 'video') {
+                $('#new-video').modal('openModal');
+                $('#new_video_url').val($imageContainer.find('input[name*="video_url"]').val());
+                $('#new_video_name').val($imageContainer.find('input[name*="video_name"]').val());
+
+                $('#new_video_disabled').prop('checked', $imageContainer.find('input[name*="disabled"]').val());
+                $('#new_video_role').val($imageContainer.find('input[name*="role"]').val());
+
+                $('#new_video_description').val($imageContainer.find('input[name*="video_description"]').val());
+                $('#new_video_description').val($imageContainer.find('input[name*="video_description"]').val());
+                return;
+            }
+
             var dialogElement = $imageContainer.data('dialog');
 
             if ($imageContainer.is('.removed') || (dialogElement && dialogElement.is(':visible'))) {
