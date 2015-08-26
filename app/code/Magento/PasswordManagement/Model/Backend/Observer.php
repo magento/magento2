@@ -7,6 +7,7 @@ namespace Magento\PasswordManagement\Model\Backend;
 
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Exception\State\UserLockedException;
+use Magento\Framework\Encryption\Encryptor;
 
 /**
  * PasswordManagement backend observer model
@@ -155,7 +156,7 @@ class Observer
 
             $updateFirstFailureDate = false;
             $updateLockExpires = false;
-            $lockThresholdInterval = new \DateInterval('PT' . $lockThreshold.'S');
+            $lockThresholdInterval = new \DateInterval('PT' . $lockThreshold . 'S');
             // set first failure date when this is first failure or last first failure expired
             if (1 === $failuresNum || !$firstFailureDate || $now->diff($firstFailureDate) > $lockThresholdInterval) {
                 $updateFirstFailureDate = $now;
@@ -206,14 +207,17 @@ class Observer
         }
 
         // upgrade admin password
-        if (!$this->_encryptor->validateHash($password, $user->getPassword())) {
-            $this->_userFactory->create()->load(
-                $user->getId()
-            )->setNewPassword(
-                $password
-            )->setForceNewPassword(
-                true
-            )->save();
+        $isValidHash = $this->_encryptor->validateHashByVersion(
+            $password,
+            $user->getPassword(),
+            Encryptor::HASH_VERSION_LATEST
+        );
+        if (!$isValidHash) {
+            $this->_userFactory->create()
+                ->load($user->getId())
+                ->setNewPassword($password)
+                ->setForceNewPassword(true)
+                ->save();
         }
     }
 

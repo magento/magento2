@@ -6,6 +6,7 @@
 namespace Magento\PasswordManagement\Model;
 
 use Magento\Framework\Event\Observer as EventObserver;
+use Magento\Framework\Encryption\Encryptor;
 
 /**
  * PasswordManagement backend observer model
@@ -40,7 +41,12 @@ class Observer
         $password = $observer->getEvent()->getPassword();
         /** @var \Magento\Customer\Model\Customer $model */
         $model = $observer->getEvent()->getModel();
-        if (!$this->_encryptor->validateHash($password, $model->getPasswordHash())) {
+        $isValidHash = $this->_encryptor->validateHashByVersion(
+            $password,
+            $model->getPasswordHash(),
+            Encryptor::HASH_VERSION_LATEST
+        );
+        if (!$isValidHash) {
             $model->changePassword($password);
         }
     }

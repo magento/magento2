@@ -171,7 +171,7 @@ class Encryptor implements EncryptorInterface
      * @param int $version
      * @return bool
      */
-    public function validateHashByVersion($password, $hash, $version = self::HASH_VERSION_LATEST)
+    public function validateHashByVersion($password, $hash, $version)
     {
         // look for salt
         $hashArr = explode(':', $hash, 2);
