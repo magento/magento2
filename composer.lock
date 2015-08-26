@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cc7e6d69c03de891e236b57f7714e09f",
+    "hash": "e4150d79f684532d0a9cded9b58ebf6b",
     "packages": [
         {
             "name": "braintree/braintree_php",

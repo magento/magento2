@@ -17,7 +17,7 @@ class UpdateAttributesFlushCacheTest extends \PHPUnit_Framework_TestCase
 
         $productActionMock = $this->getMock('Magento\Catalog\Model\Product\Action', [], [], '', false);
 
-        $cacheContextMock = $this->getMock('Magento\Indexer\Model\CacheContext', [], [], '', false);
+        $cacheContextMock = $this->getMock('Magento\Framework\Indexer\CacheContext', [], [], '', false);
         $cacheContextMock->expects($this->once())
             ->method('registerEntities')
             ->with(Product::CACHE_TAG, $productIds);
