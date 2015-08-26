@@ -13,6 +13,7 @@ use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
 use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
 use Magento\Sales\Model\Order\ShipmentFactory;
 use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\Service\InvoiceService;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -40,23 +41,31 @@ class Save extends \Magento\Backend\App\Action
     protected $registry;
 
     /**
+     * @var InvoiceService
+     */
+    private $invoiceService;
+
+    /**
      * @param Action\Context $context
      * @param Registry $registry
      * @param InvoiceSender $invoiceSender
      * @param ShipmentSender $shipmentSender
      * @param ShipmentFactory $shipmentFactory
+     * @param InvoiceService $invoiceService
      */
     public function __construct(
         Action\Context $context,
         Registry $registry,
         InvoiceSender $invoiceSender,
         ShipmentSender $shipmentSender,
-        ShipmentFactory $shipmentFactory
+        ShipmentFactory $shipmentFactory,
+        InvoiceService $invoiceService
     ) {
         $this->registry = $registry;
         $this->invoiceSender = $invoiceSender;
         $this->shipmentSender = $shipmentSender;
         $this->shipmentFactory = $shipmentFactory;
+        $this->invoiceService = $invoiceService;
         parent::__construct($context);
     }
 
@@ -127,9 +136,7 @@ class Save extends \Magento\Backend\App\Action
                 );
             }
 
-            $invoiceManagement = $this->_objectManager->create('Magento\Sales\Api\InvoiceManagementInterface');
-            /** @var \Magento\Sales\Model\Order\Invoice $invoice */
-            $invoice = $invoiceManagement->prepareInvoice($orderId, $invoiceItems);
+            $invoice = $this->invoiceService->prepareInvoice($order, $invoiceItems);
 
             if (!$invoice) {
                 throw new LocalizedException(__('We can\'t save the invoice right now.'));
