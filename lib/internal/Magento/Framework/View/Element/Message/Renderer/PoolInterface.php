@@ -10,8 +10,8 @@ interface PoolInterface
     /**
      * Returns Renderer for specified identifier
      *
-     * @param string $identifier
+     * @param string $rendererCode
      * @return RendererInterface | null
      */
-    public function get($identifier);
+    public function get($rendererCode);
 }

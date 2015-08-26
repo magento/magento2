@@ -16,13 +16,22 @@ class InterpretationStrategy implements InterpretationStrategyInterface
     private $renderersPool;
 
     /**
+     * @var MessageConfigurationsPool
+     */
+    private $messageConfigurationsPool;
+
+    /**
      * @param RenderersPool $renderersPool
+     * @param MessageConfigurationsPool $messageConfigurationsPool
      */
     public function __construct(
-        RenderersPool $renderersPool
+        RenderersPool $renderersPool,
+        MessageConfigurationsPool $messageConfigurationsPool
     ) {
         $this->renderersPool = $renderersPool;
+        $this->messageConfigurationsPool = $messageConfigurationsPool;
     }
+
     /**
      * Interpret message
      *
@@ -32,11 +41,18 @@ class InterpretationStrategy implements InterpretationStrategyInterface
      */
     public function interpret(MessageInterface $message)
     {
-        $renderer = $this->renderersPool->get($message->getIdentifier());
+        $messageConfiguration = $this->messageConfigurationsPool->getMessageConfiguration(
+            $message->getIdentifier()
+        );
+        if (null === $messageConfiguration) {
+            throw new \LogicException();
+        }
+
+        $renderer = $this->renderersPool->get($messageConfiguration['renderer']);
         if (null === $renderer) {
             throw new \LogicException();
         }
 
-        return $renderer->render($message);
+        return $renderer->render($message, $messageConfiguration['data']);
     }
 }

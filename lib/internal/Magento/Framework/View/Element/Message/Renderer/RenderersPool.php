@@ -13,17 +13,10 @@ class RenderersPool implements PoolInterface
     private $renderers;
 
     /**
-     * @var array
-     */
-    private $renderersConfiguration;
-
-    /**
      * @param array $renderers
-     * @param array $renderersConfiguration
      */
     public function __construct(
-        array $renderers = [],
-        array $renderersConfiguration = []
+        array $renderers = []
     ) {
         array_walk(
             $renderers,
@@ -33,28 +26,18 @@ class RenderersPool implements PoolInterface
         );
 
         $this->renderers = $renderers;
-        $this->renderersConfiguration = $renderersConfiguration;
     }
 
     /**
      * Returns Renderer for specified identifier
      *
-     * @param string $identifier
+     * @param string $rendererCode
      * @return RendererInterface | null
      */
-    public function get($identifier)
+    public function get($rendererCode)
     {
-        if (!isset($this->renderers[$identifier])) {
-            return null;
-        }
-
-        $renderer = $this->renderers[$identifier];
-        $renderer->initialize(
-            !isset($this->renderersConfiguration[$identifier])
-            ? null
-            : $this->renderersConfiguration[$identifier]
-        );
-
-        return $renderer;
+        return !isset($this->renderers[$rendererCode])
+                ? null
+                :$this->renderers[$rendererCode];
     }
 }
