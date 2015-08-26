@@ -22,6 +22,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class MapperTest extends \PHPUnit_Framework_TestCase
 {
     const INDEX_NAME = 'test_index_fulltext';
+    const REQUEST_LIMIT = 120321;
 
     /**
      * @var \Magento\Framework\Search\Adapter\Mysql\IndexBuilderInterface|MockObject
@@ -83,7 +84,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $helper = new ObjectManager($this);
 
         $this->select = $this->getMockBuilder('Magento\Framework\DB\Select')
-            ->setMethods(['group', 'limit', 'where', 'columns', 'from', 'join', 'joinInner'])
+            ->setMethods(['group', 'limit', 'where', 'columns', 'from', 'join', 'joinInner', 'order'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->select->expects($this->any())
@@ -138,10 +139,9 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $index = self::INDEX_NAME;
         $this->request->expects($this->exactly(2))
             ->method('getIndex')
-            ->will($this->returnValue($index));
+            ->will($this->returnValue(self::INDEX_NAME));
 
         $temporaryStorageFactory = $this->getMockBuilder(
             '\Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory'
@@ -161,7 +161,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                 'queryContainerFactory' => $queryContainerFactory,
                 'filterBuilder' => $this->filterBuilder,
                 'matchBuilder' => $this->matchBuilder,
-                'indexProviders' => [$index => $this->indexBuilder],
+                'indexProviders' => [self::INDEX_NAME => $this->indexBuilder],
                 'temporaryStorageFactory' => $temporaryStorageFactory
             ]
         );
@@ -170,6 +170,18 @@ class MapperTest extends \PHPUnit_Framework_TestCase
     public function testBuildMatchQuery()
     {
         $query = $this->createMatchQuery();
+
+        $this->select->expects($this->any())
+            ->method('limit')
+            ->with(self::REQUEST_LIMIT)
+            ->willReturnSelf();
+        $this->select->expects($this->once())
+            ->method('order')
+            ->with('relevance DESC')
+            ->willReturnSelf();
+        $this->request->expects($this->once())
+            ->method('getSize')
+            ->willReturn(self::REQUEST_LIMIT);
 
         $this->queryContainer->expects($this->once())
             ->method('getMatchQueries')
@@ -196,6 +208,18 @@ class MapperTest extends \PHPUnit_Framework_TestCase
     {
         $query = $this->createFilterQuery(Filter::REFERENCE_FILTER, $this->createFilter());
 
+        $this->select->expects($this->any())
+            ->method('limit')
+            ->with(self::REQUEST_LIMIT)
+            ->willReturnSelf();
+        $this->select->expects($this->once())
+            ->method('order')
+            ->with('relevance DESC')
+            ->willReturnSelf();
+        $this->request->expects($this->once())
+            ->method('getSize')
+            ->willReturn(self::REQUEST_LIMIT);
+
         $this->select->expects($this->any())->method('columns')->will($this->returnValue($this->select));
 
         $this->request->expects($this->once())->method('getQuery')->will($this->returnValue($query));
@@ -215,6 +239,18 @@ class MapperTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuildQuery($query, array $derivedQueries = [])
     {
+        $this->select->expects($this->any())
+            ->method('limit')
+            ->with(self::REQUEST_LIMIT)
+            ->willReturnSelf();
+        $this->select->expects($this->once())
+            ->method('order')
+            ->with('relevance DESC')
+            ->willReturnSelf();
+        $this->request->expects($this->once())
+            ->method('getSize')
+            ->willReturn(self::REQUEST_LIMIT);
+
         $this->filterBuilder->expects($this->any())->method('build')->will($this->returnValue('(1)'));
 
         $table = $this->getMockBuilder('\Magento\Framework\DB\Ddl\Table')
@@ -315,13 +351,18 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ->method('getType')
             ->will($this->returnValue('unknownQuery'));
 
+        $this->select->expects($this->never())
+            ->method('limit');
+        $this->select->expects($this->never())
+            ->method('order');
+
         $this->request->expects($this->once())->method('getQuery')->will($this->returnValue($query));
 
         $this->mapper->buildQuery($this->request);
     }
 
     /**
-     * @return MockObject
+     * @return MockObject|\Magento\Framework\Search\Request\Query\Match
      */
     private function createMatchQuery()
     {
@@ -337,7 +378,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $referenceType
      * @param mixed $reference
-     * @return MockObject
+     * @return MockObject|\Magento\Framework\Search\Request\Query\Filter
      */
     private function createFilterQuery($referenceType, $reference)
     {
@@ -356,7 +397,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return MockObject
+     * @return MockObject|\Magento\Framework\Search\Request\Query\BoolExpression
      */
     private function createBoolQuery(array $must, array $should, array $mustNot)
     {
@@ -380,7 +421,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return MockObject
+     * @return MockObject|\Magento\Framework\Search\Request\FilterInterface
      */
     private function createFilter()
     {
@@ -392,6 +433,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
     /**
      * @param $request
      * @param $conditionType
+     * @return MockObject|\Magento\Framework\Search\Adapter\Mysql\Query\MatchContainer
      */
     private function createMatchContainer($request, $conditionType)
     {
