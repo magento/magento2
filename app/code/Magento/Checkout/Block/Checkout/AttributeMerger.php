@@ -43,7 +43,7 @@ class AttributeMerger
         'alpha' => 'validate-alpha',
         'numeric' => 'validate-number',
         'alphanumeric' => 'validate-alphanum',
-        'url' => 'url2',
+        'url' => 'validate-url',
         'email' => 'email2',
     ];
 
