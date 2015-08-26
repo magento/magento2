@@ -13,7 +13,7 @@ use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManager;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DownloadableTest extends \PHPUnit_Framework_TestCase
+class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
     /** @var ObjectManager|\Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable */
     protected $downloadableModelMock;
@@ -75,7 +75,7 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $objectManager = new ObjectManager($this);
+        parent::setUp();
 
         //connection and sql query results
         $this->connectionMock = $this->getMock(
@@ -93,14 +93,7 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
         $adapter->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
         $this->select->expects($this->any())->method('getAdapter')->willReturn($adapter);
         $this->connectionMock->expects($this->any())->method('select')->will($this->returnValue($this->select));
-        $this->connectionMock->expects($this->any())->method('fetchPairs')->will(
-            $this->returnValue(
-                [
-                    '1' => 'default',
-                    '2' => 'another_set'
-                ]
-            )
-        );
+
         $this->connectionMock->expects($this->any())->method('insertOnDuplicate')->willReturnSelf();
         $this->connectionMock->expects($this->any())->method('delete')->willReturnSelf();
         $this->connectionMock->expects($this->any())->method('quoteInto')->willReturn('');
@@ -215,17 +208,6 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->downloadableHelper->expects($this->any())->method('prepareDataForSave')->willReturn([]);
-        $this->downloadableModelMock = $objectManager->getObject(
-            '\Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable',
-            [
-                'attrSetColFac' => $this->attrSetColFacMock,
-                'prodAttrColFac' => $this->prodAttrColFacMock,
-                'resource' => $this->resourceMock,
-                'params' => $this->paramsArray,
-                'uploaderHelper' => $this->uploaderHelper,
-                'downloadableHelper' => $this->downloadableHelper
-            ]
-        );
     }
 
     /**
@@ -243,14 +225,36 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
 
         $this->connectionMock->expects($this->any())->method('fetchAll')->with(
             $this->select
-        )->willReturnOnConsecutiveCalls(
+        )->will($this->onConsecutiveCalls(
+            [
+                [
+                    'attribute_set_name' => '1',
+                    'attribute_id' => '1',
+                ],
+                [
+                    'attribute_set_name' => '2',
+                    'attribute_id' => '2',
+                ],
+            ],
             $fetchResult['sample'],
             $fetchResult['sample'],
             $fetchResult['link'],
             $fetchResult['link']
+        ));
+
+        $downloadableModelMock = $this->objectManagerHelper->getObject(
+            '\Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable',
+            [
+                'attrSetColFac' => $this->attrSetColFacMock,
+                'prodAttrColFac' => $this->prodAttrColFacMock,
+                'resource' => $this->resourceMock,
+                'params' => $this->paramsArray,
+                'uploaderHelper' => $this->uploaderHelper,
+                'downloadableHelper' => $this->downloadableHelper
+            ]
         );
 
-        $this->downloadableModelMock->saveData();
+        $downloadableModelMock->saveData();
     }
 
     /**
@@ -532,6 +536,31 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsRowValid(array $rowData, $rowNum, $isNewProduct = true)
     {
+        $this->connectionMock->expects($this->any())->method('fetchAll')->with(
+            $this->select
+        )->willReturnOnConsecutiveCalls(
+            [
+                [
+                    'attribute_set_name' => '1',
+                    'attribute_id' => '1',
+                ],
+                [
+                    'attribute_set_name' => '2',
+                    'attribute_id' => '2',
+                ],
+            ]
+        );
+        $this->downloadableModelMock = $this->objectManagerHelper->getObject(
+            '\Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable',
+            [
+                'attrSetColFac' => $this->attrSetColFacMock,
+                'prodAttrColFac' => $this->prodAttrColFacMock,
+                'resource' => $this->resourceMock,
+                'params' => $this->paramsArray,
+                'uploaderHelper' => $this->uploaderHelper,
+                'downloadableHelper' => $this->downloadableHelper
+            ]
+        );
         $this->downloadableModelMock->isRowValid($rowData, $rowNum, $isNewProduct);
     }
 
@@ -656,6 +685,31 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetUploaderDirFalse($newSku, $bunch, $allowImport)
     {
+        $this->connectionMock->expects($this->any())->method('fetchAll')->with(
+            $this->select
+        )->willReturnOnConsecutiveCalls(
+            [
+                [
+                    'attribute_set_name' => '1',
+                    'attribute_id' => '1',
+                ],
+                [
+                    'attribute_set_name' => '2',
+                    'attribute_id' => '2',
+                ],
+            ]
+        );
+        $this->downloadableModelMock = $this->objectManagerHelper->getObject(
+            '\Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable',
+            [
+                'attrSetColFac' => $this->attrSetColFacMock,
+                'prodAttrColFac' => $this->prodAttrColFacMock,
+                'resource' => $this->resourceMock,
+                'params' => $this->paramsArray,
+                'uploaderHelper' => $this->uploaderHelper,
+                'downloadableHelper' => $this->downloadableHelper
+            ]
+        );
         $this->entityModelMock->expects($this->once())->method('getNewSku')->will($this->returnValue($newSku));
         $this->entityModelMock->expects($this->at(1))->method('getNextBunch')->will($this->returnValue($bunch));
         $this->entityModelMock->expects($this->at(2))->method('getNextBunch')->will($this->returnValue(null));
@@ -664,7 +718,6 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('\Magento\Framework\Exception\LocalizedException');
         $this->setExpectedException('\Exception');
         $this->uploaderMock->expects($this->any())->method('move')->will($this->throwException($exception));
-
         $this->downloadableModelMock->saveData();
     }
 
@@ -718,7 +771,31 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
                 .' file=media/file_link.mp4,sortorder=1|group_title=Group Title, title=Title 2, price=10, downloads'
                 .'=unlimited, url=media/file2.mp4,sortorder=0',
         ];
-
+        $this->connectionMock->expects($this->any())->method('fetchAll')->with(
+            $this->select
+        )->willReturnOnConsecutiveCalls(
+            [
+                [
+                    'attribute_set_name' => '1',
+                    'attribute_id' => '1',
+                ],
+                [
+                    'attribute_set_name' => '2',
+                    'attribute_id' => '2',
+                ],
+            ]
+        );
+        $this->downloadableModelMock = $this->objectManagerHelper->getObject(
+            '\Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable',
+            [
+                'attrSetColFac' => $this->attrSetColFacMock,
+                'prodAttrColFac' => $this->prodAttrColFacMock,
+                'resource' => $this->resourceMock,
+                'params' => $this->paramsArray,
+                'uploaderHelper' => $this->uploaderHelper,
+                'downloadableHelper' => $this->downloadableHelper
+            ]
+        );
         $this->setPropertyValue(
             $this->downloadableModelMock,
             '_attributes',
