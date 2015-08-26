@@ -3,9 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Checkout\Block\Cart;
 
 use Magento\Store\Model\ScopeInterface;
@@ -90,7 +87,7 @@ class Sidebar extends AbstractCart
     }
 
     /**
-     * Get shoppinc cart page url
+     * Get shopping cart page url
      *
      * @return string
      */
