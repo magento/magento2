@@ -2,7 +2,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 define([
     'ko',
     'underscore',
@@ -24,11 +23,10 @@ define([
     return Collapsible.extend({
         defaults: {
             template: 'ui/grid/paging/sizes',
-            editing: false,
             value: 20,
-            options: [],
             minSize: 1,
             maxSize: 1000,
+            options: [],
             links: {
                 value: '${ $.storageConfig.path }.value',
                 options: '${ $.storageConfig.path }.options'
@@ -48,7 +46,7 @@ define([
                 .observe('options editing value');
 
             this.custom = {
-                value: ko.observable(),
+                value: ko.observable(''),
                 visible: ko.observable(false)
             };
 
@@ -83,29 +81,12 @@ define([
         },
 
         /**
-         * Creates new editable size instance with the provided value.
-         *
-         * @param {Number} value - Value of the size.
-         * @returns {Object}
-         */
-        createSize: function (value) {
-            return {
-                value: value,
-                label: value,
-                _value: value,
-                editable: true
-            };
-        },
-
-        /**
          * Returns value of the first size.
          *
          * @returns {Number}
          */
         getFirst: function () {
-            var size = this.options()[0];
-
-            return size.value;
+            return this.options()[0].value;
         },
 
         /**
@@ -131,35 +112,21 @@ define([
         },
 
         /**
-         * Chechks if provided value exists in the sizes list.
-         *
-         * @returns {Boolean}
-         */
-        hasSize: function (value) {
-            return !!this.getSize(value);
-        },
-
-        /**
          * Adds a new value to sizes list.
          *
          * @param {Number} value - Value to be added.
          * @returns {Sizes} Chainable.
          */
         addSize: function (value) {
-            var options = this.options(),
-                size;
+            var items = this.options();
 
             if (this.hasSize(value)) {
                 return this;
             }
 
-            size = this.createSize(value);
+            items.push(this.createSize(value));
 
-            options.push(size);
-
-            options = this.sort(options);
-
-            this.options(options);
+            this.options(this.sort(items));
 
             return this;
         },
@@ -170,7 +137,7 @@ define([
          * @param {Number} value - Value to be removed.
          * @returns {Sizes} Chainable.
          */
-        removeSize: function (value, isUpdate) {
+        removeSize: function (value) {
             var size = this.getSize(value);
 
             if (!size) {
@@ -179,7 +146,7 @@ define([
 
             this.options.remove(size);
 
-            if (!isUpdate && this.isSelected(value)) {
+            if (this.isSelected(value)) {
                 this.setSize(this.getFirst());
             }
 
@@ -188,6 +155,8 @@ define([
 
         /**
          *
+         * @param {Number} value
+         * @param {(Number|String)} [newValue=size._value]
          * @returns {Sizes} Chainable.
          */
         updateSize: function (value, newValue) {
@@ -200,14 +169,38 @@ define([
             newValue = newValue || size._value;
             newValue = this.normalize(newValue);
 
-            this.removeSize(value, true)
-                .addSize(newValue);
+            this.options.remove(size);
+            this.addSize(newValue);
 
             if (this.isSelected(value)) {
                 this.setSize(newValue);
             }
 
             return this;
+        },
+
+        /**
+         * Creates new editable size instance with the provided value.
+         *
+         * @param {Number} value - Value of the size.
+         * @returns {Object}
+         */
+        createSize: function (value) {
+            return {
+                value: value,
+                label: value,
+                _value: value,
+                editable: true
+            };
+        },
+
+        /**
+         * Chechks if provided value exists in the sizes list.
+         *
+         * @returns {Boolean}
+         */
+        hasSize: function (value) {
+            return !!this.getSize(value);
         },
 
         /**
@@ -282,35 +275,20 @@ define([
         },
 
         /**
+         * Converts provided value to a number and puts
+         * it in range between 'minSize' and 'maxSize' properties.
          *
-         * @param {(Number|String)} value
-         * @returns {Number|Boolean}
+         * @param {(Number|String)} value - Value to be normalized.
+         * @returns {Number}
          */
         normalize: function (value) {
-            var result = +value;
+            value = +value;
 
-            if (_.isString(value) && value.trim() !== +result + '') {
-                result = this.getFirst();
+            if (isNaN(value)) {
+                return this.getFirst();
             }
 
-            return getInRange(result, this.minSize, this.maxSize);
-        },
-
-        /**
-         * Checks if provided value is in editing state.
-         *
-         * @returns {Boolean}
-         */
-        isEditing: function (value) {
-            return this.editing() === value;
-        },
-
-        /**
-         *
-         * @returns {Boolean}
-         */
-        isSelected: function (value) {
-            return this.value() === value;
+            return getInRange(Math.round(value), this.minSize, this.maxSize);
         },
 
         /**
@@ -334,10 +312,27 @@ define([
          */
         close: function () {
             this._super()
-                .discardCustom()
-                .discard();
+                .discard()
+                .discardCustom();
 
             return this;
+        },
+
+        /**
+         * Checks if provided value is in editing state.
+         *
+         * @returns {Boolean}
+         */
+        isEditing: function (value) {
+            return this.editing() === value;
+        },
+
+        /**
+         *
+         * @returns {Boolean}
+         */
+        isSelected: function (value) {
+            return this.value() === value;
         },
 
         /**
