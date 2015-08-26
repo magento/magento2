@@ -9,10 +9,12 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout\Reader;
 
+use Magento\Framework\View\Layout\Reader\Block;
+
 /**
  * Class BlockTest
  *
- * @covers \Magento\Framework\View\Layout\Reader\Block
+ * @covers Block
  */
 class BlockTest extends \PHPUnit_Framework_TestCase
 {
@@ -43,9 +45,9 @@ class BlockTest extends \PHPUnit_Framework_TestCase
      */
     protected function getElement($xml, $elementType)
     {
-        $xml = '<' . \Magento\Framework\View\Layout\Reader\Block::TYPE_BLOCK . '>'
+        $xml = '<' . Block::TYPE_BLOCK . '>'
             . $xml
-            . '</' . \Magento\Framework\View\Layout\Reader\Block::TYPE_BLOCK . '>';
+            . '</' . Block::TYPE_BLOCK . '>';
 
         $xml = simplexml_load_string($xml, 'Magento\Framework\View\Layout\Element');
         return $xml->{$elementType};
@@ -67,7 +69,7 @@ class BlockTest extends \PHPUnit_Framework_TestCase
      * Return testing instance of block
      *
      * @param array $arguments
-     * @return \Magento\Framework\View\Layout\Reader\Block
+     * @return Block
      */
     protected function getBlock(array $arguments)
     {
@@ -129,11 +131,12 @@ class BlockTest extends \PHPUnit_Framework_TestCase
                 $literal,
                 [
                     'attributes' => [
-                        'group' => '',
-                        'class' => '',
-                        'template' => '',
-                        'ttl' => '',
-                        'display' => ''
+                        Block::ATTRIBUTE_GROUP => '',
+                        Block::ATTRIBUTE_CLASS => '',
+                        Block::ATTRIBUTE_TEMPLATE => '',
+                        Block::ATTRIBUTE_TTL => '',
+                        Block::ATTRIBUTE_DISPLAY => '',
+                        Block::ATTRIBUTE_ACL => ''
                     ],
                     'actions' => [
                         ['someMethod', [], 'action_config_path', 'scope'],
@@ -214,7 +217,14 @@ class BlockTest extends \PHPUnit_Framework_TestCase
                         ['someMethod', [], 'action_config_path', 'scope'],
                     ],
                     'arguments' => [],
-                    'attributes' => ['display' => '']
+                    'attributes' => [
+                        Block::ATTRIBUTE_GROUP => '',
+                        Block::ATTRIBUTE_CLASS => '',
+                        Block::ATTRIBUTE_TEMPLATE => '',
+                        Block::ATTRIBUTE_TTL => '',
+                        Block::ATTRIBUTE_DISPLAY => '',
+                        Block::ATTRIBUTE_ACL => ''
+                    ]
                 ]
             );
 
