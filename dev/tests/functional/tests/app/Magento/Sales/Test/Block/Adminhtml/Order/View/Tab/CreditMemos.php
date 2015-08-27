@@ -20,7 +20,7 @@ class CreditMemos extends Tab
      *
      * @var string
      */
-    protected $grid = '#order_creditmemos';
+    protected $grid = '#sales_order_view_tabs_order_creditmemos_content';
 
     /**
      * Get grid block

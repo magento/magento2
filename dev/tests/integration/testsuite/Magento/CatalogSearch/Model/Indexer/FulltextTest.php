@@ -16,7 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 class FulltextTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Indexer\Model\IndexerInterface
+     * @var \Magento\Framework\Indexer\IndexerInterface
      */
     protected $indexer;
 
@@ -72,7 +72,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        /** @var \Magento\Indexer\Model\IndexerInterface indexer */
+        /** @var \Magento\Framework\Indexer\IndexerInterface indexer */
         $this->indexer = Bootstrap::getObjectManager()->create(
             'Magento\Indexer\Model\Indexer'
         );
