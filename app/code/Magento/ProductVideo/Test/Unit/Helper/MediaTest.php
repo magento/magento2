@@ -10,12 +10,19 @@ namespace Magento\ProductVideo\Test\Unit\Helper;
  */
 class MediaTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Config */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Config
+     */
     protected $viewConfigMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\DesignInterface */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\DesignInterface
+     */
     protected $currentThemeMock;
 
+    /**
+     * @var \Magento\Swatches\Helper\Media|\Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
     protected $mediaHelperObject;
 
     /**
