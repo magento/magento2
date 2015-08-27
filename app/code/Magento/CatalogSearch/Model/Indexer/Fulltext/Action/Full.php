@@ -734,18 +734,18 @@ class Full
         $attribute = $this->getSearchableAttribute($attributeId);
         $value = $this->engine->processAttributeValue($attribute, $valueId);
 
-        if ($attribute->getIsSearchable()
+        if (false !== $value
+            && $attribute->getIsSearchable()
             && $attribute->usesSource()
             && $this->engine->allowAdvancedIndex()
         ) {
             $attribute->setStoreId($storeId);
-            $valueText = $attribute->getSource()->getIndexOptionText($valueId);
 
-            if (is_array($valueText)) {
-                $value .=  $this->separator . implode($this->separator, $valueText);
-            } else {
-                $value .= $this->separator . $valueText;
-            }
+            $valueText = (array) $attribute->getSource()->getIndexOptionText($valueId);
+
+            $pieces = array_filter(array_merge([$value], $valueText));
+
+            $value = implode($this->separator, $pieces);
         }
 
         $value = preg_replace('/\\s+/siu', ' ', trim(strip_tags($value)));
