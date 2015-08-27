@@ -40,6 +40,18 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test set of processed types data.
+     */
+    public function testSetTypesData()
+    {
+        $this->_typeProcessor->setTypeData('typeC', ['dataC']);
+        $this->assertEquals(['typeC' => ['dataC']], $this->_typeProcessor->getTypesData());
+        $typeData = ['typeA' => ['dataA'], 'typeB' => ['dataB']];
+        $this->_typeProcessor->setTypesData($typeData);
+        $this->assertEquals($typeData, $this->_typeProcessor->getTypesData());
+    }
+
+    /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Data type "NonExistentType" is not declared.
      */

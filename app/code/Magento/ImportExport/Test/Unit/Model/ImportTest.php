@@ -59,7 +59,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     protected $_uploaderFactory;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $indexerRegistry;
 
@@ -151,7 +151,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         $this->_behaviorFactory = $this->getMockBuilder('\Magento\ImportExport\Model\Source\Import\Behavior\Factory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->indexerRegistry = $this->getMockBuilder('\Magento\Indexer\Model\IndexerRegistry')
+        $this->indexerRegistry = $this->getMockBuilder('\Magento\Framework\Indexer\IndexerRegistry')
             ->disableOriginalConstructor()
             ->getMock();
         $this->historyModel = $this->getMockBuilder('\Magento\ImportExport\Model\History')

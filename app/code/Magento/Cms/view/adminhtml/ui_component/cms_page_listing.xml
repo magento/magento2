@@ -408,6 +408,7 @@
                     </item>
                     <item name="selectProvider" xsi:type="string">cms_page_listing.cms_page_listing.cms_page_columns.ids</item>
                     <item name="displayArea" xsi:type="string">bottom</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/paging/paging</item>
                     <item name="options" xsi:type="array">
                         <item name="20" xsi:type="array">
                             <item name="value" xsi:type="number">20</item>

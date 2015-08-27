@@ -19,7 +19,6 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Sales\Model\Resource\Order\CollectionFactory;
 
 /**
- * Class MassPrintShippingLabel
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction

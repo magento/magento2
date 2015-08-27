@@ -5,18 +5,18 @@
 
 define([
     'ko',
-    'jquery',
+    'Magento_Ui/js/lib/view/utils/async',
     'underscore',
     'uiRegistry',
-    'mage/utils/dom-observer',
-    'Magento_Ui/js/lib/ko/extender/bound-nodes',
     'uiClass'
-], function (ko, $, _, registry, domObserver, boundNodes, Class) {
+], function (ko, $, _, registry, Class) {
     'use strict';
 
     return Class.extend({
         defaults: {
-            rowSelector: 'tbody tr.data-row',
+            rootSelector: '${ $.columnsProvider }:.admin__data-grid-wrap',
+            tableSelector: '${ $.rootSelector } -> table',
+            rowSelector: '${ $.tableSelector } tbody tr.data-row',
             headerButtonsTmpl:
                 '<!-- ko template: headerButtonsTmpl --><!-- /ko -->',
             bulkTmpl:
@@ -40,15 +40,22 @@ define([
          * @returns {View} Chainable.
          */
         initialize: function () {
-            _.bindAll(this, 'onRowAdd', 'onRootAdd');
+            _.bindAll(
+                this,
+                'initRoot',
+                'initTable',
+                'initRow',
+                'rowBindings',
+                'tableBindings'
+            );
 
             this._super();
 
             this.model = registry.get(this.model);
 
-            registry.get(this.columnsProvider, function (columns) {
-                boundNodes.get(columns, this.onRootAdd);
-            }.bind(this));
+            $.async(this.rootSelector, this.initRoot);
+            $.async(this.tableSelector, this.initTable);
+            $.async(this.rowSelector, this.initRow);
 
             return this;
         },
@@ -60,16 +67,9 @@ define([
          * @returns {View} Chainable.
          */
         initRoot: function (node) {
-            var table       = $('> table', node)[0],
-                buttonsHtml = $(this.headerButtonsTmpl);
-
-            buttonsHtml.insertBefore(node);
-            ko.applyBindings(this.model, buttonsHtml[0]);
-
-            if (table) {
-                this.initTable(table)
-                    .initBulk(table);
-            }
+            $(this.headerButtonsTmpl)
+                .insertBefore(node)
+                .applyBindings(this.model);
 
             return this;
         },
@@ -81,17 +81,9 @@ define([
          * @returns {View} Chainable.
          */
         initTable: function (table) {
-            var model = this.model;
+            $(table).bindings(this.tableBindings);
 
-            ko.applyBindingsToNode(table, {
-                css: {
-                    '_in-edit': ko.computed(function () {
-                        return model.hasActive();
-                    })
-                }
-            });
-
-            domObserver.get(this.rowSelector, this.onRowAdd, table);
+            this.initBulk(table);
 
             return this;
         },
@@ -104,11 +96,9 @@ define([
          * @returns {View} Chainable.
          */
         initBulk: function (table) {
-            var model = this.model,
-                bulkHtml = $(this.bulkTmpl);
-
-            bulkHtml.prependTo(table.tBodies[0]);
-            ko.applyBindings(model, bulkHtml[0]);
+            $(this.bulkTmpl)
+                .prependTo('tbody', table)
+                .applyBindings(this.model);
 
             return this;
         },
@@ -120,42 +110,48 @@ define([
          * @returns {View} Chainable.
          */
         initRow: function (row) {
-            var ctx     = ko.contextFor(row),
-                model   = this.model,
-                rowHtml = $(this.rowTmpl);
+            $(row).extendCtx({
+                    _editor: this.model
+                }).bindings(this.rowBindings);
 
-            ko.applyBindingsToNode(row, {
-                visible: ko.computed(function () {
-                    return !model.isActive(ctx.$index(), true);
-                })
-            });
-
-            ctx._editor = model;
-
-            rowHtml.insertBefore(row);
-            ko.applyBindings(ctx, rowHtml[0]);
+            $(this.rowTmpl)
+                .insertBefore(row)
+                .applyBindings(row);
 
             return this;
         },
 
         /**
-         * Listener of the tables' rows appearance.
+         * Returns row bindings.
          *
-         * @param {HTMLTableRowElement} row
+         * @param {Object} ctx - Current context of a row.
+         * @returns {Object}
          */
-        onRowAdd: function (row) {
-            this.initRow(row);
+        rowBindings: function (ctx) {
+            var model = this.model;
+
+            return {
+                visible: ko.computed(function () {
+                    return !model.isActive(ctx.$index(), true);
+                })
+            };
         },
 
         /**
-         * Listener of the root node appearance.
+         * Returns table bindings.
          *
-         * @param {HTMLElement} node
+         * @returns {Object}
          */
-        onRootAdd: function (node) {
-            if ($(node).is('.admin__data-grid-wrap')) {
-                this.initRoot(node);
-            }
+        tableBindings: function () {
+            var model = this.model;
+
+            return {
+                css: {
+                    '_in-edit': ko.computed(function () {
+                        return model.hasActive();
+                    })
+                }
+            };
         }
     });
 });

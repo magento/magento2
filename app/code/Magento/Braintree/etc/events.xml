@@ -12,4 +12,7 @@
     <event name="customer_delete_commit_after">
         <observer name="braintree" instance="Magento\Braintree\Model\Observer" method="deleteBraintreeCustomer" />
     </event>
+    <event name="checkout_submit_before">
+        <observer name="braintree" instance="Magento\Braintree\Model\Observer" method="processBraintreeAddress" />
+    </event>
 </config>
