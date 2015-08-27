@@ -4,14 +4,15 @@
  */
 define([
     'underscore',
-    'mageUtils'
+    'mageUtils',
+    'es6-collections'
 ], function (_, utils) {
     'use strict';
 
     function Events(storage) {
         this.id = 0,
 
-        this.requests   = {};
+        this.requests   = new Map()
         this.map        = {};
         this.storage    = storage;
 
@@ -60,10 +61,10 @@ define([
                 (map[elem] = map[elem] || []).push(this.id);
             }, this);
 
-            this.requests[this.id++] = {
-                callback:   callback,
-                deps:       elems
-            };
+            this.requests.set(this.id++, {
+                callback: callback,
+                deps: elems
+            });
 
             return this;
         },
@@ -75,7 +76,7 @@ define([
          * @returns {Boolean} Whether specified request was successfully resolved.
          */
         _resolve: function (id) {
-            var request     = this.requests[id],
+            var request     = this.requests.get(id),
                 elems       = request.deps,
                 storage     = this.storage,
                 isResolved;
@@ -96,13 +97,17 @@ define([
          */
         _clear: function (id) {
             var map     = this.map,
-                elems   = this.requests[id].deps;
+                elems   = this.requests.get(id).deps;
 
             elems.forEach(function (elem) {
                 utils.remove(map[elem], id);
+
+                if (!map[elem].length) {
+                    delete map[elem];
+                }
             });
 
-            delete this.requests[id];
+            this.requests.delete(id);
         }
     };
 
