@@ -22,17 +22,17 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     /*
      * Video play attribute
      */
-    const VIDEO_PLAY = 'video_play';
+    const NODE_CONFIG_NAME_VIDEO_PLAY = 'video_play';
 
     /*
      * Video stop attribute
      */
-    const VIDEO_STOP = 'video_stop';
+    const NODE_CONFIG_NAME_VIDEO_STOP = 'video_stop';
 
     /*
      * Video color attribute
      */
-    const VIDEO_BACKGROUND = 'video_background';
+    const NODE_CONFIG_NAME_VIDEO_BACKGROUND = 'video_background';
 
     /**
      * @var \Magento\Framework\View\ConfigInterface
@@ -90,7 +90,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getVideoPlayAttribute()
     {
-        return $this->cachedVideoConfig->getVideoAttributeValue(self::MODULE_NAME, self::VIDEO_PLAY);
+        return $this->cachedVideoConfig->getVideoAttributeValue(self::MODULE_NAME, self::NODE_CONFIG_NAME_VIDEO_PLAY);
     }
 
     /**
@@ -100,7 +100,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getVideoStopAttribute()
     {
-        return $this->cachedVideoConfig->getVideoAttributeValue(self::MODULE_NAME, self::VIDEO_STOP);
+        return $this->cachedVideoConfig->getVideoAttributeValue(self::MODULE_NAME, self::NODE_CONFIG_NAME_VIDEO_STOP);
     }
 
     /**
@@ -110,7 +110,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getVideoBackgroundAttribute()
     {
-        return $this->cachedVideoConfig->getVideoAttributeValue(self::MODULE_NAME, self::VIDEO_BACKGROUND);
+        return $this->cachedVideoConfig->getVideoAttributeValue(self::MODULE_NAME, self::NODE_CONFIG_NAME_VIDEO_BACKGROUND);
     }
 
 }
