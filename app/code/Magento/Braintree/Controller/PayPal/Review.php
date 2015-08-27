@@ -77,7 +77,7 @@ class Review extends \Magento\Braintree\Controller\PayPal
             } else {
                 $paymentMethod = $this->getQuote()->getPayment()->getMethodInstance();
                 if (!$paymentMethod || $paymentMethod->getCode() !== PayPal::METHOD_CODE) {
-                    $this->messageManager->addError(
+                    $this->messageManager->addErrorMessage(
                         __('Incorrect payment method.')
                     );
 
@@ -96,9 +96,10 @@ class Review extends \Magento\Braintree\Controller\PayPal
             $reviewBlock->getChildBlock('shipping_method')->setQuote($this->getQuote());
             return $resultPage;
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addExceptionMessage($e, $e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(
+            $this->messageManager->addExceptionMessage(
+                $e,
                 __('We can\'t initialize checkout review.')
             );
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);

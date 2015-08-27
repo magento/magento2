@@ -182,6 +182,27 @@ interface ManagerInterface
      * @param string $alternativeText
      * @param string|null $group
      * @return ManagerInterface
+     * @deprecated
      */
     public function addException(\Exception $exception, $alternativeText, $group = null);
+
+    /**
+     * Adds a message describing an exception. Does not contain Exception handling logic.
+     *
+     * @param \Exception $exception
+     * @param string $alternativeText
+     * @param string|null $group
+     * @return ManagerInterface
+     */
+    public function addExceptionMessage(\Exception $exception, $alternativeText, $group = null);
+
+    /**
+     * Creates identified message
+     *
+     * @param string $type
+     * @param string|null $identifier
+     * @return MessageInterface
+     * @throws \InvalidArgumentException
+     */
+    public function createMessage($type, $identifier = null);
 }

@@ -5,6 +5,9 @@
  */
 namespace Magento\Paypal\Block\Cart;
 
+use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
+
 /**
  * PayPal order review page validation messages block
  */
@@ -21,6 +24,7 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
      * @param \Magento\Framework\Message\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Checkout\Helper\Cart $cartHelper
+     * @param InterpretationStrategyInterface $interpretationStrategy
      * @param array $data
      */
     public function __construct(
@@ -29,6 +33,7 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
         \Magento\Framework\Message\CollectionFactory $collectionFactory,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Checkout\Helper\Cart $cartHelper,
+        InterpretationStrategyInterface $interpretationStrategy,
         array $data = []
     ) {
         parent::__construct(
@@ -36,6 +41,7 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
             $messageFactory,
             $collectionFactory,
             $messageManager,
+            $interpretationStrategy,
             $data
         );
         $this->cartHelper = $cartHelper;
@@ -62,12 +68,23 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
     {
         // Compose array of messages to add
         $messages = [];
-        /** @var \Magento\Framework\Message\MessageInterface $message */
+        /** @var MessageInterface $message */
         foreach ($this->cartHelper->getQuote()->getMessages() as $message) {
-            // Escape HTML entities in quote message to prevent XSS
-            $message->setText($this->escapeHtml($message->getText()));
-            $messages[] = $message;
+            if (!$message->getIdentifier()) {
+                try {
+                    $messages[] = $this->messageManager
+                        ->createMessage($message->getType())
+                        ->setText($message->getText());
+                } catch (\InvalidArgumentException $e) {
+                    // pass
+                }
+            } else {
+                $messages[] = $message;
+            }
+
         }
-        $this->messageManager->addUniqueMessages($messages);
+        $this->messageManager->addUniqueMessages(
+            $messages
+        );
     }
 }
