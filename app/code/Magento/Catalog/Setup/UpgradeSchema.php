@@ -89,12 +89,89 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'comment' => 'Media entry type'
                 ]
             );
+            $installer->getConnection()->addColumn(
+                $installer->getTable(Media::GALLERY_TABLE),
+                'disabled',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                    'unsigned' => true,
+                    'nullable' => false,
+                    'default' => 0,
+                    'comment' => 'Visibility status'
+                ]
+            );
 
             /**
              * Drop entity Id columns
              */
             $installer->getConnection()->dropColumn($installer->getTable(Media::GALLERY_TABLE), 'entity_id');
-            $installer->getConnection()->dropColumn($installer->getTable(Media::GALLERY_VALUE_TABLE), 'entity_id');
+
+            /**
+             * Drop primary index
+             */
+            $installer->getConnection()->dropForeignKey(
+                $installer->getTable(Media::GALLERY_VALUE_TABLE),
+                $installer->getFkName(
+                    $installer->getTable(Media::GALLERY_VALUE_TABLE),
+                    'value_id',
+                    $installer->getTable(Media::GALLERY_TABLE),
+                    'value_id'
+                )
+            );
+            $installer->getConnection()->dropForeignKey(
+                $installer->getTable(Media::GALLERY_VALUE_TABLE),
+                $installer->getFkName(
+                    $installer->getTable(Media::GALLERY_VALUE_TABLE),
+                    'store_id',
+                    $installer->getTable('store'),
+                    'store_id'
+                )
+            );
+            $installer->getConnection()->dropIndex($installer->getTable(Media::GALLERY_VALUE_TABLE), 'primary');
+
+            /**
+             * Add index 'value_id'
+             */
+            $installer->getConnection()->addIndex(
+                $installer->getTable(Media::GALLERY_VALUE_TABLE),
+                $installer->getConnection()->getIndexName(
+                    $installer->getTable(Media::GALLERY_VALUE_TABLE),
+                    'value_id',
+                    'index'
+                ),
+                'value_id'
+            );
+
+            /**
+             * Add foreign keys again
+             */
+            $installer->getConnection()->addForeignKey(
+                $installer->getFkName(
+                    $installer->getTable(Media::GALLERY_VALUE_TABLE),
+                    'value_id',
+                    $installer->getTable(Media::GALLERY_TABLE),
+                    'value_id'
+                ),
+                $installer->getTable(Media::GALLERY_VALUE_TABLE),
+                'value_id',
+                $installer->getTable(Media::GALLERY_TABLE),
+                'value_id',
+                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            );
+
+            $installer->getConnection()->addForeignKey(
+                $installer->getFkName(
+                    $installer->getTable(Media::GALLERY_VALUE_TABLE),
+                    'store_id',
+                    $installer->getTable('store'),
+                    'store_id'
+                ),
+                $installer->getTable(Media::GALLERY_VALUE_TABLE),
+                'store_id',
+                $installer->getTable('store'),
+                'store_id',
+                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            );
 
             $installer->endSetup();
         }

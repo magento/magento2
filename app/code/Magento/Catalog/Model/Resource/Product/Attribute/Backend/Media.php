@@ -166,24 +166,37 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ['entity_id' => 'entity_id']
         )->joinLeft(
             ['value' => $this->getTable(self::GALLERY_VALUE_TABLE)],
-            $connection->quoteInto($mainTableAlias.'.value_id = value.value_id AND value.store_id = ?', (int)$storeId),
-            [
-                'label',
-                'position',
-                'disabled'
-            ]
+            implode(
+                ' AND ',
+                [
+                    $mainTableAlias.'.value_id = value.value_id',
+                    $connection->quoteInto('value.store_id = ?', (int)$storeId),
+                    $connection->quoteInto('value.entity_id = ?', (int)$entityId)
+                ]
+            ),
+            ['label', 'position', 'disabled']
         )->joinLeft(
             ['default_value' => $this->getTable(self::GALLERY_VALUE_TABLE)],
-            $mainTableAlias.'.value_id = default_value.value_id AND default_value.store_id = 0',
+            implode(
+                ' AND ',
+                [
+                    $mainTableAlias.'.value_id = default_value.value_id',
+                    'default_value.store_id = 0',
+                    $connection->quoteInto('default_value.entity_id = ?', (int)$entityId)
+                ]
+            ),
             ['label_default' => 'label', 'position_default' => 'position', 'disabled_default' => 'disabled']
         )->where(
             $mainTableAlias.'.attribute_id = ?',
             $attributeId
+
+        )->where(
+            $mainTableAlias.'.disabled = 0'
         )->where(
             'entity.entity_id = ?',
             $entityId
         )
-            ->where($positionCheckSql . ' IS NOT NULL')
+//            ->where($positionCheckSql . ' IS NOT NULL')
             ->order($positionCheckSql . ' ' . \Magento\Framework\DB\Select::SQL_ASC);
 
         return $select;
@@ -267,11 +280,12 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Delete gallery value for store in db
      *
-     * @param integer $valueId
-     * @param integer $storeId
+     * @param int $valueId
+     * @param int $entityId
+     * @param int $storeId
      * @return $this
      */
-    public function deleteGalleryValueInStore($valueId, $storeId)
+    public function deleteGalleryValueInStore($valueId, $entityId, $storeId)
     {
         $connection = $this->getConnection();
 
@@ -279,6 +293,7 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ' AND ',
             [
                 $connection->quoteInto('value_id = ?', (int)$valueId),
+                $connection->quoteInto('entity_id = ?', (int)$entityId),
                 $connection->quoteInto('store_id = ?', (int)$storeId)
             ]
         );

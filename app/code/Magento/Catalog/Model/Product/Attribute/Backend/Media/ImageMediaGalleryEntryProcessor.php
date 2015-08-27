@@ -171,11 +171,16 @@ class ImageMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryProcessor
                 $this->resourceEntryMediaGallery->bindValueToEntity($image['value_id'], $product->getId());
             }
 
-            $this->resourceEntryMediaGallery->deleteGalleryValueInStore($image['value_id'], $product->getStoreId());
+            $this->resourceEntryMediaGallery->deleteGalleryValueInStore(
+                $image['value_id'],
+                $product->getId(),
+                $product->getStoreId()
+            );
 
             // Add per store labels, position, disabled
             $data = [];
             $data['value_id'] = $image['value_id'];
+            $data['entity_id'] = $product->getId();
 
             $data['label'] = isset($image['label']) ? $image['label'] : '';
             $data['position'] = isset($image['position']) ? (int)$image['position'] : 0;
