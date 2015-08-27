@@ -1,0 +1,148 @@
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+/*jshint browser:true jquery:true*/
+/*global FORM_KEY*/
+define([
+    'jquery',
+    'jquery/ui',
+    'Magento_Ui/js/modal/modal',
+    'mage/translate',
+    'mage/backend/tree-suggest',
+    'mage/backend/validation'
+], function ($) {
+    'use strict';
+
+    $.widget('mage.newVideoDialog', {
+        _create: function () {
+            var widget = this;
+            var newVideoForm = $('#new_video_form');
+            var uploader = $('#new_video_screenshot');
+
+            this.element.modal({
+                type: 'slide',
+                modalClass: 'mage-new-video-dialog form-inline',
+                title: $.mage.__('Create Video'),
+                buttons: [{
+                    text: $.mage.__('Create Video'),
+                    class: 'action-primary video-create-button',
+                    click: function (e) {
+                        var file = $('#new_video_screenshot').get(0).files[0];
+                        var inputFile = uploader.val('').clone(true);
+                        $('#new_video_screenshot').fileupload().fileupload(
+                            'send',
+                            {
+                                files: file,
+                                url: widget.options.saveVideoUrl,
+                            }
+                        ).success(
+                            function(result, textStatus, jqXHR)
+                            {
+                                var data = JSON.parse(result);
+                                var formData = $.each($('#new_video_form').serializeArray(), function(i, field) {
+                                    data[field.name] = field.value;
+                                });
+                                data['disabled'] = $('#new_video_disabled').prop('checked') ? 1 : 0;
+                                data['media_type'] = 'external-video';
+                                widget.saveImageRoles(data['file']);
+                                $('#media_gallery_content').trigger('addItem', data);
+                                $('#new-video').modal('closeModal');
+                                uploader.replaceWith(inputFile);
+                            }
+                        );
+                    }
+                },
+                {
+                    text: $.mage.__('Edit'),
+                    class: 'action-primary video-edit',
+                    click: function (e) {
+                        var inputFile = uploader.val('').clone(true);
+                        var mediaFields = $('input[name*="' + $('#item_id').val() + '"]');
+                        $.each(mediaFields, function(i, el){
+                            var fieldHash = $('#item_id').val();
+                            var start = el.name.indexOf(fieldHash) + $('#item_id').val().length + 1;
+                            var fieldName = el.name.substring(start, el.name.length - 1);
+                            if ($('#' + fieldName).length > 0) {
+                                $('input[name*="' + $('#item_id').val() + '[' + fieldName + ']"]').val($('#' + fieldName).val());
+                            }
+                        });
+                        var flagChecked = $('#new_video_disabled').prop('checked') ? 1 : 0;
+                        $('input[name*="' + $('#item_id').val() + '[disabled]"]').val(flagChecked);
+                        /*
+                        if (flagChecked == true) {
+                            $('[name*="' + $('#item_id').val() + '"]').siblings('.image-fade').css('visibility', 'visible');
+                        } else {
+                            $('[name*="' + $('#item_id').val() + '"]').siblings('.image-fade').css('visibility', 'hidden');
+                        }
+                        */
+                        widget.saveImageRoles($('#file_name').val());
+                        uploader.replaceWith(inputFile);
+                        $('#new-video').modal('closeModal');
+                    }
+                }],
+                opened: function() {
+                    if ($('#video_url').val() != '') {
+                        $('.video-create-button')[0].hide();
+                        $('.video-edit')[0].show();
+                    } else {
+                        $('.video-create-button')[0].show();
+                        $('.video-edit')[0].hide();
+                    }
+
+                    var formFields = $('#new_video_form').find('.edited-data');
+
+                    $.each(formFields, function (i, field) {
+                        $(field).val($imageContainer.find('input[name*="' + field.name + '"]').val());
+                    })
+
+                    var flagChecked = ($imageContainer.find('input[name*="disabled"]').val() == 1) ? true : false;
+                    $('#new_video_disabled').prop('checked', flagChecked);
+
+                    var file = $('#file_name').val($imageContainer.find('input[name*="file"]').val());
+
+                    $('#video_base_image').prop('checked', false).prop('disabled', false);
+                    if ($('[name="product[image]"]').val() == file.val()) {
+                        $('#video_base_image').prop('checked', true);
+                    }
+                    $('#video_small_image').prop('checked', false).prop('disabled', false);
+                    if ($('[name="product[small_image]"]').val() == file.val()) {
+                        $('#video_small_image').prop('checked', true);
+                    }
+                    $('#video_thumb_image').prop('checked', false).prop('disabled', false);
+                    if ($('[name="product[thumbnail]"]').val() == file.val()) {
+                        $('#video_thumb_image').prop('checked', true);
+                    }
+                    $('#video_swatch_image').prop('checked', false).prop('disabled', false);
+                    if ($('[name="product[swatch_image]"]').val() == file.val()) {
+                        $('#video_swatch_image').prop('checked', true);
+                    }
+                },
+                closed: function() {
+                    $('input[name*="' + $('#item_id').val() + '"]').parent().removeClass('active');
+                    $('#new_video_form')[0].reset();
+                }
+            });
+        },
+
+        saveImageRoles: function(data) {
+            if (data.length > 0) {
+                var containers = $('.video-placeholder').siblings('input');
+                $.each(containers, function (i, el) {
+                    var start = el.name.indexOf('[') + 1;
+                    var end = el.name.indexOf(']');
+                    var imageType = el.name.substring(start, end);
+                    var imageCheckbox = $('#new_video_form input[value="' + imageType + '"]');
+                    if ($(el).val() != '' && $(el).val() == data && imageCheckbox.prop('checked') == false) {
+                        $(el).val('');
+                    }
+                    if (imageCheckbox.prop('checked') ) {
+                        $(el).val(data);
+                    }
+                })
+            }
+        }
+    });
+
+    return $.mage.newVideoDialog;
+});
