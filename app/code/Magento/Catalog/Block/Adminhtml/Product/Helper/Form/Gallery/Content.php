@@ -34,6 +34,11 @@ class Content extends \Magento\Backend\Block\Widget
     protected $_jsonEncoder;
 
     /**
+     * @var \Magento\Framework\View\Asset\Repository
+     */
+    protected $_assetRepo;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
@@ -43,10 +48,12 @@ class Content extends \Magento\Backend\Block\Widget
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
+        \Magento\Framework\View\Asset\Repository $assetRepo,
         array $data = []
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         $this->_mediaConfig = $mediaConfig;
+        $this->_assetRepo = $assetRepo;
         parent::__construct($context, $data);
     }
 
@@ -199,5 +206,18 @@ class Content extends \Magento\Backend\Block\Widget
     public function getImageTypesJson()
     {
         return $this->_jsonEncoder->encode($this->getImageTypes());
+    }
+
+    /**
+     * Get everything needed to build and decorate "New Video" button
+     *
+     * @return array
+     */
+    public function getVideoButtonData()
+    {
+        return [
+            'spacerImage' => $this->_assetRepo->getUrl('images/spacer.gif'),
+            'placeholderText' => 'Click here to add videos.'//TODO:Add helper's __('') translater when any helper would be created
+        ];
     }
 }
