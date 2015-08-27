@@ -149,7 +149,7 @@
                         of {{numberOfPages}}
                         </label>
                     <button class="action-next"
-                            ng-disabled="currentPage > numberOfPages-1"
+                            ng-disabled="currentPage >= numberOfPages"
                             ng-click="currentPage = currentPage + 1; start = start + rowLimit"
                             type="button"
                         >
