@@ -322,6 +322,19 @@ define([
         },
 
         /**
+         * Returns selected items on a current page.
+         *
+         * @returns {Array}
+         */
+        getPageSelections: function () {
+            var ids = this.getIds();
+
+            return this.selected.filter(function (id) {
+                return _.contains(ids, id);
+            });
+        },
+
+        /**
          * Returns selections data.
          *
          * @returns {Object}
