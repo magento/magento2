@@ -32,8 +32,10 @@ define([
             },
             resizeConfig: {
                 name: '${ $.name }_resize',
+                columnsProvider: '${ $.name }',
                 component: 'Magento_Ui/js/grid/resize',
                 provider: '${ $.provider }',
+                classResize: 'shadow-div',
                 divsAttrParams: {
                     'data-cl-elem': 'shadow-div'
                 },

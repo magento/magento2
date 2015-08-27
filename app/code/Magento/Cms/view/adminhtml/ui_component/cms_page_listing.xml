@@ -470,6 +470,8 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/multiselect</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="resizeDefaultWidth" xsi:type="string">60</item>
                     <item name="draggable" xsi:type="boolean">false</item>
                     <item name="indexField" xsi:type="string">page_id</item>
                     <item name="controlVisibility" xsi:type="boolean">false</item>
@@ -484,6 +486,7 @@
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="sorting" xsi:type="string">asc</item>
+                    <item name="resizeDefaultWidth" xsi:type="string">60</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">ID</item>
                 </item>
@@ -495,6 +498,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="resizeDefaultWidth" xsi:type="string">120</item>
                     <item name="editor" xsi:type="array">
                         <item name="editorType" xsi:type="string">text</item>
                         <item name="validation" xsi:type="array">
@@ -514,6 +518,7 @@
                 </item>
                 <item name="config" xsi:type="array">
                     <item name="editor" xsi:type="string">text</item>
+                    <item name="resizeDefaultWidth" xsi:type="string">120</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">URL Key</item>
@@ -527,6 +532,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="resizeDefaultWidth" xsi:type="string">120</item>
                     <item name="editor" xsi:type="string">select</item>
                     <item name="dataType" xsi:type="string">select</item>
                     <item name="align" xsi:type="string">left</item>
@@ -540,6 +546,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="resizeDefaultWidth" xsi:type="string">120</item>
                     <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
                     <item name="sortable" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">text</item>
@@ -555,6 +562,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="resizeDefaultWidth" xsi:type="string">120</item>
                     <item name="editor" xsi:type="string">select</item>
                     <item name="dataType" xsi:type="string">select</item>
                     <item name="align" xsi:type="string">left</item>
@@ -570,6 +578,8 @@
                 <item name="config" xsi:type="array">
                     <item name="editor" xsi:type="string">date</item>
                     <item name="dataType" xsi:type="string">date</item>
+                    <item name="resizeDefaultWidth" xsi:type="string">120</item>
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Created</item>
                 </item>
@@ -582,6 +592,7 @@
                 </item>
                 <item name="config" xsi:type="array">
                     <item name="editor" xsi:type="string">date</item>
+                    <item name="resizeDefaultWidth" xsi:type="string">120</item>
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Modified</item>
@@ -596,6 +607,7 @@
                 <item name="config" xsi:type="array">
                     <item name="editor" xsi:type="string">date</item>
                     <item name="dataType" xsi:type="string">date</item>
+                    <item name="resizeDefaultWidth" xsi:type="string">120</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Custom design from</item>
                     <item name="dateFormat" xsi:type="string">MMM d, y</item>
@@ -611,6 +623,7 @@
                 <item name="config" xsi:type="array">
                     <item name="editor" xsi:type="string">date</item>
                     <item name="dataType" xsi:type="string">date</item>
+                    <item name="resizeDefaultWidth" xsi:type="string">120</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Custom design to</item>
                     <item name="dateFormat" xsi:type="string">MMM d, y</item>
@@ -627,6 +640,7 @@
                 <item name="config" xsi:type="array">
                     <item name="editor" xsi:type="string">select</item>
                     <item name="dataType" xsi:type="string">select</item>
+                    <item name="resizeDefaultWidth" xsi:type="string">120</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Custom Theme</item>
                     <item name="visible" xsi:type="boolean">false</item>
@@ -642,6 +656,7 @@
                 <item name="config" xsi:type="array">
                     <item name="editor" xsi:type="string">select</item>
                     <item name="dataType" xsi:type="string">select</item>
+                    <item name="resizeDefaultWidth" xsi:type="string">120</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Custom Layout</item>
                     <item name="visible" xsi:type="boolean">false</item>
@@ -656,6 +671,7 @@
                 <item name="config" xsi:type="array">
                     <item name="editor" xsi:type="string">text</item>
                     <item name="dataType" xsi:type="string">text</item>
+                    <item name="resizeDefaultWidth" xsi:type="string">120</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Meta Keywords</item>
                     <item name="visible" xsi:type="boolean">false</item>
@@ -670,6 +686,7 @@
                 <item name="config" xsi:type="array">
                     <item name="editor" xsi:type="string">text</item>
                     <item name="dataType" xsi:type="string">text</item>
+                    <item name="resizeDefaultWidth" xsi:type="string">120</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Meta Description</item>
                     <item name="visible" xsi:type="boolean">false</item>
@@ -680,6 +697,8 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="draggable" xsi:type="boolean">false</item>
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="resizeDefaultWidth" xsi:type="string">120</item>
                     <item name="dataType" xsi:type="string">actions</item>
                     <item name="indexField" xsi:type="string">page_id</item>
                     <item name="blockVisibility" xsi:type="boolean">true</item>
