@@ -26,6 +26,8 @@ define([
             value: 20,
             minSize: 1,
             maxSize: 1000,
+            customVisible: false,
+            customValue: '',
             options: [],
             links: {
                 value: '${ $.storageConfig.path }.value',
@@ -43,12 +45,7 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe('options editing value');
-
-            this.custom = {
-                value: ko.observable(''),
-                visible: ko.observable(false)
-            };
+                .observe('options editing value customVisible customValue');
 
             this._value = ko.pureComputed({
                 read: this.value,
@@ -86,12 +83,24 @@ define([
          *
          * @returns {Sizes} Chainable.
          */
-        discard: function () {
+        discardEditing: function () {
             var value = this.editing();
 
             if (value) {
                 this.updateSize(value, value);
             }
+
+            return this;
+        },
+
+        /**
+         * Invokes 'discardEditing' and 'discardCustom' actions.
+         *
+         * @returns {Sizes} Chainable.
+         */
+        discardAll: function () {
+            this.discardEditing()
+                .discardCustom();
 
             return this;
         },
@@ -170,6 +179,8 @@ define([
         },
 
         /**
+         * Updates existing value to the provided one.
+         *
          *
          * @param {Number} value
          * @param {(Number|String)} [newValue=size._value]
@@ -237,7 +248,7 @@ define([
          * @returns {Sizes} Chainable.
          */
         showCustom: function () {
-            this.custom.visible(true);
+            this.customVisible(true);
 
             return this;
         },
@@ -248,7 +259,7 @@ define([
          * @returns {Sizes} Chainable.
          */
         hideCustom: function () {
-            this.custom.visible(false);
+            this.customVisible(false);
 
             return this;
         },
@@ -259,7 +270,7 @@ define([
          * @returns {Sizes} Chainable.
          */
         clearCustom: function () {
-            this.custom.value('');
+            this.customValue('');
 
             return this;
         },
@@ -270,7 +281,7 @@ define([
          * @returns {Sizes} Chainable.
          */
         applyCustom: function () {
-            var value = this.custom.value();
+            var value = this.customValue();
 
             value = this.normalize(value);
 
@@ -287,7 +298,7 @@ define([
          * @returns {Boolean}
          */
         isCustomVisible: function () {
-            return this.custom.visible();
+            return this.customVisible();
         },
 
         /**
@@ -321,20 +332,6 @@ define([
         },
 
         /**
-         * Overrides original method to
-         * discard all unapplied editings.
-         *
-         * @returns {Sizes} Chainable.
-         */
-        close: function () {
-            this._super()
-                .discard()
-                .discardCustom();
-
-            return this;
-        },
-
-        /**
          * Checks if provided value is in editing state.
          *
          * @returns {Boolean}
@@ -355,7 +352,8 @@ define([
          * Listener of the 'value' property changes.
          */
         onValueChange: function () {
-            this.close();
+            this.close()
+                .discardAll();
         },
 
         /**

@@ -25,7 +25,7 @@
         <span data-bind="i18n: 'Select'"></span>
     </button>
 
-    <ul class="selectmenu-items" data-bind="css: {_active: opened}">
+    <ul class="selectmenu-items" data-bind="css: {_active: opened}, outerClick: $data.discardAll.bind($data)">
         <!-- ko foreach: options -->
         <li data-bind="css: { _edit: $parent.isEditing(value)}">
             <!-- ko if: $data.editable -->
@@ -72,7 +72,7 @@
         </li>
         <!-- /ko -->
 
-        <li data-bind="css: { _edit: custom.visible }">
+        <li data-bind="css: { _edit: isCustomVisible() }">
             <div class="selectmenu-item">
                 <button
                    type="button"
@@ -80,16 +80,16 @@
                    data-bind="
                         click: function () {
                             $data.showCustom()
-                                .discard();
+                                .discardEditing();
                         },
-                        visible: !custom.visible(),
+                        visible: !isCustomVisible(),
                         i18n: 'Custom'"></button>
             </div>
             <div class="selectmenu-item-edit" data-bind="keyboard: {13: applyCustom}">
                 <input
                     class="admin__control-text"
                     type="text"
-                    data-bind="value: custom.value, hasFocus: isCustomVisible()"/>
+                    data-bind="value: customValue, hasFocus: isCustomVisible()"/>
                 <button
                         class="action-save"
                         data-bind="click: applyCustom"
