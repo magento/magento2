@@ -10,8 +10,9 @@
 define([
     'underscore',
     'uiRegistry',
-    'Magento_Ui/js/form/element/ui-select'
-], function (_, registry, Constr) {
+    'Magento_Ui/js/form/element/ui-select',
+    'ko'
+], function (_, registry, Constr, ko) {
     'use strict';
 
     describe('Magento_Ui/js/form/element/ui-select', function () {
@@ -20,6 +21,8 @@ define([
             dataScope: '',
             provider: 'provider'
         });
+
+        obj.value = ko.observableArray([]);
 
         describe('"initialize" method', function () {
             it('Check for defined ', function () {
@@ -59,29 +62,27 @@ define([
             });
         });
 
-        describe('"hasSelected" method', function () {
+        describe('"hasData" method', function () {
             it('Check for defined ', function () {
-                expect(obj.hasOwnProperty('hasSelected')).toBeDefined();
+                expect(obj.hasOwnProperty('hasData')).toBeDefined();
             });
             it('Check method type', function () {
-                var type = typeof obj.hasSelected;
+                var type = typeof obj.hasData;
 
                 expect(type).toEqual('function');
             });
             it('Check returned value type if method called without arguments', function () {
-                var type = typeof obj.hasSelected();
+                var type = typeof obj.hasData();
 
                 expect(type).toEqual('boolean');
             });
             it('Must be false if selected array length is 0', function () {
-                obj.selected([]);
-                obj.hasSelected();
-                expect(obj.selected()).toEqual(false);
+                obj.value([]);
+                expect(obj.hasData()).toEqual(false);
             });
             it('Must be true if selected array length is 0', function () {
-                obj.selected(['magento']);
-                obj.hasSelected();
-                expect(obj.selected()).toEqual(true);
+                obj.value(['magento']);
+                expect(obj.hasData()).toEqual(true);
             });
         });
 
@@ -95,9 +96,9 @@ define([
                 expect(type).toEqual('function');
             });
             it('Must remove data from selected array', function () {
-                obj.selected(['magento', 'magento2']);
+                obj.value(['magento', 'magento2']);
                 obj.removeSelected('magento');
-                expect(obj.selected()).toEqual(['magento2']);
+                expect(obj.value()).toEqual(['magento2']);
             });
         });
 
@@ -111,7 +112,8 @@ define([
                 expect(type).toEqual('function');
             });
             it('Check returned value type if method called without arguments', function () {
-                var type = typeof obj.hasSelected();
+                var event = {keyCode: 9},
+                    type = typeof obj.isTabKey(event);
 
                 expect(type).toEqual('boolean');
             });
@@ -168,21 +170,8 @@ define([
 
                 expect(type).toEqual('object');
             });
-            it('Check changes "this.hoverElIndex" observe variable if listVisible is true', function () {
+            it('Check changes "this.hoverElIndex" observe variable', function () {
                 obj.hoverElIndex(5);
-                obj.listVisible(true);
-                obj.cleanHoveredElement();
-                expect(obj.hoverElIndex()).toEqual(5);
-            });
-            it('Check changes "this.hoverElIndex" observe variable if listVisible is false', function () {
-                obj.hoverElIndex(5);
-                obj.listVisible(false);
-                obj.cleanHoveredElement();
-                expect(obj.hoverElIndex()).toEqual(null);
-            });
-            it('Check execution "cleanHoveredElement" method if this.hoverElIndex is null', function () {
-                obj.hoverElIndex(null);
-                obj.listVisible(false);
                 obj.cleanHoveredElement();
                 expect(obj.hoverElIndex()).toEqual(null);
             });
@@ -202,11 +191,11 @@ define([
                 expect(type).toEqual('boolean');
             });
             it('Must return true if array "selected" has value', function () {
-                obj.selected(['magento']);
+                obj.value(['magento']);
                 expect(obj.isSelected('magento')).toEqual(true);
             });
             it('Must return false if array "selected" has not value', function () {
-                obj.selected(['magento']);
+                obj.value(['magento']);
                 expect(obj.isSelected('magentoTwo')).toEqual(false);
             });
         });
@@ -267,29 +256,29 @@ define([
                 expect(type).toEqual('function');
             });
             it('Check returned value if method called without arguments', function () {
-                var data = {label: 'label'};
+                var data = {value: 'label'};
 
                 expect(obj.toggleOptionSelected(data)).toBeDefined();
             });
             it('Check returned value type if method called without arguments', function () {
-                var data = {label: 'label'},
+                var data = {value: 'label'},
                     type = typeof obj.toggleOptionSelected(data);
 
                 expect(type).toEqual('object');
             });
             it('Transmitted value must be in "selected" array if "selected" array has not this value', function () {
-                var data = {label: 'label'};
+                var data = {value: 'label'};
 
-                obj.selected(['magento']);
+                obj.value(['magento']);
                 obj.toggleOptionSelected(data);
-                expect(obj.selected()[1]).toEqual(data.label);
+                expect(obj.value()[1]).toEqual(data.value);
             });
             it('Transmitted value must be removed in "selected" array if "selected" array has this value', function () {
-                var data = {label: 'label'};
+                var data = {value: 'label'};
 
-                obj.selected(['label']);
+                obj.value(['label']);
                 obj.toggleOptionSelected(data);
-                expect(obj.selected()).toEqual([]);
+                expect(obj.value()).toEqual([]);
             });
         });
         describe('"onHoveredIn" method', function () {
@@ -346,11 +335,6 @@ define([
             it('Observe variable "multiselectFocus" must be false', function () {
                 obj.onFocusOut();
                 expect(obj.multiselectFocus()).toEqual(false);
-            });
-            it('Observe variable "listVisible" must be false', function () {
-                obj.listVisible(true);
-                obj.onFocusOut();
-                expect(obj.listVisible()).toEqual(false);
             });
         });
         describe('"enterKeyHandler" method', function () {
@@ -502,37 +486,15 @@ define([
 
                 expect(type).toEqual('string');
             });
-            it('Check returned value if selected array length is 1', function () {
-                obj.selected(['one']);
-
-                expect(obj.setCaption()).toEqual('one');
-            });
             it('Check returned value if selected array length more then 1', function () {
-                obj.selected(['one', 'two']);
+                obj.value(['one', 'two']);
 
                 expect(obj.setCaption()).toEqual('2 ' + obj.selectedPlaceholders.lotPlaceholders);
             });
             it('Check returned value if selected array length is 0', function () {
-                obj.selected([]);
+                obj.value([]);
 
                 expect(obj.setCaption()).toEqual(obj.selectedPlaceholders.defaultPlaceholder);
-            });
-        });
-        describe('"setValue" method', function () {
-            it('Check for defined ', function () {
-                expect(obj.hasOwnProperty('setValue')).toBeDefined();
-            });
-            it('Check answer type', function () {
-                var type = typeof obj.setValue;
-
-                expect(type).toEqual('function');
-            });
-            it('Check "this.value". this.value must equal this.selected', function () {
-                var array = ['one', 'two', 'three'];
-
-                obj.selected(array);
-                obj.setValue();
-                expect(obj.value()).toEqual(array);
             });
         });
         describe('"keyDownHandlers" method', function () {
@@ -565,6 +527,52 @@ define([
                 expect(obj.listVisible()).toEqual(true);
             });
         });
+        describe('"hasValue" method', function () {
+            it('Check for defined ', function () {
+                expect(obj.hasOwnProperty('hasValue')).toBeDefined();
+            });
+            it('Check answer type', function () {
+                var type = typeof obj.hasValue;
+
+                expect(type).toEqual('function');
+            });
+            it('Check returned value if value is false', function () {
+                obj.value(false);
+
+                expect(obj.hasValue()).toEqual([]);
+            });
+            it('Check returned value if value has options', function () {
+                obj.value(['magento', 'magento2']);
+
+                expect(obj.hasValue()).toEqual(['magento', 'magento2']);
+            });
+            it('Check returned value type if method called without arguments', function () {
+                var type = typeof obj.hasValue();
+
+                expect(type).toEqual('object');
+            });
+        });
+        describe('"getSelected" method', function () {
+            it('Check for defined ', function () {
+                expect(obj.hasOwnProperty('getSelected')).toBeDefined();
+            });
+            it('Check answer type', function () {
+                var type = typeof obj.getSelected;
+
+                expect(type).toEqual('function');
+            });
+            it('Check returned value if selected', function () {
+                obj.cacheOptions = [{value: 'magento'}, {value: 'magento2'}];
+                obj.value(['magento', 'magento2']);
+
+                expect(obj.getSelected()).toEqual([{value: 'magento'}, {value: 'magento2'}]);
+            });
+            it('Check returned value type if method called without arguments', function () {
+                var type = typeof obj.getSelected();
+
+                expect(type).toEqual('object');
+            });
+        });
         describe('"getPreview" method', function () {
             it('Check for defined ', function () {
                 expect(obj.hasOwnProperty('getPreview')).toBeDefined();
@@ -578,11 +586,6 @@ define([
                 var type = typeof obj.getPreview();
 
                 expect(type).toEqual('string');
-            });
-            it('Must return concat string with values from "this.selected" array', function () {
-                obj.selected(['one', 'two']);
-
-                expect(obj.getPreview()).toEqual('one,two');
             });
         });
     });
