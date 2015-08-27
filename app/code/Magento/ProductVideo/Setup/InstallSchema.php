@@ -47,21 +47,21 @@ class InstallSchema implements InstallSchemaInterface
                 'provider',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                 32,
-                ['nullable' => false],
+                ['nullable' => true, 'default' => null],
                 'Video provider ID'
             )
             ->addColumn(
                 'url',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                 null,
-                [],
+                ['nullable' => true, 'default' => null],
                 'Video URL'
             )
             ->addColumn(
                 'title',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                 255,
-                [],
+                ['nullable' => true, 'default' => null],
                 'Title'
             )
             ->addColumn(
@@ -79,8 +79,13 @@ class InstallSchema implements InstallSchemaInterface
                 'Video meta data'
             )
             ->addIndex(
-                $setup->getIdxName(ExternalVideoMediaGalleryEntryProcessor::GALLERY_VALUE_VIDEO_TABLE, ['store_id']),
-                ['store_id']
+                $setup->getIdxName(
+                    ExternalVideoMediaGalleryEntryProcessor::GALLERY_VALUE_VIDEO_TABLE,
+                    ['value_id', 'store_id'],
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                ),
+                ['value_id', 'store_id'],
+                ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
             )
             ->addForeignKey(
                 $setup->getFkName(
@@ -92,6 +97,18 @@ class InstallSchema implements InstallSchemaInterface
                 'value_id',
                 $setup->getTable(Media::GALLERY_TABLE),
                 'value_id',
+                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            )
+            ->addForeignKey(
+                $setup->getFkName(
+                    ExternalVideoMediaGalleryEntryProcessor::GALLERY_VALUE_VIDEO_TABLE,
+                    'store_id',
+                    $setup->getTable('store'),
+                    'store_id'
+                ),
+                'store_id',
+                $setup->getTable('store'),
+                'store_id',
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->setComment('Catalog Product Video Table');
