@@ -13,17 +13,20 @@ use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Steps:
- * 1. Log in to backend as admin user.
- * 2. Navigate to System > Extensions > Integrations.
- * 3. Start to create new Integration.
- * 4. Fill in all data according to data set.
- * 5. Click "Save" button.
- * 6. Perform all assertions.
+ * 1. Log in to backend as admin user
+ * 2. Navigate to System > Extensions > Integrations
+ * 3. Click 'Add New Integration'
+ * 4. Fill in all required data
+ * 5. Click "Save" button to save Integration1
+ * 6. Click 'Add New Integration'
+ * 7. Fill in all required data and use the same name as for Integration1
+ * 8. Click "Save" button
+ * 9. Perform all assertions
  *
  * @group Web_API_Framework_(PS)
- * @ZephyrId MAGETWO-26009, MAGETWO-16755, MAGETWO-16819, MAGETWO-16820
+ * @ZephyrId MAGETWO-16756
  */
-class CreateIntegrationEntityTest extends Injectable
+class CreateIntegrationWithDuplicatedNameTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
@@ -51,24 +54,30 @@ class CreateIntegrationEntityTest extends Injectable
      * @param IntegrationNew $integrationNew
      * @return void
      */
-    public function __inject(IntegrationIndex $integrationIndex, IntegrationNew $integrationNew)
-    {
+    public function __inject(
+        IntegrationIndex $integrationIndex,
+        IntegrationNew $integrationNew
+    ) {
         $this->integrationIndexPage = $integrationIndex;
         $this->integrationNewPage = $integrationNew;
     }
 
     /**
-     * Create Integration Entity test.
+     * Create Integration Entity with existing name test.
      *
      * @param Integration $integration
-     * @return void
+     * @return Integration
      */
     public function test(Integration $integration)
     {
+        // Precondition
+        $integration->persist();
+
         // Steps
         $this->integrationIndexPage->open();
         $this->integrationIndexPage->getGridPageActions()->addNew();
         $this->integrationNewPage->getIntegrationForm()->fill($integration);
         $this->integrationNewPage->getFormPageActions()->saveNew();
+        return ['integration' => $integration];
     }
 }
