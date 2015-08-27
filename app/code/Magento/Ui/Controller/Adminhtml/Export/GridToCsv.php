@@ -7,7 +7,6 @@ namespace Magento\Ui\Controller\Adminhtml\Export;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Model\Export\ConvertToCsv;
 use Magento\Framework\App\Response\Http\FileFactory;
 
@@ -16,11 +15,6 @@ use Magento\Framework\App\Response\Http\FileFactory;
  */
 class GridToCsv extends Action
 {
-    /**
-     * @var UiComponentFactory
-     */
-    protected $factory;
-
     /**
      * @var ConvertToCsv
      */
@@ -33,18 +27,15 @@ class GridToCsv extends Action
 
     /**
      * @param Context $context
-     * @param UiComponentFactory $factory
      * @param ConvertToCsv $converter
      * @param FileFactory $fileFactory
      */
     public function __construct(
         Context $context,
-        UiComponentFactory $factory,
         ConvertToCsv $converter,
         FileFactory $fileFactory
     ) {
         parent::__construct($context);
-        $this->factory = $factory;
         $this->converter = $converter;
         $this->fileFactory = $fileFactory;
     }
@@ -58,6 +49,5 @@ class GridToCsv extends Action
     public function execute()
     {
         return $this->fileFactory->create('export.csv', $this->converter->getCsvFile(), 'var');
-
     }
 }
