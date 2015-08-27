@@ -35,6 +35,8 @@
                   provider="Magento\Customer\Model\Indexer\Address\AttributeProvider">
             <reference fieldset="customer" from="entity_id" to="default_billing"/>
             <field name="full" xsi:type="searchable" dataType="text" handler="BillingAddressHandler"/>
+            <field name="firstname" xsi:type="searchable" dataType="varchar"/>
+            <field name="lastname" xsi:type="searchable" dataType="varchar"/>
             <field name="telephone" xsi:type="searchable" dataType="varchar"/>
             <field name="postcode" xsi:type="searchable" dataType="varchar"/>
             <field name="country_id" xsi:type="filterable" dataType="varchar"/>

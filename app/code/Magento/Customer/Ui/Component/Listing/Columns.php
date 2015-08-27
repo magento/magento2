@@ -8,6 +8,7 @@ namespace Magento\Customer\Ui\Component\Listing;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Customer\Ui\Component\ColumnFactory;
 use Magento\Customer\Api\Data\AttributeMetadataInterface as AttributeMetadata;
+use\Magento\Framework\View\Element\UiComponentInterface;
 
 class Columns extends \Magento\Ui\Component\Listing\Columns
 {
@@ -111,6 +112,7 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     public function updateColumn(array $attributeData, $newAttributeCode)
     {
         $component = $this->components[$attributeData[AttributeMetadata::ATTRIBUTE_CODE]];
+        $this->addOptions($component, $attributeData);
 
         if ($attributeData[AttributeMetadata::BACKEND_TYPE] != 'static') {
             if ($attributeData[AttributeMetadata::IS_USED_IN_GRID]) {
@@ -131,6 +133,23 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
                     $component->getData('config'),
                     ['visible' => $attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID]]
                 )
+            );
+        }
+    }
+
+    /**
+     * Add options to component
+     *
+     * @param UiComponentInterface $component
+     * @param $attributeData
+     */
+    public function addOptions(UiComponentInterface $component, $attributeData)
+    {
+        $config = $component->getData('config');
+        if (count($attributeData[AttributeMetadata::OPTIONS]) && !isset($config[AttributeMetadata::OPTIONS])) {
+            $component->setData(
+                'config',
+                array_merge($config, [AttributeMetadata::OPTIONS => $attributeData[AttributeMetadata::OPTIONS]])
             );
         }
     }
