@@ -154,19 +154,41 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetWeeAttributesForBundle()
     {
-        $weeObject = new \Magento\Framework\DataObject(
+
+        $prodId1 = rand(1, 10);
+        $prodId2 = rand(11, 20);
+        $fptCode1 = 'fpt'.$prodId1;
+        $fptCode2 = 'fpt'.$prodId2;
+
+        $weeObject1 = new \Magento\Framework\DataObject(
             [
-                'code' => 'fpt',
+                'code' => $fptCode1,
                 'amount' => '15.0000',
             ]
         );
-        $testArray = ['fpt' => $weeObject];
+
+        $weeObject2 = new \Magento\Framework\DataObject(
+            [
+                'code' => $fptCode2,
+                'amount' => '15.0000',
+            ]
+        );
+
+
+        $testArray = [$prodId1 => [$fptCode1 => $weeObject1], $prodId2 => [$fptCode2 => $weeObject2]];
 
         $this->weeeTax->expects($this->any())
             ->method('getProductWeeeAttributes')
-            ->will($this->returnValue([$weeObject]));
+            ->will($this->returnValue([$weeObject1, $weeObject2]));
 
-        $productSimple=$this->getMock('\Magento\Catalog\Model\Product\Type\Simple', [], [], '', false);
+        $productSimple=$this->getMock('\Magento\Catalog\Model\Product\Type\Simple', ['getId'], [], '', false);
+
+        $productSimple->expects($this->at(0))
+            ->method('getId')
+            ->will($this->returnValue($prodId1));
+        $productSimple->expects($this->at(1))
+            ->method('getId')
+            ->will($this->returnValue($prodId2));
 
         $productInstance=$this->getMock('\Magento\Bundle\Model\Product\Type', [], [], '', false);
         $productInstance->expects($this->any())

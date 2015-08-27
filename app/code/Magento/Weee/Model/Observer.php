@@ -287,15 +287,17 @@ class Observer extends \Magento\Framework\Model\AbstractModel
      */
     private function insertWeePrice($holder, $key, $weeeAttributes)
     {
-        if (count($weeeAttributes[$holder['optionId']])>0) {
-            $weeSum = 0;
-            foreach ($weeeAttributes[$holder['optionId']] as $weeAttribute) {
-                $holder[$key]['weeePrice' . $weeAttribute->getCode()] =
-                    ['amount' => (float)$weeAttribute->getAmount()];
-                $weeSum += (float)$weeAttribute->getAmount();
-            }
+        if (array_key_exists($holder['optionId'], $weeeAttributes)) {
+            if (count($weeeAttributes[$holder['optionId']]) > 0 && is_array($weeeAttributes[$holder['optionId']])) {
+                $weeSum = 0;
+                foreach ($weeeAttributes[$holder['optionId']] as $weeAttribute) {
+                    $holder[$key]['weeePrice' . $weeAttribute->getCode()] =
+                        ['amount' => (float)$weeAttribute->getAmount()];
+                    $weeSum += (float)$weeAttribute->getAmount();
+                }
 
-            $holder[$key]['weeePrice']['amount'] += (float)$weeSum;
+                $holder[$key]['weeePrice']['amount'] += (float)$weeSum;
+            }
         }
         return $holder;
     }

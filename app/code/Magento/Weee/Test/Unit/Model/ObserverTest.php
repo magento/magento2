@@ -26,6 +26,21 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
                 'config' => $testArray,
             ]
         );
+
+        $weeObject1 = new \Magento\Framework\DataObject(
+            [
+                'code' => 'fpt1',
+                'amount' => '15.0000',
+            ]
+        );
+
+        $weeObject2 = new \Magento\Framework\DataObject(
+            [
+                'code' => 'fpt2',
+                'amount' => '16.0000',
+            ]
+        );
+
         $weeHelper=$this->getMock('Magento\Weee\Helper\Data', [], [], '', false);
         $weeHelper->expects($this->any())
             ->method('isEnabled')
@@ -54,18 +69,21 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->with('current_product')
             ->will($this->returnValue($product));
 
+        $weeHelper->expects($this->any())
+            ->method('getWeeAttributesForBundle')
+            ->will($this->returnValue([1=> ['fpt1' => $weeObject1], 2 =>['fpt1'=>$weeObject1, 'fpt2'=> $weeObject2]]));
 
         $objectManager = new ObjectManager($this);
-         $weeeObserverObject = $objectManager->getObject(
-             'Magento\Weee\Model\Observer',
-             [
-                 'weeeData' => $weeHelper,
-                 'registry' => $registry,
-             ]
-         );
-         $weeeObserverObject->getPriceConfiguration($observerObject);
+        $weeeObserverObject = $objectManager->getObject(
+            'Magento\Weee\Model\Observer',
+            [
+                'weeeData' => $weeHelper,
+                'registry' => $registry,
+            ]
+        );
+        $weeeObserverObject->getPriceConfiguration($observerObject);
 
-         $this->assertEquals($expectedArray, $configObj->getData('config'));
+        $this->assertEquals($expectedArray, $configObj->getData('config'));
     }
 
     /**
@@ -117,7 +135,10 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
                                         'amount' => 33.50,
                                     ],
                                     'weeePrice' => [
-                                        'amount' => 31.50,
+                                        'amount' => 46.5,
+                                    ],
+                                    'weeePricefpt1' => [
+                                        'amount' => 15,
                                     ],
                                 ],
                         ],
@@ -132,7 +153,13 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
                                         'amount' => 333.50,
                                     ],
                                     'weeePrice' => [
-                                        'amount' => 331.50,
+                                        'amount' => 362.5,
+                                    ],
+                                    'weeePricefpt1' => [
+                                        'amount' => 15,
+                                    ],
+                                    'weeePricefpt2' => [
+                                        'amount' => 16,
                                     ],
                                 ],
                         ],
@@ -218,9 +245,16 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $weeObject = new \Magento\Framework\DataObject(
+        $weeObject1 = new \Magento\Framework\DataObject(
             [
-                'code' => 'fpt',
+                'code' => 'fpt1',
+                'amount' => '15.0000',
+            ]
+        );
+
+        $weeObject2 = new \Magento\Framework\DataObject(
+            [
+                'code' => 'fpt2',
                 'amount' => '15.0000',
             ]
         );
@@ -236,7 +270,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $weeHelper->expects($this->any())
             ->method('getWeeAttributesForBundle')
-            ->will($this->returnValue([$weeObject]));
+            ->will($this->returnValue([['fpt1' => $weeObject1], ['fpt1'=>$weeObject1, 'fpt2'=>$weeObject2]]));
 
         $responseObject=$this->getMock('Magento\Framework\Event\Observer', ['getResponseObject'], [], '', false);
         $responseObject->expects($this->any())
@@ -306,17 +340,18 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'testArray' => [
-                        'TOTAL_BASE_CALCULATION' => 'TOTAL_BASE_CALCULATION',
-                        'optionTemplate' => '<%= data.label %><% if (data.basePrice.value) '
-                . '{ %> +<%= data.basePrice.formatted %><% } %>',
+                    'TOTAL_BASE_CALCULATION' => 'TOTAL_BASE_CALCULATION',
+                    'optionTemplate' => '<%= data.label %><% if (data.basePrice.value) '
+                        . '{ %> +<%= data.basePrice.formatted %><% } %>',
                 ],
                 'weeDisplay' =>  false,
                 'weeEnabled' =>  true,
                 'expectedArray' => [
-                        'TOTAL_BASE_CALCULATION' => 'TOTAL_BASE_CALCULATION',
-                        'optionTemplate' => '<%= data.label %><% if (data.basePrice.value) '
-                . '{ %> +<%= data.basePrice.formatted %><% } %> <% if (data.weeePricefpt) '
-                . '{ %>  (:<%= data.weeePricefpt.formatted %>)<% } %>',
+                    'TOTAL_BASE_CALCULATION' => 'TOTAL_BASE_CALCULATION',
+                    'optionTemplate' => '<%= data.label %><% if (data.basePrice.value) '
+                        . '{ %> +<%= data.basePrice.formatted %><% } %> <% if (data.weeePricefpt1) '
+                        . '{ %>  (:<%= data.weeePricefpt1.formatted %>)<% } %>'
+                        . ' <% if (data.weeePricefpt2) { %>  (:<%= data.weeePricefpt2.formatted %>)<% } %>',
                 ],
             ],
             [
@@ -330,8 +365,9 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
                 'expectedArray' => [
                     'TOTAL_BASE_CALCULATION' => 'TOTAL_BASE_CALCULATION',
                     'optionTemplate' => '<%= data.label %><% if (data.basePrice.value) '
-                        . '{ %> +<%= data.basePrice.formatted %><% } %> <% if (data.weeePricefpt) '
-                        . '{ %>  (:<%= data.weeePricefpt.formatted %>)<% } %> '
+                        . '{ %> +<%= data.basePrice.formatted %><% } %> <% if (data.weeePricefpt1) '
+                        . '{ %>  (:<%= data.weeePricefpt1.formatted %>)<% } %> '
+                        . '<% if (data.weeePricefpt2) { %>  (:<%= data.weeePricefpt2.formatted %>)<% } %> '
                         . '<% if (data.weeePrice) { %><%= data.weeePrice.formatted %><% } %>',
                 ],
             ],
