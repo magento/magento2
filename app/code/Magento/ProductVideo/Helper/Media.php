@@ -11,7 +11,6 @@ use Magento\Framework\App\Area;
 /**
  * Helper to get attributes for video
  *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Media extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -72,11 +71,13 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function initConfig()
     {
-        if($this->cachedVideoConfig === null) {
-            $this->cachedVideoConfig = $this->viewConfig->getViewConfig([
-                'area' => Area::AREA_FRONTEND,
-                'themeModel' => $this->currentTheme
-            ]);
+        if ($this->cachedVideoConfig === null) {
+            $this->cachedVideoConfig = $this->viewConfig->getViewConfig(
+                [
+                    'area' => Area::AREA_FRONTEND,
+                    'themeModel' => $this->currentTheme
+                ]
+            );
         }
 
         return $this;
