@@ -222,11 +222,21 @@ class Address extends AbstractCustomer
     protected $_customerAttributes = [];
 
     /**
+     * Valid column names
+     *
+     * @array
+     */
+    protected $validColumnNames = [
+        "region_id", "vat_is_valid", "vat_request_date", "vat_request_id", "vat_request_success"
+    ];
+
+    /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\App\Resource $resource
+     * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -237,7 +247,6 @@ class Address extends AbstractCustomer
      * @param \Magento\Customer\Model\Resource\Address\CollectionFactory $addressColFactory
      * @param \Magento\Customer\Model\Resource\Address\Attribute\CollectionFactory $attributesFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param ProcessingErrorAggregatorInterface $errorAggregator,
      * @param array $data
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -248,6 +257,7 @@ class Address extends AbstractCustomer
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\App\Resource $resource,
+        ProcessingErrorAggregatorInterface $errorAggregator,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
@@ -258,7 +268,6 @@ class Address extends AbstractCustomer
         \Magento\Customer\Model\Resource\Address\CollectionFactory $addressColFactory,
         \Magento\Customer\Model\Resource\Address\Attribute\CollectionFactory $attributesFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        ProcessingErrorAggregatorInterface $errorAggregator,
         array $data = []
     ) {
         $this->_customerFactory = $customerFactory;
@@ -279,11 +288,11 @@ class Address extends AbstractCustomer
             $importFactory,
             $resourceHelper,
             $resource,
+            $errorAggregator,
             $storeManager,
             $collectionFactory,
             $eavConfig,
             $storageFactory,
-            $errorAggregator,
             $data
         );
 
@@ -422,6 +431,7 @@ class Address extends AbstractCustomer
                     $deleteRowIds[] = $rowData[self::COLUMN_ADDRESS_ID];
                 }
             }
+            $this->updateItemsCounterStats($newRows, $updateRows, $deleteRowIds);
 
             $this->_saveAddressEntities(
                 $newRows,

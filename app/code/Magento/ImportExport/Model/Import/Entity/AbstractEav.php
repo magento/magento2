@@ -80,10 +80,10 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\App\Resource $resource
+     * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param ProcessingErrorAggregatorInterface $errorAggregator,
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -94,10 +94,10 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\App\Resource $resource,
+        ProcessingErrorAggregatorInterface $errorAggregator,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
-        ProcessingErrorAggregatorInterface $errorAggregator,
         array $data = []
     ) {
         parent::__construct($string, $scopeConfig, $importFactory, $resourceHelper, $resource, $errorAggregator, $data);
@@ -180,6 +180,7 @@ abstract class AbstractEav extends \Magento\ImportExport\Model\Import\AbstractEn
                 'type' => \Magento\ImportExport\Model\Import::getAttributeType($attribute),
                 'options' => $this->getAttributeOptions($attribute),
             ];
+            $this->validColumnNames[] = $attribute->getAttributeCode();
         }
         return $this;
     }

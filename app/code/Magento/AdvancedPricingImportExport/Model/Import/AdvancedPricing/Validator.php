@@ -51,5 +51,6 @@ class Validator extends AbstractValidator implements RowValidatorInterface
         foreach ($this->validators as $validator) {
             $validator->init($context);
         }
+        return $this;
     }
 }

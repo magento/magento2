@@ -62,6 +62,30 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         ValidatorInterface::ERROR_INVALID_GROUP_PRICE_SITE => 'Group Price data website is invalid',
         ValidatorInterface::ERROR_INVALID_GROUP_PRICE_GROUP => 'Group Price customer group is invalid',
         ValidatorInterface::ERROR_GROUP_PRICE_DATA_INCOMPLETE => 'Group Price data is incomplete',
+        ValidatorInterface::ERROR_INVALID_ATTRIBUTE_DECIMAL => 'Value for \'%s\' attribute contains incorrect value, acceptable values are in decimal format',
+    ];
+
+    /**
+     * If we should check column names
+     *
+     * @var bool
+     */
+    protected $needColumnCheck = true;
+
+    /**
+     * Valid column names
+     *
+     * @array
+     */
+    protected $validColumnNames = [
+        self::COL_SKU,
+        self::COL_TIER_PRICE_WEBSITE,
+        self::COL_TIER_PRICE_CUSTOMER_GROUP,
+        self::COL_TIER_PRICE_QTY,
+        self::COL_TIER_PRICE,
+        self::COL_GROUP_PRICE_WEBSITE,
+        self::COL_GROUP_PRICE_CUSTOMER_GROUP,
+        self::COL_GROUP_PRICE,
     ];
 
     /**
@@ -82,9 +106,19 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     protected $_catalogData;
 
     /**
+     * @var \Magento\Catalog\Model\Product
+     */
+    protected $_productModel;
+
+    /**
      * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver
      */
     protected $_storeResolver;
+
+    /**
+     * @var ImportProduct
+     */
+    protected $_importProduct;
 
     /**
      * @var AdvancedPricing\Validator
@@ -132,60 +166,64 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
 
     /**
      * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
-     * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Eav\Model\Config $config
      * @param \Magento\ImportExport\Model\Resource\Import\Data $importData
+     * @param \Magento\Eav\Model\Config $config
      * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Framework\Stdlib\StringUtils $string
+     * @param ProcessingErrorAggregatorInterface $errorAggregator
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory $resourceFactory
+     * @param \Magento\Catalog\Model\Product $productModel
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param ImportProduct\StoreResolver $storeResolver
+     * @param ImportProduct $importProduct
      * @param AdvancedPricing\Validator $validator
      * @param AdvancedPricing\Validator\Website $websiteValidator
      * @param AdvancedPricing\Validator\GroupPrice $groupPriceValidator
-     * @param \Magento\Framework\Stdlib\StringUtils $string
-     * @param ProcessingErrorAggregatorInterface $errorAggregator
      */
     public function __construct(
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\ImportExport\Helper\Data $importExportData,
-        \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
-        \Magento\Eav\Model\Config $config,
         \Magento\ImportExport\Model\Resource\Import\Data $importData,
+        \Magento\Eav\Model\Config $config,
         \Magento\Framework\App\Resource $resource,
+        \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
+        \Magento\Framework\Stdlib\StringUtils $string,
+        ProcessingErrorAggregatorInterface $errorAggregator,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory $resourceFactory,
+        \Magento\Catalog\Model\Product $productModel,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver,
+        ImportProduct $importProduct,
         AdvancedPricing\Validator $validator,
         AdvancedPricing\Validator\Website $websiteValidator,
-        AdvancedPricing\Validator\GroupPrice $groupPriceValidator,
-        \Magento\Framework\Stdlib\StringUtils $string,
-        ProcessingErrorAggregatorInterface $errorAggregator
+        AdvancedPricing\Validator\GroupPrice $groupPriceValidator
     ) {
         $this->_localeDate = $localeDate;
+        $this->jsonHelper = $jsonHelper;
+        $this->_importExportData = $importExportData;
+        $this->_resourceHelper = $resourceHelper;
+        $this->_dataSourceModel = $importData;
         $this->_connection = $resource->getConnection('write');
         $this->_resourceFactory = $resourceFactory;
+        $this->_productModel = $productModel;
         $this->_catalogData = $catalogData;
         $this->_storeResolver = $storeResolver;
-        $this->_validator = $validator;
+        $this->_importProduct = $importProduct;
+        $this->_validator = $validator->init($this);
         $this->_oldSkus = $this->retrieveOldSkus();
         $this->websiteValidator = $websiteValidator;
         $this->groupPriceValidator = $groupPriceValidator;
+        $this->errorAggregator = $errorAggregator;
         $this->_catalogProductEntity = $this->_resourceFactory->create()->getTable('catalog_product_entity');
 
-        parent::__construct(
-            $jsonHelper,
-            $importExportData,
-            $importData,
-            $config,
-            $resource,
-            $resourceHelper,
-            $string,
-            $errorAggregator
-        );
+        foreach (array_merge($this->errorMessageTemplates, $this->_messageTemplates) as $errorCode => $message) {
+            $this->getErrorAggregator()->addErrorMessageTemplate($errorCode, $message);
+        }
     }
 
     /**

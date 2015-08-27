@@ -33,14 +33,14 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
      * There must be column names in the first line
      *
      * @param string $file
-     * @param \Magento\Framework\Filesystem\Directory\Write $directory
+     * @param \Magento\Framework\Filesystem\Directory\Read $directory
      * @param string $delimiter
      * @param string $enclosure
      * @throws \LogicException
      */
     public function __construct(
         $file,
-        \Magento\Framework\Filesystem\Directory\Write $directory,
+        \Magento\Framework\Filesystem\Directory\Read $directory,
         $delimiter = ',',
         $enclosure = '"'
     ) {

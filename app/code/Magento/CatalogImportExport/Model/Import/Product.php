@@ -210,7 +210,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ValidatorInterface::ERROR_INVALID_ATTR_SET => 'Invalid value for Product Template column (set doesn\'t exist?)',
         ValidatorInterface::ERROR_INVALID_TYPE => 'Product Type is invalid or not supported',
         ValidatorInterface::ERROR_INVALID_CATEGORY => 'Category does not exists',
-        ValidatorInterface::ERROR_VALUE_IS_REQUIRED => 'Please make sure attribute "%s" is not empty',
+        ValidatorInterface::ERROR_VALUE_IS_REQUIRED => 'Please make sure attribute "%s" is not empty.',
         ValidatorInterface::ERROR_TYPE_CHANGED => 'Trying to change type of existing products',
         ValidatorInterface::ERROR_SKU_IS_EMPTY => 'SKU is empty',
         ValidatorInterface::ERROR_NO_DEFAULT_ROW => 'Default values row does not exists',
@@ -236,6 +236,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ValidatorInterface::ERROR_INVALID_MEDIA_URL_OR_PATH => 'Wrong URL/path used for attribute %s',
         ValidatorInterface::ERROR_MEDIA_PATH_NOT_ACCESSIBLE => 'Imported resource (image) does not exist in the local media storage',
         ValidatorInterface::ERROR_MEDIA_URL_NOT_ACCESSIBLE => 'Imported resource (image) could not be downloaded from external resource due to timeout or access permissions',
+        ValidatorInterface::ERROR_INVALID_WEIGHT => 'Product weight is invalid',
     ];
 
     /**
@@ -440,7 +441,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_resourceFactory;
 
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Proxy\Product\Resource 
+     * @var \Magento\CatalogImportExport\Model\Import\Proxy\Product\Resource
      */
     protected $_resource;
 
@@ -490,7 +491,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $dateTime;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerRegistry
+     * @var \Magento\Framework\Indexer\IndexerRegistry
      */
     protected $indexerRegistry;
 
@@ -576,6 +577,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Stdlib\StringUtils $string
+     * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
@@ -594,7 +596,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param DateTime\TimezoneInterface $localeDate
      * @param DateTime $dateTime
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
+     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @param Product\StoreResolver $storeResolver
      * @param Product\SkuProcessor $skuProcessor
      * @param Product\CategoryProcessor $categoryProcessor
@@ -602,7 +604,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param ObjectRelationProcessor $objectRelationProcessor
      * @param TransactionManagerInterface $transactionManager
      * @param Product\TaxClassProcessor $taxClassProcessor
-     * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param array $data
      * @throws \Magento\Framework\Exception\LocalizedException
      *
@@ -616,6 +617,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\Framework\App\Resource $resource,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Stdlib\StringUtils $string,
+        ProcessingErrorAggregatorInterface $errorAggregator,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
@@ -634,7 +636,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         DateTime $dateTime,
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
+        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         Product\StoreResolver $storeResolver,
         Product\SkuProcessor $skuProcessor,
         Product\CategoryProcessor $categoryProcessor,
@@ -642,7 +644,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         ObjectRelationProcessor $objectRelationProcessor,
         TransactionManagerInterface $transactionManager,
         Product\TaxClassProcessor $taxClassProcessor,
-        ProcessingErrorAggregatorInterface $errorAggregator,
         array $data = []
     ) {
         $this->_eventManager = $eventManager;
@@ -756,7 +757,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     public function retrieveProductTypeByName($name)
     {
-        return $this->_productTypeModels[$name];
+        if (isset($this->_productTypeModels[$name])) {
+            return $this->_productTypeModels[$name];
+        }
+        return null;
     }
 
     /**
@@ -957,20 +961,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         foreach ($this->_messageTemplates as $errorCode => $template) {
             $this->addMessageTemplate($errorCode, $template);
         }
-    }
-
-    /**
-     * Retrieve message template
-     *
-     * @param string $errorCode
-     * @return null|string
-     */
-    public function retrieveMessageTemplate($errorCode)
-    {
-        if (isset($this->_messageTemplates[$errorCode])) {
-            return $this->_messageTemplates[$errorCode];
-        }
-        return null;
     }
 
     /**
@@ -1612,16 +1602,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         }
                     }
                     foreach ($storeIds as $storeId) {
-                        if ('multiselect' == $attribute->getFrontendInput()) {
-                            if (!isset($attributes[$attrTable][$rowSku][$attrId][$storeId])) {
-                                $attributes[$attrTable][$rowSku][$attrId][$storeId] = '';
-                            } else {
-                                $attributes[$attrTable][$rowSku][$attrId][$storeId] .= ',';
-                            }
-                            $attributes[$attrTable][$rowSku][$attrId][$storeId] .= $attrValue;
-                        } else {
-                            $attributes[$attrTable][$rowSku][$attrId][$storeId] = $attrValue;
-                        }
+                        $attributes[$attrTable][$rowSku][$attrId][$storeId] = $attrValue;
                     }
                     // restore 'backend_model' to avoid 'default' setting
                     $attribute->setBackendModel($backModel);
@@ -1793,7 +1774,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $destinationDir = "catalog/product";
             $destinationPath = $dirAddon . $DS . $this->_mediaDirectory->getRelativePath($destinationDir);
 
-            $this->_mediaDirectory->create($destinationDir);
+            $this->_mediaDirectory->create($destinationPath);
             if (!$this->_fileUploader->setDestDir($destinationPath)) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('File directory \'%1\' is not writable.', $destinationPath)
@@ -1801,15 +1782,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             }
         }
         return $this->_fileUploader;
-    }
-
-    public function getDestinationDir()
-    {
-        /*$dirConfig = DirectoryList::getDefaultConfig();
-        $dirAddon = $dirConfig[DirectoryList::MEDIA][DirectoryList::PATH];
-        $DS = DIRECTORY_SEPARATOR;
-        $destinationDir = "catalog/product";
-        $destinationPath = $dirAddon . $DS . $this->_mediaDirectory->getRelativePath($destinationDir);*/
     }
 
     /**
@@ -2211,10 +2183,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             if (!isset($rowData[self::COL_TYPE]) || !isset($this->_productTypeModels[$rowData[self::COL_TYPE]])) {
                 $this->addRowError(ValidatorInterface::ERROR_INVALID_TYPE, $rowNum);
             } elseif (!isset(
-                $rowData[self::COL_ATTR_SET]
-            ) || !isset(
-                $this->_attrSetNameToId[$rowData[self::COL_ATTR_SET]]
-            )
+                    $rowData[self::COL_ATTR_SET]
+                ) || !isset(
+                    $this->_attrSetNameToId[$rowData[self::COL_ATTR_SET]]
+                )
             ) {
                 $this->addRowError(ValidatorInterface::ERROR_INVALID_ATTR_SET, $rowNum);
             } elseif (is_null($this->skuProcessor->getNewSku($sku))) {

@@ -7,6 +7,7 @@ namespace Magento\CatalogImportExport\Model\Import\Product\Type;
 
 use Magento\Framework\App\Resource;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
+use Magento\CatalogImportExport\Model\Import\Product;
 
 /**
  * Import entity abstract product type model
@@ -126,11 +127,6 @@ abstract class AbstractType
     protected $connection;
 
     /**
-     * @var array
-     */
-    protected $codeToId;
-
-    /**
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac
      * @param \Magento\Framework\App\Resource $resource
@@ -235,7 +231,7 @@ abstract class AbstractType
     {
         // temporary storage for attributes' parameters to avoid double querying inside the loop
         $entityId = $this->_entityModel->getEntityTypeId();
-        $entityAttributes = $this->_connection->fetchPairs(
+        $entityAttributes = $this->_connection->fetchAll(
             $this->_connection->select()->from(
                 ['attr' => $this->_resource->getTableName('eav_entity_attribute')],
                 ['attr.attribute_id']
@@ -248,23 +244,23 @@ abstract class AbstractType
             )
         );
         $absentKeys = [];
-        foreach ($entityAttributes as $attributeId => $attributeSetName) {
-            if (!isset(self::$commonAttributesCache[$attributeId])) {
-                if (!isset($absentKeys[$attributeSetName])) {
-                    $absentKeys[$attributeSetName] = [];
+        foreach ($entityAttributes as $attributeRow) {
+            if (!isset(self::$commonAttributesCache[$attributeRow['attribute_id']])) {
+                if (!isset($absentKeys[$attributeRow['attribute_set_name']])) {
+                    $absentKeys[$attributeRow['attribute_set_name']] = [];
                 }
-                $absentKeys[$attributeSetName][] = $attributeId;
+                $absentKeys[$attributeRow['attribute_set_name']][] = $attributeRow['attribute_id'];
             }
         }
         foreach ($absentKeys as $attributeSetName => $attributeIds) {
             $this->attachAttributesById($attributeSetName, $attributeIds);
         }
-        foreach ($entityAttributes as $attributeId => $attributeSetName) {
-            if (isset(self::$commonAttributesCache[$attributeId])) {
-                $attribute = self::$commonAttributesCache[$attributeId];
+        foreach ($entityAttributes as $attributeRow) {
+            if (isset(self::$commonAttributesCache[$attributeRow['attribute_id']])) {
+                $attribute = self::$commonAttributesCache[$attributeRow['attribute_id']];
                 $this->_addAttributeParams(
-                    $attributeSetName,
-                    self::$commonAttributesCache[$attributeId],
+                    $attributeRow['attribute_set_name'],
+                    self::$commonAttributesCache[$attributeRow['attribute_id']],
                     $attribute
                 );
             }
@@ -484,10 +480,16 @@ abstract class AbstractType
         foreach ($this->_getProductAttributes($rowData) as $attrCode => $attrParams) {
             if (!$attrParams['is_static']) {
                 if (isset($rowData[$attrCode]) && strlen($rowData[$attrCode])) {
-                    $resultAttrs[$attrCode] = 'select' == $attrParams['type'] ||
-                        'multiselect' == $attrParams['type'] ? $attrParams['options'][strtolower(
-                            $rowData[$attrCode]
-                        )] : $rowData[$attrCode];
+                    $resultAttrs[$attrCode] = 'select' == $attrParams['type'] ? $attrParams['options'][strtolower(
+                        $rowData[$attrCode]
+                    )] : $rowData[$attrCode];
+                    if ('multiselect' == $attrParams['type']) {
+                        $resultAttrs[$attrCode] = [];
+                        foreach (explode(Product::PSEUDO_MULTI_LINE_SEPARATOR, $rowData[$attrCode]) as $value) {
+                            $resultAttrs[$attrCode][] = $attrParams['options'][strtolower($value)];
+                        }
+                        $resultAttrs[$attrCode] = implode(',', $resultAttrs[$attrCode]);
+                    }
                 } elseif (array_key_exists($attrCode, $rowData)) {
                     $resultAttrs[$attrCode] = $rowData[$attrCode];
                 } elseif ($withDefaultValue && null !== $attrParams['default_value']) {

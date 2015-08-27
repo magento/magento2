@@ -24,6 +24,11 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
 
     const COLUMN_EMAIL = '_email';
 
+    const COLUMN_DEFAULT_BILLING = 'default_billing';
+
+    const COLUMN_DEFAULT_SHIPPING = 'default_shipping';
+
+
     /**#@-*/
 
     /**#@+
@@ -50,7 +55,8 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      *
      * @var string[]
      */
-    protected $_ignoredAttributes = ['website_id', 'store_id', 'default_billing', 'default_shipping'];
+    protected $_ignoredAttributes = ['website_id', 'store_id',
+        self::COLUMN_DEFAULT_BILLING, self::COLUMN_DEFAULT_SHIPPING];
 
     /**
      * Customer collection wrapper
@@ -65,6 +71,13 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     protected $_storageFactory;
 
     /**
+     * If we should check column names
+     *
+     * @var bool
+     */
+    protected $needColumnCheck = true;
+
+    /**
      * {@inheritdoc}
      */
     protected $masterAttributeCode = '_email';
@@ -75,11 +88,11 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\App\Resource $resource
+     * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory
-     * @param ProcessingErrorAggregatorInterface $errorAggregator,
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -89,11 +102,11 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\App\Resource $resource,
+        ProcessingErrorAggregatorInterface $errorAggregator,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory,
-        ProcessingErrorAggregatorInterface $errorAggregator,
         array $data = []
     ) {
         $this->_storageFactory = $storageFactory;
@@ -103,10 +116,10 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
             $importFactory,
             $resourceHelper,
             $resource,
+            $errorAggregator,
             $storeManager,
             $collectionFactory,
             $eavConfig,
-            $errorAggregator,
             $data
         );
 

@@ -5,14 +5,14 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
-use Magento\ImportExport\Controller\Adminhtml\Import as ImportController;
+use Magento\ImportExport\Controller\Adminhtml\ImportResult as ImportResultController;
 use Magento\ImportExport\Model\Import;
 use Magento\ImportExport\Block\Adminhtml\Import\Frame\Result as ImportResultBlock;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import\Adapter as ImportAdapter;
 
-class Validate extends ImportController
+class Validate extends ImportResultController
 {
     /**
      * Validate uploaded files action
@@ -44,14 +44,20 @@ class Validate extends ImportController
             $validationResult = $import->validateSource($source);
 
             if (!$import->getProcessedRowsCount()) {
-                $resultBlock->addError(__('This file is empty. Please try another one.'));
+                if (!$import->getErrorAggregator()->getErrorsCount()) {
+                    $resultBlock->addError(__('This file is empty. Please try another one.'));
+                } else {
+                    foreach ($import->getErrorAggregator()->getAllErrors() as $error) {
+                        $resultBlock->addError($error->getErrorMessage(), false);
+                    }
+                }
             } else {
+                $errorAggregator = $import->getErrorAggregator();
                 if (!$validationResult) {
-                    $resultBlock->addNotice(
+                    $resultBlock->addError(
                         __('Data validation is failed. Please fix errors and re-upload the file..')
                     );
-                    $errors = $this->getImportProcessingMessages($import->getErrorAggregator());
-                    $resultBlock->addError($errors);
+                    $this->addErrorMessages($resultBlock, $errorAggregator);
                 } else {
                     if ($import->isImportAllowed()) {
                         $resultBlock->addSuccess(
@@ -65,7 +71,6 @@ class Validate extends ImportController
                         );
                     }
                 }
-                $errorAggregator = $import->getErrorAggregator();
                 $resultBlock->addNotice(
                     __(
                         'Checked rows: %1, checked entities: %2, invalid rows: %3, total errors: %4',

@@ -49,19 +49,27 @@ abstract class AbstractEntity
     const ERROR_CODE_ATTRIBUTE_NOT_VALID = 'attributeNotInvalid';
     const ERROR_CODE_DUPLICATE_UNIQUE_ATTRIBUTE = 'duplicateUniqueAttribute';
     const ERROR_CODE_ILLEGAL_CHARACTERS = 'illegalCharacters';
+    const ERROR_CODE_INVALID_ATTRIBUTE = 'invalidAttributeName';
     const ERROR_CODE_WRONG_QUOTES = 'wrongQuotes';
     const ERROR_CODE_COLUMNS_NUMBER = 'wrongColumnsNumber';
+    const ERROR_EXCEEDED_MAX_LENGTH = 'exceededMaxLength';
+    const ERROR_INVALID_ATTRIBUTE_TYPE = 'invalidAttributeType';
+    const ERROR_INVALID_ATTRIBUTE_OPTION = 'absentAttributeOption';
 
     protected $errorMessageTemplates = [
         self::ERROR_CODE_SYSTEM_EXCEPTION => 'General system exception happened',
-        self::ERROR_CODE_COLUMN_NOT_FOUND => 'We can\'t find required columns: %1.',
-        self::ERROR_CODE_COLUMN_EMPTY_HEADER => 'Columns number: "%1" have empty headers',
-        self::ERROR_CODE_COLUMN_NAME_INVALID => 'Column names: "%1" are invalid',
-        self::ERROR_CODE_ATTRIBUTE_NOT_VALID => "Please correct the value for '%s'.",
+        self::ERROR_CODE_COLUMN_NOT_FOUND => 'We can\'t find required columns: %s.',
+        self::ERROR_CODE_COLUMN_EMPTY_HEADER => 'Columns number: "%s" have empty headers',
+        self::ERROR_CODE_COLUMN_NAME_INVALID => 'Column names: "%s" are invalid',
+        self::ERROR_CODE_ATTRIBUTE_NOT_VALID => "Please correct the value for '%s'",
         self::ERROR_CODE_DUPLICATE_UNIQUE_ATTRIBUTE => "Duplicate Unique Attribute for '%s'",
         self::ERROR_CODE_ILLEGAL_CHARACTERS => "Illegal character used for attribute %s",
+        self::ERROR_CODE_INVALID_ATTRIBUTE => 'Header contains invalid attribute(s): "%s"',
         self::ERROR_CODE_WRONG_QUOTES => "Curly quotes used instead of straight quotes",
         self::ERROR_CODE_COLUMNS_NUMBER => "Number of columns does not correspond to the number of rows in the header",
+        self::ERROR_EXCEEDED_MAX_LENGTH => 'Attribute %s exceeded max length',
+        self::ERROR_INVALID_ATTRIBUTE_TYPE => 'Value for \'%s\' attribute contains incorrect value, acceptable values are in %s format',
+        self::ERROR_INVALID_ATTRIBUTE_OPTION => 'Value for \'%s\' attribute contains incorrect value, see acceptable values on settings specified for Admin',
     ];
 
     /**#@-*/
@@ -79,6 +87,20 @@ abstract class AbstractEntity
      * @var bool
      */
     protected $_dataValidated = false;
+
+    /**
+     * Valid column names
+     *
+     * @array
+     */
+    protected $validColumnNames = [];
+
+    /**
+     * If we should check column names
+     *
+     * @var bool
+     */
+    protected $needColumnCheck = false;
 
     /**
      * DB data source model
@@ -146,7 +168,7 @@ abstract class AbstractEntity
      *
      * @var bool
      */
-    protected $logInHistory = false;
+    protected $logInHistory = true;
 
     /**
      * Rows which will be skipped during import
@@ -227,11 +249,32 @@ abstract class AbstractEntity
     protected $_scopeConfig;
 
     /**
+     * Count if created items
+     *
+     * @var int
+     */
+    protected $countItemsCreated = 0;
+
+    /**
+     * Count if updated items
+     *
+     * @var int
+     */
+    protected $countItemsUpdated = 0;
+
+    /**
+     * Count if deleted items
+     *
+     * @var int
+     */
+    protected $countItemsDeleted = 0;
+
+    /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param Resource $resource
+     * @param \Magento\Framework\App\Resource $resource
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param array $data
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -579,30 +622,37 @@ abstract class AbstractEntity
      */
     public function isAttributeValid($attributeCode, array $attributeParams, array $rowData, $rowNumber)
     {
+        $message = '';
         switch ($attributeParams['type']) {
             case 'varchar':
                 $value = $this->string->cleanString($rowData[$attributeCode]);
                 $valid = $this->string->strlen($value) < self::DB_MAX_VARCHAR_LENGTH;
+                $message = self::ERROR_EXCEEDED_MAX_LENGTH;
                 break;
             case 'decimal':
                 $value = trim($rowData[$attributeCode]);
                 $valid = (double)$value == $value && is_numeric($value);
+                $message = self::ERROR_INVALID_ATTRIBUTE_TYPE;
                 break;
             case 'select':
             case 'multiselect':
                 $valid = isset($attributeParams['options'][strtolower($rowData[$attributeCode])]);
+                $message = self::ERROR_INVALID_ATTRIBUTE_OPTION;
                 break;
             case 'int':
                 $value = trim($rowData[$attributeCode]);
                 $valid = (int)$value == $value && is_numeric($value);
+                $message = self::ERROR_INVALID_ATTRIBUTE_TYPE;
                 break;
             case 'datetime':
                 $value = trim($rowData[$attributeCode]);
                 $valid = strtotime($value) !== false;
+                $message = self::ERROR_INVALID_ATTRIBUTE_TYPE;
                 break;
             case 'text':
                 $value = $this->string->cleanString($rowData[$attributeCode]);
                 $valid = $this->string->strlen($value) < self::DB_MAX_TEXT_LENGTH;
+                $message = self::ERROR_EXCEEDED_MAX_LENGTH;
                 break;
             default:
                 $valid = true;
@@ -610,7 +660,14 @@ abstract class AbstractEntity
         }
 
         if (!$valid) {
-            $this->addRowError(self::ERROR_CODE_ATTRIBUTE_NOT_VALID, $rowNumber, $attributeCode);
+            if ($message == self::ERROR_INVALID_ATTRIBUTE_TYPE) {
+                $message = sprintf(
+                    $this->errorMessageTemplates[$message],
+                    $attributeCode,
+                    $attributeParams['type']
+                );
+            }
+            $this->addRowError($message, $rowNumber, $attributeCode);
         } elseif (!empty($attributeParams['is_unique'])) {
             if (isset($this->_uniqueAttributes[$attributeCode][$rowData[$attributeCode]])) {
                 $this->addRowError(self::ERROR_CODE_DUPLICATE_UNIQUE_ATTRIBUTE, $rowNumber, $attributeCode);
@@ -714,6 +771,7 @@ abstract class AbstractEntity
             $columnNumber = 0;
             $emptyHeaderColumns = [];
             $invalidColumns = [];
+            $invalidAttributes = [];
             foreach ($this->getSource()->getColNames() as $columnName) {
                 $columnNumber++;
                 if (!$this->isAttributeParticular($columnName)) {
@@ -721,10 +779,19 @@ abstract class AbstractEntity
                         $emptyHeaderColumns[] = $columnNumber;
                     } elseif (!preg_match('/^[a-z][a-z0-9_]*$/', $columnName)) {
                         $invalidColumns[] = $columnName;
+                    } elseif ($this->needColumnCheck && !in_array($columnName, $this->validColumnNames)) {
+                        $invalidAttributes[] = $columnName;
                     }
                 }
             }
-
+            if ($invalidAttributes) {
+                $this->getErrorAggregator()->addError(
+                    self::ERROR_CODE_INVALID_ATTRIBUTE,
+                    ProcessingError::ERROR_LEVEL_CRITICAL,
+                    null,
+                    implode('", "', $invalidAttributes)
+                );
+            }
             if ($emptyHeaderColumns) {
                 $this->getErrorAggregator()->addError(
                     self::ERROR_CODE_COLUMN_EMPTY_HEADER,
@@ -738,7 +805,7 @@ abstract class AbstractEntity
                     self::ERROR_CODE_COLUMN_NAME_INVALID,
                     ProcessingError::ERROR_LEVEL_CRITICAL,
                     null,
-                    $invalidColumns
+                    implode('", "', $invalidColumns)
                 );
             }
 
@@ -748,5 +815,51 @@ abstract class AbstractEntity
             }
         }
         return $this->getErrorAggregator();
+    }
+
+    /**
+     * Get count of created items
+     *
+     * @return int
+     */
+    public function getCreatedItemsCount()
+    {
+        return $this->countItemsCreated;
+    }
+
+    /**
+     * Get count of updated items
+     *
+     * @return int
+     */
+    public function getUpdatedItemsCount()
+    {
+        return $this->countItemsUpdated;
+    }
+
+    /**
+     * Get count of deleted items
+     *
+     * @return int
+     */
+    public function getDeletedItemsCount()
+    {
+        return $this->countItemsDeleted;
+    }
+
+    /**
+     * Update proceed items counter
+     *
+     * @param array $created
+     * @param array $updated
+     * @param array $deleted
+     * @return $this
+     */
+    protected function updateItemsCounterStats(array $created = [], array $updated = [], array $deleted = [])
+    {
+        $this->countItemsCreated = count($created);
+        $this->countItemsUpdated = count($updated);
+        $this->countItemsDeleted = count($deleted);
+        return $this;
     }
 }

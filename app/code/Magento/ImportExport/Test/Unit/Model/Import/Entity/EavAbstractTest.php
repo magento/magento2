@@ -98,10 +98,10 @@ class EavAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstr
                 $this->_importFactory,
                 $this->_resourceHelper,
                 $this->_resource,
+                $this->getErrorAggregatorObject(),
                 $this->_storeManager,
                 $this->_collectionFactory,
                 $this->_eavConfig,
-                $this->getErrorAggregatorObject(),
                 $this->_getModelDependencies()
             ]
         );

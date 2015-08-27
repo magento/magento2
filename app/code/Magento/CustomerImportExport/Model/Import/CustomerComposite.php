@@ -126,6 +126,24 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     protected $_dataSourceModels;
 
     /**
+     * If we should check column names
+     *
+     * @var bool
+     */
+    protected $needColumnCheck = true;
+
+    /**
+     * Valid column names
+     *
+     * @array
+     */
+    protected $validColumnNames = [
+        Customer::COLUMN_DEFAULT_BILLING,
+        Customer::COLUMN_DEFAULT_SHIPPING,
+        Customer::COLUMN_PASSWORD,
+    ];
+
+    /**
      * {@inheritdoc}
      */
     protected $masterAttributeCode = 'email';
@@ -136,11 +154,12 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\App\Resource $resource
+     * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param \Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\DataFactory $dataFactory
      * @param \Magento\CustomerImportExport\Model\Import\CustomerFactory $customerFactory
      * @param \Magento\CustomerImportExport\Model\Import\AddressFactory $addressFactory
-     * @param ProcessingErrorAggregatorInterface $errorAggregator,
      * @param array $data
+     * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -150,10 +169,10 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\App\Resource $resource,
+        ProcessingErrorAggregatorInterface $errorAggregator,
         \Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\DataFactory $dataFactory,
         \Magento\CustomerImportExport\Model\Import\CustomerFactory $customerFactory,
         \Magento\CustomerImportExport\Model\Import\AddressFactory $addressFactory,
-        ProcessingErrorAggregatorInterface $errorAggregator,
         array $data = []
     ) {
         parent::__construct($string, $scopeConfig, $importFactory, $resourceHelper, $resource, $errorAggregator, $data);
@@ -204,6 +223,13 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
             unset($data['data_source_model']);
         }
         $this->_initAddressAttributes();
+
+        $this->validColumnNames = array_merge(
+            $this->validColumnNames,
+            $this->_customerAttributes,
+            $this->_addressAttributes,
+            $this->_customerEntity->customerFields
+        );
 
         // next customer id
         if (isset($data['next_customer_id'])) {

@@ -5,24 +5,10 @@
  */
 namespace Magento\Indexer\Model\Indexer;
 
-/**
- * @method string getIndexerId()
- * @method \Magento\Indexer\Model\Indexer\State setIndexerId($value)
- * @method string getStatus()
- * @method string getUpdated()
- * @method \Magento\Indexer\Model\Indexer\State setUpdated($value)
- */
-class State extends \Magento\Framework\Model\AbstractModel
+use Magento\Framework\Indexer\StateInterface;
+
+class State extends \Magento\Framework\Model\AbstractModel implements StateInterface
 {
-    /**
-     * Indexer statuses
-     */
-    const STATUS_WORKING = 'working';
-
-    const STATUS_VALID = 'valid';
-
-    const STATUS_INVALID = 'invalid';
-
     /**
      * Prefix of model events names
      *
@@ -55,6 +41,58 @@ class State extends \Magento\Framework\Model\AbstractModel
             $data['status'] = self::STATUS_INVALID;
         }
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+    }
+
+    /**
+     * Return indexer id
+     *
+     * @return string
+     */
+    public function getIndexerId()
+    {
+        return parent::getIndexerId();
+    }
+
+    /**
+     * Set indexer id
+     *
+     * @param string $value
+     * @return $this
+     */
+    public function setIndexerId($value)
+    {
+        return parent::setIndexerId($value);
+    }
+
+    /**
+     * Return status
+     *
+     * @return string
+     */
+    public function getStatus()
+    {
+        return parent::getStatus();
+    }
+
+    /**
+     * Return updated
+     *
+     * @return string
+     */
+    public function getUpdated()
+    {
+        return parent::getUpdated();
+    }
+
+    /**
+     * Set updated
+     *
+     * @param string $value
+     * @return $this
+     */
+    public function setUpdated($value)
+    {
+        return parent::setUpdated($value);
     }
 
     /**

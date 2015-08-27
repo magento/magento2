@@ -27,6 +27,8 @@ class Customer extends AbstractCustomer
 
     const COLUMN_STORE = '_store';
 
+    const COLUMN_PASSWORD = 'password';
+
     /**#@-*/
 
     /**#@+
@@ -120,18 +122,52 @@ class Customer extends AbstractCustomer
     protected $masterAttributeCode = 'email';
 
     /**
+     * Valid column names
+     *
+     * @array
+     */
+    protected $validColumnNames = [
+        self::COLUMN_DEFAULT_BILLING,
+        self::COLUMN_DEFAULT_SHIPPING,
+        self::COLUMN_PASSWORD,
+    ];
+
+    /**
+     * Customer fields in file
+     */
+    public $customerFields = [
+        'group_id',
+        'store_id',
+        'updated_at',
+        'created_at',
+        'created_in',
+        'prefix',
+        'firstname',
+        'middlename',
+        'lastname',
+        'suffix',
+        'dob',
+        'password_hash',
+        'taxvat',
+        'confirmation',
+        'gender',
+        'rp_token',
+        'rp_token_created_at',
+        ];
+
+    /**
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\App\Resource $resource
+     * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory
      * @param \Magento\Customer\Model\Resource\Attribute\CollectionFactory $attrCollectionFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
-     * @param ProcessingErrorAggregatorInterface $errorAggregator,
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -141,13 +177,13 @@ class Customer extends AbstractCustomer
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\App\Resource $resource,
+        ProcessingErrorAggregatorInterface $errorAggregator,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory,
         \Magento\Customer\Model\Resource\Attribute\CollectionFactory $attrCollectionFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
-        ProcessingErrorAggregatorInterface $errorAggregator,
         array $data = []
     ) {
         $this->_resourceHelper = $resourceHelper;
@@ -167,11 +203,11 @@ class Customer extends AbstractCustomer
             $importFactory,
             $resourceHelper,
             $resource,
+            $errorAggregator,
             $storeManager,
             $collectionFactory,
             $eavConfig,
             $storageFactory,
-            $errorAggregator,
             $data
         );
 
@@ -201,6 +237,11 @@ class Customer extends AbstractCustomer
 
         $this->_initStores(true)->_initAttributes();
 
+        $this->validColumnNames = array_merge(
+            $this->validColumnNames,
+            $this->customerFields
+        );
+
         $this->_customerModel = $customerFactory->create();
         /** @var $customerResource \Magento\Customer\Model\Resource\Customer */
         $customerResource = $this->_customerModel->getResource();
@@ -220,30 +261,11 @@ class Customer extends AbstractCustomer
             $this->_connection->insertMultiple($this->_entityTable, $entitiesToCreate);
         }
 
-        $customerFields = [
-            'group_id',
-            'store_id',
-            'updated_at',
-            'created_at',
-            'created_in',
-            'prefix',
-            'firstname',
-            'middlename',
-            'lastname',
-            'suffix',
-            'dob',
-            'password_hash',
-            'taxvat',
-            'confirmation',
-            'gender',
-            'rp_token',
-            'rp_token_created_at',
-        ];
         if ($entitiesToUpdate) {
             $this->_connection->insertOnDuplicate(
                 $this->_entityTable,
                 $entitiesToUpdate,
-                $customerFields
+                $this->customerFields
             );
         }
 
@@ -439,6 +461,7 @@ class Customer extends AbstractCustomer
                     }
                 }
             }
+            $this->updateItemsCounterStats($entitiesToCreate, $entitiesToUpdate, $entitiesToDelete);
             /**
              * Save prepared data
              */
