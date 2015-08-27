@@ -24,13 +24,15 @@ define([
             gridNew: [],
             gridDeleted: [],
             attributes: [],
-            attributesName: [],
+            attributesName: [$.mage.__('Images'), $.mage.__('SKU'), $.mage.__('Quantity'), $.mage.__('Price')],
             sections: [],
             gridTemplate: 'Magento_ConfigurableProduct/variations/steps/summary-grid'
         },
         initObservable: function () {
-            this._super().observe('gridExisting gridNew gridDeleted attributes attributesName sections');
-
+            this._super().observe('gridExisting gridNew gridDeleted attributes sections');
+            this.gridExisting.columns = ko.observableArray();
+            this.gridNew.columns = ko.observableArray();
+            this.gridDeleted.columns = ko.observableArray();
             return this;
         },
         nextLabelText: $.mage.__('Generate Products'),
@@ -77,9 +79,11 @@ define([
             }, this);
 
             this.gridExisting(gridExisting);
+            this.gridExisting.columns(this.getColumnsName(this.wizard.data.attributes));
 
             if (gridNew.length > 0) {
                 this.gridNew(gridNew);
+                this.gridNew.columns(this.getColumnsName(this.wizard.data.attributes));
             }
 
             _.each(_.omit(this.variationsComponent().productAttributesMap, variationsKeys), function (productId) {
@@ -90,6 +94,7 @@ define([
 
             if (gridDeleted.length > 0) {
                 this.gridDeleted(gridDeleted);
+                this.gridDeleted.columns(this.getColumnsName(this.variationsComponent().productAttributes));
             }
         },
         prepareRowForGrid: function(variation) {
@@ -110,16 +115,19 @@ define([
         getGridId: function() {
             return _.uniqueId('grid_');
         },
+        getColumnsName: function (attributes) {
+            var columns = this.attributesName.slice(0);
+
+            attributes.each(function (attribute, index) {
+                columns.splice(3 + index, 0, attribute.label);
+            }, this);
+
+            return columns;
+        },
         render: function (wizard) {
             this.wizard = wizard;
             this.sections(wizard.data.sections());
             this.attributes(wizard.data.attributes());
-
-            this.attributesName([$.mage.__('Images'), $.mage.__('SKU'), $.mage.__('Quantity'), $.mage.__('Price')]);
-            this.attributes.each(function (attribute, index) {
-                this.attributesName.splice(3 + index, 0, attribute.label);
-            }, this);
-
             this.gridNew([]);
             this.gridExisting([]);
             this.gridDeleted([]);
