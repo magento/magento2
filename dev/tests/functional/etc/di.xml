@@ -11,4 +11,6 @@
             <argument name="schemaPath" xsi:type="string">etc/config.xsd</argument>
         </arguments>
     </virtualType>
+
+    <type name="Magento\Mtf\Util\Protocol\CurlTransport\WebApiDecorator" shared="true" />
 </config>

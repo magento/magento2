@@ -215,21 +215,4 @@ class Curl extends AbstractCurl
         preg_match('/<tr data-role="row" title="[^"]+system_design_theme\/edit\/id\/([\d]+)\/"/', $response, $match);
         return empty($match[1]) ? null : $match[1];
     }
-
-    /**
-     * Encoded filter parameters.
-     *
-     * @param array $filter
-     * @return string
-     */
-    protected function encodeFilter(array $filter)
-    {
-        $result = [];
-        foreach ($filter as $name => $value) {
-            $result[] = "{$name}={$value}";
-        }
-        $result = implode('&', $result);
-
-        return base64_encode($result);
-    }
 }
