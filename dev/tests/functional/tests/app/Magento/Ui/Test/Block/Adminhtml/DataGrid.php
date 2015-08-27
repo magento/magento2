@@ -55,7 +55,7 @@ class DataGrid extends Grid
      *
      * @var string
      */
-    protected $massActionToggleButton = '.data-grid-multicheck-cell [data-toggle="dropdown"]';
+    protected $massActionToggleButton = 'th [data-toggle="dropdown"]';
 
     /**
      * Mass action button.
