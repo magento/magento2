@@ -39,7 +39,7 @@ class AttributeMerger
      *
      * @var array
      */
-    protected $inputValidation = [
+    protected $inputValidationMap = [
         'alpha' => 'validate-alpha',
         'numeric' => 'validate-number',
         'alphanumeric' => 'validate-alphanum',
@@ -137,9 +137,9 @@ class AttributeMerger
         $dataScopePrefix
     ) {
         // street attribute is unique in terms of configuration, so it has its own configuration builder
-        if (isset($attributeConfig['validation']) && isset($attributeConfig['validation']['input_validation'])) {
+        if (isset($attributeConfig['validation']['input_validation'])) {
             $validationRule = $attributeConfig['validation']['input_validation'];
-            $attributeConfig['validation'][$this->inputValidation[$validationRule]] = true;
+            $attributeConfig['validation'][$this->inputValidationMap[$validationRule]] = true;
             unset($attributeConfig['validation']['input_validation']);
         }
 
