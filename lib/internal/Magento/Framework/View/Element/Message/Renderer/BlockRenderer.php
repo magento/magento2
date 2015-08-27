@@ -55,6 +55,7 @@ class BlockRenderer extends Template implements RendererInterface
     /**
      * @param array $configuration
      * @param array $initializationData
+     * @return void
      */
     private function setUpConfiguration(array $configuration, array $initializationData)
     {

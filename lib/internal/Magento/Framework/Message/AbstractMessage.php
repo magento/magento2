@@ -120,7 +120,7 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function toString()
     {
-        $out = $this->getType() . ': ' . $this->getIdentifier() . '| ' . $this->getText();
+        $out = $this->getType() . ': ' . $this->getIdentifier() . ': ' . $this->getText();
         return $out;
     }
 
