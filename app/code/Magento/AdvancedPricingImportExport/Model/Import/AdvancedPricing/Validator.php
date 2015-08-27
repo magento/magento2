@@ -48,7 +48,7 @@ class Validator extends AbstractImportValidator implements RowValidatorInterface
     public function init()
     {
         foreach ($this->validators as $validator) {
-            $validator->setContext($this->context)->init();
+            $validator->setContext($this->getContext())->init();
         }
     }
 }

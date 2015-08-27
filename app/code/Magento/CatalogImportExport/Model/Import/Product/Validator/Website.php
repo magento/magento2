@@ -7,6 +7,7 @@ namespace Magento\CatalogImportExport\Model\Import\Product\Validator;
 
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
+use Magento\ImportExport\Model\Import;
 
 class Website extends AbstractImportValidator implements RowValidatorInterface
 {
@@ -32,7 +33,10 @@ class Website extends AbstractImportValidator implements RowValidatorInterface
         if (empty($value[ImportProduct::COL_PRODUCT_WEBSITES])) {
             return true;
         }
-        $separator = $this->context->getMultipleValueSeparator();
+        $separator = $this->getContext()->getParam(Import::FIELD_FIELD_MULTIPLE_VALUE_SEPARATOR);
+        if (!$separator) {
+            $separator = ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR;
+        }
         $websites = explode($separator, $value[ImportProduct::COL_PRODUCT_WEBSITES]);
         foreach ($websites as $website) {
             if (!$this->storeResolver->getWebsiteCodeToId($website)) {
