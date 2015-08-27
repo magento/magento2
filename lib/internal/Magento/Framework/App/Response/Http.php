@@ -24,6 +24,9 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
     /** X-FRAME-OPTIONS Header name */
     const HEADER_X_FRAME_OPT = 'X-Frame-Options';
 
+    /** @var \Magento\Framework\App\Request\Http */
+    protected $request;
+
     /** @var \Magento\Framework\Stdlib\CookieManagerInterface */
     protected $cookieManager;
 
@@ -43,11 +46,13 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
      * @param DateTime $dateTime
      */
     public function __construct(
+        \Magento\Framework\App\Request\Http $request,
         CookieManagerInterface $cookieManager,
         CookieMetadataFactory $cookieMetadataFactory,
         Context $context,
         DateTime $dateTime
     ) {
+        $this->request = $request;
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
         $this->context = $context;
@@ -76,8 +81,8 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
         if ($varyString) {
             $sensitiveCookMetadata = $this->cookieMetadataFactory->createSensitiveCookieMetadata()->setPath('/');
             $this->cookieManager->setSensitiveCookie(self::COOKIE_VARY_STRING, $varyString, $sensitiveCookMetadata);
-        } else {
-            $cookieMetadata = $this->cookieMetadataFactory->createCookieMetadata()->setPath('/');
+        } elseif ($this->request->get(self::COOKIE_VARY_STRING)) {
+            $cookieMetadata = $this->cookieMetadataFactory->createSensitiveCookieMetadata()->setPath('/');
             $this->cookieManager->deleteCookie(self::COOKIE_VARY_STRING, $cookieMetadata);
         }
     }
