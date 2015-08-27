@@ -138,7 +138,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     protected $_uploaderFactory;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerRegistry
+     * @var \Magento\Framework\Indexer\IndexerRegistry
      */
     protected $indexerRegistry;
 
@@ -164,7 +164,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * @param FileTransferFactory $httpFactory
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
      * @param Source\Import\Behavior\Factory $behaviorFactory
-     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
+     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @param History $importHistoryModel
      * @param \Magento\Framework\Stdlib\DateTime\DateTime
      * @param array $data
@@ -182,7 +182,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
         \Magento\Framework\HTTP\Adapter\FileTransferFactory $httpFactory,
         \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory,
         \Magento\ImportExport\Model\Source\Import\Behavior\Factory $behaviorFactory,
-        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
+        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\ImportExport\Model\History $importHistoryModel,
         \Magento\Framework\Stdlib\DateTime\DateTime $localeDate,
         array $data = []
@@ -211,9 +211,9 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      */
     protected function _getEntityAdapter()
     {
+
         if (!$this->_entityAdapter) {
             $entities = $this->_importConfig->getEntities();
-
             if (isset($entities[$this->getEntity()])) {
                 try {
                     $this->_entityAdapter = $this->_entityFactory->create($entities[$this->getEntity()]['model']);
@@ -561,8 +561,20 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     public function validateSource(\Magento\ImportExport\Model\Import\AbstractSource $source)
     {
         $this->addLogComment(__('Begin data validation'));
-        $adapter = $this->_getEntityAdapter()->setSource($source);
-        $errorAggregator = $adapter->validateData();
+        try {
+            $adapter = $this->_getEntityAdapter()->setSource($source);
+            $errorAggregator = $adapter->validateData();
+        } catch (\Exception $e) {
+            $errorAggregator = $this->getErrorAggregator();
+            $errorAggregator->addError(
+                \Magento\ImportExport\Model\Import\Entity\AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION,
+                ProcessingError::ERROR_LEVEL_CRITICAL,
+                null,
+                null,
+                null,
+                $e->getMessage()
+            );
+        }
 
         $messages = $this->getOperationResultMessages($errorAggregator);
         $this->addLogComment($messages);
@@ -622,6 +634,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                 $behaviourData[$entityCode] = [
                     'token' => $behaviorClassName,
                     'code' => $behavior->getCode() . '_behavior',
+                    'notes' => $behavior->getNotes($entityCode),
                 ];
             } else {
                 throw new \Magento\Framework\Exception\LocalizedException(
@@ -664,12 +677,14 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     public function isReportEntityType($entity = null)
     {
         $result = false;
+        if (!$entity) {
+            $entity = $this->getEntity();
+        }
         if ($entity !== null && $this->_getEntityAdapter()->getEntityTypeCode() != $entity) {
             $entities = $this->_importConfig->getEntities();
-            if (isset($entities[$this->getEntity()])) {
+            if (isset($entities[$entity])) {
                 try {
-                    $adapter = $this->_entityFactory->create($entities[$entity]['model']);
-                    $result = $adapter->isNeedToLogInHistory();
+                    $result = $this->_getEntityAdapter()->isNeedToLogInHistory();
                 } catch (\Exception $e) {
                     throw new \Magento\Framework\Exception\LocalizedException(__('Please enter a correct entity model'));
                 }

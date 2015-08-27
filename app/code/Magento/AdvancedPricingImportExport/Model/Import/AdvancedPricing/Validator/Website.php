@@ -42,6 +42,24 @@ class Website extends AbstractImportValidator implements RowValidatorInterface
     }
 
     /**
+     * Validate by website type
+     *
+     * @param array $value
+     * @param string $websiteCode
+     * @return bool
+     */
+    protected function isWebsiteValid($value, $websiteCode)
+    {
+        if (isset($value[$websiteCode]) && !empty($value[$websiteCode])) {
+            if ($value[$websiteCode] != $this->getAllWebsitesValue()
+                && !$this->storeResolver->getWebsiteCodeToId($value[$websiteCode])) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Validate value
      *
      * @param mixed $value
@@ -50,18 +68,17 @@ class Website extends AbstractImportValidator implements RowValidatorInterface
     public function isValid($value)
     {
         $this->_clearMessages();
-        if ($value[AdvancedPricing::COL_TIER_PRICE_WEBSITE] != $this->getAllWebsitesValue() &&
-            $value[AdvancedPricing::COL_GROUP_PRICE_WEBSITE] != $this->getAllWebsitesValue()) {
-            if ((!empty($value[AdvancedPricing::COL_TIER_PRICE_WEBSITE])
-                    && !$this->storeResolver->getWebsiteCodeToId($value[AdvancedPricing::COL_TIER_PRICE_WEBSITE]))
-                || ((!empty($value[AdvancedPricing::COL_GROUP_PRICE_WEBSITE]))
-                    && !$this->storeResolver->getWebsiteCodeToId($value[AdvancedPricing::COL_GROUP_PRICE_WEBSITE]))
-            ) {
-                $this->_addMessages([self::ERROR_INVALID_WEBSITE]);
-                return false;
-            }
+        $valid = true;
+        if (isset($value[AdvancedPricing::COL_TIER_PRICE]) && !empty($value[AdvancedPricing::COL_TIER_PRICE])) {
+            $valid *= $this->isWebsiteValid($value, AdvancedPricing::COL_TIER_PRICE_WEBSITE);
         }
-        return true;
+        if (isset($value[AdvancedPricing::COL_GROUP_PRICE]) && !empty($value[AdvancedPricing::COL_GROUP_PRICE])) {
+            $valid *= $this->isWebsiteValid($value, AdvancedPricing::COL_GROUP_PRICE_WEBSITE);
+        }
+        if (!$valid) {
+            $this->_addMessages([self::ERROR_INVALID_WEBSITE]);
+        }
+        return $valid;
     }
 
     /**

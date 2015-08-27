@@ -36,20 +36,29 @@ abstract class AbstractEntity
     const ERROR_CODE_ATTRIBUTE_NOT_VALID = 'attributeNotInvalid';
     const ERROR_CODE_DUPLICATE_UNIQUE_ATTRIBUTE = 'duplicateUniqueAttribute';
     const ERROR_CODE_ILLEGAL_CHARACTERS = 'illegalCharacters';
+    const ERROR_CODE_INVALID_ATTRIBUTE = 'invalidAttributeName';
     const ERROR_CODE_WRONG_QUOTES = 'wrongQuotes';
     const ERROR_CODE_COLUMNS_NUMBER = 'wrongColumnsNumber';
 
     protected $errorMessageTemplates = [
         self::ERROR_CODE_SYSTEM_EXCEPTION => 'General system exception happened',
-        self::ERROR_CODE_COLUMN_NOT_FOUND => 'We can\'t find required columns: %1.',
-        self::ERROR_CODE_COLUMN_EMPTY_HEADER => 'Columns number: "%1" have empty headers',
-        self::ERROR_CODE_COLUMN_NAME_INVALID => 'Column names: "%1" are invalid',
+        self::ERROR_CODE_COLUMN_NOT_FOUND => 'We can\'t find required columns: %s.',
+        self::ERROR_CODE_COLUMN_EMPTY_HEADER => 'Columns number: "%s" have empty headers',
+        self::ERROR_CODE_COLUMN_NAME_INVALID => 'Column names: "%s" are invalid',
         self::ERROR_CODE_ATTRIBUTE_NOT_VALID => "Please correct the value for '%s'.",
         self::ERROR_CODE_DUPLICATE_UNIQUE_ATTRIBUTE => "Duplicate Unique Attribute for '%s'",
         self::ERROR_CODE_ILLEGAL_CHARACTERS => "Illegal character used for attribute %s",
+        self::ERROR_CODE_INVALID_ATTRIBUTE => 'Header contains invalid attribute(s): "%s"',
         self::ERROR_CODE_WRONG_QUOTES => "Curly quotes used instead of straight quotes",
         self::ERROR_CODE_COLUMNS_NUMBER => "Number of columns does not correspond to the number of rows in the header",
     ];
+
+    /**
+     * Validation failure message template definitions
+     *
+     * @var array
+     */
+    protected $_messageTemplates = [];
 
     /**
      * DB connection.
@@ -59,11 +68,25 @@ abstract class AbstractEntity
     protected $_connection;
 
     /**
-     * Has data process validation done?
+     * Has data process validation done?8
      *
      * @var bool
      */
     protected $_dataValidated = false;
+
+    /**
+     * Valid column names
+     *
+     * @array
+     */
+    protected $validColumnNames = [];
+
+    /**
+     * If we should check column names
+     *
+     * @var bool
+     */
+    protected $needColumnCheck = false;
 
     /**
      * DB data source model.
@@ -625,6 +648,20 @@ abstract class AbstractEntity
     }
 
     /**
+     * Retrieve message template
+     *
+     * @param string $errorCode
+     * @return null|string
+     */
+    public function retrieveMessageTemplate($errorCode)
+    {
+        if (isset($this->_messageTemplates[$errorCode])) {
+            return $this->_messageTemplates[$errorCode];
+        }
+        return null;
+    }
+
+    /**
      * Is import need to log in history.
      *
      * @return bool
@@ -705,6 +742,7 @@ abstract class AbstractEntity
                 $columnNumber = 0;
                 $emptyHeaderColumns = [];
                 $invalidColumns = [];
+                $invalidAttributes = [];
                 foreach ($this->getSource()->getColNames() as $columnName) {
                     $columnNumber++;
                     if (!$this->isAttributeParticular($columnName)) {
@@ -712,10 +750,20 @@ abstract class AbstractEntity
                             $emptyHeaderColumns[] = $columnNumber;
                         } elseif (!preg_match('/^[a-z][a-z0-9_]*$/', $columnName)) {
                             $invalidColumns[] = $columnName;
+                        } elseif ($this->needColumnCheck && !in_array($columnName, $this->validColumnNames)) {
+                            $invalidAttributes[] = $columnName;
                         }
                     }
                 }
 
+                if ($invalidAttributes) {
+                    $this->getErrorAggregator()->addError(
+                        self::ERROR_CODE_INVALID_ATTRIBUTE,
+                        ProcessingError::ERROR_LEVEL_CRITICAL,
+                        null,
+                        implode('", "', $invalidAttributes)
+                    );
+                }
                 if ($emptyHeaderColumns) {
                     $this->getErrorAggregator()->addError(
                         self::ERROR_CODE_COLUMN_EMPTY_HEADER,
@@ -729,7 +777,7 @@ abstract class AbstractEntity
                         self::ERROR_CODE_COLUMN_NAME_INVALID,
                         ProcessingError::ERROR_LEVEL_CRITICAL,
                         null,
-                        $invalidColumns
+                        implode('", "', $invalidColumns)
                     );
                 }
             }

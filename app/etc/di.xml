@@ -123,13 +123,12 @@
     <preference for="Magento\Framework\Url\QueryParamsResolverInterface" type="Magento\Framework\Url\QueryParamsResolver" />
     <preference for="Magento\Framework\Url\ScopeResolverInterface" type="Magento\Framework\Url\ScopeResolver" />
     <preference for="Magento\Framework\Url\SecurityInfoInterface" type="Magento\Framework\Url\SecurityInfo\Proxy" />
-    <preference for="Magento\Framework\Css\PreProcessor\AdapterInterface" type="Magento\Framework\Css\PreProcessor\Adapter\Oyejorge" />
     <preference for="Magento\Framework\Locale\CurrencyInterface" type="Magento\Framework\Locale\Currency" />
     <preference for="Magento\Framework\CurrencyInterface" type="Magento\Framework\Currency" />
     <preference for="Magento\Framework\Locale\FormatInterface" type="Magento\Framework\Locale\Format" />
     <preference for="Magento\Framework\Locale\ResolverInterface" type="Magento\Framework\Locale\Resolver" />
     <preference for="Magento\Framework\Stdlib\DateTime\TimezoneInterface" type="Magento\Framework\Stdlib\DateTime\Timezone" />
-    <preference for="Magento\Framework\Less\PreProcessor\ErrorHandlerInterface" type="Magento\Framework\Less\PreProcessor\ErrorHandler" />
+
     <preference for="Magento\Framework\Module\ResourceInterface" type="Magento\Framework\Module\Resource" />
     <preference for="Magento\Framework\Pricing\Amount\AmountInterface" type="Magento\Framework\Pricing\Amount\Base" />
     <preference for="Magento\Framework\Api\SearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
@@ -139,6 +138,7 @@
     <preference for="Magento\Framework\Api\ImageContentValidatorInterface" type="Magento\Framework\Api\ImageContentValidator" />
     <preference for="Magento\Framework\Api\ImageProcessorInterface" type="Magento\Framework\Api\ImageProcessor" />
     <preference for="Magento\Framework\Code\Reader\ClassReaderInterface" type="Magento\Framework\Code\Reader\ClassReader" />
+    <preference for="Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface" type="Magento\Framework\Stdlib\DateTime\DateTimeFormatter"/>
     <type name="Magento\Framework\Model\Resource\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Logger\Handler\Base">
         <arguments>
@@ -578,23 +578,6 @@
             </argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Framework\View\Asset\SourceFileGeneratorPool">
-        <arguments>
-            <argument name="fileGeneratorTypes" xsi:type="array">
-                <item name="less" xsi:type="object">fileassemblerFileGenerator</item>
-            </argument>
-        </arguments>
-    </type>
-    <virtualType name="fileassemblerFileGenerator" type="Magento\Framework\Less\FileGenerator">
-        <arguments>
-            <argument name="relatedGenerator" xsi:type="object">fileassemblerRelatedFilesGenerator</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="fileassemblerRelatedFilesGenerator" type="Magento\Developer\Model\Less\FileGenerator\PublicationDecorator">
-        <arguments>
-            <argument name="publisher" xsi:type="object">developerPublisher</argument>
-        </arguments>
-    </virtualType>
     <type name="Magento\Framework\View\Design\FileResolution\Fallback\File">
         <arguments>
             <argument name="resolver" xsi:type="object">Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple</argument>
@@ -610,15 +593,7 @@
             <argument name="resolver" xsi:type="object">Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple</argument>
         </arguments>
     </type>
-    <virtualType name="viewFileFallbackResolver" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Alternative">
-        <arguments>
-            <argument name="alternativeExtensions" xsi:type="array">
-                <item name="css" xsi:type="array">
-                    <item name="less" xsi:type="string">less</item>
-                </item>
-            </argument>
-        </arguments>
-    </virtualType>
+
     <virtualType name="viewFileMinifiedFallbackResolver" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Minification">
         <arguments>
             <argument name="fallback" xsi:type="object">viewFileFallbackResolver</argument>
@@ -1040,48 +1015,7 @@
             <argument name="areaCode" xsi:type="string">frontend</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Less\PreProcessor\Instruction\MagentoImport">
-        <arguments>
-            <argument name="fileSource" xsi:type="object">Magento\Framework\Less\File\Collector\Aggregated</argument>
-        </arguments>
-    </type>
-    <virtualType name="lessFileSourceBase" type="Magento\Framework\View\File\Collector\Base">
-        <arguments>
-            <argument name="subDir" xsi:type="string">web</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="lessFileSourceBaseFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
-        <arguments>
-            <argument name="subject" xsi:type="object">lessFileSourceBase</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="lessFileSourceBaseSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
-        <arguments>
-            <argument name="subject" xsi:type="object">lessFileSourceBaseFiltered</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="lessFileOverriddenBase" type="Magento\Framework\View\File\Collector\Override\Base">
-        <arguments>
-            <argument name="subDir" xsi:type="string">web</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="lessFileSourceThemeFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
-        <arguments>
-            <argument name="subject" xsi:type="object">lessFileSourceTheme</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="lessFileSourceThemeSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
-        <arguments>
-            <argument name="subject" xsi:type="object">lessFileSourceThemeFiltered</argument>
-        </arguments>
-    </virtualType>
-    <type name="Magento\Framework\Less\File\Collector\Aggregated">
-        <arguments>
-            <argument name="libraryFiles" xsi:type="object">Magento\Framework\Less\File\Collector\Library</argument>
-            <argument name="baseFiles" xsi:type="object">lessFileSourceBaseSorted</argument>
-            <argument name="overriddenBaseFiles" xsi:type="object">lessFileOverriddenBase</argument>
-        </arguments>
-    </type>
+
     <type name="Magento\Framework\Module\ModuleList\Loader">
         <arguments>
             <argument name="filesystemDriver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>

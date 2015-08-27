@@ -23,27 +23,4 @@ abstract class Import extends Action
     {
         return $this->_authorization->isAllowed('Magento_ImportExport::import');
     }
-
-    /**
-     * @param \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface $errorAggregator
-     * @return array
-     */
-    protected function getImportProcessingMessages(ProcessingErrorAggregatorInterface $errorAggregator)
-    {
-        $messages = [];
-        $rowMessages = $errorAggregator->getRowsGroupedByErrorCode([], [AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION]);
-        foreach ($rowMessages as $errorCode => $rows) {
-            $messages[] = $errorCode . ' ' . __('in rows:') . ' ' . implode(', ', $rows);
-        }
-        return $messages;
-    }
-
-    /**
-     * @param ProcessingErrorAggregatorInterface $errorAggregator
-     * @return \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError[]
-     */
-    protected function getSystemExceptions(ProcessingErrorAggregatorInterface $errorAggregator)
-    {
-        return $errorAggregator->getErrorsByCode([AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION]);
-    }
 }

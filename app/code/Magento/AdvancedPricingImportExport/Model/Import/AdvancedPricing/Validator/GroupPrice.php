@@ -6,6 +6,7 @@
 namespace Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator;
 
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing;
+use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
 class GroupPrice extends \Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractPrice
 {
@@ -45,6 +46,24 @@ class GroupPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valid
         foreach ($this->groupRepository->getList($this->searchCriteriaBuilder->create())->getItems() as $group) {
             $this->customerGroups[$group->getCode()] = $group->getId();
         }
+        $this->context = $context;
+    }
+
+    /**
+     * @param $attribute
+     */
+    protected function addDecimalError($attribute)
+    {
+        $this->_addMessages(
+            [
+                sprintf(
+                    $this->context->retrieveMessageTemplate(
+                        RowValidatorInterface::ERROR_INVALID_ATTRIBUTE_DECIMAL
+                    ),
+                    $attribute
+                )
+            ]
+        );
     }
 
     /**
@@ -59,21 +78,30 @@ class GroupPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valid
         if (!$this->customerGroups) {
             $this->init($this->context);
         }
+        $valid = true;
         if ($this->isValidValueAndLength($value)) {
             if (!isset($value[AdvancedPricing::COL_GROUP_PRICE_WEBSITE])
                 || !isset($value[AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP])
                 || $this->hasEmptyColumns($value)) {
                 $this->_addMessages([self::ERROR_GROUP_PRICE_DATA_INCOMPLETE]);
-                return false;
+                $valid = false;
             } elseif (
                 $value[AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP] == AdvancedPricing::VALUE_ALL_GROUPS
                 || !isset($this->customerGroups[$value[AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP]])
             ) {
                 $this->_addMessages([self::ERROR_INVALID_GROUP_PRICE_GROUP]);
-                return false;
+                $valid = false;
+            }
+            if ($valid) {
+                if (!is_numeric($value[AdvancedPricing::COL_GROUP_PRICE])
+                    || $value[AdvancedPricing::COL_GROUP_PRICE] < 0
+                ) {
+                    $this->addDecimalError(AdvancedPricing::COL_GROUP_PRICE);
+                    $valid = false;
+                }
             }
         }
-        return true;
+        return $valid;
     }
 
     /**

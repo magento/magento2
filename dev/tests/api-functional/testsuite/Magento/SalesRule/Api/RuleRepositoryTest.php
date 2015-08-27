@@ -41,8 +41,8 @@ class RuleRepositoryTest extends WebapiAbstract
                 'conditions' => [
                     [
                         'condition_type' => 'Magento\SalesRule\Model\Rule\Condition\Address',
-                        'attribute_name' => 'base_subtotal',
                         'operator' => '>',
+                        'attribute_name' => 'base_subtotal',
                         'value' => 800
                     ]
                 ],
@@ -76,7 +76,7 @@ class RuleRepositoryTest extends WebapiAbstract
             'is_rss' => true,
             'coupon_type' => \Magento\SalesRule\Api\Data\RuleInterface::COUPON_TYPE_SPECIFIC_COUPON,
             'use_auto_generation' => false,
-            'uses_per_coupon' => null,
+            'uses_per_coupon' => 0,
             'simple_free_shipping' => 0,
         ];
         return $data;
@@ -88,22 +88,27 @@ class RuleRepositoryTest extends WebapiAbstract
         $inputData = $this->getSalesRuleData();
         $result = $this->createRule($inputData);
         $ruleId = $result['rule_id'];
-        $inputData['rule_id'] = $ruleId;
+        $this->assertArrayHasKey('rule_id', $result);
+        $this->assertEquals($ruleId, $result['rule_id']);
+        unset($result['rule_id']);
         $this->assertEquals($inputData, $result);
 
         //test getList
         $result = $this->verifyGetList($ruleId);
+        unset($result['rule_id']);
         $this->assertEquals($inputData, $result);
 
         //test update
         $inputData['times_used'] = 2;
-        $inputData['customer_group_ids'] = [1, 3];
+        $inputData['customer_group_ids'] = [0, 1, 3];
         $inputData['discount_amount'] = 30;
         $result = $this->updateRule($ruleId, $inputData);
+        unset($result['rule_id']);
         $this->assertEquals($inputData, $result);
 
         //test get
         $result = $this->getRule($ruleId);
+        unset($result['rule_id']);
         $this->assertEquals($inputData, $result);
 
         //test delete
@@ -162,7 +167,7 @@ class RuleRepositoryTest extends WebapiAbstract
      * Create Sales rule
      *
      * @param $rule
-     * @return int
+     * @return array
      */
     protected function createRule($rule)
     {

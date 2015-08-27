@@ -6,6 +6,7 @@
 namespace Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator;
 
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing;
+use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
 class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractPrice
 {
@@ -46,7 +47,24 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
         foreach ($this->groupRepository->getList($this->searchCriteriaBuilder->create())->getItems() as $group) {
             $this->customerGroups[$group->getCode()] = $group->getId();
         }
-        return parent::init($context);
+        $this->context = $context;
+    }
+
+    /**
+     * @param $attribute
+     */
+    protected function addDecimalError($attribute)
+    {
+        $this->_addMessages(
+            [
+                sprintf(
+                    $this->context->retrieveMessageTemplate(
+                        RowValidatorInterface::ERROR_INVALID_ATTRIBUTE_DECIMAL
+                    ),
+                    $attribute
+                )
+            ]
+        );
     }
 
     /**
@@ -63,6 +81,7 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
         if (!$this->customerGroups) {
             $this->init($this->context);
         }
+        $valid = true;
         if ($this->isValidValueAndLength($value)) {
             if (!isset($value[AdvancedPricing::COL_TIER_PRICE_WEBSITE])
                 || !isset($value[AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP])
@@ -71,19 +90,27 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
                 || $this->hasEmptyColumns($value)
             ) {
                 $this->_addMessages([self::ERROR_TIER_DATA_INCOMPLETE]);
-                return false;
+                $valid = false;
             } elseif ($value[AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP] != AdvancedPricing::VALUE_ALL_GROUPS
                 && !isset($this->customerGroups[$value[AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP]])
             ) {
                 $this->_addMessages([self::ERROR_INVALID_TIER_PRICE_GROUP]);
-                return false;
-            } elseif ($value[AdvancedPricing::COL_TIER_PRICE_QTY] <= 0
-                || $value[AdvancedPricing::COL_TIER_PRICE] <= 0) {
-                $this->_addMessages([self::ERROR_INVALID_TIER_PRICE_QTY]);
-                return false;
+                $valid = false;
+            }
+            if ($valid) {
+                if (!is_numeric($value[AdvancedPricing::COL_TIER_PRICE_QTY])
+                    || $value[AdvancedPricing::COL_TIER_PRICE_QTY] < 0) {
+                    $this->addDecimalError(AdvancedPricing::COL_TIER_PRICE_QTY);
+                    $valid = false;
+                }
+                if (!is_numeric($value[AdvancedPricing::COL_TIER_PRICE])
+                    || $value[AdvancedPricing::COL_TIER_PRICE] < 0) {
+                    $this->addDecimalError(AdvancedPricing::COL_TIER_PRICE);
+                    $valid = false;
+                }
             }
         }
-        return true;
+        return $valid;
     }
 
     /**

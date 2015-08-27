@@ -116,12 +116,11 @@
         </div>
     </div>
 </form>
-<script>
-require(['jquery'], function(jQuery){
 
-    //<![CDATA[
-        jQuery('a[role="back"]').on('click', function() { history.back(); return false; });
-    //]]>
-
-});
+<script type="text/x-magento-init">
+    {
+        "a[role='back']": {
+            "Magento_SendFriend/back-event": {}
+        }
+    }
 </script>
