@@ -5,15 +5,14 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Validator;
 
-use \Magento\Framework\Validator\AbstractValidator;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
-class Weight extends AbstractValidator implements RowValidatorInterface
+class Weight extends AbstractImportValidator implements RowValidatorInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function init($context)
+    public function init()
     {
         return $this;
     }

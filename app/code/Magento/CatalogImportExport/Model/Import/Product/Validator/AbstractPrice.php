@@ -42,11 +42,11 @@ abstract class AbstractPrice extends AbstractImportValidator implements RowValid
     /**
      * {@inheritdoc}
      */
-    public function init($context)
+    public function init()
     {
         foreach ($this->groupRepository->getList($this->searchCriteriaBuilder->create())->getItems() as $group) {
             $this->customerGroups[$group->getId()] = true;
         }
-        return parent::init($context);
+        return parent::init();
     }
 }

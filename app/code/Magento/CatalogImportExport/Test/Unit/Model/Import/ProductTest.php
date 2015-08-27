@@ -311,6 +311,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->data = [];
 
+        $this->validator->expects($this->once())->method('setContext')->will($this->returnSelf());
+
         $this->_objectConstructor()
             ->_parentObjectConstructor()
             ->_initAttributeSets()

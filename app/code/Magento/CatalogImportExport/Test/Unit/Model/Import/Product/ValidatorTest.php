@@ -41,7 +41,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
+        $this->validatorOne->expects($this->any())->method('setContext')->will($this->returnSelf());
+        $this->validatorTwo->expects($this->any())->method('setContext')->will($this->returnSelf());
         $this->validators = [$this->validatorOne, $this->validatorTwo];
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->validator = $this->objectManagerHelper->getObject(
@@ -75,6 +76,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->validatorOne->expects($this->once())->method('init');
         $this->validatorTwo->expects($this->once())->method('init');
-        $this->validator->init(null);
+        /** @var \Magento\CatalogImportExport\Model\Import\ContextInterface $contextMock */
+        $contextMock = $this->getMock('Magento\CatalogImportExport\Model\Import\ContextInterface', [], [], '', false);
+        $this->validator->setContext($contextMock)->init();
     }
 }

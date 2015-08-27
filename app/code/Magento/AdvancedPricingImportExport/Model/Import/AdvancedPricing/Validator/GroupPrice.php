@@ -6,8 +6,9 @@
 namespace Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator;
 
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing;
+use Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractPrice;
 
-class GroupPrice extends \Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractPrice
+class GroupPrice extends AbstractPrice
 {
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver
@@ -38,11 +39,9 @@ class GroupPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valid
     }
 
     /**
-     * Call parent init()
-     *
-     * @return $this
+     * {@inheritdoc}
      */
-    public function init($context)
+    public function init()
     {
         foreach ($this->groupRepository->getList($this->searchCriteriaBuilder->create())->getItems() as $group) {
             $this->customerGroups[$group->getCode()] = $group->getId();
@@ -60,7 +59,7 @@ class GroupPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valid
     {
         $this->_clearMessages();
         if (!$this->customerGroups) {
-            $this->init($this->context);
+            $this->init();
         }
         if ($this->isValidValueAndLength($value)) {
             if (!isset($value[AdvancedPricing::COL_GROUP_PRICE_WEBSITE])
@@ -87,7 +86,7 @@ class GroupPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valid
     public function getCustomerGroups()
     {
         if (!$this->customerGroups) {
-            $this->init($this->context);
+            $this->init();
         }
         return $this->customerGroups;
     }

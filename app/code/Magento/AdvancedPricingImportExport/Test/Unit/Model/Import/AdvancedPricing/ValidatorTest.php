@@ -31,7 +31,10 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             'Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface',
             [],
             '',
-            false
+            false,
+            false,
+            true,
+            ['setContext']
         );
         $messages = ['messages'];
         $this->validatorTest->expects($this->any())->method('getMessages')->willReturn($messages);
@@ -42,6 +45,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             ['_clearMessages', '_addMessages'],
             [$this->validators]
         );
+
     }
 
     /**
@@ -71,9 +75,12 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     public function testInit()
     {
-        $this->validatorTest->expects($this->once())->method('init');
-
-        $this->validator->init(null);
+        $this->validator->expects($this->any())->method('setContext')->will($this->returnSelf());
+        $this->validatorTest->expects($this->once())->method('init')->will($this->returnSelf());
+        $this->validatorTest->expects($this->any())->method('setContext')->will($this->returnSelf());
+        /** @var \Magento\CatalogImportExport\Model\Import\ContextInterface $contextMock */
+        $contextMock = $this->getMock('Magento\CatalogImportExport\Model\Import\ContextInterface', [], [], '', false);
+        $this->validator->setContext($contextMock)->init();
     }
 
     public function isValidDataProvider()
