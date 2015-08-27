@@ -58,6 +58,9 @@ class ColumnFactory
             'align' => 'left',
             'visible' => (bool)$attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID],
         ], $config);
+        if (count($attributeData[AttributeMetadata::OPTIONS]) && !isset($config[AttributeMetadata::OPTIONS])) {
+            $config[AttributeMetadata::OPTIONS] = $attributeData[AttributeMetadata::OPTIONS];
+        }
 
         if ($attributeData[AttributeMetadata::OPTIONS]) {
             $config['options'] = $attributeData[AttributeMetadata::OPTIONS];

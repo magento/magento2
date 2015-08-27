@@ -111,11 +111,17 @@ class AttributeRepository
         return $attributes;
     }
 
+    /**
+     * Convert options to array
+     *
+     * @param array $options
+     * @return array
+     */
     protected function getOptionArray(array $options)
     {
         /** @var \Magento\Customer\Api\Data\OptionInterface $option */
         foreach ($options as &$option) {
-            $option = ['label' => $option->getLabel(), 'value' => $option->getValue()];
+            $option = ['label' => (string)$option->getLabel(), 'value' => $option->getValue()];
         }
         return $options;
     }
