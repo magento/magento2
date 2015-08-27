@@ -68,7 +68,7 @@
                     <table class="table-checkout-shipping-method">
                         <thead>
                             <tr class="row">
-                                <th class="col">&nbsp;</th>
+                                <th class="col">Select Method</th>
                                 <th class="col col-price" data-bind="i18n: 'Price'"></th>
                                 <th class="col col-method" data-bind="i18n: 'Method Title'"></th>
                                 <th class="col col-carrier" data-bind="i18n: 'Carrier Title'"></th>
@@ -84,7 +84,7 @@
                                 <input name="shipping_method"
                                        class="radio"
                                        type="radio"
-                                       data-bind="attr: {checked: $parent.rates().length == 1, 'value' : method.carrier_code + '_' + method.method_code, 'id': 's_method_' + method.method_code}" />
+                                       data-bind="attr: {checked: $parent.rates().length == 1, 'value' : method.carrier_code + '_' + method.method_code, 'id': 's_method_' + method.method_code, 'aria-labelledby': 'label_' + method.method_code + ' ' + 'label_' + method.carrier_code}" />
                                 <!-- /ko -->
                                 <!--ko ifnot: ($parent.rates().length == 1)-->
                                 <input name="shipping_method" type="radio"
@@ -102,8 +102,12 @@
                                 <!-- ko template: getTemplate() --><!-- /ko -->
                                 <!-- /ko -->
                             </td>
-                            <td class="col col-method" data-bind="i18n: method.method_title"></td>
-                            <td class="col col-carrier" data-bind="i18n: method.carrier_title"></td>
+
+                            <td class="col col-method"
+                                    data-bind="i18n: method.method_title, attr: {'id': 'label_' + method.method_code}"></td>
+
+                            <td class="col col-carrier"
+                                    data-bind="i18n: method.carrier_title, attr: {'id': 'label_' + method.carrier_code}"></td>
                         </tr>
 
                         <!-- ko if:  method.error_message -->
