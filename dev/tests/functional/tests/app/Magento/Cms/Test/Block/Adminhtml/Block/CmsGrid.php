@@ -41,7 +41,7 @@ class CmsGrid extends DataGrid
         ],
         'store_id' => [
             'selector' => '[name="filters[store_id]"]',
-            'input' => 'selectstore'
+            'input' => 'simplifiedselect'
         ],
         'is_active' => [
             'selector' => '[name="filters[is_active]"]',
