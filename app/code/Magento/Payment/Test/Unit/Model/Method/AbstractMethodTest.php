@@ -104,7 +104,7 @@ class AbstractMethodTest extends \PHPUnit_Framework_TestCase
                 $storeId
             )->willReturn($result);
 
-        $this->eventManagerMock->expects($this->once())
+        $this->eventManagerMock->expects($result ? $this->once() : $this->never())
             ->method('dispatch')
             ->with(
                 $this->equalTo('payment_method_is_active'),

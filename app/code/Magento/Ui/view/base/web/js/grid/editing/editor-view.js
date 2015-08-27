@@ -89,7 +89,7 @@ define([
                         return model.hasActive();
                     })
                 }
-            });
+            }, ko.contextFor(table));
 
             domObserver.get(this.rowSelector, this.onRowAdd, table);
 
@@ -128,7 +128,7 @@ define([
                 visible: ko.computed(function () {
                     return !model.isActive(ctx.$index(), true);
                 })
-            });
+            }, ctx);
 
             ctx._editor = model;
 
