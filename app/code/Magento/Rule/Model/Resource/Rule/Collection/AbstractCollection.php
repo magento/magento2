@@ -80,17 +80,11 @@ abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\C
             if ($websiteId instanceof \Magento\Store\Model\Website) {
                 $websiteId = $websiteId->getId();
             }
-
-            $subSelect = $this->getConnection()->select()->from(
+            $this->getSelect()->join(
                 ['website' => $this->getTable($entityInfo['associations_table'])],
-                ''
-            )->where(
-                'website.' . $entityInfo['entity_id_field'] . ' IN (?)',
-                $websiteId
-            );
-            $this->getSelect()->exists(
-                $subSelect,
-                'main_table.' . $entityInfo['rule_id_field'] . ' = website.' . $entityInfo['rule_id_field']
+                $this->getConnection()->quoteInto('website.' . $entityInfo['entity_id_field'] . ' = ?', $websiteId)
+                . ' AND main_table.' . $entityInfo['rule_id_field'] . ' = website.' . $entityInfo['rule_id_field'],
+                []
             );
         }
         return $this;

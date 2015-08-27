@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
-use Magento\Indexer\Model\IndexerInterface;
+use Magento\Framework\Indexer\IndexerInterface;
 
 /**
  * An Abstract class for all Indexer related commands.
