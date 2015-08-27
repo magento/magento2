@@ -183,6 +183,7 @@ class Observer
      * Update locking information for the user
      *
      * @param \Magento\User\Model\User $user
+     * @return void
      */
     private function _updateLockingInformation($user)
     {
@@ -215,6 +216,7 @@ class Observer
      * Side-effect can be when passwords were changed with different lifetime configuration settings
      *
      * @param array $latestPassword
+     * @return void
      */
     private function _checkExpiredPassword($latestPassword)
     {

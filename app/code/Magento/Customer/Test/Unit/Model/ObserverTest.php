@@ -114,11 +114,12 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->encryptorMock->expects($this->any())
             ->method('isValidHashByVersion')
-            ->will($this->returnCallback(
-                function ($arg1, $arg2) {
-                    return $arg1 == $arg2;
-                }
-            )
+            ->will(
+                $this->returnCallback(
+                    function ($arg1, $arg2) {
+                        return $arg1 == $arg2;
+                    }
+                )
             );
         $this->model = new Observer(
             $this->vat,
