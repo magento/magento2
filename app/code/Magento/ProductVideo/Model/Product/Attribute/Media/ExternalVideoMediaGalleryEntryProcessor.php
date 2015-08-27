@@ -7,6 +7,7 @@
 namespace Magento\ProductVideo\Model\Product\Attribute\Media;
 
 use Magento\Catalog\Model\Product\Attribute\Backend\Media\AbstractMediaGalleryEntryProcessor;
+use Magento\Customer\Model\Resource\Form\Attribute;
 use \Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Catalog\Model\Product;
 
@@ -33,13 +34,12 @@ class ExternalVideoMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryP
      */
     public function afterLoad(Product $product, AbstractAttribute $attribute)
     {
-        $attributeCode = $attribute->getAttributeCode();
-        $mediaCollection = $this->getMediaEntriesDataCollection($product->getData($attributeCode));
+        $mediaCollection = $this->getMediaEntriesDataCollection($product, $attribute);
         if (!empty($mediaCollection)) {
             $ids = $this->collectVideoEntriesIds($mediaCollection);
             $videoDataCollection = $this->loadVideoDataById($ids);
             $mediaEntriesDataCollection = $this->addVideoDataToMediaEntries($mediaCollection, $videoDataCollection);
-            $product->setData($attributeCode, $mediaEntriesDataCollection);
+            $product->setData($attribute->getAttributeCode(), $mediaEntriesDataCollection);
         }
     }
 
@@ -50,8 +50,7 @@ class ExternalVideoMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryP
      */
     public function afterSave(Product $product, AbstractAttribute $attribute)
     {
-        $attributeCode = $attribute->getAttributeCode();
-        $mediaCollection = $this->getMediaEntriesDataCollection($product->getData($attributeCode));
+        $mediaCollection = $this->getMediaEntriesDataCollection($product, $attribute);
         if (!empty($mediaCollection)) {
             $videoDataCollection = $this->collectVideoData($mediaCollection);
             $this->saveVideoData($videoDataCollection);
@@ -95,7 +94,8 @@ class ExternalVideoMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryP
     {
         $videoDataCollection = [];
         foreach ($mediaCollection as $item) {
-            if ($item['media_type'] == ExternalVideoMediaEntryConverter::MEDIA_TYPE_CODE) {
+            if (!empty($item['media_type'])
+                && $item['media_type'] == ExternalVideoMediaEntryConverter::MEDIA_TYPE_CODE) {
                 $videoData = $this->extractVideoDataFromRowData($item);
                 $videoData['video_value_id'] = $item['value_id'];
                 $videoDataCollection[] = $videoData;
@@ -115,12 +115,15 @@ class ExternalVideoMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryP
     }
 
     /**
-     * @param array $mediaData
+     * @param Product $product
+     * @param AbstractAttribute $attribute
      * @return array
      */
-    protected function getMediaEntriesDataCollection(array $mediaData)
+    protected function getMediaEntriesDataCollection(Product $product, AbstractAttribute $attribute)
     {
-        if (is_array($mediaData['images'])) {
+        $attributeCode = $attribute->getAttributeCode();
+        $mediaData = $product->getData($attributeCode);
+        if (!empty($mediaData['images']) && is_array($mediaData['images'])) {
             return $mediaData['images'];
         }
         return [];
