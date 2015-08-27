@@ -119,6 +119,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'select',
                 [
                     'name' => \Magento\ImportExport\Model\Import::FIELD_NAME_VALIDATION_STRATEGY,
+                    'title' => __(' '),
+                    'label' => __(' '),
                     'required' => true,
                     'class' => $behaviorCode,
                     'disabled' => true,
