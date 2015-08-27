@@ -55,7 +55,7 @@ class DataGrid extends Grid
      *
      * @var string
      */
-    protected $massActionToggleButton = '.action-multiselect-toggle';
+    protected $massActionToggleButton = '.data-grid-multicheck-cell [data-toggle="dropdown"]';
 
     /**
      * Mass action button.
@@ -97,6 +97,13 @@ class DataGrid extends Grid
      * @var string
      */
     protected $fullTextSearchButton = '.data-grid-search-control-wrap .action-submit';
+
+    /**
+     * Selector for no records row.
+     *
+     * @var string
+     */
+    protected $noRecords = '[class$=no-data]';
 
     /**
      * Clear all applied Filters.
