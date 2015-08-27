@@ -76,7 +76,6 @@ class JobModule extends AbstractJob
                 if (isset($compObj['name']) && (!empty($compObj['name']))) {
                     $moduleNames[] = $compObj['name'];
                 } else {
-                    $this->status->toggleUpdateError(true);
                     throw new \RuntimeException('component name is not set.');
                 }
             }
@@ -89,7 +88,6 @@ class JobModule extends AbstractJob
 
             // check for return statusCode to catch any Symfony errors
             if( $statusCode != 0 ) {
-                $this->status->toggleUpdateError(true);
                 throw new \RuntimeException('Symfony run() returned StatusCode: ' . $statusCode);
             }
 
@@ -97,6 +95,7 @@ class JobModule extends AbstractJob
             $this->performCleanup();
 
         } catch (\Exception $e) {
+            $this->status->toggleUpdateError(true);
             throw new \RuntimeException(sprintf('Could not complete %s successfully: %s', $this->cmdString, $e->getMessage()));
         }
     }
