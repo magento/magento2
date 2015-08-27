@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Customer\Model;
 
 use Magento\Customer\Api\GroupManagementInterface;
@@ -14,12 +12,15 @@ use Magento\Customer\Model\Address\AbstractAddress;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State as AppState;
+use Magento\Framework\Encryption\Encryptor;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Escaper;
+use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\Message\ManagerInterface;
 
 /**
+ * Customer Observer Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Observer
@@ -75,6 +76,13 @@ class Observer
     protected $appState;
 
     /**
+     * Encryption model
+     *
+     * @var EncryptorInterface
+     */
+    protected $encryptor;
+
+    /**
      * @param Vat $customerVat
      * @param HelperAddress $customerAddress
      * @param Registry $coreRegistry
@@ -83,6 +91,7 @@ class Observer
      * @param ManagerInterface $messageManager
      * @param Escaper $escaper
      * @param AppState $appState
+     * @param EncryptorInterface $encryptor
      */
     public function __construct(
         Vat $customerVat,
@@ -92,7 +101,8 @@ class Observer
         ScopeConfigInterface $scopeConfig,
         ManagerInterface $messageManager,
         Escaper $escaper,
-        AppState $appState
+        AppState $appState,
+        EncryptorInterface $encryptor
     ) {
         $this->_customerVat = $customerVat;
         $this->_customerAddress = $customerAddress;
@@ -102,6 +112,7 @@ class Observer
         $this->messageManager = $messageManager;
         $this->escaper = $escaper;
         $this->appState = $appState;
+        $this->encryptor = $encryptor;
     }
 
     /**
@@ -325,5 +336,26 @@ class Observer
 
         $this->messageManager->addError(implode(' ', $message));
         return $this;
+    }
+
+    /**
+     * Upgrade customer password hash when customer has logged in
+     *
+     * @param EventObserver $observer
+     * @return void
+     */
+    public function upgradeCustomerPassword($observer)
+    {
+        $password = $observer->getEvent()->getPassword();
+        /** @var \Magento\Customer\Model\Customer $model */
+        $model = $observer->getEvent()->getModel();
+        $isValidHash = $this->encryptor->isValidHashByVersion(
+            $password,
+            $model->getPasswordHash(),
+            Encryptor::HASH_VERSION_LATEST
+        );
+        if (!$isValidHash) {
+            $model->changePassword($password);
+        }
     }
 }
