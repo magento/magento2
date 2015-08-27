@@ -43,6 +43,7 @@ define([
                                 data['video_url'] = $('#video_url').val();
                                 data['video_name'] = $('#video_name').val();
                                 data['video_description'] = $('#video_description').val();
+                                data['video_metadata'] = $('#video_metadata').val();
                                 data['disabled'] = $('#new_video_disabled').prop('checked') ? 1 : 0;
                                 data['role'] = $('#new_video_role').val();
                                 data['media_type'] = 'external-video';

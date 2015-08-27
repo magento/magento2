@@ -49,6 +49,7 @@ $elementName = $block->getElement()->getName() . '[images]';
              data-role="image">
             <input type="hidden" name="<?php echo $elementName ?>[<%- data.file_id %>][position]" value="<%- data.position %>" class="position"/>
             <input type="hidden" name="<?php echo $elementName ?>[<%- data.file_id %>][media_type]" value="<%- data.media_type %>"/>
+            <input type="hidden" name="<?php echo $elementName ?>[<%- data.file_id %>][provider]" value="<%- data.provider %>"/>
             <input type="hidden" name="<?php echo $elementName ?>[<%- data.file_id %>][file]" value="<%- data.file %>"/>
             <input type="hidden" name="<?php echo $elementName ?>[<%- data.file_id %>][value_id]" value="<%- data.value_id %>"/>
             <input type="hidden" name="<?php echo $elementName ?>[<%- data.file_id %>][label]" value="<%- data.label %>"/>
@@ -57,6 +58,7 @@ $elementName = $block->getElement()->getName() . '[images]';
             <input type="hidden" name="<?php echo $elementName ?>[<%- data.file_id %>][video_url]" value="<%- data.video_url %>"/>
             <input type="hidden" name="<?php echo $elementName ?>[<%- data.file_id %>][video_name]" value="<%- data.video_name %>"/>
             <input type="hidden" name="<?php echo $elementName ?>[<%- data.file_id %>][video_description]" value="<%- data.video_description %>"/>
+            <input type="hidden" name="<?php echo $elementName ?>[<%- data.file_id %>][video_metadata]" value="<%- data.video_metadata %>"/>
             <input type="hidden" name="<?php echo $elementName ?>[<%- data.file_id %>][role]" value="<%- data.video_description %>"/>
             <ul class="type-labels" style="display: none">
                 <?php foreach ($block->getImageTypes() as $typeData) {
