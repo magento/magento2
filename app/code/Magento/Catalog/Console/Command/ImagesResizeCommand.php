@@ -77,18 +77,32 @@ class ImagesResizeCommand extends Command
         /** @var ProductCollection $productCollection */
         $productCollection = $this->productCollectionFactory->create();
         $productIds = $productCollection->getAllIds();
-
-        foreach ($productIds as $productId) {
-            try {
-                /** @var Product $product */
-                $product = $this->productRepository->getById($productId);
-            } catch (NoSuchEntityException $e) {
-                continue;
-            }
-
-            /** @var ImageCache $imageCache */
-            $imageCache = $this->imageCacheFactory->create();
-            $imageCache->generate($product);
+        if (!count($productIds)) {
+            $output->writeln("<info>No product images to resize</info>");
+            return;
         }
+
+        try {
+            foreach ($productIds as $productId) {
+                try {
+                    /** @var Product $product */
+                    $product = $this->productRepository->getById($productId);
+                } catch (NoSuchEntityException $e) {
+                    continue;
+                }
+
+                /** @var ImageCache $imageCache */
+                $imageCache = $this->imageCacheFactory->create();
+                $imageCache->generate($product);
+
+                $output->write(".");
+            }
+        } catch (\Exception $e) {
+            $output->writeln("<error>{$e->getMessage()}</error>");
+            return;
+        }
+
+        $output->write("\n");
+        $output->writeln("<info>Product images resized successfully</info>");
     }
 }
