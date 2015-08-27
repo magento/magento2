@@ -7,80 +7,152 @@
 //  Actions -> Actions multiselect
 //  _____________________________________________
 
-//  Action multiselect is a combining of checkbox and dropdown elements
+//
+//  Variables
+//  ---------------------------------------------
 
-.action-multiselect-wrap {
-    &:extend(.abs-clearfix all);
-    display: inline-block;
-    padding-top: 1px;
-    position: relative;
-    height: @control-checkbox-radio__size;
-    width: @control-checkbox-radio__size * 2 - .1rem;
-    z-index: @action-multiselect__z-index;
-    &:hover {
-        .admin__control-checkbox + label:before,
-        .action-multiselect-toggle {
-            border-color: @field-control__hover__border-color;
-        }
-    }
-    &._active {
-        .admin__control-checkbox + label:before,
-        .action-multiselect-toggle {
-            border-color: @action__active__border-color;
+@action-multiselect-menu-item__selected__background-color: @color-gray89;
+
+//  Crumbs
+@action-multiselect-crumb__background-color: @color-white-smoke;
+@action-multiselect-crumb__border-color: @color-gray65-almost;
+
+@action-multiselect-crumb-close-action__size: 2rem;
+
+//
+
+.admin__action-multiselect-wrap {
+    -webkit-user-select: none;
+       -moz-user-select: none;
+        -ms-user-select: none;
+            user-select: none;
+    &.action-select-wrap {
+        &:focus {
+            box-shadow: none;
         }
         .action-menu {
-            display: block;
+            max-height: none;
+            overflow-y: inherit;
         }
-    }
-    &._disabled {
-        .admin__control-checkbox {
-            + label {
-                &:before {
-                    background-color: @control-checkbox-radio__background-color;
-                }
-            }
-        }
-        .admin__control-checkbox + label:before,
-        .action-multiselect-toggle {
-            border-color: @field-control__border-color;
-            opacity: 1;
-        }
-    }
-    .admin__control-checkbox,
-    .admin__control-checkbox + label,
-    .action-multiselect-toggle {
-        float: left;
-    }
-    .action-multiselect-toggle {
-        .action-toggle-triangle(
-            @_triangle__height: @button-marker-triangle__height;
-            @_triangle__width: @button-marker-triangle__width;
-        );
-        border-radius: 0 1px 1px 0;
-        height: @control-checkbox-radio__size;
-        margin-left: -1px;
-        padding: 0;
-        position: relative;
-        transition: @smooth__border-color;
-        width: @control-checkbox-radio__size;
-        &:focus {
-            border-color: @action__active__border-color;
-        }
-        &:after {
-            right: .3rem;
-        }
-        > span {
-            .visually-hidden();
-        }
-    }
-    .action-menu {
-        left: 0;
-        right: auto;
-        text-align: left;
-        margin-top: 2px;
     }
     .action-menu-item {
-        white-space: nowrap;
+        transition: background-color .1s linear;
+        &._selected {
+            background-color: @action-multiselect-menu-item__selected__background-color;
+        }
+        &._hover {
+            background-color: @action__hover__background-color;
+        }
+    }
+    .admin__action-multiselect {
+        border: 1px solid @action__border-color;
+        cursor: pointer;
+        min-height: @action__height;
+        padding: @action__padding-top + .1rem (@action__height + .4rem) @action__padding-bottom 1em;
+        white-space: normal;
+        &:after {
+            bottom: @action__height / 2 - @button-marker-triangle__height / 2 - .1rem;
+            top: auto;
+        }
+        &:before {
+            height: @action__height;
+            top: auto;
+            width: @action__height;
+        }
+    }
+}
+
+.action-menu {
+    left: 0;
+    right: auto;
+    text-align: left;
+    margin-top: 2px;
+}
+
+.admin__action-multiselect-label {
+    position: relative;
+    z-index: 1;
+    &:before {
+        margin-right: .5rem;
+    }
+}
+
+.admin__action-multiselect-search-wrap {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    position: relative;
+    + .admin__action-multiselect-menu-inner {
+        border-bottom: 1px solid @border__color;
+        border-top: 1px solid @border__color;
+        margin-bottom: 1rem;
+    }
+}
+
+.admin__action-multiselect-menu-inner {
+    margin-bottom: 0;
+    max-height: 17.2rem;
+    overflow-y: auto;
+}
+
+.admin__action-multiselect-search {
+    padding-right: 3rem;
+    width: 100%;
+}
+
+.admin__action-multiselect-search-label {
+    display: block;
+    font-size: 1.5rem;
+    height: 1em;
+    overflow: hidden;
+    position: absolute;
+    right: 2.2rem;
+    top: 1.7rem;
+    width: 1em;
+    &:before {
+        &:extend(.abs-icon all);
+        content: @icon-search__content;
+    }
+}
+
+.admin__action-multiselect-actions-wrap {
+    text-align: center;
+    .action-default {
+        font-size: 1.3rem;
+        min-width: 13rem;
+    }
+}
+
+//  Crumbs
+.admin__action-multiselect-crumb {
+    background-color: @action-multiselect-crumb__background-color;
+    border: 1px solid @action-multiselect-crumb__border-color;
+    border-radius: 1px;
+    display: inline-block;
+    font-size: 1.2rem;
+    margin: -.3rem .9rem .5rem -1.1rem;
+    padding: .3rem (@action-multiselect-crumb-close-action__size + .4rem) .4rem 1rem;
+    position: relative;
+    transition: border-color .1s linear;
+    &:hover {
+        border-color: darken(@color-gray65-almost, 10%);
+    }
+    .action-close {
+        bottom: 0;
+        font-size: .5em;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: @action-multiselect-crumb-close-action__size;
+        &:hover {
+            color: darken(@text__color, 20%);
+        }
+        &:focus,
+        &:active {
+            background-color: transparent;
+        }
+        &:active {
+            transform: scale(.9);
+        }
     }
 }
 
