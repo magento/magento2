@@ -101,6 +101,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param InterpretationStrategyInterface $messageInterpretationStrategy
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,

@@ -18,6 +18,7 @@ class Manager implements ManagerInterface
      * Default message group
      */
     const DEFAULT_GROUP = 'default';
+
     /**
      * @var Session
      */
@@ -451,6 +452,7 @@ class Manager implements ManagerInterface
      * Asserts that identifier is not empty
      *
      * @param mixed $identifier
+     * @return void
      * @throws \InvalidArgumentException
      */
     private function assertNotEmptyIdentifier($identifier)

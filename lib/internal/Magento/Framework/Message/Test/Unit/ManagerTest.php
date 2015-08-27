@@ -259,11 +259,10 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param \PHPUnit_Framework_MockObject_MockObject $messages
-     * @param string $text
      * @param string $expectation
      * @dataProvider addUniqueMessagesWhenMessagesImplementMessageInterfaceDataProvider
      */
-    public function testAddUniqueMessagesWhenMessagesImplementMessageInterface($messages, $text, $expectation)
+    public function testAddUniqueMessagesWhenMessagesImplementMessageInterface($messages, $expectation)
     {
         $messageCollection =
             $this->getMock('Magento\Framework\Message\Collection', ['getItems', 'addMessage'], [], '', false);
@@ -273,24 +272,20 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $messageCollection
             ->expects($this->once())
             ->method('getItems')
-            ->will($this->returnValue([$this->messageMock]));
+            ->will($this->returnValue([new TestingMessage('text')]));
         $messageCollection->expects($this->$expectation())->method('addMessage');
-        $this->messageMock->expects($this->once())->method('getText')->will($this->returnValue('text'));
-        $messages->expects($this->once())->method('getText')->will($this->returnValue($text));
-        $this->model->addUniqueMessages($messages);
+        $this->model->addUniqueMessages([$messages]);
     }
 
     public function addUniqueMessagesWhenMessagesImplementMessageInterfaceDataProvider()
     {
         return [
             'message_text_is_unique' => [
-                $this->getMock('Magento\Framework\Message\MessageInterface'),
-                'text1',
+                new TestingMessage('text1'),
                 'once',
             ],
-            'message_text_is_already_exist' => [
-                $this->getMock('Magento\Framework\Message\MessageInterface'),
-                'text',
+            'message_text_already_exists' => [
+                new TestingMessage('text'),
                 'never',
             ]
         ];
@@ -318,7 +313,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     public function addUniqueMessagesDataProvider()
     {
         return [
-            'messages_are_text' => ['message'],
+            'messages_are_text' => [['message']],
             'messages_are_empty' => [[]]
         ];
     }

@@ -14,6 +14,9 @@ class InterpretationMediator implements InterpretationStrategyInterface
      */
     private $interpretationStrategy;
 
+    /**
+     * @param InterpretationStrategy $interpretationStrategy
+     */
     public function __construct(
         InterpretationStrategy $interpretationStrategy
     ) {

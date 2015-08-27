@@ -90,7 +90,7 @@ class Add extends Action\Action implements IndexInterface
         }
 
         if (!$product || !$product->isVisibleInCatalog()) {
-            $this->messageManager->addError(__('We can\'t specify a product.'));
+            $this->messageManager->addErrorMessage(__('We can\'t specify a product.'));
             $resultRedirect->setPath('*/');
             return $resultRedirect;
         }
@@ -126,12 +126,14 @@ class Add extends Action\Action implements IndexInterface
                 ]
             );
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError(
+            $this->messageManager->addErrorMessage(
                 __('We can\'t add the item to Wish List right now: %1.', $e->getMessage())
             );
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We can\'t add the item to Wish List right now.'));
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->messageManager->addExceptionMessage(
+                $e,
+                __('We can\'t add the item to Wish List right now.')
+            );
         }
 
         $resultRedirect->setPath('*', ['wishlist_id' => $wishlist->getId()]);

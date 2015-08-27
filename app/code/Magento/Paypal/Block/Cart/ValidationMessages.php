@@ -23,8 +23,8 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
      * @param \Magento\Framework\Message\Factory $messageFactory
      * @param \Magento\Framework\Message\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param \Magento\Checkout\Helper\Cart $cartHelper
      * @param InterpretationStrategyInterface $interpretationStrategy
+     * @param \Magento\Checkout\Helper\Cart $cartHelper
      * @param array $data
      */
     public function __construct(
@@ -32,8 +32,8 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
         \Magento\Framework\Message\Factory $messageFactory,
         \Magento\Framework\Message\CollectionFactory $collectionFactory,
         \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Magento\Checkout\Helper\Cart $cartHelper,
         InterpretationStrategyInterface $interpretationStrategy,
+        \Magento\Checkout\Helper\Cart $cartHelper,
         array $data = []
     ) {
         parent::__construct(
