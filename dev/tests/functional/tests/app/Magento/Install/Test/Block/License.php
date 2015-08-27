@@ -26,11 +26,7 @@ class License extends Block
      *
      * @var string
      */
-<<<<<<< HEAD
-    protected $license = 'license-text';
-=======
     protected $license = '.license-text';
->>>>>>> mainline/develop
 
     /**
      * Click on 'Back' button.
@@ -49,6 +45,6 @@ class License extends Block
      */
     public function getLicense()
     {
-        return $this->_rootElement->find($this->license, Locator::SELECTOR_CLASS_NAME)->getText();
+        return $this->_rootElement->find($this->license, Locator::SELECTOR_CSS)->getText();
     }
 }

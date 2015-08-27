@@ -23,7 +23,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     protected $_indexerMock;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $indexerRegistryMock;
 
@@ -39,7 +39,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->indexerRegistryMock = $this->getMock(
-            'Magento\Indexer\Model\IndexerRegistry',
+            'Magento\Framework\Indexer\IndexerRegistry',
             ['get'],
             [],
             '',

@@ -10,6 +10,9 @@
         <job name="sales_clean_quotes" instance="Magento\Sales\Model\Observer\CleanExpiredQuotes" method="execute">
             <schedule>0 0 * * *</schedule>
         </job>
+        <job name="sales_clean_orders" instance="Magento\Sales\Model\Observer\CleanExpiredOrders" method="execute">
+            <schedule>0 * * * *</schedule>
+        </job>
         <job name="aggregate_sales_report_order_data" instance="Magento\Sales\Model\Observer\AggregateSalesReportOrderData" method="execute">
             <schedule>0 0 * * *</schedule>
         </job>
