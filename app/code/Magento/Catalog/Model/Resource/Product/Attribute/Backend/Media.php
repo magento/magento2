@@ -49,10 +49,17 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param string $tableNameAlias
      * @param array $ids
+     * @param int|null $storeId
      * @param array|null $cols
+     * @param array $leftJoinTables
      * @return array
      */
-    public function loadDataFromTableByValueId($tableNameAlias, array $ids, array $cols = null)
+    public function loadDataFromTableByValueId(
+        $tableNameAlias,
+        array $ids,
+        $storeId = null,
+        array $cols = null,
+        array $leftJoinTables = [])
     {
         if (null == $cols) {
             $cols = '*';
@@ -66,6 +73,12 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 $mainTableAlias.'.value_id IN(?)',
                 $ids
             );
+        if (null !== $storeId) {
+            $select->where($mainTableAlias.'.store_id = ?', $storeId);
+        }
+        foreach ($leftJoinTables as $joinParameters) {
+            $select->joinLeft($joinParameters[0], $joinParameters[1], $joinParameters[2]);
+        }
         $result = $this->getConnection()->fetchAll($select);
 
         return $result;
@@ -74,19 +87,25 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param string $tableName
      * @param array $data
-     * @param string $idKeyName
+     * @param array $idKeyNames
      * @return mixed
      */
-    public function updateTable($tableName, array $data, $idKeyName = 'value_id')
+    public function updateTable($tableName, array $data, array $idKeyNames = ['value_id'])
     {
         $tableName = $this->getTable($tableName);
         $data = $this->_prepareDataForTable(
             new \Magento\Framework\DataObject($data),
             $tableName
         );
-        $id = $data[$idKeyName];
-        $selectCondition = $this->getConnection()->quoteInto($idKeyName . ' = ? ', $id);
-        if (empty($data[$idKeyName]) || !$this->isRecordsExist($tableName, $selectCondition)) {
+        $selectCondition = [];
+        foreach ($idKeyNames as $key) {
+            if (isset($data[$key])) {
+                $selectCondition[] = $this->getConnection()->quoteInto($key . ' = ? ', $data[$key]);
+            }
+        }
+        $selectCondition = implode(' AND ', $selectCondition);
+        $id = null;
+        if (!$this->isRecordsExist($tableName, $selectCondition)) {
             $this->getConnection()->insert($tableName, $data);
             $id = $this->getConnection()->lastInsertId($tableName);
         } else {

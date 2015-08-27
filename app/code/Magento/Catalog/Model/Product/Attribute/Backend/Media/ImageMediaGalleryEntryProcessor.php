@@ -167,6 +167,9 @@ class ImageMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryProcessor
                 $data = [];
                 $data['attribute_id'] = $attribute->getId();
                 $data['value'] = $image['file'];
+                if (!empty($image['media_type'])) {
+                    $data['media_type'] = $image['media_type'];
+                }
                 $image['value_id'] = $this->resourceEntryMediaGallery->insertGallery($data);
                 $this->resourceEntryMediaGallery->bindValueToEntity($image['value_id'], $product->getId());
             }
