@@ -6,7 +6,9 @@
 
 namespace Magento\Mtf\Util\Protocol\CurlTransport;
 
+use Magento\Integration\Test\Fixture\Integration;
 use Magento\Mtf\Config\DataInterface;
+use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\ObjectManager;
 use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
@@ -16,6 +18,18 @@ use Magento\Mtf\Util\Protocol\CurlTransport;
  */
 class WebApiDecorator implements CurlInterface
 {
+    /**
+     * Xpath to token in configuration file.
+     */
+    const CONFIG_TOKEN_PATH = 'handler/0/webapi/0/token/0/value';
+
+    /**
+     * Object manager.
+     *
+     * @var ObjectManager
+     */
+    protected $objectManager;
+
     /**
      * Curl transport protocol.
      *
@@ -29,6 +43,13 @@ class WebApiDecorator implements CurlInterface
      * @var DataInterface
      */
     protected $configuration;
+
+    /**
+     * Fixture factory.
+     *
+     * @var FixtureFactory
+     */
+    protected $fixtureFactory;
 
     /**
      * Api headers.
@@ -49,13 +70,85 @@ class WebApiDecorator implements CurlInterface
 
     /**
      * @construct
+     * @param ObjectManager $objectManager
      * @param CurlTransport $transport
      * @param DataInterface $configuration
+     * @param FixtureFactory $fixtureFactory
      */
-    public function __construct(CurlTransport $transport, DataInterface $configuration)
-    {
+    public function __construct(
+        ObjectManager $objectManager,
+        CurlTransport $transport,
+        DataInterface $configuration,
+        FixtureFactory $fixtureFactory
+    ) {
+        $this->objectManager = $objectManager;
         $this->transport = $transport;
         $this->configuration = $configuration;
+        $this->fixtureFactory = $fixtureFactory;
+
+        $this->init();
+    }
+
+    /**
+     * Init integration account.
+     *
+     * @return void
+     */
+    protected function init()
+    {
+        $integrationToken = $this->configuration->get(self::CONFIG_TOKEN_PATH);
+
+        if (null === $integrationToken || !$this->isValidIntegration()) {
+            /** @var \Magento\Integration\Test\Fixture\Integration $integration */
+            $integration = $this->fixtureFactory->create(
+                'Magento\Integration\Test\Fixture\Integration',
+                ['dataset' => 'default_active']
+            );
+            $integration->persist();
+
+            $this->setConfiguration($integration);
+        }
+    }
+
+    /**
+     * Set integration data to configuration file.
+     *
+     * @param Integration $integration
+     * @return void
+     */
+    protected function setConfiguration(Integration $integration)
+    {
+        $fileConfig = MTF_BP . '/etc/config.xml';
+        if (!file_exists($fileConfig)) {
+            copy(MTF_BP . '/etc/config.xml.dist', $fileConfig);
+        }
+
+        $dom = new \DOMDocument();
+        $dom->load($fileConfig);
+
+        $webapi = (new \DOMXPath($dom))->query('//config/handler/webapi')->item(0);
+        $webapiToken = (new \DOMXPath($dom))->query('//config/handler/webapi/token')->item(0);
+        if ($webapiToken) {
+            $webapiToken->nodeValue = $integration->getToken();
+        } else {
+            $webapi->appendChild($dom->createElement('token', $integration->getToken()));
+        }
+
+        $dom->save($fileConfig);
+        $this->configuration = $this->objectManager->create('Magento\Mtf\Config\DataInterface');
+    }
+
+    /**
+     * Check ability access to webapi.
+     *
+     * @return bool
+     */
+    protected function isValidIntegration()
+    {
+        $this->write($_ENV['app_frontend_url'] . 'rest/V1/modules', [], CurlInterface::GET);
+        $response = json_decode($this->read(), true);
+
+        return !isset($response['message']);
     }
 
     /**
@@ -70,7 +163,7 @@ class WebApiDecorator implements CurlInterface
     public function write($url, $params = [], $method = CurlInterface::POST, $headers = [])
     {
         $headers = array_merge(
-            ['Authorization: Bearer ' . $this->configuration->get('handler/0/api/0/token/0/value')],
+            ['Authorization: Bearer ' . $this->configuration->get(self::CONFIG_TOKEN_PATH)],
             $this->headers,
             $headers
         );
