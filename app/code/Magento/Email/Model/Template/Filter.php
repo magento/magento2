@@ -766,8 +766,8 @@ class Filter extends \Magento\Framework\Filter\Template
 
         $css = $this->getCssFilesContent([$params['file']]);
 
-        if (strpos($css, \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX) !== false) {
-            // Return LESS compilation error wrapped in CSS comment
+        if (strpos($css, \Magento\Framework\Css\PreProcessor\AdapterInterface::ERROR_MESSAGE_PREFIX) !== false) {
+            // Return compilation error wrapped in CSS comment
             return '/*' . PHP_EOL . $css . PHP_EOL . '*/';
         } elseif (!empty($css)) {
             return $css;
@@ -886,8 +886,8 @@ class Filter extends \Magento\Framework\Filter\Template
         // Only run Emogrify if HTML and CSS contain content
         if ($html && $cssToInline) {
             try {
-                // Don't try to compile CSS that has LESS compilation errors
-                if (strpos($cssToInline, \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX)
+                // Don't try to compile CSS that has compilation errors
+                if (strpos($cssToInline, \Magento\Framework\Css\PreProcessor\AdapterInterface::ERROR_MESSAGE_PREFIX)
                     !== false
                 ) {
                     throw new \Magento\Framework\Exception\MailException(

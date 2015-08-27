@@ -98,7 +98,7 @@ class QueryContainer
     /**
      * @return MatchContainer[]
      */
-    public function getDerivedQueries()
+    public function getMatchQueries()
     {
         return $this->queries;
     }

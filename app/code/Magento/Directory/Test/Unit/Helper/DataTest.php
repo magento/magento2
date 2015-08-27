@@ -237,4 +237,26 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($country, $this->_object->getDefaultCountry($storeId));
     }
+
+    public function testGetCountryCollection()
+    {
+        $this->_countryCollection->expects(
+            $this->once()
+        )->method(
+            'isLoaded'
+        )->will(
+            $this->returnValue(0)
+        );
+
+        $store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $this->_countryCollection->expects(
+            $this->once()
+        )->method(
+            'loadByStore'
+        )->with(
+            $store
+        );
+
+        $this->_object->getCountryCollection($store);
+    }
 }
