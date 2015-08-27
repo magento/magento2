@@ -29,7 +29,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
 
         $this->viewConfigMock = $this->getMock(
             '\Magento\Framework\View\Config',
-            ['getMediaValue', 'getViewConfig'],
+            ['getVideoAttributeValue', 'getViewConfig'],
             [],
             '',
             false
@@ -116,7 +116,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetVideoPlayAttribute($expectedResult)
     {
-        $this->viewConfigMock->expects($this->once())->method('getMediaValue')->willReturn($expectedResult);
+        $this->viewConfigMock->expects($this->once())->method('getVideoAttributeValue')->willReturn($expectedResult);
         $this->mediaHelperObject->getVideoPlayAttribute();
     }
 
@@ -125,7 +125,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetVideoStopAttribute($expectedResult)
     {
-        $this->viewConfigMock->expects($this->once())->method('getMediaValue')->willReturn($expectedResult);
+        $this->viewConfigMock->expects($this->once())->method('getVideoAttributeValue')->willReturn($expectedResult);
         $this->mediaHelperObject->getVideoStopAttribute();
     }
 
@@ -134,7 +134,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetVideoBackgroundAttribute($expectedResult)
     {
-        $this->viewConfigMock->expects($this->once())->method('getMediaValue')->willReturn($expectedResult);
+        $this->viewConfigMock->expects($this->once())->method('getVideoAttributeValue')->willReturn($expectedResult);
         $this->mediaHelperObject->getVideoBackgroundAttribute();
     }
 
