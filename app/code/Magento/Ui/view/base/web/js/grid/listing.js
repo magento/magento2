@@ -30,6 +30,15 @@ define([
                 dataProvider: '${ $.provider }',
                 enabled: false
             },
+            resizeConfig: {
+                name: '${ $.name }_resize',
+                component: 'Magento_Ui/js/grid/resize',
+                provider: '${ $.provider }',
+                divsAttrParams: {
+                    'data-cl-elem': 'shadow-div'
+                },
+                enabled: true
+            },
             imports: {
                 rows: '${ $.provider }:data.items'
             },
@@ -39,7 +48,8 @@ define([
                 '${ $.provider }:reloaded': 'hideLoader'
             },
             modules: {
-                dnd: '${ $.dndConfig.name }'
+                dnd: '${ $.dndConfig.name }',
+                resize: '${ $.resizeConfig.name }'
             }
         },
 
@@ -50,6 +60,10 @@ define([
          */
         initialize: function () {
             this._super();
+
+            if (this.resizeConfig.enabled) {
+                this.initResize();
+            }
 
             if (this.dndConfig.enabled) {
                 this.initDnd();
@@ -81,6 +95,12 @@ define([
          */
         initDnd: function () {
             layout([this.dndConfig]);
+
+            return this;
+        },
+
+        initResize: function () {
+            layout([this.resizeConfig]);
 
             return this;
         },

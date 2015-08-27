@@ -10,6 +10,12 @@
         css: { _dragging: dragging },
         click: hasFieldAction() ?
             applyFieldAction.bind($data, $parentContext.$index()) :
-            false,
-        text: getLabel(row[field.index])"
-    data-action="grid-row-edit"></td>
+            false"
+    data-action="grid-row-edit">
+    <div
+        data-bind="
+            text: getLabel(row[field.index]),
+            style: { maxHeight: $parents[1].resize('getMaxHeight')}"
+        class="_hideOverflow">
+    </div>
+</td>
