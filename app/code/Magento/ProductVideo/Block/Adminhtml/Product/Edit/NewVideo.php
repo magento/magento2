@@ -90,6 +90,7 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
             'video_url',
             'text',
             [
+                'class' => 'edited-data',
                 'label' => __('Url'),
                 'title' => __('Url'),
                 'required' => true,
@@ -103,6 +104,7 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
             'video_name',
             'text',
             [
+                'class' => 'edited-data',
                 'label' => __('Title'),
                 'title' => __('Title'),
                 'required' => true,
@@ -114,6 +116,7 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
             'video_description',
             'textarea',
             [
+                'class' => 'edited-data',
                 'label' => __('Description'),
                 'title' => __('Description'),
                 'name' => 'video_description',
@@ -124,6 +127,7 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
             'video_metadata',
             'text',
             [
+                'class' => 'edited-data',
                 'label' => __('Metadata'),
                 'title' => __('Metadata'),
                 'name' => 'video_metadata',
@@ -155,9 +159,10 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
             'new_video_disabled',
             'checkbox',
             [
+                'class' => 'edited-data',
                 'label' => 'Hide from Product Page',
                 'title' => __('Hide from Product Page'),
-                'name' => 'new_video_disabled',
+                'name' => 'disabled',
             ]
         );
 
@@ -194,6 +199,18 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
                 'title' => __('Thumbnail'),
                 'data-role' => 'role-type-selector',
                 'value' => 'thumbnail',
+            ]
+        );
+
+        $fieldset->addField(
+            'video_swatch_image',
+            'checkbox',
+            [
+                'class' => 'video_image_role',
+                'label' => 'Swatch Image',
+                'title' => __('Swatch Image'),
+                'data-role' => 'role-type-selector',
+                'value' => 'swatch_image',
             ]
         );
 
