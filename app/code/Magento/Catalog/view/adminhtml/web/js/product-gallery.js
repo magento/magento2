@@ -316,12 +316,15 @@ define([
 
             if ($imageContainer.find('input[name*="media_type"]').val() == 'external-video') {
                 $('#new-video').modal('openModal');
-                $('#video_url').val($imageContainer.find('input[name*="video_url"]').val());
-                $('#video_name').val($imageContainer.find('input[name*="video_name"]').val());
+                var formFields = $('#new_video_form').find('.edited-data');
+
+                $.each(formFields, function (i, field) {
+                    $(field).val($imageContainer.find('input[name*="' + field.name + '"]').val());
+                })
 
                 var flagChecked = ($imageContainer.find('input[name*="disabled"]').val() == 1) ? true : false;
                 $('#new_video_disabled').prop('checked', flagChecked);
-                $('#new_video_role').val($imageContainer.find('input[name*="role"]').val());
+
                 var file = $('#file_name').val($imageContainer.find('input[name*="file"]').val());
 
                 $('#video_base_image').prop('checked', false).prop('disabled', false);
@@ -337,7 +340,6 @@ define([
                     $('#video_thumb_image').prop('checked', true);
                 }
 
-                $('#video_description').val($imageContainer.find('input[name*="video_description"]').val());
                 return;
             }
 
