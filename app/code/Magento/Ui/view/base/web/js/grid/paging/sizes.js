@@ -28,7 +28,22 @@ define([
             maxSize: 1000,
             customVisible: false,
             customValue: '',
-            options: [],
+            options: [{
+                value: 20,
+                label: 20
+            }, {
+                value: 30,
+                label: 30
+            }, {
+                value: 50,
+                label: 50
+            }, {
+                value: 100,
+                label: 100
+            }, {
+                value: 200,
+                label: 200
+            }],
             links: {
                 value: '${ $.storageConfig.path }.value',
                 options: '${ $.storageConfig.path }.options'
@@ -45,7 +60,13 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe('options editing value customVisible customValue');
+                .observe([
+                    'options',
+                    'editing',
+                    'value',
+                    'customVisible',
+                    'customValue'
+                ]);
 
             this._value = ko.pureComputed({
                 read: this.value,
