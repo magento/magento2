@@ -12,6 +12,7 @@ use Magento\Customer\Model\Address\AbstractAddress;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State as AppState;
+use Magento\Framework\DataObject;
 use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Escaper;
@@ -262,7 +263,7 @@ class Observer
      * Add success message for valid VAT ID
      *
      * @param Address $customerAddress
-     * @param $validationResult
+     * @param DataObject $validationResult
      * @return $this
      */
     protected function addValidMessage($customerAddress, $validationResult)

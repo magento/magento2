@@ -147,7 +147,9 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $connection = $this->getConnection();
 
             $select = $connection->select();
-            $select->from($this->getTable('authorization_role'))->where('parent_id > :parent_id')->where('user_id = :user_id');
+            $select->from($this->getTable('authorization_role'))
+                ->where('parent_id > :parent_id')
+                ->where('user_id = :user_id');
 
             $binds = ['parent_id' => 0, 'user_id' => $userId];
 
