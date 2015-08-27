@@ -4,15 +4,24 @@
     text-decoration: none;
 }
 
-.image .video-placeholder-text {
-    font-size: 1.1rem;
-    bottom: 0;
-    color: #008bdb;
-    left: 0;
-    line-height: 1.333;
-    margin-bottom: 15%;
-    padding: 0 1rem;
-    position: absolute;
-    right: 0;
+.image.video-placeholder {
+    /*background: #fff url(../images/icon-movie.png) center;*/
+    background-color: #fff;
+    font-size: 4rem;
+    line-height: inherit;
+    color: #ccc;
+    overflow: hidden;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    vertical-align: middle;
     text-align: center;
+}
+
+#add_video_button {
+    /*background: #fff url(../images/icon-movie.png) center;*/
+    background: #fff url(http://joxi.ru/ZrJVGD9tQBayrj.gif) 50% 50% no-repeat;
+    background-size: contain;
+    border: none;
 }
