@@ -79,7 +79,7 @@
                         <xs:element name="video_background" minOccurs="0">
                             <xs:simpleType>
                                 <xs:restriction base="xs:string">
-                                    <xs:pattern value="\[(\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\]"/>
+                                    <xs:pattern value="#([a-f0-9]{6}|[a-f0-9]{3})"/>
                                 </xs:restriction>
                             </xs:simpleType>
                         </xs:element>
