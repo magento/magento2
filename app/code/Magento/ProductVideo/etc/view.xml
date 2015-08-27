@@ -14,7 +14,7 @@
             <video_stop>1</video_stop>
         </video>
         <video id="video_background" type="video_background">
-            <video_background>[255, 255, 255]</video_background>
+            <video_background>#000</video_background>
         </video>
     </media>
 </view>
