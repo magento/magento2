@@ -14,7 +14,7 @@
     <div class="admin__data-grid-wrap">
         <!-- ko if: gridNew().length -->
             <!-- ko template: {name: getGridTemplate(), data: {
-                grid: gridNew(),
+                grid: gridNew,
                 id: getGridId(),
                 title: $t('New Product Review'),
                 note: $t('Here are the products you\'re about to create.')
@@ -23,7 +23,7 @@
 
         <!-- ko if: gridExisting().length -->
             <!-- ko template: {name: getGridTemplate(), data: {
-                grid: gridExisting(),
+                grid: gridExisting,
                 id: getGridId(),
                 title: $t('Associated Products'),
                 note: $t('You created these products for this configuration.')
@@ -32,7 +32,7 @@
 
         <!-- ko if: gridDeleted().length -->
             <!-- ko template: {name: getGridTemplate(), data: {
-                grid: gridDeleted(),
+                grid: gridDeleted,
                 id: getGridId(),
                 title: $t('Disassociated Products'),
                 note: $t('These products are not associated.')
