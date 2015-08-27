@@ -61,7 +61,7 @@ return [
             'templateUrl' => "$base/data-option",
             'title'       => "Data \n Option",
             'controller'  => 'dataOptionController',
-            'header'      => 'Step 3: Data Option',
+            'header'      => 'Step 3: Remove or Keep Data',
             'nav'         => true,
             'order'       => 6,
             'type'        => 'uninstall'
