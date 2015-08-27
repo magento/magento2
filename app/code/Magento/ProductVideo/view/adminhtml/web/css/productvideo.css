@@ -1,0 +1,18 @@
+.image.video-placeholder {
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.image .video-placeholder-text {
+    font-size: 1.1rem;
+    bottom: 0;
+    color: #008bdb;
+    left: 0;
+    line-height: 1.333;
+    margin-bottom: 15%;
+    padding: 0 1rem;
+    position: absolute;
+    right: 0;
+    text-align: center;
+}
