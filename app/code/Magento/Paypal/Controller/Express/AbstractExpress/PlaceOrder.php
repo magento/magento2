@@ -64,11 +64,16 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
         } catch (ApiProcessableException $e) {
             $this->_processPaypalApiError($e);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addExceptionMessage(
+                $e,
+                $e->getMessage()
+            );
             $this->_redirect('*/*/review');
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We can\'t place the order.'));
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->messageManager->addExceptionMessage(
+                $e,
+                __('We can\'t place the order.')
+            );
             $this->_redirect('*/*/review');
         }
     }
@@ -128,7 +133,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      */
     protected function _redirectToCartAndShowError($errorMessage)
     {
-        $this->messageManager->addError($errorMessage);
+        $this->messageManager->addErrorMessage($errorMessage);
         $this->_redirect('checkout/cart');
     }
 }

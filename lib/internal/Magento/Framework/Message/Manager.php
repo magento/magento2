@@ -256,6 +256,28 @@ class Manager implements ManagerInterface
     }
 
     /**
+     * @inheritdoc
+     *
+     * @param \Exception $exception
+     * @param string $alternativeText
+     * @param string $group
+     * @return $this
+     */
+    public function addExceptionMessage(\Exception $exception, $alternativeText, $group = null)
+    {
+        $message = sprintf(
+            'Exception message: %s%sTrace: %s',
+            $exception->getMessage(),
+            "\n",
+            $exception->getTraceAsString()
+        );
+
+        $this->logger->critical($message);
+        $this->addErrorMessage($alternativeText, $group);
+        return $this;
+    }
+
+    /**
      * Adds new error message
      *
      * @param string $message
@@ -265,7 +287,7 @@ class Manager implements ManagerInterface
     public function addErrorMessage($message, $group = null)
     {
         $this->addMessage(
-            $this->createIdentifiedMessage(MessageInterface::TYPE_ERROR)
+            $this->createMessage(MessageInterface::TYPE_ERROR)
                 ->setText($message),
             $group
         );
@@ -282,7 +304,7 @@ class Manager implements ManagerInterface
     public function addWarningMessage($message, $group = null)
     {
         $this->addMessage(
-            $this->createIdentifiedMessage(MessageInterface::TYPE_WARNING)
+            $this->createMessage(MessageInterface::TYPE_WARNING)
                 ->setText($message),
             $group
         );
@@ -299,7 +321,7 @@ class Manager implements ManagerInterface
     public function addNoticeMessage($message, $group = null)
     {
         $this->addMessage(
-            $this->createIdentifiedMessage(MessageInterface::TYPE_NOTICE)
+            $this->createMessage(MessageInterface::TYPE_NOTICE)
                 ->setText($message),
             $group
         );
@@ -316,7 +338,7 @@ class Manager implements ManagerInterface
     public function addSuccessMessage($message, $group = null)
     {
         $this->addMessage(
-            $this->createIdentifiedMessage(MessageInterface::TYPE_SUCCESS)
+            $this->createMessage(MessageInterface::TYPE_SUCCESS)
                 ->setText($message),
             $group
         );
@@ -336,7 +358,7 @@ class Manager implements ManagerInterface
     {
         $this->assertNotEmptyIdentifier($identifier);
         $this->addMessage(
-            $this->createIdentifiedMessage(MessageInterface::TYPE_ERROR, $identifier)
+            $this->createMessage(MessageInterface::TYPE_ERROR, $identifier)
                 ->setData($data),
             $group
         );
@@ -357,7 +379,7 @@ class Manager implements ManagerInterface
     {
         $this->assertNotEmptyIdentifier($identifier);
         $this->addMessage(
-            $this->createIdentifiedMessage(MessageInterface::TYPE_WARNING, $identifier)
+            $this->createMessage(MessageInterface::TYPE_WARNING, $identifier)
                 ->setData($data),
             $group
         );
@@ -378,7 +400,7 @@ class Manager implements ManagerInterface
     {
         $this->assertNotEmptyIdentifier($identifier);
         $this->addMessage(
-            $this->createIdentifiedMessage(MessageInterface::TYPE_NOTICE, $identifier)
+            $this->createMessage(MessageInterface::TYPE_NOTICE, $identifier)
                 ->setData($data),
             $group
         );
@@ -399,7 +421,7 @@ class Manager implements ManagerInterface
     {
         $this->assertNotEmptyIdentifier($identifier);
         $this->addMessage(
-            $this->createIdentifiedMessage(MessageInterface::TYPE_SUCCESS, $identifier)
+            $this->createMessage(MessageInterface::TYPE_SUCCESS, $identifier)
                 ->setData($data),
             $group
         );
@@ -415,7 +437,7 @@ class Manager implements ManagerInterface
      * @return MessageInterface
      * @throws \InvalidArgumentException
      */
-    private function createIdentifiedMessage($type, $identifier = null)
+    public function createMessage($type, $identifier = null)
     {
         return $this->messageFactory->create($type)
             ->setIdentifier(
