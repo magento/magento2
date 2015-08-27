@@ -46,4 +46,10 @@
     <action name="rest/*/V1/guest-carts/*/payment-information">
         <section name="cart"/>
     </action>
+    <action name="rest/*/V1/guest-carts/*/selected-payment-method">
+        <section name="cart"/>
+    </action>
+    <action name="rest/*/V1/carts/*/selected-payment-method">
+        <section name="cart"/>
+    </action>
 </config>
