@@ -35,22 +35,47 @@ define([
     'use strict';
 
     return {
+        resolveEstimationAddress: function () {
+            if (checkoutData.getShippingAddressFromData()) {
+                var address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getShippingAddressFromData());
+                selectShippingAddress(address);
+            }
+            this.resolveShippingAddress(true);
+            if (quote.isVirtual) {
+               if  (checkoutData.getBillingAddressFromData()) {
+                    address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getBillingAddressFromData());
+                    selectBillingAddress(address);
+                } else {
+                   this.resolveBillingAddress();
+               }
+            }
+
+        },
+
         resolveShippingAddress: function () {
             var newCustomerShippingAddress = checkoutData.getNewCustomerShippingAddress();
             if (newCustomerShippingAddress) {
                 createShippingAddress(newCustomerShippingAddress);
             }
+            this.applyShippingAddress();
+        },
+
+        applyShippingAddress: function (isEstimatedAddress) {
 
             if (addressList().length == 0) {
                 var address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getShippingAddressFromData());
                 selectShippingAddress(address);
             }
-
-            var shippingAddress = quote.shippingAddress();
+            var shippingAddress = quote.shippingAddress(),
+                isConvertAddress = isEstimatedAddress || false,
+                addressData;
             if (!shippingAddress) {
                 var isShippingAddressInitialized = addressList.some(function (address) {
                     if (checkoutData.getSelectedShippingAddress() == address.getKey()) {
-                        selectShippingAddress(address);
+                        addressData = isConvertAddress
+                            ? addressConverter.addressToEstimationAddress(address)
+                            : address;
+                        selectShippingAddress(addressData);
                         return true;
                     }
                     return false;
@@ -59,14 +84,20 @@ define([
                 if (!isShippingAddressInitialized) {
                     isShippingAddressInitialized = addressList.some(function (address) {
                         if (address.isDefaultShipping()) {
-                            selectShippingAddress(address);
+                            addressData = isConvertAddress
+                                ? addressConverter.addressToEstimationAddress(address)
+                                : address;
+                            selectShippingAddress(addressData);
                             return true;
                         }
                         return false;
                     });
                 }
                 if (!isShippingAddressInitialized && addressList().length == 1) {
-                    selectShippingAddress(addressList()[0]);
+                    addressData = isConvertAddress
+                        ? addressConverter.addressToEstimationAddress(addressList()[0])
+                        : addressList()[0];
+                    selectShippingAddress(addressData);
                 }
             }
         },
@@ -104,7 +135,7 @@ define([
                 selectShippingMethodAction(window.checkoutConfig.selectedShippingMethod);
             }
 
-            //Unset selected shipping shipping method if not available
+            //Unset selected shipping method if not available
             if (!rateIsAvailable) {
                 selectShippingMethodAction(null);
             }
@@ -137,11 +168,15 @@ define([
                         }
                     });
                 }
-            } else if (
-                shippingAddress
+            } else {
+                this.applyBillingAddress()
+            }
+        },
+        applyBillingAddress: function () {
+            var shippingAddress = quote.shippingAddress();
+            if (shippingAddress
                 && shippingAddress.canUseForBilling()
-                && (shippingAddress.isDefaultShipping() || !quote.isVirtual())
-            ) {
+                && (shippingAddress.isDefaultShipping() || !quote.isVirtual())) {
                 //set billing address same as shipping by default if it is not empty
                 selectBillingAddress(quote.shippingAddress());
             }

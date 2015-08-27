@@ -13,7 +13,7 @@ require 'order.php';
 $orderService = \Magento\TestFramework\ObjectManager::getInstance()->create(
     'Magento\Sales\Api\InvoiceManagementInterface'
 );
-$invoice = $orderService->prepareInvoice($order->getEntityId());
+$invoice = $orderService->prepareInvoice($order);
 $invoice->register();
 $order = $invoice->getOrder();
 $order->setIsInProcess(true);
