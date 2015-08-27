@@ -79,6 +79,14 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
         );
 
         $fieldset->addField(
+            'provider',
+            'hidden',
+            [
+                'name' => 'provider',
+            ]
+        );
+
+        $fieldset->addField(
             'video_url',
             'text',
             [
@@ -109,6 +117,16 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
                 'label' => __('Description'),
                 'title' => __('Description'),
                 'name' => 'video_description',
+            ]
+        );
+
+        $fieldset->addField(
+            'video_metadata',
+            'text',
+            [
+                'label' => __('Metadata'),
+                'title' => __('Metadata'),
+                'name' => 'video_metadata',
             ]
         );
 

@@ -314,7 +314,7 @@ define([
         _showDialog: function (imageData) {
             var $imageContainer = this.findElement(imageData);
 
-            if ($imageContainer.find('input[name*="entity_type"]').val() == 'video') {
+            if ($imageContainer.find('input[name*="media_type"]').val() == 'external-video') {
                 $('#new-video').modal('openModal');
                 $('#video_url').val($imageContainer.find('input[name*="video_url"]').val());
                 $('#video_name').val($imageContainer.find('input[name*="video_name"]').val());
