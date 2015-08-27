@@ -28,7 +28,7 @@ $elementName = $block->getElement()->getName() . '[images]';
         </div>
         <?php echo $block->getChildHtml('additional_buttons'); ?>
         <div class="image video-placeholder">
-            <button id="add_video_button" title="New Video" type="button" class="action-default scalable" onclick="jQuery('#new-video').modal('openModal'); jQuery('#new_video_form')[0].reset();" data-ui-id="widget-button-1">
+            <button id="add_video_button" title="New Video" type="button" class="action-default scalable" data-mage-init='{"openVideoModal" : {}}' data-ui-id="widget-button-1">
                 <span>New Video</span>
             </button>
         </div>
@@ -44,12 +44,11 @@ $elementName = $block->getElement()->getName() . '[images]';
     <?php
 
 } ?>
-
     <script id="<?php echo $block->getHtmlId() ?>-template" type="text/x-magento-template">
         <div class="image item <% if (data.disabled == 1) { %>hidden-for-front<% } %>"
              data-role="image">
             <input type="hidden" name="<?php echo $elementName ?>[<%- data.file_id %>][position]" value="<%- data.position %>" class="position"/>
-            <input type="hidden" name="<?php echo $elementName ?>[<%- data.file_id %>][entity_type]" value="<%- data.entity_type %>"/>
+            <input type="hidden" name="<?php echo $elementName ?>[<%- data.file_id %>][media_type]" value="<%- data.media_type %>"/>
             <input type="hidden" name="<?php echo $elementName ?>[<%- data.file_id %>][file]" value="<%- data.file %>"/>
             <input type="hidden" name="<?php echo $elementName ?>[<%- data.file_id %>][value_id]" value="<%- data.value_id %>"/>
             <input type="hidden" name="<?php echo $elementName ?>[<%- data.file_id %>][label]" value="<%- data.label %>"/>

@@ -316,14 +316,28 @@ define([
 
             if ($imageContainer.find('input[name*="entity_type"]').val() == 'video') {
                 $('#new-video').modal('openModal');
-                $('#new_video_url').val($imageContainer.find('input[name*="video_url"]').val());
-                $('#new_video_name').val($imageContainer.find('input[name*="video_name"]').val());
+                $('#video_url').val($imageContainer.find('input[name*="video_url"]').val());
+                $('#video_name').val($imageContainer.find('input[name*="video_name"]').val());
 
-                $('#new_video_disabled').prop('checked', $imageContainer.find('input[name*="disabled"]').val());
+                var flagChecked = ($imageContainer.find('input[name*="disabled"]').val() == 1) ? true : false;
+                $('#new_video_disabled').prop('checked', flagChecked);
                 $('#new_video_role').val($imageContainer.find('input[name*="role"]').val());
+                var file = $('#file_name').val($imageContainer.find('input[name*="file"]').val());
 
-                $('#new_video_description').val($imageContainer.find('input[name*="video_description"]').val());
-                $('#new_video_description').val($imageContainer.find('input[name*="video_description"]').val());
+                $('#video_base_image').prop('checked', false).prop('disabled', false);
+                if ($('[name="product[image]"]').val() == file.val()) {
+                    $('#video_base_image').prop('checked', true);
+                }
+                $('#video_small_image').prop('checked', false).prop('disabled', false);
+                if ($('[name="product[small_image]"]').val() == file.val()) {
+                    $('#video_small_image').prop('checked', true);
+                }
+                $('#video_thumb_image').prop('checked', false).prop('disabled', false);
+                if ($('[name="product[thumbnail]"]').val() == file.val()) {
+                    $('#video_thumb_image').prop('checked', true);
+                }
+
+                $('#video_description').val($imageContainer.find('input[name*="video_description"]').val());
                 return;
             }
 

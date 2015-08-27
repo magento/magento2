@@ -73,36 +73,42 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
         );
 
         $fieldset->addField(
-            'new_video_url',
+            'file_name',
+            'hidden',
+            []
+        );
+
+        $fieldset->addField(
+            'video_url',
             'text',
             [
                 'label' => __('Url'),
                 'title' => __('Url'),
                 'required' => true,
-                'name' => 'new_video_url',
+                'name' => 'video_url',
                 'note' => 'Youtube or Vimeo supported',
             ]
         );
 
 
         $fieldset->addField(
-            'new_video_name',
+            'video_name',
             'text',
             [
                 'label' => __('Title'),
                 'title' => __('Title'),
                 'required' => true,
-                'name' => 'new_video_name',
+                'name' => 'video_name',
             ]
         );
 
         $fieldset->addField(
-            'new_video_description',
+            'video_description',
             'textarea',
             [
                 'label' => __('Description'),
                 'title' => __('Description'),
-                'name' => 'new_video_description',
+                'name' => 'video_description',
             ]
         );
 
@@ -138,12 +144,38 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
         );
 
         $fieldset->addField(
-            'new_video_role',
+            'video_base_image',
             'checkbox',
             [
+                'class' => 'video_image_role',
                 'label' => 'Base Image',
                 'title' => __('Base Image'),
-                'data-role' => 'type-selector',
+                'data-role' => 'role-type-selector',
+                'value' => 'image',
+            ]
+        );
+
+        $fieldset->addField(
+            'video_small_image',
+            'checkbox',
+            [
+                'class' => 'video_image_role',
+                'label' => 'Small Image',
+                'title' => __('Small Image'),
+                'data-role' => 'role-type-selector',
+                'value' => 'small_image',
+            ]
+        );
+
+        $fieldset->addField(
+            'video_thumb_image',
+            'checkbox',
+            [
+                'class' => 'video_image_role',
+                'label' => 'Thumbnail',
+                'title' => __('Thumbnail'),
+                'data-role' => 'role-type-selector',
+                'value' => 'thumbnail',
             ]
         );
 
