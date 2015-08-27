@@ -90,7 +90,6 @@ class InlineEdit extends \Magento\Backend\App\Action
      */
     protected function getData(array $data, $isCustomerData = null)
     {
-        $result = [];
         $addressKeys = preg_grep(
             '/^(' . AttributeRepository::BILLING_ADDRESS_PREFIX . '\w+)/',
             array_keys($data),
@@ -131,7 +130,7 @@ class InlineEdit extends \Magento\Backend\App\Action
         /** @var \Magento\Customer\Api\Data\AddressInterface $address */
         foreach ($addresses as $address) {
             if ($address->isDefaultBilling()) {
-                $this->setData($address, $this->parseStreetField($data));
+                $this->setData($address, $this->processAddressData($data));
                 $this->addressRepository->save($address);
                 break;
             }
