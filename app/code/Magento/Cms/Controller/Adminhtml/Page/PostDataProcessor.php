@@ -97,9 +97,11 @@ class PostDataProcessor
         ];
         $errorNo = true;
         foreach ($data as $field => $value) {
-            if (in_array($field, array_keys($requiredFields)) && empty($value)) {
+            if (in_array($field, array_keys($requiredFields)) && $value == '') {
                 $errorNo = false;
-                $this->messageManager->addError($requiredFields[$field] . ' is a required field.');
+                $this->messageManager->addError(
+                    'To apply changes you should fill in hidden required "' . $requiredFields[$field] . '" field'
+                );
             }
         }
         return $errorNo;
