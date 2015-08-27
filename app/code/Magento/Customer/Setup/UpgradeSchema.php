@@ -32,6 +32,53 @@ class UpgradeSchema implements UpgradeSchemaInterface
             );
         }
 
+        if (version_compare($context->getVersion(), '2.0.1', '<')) {
+            $setup->getConnection()->addColumn(
+                $setup->getTable('customer_eav_attribute'),
+                'is_used_in_grid',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                    'unsigned' => true,
+                    'nullable' => false,
+                    'default' => '0',
+                    'comment' => 'Is Used in Grid'
+                ]
+            );
+            $setup->getConnection()->addColumn(
+                $setup->getTable('customer_eav_attribute'),
+                'is_visible_in_grid',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                    'unsigned' => true,
+                    'nullable' => false,
+                    'default' => '0',
+                    'comment' => 'Is Visible in Grid'
+                ]
+            );
+            $setup->getConnection()->addColumn(
+                $setup->getTable('customer_eav_attribute'),
+                'is_filterable_in_grid',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                    'unsigned' => true,
+                    'nullable' => false,
+                    'default' => '0',
+                    'comment' => 'Is Filterable in Grid'
+                ]
+            );
+            $setup->getConnection()->addColumn(
+                $setup->getTable('customer_eav_attribute'),
+                'is_searchable_in_grid',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                    'unsigned' => true,
+                    'nullable' => false,
+                    'default' => '0',
+                    'comment' => 'Is Searchable in Grid'
+                ]
+            );
+        }
+
         $setup->endSetup();
     }
 }

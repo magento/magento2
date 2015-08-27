@@ -94,7 +94,7 @@
     width: 100%;
 
     &:not(._dragging-copy) {
-        ._even-row {
+        ._odd-row {
             td {
                 &._dragging {
                     background-color: @data-grid-td__even__dragging__background-color;
@@ -121,7 +121,7 @@
         }
     }
     tr {
-        &._even-row {
+        &._odd-row {
             td {
                 background-color: @data-grid-td__even__background-color;
             }
@@ -397,7 +397,7 @@
                 }
             }
         }
-        ._even-row {
+        ._odd-row {
             &.data-grid-editable-row {
                 &:hover {
                     td {
