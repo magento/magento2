@@ -103,9 +103,9 @@ define(
                     this.isPlaceOrderActionAllowed(false);
                     placeOrder = placeOrderAction(this.getData(), this.redirectAfterPlaceOrder);
 
-                    $.when(placeOrder).fail(function(){
+                    $.when(placeOrder).fail(function () {
                         self.isPlaceOrderActionAllowed(true);
-                    }).done(this.afterPlaceOrder);
+                    }).done(this.afterPlaceOrder.bind(this));
                     return true;
                 }
                 return false;
