@@ -5,13 +5,7 @@
  */
 -->
 <div class="admin__data-grid-wrap">
-    <table class="data-grid"
-           data-bind="
-            afterRender: function(elem, viewModel) {
-                    if (resizeConfig.enabled) {
-                        resize('setTable', elem, viewModel);
-                    }
-                }">
+    <table class="data-grid">
         <thead>
             <tr data-bind="foreach: elems">
                 <!-- ko template: getHeader() --><!-- /ko -->

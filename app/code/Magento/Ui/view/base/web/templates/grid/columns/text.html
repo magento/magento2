@@ -5,13 +5,8 @@
  */
 -->
 <th
-    class="data-grid-th"
+    class="data-grid-th _relative"
     data-bind="
-        afterRender:  function (elem, viewModel) {
-            if ($parent.resizeConfig.enabled) {
-                $parent.resize('setColumn', elem, viewModel);
-            }
-        },
         css: {
             '_sortable': sortable,
             '_draggable': draggable,
@@ -20,8 +15,8 @@
         },
         click: sort,
         visible: visible">
-    <!-- ko if: $parent.resizeConfig.enabled-->
-        <div data-bind="attr: $parent.resizeConfig.divsAttrParams"></div>
-    <!-- /ko -->
-    <span data-bind="text: label"></span>
+    <span
+        class="_hideOverflow"
+        data-bind="text: label">
+    </span>
 </th>
