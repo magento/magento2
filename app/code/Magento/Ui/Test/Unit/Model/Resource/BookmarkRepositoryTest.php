@@ -6,7 +6,7 @@
 
 namespace Magento\Ui\Test\Unit\Model\Resource;
 
-use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SortOrder;
 use Magento\Ui\Model\Resource\BookmarkRepository;
 
 /**
@@ -163,7 +163,7 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($fieldNameAsc);
         $sortOrderAsc->expects($this->once())
             ->method('getDirection')
-            ->willReturn(SearchCriteriaInterface::SORT_ASC);
+            ->willReturn(SortOrder::SORT_ASC);
         $sortOrderDesc = $this->getMockBuilder('Magento\Framework\Api\SortOrder')
             ->disableOriginalConstructor()
             ->getMock();
@@ -172,7 +172,7 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($fieldNameDesc);
         $sortOrderDesc->expects($this->once())
             ->method('getDirection')
-            ->willReturn(SearchCriteriaInterface::SORT_DESC);
+            ->willReturn(SortOrder::SORT_DESC);
         $fieldAsc = $this->getMockBuilder('Magento\Framework\Api\Filter')
             ->disableOriginalConstructor()
             ->getMock();
@@ -208,7 +208,7 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$this->bookmarkMock]);
         $collection->expects($this->any())
             ->method('addOrder')
-            ->willReturnMap([[$fieldNameAsc, 'ASC'], [$fieldNameDesc, 'DESC']]);
+            ->willReturnMap([[$fieldNameAsc, SortOrder::SORT_ASC], [$fieldNameDesc, SortOrder::SORT_DESC]]);
         $collection->expects($this->any())
             ->method('addFieldToFilter')
             ->willReturnMap([[$fieldNameAsc, [$fieldValueAsc => 'eq']], [$fieldNameDesc, [$fieldValueDesc => 'eq']]]);

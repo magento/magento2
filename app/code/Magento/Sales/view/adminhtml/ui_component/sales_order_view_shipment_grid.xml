@@ -311,14 +311,20 @@
                     <item name="displayArea" xsi:type="string">bottom</item>
                     <item name="actions" xsi:type="array">
                         <item name="pdfshipments_order" xsi:type="array">
-                            <item name="type" xsi:type="string">pdfshipments_order</item>
-                            <item name="label" xsi:type="string" translate="true">PDF Shipments</item>
-                            <item name="url" xsi:type="string">sales/shipment/pdfshipments</item>
                         </item>
                     </item>
                     <item name="indexField" xsi:type="string">entity_id</item>
                 </item>
             </argument>
+            <action name="pdfshipments_order">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">pdfshipments_order</item>
+                        <item name="label" xsi:type="string" translate="true">PDF Shipments</item>
+                        <item name="url" xsi:type="url" path="sales/shipment/pdfshipments"/>
+                    </item>
+                </argument>
+            </action>
         </massaction>
         <paging name="listing_paging">
             <argument name="data" xsi:type="array">
