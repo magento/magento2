@@ -15,10 +15,14 @@ define([
     'use strict';
 
     $.widget('mage.newVideoDialog', {
+
+        clickedElement : '',
+
         _create: function () {
             var widget = this;
             var newVideoForm = $('#new_video_form');
             var uploader = $('#new_video_screenshot');
+            this.toggleButtons();
 
             this.element.modal({
                 type: 'slide',
@@ -28,6 +32,18 @@ define([
                     text: $.mage.__('Create Video'),
                     class: 'action-primary video-create-button',
                     click: function (e) {
+                        var newVideoForm = $('#new_video_form');
+                        newVideoForm.mage('validation', {
+                            errorPlacement: function (error, element) {
+                                error.insertAfter(element);
+                            }
+                        }).on('highlight.validate', function (e) {
+                            var options = $(this).validation('option');
+                        });
+                        newVideoForm.validation();
+                        if (!newVideoForm.valid()) {
+                            return;
+                        }
                         var file = $('#new_video_screenshot').get(0).files[0];
                         var inputFile = uploader.val('').clone(true);
                         $('#new_video_screenshot').fileupload().fileupload(
@@ -57,6 +73,18 @@ define([
                     text: $.mage.__('Edit'),
                     class: 'action-primary video-edit',
                     click: function (e) {
+                        var newVideoForm = $('#new_video_form');
+                        newVideoForm.mage('validation', {
+                            errorPlacement: function (error, element) {
+                                error.insertAfter(element);
+                            }
+                        }).on('highlight.validate', function (e) {
+                            var options = $(this).validation('option');
+                        });
+                        newVideoForm.validation();
+                        if (!newVideoForm.valid()) {
+                            return;
+                        }
                         var inputFile = uploader.val('').clone(true);
                         var mediaFields = $('input[name*="' + $('#item_id').val() + '"]');
                         $.each(mediaFields, function(i, el){
@@ -69,56 +97,50 @@ define([
                         });
                         var flagChecked = $('#new_video_disabled').prop('checked') ? 1 : 0;
                         $('input[name*="' + $('#item_id').val() + '[disabled]"]').val(flagChecked);
-                        /*
+
                         if (flagChecked == true) {
                             $('[name*="' + $('#item_id').val() + '"]').siblings('.image-fade').css('visibility', 'visible');
                         } else {
                             $('[name*="' + $('#item_id').val() + '"]').siblings('.image-fade').css('visibility', 'hidden');
                         }
-                        */
+
                         widget.saveImageRoles($('#file_name').val());
                         uploader.replaceWith(inputFile);
                         $('#new-video').modal('closeModal');
                     }
                 }],
-                opened: function() {
-                    if ($('#video_url').val() != '') {
-                        $('.video-create-button')[0].hide();
-                        $('.video-edit')[0].show();
-                    } else {
-                        $('.video-create-button')[0].show();
-                        $('.video-edit')[0].hide();
-                    }
+                opened: function(e) {
+                    $('#video_url').focus();
+                    $(document).on('click', '.item.image', function() {
+                        var formFields = $('#new_video_form').find('.edited-data');
+                        var container = $(this);
 
-                    var formFields = $('#new_video_form').find('.edited-data');
+                        $.each(formFields, function (i, field) {
+                            $(field).val(container.find('input[name*="' + field.name + '"]').val());
+                        });
 
-                    $.each(formFields, function (i, field) {
-                        $(field).val($imageContainer.find('input[name*="' + field.name + '"]').val());
-                    })
+                        var flagChecked = (container.find('input[name*="disabled"]').val() == 1) ? true : false;
+                        $('#new_video_disabled').prop('checked', flagChecked);
 
-                    var flagChecked = ($imageContainer.find('input[name*="disabled"]').val() == 1) ? true : false;
-                    $('#new_video_disabled').prop('checked', flagChecked);
+                        var file = $('#file_name').val(container.find('input[name*="file"]').val());
 
-                    var file = $('#file_name').val($imageContainer.find('input[name*="file"]').val());
+                        $.each($('.video_image_role'), function(){
+                            $(this).prop('checked', false).prop('disabled', false);
+                        });
 
-                    $('#video_base_image').prop('checked', false).prop('disabled', false);
-                    if ($('[name="product[image]"]').val() == file.val()) {
-                        $('#video_base_image').prop('checked', true);
-                    }
-                    $('#video_small_image').prop('checked', false).prop('disabled', false);
-                    if ($('[name="product[small_image]"]').val() == file.val()) {
-                        $('#video_small_image').prop('checked', true);
-                    }
-                    $('#video_thumb_image').prop('checked', false).prop('disabled', false);
-                    if ($('[name="product[thumbnail]"]').val() == file.val()) {
-                        $('#video_thumb_image').prop('checked', true);
-                    }
-                    $('#video_swatch_image').prop('checked', false).prop('disabled', false);
-                    if ($('[name="product[swatch_image]"]').val() == file.val()) {
-                        $('#video_swatch_image').prop('checked', true);
-                    }
+                        $.each($('.video-placeholder').siblings('input:hidden'), function() {
+                            if ($(this).val() == file.val()) {
+                                var start = this.name.indexOf('[') + 1;
+                                var end = this.name.length - 1;
+                                var imageRole = this.name.substring(start, end);
+                                $('#new_video_form input[value="' + imageRole + '"]').prop('checked', true);
+                            }
+                        });
+
+                    });
                 },
                 closed: function() {
+                    newVideoForm.validation('clearError');
                     $('input[name*="' + $('#item_id').val() + '"]').parent().removeClass('active');
                     $('#new_video_form')[0].reset();
                 }
@@ -141,7 +163,19 @@ define([
                     }
                 })
             }
-        }
+        },
+
+        toggleButtons: function() {
+            $('.video-placeholder').click(function() {
+                $('.video-create-button').show();
+                $('.video-edit').hide();
+            });
+            $(document).on('click', '.item.image', function() {
+                $('.video-create-button').hide();
+                $('.video-edit').show();
+            });
+        },
+
     });
 
     return $.mage.newVideoDialog;
