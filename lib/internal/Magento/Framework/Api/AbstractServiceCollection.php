@@ -128,6 +128,7 @@ abstract class AbstractServiceCollection extends \Magento\Framework\Data\Collect
      * Pre-process filters to create multiple groups in case of multiple conditions eg: from & to
      * @param string|array $field
      * @param string|int|array $condition
+     * @return null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function processFilters($field, $condition)
