@@ -95,6 +95,10 @@ class Validation
         }
     }
 
+    /**
+     * Verify if agreement validation needed
+     * @return bool
+     */
     protected function isAgreementEnabled()
     {
         $isAgreementsEnabled = $this->scopeConfiguration->isSetFlag(

@@ -83,8 +83,11 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
     {
         $cartId = 100;
         $agreements = [1, 2, 3];
-        $this->scopeConfigMock->expects($this->once())->method('isSetFlag')->with(AgreementsProvider::PATH_ENABLED,
-            ScopeInterface::SCOPE_STORE)->willReturn(true);
+        $this->scopeConfigMock
+            ->expects($this->once())
+            ->method('isSetFlag')
+            ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
+            ->willReturn(true);
         $this->repositoryMock->expects($this->once())->method('getList')->willReturn([1]);
         $this->extensionAttributesMock->expects($this->once())->method('getAgreementIds')->willReturn($agreements);
         $this->agreementsValidatorMock->expects($this->once())->method('isValid')->with($agreements)->willReturn(true);
@@ -102,8 +105,11 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
     {
         $cartId = 100;
         $agreements = [1, 2, 3];
-        $this->scopeConfigMock->expects($this->once())->method('isSetFlag')->with(AgreementsProvider::PATH_ENABLED,
-            ScopeInterface::SCOPE_STORE)->willReturn(true);
+        $this->scopeConfigMock
+            ->expects($this->once())
+            ->method('isSetFlag')
+            ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
+            ->willReturn(true);
         $this->repositoryMock->expects($this->once())->method('getList')->willReturn([1]);
         $this->extensionAttributesMock->expects($this->once())->method('getAgreementIds')->willReturn($agreements);
         $this->agreementsValidatorMock->expects($this->once())->method('isValid')->with($agreements)->willReturn(false);
@@ -117,8 +123,11 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
     {
         $cartId = 100;
         $agreements = [1, 2, 3];
-        $this->scopeConfigMock->expects($this->once())->method('isSetFlag')->with(AgreementsProvider::PATH_ENABLED,
-            ScopeInterface::SCOPE_STORE)->willReturn(true);
+        $this->scopeConfigMock
+            ->expects($this->once())
+            ->method('isSetFlag')
+            ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
+            ->willReturn(true);
         $this->repositoryMock->expects($this->once())->method('getList')->willReturn([1]);
         $this->extensionAttributesMock->expects($this->once())->method('getAgreementIds')->willReturn($agreements);
         $this->agreementsValidatorMock->expects($this->once())->method('isValid')->with($agreements)->willReturn(true);
