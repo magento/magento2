@@ -486,7 +486,8 @@ abstract class AbstractType
      */
     public function retrieveAttributeFromCache($attributeCode)
     {
-        if (isset(self::$attributeCodeToId[$attributeCode]) && $id = self::$attributeCodeToId[$attributeCode]) {
+        if (isset(self::$attributeCodeToId[$attributeCode])) {
+            $id = self::$attributeCodeToId[$attributeCode];
             if (isset(self::$commonAttributesCache[$id])) {
                 return self::$commonAttributesCache[$id];
             }

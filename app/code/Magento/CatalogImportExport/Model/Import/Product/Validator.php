@@ -23,12 +23,12 @@ class Validator extends AbstractImportValidator implements RowValidatorInterface
     /**
      * @var array
      */
-    protected $_uniqueAttributes;
+    protected $uniqueAttributes;
 
     /**
      * @var array
      */
-    protected $_rowData;
+    protected $rowData;
 
     /**
      * @param \Magento\Framework\Stdlib\String $string
@@ -49,7 +49,7 @@ class Validator extends AbstractImportValidator implements RowValidatorInterface
      */
     protected function textValidation($attrCode, $type)
     {
-        $val = $this->string->cleanString($this->_rowData[$attrCode]);
+        $val = $this->string->cleanString($this->rowData[$attrCode]);
         if ($type == 'text') {
             $valid = $this->string->strlen($val) < Product::DB_MAX_TEXT_LENGTH;
         } else {
@@ -68,7 +68,7 @@ class Validator extends AbstractImportValidator implements RowValidatorInterface
      */
     protected function numericValidation($attrCode, $type)
     {
-        $val = trim($this->_rowData[$attrCode]);
+        $val = trim($this->rowData[$attrCode]);
         if ($type == 'int') {
             $valid = (string)(int)$val === $val;
         } else {
@@ -98,7 +98,7 @@ class Validator extends AbstractImportValidator implements RowValidatorInterface
      */
     public function isAttributeValid($attrCode, array $attrParams, array $rowData)
     {
-        $this->_rowData = $rowData;
+        $this->rowData = $rowData;
         if (!empty($attrParams['apply_to']) && !in_array($rowData['product_type'], $attrParams['apply_to'])) {
             return true;
         }
@@ -166,12 +166,12 @@ class Validator extends AbstractImportValidator implements RowValidatorInterface
                 break;
         }
         if ($valid && !empty($attrParams['is_unique'])) {
-            if (isset($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]])
-                && ($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] != $rowData[Product::COL_SKU])) {
+            if (isset($this->uniqueAttributes[$attrCode][$rowData[$attrCode]])
+                && ($this->uniqueAttributes[$attrCode][$rowData[$attrCode]] != $rowData[Product::COL_SKU])) {
                 $this->_addMessages([RowValidatorInterface::ERROR_DUPLICATE_UNIQUE_ATTRIBUTE]);
                 return false;
             }
-            $this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] = $rowData[Product::COL_SKU];
+            $this->uniqueAttributes[$attrCode][$rowData[$attrCode]] = $rowData[Product::COL_SKU];
         }
         return (bool)$valid;
     }
@@ -183,15 +183,15 @@ class Validator extends AbstractImportValidator implements RowValidatorInterface
     protected function isValidAttributes()
     {
         $this->_clearMessages();
-        if (!isset($this->_rowData['product_type'])) {
+        if (!isset($this->rowData['product_type'])) {
             return false;
         }
-        $entityTypeModel = $this->context->retrieveProductTypeByName($this->_rowData['product_type']);
+        $entityTypeModel = $this->context->retrieveProductTypeByName($this->rowData['product_type']);
         if ($entityTypeModel) {
-            foreach ($this->_rowData as $attrCode => $attrValue) {
+            foreach ($this->rowData as $attrCode => $attrValue) {
                 $attrParams = $entityTypeModel->retrieveAttributeFromCache($attrCode);
                 if ($attrParams) {
-                    $this->isAttributeValid($attrCode, $attrParams, $this->_rowData);
+                    $this->isAttributeValid($attrCode, $attrParams, $this->rowData);
                 }
             }
             if ($this->getMessages()) {
@@ -206,7 +206,7 @@ class Validator extends AbstractImportValidator implements RowValidatorInterface
      */
     public function isValid($value)
     {
-        $this->_rowData = $value;
+        $this->rowData = $value;
         $this->_clearMessages();
         $returnValue = $this->isValidAttributes();
         foreach ($this->validators as $validator) {
