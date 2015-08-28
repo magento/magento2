@@ -58,7 +58,7 @@ define([
             var data = utils.nested(this, path),
                 diffs;
 
-            if (typeof data !== 'function') {
+            if (!_.isFunction(data)) {
                 diffs = utils.compare(data, value, path);
 
                 utils.nested(this, path, value);
@@ -75,16 +75,36 @@ define([
          * Removes nested data from the object.
          *
          * @param {String} path - Path to the property that should be removed.
+         * @returns {Component} Chainable.
          */
         remove: function (path) {
-            utils.nestedRemove(this, path);
+            var data,
+                diffs;
+
+            if (!path) {
+                return this;
+            }
+
+            data = utils.nested(this, path);
+
+            if (!_.isUndefined(data) && !_.isFunction(data)) {
+                diffs = utils.compare(data, undefined, path);
+
+                utils.nestedRemove(this, path);
+
+                this._notify(diffs);
+            }
+
+            return this;
         },
 
         /**
          * If 2 params passed, path is considered as key.
          * Else, path is considered as object.
          * Assignes props to this based on incoming params
-         * @param  {Object|String} path
+         *
+         * @param {Object|String} path
+         * @returns {Component} Chainable.
          */
         observe: function (path) {
             var type = typeof path;
@@ -106,6 +126,9 @@ define([
             return this;
         },
 
+        /**
+         *
+         */
         _notify: function (diffs) {
             diffs.changes.forEach(function (change) {
                 this.trigger(change.path, change.value, change);
@@ -118,6 +141,9 @@ define([
             }, this);
         },
 
+        /**
+         *
+         */
         restore: function () {
             var ns = this.storageConfig.namespace,
                 storage = this.storage();
@@ -129,6 +155,12 @@ define([
             return this;
         },
 
+        /**
+         *
+         * @param {String} property
+         * @param {*} data
+         * @returns {Component} Chainable.
+         */
         store: function (property, data) {
             var ns = this.storageConfig.namespace,
                 path = utils.fullPath(ns, property);
@@ -140,6 +172,9 @@ define([
             return this;
         },
 
+        /**
+         *
+         */
         removeStored: function (property) {
             var ns = this.storageConfig.namespace,
                 path = utils.fullPath(ns, property);
