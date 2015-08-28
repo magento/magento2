@@ -5,11 +5,24 @@
  */
 namespace Magento\CheckoutAgreements\Model\Checkout\Plugin;
 
+use Magento\CheckoutAgreements\Model\AgreementsProvider;
+use Magento\Store\Model\ScopeInterface;
+
 /**
  * Class Validation
  */
 class Validation
 {
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $scopeConfiguration;
+
+    /**
+     * @var \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface
+     */
+    protected $checkoutAgreementsRepository;
+
     /**
      * @var \Magento\CheckoutAgreements\Model\AgreementsValidator
      */
@@ -17,11 +30,17 @@ class Validation
 
     /**
      * @param \Magento\CheckoutAgreements\Model\AgreementsValidator $agreementsValidator
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration
+     * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository
      */
     public function __construct(
-        \Magento\CheckoutAgreements\Model\AgreementsValidator $agreementsValidator
+        \Magento\CheckoutAgreements\Model\AgreementsValidator $agreementsValidator,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration,
+        \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository
     ) {
         $this->agreementsValidator = $agreementsValidator;
+        $this->scopeConfiguration = $scopeConfiguration;
+        $this->checkoutAgreementsRepository = $checkoutAgreementsRepository;
     }
 
     /**
@@ -38,7 +57,9 @@ class Validation
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
         \Magento\Quote\Api\Data\AddressInterface $billingAddress
     ) {
-        $this->validateAgreements($paymentMethod->getExtensionAttributes()->getAgreementIds());
+        if ($this->isAgreementEnabled()) {
+            $this->validateAgreements($paymentMethod->getExtensionAttributes()->getAgreementIds());
+        }
     }
 
     /**
@@ -55,7 +76,9 @@ class Validation
         \Magento\Quote\Api\Data\PaymentInterface $paymentMethod,
         \Magento\Quote\Api\Data\AddressInterface $billingAddress
     ) {
-        $this->validateAgreements($paymentMethod->getExtensionAttributes()->getAgreementIds());
+        if ($this->isAgreementEnabled()) {
+            $this->validateAgreements($paymentMethod->getExtensionAttributes()->getAgreementIds());
+        }
     }
 
     /**
@@ -70,5 +93,15 @@ class Validation
                 __('Please agree to all the terms and conditions before placing the order.')
             );
         }
+    }
+
+    protected function isAgreementEnabled()
+    {
+        $isAgreementsEnabled = $this->scopeConfiguration->isSetFlag(
+            AgreementsProvider::PATH_ENABLED,
+            ScopeInterface::SCOPE_STORE
+        );
+        $agreementsList = $isAgreementsEnabled ? $this->checkoutAgreementsRepository->getList() : [];
+        return (bool)($isAgreementsEnabled && count($agreementsList) > 0);
     }
 }
