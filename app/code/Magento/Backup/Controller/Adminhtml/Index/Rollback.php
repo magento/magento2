@@ -30,7 +30,7 @@ class Rollback extends \Magento\Backup\Controller\Adminhtml\Index
         }
 
         $helper = $this->_objectManager->get('Magento\Backup\Helper\Data');
-        $response = new \Magento\Framework\Object();
+        $response = new \Magento\Framework\DataObject();
 
         try {
             /* @var $backup \Magento\Backup\Model\Backup */

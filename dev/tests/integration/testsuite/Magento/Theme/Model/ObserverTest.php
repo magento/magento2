@@ -64,7 +64,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected function _createEventObserverForThemeRegistration()
     {
         $response = $this->_objectManager->create(
-            'Magento\Framework\Object',
+            'Magento\Framework\DataObject',
             ['data' => ['additional_options' => []]]
         );
         $event = $this->_objectManager->create(

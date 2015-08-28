@@ -58,7 +58,7 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
         $this->httpFactoryMock->expects($this->once())->method('create')->will($this->returnValue($httpAdapterMock));
 
         $this->model->validate(
-            $this->objectManager->create('Magento\Framework\Object'),
+            $this->objectManager->create('Magento\Framework\DataObject'),
             $this->getProductOption(['is_require' => false])
         );
     }
@@ -82,7 +82,7 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
         $this->httpFactoryMock->expects($this->once())->method('create')->will($this->returnValue($httpAdapterMock));
 
         $this->model->validate(
-            $this->objectManager->create('Magento\Framework\Object'),
+            $this->objectManager->create('Magento\Framework\DataObject'),
             $this->getProductOption(['is_require' => false])
         );
     }
@@ -102,7 +102,7 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
         $this->httpFactoryMock->expects($this->once())->method('create')->will($this->returnValue($httpAdapterMock));
 
         $this->model->validate(
-            $this->objectManager->create('Magento\Framework\Object'),
+            $this->objectManager->create('Magento\Framework\DataObject'),
             $this->getProductOption(['is_require' => false])
         );
     }
@@ -120,7 +120,7 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
         $this->httpFactoryMock->expects($this->once())->method('create')->will($this->returnValue($httpAdapterMock));
 
         $this->model->validate(
-            $this->objectManager->create('Magento\Framework\Object'),
+            $this->objectManager->create('Magento\Framework\DataObject'),
             $this->getProductOption()
         );
     }
@@ -152,7 +152,7 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
         $this->httpFactoryMock->expects($this->once())->method('create')->will($this->returnValue($httpAdapterMock));
 
         $this->model->validate(
-            $this->objectManager->create('Magento\Framework\Object'),
+            $this->objectManager->create('Magento\Framework\DataObject'),
             $this->getProductOption()
         );
     }
@@ -168,7 +168,7 @@ class ValidatorFileTest extends \PHPUnit_Framework_TestCase
         $this->httpFactoryMock->expects($this->once())->method('create')->will($this->returnValue($httpAdapterMock));
 
         $result = $this->model->validate(
-            $this->objectManager->create('Magento\Framework\Object'),
+            $this->objectManager->create('Magento\Framework\DataObject'),
             $this->getProductOption()
         );
         unset($result['fullpath'], $result['secret_key']);

@@ -10,7 +10,6 @@
  * @method \Magento\Store\Model\Resource\Group _getResource()
  * @method \Magento\Store\Model\Resource\Group getResource()
  * @method \Magento\Store\Model\Store setWebsiteId(int $value)
- * @method string getName()
  * @method \Magento\Store\Model\Store setName(string $value)
  * @method \Magento\Store\Model\Store setRootCategoryId(int $value)
  * @method \Magento\Store\Model\Store setDefaultStoreId(int $value)
@@ -18,7 +17,9 @@
 namespace Magento\Store\Model;
 
 
-class Group extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\Object\IdentityInterface
+class Group extends \Magento\Framework\Model\AbstractModel implements
+    \Magento\Framework\DataObject\IdentityInterface,
+    \Magento\Store\Api\Data\GroupInterface
 {
     const ENTITY = 'store_group';
 
@@ -383,5 +384,13 @@ class Group extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     public function getIdentities()
     {
         return [self::CACHE_TAG . '_' . $this->getId()];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return $this->getData('name');
     }
 }

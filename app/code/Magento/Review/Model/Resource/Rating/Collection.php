@@ -45,7 +45,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Review\Model\Resource\Rating\Option\CollectionFactory $ratingCollectionF,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->_storeManager = $storeManager;
@@ -76,7 +76,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function addEntityFilter($entity)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
         $this->getSelect()->join(
             $this->getTable('rating_entity'),
@@ -87,13 +87,13 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         if (is_numeric($entity)) {
             $this->addFilter(
                 'entity',
-                $adapter->quoteInto($this->getTable('rating_entity') . '.entity_id=?', $entity),
+                $connection->quoteInto($this->getTable('rating_entity') . '.entity_id=?', $entity),
                 'string'
             );
         } elseif (is_string($entity)) {
             $this->addFilter(
                 'entity',
-                $adapter->quoteInto($this->getTable('rating_entity') . '.entity_code=?', $entity),
+                $connection->quoteInto($this->getTable('rating_entity') . '.entity_code=?', $entity),
                 'string'
             );
         }
@@ -123,7 +123,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         if ($this->_storeManager->isSingleStoreMode()) {
             return $this;
         }
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         if (!is_array($storeId)) {
             $storeId = [$storeId === null ? -1 : $storeId];
         }
@@ -141,7 +141,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
             //        ->group('main_table.rating_id')
             $this->_isStoreJoined = true;
         }
-        $inCondition = $adapter->prepareSqlCondition('store.store_id', ['in' => $storeId]);
+        $inCondition = $connection->prepareSqlCondition('store.store_id', ['in' => $storeId]);
         $this->getSelect()->where($inCondition);
         $this->setPositionOrder();
         return $this;
@@ -184,12 +184,12 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
             return $this;
         }
 
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
-        $inCond = $adapter->prepareSqlCondition('rating_option_vote.rating_id', ['in' => $arrRatingId]);
-        $sumCond = new \Zend_Db_Expr("SUM(rating_option_vote.{$adapter->quoteIdentifier('percent')})");
+        $inCond = $connection->prepareSqlCondition('rating_option_vote.rating_id', ['in' => $arrRatingId]);
+        $sumCond = new \Zend_Db_Expr("SUM(rating_option_vote.{$connection->quoteIdentifier('percent')})");
         $countCond = new \Zend_Db_Expr('COUNT(*)');
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             ['rating_option_vote' => $this->getTable('rating_option_vote')],
             ['rating_id' => 'rating_option_vote.rating_id', 'sum' => $sumCond, 'count' => $countCond]
         )->join(
@@ -239,11 +239,11 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function addRatingPerStoreName($storeId)
     {
-        $adapter = $this->getConnection();
-        $ratingCodeCond = $adapter->getIfNullSql('title.value', 'main_table.rating_code');
+        $connection = $this->getConnection();
+        $ratingCodeCond = $connection->getIfNullSql('title.value', 'main_table.rating_code');
         $this->getSelect()->joinLeft(
             ['title' => $this->getTable('rating_title')],
-            $adapter->quoteInto('main_table.rating_id=title.rating_id AND title.store_id = ?', (int)$storeId),
+            $connection->quoteInto('main_table.rating_id=title.rating_id AND title.store_id = ?', (int)$storeId),
             ['rating_code' => $ratingCodeCond]
         );
         return $this;
@@ -302,13 +302,13 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         if (!$ratingIds) {
             return $this;
         }
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
-        $inCondition = $adapter->prepareSqlCondition('rating_id', ['in' => $ratingIds]);
+        $inCondition = $connection->prepareSqlCondition('rating_id', ['in' => $ratingIds]);
 
-        $this->_select = $adapter->select()->from($this->getTable('rating_store'))->where($inCondition);
+        $this->_select = $connection->select()->from($this->getTable('rating_store'))->where($inCondition);
 
-        $data = $adapter->fetchAll($this->_select);
+        $data = $connection->fetchAll($this->_select);
         if (is_array($data) && count($data) > 0) {
             foreach ($data as $row) {
                 $item = $this->getItemById($row['rating_id']);

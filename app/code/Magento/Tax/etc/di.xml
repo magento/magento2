@@ -69,12 +69,12 @@
     </type>
     <type name="Magento\Tax\Model\Resource\Report\Tax\Createdat">
         <arguments>
-            <argument name="resourcePrefix" xsi:type="string">sales</argument>
+            <argument name="connectionName" xsi:type="string">sales</argument>
         </arguments>
     </type>
     <type name="Magento\Tax\Model\Resource\Report\Tax\Updatedat">
         <arguments>
-            <argument name="resourcePrefix" xsi:type="string">sales</argument>
+            <argument name="connectionName" xsi:type="string">sales</argument>
         </arguments>
     </type>
     <type name="Magento\Sales\Api\OrderRepositoryInterface">

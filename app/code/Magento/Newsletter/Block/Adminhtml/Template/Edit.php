@@ -13,7 +13,10 @@
  */
 namespace Magento\Newsletter\Block\Adminhtml\Template;
 
-class Edit extends \Magento\Backend\Block\Widget
+use Magento\Backend\Block\Widget;
+use Magento\Framework\App\TemplateTypesInterface;
+
+class Edit extends Widget
 {
     /**
      * Core registry
@@ -249,6 +252,19 @@ class Edit extends \Magento\Backend\Block\Widget
     }
 
     /**
+     * Return template type from template object or TYPE_HTML by default
+     *
+     * @return int
+     */
+    public function getTemplateType()
+    {
+        if ($this->getModel()->getTemplateType()) {
+            return $this->getModel()->getTemplateType();
+        }
+        return TemplateTypesInterface::TYPE_HTML;
+    }
+
+    /**
      * Return delete url for customer group
      *
      * @return string
@@ -281,8 +297,7 @@ class Edit extends \Magento\Backend\Block\Widget
     /**
      * Getter for id of current store (the only one in single-store mode and current in multi-stores mode)
      *
-     * @return boolean
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @return int
      */
     protected function getStoreId()
     {

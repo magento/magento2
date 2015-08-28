@@ -102,7 +102,8 @@ class IndexerHandler implements IndexerInterface
     public function deleteIndex($dimensions, \Traversable $documents)
     {
         foreach ($this->batch->getItems($documents, $this->batchSize) as $batchDocuments) {
-            $this->getAdapter()->delete($this->getTableName($dimensions), ['entity_id in (?)' => $batchDocuments]);
+            $this->resource->getConnection()
+                ->delete($this->getTableName($dimensions), ['entity_id in (?)' => $batchDocuments]);
         }
     }
 
@@ -141,14 +142,6 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * @return AdapterInterface
-     */
-    private function getAdapter()
-    {
-        return $this->resource->getConnection(Resource::DEFAULT_WRITE_RESOURCE);
-    }
-
-    /**
      * @param array $documents
      * @param Dimension[] $dimensions
      * @return void
@@ -159,7 +152,7 @@ class IndexerHandler implements IndexerInterface
         if (empty($documents)) {
             return;
         }
-        $this->getAdapter()->insertOnDuplicate(
+        $this->resource->getConnection()->insertOnDuplicate(
             $this->getTableName($dimensions),
             $documents,
             ['data_index']

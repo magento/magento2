@@ -100,7 +100,7 @@ jQuery(function ($) {
         ]
     )?>);
     //adding data to templates
-    <?php /** @var $_value \Magento\Framework\Object */ ?>
+    <?php /** @var $_value \Magento\Framework\DataObject */ ?>
     <?php foreach ($block->getOptionValues() as $_value): ?>
         fieldSet.customOptions('addOption', <?php echo $_value->toJson() ?>);
     <?php endforeach; ?>

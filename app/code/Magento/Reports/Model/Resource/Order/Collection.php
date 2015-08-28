@@ -96,7 +96,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Sales\Model\Resource\Report\OrderFactory $reportOrderFactory,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         parent::__construct(
@@ -172,17 +172,17 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     protected function _getSalesAmountExpression()
     {
         if (null === $this->_salesAmountExpression) {
-            $adapter = $this->getConnection();
-            $expressionTransferObject = new \Magento\Framework\Object(
+            $connection = $this->getConnection();
+            $expressionTransferObject = new \Magento\Framework\DataObject(
                 [
                     'expression' => '%s - %s - %s - (%s - %s - %s)',
                     'arguments' => [
-                        $adapter->getIfNullSql('main_table.base_total_invoiced', 0),
-                        $adapter->getIfNullSql('main_table.base_tax_invoiced', 0),
-                        $adapter->getIfNullSql('main_table.base_shipping_invoiced', 0),
-                        $adapter->getIfNullSql('main_table.base_total_refunded', 0),
-                        $adapter->getIfNullSql('main_table.base_tax_refunded', 0),
-                        $adapter->getIfNullSql('main_table.base_shipping_refunded', 0),
+                        $connection->getIfNullSql('main_table.base_total_invoiced', 0),
+                        $connection->getIfNullSql('main_table.base_tax_invoiced', 0),
+                        $connection->getIfNullSql('main_table.base_shipping_invoiced', 0),
+                        $connection->getIfNullSql('main_table.base_total_refunded', 0),
+                        $connection->getIfNullSql('main_table.base_tax_refunded', 0),
+                        $connection->getIfNullSql('main_table.base_shipping_refunded', 0),
                     ],
                 ]
             );
@@ -212,12 +212,12 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     protected function _prepareSummaryLive($range, $customStart, $customEnd, $isFilter = 0)
     {
         $this->setMainTable('sales_order');
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
         /**
          * Reset all columns, because result will group only by 'created_at' field
          */
-        $this->getSelect()->reset(\Zend_Db_Select::COLUMNS);
+        $this->getSelect()->reset(\Magento\Framework\DB\Select::COLUMNS);
 
         $expression = $this->_getSalesAmountExpression();
         if ($isFilter == 0) {
@@ -227,7 +227,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
                         sprintf(
                             'SUM((%s) * %s)',
                             $expression,
-                            $adapter->getIfNullSql('main_table.base_to_global_rate', 0)
+                            $connection->getIfNullSql('main_table.base_to_global_rate', 0)
                         )
                     ),
                 ]
@@ -252,7 +252,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
             [\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT, \Magento\Sales\Model\Order::STATE_NEW]
         )->order(
             'range',
-            \Zend_Db_Select::SQL_ASC
+            \Magento\Framework\DB\Select::SQL_ASC
         )->group(
             $tzRangeOffsetExpression
         );
@@ -276,7 +276,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
         /**
          * Reset all columns, because result will group only by 'created_at' field
          */
-        $this->getSelect()->reset(\Zend_Db_Select::COLUMNS);
+        $this->getSelect()->reset(\Magento\Framework\DB\Select::COLUMNS);
         $rangePeriod = $this->_getRangeExpressionForAttribute($range, 'main_table.period');
 
         $tableName = $this->getConnection()->quoteIdentifier('main_table.period');
@@ -386,10 +386,10 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
         if (null == $tzTo) {
             $tzTo = $this->_localeDate->scopeDate()->format('P');
         }
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $expression = $this->_getRangeExpression($range);
-        $attribute = $adapter->quoteIdentifier($attribute);
-        $periodExpr = $adapter->getDateAddSql(
+        $attribute = $connection->quoteIdentifier($attribute);
+        $periodExpr = $connection->getDateAddSql(
             $attribute,
             $tzTo,
             \Magento\Framework\DB\Adapter\AdapterInterface::INTERVAL_HOUR
@@ -512,19 +512,19 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
         $this->setMainTable('sales_order');
         $this->removeAllFieldsFromSelect();
 
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
-        $baseTaxInvoiced = $adapter->getIfNullSql('main_table.base_tax_invoiced', 0);
-        $baseTaxRefunded = $adapter->getIfNullSql('main_table.base_tax_refunded', 0);
-        $baseShippingInvoiced = $adapter->getIfNullSql('main_table.base_shipping_invoiced', 0);
-        $baseShippingRefunded = $adapter->getIfNullSql('main_table.base_shipping_refunded', 0);
+        $baseTaxInvoiced = $connection->getIfNullSql('main_table.base_tax_invoiced', 0);
+        $baseTaxRefunded = $connection->getIfNullSql('main_table.base_tax_refunded', 0);
+        $baseShippingInvoiced = $connection->getIfNullSql('main_table.base_shipping_invoiced', 0);
+        $baseShippingRefunded = $connection->getIfNullSql('main_table.base_shipping_refunded', 0);
 
         $revenueExp = $this->_getSalesAmountExpression();
         $taxExp = sprintf('%s - %s', $baseTaxInvoiced, $baseTaxRefunded);
         $shippingExp = sprintf('%s - %s', $baseShippingInvoiced, $baseShippingRefunded);
 
         if ($isFilter == 0) {
-            $rateExp = $adapter->getIfNullSql('main_table.base_to_global_rate', 0);
+            $rateExp = $connection->getIfNullSql('main_table.base_to_global_rate', 0);
             $this->getSelect()->columns(
                 [
                     'revenue' => new \Zend_Db_Expr(sprintf('SUM((%s) * %s)', $revenueExp, $rateExp)),
@@ -597,7 +597,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
         if (empty($statuses)) {
             $statuses = [0];
         }
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
         if ($this->_scopeConfig->getValue(
             'sales/dashboard/use_aggregated_data',
@@ -606,7 +606,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
         ) {
             $this->setMainTable('sales_order_aggregated_created');
             $this->removeAllFieldsFromSelect();
-            $averageExpr = $adapter->getCheckSql(
+            $averageExpr = $connection->getCheckSql(
                 'SUM(main_table.orders_count) > 0',
                 'SUM(main_table.total_revenue_amount)/SUM(main_table.orders_count)',
                 0
@@ -679,12 +679,12 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
      */
     public function setStoreIds($storeIds)
     {
-        $adapter = $this->getConnection();
-        $baseSubtotalInvoiced = $adapter->getIfNullSql('main_table.base_subtotal_invoiced', 0);
-        $baseDiscountRefunded = $adapter->getIfNullSql('main_table.base_discount_refunded', 0);
-        $baseSubtotalRefunded = $adapter->getIfNullSql('main_table.base_subtotal_refunded', 0);
-        $baseDiscountInvoiced = $adapter->getIfNullSql('main_table.base_discount_invoiced', 0);
-        $baseTotalInvocedCost = $adapter->getIfNullSql('main_table.base_total_invoiced_cost', 0);
+        $connection = $this->getConnection();
+        $baseSubtotalInvoiced = $connection->getIfNullSql('main_table.base_subtotal_invoiced', 0);
+        $baseDiscountRefunded = $connection->getIfNullSql('main_table.base_discount_refunded', 0);
+        $baseSubtotalRefunded = $connection->getIfNullSql('main_table.base_subtotal_refunded', 0);
+        $baseDiscountInvoiced = $connection->getIfNullSql('main_table.base_discount_invoiced', 0);
+        $baseTotalInvocedCost = $connection->getIfNullSql('main_table.base_total_invoiced_cost', 0);
         if ($storeIds) {
             $this->getSelect()->columns(
                 [
@@ -884,12 +884,12 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection
     public function getSelectCountSql()
     {
         $countSelect = clone $this->getSelect();
-        $countSelect->reset(\Zend_Db_Select::ORDER);
-        $countSelect->reset(\Zend_Db_Select::LIMIT_COUNT);
-        $countSelect->reset(\Zend_Db_Select::LIMIT_OFFSET);
-        $countSelect->reset(\Zend_Db_Select::COLUMNS);
-        $countSelect->reset(\Zend_Db_Select::GROUP);
-        $countSelect->reset(\Zend_Db_Select::HAVING);
+        $countSelect->reset(\Magento\Framework\DB\Select::ORDER);
+        $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
+        $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
+        $countSelect->reset(\Magento\Framework\DB\Select::GROUP);
+        $countSelect->reset(\Magento\Framework\DB\Select::HAVING);
         $countSelect->columns("COUNT(DISTINCT main_table.entity_id)");
 
         return $countSelect;

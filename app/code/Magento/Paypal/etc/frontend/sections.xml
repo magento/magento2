@@ -9,5 +9,6 @@
         xsi:noNamespaceSchemaLocation="../../../Customer/etc/sections.xsd">
     <action name="paypal/express/placeOrder">
         <section name="cart"/>
+        <section name="checkout-data"/>
     </action>
 </config>

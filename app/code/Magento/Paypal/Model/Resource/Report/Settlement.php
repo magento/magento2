@@ -28,15 +28,15 @@ class Settlement extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $coreDate
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $coreDate,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->_coreDate = $coreDate;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -60,12 +60,12 @@ class Settlement extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $rows = $object->getRows();
         if (is_array($rows)) {
-            $adapter = $this->_getWriteAdapter();
+            $connection = $this->getConnection();
             $reportId = (int)$object->getId();
             try {
-                $adapter->beginTransaction();
+                $connection->beginTransaction();
                 if ($reportId) {
-                    $adapter->delete($this->_rowsTable, ['report_id = ?' => $reportId]);
+                    $connection->delete($this->_rowsTable, ['report_id = ?' => $reportId]);
                 }
 
                 foreach (array_keys($rows) as $key) {
@@ -86,11 +86,11 @@ class Settlement extends \Magento\Framework\Model\Resource\Db\AbstractDb
                     $rows[$key]['report_id'] = $reportId;
                 }
                 if (!empty($rows)) {
-                    $adapter->insertMultiple($this->_rowsTable, $rows);
+                    $connection->insertMultiple($this->_rowsTable, $rows);
                 }
-                $adapter->commit();
+                $connection->commit();
             } catch (\Exception $e) {
-                $adapter->rollback();
+                $connection->rollback();
             }
         }
 
@@ -107,8 +107,8 @@ class Settlement extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function loadByAccountAndDate(\Magento\Paypal\Model\Report\Settlement $report, $accountId, $reportDate)
     {
-        $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             $this->getMainTable()
         )->where(
             'account_id = :account_id'
@@ -116,7 +116,7 @@ class Settlement extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'report_date = :report_date'
         );
 
-        $data = $adapter->fetchRow($select, [':account_id' => $accountId, ':report_date' => $reportDate]);
+        $data = $connection->fetchRow($select, [':account_id' => $accountId, ':report_date' => $reportDate]);
         if ($data) {
             $report->addData($data);
         }

@@ -25,16 +25,16 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\Resource\AbstractR
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Indexer\Model\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->_eavConfig = $eavConfig;
-        parent::__construct($context, $tableStrategy, $resourcePrefix);
+        parent::__construct($context, $tableStrategy, $connectionName);
     }
 
     /**
@@ -66,7 +66,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\Resource\AbstractR
         $attribute = $this->_getAttribute($attrCode);
         $attributeId = $attribute->getAttributeId();
         $attributeTable = $attribute->getBackend()->getTable();
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $joinType = $condition !== null || $required ? 'join' : 'joinLeft';
 
         if ($attribute->isScopeGlobal()) {
@@ -94,8 +94,8 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\Resource\AbstractR
                 " AND {$sAlias}.store_id = {$store}",
                 []
             );
-            $expression = $adapter->getCheckSql(
-                $adapter->getIfNullSql("{$sAlias}.value_id", -1) . ' > 0',
+            $expression = $connection->getCheckSql(
+                $connection->getIfNullSql("{$sAlias}.value_id", -1) . ' > 0',
                 "{$sAlias}.value",
                 "{$dAlias}.value"
             );
@@ -172,8 +172,8 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\Resource\AbstractR
      */
     public function getRelationsByChild($childIds)
     {
-        $write = $this->_getWriteAdapter();
-        $select = $write->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             $this->getTable('catalog_product_relation'),
             'parent_id'
         )->where(
@@ -181,7 +181,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\Resource\AbstractR
             $childIds
         );
 
-        return $write->fetchCol($select);
+        return $connection->fetchCol($select);
     }
 
     /**
@@ -198,15 +198,15 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\Resource\AbstractR
 
         $result = [];
         if (!empty($parentIds)) {
-            $write = $this->_getWriteAdapter();
-            $select = $write->select()->from(
+            $connection = $this->getConnection();
+            $select = $connection->select()->from(
                 $this->getTable('catalog_product_relation'),
                 'child_id'
             )->where(
                 'parent_id IN(?)',
                 $parentIds
             );
-            $result = $write->fetchCol($select);
+            $result = $connection->fetchCol($select);
         }
 
         return $result;

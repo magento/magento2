@@ -116,8 +116,8 @@ class RegionTest extends \PHPUnit_Framework_TestCase
             'with no defined regions' => [[]],
             'with defined regions' => [
                 [
-                    new \Magento\Framework\Object(['value' => 'Bavaria']),
-                    new \Magento\Framework\Object(['value' => 'Saxony']),
+                    new \Magento\Framework\DataObject(['value' => 'Bavaria']),
+                    new \Magento\Framework\DataObject(['value' => 'Saxony']),
                 ],
             ]
         ];

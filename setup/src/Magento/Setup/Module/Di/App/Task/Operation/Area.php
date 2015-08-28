@@ -106,4 +106,14 @@ class Area implements OperationInterface
         }
         return $definitions;
     }
+
+    /**
+     * Returns operation name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return 'Area configuration aggregation';
+    }
 }

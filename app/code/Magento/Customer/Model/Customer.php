@@ -496,7 +496,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve customer address array
      *
-     * @return \Magento\Framework\Object[]
+     * @return \Magento\Framework\DataObject[]
      */
     public function getAddresses()
     {
@@ -990,7 +990,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
             $errors[] = __('Please enter a gender.');
         }
 
-        $transport = new \Magento\Framework\Object(
+        $transport = new \Magento\Framework\DataObject(
             ['errors' => $errors]
         );
         $this->_eventManager->dispatch('customer_validate', ['customer' => $this, 'transport' => $transport]);

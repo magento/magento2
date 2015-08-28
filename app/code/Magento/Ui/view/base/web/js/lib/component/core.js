@@ -38,7 +38,7 @@ define([
                 .initObservable()
                 .initModules()
                 .initUnique()
-                .setListners(this.listens)
+                .setListeners(this.listens)
                 .initLinks();
 
             return this;

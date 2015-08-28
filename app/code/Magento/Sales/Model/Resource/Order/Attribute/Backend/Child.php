@@ -15,7 +15,7 @@ class Child extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Perform operation before save
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      */
     public function beforeSave($object)

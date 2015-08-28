@@ -6,16 +6,15 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\GroupedProduct\Test\TestCase\CreateGroupedProductEntityTest">
-        <variation name="CreateGroupedProductEntityTestVariation1" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
-            <data name="description" xsi:type="string">MAGETWO-13610: Create Grouped Product and Assign It to the Category</data>
+    <testCase name="Magento\GroupedProduct\Test\TestCase\CreateGroupedProductEntityTest" summary="Create Grouped Product" ticketId="MAGETWO-24877">
+        <variation name="CreateGroupedProductEntityTestVariation1" summary="Create Grouped Product and Assign It to the Category" ticketId="MAGETWO-13610" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" method="test">
             <data name="product/data/url_key" xsi:type="string">test-grouped-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">GroupedProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">GroupedProduct_sku%isolation%</data>
             <data name="product/data/category" xsi:type="string">category_%isolation%</data>
             <data name="product/data/associated/products" xsi:type="string">catalogProductSimple::simple_big_qty,downloadableProduct::one_dollar_product_with_no_separated_link,catalogProductVirtual::required_fields_with_category</data>
             <data name="product/data/associated/dataset" xsi:type="string">simple_downloadable_virtual</data>
-            <data name="tag" xsi:type="string">test_type:acceptance_test, stable:no</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" next="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" next="Magento\Catalog\Test\Constraint\AssertProductPage" prev="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" prev="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />

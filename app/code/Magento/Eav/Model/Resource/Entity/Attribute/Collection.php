@@ -32,7 +32,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Zend_Db_Adapter_Abstract|null $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
@@ -41,7 +41,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Config $eavConfig,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->eavConfig = $eavConfig;
@@ -85,7 +85,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function useLoadDataFields()
     {
-        $this->getSelect()->reset(\Zend_Db_Select::COLUMNS);
+        $this->getSelect()->reset(\Magento\Framework\DB\Select::COLUMNS);
         $this->getSelect()->columns($this->_getLoadDataFields());
 
         return $this;
@@ -308,12 +308,12 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function addHasOptionsFilter()
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $orWhere = implode(
             ' OR ',
             [
-                $adapter->quoteInto('(main_table.frontend_input = ? AND ao.option_id > 0)', 'select'),
-                $adapter->quoteInto('(main_table.frontend_input <> ?)', 'select'),
+                $connection->quoteInto('(main_table.frontend_input = ? AND ao.option_id > 0)', 'select'),
+                $connection->quoteInto('(main_table.frontend_input <> ?)', 'select'),
                 '(main_table.is_user_defined = 0)'
             ]
         );
@@ -367,9 +367,9 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
             }
             $attributeToSetInfo = [];
 
-            $adapter = $this->getConnection();
+            $connection = $this->getConnection();
             if (count($attributeIds) > 0) {
-                $select = $adapter->select()->from(
+                $select = $connection->select()->from(
                     ['entity' => $this->getTable('eav_entity_attribute')],
                     ['attribute_id', 'attribute_set_id', 'attribute_group_id', 'sort_order']
                 )->joinLeft(
@@ -380,7 +380,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
                     'attribute_id IN (?)',
                     $attributeIds
                 );
-                $result = $adapter->fetchAll($select);
+                $result = $connection->fetchAll($select);
 
                 foreach ($result as $row) {
                     $data = [
@@ -445,15 +445,15 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function addStoreLabel($storeId)
     {
-        $adapter = $this->getConnection();
-        $joinExpression = $adapter->quoteInto(
+        $connection = $this->getConnection();
+        $joinExpression = $connection->quoteInto(
             'al.attribute_id = main_table.attribute_id AND al.store_id = ?',
             (int)$storeId
         );
         $this->getSelect()->joinLeft(
             ['al' => $this->getTable('eav_attribute_label')],
             $joinExpression,
-            ['store_label' => $adapter->getIfNullSql('al.value', 'main_table.frontend_label')]
+            ['store_label' => $connection->getIfNullSql('al.value', 'main_table.frontend_label')]
         );
 
         return $this;
@@ -465,7 +465,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     public function getSelectCountSql()
     {
         $countSelect = parent::getSelectCountSql();
-        $countSelect->reset(\Zend_Db_Select::COLUMNS);
+        $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
         $countSelect->columns('COUNT(DISTINCT main_table.attribute_id)');
         return $countSelect;
     }

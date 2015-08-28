@@ -49,11 +49,9 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Model\Resource\AbstractResource',
             [
                 '_construct',
-                '_getReadAdapter',
-                '_getWriteAdapter',
+                'getConnection',
                 'getIdFieldName',
                 'getSearchableData',
-                'getConnection'
             ],
             [],
             '',

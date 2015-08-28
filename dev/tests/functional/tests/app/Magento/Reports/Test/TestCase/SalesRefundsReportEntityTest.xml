@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Reports\Test\TestCase\SalesRefundsReportEntityTest">
+    <testCase name="Magento\Reports\Test\TestCase\SalesRefundsReportEntityTest" summary="Sales Refunds Report" ticketId="MAGETWO-29348">
         <variation name="SalesRefundsReportEntityTestVariation1">
             <data name="description" xsi:type="string">assert refunds year report</data>
             <data name="order/dataset" xsi:type="string">default</data>

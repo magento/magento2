@@ -96,7 +96,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected $_customBehaviour = ['update_id' => 1, 'delete_id' => 2];
 
     /**
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $_stringLib;
 
@@ -111,7 +111,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_objectManagerMock = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_stringLib = new \Magento\Framework\Stdlib\String();
+        $this->_stringLib = new \Magento\Framework\Stdlib\StringUtils();
         $this->_storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManager')
             ->disableOriginalConstructor()
             ->setMethods(['getWebsites'])
@@ -146,14 +146,14 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
         );
         foreach ($this->_addresses as $address) {
-            $addressCollection->addItem(new \Magento\Framework\Object($address));
+            $addressCollection->addItem(new \Magento\Framework\DataObject($address));
         }
 
         $regionCollection = new \Magento\Framework\Data\Collection(
             $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
         );
         foreach ($this->_regions as $region) {
-            $regionCollection->addItem(new \Magento\Framework\Object($region));
+            $regionCollection->addItem(new \Magento\Framework\DataObject($region));
         }
 
         $data = [
@@ -292,7 +292,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             $websiteData = ['id' => $id, 'code' => $code];
-            $websites[$id] = new \Magento\Framework\Object($websiteData);
+            $websites[$id] = new \Magento\Framework\DataObject($websiteData);
         }
 
         return $websites;

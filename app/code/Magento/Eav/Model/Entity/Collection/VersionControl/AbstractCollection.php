@@ -40,7 +40,7 @@ abstract class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\A
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
-        $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->entitySnapshot = $entitySnapshot;
 
@@ -73,7 +73,7 @@ abstract class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\A
     /**
      * @inheritdoc
      */
-    protected function beforeAddLoadedItem(\Magento\Framework\Object $item)
+    protected function beforeAddLoadedItem(\Magento\Framework\DataObject $item)
     {
         $this->entitySnapshot->registerSnapshot($item);
         return $item;

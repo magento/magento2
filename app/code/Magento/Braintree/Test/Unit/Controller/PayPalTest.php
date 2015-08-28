@@ -113,7 +113,7 @@ class PayPalTest extends \PHPUnit_Framework_TestCase
 
     public function testDispatchNotActive()
     {
-        $resultRedirect = new \Magento\Framework\Object();
+        $resultRedirect = new \Magento\Framework\DataObject();
         $this->braintreePayPalConfigMock->expects($this->once())
             ->method('isActive')
             ->willReturn(false);
@@ -131,7 +131,7 @@ class PayPalTest extends \PHPUnit_Framework_TestCase
 
     public function testDispatchButtonNotEnabled()
     {
-        $resultRedirect = new \Magento\Framework\Object();
+        $resultRedirect = new \Magento\Framework\DataObject();
         $this->braintreePayPalConfigMock->expects($this->once())
             ->method('isActive')
             ->willReturn(true);

@@ -44,7 +44,7 @@ class InvalidateCacheIfChanged
     {
         if ($this->config->isEnabled()) {
             $object = $observer->getEvent()->getObject();
-            if ($object instanceof \Magento\Framework\Object\IdentityInterface) {
+            if ($object instanceof \Magento\Framework\DataObject\IdentityInterface) {
                 if ($object->getIdentities()) {
                     $this->typeList->invalidate('full_page');
                 }

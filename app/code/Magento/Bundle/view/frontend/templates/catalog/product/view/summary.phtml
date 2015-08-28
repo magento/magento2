@@ -20,7 +20,7 @@
     </div>
     <div class="content">
         <div class="bundle-info">
-            <?php echo $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image')->init($_product, 'bundled_product_customization_page')->toHtml() ?>
+            <?php echo $block->getImage($_product, 'bundled_product_customization_page')->toHtml(); ?>
             <div class="product-details">
                 <strong class="product name"><?php echo $block->escapeHtml($_product->getName()) ?></strong>
                 <?php if ($_product->getIsSalable()): ?>

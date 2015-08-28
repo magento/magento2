@@ -113,7 +113,7 @@ abstract class AbstractAgreement extends \Magento\Payment\Model\Method\AbstractM
         $id = false;
         if (is_array($data) && isset($data[$key])) {
             $id = $data[$key];
-        } elseif ($data instanceof \Magento\Framework\Object && $data->getData($key)) {
+        } elseif ($data instanceof \Magento\Framework\DataObject && $data->getData($key)) {
             $id = $data->getData($key);
         }
         if ($id) {

@@ -31,11 +31,11 @@ class Nonce extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function deleteOldEntries($minutes)
     {
         if ($minutes > 0) {
-            $adapter = $this->_getWriteAdapter();
+            $connection = $this->getConnection();
 
-            return $adapter->delete(
+            return $connection->delete(
                 $this->getMainTable(),
-                $adapter->quoteInto('timestamp <= ?', time() - $minutes * 60, \Zend_Db::INT_TYPE)
+                $connection->quoteInto('timestamp <= ?', time() - $minutes * 60, \Zend_Db::INT_TYPE)
             );
         } else {
             return 0;
@@ -51,8 +51,8 @@ class Nonce extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function selectByCompositeKey($nonce, $consumerId)
     {
-        $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             $this->getMainTable()
         )->where(
             'nonce = ?',
@@ -61,7 +61,7 @@ class Nonce extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'consumer_id = ?',
             $consumerId
         );
-        $row = $adapter->fetchRow($select);
+        $row = $connection->fetchRow($select);
         return $row ? $row : [];
     }
 }

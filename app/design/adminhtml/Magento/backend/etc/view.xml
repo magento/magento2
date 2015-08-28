@@ -9,14 +9,17 @@
     <vars module="Js_Bundle">
         <var name="bundle_size">1MB</var>
     </vars>
-    <vars module="Magento_Catalog">
-        <var name="product_listing_thumbnail:type">thumbnail</var>
-        <var name="product_listing_thumbnail:width">75</var>
-        <var name="product_listing_thumbnail:ratio">1</var>
-        <var name="product_listing_thumbnail:height">75</var>
-        <var name="product_listing_thumbnail_preview:type">thumbnail</var>
-        <var name="product_listing_thumbnail_preview:ratio">1</var>
-    </vars>
+    <images module="Magento_Catalog">
+        <image id="product_listing_thumbnail" type="thumbnail">
+            <width>75</width>
+            <height>75</height>
+        </image>
+        <image id="product_listing_thumbnail_preview" type="thumbnail"/>
+        <image id="product_thumbnail_image" type="thumbnail">
+            <width>75</width>
+            <height>75</height>
+        </image>
+    </images>
     <exclude>
         <item type="file">Lib::mage/common.js</item>
         <item type="file">Lib::mage/cookies.js</item>

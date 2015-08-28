@@ -21,7 +21,7 @@ class Items extends Block
      *
      * @var string
      */
-    protected $itemBlock = '//li[.//a[contains(.,"%s")]]';
+    protected $itemBlock = './/li[.//a[contains(.,"%s")]]';
 
     /**
      * Selector for 'Remove item' button.

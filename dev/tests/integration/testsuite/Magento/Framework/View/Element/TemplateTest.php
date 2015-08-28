@@ -84,7 +84,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     public function testGetObjectData()
     {
-        $object = new \Magento\Framework\Object(['key' => 'value']);
+        $object = new \Magento\Framework\DataObject(['key' => 'value']);
         $this->assertEquals('value', $this->_block->getObjectData($object, 'key'));
     }
 

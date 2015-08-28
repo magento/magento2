@@ -21,7 +21,7 @@ class Initializer
      * @param callable $proceed
      * @param \Magento\Quote\Model\Quote $quote
      * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Framework\Object $config
+     * @param \Magento\Framework\DataObject $config
      *
      * @return \Magento\Quote\Model\Quote\Item|string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -31,7 +31,7 @@ class Initializer
         \Closure $proceed,
         \Magento\Quote\Model\Quote $quote,
         \Magento\Catalog\Model\Product $product,
-        \Magento\Framework\Object $config
+        \Magento\Framework\DataObject $config
     ) {
         $item = $proceed($quote, $product, $config);
 

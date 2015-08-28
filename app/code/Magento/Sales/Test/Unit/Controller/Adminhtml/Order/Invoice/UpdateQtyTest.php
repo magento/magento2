@@ -199,12 +199,12 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
             ->method('canInvoice')
             ->willReturn(true);
 
-        $orderService = $this->getMockBuilder('Magento\Sales\Model\Service\Order')
+        $invoiceManagement = $this->getMockBuilder('Magento\Sales\Api\InvoiceManagementInterface')
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
-        $orderService->expects($this->once())
+        $invoiceManagement->expects($this->once())
             ->method('prepareInvoice')
+            ->with($orderId, [])
             ->willReturn($invoiceMock);
 
         $this->objectManagerMock->expects($this->at(0))
@@ -213,8 +213,8 @@ class UpdateQtyTest extends \PHPUnit_Framework_TestCase
             ->willReturn($orderMock);
         $this->objectManagerMock->expects($this->at(1))
             ->method('create')
-            ->with('Magento\Sales\Model\Service\Order')
-            ->willReturn($orderService);
+            ->with('Magento\Sales\Api\InvoiceManagementInterface')
+            ->willReturn($invoiceManagement);
 
         $blockItemMock = $this->getMockBuilder('Magento\Sales\Block\Order\Items')
             ->disableOriginalConstructor()

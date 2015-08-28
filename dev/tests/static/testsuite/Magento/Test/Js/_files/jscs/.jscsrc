@@ -1,0 +1,54 @@
+{
+    "preset": "crockford",
+    "plugins": [
+        "jscs-jsdoc"
+    ],
+    "requirePaddingNewlinesBeforeKeywords": [
+        "do",
+        "for",
+        "if",
+        "switch",
+        "case",
+        "try",
+        "void",
+        "while",
+        "with",
+        "return"
+    ],
+    "requireSpaceBeforeKeywords": [
+        "else",
+        "while",
+        "catch"
+    ],
+    "disallowMultipleLineStrings": true,
+    "validateQuoteMarks": "'",
+    "requireOperatorBeforeLineBreak": true,
+    "disallowYodaConditions": true,
+    "disallowMultipleLineBreaks": true,
+    "disallowSpacesInCallExpression": true,
+    "requirePaddingNewLinesInObjects": true,
+    "requireLineFeedAtFileEnd": true,
+    "disallowSpaceAfterObjectKeys": true,
+    "requireSpaceBeforeObjectValues": true,
+    "disallowSpaceAfterPrefixUnaryOperators": true,
+    "requireCamelCaseOrUpperCaseIdentifiers": true,
+    "validateParameterSeparator": ", ",
+    "disallowSpacesInsideObjectBrackets": "all",
+    "disallowSpacesInsideArrayBrackets": "all",
+    "requireLineBreakAfterVariableAssignment": true,
+    "requirePaddingNewLinesAfterUseStrict": true,
+    "disallowDanglingUnderscores": null,
+    "jsDoc": {
+        "checkAnnotations": {
+            "preset": "jsdoc3"
+        },
+        "enforceExistence": "exceptExports",
+        "requireParamTypes": true,
+        "checkRedundantParams": true,
+        "checkReturnTypes": true,
+        "checkRedundantReturns": true,
+        "checkParamNames": true,
+        "checkTypes": "capitalizedNativeCase",
+        "requireHyphenBeforeDescription": true
+    }
+}

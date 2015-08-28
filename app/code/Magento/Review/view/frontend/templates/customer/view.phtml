@@ -7,21 +7,23 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php if ($block->getProductData()->getId()): ?>
-<?php $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image'); ?>
+<?php
+$product = $block->getProductData();
+?>
+<?php if ($product->getId()): ?>
 <div class="customer-review view">
     <div class="product-details">
         <div class="product-media">
-            <a class="product-photo" href="<?php echo $block->getProductData()->getProductUrl() ?>">
+            <a class="product-photo" href="<?php echo $product->getProductUrl() ?>">
                 <?php /* customer_account_product_review_page */ ?>
-                <?php echo $imageBlock->init($block->getProductData(), 'customer_account_product_review_page')->toHtml() ?>
+                <?php echo $block->getImage($block->getProductData(), 'customer_account_product_review_page')->toHtml() ?>
             </a>
         </div>
         <div class="product-info">
-            <h2 class="product-name"><?php echo $block->escapeHtml($block->getProductData()->getName()) ?></h2>
+            <h2 class="product-name"><?php echo $block->escapeHtml($product->getName()) ?></h2>
             <?php if ($block->getRating() && $block->getRating()->getSize()): ?>
                 <span class="rating-average-label"><?php echo __('Average Customer Rating:') ?></span>
-                <?php echo $block->getReviewsSummaryHtml($block->getProductData()) ?>
+                <?php echo $block->getReviewsSummaryHtml($product) ?>
             <?php endif; ?>
         </div>
     </div>

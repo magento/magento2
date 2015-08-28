@@ -16,7 +16,7 @@
     <tr>
         <td class="col photo">
             <a href="<?= $_product->getProductUrl() ?>" title="<?= $block->escapeHtml($_product->getName()) ?>" class="product photo">
-                <img src="<?= $block->getThumbnailUrl($_product) ?>" height="<?= $block->getThumbnailSize() ?>" alt="<?= $block->escapeHtml($_product->getName()) ?>" class="photo image" />
+                <?php echo $block->getImage($_product, 'product_thumbnail_image', ['class' => 'photo image'])->toHtml(); ?>
             </a>
         </td>
         <td class="col item">

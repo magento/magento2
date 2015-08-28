@@ -19,10 +19,9 @@ use Magento\Framework\DB\Profiler;
 use Magento\Framework\DB\Select;
 use Magento\Framework\DB\Statement\Parameter;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Mview\View\Subscription;
 use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\DateTime;
-use Magento\Framework\Stdlib\String;
+use Magento\Framework\Stdlib\StringUtils;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -184,14 +183,14 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     private $logger;
 
     /**
-     * @param \Magento\Framework\Stdlib\String|String $string
+     * @param \Magento\Framework\Stdlib\StringUtils|String $string
      * @param DateTime $dateTime
      * @param LoggerInterface $logger
      * @param array $config
-     * @throws \Zend_Db_Adapter_Exception
+     * @throws \InvalidArgumentException
      */
     public function __construct(
-        String $string,
+        StringUtils $string,
         DateTime $dateTime,
         LoggerInterface $logger,
         array $config = []
@@ -199,7 +198,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $this->string = $string;
         $this->dateTime = $dateTime;
         $this->logger = $logger;
-        parent::__construct($config);
+        try {
+            parent::__construct($config);
+        } catch (\Zend_Db_Adapter_Exception $e) {
+            throw new \InvalidArgumentException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
     /**
@@ -390,7 +393,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     /**
      * Check transaction level in case of DDL query
      *
-     * @param string|\Zend_Db_Select $sql
+     * @param string|\Magento\Framework\DB\Select $sql
      * @return void
      * @throws \Zend_Db_Adapter_Exception
      */
@@ -410,7 +413,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Special handling for PDO query().
      * All bind parameter names must begin with ':'.
      *
-     * @param string|\Zend_Db_Select $sql The SQL statement with placeholders.
+     * @param string|\Magento\Framework\DB\Select $sql The SQL statement with placeholders.
      * @param mixed $bind An array of data or data itself to bind to the placeholders.
      * @return \Zend_Db_Statement_Pdo|void
      * @throws \Zend_Db_Adapter_Exception To re-throw \PDOException.
@@ -473,7 +476,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Special handling for PDO query().
      * All bind parameter names must begin with ':'.
      *
-     * @param string|\Zend_Db_Select $sql The SQL statement with placeholders.
+     * @param string|\Magento\Framework\DB\Select $sql The SQL statement with placeholders.
      * @param mixed $bind An array of data or data itself to bind to the placeholders.
      * @return \Zend_Db_Statement_Pdo|void
      * @throws \Zend_Db_Adapter_Exception To re-throw \PDOException.
@@ -495,7 +498,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * Special handling for PDO query().
      * All bind parameter names must begin with ':'.
      *
-     * @param string|\Zend_Db_Select $sql The SQL statement with placeholders.
+     * @param string|\Magento\Framework\DB\Select $sql The SQL statement with placeholders.
      * @param mixed $bind An array of data or data itself to bind to the placeholders.
      * @return \Zend_Db_Statement_Pdo|void
      * @throws \Zend_Db_Adapter_Exception To re-throw \PDOException.
@@ -512,7 +515,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * (e.g. "foo:bar"). And also changes named bind to positional one, because underlying library has problems
      * with named binds.
      *
-     * @param \Zend_Db_Select|string $sql
+     * @param \Magento\Framework\DB\Select|string $sql
      * @param mixed $bind
      * @return $this
      */
@@ -1310,7 +1313,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     }
 
     /**
-     * Creates and returns a new \Zend_Db_Select object for this adapter.
+     * Creates and returns a new \Magento\Framework\DB\Select object for this adapter.
      *
      * @return Select
      */
@@ -1910,12 +1913,12 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     /**
      * Set cache adapter
      *
-     * @param FrontendInterface $adapter
+     * @param FrontendInterface $cacheAdapter
      * @return $this
      */
-    public function setCacheAdapter(FrontendInterface $adapter)
+    public function setCacheAdapter(FrontendInterface $cacheAdapter)
     {
-        $this->_cacheAdapter = $adapter;
+        $this->_cacheAdapter = $cacheAdapter;
         return $this;
     }
 
@@ -2893,7 +2896,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     /**
      * Generate fragment of SQL, that check condition and return true or false value
      *
-     * @param \Zend_Db_Expr|\Zend_Db_Select|string $expression
+     * @param \Zend_Db_Expr|\Magento\Framework\DB\Select|string $expression
      * @param string $true  true value
      * @param string $false false value
      * @return \Zend_Db_Expr
@@ -2912,7 +2915,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     /**
      * Returns valid IFNULL expression
      *
-     * @param \Zend_Db_Expr|\Zend_Db_Select|string $expression
+     * @param \Zend_Db_Expr|\Magento\Framework\DB\Select|string $expression
      * @param string|int $value OPTIONAL. Applies when $expression is NULL
      * @return \Zend_Db_Expr
      */
@@ -3366,9 +3369,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 
         // render JOIN conditions (FROM Part)
         $joinConds  = [];
-        foreach ($select->getPart(\Zend_Db_Select::FROM) as $correlationName => $joinProp) {
-            if ($joinProp['joinType'] == \Zend_Db_Select::FROM) {
-                $joinType = strtoupper(\Zend_Db_Select::INNER_JOIN);
+        foreach ($select->getPart(\Magento\Framework\DB\Select::FROM) as $correlationName => $joinProp) {
+            if ($joinProp['joinType'] == \Magento\Framework\DB\Select::FROM) {
+                $joinType = strtoupper(\Magento\Framework\DB\Select::INNER_JOIN);
             } else {
                 $joinType = strtoupper($joinProp['joinType']);
             }
@@ -3393,7 +3396,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 
         // render UPDATE SET
         $columns = [];
-        foreach ($select->getPart(\Zend_Db_Select::COLUMNS) as $columnEntry) {
+        foreach ($select->getPart(\Magento\Framework\DB\Select::COLUMNS) as $columnEntry) {
             list($correlationName, $column, $alias) = $columnEntry;
             if (empty($alias)) {
                 $alias = $column;
@@ -3413,7 +3416,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $query = sprintf("%s\nSET %s", $query, implode(', ', $columns));
 
         // render WHERE
-        $wherePart = $select->getPart(\Zend_Db_Select::WHERE);
+        $wherePart = $select->getPart(\Magento\Framework\DB\Select::WHERE);
         if ($wherePart) {
             $query = sprintf("%s\nWHERE %s", $query, implode(' ', $wherePart));
         }
@@ -3431,8 +3434,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     public function deleteFromSelect(Select $select, $table)
     {
         $select = clone $select;
-        $select->reset(\Zend_Db_Select::DISTINCT);
-        $select->reset(\Zend_Db_Select::COLUMNS);
+        $select->reset(\Magento\Framework\DB\Select::DISTINCT);
+        $select->reset(\Magento\Framework\DB\Select::COLUMNS);
 
         $query = sprintf('DELETE %s %s', $this->quoteIdentifier($table), $select->assemble());
 

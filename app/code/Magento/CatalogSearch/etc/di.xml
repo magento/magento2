@@ -139,9 +139,22 @@
             <argument name="collectionFactory" xsi:type="object">Magento\CatalogSearch\Model\Resource\Fulltext\CollectionFactory</argument>
         </arguments>
     </type>
+
+    <virtualType name="Magento\CatalogSearch\Model\Resource\Fulltext\SearchCollection" type="Magento\CatalogSearch\Model\Resource\Fulltext\Collection">
+        <arguments>
+            <argument name="searchRequestName" xsi:type="string">quick_search_container</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Magento\CatalogSearch\Model\Resource\Fulltext\SearchCollectionFactory" type="Magento\Catalog\Model\Resource\Product\CollectionFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\CatalogSearch\Model\Resource\Fulltext\SearchCollection</argument>
+        </arguments>
+    </virtualType>
+
     <virtualType name="Magento\CatalogSearch\Model\Layer\Search\ItemCollectionProvider" type="Magento\Catalog\Model\Layer\Search\ItemCollectionProvider">
         <arguments>
-            <argument name="collectionFactory" xsi:type="object">Magento\CatalogSearch\Model\Resource\Fulltext\CollectionFactory</argument>
+            <argument name="collectionFactory" xsi:type="object">Magento\CatalogSearch\Model\Resource\Fulltext\SearchCollectionFactory</argument>
         </arguments>
     </virtualType>
     <virtualType name="Magento\CatalogSearch\Model\Resource\Advanced\CollectionFactory"

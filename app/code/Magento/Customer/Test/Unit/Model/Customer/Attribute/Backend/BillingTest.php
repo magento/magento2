@@ -23,14 +23,14 @@ class BillingTest extends \PHPUnit_Framework_TestCase
 
     public function testBeforeSave()
     {
-        $object = $this->getMockBuilder('Magento\Framework\Object')
+        $object = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->setMethods(['getDefaultBilling', 'unsetDefaultBilling'])
             ->getMock();
 
         $object->expects($this->once())->method('getDefaultBilling')->will($this->returnValue(null));
         $object->expects($this->once())->method('unsetDefaultBilling')->will($this->returnSelf());
-        /** @var \Magento\Framework\Object $object */
+        /** @var \Magento\Framework\DataObject $object */
 
         $this->testable->beforeSave($object);
     }
@@ -40,12 +40,12 @@ class BillingTest extends \PHPUnit_Framework_TestCase
         $addressId = 1;
         $attributeCode = 'attribute_code';
         $defaultBilling = 'default billing address';
-        $object = $this->getMockBuilder('Magento\Framework\Object')
+        $object = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->setMethods(['getDefaultBilling', 'getAddresses', 'setDefaultBilling'])
             ->getMock();
 
-        $address = $this->getMockBuilder('Magento\Framework\Object')
+        $address = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->setMethods(['getPostIndex', 'getId'])
             ->getMock();
@@ -68,7 +68,7 @@ class BillingTest extends \PHPUnit_Framework_TestCase
         $object->expects($this->once())->method('getDefaultBilling')->will($this->returnValue($defaultBilling));
         $object->expects($this->once())->method('setDefaultBilling')->with($addressId)->will($this->returnSelf());
         $object->expects($this->once())->method('getAddresses')->will($this->returnValue([$address]));
-        /** @var \Magento\Framework\Object $object */
+        /** @var \Magento\Framework\DataObject $object */
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
 
         $this->testable->setAttribute($attribute);

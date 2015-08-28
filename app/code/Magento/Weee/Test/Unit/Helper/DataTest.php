@@ -24,6 +24,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected $_product;
 
     /**
+     * @var \Magento\Weee\Model\Tax
+     */
+    protected $weeeTax;
+
+    /**
      * @var \Magento\Weee\Helper\Data
      */
     protected $_helperData;
@@ -33,11 +38,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->_product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $weeeConfig = $this->getMock('Magento\Weee\Model\Config', [], [], '', false);
         $weeeConfig->expects($this->any())->method('isEnabled')->will($this->returnValue(true));
-        $weeeTax = $this->getMock('Magento\Weee\Model\Tax', [], [], '', false);
-        $weeeTax->expects($this->any())->method('getWeeeAmount')->will($this->returnValue('11.26'));
+        $this->weeeTax = $this->getMock('Magento\Weee\Model\Tax', [], [], '', false);
+        $this->weeeTax->expects($this->any())->method('getWeeeAmount')->will($this->returnValue('11.26'));
         $arguments = [
             'weeeConfig' => $weeeConfig,
-            'weeeTax' => $weeeTax,
+            'weeeTax' => $this->weeeTax,
         ];
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_helperData = $helper->getObject('Magento\Weee\Helper\Data', $arguments);
@@ -45,6 +50,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAmount()
     {
+        $this->_product->expects($this->any())->method('hasData')->will($this->returnValue(false));
+        $this->_product->expects($this->any())->method('getData')->will($this->returnValue(11.26));
+
         $this->assertEquals('11.26', $this->_helperData->getAmount($this->_product));
     }
 
@@ -142,5 +150,61 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $orderItem = $this->setupOrderItem();
         $value = $this->_helperData->getBaseWeeeTaxAmountRefunded($orderItem);
         $this->assertEquals(self::BASE_TAX_AMOUNT_REFUNDED, $value);
+    }
+
+    public function testGetWeeAttributesForBundle()
+    {
+        $weeObject = new \Magento\Framework\DataObject(
+            [
+                'code' => 'fpt',
+                'amount' => '15.0000',
+            ]
+        );
+        $testArray = ['fpt' => $weeObject];
+
+        $this->weeeTax->expects($this->any())
+            ->method('getProductWeeeAttributes')
+            ->will($this->returnValue([$weeObject]));
+
+        $productSimple=$this->getMock('\Magento\Catalog\Model\Product\Type\Simple', [], [], '', false);
+
+        $productInstance=$this->getMock('\Magento\Bundle\Model\Product\Type', [], [], '', false);
+        $productInstance->expects($this->any())
+            ->method('getSelectionsCollection')
+            ->will($this->returnValue([$productSimple]));
+
+        $store=$this->getMock('\Magento\Store\Model\Store', [], [], '', false);
+
+
+        $product=$this->getMock(
+            '\Magento\Bundle\Model\Product',
+            ['getTypeInstance', 'getStoreId', 'getStore', 'getTypeId'],
+            [],
+            '',
+            false
+        );
+        $product->expects($this->any())
+            ->method('getTypeInstance')
+            ->will($this->returnValue($productInstance));
+
+        $product->expects($this->any())
+            ->method('getStoreId')
+            ->will($this->returnValue(1));
+
+        $product->expects($this->any())
+            ->method('getStore')
+            ->will($this->returnValue($store));
+
+        $product->expects($this->any())
+            ->method('getTypeId')
+            ->will($this->returnValue('bundle'));
+
+        $registry=$this->getMock('Magento\Framework\Registry', [], [], '', false);
+        $registry->expects($this->any())
+            ->method('registry')
+            ->with('current_product')
+            ->will($this->returnValue($product));
+
+        $this->assertEquals($testArray, $this->_helperData->getWeeAttributesForBundle($product));
     }
 }

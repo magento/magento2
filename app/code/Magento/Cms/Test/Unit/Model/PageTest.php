@@ -63,8 +63,7 @@ class PageTest extends \PHPUnit_Framework_TestCase
                         ->setMethods(
                             [
                                 '_construct',
-                                '_getReadAdapter',
-                                '_getWriteAdapter',
+                                'getConnection',
                             ]
                         )
                         ->getMockForAbstractClass(),

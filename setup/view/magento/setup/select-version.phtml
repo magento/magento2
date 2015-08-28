@@ -124,12 +124,12 @@
             <div class="admin__data-grid-header-row row row-gutter">
                 <div class="col-xs-3">
                     <div class="admin__control-support-text">
-                        <span>{{total}}</span> records found
+                        <span>{{totalForGrid}} of {{total}} </span> components are selected.
                     </div>
                 </div>
                 <div class="col-xs-9 admin__data-grid-pager-wrap">
                 <select id="perPage" class="admin__control-select" ng-model="rowLimit">
-                        <option value="20">20</option>
+                    <option value="20">20</option>
                         <option value="30">30</option>
                         <option value="50">50</option>
                         <option value="100">100</option>
@@ -138,18 +138,18 @@
                     <label class="admin__control-support-text" for="perPage">per page</label>
                     <div class="admin__data-grid-pager">
                     <button class="action-previous"
-                            ng-disabled="currentPage == 0"
+                            ng-disabled="currentPage == 1"
                             ng-click="currentPage = currentPage - 1; start = start - rowLimit"
                             type="button"
                         >
                             <span>Previous page</span>
                         </button>
-                    <input id="pageCurrent" class="admin__control-text" type="number" value="{{currentPage+1}}">
+                    <input id="pageCurrent" class="admin__control-text" type="number" value="{{currentPage}}">
                         <label class="admin__control-support-text" for="pageCurrent">
                         of {{numberOfPages}}
                         </label>
                     <button class="action-next"
-                            ng-disabled="currentPage >= numberOfPages-1"
+                            ng-disabled="currentPage >= numberOfPages"
                             ng-click="currentPage = currentPage + 1; start = start + rowLimit"
                             type="button"
                         >
@@ -184,12 +184,13 @@
                 </tr>
                 </thead>
                 <tbody>
-            <tr ng-repeat="component in components | startFrom:start | limitTo:rowLimit">
+            <tr ng-repeat="component in displayComponents | limitTo:rowLimit">
                     <td class="data-grid-indicator-cell">
                         <div class="onoffswitch">
                             <input type="checkbox" name="{{component.checkboxId}}"
                                    class="onoffswitch-checkbox" id="{{component.checkboxId}}"
-                                   ng-click="AddRemoveComponentOnSliderMove(component.name)" checked>
+                                   ng-click="AddRemoveComponentOnSliderMove(component)"
+                                   ng-checked="isSelected(component.name)">
                             <label class="onoffswitch-label" for="{{component.checkboxId}}">
                                 <span class="onoffswitch-inner"></span>
                                 <span class="onoffswitch-switch"></span>
@@ -200,7 +201,7 @@
                         <span class="data-grid-data">{{component.name}}</span>
                     </td>
                     <td>
-                        <span class="data-grid-data">{{component.type}}</span>
+                        <span class="data-grid-data">{{component.type.replace("magento2-", "")}}</span>
                     </td>
                     <td>
                         <span class="data-grid-data">{{component.vendor}}</span>

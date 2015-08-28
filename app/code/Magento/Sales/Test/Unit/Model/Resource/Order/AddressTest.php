@@ -31,9 +31,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected $orderMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $adapterMock;
+    protected $connectionMock;
 
     /**
      * @var \Magento\Sales\Model\Order\Address\Validator|\PHPUnit_Framework_MockObject_MockObject
@@ -73,7 +73,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->adapterMock = $this->getMock(
+        $this->connectionMock = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
             [],
             [],
@@ -103,14 +103,14 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         );
         $this->appResourceMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->adapterMock));
+            ->will($this->returnValue($this->connectionMock));
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->adapterMock->expects($this->any())
+        $this->connectionMock->expects($this->any())
             ->method('describeTable')
             ->will($this->returnValue([]));
-        $this->adapterMock->expects($this->any())
+        $this->connectionMock->expects($this->any())
             ->method('insert');
-        $this->adapterMock->expects($this->any())
+        $this->connectionMock->expects($this->any())
             ->method('lastInsertId');
         $this->addressResource = $objectManager->getObject(
             'Magento\Sales\Model\Resource\Order\Address',
