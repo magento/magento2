@@ -5,8 +5,8 @@
  */
 namespace Magento\Framework\Message;
 
-use Magento\Framework\Event\ManagerInterface as EventManagerInterface;
-use Psr\Log\LoggerInterface as Logger;
+use Magento\Framework\Event;
+use Psr\Log\LoggerInterface;
 
 /**
  * Message manager model
@@ -35,12 +35,12 @@ class Manager implements ManagerInterface
     protected $messagesFactory;
 
     /**
-     * @var EventManagerInterface
+     * @var Event\ManagerInterface
      */
     protected $eventManager;
 
     /**
-     * @var Logger
+     * @var LoggerInterface
      */
     protected $logger;
 
@@ -58,16 +58,16 @@ class Manager implements ManagerInterface
      * @param Session $session
      * @param Factory $messageFactory
      * @param CollectionFactory $messagesFactory
-     * @param EventManagerInterface $eventManager
-     * @param Logger $logger
+     * @param Event\ManagerInterface $eventManager
+     * @param LoggerInterface $logger
      * @param string $defaultGroup
      */
     public function __construct(
         Session $session,
         Factory $messageFactory,
         CollectionFactory $messagesFactory,
-        EventManagerInterface $eventManager,
-        Logger $logger,
+        Event\ManagerInterface $eventManager,
+        LoggerInterface $logger,
         $defaultGroup = self::DEFAULT_GROUP
     ) {
         $this->session = $session;

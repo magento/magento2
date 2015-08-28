@@ -6,9 +6,9 @@
 namespace Magento\Framework\View\Element\Message\Renderer;
 
 use Magento\Framework\Message\MessageInterface;
-use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Element\Message\Renderer\BlockRenderer\Template;
 
-class BlockRenderer extends Template implements RendererInterface
+class BlockRenderer implements RendererInterface
 {
     /**
      * complex_renderer
@@ -21,14 +21,17 @@ class BlockRenderer extends Template implements RendererInterface
     private $configuration;
 
     /**
-     * @param Template\Context $context
-     * @param array $data
+     * @var Template
+     */
+    private $template;
+
+    /**
+     * @param Template $template
      */
     public function __construct(
-        Template\Context $context,
-        array $data = []
+        Template $template
     ) {
-        parent::__construct($context, $data);
+        $this->template = $template;
     }
 
     /**
@@ -41,15 +44,12 @@ class BlockRenderer extends Template implements RendererInterface
     public function render(MessageInterface $message, array $initializationData)
     {
         $this->setUpConfiguration($message->getData(), $initializationData);
-        return $this->toHtml();
-    }
 
-    /**
-     * @return array
-     */
-    public function getCacheKeyInfo()
-    {
-        return array_merge((array)$this->configuration, [$this->getTemplate()]);
+        $result = $this->template->toHtml();
+
+        $this->tearDownConfiguration();
+
+        return $result;
     }
 
     /**
@@ -60,13 +60,13 @@ class BlockRenderer extends Template implements RendererInterface
     private function setUpConfiguration(array $configuration, array $initializationData)
     {
         if (!isset($initializationData['template'])) {
-            throw new \InvalidArgumentException('Template should be provided for renderer.');
+            throw new \InvalidArgumentException('Template should be provided for the renderer.');
         }
 
-        $this->setTemplate($initializationData['template']);
-
         $this->configuration = $configuration;
-        $this->setData($configuration);
+
+        $this->template->setTemplate($initializationData['template']);
+        $this->template->setData($configuration);
     }
 
     /**
@@ -75,22 +75,10 @@ class BlockRenderer extends Template implements RendererInterface
     private function tearDownConfiguration()
     {
         foreach (array_keys($this->configuration) as $key) {
-            $this->unsetData($key);
+            $this->template->unsetData($key);
             unset($this->configuration[$key]);
         }
 
-        unset($this->_template);
-    }
-
-    /**
-     * Processing block html after rendering
-     *
-     * @param   string $html
-     * @return  string
-     */
-    protected function _afterToHtml($html)
-    {
-        $this->tearDownConfiguration();
-        return parent::_afterToHtml($html);
+        $this->template->setTemplate('');
     }
 }

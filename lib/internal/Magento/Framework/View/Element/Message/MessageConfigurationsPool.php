@@ -13,6 +13,9 @@ class MessageConfigurationsPool
     private $configurationsMap;
 
     /**
+     * Expected input:
+     * ['message_identifier' => ['renderer' => '{renderer_code}', 'data' => []], ...]
+     *
      * @param array $configurationsMap
      */
     public function __construct(
