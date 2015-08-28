@@ -24,7 +24,7 @@
     </button>
     <div class="selectmenu-items" data-bind="css: {_active: opened}, outerClick: $data.discardAll.bind($data)">
         <ul>
-            <!-- ko foreach: options -->
+            <!-- ko foreach: optionsArray -->
             <li data-bind="css: { _edit: $parent.isEditing(value)}">
                 <!-- ko if: $data.editable -->
                 <div

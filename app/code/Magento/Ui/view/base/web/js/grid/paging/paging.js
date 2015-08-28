@@ -30,7 +30,11 @@ define([
 
             sizesConfig: {
                 component: 'Magento_Ui/js/grid/paging/sizes',
-                name: '${ $.name }_sizes'
+                name: '${ $.name }_sizes',
+                storageConfig: {
+                    provider: '${ $.storageConfig.provider }',
+                    namespace: '${ $.storageConfig.namespace }'
+                }
             },
 
             imports: {
