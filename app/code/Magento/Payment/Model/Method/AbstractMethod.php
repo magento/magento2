@@ -359,7 +359,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     /**
      * Check void availability
      * @return bool
-     * @internal param \Magento\Framework\Object $payment
+     * @internal param \Magento\Framework\DataObject $payment
      * @api
      */
     public function canVoid()
@@ -581,11 +581,12 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     /**
      * Order payment abstract method
      *
-     * @param \Magento\Framework\Object|InfoInterface $payment
+     * @param \Magento\Framework\DataObject|InfoInterface $payment
      * @param float $amount
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      * @api
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function order(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -598,11 +599,12 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     /**
      * Authorize payment abstract method
      *
-     * @param \Magento\Framework\Object|InfoInterface $payment
+     * @param \Magento\Framework\DataObject|InfoInterface $payment
      * @param float $amount
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      * @api
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function authorize(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -615,11 +617,12 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     /**
      * Capture payment abstract method
      *
-     * @param \Magento\Framework\Object|InfoInterface $payment
+     * @param \Magento\Framework\DataObject|InfoInterface $payment
      * @param float $amount
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      * @api
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function capture(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -633,11 +636,12 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     /**
      * Refund specified amount for payment
      *
-     * @param \Magento\Framework\Object|InfoInterface $payment
+     * @param \Magento\Framework\DataObject|InfoInterface $payment
      * @param float $amount
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      * @api
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function refund(\Magento\Payment\Model\InfoInterface $payment, $amount)
     {
@@ -650,9 +654,10 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     /**
      * Cancel payment abstract method
      *
-     * @param \Magento\Framework\Object|InfoInterface $payment
+     * @param \Magento\Framework\DataObject|InfoInterface $payment
      * @return $this
      * @api
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function cancel(\Magento\Payment\Model\InfoInterface $payment)
     {
@@ -662,15 +667,16 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     /**
      * Void payment abstract method
      *
-     * @param \Magento\Framework\Object|InfoInterface $payment
+     * @param \Magento\Framework\DataObject|InfoInterface $payment
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      * @api
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function void(\Magento\Payment\Model\InfoInterface $payment)
     {
         if (!$this->canVoid()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Void action is not available.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The void action is not available.'));
         }
         return $this;
     }
@@ -692,6 +698,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * @return false
      * @throws \Magento\Framework\Exception\LocalizedException
      * @api
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function acceptPayment(InfoInterface $payment)
     {
@@ -708,6 +715,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      * @return false
      * @throws \Magento\Framework\Exception\LocalizedException
      * @api
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function denyPayment(InfoInterface $payment)
     {
@@ -737,6 +745,9 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      */
     public function getConfigData($field, $storeId = null)
     {
+        if ('order_place_redirect_url' === $field) {
+            return $this->getOrderPlaceRedirectUrl();
+        }
         if (null === $storeId) {
             $storeId = $this->getStore();
         }
@@ -747,7 +758,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     /**
      * Assign data to info model instance
      *
-     * @param array|\Magento\Framework\Object $data
+     * @param array|\Magento\Framework\DataObject $data
      * @return $this
      * @api
      */
@@ -755,7 +766,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     {
         if (is_array($data)) {
             $this->getInfoInstance()->addData($data);
-        } elseif ($data instanceof \Magento\Framework\Object) {
+        } elseif ($data instanceof \Magento\Framework\DataObject) {
             $this->getInfoInstance()->addData($data->getData());
         }
         return $this;
@@ -833,7 +844,11 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
      */
     protected function _debug($debugData)
     {
-        $this->logger->debug($debugData, $this->getDebugReplacePrivateDataKeys(), $this->getDebugFlag());
+        $this->logger->debug(
+            $debugData,
+            $this->getDebugReplacePrivateDataKeys(),
+            $this->getDebugFlag()
+        );
     }
 
     /**

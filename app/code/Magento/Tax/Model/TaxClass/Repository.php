@@ -9,7 +9,6 @@ namespace Magento\Tax\Model\TaxClass;
 
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroup;
-use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\CouldNotDeleteException;
@@ -63,12 +62,18 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
     protected $taxClassResource;
 
     /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     */
+    protected $joinProcessor;
+
+    /**
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param FilterBuilder $filterBuilder
      * @param TaxClassCollectionFactory $taxClassCollectionFactory
      * @param \Magento\Tax\Api\Data\TaxClassSearchResultsInterfaceFactory $searchResultsFactory
      * @param ClassModelRegistry $classModelRegistry
      * @param \Magento\Tax\Model\Resource\TaxClass $taxClassResource
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      */
     public function __construct(
         SearchCriteriaBuilder $searchCriteriaBuilder,
@@ -76,7 +81,8 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
         TaxClassCollectionFactory $taxClassCollectionFactory,
         \Magento\Tax\Api\Data\TaxClassSearchResultsInterfaceFactory $searchResultsFactory,
         ClassModelRegistry $classModelRegistry,
-        \Magento\Tax\Model\Resource\TaxClass $taxClassResource
+        \Magento\Tax\Model\Resource\TaxClass $taxClassResource,
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
     ) {
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
@@ -84,6 +90,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
         $this->searchResultsFactory = $searchResultsFactory;
         $this->classModelRegistry = $classModelRegistry;
         $this->taxClassResource = $taxClassResource;
+        $this->joinProcessor = $joinProcessor;
     }
 
     /**
@@ -195,6 +202,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
         $searchResults->setSearchCriteria($searchCriteria);
         /** @var TaxClassCollection $collection */
         $collection = $this->taxClassCollectionFactory->create();
+        $this->joinProcessor->process($collection);
         foreach ($searchCriteria->getFilterGroups() as $group) {
             $this->addFilterGroupToCollection($group, $collection);
         }
@@ -205,7 +213,7 @@ class Repository implements \Magento\Tax\Api\TaxClassRepositoryInterface
             foreach ($searchCriteria->getSortOrders() as $sortOrder) {
                 $collection->addOrder(
                     $sortOrder->getField(),
-                    ($sortOrder->getDirection() == SearchCriteria::SORT_ASC) ? 'ASC' : 'DESC'
+                    ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
                 );
             }
         }

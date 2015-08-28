@@ -34,7 +34,9 @@ class ImportExport
      */
     public function afterImportSource(Import $subject, $result)
     {
-        $this->ruleProductProcessor->markIndexerAsInvalid();
+        if (!$this->ruleProductProcessor->isIndexerScheduled()) {
+            $this->ruleProductProcessor->markIndexerAsInvalid();
+        }
         return $result;
     }
 }

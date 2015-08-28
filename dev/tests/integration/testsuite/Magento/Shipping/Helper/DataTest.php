@@ -35,8 +35,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
             $orderFactory = $this->_getMockOrderFactory($code);
             $constructArgs['orderFactory'] = $orderFactory;
         } elseif ('Magento\Sales\Model\Order\Shipment\Track' == $modelName) {
-            $shipmentFactory = $this->_getMockShipmentFactory($code);
-            $constructArgs['shipmentFactory'] = $shipmentFactory;
+            $shipmentRepository = $this->_getMockShipmentRepository($code);
+            $constructArgs['shipmentRepository'] = $shipmentRepository;
         }
 
         $model = $objectManager->create($modelName, $constructArgs);
@@ -66,24 +66,24 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param $code
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Sales\Model\Order\ShipmentRepository|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _getMockShipmentFactory($code)
+    protected function _getMockShipmentRepository($code)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $orderFactory = $this->_getMockOrderFactory($code);
         $shipmentArgs = ['orderFactory' => $orderFactory];
 
         $shipment = $objectManager->create('Magento\Sales\Model\Order\Shipment', $shipmentArgs);
-        $shipmentFactory = $this->getMock(
-            'Magento\Sales\Model\Order\ShipmentFactory',
-            ['create'],
+        $shipmentRepository = $this->getMock(
+            'Magento\Sales\Model\Order\ShipmentRepository',
+            ['get'],
             [],
             '',
             false
         );
-        $shipmentFactory->expects($this->atLeastOnce())->method('create')->will($this->returnValue($shipment));
-        return $shipmentFactory;
+        $shipmentRepository->expects($this->atLeastOnce())->method('get')->willReturn($shipment);
+        return $shipmentRepository;
     }
 
     /**

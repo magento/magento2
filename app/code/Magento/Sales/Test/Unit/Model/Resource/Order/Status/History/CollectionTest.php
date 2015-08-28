@@ -14,7 +14,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $collection;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $connectionMock;
 
@@ -24,7 +24,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $eventManagerMock;
 
     /**
-     * @var \Zend_Db_Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $selectMock;
 
@@ -48,7 +48,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected $entityFactoryMock;
     /**
-     * @var \Magento\Sales\Model\Resource\EntitySnapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entitySnapshotMock;
 
@@ -56,10 +56,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         $this->eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $this->connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
-        $this->selectMock = $this->getMock('Zend_Db_Select', [], [], '', false);
+        $this->selectMock = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
         $this->historyItemMock = $this->getMock(
             'Magento\Sales\Model\Order\Status\History',
-            ['__wakeup', 'setData'],
+            ['__wakeup', 'addData'],
             [],
             '',
             false
@@ -71,10 +71,10 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            ['getReadConnection', 'getMainTable', 'getTable', '__wakeup']
+            ['getConnection', 'getMainTable', 'getTable', '__wakeup']
         );
         $this->entitySnapshotMock = $this->getMock(
-            'Magento\Sales\Model\Resource\EntitySnapshot',
+            'Magento\Framework\Model\Resource\Db\VersionControl\Snapshot',
             [],
             [],
             '',
@@ -85,7 +85,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
         $this->entityFactoryMock = $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false);
 
-        $this->resourceMock->expects($this->any())->method('getReadConnection')->will(
+        $this->resourceMock->expects($this->any())->method('getConnection')->will(
             $this->returnValue($this->connectionMock)
         );
         $this->resourceMock->expects($this->any())->method('getTable')->will($this->returnArgument(0));
@@ -97,7 +97,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         $data = [['data']];
         $this->historyItemMock->expects($this->once())
-            ->method('setData')
+            ->method('addData')
             ->with($this->equalTo($data[0]))
             ->will($this->returnValue($this->historyItemMock));
 
@@ -134,7 +134,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->will($this->returnValue($orderId));
 
-        $this->connectionMock = $this->collection->getResource()->getReadConnection();
+        $this->connectionMock = $this->collection->getResource()->getConnection();
         $this->connectionMock->expects($this->exactly(3))
             ->method('prepareSqlCondition')
             ->will(

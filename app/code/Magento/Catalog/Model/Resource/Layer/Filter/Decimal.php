@@ -35,7 +35,7 @@ class Decimal extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $collection = $filter->getLayer()->getProductCollection();
         $attribute = $filter->getAttributeModel();
-        $connection = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $tableAlias = sprintf('%s_idx', $attribute->getAttributeCode());
         $conditions = [
             "{$tableAlias}.entity_id = e.entity_id",
@@ -69,7 +69,7 @@ class Decimal extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function getMinMax(\Magento\Catalog\Model\Layer\Filter\FilterInterface $filter)
     {
         $select = $this->_getSelect($filter);
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
 
         $select->columns(
             [
@@ -78,7 +78,7 @@ class Decimal extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ]
         );
 
-        $result = $adapter->fetchRow($select);
+        $result = $connection->fetchRow($select);
 
         return [$result['min_value'], $result['max_value']];
     }
@@ -98,20 +98,20 @@ class Decimal extends \Magento\Framework\Model\Resource\Db\AbstractDb
         // clone select from collection with filters
         $select = clone $collection->getSelect();
         // reset columns, order and limitation conditions
-        $select->reset(\Zend_Db_Select::COLUMNS);
-        $select->reset(\Zend_Db_Select::ORDER);
-        $select->reset(\Zend_Db_Select::LIMIT_COUNT);
-        $select->reset(\Zend_Db_Select::LIMIT_OFFSET);
+        $select->reset(\Magento\Framework\DB\Select::COLUMNS);
+        $select->reset(\Magento\Framework\DB\Select::ORDER);
+        $select->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $select->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
 
         $attributeId = $filter->getAttributeModel()->getId();
         $storeId = $collection->getStoreId();
 
         $select->join(
             ['decimal_index' => $this->getMainTable()],
-            'e.entity_id = decimal_index.entity_id' . ' AND ' . $this->_getReadAdapter()->quoteInto(
+            'e.entity_id = decimal_index.entity_id' . ' AND ' . $this->getConnection()->quoteInto(
                 'decimal_index.attribute_id = ?',
                 $attributeId
-            ) . ' AND ' . $this->_getReadAdapter()->quoteInto(
+            ) . ' AND ' . $this->getConnection()->quoteInto(
                 'decimal_index.store_id = ?',
                 $storeId
             ),
@@ -131,7 +131,7 @@ class Decimal extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function getCount(\Magento\Catalog\Model\Layer\Filter\FilterInterface $filter, $range)
     {
         $select = $this->_getSelect($filter);
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
 
         $countExpr = new \Zend_Db_Expr("COUNT(*)");
         $rangeExpr = new \Zend_Db_Expr("FLOOR(decimal_index.value / {$range}) + 1");
@@ -139,6 +139,6 @@ class Decimal extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $select->columns(['decimal_range' => $rangeExpr, 'count' => $countExpr]);
         $select->group($rangeExpr);
 
-        return $adapter->fetchPairs($select);
+        return $connection->fetchPairs($select);
     }
 }

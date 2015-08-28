@@ -14,10 +14,10 @@ namespace Magento\Tax\Block\Adminhtml\Rate\Grid\Renderer;
 class Data extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return int|string
      */
-    protected function _getValue(\Magento\Framework\Object $row)
+    protected function _getValue(\Magento\Framework\DataObject $row)
     {
         $data = parent::_getValue($row);
         if (intval($data) == $data) {

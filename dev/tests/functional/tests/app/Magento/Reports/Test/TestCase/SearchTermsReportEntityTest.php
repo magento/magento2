@@ -12,7 +12,6 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Flow:
  * Preconditions:
  * 1. Products is created.
  *
@@ -102,7 +101,7 @@ class SearchTermsReportEntityTest extends Injectable
         for ($i = 0; $i < $countProduct; $i++) {
             $productFixture = $this->fixtureFactory->createByCode(
                 'catalogProductSimple',
-                ['dataSet' => $product, 'data' => ['name' => $name]]
+                ['dataset' => $product, 'data' => ['name' => $name]]
             );
             $productFixture->persist();
         }

@@ -16,7 +16,7 @@ use Magento\Framework\Exception\LocalizedException;
  * @author     Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DefaultType extends \Magento\Framework\Object
+class DefaultType extends \Magento\Framework\DataObject
 {
     /**
      * Option Instance
@@ -171,12 +171,12 @@ class DefaultType extends \Magento\Framework\Object
     /**
      * Getter for Buy Request
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getRequest()
     {
-        if ($this->_getData('request') instanceof \Magento\Framework\Object) {
+        if ($this->_getData('request') instanceof \Magento\Framework\DataObject) {
             return $this->_getData('request');
         }
         throw new LocalizedException(__('The BuyRequest instance in options group is incorrect.'));
@@ -208,7 +208,7 @@ class DefaultType extends \Magento\Framework\Object
 
         $option = $this->getOption();
         if (!isset($values[$option->getId()]) && $option->getIsRequire() && !$this->getSkipCheckRequiredOption()) {
-            throw new LocalizedException(__('Please specify the product\'s required option(s).'));
+            throw new LocalizedException(__('Please specify product\'s required option(s).'));
         } elseif (isset($values[$option->getId()])) {
             $this->setUserValue($values[$option->getId()]);
             $this->setIsValid(true);
@@ -240,7 +240,7 @@ class DefaultType extends \Magento\Framework\Object
             return $this->getUserValue();
         }
         throw new LocalizedException(
-            __('We couldn\'t add the product to the cart because of an option validation issue.')
+            __('We can\'t add the product to the cart because of an option validation issue.')
         );
     }
 

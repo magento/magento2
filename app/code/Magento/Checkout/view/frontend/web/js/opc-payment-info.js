@@ -24,7 +24,7 @@ define([
         options: {
             payment: {
                 form: '#co-payment-form',
-                continueSelector: '#opc-payment [data-role=opc-continue]',
+                continueSelector: '#payment [data-role=opc-continue]',
                 methodsContainer: '#checkout-payment-method-load',
                 freeInput: {
                     tmpl: '<input id="hidden-free" type="hidden" name="payment[method]" value="free">',
@@ -121,7 +121,7 @@ define([
             var methods = this.element.find('[name^="payment["]');
 
             if (methods.length === 0) {
-                alert($.mage.__("We can't complete your order because you don't have a payment method available."));
+                alert($.mage.__('We can\'t complete your order because you don\'t have a payment method set up.'));
 
                 return false;
             }

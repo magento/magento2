@@ -11,6 +11,8 @@ use Magento\SalesSequence\Model\Manager;
 use Magento\Sales\Model\Resource\EntityAbstract as SalesResource;
 use Magento\Sales\Model\Resource\Order\Handler\State as StateHandler;
 use Magento\Sales\Model\Spi\OrderResourceInterface;
+use Magento\Framework\Model\Resource\Db\VersionControl\Snapshot;
+use Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite;
 
 /**
  * Flat sales order resource
@@ -53,28 +55,28 @@ class Order extends SalesResource implements OrderResourceInterface
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param Attribute $attribute
      * @param Manager $sequenceManager
-     * @param EntitySnapshot $entitySnapshot
-     * @param EntityRelationComposite $entityRelationComposite
+     * @param Snapshot $entitySnapshot
+     * @param RelationComposite $entityRelationComposite
      * @param StateHandler $stateHandler
-     * @param string $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
+        Snapshot $entitySnapshot,
+        RelationComposite $entityRelationComposite,
         Attribute $attribute,
         Manager $sequenceManager,
-        EntitySnapshot $entitySnapshot,
-        EntityRelationComposite $entityRelationComposite,
         StateHandler $stateHandler,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->stateHandler = $stateHandler;
         parent::__construct(
             $context,
-            $attribute,
-            $sequenceManager,
             $entitySnapshot,
             $entityRelationComposite,
-            $resourcePrefix
+            $attribute,
+            $sequenceManager,
+            $connectionName
         );
     }
 
@@ -88,8 +90,8 @@ class Order extends SalesResource implements OrderResourceInterface
      */
     public function aggregateProductsByTypes($orderId, $productTypeIds = [], $isProductTypeIn = false)
     {
-        $adapter = $this->getReadConnection();
-        $select = $adapter->select()
+        $connection = $this->getConnection();
+        $select = $connection->select()
             ->from(
                 ['o' => $this->getTable('sales_order_item')],
                 ['o.product_type', new \Zend_Db_Expr('COUNT(*)')]
@@ -106,7 +108,7 @@ class Order extends SalesResource implements OrderResourceInterface
                 $productTypeIds
             );
         }
-        return $adapter->fetchPairs($select);
+        return $connection->fetchPairs($select);
     }
 
     /**
@@ -124,7 +126,9 @@ class Order extends SalesResource implements OrderResourceInterface
                 $parent = $item->getQuoteParentItemId();
                 if ($parent && !$item->getParentItem()) {
                     $item->setParentItem($object->getItemByQuoteItemId($parent));
-                } elseif (!$parent) {
+                }
+                $childItems = $item->getChildrenItems();
+                if (empty($childItems)) {
                     $itemsCount++;
                 }
             }
@@ -138,8 +142,6 @@ class Order extends SalesResource implements OrderResourceInterface
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        /** @var \Magento\Sales\Model\Order $object */
-        $this->stateHandler->check($object);
         if (!$object->getId()) {
             /** @var \Magento\Store\Model\Store $store */
             $store = $object->getStore();
@@ -160,5 +162,15 @@ class Order extends SalesResource implements OrderResourceInterface
             $object->setCustomerId($object->getCustomer()->getId());
         }
         return parent::_beforeSave($object);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function save(\Magento\Framework\Model\AbstractModel $object)
+    {
+        /** @var \Magento\Sales\Model\Order $object */
+        $this->stateHandler->check($object);
+        return parent::save($object);
     }
 }

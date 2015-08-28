@@ -46,7 +46,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      */
     public function execute()
     {
-        $response = new \Magento\Framework\Object();
+        $response = new \Magento\Framework\DataObject();
         $response->setError(false);
 
         $attributeCode = $this->getRequest()->getParam('attribute_code');
@@ -65,7 +65,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                 $response->setAttributes(['attribute_code' => __('An attribute with this code already exists.')]);
             } else {
                 $response->setAttributes(
-                    ['attribute_label' => __('Attribute with the same code (%1) already exists.', $attributeCode)]
+                    ['attribute_label' => __('An attribute with the same code (%1) already exists.', $attributeCode)]
                 );
             }
             $response->setError(true);
@@ -77,7 +77,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             $attributeSet->setEntityTypeId($this->_entityTypeId)->load($setName, 'attribute_set_name');
             if ($attributeSet->getId()) {
                 $setName = $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($setName);
-                $this->messageManager->addError(__('Attribute Set with name \'%1\' already exists.', $setName));
+                $this->messageManager->addError(__('An attribute set named \'%1\' already exists.', $setName));
 
                 $layout = $this->layoutFactory->create();
                 $layout->initMessages();

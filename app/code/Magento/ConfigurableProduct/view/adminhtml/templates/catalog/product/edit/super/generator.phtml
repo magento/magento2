@@ -6,20 +6,6 @@
 /** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config */
 ?>
 <div data-role="product-variations-generator">
-    <!-- Configurable Attributes list -->
-    <div id="configurable-attributes-container" data-mage-init='{"variationsAttributes":{}}'>
-        <?php echo $block->getChildHtml('template'); ?>
-        <?php
-        foreach ($block->getAttributes() as $attribute) {
-            echo $block->getChildBlock('attribute-renderer')->render([
-                'attribute' => $attribute,
-            ]);
-        } ?>
-    </div>
-
-    <!-- "Generate Variations" button -->
-    <?php echo $block->getChildHtml('generate'); ?>
-
     <!-- Variations -->
     <div id="product-variations-matrix" data-role="product-variations-matrix">
         <?php echo $block->getChildHtml('matrix'); ?>

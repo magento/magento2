@@ -381,9 +381,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessBuyRequest()
     {
-        $request = new \Magento\Framework\Object();
+        $request = new \Magento\Framework\DataObject();
         $result = $this->_model->processBuyRequest($request);
-        $this->assertInstanceOf('Magento\Framework\Object', $result);
+        $this->assertInstanceOf('Magento\Framework\DataObject', $result);
         $this->assertArrayHasKey('errors', $result->getData());
     }
 
@@ -418,5 +418,16 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         foreach ($validationResult as $error) {
             $this->assertTrue($error);
         }
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoAppIsolation enabled
+     */
+    public function testGetOptions()
+    {
+        $this->_model->load(1);
+        $options = $this->_model->getOptions();
+        $this->assertEquals(4, count($options));
     }
 }

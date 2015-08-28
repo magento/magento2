@@ -32,7 +32,7 @@ class Collection extends AbstractCollection implements OrderPaymentSearchResultI
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Sales\Model\Resource\EntitySnapshot $entitySnapshot
+     * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot
      * @param null $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
@@ -41,8 +41,8 @@ class Collection extends AbstractCollection implements OrderPaymentSearchResultI
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Sales\Model\Resource\EntitySnapshot $entitySnapshot,
-        $connection = null,
+        \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         parent::__construct(

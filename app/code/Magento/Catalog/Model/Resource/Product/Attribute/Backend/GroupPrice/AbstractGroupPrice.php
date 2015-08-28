@@ -22,7 +22,7 @@ abstract class AbstractGroupPrice extends \Magento\Framework\Model\Resource\Db\A
      */
     public function loadPriceData($productId, $websiteId = null)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
 
         $columns = [
             'price_id' => $this->getIdFieldName(),
@@ -34,7 +34,7 @@ abstract class AbstractGroupPrice extends \Magento\Framework\Model\Resource\Db\A
 
         $columns = $this->_loadPriceDataColumns($columns);
 
-        $select = $adapter->select()->from($this->getMainTable(), $columns)->where('entity_id=?', $productId);
+        $select = $connection->select()->from($this->getMainTable(), $columns)->where('entity_id=?', $productId);
 
         $this->_loadPriceDataSelect($select);
 
@@ -46,7 +46,7 @@ abstract class AbstractGroupPrice extends \Magento\Framework\Model\Resource\Db\A
             }
         }
 
-        return $adapter->fetchAll($select);
+        return $connection->fetchAll($select);
     }
 
     /**
@@ -81,40 +81,40 @@ abstract class AbstractGroupPrice extends \Magento\Framework\Model\Resource\Db\A
      */
     public function deletePriceData($productId, $websiteId = null, $priceId = null)
     {
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
 
-        $conds = [$adapter->quoteInto('entity_id = ?', $productId)];
+        $conds = [$connection->quoteInto('entity_id = ?', $productId)];
 
         if ($websiteId !== null) {
-            $conds[] = $adapter->quoteInto('website_id = ?', $websiteId);
+            $conds[] = $connection->quoteInto('website_id = ?', $websiteId);
         }
 
         if ($priceId !== null) {
-            $conds[] = $adapter->quoteInto($this->getIdFieldName() . ' = ?', $priceId);
+            $conds[] = $connection->quoteInto($this->getIdFieldName() . ' = ?', $priceId);
         }
 
         $where = implode(' AND ', $conds);
 
-        return $adapter->delete($this->getMainTable(), $where);
+        return $connection->delete($this->getMainTable(), $where);
     }
 
     /**
      * Save tier price object
      *
-     * @param \Magento\Framework\Object $priceObject
+     * @param \Magento\Framework\DataObject $priceObject
      * @return \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Tierprice
      */
-    public function savePriceData(\Magento\Framework\Object $priceObject)
+    public function savePriceData(\Magento\Framework\DataObject $priceObject)
     {
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         $data = $this->_prepareDataForTable($priceObject, $this->getMainTable());
 
         if (!empty($data[$this->getIdFieldName()])) {
-            $where = $adapter->quoteInto($this->getIdFieldName() . ' = ?', $data[$this->getIdFieldName()]);
+            $where = $connection->quoteInto($this->getIdFieldName() . ' = ?', $data[$this->getIdFieldName()]);
             unset($data[$this->getIdFieldName()]);
-            $adapter->update($this->getMainTable(), $data, $where);
+            $connection->update($this->getMainTable(), $data, $where);
         } else {
-            $adapter->insert($this->getMainTable(), $data);
+            $connection->insert($this->getMainTable(), $data);
         }
         return $this;
     }

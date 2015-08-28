@@ -68,7 +68,7 @@
     right: 0;
     top: 0;
     position: absolute;
-    z-index: @overlay__z-index;
+    z-index: @data-grid-overlay__z-index;
 
     .grid-loader {
         background: url('@{baseDir}images/loader-2.gif') 50% 50% no-repeat;
@@ -106,6 +106,9 @@
         &:nth-child(even) {
             td {
                 background-color: @data-grid-td__even__background-color;
+                &._dragging {
+                    background-color: fade(@data-grid-td__even__background-color, @data-grid-td__dragging__opacity); 
+                }
             }
         }
         &.data-grid-tr-no-data {
@@ -154,7 +157,21 @@
         &:last-child {
             border-right-style: @data-grid-td__border-outer-style;
         }
+        &._dragging {
+            color: fade(@table__color, @data-grid-td__dragging__opacity);
+            background-color: fade(@data-grid-td__odd__background-color, @data-grid-td__dragging__opacity);
+            a {
+                color: fade(@link__color, @data-grid-td__dragging__opacity);
+                &:hover {
+                    color: fade(@link__hover__color, @data-grid-td__dragging__opacity);
+                }
+            }
+        }
+        
         //  Action select data grid styles (can be action-select-secondary in future)
+        .action-select-wrap {
+            position: static;
+        }
         .action-select {
             .link-pattern();
             background-color: transparent;
@@ -168,6 +185,9 @@
             }
             &:after {
                 border-color: @link__color transparent transparent transparent;
+                margin: .6rem 0 0 .7rem;
+                right: auto;
+                top: auto;
             }
             &:before {
                 display: none;
@@ -175,6 +195,9 @@
         }
         .action-menu {
             left: auto;
+            min-width: 10rem;
+            right: 0;
+            top: auto;
             z-index: 1;
         }
     }
@@ -189,11 +212,22 @@
         &:first-child {
             border-left-color: @data-grid-th__border-color;
         }
+        &._dragover-left {
+            box-shadow: inset 3px 0 0px 0px @color-white;
+        }
+        &._dragover-right {
+            box-shadow: inset -3px 0 0px 0px @color-white;
+        }
     }
     .data-grid-th {
         color: @data-grid-th__color;
         padding: @data-grid-th__padding-vertical @data-grid-th__padding-horizontal;
         vertical-align: middle;
+        &._draggable {
+            cursor: -webkit-grab;
+               cursor: -moz-grab;
+                    cursor: grab;
+        }
         &._sortable {
             background-clip: padding-box; // Fix for border overlay in Firefox
             cursor: pointer;
@@ -228,9 +262,18 @@
             cursor: default;
         }
     }
+    .data-grid-thumbnail-cell {
+        width: 7rem;
+        text-align: center;
+        img {
+            border: 1px solid @data-grid-td__border-color;
+            max-width: 5rem;
+        }
+    }
     .data-grid-multiselect-cell {
         padding: @data-grid-th__padding-horizontal @data-grid-th__padding-vertical @data-grid-th__padding-horizontal - .1rem;
         text-align: center;
+        vertical-align: middle;
     }
     .data-grid-actions-cell {
         padding-left: @data-grid-cell__padding-horizontal * 2;
@@ -278,6 +321,45 @@
             }
             &:last-child {
                 border-right-color: @data-grid-td__border-color;
+            }
+        }
+    }
+    //  Draggable columns
+    &._hidden {
+        display: none;
+    }
+    &.data-grid-draggable {
+        background-color: @color-black;
+    }
+    &._dragging-copy {
+        background-color: @color-white;
+        box-shadow: @component__box-shadow__base;
+        left: 0;
+        opacity: .95;
+        position: fixed;
+        top: 0;
+        z-index: @data-grid-overlay__z-index;
+        .data-grid-th {
+            border: @data-grid-dragging-copy__border;
+            border-bottom: none;
+        }
+        .data-grid-th,
+        .data-grid-th._sortable {
+            cursor: -webkit-grabbing;
+               cursor: -moz-grabbing;
+                    cursor: grabbing;
+        }
+        tbody {
+            tr {
+                &:last-child {
+                    td {
+                        border-bottom: @data-grid-dragging-copy__border;
+                    }
+                }
+            }
+            td {
+                border-left: @data-grid-dragging-copy__border;
+                border-right: @data-grid-dragging-copy__border;
             }
         }
     }

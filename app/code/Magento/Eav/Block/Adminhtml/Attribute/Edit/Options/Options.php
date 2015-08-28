@@ -136,7 +136,7 @@ class Options extends \Magento\Backend\Block\Template
                 $defaultValues
             );
             foreach ($bunch as $value) {
-                $values[] = new \Magento\Framework\Object($value);
+                $values[] = new \Magento\Framework\DataObject($value);
             }
         }
 
@@ -268,7 +268,7 @@ class Options extends \Magento\Backend\Block\Template
      *
      * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
      */
-    private function getAttributeObject()
+    protected function getAttributeObject()
     {
         return $this->_registry->registry('entity_attribute');
     }

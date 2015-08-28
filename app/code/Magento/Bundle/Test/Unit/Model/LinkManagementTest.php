@@ -228,7 +228,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue([$this->option]));
 
         $this->option->expects($this->any())->method('getOptionId')->will($this->returnValue(10));
-        $this->option->expects($this->never())->method('getSelections');
+        $this->option->expects($this->once())->method('getSelections')->willReturn([1, 2]);
 
         $this->dataObjectHelperMock->expects($this->never())->method('populateWithArray');
 

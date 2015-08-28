@@ -6,12 +6,12 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Sales\Test\TestCase\CreateOrderBackendTest">
+    <testCase name="Magento\Sales\Test\TestCase\CreateOrderBackendTest" summary="Create Order from Admin within Offline Payment Methods" ticketId="MAGETWO-28696">
         <variation name="CreateOrderBackendTestVariation1">
             <data name="description" xsi:type="string">Create order with simple product for registered US customer using Fixed shipping method and Cash on Delivery payment method</data>
             <data name="products" xsi:type="string">catalogProductSimple::default</data>
-            <data name="customer/dataSet" xsi:type="string">customer_US</data>
-            <data name="billingAddress/dataSet" xsi:type="string">customer_US</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="billingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="saveAddress" xsi:type="string">No</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
@@ -31,8 +31,9 @@
         <variation name="CreateOrderBackendTestVariation2">
             <data name="description" xsi:type="string">Create order with virtual product for registered UK customer using Check/Money Order payment method</data>
             <data name="products" xsi:type="string">catalogProductVirtual::default</data>
-            <data name="customer/dataSet" xsi:type="string">customer_UK</data>
-            <data name="billingAddress/dataSet" xsi:type="string">customer_UK</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="billingAddress/dataset" xsi:type="string">UK_address_without_email</data>
+            <data name="setShippingAddress" xsi:type="boolean">false</data>
             <data name="prices" xsi:type="array">
                 <item name="grandTotal" xsi:type="string">10.00</item>
             </data>
@@ -49,8 +50,8 @@
         <variation name="CreateOrderBackendTestVariation3">
             <data name="description" xsi:type="string">Create order with simple product for registered US customer using Fixed shipping method and Bank Transfer payment method</data>
             <data name="products" xsi:type="string">catalogProductSimple::default</data>
-            <data name="customer/dataSet" xsi:type="string">customer_US</data>
-            <data name="billingAddress/dataSet" xsi:type="string">customer_US</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="billingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="saveAddress" xsi:type="string">No</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
@@ -68,12 +69,12 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
         </variation>
         <variation name="CreateOrderBackendTestVariation4">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Create order with virtual product for registered UK customer using Bank Transfer payment method</data>
             <data name="products" xsi:type="string">catalogProductVirtual::default</data>
-            <data name="customer/dataSet" xsi:type="string">customer_UK</data>
-            <data name="billingAddress/dataSet" xsi:type="string">customer_UK</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="billingAddress/dataset" xsi:type="string">UK_address_without_email</data>
             <data name="saveAddress" xsi:type="string">No</data>
+            <data name="setShippingAddress" xsi:type="boolean">false</data>
             <data name="prices" xsi:type="array">
                 <item name="grandTotal" xsi:type="string">10.00</item>
             </data>
@@ -88,12 +89,11 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
         </variation>
         <variation name="CreateOrderBackendTestVariation5">
-            <data name="tag" xsi:type="string">to_maintain:yes</data>
             <data name="description" xsi:type="string">Create order with simple product for registered US customer using Fixed shipping method and Purchase Order payment method</data>
             <data name="products" xsi:type="string">catalogProductSimple::default</data>
-            <data name="customer/dataSet" xsi:type="string">customer_US</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
             <data name="saveAddress" xsi:type="string">No</data>
-            <data name="billingAddress/dataSet" xsi:type="string">customer_US</data>
+            <data name="billingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="prices" xsi:type="array">
@@ -110,39 +110,37 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGridOnFrontend" />
         </variation>
-        <variation name="CreateOrderBackendTestVariation6">
-            <data name="description" xsi:type="string">MAGETWO-12395 - Create Offline Order for Registered Customer in Admin</data>
+        <variation name="CreateOrderBackendTestVariation6" summary="Create Offline Order for Registered Customer in Admin" ticketId="MAGETWO-12395">
             <data name="products" xsi:type="string">catalogProductSimple::simple_10_dollar, configurableProduct::with_one_option</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
-            <data name="customer/dataSet" xsi:type="string">customer_US</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
             <data name="saveAddress" xsi:type="string">No</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
-            <data name="billingAddress/dataSet" xsi:type="string">customer_US</data>
+            <data name="billingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="prices" xsi:type="array">
-                <item name="grandTotal" xsi:type="string">32.73</item>
+                <item name="grandTotal" xsi:type="string">21.91</item>
             </data>
             <data name="payment/method" xsi:type="string">checkmo</data>
             <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
         </variation>
-        <variation name="CreateOrderBackendTestVariation7">
-            <data name="description" xsi:type="string">MAGETWO-12520 - Create Order for New Customer in Admin with Offline Payment Method</data>
+        <variation name="CreateOrderBackendTestVariation7" summary="Create Order for New Customer in Admin with Offline Payment Method" ticketId="MAGETWO-12520">
+            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <data name="products" xsi:type="string">catalogProductSimple::simple_10_dollar, configurableProduct::with_one_option</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
-            <data name="customer/dataSet" xsi:type="string">customer_US</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
             <data name="saveAddress" xsi:type="string">Yes</data>
             <data name="checkoutMethod" xsi:type="string">register</data>
-            <data name="billingAddress/dataSet" xsi:type="string">customer_US</data>
+            <data name="billingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="prices" xsi:type="array">
-                <item name="grandTotal" xsi:type="string">32.73</item>
+                <item name="grandTotal" xsi:type="string">21.91</item>
             </data>
             <data name="payment/method" xsi:type="string">checkmo</data>
-            <data name="tag" xsi:type="string">test_type:acceptance_test, to_maintain:yes</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderSuccessCreateMessage" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />

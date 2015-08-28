@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Catalog\Test\Repository\Product\GroupPriceOptions">
+        <dataset name="not_logged_in_20">
+            <field name="0" xsi:type="array">
+                <item name="price" xsi:type="string">20</item>
+                <item name="website" xsi:type="string">All Websites [USD]</item>
+                <item name="customer_group" xsi:type="string">NOT LOGGED IN</item>
+            </field>
+        </dataset>
+
+        <dataset name="not_logged_in_90">
+            <field name="0" xsi:type="array">
+                <item name="price" xsi:type="string">90</item>
+                <item name="website" xsi:type="string">All Websites [USD]</item>
+                <item name="customer_group" xsi:type="string">NOT LOGGED IN</item>
+            </field>
+        </dataset>
+
+        <dataset name="general_90_99">
+            <field name="0" xsi:type="array">
+                <item name="price" xsi:type="string">90.99</item>
+                <item name="website" xsi:type="string">All Websites [USD]</item>
+                <item name="customer_group" xsi:type="string">General</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

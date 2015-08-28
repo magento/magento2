@@ -3,18 +3,18 @@
     "description": "N/A",
     "require": {
         "php": "~5.5.0|~5.6.0",
-        "magento/module-store": "0.74.0-beta13",
-        "magento/module-theme": "0.74.0-beta13",
-        "magento/module-backend": "0.74.0-beta13",
-        "magento/module-eav": "0.74.0-beta13",
-        "magento/module-translation": "0.74.0-beta13",
-        "magento/module-config": "0.74.0-beta13",
-        "magento/module-media-storage": "0.74.0-beta13",
-        "magento/framework": "0.74.0-beta13",
+        "magento/module-store": "1.0.0-beta",
+        "magento/module-theme": "1.0.0-beta",
+        "magento/module-backend": "1.0.0-beta",
+        "magento/module-eav": "1.0.0-beta",
+        "magento/module-translation": "1.0.0-beta",
+        "magento/module-config": "1.0.0-beta",
+        "magento/module-media-storage": "1.0.0-beta",
+        "magento/framework": "1.0.0-beta",
         "magento/magento-composer-installer": "*"
     },
     "type": "magento2-module",
-    "version": "0.74.0-beta13",
+    "version": "1.0.0-beta",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

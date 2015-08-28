@@ -8,6 +8,7 @@ namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order;
 /**
  * @covers \Magento\Sales\Controller\Adminhtml\Order\View
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class ViewTest extends \PHPUnit_Framework_TestCase
 {
@@ -86,8 +87,24 @@ class ViewTest extends \PHPUnit_Framework_TestCase
      */
     protected $loggerMock;
 
+    /**
+     * @var \Magento\Sales\Api\OrderManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $orderManagementMock;
+
+    /**
+     * @var \Magento\Sales\Api\OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $orderRepositoryMock;
+
     public function setUp()
     {
+        $this->orderManagementMock = $this->getMockBuilder('Magento\Sales\Api\OrderManagementInterface')
+            ->getMockForAbstractClass();
+        $this->orderRepositoryMock = $this->getMockBuilder('Magento\Sales\Api\OrderRepositoryInterface')
+            ->getMockForAbstractClass();
+        $this->loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')
+            ->getMockForAbstractClass();
         $this->requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
             ->getMock();
         $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
@@ -123,8 +140,6 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->resultRedirectMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\Redirect')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')
-            ->getMock();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->context = $objectManager->getObject(
@@ -143,7 +158,10 @@ class ViewTest extends \PHPUnit_Framework_TestCase
                 'context' => $this->context,
                 'coreRegistry' => $this->coreRegistryMock,
                 'resultPageFactory' => $this->resultPageFactoryMock,
-                'resultRedirectFactory' => $this->resultRedirectFactoryMock
+                'resultRedirectFactory' => $this->resultRedirectFactoryMock,
+                'orderManagement' => $this->orderManagementMock,
+                'orderRepository' => $this->orderRepositoryMock,
+                'logger' => $this->loggerMock
             ]
         );
     }
@@ -167,7 +185,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->method('getTitle')
             ->willReturn($this->pageTitleMock);
         $this->orderMock->expects($this->atLeastOnce())
-            ->method('getRealOrderId')
+            ->method('getIncrementId')
             ->willReturn($id);
         $this->pageTitleMock->expects($this->exactly(2))
             ->method('prepend')
@@ -188,7 +206,18 @@ class ViewTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteNoOrder()
     {
-        $this->initOrder();
+        $orderIdParam = 111;
+
+        $this->requestMock->expects($this->atLeastOnce())
+            ->method('getParam')
+            ->with('order_id')
+            ->willReturn($orderIdParam);
+        $this->orderRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with($orderIdParam)
+            ->willThrowException(
+                new \Magento\Framework\Exception\NoSuchEntityException(__('Requested entity doesn\'t exist'))
+            );
         $this->initOrderFail();
         $this->prepareRedirect();
         $this->setPath('sales/*/');
@@ -213,10 +242,6 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->resultPageFactoryMock->expects($this->once())
             ->method('create')
             ->willThrowException($exception);
-        $this->objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with('Psr\Log\LoggerInterface')
-            ->willReturn($this->loggerMock);
         $this->loggerMock->expects($this->once())
             ->method('critical')
             ->with($exception);
@@ -240,24 +265,17 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->with('order_id')
             ->willReturn($orderIdParam);
-        $this->objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with('Magento\Sales\Model\Order')
-            ->willReturn($this->orderMock);
-        $this->orderMock->expects($this->once())
-            ->method('load')
+        $this->orderRepositoryMock->expects($this->once())
+            ->method('get')
             ->with($orderIdParam)
-            ->willReturnSelf();
+            ->willReturn($this->orderMock);
     }
 
     /**
-     * @param int $orderId
+     * init Order Success
      */
-    protected function initOrderSuccess($orderId)
+    protected function initOrderSuccess()
     {
-        $this->orderMock->expects($this->atLeastOnce())
-            ->method('getId')
-            ->willReturn($orderId);
         $this->coreRegistryMock->expects($this->exactly(2))
             ->method('register')
             ->withConsecutive(
@@ -268,9 +286,6 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     protected function initOrderFail()
     {
-        $this->orderMock->expects($this->atLeastOnce())
-            ->method('getId')
-            ->willReturn(null);
         $this->messageManagerMock->expects($this->once())
             ->method('addError')
             ->with('This order no longer exists.')

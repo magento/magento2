@@ -9,64 +9,75 @@ namespace Magento\Checkout\Test\Block\Cart;
 use Magento\Mtf\Block\Block;
 
 /**
- * Class AbstractCartItem
- * Base product item block on checkout page
+ * Base product item block on checkout page.
  */
 class AbstractCartItem extends Block
 {
     /**
-     * Selector for product name
+     * Selector for product name.
      *
      * @var string
      */
     protected $productName = '.product-item-name > a';
 
     /**
-     * Selector for unit price
+     * Selector for unit price.
      *
      * @var string
      */
     protected $price = './/td[@class="col price"]//span[@class="price"]';
 
     /**
-     * Selector for unit price including tax
+     * Selector for unit price including tax.
      *
      * @var string
      */
     protected $priceInclTax = './/td[@class="col price"]/*[@class="price-including-tax"]/span';
 
     /**
-     * Quantity input selector
+     * Selector for unit price excluding tax.
      *
      * @var string
      */
-    protected $qty = './/input[@type="number" and @title="Qty"]';
+    protected $priceExclTax = './/td[@class="col price"]/*[@class="price-excluding-tax"]/span';
 
     /**
-     * Cart item sub-total xpath selector
+     * Quantity input selector.
      *
      * @var string
      */
-    protected $subtotalPrice = './/td[@class="col subtotal"]//*[@class="price-excluding-tax"]//span[@class="price"]';
+    protected $qty = './/input[@data-role="cart-item-qty"]';
 
-    // @codingStandardsIgnoreStart
     /**
-     * Cart item sub-total including tax xpath selector
+     * Cart item sub-total xpath selector.
      *
      * @var string
      */
-    protected $subTotalPriceInclTax = '//td[@class="col subtotal"]//span[@class="price"]';
-    // @codingStandardsIgnoreEnd
+    protected $subtotalPrice = '.col.subtotal .price';
 
     /**
-     *  Selector for options block
+     * Cart item sub-total excluding tax xpath selector.
      *
      * @var string
      */
-    protected $optionsBlock = './/dl[@class="item-options"]';
+    protected $subTotalPriceExclTax = '.col.subtotal .price-excluding-tax .price';
 
     /**
-     * Escape currency in price
+     * Cart item sub-total including tax xpath selector.
+     *
+     * @var string
+     */
+    protected $subTotalPriceInclTax = '.col.subtotal .price-including-tax .price';
+
+    /**
+     *  Selector for options block.
+     *
+     * @var string
+     */
+    protected $optionsBlock = './/dl[contains(@class, "item-options")]';
+
+    /**
+     * Escape currency in price.
      *
      * @param string $price
      * @return string|null

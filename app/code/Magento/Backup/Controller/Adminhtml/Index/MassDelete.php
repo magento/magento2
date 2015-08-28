@@ -21,12 +21,12 @@ class MassDelete extends \Magento\Backup\Controller\Adminhtml\Index
             return $this->_redirect('backup/*/index');
         }
 
-        $resultData = new \Magento\Framework\Object();
+        $resultData = new \Magento\Framework\DataObject();
         $resultData->setIsSuccess(false);
         $resultData->setDeleteResult([]);
         $this->_coreRegistry->register('backup_manager', $resultData);
 
-        $deleteFailMessage = __('We couldn\'t delete one or more backups.');
+        $deleteFailMessage = __('We can\'t delete one or more backups.');
 
         try {
             $allBackupsDeleted = true;
@@ -49,7 +49,7 @@ class MassDelete extends \Magento\Backup\Controller\Adminhtml\Index
 
             $resultData->setIsSuccess(true);
             if ($allBackupsDeleted) {
-                $this->messageManager->addSuccess(__('The selected backup(s) has been deleted.'));
+                $this->messageManager->addSuccess(__('You deleted the selected backup(s).'));
             } else {
                 throw new \Exception($deleteFailMessage);
             }

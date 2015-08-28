@@ -494,7 +494,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getShippingPrice($price, $includingTax = null, $shippingAddress = null, $ctc = null, $store = null)
     {
-        $pseudoProduct = new \Magento\Framework\Object();
+        $pseudoProduct = new \Magento\Framework\DataObject();
         $pseudoProduct->setTaxClassId($this->getShippingTaxClass($store));
 
         $billingAddress = false;

@@ -11,12 +11,12 @@ use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\Resource\Address\CollectionFactory;
 use Magento\Customer\Model\Resource\Customer as ResourceCustomer;
 use Magento\Customer\Api\Data\CustomerInterfaceFactory;
-use Magento\Customer\Model\Data\Customer as CustomerData;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Indexer\StateInterface;
 
 /**
  * Customer model
@@ -69,6 +69,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     const SUBSCRIBED_NO = 'no';
 
     const ENTITY = 'customer';
+
+    const CUSTOMER_GRID_INDEXER_ID = 'customer_grid';
 
     /**
      * Configuration path to expiration period of reset password link
@@ -200,26 +202,32 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     protected $metadataService;
 
     /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
+    protected $indexerRegistry;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $config
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param ScopeConfigInterface $scopeConfig
      * @param ResourceCustomer $resource
      * @param Share $configShare
      * @param AddressFactory $addressFactory
      * @param CollectionFactory $addressesFactory
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param GroupRepositoryInterface $groupRepository
-     * @param AttributeFactory $attributeFactory
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param CustomerInterfaceFactory $customerDataFactory
      * @param DataObjectProcessor $dataObjectProcessor
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param CustomerMetadataInterface $metadataService
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -240,6 +248,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         DataObjectProcessor $dataObjectProcessor,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Customer\Api\CustomerMetadataInterface $metadataService,
+        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -257,6 +266,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         $this->customerDataFactory = $customerDataFactory;
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->indexerRegistry = $indexerRegistry;
         parent::__construct(
             $context,
             $registry,
@@ -395,52 +405,6 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Processing object before save data
-     *
-     * @return $this
-     */
-    public function beforeSave()
-    {
-        parent::beforeSave();
-
-        $storeId = $this->getStoreId();
-        if ($storeId === null) {
-            $this->setStoreId($this->_storeManager->getStore()->getId());
-        }
-
-        $this->getGroupId();
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function afterSave()
-    {
-        $customerData = (array)$this->getData();
-        $customerData[CustomerData::ID] = $this->getId();
-        $dataObject = $this->customerDataFactory->create();
-        $this->dataObjectHelper->populateWithArray(
-            $dataObject,
-            $customerData,
-            '\Magento\Customer\Api\Data\CustomerInterface'
-        );
-        $customerOrigData = (array)$this->getOrigData();
-        $customerOrigData[CustomerData::ID] = $this->getId();
-        $origDataObject = $this->customerDataFactory->create();
-        $this->dataObjectHelper->populateWithArray(
-            $origDataObject,
-            $customerOrigData,
-            '\Magento\Customer\Api\Data\CustomerInterface'
-        );
-        $this->_eventManager->dispatch(
-            'customer_save_after_data_object',
-            ['customer_data_object' => $dataObject, 'orig_customer_data_object' => $origDataObject]
-        );
-        return parent::afterSave();
-    }
-
-    /**
      * Change customer password
      *
      * @param   string $newPassword
@@ -543,7 +507,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve customer address array
      *
-     * @return \Magento\Framework\Object[]
+     * @return \Magento\Framework\DataObject[]
      */
     public function getAddresses()
     {
@@ -781,7 +745,9 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         $types = $this->getTemplateTypes();
 
         if (!isset($types[$type])) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Wrong transactional account email type'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Please correct the transactional account email type.')
+            );
         }
 
         if (!$storeId) {
@@ -1024,18 +990,18 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         $entityType = $this->_config->getEntityType('customer');
         $attribute = $this->_config->getAttribute($entityType, 'dob');
         if ($attribute->getIsRequired() && '' == trim($this->getDob())) {
-            $errors[] = __('The Date of Birth is required.');
+            $errors[] = __('Please enter a date of birth.');
         }
         $attribute = $this->_config->getAttribute($entityType, 'taxvat');
         if ($attribute->getIsRequired() && '' == trim($this->getTaxvat())) {
-            $errors[] = __('The TAX/VAT number is required.');
+            $errors[] = __('Please enter a TAX/VAT number.');
         }
         $attribute = $this->_config->getAttribute($entityType, 'gender');
         if ($attribute->getIsRequired() && '' == trim($this->getGender())) {
-            $errors[] = __('Gender is required.');
+            $errors[] = __('Please enter a gender.');
         }
 
-        $transport = new \Magento\Framework\Object(
+        $transport = new \Magento\Framework\DataObject(
             ['errors' => $errors]
         );
         $this->_eventManager->dispatch('customer_validate', ['customer' => $this, 'transport' => $transport]);
@@ -1112,6 +1078,43 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     {
         //TODO : Revisit and figure handling permissions in MAGETWO-11084 Implementation: Service Context Provider
         return parent::beforeDelete();
+    }
+
+    /**
+     * Processing object after save data
+     *
+     * @return $this
+     */
+    public function afterSave()
+    {
+        $indexer = $this->indexerRegistry->get(self::CUSTOMER_GRID_INDEXER_ID);
+        if ($indexer->getState()->getStatus() == StateInterface::STATUS_VALID) {
+            $this->_getResource()->addCommitCallback([$this, 'reindex']);
+        }
+        return parent::afterSave();
+    }
+
+    /**
+     * Init indexing process after customer delete
+     *
+     * @return \Magento\Framework\Model\AbstractModel
+     */
+    public function afterDeleteCommit()
+    {
+        $this->reindex();
+        return parent::afterDeleteCommit();
+    }
+
+    /**
+     * Init indexing process after customer save
+     *
+     * @return void
+     */
+    public function reindex()
+    {
+        /** @var \Magento\Framework\Indexer\IndexerInterface $indexer */
+        $indexer = $this->indexerRegistry->get(self::CUSTOMER_GRID_INDEXER_ID);
+        $indexer->reindexRow($this->getId());
     }
 
     /**
@@ -1264,7 +1267,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     {
         if (!is_string($passwordLinkToken) || empty($passwordLinkToken)) {
             throw new AuthenticationException(
-                __('Invalid password reset token.')
+                __('Please enter a valid password reset token.')
             );
         }
         $this->_getResource()->changeResetPasswordLinkToken($this, $passwordLinkToken);

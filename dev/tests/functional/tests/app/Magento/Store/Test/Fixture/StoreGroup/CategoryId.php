@@ -6,30 +6,15 @@
 
 namespace Magento\Store\Test\Fixture\StoreGroup;
 
-use Magento\Catalog\Test\Fixture\Category;
+use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Catalog\Test\Fixture\Category;
 
 /**
- * Class CategoryId
- * Prepare CategoryId for Store Group
+ * Prepare CategoryId for Store Group.
  */
-class CategoryId implements FixtureInterface
+class CategoryId extends DataSource
 {
-    /**
-     * Prepared dataSet data
-     *
-     * @var array
-     */
-    protected $data;
-
-    /**
-     * Data set configuration settings
-     *
-     * @var array
-     */
-    protected $params;
-
     /**
      * Category fixture
      *
@@ -38,8 +23,7 @@ class CategoryId implements FixtureInterface
     protected $category;
 
     /**
-     * Constructor
-     *
+     * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param array $params
      * @param array $data [optional]
@@ -47,8 +31,8 @@ class CategoryId implements FixtureInterface
     public function __construct(FixtureFactory $fixtureFactory, array $params, array $data = [])
     {
         $this->params = $params;
-        if (isset($data['dataSet'])) {
-            $category = $fixtureFactory->createByCode('category', ['dataSet' => $data['dataSet']]);
+        if (isset($data['dataset'])) {
+            $category = $fixtureFactory->createByCode('category', ['dataset' => $data['dataset']]);
             /** @var Category $category */
             if (!$category->getId()) {
                 $category->persist();
@@ -56,39 +40,6 @@ class CategoryId implements FixtureInterface
             $this->category = $category;
             $this->data = $category->getName();
         }
-    }
-
-    /**
-     * Persist attribute options
-     *
-     * @return void
-     */
-    public function persist()
-    {
-        //
-    }
-
-    /**
-     * Return prepared data set
-     *
-     * @param string|null $key [optional]
-     * @return mixed
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function getData($key = null)
-    {
-        return $this->data;
-    }
-
-    /**
-     * Return data set configuration settings
-     *
-     * @return array
-     */
-    public function getDataConfig()
-    {
-        return $this->params;
     }
 
     /**

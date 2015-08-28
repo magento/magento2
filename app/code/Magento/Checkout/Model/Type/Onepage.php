@@ -107,7 +107,7 @@ class Onepage
     protected $_orderFactory;
 
     /**
-     * @var \Magento\Framework\Object\Copy
+     * @var \Magento\Framework\DataObject\Copy
      */
     protected $_objectCopyService;
 
@@ -184,7 +184,7 @@ class Onepage
      * @param \Magento\Customer\Model\FormFactory $customerFormFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Framework\Object\Copy $objectCopyService
+     * @param \Magento\Framework\DataObject\Copy $objectCopyService
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
      * @param CustomerDataFactory $customerDataFactory
@@ -214,7 +214,7 @@ class Onepage
         \Magento\Customer\Model\FormFactory $customerFormFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Framework\Object\Copy $objectCopyService,
+        \Magento\Framework\DataObject\Copy $objectCopyService,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Customer\Model\Metadata\FormFactory $formFactory,
         CustomerDataFactory $customerDataFactory,
@@ -449,7 +449,7 @@ class Onepage
                     'error' => 1,
                     // @codingStandardsIgnoreStart
                     'message' => __(
-                        'There is already a registered customer using this email address. Please log in using this email address or enter a different email address to register your account.'
+                        'This email address already belongs to a registered customer. You can sign in or create an account with a different email address.'
                     )
                     // @codingStandardsIgnoreEnd
                 ];
@@ -783,11 +783,13 @@ class Onepage
         $quote = $this->getQuote();
 
         if ($quote->isMultipleShippingAddresses()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('There are more than one shipping address.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('There are more than one shipping addresses.')
+            );
         }
 
         if ($quote->getCheckoutMethod() == self::METHOD_GUEST && !$this->_helper->isAllowedGuestCheckout($quote)) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Sorry, guest checkout is not enabled.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Sorry, guest checkout is not available.'));
         }
     }
 
@@ -907,7 +909,7 @@ class Onepage
             $this->messageManager->addSuccess(
                 // @codingStandardsIgnoreStart
                 __(
-                    'Account confirmation is required. Please, check your e-mail for confirmation link. To resend confirmation email please <a href="%1">click here</a>.',
+                    'You must confirm your account. Please check your email for the confirmation link or <a href="%1">click here</a> for a new link.',
                     $url
                 )
                 // @codingStandardsIgnoreEnd
@@ -981,14 +983,18 @@ class Onepage
                 $redirectUrl
             )->setLastRealOrderId(
                 $order->getIncrementId()
+            )->setLastOrderStatus(
+                $order->getStatus()
             );
         }
 
         $this->_eventManager->dispatch(
             'checkout_submit_all_after',
-            ['order' => $order, 'quote' => $this->getQuote()]
+            [
+                'order' => $order,
+                'quote' => $this->getQuote()
+            ]
         );
-
         return $this;
     }
 

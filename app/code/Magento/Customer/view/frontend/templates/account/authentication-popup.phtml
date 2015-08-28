@@ -1,0 +1,22 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<li id="authenticationPopup" data-bind="scope:'authenticationPopup'">
+    <script>
+        window.authenticationPopup = <?php echo \Zend_Json::encode($block->getConfig()); ?>;
+    </script>
+    <!-- ko template: getTemplate() --><!-- /ko -->
+    <script type="text/x-magento-init">
+        {
+            "#authenticationPopup": {
+                "Magento_Ui/js/core/app": <?php echo $block->getJsLayout();?>
+            },
+            "*": {
+                "Magento_Ui/js/block-loader": "<?php echo $block->getViewFileUrl('images/loader-1.gif'); ?>"
+            }
+        }
+    </script>
+</li>

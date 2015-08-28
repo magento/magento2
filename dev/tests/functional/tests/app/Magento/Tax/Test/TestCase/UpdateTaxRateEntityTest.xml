@@ -6,13 +6,11 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Tax\Test\TestCase\UpdateTaxRateEntityTest">
+    <testCase name="Magento\Tax\Test\TestCase\UpdateTaxRateEntityTest" summary="Edit Tax Rate" ticketId="MAGETWO-23299">
         <variation name="UpdateTaxRateEntityTestVariation1">
-            <data name="initialTaxRate/dataSet" xsi:type="string">default</data>
+            <data name="initialTaxRate/dataset" xsi:type="string">default</data>
             <data name="taxRate/data/code" xsi:type="string">TaxIdentifier%isolation%</data>
             <data name="taxRate/data/zip_is_range" xsi:type="string">No</data>
-            <data name="taxRate/data/zip_from" xsi:type="string">-</data>
-            <data name="taxRate/data/zip_to" xsi:type="string">-</data>
             <data name="taxRate/data/tax_postcode" xsi:type="string">90001</data>
             <data name="taxRate/data/tax_country_id" xsi:type="string">United States</data>
             <data name="taxRate/data/tax_region_id" xsi:type="string">California</data>
@@ -22,12 +20,11 @@
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateForm" />
         </variation>
         <variation name="UpdateTaxRateEntityTestVariation2">
-            <data name="initialTaxRate/dataSet" xsi:type="string">default</data>
+            <data name="initialTaxRate/dataset" xsi:type="string">default</data>
             <data name="taxRate/data/code" xsi:type="string">TaxIdentifier%isolation%</data>
             <data name="taxRate/data/zip_is_range" xsi:type="string">Yes</data>
             <data name="taxRate/data/zip_from" xsi:type="string">90001</data>
             <data name="taxRate/data/zip_to" xsi:type="string">96162</data>
-            <data name="taxRate/data/tax_postcode" xsi:type="string">-</data>
             <data name="taxRate/data/tax_country_id" xsi:type="string">United States</data>
             <data name="taxRate/data/tax_region_id" xsi:type="string">California</data>
             <data name="taxRate/data/rate" xsi:type="string">15.05</data>
@@ -36,25 +33,20 @@
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateForm" />
         </variation>
         <variation name="UpdateTaxRateEntityTestVariation3">
-            <data name="initialTaxRate/dataSet" xsi:type="string">default</data>
+            <data name="initialTaxRate/dataset" xsi:type="string">default</data>
             <data name="taxRate/data/code" xsi:type="string">TaxIdentifier%isolation%</data>
             <data name="taxRate/data/zip_is_range" xsi:type="string">No</data>
-            <data name="taxRate/data/zip_from" xsi:type="string">-</data>
-            <data name="taxRate/data/zip_to" xsi:type="string">-</data>
             <data name="taxRate/data/tax_postcode" xsi:type="string">*</data>
             <data name="taxRate/data/tax_country_id" xsi:type="string">United Kingdom</data>
-            <data name="taxRate/data/tax_region_id" xsi:type="string">*</data>
             <data name="taxRate/data/rate" xsi:type="string">777</data>
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateSuccessSaveMessage" />
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateInGrid" />
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateForm" />
         </variation>
         <variation name="UpdateTaxRateEntityTestVariation4">
-            <data name="initialTaxRate/dataSet" xsi:type="string">withZipRange</data>
+            <data name="initialTaxRate/dataset" xsi:type="string">withZipRange</data>
             <data name="taxRate/data/code" xsi:type="string">TaxIdentifier%isolation%</data>
             <data name="taxRate/data/zip_is_range" xsi:type="string">No</data>
-            <data name="taxRate/data/zip_from" xsi:type="string">-</data>
-            <data name="taxRate/data/zip_to" xsi:type="string">-</data>
             <data name="taxRate/data/tax_postcode" xsi:type="string">180</data>
             <data name="taxRate/data/tax_country_id" xsi:type="string">Canada</data>
             <data name="taxRate/data/tax_region_id" xsi:type="string">*</data>
@@ -64,24 +56,20 @@
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateForm" />
         </variation>
         <variation name="UpdateTaxRateEntityTestVariation5">
-            <data name="initialTaxRate/dataSet" xsi:type="string">withZipRange</data>
+            <data name="initialTaxRate/dataset" xsi:type="string">withZipRange</data>
             <data name="taxRate/data/code" xsi:type="string">TaxIdentifier%isolation%</data>
             <data name="taxRate/data/zip_is_range" xsi:type="string">Yes</data>
             <data name="taxRate/data/zip_from" xsi:type="string">1</data>
             <data name="taxRate/data/zip_to" xsi:type="string">7800935</data>
-            <data name="taxRate/data/tax_postcode" xsi:type="string">-</data>
             <data name="taxRate/data/tax_country_id" xsi:type="string">United Kingdom</data>
-            <data name="taxRate/data/tax_region_id" xsi:type="string">*</data>
             <data name="taxRate/data/rate" xsi:type="string">12.99</data>
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateSuccessSaveMessage" />
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateForm" />
         </variation>
         <variation name="UpdateTaxRateEntityTestVariation6">
-            <data name="initialTaxRate/dataSet" xsi:type="string">withZipRange</data>
+            <data name="initialTaxRate/dataset" xsi:type="string">withZipRange</data>
             <data name="taxRate/data/code" xsi:type="string">TaxIdentifier%isolation%</data>
             <data name="taxRate/data/zip_is_range" xsi:type="string">No</data>
-            <data name="taxRate/data/zip_from" xsi:type="string">-</data>
-            <data name="taxRate/data/zip_to" xsi:type="string">-</data>
             <data name="taxRate/data/tax_postcode" xsi:type="string">*</data>
             <data name="taxRate/data/tax_country_id" xsi:type="string">France</data>
             <data name="taxRate/data/tax_region_id" xsi:type="string">Val-d'Oise</data>

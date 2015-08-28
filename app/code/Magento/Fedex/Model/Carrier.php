@@ -11,6 +11,7 @@ namespace Magento\Fedex\Model;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Rate\Result;
+use Magento\Framework\Xml\Security;
 
 /**
  * Fedex shipping implementation
@@ -121,6 +122,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
+     * @param Security $xmlSecurity
      * @param \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory
      * @param \Magento\Shipping\Model\Rate\ResultFactory $rateFactory
      * @param \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory
@@ -143,6 +145,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory,
         \Psr\Log\LoggerInterface $logger,
+        Security $xmlSecurity,
         \Magento\Shipping\Model\Simplexml\ElementFactory $xmlElFactory,
         \Magento\Shipping\Model\Rate\ResultFactory $rateFactory,
         \Magento\Quote\Model\Quote\Address\RateResult\MethodFactory $rateMethodFactory,
@@ -165,6 +168,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $scopeConfig,
             $rateErrorFactory,
             $logger,
+            $xmlSecurity,
             $xmlElFactory,
             $rateFactory,
             $rateMethodFactory,
@@ -236,18 +240,17 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Collect and get rates
      *
-     * @param \Magento\Framework\Object $request
+     * @param RateRequest $request
      * @return Result|bool|null
      */
-    public function collectRates(\Magento\Framework\Object $request)
+    public function collectRates(RateRequest $request)
     {
-        if (!$this->getConfigFlag($this->_activeFlag)) {
-            return false;
+        if (!$this->canCollectRates()) {
+            return $this->getErrorMessage();
         }
+
         $this->setRequest($request);
-
         $this->_getQuotes();
-
         $this->_updateFreeMethodQuote($request);
 
         return $this->getResult();
@@ -265,7 +268,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     {
         $this->_request = $request;
 
-        $r = new \Magento\Framework\Object();
+        $r = new \Magento\Framework\DataObject();
 
         if ($request->getLimitMethod()) {
             $r->setService($request->getLimitMethod());
@@ -466,6 +469,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $debugData['result'] = $response;
         }
         $this->_debug($debugData);
+
         return $response;
     }
 
@@ -492,6 +496,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if (!$preparedGeneral->getError() || $this->_result->getError() && $preparedGeneral->getError()) {
             $this->_result->append($preparedGeneral);
         }
+
         return $this->_result;
     }
 
@@ -506,7 +511,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     {
         $costArr = [];
         $priceArr = [];
-        $errorTitle = 'Unable to retrieve tracking';
+        $errorTitle = 'For some reason we can\'t retrieve tracking info right now.';
 
         if (is_object($response)) {
             if ($response->HighestSeverity == 'FAILURE' || $response->HighestSeverity == 'ERROR') {
@@ -561,6 +566,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $result->append($rate);
             }
         }
+
         return $result;
     }
 
@@ -690,6 +696,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             }
             $this->_debug($debugData);
         }
+
         return $this->_parseXmlResponse($responseBody);
     }
 
@@ -736,7 +743,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $errorTitle = 'Response is in the wrong format.';
             }
         } else {
-            $errorTitle = 'Unable to retrieve tracking';
+            $errorTitle = 'For some reason we can\'t retrieve tracking info right now.';
         }
 
         $result = $this->_rateFactory->create();
@@ -758,6 +765,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 $result->append($rate);
             }
         }
+
         return $result;
     }
 
@@ -905,8 +913,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'INDIRECT' => __('Indirect'),
             ],
             'unit_of_measure' => [
-                'LB'   =>  __('Pounds'),
-                'KG'   =>  __('Kilograms'),
+                'LB' => __('Pounds'),
+                'KG' => __('Kilograms'),
             ],
         ];
 
@@ -948,6 +956,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             'TWD' => 'NTD',
         ];
         $currencyCode = $this->_storeManager->getStore()->getBaseCurrencyCode();
+
         return isset($codes[$currencyCode]) ? $codes[$currencyCode] : $currencyCode;
     }
 
@@ -979,7 +988,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      */
     protected function setTrackingReqeust()
     {
-        $r = new \Magento\Framework\Object();
+        $r = new \Magento\Framework\DataObject();
 
         $account = $this->getConfigData('account');
         $r->setAccount($account);
@@ -1139,7 +1148,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $error->setCarrier('fedex');
             $error->setCarrierTitle($this->getConfigData('title'));
             $error->setTracking($trackingValue);
-            $error->setErrorMessage($errorTitle ? $errorTitle : __('Unable to retrieve tracking'));
+            $error->setErrorMessage(
+                $errorTitle ? $errorTitle : __('For some reason we can\'t retrieve tracking info right now.')
+            );
             $this->_result->append($error);
         }
     }
@@ -1168,6 +1179,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         if (empty($statuses)) {
             $statuses = __('Empty response');
         }
+
         return $statuses;
     }
 
@@ -1183,6 +1195,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         foreach ($allowed as $k) {
             $arr[$k] = $this->getCode('method', $k);
         }
+
         return $arr;
     }
 
@@ -1214,13 +1227,13 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Form array with appropriate structure for shipment request
      *
-     * @param \Magento\Framework\Object $request
+     * @param \Magento\Framework\DataObject $request
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function _formShipmentRequest(\Magento\Framework\Object $request)
+    protected function _formShipmentRequest(\Magento\Framework\DataObject $request)
     {
         if ($request->getReferenceData()) {
             $referenceData = $request->getReferenceData() . $request->getPackageId();
@@ -1244,7 +1257,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $productIds = [];
         $packageItems = $request->getPackageItems();
         foreach ($packageItems as $itemShipment) {
-            $item = new \Magento\Framework\Object();
+            $item = new \Magento\Framework\DataObject();
             $item->setData($itemShipment);
 
             $unitPrice += $item->getPrice();
@@ -1371,7 +1384,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         // set dimensions
         if ($length || $width || $height) {
             $requestClient['RequestedShipment']['RequestedPackageLineItems']['Dimensions'] = [];
-            $dimenssions = & $requestClient['RequestedShipment']['RequestedPackageLineItems']['Dimensions'];
+            $dimenssions = &$requestClient['RequestedShipment']['RequestedPackageLineItems']['Dimensions'];
             $dimenssions['Length'] = $length;
             $dimenssions['Width'] = $width;
             $dimenssions['Height'] = $height;
@@ -1384,13 +1397,13 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Do shipment request to carrier web service, obtain Print Shipping Labels and process errors in response
      *
-     * @param \Magento\Framework\Object $request
-     * @return \Magento\Framework\Object
+     * @param \Magento\Framework\DataObject $request
+     * @return \Magento\Framework\DataObject
      */
-    protected function _doShipmentRequest(\Magento\Framework\Object $request)
+    protected function _doShipmentRequest(\Magento\Framework\DataObject $request)
     {
         $this->_prepareShipmentRequest($request);
-        $result = new \Magento\Framework\Object();
+        $result = new \Magento\Framework\DataObject();
         $client = $this->_createShipSoapClient();
         $requestClient = $this->_formShipmentRequest($request);
         $response = $client->processShipment($requestClient);
@@ -1440,17 +1453,18 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             $client = $this->_createShipSoapClient();
             $client->deleteShipment($requestData);
         }
+
         return true;
     }
 
     /**
      * Return container types of carrier
      *
-     * @param \Magento\Framework\Object|null $params
+     * @param \Magento\Framework\DataObject|null $params
      * @return array|bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function getContainerTypes(\Magento\Framework\Object $params = null)
+    public function getContainerTypes(\Magento\Framework\DataObject $params = null)
     {
         if ($params == null) {
             return $this->_getAllowedContainers($params);
@@ -1469,11 +1483,13 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             if ($method == 'INTERNATIONAL_ECONOMY' || $method == 'INTERNATIONAL_FIRST') {
                 $allTypes = $this->getContainerTypesAll();
                 $exclude = ['FEDEX_10KG_BOX' => '', 'FEDEX_25KG_BOX' => ''];
+
                 return array_diff_key($allTypes, $exclude);
             } else {
                 if ($method == 'EUROPE_FIRST_INTERNATIONAL_PRIORITY') {
                     $allTypes = $this->getContainerTypesAll();
                     $exclude = ['FEDEX_BOX' => '', 'FEDEX_TUBE' => ''];
+
                     return array_diff_key($allTypes, $exclude);
                 } else {
                     if ($countryShipper == self::CANADA_COUNTRY_ID && $countryRecipient == self::CANADA_COUNTRY_ID) {
@@ -1511,11 +1527,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     /**
      * Return delivery confirmation types of carrier
      *
-     * @param \Magento\Framework\Object|null $params
+     * @param \Magento\Framework\DataObject|null $params
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getDeliveryConfirmationTypes(\Magento\Framework\Object $params = null)
+    public function getDeliveryConfirmationTypes(\Magento\Framework\DataObject $params = null)
     {
         return $this->getCode('delivery_confirmation_types');
     }

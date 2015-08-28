@@ -31,9 +31,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected $orderMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $adapterMock;
+    protected $connectionMock;
 
     /**
      * @var \Magento\Sales\Model\Order\Address\Validator|\PHPUnit_Framework_MockObject_MockObject
@@ -46,7 +46,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected $gridPoolMock;
 
     /**
-     * @var \Magento\Sales\Model\Resource\EntitySnapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entitySnapshotMock;
 
@@ -54,7 +54,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     {
         $this->addressMock = $this->getMock(
             'Magento\Sales\Model\Order\Address',
-            ['__wakeup', 'getOrderId', 'hasDataChanges', 'beforeSave', 'afterSave', 'validateBeforeSave', 'getOrder'],
+            ['__wakeup', 'getParentId', 'hasDataChanges', 'beforeSave', 'afterSave', 'validateBeforeSave', 'getOrder'],
             [],
             '',
             false
@@ -73,7 +73,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->adapterMock = $this->getMock(
+        $this->connectionMock = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
             [],
             [],
@@ -95,7 +95,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->entitySnapshotMock = $this->getMock(
-            'Magento\Sales\Model\Resource\EntitySnapshot',
+            'Magento\Framework\Model\Resource\Db\VersionControl\Snapshot',
             [],
             [],
             '',
@@ -103,14 +103,14 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         );
         $this->appResourceMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->adapterMock));
+            ->will($this->returnValue($this->connectionMock));
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->adapterMock->expects($this->any())
+        $this->connectionMock->expects($this->any())
             ->method('describeTable')
             ->will($this->returnValue([]));
-        $this->adapterMock->expects($this->any())
+        $this->connectionMock->expects($this->any())
             ->method('insert');
-        $this->adapterMock->expects($this->any())
+        $this->connectionMock->expects($this->any())
             ->method('lastInsertId');
         $this->addressResource = $objectManager->getObject(
             'Magento\Sales\Model\Resource\Order\Address',
@@ -136,18 +136,12 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->method('isModified')
             ->with($this->addressMock)
             ->willReturn(true);
-        $this->addressMock->expects($this->exactly(2))
-            ->method('getOrder')
-            ->will($this->returnValue($this->orderMock));
-        $this->orderMock->expects($this->once())
-            ->method('getId')
-            ->willReturn(1);
-        $this->addressMock->expects($this->exactly(2))
-            ->method('getOrderId')
-            ->will($this->returnValue(2));
+        $this->addressMock->expects($this->exactly(3))
+            ->method('getParentId')
+            ->will($this->returnValue(1));
         $this->gridPoolMock->expects($this->once())
             ->method('refreshByOrderId')
-            ->with($this->equalTo(2))
+            ->with($this->equalTo(1))
             ->will($this->returnSelf());
 
         $this->addressResource->save($this->addressMock);
@@ -157,7 +151,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      * test _beforeSaveMethod via save() with failed validation
      *
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Cannot save address:
+     * @expectedExceptionMessage We can't save the address:
      */
     public function testSaveValidationFailed()
     {

@@ -6,127 +6,164 @@
 /*global define*/
 define(
     [
-        "jquery",
-        'Magento_Ui/js/form/form',
         'ko',
+        'Magento_Ui/js/form/form',
         'Magento_Customer/js/model/customer',
-        '../action/select-billing-address',
-        '../model/step-navigator',
-        '../model/quote',
-        '../model/addresslist'
+        'Magento_Customer/js/model/address-list',
+        'Magento_Checkout/js/model/quote',
+        'Magento_Checkout/js/action/create-billing-address',
+        'Magento_Checkout/js/action/select-billing-address',
+        'Magento_Checkout/js/checkout-data',
+        'Magento_Checkout/js/model/checkout-data-resolver',
+        'mage/translate'
     ],
-    function ($, Component, ko, customer, selectBillingAddress, navigator, quote, addressList) {
-        "use strict";
-        var stepName = 'billingAddress';
-        var newAddressSelected = ko.observable(false);
-        var billingFormSelector = '#co-billing-form';
+    function (
+        ko,
+        Component,
+        customer,
+        addressList,
+        quote,
+        createBillingAddress,
+        selectBillingAddress,
+        checkoutData,
+        checkoutDataResolver,
+        $t
+    ) {
+        'use strict';
+
+        var lastSelectedBillingAddress = null,
+            newAddressOption = {
+            getAddressInline: function() {
+                return $t('New Address');
+            },
+            customerAddressId: null
+            },
+            countryData = window.checkoutConfig.countryData;
+
+        var addressOptions = addressList().filter(function(address) {
+            return address.getType() == 'customer-address';
+        });
+        addressOptions.push(newAddressOption);
 
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/billing-address'
             },
+
+            initialize: function () {
+                this._super();
+                quote.paymentMethod.subscribe(function() {
+                    checkoutDataResolver.resolveBillingAddress();
+                }, this);
+            },
+
             initObservable: function () {
-                this._super().observe('useForShipping');
+                this._super()
+                    .observe({
+                        selectedAddress: null,
+                        isAddressDetailsVisible: quote.billingAddress() != null,
+                        isAddressFormVisible: !customer.isLoggedIn() || addressOptions.length == 1,
+                        isAddressSameAsShipping: false,
+                        saveInAddressBook: true
+                    });
+
+                quote.billingAddress.subscribe(function(newAddress) {
+                    this.isAddressSameAsShipping(
+                        newAddress != null
+                            && newAddress.getCacheKey() == quote.shippingAddress().getCacheKey()
+                            && !quote.isVirtual()
+                    );
+                    if (newAddress != null && newAddress.saveInAddressBook !== undefined) {
+                        this.saveInAddressBook(newAddress.saveInAddressBook);
+                    }
+                    this.isAddressDetailsVisible(true);
+                }, this);
+
                 return this;
             },
-            stepClassAttributes: function() {
-                return navigator.getStepClassAttributes(stepName);
+
+            canUseShippingAddress: ko.computed(function(){
+                return !quote.isVirtual() && quote.shippingAddress()
+                    && quote.shippingAddress().canUseForBilling();
+            }),
+
+            currentBillingAddress: quote.billingAddress,
+
+            addressOptions: addressOptions,
+
+            customerHasAddresses: addressOptions.length > 1,
+
+            addressOptionsText: function(address) {
+                return address.getAddressInline();
             },
-            stepNumber: navigator.getStepNumber(stepName),
-            billingAddresses: function() {
-                var newAddress = {
-                        getAddressInline: function() {
-                            return $.mage.__('New address');
-                        },
-                        customerAddressId: null
-                    },
-                    addresses = addressList.getAddresses();
-                addresses.push(newAddress);
-                return addresses;
-            },
-            selectedBillingAddressId: ko.observable(
-                addressList.getAddresses().length ? addressList.getAddresses()[0].customerAddressId : null
-            ),
-            isVisible: navigator.isStepVisible(stepName),
-            useForShipping: "1",
-            quoteIsVirtual: quote.isVirtual(),
-            billingAddressesOptionsText: function(item) {
-                return item.getAddressInline();
-            },
-            checkUseForShipping: function(useForShipping) {
-                var additionalData = {};
-                if (useForShipping() instanceof Object) {
-                    additionalData = useForShipping().getAdditionalData();
-                    useForShipping('1');
-                }
-                return additionalData;
-            },
-            submitBillingAddress: function() {
-                var additionalData = this.checkUseForShipping(this.useForShipping);
-                if (this.selectedBillingAddressId()) {
-                    selectBillingAddress(
-                        addressList.getAddressById(this.selectedBillingAddressId()),
-                        this.useForShipping,
-                        additionalData
-                    );
+
+            useShippingAddress: function () {
+                if (this.isAddressSameAsShipping()) {
+                    selectBillingAddress(quote.shippingAddress());
+                    this.isAddressDetailsVisible(true);
                 } else {
-                    this.validate();
+                    lastSelectedBillingAddress = quote.billingAddress();
+                    quote.billingAddress(null);
+                    this.isAddressDetailsVisible(false);
+                }
+                checkoutData.setSelectedBillingAddress(null);
+                return true;
+            },
+
+            updateAddress: function () {
+                if (this.selectedAddress() && this.selectedAddress() != newAddressOption) {
+                    selectBillingAddress(this.selectedAddress());
+                    checkoutData.setSelectedBillingAddress(this.selectedAddress().getKey());
+                } else {
+                    this.source.set('params.invalid', false);
+                    this.source.trigger(this.dataScopePrefix + '.data.validate');
                     if (!this.source.get('params.invalid')) {
-                        var addressData = this.source.get('billingAddress');
-                        /**
-                         * All the the input fields that are not a part of the address (e. g. CAPTCHA) but need to be
-                         * submitted in the same request must have data-scope attribute set
-                         */
-                        var additionalFields = $('input[data-scope="additionalAddressData"]').serializeArray();
-                        additionalFields.forEach(function (field) {
-                            additionalData[field.name] = field.value;
-                        });
-                        if (quote.getCheckoutMethod()() && !customer.isLoggedIn()()) {
-                            addressData.email = this.source.get('customerDetails.email');
+                        var addressData = this.source.get(this.dataScopePrefix),
+                            newBillingAddress = createBillingAddress(addressData);
+                        if (this.isCustomerLoggedIn && !this.customerHasAddresses) {
+                            this.saveInAddressBook(true);
                         }
-                        if($(billingFormSelector).validation() && $(billingFormSelector).validation('isValid')) {
-                            selectBillingAddress(addressData, this.useForShipping, additionalData);
-                        }
+                        addressData.save_in_address_book = this.saveInAddressBook();
+
+                        // New address must be selected as a billing address
+                        selectBillingAddress(newBillingAddress);
+                        checkoutData.setSelectedBillingAddress(newBillingAddress.getKey());
+                        checkoutData.setNewCustomerBillingAddress(addressData);
                     }
                 }
             },
-            navigateToCurrentStep: function() {
-                if (!navigator.isStepVisible(stepName)()) {
-                    navigator.goToStep(stepName);
-                }
-            },
-            isNewAddressSelected: function() {
-                if (!this.customerAddressCount) {
-                    return true;
-                }
-                return newAddressSelected();
-            },
-            onAddressChange: function (value) {
-                value() === null ? newAddressSelected(true) : newAddressSelected(false);
-            },
-            validate: function() {
-                var fields = $(billingFormSelector).find('input, select');
 
-                this.source.set('params.invalid', false);
-                fields.trigger('change');
-                this.source.trigger('billingAddress.data.validate');
-                if (!customer.isLoggedIn()()) {
-                    this.source.trigger('customerDetails.data.validate');
-                }
-                this.validateAdditionalAddressFields();
+            editAddress: function () {
+                lastSelectedBillingAddress = quote.billingAddress();
+                quote.billingAddress(null);
+                this.isAddressDetailsVisible(false);
             },
-            validateAdditionalAddressFields: function() {
-                $(billingFormSelector).validation();
-                $(billingFormSelector + ' input[data-scope="additionalAddressData"]').each(function(key, item) {
-                    $(item).valid();
-                });
-            },
-            isCustomerLoggedIn: customer.isLoggedIn(),
-            customerAddressCount: window.checkoutConfig.customerAddressCount,
-            hideExtraFields: function() {
-                if (!quote.getCheckoutMethod()() && customer.isLoggedIn()()) {
-                    $('[name="customerDetails.email"]').hide();
+
+            cancelAddressEdit: function () {
+                this.restoreBillingAddress();
+                if (quote.billingAddress()) {
+                    // restore 'Same As Shipping' checkbox state
+                    this.isAddressSameAsShipping(
+                        quote.billingAddress() != null
+                            && quote.billingAddress().getCacheKey() == quote.shippingAddress().getCacheKey()
+                            && !quote.isVirtual()
+                    );
+                    this.isAddressDetailsVisible(true);
                 }
+            },
+
+            restoreBillingAddress: function () {
+                if (lastSelectedBillingAddress != null) {
+                    selectBillingAddress(lastSelectedBillingAddress);
+                }
+            },
+
+            onAddressChange: function (address) {
+                this.isAddressFormVisible(address == newAddressOption);
+            },
+
+            getCountryName: function(countryId) {
+                return (countryData[countryId] != undefined) ? countryData[countryId].name : "";
             }
         });
     }

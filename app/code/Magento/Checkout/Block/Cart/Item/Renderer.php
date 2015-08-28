@@ -8,8 +8,10 @@
 
 namespace Magento\Checkout\Block\Cart\Item;
 
+use Magento\Checkout\Block\Cart\Item\Renderer\Actions;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Quote\Model\Quote\Item;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
 
 /**
@@ -21,7 +23,7 @@ use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
  * @method \Magento\Checkout\Block\Cart\Item\Renderer setDeleteUrl(string)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Renderer extends \Magento\Framework\View\Element\Template implements \Magento\Framework\Object\IdentityInterface
+class Renderer extends \Magento\Framework\View\Element\Template implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var \Magento\Checkout\Model\Session
@@ -29,7 +31,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     protected $_checkoutSession;
 
     /**
-     * @var Item
+     * @var AbstractItem
      */
     protected $_item;
 
@@ -70,9 +72,9 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     protected $messageManager;
 
     /**
-     * @var \Magento\Catalog\Helper\Image
+     * @var \Magento\Catalog\Block\Product\ImageBuilder
      */
-    protected $_imageHelper;
+    protected $imageBuilder;
 
     /**
      * @var PriceCurrencyInterface
@@ -88,7 +90,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Helper\Product\Configuration $productConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @param \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param PriceCurrencyInterface $priceCurrency
@@ -99,7 +101,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Catalog\Helper\Product\Configuration $productConfig,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Catalog\Helper\Image $imageHelper,
+        \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder,
         \Magento\Framework\Url\Helper\Data $urlHelper,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         PriceCurrencyInterface $priceCurrency,
@@ -107,7 +109,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
         array $data = []
     ) {
         $this->priceCurrency = $priceCurrency;
-        $this->_imageHelper = $imageHelper;
+        $this->imageBuilder = $imageBuilder;
         $this->_urlHelper = $urlHelper;
         $this->_productConfig = $productConfig;
         $this->_checkoutSession = $checkoutSession;
@@ -120,10 +122,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Set item for render
      *
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param AbstractItem $item
      * @return $this
      */
-    public function setItem(\Magento\Quote\Model\Quote\Item\AbstractItem $item)
+    public function setItem(AbstractItem $item)
     {
         $this->_item = $item;
         return $this;
@@ -132,7 +134,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Get quote item
      *
-     * @return Item
+     * @return AbstractItem
      */
     public function getItem()
     {
@@ -150,16 +152,6 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     }
 
     /**
-     * Get product thumbnail image
-     *
-     * @return \Magento\Catalog\Model\Product\Image
-     */
-    public function getProductThumbnail()
-    {
-        return $this->_imageHelper->init($this->getProductForThumbnail(), 'thumbnail');
-    }
-
-    /**
      * Identify the product from which thumbnail should be taken.
      *
      * @return \Magento\Catalog\Model\Product
@@ -167,50 +159,6 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     public function getProductForThumbnail()
     {
         return $this->getProduct();
-    }
-
-    /**
-     * Get product thumbnail image url
-     *
-     * @return \Magento\Catalog\Model\Product\Image
-     */
-    public function getProductThumbnailUrl()
-    {
-        return (string)$this->getProductThumbnail()->resize($this->getThumbnailSize());
-    }
-
-    /**
-     * Product image thumbnail getter
-     *
-     * @return int
-     */
-    public function getThumbnailSize()
-    {
-        return $this->getVar('product_thumbnail_image_size', 'Magento_Catalog');
-    }
-
-    /**
-     * Get product thumbnail image url for sidebar
-     *
-     * @return \Magento\Catalog\Model\Product\Image
-     */
-    public function getProductThumbnailSidebarUrl()
-    {
-        return (string)$this->getProductThumbnail()->resize(
-            $this->getThumbnailSidebarSize()
-        )->setWatermarkSize(
-            '30x10'
-        );
-    }
-
-    /**
-     * Product image thumbnail getter
-     *
-     * @return int
-     */
-    public function getThumbnailSidebarSize()
-    {
-        return $this->getVar('product_thumbnail_image_sidebar_size', 'Magento_Catalog');
     }
 
     /**
@@ -317,19 +265,6 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     }
 
     /**
-     * Get item configure url
-     *
-     * @return string
-     */
-    public function getConfigureUrl()
-    {
-        return $this->getUrl(
-            'checkout/cart/configure',
-            ['id' => $this->getItem()->getId(), 'product_id' => $this->getItem()->getProduct()->getId()]
-        );
-    }
-
-    /**
      * Get quote item qty
      *
      * @return float|int
@@ -432,7 +367,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Return product additional information block
      *
-     * @return \Magento\Framework\View\Element\AbstractBlock
+     * @return AbstractBlock
      */
     public function getProductAdditionalInformationBlock()
     {
@@ -529,10 +464,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Return the unit price html
      *
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param AbstractItem $item
      * @return string
      */
-    public function getUnitPriceHtml(\Magento\Quote\Model\Quote\Item\AbstractItem  $item)
+    public function getUnitPriceHtml(AbstractItem $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.item.price.unit');
@@ -543,10 +478,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Return row total html
      *
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem  $item
+     * @param AbstractItem $item
      * @return string
      */
-    public function getRowTotalHtml(\Magento\Quote\Model\Quote\Item\AbstractItem  $item)
+    public function getRowTotalHtml(AbstractItem $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.item.price.row');
@@ -557,10 +492,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Return item price html for sidebar
      *
-     * @param \Magento\Quote\Model\Quote\Item\AbstractItem  $item
+     * @param AbstractItem $item
      * @return string
      */
-    public function getSidebarItemPriceHtml(\Magento\Quote\Model\Quote\Item\AbstractItem  $item)
+    public function getSidebarItemPriceHtml(AbstractItem $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.cart.item.price.sidebar');
@@ -571,10 +506,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Get unit price excluding tax html
      *
-     * @param Item\AbstractItem $item
+     * @param AbstractItem $item
      * @return string
      */
-    public function getUnitPriceExclTaxHtml(\Magento\Quote\Model\Quote\Item\AbstractItem  $item)
+    public function getUnitPriceExclTaxHtml(AbstractItem $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.onepage.review.item.price.unit.excl');
@@ -585,10 +520,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Get unit price including tax html
      *
-     * @param Item\AbstractItem $item
+     * @param AbstractItem $item
      * @return string
      */
-    public function getUnitPriceInclTaxHtml(\Magento\Quote\Model\Quote\Item\AbstractItem  $item)
+    public function getUnitPriceInclTaxHtml(AbstractItem $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.onepage.review.item.price.unit.incl');
@@ -599,10 +534,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Get row total excluding tax html
      *
-     * @param Item\AbstractItem $item
+     * @param AbstractItem $item
      * @return string
      */
-    public function getRowTotalExclTaxHtml(\Magento\Quote\Model\Quote\Item\AbstractItem  $item)
+    public function getRowTotalExclTaxHtml(AbstractItem $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.onepage.review.item.price.rowtotal.excl');
@@ -613,14 +548,48 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     /**
      * Get row total including tax html
      *
-     * @param Item\AbstractItem $item
+     * @param AbstractItem $item
      * @return string
      */
-    public function getRowTotalInclTaxHtml(\Magento\Quote\Model\Quote\Item\AbstractItem  $item)
+    public function getRowTotalInclTaxHtml(AbstractItem $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.onepage.review.item.price.rowtotal.incl');
         $block->setItem($item);
         return $block->toHtml();
+    }
+
+    /**
+     * Get row total including tax html
+     *
+     * @param AbstractItem $item
+     * @return string
+     */
+    public function getActions(AbstractItem $item)
+    {
+        /** @var Actions $block */
+        $block = $this->getChildBlock('actions');
+        if ($block instanceof Actions) {
+            $block->setItem($item);
+            return $block->toHtml();
+        } else {
+            return '';
+        }
+    }
+
+    /**
+     * Retrieve product image
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param string $imageId
+     * @param array $attributes
+     * @return \Magento\Catalog\Block\Product\Image
+     */
+    public function getImage($product, $imageId, $attributes = [])
+    {
+        return $this->imageBuilder->setProduct($product)
+            ->setImageId($imageId)
+            ->setAttributes($attributes)
+            ->create();
     }
 }

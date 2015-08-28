@@ -22,7 +22,7 @@
         <dt>Username:</dt>
         <dd>{{admin.username}}</dd>
 
-        <dt>E-Mail:</dt>
+        <dt>Email:</dt>
         <dd>{{admin.email}}</dd>
 
         <dt>Password:</dt>
@@ -37,6 +37,12 @@
         <dd>
             <a href="{{url.admin}}" target="_blank">{{url.admin}}</a>
         </dd>
+
+        <div class="message message-notice">
+        <span class="message-text">
+            Be sure to bookmark your unique URL and record it offline.
+        </span>
+        </div>
 
         <dt>Encryption Key:</dt>
         <dd>{{config.encrypt.key}}</dd>
@@ -58,7 +64,11 @@
     </dl>
 
     <p class="bold" ng-repeat="message in messages">{{message}}</p>
-
+    <?php if ($this->isSampleDataErrorInstallation) : ?>
+        <div class="message message-warning">
+            <span class="message-text"><strong>Something went wrong while installing sample data.</strong> Please check <code>var/log/installation.log</code> for details. You can retry installing the data now or just start using Magento.</span>
+        </div>
+    <?php endif; ?>
     <div ng-show="config.address.actual_base_url">
         <a
             class="btn btn-large btn-prime"

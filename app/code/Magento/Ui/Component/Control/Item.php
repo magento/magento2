@@ -5,12 +5,12 @@
  */
 namespace Magento\Ui\Component\Control;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 
 /**
  * Class Item
  */
-class Item extends Object
+class Item extends DataObject
 {
     //
 }

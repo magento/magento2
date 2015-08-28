@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Abstract Rule entity data model
  */
@@ -63,16 +61,22 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
     abstract public function getActionsInstance();
 
     /**
+     * Form factory
+     *
      * @var \Magento\Framework\Data\FormFactory
      */
     protected $_formFactory;
 
     /**
+     * Timezone instance
+     *
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
     protected $_localeDate;
 
     /**
+     * Constructor
+     *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -107,7 +111,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
         // Check if discount amount not negative
         if ($this->hasDiscountAmount()) {
             if ((int)$this->getDiscountAmount() < 0) {
-                throw new \Magento\Framework\Exception\LocalizedException(__('Invalid discount amount.'));
+                throw new \Magento\Framework\Exception\LocalizedException(__('Please choose a valid discount amount.'));
             }
         }
 
@@ -233,7 +237,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
      */
     protected function _resetConditions($conditions = null)
     {
-        if (is_null($conditions)) {
+        if (null === $conditions) {
             $conditions = $this->getConditionsInstance();
         }
         $conditions->setRule($this)->setId('1')->setPrefix('conditions');
@@ -250,7 +254,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
      */
     protected function _resetActions($actions = null)
     {
-        if (is_null($actions)) {
+        if (null === $actions) {
             $actions = $this->getActionsInstance();
         }
         $actions->setRule($this)->setId('1')->setPrefix('actions');
@@ -335,10 +339,10 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
     /**
      * Validate rule conditions to determine if rule can run
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return bool
      */
-    public function validate(\Magento\Framework\Object $object)
+    public function validate(\Magento\Framework\DataObject $object)
     {
         return $this->getConditions()->validate($object);
     }
@@ -346,12 +350,12 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
     /**
      * Validate rule data
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return bool|string[] - return true if validation passed successfully. Array with errors description otherwise
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function validateData(\Magento\Framework\Object $object)
+    public function validateData(\Magento\Framework\DataObject $object)
     {
         $result = [];
         $fromDate = $toDate = null;
@@ -373,13 +377,13 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
         if ($object->hasWebsiteIds()) {
             $websiteIds = $object->getWebsiteIds();
             if (empty($websiteIds)) {
-                $result[] = __('Websites must be specified.');
+                $result[] = __('Please specify a website.');
             }
         }
         if ($object->hasCustomerGroupIds()) {
             $customerGroupIds = $object->getCustomerGroupIds();
             if (empty($customerGroupIds)) {
-                $result[] = __('Customer Groups must be specified.');
+                $result[] = __('Please specify Customer Groups.');
             }
         }
 
@@ -390,6 +394,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
      * Check availability to delete rule
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isDeleteable()
     {
@@ -401,6 +406,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
      *
      * @param bool $value
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setIsDeleteable($value)
     {
@@ -412,6 +418,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
      * Check if rule is readonly
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isReadonly()
     {
@@ -423,6 +430,7 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
      *
      * @param bool $value
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setIsReadonly($value)
     {

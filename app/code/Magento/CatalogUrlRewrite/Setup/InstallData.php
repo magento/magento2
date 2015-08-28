@@ -80,6 +80,9 @@ class InstallData implements InstallDataInterface
                 'global' => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE,
                 'used_in_product_listing' => true,
                 'group' => 'Search Engine Optimization',
+                'is_used_in_grid' => true,
+                'is_visible_in_grid' => false,
+                'is_filterable_in_grid' => true,
             ]
         );
 

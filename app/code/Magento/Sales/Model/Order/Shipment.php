@@ -234,9 +234,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
-     * Register shipment
-     *
-     * Apply to order, order items etc.
+     * Registers shipment.
      *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -244,13 +242,18 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     public function register()
     {
         if ($this->getId()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('We cannot register an existing shipment'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('We cannot register an existing shipment')
+            );
         }
 
         $totalQty = 0;
+
+        /** @var \Magento\Sales\Model\Order\Shipment\Item $item */
         foreach ($this->getAllItems() as $item) {
             if ($item->getQty() > 0) {
                 $item->register();
+
                 if (!$item->getOrderItem()->isDummy(true)) {
                     $totalQty += $item->getQty();
                 }
@@ -258,6 +261,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
                 $item->isDeleted(true);
             }
         }
+
         $this->setTotalQty($totalQty);
 
         return $this;
@@ -454,36 +458,6 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     }
 
     /**
-     * Before object save
-     *
-     * @return $this
-     */
-    protected function _beforeSave()
-    {
-        return parent::_beforeSave();
-    }
-
-    /**
-     * Before object delete
-     *
-     * @return $this
-     */
-    protected function _beforeDelete()
-    {
-        return parent::_beforeDelete();
-    }
-
-    /**
-     * After object save manipulations
-     *
-     * @return $this
-     */
-    protected function _afterSave()
-    {
-        return parent::_afterSave();
-    }
-
-    /**
      * Retrieve store model instance
      *
      * @return \Magento\Store\Model\Store
@@ -514,7 +488,7 @@ class Shipment extends AbstractModel implements EntityInterface, ShipmentInterfa
     {
         $label = $this->getData('shipping_label');
         if ($label) {
-            return $this->getResource()->getReadConnection()->decodeVarbinary($label);
+            return $this->getResource()->getConnection()->decodeVarbinary($label);
         }
         return $label;
     }

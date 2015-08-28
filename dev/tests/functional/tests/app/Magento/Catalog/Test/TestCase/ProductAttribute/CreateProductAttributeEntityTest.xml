@@ -6,9 +6,9 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Catalog\Test\TestCase\ProductAttribute\CreateProductAttributeEntityTest">
+    <testCase name="Magento\Catalog\Test\TestCase\ProductAttribute\CreateProductAttributeEntityTest" summary="Create Product Attribute" ticketId="MAGETWO-24767">
         <variation name="CreateProductAttributeEntityTestVariation1">
-            <data name="productTemplate/dataSet" xsi:type="string">custom_attribute_set</data>
+            <data name="productTemplate/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttribute/data/frontend_label" xsi:type="string">Text_Field_Admin_%isolation%</data>
             <data name="productAttribute/data/frontend_input" xsi:type="string">Text Field</data>
             <data name="productAttribute/data/is_required" xsi:type="string">No</data>
@@ -19,7 +19,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
         </variation>
         <variation name="CreateProductAttributeEntityTestVariation2">
-            <data name="productTemplate/dataSet" xsi:type="string">custom_attribute_set</data>
+            <data name="productTemplate/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttribute/data/frontend_label" xsi:type="string">Text_Field_Admin_%isolation%</data>
             <data name="productAttribute/data/frontend_input" xsi:type="string">Text Area</data>
             <data name="productAttribute/data/is_required" xsi:type="string">Yes</data>
@@ -41,7 +41,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsComparable" />
         </variation>
         <variation name="CreateProductAttributeEntityTestVariation3">
-            <data name="productTemplate/dataSet" xsi:type="string">custom_attribute_set</data>
+            <data name="productTemplate/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttribute/data/frontend_label" xsi:type="string">Date_Admin_%isolation%</data>
             <data name="productAttribute/data/frontend_input" xsi:type="string">Date</data>
             <data name="productAttribute/data/is_required" xsi:type="string">No</data>
@@ -62,7 +62,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsUsedPromoRules" />
         </variation>
         <variation name="CreateProductAttributeEntityTestVariation4">
-            <data name="productTemplate/dataSet" xsi:type="string">custom_attribute_set</data>
+            <data name="productTemplate/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttribute/data/frontend_label" xsi:type="string">Yes/No_Admin_%isolation%</data>
             <data name="productAttribute/data/frontend_input" xsi:type="string">Yes/No</data>
             <data name="productAttribute/data/is_required" xsi:type="string">Yes</data>
@@ -75,10 +75,10 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
         </variation>
         <variation name="CreateProductAttributeEntityTestVariation5">
-            <data name="productTemplate/dataSet" xsi:type="string">custom_attribute_set</data>
+            <data name="productTemplate/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttribute/data/frontend_label" xsi:type="string">Multiple_Select_Admin_%isolation%</data>
             <data name="productAttribute/data/frontend_input" xsi:type="string">Multiple Select</data>
-            <data name="productAttribute/data/options/preset" xsi:type="string">default</data>
+            <data name="productAttribute/data/options/dataset" xsi:type="string">default</data>
             <data name="productAttribute/data/is_required" xsi:type="string">No</data>
             <data name="productAttribute/data/attribute_code" xsi:type="string">attr_multiselect_%isolation%</data>
             <data name="productAttribute/data/is_global" xsi:type="string">Website</data>
@@ -103,10 +103,10 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeOptionsOnProductForm" />
         </variation>
         <variation name="CreateProductAttributeEntityTestVariation6">
-            <data name="productTemplate/dataSet" xsi:type="string">custom_attribute_set</data>
+            <data name="productTemplate/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttribute/data/frontend_label" xsi:type="string">Dropdown_Admin_%isolation%</data>
             <data name="productAttribute/data/frontend_input" xsi:type="string">Dropdown</data>
-            <data name="productAttribute/data/options/preset" xsi:type="string">default</data>
+            <data name="productAttribute/data/options/dataset" xsi:type="string">default</data>
             <data name="productAttribute/data/is_required" xsi:type="string">Yes</data>
             <data name="productAttribute/data/attribute_code" xsi:type="string">attr_dropdown_%isolation%</data>
             <data name="productAttribute/data/is_global" xsi:type="string">Global</data>
@@ -136,7 +136,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeOptionsOnProductForm" />
         </variation>
         <variation name="CreateProductAttributeEntityTestVariation7">
-            <data name="productTemplate/dataSet" xsi:type="string">custom_attribute_set</data>
+            <data name="productTemplate/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttribute/data/frontend_label" xsi:type="string">Price_Admin_%isolation%</data>
             <data name="productAttribute/data/frontend_input" xsi:type="string">Price</data>
             <data name="productAttribute/data/is_required" xsi:type="string">No</data>
@@ -158,7 +158,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterableInSearch" />
         </variation>
         <variation name="CreateProductAttributeEntityTestVariation8">
-            <data name="productTemplate/dataSet" xsi:type="string">custom_attribute_set</data>
+            <data name="productTemplate/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttribute/data/frontend_label" xsi:type="string">Fixed_Product_Tax_Admin_%isolation%</data>
             <data name="productAttribute/data/frontend_input" xsi:type="string">Fixed Product Tax</data>
             <data name="productAttribute/data/attribute_code" xsi:type="string">attr_fpt_code_%isolation%</data>
@@ -168,7 +168,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
         </variation>
         <variation name="CreateProductAttributeEntityTestVariation9">
-            <data name="productTemplate/dataSet" xsi:type="string">custom_attribute_set</data>
+            <data name="productTemplate/dataset" xsi:type="string">custom_attribute_set</data>
             <data name="productAttribute/data/frontend_label" xsi:type="string">Text_Field_Admin_%isolation%</data>
             <data name="productAttribute/data/frontend_input" xsi:type="string">Text Field</data>
             <data name="productAttribute/data/is_required" xsi:type="string">Yes</data>

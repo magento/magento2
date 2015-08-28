@@ -19,7 +19,7 @@ class Cancel extends \Magento\Sales\Controller\Adminhtml\Order
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($order) {
             try {
-                $order->cancel()->save();
+                $this->orderManagement->cancel($order->getEntityId());
                 $this->messageManager->addSuccess(__('You canceled the order.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
@@ -30,5 +30,13 @@ class Cancel extends \Magento\Sales\Controller\Adminhtml\Order
             return $resultRedirect->setPath('sales/order/view', ['order_id' => $order->getId()]);
         }
         return $resultRedirect->setPath('sales/*/');
+    }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Magento_Sales::cancel');
     }
 }

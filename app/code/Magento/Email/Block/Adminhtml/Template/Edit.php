@@ -5,13 +5,16 @@
  */
 namespace Magento\Email\Block\Adminhtml\Template;
 
+use Magento\Backend\Block\Widget;
+use Magento\Backend\Block\Widget\ContainerInterface;
+
 /**
  * Adminhtml system template edit block
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  * @method array getTemplateOptions()
  */
-class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Block\Widget\ContainerInterface
+class Edit extends Widget implements ContainerInterface
 {
     /**
      * @var \Magento\Framework\Registry
@@ -250,14 +253,10 @@ class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Blo
      */
     protected function _getDefaultTemplatesAsOptionsArray()
     {
-        $options = [['value' => '', 'label' => '', 'group' => '']];
-        foreach ($this->_emailConfig->getAvailableTemplates() as $templateId) {
-            $options[] = [
-                'value' => $templateId,
-                'label' => $this->_emailConfig->getTemplateLabel($templateId),
-                'group' => $this->_emailConfig->getTemplateModule($templateId),
-            ];
-        }
+        $options = array_merge(
+            [['value' => '', 'label' => '', 'group' => '']],
+            $this->_emailConfig->getAvailableTemplates()
+        );
         uasort(
             $options,
             function (array $firstElement, array $secondElement) {
@@ -341,6 +340,16 @@ class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Blo
     }
 
     /**
+     * Return template type from template object
+     *
+     * @return int
+     */
+    public function getTemplateType()
+    {
+        return $this->getEmailTemplate()->getType();
+    }
+
+    /**
      * Return delete url for customer group
      *
      * @return string
@@ -371,34 +380,16 @@ class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Blo
     }
 
     /**
-     * Get paths of where current template is used as default
-     *
-     * @param bool $asJSON
-     * @return string
-     */
-    public function getUsedDefaultForPaths($asJSON = true)
-    {
-        /** @var $template \Magento\Email\Model\BackendTemplate */
-        $template = $this->getEmailTemplate();
-        $paths = $template->getSystemConfigPathsWhereUsedAsDefault();
-        $pathsParts = $this->_getSystemConfigPathsParts($paths);
-        if ($asJSON) {
-            return $this->jsonHelper->jsonEncode($pathsParts);
-        }
-        return $pathsParts;
-    }
-
-    /**
      * Get paths of where current template is currently used
      *
      * @param bool $asJSON
      * @return string
      */
-    public function getUsedCurrentlyForPaths($asJSON = true)
+    public function getCurrentlyUsedForPaths($asJSON = true)
     {
         /** @var $template \Magento\Email\Model\BackendTemplate */
         $template = $this->getEmailTemplate();
-        $paths = $template->getSystemConfigPathsWhereUsedCurrently();
+        $paths = $template->getSystemConfigPathsWhereCurrentlyUsed();
         $pathsParts = $this->_getSystemConfigPathsParts($paths);
         if ($asJSON) {
             return $this->_jsonEncoder->encode($pathsParts);
@@ -416,7 +407,7 @@ class Edit extends \Magento\Backend\Block\Widget implements \Magento\Backend\Blo
     protected function _getSystemConfigPathsParts($paths)
     {
         $result = $urlParams = $prefixParts = [];
-        $scopeLabel = __('GLOBAL');
+        $scopeLabel = __('Default Config');
         if ($paths) {
             /** @var $menu \Magento\Backend\Model\Menu */
             $menu = $this->_menuConfig->getMenu();

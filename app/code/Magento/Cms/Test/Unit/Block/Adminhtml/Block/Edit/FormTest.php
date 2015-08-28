@@ -93,11 +93,6 @@ class FormTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $viewFileSystem;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $rootDirectory;
 
     /**
@@ -131,6 +126,16 @@ class FormTest extends \PHPUnit_Framework_TestCase
     protected $block;
 
     /**
+     * @var \Magento\Framework\View\Element\Template\File\Resolver|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_resolver;
+
+    /**
+     * @var \Magento\Framework\View\Element\Template\File\Validator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_validator;
+
+    /**
      * Sets up the fixture, for example, open a network connection.
      * This method is called before a test is executed.
      *
@@ -138,6 +143,22 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
+        $this->_resolver = $this->getMock(
+            'Magento\Framework\View\Element\Template\File\Resolver',
+            [],
+            [],
+            '',
+            false
+        );
+
+        $this->_validator = $this->getMock(
+            'Magento\Framework\View\Element\Template\File\Validator',
+            [],
+            [],
+            '',
+            false
+        );
+
         $this->model = $this->getMock('Magento\Cms\Model\Block', ['getBlockId', 'setStoreId'], [], '', false);
 
         $this->registry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
@@ -150,7 +171,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->storeValues);
 
         $this->field = $this->getMock('Magento\Framework\Data\Form\Element\AbstractElement', [], [], '', false);
-        $this->config = $this->getMock('Magento\Framework\Object', [], [], '', false);
+        $this->config = $this->getMock('Magento\Framework\DataObject', [], [], '', false);
         $this->store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
         $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
         $this->fieldSet = $this->getMock('Magento\Framework\Data\Form\Element\Fieldset', [], [], '', false);
@@ -158,7 +179,6 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface', [], [], '', false);
         $this->urlBuilder = $this->getMock('Magento\Framework\UrlInterface', [], [], '', false);
         $this->appState = $this->getMock('Magento\Framework\App\State', [], [], '', false);
-        $this->viewFileSystem = $this->getMock('Magento\Framework\View\FileSystem', [], [], '', false);
         $this->logger = $this->getMock('Psr\Log\LoggerInterface', [], [], '', false);
         $this->rootDirectory = $this->getMock(
             'Magento\Framework\Filesystem\Directory\ReadInterface',
@@ -193,10 +213,11 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->once())->method('getStoreManager')->willReturn($this->storeManager);
         $this->context->expects($this->once())->method('getUrlBuilder')->willReturn($this->urlBuilder);
         $this->context->expects($this->once())->method('getAppState')->willReturn($this->appState);
-        $this->context->expects($this->once())->method('getViewFileSystem')->willReturn($this->viewFileSystem);
         $this->context->expects($this->once())->method('getFilesystem')->willReturn($this->fileSystem);
         $this->context->expects($this->once())->method('getLogger')->willReturn($this->logger);
         $this->context->expects($this->once())->method('getLayout')->willReturn($this->layout);
+        $this->context->expects($this->once())->method('getResolver')->willReturn($this->_resolver);
+        $this->context->expects($this->once())->method('getValidator')->willReturn($this->_validator);
 
         /** @var \Magento\Cms\Block\Adminhtml\Block\Edit\Form $block */
         $this->block = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))

@@ -5,6 +5,7 @@
  */
 namespace Magento\ImportExport\Model\Import\Entity;
 
+use Magento\Framework\App\Resource;
 use Magento\ImportExport\Model\Import\AbstractSource;
 use Magento\ImportExport\Model\Import as ImportExport;
 
@@ -194,7 +195,7 @@ abstract class AbstractEntity
     /**
      * Magento string lib
      *
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
@@ -204,22 +205,50 @@ abstract class AbstractEntity
     protected $_resourceHelper;
 
     /**
+     * Count if created items
+     *
+     * @var int
+     */
+    protected $countItemsCreated = 0;
+
+    /**
+     * Count if updated items
+     *
+     * @var int
+     */
+    protected $countItemsUpdated = 0;
+
+    /**
+     * Count if deleted items
+     *
+     * @var int
+     */
+    protected $countItemsDeleted = 0;
+
+    /**
+     * Need to log in import history
+     *
+     * @var bool
+     */
+    protected $logInHistory = false;
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\Resource\Import\Data $importData
      * @param \Magento\Eav\Model\Config $config
-     * @param \Magento\Framework\App\Resource $resource
+     * @param Resource $resource
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      */
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\ImportExport\Helper\Data $importExportData,
         \Magento\ImportExport\Model\Resource\Import\Data $importData,
         \Magento\Eav\Model\Config $config,
-        \Magento\Framework\App\Resource $resource,
+        Resource $resource,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
-        \Magento\Framework\Stdlib\String $string
+        \Magento\Framework\Stdlib\StringUtils $string
     ) {
         $this->jsonHelper = $jsonHelper;
         $this->_importExportData = $importExportData;
@@ -230,7 +259,7 @@ abstract class AbstractEntity
 
         $this->_entityTypeId = $entityType->getEntityTypeId();
         $this->_dataSourceModel = $importData;
-        $this->_connection = $resource->getConnection('write');
+        $this->_connection = $resource->getConnection();
     }
 
     /**
@@ -545,7 +574,7 @@ abstract class AbstractEntity
     public function getSource()
     {
         if (!$this->_source) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Source is not set'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The source is not set.'));
         }
         return $this->_source;
     }
@@ -659,6 +688,16 @@ abstract class AbstractEntity
     }
 
     /**
+     * Is import need to log in history.
+     *
+     * @return bool
+     */
+    public function isNeedToLogInHistory()
+    {
+        return $this->logInHistory;
+    }
+
+    /**
      * Validate data row.
      *
      * @param array $rowData
@@ -706,7 +745,7 @@ abstract class AbstractEntity
             // do all permanent columns exist?
             if ($absentColumns = array_diff($this->_permanentAttributes, $this->getSource()->getColNames())) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Cannot find required columns: %1', implode(', ', $absentColumns))
+                    __('We can\'t find required columns: %1.', implode(', ', $absentColumns))
                 );
             }
 
@@ -745,5 +784,35 @@ abstract class AbstractEntity
             $this->_dataValidated = true;
         }
         return $this;
+    }
+
+    /**
+     * Get count of created items
+     *
+     * @return int
+     */
+    public function getCreatedItemsCount()
+    {
+        return $this->countItemsCreated;
+    }
+
+    /**
+     * Get count of updated items
+     *
+     * @return int
+     */
+    public function getUpdatedItemsCount()
+    {
+        return $this->countItemsUpdated;
+    }
+
+    /**
+     * Get count of deleted items
+     *
+     * @return int
+     */
+    public function getDeletedItemsCount()
+    {
+        return $this->countItemsDeleted;
     }
 }

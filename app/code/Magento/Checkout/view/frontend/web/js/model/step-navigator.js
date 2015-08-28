@@ -7,198 +7,135 @@
 define(
     [
         'jquery',
-        'ko',
-        'Magento_Customer/js/model/customer',
-        'Magento_Ui/js/model/errorlist'
+        'ko'
     ],
-    function($, ko, customer, errorList) {
-        var customerIsLoggedIn = customer.isLoggedIn()();
-        var defaultStepClass = 'section';
-        var allowedStepClass = 'allow';
-        var activeStepClass = 'active';
+    function($, ko) {
+        var steps = ko.observableArray();
         return {
-            currentStep: null,
-            steps: [
-                {
-                    name: 'authentication',
-                    isVisible: ko.observable(!customerIsLoggedIn),
-                    isEnabled: true,
-                    number: ko.observable(1),
-                    classAttributes: ko.observable(defaultStepClass)
-                },
-                {
-                    name: 'billingAddress',
-                    isVisible: ko.observable(customerIsLoggedIn),
-                    isEnabled: true,
-                    number: ko.observable(2),
-                    classAttributes: ko.observable(defaultStepClass)
-                },
-                {
-                    name: 'shippingAddress',
-                    isVisible: ko.observable(false),
-                    isEnabled: true,
-                    number: ko.observable(3),
-                    classAttributes: ko.observable(defaultStepClass)
-                },
-                {
-                    name: 'shippingMethod',
-                    isVisible: ko.observable(false),
-                    isEnabled: true,
-                    number: ko.observable(4),
-                    classAttributes: ko.observable(defaultStepClass)
-                },
-                {
-                    name: 'paymentMethod',
-                    isVisible: ko.observable(false),
-                    isEnabled: true,
-                    number: ko.observable(5),
-                    classAttributes: ko.observable(defaultStepClass)
-                },
-                {
-                    name: 'review',
-                    isVisible: ko.observable(false),
-                    isEnabled: true,
-                    number: ko.observable(6),
-                    classAttributes: ko.observable(defaultStepClass)
+            steps: steps,
+            stepCodes: [],
+            validCodes: [],
+
+            handleHash: function () {
+                var hashString = window.location.hash.replace('#', '');
+                if (hashString == '') {
+                    return false;
                 }
-            ],
-            setCurrent: function(step) {
-                this.currentStep = step;
-                return this;
+
+                if (-1 == $.inArray(hashString, this.validCodes)) {
+                    window.location.href = window.checkoutConfig.pageNotFoundUrl;
+                    return false;
+                }
+
+                var isRequestedStepVisible = steps.sort(this.sortItems).some(function(element) {
+                    return (element.code == hashString || element.alias == hashString) && element.isVisible();
+                });
+
+                //if requested step is visible, then we don't need to load step data from server
+                if (isRequestedStepVisible) {
+                    return false;
+                }
+
+                steps.sort(this.sortItems).forEach(function(element) {
+                    if (element.code == hashString || element.alias == hashString) {
+                        element.navigate();
+                    } else {
+                        element.isVisible(false);
+                    }
+
+                });
+                return false;
             },
-            getCurrentStep: function() {
-                if (!this.currentStep) {
-                    alert('Current step not set.');
+
+            registerStep: function(code, alias, title, isVisible, navigate, sortOrder) {
+                if (-1 != $.inArray(code, this.validCodes)) {
+                    throw new DOMException('Step code [' + code + '] already registered in step navigator');
+                }
+                if (alias != null) {
+                    if (-1 != $.inArray(alias, this.validCodes)) {
+                        throw new DOMException('Step code [' + alias + '] already registered in step navigator');
+                    }
+                    this.validCodes.push(alias);
+                }
+                this.validCodes.push(code);
+                steps.push({
+                    code: code,
+                    alias: alias != null ? alias : code,
+                    title : title,
+                    isVisible: isVisible,
+                    navigate: navigate,
+                    sortOrder: sortOrder
+                });
+                this.stepCodes.push(code);
+                var hash = window.location.hash.replace('#', '');
+                if (hash != '' && hash != code) {
+                    //Force hiding of not active step
+                    isVisible(false);
+                }
+            },
+
+            sortItems: function(itemOne, itemTwo) {
+                return itemOne.sortOrder > itemTwo.sortOrder ? 1 : -1
+            },
+
+            getActiveItemIndex: function() {
+                var activeIndex = 0;
+                steps.sort(this.sortItems).forEach(function(element, index) {
+                    if (element.isVisible()) {
+                        activeIndex = index;
+                    }
+                });
+                return activeIndex;
+            },
+
+            isProcessed: function(code) {
+                var activeItemIndex = this.getActiveItemIndex();
+                var sortedItems = steps.sort(this.sortItems);
+                var requestedItemIndex = -1;
+                sortedItems.forEach(function(element, index) {
+                    if (element.code == code) {
+                        requestedItemIndex = index;
+                    }
+                });
+                if (requestedItemIndex == -1) {
+                    return false;
+                }
+                return activeItemIndex > requestedItemIndex;
+            },
+
+            navigateTo: function(code) {
+                var sortedItems = steps.sort(this.sortItems);
+                if (!this.isProcessed(code)) {
                     return;
                 }
-                var self = this;
-                var currentStep = null;
-                $.each(this.steps, function(key, step) {
-                    if (self.currentStep == step.name) {
-                        currentStep = step;
-                    }
-                });
-                return currentStep;
-            },
-            goNext: function() {
-                var currentStep = this.getCurrentStep();
-                var nextStepOrder = currentStep.number() + 1;
-                var nextStep = null;
-                $.each(this.steps, function(key, item) {
-                    if (nextStepOrder == item.number()) {
-                        nextStep = item;
-                        return false;
-                    }
-                });
-                if (nextStep) {
-                    this.toStep(nextStep.name);
-                }
-            },
-            goBack: function() {
-                var currentStep = this.getCurrentStep();
-                var prevStepOrder = currentStep.number() - 1;
-                var previousStep = null;
-                $.each(this.steps, function(key, item) {
-                    if (prevStepOrder == item.number()) {
-                        previousStep = item;
-                        return false;
-                    }
-                });
-                if (previousStep) {
-                    this.toStep(previousStep.name);
-                }
-            },
-            getStepClassAttributes: function(name) {
-                return this.findStepByName(name).classAttributes;
-            },
-            setStepClassAttributes: function(name) {
-                var stepClass = defaultStepClass;
-                var step = this.findStepByName(name);
-                if (step.isVisible()) {
-                    stepClass += ' ' + activeStepClass;
-                }
-                if (this.isStepAvailable(step.name)) {
-                    stepClass += ' ' + allowedStepClass;
-                }
-                step.classAttributes(stepClass);
-            },
-            updateStepsClassAttributes: function() {
-                var self = this;
-                $.each(this.steps, function(key, step) {
-                    var stepClass = defaultStepClass;
-                    if (step.isVisible()) {
-                        stepClass += ' ' + activeStepClass;
-                    }
-                    if (self.isStepAvailable(step.name)) {
-                        stepClass += ' ' + allowedStepClass;
-                    }
-                    step.classAttributes(stepClass);
-                });
-            },
-            isStepAvailable: function(name) {
-                var visibleStep = this.getCurrentVisibleStep();
-                var step = this.findStepByName(name);
-                return (step.number() < visibleStep.number());
-            },
-            goToStep: function(name) {
-                if (this.isStepAvailable(name)) {
-                    this.toStep(name);
-                }
-            },
-            toStep: function(name) {
-                if (name) {
-                    $.each(this.steps, function(key, step) {
-                        step.isVisible(false);
-                    });
-                    this.findStepByName(name).isVisible(true);
-                    this.updateStepsClassAttributes();
-                    errorList.clear();
-                }
-            },
-            findStepByName: function(name) {
-                var step = null;
-                $.each(this.steps, function(key, currentStep) {
-                    if (name == currentStep.name) {
-                        step = currentStep;
-                        return false;
-                    }
-                });
-                return step;
-            },
-            isStepVisible: function(step) {
-                this.setStepClassAttributes(step);
-                return this.findStepByName(step).isVisible;
-            },
-            setStepVisible: function(step, flag) {
-                this.findStepByName(step).isVisible(flag);
-            },
-            getCurrentVisibleStep: function() {
-                var step = null;
-                $.each(this.steps, function(key, currentStep) {
-                    if (currentStep.isVisible()) {
-                        step = currentStep;
-                        return false;
-                    }
-                });
-                return step;
-            },
-            setStepEnabled: function(step, flag) {
-                this.findStepByName(step).isEnabled = flag;
-                this.refreshStepsNumbers();
-            },
-            refreshStepsNumbers: function() {
-                var numb = 1;
-                $.each(this.steps, function(key, item) {
-                    if (item.isEnabled) {
-                        item.number(numb);
-                        numb++;
+                sortedItems.forEach(function(element) {
+                    if (element.code == code) {
+                        element.isVisible(true);
+                        $('body').animate({scrollTop: $('#' + code).offset().top}, 0, function () {
+                            window.location = window.checkoutConfig.checkoutUrl + "#" + code;
+                        });
                     } else {
-                        item.number(null);
+                        element.isVisible(false);
                     }
+
                 });
             },
-            getStepNumber: function(name) {
-                return this.findStepByName(name).number;
+
+            next: function() {
+                var activeIndex = 0;
+                steps.sort(this.sortItems).forEach(function(element, index) {
+                    if (element.isVisible()) {
+                        element.isVisible(false);
+                        activeIndex = index;
+                    }
+                });
+                if (steps().length > activeIndex + 1) {
+                    var code = steps()[activeIndex + 1].code;
+                    steps()[activeIndex + 1].isVisible(true);
+                    $('body').animate({scrollTop: $('#' + code).offset().top}, 0, function () {
+                        window.location = window.checkoutConfig.checkoutUrl + "#" + code;
+                    });
+                }
             }
         };
     }

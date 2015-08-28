@@ -72,7 +72,6 @@ class FileFactory
                 $contentLength = $dir->stat($file)['size'];
             }
         }
-
         $this->_response->setHttpResponseCode(200)
             ->setHeader('Pragma', 'public', true)
             ->setHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0', true)
@@ -82,22 +81,25 @@ class FileFactory
             ->setHeader('Last-Modified', date('r'), true);
 
         if ($content !== null) {
+            $this->_response->sendHeaders();
             if ($isFile) {
-                $this->_response->sendHeaders();
                 $stream = $dir->openFile($file, 'r');
                 while (!$stream->eof()) {
                     echo $stream->read(1024);
                 }
-                $stream->close();
-                flush();
-                if (!empty($content['rm'])) {
-                    $dir->delete($file);
-                }
-                $this->callExit();
             } else {
-                $this->_response->clearBody();
-                $this->_response->setBody($content);
+                $dir->writeFile($fileName, $content);
+                $stream = $dir->openFile($fileName, 'r');
+                while (!$stream->eof()) {
+                    echo $stream->read(1024);
+                }
             }
+            $stream->close();
+            flush();
+            if (!empty($content['rm'])) {
+                $dir->delete($file);
+            }
+            $this->callExit();
         }
         return $this->_response;
     }

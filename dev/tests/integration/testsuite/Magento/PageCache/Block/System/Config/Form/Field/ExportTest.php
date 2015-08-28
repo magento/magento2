@@ -8,7 +8,7 @@ namespace Magento\PageCache\Block\System\Config\Form\Field;
 /**
  * @magentoAppArea adminhtml
  */
-class ExportTest extends \Magento\Backend\Utility\Controller
+class ExportTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * Check Varnish export buttons

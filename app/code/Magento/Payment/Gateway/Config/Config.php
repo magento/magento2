@@ -35,11 +35,33 @@ class Config implements ConfigInterface
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
-        $methodCode,
+        $methodCode = '',
         $pathPattern = self::DEFAULT_PATH_PATTERN
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->methodCode = $methodCode;
+        $this->pathPattern = $pathPattern;
+    }
+
+    /**
+     * Sets method code
+     *
+     * @param string $methodCode
+     * @return void
+     */
+    public function setMethodCode($methodCode)
+    {
+        $this->methodCode = $methodCode;
+    }
+
+    /**
+     * Sets path pattern
+     *
+     * @param string $pathPattern
+     * @return void
+     */
+    public function setPathPattern($pathPattern)
+    {
         $this->pathPattern = $pathPattern;
     }
 

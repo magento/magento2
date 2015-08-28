@@ -18,7 +18,7 @@ class Hold extends \Magento\Sales\Controller\Adminhtml\Order
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($order) {
             try {
-                $order->hold()->save();
+                $this->orderManagement->hold($order->getEntityId());
                 $this->messageManager->addSuccess(__('You put the order on hold.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
@@ -30,5 +30,13 @@ class Hold extends \Magento\Sales\Controller\Adminhtml\Order
         }
         $resultRedirect->setPath('sales/*/');
         return $resultRedirect;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Magento_Sales::hold');
     }
 }

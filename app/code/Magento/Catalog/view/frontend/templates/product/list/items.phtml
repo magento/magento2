@@ -17,12 +17,12 @@ switch ($type = $block->getType()) {
             $type = 'related';
             $class = $type;
 
-            $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
             $image = 'related_products_list';
             $title = __('Related Products');
             $items = $block->getAllItems();
             $limit = $block->getPositionLimit();
             $shuffle = (int) $block->isShuffled();
+            $canItemsAddToCart = $block->canItemsAddToCart();
 
             $showWishlist = true;
             $showCompare = true;
@@ -38,12 +38,12 @@ switch ($type = $block->getType()) {
             $type = 'related';
             $class = $type;
 
-            $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
             $image = 'related_products_list';
             $title = __('Related Products');
             $items = $block->getItems();
             $limit = 0;
             $shuffle = 0;
+            $canItemsAddToCart = $block->canItemsAddToCart();
 
             $showWishlist = true;
             $showCompare = true;
@@ -58,9 +58,8 @@ switch ($type = $block->getType()) {
             $type = 'upsell';
             $class = $type;
 
-            $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
             $image = 'upsell_products_list';
-            $title = __('You may also be interested in the following product(s)');
+            $title = __('We found other products you might like!');
             $items = $block->getAllItems();
             $limit = $block->getPositionLimit();
             $shuffle = (int) $block->isShuffled();
@@ -70,6 +69,7 @@ switch ($type = $block->getType()) {
             $showCart = false;
             $templateType = null;
             $description = false;
+            $canItemsAddToCart = false;
         }
     break;
 
@@ -79,9 +79,8 @@ switch ($type = $block->getType()) {
             $type = 'upsell';
             $class = $type;
 
-            $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
             $image = 'upsell_products_list';
-            $title = __('You may also be interested in the following product(s)');
+            $title = __('We found other products you might like!');
             $items = $block->getItemCollection()->getItems();
             $limit = $block->getItemLimit('upsell');
             $shuffle = 0;
@@ -91,6 +90,7 @@ switch ($type = $block->getType()) {
             $showCart = false;
             $templateType = null;
             $description = false;
+            $canItemsAddToCart = false;
         }
     break;
 
@@ -100,7 +100,6 @@ switch ($type = $block->getType()) {
             $type = 'crosssell';
             $class = $type;
 
-            $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
             $image = 'cart_cross_sell_products';
             $title = __('More Choices:');
             $items = $block->getItemCollection();
@@ -110,6 +109,7 @@ switch ($type = $block->getType()) {
             $showCart = true;
             $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
             $description = false;
+            $canItemsAddToCart = false;
         }
     break;
 
@@ -119,7 +119,6 @@ switch ($type = $block->getType()) {
             $type = 'crosssell';
             $class = $type;
 
-            $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
             $image = 'cart_cross_sell_products';
             $title = __('More Choices:');
             $items = $block->getItems();
@@ -129,6 +128,7 @@ switch ($type = $block->getType()) {
             $showCart = true;
             $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
             $description = false;
+            $canItemsAddToCart = false;
         }
     break;
 
@@ -140,7 +140,6 @@ switch ($type = $block->getType()) {
 
             $class = 'widget' . ' ' . $type;
 
-            $imageBlock = $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
             $image = 'new_products_content_widget_grid';
             $title = __('New Products');
             $items = $exist;
@@ -150,6 +149,7 @@ switch ($type = $block->getType()) {
             $showCart = true;
             $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
             $description = ($mode == 'list') ? true : false;
+            $canItemsAddToCart = false;
         }
     break;
 
@@ -173,7 +173,7 @@ switch ($type = $block->getType()) {
         <strong id="block-<?php echo $class?>-heading" role="heading" aria-level="2"><?php echo $title; ?></strong>
     </div>
     <div class="block-content content" aria-labelledby="block-<?php echo $class?>-heading">
-        <?php if ($type == 'related'): ?>
+        <?php if ($type == 'related' && $canItemsAddToCart): ?>
         <div class="block-actions">
             <?php echo __('Check items to add to the cart or') ?>
             <button type="button" class="action select" role="select-all"><span><?php echo __('select all') ?></span></button>
@@ -197,7 +197,7 @@ switch ($type = $block->getType()) {
                 <div class="product-item-info <?php echo $available; ?>">
                     <?php echo '<!-- ' . $image . '-->' ?>
                     <a href="<?php echo $block->getProductUrl($_item) ?>" class="product photo product-item-photo">
-                        <?php echo $imageBlock->init($_item, $image)->toHtml() ?>
+                        <?php echo $block->getImage($_item, $image)->toHtml(); ?>
                     </a>
                     <div class="product details product-item-details">
                         <strong class="product name product-item-name"><a class="product-item-link" title="<?php echo $block->escapeHtml($_item->getName()) ?>" href="<?php echo $block->getProductUrl($_item) ?>">

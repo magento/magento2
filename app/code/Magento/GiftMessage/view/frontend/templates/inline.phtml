@@ -32,7 +32,7 @@
                     <a href="#" class="action activate message" data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"hidden", "toggleContainers":"#allow-gift-messages-for-order-container"}}'><?php echo __('Gift Message') ?></a>
                     <div id="allow-gift-messages-for-order-container" class="gift-messages-order hidden">
                         <fieldset class="fieldset">
-                            <p><?php echo __('If you don\'t want to leave a gift message for the entire order, leave this box blank.') ?></p>
+                            <p><?php echo __('Leave this box blank if you don\'t want to leave a gift message for the entire order.') ?></p>
                             <div class="field from">
                                 <label for="gift-message-whole-from" class="label"><span><?php echo __('From') ?></span></label>
                                 <div class="control">
@@ -81,8 +81,7 @@ require(['jquery'], function(jQuery){
                                  <?php echo __('<span>Item %1</span> of %2', $_index+1, $block->countItems()) ?>
                              </div>
                              <div class="img photo container">
-                                 <?php $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image'); ?>
-                                 <?php echo $imageBlock->init($_product, 'gift_messages_checkout_thumbnail')->toHtml() ?>
+                                 <?php echo $block->getImage($_product, 'gift_messages_checkout_thumbnail')->toHtml(); ?>
                              </div>
                              <strong class="product name"><?php echo $block->escapeHtml($_product->getName()) ?></strong>
                          </div>
@@ -92,7 +91,7 @@ require(['jquery'], function(jQuery){
                              <a href="#" class="action activate message" data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"hidden", "toggleContainers":"#gift-messages-for-item-container-<?php echo $_item->getId() ?>"}}'><?php echo __('Gift Message') ?></a>
                              <div id="gift-messages-for-item-container-<?php echo $_item->getId() ?>" class="block message hidden">
                                  <fieldset class="fieldset">
-                                     <p><?php echo __('You can leave a box blank if you don\'t wish to add a gift message for the item.') ?></p>
+                                     <p><?php echo __('Leave a box blank if you don\'t want to add a gift message for that item.') ?></p>
                                      <div class="field from">
                                          <label for="gift-message-<?php echo $_item->getId() ?>-from" class="label"><span><?php echo __('From') ?></span></label>
                                          <div class="control">
@@ -153,7 +152,7 @@ require(['jquery'], function(jQuery){
             <dt id="add-gift-options-for-order-<?php echo $block->getEntity()->getId() ?>" class="order-title">
                 <div class="field choice">
                     <input type="checkbox" name="allow_gift_options_for_order_<?php echo $block->getEntity()->getId() ?>" id="allow_gift_options_for_order_<?php echo $block->getEntity()->getId() ?>" data-mage-init='{"giftOptions":{}}' value="1" data-selector='{"id":"#allow-gift-options-for-order-container-<?php echo $block->getEntity()->getId() ?>"}'<?php if ($block->getEntityHasMessage()): ?> checked="checked"<?php endif; ?> class="checkbox" />
-                    <label for="allow_gift_options_for_order_<?php echo $block->getEntity()->getId() ?>" class="label"><span><?php echo __('Add gift options for the Entire Order') ?></span></label>
+                    <label for="allow_gift_options_for_order_<?php echo $block->getEntity()->getId() ?>" class="label"><span><?php echo __('Add Gift Options for the Entire Order') ?></span></label>
                 </div>
             </dt>
 
@@ -164,7 +163,7 @@ require(['jquery'], function(jQuery){
                     <a href="#" class="action activate message" data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"hidden", "toggleContainers":"#gift-messages-for-order-container-<?php echo $block->getEntity()->getId() ?>"}}'><?php echo __('Gift Message') ?></a>
                     <div id="gift-messages-for-order-container-<?php echo $block->getEntity()->getId() ?>" class="gift-messages-order hidden">
                         <fieldset class="fieldset">
-                            <p><?php echo __('You can leave this box blank if you do not wish to add a gift message for this address.') ?></p>
+                            <p><?php echo __('You can leave this box blank if you don\'t want to add a gift message for this address.') ?></p>
                             <div class="field from">
                                 <label for="gift-message-<?php echo $block->getEntity()->getId() ?>-from" class="label"><span><?php echo __('From') ?></span></label>
                                 <div class="control">
@@ -204,8 +203,7 @@ require(['jquery'], function(jQuery){
                          <div class="product">
                              <div class="number"><?php echo __('<span>Item %1</span> of %2', $_index+1, $block->countItems()) ?></div>
                              <div class="img photo container">
-                                 <?php $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image'); ?>
-                                 <?php echo $imageBlock->init($_product, 'gift_messages_checkout_thumbnail')->toHtml() ?>
+                                 <?php echo $block->getImage($_product, 'gift_messages_checkout_thumbnail')->toHtml(); ?>
                              </div>
                              <strong class="product-name"><?php echo $block->escapeHtml($_product->getName()) ?></strong>
                          </div>
@@ -218,7 +216,7 @@ require(['jquery'], function(jQuery){
                                  <a href="#" class="action activate message" data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"hidden", "toggleContainers":"#gift-messages-for-item-container-<?php echo $_item->getId() ?>"}}'><?php echo __('Gift Message') ?></a>
                                  <div id="gift-messages-for-item-container-<?php echo $_item->getId() ?>" class="block message hidden">
                                      <fieldset class="fieldset">
-                                        <p><?php echo __('You can leave this box blank if you do not wish to add a gift message for the item.') ?></p>
+                                        <p><?php echo __('You can leave this box blank if you don\'t want to add a gift message for the item.') ?></p>
                                          <input type="hidden" name="giftmessage[quote_address_item][<?php echo $_item->getId() ?>][address]" value="<?php echo $block->getEntity()->getId()?>" />
                                          <div class="field from">
                                              <label for="gift-message-<?php echo $_item->getId() ?>-from" class="label"><span><?php echo __('From') ?></span></label>

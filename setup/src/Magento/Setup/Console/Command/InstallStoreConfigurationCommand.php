@@ -166,6 +166,7 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
      * @param InputInterface $input
      * @return string[]
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function validate(InputInterface $input)
     {
@@ -178,6 +179,9 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
             switch ($key) {
                 case StoreConfigurationDataMapper::KEY_BASE_URL:
                     /** @var Validator $url */
+                    if (strcmp($value, '{{base_url}}') == 0) {
+                        break;
+                    }
                     $url = $this->objectManager->get('Magento\Framework\Url\Validator');
                     if (!$url->isValid($value)) {
                         $errorMsgs = $url->getMessages();
@@ -252,6 +256,15 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
                     $errorMsg = $this->validateBinaryValue(
                         $value,
                         StoreConfigurationDataMapper::KEY_ADMIN_USE_SECURITY_KEY
+                    );
+                    if ($errorMsg !== '') {
+                        $errors[] = $errorMsg;
+                    }
+                    break;
+                case StoreConfigurationDataMapper::KEY_JS_LOGGING:
+                    $errorMsg = $this->validateBinaryValue(
+                        $value,
+                        StoreConfigurationDataMapper::KEY_JS_LOGGING
                     );
                     if ($errorMsg !== '') {
                         $errors[] = $errorMsg;

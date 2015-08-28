@@ -7,6 +7,12 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
     <repository class="Magento\Catalog\Test\Repository\CatalogProductAttribute">
+        <dataset name="default">
+            <field name="frontend_label" xsi:type="string">attribute_label%isolation%</field>
+            <field name="frontend_input" xsi:type="string">Text Field</field>
+            <field name="is_required" xsi:type="string">No</field>
+        </dataset>
+
         <dataset name="attribute_type_text_field">
             <field name="frontend_label" xsi:type="string">attribute_text%isolation%</field>
             <field name="attribute_code" xsi:type="string">attribute_text%isolation%</field>

@@ -211,11 +211,11 @@ abstract class AbstractType
     /**
      * Return relation info about used products for specific type instance
      *
-     * @return \Magento\Framework\Object Object with information data
+     * @return \Magento\Framework\DataObject Object with information data
      */
     public function getRelationInfo()
     {
-        return new \Magento\Framework\Object();
+        return new \Magento\Framework\DataObject();
     }
 
     /**
@@ -356,13 +356,13 @@ abstract class AbstractType
      * Prepare product and its configuration to be added to some products list.
      * Perform standard preparation process and then prepare options belonging to specific product type.
      *
-     * @param  \Magento\Framework\Object $buyRequest
+     * @param  \Magento\Framework\DataObject $buyRequest
      * @param  \Magento\Catalog\Model\Product $product
      * @param  string $processMode
      * @return array|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _prepareProduct(\Magento\Framework\Object $buyRequest, $product, $processMode)
+    protected function _prepareProduct(\Magento\Framework\DataObject $buyRequest, $product, $processMode)
     {
         // try to add custom options
         try {
@@ -423,13 +423,13 @@ abstract class AbstractType
     /**
      * Process product configuration
      *
-     * @param \Magento\Framework\Object $buyRequest
+     * @param \Magento\Framework\DataObject $buyRequest
      * @param \Magento\Catalog\Model\Product $product
      * @param string $processMode
      * @return array|string
      */
     public function processConfiguration(
-        \Magento\Framework\Object $buyRequest,
+        \Magento\Framework\DataObject $buyRequest,
         $product,
         $processMode = self::PROCESS_MODE_LITE
     ) {
@@ -442,12 +442,12 @@ abstract class AbstractType
      * Initialize product(s) for add to cart process.
      * Advanced version of func to prepare product for cart - processMode can be specified there.
      *
-     * @param \Magento\Framework\Object $buyRequest
+     * @param \Magento\Framework\DataObject $buyRequest
      * @param \Magento\Catalog\Model\Product $product
      * @param null|string $processMode
      * @return array|string
      */
-    public function prepareForCartAdvanced(\Magento\Framework\Object $buyRequest, $product, $processMode = null)
+    public function prepareForCartAdvanced(\Magento\Framework\DataObject $buyRequest, $product, $processMode = null)
     {
         if (!$processMode) {
             $processMode = self::PROCESS_MODE_FULL;
@@ -460,11 +460,11 @@ abstract class AbstractType
     /**
      * Initialize product(s) for add to cart process
      *
-     * @param \Magento\Framework\Object $buyRequest
+     * @param \Magento\Framework\DataObject $buyRequest
      * @param \Magento\Catalog\Model\Product $product
      * @return array|string
      */
-    public function prepareForCart(\Magento\Framework\Object $buyRequest, $product)
+    public function prepareForCart(\Magento\Framework\DataObject $buyRequest, $product)
     {
         return $this->prepareForCartAdvanced($buyRequest, $product, self::PROCESS_MODE_FULL);
     }
@@ -559,18 +559,18 @@ abstract class AbstractType
      */
     public function getSpecifyOptionMessage()
     {
-        return __('Please specify the product\'s required option(s).');
+        return __('Please specify product\'s required option(s).');
     }
 
     /**
      * Process custom defined options for product
      *
-     * @param \Magento\Framework\Object $buyRequest
+     * @param \Magento\Framework\DataObject $buyRequest
      * @param \Magento\Catalog\Model\Product $product
      * @param string $processMode
      * @return array
      */
-    protected function _prepareOptions(\Magento\Framework\Object $buyRequest, $product, $processMode)
+    protected function _prepareOptions(\Magento\Framework\DataObject $buyRequest, $product, $processMode)
     {
         $transport = new \StdClass();
         $transport->options = [];
@@ -796,7 +796,7 @@ abstract class AbstractType
 
                     $group = $option->groupFactory($option->getType())
                         ->setOption($option)
-                        ->setListener(new \Magento\Framework\Object());
+                        ->setListener(new \Magento\Framework\DataObject());
 
                     $optionSku = $group->getOptionSku($confItemOption->getValue(), $skuDelimiter);
                     if ($optionSku) {
@@ -841,14 +841,14 @@ abstract class AbstractType
      * so need to change configuration item qty option value too.
      *
      * @param array $options
-     * @param \Magento\Framework\Object $option
+     * @param \Magento\Framework\DataObject $option
      * @param int|float|null $value
      * @param \Magento\Catalog\Model\Product $product
      *
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function updateQtyOption($options, \Magento\Framework\Object $option, $value, $product)
+    public function updateQtyOption($options, \Magento\Framework\DataObject $option, $value, $product)
     {
         return $this;
     }
@@ -995,7 +995,7 @@ abstract class AbstractType
      * Prepare selected options for product
      *
      * @param  \Magento\Catalog\Model\Product $product
-     * @param  \Magento\Framework\Object $buyRequest
+     * @param  \Magento\Framework\DataObject $buyRequest
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -1008,7 +1008,7 @@ abstract class AbstractType
      * Check product's options configuration
      *
      * @param  \Magento\Catalog\Model\Product $product
-     * @param  \Magento\Framework\Object $buyRequest
+     * @param  \Magento\Framework\DataObject $buyRequest
      * @return array
      */
     public function checkProductConfiguration($product, $buyRequest)

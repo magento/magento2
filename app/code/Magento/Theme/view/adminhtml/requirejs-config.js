@@ -11,6 +11,9 @@ var config = {
         "extjs/ext-tree-checkbox": [
             "extjs/ext-tree",
             "extjs/defaults"
+        ],
+        "jquery/editableMultiselect/js/jquery.editable": [
+            "jquery"
         ]
     },
     "bundles": {

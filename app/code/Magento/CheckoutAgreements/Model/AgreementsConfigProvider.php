@@ -20,11 +20,20 @@ class AgreementsConfigProvider implements ConfigProviderInterface
     protected $scopeConfiguration;
 
     /**
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration
+     * @var \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface
      */
-    public function __construct(\Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration)
-    {
+    protected $checkoutAgreementsRepository;
+
+    /**
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration
+     * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository
+     */
+    public function __construct(
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration,
+        \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository
+    ) {
         $this->scopeConfiguration = $scopeConfiguration;
+        $this->checkoutAgreementsRepository = $checkoutAgreementsRepository;
     }
 
     /**
@@ -32,10 +41,14 @@ class AgreementsConfigProvider implements ConfigProviderInterface
      */
     public function getConfig()
     {
-        if ($this->scopeConfiguration->isSetFlag(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)) {
+        $isAgreementsEnabled = $this->scopeConfiguration->isSetFlag(
+            AgreementsProvider::PATH_ENABLED,
+            ScopeInterface::SCOPE_STORE
+        );
+
+        if ($isAgreementsEnabled && count($this->checkoutAgreementsRepository->getList()) > 0) {
             return ['checkoutAgreementsEnabled' => true];
-        } else {
-            return [];
         }
+        return [];
     }
 }

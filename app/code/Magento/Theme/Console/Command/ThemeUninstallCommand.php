@@ -194,25 +194,24 @@ class ThemeUninstallCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $messages = [];
         $themePaths = $input->getArgument(self::INPUT_KEY_THEMES);
-        $validationMessages = $this->validate($themePaths);
-        if (!empty($validationMessages)) {
-            $output->writeln($validationMessages);
+        $messages = array_merge($messages, $this->validate($themePaths));
+        if (!empty($messages)) {
+            $output->writeln($messages);
             return;
         }
-        $isThemeInUseMessages = $this->themeValidator->validateIsThemeInUse($themePaths);
-        if (!empty($isThemeInUseMessages)) {
-            $output->writeln($isThemeInUseMessages);
-            return;
-        }
-        $childThemeCheckMessages = $this->checkChildTheme($themePaths);
-        if (!empty($childThemeCheckMessages)) {
-            $output->writeln($childThemeCheckMessages);
-            return;
-        }
-        $dependencyMessages = $this->checkDependencies($themePaths);
-        if (!empty($dependencyMessages)) {
-            $output->writeln($dependencyMessages);
+        $messages = array_merge(
+            $messages,
+            $this->themeValidator->validateIsThemeInUse($themePaths),
+            $this->checkChildTheme($themePaths),
+            $this->checkDependencies($themePaths)
+        );
+        if (!empty($messages)) {
+            $output->writeln(
+                '<error>Unable to uninstall. Please resolve the following issues:</error>'
+                . PHP_EOL . implode(PHP_EOL, $messages)
+            );
             return;
         }
 
@@ -290,8 +289,8 @@ class ThemeUninstallCommand extends Command
         foreach ($dependencies as $package => $dependingPackages) {
             if (!empty($dependingPackages)) {
                 $messages[] =
-                    '<error>Cannot uninstall ' . $packageToPath[$package] .
-                    " because the following package(s) depend on it:</error>" .
+                    '<error>' . $packageToPath[$package] .
+                    " has the following dependent package(s):</error>" .
                     PHP_EOL . "\t<error>" . implode('</error>' . PHP_EOL . "\t<error>", $dependingPackages)
                     . "</error>";
             }
@@ -322,13 +321,13 @@ class ThemeUninstallCommand extends Command
         }
         if (!empty($themeHasVirtualChildren)) {
             $text = count($themeHasVirtualChildren) > 1 ? ' are parents of' : ' is a parent of';
-            $messages[] = '<error>Unable to uninstall. '
-                . implode(', ', $themeHasVirtualChildren) . $text . ' virtual theme</error>';
+            $messages[] = '<error>' . implode(', ', $themeHasVirtualChildren) . $text . ' virtual theme.'
+                . ' Parent themes cannot be uninstalled.</error>';
         }
         if (!empty($themeHasPhysicalChildren)) {
             $text = count($themeHasPhysicalChildren) > 1 ? ' are parents of' : ' is a parent of';
-            $messages[] = '<error>Unable to uninstall. '
-                . implode(', ', $themeHasPhysicalChildren) . $text . ' physical theme</error>';
+            $messages[] = '<error>' . implode(', ', $themeHasPhysicalChildren) . $text . ' physical theme.'
+                . ' Parent themes cannot be uninstalled.</error>';
         }
         return $messages;
     }
@@ -362,7 +361,11 @@ class ThemeUninstallCommand extends Command
     {
         $themesDirRead = $this->filesystem->getDirectoryRead(DirectoryList::THEMES);
         if ($themesDirRead->isExist($themePath . '/composer.json')) {
-            $rawData = \Zend_Json::decode($themesDirRead->readFile($themePath . '/composer.json'));
+            $rawData = [];
+            $themeFile = $themesDirRead->readFile($themePath . '/composer.json');
+            if ($themeFile) {
+                $rawData = \Zend_Json::decode($themeFile);
+            }
             return isset($rawData['name']) ? $rawData['name'] : '';
         }
         return '';

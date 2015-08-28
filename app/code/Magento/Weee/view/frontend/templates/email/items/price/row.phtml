@@ -20,23 +20,23 @@ $_order = $_item->getOrder();
 
 <?php if ($block->displayPriceExclTax() || $block->displayBothPrices()): ?>
     <?php if ($block->displayBothPrices()): ?>
-        <span class="label"><?php echo __('Excl. Tax'); ?>:</span>
+        <span class="label"><?= __('Excl. Tax') ?>:</span>
     <?php endif; ?>
-    <?php echo $_order->formatPrice($block->getRowDisplayPriceExclTax()); ?>
+    <?= $_order->formatPrice($block->getRowDisplayPriceExclTax()) ?>
 
     <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item)): ?>
         <br />
         <?php if ($block->displayPriceWithWeeeDetails()): ?>
             <small>
                 <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
-                    <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $_order->formatPrice($tax['row_amount'], true, true); ?></span><br />
+                    <span class="nobr"><?= $tax['title'] ?>: <?= $_order->formatPrice($tax['row_amount'], true, true) ?></span><br />
                 <?php endforeach; ?>
             </small>
         <?php endif; ?>
 
         <?php if ($block->displayFinalPrice()): ?>
             <br />
-            <span class="nobr"><?php echo __('Total'); ?>:<br /> <?php echo $_order->formatPrice($block->getFinalRowDisplayPriceExclTax()); ?></span>
+            <span class="nobr"><?= __('Total') ?>:<br /> <?= $_order->formatPrice($block->getFinalRowDisplayPriceExclTax()) ?></span>
         <?php endif; ?>
     <?php endif; ?>
 <?php endif; ?>
@@ -44,21 +44,21 @@ $_order = $_item->getOrder();
 
 <?php if ($block->displayPriceInclTax() || $block->displayBothPrices()): ?>
     <?php if ($block->displayBothPrices()): ?>
-        <br /><span class="label"><?php echo __('Incl. Tax'); ?>:</span>
+        <br /><span class="label"><?= __('Incl. Tax') ?>:</span>
     <?php endif; ?>
-    <?php echo $_order->formatPrice($block->getRowDisplayPriceInclTax()); ?>
+    <?= $_order->formatPrice($block->getRowDisplayPriceInclTax()) ?>
     <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item)): ?>
         <br />
         <?php if ($block->displayPriceWithWeeeDetails()): ?>
             <small>
                 <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
-                    <span class="nobr"><?php echo $tax['title']; ?>: <?php echo $_order->formatPrice($tax['row_amount_incl_tax'], true, true); ?></span><br />
+                    <span class="nobr"><?= $tax['title'] ?>: <?= $_order->formatPrice($tax['row_amount_incl_tax'], true, true) ?></span><br />
                 <?php endforeach; ?>
             </small>
         <?php endif; ?>
 
         <?php if ($block->displayFinalPrice()): ?>
-            <span class="nobr"><?php echo __('Total incl. tax'); ?>:<br /> <?php echo $_order->formatPrice($block->getFinalRowDisplayPriceInclTax()); ?></span>
+            <span class="nobr"><?= __('Total Incl. Tax') ?>:<br /> <?= $_order->formatPrice($block->getFinalRowDisplayPriceInclTax()) ?></span>
         <?php endif; ?>
     <?php endif; ?>
 <?php endif; ?>

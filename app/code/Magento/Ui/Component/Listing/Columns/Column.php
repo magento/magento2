@@ -66,6 +66,8 @@ class Column extends AbstractComponent implements ColumnInterface
      */
     public function prepare()
     {
+        $this->addFieldToSelect();
+
         $dataType = $this->getData('config/dataType');
         if ($dataType) {
             $this->wrappedComponent = $this->uiComponentFactory->create(
@@ -102,6 +104,17 @@ class Column extends AbstractComponent implements ColumnInterface
     public function prepareItems(array & $items)
     {
         return $items;
+    }
+
+    /**
+     * Add field to select
+     * @return void
+     */
+    protected function addFieldToSelect()
+    {
+        if ($this->getData('config/add_field')) {
+            $this->getContext()->getDataProvider()->addField($this->getName());
+        }
     }
 
     /**

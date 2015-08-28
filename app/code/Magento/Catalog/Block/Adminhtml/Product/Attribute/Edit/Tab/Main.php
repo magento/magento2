@@ -58,7 +58,7 @@ class Main extends AbstractMain
             ];
         }
 
-        $response = new \Magento\Framework\Object();
+        $response = new \Magento\Framework\DataObject();
         $response->setTypes([]);
         $this->_eventManager->dispatch('adminhtml_product_attribute_types', ['response' => $response]);
         $_hiddenFields = [];
@@ -69,6 +69,8 @@ class Main extends AbstractMain
             }
         }
         $this->_coreRegistry->register('attribute_type_hidden_fields', $_hiddenFields);
+
+        $this->_eventManager->dispatch('product_attribute_form_build_main_tab', ['form' => $form]);
 
         $frontendInputValues = array_merge($frontendInputElm->getValues(), $additionalTypes);
         $frontendInputElm->setValues($frontendInputValues);

@@ -68,10 +68,6 @@ class ProductVariationsBuilder
                     ]
                 );
                 $item->setData('custom_attributes', $customAttributes);
-
-                $priceInfo = $valueInfo['price'];
-                $price += (!empty($priceInfo['is_percent']) ? $product->getPrice() / 100.0 : 1.0)
-                    * $priceInfo['pricing_value'];
             }
             $item->setPrice($price);
             $item->setName($product->getName() . $suffix);

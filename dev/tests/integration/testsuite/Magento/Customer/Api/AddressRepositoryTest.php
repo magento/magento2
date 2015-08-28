@@ -306,17 +306,17 @@ class AddressRepositoryTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchBuilder */
         $searchBuilder = $this->_objectManager->create('Magento\Framework\Api\SearchCriteriaBuilder');
         foreach ($filters as $filter) {
-            $searchBuilder->addFilter([$filter]);
+            $searchBuilder->addFilters([$filter]);
         }
         if ($filterGroup !== null) {
-            $searchBuilder->addFilter($filterGroup);
+            $searchBuilder->addFilters($filterGroup);
         }
 
         $searchResults = $this->repository->getList($searchBuilder->create());
 
         $this->assertEquals(count($expectedResult), $searchResults->getTotalCount());
 
-        /** @var \Magento\Customer\Api\Data\AddressInterface $item*/
+        /** @var \Magento\Customer\Api\Data\AddressInterface $item */
         foreach ($searchResults->getItems() as $item) {
             $this->assertEquals(
                 $expectedResult[$item->getId()]['city'],

@@ -1,0 +1,27 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var $block \Magento\Braintree\Block\Datajs
+ */
+?>
+<?php
+$arrayData = [
+    "kountId" => $this->helper('Magento\Braintree\Helper\Data')->getKountId() ?
+        $this->helper('Magento\Braintree\Helper\Data')->getKountId() : false,
+    "formId" =>$block->getFormId(),
+    "merchantId" => $block->getMerchantId(),
+    "braintreeDataJs" => $block->getJsSrc(),
+];
+$serializedFormData = $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($arrayData);
+?>
+<script type="text/x-magento-init">
+    {
+        "body": {
+             "braintreeDataJs": <?php echo $serializedFormData ?>
+        }
+    }
+</script>

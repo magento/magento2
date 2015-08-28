@@ -7,7 +7,6 @@ namespace Magento\Framework\View\Element;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-use Magento\Framework\View\Template\Html\Minifier;
 
 /**
  * Base html block
@@ -55,13 +54,6 @@ class Template extends AbstractBlock
      * @var Filesystem
      */
     protected $_filesystem;
-
-    /**
-     * View file system
-     *
-     * @var \Magento\Framework\View\FileSystem
-     */
-    protected $_viewFileSystem;
 
     /**
      * Path to template file in theme.
@@ -118,6 +110,16 @@ class Template extends AbstractBlock
     protected $pageConfig;
 
     /**
+     * @var \Magento\Framework\View\Element\Template\File\Resolver
+     */
+    protected $resolver;
+
+    /**
+     * @var \Magento\Framework\View\Element\Template\File\Validator
+     */
+    protected $validator;
+
+    /**
      * Constructor
      *
      * @param Template\Context $context
@@ -125,8 +127,9 @@ class Template extends AbstractBlock
      */
     public function __construct(Template\Context $context, array $data = [])
     {
+        $this->validator = $context->getValidator();
+        $this->resolver = $context->getResolver();
         $this->_filesystem = $context->getFilesystem();
-        $this->_viewFileSystem = $context->getViewFileSystem();
         $this->templateEnginePool = $context->getEnginePool();
         $this->_storeManager = $context->getStoreManager();
         $this->_appState = $context->getAppState();
@@ -200,8 +203,7 @@ class Template extends AbstractBlock
         if ($area) {
             $params['area'] = $area;
         }
-        $templateName = $this->_viewFileSystem->getTemplateFileName($template ?: $this->getTemplate(), $params);
-        return $templateName;
+        return $this->resolver->getTemplateFileName($template ?: $this->getTemplate(), $params);
     }
 
     /**
@@ -247,7 +249,7 @@ class Template extends AbstractBlock
             ['group' => 'TEMPLATE', 'file_name' => $relativeFilePath]
         );
 
-        if ($this->isTemplateFileValid($fileName)) {
+        if ($this->validator->isValid($fileName)) {
             $extension = pathinfo($fileName, PATHINFO_EXTENSION);
             $templateEngine = $this->templateEnginePool->get($extension);
             $html = $templateEngine->render($this->templateContext, $fileName, $this->_viewVars);
@@ -289,11 +291,11 @@ class Template extends AbstractBlock
     /**
      * Get data from specified object
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @param string $key
      * @return mixed
      */
-    public function getObjectData(\Magento\Framework\Object $object, $key)
+    public function getObjectData(\Magento\Framework\DataObject $object, $key)
     {
         return $object->getDataUsingMethod((string)$key);
     }
@@ -311,22 +313,6 @@ class Template extends AbstractBlock
             $this->getTemplateFile(),
             'template' => $this->getTemplate()
         ];
-    }
-
-    /**
-     * Get is allowed symliks flag
-     *
-     * @return bool
-     */
-    protected function isAllowSymlinks()
-    {
-        if (null === $this->_allowSymlinks) {
-            $this->_allowSymlinks = $this->_scopeConfig->isSetFlag(
-                self::XML_PATH_TEMPLATE_ALLOW_SYMLINK,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            );
-        }
-        return $this->_allowSymlinks;
     }
 
     /**
@@ -354,50 +340,5 @@ class Template extends AbstractBlock
             $this->mediaDirectory = $this->_filesystem->getDirectoryRead(DirectoryList::MEDIA);
         }
         return $this->mediaDirectory;
-    }
-
-    /**
-     * Checks whether the provided file can be rendered.
-     *
-     * Available directories which are allowed to be rendered
-     * (the template file should be located under these directories):
-     *  - app
-     *  - design
-     *
-     * @param string $fileName
-     * @return bool
-     */
-    protected function isTemplateFileValid($fileName)
-    {
-        $fileName = str_replace('\\', '/', $fileName);
-
-        $themesDir = $this->_filesystem->getDirectoryRead(DirectoryList::THEMES)->getAbsolutePath();
-        $appDir = $this->_filesystem->getDirectoryRead(DirectoryList::APP)->getAbsolutePath();
-        $compiledDir = $this->_filesystem->getDirectoryRead(DirectoryList::TEMPLATE_MINIFICATION_DIR)
-            ->getAbsolutePath();
-        return ($this->isPathInDirectory(
-            $fileName,
-            $compiledDir
-        ) || $this->isPathInDirectory(
-            $fileName,
-            $appDir
-        ) || $this->isPathInDirectory(
-            $fileName,
-            $themesDir
-        ) || $this->isAllowSymlinks()) && $this->getRootDirectory()->isFile(
-            $this->getRootDirectory()->getRelativePath($fileName)
-        );
-    }
-
-    /**
-     * Checks whether path related to the directory
-     *
-     * @param string $path
-     * @param string $directory
-     * @return bool
-     */
-    protected function isPathInDirectory($path, $directory)
-    {
-        return 0 === strpos($path, $directory);
     }
 }

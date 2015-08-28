@@ -5,6 +5,7 @@
  */
 namespace Magento\ImportExport\Model\Import;
 
+use Magento\Framework\App\Resource;
 
 /**
  * Import entity abstract model
@@ -114,7 +115,7 @@ abstract class AbstractEntity
     /**
      * Magento string lib
      *
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
@@ -152,6 +153,13 @@ abstract class AbstractEntity
      * @var int
      */
     protected $_processedRowsCount = 0;
+
+    /**
+     * Need to log in import history
+     *
+     * @var bool
+     */
+    protected $logInHistory = false;
 
     /**
      * Rows which will be skipped during import
@@ -232,27 +240,30 @@ abstract class AbstractEntity
     protected $_scopeConfig;
 
     /**
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Framework\App\Resource $resource
+     * @param Resource $resource
      * @param array $data
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function __construct(
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
-        \Magento\Framework\App\Resource $resource,
+        Resource $resource,
         array $data = []
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_dataSourceModel = isset(
             $data['data_source_model']
         ) ? $data['data_source_model'] : $importFactory->create()->getDataSourceModel();
-        $this->_connection = isset($data['connection']) ? $data['connection'] : $resource->getConnection('write');
+        $this->_connection =
+            isset($data['connection']) ?
+            $data['connection'] :
+            $resource->getConnection();
         $this->string = $string;
         $this->_pageSize = isset(
             $data['page_size']
@@ -549,7 +560,7 @@ abstract class AbstractEntity
     public function getSource()
     {
         if (!$this->_source) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Source is not set'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The source is not set.'));
         }
         return $this->_source;
     }
@@ -671,6 +682,16 @@ abstract class AbstractEntity
     }
 
     /**
+     * Is import need to log in history.
+     *
+     * @return bool
+     */
+    public function isNeedToLogInHistory()
+    {
+        return $this->logInHistory;
+    }
+
+    /**
      * Validate data row
      *
      * @param array $rowData
@@ -719,7 +740,7 @@ abstract class AbstractEntity
             $absentColumns = array_diff($this->_permanentAttributes, $this->getSource()->getColNames());
             if ($absentColumns) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Cannot find required columns: %1', implode(', ', $absentColumns))
+                    __('We can\'t find required columns: %1.', implode(', ', $absentColumns))
                 );
             }
 

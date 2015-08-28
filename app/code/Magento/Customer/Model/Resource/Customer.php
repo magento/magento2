@@ -12,7 +12,7 @@ use Magento\Framework\Exception\AlreadyExistsException;
  * Customer entity resource model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
+class Customer extends \Magento\Eav\Model\Entity\VersionControl\AbstractEntity
 {
     /**
      * @var \Magento\Framework\Validator\Factory
@@ -32,23 +32,35 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
     protected $dateTime;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
      * @param \Magento\Eav\Model\Entity\Context $context
+     * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot
+     * @param \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Validator\Factory $validatorFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
+        \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
+        \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Validator\Factory $validatorFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         $data = []
     ) {
-        parent::__construct($context, $data);
+        parent::__construct($context, $entitySnapshot, $entityRelationComposite, $data);
         $this->_scopeConfig = $scopeConfig;
         $this->_validatorFactory = $validatorFactory;
         $this->dateTime = $dateTime;
+        $this->storeManager = $storeManager;
         $this->setType('customer');
         $this->setConnection('customer_read', 'customer_write');
     }
@@ -72,23 +84,30 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Check customer scope, email and confirmation key before saving
      *
-     * @param \Magento\Framework\Object $customer
+     * @param \Magento\Framework\DataObject $customer
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function _beforeSave(\Magento\Framework\Object $customer)
+    protected function _beforeSave(\Magento\Framework\DataObject $customer)
     {
         /** @var \Magento\Customer\Model\Customer $customer */
+        if ($customer->getStoreId() === null) {
+            $customer->setStoreId($this->storeManager->getStore()->getId());
+        }
+        $customer->getGroupId();
+
         parent::_beforeSave($customer);
 
         if (!$customer->getEmail()) {
-            throw new ValidatorException(__('Customer email is required'));
+            throw new ValidatorException(__('Please enter a customer email.'));
         }
 
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         $bind = ['email' => $customer->getEmail()];
 
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getEntityTable(),
             [$this->getEntityIdField()]
         )->where(
@@ -103,10 +122,10 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
             $select->where('entity_id != :entity_id');
         }
 
-        $result = $adapter->fetchOne($select, $bind);
+        $result = $connection->fetchOne($select, $bind);
         if ($result) {
             throw new AlreadyExistsException(
-                __('Customer with the same email already exists in associated website.')
+                __('A customer with the same email already exists in an associated website.')
             );
         }
 
@@ -149,76 +168,18 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Save customer addresses and set default addresses in attributes backend
      *
-     * @param \Magento\Customer\Model\Customer $customer
+     * @param \Magento\Framework\DataObject $customer
      * @return $this
      */
-    protected function _afterSave(\Magento\Framework\Object $customer)
+    protected function _afterSave(\Magento\Framework\DataObject $customer)
     {
-        $this->_saveAddresses($customer);
         return parent::_afterSave($customer);
-    }
-
-    /**
-     * Save/delete customer address
-     *
-     * @param \Magento\Customer\Model\Customer $customer
-     * @return $this
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
-    protected function _saveAddresses(\Magento\Customer\Model\Customer $customer)
-    {
-        $defaultBillingId = $customer->getData('default_billing');
-        $defaultShippingId = $customer->getData('default_shipping');
-        /** @var \Magento\Customer\Model\Address $address */
-        foreach ($customer->getAddresses() as $address) {
-            if ($address->getData('_deleted')) {
-                if ($address->getId() == $defaultBillingId) {
-                    $customer->setData('default_billing', null);
-                }
-                if ($address->getId() == $defaultShippingId) {
-                    $customer->setData('default_shipping', null);
-                }
-                $removedAddressId = $address->getId();
-                $address->delete();
-                // Remove deleted address from customer address collection
-                $customer->getAddressesCollection()->removeItemByKey($removedAddressId);
-            } else {
-                $address->setParentId(
-                    $customer->getId()
-                )->setStoreId(
-                    $customer->getStoreId()
-                )->setIsCustomerSaveTransaction(
-                    true
-                )->save();
-                if (($address->getIsPrimaryBilling() ||
-                    $address->getIsDefaultBilling()) && $address->getId() != $defaultBillingId
-                ) {
-                    $customer->setData('default_billing', $address->getId());
-                }
-                if (($address->getIsPrimaryShipping() ||
-                    $address->getIsDefaultShipping()) && $address->getId() != $defaultShippingId
-                ) {
-                    $customer->setData('default_shipping', $address->getId());
-                }
-            }
-        }
-        $changedAddresses = [];
-
-        $changedAddresses['default_billing'] = $customer->getData('default_billing');
-        $changedAddresses['default_shipping'] = $customer->getData('default_shipping');
-        $this->_getWriteAdapter()->update(
-            $this->getTable('customer_entity'),
-            $changedAddresses,
-            $this->_getWriteAdapter()->quoteInto('entity_id = ?', $customer->getId())
-        );
-
-        return $this;
     }
 
     /**
      * Retrieve select object for loading base entity row
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @param string|int $rowId
      * @return \Magento\Framework\DB\Select
      */
@@ -242,9 +203,9 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     public function loadByEmail(\Magento\Customer\Model\Customer $customer, $email)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $bind = ['customer_email' => $email];
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getEntityTable(),
             [$this->getEntityIdField()]
         )->where(
@@ -254,14 +215,14 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
         if ($customer->getSharingConfig()->isWebsiteScope()) {
             if (!$customer->hasData('website_id')) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Customer website ID must be specified when using the website scope')
+                    __('A customer website ID must be specified when using the website scope.')
                 );
             }
             $bind['website_id'] = (int)$customer->getWebsiteId();
             $select->where('website_id = :website_id');
         }
 
-        $customerId = $adapter->fetchOne($select, $bind);
+        $customerId = $connection->fetchOne($select, $bind);
         if ($customerId) {
             $this->load($customer, $customerId);
         } else {
@@ -291,8 +252,8 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     public function findEmailDuplicates()
     {
-        $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             $this->getTable('customer_entity'),
             ['email', 'cnt' => 'COUNT(*)']
         )->group(
@@ -302,7 +263,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
         )->limit(
             1
         );
-        $lookup = $adapter->fetchRow($select);
+        $lookup = $connection->fetchRow($select);
         if (empty($lookup)) {
             return false;
         }
@@ -317,9 +278,9 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     public function checkCustomerId($customerId)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $bind = ['entity_id' => (int)$customerId];
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getTable('customer_entity'),
             'entity_id'
         )->where(
@@ -328,7 +289,7 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
             1
         );
 
-        $result = $adapter->fetchOne($select, $bind);
+        $result = $connection->fetchOne($select, $bind);
         if ($result) {
             return true;
         }
@@ -343,25 +304,25 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
      */
     public function getWebsiteId($customerId)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $bind = ['entity_id' => (int)$customerId];
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getTable('customer_entity'),
             'website_id'
         )->where(
             'entity_id = :entity_id'
         );
 
-        return $adapter->fetchOne($select, $bind);
+        return $connection->fetchOne($select, $bind);
     }
 
     /**
      * Custom setter of increment ID if its needed
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      */
-    public function setNewIncrementId(\Magento\Framework\Object $object)
+    public function setNewIncrementId(\Magento\Framework\DataObject $object)
     {
         if ($this->_scopeConfig->getValue(
             \Magento\Customer\Model\Customer::XML_PATH_GENERATE_HUMAN_FRIENDLY_ID,

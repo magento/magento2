@@ -1,0 +1,49 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Braintree\Block\Creditcard\Management */
+    $_storedCards = $block->getCurrentCustomerStoredCards();
+?>
+<div class="page-title title-buttons">
+    <?php if ($block->getUsesVault()): ?>
+        <button type="button" title="<?php echo __('Add Credit Card') ?>" class="action subscribe primary" onclick="window.location='<?php echo $block->getAddUrl() ?>';"><span><span><?php echo __('Add Credit Card') ?></span></span></button>
+    <?php endif ?>
+</div>
+<?php echo $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
+<?php if (count($_storedCards)): ?>
+    <table class="data-table" id="my-quotes-table">
+        <col width="1" />
+        <col width="1" />
+        <col width="1" />
+        <col width="1" />
+        <col width="1" />
+        <thead>
+            <tr>
+                <th><?php echo __('Type') ?></th>
+                <th><?php echo __('Card Number') ?></th>
+                <th><?php echo __('Is Default') ?></th>
+                <th colspan="2"><?php echo __('Actions') ?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($_storedCards as $card):?>
+                <tr>
+                    <td><?php echo $card->cardType ?></td>
+                    <td><?php echo $card->maskedNumber ?></td>
+                    <td><?php echo ($card->default) ? __('Yes') : __('No') ?></td>
+                    <td>
+                        <a href="<?php echo $block->getEditUrl($card->token) ?>"><?php echo __('Edit')?></a>
+                    </td>
+                    <td>
+                        <a href="<?php echo $block->getDeleteUrl($card->token) ?>"><?php echo __('Delete')?></a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>        
+    </table>
+<?php endif; ?>

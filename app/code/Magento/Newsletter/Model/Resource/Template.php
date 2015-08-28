@@ -25,14 +25,14 @@ class Template extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
         $this->_date = $date;
     }
 
@@ -47,36 +47,6 @@ class Template extends \Magento\Framework\Model\Resource\Db\AbstractDb
     }
 
     /**
-     * Load an object by template code
-     *
-     * @param \Magento\Newsletter\Model\Template $object
-     * @param string $templateCode
-     * @return $this
-     */
-    public function loadByCode(\Magento\Newsletter\Model\Template $object, $templateCode)
-    {
-        $read = $this->_getReadAdapter();
-        if ($read && !is_null($templateCode)) {
-            $select = $this->_getLoadSelect(
-                'template_code',
-                $templateCode,
-                $object
-            )->where(
-                'template_actual = :template_actual'
-            );
-            $data = $read->fetchRow($select, ['template_actual' => 1]);
-
-            if ($data) {
-                $object->setData($data);
-            }
-        }
-
-        $this->_afterLoad($object);
-
-        return $this;
-    }
-
-    /**
      * Check usage of template in queue
      *
      * @param \Magento\Newsletter\Model\Template $template
@@ -85,14 +55,14 @@ class Template extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function checkUsageInQueue(\Magento\Newsletter\Model\Template $template)
     {
         if ($template->getTemplateActual() !== 0 && !$template->getIsSystem()) {
-            $select = $this->_getReadAdapter()->select()->from(
+            $select = $this->getConnection()->select()->from(
                 $this->getTable('newsletter_queue'),
                 new \Zend_Db_Expr('COUNT(queue_id)')
             )->where(
                 'template_id = :template_id'
             );
 
-            $countOfQueue = $this->_getReadAdapter()->fetchOne($select, ['template_id' => $template->getId()]);
+            $countOfQueue = $this->getConnection()->fetchOne($select, ['template_id' => $template->getId()]);
 
             return $countOfQueue > 0;
         } elseif ($template->getIsSystem()) {
@@ -116,7 +86,7 @@ class Template extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 'template_code' => $template->getTemplateCode(),
                 'template_actual' => 1,
             ];
-            $select = $this->_getReadAdapter()->select()->from(
+            $select = $this->getConnection()->select()->from(
                 $this->getMainTable(),
                 new \Zend_Db_Expr('COUNT(template_id)')
             )->where(
@@ -127,7 +97,7 @@ class Template extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 'template_actual = :template_actual'
             );
 
-            $countOfCodes = $this->_getReadAdapter()->fetchOne($select, $bind);
+            $countOfCodes = $this->getConnection()->fetchOne($select, $bind);
 
             return $countOfCodes > 0;
         } else {

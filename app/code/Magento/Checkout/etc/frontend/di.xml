@@ -10,7 +10,7 @@
     <type name="Magento\Framework\Url\SecurityInfo">
         <arguments>
             <argument name="secureUrlList" xsi:type="array">
-                <item name="checkout_onepage" xsi:type="string">/checkout/onepage</item>
+                <item name="checkout_index" xsi:type="string">/checkout</item>
             </argument>
         </arguments>
     </type>
@@ -22,6 +22,13 @@
         <arguments>
             <argument name="sectionSourceMap" xsi:type="array">
                 <item name="cart" xsi:type="string">Magento\Checkout\CustomerData\Cart</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Block\SectionConfig">
+        <arguments>
+            <argument name="clientSideSections" xsi:type="array">
+                <item name="checkout-data" xsi:type="string">checkout-data</item>
             </argument>
         </arguments>
     </type>
@@ -43,6 +50,7 @@
         <arguments>
             <argument name="layoutProcessors" xsi:type="array">
                 <item name="addressFormAttributes" xsi:type="object">Magento\Checkout\Block\Checkout\LayoutProcessor</item>
+                <item name="totalsSortOrder" xsi:type="object">Magento\Checkout\Block\Checkout\TotalsProcessor</item>
             </argument>
         </arguments>
     </type>

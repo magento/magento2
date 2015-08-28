@@ -5,12 +5,15 @@
  */
 namespace Magento\Customer\Model\Resource;
 
+use Magento\Framework\Model\Resource\Db\VersionControl\Snapshot;
+use Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite;
+
 /**
  * Customer group resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
+class Group extends \Magento\Framework\Model\Resource\Db\VersionControl\AbstractDb
 {
     /**
      * Group Management
@@ -26,19 +29,23 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
+     * @param Snapshot $entitySnapshot,
+     * @param RelationComposite $entityRelationComposite,
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param Customer\CollectionFactory $customersFactory
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
+        Snapshot $entitySnapshot,
+        RelationComposite $entityRelationComposite,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Customer\Model\Resource\Customer\CollectionFactory $customersFactory,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->_groupManagement = $groupManagement;
         $this->_customersFactory = $customersFactory;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $entitySnapshot, $entityRelationComposite, $connectionName);
     }
 
     /**
@@ -74,7 +81,7 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         if ($group->usesAsDefault()) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('The group "%1" cannot be deleted', $group->getCode())
+                __('You can\'t delete group "%1".', $group->getCode())
             );
         }
         return parent::_beforeDelete($group);

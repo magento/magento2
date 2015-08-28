@@ -15,7 +15,7 @@ class ProfileTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface | \PHPUnit_Framework_MockObject_MockObject
      */
-    private $adapter;
+    private $connectionMock;
 
     /**
      * @var \Magento\Framework\Model\Resource\Db\Context | \PHPUnit_Framework_MockObject_MockObject
@@ -57,7 +57,7 @@ class ProfileTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->adapter = $this->getMockForAbstractClass(
+        $this->connectionMock = $this->getMockForAbstractClass(
             'Magento\Framework\DB\Adapter\AdapterInterface',
             [],
             '',
@@ -128,11 +128,11 @@ class ProfileTest extends \PHPUnit_Framework_TestCase
         $this->profileFactory->expects($this->once())->method('create')->willReturn($this->profile);
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
-            ->willReturn($this->adapter);
+            ->willReturn($this->connectionMock);
         $this->resourceMock->expects($this->once())
             ->method('getTableName')
             ->willReturn($profileTableName);
-        $this->adapter->expects($this->any())->method('select')->willReturn($this->select);
+        $this->connectionMock->expects($this->any())->method('select')->willReturn($this->select);
         $this->select->expects($this->at(0))
             ->method('from')
             ->with($profileTableName, [$profileIdFieldName])
@@ -145,7 +145,7 @@ class ProfileTest extends \PHPUnit_Framework_TestCase
             ->method('where')
             ->with('is_active = 1')
             ->willReturn($this->select);
-        $this->adapter->expects($this->once())
+        $this->connectionMock->expects($this->once())
             ->method('fetchOne')
             ->with($this->select, ['meta_id' => $metaId])
             ->willReturn($profileId);
@@ -153,9 +153,9 @@ class ProfileTest extends \PHPUnit_Framework_TestCase
             ->method('from')
             ->with($profileTableName, '*', null)
             ->willReturn($this->select);
-        $this->adapter->expects($this->any())
+        $this->connectionMock->expects($this->any())
             ->method('quoteIdentifier');
-        $this->adapter->expects($this->once())->method('fetchRow')->willReturn($profileData);
+        $this->connectionMock->expects($this->once())->method('fetchRow')->willReturn($profileData);
         $this->profile->expects($this->at(0))->method('setData')->with($profileData);
         $this->assertEquals($this->profile, $this->resource->loadActiveProfile($metaId));
     }

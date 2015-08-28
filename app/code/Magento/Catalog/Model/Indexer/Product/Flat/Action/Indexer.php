@@ -6,6 +6,8 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 
+use Magento\Framework\App\Resource;
+
 class Indexer
 {
     /**
@@ -31,7 +33,7 @@ class Indexer
         \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper
     ) {
         $this->_productIndexerHelper = $productHelper;
-        $this->_connection = $resource->getConnection('default');
+        $this->_connection = $resource->getConnection();
     }
 
     /**

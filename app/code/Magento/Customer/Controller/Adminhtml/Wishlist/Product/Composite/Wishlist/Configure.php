@@ -17,7 +17,7 @@ class Configure extends \Magento\Customer\Controller\Adminhtml\Wishlist\Product\
      */
     public function execute()
     {
-        $configureResult = new \Magento\Framework\Object();
+        $configureResult = new \Magento\Framework\DataObject();
         try {
             $this->_initData();
 

@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Helper\Product\Flat;
 
+use Magento\Framework\App\Resource;
+
 /**
  * Catalog Product Flat Indexer Helper
  *
@@ -202,7 +204,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
             'unsigned' => true,
             'nullable' => false,
             'default' => '0',
-            'comment' => 'Attribute Set Id',
+            'comment' => 'Product Template ID',
         ];
         $columns['type_id'] = [
             'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
@@ -323,7 +325,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
     public function getAttributeCodes()
     {
         if ($this->_attributeCodes === null) {
-            $adapter = $this->_resource->getConnection('read');
+            $connection = $this->_resource->getConnection();
             $this->_attributeCodes = [];
 
             foreach ($this->_flatAttributeGroups as $attributeGroupName) {
@@ -336,7 +338,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
                 'entity_type_id' => $this->getEntityTypeId(),
             ];
 
-            $select = $adapter->select()->from(
+            $select = $connection->select()->from(
                 ['main_table' => $this->getTable('eav_attribute')]
             )->join(
                 ['additional_table' => $this->getTable('catalog_eav_attribute')],
@@ -346,17 +348,17 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
             );
             $whereCondition = [
                 'main_table.backend_type = :backend_type',
-                $adapter->quoteInto('additional_table.is_used_for_promo_rules = ?', 1),
-                $adapter->quoteInto('additional_table.used_in_product_listing = ?', 1),
-                $adapter->quoteInto('additional_table.used_for_sort_by = ?', 1),
-                $adapter->quoteInto('main_table.attribute_code IN(?)', $this->_systemAttributes),
+                $connection->quoteInto('additional_table.is_used_for_promo_rules = ?', 1),
+                $connection->quoteInto('additional_table.used_in_product_listing = ?', 1),
+                $connection->quoteInto('additional_table.used_for_sort_by = ?', 1),
+                $connection->quoteInto('main_table.attribute_code IN(?)', $this->_systemAttributes),
             ];
             if ($this->isAddFilterableAttributes()) {
-                $whereCondition[] = $adapter->quoteInto('additional_table.is_filterable > ?', 0);
+                $whereCondition[] = $connection->quoteInto('additional_table.is_filterable > ?', 0);
             }
 
             $select->where(implode(' OR ', $whereCondition));
-            $attributesData = $adapter->fetchAll($select, $bind);
+            $attributesData = $connection->fetchAll($select, $bind);
             $this->_eavConfig->importAttributesData($this->getEntityType(), $attributesData);
 
             foreach ($attributesData as $data) {
@@ -492,7 +494,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function deleteAbandonedStoreFlatTables()
     {
-        $connection = $this->_resource->getConnection('write');
+        $connection = $this->_resource->getConnection();
         $existentTables = $connection->getTables($connection->getTableName('catalog_product_flat_%'));
         $this->_changelog->setViewId('catalog_product_flat');
         foreach ($existentTables as $key => $tableName) {

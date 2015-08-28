@@ -13,7 +13,7 @@ use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Precondition:
- * 1. Several Shopping Cart Price Rules are created.
+ * 1. Several Cart Price Rules are created.
  *
  * Steps:
  * 1. Login to backend.

@@ -13,4 +13,11 @@ interface OperationInterface
      * @return void
      */
     public function doOperation();
+
+    /**
+     * Returns operation name
+     *
+     * @return string
+     */
+    public function getName();
 }

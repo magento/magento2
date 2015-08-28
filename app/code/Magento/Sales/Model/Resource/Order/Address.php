@@ -7,7 +7,7 @@ namespace Magento\Sales\Model\Resource\Order;
 
 use Magento\Sales\Model\Resource\EntityAbstract as SalesResource;
 use Magento\Sales\Model\Spi\OrderAddressResourceInterface;
-use Magento\Sales\Model\Resource\EntitySnapshot;
+use Magento\Framework\Model\Resource\Db\VersionControl\Snapshot;
 
 /**
  * Flat sales order address resource
@@ -35,31 +35,31 @@ class Address extends SalesResource implements OrderAddressResourceInterface
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Sales\Model\Resource\Attribute $attribute
      * @param \Magento\SalesSequence\Model\Manager $sequenceManager
-     * @param EntitySnapshot $entitySnapshot
-     * @param \Magento\Sales\Model\Resource\EntityRelationComposite $entityRelationComposite
+     * @param Snapshot $entitySnapshot
+     * @param \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite
      * @param \Magento\Sales\Model\Order\Address\Validator $validator
      * @param \Magento\Sales\Model\Resource\GridPool $gridPool
-     * @param string $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
+        Snapshot $entitySnapshot,
+        \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite,
         \Magento\Sales\Model\Resource\Attribute $attribute,
         \Magento\SalesSequence\Model\Manager $sequenceManager,
-        EntitySnapshot $entitySnapshot,
-        \Magento\Sales\Model\Resource\EntityRelationComposite $entityRelationComposite,
         \Magento\Sales\Model\Order\Address\Validator $validator,
         \Magento\Sales\Model\Resource\GridPool $gridPool,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->_validator = $validator;
         $this->gridPool = $gridPool;
         parent::__construct(
             $context,
-            $attribute,
-            $sequenceManager,
             $entitySnapshot,
             $entityRelationComposite,
-            $resourcePrefix
+            $attribute,
+            $sequenceManager,
+            $connectionName
         );
     }
 
@@ -117,7 +117,7 @@ class Address extends SalesResource implements OrderAddressResourceInterface
         $warnings = $this->_validator->validate($object);
         if (!empty($warnings)) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __("Cannot save address:\n%1", implode("\n", $warnings))
+                __("We can't save the address:\n%1", implode("\n", $warnings))
             );
         }
         return $this;
@@ -126,14 +126,14 @@ class Address extends SalesResource implements OrderAddressResourceInterface
     /**
      * Update related grid table after object save
      *
-     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
         $resource = parent::_afterSave($object);
-        if ($object->getOrderId()) {
-            $this->gridPool->refreshByOrderId($object->getOrderId());
+        if ($object->getParentId()) {
+            $this->gridPool->refreshByOrderId($object->getParentId());
         }
         return $resource;
     }

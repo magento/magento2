@@ -6,7 +6,6 @@
 namespace Magento\Quote\Api;
 
 use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Api\SortOrder;
@@ -23,7 +22,7 @@ class CartRepositoryTest extends WebapiAbstract
     /**
      * @var SearchCriteriaBuilder
      */
-    private $searchBuilder;
+    private $searchCriteriaBuilder;
 
     /**
      * @var SortOrderBuilder
@@ -44,7 +43,7 @@ class CartRepositoryTest extends WebapiAbstract
         $this->sortOrderBuilder = $this->objectManager->create(
             'Magento\Framework\Api\SortOrderBuilder'
         );
-        $this->searchBuilder = $this->objectManager->create(
+        $this->searchCriteriaBuilder = $this->objectManager->create(
             'Magento\Framework\Api\SearchCriteriaBuilder'
         );
     }
@@ -174,14 +173,13 @@ class CartRepositoryTest extends WebapiAbstract
             ->setValue($tomorrowDate)
             ->create();
 
-        $this->searchBuilder->addFilter([$grandTotalFilter, $subtotalFilter]);
-        $this->searchBuilder->addFilter([$minCreatedAtFilter]);
-        $this->searchBuilder->addFilter([$maxCreatedAtFilter]);
+        $this->searchCriteriaBuilder->addFilters([$grandTotalFilter, $subtotalFilter]);
+        $this->searchCriteriaBuilder->addFilters([$minCreatedAtFilter]);
+        $this->searchCriteriaBuilder->addFilters([$maxCreatedAtFilter]);
         /** @var SortOrder $sortOrder */
-        $sortOrder = $this->sortOrderBuilder->setField('subtotal')->setDirection(SearchCriteria::SORT_ASC)->create();
-        $this->searchBuilder->setSortOrders([$sortOrder]);
-        $searchCriteria = $this->searchBuilder->create()->__toArray();
-
+        $sortOrder = $this->sortOrderBuilder->setField('subtotal')->setDirection(SortOrder::SORT_ASC)->create();
+        $this->searchCriteriaBuilder->setSortOrders([$sortOrder]);
+        $searchCriteria = $this->searchCriteriaBuilder->create()->__toArray();
         $requestData = ['searchCriteria' => $searchCriteria];
         $serviceInfo = [
             'rest' => [
@@ -233,8 +231,8 @@ class CartRepositoryTest extends WebapiAbstract
             ->setValue(0)
             ->create();
 
-        $this->searchBuilder->addFilter([$invalidFilter]);
-        $searchCriteria = $this->searchBuilder->create()->__toArray();
+        $this->searchCriteriaBuilder->addFilters([$invalidFilter]);
+        $searchCriteria = $this->searchCriteriaBuilder->create()->__toArray();
         $requestData = ['searchCriteria' => $searchCriteria];
         $this->_webApiCall($serviceInfo, $requestData);
     }

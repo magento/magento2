@@ -29,15 +29,15 @@ class Session extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Persistent\Model\SessionFactory $sessionFactory
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Persistent\Model\SessionFactory $sessionFactory,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->_sessionFactory = $sessionFactory;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -65,7 +65,7 @@ class Session extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param string $field
      * @param mixed $value
      * @param \Magento\Persistent\Model\Session $object
-     * @return \Zend_Db_Select
+     * @return \Magento\Framework\DB\Select
      */
     protected function _getLoadSelect($field, $value, $object)
     {
@@ -92,7 +92,7 @@ class Session extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function deleteByCustomerId($customerId)
     {
-        $this->_getWriteAdapter()->delete($this->getMainTable(), ['customer_id = ?' => $customerId]);
+        $this->getConnection()->delete($this->getMainTable(), ['customer_id = ?' => $customerId]);
         return $this;
     }
 
@@ -118,7 +118,7 @@ class Session extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function deleteExpired($websiteId, $expiredBefore)
     {
-        $this->_getWriteAdapter()->delete(
+        $this->getConnection()->delete(
             $this->getMainTable(),
             ['website_id = ?' => $websiteId, 'updated_at < ?' => $expiredBefore]
         );

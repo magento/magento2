@@ -301,5 +301,17 @@ class InstallData implements InstallDataInterface
                 '1'
             );
         }
+        $categorySetup->updateAttribute(
+            \Magento\Catalog\Model\Category::ENTITY,
+            'custom_design_from',
+            'attribute_model',
+            'Magento\Catalog\Model\Resource\Eav\Attribute'
+        );
+        $categorySetup->updateAttribute(
+            \Magento\Catalog\Model\Category::ENTITY,
+            'custom_design_from',
+            'frontend_model',
+            'Magento\Eav\Model\Entity\Attribute\Frontend\Datetime'
+        );
     }
 }

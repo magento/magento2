@@ -116,7 +116,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testGetUsedCurrentlyForPaths()
+    public function testGetCurrentlyUsedForPaths()
     {
         $sectionMock = $this->getMock(
             'Magento\Config\Model\Config\Structure\Element\Section',
@@ -172,51 +172,33 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $groupMock3->expects($this->any())->method('getLabel')->will($this->returnValue('Group_3_Label'));
         $filedMock->expects($this->any())->method('getLabel')->will($this->returnValue('Field_1_Label'));
 
-        $this->_configStructureMock->expects(
-            $this->any()
-        )->method(
-            'getElement'
-        )->with(
-            'section1'
-        )->will(
-            $this->returnValue($sectionMock)
-        );
+        $this->_configStructureMock->expects($this->any())
+            ->method('getElement')
+            ->with('section1')
+            ->will($this->returnValue($sectionMock));
 
-        $this->_configStructureMock->expects(
-            $this->any()
-        )->method(
-            'getElementByPathParts'
-        )->will(
-            $this->returnValueMap($map)
-        );
+        $this->_configStructureMock->expects($this->any())
+            ->method('getElementByPathParts')
+            ->will($this->returnValueMap($map));
 
         $templateMock = $this->getMock('Magento\Email\Model\BackendTemplate', [], [], '', false, false);
-        $templateMock->expects(
-            $this->once()
-        )->method(
-            'getSystemConfigPathsWhereUsedCurrently'
-        )->will(
-            $this->returnValue($this->_fixtureConfigPath)
-        );
+        $templateMock->expects($this->once())
+            ->method('getSystemConfigPathsWhereCurrentlyUsed')
+            ->will($this->returnValue($this->_fixtureConfigPath));
 
-        $this->_registryMock->expects(
-            $this->once()
-        )->method(
-            'registry'
-        )->with(
-            'current_email_template'
-        )->will(
-            $this->returnValue($templateMock)
-        );
+        $this->_registryMock->expects($this->once())
+            ->method('registry')
+            ->with('current_email_template')
+            ->will($this->returnValue($templateMock));
 
-        $actual = $this->_block->getUsedCurrentlyForPaths(false);
+        $actual = $this->_block->getCurrentlyUsedForPaths(false);
         $expected = [
             [
                 ['title' => __('Title')],
                 ['title' => __('Title'), 'url' => 'adminhtml/system_config/'],
                 ['title' => 'Section_1_Label', 'url' => 'adminhtml/system_config/edit'],
                 ['title' => 'Group_1_Label'],
-                ['title' => 'Field_1_Label', 'scope' => __('GLOBAL')],
+                ['title' => 'Field_1_Label', 'scope' => __('Default Config')],
             ],
             [
                 ['title' => __('Title')],
@@ -224,7 +206,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
                 ['title' => 'Section_1_Label', 'url' => 'adminhtml/system_config/edit'],
                 ['title' => 'Group_1_Label'],
                 ['title' => 'Group_2_Label'],
-                ['title' => 'Field_1_Label', 'scope' => __('GLOBAL')]
+                ['title' => 'Field_1_Label', 'scope' => __('Default Config')]
             ],
             [
                 ['title' => __('Title')],
@@ -233,7 +215,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
                 ['title' => 'Group_1_Label'],
                 ['title' => 'Group_2_Label'],
                 ['title' => 'Group_3_Label'],
-                ['title' => 'Field_1_Label', 'scope' => __('GLOBAL')]
+                ['title' => 'Field_1_Label', 'scope' => __('Default Config')]
             ],
         ];
         $this->assertEquals($expected, $actual);
@@ -256,15 +238,25 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $this->_emailConfigMock
             ->expects($this->once())
             ->method('getAvailableTemplates')
-            ->will($this->returnValue(['template_b2', 'template_a', 'template_b1']));
-        $this->_emailConfigMock
-            ->expects($this->exactly(3))
-            ->method('getTemplateModule')
-            ->will($this->onConsecutiveCalls('Fixture_ModuleB', 'Fixture_ModuleA', 'Fixture_ModuleB'));
-        $this->_emailConfigMock
-            ->expects($this->exactly(3))
-            ->method('getTemplateLabel')
-            ->will($this->onConsecutiveCalls('Template B2', 'Template A', 'Template B1'));
+            ->will($this->returnValue(
+                [
+                    [
+                        'value' => 'template_b2',
+                        'label' => 'Template B2',
+                        'group' => 'Fixture_ModuleB',
+                    ],
+                    [
+                        'value' => 'template_a',
+                        'label' => 'Template A',
+                        'group' => 'Fixture_ModuleA',
+                    ],
+                    [
+                        'value' => 'template_b1',
+                        'label' => 'Template B1',
+                        'group' => 'Fixture_ModuleB',
+                    ],
+                ]
+            ));
 
         $this->assertEmpty($this->_block->getData('template_options'));
         $this->_block->setTemplate('my/custom\template.phtml');

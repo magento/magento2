@@ -18,7 +18,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     protected $_objectHelper;
 
     /**
-     * @var \Magento\Framework\Object | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $dataObject;
 
@@ -92,7 +92,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
                 'resourceProductAttribute' => $this->resourceModel
             ]
         );
-        $this->dataObject = $this->getMockBuilder('Magento\Framework\Object')
+        $this->dataObject = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->setMethods(['getIsDuplicate', 'isLockedAttribute', 'getMediaAttributes'])
             ->getMock();
@@ -117,7 +117,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
 
         $this->model->setAttribute($attribute);
 
-        $object = new \Magento\Framework\Object();
+        $object = new \Magento\Framework\DataObject();
         $object->setImage(['images' => [['value_id' => $valueId]]]);
         $object->setId(555);
 

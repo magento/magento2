@@ -81,35 +81,20 @@
         </div>
     </div>
 </form>
-<script>
-require([
-    "jquery",
-    "mage/mage"
-], function($){
-
-    $('#review-form').mage('validation', {
-        errorPlacement: function (error, element) {
-            if (element.parents('#product-review-table').length) {
-                $('#product-review-table').siblings(this.errorElement + '.' + this.errorClass).remove();
-                $('#product-review-table').after(error);
-            } else {
-                element.after(error);
-            }
-        }
-    });
-});
-</script>
 <script type="text/x-magento-init">
 {
     "[data-role=product-review-form]": {
         "Magento_Ui/js/core/app": <?php echo $block->getJsLayout();?>
+    },
+    "#review-form": {
+        "Magento_Review/js/error-placement": {}
     }
 }
 </script>
 <?php else: ?>
     <div class="message info notlogged" id="review-form">
         <div>
-            <?php echo __('Only registered users can write reviews. Please, <a href="%1">log in</a> or <a href="%2">register</a>', $block->getLoginLink(), $block->getRegisterUrl()) ?>
+            <?php echo __('Only registered users can write reviews. Please, <a href="%1">Sign in</a> or <a href="%2">create an account</a>', $block->getLoginLink(), $block->getRegisterUrl()) ?>
         </div>
     </div>
 <?php endif ?>

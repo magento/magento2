@@ -9,6 +9,7 @@ namespace Magento\Quote\Model;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\StateException;
 use Magento\Quote\Model\Quote as QuoteEntity;
 use Magento\Quote\Model\Quote\Address\ToOrder as ToOrderConverter;
@@ -297,11 +298,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      */
     public function placeOrder($cartId, $agreements = null, PaymentInterface $paymentMethod = null)
     {
-        if (!$this->agreementsValidator->isValid($agreements)) {
-            throw new \Magento\Framework\Exception\CouldNotSaveException(
-                __('Please agree to all the terms and conditions before placing the order.')
-            );
-        }
         $quote = $this->quoteRepository->getActive($cartId);
         if ($paymentMethod) {
             $paymentMethod->setChecks([
@@ -329,10 +325,16 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         }
 
         $order = $this->submit($quote);
+
+        if (null == $order) {
+            throw new LocalizedException(__('Cannot place order.'));
+        }
+
         $this->checkoutSession->setLastQuoteId($quote->getId());
         $this->checkoutSession->setLastSuccessQuoteId($quote->getId());
         $this->checkoutSession->setLastOrderId($order->getId());
         $this->checkoutSession->setLastRealOrderId($order->getIncrementId());
+        $this->checkoutSession->setLastOrderStatus($order->getStatus());
 
         $this->eventManager->dispatch('checkout_submit_all_after', ['order' => $order, 'quote' => $quote]);
         return $order->getId();
@@ -351,7 +353,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      *
      * @param Quote $quote
      * @param array $orderData
-     * @return \Magento\Framework\Model\AbstractExtensibleModel|\Magento\Sales\Api\Data\OrderInterface|object|void
+     * @return \Magento\Framework\Model\AbstractExtensibleModel|\Magento\Sales\Api\Data\OrderInterface|object|null
      * @throws \Exception
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -359,7 +361,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     {
         if (!$quote->getAllVisibleItems()) {
             $quote->setIsActive(false);
-            return;
+            return null;
         }
 
         return $this->submitQuote($quote, $orderData);
@@ -371,7 +373,11 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      */
     protected function resolveItems(QuoteEntity $quote)
     {
-        $quoteItems = $quote->getAllItems();
+        $quoteItems = [];
+        foreach ($quote->getAllItems() as $quoteItem) {
+            /** @var \Magento\Quote\Model\Resource\Quote\Item $quoteItem */
+            $quoteItems[$quoteItem->getId()] = $quoteItem;
+        }
         $orderItems = [];
         foreach ($quoteItems as $quoteItem) {
             $parentItem = (isset($orderItems[$quoteItem->getParentItemId()])) ?
@@ -482,6 +488,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param Quote $quote
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _prepareCustomerQuote($quote)
     {
@@ -518,6 +525,9 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
             }
             $quote->addCustomerAddress($billingAddress);
             $billing->setCustomerAddressData($billingAddress);
+        }
+        if ($shipping && !$shipping->getCustomerId() && !$hasDefaultBilling) {
+            $shipping->setIsDefaultBilling(true);
         }
     }
 }

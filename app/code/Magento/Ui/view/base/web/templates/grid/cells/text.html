@@ -4,8 +4,12 @@
  * See COPYING.txt for license details.
  */
 -->
-<td
-    data-bind="visible: visible,
-           click: isClickable(row) ? redirect.bind($data, getClickUrl(row)) : false,
-           text: getLabel(row[field.index])"
+<td 
+    data-bind="
+        visible: visible,
+        css: { _dragging: dragging },
+        click: hasFieldAction() ?
+            applyFieldAction.bind($data, $parentContext.$index()) :
+            false,
+        text: getLabel(row[field.index])"
     data-action="grid-row-edit"></td>

@@ -15,12 +15,12 @@ use Magento\Mtf\TestCase\Injectable;
 /**
  * Preconditions:
  * 1. Enable "Terms and Conditions": Stores > Configuration > Sales > Checkout > Checkout Options
- * 2. Create term according to dataSet
+ * 2. Create term according to dataset
  *
  * Steps:
  * 1. Open Backend Stores > Terms and Conditions
  * 2. Open created Term from preconditions
- * 3. Fill data from dataSet
+ * 3. Fill data from dataset
  * 4. Save
  * 5. Perform all assertions
  *

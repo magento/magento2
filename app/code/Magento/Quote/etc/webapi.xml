@@ -145,6 +145,24 @@
             <parameter name="cartId" force="true">%cart_id%</parameter>
         </data>
     </route>
+    <route url="/V1/carts/mine/estimate-shipping-methods" method="POST">
+        <service class="Magento\Quote\Api\ShippingMethodManagementInterface" method="estimateByAddress"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
+    <route url="/V1/carts/mine/estimate-shipping-methods-by-address-id" method="POST">
+        <service class="Magento\Quote\Api\ShippingMethodManagementInterface" method="estimateByAddressId"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
 
     <!-- Managing Guest Cart Shipment Method -->
     <route url="/V1/guest-carts/:cartId/selected-shipping-method" method="PUT">
@@ -161,6 +179,12 @@
     </route>
     <route url="/V1/guest-carts/:cartId/shipping-methods" method="GET">
         <service class="Magento\Quote\Api\GuestShippingMethodManagementInterface" method="getList"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/guest-carts/:cartId/estimate-shipping-methods" method="POST">
+        <service class="Magento\Quote\Api\GuestShippingMethodManagementInterface" method="estimateByAddress"/>
         <resources>
             <resource ref="anonymous" />
         </resources>
@@ -225,7 +249,7 @@
             <resource ref="self" />
         </resources>
         <data>
-            <parameter name="customerId" force="true">%customer_id%</parameter>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
         </data>
     </route>
     <route url="/V1/carts/mine/items" method="POST">
@@ -234,7 +258,7 @@
             <resource ref="self" />
         </resources>
         <data>
-            <parameter name="customerId" force="true">%customer_id%</parameter>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
         </data>
     </route>
     <route url="/V1/carts/mine/items/:itemId" method="PUT">
@@ -243,7 +267,7 @@
             <resource ref="self" />
         </resources>
         <data>
-            <parameter name="customerId" force="true">%customer_id%</parameter>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
         </data>
     </route>
     <route url="/V1/carts/mine/items/:itemId" method="DELETE">
@@ -252,7 +276,7 @@
             <resource ref="self" />
         </resources>
         <data>
-            <parameter name="customerId" force="true">%customer_id%</parameter>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
         </data>
     </route>
 
@@ -348,12 +372,6 @@
     </route>
     <route url="/V1/guest-carts/:cartId/billing-address" method="POST">
         <service class="Magento\Quote\Api\GuestBillingAddressManagementInterface" method="assign"/>
-        <resources>
-            <resource ref="anonymous" />
-        </resources>
-    </route>
-    <route url="/V1/guest-carts/:cartId/addresses" method="POST">
-        <service class="Magento\Quote\Api\GuestAddressDetailsManagementInterface" method="saveAddresses"/>
         <resources>
             <resource ref="anonymous" />
         </resources>
@@ -488,15 +506,6 @@
     </route>
     <route url="/V1/carts/mine/shipping-address" method="POST">
         <service class="Magento\Quote\Api\ShippingAddressManagementInterface" method="assign"/>
-        <resources>
-            <resource ref="self" />
-        </resources>
-        <data>
-            <parameter name="cartId" force="true">%cart_id%</parameter>
-        </data>
-    </route>
-    <route url="/V1/carts/mine/addresses" method="POST">
-        <service class="Magento\Quote\Api\AddressDetailsManagementInterface" method="saveAddresses"/>
         <resources>
             <resource ref="self" />
         </resources>

@@ -6,9 +6,10 @@
 namespace Magento\CatalogRule\Model\Indexer;
 
 use Magento\Framework\Mview\ActionInterface as MviewActionInterface;
-use Magento\Indexer\Model\ActionInterface as IndexerActionInterface;
+use Magento\Framework\Indexer\ActionInterface as IndexerActionInterface;
+use Magento\Framework\DataObject\IdentityInterface as IdentityInterface;
 
-abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInterface
+abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInterface, IdentityInterface
 {
     /**
      * @var IndexBuilder
@@ -60,6 +61,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * Get affected cache tags
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function getIdentities()
     {
@@ -105,7 +107,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     {
         if (!$id) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Could not rebuild index for undefined product')
+                __('We can\'t rebuild the index for an undefined product.')
             );
         }
         $this->doExecuteRow($id);

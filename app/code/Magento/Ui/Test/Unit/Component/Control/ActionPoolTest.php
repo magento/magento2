@@ -7,7 +7,7 @@ namespace Magento\Ui\Test\Unit\Component\Control;
 
 use \Magento\Ui\Component\Control\ActionPool;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\UiComponent\Context;
 use Magento\Framework\View\Element\UiComponentInterface;
@@ -99,6 +99,7 @@ class ActionPoolTest extends \PHPUnit_Framework_TestCase
     public function testAdd()
     {
         $data = ['id' => 'id'];
+        $this->uiComponentInterfaceMock->expects($this->once())->method('getName')->willReturn('name');
         $this->itemFactoryMock->expects($this->any())->method('create')->willReturn($this->items[$this->key]);
         $this->items[$this->key]->expects($this->any())->method('setData')->with($data)->willReturnSelf();
 
@@ -114,7 +115,7 @@ class ActionPoolTest extends \PHPUnit_Framework_TestCase
             ->method('createBlock')
             ->with(
                 'Magento\Ui\Component\Control\Container',
-                'container-' . $this->key,
+                'container-name-' . $this->key,
                 [
                     'data' => [
                         'button_item' => $this->items[$this->key],

@@ -6,9 +6,9 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\CatalogRule\Test\TestCase\UpdateCatalogPriceRuleEntityTest">
+    <testCase name="Magento\CatalogRule\Test\TestCase\UpdateCatalogPriceRuleEntityTest" summary="Update Catalog Price Rule" ticketId="MAGETWO-25187">
         <variation name="UpdateCatalogPriceRuleEntityTestVariation1">
-            <data name="catalogPriceRuleOriginal/dataSet" xsi:type="string">active_catalog_price_rule_with_conditions</data>
+            <data name="catalogPriceRuleOriginal/dataset" xsi:type="string">active_catalog_price_rule_with_conditions</data>
             <data name="catalogPriceRule/data/name" xsi:type="string">New Catalog Price Rule Name %isolation%</data>
             <data name="catalogPriceRule/data/is_active" xsi:type="string">Inactive</data>
             <data name="saveAction" xsi:type="string">save</data>
@@ -19,12 +19,12 @@
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedProductPage" />
         </variation>
         <variation name="UpdateCatalogPriceRuleEntityTestVariation2">
-            <data name="catalogPriceRuleOriginal/dataSet" xsi:type="string">active_catalog_price_rule_with_conditions</data>
+            <data name="catalogPriceRuleOriginal/dataset" xsi:type="string">active_catalog_price_rule_with_conditions</data>
             <data name="catalogPriceRule/data/name" xsi:type="string">New Catalog Price Rule Name %isolation%</data>
             <data name="catalogPriceRule/data/description" xsi:type="string">New Catalog Price Rule Description %isolation%</data>
             <data name="catalogPriceRule/data/is_active" xsi:type="string">Active</data>
             <data name="catalogPriceRule/data/conditions" xsi:type="string">[Category|is|%category_1%]</data>
-            <data name="catalogPriceRule/data/simple_action" xsi:type="string">By Fixed Amount</data>
+            <data name="catalogPriceRule/data/simple_action" xsi:type="string">Apply as fixed amount</data>
             <data name="catalogPriceRule/data/discount_amount" xsi:type="string">35</data>
             <data name="saveAction" xsi:type="string">saveAndApply</data>
             <data name="cartPrice/sub_total" xsi:type="string">65</data>

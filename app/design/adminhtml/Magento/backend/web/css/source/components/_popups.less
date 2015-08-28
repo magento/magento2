@@ -4,29 +4,8 @@
 //  */
 
 //
-//  Variables
+//  Components -> Popups
 //  _____________________________________________
-
-@popup__background-color: @color-white;
-@popup__padding: 3rem;
-@popup__padding__horizontal: @popup__padding;
-@popup__padding__vertical: @popup__padding;
-
-@popup-title__color: @color-gray20;
-@popup-title__font-size: 2.4rem;
-@popup-title__line-height: 2.4rem;
-
-@popup-close-icon__color: @color-brownie-vanilla;
-@popup-close-icon__hover__color: @color-gray68;
-@popup-close-icon__font: @icons-admin__font-name;
-@popup-close-icon__font-size: 2rem;
-@popup-close-icon__content: @icon-close-mage__content;
-@popup-close-icon__right: 3rem;
-@popup-close-icon__top: 3rem;
-
-@popup-overlay__background-color: rgba(0, 0, 0, .35);
-
-@popup-fieldset__margin-left: 34%;
 
 //
 //  Jquery UI popup window
@@ -344,15 +323,6 @@
     }
 }
 
-.ui-widget-overlay {
-    background: @popup-overlay__background-color;
-    bottom: 0;
-    left: 0;
-    position: fixed;
-    right: 0;
-    top: 0;
-}
-
 //  The message/dialog popup
 .ui-popup-message {
     .ui-dialog-titlebar {
@@ -493,6 +463,12 @@
 
     .magento_content {
         height: auto !important;
+        .buttons-set {
+            margin: 0 0 15px;
+            button {
+                margin-right: 4px;
+            }
+        }
     }
 
     .magento_buttons {
@@ -512,8 +488,12 @@
     }
 }
 
+.ui-widget-overlay {
+    &:extend(.abs-modal-overlay all);
+}
+
 .overlay_magento {
-    &:extend(.ui-widget-overlay all);
+    &:extend(.abs-modal-overlay all);
     z-index: 800 !important;
 }
 
@@ -524,7 +504,7 @@
 //  ToDo UI: old popups should be replaced by jquery UI popup
 
 .fade {
-    &:extend(.ui-widget-overlay all);
+    &:extend(.abs-modal-overlay all);
     z-index: 1000;
 
     .popup {

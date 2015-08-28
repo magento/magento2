@@ -33,6 +33,8 @@ use Magento\Mtf\TestCase\Injectable;
  *
  * @group Order_Management_(CS)
  * @ZephyrId MAGETWO-28109
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MoveRecentlyComparedProductsOnOrderPageTest extends Injectable
 {
@@ -100,6 +102,10 @@ class MoveRecentlyComparedProductsOnOrderPageTest extends Injectable
     public function __prepare(Customer $customer, BrowserInterface $browser)
     {
         $customer->persist();
+        // Login under customer
+        $this->objectManager
+            ->create('Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep', ['customer' => $customer])
+            ->run();
         $this->browser = $browser;
 
         return ['customer' => $customer];
@@ -147,11 +153,6 @@ class MoveRecentlyComparedProductsOnOrderPageTest extends Injectable
             '\Magento\Catalog\Test\TestStep\CreateProductsStep',
             ['products' => $products]
         )->run()['products'];
-        // Login under customer
-        $this->objectManager->create(
-            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
-            ['customer' => $customer]
-        )->run();
         foreach ($products as $itemProduct) {
             $this->browser->open($_ENV['app_frontend_url'] . $itemProduct->getUrlKey() . '.html');
             $this->catalogProductView->getViewBlock()->clickAddToCompare();

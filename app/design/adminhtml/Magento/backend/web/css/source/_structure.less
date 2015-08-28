@@ -7,24 +7,6 @@
 //  Structure
 //  _____________________________________________
 
-//
-//  Variables
-//  ---------------------------------------------
-
-@window__min-width: 1024px;
-
-@body__background-color: @color-white-smoke;
-
-@page-wrapper__indent-left: @menu__width;
-@page-wrapper__background-color: @color-white;
-
-@page-content__padding-horizontal: @content__indent;
-@page-content__padding-vertical: @content__indent;
-
-@notices-wrapper__border-color: @color-gray83;
-
-//
-
 html {
     height: 100%;
 }
@@ -38,7 +20,9 @@ body {
 
 .page-wrapper {
     background-color: @page-wrapper__background-color;
-    float: left;
+    display: inline-block;
+    margin-left: -4px; // Clear inline-block gap
+    vertical-align: top;
     width: ~'calc(100% - @{menu__width})';
 }
 

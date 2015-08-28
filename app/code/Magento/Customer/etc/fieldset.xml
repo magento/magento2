@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Object/etc/fieldset.xsd">
+        xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/DataObject/etc/fieldset.xsd">
     <scope id="global">
         <fieldset id="customer_account">
             <field name="prefix">
@@ -128,6 +128,23 @@
             </field>
             <field name="vat_request_success">
                 <aspect name="to_order" />
+            </field>
+        </fieldset>
+        <fieldset id="order_address">
+            <field name="vat_id">
+                <aspect name="to_customer_address" />
+            </field>
+            <field name="vat_is_valid">
+                <aspect name="to_customer_address" />
+            </field>
+            <field name="vat_request_id">
+                <aspect name="to_customer_address" />
+            </field>
+            <field name="vat_request_date">
+                <aspect name="to_customer_address" />
+            </field>
+            <field name="vat_request_success">
+                <aspect name="to_customer_address" />
             </field>
         </fieldset>
     </scope>

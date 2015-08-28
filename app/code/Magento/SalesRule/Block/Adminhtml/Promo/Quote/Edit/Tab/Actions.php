@@ -97,7 +97,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
 
         $fieldset = $form->addFieldset(
             'action_fieldset',
-            ['legend' => __('Update prices using the following information')]
+            ['legend' => __('Pricing Structure Rules')]
         );
 
         $fieldset->addField(
@@ -154,8 +154,8 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
             'stop_rules_processing',
             'select',
             [
-                'label' => __('Stop Further Rules Processing'),
-                'title' => __('Stop Further Rules Processing'),
+                'label' => __('Discard subsequent rules'),
+                'title' => __('Discard subsequent rules'),
                 'name' => 'stop_rules_processing',
                 'options' => ['1' => __('Yes'), '0' => __('No')]
             ]

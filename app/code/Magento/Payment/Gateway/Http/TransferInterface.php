@@ -38,7 +38,7 @@ interface TransferInterface
     /**
      * Returns request body
      *
-     * @return string
+     * @return array|string
      */
     public function getBody();
 
@@ -48,4 +48,18 @@ interface TransferInterface
      * @return string
      */
     public function getUri();
+
+    /**
+     * Returns Auth username
+     *
+     * @return string
+     */
+    public function getAuthUsername();
+
+    /**
+     * Returns Auth password
+     *
+     * @return string
+     */
+    public function getAuthPassword();
 }

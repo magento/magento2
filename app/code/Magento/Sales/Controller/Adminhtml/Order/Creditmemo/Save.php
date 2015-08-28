@@ -77,7 +77,7 @@ class Save extends \Magento\Backend\App\Action
             if ($creditmemo) {
                 if (!$creditmemo->isValidGrandTotal()) {
                     throw new \Magento\Framework\Exception\LocalizedException(
-                        __('Credit memo\'s total must be positive.')
+                        __('The credit memo\'s total must be positive.')
                     );
                 }
 
@@ -92,9 +92,6 @@ class Save extends \Magento\Backend\App\Action
                     $creditmemo->setCustomerNoteNotify(isset($data['comment_customer_notify']));
                 }
 
-                if (isset($data['do_refund'])) {
-                    $creditmemo->setRefundRequested(true);
-                }
                 if (isset($data['do_offline'])) {
                     //do not allow online refund for Refund to Store Credit
                     if (!$data['do_offline'] && !empty($data['refund_customerbalance_return_enable'])) {
@@ -102,23 +99,11 @@ class Save extends \Magento\Backend\App\Action
                             __('Cannot create online refund for Refund to Store Credit.')
                         );
                     }
-                    $creditmemo->setOfflineRequested((bool)(int)$data['do_offline']);
                 }
-
-                $creditmemo->register();
-
-                $creditmemo->getOrder()->setCustomerNoteNotify(!empty($data['send_email']));
-                $transactionSave = $this->_objectManager->create(
-                    'Magento\Framework\DB\Transaction'
-                )->addObject(
-                    $creditmemo
-                )->addObject(
-                    $creditmemo->getOrder()
+                $creditmemoManagement = $this->_objectManager->create(
+                    'Magento\Sales\Api\CreditmemoManagementInterface'
                 );
-                if ($creditmemo->getInvoice()) {
-                    $transactionSave->addObject($creditmemo->getInvoice());
-                }
-                $transactionSave->save();
+                $creditmemoManagement->refund($creditmemo, (bool)$data['do_offline'], !empty($data['send_email']));
 
                 if (!empty($data['send_email'])) {
                     $this->creditmemoSender->send($creditmemo);
@@ -138,7 +123,7 @@ class Save extends \Magento\Backend\App\Action
             $this->_getSession()->setFormData($data);
         } catch (\Exception $e) {
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-            $this->messageManager->addError(__('Cannot save the credit memo.'));
+            $this->messageManager->addError(__('We can\'t save the credit memo right now.'));
         }
         $resultRedirect->setPath('sales/*/new', ['_current' => true]);
         return $resultRedirect;

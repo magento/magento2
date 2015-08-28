@@ -39,16 +39,17 @@ $passwordWizard = sprintf(
     </div>
 </div>
 
-<h2 class="page-title">{{$state.current.header}}</h2>
+<h2 class="page-sub-title">{{$state.current.header}}</h2>
 
 <p>
-    Create a new Admin account to manage you store.
+    Create a new Admin account to manage your store.
 </p>
 
 <form
     novalidate
     name="account"
     role="form"
+    autocomplete="off"
     >
 
     <div
@@ -91,14 +92,14 @@ $passwordWizard = sprintf(
         ng-class="{'has-error': account.adminEmail.$invalid && account.submitted}"
         >
         <div class="col-m-3">
-            <label class="form-label required" for="adminEmail">New E-Mail</label>
+            <label class="form-label required" for="adminEmail">New Email</label>
         </div>
         <div class="col-m-4">
             <input
                 id="adminEmail"
                 class="form-el-input"
                 tooltip-placement="right"
-                tooltip="Must be a correct e-mail."
+                tooltip="Must be a correct email."
                 tooltip-trigger="focus"
                 tooltip-append-to-body="true"
                 type="email"
@@ -109,10 +110,10 @@ $passwordWizard = sprintf(
                 >
             <div class="error-container">
                 <span ng-show="account.adminEmail.$error.required">
-                    Please enter your new e-mail.
+                    Please enter your new email.
                 </span>
                 <span ng-show="account.adminEmail.$error.email">
-                    Please enter a correct e-mail.
+                    Please enter a correct email.
                 </span>
             </div>
         </div>

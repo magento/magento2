@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <virtualType name="Magento\Paypal\Model\PayflowadvancedFactory" type="Magento\Paypal\Model\PayflowlinkFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Paypal\Model\Payflowadvanced</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Paypal\Controller\Payflowadvanced\SilentPost">
+        <arguments>
+            <argument name="payflowModelFactory" xsi:type="object">Magento\Paypal\Model\PayflowadvancedFactory</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Paypal\Model\Payflow\ProFactory" type="Magento\Paypal\Model\ProFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\Paypal\Model\Payflow\Pro</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Paypal\Model\PayflowExpress">
+        <arguments>
+            <argument name="proFactory" xsi:type="object">Magento\Paypal\Model\Payflow\ProFactory</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Paypal\Helper\Shortcut\ValidatorInterface" type="Magento\Paypal\Helper\Shortcut\Validator"/>
+    <type name="Magento\Paypal\Block\Express\Shortcut">
+        <arguments>
+            <argument name="paymentMethodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS</argument>
+            <argument name="startAction" xsi:type="string">paypal/express/start/button/1</argument>
+            <argument name="checkoutType" xsi:type="string">Magento\Paypal\Model\Express\Checkout</argument>
+            <argument name="alias" xsi:type="string">product.info.addtocart.paypal</argument>
+            <argument name="shortcutTemplate" xsi:type="string">express/shortcut.phtml</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Paypal\Block\WpsExpress\Shortcut" type="Magento\Paypal\Block\Express\Shortcut"></virtualType>
+    <virtualType name="Magento\Paypal\Block\Express\ShortcutContainer" type="Magento\Paypal\Block\Express\Shortcut">
+        <arguments>
+            <argument name="alias" xsi:type="string">product.info.addtocart.paypalShortcutContainer</argument>
+            <argument name="shortcutTemplate" xsi:type="string">express/shortcut/container.phtml</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Paypal\Block\WpsExpress\ShortcutContainer" type="Magento\Paypal\Block\Express\Shortcut">
+        <arguments>
+            <argument name="alias" xsi:type="string">product.info.addtocart.paypalShortcutContainer</argument>
+            <argument name="shortcutTemplate" xsi:type="string">express/shortcut/container.phtml</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Paypal\Block\PayflowExpress\Shortcut" type="Magento\Paypal\Block\Express\Shortcut">
+        <arguments>
+            <argument name="paymentMethodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_WPP_PE_EXPRESS</argument>
+            <argument name="startAction" xsi:type="string">paypal/payflowexpress/start/button/1</argument>
+            <argument name="checkoutType" xsi:type="string">Magento\Paypal\Model\PayflowExpress\Checkout</argument>
+            <argument name="alias" xsi:type="string">product.info.addtocart.payflow</argument>
+            <argument name="shortcutTemplate" xsi:type="string">express/shortcut.phtml</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\Paypal\Block\PayflowExpress\ShortcutContainer" type="Magento\Paypal\Block\Express\Shortcut">
+        <arguments>
+            <argument name="paymentMethodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_WPP_PE_EXPRESS</argument>
+            <argument name="alias" xsi:type="string">product.info.addtocart.payflowShortcutContainer</argument>
+            <argument name="shortcutTemplate" xsi:type="string">express/shortcut/container.phtml</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Paypal\Block\Bml\Shortcut">
+        <arguments>
+            <argument name="paymentMethodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS</argument>
+            <argument name="startAction" xsi:type="string">paypal/bml/start/button/1</argument>
+            <argument name="bmlMethodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_WPP_BML</argument>
+            <argument name="alias" xsi:type="string">product.info.addtocart.paypalbml</argument>
+            <argument name="shortcutTemplate" xsi:type="string">express/shortcut.phtml</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Paypal\Block\WpsBml\Shortcut" type="Magento\Paypal\Block\Bml\Shortcut"></virtualType>
+    <type name="\Magento\Paypal\Helper\Data">
+        <arguments>
+            <argument name="methodCodes" xsi:type="array">
+                <item name="expressCheckout" xsi:type="const">Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS</item>
+                <item name="hostedPro" xsi:type="const">Magento\Paypal\Model\Config::METHOD_HOSTEDPRO</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Payment\Model\Checks\Composite">
+        <plugin name="paypal_specification" type="Magento\Paypal\Model\Method\Checks\SpecificationPlugin"/>
+    </type>
+    <virtualType name="Magento\Paypal\Block\Payflow\Bml\Shortcut" type="Magento\Paypal\Block\Bml\Shortcut">
+        <arguments>
+            <argument name="paymentMethodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_WPP_PE_EXPRESS</argument>
+            <argument name="startAction" xsi:type="string">paypal/payflowbml/start/button/1</argument>
+            <argument name="bmlMethodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_WPP_PE_BML</argument>
+            <argument name="alias" xsi:type="string">product.info.addtocart.payflowbml</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="payflowproConfigFactory" type="Magento\Payment\Model\Method\ConfigInterfaceFactory">
+        <arguments>
+            <argument xsi:type="string" name="instanceName">Magento\Paypal\Model\PayflowConfig</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="payflowlinkConfigFactory" type="Magento\Payment\Model\Method\ConfigInterfaceFactory">
+        <arguments>
+            <argument xsi:type="string" name="instanceName">Magento\Paypal\Model\Config</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Paypal\Model\Payflowpro">
+        <arguments>
+            <argument name="configFactory" xsi:type="object">payflowproConfigFactory</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Paypal\Model\Payflowlink">
+        <arguments>
+            <argument name="configFactory" xsi:type="object">payflowlinkConfigFactory</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="cvv2_code" xsi:type="object">Magento\Paypal\Model\Payflow\Service\Response\Validator\CVV2Match</item>
+                <item name="avs_response" xsi:type="object">Magento\Paypal\Model\Payflow\Service\Response\Validator\AVSResponse</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidatorInController" type="Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="secure_token" xsi:type="object">Magento\Paypal\Model\Payflow\Service\Response\Validator\SecureToken</item>
+                <item name="cvv2_code" xsi:type="object">Magento\Paypal\Model\Payflow\Service\Response\Validator\CVV2Match</item>
+                <item name="avs_response" xsi:type="object">Magento\Paypal\Model\Payflow\Service\Response\Validator\AVSResponse</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Paypal\Controller\Transparent\Response">
+        <arguments>
+            <argument name="responseValidator" xsi:type="object">Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidatorInController</argument>
+        </arguments>
+    </type>
+
+    <preference for="Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerInterface" type="Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerComposite"/>
+    <type name="Magento\Paypal\Model\Payflow\Service\Response\Handler\HandlerComposite">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="fraudHandler" xsi:type="object">Magento\Paypal\Model\Payflow\Service\Response\Handler\FraudHandler</item>
+                <item name="creditCardHandler" xsi:type="object">Magento\Paypal\Model\Payflow\Service\Response\Handler\CreditCardValidationHandler</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

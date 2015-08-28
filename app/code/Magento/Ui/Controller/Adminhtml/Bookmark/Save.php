@@ -7,14 +7,18 @@ namespace Magento\Ui\Controller\Adminhtml\Bookmark;
 
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\Json\DecoderInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Api\BookmarkManagementInterface;
 use Magento\Ui\Api\BookmarkRepositoryInterface;
 use Magento\Ui\Api\Data\BookmarkInterface;
+use Magento\Ui\Api\Data\BookmarkInterfaceFactory;
 use Magento\Ui\Controller\Adminhtml\AbstractAction;
 
 /**
  * Class Save action
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends AbstractAction
 {
@@ -22,6 +26,10 @@ class Save extends AbstractAction
      * Identifier for current bookmark
      */
     const CURRENT_IDENTIFIER = 'current';
+
+    const ACTIVE_IDENTIFIER = 'activeIndex';
+
+    const VIEWS_IDENTIFIER = 'views';
 
     /**
      * @var BookmarkRepositoryInterface
@@ -34,7 +42,7 @@ class Save extends AbstractAction
     protected $bookmarkManagement;
 
     /**
-     * @var \Magento\Ui\Api\Data\BookmarkInterfaceFactory
+     * @var BookmarkInterfaceFactory
      */
     protected $bookmarkFactory;
 
@@ -44,26 +52,34 @@ class Save extends AbstractAction
     protected $userContext;
 
     /**
+     * @var DecoderInterface
+     */
+    protected $jsonDecoder;
+
+    /**
      * @param Context $context
      * @param UiComponentFactory $factory
      * @param BookmarkRepositoryInterface $bookmarkRepository
      * @param BookmarkManagementInterface $bookmarkManagement
-     * @param \Magento\Ui\Api\Data\BookmarkInterfaceFactory $bookmarkFactory
+     * @param BookmarkInterfaceFactory $bookmarkFactory
      * @param UserContextInterface $userContext
+     * @param DecoderInterface $jsonDecoder
      */
     public function __construct(
         Context $context,
         UiComponentFactory $factory,
         BookmarkRepositoryInterface $bookmarkRepository,
         BookmarkManagementInterface $bookmarkManagement,
-        \Magento\Ui\Api\Data\BookmarkInterfaceFactory $bookmarkFactory,
-        UserContextInterface $userContext
+        BookmarkInterfaceFactory $bookmarkFactory,
+        UserContextInterface $userContext,
+        DecoderInterface $jsonDecoder
     ) {
         parent::__construct($context, $factory);
         $this->bookmarkRepository = $bookmarkRepository;
         $this->bookmarkManagement = $bookmarkManagement;
         $this->bookmarkFactory = $bookmarkFactory;
         $this->userContext = $userContext;
+        $this->jsonDecoder = $jsonDecoder;
     }
 
     /**
@@ -71,34 +87,45 @@ class Save extends AbstractAction
      *
      * @return void
      */
-    public function execute()
+    protected function execute()
     {
         $bookmark = $this->bookmarkFactory->create();
-        $data = $this->_request->getParam('data');
-        if (isset($data['views'])) {
-            foreach ($data['views'] as $identifier => $data) {
-                $updateBookmark = $this->checkBookmark($identifier);
-                if ($updateBookmark !== false) {
-                    $bookmark = $updateBookmark;
-                }
+        $jsonData = $this->_request->getParam('data');
+        if (!$jsonData) {
+            throw new \InvalidArgumentException('Invalid parameter "data"');
+        }
+        $data = $this->jsonDecoder->decode($jsonData);
+        $action = key($data);
+        switch($action) {
+            case self::ACTIVE_IDENTIFIER:
+                $this->updateCurrentBookmark($data[$action]);
+                break;
 
+            case self::CURRENT_IDENTIFIER:
                 $this->updateBookmark(
                     $bookmark,
-                    $identifier,
-                    (isset($data['label']) ? $data['label'] : ''),
-                    $data
+                    $action,
+                    $bookmark->getTitle(),
+                    $jsonData
                 );
-            }
-        } else {
-            $identifier = isset($data['activeIndex'])
-                ? $data['activeIndex']
-                : (isset($data[self::CURRENT_IDENTIFIER]) ? self::CURRENT_IDENTIFIER : '');
-            $updateBookmark = $this->checkBookmark($identifier);
-            if ($updateBookmark !== false) {
-                $bookmark = $updateBookmark;
-            }
 
-            $this->updateBookmark($bookmark, $identifier, '', $data[$identifier]);
+                break;
+
+            case self::VIEWS_IDENTIFIER:
+                foreach ($data[$action] as $identifier => $data) {
+                    $this->updateBookmark(
+                        $bookmark,
+                        $identifier,
+                        isset($data['label']) ? $data['label'] : '',
+                        $jsonData
+                    );
+                    $this->updateCurrentBookmark($identifier);
+                }
+
+                break;
+
+            default:
+                throw new \LogicException(__('Unsupported bookmark action.'));
         }
     }
 
@@ -108,26 +135,39 @@ class Save extends AbstractAction
      * @param BookmarkInterface $bookmark
      * @param string $identifier
      * @param string $title
-     * @param array $config
+     * @param string $config
      * @return void
      */
-    protected function updateBookmark(BookmarkInterface $bookmark, $identifier, $title, array $config = [])
+    protected function updateBookmark(BookmarkInterface $bookmark, $identifier, $title, $config)
     {
-        $this->filterVars($config);
+        $updateBookmark = $this->checkBookmark($identifier);
+        if ($updateBookmark !== false) {
+            $bookmark = $updateBookmark;
+        }
+
         $bookmark->setUserId($this->userContext->getUserId())
             ->setNamespace($this->_request->getParam('namespace'))
             ->setIdentifier($identifier)
             ->setTitle($title)
-            ->setConfig($config)
-            ->setCurrent($identifier !== self::CURRENT_IDENTIFIER);
+            ->setConfig($config);
         $this->bookmarkRepository->save($bookmark);
+    }
 
+    /**
+     * Update current bookmark
+     *
+     * @param string $identifier
+     * @return void
+     */
+    protected function updateCurrentBookmark($identifier)
+    {
         $bookmarks = $this->bookmarkManagement->loadByNamespace($this->_request->getParam('namespace'));
         foreach ($bookmarks->getItems() as $bookmark) {
             if ($bookmark->getIdentifier() == $identifier) {
-                continue;
+                $bookmark->setCurrent(true);
+            } else {
+                $bookmark->setCurrent(false);
             }
-            $bookmark->setCurrent(false);
             $this->bookmarkRepository->save($bookmark);
         }
     }
@@ -152,28 +192,5 @@ class Save extends AbstractAction
         }
 
         return $result;
-    }
-
-    /**
-     * Filter boolean vars
-     *
-     * @param array $data
-     * @return void
-     */
-    protected function filterVars(array & $data = [])
-    {
-        foreach ($data as & $value) {
-            if (is_array($value)) {
-                $this->filterVars($value);
-            } else {
-                if ($value == 'true') {
-                    $value = true;
-                } elseif ($value == 'false') {
-                    $value = false;
-                } elseif (is_numeric($value)) {
-                    $value = (int) $value;
-                }
-            }
-        }
     }
 }

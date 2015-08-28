@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
+    <event name="sales_order_item_save_commit_after">
+        <observer name="downloadable_observer" instance="Magento\Downloadable\Model\Observer" method="saveDownloadableOrderItem" />
+    </event>
+    <event name="sales_order_save_commit_after">
+        <observer name="downloadable_observer" instance="Magento\Downloadable\Model\Observer" method="setLinkStatus" />
+    </event>
+    <event name="sales_model_service_quote_submit_success">
+        <observer name="checkout_type_onepage_save_order_after" instance="Magento\Downloadable\Model\Observer" method="setHasDownloadableProducts" />
+    </event>
+</config>

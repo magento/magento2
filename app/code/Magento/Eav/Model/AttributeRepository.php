@@ -7,7 +7,7 @@
 namespace Magento\Eav\Model;
 
 use Magento\Eav\Model\Resource\Entity\Attribute\Collection;
-use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
@@ -43,24 +43,32 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
     protected $attributeFactory;
 
     /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     */
+    protected $joinProcessor;
+
+    /**
      * @param Config $eavConfig
      * @param Resource\Entity\Attribute $eavResource
      * @param Resource\Entity\Attribute\CollectionFactory $attributeCollectionFactory
      * @param \Magento\Eav\Api\Data\AttributeSearchResultsInterfaceFactory $searchResultsFactory
      * @param Entity\AttributeFactory $attributeFactory
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      */
     public function __construct(
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Resource\Entity\Attribute $eavResource,
         \Magento\Eav\Model\Resource\Entity\Attribute\CollectionFactory $attributeCollectionFactory,
         \Magento\Eav\Api\Data\AttributeSearchResultsInterfaceFactory $searchResultsFactory,
-        \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
+        \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
     ) {
         $this->eavConfig = $eavConfig;
         $this->eavResource = $eavResource;
         $this->attributeCollectionFactory = $attributeCollectionFactory;
         $this->searchResultsFactory = $searchResultsFactory;
         $this->attributeFactory = $attributeFactory;
+        $this->joinProcessor = $joinProcessor;
     }
 
     /**
@@ -87,6 +95,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
 
         /** @var \Magento\Eav\Model\Resource\Entity\Attribute\Collection $attributeCollection */
         $attributeCollection = $this->attributeCollectionFactory->create();
+        $this->joinProcessor->process($attributeCollection);
         $attributeCollection->addFieldToFilter('entity_type_code', ['eq' => $entityTypeCode]);
         $attributeCollection->join(
             ['entity_type' => $attributeCollection->getTable('eav_entity_type')],
@@ -98,8 +107,10 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
             'main_table.attribute_id = eav_entity_attribute.attribute_id',
             []
         );
+        $entityType = $this->eavConfig->getEntityType($entityTypeCode);
+        $additionalTable = $entityType->getAdditionalAttributeTable();
         $attributeCollection->join(
-            ['additional_table' => $attributeCollection->getTable('catalog_eav_attribute')],
+            ['additional_table' => $attributeCollection->getTable($additionalTable)],
             'main_table.attribute_id = additional_table.attribute_id',
             []
         );
@@ -107,11 +118,11 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
         foreach ($searchCriteria->getFilterGroups() as $group) {
             $this->addFilterGroupToCollection($group, $attributeCollection);
         }
-        /** @var \Magento\Framework\Api\SortOrder $sortOrder */
+        /** @var SortOrder $sortOrder */
         foreach ((array)$searchCriteria->getSortOrders() as $sortOrder) {
             $attributeCollection->addOrder(
                 $sortOrder->getField(),
-                ($sortOrder->getDirection() == SearchCriteriaInterface::SORT_ASC) ? 'ASC' : 'DESC'
+                ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
             );
         }
 

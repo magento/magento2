@@ -26,7 +26,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Select "For Product" from  "Create URL Rewrite:" dropdown
  * 5. Select created early product
  * 6. Click "Skip Category Selection" button
- * 7. Fill data according to dataSet
+ * 7. Fill data according to dataset
  * 8. Perform all assertions
  *
  * @group URL_Rewrites_(PS)

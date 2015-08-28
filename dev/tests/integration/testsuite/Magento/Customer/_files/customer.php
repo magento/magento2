@@ -26,5 +26,6 @@ $customer->setWebsiteId(1)
     ->setDefaultShipping(1)
     ->setTaxvat('12')
     ->setGender(0);
+
 $customer->isObjectNew(true);
 $customer->save();

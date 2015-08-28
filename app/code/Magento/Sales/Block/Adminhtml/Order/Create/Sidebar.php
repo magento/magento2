@@ -45,7 +45,7 @@ class Sidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     /**
      * Check if can display
      *
-     * @param \Magento\Framework\Object $child
+     * @param \Magento\Framework\DataObject $child
      * @return true
      */
     public function canDisplay($child)

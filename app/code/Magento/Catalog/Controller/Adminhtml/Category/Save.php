@@ -116,7 +116,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 
             $category->setAttributeSetId($category->getDefaultAttributeSetId());
 
-            if (isset($data['category_products']) && !$category->getProductsReadonly()) {
+            if (isset($data['category_products'])
+                && is_string($data['category_products'])
+                && !$category->getProductsReadonly()
+            ) {
                 $products = json_decode($data['category_products'], true);
                 $category->setPostedProducts($products);
             }
@@ -162,7 +165,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 
                 $category->unsetData('use_post_data_config');
                 if (isset($data['general']['entity_id'])) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__('Unable to save the category'));
+                    throw new \Magento\Framework\Exception\LocalizedException(
+                        __('Something went wrong while saving the category.')
+                    );
                 }
 
                 $category->save();

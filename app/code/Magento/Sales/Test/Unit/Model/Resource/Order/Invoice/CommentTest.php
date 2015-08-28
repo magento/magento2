@@ -26,16 +26,16 @@ class CommentTest extends \PHPUnit_Framework_TestCase
     protected $appResourceMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $adapterMock;
+    protected $connectionMock;
 
     /**
      * @var \Magento\Sales\Model\Order\Invoice\Comment\Validator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $validatorMock;
     /**
-     * @var \Magento\Sales\Model\Resource\EntitySnapshot|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entitySnapshotMock;
 
@@ -58,7 +58,7 @@ class CommentTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->adapterMock = $this->getMock(
+        $this->connectionMock = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
             [],
             [],
@@ -73,7 +73,7 @@ class CommentTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->entitySnapshotMock = $this->getMock(
-            'Magento\Sales\Model\Resource\EntitySnapshot',
+            'Magento\Framework\Model\Resource\Db\VersionControl\Snapshot',
             [],
             [],
             '',
@@ -81,13 +81,13 @@ class CommentTest extends \PHPUnit_Framework_TestCase
         );
         $this->appResourceMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->adapterMock));
-        $this->adapterMock->expects($this->any())
+            ->will($this->returnValue($this->connectionMock));
+        $this->connectionMock->expects($this->any())
             ->method('describeTable')
             ->will($this->returnValue([]));
-        $this->adapterMock->expects($this->any())
+        $this->connectionMock->expects($this->any())
             ->method('insert');
-        $this->adapterMock->expects($this->any())
+        $this->connectionMock->expects($this->any())
             ->method('lastInsertId');
         $this->commentModelMock->expects($this->any())->method('hasDataChanges')->will($this->returnValue(true));
         $this->commentModelMock->expects($this->any())->method('isSaveAllowed')->will($this->returnValue(true));

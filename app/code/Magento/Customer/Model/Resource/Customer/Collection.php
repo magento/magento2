@@ -9,8 +9,9 @@ namespace Magento\Customer\Model\Resource\Customer;
  * Customers collection
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
+class Collection extends \Magento\Eav\Model\Entity\Collection\VersionControl\AbstractCollection
 {
     /**
      * Name of collection model
@@ -18,7 +19,7 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
     const CUSTOMER_MODEL_NAME = 'Magento\Customer\Model\Customer';
 
     /**
-     * @var \Magento\Framework\Object\Copy\Config
+     * @var \Magento\Framework\DataObject\Copy\Config
      */
     protected $_fieldsetConfig;
 
@@ -37,8 +38,9 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Framework\Object\Copy\Config $fieldsetConfig
-     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot
+     * @param \Magento\Framework\DataObject\Copy\Config $fieldsetConfig
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param string $modelName
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -53,8 +55,9 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Framework\Object\Copy\Config $fieldsetConfig,
-        $connection = null,
+        \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
+        \Magento\Framework\DataObject\Copy\Config $fieldsetConfig,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         $modelName = self::CUSTOMER_MODEL_NAME
     ) {
         $this->_fieldsetConfig = $fieldsetConfig;
@@ -69,6 +72,7 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
             $eavEntityFactory,
             $resourceHelper,
             $universalFactory,
+            $entitySnapshot,
             $connection
         );
     }
@@ -117,34 +121,34 @@ class Collection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
             }
         }
 
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $concatenate = [];
         if (isset($fields['prefix'])) {
-            $concatenate[] = $adapter->getCheckSql(
+            $concatenate[] = $connection->getCheckSql(
                 '{{prefix}} IS NOT NULL AND {{prefix}} != \'\'',
-                $adapter->getConcatSql(['LTRIM(RTRIM({{prefix}}))', '\' \'']),
+                $connection->getConcatSql(['LTRIM(RTRIM({{prefix}}))', '\' \'']),
                 '\'\''
             );
         }
         $concatenate[] = 'LTRIM(RTRIM({{firstname}}))';
         $concatenate[] = '\' \'';
         if (isset($fields['middlename'])) {
-            $concatenate[] = $adapter->getCheckSql(
+            $concatenate[] = $connection->getCheckSql(
                 '{{middlename}} IS NOT NULL AND {{middlename}} != \'\'',
-                $adapter->getConcatSql(['LTRIM(RTRIM({{middlename}}))', '\' \'']),
+                $connection->getConcatSql(['LTRIM(RTRIM({{middlename}}))', '\' \'']),
                 '\'\''
             );
         }
         $concatenate[] = 'LTRIM(RTRIM({{lastname}}))';
         if (isset($fields['suffix'])) {
-            $concatenate[] = $adapter->getCheckSql(
+            $concatenate[] = $connection->getCheckSql(
                 '{{suffix}} IS NOT NULL AND {{suffix}} != \'\'',
-                $adapter->getConcatSql(['\' \'', 'LTRIM(RTRIM({{suffix}}))']),
+                $connection->getConcatSql(['\' \'', 'LTRIM(RTRIM({{suffix}}))']),
                 '\'\''
             );
         }
 
-        $nameExpr = $adapter->getConcatSql($concatenate);
+        $nameExpr = $connection->getConcatSql($concatenate);
 
         $this->addExpressionAttributeToSelect('name', $nameExpr, $fields);
 

@@ -5,9 +5,9 @@
  */
 namespace Magento\Tax\Test\Unit\Model\Calculation;
 
+use Magento\Framework\Api\SortOrder;
 use \Magento\Tax\Model\Calculation\RateRepository;
 
-use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\AlreadyExistsException;
@@ -58,6 +58,11 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $rateResourceMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $joinProcessorMock;
 
     public function setUp()
     {
@@ -117,6 +122,13 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->joinProcessorMock = $this->getMock(
+            'Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface',
+            [],
+            [],
+            '',
+            false
+        );
         $this->model = new RateRepository(
             $this->rateConverterMock,
             $this->rateRegistryMock,
@@ -124,7 +136,8 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->rateFactoryMock,
             $this->countryFactoryMock,
             $this->regionFactoryMock,
-            $this->rateResourceMock
+            $this->rateResourceMock,
+            $this->joinProcessorMock
         );
     }
 
@@ -256,6 +269,8 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->searchResultFactory->expects($this->once())->method('create')->willReturn($this->searchResultMock);
 
+        $this->joinProcessorMock->expects($this->once())->method('process')->with($collectionMock);
+
         $this->model->getList($searchCriteriaMock);
     }
 
@@ -376,7 +391,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getSortOrders')
             ->will($this->returnValue([$sortOrderMock]));
         $sortOrderMock->expects($this->once())->method('getField')->willReturn('field_name');
-        $sortOrderMock->expects($this->once())->method('getDirection')->willReturn(SearchCriteria::SORT_ASC);
+        $sortOrderMock->expects($this->once())->method('getDirection')->willReturn(SortOrder::SORT_ASC);
         $collectionMock->expects($this->once())->method('addOrder')->with('main_table.field_name', 'ASC');
         $currentPage = 1;
         $pageSize = 100;
@@ -401,6 +416,8 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->searchResultMock->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock)
             ->willReturnSelf();
         $this->searchResultFactory->expects($this->once())->method('create')->willReturn($this->searchResultMock);
+
+        $this->joinProcessorMock->expects($this->once())->method('process')->with($collectionMock);
 
         $this->model->getList($searchCriteriaMock);
     }

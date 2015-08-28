@@ -58,7 +58,7 @@ abstract class AbstractCollection extends \Magento\Sales\Model\Resource\Collecti
     /**
      * Add order filter
      *
-     * @param int|\Magento\Sales\Model\Order $order
+     * @param int|\Magento\Sales\Model\Order|array $order
      * @return $this
      */
     public function setOrderFilter($order)

@@ -7,7 +7,7 @@ namespace Magento\Quote\Model\Quote\Item;
 
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Framework\Locale\FormatInterface;
-use Magento\Framework\Object\Factory as ObjectFactory;
+use Magento\Framework\DataObject\Factory as ObjectFactory;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item;
 use Zend\Code\Exception\InvalidArgumentException;
@@ -99,7 +99,7 @@ class Updater
     protected function setCustomPrice(array $info, Item $item)
     {
         $itemPrice = $this->parseCustomPrice($info['custom_price']);
-        /** @var \Magento\Framework\Object $infoBuyRequest */
+        /** @var \Magento\Framework\DataObject $infoBuyRequest */
         $infoBuyRequest = $item->getBuyRequest();
         if ($infoBuyRequest) {
             $infoBuyRequest->setCustomPrice($itemPrice);
@@ -123,7 +123,7 @@ class Updater
      */
     protected function unsetCustomPrice(Item $item)
     {
-        /** @var \Magento\Framework\Object $infoBuyRequest */
+        /** @var \Magento\Framework\DataObject $infoBuyRequest */
         $infoBuyRequest = $item->getBuyRequest();
         if ($infoBuyRequest->hasData('custom_price')) {
             $infoBuyRequest->unsetData('custom_price');

@@ -176,7 +176,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
      *
      * @param array|string $key
      * @param null $value
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function setData($key, $value = null)
     {
@@ -700,6 +700,14 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     public function setVatRequestId($id)
     {
         return $this->setData(OrderAddressInterface::VAT_REQUEST_ID, $id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRegionCode($regionCode)
+    {
+        return $this->setData(OrderAddressInterface::KEY_REGION_CODE, $regionCode);
     }
 
     /**

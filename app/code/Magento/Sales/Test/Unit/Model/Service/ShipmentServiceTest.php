@@ -24,7 +24,7 @@ class ShipmentServiceTest extends \PHPUnit_Framework_TestCase
      *
      * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $criteriaBuilderMock;
+    protected $searchCriteriaBuilderMock;
 
     /**
      * Filter Builder
@@ -65,16 +65,16 @@ class ShipmentServiceTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->criteriaBuilderMock = $this->getMock(
+        $this->searchCriteriaBuilderMock = $this->getMock(
             'Magento\Framework\Api\SearchCriteriaBuilder',
-            ['create', 'addFilter'],
+            ['create', 'addFilters'],
             [],
             '',
             false
         );
         $this->filterBuilderMock = $this->getMock(
             'Magento\Framework\Api\FilterBuilder',
-            ['setField', 'setValue', 'create'],
+            ['setField', 'setValue', 'setConditionType', 'create'],
             [],
             '',
             false
@@ -97,7 +97,7 @@ class ShipmentServiceTest extends \PHPUnit_Framework_TestCase
             'Magento\Sales\Model\Service\ShipmentService',
             [
                 'commentRepository' => $this->commentRepositoryMock,
-                'criteriaBuilder' => $this->criteriaBuilderMock,
+                'criteriaBuilder' => $this->searchCriteriaBuilderMock,
                 'filterBuilder' => $this->filterBuilderMock,
                 'repository' => $this->repositoryMock,
                 'notifier' => $this->notifierMock,
@@ -164,12 +164,16 @@ class ShipmentServiceTest extends \PHPUnit_Framework_TestCase
             ->with($id)
             ->will($this->returnSelf());
         $this->filterBuilderMock->expects($this->once())
+            ->method('setConditionType')
+            ->with('eq')
+            ->will($this->returnSelf());
+        $this->filterBuilderMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($filterMock));
-        $this->criteriaBuilderMock->expects($this->once())
-            ->method('addFilter')
-            ->with(['eq' => $filterMock]);
-        $this->criteriaBuilderMock->expects($this->once())
+        $this->searchCriteriaBuilderMock->expects($this->once())
+            ->method('addFilters')
+            ->with([$filterMock]);
+        $this->searchCriteriaBuilderMock->expects($this->once())
             ->method('create')
             ->will($this->returnValue($searchCriteriaMock));
         $this->commentRepositoryMock->expects($this->once())

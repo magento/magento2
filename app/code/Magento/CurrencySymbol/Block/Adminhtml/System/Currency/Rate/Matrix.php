@@ -83,6 +83,7 @@ class Matrix extends \Magento\Backend\Block\Template
      * Get rates form action
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getRatesFormAction()
     {

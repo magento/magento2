@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Action\Rows;
 
+use Magento\Framework\App\Resource;
+
 /**
  * Class TableData
  */
@@ -47,7 +49,7 @@ class TableData implements \Magento\Catalog\Model\Indexer\Product\Flat\TableData
      */
     public function move($flatTable, $flatDropName, $temporaryFlatTableName)
     {
-        $connection = $this->_resource->getConnection('write');
+        $connection = $this->_resource->getConnection();
         if (!$connection->isTableExists($flatTable)) {
             $connection->dropTable($flatDropName);
             $connection->renameTablesBatch([['oldName' => $temporaryFlatTableName, 'newName' => $flatTable]]);

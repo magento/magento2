@@ -49,10 +49,10 @@ class ClassReflectorTest extends \PHPUnit_Framework_TestCase
 
     public function testExtractMethodData()
     {
-        $classReflection = new \Zend\Server\Reflection\ReflectionClass(
-            new \ReflectionClass('\\Magento\\Webapi\\Test\\Unit\\Model\\Config\\TestServiceForClassReflector')
+        $classReflection = new \Zend\Code\Reflection\ClassReflection(
+            '\\Magento\\Webapi\\Test\\Unit\\Model\\Config\\TestServiceForClassReflector'
         );
-        /** @var $methodReflection ReflectionMethod */
+        /** @var $methodReflection \Zend\Code\Reflection\MethodReflection */
         $methodReflection = $classReflection->getMethods()[0];
         $methodData = $this->_classReflector->extractMethodData($methodReflection);
         $expectedResponse = $this->_getSampleReflectionData();

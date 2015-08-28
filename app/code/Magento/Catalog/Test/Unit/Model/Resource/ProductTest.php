@@ -56,9 +56,15 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function testValidateWrongAttributeSet()
     {
         $productTypeId = 4;
-        $expectedErrorMessage = ['attribute_set' => 'Invalid attribute set entity type'];
+        $expectedErrorMessage = ['attribute_set' => 'Invalid product template entity type'];
 
-        $productMock = $this->getMock('\Magento\Framework\Object', ['getAttributeSetId', '__wakeup'], [], '', false);
+        $productMock = $this->getMock(
+            '\Magento\Framework\DataObject',
+            ['getAttributeSetId', '__wakeup'],
+            [],
+            '',
+            false
+        );
         $attributeSetMock = $this->getMock(
             '\Magento\Eav\Model\Entity\Attribute\Set',
             ['load', 'getEntityTypeId', '__wakeup'],

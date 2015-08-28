@@ -139,7 +139,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         try {
             $obj = $this->_config->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $this->getAttribute());
         } catch (\Exception $e) {
-            $obj = new \Magento\Framework\Object();
+            $obj = new \Magento\Framework\DataObject();
             $obj->setEntity($this->_productFactory->create())->setFrontendInput('text');
         }
         return $obj;
@@ -153,7 +153,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      */
     protected function _addSpecialAttributes(array &$attributes)
     {
-        $attributes['attribute_set_id'] = __('Attribute Set');
+        $attributes['attribute_set_id'] = __('Product Template');
         $attributes['category_ids'] = __('Category');
     }
 
@@ -581,7 +581,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     {
         if ($this->getAttribute() == 'category_ids') {
             return new \Zend_Db_Expr(
-                $this->_productResource->getReadConnection()
+                $this->_productResource->getConnection()
                 ->select()
                 ->from(
                     $this->_productResource->getTable('catalog_category_product'),
@@ -640,9 +640,9 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      */
     protected function _getAvailableInCategories($productId)
     {
-        return $this->_productResource->getReadConnection()
+        return $this->_productResource->getConnection()
             ->fetchCol(
-                $this->_productResource->getReadConnection()
+                $this->_productResource->getConnection()
                     ->select()
                     ->distinct()
                     ->from(
@@ -663,9 +663,9 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      */
     protected function _getAttributeSetId($productId)
     {
-        return $this->_productResource->getReadConnection()
+        return $this->_productResource->getConnection()
             ->fetchOne(
-                $this->_productResource->getReadConnection()
+                $this->_productResource->getConnection()
                     ->select()
                     ->distinct()
                     ->from(

@@ -6,7 +6,7 @@
 namespace Magento\Customer\Api;
 
 use Magento\Customer\Api\Data\CustomerInterface as Customer;
-use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Customer as CustomerHelper;
@@ -357,7 +357,7 @@ class CustomerRepositoryTest extends WebapiAbstract
             ->setField(Customer::EMAIL)
             ->setValue($customerData[Customer::EMAIL])
             ->create();
-        $this->searchCriteriaBuilder->addFilter([$filter]);
+        $this->searchCriteriaBuilder->addFilters([$filter]);
         $searchData = $this->dataObjectProcessor->buildOutputDataArray(
             $this->searchCriteriaBuilder->create(),
             'Magento\Framework\Api\SearchCriteriaInterface'
@@ -391,7 +391,7 @@ class CustomerRepositoryTest extends WebapiAbstract
             ->setField(Customer::EMAIL)
             ->setValue($customerData[Customer::EMAIL])
             ->create();
-        $this->searchCriteriaBuilder->addFilter([$filter]);
+        $this->searchCriteriaBuilder->addFilters([$filter]);
 
         $searchData = $this->searchCriteriaBuilder->create()->__toArray();
         $requestData = ['searchCriteria' => $searchData];
@@ -451,15 +451,15 @@ class CustomerRepositoryTest extends WebapiAbstract
         $filter3 = $builder->setField(Customer::LASTNAME)
             ->setValue($customerData1[Customer::LASTNAME])
             ->create();
-        $this->searchCriteriaBuilder->addFilter([$filter1, $filter2]);
-        $this->searchCriteriaBuilder->addFilter([$filter3]);
+        $this->searchCriteriaBuilder->addFilters([$filter1, $filter2]);
+        $this->searchCriteriaBuilder->addFilters([$filter3]);
 
         /**@var \Magento\Framework\Api\SortOrderBuilder $sortOrderBuilder */
         $sortOrderBuilder = Bootstrap::getObjectManager()->create(
             'Magento\Framework\Api\SortOrderBuilder'
         );
-        /** @var \Magento\Framework\Api\SortOrder $sortOrder */
-        $sortOrder = $sortOrderBuilder->setField(Customer::EMAIL)->setDirection(SearchCriteria::SORT_ASC)->create();
+        /** @var SortOrder $sortOrder */
+        $sortOrder = $sortOrderBuilder->setField(Customer::EMAIL)->setDirection(SortOrder::SORT_ASC)->create();
         $this->searchCriteriaBuilder->setSortOrders([$sortOrder]);
 
         $searchCriteria = $this->searchCriteriaBuilder->create();
@@ -500,9 +500,9 @@ class CustomerRepositoryTest extends WebapiAbstract
         $filter3 = $builder->setField(Customer::LASTNAME)
             ->setValue($customerData1[Customer::LASTNAME])
             ->create();
-        $this->searchCriteriaBuilder->addFilter([$filter1, $filter2]);
-        $this->searchCriteriaBuilder->addFilter([$filter3]);
-        $this->searchCriteriaBuilder->setSortOrders([Customer::EMAIL => SearchCriteria::SORT_ASC]);
+        $this->searchCriteriaBuilder->addFilters([$filter1, $filter2]);
+        $this->searchCriteriaBuilder->addFilters([$filter3]);
+        $this->searchCriteriaBuilder->setSortOrders([Customer::EMAIL => SortOrder::SORT_ASC]);
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $searchData = $searchCriteria->__toArray();
         $requestData = ['searchCriteria' => $searchData];
@@ -536,8 +536,8 @@ class CustomerRepositoryTest extends WebapiAbstract
         $filter3 = $builder->setField(Customer::LASTNAME)
             ->setValue('INVALID')
             ->create();
-        $this->searchCriteriaBuilder->addFilter([$filter1, $filter2]);
-        $this->searchCriteriaBuilder->addFilter([$filter3]);
+        $this->searchCriteriaBuilder->addFilters([$filter1, $filter2]);
+        $this->searchCriteriaBuilder->addFilters([$filter3]);
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $searchData = $searchCriteria->__toArray();
         $requestData = ['searchCriteria' => $searchData];
@@ -574,8 +574,8 @@ class CustomerRepositoryTest extends WebapiAbstract
         $filter3 = $builder->setField(Customer::LASTNAME)
             ->setValue('INVALID')
             ->create();
-        $this->searchCriteriaBuilder->addFilter([$filter1, $filter2]);
-        $this->searchCriteriaBuilder->addFilter([$filter3]);
+        $this->searchCriteriaBuilder->addFilters([$filter1, $filter2]);
+        $this->searchCriteriaBuilder->addFilters([$filter3]);
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $searchData = $searchCriteria->__toArray();
         $requestData = ['searchCriteria' => $searchData];
@@ -612,9 +612,9 @@ class CustomerRepositoryTest extends WebapiAbstract
             ->setValue($customerData1[Customer::LASTNAME])
             ->create();
 
-        $this->searchCriteriaBuilder->addFilter([$filter1]);
-        $this->searchCriteriaBuilder->addFilter([$filter2, $filter3]);
-        $this->searchCriteriaBuilder->addFilter([$filter4]);
+        $this->searchCriteriaBuilder->addFilters([$filter1]);
+        $this->searchCriteriaBuilder->addFilters([$filter2, $filter3]);
+        $this->searchCriteriaBuilder->addFilters([$filter4]);
         $searchCriteria = $this->searchCriteriaBuilder->setCurrentPage(1)->setPageSize(10)->create();
         $searchData = $searchCriteria->__toArray();
         $requestData = ['searchCriteria' => $searchData];
@@ -638,9 +638,9 @@ class CustomerRepositoryTest extends WebapiAbstract
             ->setValue('invalid')
             ->create();
 
-        $this->searchCriteriaBuilder->addFilter([$filter1]);
-        $this->searchCriteriaBuilder->addFilter([$filter2, $filter3]);
-        $this->searchCriteriaBuilder->addFilter([$filter4]);
+        $this->searchCriteriaBuilder->addFilters([$filter1]);
+        $this->searchCriteriaBuilder->addFilters([$filter2, $filter3]);
+        $this->searchCriteriaBuilder->addFilters([$filter4]);
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $searchData = $searchCriteria->__toArray();
         $requestData = ['searchCriteria' => $searchData];

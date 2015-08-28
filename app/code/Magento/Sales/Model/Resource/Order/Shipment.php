@@ -9,8 +9,6 @@ use Magento\Framework\App\Resource as AppResource;
 use Magento\SalesSequence\Model\Manager;
 use Magento\Sales\Model\Resource\Attribute;
 use Magento\Sales\Model\Resource\EntityAbstract as SalesResource;
-use Magento\Sales\Model\Resource\EntitySnapshot;
-use Magento\Sales\Model\Resource\Order\Shipment\Grid as ShipmentGrid;
 use Magento\Sales\Model\Spi\ShipmentResourceInterface;
 
 /**
@@ -47,7 +45,7 @@ class Shipment extends SalesResource implements ShipmentResourceInterface
     /**
      * Perform actions before object save
      *
-     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */

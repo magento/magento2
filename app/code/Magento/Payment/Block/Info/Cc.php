@@ -85,8 +85,8 @@ class Cc extends \Magento\Payment\Block\Info
     /**
      * Prepare credit card related payment info
      *
-     * @param \Magento\Framework\Object|array $transport
-     * @return \Magento\Framework\Object
+     * @param \Magento\Framework\DataObject|array $transport
+     * @return \Magento\Framework\DataObject
      */
     protected function _prepareSpecificInformation($transport = null)
     {
@@ -101,6 +101,7 @@ class Cc extends \Magento\Payment\Block\Info
         if ($this->getInfo()->getCcLast4()) {
             $data[(string)__('Credit Card Number')] = sprintf('xxxx-%s', $this->getInfo()->getCcLast4());
         }
+
         if (!$this->getIsSecureMode()) {
             if ($ccSsIssue = $this->getInfo()->getCcSsIssue()) {
                 $data[(string)__('Switch/Solo/Maestro Issue Number')] = $ccSsIssue;

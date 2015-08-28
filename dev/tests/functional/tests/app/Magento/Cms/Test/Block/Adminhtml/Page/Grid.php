@@ -6,14 +6,22 @@
 
 namespace Magento\Cms\Test\Block\Adminhtml\Page;
 
-use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 use Magento\Mtf\Client\Locator;
+use Magento\Ui\Test\Block\Adminhtml\DataGrid;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Backend Data Grid for managing "CMS Page" entities.
  */
 class Grid extends DataGrid
 {
+    /**
+     * Select action toggle.
+     *
+     * @var string
+     */
+    protected $selectAction = '.action-select';
+
     /**
      * Filters array mapping.
      *
@@ -66,7 +74,19 @@ class Grid extends DataGrid
      *
      * @var string
      */
-    protected $previewCmsPage = '.action-menu-item';
+    protected $previewCmsPage = "..//a[contains(@class, 'action-menu-item') and text() = 'Preview']";
+
+    /**
+     * Click on "Edit" link.
+     *
+     * @param SimpleElement $rowItem
+     * @return void
+     */
+    protected function clickEditLink(SimpleElement $rowItem)
+    {
+        $rowItem->find($this->selectAction)->click();
+        $rowItem->find($this->editLink)->click();
+    }
 
     /**
      * Search item and open it on Frontend.
@@ -78,32 +98,12 @@ class Grid extends DataGrid
     public function searchAndPreview(array $filter)
     {
         $this->search($filter);
-        $rowItem = $this->_rootElement->find($this->rowItem);
+        $rowItem = $this->getRow([$filter['title']]);
         if ($rowItem->isVisible()) {
-            $rowItem->find($this->previewCmsPage)->click();
+            $rowItem->find($this->selectAction)->click();
+            $rowItem->find($this->previewCmsPage, Locator::SELECTOR_XPATH)->click();
         } else {
             throw new \Exception('Searched item was not found.');
         }
-    }
-
-    /**
-     * Wait loader.
-     *
-     * @return void
-     */
-    protected function waitLoader()
-    {
-        try {
-            $browser = $this->browser;
-            $selector = $this->loader;
-            $browser->waitUntil(
-                function () use ($browser, $selector) {
-                    return $browser->find($selector)->isVisible() == true ? true : null;
-                }
-            );
-        } catch (\Exception $e) {
-        }
-
-        parent::waitLoader();
     }
 }

@@ -34,6 +34,15 @@
             </item>
         </argument>
     </filters>
+    <filterSearch class="Magento\Ui\Component\Filters\Type\Search">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/search/search</item>
+                <item name="displayArea" xsi:type="string">dataGridFilters</item>
+
+            </item>
+        </argument>
+    </filterSearch>
     <filterSelect class="Magento\Ui\Component\Filters\Type\Select">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
@@ -62,7 +71,6 @@
             </item>
         </argument>
     </filterDate>
-
     <container class="Magento\Ui\Component\Container">
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
@@ -137,8 +145,8 @@
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/element/boolean</item>
-                <item name="extends" xsi:type="string">input</item>
                 <item name="config" xsi:type="array">
+                    <item name="template" xsi:type="string">ui/form/field</item>
                     <item name="elementTmpl" xsi:type="string">ui/form/element/checkbox</item>
                 </item>
             </item>
@@ -148,8 +156,8 @@
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/element/select</item>
-                <item name="extends" xsi:type="string">input</item>
                 <item name="config" xsi:type="array">
+                    <item name="template" xsi:type="string">ui/form/field</item>
                     <item name="elementTmpl" xsi:type="string">ui/form/element/select</item>
                 </item>
             </item>
@@ -160,8 +168,8 @@
             <item name="template" xsi:type="string">ui/form/element/multiselect</item>
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/element/multiselect</item>
-                <item name="extends" xsi:type="string">input</item>
                 <item name="config" xsi:type="array">
+                    <item name="template" xsi:type="string">ui/form/field</item>
                     <item name="elementTmpl" xsi:type="string">ui/form/element/multiselect</item>
                 </item>
             </item>
@@ -171,13 +179,20 @@
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/element/textarea</item>
-                <item name="extends" xsi:type="string">input</item>
                 <item name="config" xsi:type="array">
+                    <item name="template" xsi:type="string">ui/form/field</item>
                     <item name="elementTmpl" xsi:type="string">ui/form/element/textarea</item>
                 </item>
             </item>
         </argument>
     </textarea>
+    <multiline class="Magento\Ui\Component\Form\Element\Multiline">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
+            </item>
+        </argument>
+    </multiline>
     <!-- Form elements -->
 
     <!-- Form element data types -->
@@ -193,8 +208,9 @@
     <image class="Magento\Ui\Component\Form\Element\DataType\Media">
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
-                <item name="extends" xsi:type="string">input</item>
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
                 <item name="config" xsi:type="array">
+                    <item name="template" xsi:type="string">ui/form/field</item>
                     <item name="elementTmpl" xsi:type="string">ui/form/element/media</item>
                 </item>
             </item>
@@ -203,9 +219,9 @@
     <date class="Magento\Ui\Component\Form\Element\DataType\Date">
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
-                <item name="extends" xsi:type="string">input</item>
                 <item name="component" xsi:type="string">Magento_Ui/js/form/element/date</item>
                 <item name="config" xsi:type="array">
+                    <item name="template" xsi:type="string">ui/form/field</item>
                     <item name="elementTmpl" xsi:type="string">ui/form/element/date</item>
                 </item>
             </item>
@@ -214,15 +230,20 @@
     <boolean class="Magento\Ui\Component\Form\Element\DataType\Boolean">
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
-                <item name="extends" xsi:type="string">input</item>
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                <item name="config" xsi:type="array">
+                    <item name="template" xsi:type="string">ui/form/field</item>
+                    <item name="elementTmpl" xsi:type="string">ui/form/element/input</item>
+                </item>
             </item>
         </argument>
     </boolean>
     <email class="Magento\Ui\Component\Form\Element\DataType\Email">
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
-                <item name="extends" xsi:type="string">input</item>
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
                 <item name="config" xsi:type="array">
+                    <item name="template" xsi:type="string">ui/form/field</item>
                     <item name="elementTmpl" xsi:type="string">ui/form/element/email</item>
                 </item>
             </item>
@@ -256,4 +277,27 @@
         <argument name="data" xsi:type="array">
         </argument>
     </bookmark>
+    <exportButton class="Magento\Ui\Component\ExportButton">
+        <argument name="data" xsi:type="array">
+            <item name="template" xsi:type="string">templates/export/button</item>
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/export</item>
+            </item>
+            <item name="config" xsi:type="array">
+                <item name="displayArea" xsi:type="string">dataGridActions</item>
+                <item name="options" xsi:type="array">
+                    <item name="cvs" xsi:type="array">
+                        <item name="value" xsi:type="string">csv</item>
+                        <item name="label" xsi:type="string" translate="true">CSV</item>
+                        <item name="url" xsi:type="string">mui/export/gridToCsv</item>
+                    </item>
+                    <item name="xml" xsi:type="array">
+                        <item name="value" xsi:type="string">xml</item>
+                        <item name="label" xsi:type="string" translate="true">Excel XML</item>
+                        <item name="url" xsi:type="string">mui/export/gridToXml</item>
+                    </item>
+                </item>
+            </item>
+        </argument>
+    </exportButton>
 </components>

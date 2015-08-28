@@ -18,7 +18,7 @@ class PreferencesResolving implements ModificationInterface
      */
     public function modify(array $config)
     {
-        if (!isset($config['arguments']) || !isset($config['preferences'])) {
+        if (!isset($config['arguments'], $config['preferences'])) {
             return $config;
         }
 
@@ -42,7 +42,7 @@ class PreferencesResolving implements ModificationInterface
 
         foreach ($argument as $key => &$value) {
             if (in_array($key, ['_i_', '_ins_'])) {
-                $value = isset($preferences[$value]) ? $preferences[$value] : $value;
+                $value = $this->resolvePreferenceRecursive($value, $preferences);
                 continue;
             }
 
@@ -50,6 +50,20 @@ class PreferencesResolving implements ModificationInterface
                 $this->resolvePreferences($value, $preferences);
             }
         }
-        return;
+    }
+
+    /**
+     * Resolves preference recursively
+     *
+     * @param string $value
+     * @param array $preferences
+     *
+     * @return string
+     */
+    private function resolvePreferenceRecursive(&$value, &$preferences)
+    {
+        return isset($preferences[$value])
+            ? $this->resolvePreferenceRecursive($preferences[$value], $preferences)
+            : $value;
     }
 }

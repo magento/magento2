@@ -107,17 +107,16 @@ class InstallData implements InstallDataInterface
     <div class="message info">
         <span>
             Please replace this text with you Privacy Policy.
-            Please add any additional cookies your website uses below (e.g., Google Analytics)
+            Please add any additional cookies your website uses below (e.g. Google Analytics).
         </span>
     </div>
     <p>
-        This privacy policy sets out how {{config path="general/store_information/name"}} uses and protects any
-        information that you give {{config path="general/store_information/name"}} when you use this website.
-        {{config path="general/store_information/name"}} is committed to ensuring that your privacy is protected.
-        Should we ask you to provide certain information by which you can be identified when using this website,
-        then you can be assured that it will only be used in accordance with this privacy statement.
-        {{config path="general/store_information/name"}} may change this policy from time to time by updating this page.
-        You should check this page from time to time to ensure that you are happy with any changes.
+        This privacy policy sets out how this website (hereafter "the Store") uses and protects any information that
+        you give the Store while using this website. The Store is committed to ensuring that your privacy is protected.
+        Should we ask you to provide certain information by which you can be identified when using this website, then
+        you can be assured that it will only be used in accordance with this privacy statement. The Store may change
+        this policy from time to time by updating this page. You should check this page from time to time to ensure
+        that you are happy with any changes.
     </p>
     <h2>What we collect</h2>
     <p>We may collect the following information:</p>
@@ -191,8 +190,7 @@ class InstallData implements InstallDataInterface
         </li>
         <li>
             if you have previously agreed to us using your personal information for direct marketing purposes,
-            you may change your mind at any time by writing to or emailing us at
-            {{config path="trans_email/ident_general/email"}}
+            you may change your mind at any time by letting us know using our Contact Us information
         </li>
     </ul>
     <p>
@@ -202,8 +200,8 @@ class InstallData implements InstallDataInterface
     </p>
     <p>
         You may request details of personal information which we hold about you under the Data Protection Act 1998.
-        A small fee will be payable. If you would like a copy of the information held on you please write to
-        {{config path="general/store_information/address"}}.
+        A small fee will be payable. If you would like a copy of the information held on you please email us this
+        request using our Contact Us information.
     </p>
     <p>
         If you believe that any information we are holding on you is incorrect or incomplete,
@@ -258,7 +256,7 @@ class InstallData implements InstallDataInterface
             </tr>
             <tr>
                 <th>FRONTEND</th>
-                <td>You sesssion ID on the server.</td>
+                <td>Your session ID on the server.</td>
             </tr>
             <tr>
                 <th>GUEST-VIEW</th>

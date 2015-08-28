@@ -37,6 +37,10 @@
                 type="Magento\Customer\Model\Metadata\CustomerCachedMetadata" />
     <preference for="Magento\Customer\Api\AddressMetadataInterface"
                 type="Magento\Customer\Model\Metadata\AddressCachedMetadata" />
+    <preference for="Magento\Customer\Api\CustomerMetadataManagementInterface"
+                type="Magento\Customer\Model\Metadata\CustomerMetadataManagement" />
+    <preference for="Magento\Customer\Api\AddressMetadataManagementInterface"
+                type="Magento\Customer\Model\Metadata\AddressMetadataManagement" />
     <type name="Magento\Customer\Model\Session">
         <arguments>
             <argument name="configShare" xsi:type="object">Magento\Customer\Model\Config\Share\Proxy</argument>
@@ -68,6 +72,13 @@
             <argument name="protectedModels" xsi:type="array">
                 <item name="customer" xsi:type="string">Magento\Customer\Model\Customer</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\Resource\Address">
+        <arguments>
+            <argument name="customerRepository" xsi:type="object">Magento\Customer\Api\CustomerRepositoryInterface\Proxy</argument>
+            <argument name="entitySnapshot" xsi:type="object">EavVersionControlSnapshot</argument>
+            <argument name="entityRelationComposite" xsi:type="object">CustomerAddressRelationsComposite</argument>
         </arguments>
     </type>
     <type name="Magento\Customer\Model\Address\Config">
@@ -124,6 +135,177 @@
                     <item name="Magento\Eav\Model\Attribute\Data\Image" xsi:type="string">Magento\Framework\Api\Data\ImageContentInterface</item>
                 </item>
             </argument>
+        </arguments>
+    </type>
+    <virtualType name="EavVersionControlSnapshot" type="Magento\Framework\Model\Resource\Db\VersionControl\Snapshot">
+        <arguments>
+            <argument name="metadata" xsi:type="object">Magento\Eav\Model\Entity\VersionControl\Metadata</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="CustomerRelationsComposite" type="Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite">
+        <arguments>
+            <argument name="relationProcessors" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Customer\Model\Resource\Customer\Relation</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="CustomerAddressRelationsComposite" type="Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite">
+        <arguments>
+            <argument name="relationProcessors" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Customer\Model\Resource\Address\Relation</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Customer\Model\Resource\Customer">
+        <arguments>
+            <argument name="entitySnapshot" xsi:type="object">EavVersionControlSnapshot</argument>
+            <argument name="entityRelationComposite" xsi:type="object">CustomerRelationsComposite</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\Resource\Customer\Collection">
+        <arguments>
+            <argument name="entitySnapshot" xsi:type="object">EavVersionControlSnapshot</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\Resource\Address\Collection">
+        <arguments>
+            <argument name="entitySnapshot" xsi:type="object">EavVersionControlSnapshot</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Customer\Model\Resource\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">customer_grid_flat</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\Customer\Model\Resource\Customer</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="customer_listing_data_source" xsi:type="string">Magento\Customer\Model\Resource\Grid\Collection</item>
+                <item name="customer_online_grid_data_source" xsi:type="string">Magento\Customer\Model\Resource\Online\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="CustomerNameHandler" type="Magento\Framework\Indexer\Handler\ConcatHandler">
+        <arguments>
+            <argument name="concatExpression" xsi:type="object">CustomerNameExpression</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="ShippingAddressHandler" type="Magento\Framework\Indexer\Handler\ConcatHandler">
+        <arguments>
+            <argument name="concatExpression" xsi:type="object">ShippingAddressExpression</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BillingAddressHandler" type="Magento\Framework\Indexer\Handler\ConcatHandler">
+        <arguments>
+            <argument name="concatExpression" xsi:type="object">BillingAddressExpression</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="LastVisitAtHandler" type="Magento\Framework\Indexer\Handler\ConcatHandler">
+        <arguments>
+            <argument name="concatExpression" xsi:type="object">LastVisitAtSubSelect</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="LastVisitAtSubSelect" type="Magento\Framework\DB\Sql\LookupExpression">
+        <arguments>
+            <argument name="targetTable" xsi:type="string">customer_visitor</argument>
+            <argument name="targetColumn" xsi:type="string">last_visit_at</argument>
+            <argument name="referenceColumns" xsi:type="array">
+                <item name="customer_id" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">e</item>
+                    <item name="columnName" xsi:type="string">entity_id</item>
+                </item>
+            </argument>
+            <argument name="sortOrder" xsi:type="array">
+                <item name="DESC" xsi:type="string">last_visit_at</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="CustomerNameExpression" type="Magento\Framework\DB\Sql\ConcatExpression">
+        <arguments>
+            <argument name="tableName" xsi:type="string">e</argument>
+            <argument name="columns" xsi:type="array">
+                <item name="prefix" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">e</item>
+                    <item name="columnName" xsi:type="string">prefix</item>
+                </item>
+                <item name="firstname" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">e</item>
+                    <item name="columnName" xsi:type="string">firstname</item>
+                </item>
+                <item name="middlename" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">e</item>
+                    <item name="columnName" xsi:type="string">middlename</item>
+                </item>
+                <item name="lastname" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">e</item>
+                    <item name="columnName" xsi:type="string">lastname</item>
+                </item>
+                <item name="suffix" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">e</item>
+                    <item name="columnName" xsi:type="string">suffix</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="ShippingAddressExpression" type="Magento\Framework\DB\Sql\ConcatExpression">
+        <arguments>
+            <argument name="columns" xsi:type="array">
+                <item name="prefix" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">shipping</item>
+                    <item name="columnName" xsi:type="string">street</item>
+                </item>
+                <item name="firstname" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">shipping</item>
+                    <item name="columnName" xsi:type="string">city</item>
+                </item>
+                <item name="middlename" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">shipping</item>
+                    <item name="columnName" xsi:type="string">region</item>
+                </item>
+                <item name="lastname" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">shipping</item>
+                    <item name="columnName" xsi:type="string">postcode</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BillingAddressExpression" type="Magento\Framework\DB\Sql\ConcatExpression">
+        <arguments>
+            <argument name="columns" xsi:type="array">
+                <item name="prefix" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">billing</item>
+                    <item name="columnName" xsi:type="string">street</item>
+                </item>
+                <item name="firstname" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">billing</item>
+                    <item name="columnName" xsi:type="string">city</item>
+                </item>
+                <item name="middlename" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">billing</item>
+                    <item name="columnName" xsi:type="string">region</item>
+                </item>
+                <item name="lastname" xsi:type="array">
+                    <item name="tableAlias" xsi:type="string">billing</item>
+                    <item name="columnName" xsi:type="string">postcode</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Customer\Model\Indexer\AttributeProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Magento\Customer\Model\Resource\Attribute\Collection</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\Indexer\Address\AttributeProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Magento\Customer\Model\Resource\Address\Attribute\Collection</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\Resource\Online\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">customer_visitor</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\Customer\Model\Resource\Visitor</argument>
         </arguments>
     </type>
 </config>

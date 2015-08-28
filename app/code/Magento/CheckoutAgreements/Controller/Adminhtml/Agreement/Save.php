@@ -19,14 +19,14 @@ class Save extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
             $model->setData($postData);
 
             try {
-                $validationResult = $model->validateData(new \Magento\Framework\Object($postData));
+                $validationResult = $model->validateData(new \Magento\Framework\DataObject($postData));
                 if ($validationResult !== true) {
                     foreach ($validationResult as $message) {
                         $this->messageManager->addError($message);
                     }
                 } else {
                     $model->save();
-                    $this->messageManager->addSuccess(__('The condition has been saved.'));
+                    $this->messageManager->addSuccess(__('You saved the condition.'));
                     $this->_redirect('checkout/*/');
                     return;
                 }

@@ -51,7 +51,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
     public function testGetRelationInfo()
     {
         $info = $this->_model->getRelationInfo();
-        $this->assertInstanceOf('Magento\Framework\Object', $info);
+        $this->assertInstanceOf('Magento\Framework\DataObject', $info);
         $this->assertNotSame($info, $this->_model->getRelationInfo());
     }
 
@@ -86,9 +86,9 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testAttributesCompare()
     {
-        $attribute[1] = new \Magento\Framework\Object(['group_sort_path' => 1, 'sort_path' => 10]);
-        $attribute[2] = new \Magento\Framework\Object(['group_sort_path' => 1, 'sort_path' => 5]);
-        $attribute[3] = new \Magento\Framework\Object(['group_sort_path' => 2, 'sort_path' => 10]);
+        $attribute[1] = new \Magento\Framework\DataObject(['group_sort_path' => 1, 'sort_path' => 10]);
+        $attribute[2] = new \Magento\Framework\DataObject(['group_sort_path' => 1, 'sort_path' => 5]);
+        $attribute[3] = new \Magento\Framework\DataObject(['group_sort_path' => 2, 'sort_path' => 10]);
         $this->assertEquals(1, $this->_model->attributesCompare($attribute[1], $attribute[2]));
         $this->assertEquals(-1, $this->_model->attributesCompare($attribute[2], $attribute[1]));
         $this->assertEquals(-1, $this->_model->attributesCompare($attribute[1], $attribute[3]));
@@ -188,11 +188,11 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($product->getCustomOption('info_buyRequest'));
 
         $requestData = ['qty' => 5];
-        $result = $this->_model->prepareForCart(new \Magento\Framework\Object($requestData), $product);
+        $result = $this->_model->prepareForCart(new \Magento\Framework\DataObject($requestData), $product);
         $this->assertArrayHasKey(0, $result);
         $this->assertSame($product, $result[0]);
         $buyRequest = $product->getCustomOption('info_buyRequest');
-        $this->assertInstanceOf('Magento\Framework\Object', $buyRequest);
+        $this->assertInstanceOf('Magento\Framework\DataObject', $buyRequest);
         $this->assertEquals($product->getId(), $buyRequest->getProductId());
         $this->assertSame($product, $buyRequest->getProduct());
         $this->assertEquals(serialize($requestData), $buyRequest->getValue());
@@ -209,15 +209,15 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $product->load(1);
         // fixture
         $this->assertEquals(
-            'Please specify the product\'s required option(s).',
-            $this->_model->prepareForCart(new \Magento\Framework\Object(), $product)
+            'Please specify product\'s required option(s).',
+            $this->_model->prepareForCart(new \Magento\Framework\DataObject(), $product)
         );
     }
 
     public function testGetSpecifyOptionMessage()
     {
         $this->assertEquals(
-            'Please specify the product\'s required option(s).',
+            'Please specify product\'s required option(s).',
             $this->_model->getSpecifyOptionMessage()
         );
     }
@@ -259,7 +259,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
 
         $product->load(1);
         // fixture
-        $product->addCustomOption('info_buyRequest', serialize(new \Magento\Framework\Object(['qty' => 2])));
+        $product->addCustomOption('info_buyRequest', serialize(new \Magento\Framework\DataObject(['qty' => 2])));
         foreach ($product->getOptions() as $id => $option) {
             if ('field' == $option->getType()) {
                 $product->addCustomOption('option_ids', $id);
@@ -345,7 +345,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetWeight()
     {
-        $product = new \Magento\Framework\Object();
+        $product = new \Magento\Framework\DataObject();
         $this->assertEmpty($this->_model->getWeight($product));
         $product->setWeight('value');
         $this->assertEquals('value', $this->_model->getWeight($product));
@@ -355,16 +355,16 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
     {
         $this->markTestIncomplete('Bug MAGE-2814');
 
-        $product = new \Magento\Framework\Object();
+        $product = new \Magento\Framework\DataObject();
         $this->assertFalse($this->_model->hasOptions($product));
 
-        $product = new \Magento\Framework\Object(['has_options' => true]);
+        $product = new \Magento\Framework\DataObject(['has_options' => true]);
         $this->assertTrue($this->_model->hasOptions($product));
     }
 
     public function testHasRequiredOptions()
     {
-        $product = new \Magento\Framework\Object();
+        $product = new \Magento\Framework\DataObject();
         $this->assertFalse($this->_model->hasRequiredOptions($product));
         $product->setRequiredOptions(1);
         $this->assertTrue($this->_model->hasRequiredOptions($product));
@@ -372,7 +372,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSetStoreFilter()
     {
-        $product = new \Magento\Framework\Object();
+        $product = new \Magento\Framework\DataObject();
         $this->assertNull($this->_model->getStoreFilter($product));
         $store = new \StdClass();
         $this->_model->setStoreFilter($store, $product);
@@ -401,12 +401,12 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
 
     public function testAssignProductToOption()
     {
-        $product = new \Magento\Framework\Object();
-        $option = new \Magento\Framework\Object();
+        $product = new \Magento\Framework\DataObject();
+        $option = new \Magento\Framework\DataObject();
         $this->_model->assignProductToOption($product, $option, $product);
         $this->assertSame($product, $option->getProduct());
 
-        $option = new \Magento\Framework\Object();
+        $option = new \Magento\Framework\DataObject();
         $this->_model->assignProductToOption(null, $option, $product);
         $this->assertSame($product, $option->getProduct());
     }
@@ -471,7 +471,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Product'
         );
-        $buyRequest = new \Magento\Framework\Object(['qty' => 5]);
+        $buyRequest = new \Magento\Framework\DataObject(['qty' => 5]);
         $this->_model->checkProductConfiguration($product, $buyRequest);
     }
 }

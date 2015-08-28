@@ -57,7 +57,7 @@ class CustomerQuoteTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->eventMock = $this->getMockBuilder('Magento\Framework\Event')
             ->disableOriginalConstructor()
-            ->setMethods(['getOrigCustomerDataObject', 'getCustomerDataObject'])
+            ->setMethods(['getCustomerDataObject'])
             ->getMock();
         $this->observerMock->expects($this->any())->method('getEvent')->will($this->returnValue($this->eventMock));
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -91,8 +91,9 @@ class CustomerQuoteTest extends \PHPUnit_Framework_TestCase
         $this->eventMock->expects($this->any())
             ->method('getOrigCustomerDataObject')
             ->will($this->returnValue($origCustomerDataObjectMock));
-        $this->quoteRepositoryMock->expects($this->never())
-            ->method('getForCustomer');
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('getForCustomer')
+            ->willThrowException(new \Magento\Framework\Exception\NoSuchEntityException());
 
         $this->customerQuote->dispatch($this->observerMock);
     }
@@ -100,10 +101,9 @@ class CustomerQuoteTest extends \PHPUnit_Framework_TestCase
     /**
      * @param bool $isWebsiteScope
      * @param array $websites
-     * @param int $quoteId
      * @dataProvider dispatchDataProvider
      */
-    public function testDispatch($isWebsiteScope, $websites, $quoteId)
+    public function testDispatch($isWebsiteScope, $websites)
     {
         $this->configMock->expects($this->once())
             ->method('isWebsiteScope')
@@ -128,18 +128,9 @@ class CustomerQuoteTest extends \PHPUnit_Framework_TestCase
                 ->method('getWebsites')
                 ->will($this->returnValue($websites));
         }
-        $origCustomerDataObjectMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $origCustomerDataObjectMock->expects($this->any())
-            ->method('getGroupId')
-            ->will($this->returnValue(2));
         $this->eventMock->expects($this->any())
             ->method('getCustomerDataObject')
             ->will($this->returnValue($customerDataObjectMock));
-        $this->eventMock->expects($this->any())
-            ->method('getOrigCustomerDataObject')
-            ->will($this->returnValue($origCustomerDataObjectMock));
         /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote $quoteMock */
         $quoteMock = $this->getMockBuilder(
             'Magento\Quote\Model\Quote'
@@ -147,52 +138,38 @@ class CustomerQuoteTest extends \PHPUnit_Framework_TestCase
                 [
                     'setWebsite',
                     'setCustomerGroupId',
+                    'getCustomerGroupId',
                     'collectTotals',
                     '__wakeup',
                 ]
             )->disableOriginalConstructor(
             )->getMock();
         $websiteCount = count($websites);
-        if ($quoteId) {
-            $this->quoteRepositoryMock->expects($this->exactly($websiteCount))
-                ->method('getForCustomer')
-                ->will($this->returnValue($quoteMock));
-            $quoteMock->expects($this->exactly($websiteCount))
-                ->method('setWebsite');
-            $quoteMock->expects($this->exactly($websiteCount))
-                ->method('setCustomerGroupId');
-            $quoteMock->expects($this->exactly($websiteCount))
-                ->method('collectTotals');
-            $this->quoteRepositoryMock->expects($this->exactly($websiteCount))
-                ->method('save')
-                ->with($quoteMock);
-        } else {
-            $this->quoteRepositoryMock->expects($this->exactly($websiteCount))
-                ->method('getForCustomer')
-                ->willThrowException(
-                    new \Magento\Framework\Exception\NoSuchEntityException()
-                );
-            $quoteMock->expects($this->never())
-                ->method('setCustomerGroupId');
-            $quoteMock->expects($this->never())
-                ->method('collectTotals');
-            $this->quoteRepositoryMock->expects($this->never())
-                ->method('save');
-        }
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('getForCustomer')
+            ->will($this->returnValue($quoteMock));
+        $quoteMock->expects($this->exactly($websiteCount))
+            ->method('setWebsite');
+        $quoteMock->expects($this->exactly($websiteCount))
+            ->method('setCustomerGroupId');
+        $quoteMock->expects($this->exactly($websiteCount))
+            ->method('collectTotals');
+        $this->quoteRepositoryMock->expects($this->exactly($websiteCount))
+            ->method('save')
+            ->with($quoteMock);
+        $quoteMock->expects($this->once())
+            ->method('getCustomerGroupId')
+            ->willReturn(2);
         $this->customerQuote->dispatch($this->observerMock);
     }
 
     public function dispatchDataProvider()
     {
         return [
-            [true, ['website1'], 3],
-            [true, ['website1', 'website2'], 3],
-            [false, ['website1'], 3],
-            [false, ['website1', 'website2'], 3],
-            [true, ['website1'], null],
-            [true, ['website1', 'website2'], null],
-            [false, ['website1'], null],
-            [false, ['website1', 'website2'], null],
+            [true, ['website1']],
+            [true, ['website1', 'website2']],
+            [false, ['website1']],
+            [false, ['website1', 'website2']],
         ];
     }
 }

@@ -40,10 +40,6 @@ class IndexTest extends \Magento\Theme\Test\Unit\Controller\Adminhtml\System\Des
             ->method('getLayout')
             ->will($this->returnValue($layout));
 
-        $this->eventManager->expects($this->once())
-            ->method('dispatch')
-            ->with($this->equalTo('theme_registration_from_filesystem'))
-            ->will($this->returnValue(null));
         $this->_model->execute();
     }
 }

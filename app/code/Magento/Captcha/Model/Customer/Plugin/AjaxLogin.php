@@ -27,52 +27,70 @@ class AjaxLogin
     protected $resultJsonFactory;
 
     /**
+     * @var array
+     */
+    protected $formIds;
+
+    /**
      * @param CaptchaHelper $helper
      * @param SessionManagerInterface $sessionManager
      * @param JsonFactory $resultJsonFactory
+     * @param array $formIds
      */
     public function __construct(
         CaptchaHelper $helper,
         SessionManagerInterface $sessionManager,
-        JsonFactory $resultJsonFactory
+        JsonFactory $resultJsonFactory,
+        array $formIds
     ) {
         $this->helper = $helper;
         $this->sessionManager = $sessionManager;
         $this->resultJsonFactory = $resultJsonFactory;
+        $this->formIds = $formIds;
     }
 
     /**
      * @param \Magento\Customer\Controller\Ajax\Login $subject
-     * @param callable $proceed
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @param \Closure $proceed
+     * @return $this
      * @throws \Zend_Json_Exception
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function aroundExecute(
         \Magento\Customer\Controller\Ajax\Login $subject,
         \Closure $proceed
     ) {
-        $loginFormId = 'user_login';
+        $captchaFormIdField = 'captcha_form_id';
         $captchaInputName = 'captcha_string';
 
         /** @var \Magento\Framework\App\RequestInterface $request */
         $request = $subject->getRequest();
 
-        /** @var \Magento\Captcha\Model\ModelInterface $captchaModel */
-        $captchaModel = $this->helper->getCaptcha($loginFormId);
-
-        $loginParams = \Zend_Json::decode($request->getContent());
+        $loginParams = [];
+        $content = $request->getContent();
+        if ($content) {
+            $loginParams = \Zend_Json::decode($content);
+        }
         $username = isset($loginParams['username']) ? $loginParams['username'] : null;
-        $captchaString = isset($loginParams[$captchaInputName])
-            ? $loginParams[$captchaInputName]
-            : null;
+        $captchaString = isset($loginParams[$captchaInputName]) ? $loginParams[$captchaInputName] : null;
+        $loginFormId = isset($loginParams[$captchaFormIdField]) ? $loginParams[$captchaFormIdField] : null;
 
-        if ($captchaModel->isRequired($username)) {
-            $captchaModel->logAttempt($username);
-            if (!$captchaModel->isCorrect($captchaString)) {
-                $this->sessionManager->setUsername($username);
-                /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+        foreach ($this->formIds as $formId) {
+            $captchaModel = $this->helper->getCaptcha($formId);
+            if ($captchaModel->isRequired($username) && !in_array($loginFormId, $this->formIds)) {
                 $resultJson = $this->resultJsonFactory->create();
-                return $resultJson->setData(['errors' => true, 'message' => __('Incorrect CAPTCHA')]);
+                return $resultJson->setData(['errors' => true, 'message' => __('Provided form does not exist')]);
+            }
+
+            if ($formId == $loginFormId) {
+                $captchaModel->logAttempt($username);
+                if (!$captchaModel->isCorrect($captchaString)) {
+                    $this->sessionManager->setUsername($username);
+                    /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+                    $resultJson = $this->resultJsonFactory->create();
+                    return $resultJson->setData(['errors' => true, 'message' => __('Incorrect CAPTCHA')]);
+                }
             }
         }
         return $proceed();

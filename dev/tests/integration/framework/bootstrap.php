@@ -15,6 +15,7 @@ if (file_exists($updateAppBootstrap)) {
 
 $testsBaseDir = dirname(__DIR__);
 $magentoBaseDir = realpath("{$testsBaseDir}/../../../");
+$fixtureBaseDir = $testsBaseDir. '/testsuite';
 
 if (!defined('TESTS_TEMP_DIR')) {
     define('TESTS_TEMP_DIR', $testsBaseDir . '/tmp');
@@ -52,7 +53,8 @@ try {
         $globalConfigFile,
         $settings->get('TESTS_GLOBAL_CONFIG_DIR'),
         $settings->get('TESTS_MAGENTO_MODE'),
-        AutoloaderRegistry::getAutoloader()
+        AutoloaderRegistry::getAutoloader(),
+        true
     );
 
     $bootstrap = new \Magento\TestFramework\Bootstrap(
@@ -71,7 +73,7 @@ try {
     if (!$application->isInstalled()) {
         $application->install();
     }
-    $application->initialize();
+    $application->initialize([]);
 
     \Magento\TestFramework\Helper\Bootstrap::setInstance(new \Magento\TestFramework\Helper\Bootstrap($bootstrap));
 

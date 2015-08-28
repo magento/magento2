@@ -14,7 +14,7 @@ use Magento\Review\Model\RatingFactory;
 /**
  * Reviews admin controller
  */
-class Product extends Action
+abstract class Product extends Action
 {
     /**
      * Array of actions which can be processed without secret key validation

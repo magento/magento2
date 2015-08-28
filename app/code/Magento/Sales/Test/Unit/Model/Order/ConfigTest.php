@@ -33,34 +33,41 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
-        $this->salesConfig = new Config($orderStatusFactory, $this->orderStatusCollectionFactoryMock);
+        $this->salesConfig = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
+            ->getObject(
+                'Magento\Sales\Model\Order\Config',
+                [
+                    'orderStatusFactory' => $orderStatusFactory,
+                    'orderStatusCollectionFactory' => $this->orderStatusCollectionFactoryMock
+                ]
+            );
     }
 
     public function testGetInvisibleOnFrontStatuses()
     {
         $statuses = [
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 [
                     'status' => 'canceled',
                     'is_default' => 1,
                     'visible_on_front' => 1,
                 ]
             ),
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 [
                     'status' => 'complete',
                     'is_default' => 1,
                     'visible_on_front' => 0,
                 ]
             ),
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 [
                     'status' => 'processing',
                     'is_default' => 1,
                     'visible_on_front' => 1,
                 ]
             ),
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 [
                     'status' => 'pending_payment',
                     'is_default' => 1,

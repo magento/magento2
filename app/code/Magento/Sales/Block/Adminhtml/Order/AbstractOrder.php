@@ -62,7 +62,7 @@ class AbstractOrder extends \Magento\Backend\Block\Widget
         if ($this->_coreRegistry->registry('order')) {
             return $this->_coreRegistry->registry('order');
         }
-        throw new \Magento\Framework\Exception\LocalizedException(__('We cannot get the order instance.'));
+        throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t get the order instance right now.'));
     }
 
     /**
@@ -135,7 +135,7 @@ class AbstractOrder extends \Magento\Backend\Block\Widget
     /**
      * Retrieve subtotal price include tax html formated content
      *
-     * @param \Magento\Framework\Object $order
+     * @param \Magento\Framework\DataObject $order
      * @return string
      */
     public function displayShippingPriceInclTax($order)

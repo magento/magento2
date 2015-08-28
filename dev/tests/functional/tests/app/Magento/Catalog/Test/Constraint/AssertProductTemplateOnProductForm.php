@@ -52,7 +52,7 @@ class AssertProductTemplateOnProductForm extends AbstractConstraint
         $productSimple = $fixtureFactory->createByCode(
             'catalogProductSimple',
             [
-                'dataSet' => 'default',
+                'dataset' => 'default',
                 'data' => [
                     'attribute_set_id' => ['attribute_set' => $attributeSet],
                 ],
@@ -66,7 +66,7 @@ class AssertProductTemplateOnProductForm extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             $attributeSet->getAttributeSetName(),
             $formAttributeSet,
-            'Attribute Set not found on Product form.'
+            'Product Template not found on Product form.'
             . "\nExpected: " . $attributeSet->getAttributeSetName()
             . "\nActual: " . $formAttributeSet
         );
@@ -88,6 +88,6 @@ class AssertProductTemplateOnProductForm extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Product Attribute and Attribute Set are present on the Product form.';
+        return 'Product Attribute and Product Template are present on the Product form.';
     }
 }

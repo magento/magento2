@@ -14,11 +14,8 @@ use Magento\Mtf\ObjectManager;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Class DeleteProductFromMiniShoppingCartTest
- * Test delete products from shopping cart
- *
- * Preconditions
- * 1. Create product according to dataSet
+ * Preconditions:
+ * 1. Create product according to dataset
  * 2. Add products to cart
  *
  * Steps:

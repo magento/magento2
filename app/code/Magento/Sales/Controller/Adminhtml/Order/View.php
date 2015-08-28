@@ -23,15 +23,23 @@ class View extends \Magento\Sales\Controller\Adminhtml\Order
                 $resultPage = $this->_initAction();
                 $resultPage->getConfig()->getTitle()->prepend(__('Orders'));
             } catch (\Exception $e) {
-                $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+                $this->logger->critical($e);
                 $this->messageManager->addError(__('Exception occurred during order load'));
                 $resultRedirect->setPath('sales/order/index');
                 return $resultRedirect;
             }
-            $resultPage->getConfig()->getTitle()->prepend(sprintf("#%s", $order->getRealOrderId()));
+            $resultPage->getConfig()->getTitle()->prepend(sprintf("#%s", $order->getIncrementId()));
             return $resultPage;
         }
         $resultRedirect->setPath('sales/*/');
         return $resultRedirect;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Magento_Sales::actions_view');
     }
 }

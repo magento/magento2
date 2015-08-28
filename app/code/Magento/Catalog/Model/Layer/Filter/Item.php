@@ -13,7 +13,7 @@
  */
 namespace Magento\Catalog\Model\Layer\Filter;
 
-class Item extends \Magento\Framework\Object
+class Item extends \Magento\Framework\DataObject
 {
     /**
      * Url
@@ -57,7 +57,7 @@ class Item extends \Magento\Framework\Object
         $filter = $this->getData('filter');
         if (!is_object($filter)) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('The filter must be an object. Please set correct filter.')
+                __('The filter must be an object. Please set the correct filter.')
             );
         }
         return $filter;

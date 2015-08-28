@@ -11,6 +11,18 @@ class Currency implements \Magento\Framework\Locale\CurrencyInterface
      * Default currency
      */
     const DEFAULT_CURRENCY = 'USD';
+
+    /**#@+
+     * Currency Options
+     */
+    const CURRENCY_OPTION_SYMBOL = 'symbol';
+
+    const CURRENCY_OPTION_CURRENCY = 'currency';
+
+    const CURRENCY_OPTION_NAME = 'name';
+
+    const CURRENCY_OPTION_DISPLAY = 'display';
+
     /**
      * @var array
      */
@@ -72,12 +84,12 @@ class Currency implements \Magento\Framework\Locale\CurrencyInterface
                 $currencyObject = $this->_currencyFactory->create(
                     ['options' => $this->getDefaultCurrency(), 'locale' => $this->_localeResolver->getLocale()]
                 );
-                $options['name'] = $currency;
-                $options['currency'] = $currency;
-                $options['symbol'] = $currency;
+                $options[self::CURRENCY_OPTION_NAME] = $currency;
+                $options[self::CURRENCY_OPTION_CURRENCY] = $currency;
+                $options[self::CURRENCY_OPTION_SYMBOL] = $currency;
             }
 
-            $options = new \Magento\Framework\Object($options);
+            $options = new \Magento\Framework\DataObject($options);
             $this->_eventManager->dispatch(
                 'currency_display_options_forming',
                 ['currency_options' => $options, 'base_code' => $currency]

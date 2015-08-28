@@ -17,16 +17,16 @@ $_order = $_item->getOrder();
 
 <?php if ($block->displayPriceExclTax() || $block->displayBothPrices()): ?>
     <?php if ($block->displayBothPrices()): ?>
-        <span class="label"><?php echo __('Excl. Tax'); ?>:</span>
+        <span class="label"><?= __('Excl. Tax') ?>:</span>
     <?php endif; ?>
-    <?php echo $_order->formatPrice($_item->getRowTotal()) ?>
+    <?= $_order->formatPrice($_item->getRowTotal()) ?>
 <?php endif; ?>
 
 
 <?php if ($block->displayPriceInclTax() || $block->displayBothPrices()): ?>
     <?php if ($block->displayBothPrices()): ?>
-        <br /><span class="label"><?php echo __('Incl. Tax'); ?>:</span>
+        <br /><span class="label"><?= __('Incl. Tax') ?>:</span>
     <?php endif; ?>
     <?php $_incl = $this->helper('Magento\Checkout\Helper\Data')->getSubtotalInclTax($_item); ?>
-    <?php echo $_order->formatPrice($_incl) ?>
+    <?= $_order->formatPrice($_incl) ?>
 <?php endif; ?>

@@ -17,7 +17,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     const DEFAULT_ROOT_CATEGORY = 2;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerInterface
+     * @var \Magento\Framework\Indexer\IndexerInterface
      */
     protected $indexer;
 
@@ -28,7 +28,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        /** @var \Magento\Indexer\Model\IndexerInterface indexer */
+        /** @var \Magento\Framework\Indexer\IndexerInterface indexer */
         $this->indexer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Indexer\Model\Indexer'
         );
@@ -236,12 +236,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     protected function clearIndex()
     {
-        $this->productResource->getWriteConnection()->delete(
+        $this->productResource->getConnection()->delete(
             $this->productResource->getTable('catalog_category_product_index')
         );
 
-        $actualResult = $this->productResource->getReadConnection()->fetchOne(
-            $this->productResource->getReadConnection()->select()->from(
+        $actualResult = $this->productResource->getConnection()->fetchOne(
+            $this->productResource->getConnection()->select()->from(
                 $this->productResource->getTable('catalog_category_product_index'),
                 'product_id'
             )

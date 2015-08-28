@@ -116,7 +116,7 @@ $numColumns = sizeof($block->getColumns());
                             <?php echo __('of %1', '<span>' . $block->getCollection()->getLastPageNumber() . '</span>') ?>
                         </label>
                         <?php if ($_curPage < $_lastPage): ?>
-                            <button href="#"
+                            <button type="button"
                                     title="<?php echo __('Next page') ?>"
                                     class="action-next"
                                     onclick="<?php echo $block->getJsObjectName() ?>.setPage('<?php echo($_curPage + 1) ?>');return false;">
@@ -243,16 +243,26 @@ $numColumns = sizeof($block->getColumns());
     <?php if ($block->canDisplayContainer()): ?>
 </div>
 <script>
-    var deps = ['mage/adminhtml/grid'];
+    var deps = [];
+
+    <?php if ($block->getDependencyJsObject()): ?>
+    deps.push('uiRegistry');
+    <?php endif; ?>
 
     <?php if (strpos($block->getRowClickCallback(), 'order.') !== false): ?>
     deps.push('Magento_Sales/order/create/form')
     <?php endif; ?>
 
-    require(deps, function(){
+    deps.push('mage/adminhtml/grid');
+
+    require(deps, function(<?php echo ($block->getDependencyJsObject() ? 'registry' : '') ?>){
         <?php //TODO: getJsObjectName and getRowClickCallback has unexpected behavior. Should be removed ?>
 
         //<![CDATA[
+    <?php if ($block->getDependencyJsObject()): ?>
+        registry.get('<?php echo $block->getDependencyJsObject() ?>', function (<?php echo $block->getDependencyJsObject() ?>) {
+    <?php endif; ?>
+
     <?php echo $block->getJsObjectName() ?> = new varienGrid('<?php echo $block->getId() ?>', '<?php echo $block->getGridUrl() ?>', '<?php echo $block->getVarNamePage() ?>', '<?php echo $block->getVarNameSort() ?>', '<?php echo $block->getVarNameDir() ?>', '<?php echo $block->getVarNameFilter() ?>');
     <?php echo $block->getJsObjectName() ?>.useAjax = '<?php echo $block->getUseAjax() ?>';
     <?php if ($block->getRowClickCallback()): ?>
@@ -269,6 +279,10 @@ $numColumns = sizeof($block->getColumns());
     <?php echo $block->getMassactionBlock()->getJavaScript() ?>
     <?php endif ?>
     <?php echo $block->getAdditionalJavaScript(); ?>
+
+    <?php if ($block->getDependencyJsObject()): ?>
+        });
+    <?php endif; ?>
     //]]>
 
 });

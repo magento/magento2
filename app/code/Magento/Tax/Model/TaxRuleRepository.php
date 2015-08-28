@@ -7,7 +7,6 @@
 namespace Magento\Tax\Model;
 
 use Magento\Framework\Api\Search\FilterGroup;
-use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -53,24 +52,32 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
     protected $resource;
 
     /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     */
+    protected $joinProcessor;
+
+    /**
      * @param TaxRuleRegistry $taxRuleRegistry
      * @param TaxRuleSearchResultsInterfaceFactory $searchResultsFactory
      * @param RuleFactory $ruleFactory
      * @param CollectionFactory $collectionFactory
      * @param Resource $resource
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      */
     public function __construct(
         TaxRuleRegistry $taxRuleRegistry,
         TaxRuleSearchResultsInterfaceFactory $searchResultsFactory,
         RuleFactory $ruleFactory,
         CollectionFactory $collectionFactory,
-        Resource $resource
+        Resource $resource,
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
     ) {
         $this->taxRuleRegistry = $taxRuleRegistry;
         $this->taxRuleSearchResultsFactory = $searchResultsFactory;
         $this->taxRuleModelFactory = $ruleFactory;
         $this->collectionFactory = $collectionFactory;
         $this->resource = $resource;
+        $this->joinProcessor = $joinProcessor;
     }
 
     /**
@@ -133,6 +140,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
 
         $fields = [];
         $collection = $this->collectionFactory->create();
+        $this->joinProcessor->process($collection);
 
         //Add filters from root filter group to the collection
         foreach ($searchCriteria->getFilterGroups() as $group) {
@@ -154,7 +162,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
             foreach ($sortOrders as $sortOrder) {
                 $collection->addOrder(
                     $this->translateField($sortOrder->getField()),
-                    ($sortOrder->getDirection() == SearchCriteria::SORT_ASC) ? 'ASC' : 'DESC'
+                    ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
                 );
             }
         }

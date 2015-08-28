@@ -47,7 +47,7 @@ class ArrayUtils
      * *_is_last - if the element is last
      *
      * The respective key/attribute will be set to element, depending on object it is or array.
-     * \Magento\Framework\Object is supported.
+     * \Magento\Framework\DataObject is supported.
      *
      * $forceSetAll true will cause to set all possible values for all elements.
      * When false (default), only non-empty values will be set.
@@ -111,7 +111,7 @@ class ArrayUtils
     /**
      * Mark passed object with specified flag and appropriate value.
      *
-     * @param \Magento\Framework\Object $element
+     * @param \Magento\Framework\DataObject $element
      * @param string $key
      * @param bool $value
      * @param bool $isSkipped
@@ -119,7 +119,7 @@ class ArrayUtils
      */
     private function _decorateArrayObject($element, $key, $value, $isSkipped)
     {
-        if ($isSkipped && $element instanceof \Magento\Framework\Object) {
+        if ($isSkipped && $element instanceof \Magento\Framework\DataObject) {
             $element->setData($key, $value);
         }
     }

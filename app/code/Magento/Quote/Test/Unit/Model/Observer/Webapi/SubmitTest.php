@@ -23,7 +23,7 @@ class SubmitTest extends \PHPUnit_Framework_TestCase
     protected $orderSenderMock;
 
     /**
-     * @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $observerMock;
 
@@ -54,7 +54,7 @@ class SubmitTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getQuote', 'getOrder'])
             ->getMock();
-        $this->observerMock = $this->getMock('Magento\Framework\Object', ['getEvent'], [], '', false);
+        $this->observerMock = $this->getMock('Magento\Framework\DataObject', ['getEvent'], [], '', false);
         $this->observerMock->expects($this->any())->method('getEvent')->willReturn($eventMock);
         $eventMock->expects($this->once())->method('getQuote')->willReturn($this->quoteMock);
         $eventMock->expects($this->once())->method('getOrder')->willReturn($this->orderMock);

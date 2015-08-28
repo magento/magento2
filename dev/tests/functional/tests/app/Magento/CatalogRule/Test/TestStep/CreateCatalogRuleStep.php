@@ -61,7 +61,7 @@ class CreateCatalogRuleStep implements TestStepInterface
         if ($this->catalogRule != '-') {
             $catalogRule = $this->fixtureFactory->createByCode(
                 'catalogRule',
-                ['dataSet' => $this->catalogRule]
+                ['dataset' => $this->catalogRule]
             );
             $catalogRule->persist();
             $result['catalogRule'] = $catalogRule;

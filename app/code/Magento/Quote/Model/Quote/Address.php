@@ -246,7 +246,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      * @param Address\RateRequestFactory $rateRequestFactory
      * @param \Magento\Quote\Model\Quote\Address\Total\CollectorFactory $totalCollectorFactory
      * @param Address\TotalFactory $addressTotalFactory
-     * @param \Magento\Framework\Object\Copy $objectCopyService
+     * @param \Magento\Framework\DataObject\Copy $objectCopyService
      * @param \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory
      * @param Address\Validator $validator
      * @param \Magento\Customer\Model\Address\Mapper $addressMapper
@@ -279,7 +279,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         \Magento\Quote\Model\Quote\Address\RateRequestFactory $rateRequestFactory,
         \Magento\Quote\Model\Quote\Address\Total\CollectorFactory $totalCollectorFactory,
         \Magento\Quote\Model\Quote\Address\TotalFactory $addressTotalFactory,
-        \Magento\Framework\Object\Copy $objectCopyService,
+        \Magento\Framework\DataObject\Copy $objectCopyService,
         \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory,
         Address\Validator $validator,
         \Magento\Customer\Model\Address\Mapper $addressMapper,
@@ -424,23 +424,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /**
-     * Save child collections
-     *
-     * @return $this
-     */
-    public function afterSave()
-    {
-        parent::afterSave();
-        if (null !== $this->_items) {
-            $this->getItemsCollection()->save();
-        }
-        if (null !== $this->_rates) {
-            $this->getShippingRatesCollection()->save();
-        }
-        return $this;
-    }
-
-    /**
      * Declare address quote model object
      *
      * @param   \Magento\Quote\Model\Quote $quote
@@ -538,7 +521,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * Retrieve address items collection
      *
-     * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
      */
     public function getItemsCollection()
     {
@@ -779,7 +762,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * Retrieve collection of quote shipping rates
      *
-     * @return \Magento\Eav\Model\Entity\Collection\AbstractCollection
+     * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
      */
     public function getShippingRatesCollection()
     {
@@ -1112,6 +1095,26 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     public function __clone()
     {
         $this->setId(null);
+    }
+
+    /**
+     * Checks if it was set
+     *
+     * @return bool
+     */
+    public function itemsCollectionWasSet()
+    {
+        return null !== $this->_items;
+    }
+
+    /**
+     * Checks if it was set
+     *
+     * @return bool
+     */
+    public function shippingRatesCollectionWasSet()
+    {
+        return null !== $this->_rates;
     }
 
     /**
@@ -1572,7 +1575,12 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     public function getEmail()
     {
-        return $this->getData(self::KEY_EMAIL);
+        $email = $this->getData(self::KEY_EMAIL);
+        if (!$email) {
+            $email = $this->getQuote()->getCustomerEmail();
+            $this->setEmail($email);
+        }
+        return $email;
     }
 
     /**

@@ -221,6 +221,78 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test for setData method
+     *
+     * @return void
+     */
+    public function testSetData()
+    {
+        $key = [
+            'key' => 'value'
+        ];
+
+        $this->model->setData($key);
+        $this->assertEquals($key, $this->model->getData());
+    }
+
+    /**
+     * Test for setData method with multidimensional array in "key" argument
+     *
+     * @return void
+     */
+    public function testSetDataWithMultidimensionalArray()
+    {
+        $expected = [
+            'key' => 'value',
+            'array' => 'value1',
+        ];
+
+        $key = [
+            'key' => 'value',
+            'array' => [
+                'key1' => 'value1',
+            ]
+        ];
+
+        $this->model->setData($key);
+        $this->assertEquals($expected, $this->model->getData());
+    }
+
+    /**
+     * Test for setData method with "value" argument
+     *
+     * @return void
+     */
+    public function testSetDataWithValue()
+    {
+        $value = [
+            'key' => 'value',
+        ];
+
+        $this->model->setData('key', $value);
+        $this->assertEquals($value, $this->model->getData());
+    }
+
+    /**
+     * Test for setData method with "value" argument
+     *
+     * @return void
+     */
+    public function testSetDataWithObject()
+    {
+        $value = [
+            'key' => new \Magento\Framework\DataObject(),
+        ];
+        $expected = [
+            'key' => [
+                'key' => new \Magento\Framework\DataObject()
+            ]
+        ];
+        $this->model->setData('key', $value);
+        $this->assertEquals($expected, $this->model->getData());
+    }
+
+    /**
      * @param $data
      * @param $expected
      *

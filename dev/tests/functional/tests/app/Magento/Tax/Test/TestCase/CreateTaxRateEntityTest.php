@@ -17,7 +17,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 1. Log in as default admin user.
  * 2. Go to Stores > Taxes > Tax Zones and Rates.
  * 3. Click 'Add New Tax Rate' button.
- * 4. Fill in data according to dataSet
+ * 4. Fill in data according to dataset
  * 5. Save Tax Rate.
  * 6. Perform all assertions.
  *

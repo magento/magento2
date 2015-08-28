@@ -61,7 +61,7 @@ class ResetPasswordPost extends \Magento\Customer\Controller\Account
             return $resultRedirect;
         }
         if (iconv_strlen($password) <= 0) {
-            $this->messageManager->addError(__('New password field cannot be empty.'));
+            $this->messageManager->addError(__('Please enter a new password.'));
             $resultRedirect->setPath('*/*/createPassword', ['id' => $customerId, 'token' => $resetPasswordToken]);
             return $resultRedirect;
         }
@@ -69,11 +69,13 @@ class ResetPasswordPost extends \Magento\Customer\Controller\Account
         try {
             $customerEmail = $this->customerRepository->getById($customerId)->getEmail();
             $this->accountManagement->resetPassword($customerEmail, $resetPasswordToken, $password);
-            $this->messageManager->addSuccess(__('Your password has been updated.'));
+            $this->session->unsRpToken();
+            $this->session->unsRpCustomerId();
+            $this->messageManager->addSuccess(__('You updated your password.'));
             $resultRedirect->setPath('*/*/login');
             return $resultRedirect;
         } catch (\Exception $exception) {
-            $this->messageManager->addError(__('There was an error saving the new password.'));
+            $this->messageManager->addError(__('Something went wrong while saving the new password.'));
             $resultRedirect->setPath('*/*/createPassword', ['id' => $customerId, 'token' => $resetPasswordToken]);
             return $resultRedirect;
         }

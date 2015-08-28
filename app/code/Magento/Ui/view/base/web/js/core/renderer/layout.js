@@ -84,7 +84,7 @@ define([
                 return this.waitParent(node, name);
             }
 
-            if (node.template) {
+            if (node.nodeTemplate) {
                 return this.waitTemplate.apply(this, arguments);
             }
 
@@ -102,19 +102,25 @@ define([
         },
 
         build: function (parent, node, name) {
-            var defaults = parent && parent.childDefaults || {},
-                children = node.children,
-                type = getNodeType(parent, node);
+            var defaults    = parent && parent.childDefaults || {},
+                children    = node.children,
+                type        = getNodeType(parent, node),
+                dataScope   = getDataScope(parent, node),
+                nodeName;
 
             node.children = false;
 
             node = utils.extend({
             }, types.get(type), defaults, node);
 
+            nodeName = getNodeName(parent, node, name);
+
             _.extend(node, node.config || {}, {
                 index: node.name || name,
-                name: getNodeName(parent, node, name),
-                dataScope: getDataScope(parent, node)
+                name: nodeName,
+                dataScope: dataScope,
+                parentName: utils.getPart(nodeName, -2),
+                parentScope: utils.getPart(dataScope, -2)
             });
 
             node.children = children;
@@ -122,11 +128,19 @@ define([
             delete node.type;
             delete node.config;
 
+            if (children) {
+                node.initChildCount = _.size(children);
+            }
+
             if (node.isTemplate) {
                 node.isTemplate = false;
 
                 templates.set(node.name, node);
 
+                return false;
+            }
+
+            if (node.disabled) {
                 return false;
             }
 
@@ -150,7 +164,7 @@ define([
         waitTemplate: function (parent, node) {
             var args = _.toArray(arguments);
 
-            templates.get(node.template, function () {
+            templates.get(node.nodeTemplate, function () {
                 this.applyTemplate.apply(this, args);
             }.bind(this));
 
@@ -168,11 +182,11 @@ define([
         },
 
         applyTemplate: function (parent, node, name) {
-            var template = templates.get(node.template);
+            var template = templates.get(node.nodeTemplate);
 
             node = utils.extend({}, template, node);
 
-            delete node.template;
+            delete node.nodeTemplate;
 
             this.process(parent, node, name);
         }

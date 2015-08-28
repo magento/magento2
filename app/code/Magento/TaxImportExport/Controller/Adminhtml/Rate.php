@@ -8,7 +8,7 @@ namespace Magento\TaxImportExport\Controller\Adminhtml;
 /**
  * Adminhtml tax rate controller
  */
-class Rate extends \Magento\Backend\App\Action
+abstract class Rate extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
@@ -32,18 +32,6 @@ class Rate extends \Magento\Backend\App\Action
      */
     protected function _isAllowed()
     {
-        switch ($this->getRequest()->getActionName()) {
-            case 'importExport':
-                return $this->_authorization->isAllowed('Magento_TaxImportExport::import_export');
-            case 'importPost':
-            case 'exportPost':
-                return $this->_authorization->isAllowed(
-                    'Magento_Tax::manage_tax'
-                ) || $this->_authorization->isAllowed(
-                    'Magento_TaxImportExport::import_export'
-                );
-            default:
-                return $this->_authorization->isAllowed('Magento_Tax::manage_tax');
-        }
+        return $this->_authorization->isAllowed('Magento_Tax::manage_tax');
     }
 }

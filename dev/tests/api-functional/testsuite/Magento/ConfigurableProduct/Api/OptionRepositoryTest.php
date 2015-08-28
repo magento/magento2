@@ -75,25 +75,14 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
         $this->assertTrue(is_array($option));
         $this->assertNotEmpty($option);
 
-        $expectedValues = [
-            ['pricing_value' => 5, 'is_percent' => 0],
-            ['pricing_value' => 5, 'is_percent' => 0]
-        ];
+        $this->assertCount(2, $option['values']);
 
-        $this->assertCount(count($expectedValues), $option['values']);
 
-        foreach ($option['values'] as $key => $value) {
+        foreach ($option['values'] as $value) {
             $this->assertTrue(is_array($value));
             $this->assertNotEmpty($value);
 
-            $this->assertArrayHasKey($key, $expectedValues);
-            $expectedValue = $expectedValues[$key];
-
-            $this->assertArrayHasKey('pricing_value', $value);
-            $this->assertEquals($expectedValue['pricing_value'], $value['pricing_value']);
-
-            $this->assertArrayHasKey('is_percent', $value);
-            $this->assertEquals($expectedValue['is_percent'], $value['is_percent']);
+            $this->assertArrayHasKey('value_index', $value);
         }
     }
 
@@ -170,8 +159,6 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
             'values' => [
                 [
                     'value_index' => 1,
-                    'pricing_value' => '3',
-                    'is_percent' => 0
                 ]
             ],
         ];

@@ -11,6 +11,7 @@ use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Math\Random;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\App\ObjectManagerFactory;
 
 /**
  * Creates deployment config data based on user input array
@@ -136,7 +137,7 @@ class ConfigGenerator
 
         if (!empty($data[ConfigOptionsListConstants::INPUT_KEY_DEFINITION_FORMAT])) {
             $configData->set(
-                ConfigOptionsListConstants::CONFIG_PATH_DEFINITION_FORMAT,
+                ObjectManagerFactory::CONFIG_PATH_DEFINITION_FORMAT,
                 $data[ConfigOptionsListConstants::INPUT_KEY_DEFINITION_FORMAT]
             );
         }
@@ -208,6 +209,20 @@ class ConfigGenerator
             $configData->set(ConfigOptionsListConstants::CONFIG_PATH_RESOURCE_DEFAULT_SETUP, 'default');
         }
 
+        return $configData;
+    }
+
+    /**
+     * Creates x-frame-options header config data
+     *
+     * @return ConfigData
+     */
+    public function createXFrameConfig()
+    {
+        $configData = new ConfigData(ConfigFilePool::APP_ENV);
+        if ($this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_X_FRAME_OPT) === null) {
+            $configData->set(ConfigOptionsListConstants::CONFIG_PATH_X_FRAME_OPT, 'SAMEORIGIN');
+        }
         return $configData;
     }
 }

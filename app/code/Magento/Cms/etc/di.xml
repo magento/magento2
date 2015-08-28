@@ -56,4 +56,48 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="cms_page_listing_data_source" xsi:type="string">Magento\Cms\Model\Resource\Page\Grid\Collection</item>
+                <item name="cms_block_listing_data_source" xsi:type="string">Magento\Cms\Model\Resource\Block\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Cms\Model\Resource\Page\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">cms_page</argument>
+            <argument name="eventPrefix" xsi:type="string">cms_page_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">page_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\Cms\Model\Resource\Page</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Cms\Model\Resource\Block\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">cms_block</argument>
+            <argument name="eventPrefix" xsi:type="string">cms_block_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">block_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\Cms\Model\Resource\Block</argument>
+        </arguments>
+    </type>
+    <virtualType name="CmsGirdFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="PageGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Magento\Cms\Model\Resource\Page\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">CmsGirdFilterPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BlockGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Magento\Cms\Model\Resource\Block\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">CmsGirdFilterPool</argument>
+        </arguments>
+    </virtualType>
 </config>

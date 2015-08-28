@@ -16,6 +16,7 @@ use Magento\Quote\Model\Quote\Address;
 use Magento\Sales\Model\Resource;
 use Magento\Sales\Model\Status;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 
 /**
  * Quote model
@@ -27,7 +28,6 @@ use Magento\Framework\Api\AttributeValueFactory;
  *  sales_quote_delete_before
  *  sales_quote_delete_after
  *
- * @method Quote setStoreId(int $value)
  * @method int getIsMultiShipping()
  * @method Quote setIsMultiShipping(int $value)
  * @method float getStoreToBaseRate()
@@ -252,7 +252,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $_quotePaymentCollectionFactory;
 
     /**
-     * @var \Magento\Framework\Object\Copy
+     * @var \Magento\Framework\DataObject\Copy
      */
     protected $_objectCopyService;
 
@@ -268,7 +268,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      *
      * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
-    protected $criteriaBuilder;
+    protected $searchCriteriaBuilder;
 
     /**
      * Filter builder
@@ -288,7 +288,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $itemProcessor;
 
     /**
-     * @var \Magento\Framework\Object\Factory
+     * @var \Magento\Framework\DataObject\Factory
      */
     protected $objectFactory;
 
@@ -323,6 +323,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $dataObjectHelper;
 
     /**
+     * @var JoinProcessorInterface
+     */
+    protected $extensionAttributesJoinProcessor;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -342,10 +347,10 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param Quote\PaymentFactory $quotePaymentFactory
      * @param Resource\Quote\Payment\CollectionFactory $quotePaymentCollectionFactory
-     * @param \Magento\Framework\Object\Copy $objectCopyService
+     * @param \Magento\Framework\DataObject\Copy $objectCopyService
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param Quote\Item\Processor $itemProcessor
-     * @param \Magento\Framework\Object\Factory $objectFactory
+     * @param \Magento\Framework\DataObject\Factory $objectFactory
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
@@ -355,6 +360,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param Cart\CurrencyFactory $currencyFactory
+     * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -380,10 +386,10 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Quote\Model\Quote\PaymentFactory $quotePaymentFactory,
         \Magento\Quote\Model\Resource\Quote\Payment\CollectionFactory $quotePaymentCollectionFactory,
-        \Magento\Framework\Object\Copy $objectCopyService,
+        \Magento\Framework\DataObject\Copy $objectCopyService,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\Quote\Model\Quote\Item\Processor $itemProcessor,
-        \Magento\Framework\Object\Factory $objectFactory,
+        \Magento\Framework\DataObject\Factory $objectFactory,
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
         \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
@@ -393,6 +399,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
         \Magento\Quote\Model\Cart\CurrencyFactory $currencyFactory,
+        JoinProcessorInterface $extensionAttributesJoinProcessor,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -414,7 +421,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $this->_quotePaymentCollectionFactory = $quotePaymentCollectionFactory;
         $this->_objectCopyService = $objectCopyService;
         $this->addressRepository = $addressRepository;
-        $this->criteriaBuilder = $criteriaBuilder;
+        $this->searchCriteriaBuilder = $criteriaBuilder;
         $this->filterBuilder = $filterBuilder;
         $this->stockRegistry = $stockRegistry;
         $this->itemProcessor = $itemProcessor;
@@ -425,6 +432,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $this->dataObjectHelper = $dataObjectHelper;
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
         $this->currencyFactory = $currencyFactory;
+        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         parent::__construct(
             $context,
             $registry,
@@ -678,16 +686,23 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     //@codeCoverageIgnoreEnd
 
     /**
-     * Get quote store identifier
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function getStoreId()
     {
         if (!$this->hasStoreId()) {
             return $this->_storeManager->getStore()->getId();
         }
-        return $this->_getData('store_id');
+        return (int)$this->_getData(self::KEY_STORE_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStoreId($storeId)
+    {
+        $this->setData(self::KEY_STORE_ID, (int)$storeId);
+        return $this;
     }
 
     /**
@@ -784,33 +799,6 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $this->setIsVirtual($this->getIsVirtual());
 
         parent::beforeSave();
-    }
-
-    /**
-     * Save related items
-     *
-     * @return $this
-     */
-    public function afterSave()
-    {
-        parent::afterSave();
-
-        if (null !== $this->_addresses) {
-            $this->getAddressesCollection()->save();
-        }
-
-        if (null !== $this->_items) {
-            $this->getItemsCollection()->save();
-        }
-
-        if (null !== $this->_payments) {
-            $this->getPaymentsCollection()->save();
-        }
-
-        if (null !== $this->_currentPayment) {
-            $this->getPayment()->save();
-        }
-        return $this;
     }
 
     /**
@@ -1323,6 +1311,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         }
         if (null === $this->_items) {
             $this->_items = $this->_quoteItemCollectionFactory->create();
+            $this->extensionAttributesJoinProcessor->process($this->_items);
             $this->_items->setQuote($this);
         }
         return $this->_items;
@@ -1339,7 +1328,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         foreach ($this->getItemsCollection() as $item) {
             /** @var \Magento\Quote\Model\Resource\Quote\Item $item */
             if (!$item->isDeleted()) {
-                $items[$item->getId()] = $item;
+                $items[] = $item;
             }
         }
         return $items;
@@ -1521,7 +1510,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * Returns error message if product type instance can't prepare product.
      *
      * @param mixed $product
-     * @param null|float|\Magento\Framework\Object $request
+     * @param null|float|\Magento\Framework\DataObject $request
      * @param null|string $processMode
      * @return \Magento\Quote\Model\Quote\Item|string
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -1539,7 +1528,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         if (is_numeric($request)) {
             $request = $this->objectFactory->create(['qty' => $request]);
         }
-        if (!$request instanceof \Magento\Framework\Object) {
+        if (!$request instanceof \Magento\Framework\DataObject) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We found an invalid request for adding product to quote.')
             );
@@ -1655,7 +1644,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * It's passed to \Magento\Catalog\Helper\Product->addParamsToBuyRequest() to compose resulting buyRequest.
      *
      * Basically it can hold
-     * - 'current_config', \Magento\Framework\Object or array - current buyRequest that configures product in this item,
+     * - 'current_config', \Magento\Framework\DataObject or array - current buyRequest that configures product in this item,
      *   used to restore currently attached files
      * - 'files_prefix': string[a-z0-9_] - prefix that was added at frontend to names of file options (file inputs),
      *   so they won't intersect with other submitted options
@@ -1663,8 +1652,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * For more options see \Magento\Catalog\Helper\Product->addParamsToBuyRequest()
      *
      * @param int $itemId
-     * @param \Magento\Framework\Object $buyRequest
-     * @param null|array|\Magento\Framework\Object $params
+     * @param \Magento\Framework\DataObject $buyRequest
+     * @param null|array|\Magento\Framework\DataObject $params
      * @return \Magento\Quote\Model\Quote\Item
      * @throws \Magento\Framework\Exception\LocalizedException
      *
@@ -1686,9 +1675,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $product = clone $this->productRepository->getById($productId, false, $this->getStore()->getId());
 
         if (!$params) {
-            $params = new \Magento\Framework\Object();
+            $params = new \Magento\Framework\DataObject();
         } elseif (is_array($params)) {
-            $params = new \Magento\Framework\Object($params);
+            $params = new \Magento\Framework\DataObject($params);
         }
         $params->setCurrentConfig($item->getBuyRequest());
         $buyRequest = $this->_catalogProduct->addParamsToBuyRequest($buyRequest, $params);
@@ -2151,7 +2140,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param string|null $origin Usually a name of module, that embeds error
      * @param int|null $code Error code, unique for origin, that sets it
      * @param string|null $message Error message
-     * @param \Magento\Framework\Object|null $additionalData Any additional data, that caller would like to store
+     * @param \Magento\Framework\DataObject|null $additionalData Any additional data, that caller would like to store
      * @return $this
      */
     public function addErrorInfo(
@@ -2478,6 +2467,46 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             $this->collectTotals()->save();
         }
         return parent::_afterLoad();
+    }
+
+    /**
+     * Checks if it was set
+     *
+     * @return bool
+     */
+    public function addressCollectionWasSet()
+    {
+        return null !== $this->_addresses;
+    }
+
+    /**
+     * Checks if it was set
+     *
+     * @return bool
+     */
+    public function itemsCollectionWasSet()
+    {
+        return null !== $this->_items;
+    }
+
+    /**
+     * Checks if it was set
+     *
+     * @return bool
+     */
+    public function paymentsCollectionWasSet()
+    {
+        return null !== $this->_payments;
+    }
+
+    /**
+     * Checks if it was set
+     *
+     * @return bool
+     */
+    public function currentPaymentWasSet()
+    {
+        return null !== $this->_currentPayment;
     }
 
     /**

@@ -8,7 +8,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 /**
  * @magentoAppArea adminhtml
  */
-class AttributeTest extends \Magento\Backend\Utility\Controller
+class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
     /**
      * @return void
@@ -210,8 +210,8 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
      */
     public function testSaveActionCleanAttributeLabelCache()
     {
-        /** @var \Magento\Translation\Model\Resource\String $string */
-        $string = $this->_objectManager->create('Magento\Translation\Model\Resource\String');
+        /** @var \Magento\Translation\Model\Resource\StringUtils $string */
+        $string = $this->_objectManager->create('Magento\Translation\Model\Resource\StringUtils');
         $this->assertEquals('predefined string translation', $this->_translate('string to translate'));
         $string->saveTranslate('string to translate', 'new string translation');
         $postData = $this->_getAttributeData() + ['attribute_id' => 1];

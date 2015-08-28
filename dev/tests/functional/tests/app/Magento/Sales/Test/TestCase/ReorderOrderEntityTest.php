@@ -29,7 +29,6 @@ class ReorderOrderEntityTest extends Scenario
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'CS';
-    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**

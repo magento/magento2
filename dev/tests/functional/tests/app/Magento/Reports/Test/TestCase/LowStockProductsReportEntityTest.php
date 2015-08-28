@@ -10,9 +10,6 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for LowStockProductsReportEntityTest
- *
- * Test Flow:
  * Preconditions:
  * 1. Product is created.
  *

@@ -89,6 +89,13 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     protected $_cachedSkuToProducts = [];
 
     /**
+     * Array of queries selecting cached options.
+     *
+     * @var array
+     */
+    protected $_cachedOptionSelectQuery = [];
+
+    /**
      * Column names that holds values with particular meaning.
      *
      * @var string[]
@@ -137,18 +144,18 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     /**
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac
-     * @param array $params
      * @param \Magento\Framework\App\Resource $resource
+     * @param array $params
      */
     public function __construct(
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac,
-        array $params,
-        \Magento\Framework\App\Resource $resource
+        \Magento\Framework\App\Resource $resource,
+        array $params
     ) {
-        parent::__construct($attrSetColFac, $prodAttrColFac, $params);
+        parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params);
         $this->_resource = $resource;
-        $this->connection = $resource->getConnection('write');
+        $this->connection = $resource->getConnection(\Magento\Framework\App\Resource::DEFAULT_CONNECTION);
     }
 
     /**
@@ -185,9 +192,10 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                 }
                 $this->_cachedOptions[$entityId][$option['name']]['selections'][] = $option;
                 $this->_cachedOptionSelectQuery[] =
-                    $this->connection->select()
-                    ->getAdapter()
-                    ->quoteInto('(parent_id = '.(int)$entityId.' AND title = ?)', $option['name']);
+                    $this->connection->quoteInto(
+                        '(parent_id = ' . (int)$entityId . ' AND title = ?)',
+                        $option['name']
+                    );
             }
         }
         return $selections;
@@ -231,6 +239,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     protected function populateOptionTemplate($option, $entityId, $index = null)
     {
         $populatedOption = [
+            'option_id' => null,
             'parent_id' => $entityId,
             'required' => isset($option['required']) ? $option['required'] : 1,
             'position' => ($index === null ? 0 : $index),
@@ -282,9 +291,10 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
             }
             $productId = $this->_cachedSkuToProducts[$selection['sku']];
         } else {
-            $productId = $selection['parent_product_id'];
+            $productId = $selection['product_id'];
         }
         $populatedSelection = [
+            'selection_id' => null,
             'option_id' => (int)$optionId,
             'parent_product_id' => (int)$parentId,
             'product_id' => (int)$productId,
@@ -584,6 +594,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                 $selectionTable,
                 $selections,
                 [
+                    'selection_id',
                     'product_id',
                     'position',
                     'is_default',

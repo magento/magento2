@@ -42,7 +42,7 @@
     <preference for="Magento\Catalog\Api\ProductAttributeManagementInterface" type="Magento\Catalog\Model\Product\Attribute\Management" />
     <preference for="Magento\Catalog\Api\AttributeSetManagementInterface" type="Magento\Catalog\Model\Product\Attribute\SetManagement" />
     <preference for="Magento\Catalog\Api\AttributeSetRepositoryInterface" type="Magento\Catalog\Model\Product\Attribute\SetRepository" />
-    <type name="Magento\Log\Model\Resource\Log">
+    <type name="Magento\Customer\Model\Resource\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
     <type name="Magento\Indexer\Model\Indexer\State">
@@ -185,7 +185,7 @@
     </type>
     <type name="Magento\Catalog\Model\Indexer\Product\Price\AbstractAction">
         <arguments>
-            <argument name="defaultPriceIndexer" xsi:type="string">Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice</argument>
+            <argument name="defaultPriceIndexer" xsi:type="object">Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice</argument>
         </arguments>
     </type>
     <type name="Magento\Eav\Model\Entity\Attribute\Set">
@@ -267,7 +267,7 @@
     </type>
     <type name="Magento\Catalog\Model\Indexer\Product\Price\Processor">
         <arguments>
-            <argument name="indexer" xsi:type="object" shared="false">Magento\Indexer\Model\IndexerInterface</argument>
+            <argument name="indexer" xsi:type="object" shared="false">Magento\Framework\Indexer\IndexerInterface</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Indexer\Product\Flat">

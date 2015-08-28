@@ -36,18 +36,20 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      * Class constructor
      *
      * @param \Magento\Framework\Model\Resource\Db\Context $context
+     * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
+        \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->_scopeConfig = $scopeConfig;
-        parent::__construct($context, $eavConfig, $resourcePrefix);
+        parent::__construct($context, $tableStrategy, $eavConfig, $connectionName);
     }
 
     /**
@@ -68,7 +70,7 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      */
     public function reindexAll()
     {
-        $this->useIdxTable(true);
+        $this->tableStrategy->setUseIdxTable(true);
         $this->beginTransaction();
         try {
             $this->_prepareIndexTable();
@@ -164,9 +166,9 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      */
     protected function _getStockStatusSelect($entityIds = null, $usePrimaryTable = false)
     {
-        $adapter = $this->_getWriteAdapter();
-        $qtyExpr = $adapter->getCheckSql('cisi.qty > 0', 'cisi.qty', 0);
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $qtyExpr = $connection->getCheckSql('cisi.qty > 0', 'cisi.qty', 0);
+        $select = $connection->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
             ['entity_id']
         );
@@ -185,17 +187,20 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
             ->where('e.type_id = ?', $this->getTypeId());
 
         // add limitation of status
-        $condition = $adapter->quoteInto('=?', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
+        $condition = $connection->quoteInto(
+            '=?',
+            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+        );
         $this->_addAttributeToSelect($select, 'status', 'e.entity_id', 'cs.store_id', $condition);
 
         if ($this->_isManageStock()) {
-            $statusExpr = $adapter->getCheckSql(
+            $statusExpr = $connection->getCheckSql(
                 'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 0',
                 1,
                 'cisi.is_in_stock'
             );
         } else {
-            $statusExpr = $adapter->getCheckSql(
+            $statusExpr = $connection->getCheckSql(
                 'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 1',
                 'cisi.is_in_stock',
                 1
@@ -219,10 +224,10 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      */
     protected function _prepareIndexTable($entityIds = null)
     {
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         $select = $this->_getStockStatusSelect($entityIds);
         $query = $select->insertFromSelect($this->getIdxTable());
-        $adapter->query($query);
+        $connection->query($query);
 
         return $this;
     }
@@ -235,9 +240,9 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      */
     protected function _updateIndex($entityIds)
     {
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         $select = $this->_getStockStatusSelect($entityIds, true);
-        $query = $adapter->query($select);
+        $query = $connection->query($select);
 
         $i = 0;
         $data = [];
@@ -272,8 +277,8 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
             return $this;
         }
 
-        $adapter = $this->_getWriteAdapter();
-        $adapter->insertOnDuplicate($this->getMainTable(), $data, ['qty', 'stock_status']);
+        $connection = $this->getConnection();
+        $connection->insertOnDuplicate($this->getMainTable(), $data, ['qty', 'stock_status']);
 
         return $this;
     }
@@ -287,9 +292,6 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      */
     public function getIdxTable($table = null)
     {
-        if ($this->useIdxTable()) {
-            return $this->getTable('cataloginventory_stock_status_idx');
-        }
-        return $this->getTable('cataloginventory_stock_status_tmp');
+        return $this->tableStrategy->getTableName('cataloginventory_stock_status');
     }
 }

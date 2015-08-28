@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<rules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../../../../../../app/code/Magento/Paypal/etc/rules.xsd">
+    <payment id="express_checkout_de">
+        <events selector="[data-enable='payment']">
+            <event value="0" name="deactivate-rule"/>
+            <event value="1" name="activate-rule"/>
+        </events>
+        <relation target=":self">
+            <rule type="simple/mark-enable" event="activate-rule"/>
+            <rule type="simple/disable" event="deactivate-rule"/>
+        </relation>
+    </payment>
+</rules>

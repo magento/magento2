@@ -14,6 +14,7 @@ The library provides the ability to customize all of the following user interfac
 * actions-toolbar
 * breadcrumbs
 * buttons
+* components
 * drop-downs
 * forms
 * icons
@@ -39,7 +40,7 @@ Magento UI library is located under `/lib/web/` folder. It and employs:
 * `images/` folder where default images are placed
 * `jquery/` folder where jQuery and jQuery widgets are placed
 
-###Magento UI library structure
+### Magento UI library structure
 
 ```css
 /lib/web/
@@ -49,6 +50,7 @@ Magento UI library is located under `/lib/web/` folder. It and employs:
     │    │    │    ├── actions-toolbar.less
     │    │    │    ├── breadcrumbs.less
     │    │    │    ├── buttons.less
+    │    │    │    ├── components.less
     │    │    │    ├── docs.less
     │    │    │    ├── dropdowns.less
     │    │    │    ├── forms.less
@@ -73,6 +75,7 @@ Magento UI library is located under `/lib/web/` folder. It and employs:
     │    │    ├─── actions-toolbar.html
     │    │    ├─── breadcrumbs.html
     │    │    ├─── buttons.html
+    │    │    ├─── components.html
     │    │    ├─── docs.css
     │    │    ├─── docs.html
     │    │    ├─── dropdowns.html
@@ -95,7 +98,11 @@ Magento UI library is located under `/lib/web/` folder. It and employs:
     │    │    ├─── utilities.html
     │    │    └─── variables.html
     │    ├── source/
+    │    │    ├── components/ (Reusable components files)
+    │    │    │    └── _modals.less
     │    │    ├── lib/ (Library source files)
+    │    │    │    └── variables/ (Decoupled variables)
+    │    │    │          └── ...
     │    │    │    ├── _extends.less
     │    │    │    ├── _actions-toolbar.less
     │    │    │    ├── _breadcrumbs.less

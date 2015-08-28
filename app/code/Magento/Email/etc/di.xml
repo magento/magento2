@@ -11,4 +11,14 @@
     <preference for="Magento\Framework\Mail\TransportInterface" type="Magento\Framework\Mail\Transport" />
     <preference for="Magento\Framework\Mail\MessageInterface" type="Magento\Framework\Mail\Message" />
     <preference for="Magento\Framework\Mail\Template\SenderResolverInterface" type="Magento\Email\Model\Template\SenderResolver" />
+    <type name="Magento\Email\Model\BackendTemplate">
+        <arguments>
+            <argument name="urlModel" xsi:type="object" shared="false">Magento\Backend\Model\Url</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Email\Model\Template">
+        <arguments>
+            <argument name="urlModel" xsi:type="object" shared="false">Magento\Framework\Url</argument>
+        </arguments>
+    </type>
 </config>

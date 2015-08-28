@@ -6,9 +6,8 @@
 namespace Magento\CheckoutAgreements\Model;
 
 use Magento\CheckoutAgreements\Api\Data\AgreementInterface;
-use Magento\Framework\Model\AbstractModel;
 
-class Agreement extends AbstractModel implements AgreementInterface
+class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel implements AgreementInterface
 {
     /**
      * Allowed CSS units for height field
@@ -26,7 +25,7 @@ class Agreement extends AbstractModel implements AgreementInterface
     }
 
     /**
-     * @param \Magento\Framework\Object $agreementData
+     * @param \Magento\Framework\DataObject $agreementData
      * @return array|bool
      */
     public function validateData($agreementData)
@@ -175,6 +174,28 @@ class Agreement extends AbstractModel implements AgreementInterface
     public function setIsHtml($isHtml)
     {
         return $this->setData(self::IS_HTML, $isHtml);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\CheckoutAgreements\Api\Data\AgreementExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\CheckoutAgreements\Api\Data\AgreementExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\CheckoutAgreements\Api\Data\AgreementExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
     //@codeCoverageIgnoreEnd
 }

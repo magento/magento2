@@ -43,13 +43,13 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $_storeManager;
 
     /**
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param array $variables
      */
     public function __construct(
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         $variables = []
@@ -93,7 +93,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function viewDirective($construction)
     {
-        $params = $this->_getIncludeParameters($construction[2]);
+        $params = $this->getParameters($construction[2]);
         $params['_absolute'] = $this->_useAbsoluteLinks;
         /**
          * @bug: the "_absolute" key is not supported by underlying services
@@ -122,7 +122,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function mediaDirective($construction)
     {
-        $params = $this->_getIncludeParameters($construction[2]);
+        $params = $this->getParameters($construction[2]);
         return $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $params['url'];
     }
 
@@ -136,7 +136,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function storeDirective($construction)
     {
-        $params = $this->_getIncludeParameters($construction[2]);
+        $params = $this->getParameters($construction[2]);
         if (!isset($params['_query'])) {
             $params['_query'] = [];
         }

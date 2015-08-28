@@ -6,14 +6,13 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <update handle="multishipping_checkout"/>
     <head>
         <title>Success Page</title>
     </head>
     <body>
         <referenceBlock name="page.main.title">
             <action method="setPageTitle">
-                <argument translate="true" name="title" xsi:type="string">Your order has been received.</argument>
+                <argument translate="true" name="title" xsi:type="string">We received your order!</argument>
             </action>
         </referenceBlock>
         <referenceContainer name="content">

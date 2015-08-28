@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Tax\Test\TestCase\CreateTaxRateEntityTest">
+    <testCase name="Magento\Tax\Test\TestCase\CreateTaxRateEntityTest" summary="Create Tax Rate" ticketId="MAGETWO-23286">
         <variation name="CreateTaxRateEntityTestVariation1">
             <data name="taxRate/data/code" xsi:type="string">TaxIdentifier%isolation%</data>
             <data name="taxRate/data/zip_is_range" xsi:type="string">No</data>
@@ -14,7 +14,6 @@
             <data name="taxRate/data/zip_to" xsi:type="string">-</data>
             <data name="taxRate/data/tax_postcode" xsi:type="string">*</data>
             <data name="taxRate/data/tax_country_id" xsi:type="string">Australia</data>
-            <data name="taxRate/data/tax_region_id" xsi:type="string">*</data>
             <data name="taxRate/data/rate" xsi:type="string">20</data>
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateSuccessSaveMessage" />
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateInGrid" />
@@ -55,7 +54,6 @@
             <data name="taxRate/data/zip_to" xsi:type="string">7800935</data>
             <data name="taxRate/data/tax_postcode" xsi:type="string">-</data>
             <data name="taxRate/data/tax_country_id" xsi:type="string">United Kingdom</data>
-            <data name="taxRate/data/tax_region_id" xsi:type="string">*</data>
             <data name="taxRate/data/rate" xsi:type="string">7.75</data>
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateSuccessSaveMessage" />
             <constraint name="Magento\Tax\Test\Constraint\AssertTaxRateForm" />

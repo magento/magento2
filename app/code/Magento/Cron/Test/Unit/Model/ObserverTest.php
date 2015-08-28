@@ -293,37 +293,36 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test case catch exception if callback exists but can't be executed
+     * Test case catch exception if callback is not callable or throws exception
+     *
+     * @param string $cronJobType
+     * @param mixed $cronJobObject
+     * @param string $exceptionMessage
+     * @param int $saveCalls
+     *
+     * @dataProvider dispatchExceptionInCallbackDataProvider
      */
-    public function testDispatchExceptionNotExecutable()
+    public function testDispatchExceptionInCallback($cronJobType, $cronJobObject, $exceptionMessage, $saveCalls)
     {
         $jobConfig = [
             'test_group' => [
-                'test_job1' => ['instance' => 'Not_Existed_Class', 'method' => 'notExistedMethod'],
+                'test_job1' => ['instance' => $cronJobType, 'method' => 'execute'],
             ],
         ];
 
-        $exceptionMessage = 'Invalid callback: Not_Existed_Class::notExistedMethod can\'t be called';
         $this->_request->expects($this->any())->method('getParam')->will($this->returnValue('test_group'));
-        $schedule = $this->getMockBuilder(
-            'Magento\Cron\Model\Schedule'
-        )->setMethods(
-            ['getJobCode', 'tryLockJob', 'getScheduledAt', 'save', 'setStatus', 'setMessages', '__wakeup']
-        )->disableOriginalConstructor()->getMock();
+        $schedule = $this->getMockBuilder('Magento\Cron\Model\Schedule')
+            ->setMethods(['getJobCode', 'tryLockJob', 'getScheduledAt', 'save', 'setStatus', 'setMessages', '__wakeup'])
+            ->disableOriginalConstructor()->getMock();
         $schedule->expects($this->any())->method('getJobCode')->will($this->returnValue('test_job1'));
         $schedule->expects($this->once())->method('getScheduledAt')->will($this->returnValue('-1 day'));
         $schedule->expects($this->once())->method('tryLockJob')->will($this->returnValue(true));
-        $schedule->expects(
-            $this->once()
-        )->method(
-            'setStatus'
-        )->with(
-            $this->equalTo(\Magento\Cron\Model\Schedule::STATUS_ERROR)
-        )->will(
-            $this->returnSelf()
-        );
+        $schedule->expects($this->once())
+            ->method('setStatus')
+            ->with($this->equalTo(\Magento\Cron\Model\Schedule::STATUS_ERROR))
+            ->will($this->returnSelf());
         $schedule->expects($this->once())->method('setMessages')->with($this->equalTo($exceptionMessage));
-        $schedule->expects($this->once())->method('save');
+        $schedule->expects($this->exactly($saveCalls))->method('save');
 
         $this->_collection->addItem($schedule);
 
@@ -336,17 +335,34 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $scheduleMock = $this->getMockBuilder('Magento\Cron\Model\Schedule')->disableOriginalConstructor()->getMock();
         $scheduleMock->expects($this->any())->method('getCollection')->will($this->returnValue($this->_collection));
         $this->_scheduleFactory->expects($this->once())->method('create')->will($this->returnValue($scheduleMock));
-        $this->_objectManager->expects(
-            $this->once()
-        )->method(
-            'create'
-        )->with(
-            $this->equalTo('Not_Existed_Class')
-        )->will(
-            $this->returnValue('')
-        );
+        $this->_objectManager
+            ->expects($this->once())
+            ->method('create')
+            ->with($this->equalTo($cronJobType))
+            ->will($this->returnValue($cronJobObject));
 
         $this->_observer->dispatch('');
+    }
+
+    /**
+     * @return array
+     */
+    public function dispatchExceptionInCallbackDataProvider()
+    {
+        return [
+            'non-callable callback' => [
+                'Not_Existed_Class',
+                '',
+                'Invalid callback: Not_Existed_Class::execute can\'t be called',
+                1
+            ],
+            'exception in execution' => [
+                'CronJobException',
+                new \Magento\Cron\Test\Unit\Model\CronJobException(),
+                'Test exception',
+                2
+            ],
+        ];
     }
 
     /**
@@ -354,7 +370,6 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
      */
     public function testDispatchRunJob()
     {
-        require_once __DIR__ . '/CronJob.php';
         $testCronJob = new \Magento\Cron\Test\Unit\Model\CronJob();
 
         $jobConfig = [
@@ -472,7 +487,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $schedule->expects($this->any())->method('getJobCode')->will($this->returnValue('job_code1'));
         $schedule->expects($this->once())->method('getScheduledAt')->will($this->returnValue('* * * * *'));
 
-        $this->_collection->addItem(new \Magento\Framework\Object());
+        $this->_collection->addItem(new \Magento\Framework\DataObject());
         $this->_collection->addItem($schedule);
 
         $this->_cache->expects($this->any())->method('save');
@@ -546,7 +561,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $schedule->expects($this->any())->method('unsScheduleId')->will($this->returnSelf());
         $schedule->expects($this->any())->method('trySchedule')->will($this->returnSelf());
 
-        $this->_collection->addItem(new \Magento\Framework\Object());
+        $this->_collection->addItem(new \Magento\Framework\DataObject());
         $this->_collection->addItem($schedule);
 
         $this->_cache->expects($this->any())->method('save');

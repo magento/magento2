@@ -21,6 +21,11 @@ class DataObject
     protected $isActive;
 
     /**
+     * @var string
+     */
+    private $name;
+
+    /**
      * @return string
      */
     public function getAttrName()
@@ -53,6 +58,16 @@ class DataObject
     public function setIsActive($isActive)
     {
         $this->isActive = $isActive;
+        return $this;
+    }
+
+    /**
+     * @param null|string $name Name of the attribute
+     * @return $this
+     */
+    public function setName($name = null)
+    {
+        $this->name = $name;
         return $this;
     }
 }

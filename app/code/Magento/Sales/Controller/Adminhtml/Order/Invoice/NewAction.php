@@ -82,14 +82,13 @@ class NewAction extends \Magento\Backend\App\Action
                     __('The order does not allow an invoice to be created.')
                 );
             }
-
+            $invoiceManagement = $this->_objectManager->create('Magento\Sales\Api\InvoiceManagementInterface');
             /** @var \Magento\Sales\Model\Order\Invoice $invoice */
-            $invoice = $this->_objectManager->create('Magento\Sales\Model\Service\Order', ['order' => $order])
-                ->prepareInvoice($invoiceItems);
+            $invoice = $invoiceManagement->prepareInvoice($orderId, $invoiceItems);
 
             if (!$invoice->getTotalQty()) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Cannot create an invoice without products.')
+                    __('You can\'t create an invoice without products.')
                 );
             }
             $this->registry->register('current_invoice', $invoice);
