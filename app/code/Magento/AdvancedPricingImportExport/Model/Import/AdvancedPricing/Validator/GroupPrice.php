@@ -6,8 +6,9 @@
 namespace Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator;
 
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing;
+use Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractPrice;
 
-class GroupPrice extends \Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractPrice
+class GroupPrice extends AbstractPrice
 {
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver
@@ -38,15 +39,14 @@ class GroupPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valid
     }
 
     /**
-     * Call parent init()
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function init()
     {
         foreach ($this->groupRepository->getList($this->searchCriteriaBuilder->create())->getItems() as $group) {
             $this->customerGroups[$group->getCode()] = $group->getId();
         }
+        return $this;
     }
 
     /**
