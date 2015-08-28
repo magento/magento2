@@ -5,8 +5,9 @@
 define([
     'ko',
     'underscore',
+    'mageUtils',
     'Magento_Ui/js/lib/collapsible'
-], function (ko, _, Collapsible) {
+], function (ko, _, utils, Collapsible) {
     'use strict';
 
     /**
@@ -28,25 +29,32 @@ define([
             maxSize: 1000,
             customVisible: false,
             customValue: '',
-            options: [{
-                value: 20,
-                label: 20
-            }, {
-                value: 30,
-                label: 30
-            }, {
-                value: 50,
-                label: 50
-            }, {
-                value: 100,
-                label: 100
-            }, {
-                value: 200,
-                label: 200
-            }],
+            options: {
+                '20': {
+                    value: 20,
+                    label: 20
+                },
+                '30': {
+                    value: 30,
+                    label: 30
+                },
+                '50': {
+                    value: 50,
+                    label: 50
+                },
+                '100': {
+                    value: 100,
+                    label: 100
+                },
+                '200': {
+                    value: 200,
+                    label: 200
+                }
+            },
+            optionsArray: [],
             links: {
-                value: '${ $.storageConfig.path }.value',
-                options: '${ $.storageConfig.path }.options'
+                options: '${ $.storageConfig.path }.options',
+                value: '${ $.storageConfig.path }.value'
             },
             listens: {
                 value: 'onValueChange',
@@ -55,13 +63,26 @@ define([
         },
 
         /**
+         * Initializes sizes component.
+         *
+         * @returns {Sizes} Chainable.
+         */
+        initialize: function () {
+            this._super()
+                .updateArray();
+
+            return this;
+        },
+
+        /**
+         * Initializes observable properties.
          *
          * @returns {Sizes} Chainable.
          */
         initObservable: function () {
             this._super()
                 .observe([
-                    'options',
+                    'optionsArray',
                     'editing',
                     'value',
                     'customVisible',
@@ -132,7 +153,7 @@ define([
          * @returns {Number}
          */
         getFirst: function () {
-            return this.options()[0].value;
+            return this.optionsArray()[0].value;
         },
 
         /**
@@ -142,9 +163,7 @@ define([
          * @returns {Object|Undefined}
          */
         getSize: function (value) {
-            return _.findWhere(this.options(), {
-                value: value
-            });
+            return this.options[value];
         },
 
         /**
@@ -164,15 +183,13 @@ define([
          * @returns {Sizes} Chainable.
          */
         addSize: function (value) {
-            var items = this.options();
+            var size;
 
-            if (this.hasSize(value)) {
-                return this;
+            if (!this.hasSize(value)) {
+                size = this.createSize(value);
+
+                this.set('options.' + value, size);
             }
-
-            items.push(this.createSize(value));
-
-            this.options(this.sort(items));
 
             return this;
         },
@@ -184,13 +201,11 @@ define([
          * @returns {Sizes} Chainable.
          */
         removeSize: function (value) {
-            var size = this.getSize(value);
-
-            if (!size) {
+            if (!this.hasSize(value)) {
                 return this;
             }
 
-            this.options.remove(size);
+            this.remove('options.' + value);
 
             if (this.isSelected(value)) {
                 this.setSize(this.getFirst());
@@ -215,10 +230,17 @@ define([
             }
 
             newValue = newValue || size._value;
+
+            if (isNaN(+newValue)) {
+                this.discardEditing();
+
+                return this;
+            }
+
             newValue = this.normalize(newValue);
 
-            this.options.remove(size);
-            this.addSize(newValue);
+            this.remove('options.' + value)
+                .addSize(newValue);
 
             if (this.isSelected(value)) {
                 this.setSize(newValue);
@@ -245,6 +267,7 @@ define([
         /**
          * Chechks if provided value exists in the sizes list.
          *
+         * @param {Number} value - Value to be checked.
          * @returns {Boolean}
          */
         hasSize: function (value) {
@@ -340,21 +363,24 @@ define([
         },
 
         /**
-         * Sorts provided array in ascending order by
-         * the 'value' property of its' items.
+         * Updates the array of options.
          *
-         * @param {Array} [data=this.options] - Array to be sorted.
-         * @returns {Array} Sorted array.
+         * @returns {Sizes} Chainable.
          */
-        sort: function (data) {
-            data = data || this.options();
+        updateArray: function () {
+            var array = _.values(this.options);
 
-            return _.sortBy(data, 'value');
+            array = _.sortBy(array, 'value');
+
+            this.optionsArray(array);
+
+            return this;
         },
 
         /**
          * Checks if provided value is in editing state.
          *
+         * @param {Number} value - Value to be checked.
          * @returns {Boolean}
          */
         isEditing: function (value) {
@@ -362,7 +388,9 @@ define([
         },
 
         /**
+         * Checks if provided value is selected.
          *
+         * @param {Number} value - Value to be checked.
          * @returns {Boolean}
          */
         isSelected: function (value) {
@@ -378,10 +406,11 @@ define([
         },
 
         /**
-         * Listener of the 'options' array changes.
+         * Listener of the 'options' object changes.
          */
         onSizesChange: function () {
-            this.editing(false);
+            this.editing(false)
+                .updateArray();
         }
     });
 });

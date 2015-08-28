@@ -1,19 +1,26 @@
 define([
-    'underscore',
+    'ko',
     'jquery',
-    'ko'
-], function (_, $, ko) {
+    'underscore'
+], function (ko, $, _) {
     'use strict';
 
     /**
+     * Checks if provided  value is a dom element.
      *
+     * @param {*} node - Value to be checked.
+     * @returns {Boolean}
      */
     function isDomElement(node) {
-        return node && node.tagName && node.nodeType;
+        return typeof node === 'object' && node.tagName && node.nodeType;
     }
 
     /**
+     * Removes from the provided array all non-root nodes located inside
+     * of the comment element as long as the closing comment tags.
      *
+     * @param {Array} nodes - An array of nodes to be processed.
+     * @returns {Array}
      */
     function normalize(nodes) {
         var result = nodes.slice();
@@ -31,10 +38,12 @@ define([
 
     /**
      *
+     * @param {...Object} extenders
+     * @returns {jQueryCollection} Chainable.
      */
     $.fn.extendCtx = function () {
-        var nodes = normalize(_.toArray(this)),
-            extenders = _.toArray(arguments);
+        var nodes       = normalize(_.toArray(this)),
+            extenders   = _.toArray(arguments);
 
         nodes.forEach(function (node) {
             var ctx  = ko.contextFor(node),
@@ -48,6 +57,9 @@ define([
 
     /**
      *
+     *
+     * @param {(HTMLElement|Object)} [ctx]
+     * @returns {jQueryCollection} Chainable.
      */
     $.fn.applyBindings = function (ctx) {
         var nodes = normalize(_.toArray(this)),
@@ -68,6 +80,10 @@ define([
 
     /**
      *
+     *
+     * @param {(Object|Function)} data
+     * @param {(HTMLElement|Object)} [ctx]
+     * @returns {jQueryCollection} Chainable.
      */
     $.fn.bindings = function (data, ctx) {
         var nodes    = normalize(_.toArray(this)),
@@ -81,7 +97,7 @@ define([
         nodes.forEach(function (node) {
             nodeCtx = ctx || ko.contextFor(node);
 
-            if (typeof data === 'function') {
+            if (_.isFunction(data)) {
                 bindings = data(nodeCtx, node);
             }
 

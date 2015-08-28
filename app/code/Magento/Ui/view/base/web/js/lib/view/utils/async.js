@@ -10,10 +10,13 @@ define([
     'use strict';
 
     /**
+     * Checks if provided  value is a dom element.
      *
+     * @param {*} node - Value to be checked.
+     * @returns {Boolean}
      */
     function isDomElement(node) {
-        return node.tagName && node.nodeType;
+        return typeof node === 'object' && node.tagName && node.nodeType;
     }
 
     /**
@@ -61,13 +64,14 @@ define([
                 data.ctx = ctx;
             } else {
                 data.component = ctx;
-                data.ctx = '*';
             }
         } else {
             data = _.isString(selector) ?
                 parseString(selector) :
                 selector;
         }
+
+        data.ctx = data.ctx || '*';
 
         return data;
     }
@@ -126,6 +130,35 @@ define([
     };
 
     _.extend($.async, {
+        /**
+         *
+         * @returns {Array}
+         */
+        get: function () {
+            var data        = parseData.apply(null, arguments),
+                component   = data.component,
+                nodes;
+
+            if (data.component) {
+                if (_.isString(component)) {
+                    component = registry.get(component);
+                }
+
+                if (!component) {
+                    return [];
+                }
+
+                nodes = boundedNodes.get(component);
+                nodes = $(nodes).filter(data.ctx).toArray();
+
+                return data.selector ?
+                    $(data.selector, nodes).toArray() :
+                    nodes;
+            }
+
+            return $(data.selector, data.ctx).toArray();
+        },
+
         /**
          *
          */
