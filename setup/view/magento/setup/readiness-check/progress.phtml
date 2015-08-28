@@ -77,7 +77,10 @@
                 <p ng-show="updater.expanded">
                     Download and install the updater.
                 </p>
-                <p ng-show="updater.expanded">For additional assistance, see</p>
+                <p ng-show="updater.expanded">For additional assistance, see
+                    <a href="http://devdocs.magento.com/guides/v2.0/comp-mgr/trouble/cman/updater.html"
+                       target="_blank">updater application help</a>.
+                </p>
             </div>
 
         </div>
@@ -125,7 +128,10 @@
                 </p>
                 <p ng-show="cronScript.expanded" ng-bind-html="cronScript.updaterErrorMessage">
                 </p>
-                <p ng-show="cronScript.expanded">For additional assistance, see</p>
+                <p ng-show="cronScript.expanded">For additional assistance, see
+                    <a href="http://devdocs.magento.com/guides/v2.0/comp-mgr/trouble/cman/cron.html"
+                       target="_blank">cron scripts help</a>.
+                </p>
             </div>
         </div>
     </div>
@@ -164,7 +170,11 @@
                 </p>
                 <p ng-show="componentDependency.expanded" ng-bind-html="componentDependency.errorMessage">
                 </p>
-                <p ng-show="componentDependency.expanded">For additional assistance, see</p>
+                <p ng-show="componentDependency.expanded">For additional assistance, see
+                    <a href="http://devdocs.magento.com/guides/v2.0/comp-mgr/trouble/cman/component-depend.html"
+                       target="_blank">component dependency help
+                    </a>.
+                </p>
             </div>
         </div>
     </div>
@@ -273,6 +283,13 @@
                         </p>
                     </div>
                 </div>
+
+                <p ng-show="componentDependency.expanded">For additional assistance, see
+                    <a href="http://devdocs.magento.com/guides/v2.0/install-gde/trouble/trouble/php/tshoot_php-set.html"
+                       target="_blank">PHP settings check help
+                    </a>.
+                </p>
+
             </div>
         </div>
 
@@ -431,7 +448,7 @@
                     <p>
                         The best way to resolve this is to allow write permissions for the following Magento directories. The exact fix depends on your server, your host, and other system variables.
                         <br>
-                        Our <a href="http://devdocs.magento.com/guides/v1.0/install-gde/install/composer-clone.html#instgde-prereq-compose-access" target="_blank">File Permission Help</a> can get you started.
+                        Our <a href="http://devdocs.magento.com/guides/v2.0/install-gde/trouble/cman/tshoot_install_perms.html" target="_blank">File Permission Help</a> can get you started.
                     </p>
                     <p>
                         If you need more help, please call your hosting provider.
