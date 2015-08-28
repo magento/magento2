@@ -59,9 +59,11 @@ define([
             this.options.push({value: 0, label: '', id: utils.uniqueid(), attribute_id: this.id, is_new: true});
         },
         saveOption: function (option) {
-            this.options.remove(option);
-            this.options.push(option);
-            this.chosenOptions.push(option.id);
+            if (!_.isEmpty(option.label)) {
+                this.options.remove(option);
+                this.options.push(option);
+                this.chosenOptions.push(option.id);
+            }
         },
         removeOption: function (option) {
             this.options.remove(option);
