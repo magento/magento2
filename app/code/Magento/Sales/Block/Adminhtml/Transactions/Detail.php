@@ -79,10 +79,12 @@ class Detail extends \Magento\Backend\Block\Widget\Container
             ['label' => __('Back'), 'onclick' => "setLocation('{$backUrl}')", 'class' => 'back']
         );
 
-        if ($this->_authorization->isAllowed(
-            'Magento_Sales::transactions_fetch'
-        ) && $this->orderPaymentRepository->get($this->_txn->getPaymentId())->getMethodInstance()->canFetchTransactionInfo()
-        ) {
+        $fetchTransactionAllowed = $this->_authorization->isAllowed('Magento_Sales::transactions_fetch');
+        $canFetchTransaction = $this->orderPaymentRepository->get($this->_txn->getPaymentId())
+            ->getMethodInstance()
+            ->canFetchTransactionInfo();
+
+        if ($fetchTransactionAllowed && $canFetchTransaction) {
             $fetchUrl = $this->getUrl('sales/*/fetch', ['_current' => true]);
             $this->buttonList->add(
                 'fetch',
