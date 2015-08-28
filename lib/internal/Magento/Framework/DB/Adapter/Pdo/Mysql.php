@@ -177,10 +177,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @var DateTime
      */
     protected $dateTime;
+
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    protected $logger;
 
     /**
      * @param \Magento\Framework\Stdlib\StringUtils|String $string
@@ -333,6 +334,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 
         /** @link http://bugs.mysql.com/bug.php?id=18551 */
         $this->_connection->query("SET SQL_MODE=''");
+
+        if (isset($this->_config['initStatements'])) {
+            $this->query($this->_config['initStatements']);
+        }
 
         if (!$this->_connectionFlagsSet) {
             $this->_connection->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
