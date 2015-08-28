@@ -11,11 +11,6 @@ use Magento\Quote\Model\Quote\Item;
 class RendererTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_imageHelper;
-
-    /**
      * @var Renderer
      */
     protected $_renderer;
@@ -25,11 +20,15 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      */
     protected $layout;
 
+    /**
+     * @var \Magento\Catalog\Block\Product\ImageBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $imageBuilder;
+
     protected function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->_imageHelper = $this->getMock('Magento\Catalog\Helper\Image', [], [], '', false);
         $this->layout = $this->getMock('Magento\Framework\View\LayoutInterface');
 
         $context = $this->getMockBuilder('Magento\Framework\View\Element\Template\Context')
@@ -39,11 +38,15 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->method('getLayout')
             ->will($this->returnValue($this->layout));
 
+        $this->imageBuilder = $this->getMockBuilder('Magento\Catalog\Block\Product\ImageBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->_renderer = $objectManagerHelper->getObject(
             'Magento\Checkout\Block\Cart\Item\Renderer',
             [
-                'imageHelper' => $this->_imageHelper,
                 'context' => $context,
+                'imageBuilder' => $this->imageBuilder,
             ]
         );
     }
@@ -53,24 +56,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $product = $this->_initProduct();
         $productForThumbnail = $this->_renderer->getProductForThumbnail();
         $this->assertEquals($product->getName(), $productForThumbnail->getName(), 'Invalid product was returned.');
-    }
-
-    public function testGetProductThumbnail()
-    {
-        $productForThumbnail = $this->_initProduct();
-        /** Ensure that image helper was initialized with correct arguments */
-        $this->_imageHelper->expects(
-            $this->once()
-        )->method(
-            'init'
-        )->with(
-            $productForThumbnail,
-            'thumbnail'
-        )->will(
-            $this->returnSelf()
-        );
-        $productThumbnail = $this->_renderer->getProductThumbnail();
-        $this->assertSame($this->_imageHelper, $productThumbnail, 'Invalid product thumbnail is returned.');
     }
 
     /**
@@ -202,5 +187,40 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->assertEquals('', $this->_renderer->getActions($itemMock));
+    }
+
+    public function testGetImage()
+    {
+        $imageId = 'test_image_id';
+        $attributes = [];
+
+        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $imageMock = $this->getMockBuilder('Magento\Catalog\Block\Product\Image')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->imageBuilder->expects($this->once())
+            ->method('setProduct')
+            ->with($productMock)
+            ->willReturnSelf();
+        $this->imageBuilder->expects($this->once())
+            ->method('setImageId')
+            ->with($imageId)
+            ->willReturnSelf();
+        $this->imageBuilder->expects($this->once())
+            ->method('setAttributes')
+            ->with($attributes)
+            ->willReturnSelf();
+        $this->imageBuilder->expects($this->once())
+            ->method('create')
+            ->willReturn($imageMock);
+
+        $this->assertInstanceOf(
+            'Magento\Catalog\Block\Product\Image',
+            $this->_renderer->getImage($productMock, $imageId, $attributes)
+        );
     }
 }

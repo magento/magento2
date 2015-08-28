@@ -65,6 +65,21 @@
                     }
                 }
             }
+            &.additional-attributes {
+                tbody {
+                    th {
+                        &:extend(.abs-no-display-s all);
+                    }
+                    td {
+                        &:last-child {
+                            border: none;
+                            padding: 0 0 @indent__xs;
+                        }
+                    }
+                }
+            }
+        }
+        .table:not(.totals):not(.table-comparison) {
             tfoot {
                 display: block;
                 tr {
@@ -93,19 +108,6 @@
                     .lib-font-size(16);
                     .amount {
                         padding-bottom: @indent__s;
-                    }
-                }
-            }
-            &.additional-attributes {
-                tbody {
-                    th {
-                        &:extend(.abs-no-display-s all);
-                    }
-                    td {
-                        &:last-child {
-                            border: none;
-                            padding: 0 0 @indent__xs;
-                        }
                     }
                 }
             }

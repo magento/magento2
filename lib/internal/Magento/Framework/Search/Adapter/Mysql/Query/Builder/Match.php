@@ -35,14 +35,24 @@ class Match implements QueryInterface
     private $fulltextHelper;
 
     /**
+     * @var string
+     */
+    private $fulltextSearchMode;
+
+    /**
      * @param ResolverInterface $resolver
      * @param Fulltext $fulltextHelper
+     * @param string $fulltextSearchMode
      */
-    public function __construct(ResolverInterface $resolver, Fulltext $fulltextHelper)
-    {
+    public function __construct(
+        ResolverInterface $resolver,
+        Fulltext $fulltextHelper,
+        $fulltextSearchMode = Fulltext::FULLTEXT_MODE_BOOLEAN
+    ) {
         $this->resolver = $resolver;
         $this->replaceSymbols = str_split(self::SPECIAL_CHARACTERS, 1);
         $this->fulltextHelper = $fulltextHelper;
+        $this->fulltextSearchMode = $fulltextSearchMode;
     }
 
     /**
@@ -76,9 +86,9 @@ class Match implements QueryInterface
         $matchQuery = $this->fulltextHelper->getMatchQuery(
             $columns,
             $queryValue,
-            Fulltext::FULLTEXT_MODE_BOOLEAN
+            $this->fulltextSearchMode
         );
-        $scoreBuilder->addCondition($matchQuery);
+        $scoreBuilder->addCondition($matchQuery, true);
 
         if ($fieldIds) {
             $matchQuery = sprintf('(%s AND search_index.attribute_id IN (%s))', $matchQuery, implode(',', $fieldIds));

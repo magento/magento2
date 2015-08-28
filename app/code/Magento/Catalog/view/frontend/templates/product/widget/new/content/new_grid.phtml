@@ -18,7 +18,6 @@ if ($exist = ($block->getProductCollection() && $block->getProductCollection()->
 
     $mode = 'grid';
 
-    $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
     $image = 'new_products_content_widget_grid';
     $title = __('New Products');
     $items = $block->getProductCollection()->getItems();
@@ -45,7 +44,7 @@ if ($exist = ($block->getProductCollection() && $block->getProductCollection()->
                         <?php echo($iterator++ == 1) ? '<li class="product-item">' : '</li><li class="product-item">' ?>
                         <div class="product-item-info">
                             <a href="<?php echo $block->getProductUrl($_item) ?>" class="product-item-photo">
-                                <?php echo $imageBlock->init($_item, $image)->toHtml() ?>
+                                <?php echo $block->getImage($_item, $image)->toHtml(); ?>
                             </a>
                             <div class="product-item-details">
                                 <strong class="product-item-name">

@@ -1608,3 +1608,89 @@
         }
     }
 }
+
+//
+//  Shopping cart and payment disaount codes block
+//  ---------------------------------------------
+
+.abs-discount-block {
+    .block {
+        &:extend(.abs-cart-block all);
+        > .title {
+            strong {
+                color: @color-blue1;
+                font-weight: @font-weight__regular;
+            }
+        }
+    }
+    .actions-toolbar {
+        display: table-cell;
+        vertical-align: top;
+        width: 1%;
+        .action {
+            &.primary,
+            &.cancel {
+                &:extend(.abs-revert-to-action-secondary all);
+                border-bottom-left-radius: 0;
+                border-top-left-radius: 0;
+                margin: 0 0 0 -1px;
+                white-space: nowrap;
+                width: auto;
+            }
+        }
+        .secondary {
+            bottom: 5px;
+            left: @mobile-cart-padding;
+            position: absolute;
+        }
+    }
+
+    .action.check {
+        &:extend(.abs-action-button-as-link all);
+        font-weight: @font-weight__regular;
+    }
+
+    .fieldset {
+        display: table;
+        width: 100%;
+        > .field {
+            > .label {
+                display: none;
+            }
+        }
+    }
+    .field {
+        display: table-cell;
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .abs-discount-block-desktop {
+        .block {
+            &:extend(.abs-blocks-2columns all);
+            width: 48%;
+            > .title {
+                border: 0;
+                cursor: default;
+                padding: 0 0 @indent__s;
+                strong {
+                    .lib-font-size(16);
+                }
+                &:after {
+                    display: none;
+                }
+            }
+            .content {
+                display: block !important; // Need for overwriting collapsible widget
+                padding: 0;
+            }
+        }
+        .actions-toolbar {
+            .secondary {
+                bottom: -30px;
+                left: 0;
+                position: absolute;
+            }
+        }
+    }
+}

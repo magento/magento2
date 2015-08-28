@@ -5,6 +5,10 @@
  */
 namespace Magento\Checkout\Api;
 
+/**
+ * Interface for managing customer shipping address information
+ * @api
+ */
 interface ShippingInformationManagementInterface
 {
     /**

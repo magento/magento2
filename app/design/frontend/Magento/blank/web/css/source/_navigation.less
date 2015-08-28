@@ -22,10 +22,10 @@
 
     .nav-toggle {
         .lib-icon-font(
-            @icon-menu,
-            @_icon-font-size: 28px,
-            @_icon-font-color: @header-icons-color,
-            @_icon-font-color-hover: @header-icons-color-hover
+        @icon-menu,
+        @_icon-font-size: 28px,
+        @_icon-font-color: @header-icons-color,
+        @_icon-font-color-hover: @header-icons-color-hover
         );
         .lib-icon-text-hide();
         cursor: pointer;
@@ -74,12 +74,12 @@
         .lib-css(transition, left .3s, 1);
         height: 100%;
         left: -80%;
-        left: calc(~'-1 * (100% - @{active-nav-indent})');
+        left: calc(~"-1 * (100% - @{active-nav-indent})");
         overflow: auto;
         position: fixed;
         top: 0;
         width: 80%;
-        width: calc(~'100% - @{active-nav-indent}');
+        width: calc(~"100% - @{active-nav-indent}");
 
         .switcher {
             border-top: 1px solid @color-gray82;
@@ -99,10 +99,10 @@
                     display: inline-block !important;
                     position: relative;
                     .lib-icon-font(
-                        @_icon-font-content: @icon-down,
-                        @_icon-font-size: 42px,
-                        @_icon-font-position: after,
-                        @_icon-font-display: block
+                    @_icon-font-content: @icon-down,
+                    @_icon-font-size: 42px,
+                    @_icon-font-position: after,
+                    @_icon-font-display: block
                     );
                     &:after {
                         position: absolute;
@@ -112,8 +112,8 @@
                 }
                 &.active strong {
                     .lib-icon-font-symbol(
-                        @_icon-font-content: @icon-up,
-                        @_icon-font-position: after
+                    @_icon-font-content: @icon-up,
+                    @_icon-font-position: after
                     );
                 }
             }
@@ -175,6 +175,7 @@
 
         .nav-sections {
             @_shadow: 0 0 5px 0 rgba(50, 50, 50, .75);
+            
             .lib-css(box-shadow, @_shadow, 1);
             left: 0;
             z-index: 99;
@@ -245,6 +246,8 @@
     }
 
     .nav-sections {
+        .lib-vendor-prefix-flex-shrink(0);
+        .lib-vendor-prefix-flex-basis(auto);
         margin-bottom: @indent__m;
         &-item-title {
             display: none;

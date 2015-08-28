@@ -12,24 +12,27 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\HTTP\PhpEnvironment\Request as HttpRequest;
 use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
+use Magento\Framework\Stdlib\StringUtils;
 
 class Request extends HttpRequest implements RequestInterface
 {
     /**
      * Modify pathInfo: strip down the front name and query parameters.
      *
+     * @param CookieReaderInterface $cookieReader
+     * @param StringUtils $converter
      * @param AreaList $areaList
      * @param ScopeInterface $configScope
-     * @param CookieReaderInterface $cookieReader
      * @param null|string|\Zend_Uri $uri
      */
     public function __construct(
         CookieReaderInterface $cookieReader,
+        StringUtils $converter,
         AreaList $areaList,
         ScopeInterface $configScope,
         $uri = null
     ) {
-        parent::__construct($cookieReader, $uri);
+        parent::__construct($cookieReader, $converter, $uri);
 
         $pathInfo = $this->getRequestUri();
         /** Remove base url and area from path */

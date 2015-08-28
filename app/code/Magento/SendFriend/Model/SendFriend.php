@@ -200,7 +200,8 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
                     'message' => $message,
                     'sender_name' => $sender['name'],
                     'sender_email' => $sender['email'],
-                    'product_image' => $this->_catalogImage->init($this->getProduct(), 'small_image')->resize(75),
+                    'product_image' => $this->_catalogImage->init($this->getProduct(), 'sendfriend_small_image')
+                        ->getUrl(),
                 ]
             )->addTo(
                 $email,

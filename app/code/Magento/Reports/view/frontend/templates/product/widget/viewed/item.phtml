@@ -14,7 +14,6 @@ $type = $block->getType() . '-' . $block->getViewMode();
 
 $item = $block->getProduct();
 
-$imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
 $image = $block->getImageType();
 $rating = 'short';
 ?>
@@ -23,7 +22,7 @@ $rating = 'short';
         <div class="product">
             <?php echo '<!-- ' . $image . '-->' ?>
             <a href="<?php echo $block->getProductUrl($item) ?>" class="product photo">
-                <?php echo $imageBlock->init($item, $image)->toHtml() ?>
+                <?php echo $block->getImage($item, $image)->toHtml(); ?>
             </a>
             <div class="product details">
                 <strong class="product name"><a title="<?php echo $block->escapeHtml($item->getName()) ?>" href="<?php echo $block->getProductUrl($item) ?>">

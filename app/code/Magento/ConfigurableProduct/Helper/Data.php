@@ -40,12 +40,8 @@ class Data
     public function getOptions($currentProduct, $allowedProducts)
     {
         $options = [];
-        $baseImageUrl = (string)$this->imageHelper->init($currentProduct, 'image');
-
         foreach ($allowedProducts as $product) {
             $productId = $product->getId();
-            $image = (string)$this->imageHelper->init($product, 'image');
-
             foreach ($this->getAllowAttributes($currentProduct) as $attribute) {
                 $productAttribute = $attribute->getProductAttribute();
                 $productAttributeId = $productAttribute->getId();
@@ -53,12 +49,11 @@ class Data
 
                 $options[$productAttributeId][$attributeValue][] = $productId;
                 $imageUrl = (!$product->getImage() || $product->getImage() === 'no_selection')
-                    ? $baseImageUrl
-                    : (string)$image;
+                    ? $this->imageHelper->init($currentProduct, 'product_page_image_large')->getUrl()
+                    : $this->imageHelper->init($product, 'product_page_image_large')->getUrl();
                 $options['images'][$productAttributeId][$attributeValue][$productId] = $imageUrl;
             }
         }
-
         return $options;
     }
 

@@ -45,7 +45,7 @@ class Website implements ReaderInterface
         $stores = [];
         $website = $scopeCode ? $this->websiteRepository->get($scopeCode) : $this->websiteRepository->getDefault();
         foreach ($this->storeRepository->getList() as $store) {
-            if ($store->getIsActive() && $store->getWebsiteId() == $website->getId()) {
+            if ($store->isActive() && $store->getWebsiteId() == $website->getId()) {
                 $stores[] = $store->getId();
             }
         }

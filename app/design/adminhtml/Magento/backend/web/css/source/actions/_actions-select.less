@@ -49,6 +49,12 @@
                 border-left-color: @_action-select__border-color;
             }
         }
+        &[disabled] {
+            color: @action-select__disabled__color;
+            &:after {
+                border-color: @action-select__disabled__color transparent transparent transparent;
+            }
+        }
     }
     &._active {
         z-index: @action-select__z-index;
