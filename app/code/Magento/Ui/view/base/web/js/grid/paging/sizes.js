@@ -185,13 +185,11 @@ define([
         addSize: function (value) {
             var size;
 
-            if (this.hasSize(value)) {
-                return this;
+            if (!this.hasSize(value)) {
+                size = this.createSize(value);
+
+                this.set('options.' + value, size);
             }
-
-            size = this.createSize(value);
-
-            this.set('options.' + value, size);
 
             return this;
         },
