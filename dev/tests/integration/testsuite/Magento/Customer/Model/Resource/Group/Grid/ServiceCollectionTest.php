@@ -97,7 +97,7 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage When passing in a field array there must one field into the array.
+     * @expectedExceptionMessage When passing an array of fields there must be at least one field in the array.
      */
     public function testAddToFilterException()
     {
