@@ -62,14 +62,7 @@ class InlineEdit extends \Magento\Backend\App\Action
             $page = $this->pageRepository->getById($pageId);
             try {
                 $pageData = $this->dataProcessor->filter($postItems[$pageId]);
-                if (!$this->dataProcessor->validate($pageData)
-                    || !$this->dataProcessor->validateRequireEntry($pageData)
-                ) {
-                    $error = true;
-                    foreach ($this->messageManager->getMessages(true)->getItems() as $error) {
-                        $messages[] = $this->getErrorWithPageId($page, $error->getText());
-                    }
-                }
+                $this->validatePost($pageData, $page, $error, $messages);
                 $page->setData(array_merge($page->getData(), $pageData));
                 $this->pageRepository->save($page);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
@@ -91,6 +84,25 @@ class InlineEdit extends \Magento\Backend\App\Action
             'messages' => $messages,
             'error' => $error
         ]);
+    }
+
+    /**
+     * Validate post data
+     *
+     * @param array $pageData
+     * @param \Magento\Cms\Model\Page $page
+     * @param bool $error
+     * @param array $messages
+     * @return void
+     */
+    protected function validatePost(array $pageData, \Magento\Cms\Model\Page $page, &$error, array &$messages)
+    {
+        if (!($this->dataProcessor->validate($pageData) && $this->dataProcessor->validateRequireEntry($pageData))) {
+            $error = true;
+            foreach ($this->messageManager->getMessages(true)->getItems() as $error) {
+                $messages[] = $this->getErrorWithPageId($page, $error->getText());
+            }
+        }
     }
 
     /**
