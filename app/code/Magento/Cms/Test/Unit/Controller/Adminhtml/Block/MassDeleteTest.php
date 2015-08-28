@@ -5,9 +5,9 @@
  */
 namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Block;
 
-use Magento\Cms\Test\Unit\Controller\Adminhtml\AbstractMassDeleteTest;
+use Magento\Cms\Test\Unit\Controller\Adminhtml\AbstractMassActionTest;
 
-class MassDeleteTest extends AbstractMassDeleteTest
+class MassDeleteTest extends AbstractMassActionTest
 {
     /**
      * @var \Magento\Cms\Controller\Adminhtml\Block\MassDelete
