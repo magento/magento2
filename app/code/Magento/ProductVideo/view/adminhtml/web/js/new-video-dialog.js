@@ -114,6 +114,22 @@ define([
                         uploader.replaceWith(inputFile);
                         $('#new-video').modal('closeModal');
                     }
+                },
+                {
+                    text: $.mage.__('Delete'),
+                    class: 'action-primary video-delete-button',
+                    click: function (e) {
+                        //@todo delete
+                        $('#new-video').modal('closeModal');
+                    }
+                },
+                {
+                    text: $.mage.__('Cancel'),
+                    class: 'video-cancel-button',
+                    click: function (e) {
+                        newVideoForm.validation('clearError');
+                        $('#new-video').modal('closeModal');
+                    }
                 }],
                 opened: function(e) {
                     $('#video_url').focus();
@@ -175,11 +191,13 @@ define([
         toggleButtons: function() {
             $('.video-placeholder').click(function() {
                 $('.video-create-button').show();
+                $('.video-delete-button').hide();
                 $('.video-edit').hide();
                 $('.modal-title').html('New video');
             });
             $(document).on('click', '.item.image', function() {
                 $('.video-create-button').hide();
+                $('.video-delete-button').show();
                 $('.video-edit').show();
                 $('.modal-title').html('Edit video');
             });
