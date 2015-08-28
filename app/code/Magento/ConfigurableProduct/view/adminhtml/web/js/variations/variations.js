@@ -24,20 +24,26 @@ define([
         rowIndexToEdit: false,
         variations: [],
         productAttributes: [],
-        selectProduct: function (rowIndex) {
-            var productToEdit = this.productMatrix.splice(this.rowIndexToEdit, 1)[0];
-            var newProduct = this.associatedProductsProvider().data.items[rowIndex];
-            newProduct = _.extend(productToEdit, newProduct);
-            newProduct.status = !newProduct.status * 1;
-            this.productMatrix.splice(this.rowIndexToEdit, 0, newProduct);
-            $('#associated-products-container').trigger('closeModal');
-        },
         initialize: function () {
             this._super();
             if (this.variations.length) {
                 this.render(this.variations, this.productAttributes);
             }
             this.initProductAttributesMap();
+        },
+        selectProduct: function (rowIndex) {
+            var productToEdit = this.productMatrix.splice(this.rowIndexToEdit, 1)[0],
+                newProduct = this.associatedProductsProvider().data.items[rowIndex],
+                hrefArray;
+
+            newProduct = _.extend(productToEdit, newProduct);
+            newProduct.productId = productToEdit.entity_id;
+            hrefArray = newProduct.productUrl.split('/');
+            hrefArray[hrefArray.length - 2] = newProduct.entity_id;
+            newProduct.productUrl = hrefArray.join('/');
+            newProduct.editable = false;
+            this.productMatrix.splice(this.rowIndexToEdit, 0, newProduct);
+            $('#associated-products-container').trigger('closeModal');
         },
         initObservable: function () {
             this._super().observe('actions opened attributes productMatrix');
