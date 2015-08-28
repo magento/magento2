@@ -66,16 +66,20 @@ class GridFullTextSearchTest extends Injectable
      * @param array $steps
      * @param string $pageClass
      * @param string $gridRetriever
+     * @param string $idGetter
+     * @param string $fieldGetter
      * @param string $idColumn
      * @return array
      */
     public function test(
         $pageClass,
         $gridRetriever,
+        $idGetter,
+        $fieldGetter,
         $fixtureName,
-        $fixtureDataSet,
         $itemsCount,
-        array $steps,
+        array $steps = [],
+        $fixtureDataSet = null,
         $idColumn = null
     ) {
         $items = $this->createItems($itemsCount, $fixtureName, $fixtureDataSet, $steps);
@@ -89,7 +93,7 @@ class GridFullTextSearchTest extends Injectable
 
         $filterResults = [];
         foreach ($items as $item) {
-            $gridBlock->fullTextSearch($item->getId());
+            $gridBlock->fullTextSearch($item->$fieldGetter());
             $idsInGrid = $gridBlock->getAllIds();
             if ($idColumn) {
                 $filteredTargetIds = [];
@@ -98,8 +102,8 @@ class GridFullTextSearchTest extends Injectable
                 }
                 $idsInGrid = $filteredTargetIds;
             }
-            $filteredIds = $this->getActualIds($idsInGrid, $items);
-            $filterResults[$item->getId()] = $filteredIds;
+            $filteredIds = $this->getActualIds($idsInGrid, $items, $idGetter);
+            $filterResults[$item->$idGetter()] = $filteredIds;
         }
 
         return ['results' => $filterResults];
@@ -108,14 +112,15 @@ class GridFullTextSearchTest extends Injectable
     /**
      * @param string[] $ids
      * @param FixtureInterface[] $items
+     * @param string $idGetter
      * @return string[]
      */
-    protected function getActualIds(array $ids, array $items)
+    protected function getActualIds(array $ids, array $items, $idGetter)
     {
         $actualIds = [];
         foreach ($items as $item) {
-            if (in_array($item->getId(), $ids)) {
-                $actualIds[] = $item->getId();
+            if (in_array($item->$idGetter(), $ids)) {
+                $actualIds[] = $item->$idGetter();
             }
         }
         return  $actualIds;
@@ -135,7 +140,9 @@ class GridFullTextSearchTest extends Injectable
             $item = $this->fixtureFactory->createByCode($fixtureName, ['dataset' => $fixtureDataSet]);
             $item->persist();
             $items[$i] = $item;
-            $this->processSteps($item, $steps[$i]);
+            if (!empty($steps)) {
+                $this->processSteps($item, $steps[$i]);
+            }
         }
 
         return $items;
