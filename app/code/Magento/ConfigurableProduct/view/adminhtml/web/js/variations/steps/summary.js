@@ -52,7 +52,7 @@ define([
                 price = price || productPrice;
                 var productId = this.variationsComponent().getProductIdByOptions(options);
                 if (productId && !images.file) {
-                    var product = _.findWhere(this.variationsComponent().variations, {product_id: productId});
+                    var product = _.findWhere(this.variationsComponent().variations, {productId: productId});
                     images = product.images;
                 }
                 var variation = {
@@ -61,7 +61,7 @@ define([
                     sku: sku,
                     quantity: quantity,
                     price: price,
-                    product_id: productId,
+                    productId: productId,
                     editable: true
                 };
                 this.variations.push(variation);
@@ -75,7 +75,7 @@ define([
 
             _.each(_.omit(this.variationsComponent().productAttributesMap, variationsKeys), function (productId) {
                 this.gridDeleted.push(this.prepareRowForGrid(
-                    _.findWhere(this.variationsComponent().variations, {product_id: productId})
+                    _.findWhere(this.variationsComponent().variations, {productId: productId})
                 ));
             }.bind(this));
         },
