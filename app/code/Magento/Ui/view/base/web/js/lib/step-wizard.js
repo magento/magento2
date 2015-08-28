@@ -64,6 +64,7 @@ define([
             }
             this.cleanErrorNotificationMessage();
             this.index = newIndex;
+            this.cleanNotificationMessage();
             this.render();
         };
         this._prev = function (newIndex) {
