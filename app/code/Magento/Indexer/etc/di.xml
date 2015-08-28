@@ -11,6 +11,7 @@
     <preference for="Magento\Framework\Indexer\ConfigInterface" type="Magento\Indexer\Model\Config" />
     <preference for="Magento\Framework\Indexer\IndexerInterface" type="Magento\Indexer\Model\Indexer" />
     <preference for="Magento\Framework\Indexer\Table\StrategyInterface" type="Magento\Framework\Indexer\Table\Strategy" />
+    <preference for="Magento\Framework\Indexer\StateInterface" type="Magento\Indexer\Model\Indexer\State" />
     <type name="Magento\Framework\Indexer\Table\StrategyInterface" shared="false" />
     <type name="Magento\Indexer\Model\Indexer">
         <arguments>
@@ -53,5 +54,4 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Framework\Indexer\StateInterface" type="Magento\Indexer\Model\Indexer\State" />
 </config>
