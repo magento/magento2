@@ -5,6 +5,8 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Type;
 
+use Magento\CatalogImportExport\Model\Import\Product;
+
 /**
  * Import entity abstract product type model
  *
@@ -18,6 +20,13 @@ abstract class AbstractType
      * @var array
      */
     public static $commonAttributesCache = [];
+
+    /**
+     * Attribute Code to Id cache
+     *
+     * @var array
+     */
+    public static $attributeCodeToId = [];
 
     /**
      * Product type attribute sets and attributes parameters.
@@ -358,6 +367,16 @@ abstract class AbstractType
                 // check value for non-empty in the case of required attribute?
                 if (isset($rowData[$attrCode]) && strlen($rowData[$attrCode])) {
                     $error |= !$this->_entityModel->isAttributeValid($attrCode, $attrParams, $rowData, $rowNum);
+                    $resultAttrs[$attrCode] = 'select' == $attrParams['type'] ? $attrParams['options'][strtolower(
+                        $rowData[$attrCode]
+                    )] : $rowData[$attrCode];
+                    if ('multiselect' == $attrParams['type']) {
+                        $resultAttrs[$attrCode] = [];
+                        foreach (explode('|', $rowData[$attrCode]) as $value) {
+                            $resultAttrs[$attrCode][] = $attrParams['options'][strtolower($value)];
+                        }
+                        $resultAttrs[$attrCode] = implode(',', $resultAttrs[$attrCode]);
+                    }
                 } elseif ($this->_isAttributeRequiredCheckNeeded($attrCode) && $attrParams['is_required']) {
                     // For the default scope - if this is a new product or
                     // for an old product, if the imported doc has the column present for the attrCode
@@ -412,10 +431,16 @@ abstract class AbstractType
         foreach ($this->_getProductAttributes($rowData) as $attrCode => $attrParams) {
             if (!$attrParams['is_static']) {
                 if (isset($rowData[$attrCode]) && strlen($rowData[$attrCode])) {
-                    $resultAttrs[$attrCode] = 'select' == $attrParams['type'] ||
-                        'multiselect' == $attrParams['type'] ? $attrParams['options'][strtolower(
-                            $rowData[$attrCode]
+                    $resultAttrs[$attrCode] = 'select' == $attrParams['type'] ? $attrParams['options'][strtolower(
+                        $rowData[$attrCode]
                         )] : $rowData[$attrCode];
+                    if ('multiselect' == $attrParams['type']) {
+                        $resultAttrs[$attrCode] = [];
+                        foreach (explode(Product::PSEUDO_MULTI_LINE_SEPARATOR, $rowData[$attrCode]) as $value) {
+                            $resultAttrs[$attrCode][] = $attrParams['options'][strtolower($value)];
+                        }
+                        $resultAttrs[$attrCode] = implode(',', $resultAttrs[$attrCode]);
+                    }
                 } elseif (array_key_exists($attrCode, $rowData)) {
                     $resultAttrs[$attrCode] = $rowData[$attrCode];
                 } elseif ($withDefaultValue && null !== $attrParams['default_value']) {
@@ -451,5 +476,21 @@ abstract class AbstractType
     public function saveData()
     {
         return $this;
+    }
+
+    /**
+     * Retrieve attribute from cache
+     *
+     * @param string $attributeCode
+     * @return mixed
+     */
+    public function retrieveAttributeFromCache($attributeCode)
+    {
+        if (isset(self::$attributeCodeToId[$attributeCode]) && $id = self::$attributeCodeToId[$attributeCode]) {
+            if (isset(self::$commonAttributesCache[$id])) {
+                return self::$commonAttributesCache[$id];
+            }
+        }
+        return [];
     }
 }

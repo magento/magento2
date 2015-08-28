@@ -226,6 +226,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
         ValidatorInterface::ERROR_SUPER_PRODUCTS_SKU_NOT_FOUND => 'Product with specified super products SKU not found',
         ValidatorInterface::ERROR_MEDIA_DATA_INCOMPLETE => 'Media data is incomplete',
         ValidatorInterface::ERROR_INVALID_WEIGHT => 'Product weight is invalid',
+        ValidatorInterface::ERROR_EXCEEDED_MAX_LENGTH => 'Attribute %s exceeded max length',
+        ValidatorInterface::ERROR_INVALID_ATTRIBUTE_TYPE => 'Value for \'%s\' attribute contains incorrect value, acceptable values are in %s format',
+        ValidatorInterface::ERROR_DUPLICATE_UNIQUE_ATTRIBUTE => 'Duplicated unique attribute',
+        ValidatorInterface::ERROR_INVALID_ATTRIBUTE_OPTION => 'Value for \'%s\' attribute contains incorrect value, see acceptable values on settings specified for Admin',
     ];
 
     /**
@@ -236,8 +240,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
     protected $_fieldsMap = [
         'image' => 'base_image',
         'image_label' => "base_image_label",
-        'image' => 'base_image',
-        'image_label' => 'base_image_label',
         'thumbnail' => 'thumbnail_image',
         'thumbnail_label' => 'thumbnail_image_label',
         self::COL_MEDIA_IMAGE => 'additional_images',
@@ -670,53 +672,17 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
      * @param array $attrParams Attribute params
      * @param array $rowData Row data
      * @param int $rowNum
-     *
-     * @return boolean
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @return bool
      */
     public function isAttributeValid($attrCode, array $attrParams, array $rowData, $rowNum)
     {
-        switch ($attrParams['type']) {
-            case 'varchar':
-                $val = $this->string->cleanString($rowData[$attrCode]);
-                $valid = $this->string->strlen($val) < self::DB_MAX_VARCHAR_LENGTH;
-                break;
-            case 'decimal':
-                $val = trim($rowData[$attrCode]);
-                $valid = is_numeric($val);
-                break;
-            case 'select':
-            case 'multiselect':
-                $valid = isset($attrParams['options'][strtolower($rowData[$attrCode])]);
-                break;
-            case 'int':
-                $val = trim($rowData[$attrCode]);
-                $valid = (string)(int)$val === $val;
-                break;
-            case 'datetime':
-                $val = trim($rowData[$attrCode]);
-                $valid = strtotime($val) !== false;
-                break;
-            case 'text':
-                $val = $this->string->cleanString($rowData[$attrCode]);
-                $valid = $this->string->strlen($val) < self::DB_MAX_TEXT_LENGTH;
-                break;
-            default:
-                $valid = true;
-                break;
-        }
-
-        if (!$valid) {
-            $this->addRowError(__("Please correct the value for '%s'."), $rowNum, $attrCode);
-        } elseif (!empty($attrParams['is_unique'])) {
-            if (isset($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]]) && ($this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] != $rowData[self::COL_SKU])) {
-                $this->addRowError(__("Duplicate Unique Attribute for '%s'"), $rowNum, $attrCode);
-                return false;
+        if (!$this->validator->isAttributeValid($attrCode, $attrParams, $rowData)) {
+            foreach ($this->validator->getMessages() as $message) {
+                $this->addRowError($message, $rowNum, $attrCode);
             }
-            $this->_uniqueAttributes[$attrCode][$rowData[$attrCode]] = $rowData[self::COL_SKU];
+            return false;
         }
-        return (bool)$valid;
+        return true;
     }
 
     /**
@@ -1571,16 +1537,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
                         }
                     }
                     foreach ($storeIds as $storeId) {
-                        if ('multiselect' == $attribute->getFrontendInput()) {
-                            if (!isset($attributes[$attrTable][$rowSku][$attrId][$storeId])) {
-                                $attributes[$attrTable][$rowSku][$attrId][$storeId] = '';
-                            } else {
-                                $attributes[$attrTable][$rowSku][$attrId][$storeId] .= ',';
-                            }
-                            $attributes[$attrTable][$rowSku][$attrId][$storeId] .= $attrValue;
-                        } else {
-                            $attributes[$attrTable][$rowSku][$attrId][$storeId] = $attrValue;
-                        }
+                        $attributes[$attrTable][$rowSku][$attrId][$storeId] = $attrValue;
                     }
                     // restore 'backend_model' to avoid 'default' setting
                     $attribute->setBackendModel($backModel);
@@ -2309,5 +2266,17 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
     public function getParam($name)
     {
         return isset($this->_parameters[$name]) ? $this->_parameters[$name] : null;
+    }
+
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    public function retrieveProductTypeByName($name)
+    {
+        if (isset($this->_productTypeModels[$name])) {
+            return $this->_productTypeModels[$name];
+        }
+        return null;
     }
 }
