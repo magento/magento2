@@ -42,7 +42,6 @@ class Validator extends AbstractImportValidator implements RowValidatorInterface
         $this->string = $string;
     }
 
-
     /**
      * @param mixed $attrCode
      * @param string $type
@@ -61,6 +60,7 @@ class Validator extends AbstractImportValidator implements RowValidatorInterface
         }
         return $valid;
     }
+
     /**
      * @param mixed $attrCode
      * @param string $type
@@ -87,6 +87,7 @@ class Validator extends AbstractImportValidator implements RowValidatorInterface
         }
         return $valid;
     }
+
     /**
      * @param string $attrCode
      * @param array $attrParams
@@ -174,6 +175,7 @@ class Validator extends AbstractImportValidator implements RowValidatorInterface
         }
         return (bool)$valid;
     }
+
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
