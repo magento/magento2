@@ -527,31 +527,6 @@ define([
                 expect(obj.listVisible()).toEqual(true);
             });
         });
-        describe('"hasValue" method', function () {
-            it('Check for defined ', function () {
-                expect(obj.hasOwnProperty('hasValue')).toBeDefined();
-            });
-            it('Check answer type', function () {
-                var type = typeof obj.hasValue;
-
-                expect(type).toEqual('function');
-            });
-            it('Check returned value if value is false', function () {
-                obj.value(false);
-
-                expect(obj.hasValue()).toEqual([]);
-            });
-            it('Check returned value if value has options', function () {
-                obj.value(['magento', 'magento2']);
-
-                expect(obj.hasValue()).toEqual(['magento', 'magento2']);
-            });
-            it('Check returned value type if method called without arguments', function () {
-                var type = typeof obj.hasValue();
-
-                expect(type).toEqual('object');
-            });
-        });
         describe('"getSelected" method', function () {
             it('Check for defined ', function () {
                 expect(obj.hasOwnProperty('getSelected')).toBeDefined();
