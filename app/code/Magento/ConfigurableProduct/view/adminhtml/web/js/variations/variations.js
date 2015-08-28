@@ -33,14 +33,11 @@ define([
         },
         selectProduct: function (rowIndex) {
             var productToEdit = this.productMatrix.splice(this.rowIndexToEdit, 1)[0],
-                newProduct = this.associatedProductsProvider().data.items[rowIndex],
-                hrefArray;
+                newProduct = this.associatedProductsProvider().data.items[rowIndex];
 
             newProduct = _.extend(productToEdit, newProduct);
             newProduct.productId = productToEdit.entity_id;
-            hrefArray = newProduct.productUrl.split('/');
-            hrefArray[hrefArray.length - 2] = newProduct.entity_id;
-            newProduct.productUrl = hrefArray.join('/');
+            newProduct.productUrl.replace(/\/\d+\/?$/, '/' + newProduct.entity_id + '/');
             newProduct.editable = false;
             this.productMatrix.splice(this.rowIndexToEdit, 0, newProduct);
             $('#associated-products-container').trigger('closeModal');
