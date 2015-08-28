@@ -23,6 +23,10 @@
 
 & when (@media-common = true) {
 
+    .page-title-wrapper {
+        &:extend(.abs-visually-hidden all);
+    }
+
     .checkout-container {
         &:extend(.abs-add-clearfix all);
         .css(margin, 0 0 @checkout-wrapper__margin);

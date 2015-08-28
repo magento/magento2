@@ -15,7 +15,7 @@
                             <argument translate="true" name="text" xsi:type="string">Summary</argument>
                             <argument name="tag" xsi:type="string">strong</argument>
                             <argument name="attributes" xsi:type="array">
-                                <item name="title" translate="true" xsi:type="string">Summary</item>
+                                <!--<item name="title" translate="true" xsi:type="string">Summary</item>-->
                             </argument>
                             <argument name="css_class" xsi:type="string">summary title</argument>
                         </arguments>
