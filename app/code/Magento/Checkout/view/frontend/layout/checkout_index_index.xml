@@ -420,6 +420,6 @@
                 </arguments>
             </block>
         </referenceContainer>
-        <remove name="page.messages" />
+        <referenceContainer name="page.messages" remove="true"/>
     </body>
 </page>
