@@ -31,14 +31,20 @@ define([
             }
             this.initProductAttributesMap();
         },
+        /**
+         * Select different product in configurations section
+         * @param rowIndex
+         */
         selectProduct: function (rowIndex) {
             var productToEdit = this.productMatrix.splice(this.rowIndexToEdit, 1)[0],
                 newProduct = this.associatedProductsProvider().data.items[rowIndex];
 
             newProduct = _.extend(productToEdit, newProduct);
             newProduct.productId = productToEdit.entity_id;
-            newProduct.productUrl.replace(/\/\d+\/?$/, '/' + newProduct.entity_id + '/');
+            newProduct.productUrl = this.buildProductUrl(newProduct.entity_id);
             newProduct.editable = false;
+            newProduct.images = {preview: newProduct.thumbnail_src};
+            this.productAttributesMap[this.getVariationKey(newProduct.options)] = newProduct.productId;
             this.productMatrix.splice(this.rowIndexToEdit, 0, newProduct);
             $('#associated-products-container').trigger('closeModal');
         },
@@ -54,8 +60,8 @@ define([
             return 'variations-matrix-' + key + '-' + field;
         },
         getVariationRowName: function(variation, field) {
-            if (variation.product_id) {
-                return 'configurations[' + variation.product_id + '][' + field.split('/').join('][') + ']';
+            if (variation.productId) {
+                return 'configurations[' + variation.productId + '][' + field.split('/').join('][') + ']';
             } else {
                 var key = variation.variationKey;
                 return 'variations-matrix[' + key + '][' + field.split('/').join('][') + ']';
@@ -93,16 +99,19 @@ define([
                     return _.extend(memo, attribute);
                 }, {});
                 this.productMatrix.push(_.extend(variation, {
-                    productId: variation.product_id || null,
+                    productId: variation.productId || null,
                     name: variation.name || variation.sku,
                     weight: variation.weight || this.getProductValue('weight'),
                     attribute: JSON.stringify(attributes),
                     variationKey: _.values(attributes).join('-'),
-                    editable: variation.editable === undefined ? !variation.product_id : variation.editable,
-                    productUrl: this.productUrl.replace('%id%', variation.product_id),
+                    editable: variation.editable === undefined ? !variation.productId : variation.editable,
+                    productUrl: this.buildProductUrl(variation.productId),
                     status: variation.status === undefined ? 1 : parseInt(variation.status)
                 }));
             }, this);
+        },
+        buildProductUrl: function (productId) {
+            return this.productUrl.replace('%id%', productId);
         },
         removeProduct: function (rowIndex) {
             this.productMatrix.splice(rowIndex, 1);
@@ -156,7 +165,7 @@ define([
             if (null === this.productAttributesMap) {
                 this.productAttributesMap = {};
                 _.each(this.variations, function(product) {
-                    this.productAttributesMap[this.getVariationKey(product.options)] = product.product_id;
+                    this.productAttributesMap[this.getVariationKey(product.options)] = product.productId;
                 }.bind(this));
             }
         },

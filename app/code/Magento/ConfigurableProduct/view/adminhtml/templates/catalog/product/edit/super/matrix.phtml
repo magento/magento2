@@ -50,7 +50,7 @@ if ($variations) {
             }
 
             $productMatrix[] = [
-                'product_id' => $product->getId(),
+                'productId' => $product->getId(),
                 'images' => [
                     'preview' => $this->helper('Magento\Catalog\Helper\Image')
                         ->init($product, 'product_thumbnail_image')
