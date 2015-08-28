@@ -119,7 +119,7 @@ define([
             return this;
         },
         closeList: function (rowIndex) {
-            if (this.opened() === rowIndex) {
+            if (this.opened() === rowIndex()) {
                 this.opened(false);
             }
 
