@@ -34,7 +34,7 @@ class Options implements JsonSerializable
     /**
      * @var UrlInterface
      */
-    protected  $urlBuilder;
+    protected $urlBuilder;
 
     /**
      * Base URL for subactions
@@ -109,6 +109,11 @@ class Options implements JsonSerializable
         return $this->options;
     }
 
+    /**
+     * Prepare addition data for subactions
+     *
+     * @return void
+     */
     protected function prepareData()
     {
         foreach ($this->data as $key => $value) {
