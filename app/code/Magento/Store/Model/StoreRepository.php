@@ -72,7 +72,7 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
     {
         $store = $this->get($code);
 
-        if (!$store->getIsActive()) {
+        if (!$store->isActive()) {
             throw new StoreIsInactiveException();
         }
         return $store;
@@ -103,7 +103,7 @@ class StoreRepository implements \Magento\Store\Api\StoreRepositoryInterface
     {
         $store = $this->getById($id);
 
-        if (!$store->getIsActive()) {
+        if (!$store->isActive()) {
             throw new StoreIsInactiveException();
         }
         return $store;

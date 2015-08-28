@@ -6,8 +6,22 @@
 */
 -->
 <view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Config/etc/view.xsd">
-    <vars module="Magento_Catalog">
-        <var name="swatch_image:type">swatch_image</var>
-        <var name="swatch_thumb:type">swatch_image</var>
-    </vars>
+    <images module="Magento_Catalog">
+        <image id="swatch_image" type="swatch_image">
+            <width>30</width>
+            <height>20</height>
+        </image>
+        <image id="swatch_thumb" type="swatch_thumb">
+            <width>110</width>
+            <height>90</height>
+        </image>
+        <image id="swatch_image_base" type="swatch_image">
+            <width>30</width>
+            <height>20</height>
+        </image>
+        <image id="swatch_thumb_base" type="swatch_thumb">
+            <width>110</width>
+            <height>90</height>
+        </image>
+    </images>
 </view>

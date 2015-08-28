@@ -8,7 +8,9 @@
 
 namespace Magento\Downloadable\Block\Sales\Order\Item\Renderer;
 
+use Magento\Downloadable\Model\Link;
 use Magento\Downloadable\Model\Link\Purchased;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Downloadable order item render block
@@ -57,8 +59,8 @@ class Downloadable extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRende
     public function getLinks()
     {
         $this->_purchasedLinks = $this->_purchasedFactory->create()->load(
-            $this->getOrderItem()->getOrder()->getId(),
-            'order_id'
+            $this->getOrderItem()->getId(),
+            'order_item_id'
         );
         $purchasedItems = $this->_itemsFactory->create()->addFieldToFilter(
             'order_item_id',
@@ -74,9 +76,9 @@ class Downloadable extends \Magento\Sales\Block\Order\Item\Renderer\DefaultRende
      */
     public function getLinksTitle()
     {
-        if ($this->_purchasedLinks->getLinkSectionTitle()) {
-            return $this->_purchasedLinks->getLinkSectionTitle();
-        }
-        return $this->_scopeConfig->getValue(\Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->getLinks()->getLinkSectionTitle() ?: $this->_scopeConfig->getValue(
+            Link::XML_PATH_LINKS_TITLE,
+            ScopeInterface::SCOPE_STORE
+        );
     }
 }

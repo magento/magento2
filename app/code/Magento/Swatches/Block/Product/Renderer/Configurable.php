@@ -283,18 +283,9 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
 
         $variationMediaArray = [];
         if ($variationProduct) {
-            $swatchConfig = $this->swatchMediaHelper->getImageConfig();
             $variationMediaArray = [
-                'value' => $this->getSwatchProductImage(
-                    $variationProduct,
-                    $swatchConfig['swatch_image:width'],
-                    $swatchConfig['swatch_image:height']
-                ),
-                'thumb' => $this->getSwatchProductImage(
-                    $variationProduct,
-                    $swatchConfig['swatch_thumb:width'],
-                    $swatchConfig['swatch_thumb:height']
-                ),
+                'value' => $this->getSwatchProductImage($variationProduct, 'swatch_image'),
+                'thumb' => $this->getSwatchProductImage($variationProduct, 'swatch_thumb'),
             ];
         }
 
@@ -303,25 +294,24 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
 
     /**
      * @param Product $childProduct
-     * @param integer $width
-     * @param integer $height
+     * @param string $imageType
      * @return string
      */
-    protected function getSwatchProductImage(Product $childProduct, $width, $height)
+    protected function getSwatchProductImage(Product $childProduct, $imageType)
     {
         if (
             $childProduct->getData('swatch_image') !== null
             && $childProduct->getData('swatch_image') != self::EMPTY_IMAGE_VALUE
         ) {
-            $swatchContainer = 'swatch_image';
+            $swatchImageId = $imageType == 'swatch_image' ? 'swatch_image' : 'swatch_thumb';
         } elseif (
             $childProduct->getData('image') !== null
             && $childProduct->getData('image') != self::EMPTY_IMAGE_VALUE
         ) {
-            $swatchContainer = 'image';
+            $swatchImageId = $imageType == 'swatch_image' ? 'swatch_image_base' : 'swatch_thumb_base';
         }
-        if (isset($swatchContainer)) {
-            return (string)$this->_imageHelper->init($childProduct, $swatchContainer)->resize($width, $height);
+        if (isset($swatchImageId)) {
+            return $this->_imageHelper->init($childProduct, $swatchImageId)->getUrl();
         }
     }
 

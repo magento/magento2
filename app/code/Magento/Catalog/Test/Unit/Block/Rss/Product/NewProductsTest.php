@@ -139,9 +139,9 @@ class NewProductsTest extends \PHPUnit_Framework_TestCase
         $item = $this->getItemMock();
         $this->newProducts->expects($this->once())->method('getProductsCollection')
             ->will($this->returnValue([$item]));
-        $this->imageHelper->expects($this->once())->method('init')->with($item, 'thumbnail')
+        $this->imageHelper->expects($this->once())->method('init')->with($item, 'rss_thumbnail')
             ->will($this->returnSelf());
-        $this->imageHelper->expects($this->once())->method('resize')->with(75, 75)
+        $this->imageHelper->expects($this->once())->method('getUrl')
             ->will($this->returnValue('image_link'));
         $data = [
             'title' => 'New Products from Store 1',

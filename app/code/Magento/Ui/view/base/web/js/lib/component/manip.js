@@ -62,7 +62,8 @@ define([
          * @returns {Component} Chainable.
          */
         insertChild: function (elems, position) {
-            var container = this._elems,
+            var container   = this._elems,
+                insert      = this._insert.bind(this),
                 update;
 
             if (!Array.isArray(elems)) {
@@ -77,11 +78,11 @@ define([
                 if (item === true) {
                     update = true;
                 } else if (_.isString(item)) {
-                    registry.get(item, this._insert);
+                    registry.get(item, insert);
                 } else if (utils.isObject(item)) {
-                    this._insert(item);
+                    insert(item);
                 }
-            }, this);
+            });
 
             if (update) {
                 this._update();

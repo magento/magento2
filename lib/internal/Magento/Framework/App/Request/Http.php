@@ -1,7 +1,5 @@
 <?php
 /**
- * Http request
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -9,12 +7,17 @@ namespace Magento\Framework\App\Request;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\RequestSafetyInterface;
 use Magento\Framework\App\Route\ConfigInterface\Proxy as ConfigInterface;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
+use Magento\Framework\Stdlib\StringUtils;
 
-class Http extends Request implements RequestInterface
+/**
+ * Http request
+ */
+class Http extends Request implements RequestInterface, RequestSafetyInterface
 {
     /**#@+
      * HTTP Ports
@@ -78,7 +81,18 @@ class Http extends Request implements RequestInterface
     protected $objectManager;
 
     /**
+     * @var bool|null
+     */
+    protected $isSafeMethod = null;
+
+    /**
+     * @var array
+     */
+    protected $safeRequestTypes = ['GET', 'HEAD', 'TRACE', 'OPTIONS'];
+
+    /**
      * @param CookieReaderInterface $cookieReader
+     * @param StringUtils $converter
      * @param ConfigInterface $routeConfig
      * @param PathInfoProcessorInterface $pathInfoProcessor
      * @param ObjectManagerInterface  $objectManager
@@ -87,13 +101,14 @@ class Http extends Request implements RequestInterface
      */
     public function __construct(
         CookieReaderInterface $cookieReader,
+        StringUtils $converter,
         ConfigInterface $routeConfig,
         PathInfoProcessorInterface $pathInfoProcessor,
         ObjectManagerInterface $objectManager,
         $uri = null,
         $directFrontNames = []
     ) {
-        parent::__construct($cookieReader, $uri);
+        parent::__construct($cookieReader, $converter, $uri);
         $this->routeConfig = $routeConfig;
         $this->pathInfoProcessor = $pathInfoProcessor;
         $this->objectManager = $objectManager;
@@ -302,6 +317,7 @@ class Http extends Request implements RequestInterface
     public function getDistroBaseUrl()
     {
         $headerHttpHost = $this->getServer('HTTP_HOST');
+        $headerHttpHost = $this->converter->cleanString($headerHttpHost);
         $headerServerPort = $this->getServer('SERVER_PORT');
         $headerScriptName = $this->getServer('SCRIPT_NAME');
         $headerHttps = $this->getServer('HTTPS');
@@ -409,6 +425,21 @@ class Http extends Request implements RequestInterface
         );
 
         return $this->initialRequestSecure($offLoaderHeader);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isSafeMethod()
+    {
+        if ($this->isSafeMethod === null) {
+            if (isset($_SERVER['REQUEST_METHOD']) && (in_array($_SERVER['REQUEST_METHOD'], $this->safeRequestTypes))) {
+                $this->isSafeMethod = true;
+            } else {
+                $this->isSafeMethod = false;
+            }
+        }
+        return $this->isSafeMethod;
     }
 
     /**

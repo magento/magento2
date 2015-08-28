@@ -9,7 +9,7 @@
     <type name="Magento\Catalog\Model\Resource\Eav\Attribute">
         <plugin name="save_swatches_option_params" type="Magento\Swatches\Model\Plugin\EavAttribute"/>
     </type>
-    <type name="Magento\Catalog\Block\Product\Image">
+    <type name="Magento\Catalog\Block\Product\AbstractProduct">
         <plugin name="add_product_object_to_image_data_array" type="Magento\Swatches\Model\Plugin\ProductImage" />
     </type>
     <type name="Magento\Catalog\Model\Product">

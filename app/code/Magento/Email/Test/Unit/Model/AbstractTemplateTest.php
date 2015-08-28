@@ -299,7 +299,7 @@ class AbstractTemplateTest extends \PHPUnit_Framework_TestCase
             ->method('getDesignParams')
             ->will($this->returnValue($designParams));
         $this->assetRepo->method('getUrlWithParams')
-            ->with('Magento_Email::logo_email.png', $designParams)
+            ->with(\Magento\Email\Model\AbstractTemplate::DEFAULT_LOGO_FILE_ID, $designParams)
             ->will($this->returnValue($value));
         $this->assertEquals($value, $model->getDefaultEmailLogo());
     }

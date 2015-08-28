@@ -115,7 +115,6 @@
         "magento/module-indexer": "self.version",
         "magento/module-integration": "self.version",
         "magento/module-layered-navigation": "self.version",
-        "magento/module-log": "self.version",
         "magento/module-media-storage": "self.version",
         "magento/module-msrp": "self.version",
         "magento/module-multishipping": "self.version",

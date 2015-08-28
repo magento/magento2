@@ -201,10 +201,10 @@
 
 .abs-dropdown-simple {
     .lib-dropdown(
-        @_dropdown-list-item-padding: 5px 5px 5px 23px,
-        @_dropdown-list-min-width: 200px,
-        @_icon-font-margin: 0 0 0 5px,
-        @_icon-font-vertical-align: middle
+    @_dropdown-list-item-padding: 5px 5px 5px 23px,
+    @_dropdown-list-min-width: 200px,
+    @_icon-font-margin: 0 0 0 5px,
+    @_icon-font-vertical-align: middle
     );
 }
 
@@ -231,13 +231,13 @@
 
 .abs-remove-button-for-blocks {
     .lib-icon-font(
-        @icon-remove,
-        @_icon-font-size: 26px,
-        @_icon-font-line-height: 15px,
-        @_icon-font-text-hide: true,
-        @_icon-font-color: @color-gray19,
-        @_icon-font-color-hover: @color-gray19,
-        @_icon-font-color-active: @color-gray19
+    @icon-remove,
+    @_icon-font-size: 26px,
+    @_icon-font-line-height: 15px,
+    @_icon-font-text-hide: true,
+    @_icon-font-color: @color-gray19,
+    @_icon-font-color-hover: @color-gray19,
+    @_icon-font-color-active: @color-gray19
     );
 }
 
@@ -761,7 +761,7 @@
 
 .abs-colon {
     &:after {
-        content: ": ";
+        content: ': ';
     }
 }
 
@@ -1187,5 +1187,52 @@
     }
     .table-caption {
         &:extend(.abs-no-display all);
+    }
+}
+
+//
+//  Shopping cart and payment disaount codes block
+//  ---------------------------------------------
+
+.abs-discount-block {
+    > .title {
+        border-top: @border-width__base solid @border-color__base;
+        cursor: pointer;
+        font-weight: @font-weight__semibold;
+        .lib-icon-font(
+        @_icon-font-content: @icon-down,
+        @_icon-font-size: 30px,
+        @_icon-font-position: after,
+        @_icon-font-display: block
+        );
+        margin-bottom: 0;
+        overflow: hidden;
+        padding: 7px @indent__base 7px @indent__xs;
+        position: relative;
+        &:after {
+            position: absolute;
+            right: 0;
+            top: -5px;
+        }
+        strong {
+            .column.main & {
+                .lib-font-size(18);
+                font-weight: @font-weight__regular;
+            }
+        }
+    }
+    > .content {
+        display: none;
+    }
+    &.active {
+        > .title {
+            .lib-icon-font-symbol(
+            @_icon-font-content: @icon-prev,
+            @_icon-font-position: after
+            );
+        }
+        > .content {
+            display: block;
+        }
     }
 }

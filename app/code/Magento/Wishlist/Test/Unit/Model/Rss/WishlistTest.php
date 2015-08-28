@@ -250,9 +250,10 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
         $this->imageHelperMock->expects($this->once())
             ->method('init')
+            ->with($productMock, 'rss_thumbnail')
             ->will($this->returnSelf());
         $this->imageHelperMock->expects($this->once())
-            ->method('resize')
+            ->method('getUrl')
             ->will($this->returnValue($imgThumbSrc));
         $priceRendererMock = $this->getMock('Magento\Framework\Pricing\Render', ['render'], [], '', false);
 
