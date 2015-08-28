@@ -1,0 +1,20 @@
+<?php echo $block->getSomeData();?>
+<?php echo $object->getSomeMethod($block->getHtmlId());?>
+<?php echo $block->getHtmlId() . "" . "bla";?>
+<?php echo $block->escapeUrl($var) . $var . 'bla';?>
+<?php echo $var;?>
+<?php echo "bla";?>
+<?php echo __("bla");?>
+
+<?php echo $object->methodHtml() .
+    $var .
+    $block->getSomeData();
+?>
+<?php echo '\'' . $code . '\',\'' . $block->escapeQuote($data['parentSymbol']) . '\''; ?>
+<?php echo "\"" . $code . "\",\"" . $block->escapeQuote($data['parentSymbol']) . "\""; ?>
+
+<?php
+/* This part is commented to remove all <col> tags from the code. */
+/* foreach ($block->getColumns() as $_column): ?>
+    <col <?php echo $_column->getProperty() ?> />
+<?php endforeach; */ ?>
