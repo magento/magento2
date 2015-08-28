@@ -5,6 +5,9 @@
  */
 namespace Magento\CheckoutAgreements\Test\Unit\Model\Checkout\Plugin;
 
+use Magento\CheckoutAgreements\Model\AgreementsProvider;
+use Magento\Store\Model\ScopeInterface;
+
 class ValidationTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -37,6 +40,16 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
      */
     protected $extensionAttributesMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $repositoryMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $scopeConfigMock;
+
     protected function setUp()
     {
         $this->agreementsValidatorMock = $this->getMock(
@@ -56,8 +69,13 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->repositoryMock = $this->getMock('Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface');
+
         $this->model = new \Magento\CheckoutAgreements\Model\Checkout\Plugin\Validation(
-            $this->agreementsValidatorMock
+            $this->agreementsValidatorMock,
+            $this->scopeConfigMock,
+            $this->repositoryMock
         );
     }
 
@@ -65,6 +83,12 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
     {
         $cartId = 100;
         $agreements = [1, 2, 3];
+        $this->scopeConfigMock
+            ->expects($this->once())
+            ->method('isSetFlag')
+            ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
+            ->willReturn(true);
+        $this->repositoryMock->expects($this->once())->method('getList')->willReturn([1]);
         $this->extensionAttributesMock->expects($this->once())->method('getAgreementIds')->willReturn($agreements);
         $this->agreementsValidatorMock->expects($this->once())->method('isValid')->with($agreements)->willReturn(true);
         $this->paymentMock->expects($this->once())
@@ -81,6 +105,12 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
     {
         $cartId = 100;
         $agreements = [1, 2, 3];
+        $this->scopeConfigMock
+            ->expects($this->once())
+            ->method('isSetFlag')
+            ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
+            ->willReturn(true);
+        $this->repositoryMock->expects($this->once())->method('getList')->willReturn([1]);
         $this->extensionAttributesMock->expects($this->once())->method('getAgreementIds')->willReturn($agreements);
         $this->agreementsValidatorMock->expects($this->once())->method('isValid')->with($agreements)->willReturn(false);
         $this->paymentMock->expects($this->once())
@@ -93,6 +123,12 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
     {
         $cartId = 100;
         $agreements = [1, 2, 3];
+        $this->scopeConfigMock
+            ->expects($this->once())
+            ->method('isSetFlag')
+            ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
+            ->willReturn(true);
+        $this->repositoryMock->expects($this->once())->method('getList')->willReturn([1]);
         $this->extensionAttributesMock->expects($this->once())->method('getAgreementIds')->willReturn($agreements);
         $this->agreementsValidatorMock->expects($this->once())->method('isValid')->with($agreements)->willReturn(true);
         $this->paymentMock->expects($this->once())
