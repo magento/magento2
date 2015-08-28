@@ -73,11 +73,16 @@
   .data-grid-th,
   .data-grid-th._sortable,
   .data-grid-th._draggable {
-    cursor: col-resize;
+    cursor: col-resize !important;
   }
   * {
-      cursor: col-resize;
+      cursor: col-resize !important;
   }
+}
+
+.data-grid td._resizing {
+  border-left: 1px solid @color-blue-pure;
+  border-right: 1px solid @color-blue-pure;
 }
 
 ._relative {
