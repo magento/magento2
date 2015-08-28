@@ -25,14 +25,22 @@ define([
                 expect(model.getInitialValue()).toEqual(undefined);
             });
             it('check with default value', function () {
+                model.indexedOptions = {
+                    Select: {
+                        value: 'value'
+                    }
+                };
                 model.default = 'Select';
-                expect(model.getInitialValue()).toEqual(['Select']);
+                expect(model.getInitialValue()).toEqual(['value']);
             });
-        });
-        describe('hasChanged method', function () {
-            it('check with default value', function () {
-                model.default = 'Select';
-                expect(model.getInitialValue()).toEqual(['Select']);
+            it('check with value', function () {
+                model.indexedOptions = {
+                    Select: {
+                        value: 'value'
+                    }
+                };
+                model.value('Select');
+                expect(model.getInitialValue()).toEqual(['value']);
             });
         });
     });
