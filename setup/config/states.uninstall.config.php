@@ -59,7 +59,7 @@ return [
             'id'          => 'root.data-option',
             'url'         => 'data-option',
             'templateUrl' => "$base/data-option",
-            'title'       => "Data \n Option",
+            'title'       => "Remove or \n Keep Data",
             'controller'  => 'dataOptionController',
             'header'      => 'Step 3: Remove or Keep Data',
             'nav'         => true,

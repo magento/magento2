@@ -39,6 +39,12 @@ class CronScriptReadinessCheck
     const UPDATER_KEY_FILE_PERMISSIONS_VERIFIED = 'file_permissions_verified';
 
     /**
+     * Error message for dependant checks
+     */
+    const OTHER_CHECKS_WILL_FAIL_MSG =
+        '<br/>Other checks will fail as a result (PHP version, PHP settings, and PHP extensions)';
+
+    /**
      * @var Filesystem
      */
     private $filesystem;
@@ -98,8 +104,7 @@ class CronScriptReadinessCheck
         } catch (\Magento\Framework\Exception\FileSystemException $e) {
             $error = 'Cron Job has not been configured yet';
             if ($type == self::SETUP) {
-                $error .= '<br/>PHP Version, PHP Settings and PHP Extensions Check' .
-                    ' will fail because they depend on this check';
+                $error .= self::OTHER_CHECKS_WILL_FAIL_MSG;
             }
             return [
                 'success' => false,
@@ -117,8 +122,7 @@ class CronScriptReadinessCheck
         }
         $error = 'Cron Job has not been configured yet';
         if ($type == self::SETUP) {
-            $error .= '<br/>PHP Version, PHP Settings and PHP Extensions Check' .
-                ' will fail because they depend on this check';
+            $error .= self::OTHER_CHECKS_WILL_FAIL_MSG;
         }
         return [
             'success' => false,
