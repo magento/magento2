@@ -5,9 +5,13 @@
  */
 namespace Magento\Framework\Message\Test\Unit;
 
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Message\CollectionFactory;
+use Magento\Framework\Message\Factory;
 use Magento\Framework\Message\Manager;
 use Magento\Framework\Message\MessageInterface;
-use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\Message\Session;
+use Psr\Log\LoggerInterface;
 
 /**
  * \Magento\Framework\Message\Manager test case
@@ -35,66 +39,62 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
     protected $session;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $eventManager;
 
     /**
-     * @var \Magento\Framework\Message\Manager
+     * @var Manager
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MessageInterface |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $messageMock;
+
+    /**
+     * @var LoggerInterface | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $logger;
 
     public function setUp()
     {
         $this->messagesFactory = $this->getMockBuilder(
             'Magento\Framework\Message\CollectionFactory'
-        )->disableOriginalConstructor()->setMethods(
-            ['create']
-        )->getMock();
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->messageFactory = $this->getMockBuilder(
             'Magento\Framework\Message\Factory'
-        )->disableOriginalConstructor()->setMethods(
-            ['create']
-        )->getMock();
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->session = $this->getMockBuilder(
             'Magento\Framework\Message\Session'
-        )->disableOriginalConstructor()->setMethods(
-            ['getData', 'setData']
-        )->getMock();
-        $this->eventManager = $this->getMockBuilder(
-            'Magento\Framework\Event\Manager'
-        )->setMethods(
-            ['dispatch']
-        )->disableOriginalConstructor()->getMock();
+        )
+            ->disableOriginalConstructor()
+            ->setMethods(
+                ['getData', 'setData']
+            )
+            ->getMock();
+        $this->eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface');
+        $this->logger = $this->getMock('Psr\Log\LoggerInterface');
 
         $this->messageMock = $this->getMock('Magento\Framework\Message\MessageInterface');
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $this->objectManager->getObject(
-            'Magento\Framework\Message\Manager',
-            [
-                'messagesFactory' => $this->messagesFactory,
-                'messageFactory' => $this->messageFactory,
-                'session' => $this->session,
-                'eventManager' => $this->eventManager,
-            ]
+        $this->model = new Manager(
+            $this->session,
+            $this->messageFactory,
+            $this->messagesFactory,
+            $this->eventManager,
+            $this->logger
         );
     }
 
     public function testGetDefaultGroup()
     {
         $this->assertEquals(Manager::DEFAULT_GROUP, $this->model->getDefaultGroup());
-
-        $customDefaultGroup = 'some_group';
-        $customManager = $this->objectManager->getObject(
-            'Magento\Framework\Message\Manager',
-            ['defaultGroup' => $customDefaultGroup]
-        );
-        $this->assertEquals($customDefaultGroup, $customManager->getDefaultGroup());
     }
 
     public function testGetMessages()
