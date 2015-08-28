@@ -5,9 +5,6 @@
  */
 namespace Magento\Ui\Component;
 
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Magento\Framework\Data\OptionSourceInterface;
-
 /**
  * Class MassAction
  */
@@ -16,36 +13,21 @@ class MassAction extends AbstractComponent
     const NAME = 'massaction';
 
     /**
-     * Default component data
-     *
-     * @var array
+     * @inheritDoc
      */
-    protected $_data = [
-        'config' => [
-            'actions' => []
-        ]
-    ];
+    public function prepare()
+    {
+        $config = $this->getConfiguration();
 
-    /**
-     * @var OptionSourceInterface
-     */
-    protected $optionsProvider;
+        foreach ($this->getChildComponents() as $actionComponent) {
+            $config['actions'][] = $actionComponent->getConfiguration();
+        };
 
-    /**
-     * @param ContextInterface $context
-     * @param array $components
-     * @param array $data
-     * @param OptionSourceInterface|null $optionsProvider
-     */
-    public function __construct(
-        ContextInterface $context,
-        array $components = [],
-        array $data = [],
-        OptionSourceInterface $optionsProvider = null
-    ) {
-        parent::__construct($context, $components, $data);
-        $this->optionsProvider = $optionsProvider;
+        $this->setData('config', array_replace_recursive($config, $this->getConfiguration()));
+
+        parent::prepare();
     }
+
 
     /**
      * Get component name
@@ -55,58 +37,5 @@ class MassAction extends AbstractComponent
     public function getComponentName()
     {
         return static::NAME;
-    }
-
-    /**
-     * Register component
-     *
-     * @return void
-     */
-    public function prepare()
-    {
-        $actionOptions = ($this->optionsProvider) ? $this->optionsProvider->toOptionArray() : [];
-        $config = $this->getData('config');
-        if (isset($config['actions'])) {
-            if (!empty($actionOptions)) {
-                $this->processDynamicActions($config['actions'], $actionOptions);
-            }
-            $config['actions'] = array_values($config['actions']);
-            array_walk_recursive(
-                $config['actions'],
-                function (&$item, $key, $context) {
-                    /** @var ContextInterface $context */
-                    if ($key === 'url') {
-                        $item = $context->getUrl($item);
-                    }
-                },
-                $this->getContext()
-            );
-            $this->setData('config', $config);
-        }
-
-        parent::prepare();
-    }
-
-    /**
-     * Process dynamic action
-     *
-     * @param array $actions
-     * @param array $actionOptions
-     * @return void
-     */
-    protected function processDynamicActions(&$actions, $actionOptions)
-    {
-        foreach ($actions as $key => &$data) {
-            $additionalActions = isset($actionOptions[$key]) ? $actionOptions[$key] : [];
-            $removeParent = false;
-            foreach ($additionalActions as $additionalAction) {
-                $additionalAction['url'] = $this->getContext()->getUrl($data['url'], $additionalAction['url']);
-                $removeParent = true;
-                $data['actions'][] = $additionalAction;
-            }
-            if ($removeParent) {
-                unset($data['url']);
-            }
-        }
     }
 }
