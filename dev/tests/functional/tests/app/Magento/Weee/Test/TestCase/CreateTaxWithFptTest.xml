@@ -23,7 +23,7 @@
             <data name="prices/cart_item_subtotal" xsi:type="string">100.00</data>
             <data name="prices/cart_item_subtotal_fpt" xsi:type="string">10.00</data>
             <data name="prices/cart_item_subtotal_fpt_total" xsi:type="string">110.00</data>
-            <data name="prices/grand_total" xsi:type="string">118.25</data>
+            <data name="prices/grand_total" xsi:type="string">123.66</data>
             <data name="prices/total_fpt" xsi:type="string">10.00</data>
             <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied" />
         </variation>
@@ -43,7 +43,9 @@
             <data name="prices/cart_item_subtotal" xsi:type="string">108.25</data>
             <data name="prices/cart_item_subtotal_fpt" xsi:type="string">10.00</data>
             <data name="prices/cart_item_subtotal_fpt_total" xsi:type="string">118.25</data>
-            <data name="prices/grand_total" xsi:type="string">110.00</data>
+            <data name="prices/grand_total" xsi:type="string">123.66</data>
+            <data name="prices/grand_total_excl_tax" xsi:type="string">115.00</data>
+            <data name="prices/grand_total_incl_tax" xsi:type="string">123.66</data>
             <data name="prices/total_fpt" xsi:type="string">10.00</data>
             <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied" />
         </variation>
@@ -63,7 +65,9 @@
             <data name="prices/cart_item_subtotal" xsi:type="string">108.25</data>
             <data name="prices/cart_item_subtotal_fpt" xsi:type="string">10.00</data>
             <data name="prices/cart_item_subtotal_fpt_total" xsi:type="string">118.25</data>
-            <data name="prices/grand_total" xsi:type="string">110.00</data>
+            <data name="prices/grand_total" xsi:type="string">123.66</data>
+            <data name="prices/grand_total_excl_tax" xsi:type="string">115.00</data>
+            <data name="prices/grand_total_incl_tax" xsi:type="string">123.66</data>
             <data name="prices/total_fpt" xsi:type="string">10.00</data>
             <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied" />
         </variation>
@@ -83,7 +87,7 @@
             <data name="prices/cart_item_subtotal" xsi:type="string">100.00</data>
             <data name="prices/cart_item_subtotal_fpt" xsi:type="string">10.00</data>
             <data name="prices/cart_item_subtotal_fpt_total" xsi:type="string">110.00</data>
-            <data name="prices/grand_total" xsi:type="string">118.25</data>
+            <data name="prices/grand_total" xsi:type="string">123.66</data>
             <data name="prices/total_fpt" xsi:type="string">10.00</data>
             <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied" />
         </variation>
@@ -103,7 +107,7 @@
             <data name="prices/cart_item_subtotal" xsi:type="string">100.00</data>
             <data name="prices/cart_item_subtotal_fpt" xsi:type="string">10.00</data>
             <data name="prices/cart_item_subtotal_fpt_total" xsi:type="string">110.00</data>
-            <data name="prices/grand_total" xsi:type="string">119.08</data>
+            <data name="prices/grand_total" xsi:type="string">124.49</data>
             <data name="prices/total_fpt" xsi:type="string">10.00</data>
             <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied" />
         </variation>
@@ -119,7 +123,9 @@
             <data name="prices/cart_item_fpt" xsi:type="string">10.83</data>
             <data name="prices/cart_item_subtotal" xsi:type="string">119.08</data>
             <data name="prices/cart_item_subtotal_fpt" xsi:type="string">10.83</data>
-            <data name="prices/grand_total" xsi:type="string">110.00</data>
+            <data name="prices/grand_total" xsi:type="string">124.49</data>
+            <data name="prices/grand_total_excl_tax" xsi:type="string">115.00</data>
+            <data name="prices/grand_total_incl_tax" xsi:type="string">124.49</data>
             <data name="prices/total_fpt" xsi:type="string">10.00</data>
             <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied" />
         </variation>
@@ -135,7 +141,9 @@
             <data name="prices/cart_item_fpt" xsi:type="string">10.83</data>
             <data name="prices/cart_item_subtotal" xsi:type="string">119.08</data>
             <data name="prices/cart_item_subtotal_fpt" xsi:type="string">10.83</data>
-            <data name="prices/grand_total" xsi:type="string">110.00</data>
+            <data name="prices/grand_total" xsi:type="string">124.49</data>
+            <data name="prices/grand_total_excl_tax" xsi:type="string">115.00</data>
+            <data name="prices/grand_total_incl_tax" xsi:type="string">124.49</data>
             <data name="prices/total_fpt" xsi:type="string">10.00</data>
             <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied" />
         </variation>
@@ -155,7 +163,7 @@
             <data name="prices/cart_item_subtotal" xsi:type="string">100.00</data>
             <data name="prices/cart_item_subtotal_fpt" xsi:type="string">10.00</data>
             <data name="prices/cart_item_subtotal_fpt_total" xsi:type="string">110.00</data>
-            <data name="prices/grand_total" xsi:type="string">119.08</data>
+            <data name="prices/grand_total" xsi:type="string">124.49</data>
             <data name="prices/total_fpt" xsi:type="string">10.00</data>
             <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied" />
         </variation>
@@ -175,7 +183,7 @@
             <data name="prices/cart_item_subtotal" xsi:type="string">92.38</data>
             <data name="prices/cart_item_subtotal_fpt" xsi:type="string">9.24</data>
             <data name="prices/cart_item_subtotal_fpt_total" xsi:type="string">101.62</data>
-            <data name="prices/grand_total" xsi:type="string">110.00</data>
+            <data name="prices/grand_total" xsi:type="string">115.00</data>
             <data name="prices/total_fpt" xsi:type="string">10.00</data>
             <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied" />
         </variation>
@@ -191,7 +199,7 @@
             <data name="prices/cart_item_fpt" xsi:type="string">9.24</data>
             <data name="prices/cart_item_subtotal" xsi:type="string">101.62</data>
             <data name="prices/cart_item_subtotal_fpt" xsi:type="string">9.24</data>
-            <data name="prices/grand_total" xsi:type="string">110.00</data>
+            <data name="prices/grand_total" xsi:type="string">115.00</data>
             <data name="prices/total_fpt" xsi:type="string">10.00</data>
             <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied" />
         </variation>
@@ -211,7 +219,7 @@
             <data name="prices/cart_item_subtotal" xsi:type="string">92.38</data>
             <data name="prices/cart_item_subtotal_fpt" xsi:type="string">9.24</data>
             <data name="prices/cart_item_subtotal_fpt_total" xsi:type="string">101.62</data>
-            <data name="prices/grand_total" xsi:type="string">110.00</data>
+            <data name="prices/grand_total" xsi:type="string">115.00</data>
             <data name="prices/total_fpt" xsi:type="string">10.00</data>
             <constraint name="Magento\Weee\Test\Constraint\AssertFptApplied" />
         </variation>
