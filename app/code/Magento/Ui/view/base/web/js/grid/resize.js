@@ -4,49 +4,40 @@
  */
 
 define([
-    'jquery',
+    'Magento_Ui/js/lib/view/utils/async',
     'ko',
     'underscore',
     'mageUtils',
     'uiRegistry',
-    'mage/utils/dom-observer',
     'Magento_Ui/js/lib/ko/extender/bound-nodes',
     'uiComponent'
-], function ($, ko, _, utils, registry, domObserver, boundedNodes, Component) {
+], function ($, ko, _, utils, registry, boundedNodes, Component) {
     'use strict';
 
     return Component.extend({
         defaults: {
+            rootSelector: '${ $.columnsProvider }:.admin__data-grid-wrap',
+            tableSelector: '${ $.rootSelector } -> table.data-grid',
+            columnSelector: '${ $.tableSelector } thead tr th',
+            fieldSelector: '${ $.tableSelector } tbody tr td',
+
             imports: {
                 storageColumnsData: '${ $.storageConfig.path }.storageColumnsData'
             },
-            listens: {
-                '${ $.provider }:params.sorting.field': 'onSortChange'
-            },
-            modules: {
-                source: '${ $.provider }'
-            },
             storageColumnsData: {},
             columnsElements: {},
-            tableWidth: null,
-
+            showLines: 4,
+            resizableElementClass: 'shadow-div',
+            resizingColumnClass: '_resizing',
+            inResizeClass: '_in-resize',
+            visibleClass: '_resize-visible',
+            resizable: false,
             resizeConfig: {
-                nameSpacing: {
-                    cellsDataAttribute: 'data-cl-resize',
-                    cellsDataAttrPrefix: 'column-',
-                    divsResizableAttribute: 'data-cl-elem',
-                    divsResizableAttrName: 'shadow-div'
-                },
-                dataColumnName: 'data-cl-name',
-                showLines: 4,
                 minColumnWidth: 40,
-                resizable: false,
                 maxRowsHeight: [],
                 curResizeElem: {},
                 depResizeElem: {},
-                previousWidth: null,
-                columnsArray: [],
-                visibleClass: '_resize-visible'
+                previousWidth: null
             }
         },
 
@@ -56,39 +47,51 @@ define([
         initialize: function () {
             _.bindAll(
                 this,
-                'initRoot',
                 'initTable',
                 'initColumn',
                 'initTd',
                 'mousedownHandler',
                 'mousemoveHandler',
                 'mouseupHandler',
-                'click'
+                'stopEventPropagation',
+                'refreshLastColumn'
             );
 
             this._super();
             this.observe(['maxRowsHeight']);
             this.maxRowsHeight([]);
 
-            registry.get(this.columnsProvider, function (listing) {
-                boundedNodes.get(listing, this.initRoot);
-            }.bind(this));
+            $.async(this.tableSelector, this.initTable);
+            $.async(this.columnSelector, this.initColumn);
+            $.async(this.fieldSelector, this.initTd);
 
             return this;
         },
 
-        initRoot: function (root) {
-            if ($(root).is('.admin__data-grid-wrap')) {
-                domObserver.get('table', this.initTable, root);
-            }
-        },
-
         initTable: function (table) {
             this.table = table;
-            this.tableWidth = $(table).outerWidth();
-            $(table).on('mousedown', 'thead tr th .shadow-div', this.mousedownHandler);
-            domObserver.get('thead tr th', this.initColumn, table);
-            domObserver.get('tbody tr td', this.initTd, table);
+            $(table).on('mousedown', 'thead tr th .' + this.resizableElementClass, this.mousedownHandler);
+        },
+
+        initColumn: function (column) {
+            var model = ko.dataFor(column);
+
+            model.width = this.getDefaultWidth(column);
+
+            if (!this.hasColumn(model)) {
+                this.initResizableElement(column);
+                this.columnsElements[model.index] = column;
+                $(column).outerWidth(model.width);
+                this.setStopPropagationHandler(column);
+            }
+
+            this.refreshLastColumn(column);
+
+            model.on('visible', this.refreshLastColumn.bind(this, column));
+        },
+
+        initTd: function (td) {
+            this.refreshMaxRowHeight(td);
         },
 
         initResizableElement: function (column) {
@@ -105,53 +108,12 @@ define([
             return false;
         },
 
-        getDefaultWidth: function (column) {
-            var model = ko.dataFor(column);
+        setStopPropagationHandler: function (column) {
+            var events;
 
-            boundedNodes.get(model);
-
-            if (this.storageColumnsData[model.index]) {
-                return this.storageColumnsData[model.index];
-            }
-
-            if (model.resizeDefaultWidth) {
-                return parseInt(model.resizeDefaultWidth);
-            }
-
-            return 'auto';
-        },
-
-        initColumn: function (column) {
-            var model = ko.dataFor(column),
-                events;
-
-            model.width = this.getDefaultWidth(column);
-
-            if (!this.hasColumn(model)) {
-                this.initResizableElement(column);
-                this.columnsElements[model.index] = column;
-                $(column).outerWidth(model.width);
-
-                $(column).on('click', this.click);
-                events = $._data(column, 'events').click;
-                events.unshift(events.pop());
-            }
-            this.refreshLastColumn(column);
-            model.on('visible', this.refreshVisibility.bind(this, model, column));
-        },
-
-        click: function (e) {
-            if ($(e.target).is('.shadow-div')) {
-                e.stopImmediatePropagation();
-            }
-        },
-
-        initTd: function (td) {
-            this.refreshMaxRowHeight(td);
-        },
-
-        refreshVisibility: function (model, column) {
-            this.refreshLastColumn(column);
+            $(column).on('click', this.stopEventPropagation);
+            events = $._data(column, 'events').click;
+            events.unshift(events.pop());
         },
 
         refreshLastColumn: function (column) {
@@ -159,17 +121,44 @@ define([
                 columns = $(column).parent().children().not(':hidden'),
                 length = columns.length;
 
-            $('.' + this.resizeConfig.visibleClass).removeClass(this.resizeConfig.visibleClass);
+            $('.' + this.visibleClass).removeClass(this.visibleClass);
 
-            $(column).parent().children().not(':hidden').last().addClass(this.resizeConfig.visibleClass);
+            $(column).parent().children().not(':hidden').last().addClass(this.visibleClass);
 
             for (i; i < length; i++) {
 
-                if (!columns.eq(i).find('.' + this.resizeConfig.nameSpacing.divsResizableAttrName).length && i) {
-                    columns.eq(i-1).addClass(this.resizeConfig.visibleClass);
+                if (!columns.eq(i).find('.' + this.resizableElementClass).length && i) {
+                    columns.eq(i - 1).addClass(this.visibleClass);
                 }
             }
 
+        },
+
+        refreshMaxRowHeight: function (elem) {
+            var rowsH = this.maxRowsHeight(),
+                curEL = $(elem).find('div'),
+                height,
+                obj = this.hasRow($(elem).parent()[0], true);
+
+            curEL.css('white-space', 'nowrap');
+            height = curEL.height() * this.showLines;
+            curEL.css('white-space', 'normal');
+
+            if (obj) {
+                if (obj.maxHeight < height) {
+                    rowsH[_.indexOf(rowsH, obj)].maxHeight = height;
+                } else {
+                    return false;
+                }
+            } else {
+                rowsH.push({
+                    elem: $(elem).parent()[0],
+                    maxHeight: height
+                });
+            }
+
+            $(elem).parent().children().find('div._hideOverflow').css('max-height', height + 'px');
+            this.maxRowsHeight(rowsH);
         },
 
         mousedownHandler: function (event) {
@@ -178,27 +167,36 @@ define([
                 body = $('body');
 
             cfg.curResizeElem.model = ko.dataFor($(target).parent()[0]);
+            cfg.curResizeElem.ctx = ko.contextFor($(target).parent()[0]);
             cfg.curResizeElem.elem = this.hasColumn(cfg.curResizeElem.model, true);
             cfg.curResizeElem.position = event.pageX;
             cfg.depResizeElem.elem = this.getNextElement(cfg.curResizeElem.elem);
             cfg.depResizeElem.model = ko.dataFor(cfg.depResizeElem.elem);
+            cfg.depResizeElem.ctx = ko.contextFor(cfg.depResizeElem.elem);
+
+            $(this.table).find('tr')
+                .find('td:eq(' + cfg.curResizeElem.ctx.$index() + ')')
+                .addClass(this.resizingColumnClass);
+            $(this.table).find('tr')
+                .find('td:eq(' + cfg.depResizeElem.ctx.$index() + ')')
+                .addClass(this.resizingColumnClass);
 
             if (
-                $(event.target).parent().hasClass(this.resizeConfig.visibleClass) ||
-                !$(cfg.depResizeElem.elem).find('.' + this.resizeConfig.nameSpacing.divsResizableAttrName).length
+                $(event.target).parent().hasClass(this.visibleClass) ||
+                !$(cfg.depResizeElem.elem).find('.' + this.resizableElementClass).length
             ) {
                 return false;
             }
 
             event.stopPropagation();
-            cfg.resizable = true;
+            this.resizable = true;
 
             cfg.curResizeElem.model.width === 'auto' ?
                 cfg.curResizeElem.model.width = $(cfg.curResizeElem.elem).outerWidth() : false;
             cfg.depResizeElem.model.width === 'auto' ?
                 cfg.depResizeElem.model.width = $(cfg.depResizeElem.elem).outerWidth() : false;
 
-            body.addClass('_in-resize');
+            body.addClass(this.inResizeClass);
             body.bind('mousemove', this.mousemoveHandler);
             $(window).bind('mouseup', this.mouseupHandler);
         },
@@ -211,7 +209,7 @@ define([
             event.preventDefault();
 
             if (
-                cfg.resizable &&
+                this.resizable &&
                 cfg.minColumnWidth < cfg.curResizeElem.model.width + width &&
                 cfg.minColumnWidth < cfg.depResizeElem.model.width - width
             ) {
@@ -251,13 +249,20 @@ define([
             event.stopPropagation();
             event.preventDefault();
 
+            $(this.table).find('tr')
+                .find('td:eq(' + cfg.curResizeElem.ctx.$index() + ')')
+                .removeClass(this.resizingColumnClass);
+            $(this.table).find('tr')
+                .find('td:eq(' + cfg.depResizeElem.ctx.$index() + ')')
+                .removeClass(this.resizingColumnClass);
+
             this.storageColumnsData[cfg.curResizeElem.model.index] = cfg.curResizeElem.model.width;
             this.storageColumnsData[cfg.depResizeElem.model.index] = cfg.depResizeElem.model.width;
-            cfg.resizable = false;
+            this.resizable = false;
 
             this.store('storageColumnsData');
 
-            body.removeClass('_in-resize');
+            body.removeClass(this.inResizeClass);
             body.unbind('mousemove', this.mousemoveHandler);
             $(window).unbind('mouseup', this.mouseupHandler);
         },
@@ -290,31 +295,18 @@ define([
             return 'auto';
         },
 
-        refreshMaxRowHeight: function (elem) {
-            var rowsH = this.maxRowsHeight(),
-                curEL = $(elem).find('div'),
-                height,
-                obj = this.hasRow($(elem).parent()[0], true);
+        getDefaultWidth: function (column) {
+            var model = ko.dataFor(column);
 
-            curEL.css('white-space', 'nowrap');
-            height = curEL.height() * 4;
-            curEL.css('white-space', 'normal');
-
-            if (obj) {
-                if (obj.maxHeight < height) {
-                    rowsH[_.indexOf(rowsH, obj)].maxHeight = height;
-                } else {
-                    return false;
-                }
-            } else {
-                rowsH.push({
-                    elem: $(elem).parent()[0],
-                    maxHeight: height
-                });
+            if (this.storageColumnsData[model.index]) {
+                return this.storageColumnsData[model.index];
             }
 
-            $(elem).parent().children().find('div._hideOverflow').css('max-height', height + 'px');
-            this.maxRowsHeight(rowsH);
+            if (model.resizeDefaultWidth) {
+                return parseInt(model.resizeDefaultWidth);
+            }
+
+            return 'auto';
         },
 
         hasColumn: function (model, returned) {
@@ -350,8 +342,10 @@ define([
             return false;
         },
 
-        onSortChange: function () {
-            this.maxRowsHeight([]);
+        stopEventPropagation: function (e) {
+            if ($(e.target).is('.' + this.resizableElementClass)) {
+                e.stopImmediatePropagation();
+            }
         }
     });
 });
