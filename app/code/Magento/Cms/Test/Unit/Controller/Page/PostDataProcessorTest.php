@@ -51,7 +51,7 @@ class PostDataProcessorTest extends \PHPUnit_Framework_TestCase
         ];
         $this->messageManager->expects($this->once())
             ->method('addError')
-            ->with(__('To apply changes you should fill in hidden required "Page Title" field'));
+            ->with(__('To apply changes you should fill in hidden required "%1" field', 'Page Title'));
 
         $this->assertFalse($this->postDataProcessor->validateRequireEntry($postData));
     }
