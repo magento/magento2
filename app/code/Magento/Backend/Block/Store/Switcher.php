@@ -565,16 +565,20 @@ class Switcher extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @param $state
+     * @param bool $state
+     * @return $this
      */
-    public function setUseIframe($state = false) {
+    public function setUseIframe($state = false)
+    {
         $this->isUsingIframe = (bool) $state;
+        return $this;
     }
 
     /**
      * @return bool
      */
-    public function isUsingIframe() {
+    public function isUsingIframe()
+    {
         return $this->isUsingIframe;
     }
 }
