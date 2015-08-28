@@ -113,7 +113,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
 
-        $rateRequestMock = $this->getMock('\Magento\Framework\Object', ['setProductClassId'], [], '', false);
+        $rateRequestMock = $this->getMock('\Magento\Framework\DataObject', ['setProductClassId'], [], '', false);
         $this->calculationTool->expects($this->once())
             ->method('getRateRequest')
             ->with(null, null, null, $storeId, $customerId)
@@ -142,7 +142,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
 
-        $rateRequestMock = $this->getMock('\Magento\Framework\Object', ['setProductClassId'], [], '', false);
+        $rateRequestMock = $this->getMock('\Magento\Framework\DataObject', ['setProductClassId'], [], '', false);
         $this->calculationTool->expects($this->once())
             ->method('getDefaultRateRequest')
             ->with($storeId, $customerId)

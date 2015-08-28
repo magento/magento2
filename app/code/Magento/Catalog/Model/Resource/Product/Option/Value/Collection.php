@@ -46,31 +46,31 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function addTitlesToResult($storeId)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $optionTypePriceTable = $this->getTable('catalog_product_option_type_price');
         $optionTitleTable = $this->getTable('catalog_product_option_type_title');
-        $priceExpr = $adapter->getCheckSql(
+        $priceExpr = $connection->getCheckSql(
             'store_value_price.price IS NULL',
             'default_value_price.price',
             'store_value_price.price'
         );
-        $priceTypeExpr = $adapter->getCheckSql(
+        $priceTypeExpr = $connection->getCheckSql(
             'store_value_price.price_type IS NULL',
             'default_value_price.price_type',
             'store_value_price.price_type'
         );
-        $titleExpr = $adapter->getCheckSql(
+        $titleExpr = $connection->getCheckSql(
             'store_value_title.title IS NULL',
             'default_value_title.title',
             'store_value_title.title'
         );
         $joinExprDefaultPrice = 'default_value_price.option_type_id = main_table.option_type_id AND ' .
-            $adapter->quoteInto('default_value_price.store_id = ?', \Magento\Store\Model\Store::DEFAULT_STORE_ID);
+            $connection->quoteInto('default_value_price.store_id = ?', \Magento\Store\Model\Store::DEFAULT_STORE_ID);
 
         $joinExprStorePrice = 'store_value_price.option_type_id = main_table.option_type_id AND ' .
-            $adapter->quoteInto('store_value_price.store_id = ?', $storeId);
+            $connection->quoteInto('store_value_price.store_id = ?', $storeId);
 
-        $joinExprTitle = 'store_value_title.option_type_id = main_table.option_type_id AND ' . $adapter->quoteInto(
+        $joinExprTitle = 'store_value_title.option_type_id = main_table.option_type_id AND ' . $connection->quoteInto(
             'store_value_title.store_id = ?',
             $storeId
         );

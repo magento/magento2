@@ -115,7 +115,7 @@ class Grid extends \Magento\Reports\Block\Adminhtml\Grid\AbstractGrid
      * Don't use orders in collection
      *
      * @param \Magento\Reports\Model\Resource\Report\Collection\AbstractCollection $collection
-     * @param \Magento\Framework\Object $filterData
+     * @param \Magento\Framework\DataObject $filterData
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

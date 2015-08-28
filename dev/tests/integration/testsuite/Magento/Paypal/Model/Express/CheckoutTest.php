@@ -270,7 +270,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
      * Prepare fixture for exported address
      *
      * @param array $addressData
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     protected function _getExportedAddressFixture(array $addressData)
     {
@@ -281,7 +281,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
                 $result[$key] = 'exported' . $addressData[$key];
             }
         }
-        $fixture = new \Magento\Framework\Object($result);
+        $fixture = new \Magento\Framework\DataObject($result);
         $fixture->setExportedKeys($addressDataKeys);
         $fixture->setData('note', 'note');
         return $fixture;

@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Reports\Test\TestCase\AbandonedCartsReportEntityTest">
+    <testCase name="Magento\Reports\Test\TestCase\AbandonedCartsReportEntityTest" summary="Abandoned Carts Report" ticketId="MAGETWO-28558">
         <variation name="AbandonedCartsReportEntityTestVariation1">
             <data name="description" xsi:type="string">add product to cart as registered user and check product in Report</data>
             <data name="customer/dataset" xsi:type="string">default</data>

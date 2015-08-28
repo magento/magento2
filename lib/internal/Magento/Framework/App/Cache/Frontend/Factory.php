@@ -10,6 +10,7 @@
 namespace Magento\Framework\App\Cache\Frontend;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Resource;
 use Magento\Framework\Filesystem;
 
 class Factory
@@ -300,7 +301,7 @@ class Factory
     protected function _getDbAdapterOptions()
     {
         $options['adapter_callback'] = function () {
-            return $this->_resource->getConnection('core_write');
+            return $this->_resource->getConnection();
         };
         $options['data_table_callback'] = function () {
             return $this->_resource->getTableName('cache');

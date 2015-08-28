@@ -44,4 +44,14 @@ interface InvoiceManagementInterface
      * @return bool
      */
     public function setVoid($id);
+
+    /**
+     * Prepare order invoice based on order data and requested items qtys. If $qtys is not empty - the function will
+     * prepare only specified items, otherwise all containing in the order.
+     *
+     * @param int $orderId
+     * @param array $qtys
+     * @return \Magento\Sales\Api\Data\InvoiceInterface
+     */
+    public function prepareInvoice($orderId, array $qtys = []);
 }

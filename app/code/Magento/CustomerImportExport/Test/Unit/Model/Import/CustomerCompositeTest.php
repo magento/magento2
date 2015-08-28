@@ -34,7 +34,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
     protected $_addressAttributes = ['city', 'country', 'street'];
 
     /**
-     * @var \Magento\Framework\Stdlib\String|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_string;
 
@@ -112,7 +112,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Framework\App\Helper\Context', ['getTranslateInline'], [], '', false);
         $context->expects($this->any())->method('getTranslateInline')->will($this->returnValue($translateInline));
 
-        $this->_string = new \Magento\Framework\Stdlib\String();
+        $this->_string = new \Magento\Framework\Stdlib\StringUtils();
 
         $this->_importFactory = $this->getMock(
             'Magento\ImportExport\Model\ImportFactory',
@@ -274,7 +274,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
 
         $attributeList = [];
         foreach ($this->_customerAttributes as $code) {
-            $attribute = new \Magento\Framework\Object(['attribute_code' => $code]);
+            $attribute = new \Magento\Framework\DataObject(['attribute_code' => $code]);
             $attributeList[] = $attribute;
         }
         $customerEntity->expects(
@@ -309,7 +309,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
 
         $attributeList = [];
         foreach ($this->_addressAttributes as $code) {
-            $attribute = new \Magento\Framework\Object(['attribute_code' => $code]);
+            $attribute = new \Magento\Framework\DataObject(['attribute_code' => $code]);
             $attributeList[] = $attribute;
         }
         $addressEntity->expects(

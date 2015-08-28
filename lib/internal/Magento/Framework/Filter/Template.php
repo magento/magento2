@@ -49,15 +49,15 @@ class Template implements \Zend_Filter_Interface
     protected $templateProcessor = null;
 
     /**
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
     /**
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param array $variables
      */
-    public function __construct(\Magento\Framework\Stdlib\String $string, $variables = [])
+    public function __construct(\Magento\Framework\Stdlib\StringUtils $string, $variables = [])
     {
         $this->string = $string;
         $this->setVariables($variables);
@@ -320,7 +320,7 @@ class Template implements \Zend_Filter_Interface
                 $stackVars[$i]['variable'] = & $this->templateVars[$stackVars[$i]['name']];
             } elseif (
                     isset($stackVars[$i - 1]['variable'])
-                    && $stackVars[$i - 1]['variable'] instanceof \Magento\Framework\Object
+                    && $stackVars[$i - 1]['variable'] instanceof \Magento\Framework\DataObject
             ) {
                 // If object calling methods or getting properties
                 if ($stackVars[$i]['type'] == 'property') {

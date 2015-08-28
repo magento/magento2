@@ -6,6 +6,7 @@
 namespace Magento\Framework\HTTP\PhpEnvironment;
 
 use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
+use Magento\Framework\Stdlib\StringUtils;
 use Zend\Http\Header\HeaderInterface;
 use Zend\Stdlib\Parameters;
 use Zend\Stdlib\ParametersInterface;
@@ -80,11 +81,18 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     protected $cookieReader;
 
     /**
+     * @var StringUtils
+     */
+    protected $converter;
+
+    /**
      * @param CookieReaderInterface $cookieReader
+     * @param StringUtils $converter
      * @param UriInterface|string|null $uri
      */
     public function __construct(
         CookieReaderInterface $cookieReader,
+        StringUtils $converter,
         $uri = null
     ) {
         $this->cookieReader = $cookieReader;
@@ -103,6 +111,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
                 throw new \InvalidArgumentException('Invalid URI provided to constructor');
             }
         }
+        $this->converter = $converter;
         parent::__construct();
     }
 
@@ -608,6 +617,7 @@ class Request extends \Zend\Http\PhpEnvironment\Request
     public function getHttpHost($trimPort = true)
     {
         $httpHost = $this->getServer('HTTP_HOST');
+        $httpHost = $this->converter->cleanString($httpHost);
         if (empty($httpHost)) {
             return false;
         }

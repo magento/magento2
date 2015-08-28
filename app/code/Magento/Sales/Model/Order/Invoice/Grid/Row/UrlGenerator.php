@@ -32,7 +32,7 @@ class UrlGenerator extends \Magento\Backend\Model\Widget\Grid\Row\UrlGenerator
     /**
      * Generate row url
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return bool|string
      */
     public function getUrl($item)

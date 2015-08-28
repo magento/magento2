@@ -21,6 +21,7 @@ class IndexerStatusCommand extends AbstractIndexerManageCommand
         $this->setName('indexer:status')
             ->setDescription('Shows status of Indexer')
             ->setDefinition($this->getInputList());
+
         parent::configure();
     }
 
@@ -29,7 +30,7 @@ class IndexerStatusCommand extends AbstractIndexerManageCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $indexers = $this->getIndexers($input, $output);
+        $indexers = $this->getIndexers($input);
         foreach ($indexers as $indexer) {
             $status = 'unknown';
             switch ($indexer->getStatus()) {

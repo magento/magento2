@@ -26,7 +26,7 @@ class License extends Block
      *
      * @var string
      */
-    protected $license = 'license-text';
+    protected $license = '.license-text';
 
     /**
      * Click on 'Back' button.

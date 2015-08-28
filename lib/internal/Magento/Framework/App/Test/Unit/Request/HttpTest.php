@@ -37,6 +37,11 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
+     * @var \Magento\Framework\Stdlib\StringUtils  | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $converterMock;
+
+    /**
      * @var array
      */
     private $serverArray;
@@ -54,6 +59,11 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->_infoProcessorMock = $this->getMock('Magento\Framework\App\Request\PathInfoProcessorInterface');
         $this->_infoProcessorMock->expects($this->any())->method('process')->will($this->returnArgument(1));
         $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->converterMock = $this->getMockBuilder('Magento\Framework\Stdlib\StringUtils')
+            ->disableOriginalConstructor()
+            ->setMethods(['cleanString'])
+            ->getMock();
+        $this->converterMock->expects($this->any())->method('cleanString')->will($this->returnArgument(0));
 
         // Stash the $_SERVER array to protect it from modification in test
         $this->serverArray = $_SERVER;
@@ -76,6 +86,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
                 'routeConfig' => $this->_routerListMock,
                 'pathInfoProcessor' => $this->_infoProcessorMock,
                 'objectManager' => $this->objectManager,
+                'converter' => $this->converterMock,
                 'uri' => $uri,
             ]
         );

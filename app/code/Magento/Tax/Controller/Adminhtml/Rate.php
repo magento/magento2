@@ -61,7 +61,7 @@ abstract class Rate extends \Magento\Backend\App\Action
             if (is_array($value)) {
                 $result[$key] = $this->_processRateData($value);
             } else {
-                $result[$key] = trim(strip_tags($value));
+                $result[$key] = trim($value);
             }
         }
         return $result;

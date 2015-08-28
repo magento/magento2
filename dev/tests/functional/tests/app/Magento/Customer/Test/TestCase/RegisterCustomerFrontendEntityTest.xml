@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Customer\Test\TestCase\RegisterCustomerFrontendEntityTest">
+    <testCase name="Magento\Customer\Test\TestCase\RegisterCustomerFrontendEntityTest" summary="Register New Customer" ticketId="MAGETWO-23546">
         <variation name="RegisterCustomerFrontendEntityTestVariation1">
             <data name="description" xsi:type="string">Register new customer</data>
             <data name="customer/data/firstname" xsi:type="string">john</data>
@@ -31,8 +31,7 @@
             <constraint name="Magento\Customer\Test\Constraint\AssertCustomerForm" />
             <constraint name="Magento\Newsletter\Test\Constraint\AssertCustomerIsSubscribedToNewsletter" />
         </variation>
-        <variation name="RegisterCustomerFrontendEntityTestVariation3">
-            <data name="description" xsi:type="string">MAGETWO-12394: Register Customer</data>
+        <variation name="RegisterCustomerFrontendEntityTestVariation3" summary="Register Customer" ticketId="MAGETWO-12394">
             <data name="customer/data/firstname" xsi:type="string">john</data>
             <data name="customer/data/lastname" xsi:type="string">doe</data>
             <data name="customer/data/email" xsi:type="string">johndoe%isolation%@example.com</data>

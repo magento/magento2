@@ -236,12 +236,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     protected function clearIndex()
     {
-        $this->productResource->getWriteConnection()->delete(
+        $this->productResource->getConnection()->delete(
             $this->productResource->getTable('catalog_category_product_index')
         );
 
-        $actualResult = $this->productResource->getReadConnection()->fetchOne(
-            $this->productResource->getReadConnection()->select()->from(
+        $actualResult = $this->productResource->getConnection()->fetchOne(
+            $this->productResource->getConnection()->select()->from(
                 $this->productResource->getTable('catalog_category_product_index'),
                 'product_id'
             )

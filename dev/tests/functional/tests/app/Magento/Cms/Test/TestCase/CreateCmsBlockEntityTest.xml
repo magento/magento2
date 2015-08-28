@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Cms\Test\TestCase\CreateCmsBlockEntityTest">
+    <testCase name="Magento\Cms\Test\TestCase\CreateCmsBlockEntityTest" summary="Create CMS Block" ticketId="MAGETWO-25578">
         <variation name="CreateCmsBlockEntityTestVariation1">
             <data name="cmsBlock/data/title" xsi:type="string">block_%isolation%</data>
             <data name="cmsBlock/data/identifier" xsi:type="string">identifier_%isolation%</data>

@@ -44,8 +44,8 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
 
         $taxCalculation = $this->getMock('Magento\Tax\Model\Calculation', [], [], '', false);
 
-        $rateRequest = new \Magento\Framework\Object();
-        $defaultRateRequest = new \Magento\Framework\Object();
+        $rateRequest = new \Magento\Framework\DataObject();
+        $defaultRateRequest = new \Magento\Framework\DataObject();
 
         $taxCalculation->expects($this->any())->method('getRateRequest')->will($this->returnValue($rateRequest));
         $taxCalculation
@@ -229,7 +229,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                 'isTaxable' => true,
                 'getApplied' => [],
                 'getProductWeeeAttributes' => [
-                    new \Magento\Framework\Object(
+                    new \Magento\Framework\DataObject(
                         [
                             'name' => 'Recycling Fee',
                             'amount' => 10,
@@ -269,7 +269,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                 'isTaxable' => true,
                 'getApplied' => [],
                 'getProductWeeeAttributes' => [
-                    new \Magento\Framework\Object(
+                    new \Magento\Framework\DataObject(
                         [
                             'name' => 'Recycling Fee',
                             'amount' => 10,
@@ -309,7 +309,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                 'isTaxable' => true,
                 'getApplied' => [],
                 'getProductWeeeAttributes' => [
-                    new \Magento\Framework\Object(
+                    new \Magento\Framework\DataObject(
                         [
                             'name' => 'Recycling Fee',
                             'amount' => 10,
@@ -349,7 +349,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                 'isTaxable' => false,
                 'getApplied' => [],
                 'getProductWeeeAttributes' => [
-                    new \Magento\Framework\Object(
+                    new \Magento\Framework\DataObject(
                         [
                             'name' => 'Recycling Fee',
                             'amount' => 10,
@@ -391,7 +391,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                 'isTaxable' => false,
                 'getApplied' => [],
                 'getProductWeeeAttributes' => [
-                    new \Magento\Framework\Object(
+                    new \Magento\Framework\DataObject(
                         [
                             'name' => 'Recycling Fee',
                             'amount' => 10,
@@ -433,7 +433,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                 'isTaxable' => true,
                 'getApplied' => [],
                 'getProductWeeeAttributes' => [
-                    new \Magento\Framework\Object(
+                    new \Magento\Framework\DataObject(
                         [
                             'name' => 'Recycling Fee',
                             'amount' => 10,
@@ -473,7 +473,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                 'isTaxable' => true,
                 'getApplied' => [],
                 'getProductWeeeAttributes' => [
-                    new \Magento\Framework\Object(
+                    new \Magento\Framework\DataObject(
                         [
                             'name' => 'Recycling Fee',
                             'amount' => 10,
@@ -513,7 +513,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                 'isTaxable' => false,
                 'getApplied' => [],
                 'getProductWeeeAttributes' => [
-                    new \Magento\Framework\Object(
+                    new \Magento\Framework\DataObject(
                         [
                             'name' => 'Recycling Fee',
                             'amount' => 10,
@@ -555,7 +555,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                 'isTaxable' => false,
                 'getApplied' => [],
                 'getProductWeeeAttributes' => [
-                    new \Magento\Framework\Object(
+                    new \Magento\Framework\DataObject(
                         [
                             'name' => 'Recycling Fee',
                             'amount' => 10,
@@ -597,7 +597,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                 'isTaxable' => false,
                 'getApplied' => [],
                 'getProductWeeeAttributes' => [
-                    new \Magento\Framework\Object(
+                    new \Magento\Framework\DataObject(
                         [
                             'name' => 'Recycling Fee',
                             'amount' => 10,

@@ -97,26 +97,12 @@ class CreditmemoServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Run test cancel method
+     * @expectedExceptionMessage You can not cancel Credit Memo
+     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testCancel()
     {
-        $id = 10;
-        $creditmemoMock = $this->getMock(
-            'Magento\Sales\Model\Order\Creditmemo',
-            ['cancel'],
-            [],
-            '',
-            false
-        );
-        $this->creditmemoRepositoryMock->expects($this->once())
-            ->method('get')
-            ->with($id)
-            ->will($this->returnValue($creditmemoMock));
-        $creditmemoMock->expects($this->once())
-            ->method('cancel')
-            ->will($this->returnValue(true));
-
-        $this->assertTrue($this->creditmemoService->cancel($id));
+        $this->assertTrue($this->creditmemoService->cancel(1));
     }
 
     /**

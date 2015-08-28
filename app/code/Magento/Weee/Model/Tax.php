@@ -139,8 +139,8 @@ class Tax extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @param Product $product
-     * @param null|false|\Magento\Framework\Object $shipping
-     * @param null|false|\Magento\Framework\Object $billing
+     * @param null|false|\Magento\Framework\DataObject $shipping
+     * @param null|false|\Magento\Framework\DataObject $billing
      * @param Website $website
      * @param bool $calculateTax
      * @return int
@@ -200,8 +200,9 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      * @param null|false|\Magento\Quote\Model\Quote\Address $billing
      * @param Website $website
      * @param bool $calculateTax
-     * @return \Magento\Framework\Object[]
+     * @return \Magento\Framework\DataObject[]
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getProductWeeeAttributes(
@@ -237,10 +238,10 @@ class Tax extends \Magento\Framework\Model\AbstractModel
                 $shippingAddressArray = $this->_customerSession->getDefaultTaxShippingAddress();
                 $billingAddressArray = $this->_customerSession->getDefaultTaxBillingAddress();
                 if (!empty($billingAddressArray)) {
-                    $billing = new \Magento\Framework\Object($billingAddressArray);
+                    $billing = new \Magento\Framework\DataObject($billingAddressArray);
                 }
                 if (!empty($shippingAddressArray)) {
-                    $shipping = new \Magento\Framework\Object($shippingAddressArray);
+                    $shipping = new \Magento\Framework\DataObject($shippingAddressArray);
                 }
                 $customerTaxClass = $this->_customerSession->getCustomerTaxClassId();
             }
@@ -254,80 +255,56 @@ class Tax extends \Magento\Framework\Model\AbstractModel
         );
         $defaultRateRequest = $calculator->getDefaultRateRequest($store);
 
-        $productAttributes = $product->getTypeInstance()->getSetAttributes($product);
-        foreach ($productAttributes as $code => $attribute) {
-            if (in_array($code, $allWeee)) {
+        $productAttributes = $this->getResource()->fetchWeeeTaxCalculationsByEntity(
+            $rateRequest->getCountryId(),
+            $rateRequest->getRegionId(),
+            $websiteId,
+            $store->getId(),
+            $product->getId()
+        );
 
-                $attributeSelect = $this->getResource()->getReadConnection()->select();
-                $attributeSelect->from(
-                    $this->getResource()->getTable('weee_tax'),
-                    'value'
-                )->where(
-                    'attribute_id = ?',
-                    (int)$attribute->getId()
-                )->where(
-                    'website_id IN(?)',
-                    [$websiteId, 0]
-                )->where(
-                    'country = ?',
-                    $rateRequest->getCountryId()
-                )->where(
-                    'state IN(?)',
-                    [$rateRequest->getRegionId(), 0]
-                )->where(
-                    'entity_id = ?',
-                    (int)$product->getId()
-                )->limit(
-                    1
-                );
-
-                $order = ['state ' . \Magento\Framework\DB\Select::SQL_DESC,
-                    'website_id ' . \Magento\Framework\DB\Select::SQL_DESC];
-                $attributeSelect->order($order);
-
-                $value = $this->getResource()->getReadConnection()->fetchOne($attributeSelect);
-                if ($value) {
-                    $taxAmount = $amount = 0;
-                    $amount = $value;
-                    if ($calculateTax && $this->weeeConfig->isTaxable($store)) {
-                        /** @var \Magento\Tax\Model\Calculation $calculator */
-                        $defaultPercent = $calculator->getRate(
-                            $defaultRateRequest->setProductClassId($product->getTaxClassId())
-                        );
-                        $currentPercent = $calculator->getRate(
-                            $rateRequest->setProductClassId($product->getTaxClassId())
-                        );
-                        if ($this->_taxData->priceIncludesTax($store)) {
-                            $amountInclTax = $value / (100 + $defaultPercent) * (100 + $currentPercent);
-                            //round the "golden price"
-                            $amountInclTax = $this->priceCurrency->round($amountInclTax);
-                            $taxAmount = $amountInclTax - $amountInclTax / (100 + $currentPercent) * 100;
-                            $taxAmount = $this->priceCurrency->round($taxAmount);
-                        } else {
-                            $appliedRates = $this->_calculationFactory->create()->getAppliedRates($rateRequest);
-                            if (count($appliedRates) > 1) {
-                                $taxAmount = 0;
-                                foreach ($appliedRates as $appliedRate) {
-                                    $taxRate = $appliedRate['percent'];
-                                    $taxAmount += $this->priceCurrency->round($value * $taxRate / 100);
-                                }
-                            } else {
-                                $taxAmount = $this->priceCurrency->round(
-                                    $value * $currentPercent / 100
-                                );
+        foreach ($productAttributes as $attribute) {
+            $value = $attribute['weee_value'];
+            if ($value) {
+                $taxAmount = $amount = 0;
+                $amount = $value;
+                if ($calculateTax && $this->weeeConfig->isTaxable($store)) {
+                    /** @var \Magento\Tax\Model\Calculation $calculator */
+                    $defaultPercent = $calculator->getRate(
+                        $defaultRateRequest->setProductClassId($product->getTaxClassId())
+                    );
+                    $currentPercent = $calculator->getRate(
+                        $rateRequest->setProductClassId($product->getTaxClassId())
+                    );
+                    if ($this->_taxData->priceIncludesTax($store)) {
+                        $amountInclTax = $value / (100 + $defaultPercent) * (100 + $currentPercent);
+                        //round the "golden price"
+                        $amountInclTax = $this->priceCurrency->round($amountInclTax);
+                        $taxAmount = $amountInclTax - $amountInclTax / (100 + $currentPercent) * 100;
+                        $taxAmount = $this->priceCurrency->round($taxAmount);
+                    } else {
+                        $appliedRates = $this->_calculationFactory->create()->getAppliedRates($rateRequest);
+                        if (count($appliedRates) > 1) {
+                            $taxAmount = 0;
+                            foreach ($appliedRates as $appliedRate) {
+                                $taxRate = $appliedRate['percent'];
+                                $taxAmount += $this->priceCurrency->round($value * $taxRate / 100);
                             }
-                            $taxAmount = $this->priceCurrency->round($value * $currentPercent / 100);
+                        } else {
+                            $taxAmount = $this->priceCurrency->round(
+                                $value * $currentPercent / 100
+                            );
                         }
                     }
-
-                    $one = new \Magento\Framework\Object();
-                    $one->setName(__($attribute->getFrontend()->getLabel()))
-                        ->setAmount($amount)
-                        ->setTaxAmount($taxAmount)
-                        ->setCode($attribute->getAttributeCode());
-
-                    $result[] = $one;
                 }
+
+                $one = new \Magento\Framework\DataObject();
+                $one->setName(__($attribute['label_value'] ? $attribute['label_value'] : $attribute['frontend_label']))
+                    ->setAmount($amount)
+                    ->setTaxAmount($taxAmount)
+                    ->setCode($attribute['attribute_code']);
+
+                $result[] = $one;
             }
         }
         return $result;

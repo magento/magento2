@@ -15,6 +15,7 @@ if (file_exists($updateAppBootstrap)) {
 
 $testsBaseDir = dirname(__DIR__);
 $magentoBaseDir = realpath("{$testsBaseDir}/../../../");
+$fixtureBaseDir = $testsBaseDir. '/testsuite';
 
 if (!defined('TESTS_TEMP_DIR')) {
     define('TESTS_TEMP_DIR', $testsBaseDir . '/tmp');

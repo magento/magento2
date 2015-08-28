@@ -5,8 +5,6 @@
  */
 namespace Magento\Store\Model;
 
-use Magento\Store\Model\StoreManagerInterface;
-
 /**
  * Core Website model
  *
@@ -30,8 +28,9 @@ use Magento\Store\Model\StoreManagerInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Website extends \Magento\Framework\Model\AbstractModel implements
-    \Magento\Framework\Object\IdentityInterface,
-    \Magento\Framework\App\ScopeInterface
+    \Magento\Framework\DataObject\IdentityInterface,
+    \Magento\Framework\App\ScopeInterface,
+    \Magento\Store\Api\Data\WebsiteInterface
 {
     const ENTITY = 'store_website';
 
@@ -140,9 +139,9 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
     protected $_configDataResource;
 
     /**
-     * @var StoreFactory
+     * @var \Magento\Store\Model\Resource\Store\CollectionFactory
      */
-    protected $_storeFactory;
+    protected $storeListFactory;
 
     /**
      * @var \Magento\Store\Model\GroupFactory
@@ -169,7 +168,7 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Config\Model\Resource\Config\Data $configDataResource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
-     * @param \Magento\Store\Model\StoreFactory $storeFactory
+     * @param \Magento\Store\Model\Resource\Store\CollectionFactory $storeListFactory
      * @param \Magento\Store\Model\GroupFactory $storeGroupFactory
      * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -184,7 +183,7 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
         \Magento\Framework\Registry $registry,
         \Magento\Config\Model\Resource\Config\Data $configDataResource,
         \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
-        \Magento\Store\Model\StoreFactory $storeFactory,
+        \Magento\Store\Model\Resource\Store\CollectionFactory $storeListFactory,
         \Magento\Store\Model\GroupFactory $storeGroupFactory,
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -196,7 +195,7 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_configDataResource = $configDataResource;
         $this->_coreConfig = $coreConfig;
-        $this->_storeFactory = $storeFactory;
+        $this->storeListFactory = $storeListFactory;
         $this->_storeGroupFactory = $storeGroupFactory;
         $this->_websiteFactory = $websiteFactory;
         $this->_storeManager = $storeManager;
@@ -298,7 +297,8 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
      */
     public function getGroupCollection()
     {
-        return $this->_storeGroupFactory->create()->getCollection()->addWebsiteFilter($this->getId());
+        return $this->_storeGroupFactory->create()->getCollection()->addWebsiteFilter($this->getId())
+            ->setLoadDefault(true);
     }
 
     /**
@@ -404,7 +404,7 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
      */
     public function getStoreCollection()
     {
-        return $this->_storeFactory->create()->getCollection()->addWebsiteFilter($this->getId());
+        return $this->storeListFactory->create()->addWebsiteFilter($this->getId())->setLoadDefault(true);
     }
 
     /**
@@ -483,7 +483,7 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
      */
     public function getWebsiteGroupStore()
     {
-        return join('-', [$this->getWebsiteId(), $this->getGroupId(), $this->getStoreId()]);
+        return implode('-', [$this->getWebsiteId(), $this->getGroupId(), $this->getStoreId()]);
     }
 
     /**
@@ -525,7 +525,7 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
      */
     public function afterDelete()
     {
-        $this->_storeManager->clearWebsiteCache($this->getId());
+        $this->_storeManager->reinitStores();
         parent::afterDelete();
         return $this;
     }

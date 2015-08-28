@@ -39,7 +39,7 @@ return [
             'preference' => [
                 'Zend\EventManager\EventManagerInterface' => 'EventManager',
                 'Zend\ServiceManager\ServiceLocatorInterface' => 'ServiceManager',
-                'Magento\Framework\DB\LoggerInterface' => 'Magento\Framework\DB\Logger\Null',
+                'Magento\Framework\DB\LoggerInterface' => 'Magento\Framework\DB\Logger\Quiet',
                 'Magento\Framework\Locale\ConfigInterface' => 'Magento\Framework\Locale\Config',
                 'Magento\Framework\Module\ModuleRegistryInterface' => 'Magento\Framework\Module\Registrar',
                 'Magento\Framework\Filesystem\DriverInterface' => 'Magento\Framework\Filesystem\Driver\File',

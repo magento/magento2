@@ -12,7 +12,7 @@ namespace Magento\Framework\Validator\Test\Unit\Entity;
 class PropertiesTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\DataObject
      */
     protected $_object;
 

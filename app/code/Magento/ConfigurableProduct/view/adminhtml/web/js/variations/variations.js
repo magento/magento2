@@ -15,7 +15,8 @@ define([
         defaults: {
             opened: false,
             attributes: [],
-            productMatrix: []
+            productMatrix: [],
+            productAttributesMap: null
         },
         variations: [],
         productAttributes: [],
@@ -24,6 +25,7 @@ define([
             if (this.variations.length) {
                 this.render(this.variations, this.productAttributes);
             }
+            this.initProductAttributesMap();
         },
         initObservable: function () {
             this._super().observe('actions opened attributes productMatrix');
@@ -36,9 +38,13 @@ define([
             var key = data.variationKey;
             return 'variations-matrix-' + key + '-' + field;
         },
-        getVariationRowName: function(data, field) {
-            var key = data.variationKey;
-            return 'variations-matrix[' + key + '][' + field.split('/').join('][') + ']';
+        getVariationRowName: function(variation, field) {
+            if (variation.product_id) {
+                return 'configurations[' + variation.product_id + '][' + field.split('/').join('][') + ']';
+            } else {
+                var key = variation.variationKey;
+                return 'variations-matrix[' + key + '][' + field.split('/').join('][') + ']';
+            }
         },
         getAttributeRowName: function(attribute, field) {
             return 'product[configurable_attributes_data][' + attribute.id  + '][' + field + ']';
@@ -48,9 +54,14 @@ define([
                 + field + ']';
         },
         render: function(variations, attributes) {
+            this.changeButtonWizard();
             this.populateVariationMatrix(variations);
             this.attributes(attributes);
             this.initImageUpload();
+        },
+        changeButtonWizard: function () {
+            var $button = $('[data-action=open-steps-wizard] [data-role=button-label]');
+            $button.text($button.attr('data-edit-label'));
         },
         getAttributesOptions: function() {
             return this.showVariations() ? this.productMatrix()[0].options : [];
@@ -72,40 +83,36 @@ define([
                     weight: variation.weight || this.getProductValue('weight'),
                     attribute: JSON.stringify(attributes),
                     variationKey: _.values(attributes).join('-'),
-                    readonly: variation.product_id > 0,
+                    editable: variation.editable === undefined ? !variation.product_id : variation.editable,
                     productUrl: this.productUrl.replace('%id%', variation.product_id),
                     status: variation.status === undefined ? 1 : parseInt(variation.status)
                 }));
             }, this);
         },
-        isReadonly: function (variation) {
-            return variation.productId !== null;
-        },
         removeProduct: function (rowIndex) {
             this.productMatrix.splice(rowIndex, 1);
         },
         toggleProduct: function (rowIndex) {
-            var row = $('[data-row-number=' + rowIndex + ']');
             var productChanged = {};
-            _.each('name,sku,qty,weight,price'.split(','), function(column) {
-                productChanged[column] = $(
-                    'input[type=text]',
-                    row.find($('[data-column="%s"]'.replace('%s', column)))
-                ).val();
-            });
-
+            if (this.productMatrix()[rowIndex].editable) {
+                var row = $('[data-row-number=' + rowIndex + ']');
+                _.each('name,sku,qty,weight,price'.split(','), function (column) {
+                    productChanged[column] = $(
+                        'input[type=text]',
+                        row.find($('[data-column="%s"]'.replace('%s', column)))
+                    ).val();
+                });
+            }
             var product = this.productMatrix.splice(rowIndex, 1)[0];
             product = _.extend(product, productChanged);
-            product.status = !product.status;
+            product.status = !product.status * 1;
             this.productMatrix.splice(rowIndex, 0, product);
         },
         toggleList: function (rowIndex) {
             var state = false;
-
             if (rowIndex !== this.opened()) {
                 state = rowIndex;
             }
-
             this.opened(state);
 
             return this;
@@ -116,6 +123,23 @@ define([
             }
 
             return this;
+        },
+        getVariationKey: function (options) {
+            return _.pluck(options, 'value').sort().join('-');
+        },
+        getProductIdByOptions: function (options) {
+            return this.productAttributesMap[this.getVariationKey(options)] || null;
+        },
+        initProductAttributesMap: function () {
+            if (null === this.productAttributesMap) {
+                this.productAttributesMap = {};
+                _.each(this.variations, function(product) {
+                    this.productAttributesMap[this.getVariationKey(product.options)] = product.product_id;
+                }.bind(this));
+            }
+        },
+        isShowPreviewImage: function(variation) {
+            return variation.images.preview && (!variation.editable || variation.images.file);
         },
         generateImageGallery: function(variation) {
             var gallery = [];
@@ -148,7 +172,11 @@ define([
 
                 jQuery(function ($) {
                     var matrix = $('[data-role=product-variations-matrix]');
-                    matrix.find('[data-action=upload-image] [name=image]').each(function() {
+                    matrix.find('[data-action=upload-image]').find('[name=image]').each(function() {
+                        var imageColumn = $(this).closest('[data-column=image]');
+                        if (imageColumn.find('[data-role=image]').length) {
+                            imageColumn.find('[data-toggle=dropdown]').dropdown().show();
+                        }
                         $(this).fileupload({
                             dataType: 'json',
                             dropZone: $(this).closest('[data-role=row]'),

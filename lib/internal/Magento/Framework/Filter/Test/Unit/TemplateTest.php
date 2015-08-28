@@ -23,7 +23,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     {
         $this->templateFilter->setVariables(
             [
-                'customer' => new \Magento\Framework\Object(['firstname' => 'Felicia', 'lastname' => 'Henry']),
+                'customer' => new \Magento\Framework\DataObject(['firstname' => 'Felicia', 'lastname' => 'Henry']),
                 'company' => 'A. L. Price',
                 'street1' => '687 Vernon Street',
                 'city' => 'Parker Dam',
@@ -140,8 +140,8 @@ EXPECTED_RESULT;
 
     public function varDirectiveDataProvider()
     {
-        /* @var $stub \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject */
-        $stub = $this->getMockBuilder('\Magento\Framework\Object')
+        /* @var $stub \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject */
+        $stub = $this->getMockBuilder('\Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->disableProxyingToOriginalMethods()
             ->setMethods(['bar'])

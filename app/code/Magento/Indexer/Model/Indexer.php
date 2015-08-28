@@ -5,7 +5,7 @@
  */
 namespace Magento\Indexer\Model;
 
-class Indexer extends \Magento\Framework\Object implements IndexerInterface
+class Indexer extends \Magento\Framework\DataObject implements IndexerInterface
 {
     /**
      * @var string

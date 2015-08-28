@@ -37,12 +37,12 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function itemExists($object)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $bind = [
             'attribute_set_id' => $object->getAttributeSetId(),
             'attribute_group_name' => $object->getAttributeGroupName(),
         ];
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getMainTable()
         )->where(
             'attribute_set_id = :attribute_set_id'
@@ -50,7 +50,7 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'attribute_group_name = :attribute_group_name'
         );
 
-        return $adapter->fetchRow($select, $bind) > 0;
+        return $connection->fetchRow($select, $bind) > 0;
     }
 
     /**
@@ -93,16 +93,16 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _getMaxSortOrder($object)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $bind = [':attribute_set_id' => $object->getAttributeSetId()];
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getMainTable(),
             new \Zend_Db_Expr("MAX(sort_order)")
         )->where(
             'attribute_set_id = :attribute_set_id'
         );
 
-        return $adapter->fetchOne($select, $bind);
+        return $connection->fetchOne($select, $bind);
     }
 
     /**
@@ -113,9 +113,9 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function updateDefaultGroup($attributeSetId)
     {
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         $bind = [':attribute_set_id' => $attributeSetId];
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getMainTable(),
             $this->getIdFieldName()
         )->where(
@@ -126,12 +126,12 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
             1
         );
 
-        $groupId = $adapter->fetchOne($select, $bind);
+        $groupId = $connection->fetchOne($select, $bind);
 
         if ($groupId) {
             $data = ['default_id' => 1];
             $where = ['attribute_group_id =?' => $groupId];
-            $adapter->update($this->getMainTable(), $data, $where);
+            $connection->update($this->getMainTable(), $data, $where);
         }
 
         return $this;

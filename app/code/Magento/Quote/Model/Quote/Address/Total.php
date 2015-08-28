@@ -5,7 +5,7 @@
  */
 namespace Magento\Quote\Model\Quote\Address;
 
-class Total extends \Magento\Framework\Object
+class Total extends \Magento\Framework\DataObject
 {
     /**
      * Merge numeric total values

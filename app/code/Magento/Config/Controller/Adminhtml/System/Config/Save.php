@@ -28,7 +28,7 @@ class Save extends AbstractConfig
     protected $_cache;
 
     /**
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
@@ -38,7 +38,7 @@ class Save extends AbstractConfig
      * @param \Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker $sectionChecker
      * @param \Magento\Config\Model\Config\Factory $configFactory
      * @param \Magento\Framework\Cache\FrontendInterface $cache
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -46,7 +46,7 @@ class Save extends AbstractConfig
         \Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker $sectionChecker,
         \Magento\Config\Model\Config\Factory $configFactory,
         \Magento\Framework\Cache\FrontendInterface $cache,
-        \Magento\Framework\Stdlib\String $string
+        \Magento\Framework\Stdlib\StringUtils $string
     ) {
         parent::__construct($context, $configStructure, $sectionChecker);
         $this->_configFactory = $configFactory;

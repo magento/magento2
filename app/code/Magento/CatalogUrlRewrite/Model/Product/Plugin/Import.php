@@ -137,7 +137,7 @@ class Import
                 Product::ENTITY_TYPE
             ));
         }
-        $this->connection = $resource->getConnection(Resource::DEFAULT_READ_RESOURCE);
+        $this->connection = $resource->getConnection();
         $this->urlKeyAttributeId = $attribute->getId();
         $this->urlKeyAttributeBackendTable = $attribute->getBackendTable();
         $this->urlFinder = $urlFinder;

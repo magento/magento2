@@ -40,10 +40,10 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
             'input' => 'select',
         ],
         'amount_from' => [
-            'selector' => 'input[name="base_grand_total[from]"]',
+            'selector' => 'input[name="grand_total[from]"]',
         ],
         'amount_to' => [
-            'selector' => 'input[name="base_grand_total[to]"]',
+            'selector' => 'input[name="grand_total[to]"]',
         ],
     ];
 

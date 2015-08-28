@@ -34,12 +34,12 @@ class EditorTest extends \PHPUnit_Framework_TestCase
     protected $escaperMock;
 
     /**
-     * @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $formMock;
 
     /**
-     * @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $configMock;
 
@@ -60,7 +60,7 @@ class EditorTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->escaperMock = $this->getMock('\Magento\Framework\Escaper', [], [], '', false);
-        $this->configMock = $this->getMock('\Magento\Framework\Object', ['getData'], [], '', false);
+        $this->configMock = $this->getMock('\Magento\Framework\DataObject', ['getData'], [], '', false);
 
         $this->model = $this->objectManager->getObject(
             'Magento\Framework\Data\Form\Element\Editor',
@@ -165,7 +165,7 @@ class EditorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetConfig()
     {
-        $config = $this->getMock('\Magento\Framework\Object', ['getData'], [], '', false);
+        $config = $this->getMock('\Magento\Framework\DataObject', ['getData'], [], '', false);
         $this->assertEquals($config, $this->model->getConfig());
 
         $this->configMock->expects($this->once())->method('getData')->with('test')->willReturn('test');

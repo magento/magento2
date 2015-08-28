@@ -34,14 +34,33 @@ class MenuTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Verify that Admin Navigation Menu elements have correct titles & are located on correct levels
+     */
     public function testRenderNavigation()
     {
         $menuConfig = $this->prepareMenuConfig();
+        $menuHtml = $this->blockMenu->renderNavigation($menuConfig->getMenu());
+        $menu = new \SimpleXMLElement($menuHtml);
 
-        $this->assertStringEqualsFile(
-            __DIR__ . '/_files/menu/expected.txt',
-            $this->blockMenu->renderNavigation($menuConfig->getMenu())
-        );
+        $item = $menu->xpath('/ul/li/a/span')[0];
+        $this->assertEquals('System', (string)$item, '"System" item is absent or located on wrong menu level.');
+
+        $item = $menu->xpath('/ul//ul/li/strong/span')[0];
+        $this->assertEquals('Report', (string)$item, '"Report" item is absent or located on wrong menu level.');
+
+        $liTitles = [
+            'Private Sales',
+            'Invite',
+            'Invited Customers',
+        ];
+        foreach ($menu->xpath('/ul//ul//ul/li/a/span') as $sortOrder => $item) {
+            $this->assertEquals(
+                $liTitles[$sortOrder],
+                (string)$item,
+                '"' . $liTitles[$sortOrder] . '" item is absent or located on wrong menu level.'
+            );
+        }
     }
 
     /**

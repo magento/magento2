@@ -7,7 +7,7 @@
 namespace Magento\Eav\Model;
 
 use Magento\Eav\Model\Resource\Entity\Attribute\Collection;
-use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
@@ -118,11 +118,11 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
         foreach ($searchCriteria->getFilterGroups() as $group) {
             $this->addFilterGroupToCollection($group, $attributeCollection);
         }
-        /** @var \Magento\Framework\Api\SortOrder $sortOrder */
+        /** @var SortOrder $sortOrder */
         foreach ((array)$searchCriteria->getSortOrders() as $sortOrder) {
             $attributeCollection->addOrder(
                 $sortOrder->getField(),
-                ($sortOrder->getDirection() == SearchCriteriaInterface::SORT_ASC) ? 'ASC' : 'DESC'
+                ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
             );
         }
 

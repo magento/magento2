@@ -43,6 +43,10 @@ define([
                 '${ $.provider }:params.filters': 'deselectAll',
                 selected: 'onSelectedChange',
                 rows: 'onRowsChange'
+            },
+
+            modules: {
+                source: '${ $.provider }'
             }
         },
 
@@ -327,8 +331,25 @@ define([
                 excluded: this.excluded(),
                 selected: this.selected(),
                 total: this.totalSelected(),
-                excludeMode: this.excludeMode()
+                excludeMode: this.excludeMode(),
+                params: this.getFiltering()
             };
+        },
+
+        /**
+         * Extracts filtering data from data provider.
+         *
+         * @returns {Object} Current filters state.
+         */
+        getFiltering: function () {
+            var source = this.source(),
+                keys = ['filters', 'search', 'namespace'];
+
+            if (!source) {
+                return {};
+            }
+
+            return _.pick(source.get('params'), keys);
         },
 
         /**

@@ -20,9 +20,7 @@ class Resource
 
     const AUTO_UPDATE_ALWAYS = 1;
 
-    const DEFAULT_READ_RESOURCE = 'core_read';
-
-    const DEFAULT_WRITE_RESOURCE = 'core_write';
+    const DEFAULT_CONNECTION = 'default';
 
     /**
      * Instances of actual connections
@@ -64,18 +62,18 @@ class Resource
 
     /**
      * @param ResourceConfigInterface $resourceConfig
-     * @param ConnectionFactoryInterface $adapterFactory
+     * @param ConnectionFactoryInterface $connectionFactory
      * @param DeploymentConfig $deploymentConfig
      * @param string $tablePrefix
      */
     public function __construct(
         ResourceConfigInterface $resourceConfig,
-        ConnectionFactoryInterface $adapterFactory,
+        ConnectionFactoryInterface $connectionFactory,
         DeploymentConfig $deploymentConfig,
         $tablePrefix = ''
     ) {
         $this->_config = $resourceConfig;
-        $this->_connectionFactory = $adapterFactory;
+        $this->_connectionFactory = $connectionFactory;
         $this->deploymentConfig = $deploymentConfig;
         $this->_tablePrefix = $tablePrefix ?: null;
     }
@@ -87,7 +85,7 @@ class Resource
      * @return \Magento\Framework\DB\Adapter\AdapterInterface|false
      * @codeCoverageIgnore
      */
-    public function getConnection($resourceName)
+    public function getConnection($resourceName = self::DEFAULT_CONNECTION)
     {
         $connectionName = $this->_config->getConnectionName($resourceName);
         return $this->getConnectionByName($connectionName);
@@ -124,11 +122,11 @@ class Resource
      * Get resource table name, validated by db adapter
      *
      * @param   string|string[] $modelEntity
-     * @param   string $connectionName
+     * @param string $connectionName
      * @return  string
      * @api
      */
-    public function getTableName($modelEntity, $connectionName = self::DEFAULT_READ_RESOURCE)
+    public function getTableName($modelEntity, $connectionName = self::DEFAULT_CONNECTION)
     {
         $tableSuffix = null;
         if (is_array($modelEntity)) {
@@ -163,7 +161,7 @@ class Resource
      */
     public function getTriggerName($tableName, $time, $event)
     {
-        return $this->getConnection(self::DEFAULT_READ_RESOURCE)->getTriggerName($tableName, $time, $event);
+        return $this->getConnection()->getTriggerName($tableName, $time, $event);
     }
 
     /**
@@ -208,7 +206,7 @@ class Resource
         $fields,
         $indexType = \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_INDEX
     ) {
-        return $this->getConnection(self::DEFAULT_READ_RESOURCE)
+        return $this->getConnection()
             ->getIndexName(
                 $this->getTableName($tableName),
                 $fields,
@@ -227,9 +225,7 @@ class Resource
      */
     public function getFkName($priTableName, $priColumnName, $refTableName, $refColumnName)
     {
-        return $this->getConnection(
-            self::DEFAULT_READ_RESOURCE
-        )->getForeignKeyName(
+        return $this->getConnection()->getForeignKeyName(
             $this->getTableName($priTableName),
             $priColumnName,
             $this->getTableName($refTableName),

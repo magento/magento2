@@ -12,15 +12,11 @@
             <tag group="domain" value="MX" />
         </allow>
         <deny>
-            <tag group="stable" value="no" />
-            <tag group="to_maintain" value="yes" />
             <tag group="test_type" value="3rd_party_test_deprecated" />
         </deny>
     </rule>
     <rule scope="variation">
         <deny>
-            <tag group="stable" value="no" />
-            <tag group="to_maintain" value="yes" />
             <tag group="test_type" value="3rd_party_test" />
         </deny>
     </rule>

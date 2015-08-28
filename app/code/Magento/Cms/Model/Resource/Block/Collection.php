@@ -13,6 +13,11 @@ namespace Magento\Cms\Model\Resource\Block;
 class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
+     * @var string
+     */
+    protected $_idFieldName = 'block_id';
+
+    /**
      * @return \Magento\Cms\Model\Resource\Block\Collection
      */
     protected function _afterLoad()
@@ -91,7 +96,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     {
         $countSelect = parent::getSelectCountSql();
 
-        $countSelect->reset(\Zend_Db_Select::GROUP);
+        $countSelect->reset(\Magento\Framework\DB\Select::GROUP);
 
         return $countSelect;
     }

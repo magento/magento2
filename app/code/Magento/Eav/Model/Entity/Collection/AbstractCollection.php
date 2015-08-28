@@ -148,7 +148,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->_eventManager = $eventManager;
         $this->_eavConfig = $eavConfig;
@@ -158,7 +158,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         $this->_universalFactory = $universalFactory;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $connection);
         $this->_construct();
-        $this->setConnection($this->getEntity()->getReadConnection());
+        $this->setConnection($this->getEntity()->getConnection());
         $this->_prepareStaticFields();
         $this->_initSelect();
     }
@@ -273,7 +273,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     /**
      * Set template object for the collection
      *
-     * @param   \Magento\Framework\Object $object
+     * @param   \Magento\Framework\DataObject $object
      * @return $this
      */
     public function setObject($object = null)
@@ -289,11 +289,11 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     /**
      * Add an object to the collection
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      * @throws LocalizedException
      */
-    public function addItem(\Magento\Framework\Object $object)
+    public function addItem(\Magento\Framework\DataObject $object)
     {
         if (!$object instanceof $this->_itemObjectClass) {
             throw new LocalizedException(__('Attempt to add an invalid object'));
@@ -437,7 +437,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      */
     protected function _prepareOrderExpression($field)
     {
-        foreach ($this->getSelect()->getPart(\Zend_Db_Select::COLUMNS) as $columnEntry) {
+        foreach ($this->getSelect()->getPart(\Magento\Framework\DB\Select::COLUMNS) as $columnEntry) {
             if ($columnEntry[2] != $field) {
                 continue;
             }
@@ -733,7 +733,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
 
         // validate bind
         list($pKey, $fKey) = explode('=', $bind);
-        $pKey = $this->getSelect()->getAdapter()->quoteColumnAs(trim($pKey), null);
+        $pKey = $this->getSelect()->getConnection()->quoteColumnAs(trim($pKey), null);
         $bindCond = $tableAlias . '.' . trim($pKey) . '=' . $this->_getAttributeFieldName(trim($fKey));
 
         // process join type
@@ -926,10 +926,10 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     protected function _getAllIdsSelect($limit = null, $offset = null)
     {
         $idsSelect = clone $this->getSelect();
-        $idsSelect->reset(\Zend_Db_Select::ORDER);
-        $idsSelect->reset(\Zend_Db_Select::LIMIT_COUNT);
-        $idsSelect->reset(\Zend_Db_Select::LIMIT_OFFSET);
-        $idsSelect->reset(\Zend_Db_Select::COLUMNS);
+        $idsSelect->reset(\Magento\Framework\DB\Select::ORDER);
+        $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
+        $idsSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
         $idsSelect->columns('e.' . $this->getEntity()->getIdFieldName());
         $idsSelect->limit($limit, $offset);
 
@@ -956,11 +956,11 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     public function getAllIdsSql()
     {
         $idsSelect = clone $this->getSelect();
-        $idsSelect->reset(\Zend_Db_Select::ORDER);
-        $idsSelect->reset(\Zend_Db_Select::LIMIT_COUNT);
-        $idsSelect->reset(\Zend_Db_Select::LIMIT_OFFSET);
-        $idsSelect->reset(\Zend_Db_Select::COLUMNS);
-        $idsSelect->reset(\Zend_Db_Select::GROUP);
+        $idsSelect->reset(\Magento\Framework\DB\Select::ORDER);
+        $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
+        $idsSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
+        $idsSelect->reset(\Magento\Framework\DB\Select::GROUP);
         $idsSelect->columns('e.' . $this->getEntity()->getIdFieldName());
 
         return $idsSelect;
@@ -1312,7 +1312,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
             return $this;
         }
 
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
         $attrTable = $this->_getAttributeTableAlias($attributeCode);
         if (isset($this->_joinAttributes[$attributeCode])) {
@@ -1350,13 +1350,13 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
             $attrFieldName = $attrTable . '.value';
         }
 
-        $fKey = $adapter->quoteColumnAs($fKey, null);
-        $pKey = $adapter->quoteColumnAs($pKey, null);
+        $fKey = $connection->quoteColumnAs($fKey, null);
+        $pKey = $connection->quoteColumnAs($pKey, null);
 
         $condArr = ["{$pKey} = {$fKey}"];
         if (!$attribute->getBackend()->isStatic()) {
             $condArr[] = $this->getConnection()->quoteInto(
-                $adapter->quoteColumnAs("{$attrTable}.attribute_id", null) . ' = ?',
+                $connection->quoteColumnAs("{$attrTable}.attribute_id", null) . ' = ?',
                 $attribute->getId()
             );
         }
@@ -1583,6 +1583,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      *
      * @param string $field
      * @param string $alias
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return $this|\Magento\Framework\Data\Collection\AbstractDb
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

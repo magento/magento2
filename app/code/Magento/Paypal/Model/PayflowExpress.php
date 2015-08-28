@@ -63,6 +63,8 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
      * @param CartFactory $cartFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\Exception\LocalizedExceptionFactory $exception
+     * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
+     * @param Transaction\BuilderInterface $transactionBuilder
      * @param InfoFactory $paypalInfoFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
@@ -83,6 +85,8 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
         CartFactory $cartFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\Exception\LocalizedExceptionFactory $exception,
+        \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository,
+        \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder,
         InfoFactory $paypalInfoFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
@@ -102,6 +106,8 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
             $cartFactory,
             $checkoutSession,
             $exception,
+            $transactionRepository,
+            $transactionBuilder,
             $resource,
             $resourceCollection,
             $data
@@ -181,7 +187,11 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
         /** @var \Magento\Sales\Model\Order\Payment $payment */
         $payment = $this->getInfoInstance();
         // we need the last capture transaction was made
-        $captureTransaction = $payment->lookupTransaction('', Transaction::TYPE_CAPTURE);
+        $captureTransaction = $this->transactionRepository->getByTransactionType(
+            Transaction::TYPE_CAPTURE,
+            $payment->getId(),
+            $payment->getOrder()->getId()
+        );
         return $captureTransaction && $captureTransaction->getAdditionalInformation(
             Payflow\Pro::TRANSPORT_PAYFLOW_TXN_ID
         ) && $this->_canRefund;

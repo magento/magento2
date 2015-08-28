@@ -44,6 +44,7 @@ class UninstallCollectorTest extends \PHPUnit_Framework_TestCase
         $this->result = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
         $select->expects($this->once())->method('from')->willReturn($this->result);
 
+
         $uninstallA = 'Uninstall Class A';
         $uninstallB = 'Uninstall Class B';
         $objectManager->expects($this->any())

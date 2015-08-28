@@ -81,11 +81,11 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
         $this->loggerMock->expects($this->once())
             ->method('debug');
 
-        $object = new \Magento\Framework\Object();
+        $object = new \Magento\Framework\DataObject();
 
         $result = $this->object->postRequest($object, $configInterfaceMock);
 
-        $this->assertInstanceOf('Magento\Framework\Object', $result);
+        $this->assertInstanceOf('Magento\Framework\DataObject', $result);
         $this->assertArrayHasKey('result_code', $result->getData());
     }
 
@@ -106,7 +106,7 @@ class GatewayTest extends \PHPUnit_Framework_TestCase
             ->method('request')
             ->willThrowException(new \Exception());
 
-        $object = new \Magento\Framework\Object();
+        $object = new \Magento\Framework\DataObject();
         $this->object->postRequest($object, $configInterfaceMock);
     }
 }

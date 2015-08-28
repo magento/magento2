@@ -13,8 +13,11 @@ use Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Term;
 use Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Wildcard;
 use Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer;
 use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
-use Magento\Framework\Search\Request\Query\Bool;
+use Magento\Framework\Search\Request\Query\BoolExpression;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Builder implements BuilderInterface
 {
     /**
@@ -133,6 +136,6 @@ class Builder implements BuilderInterface
      */
     private function isNegation($conditionType)
     {
-        return Bool::QUERY_CONDITION_NOT === $conditionType;
+        return BoolExpression::QUERY_CONDITION_NOT === $conditionType;
     }
 }

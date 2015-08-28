@@ -16,6 +16,10 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
 
     const VISITOR_TYPE_VISITOR = 'v';
 
+    const DEFAULT_ONLINE_MINUTES_INTERVAL = 15;
+
+    const XML_PATH_ONLINE_INTERVAL = 'customer/online_customers/online_minutes_interval';
+
     /**
      * @var string[]
      */
@@ -280,5 +284,21 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
     {
         $this->getResource()->clean($this);
         return $this;
+    }
+
+    /**
+     * Retrieve Online Interval (in minutes)
+     *
+     * @return int Minutes Interval
+     */
+    public function getOnlineInterval()
+    {
+        $configValue = intval(
+            $this->scopeConfig->getValue(
+                static::XML_PATH_ONLINE_INTERVAL,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            )
+        );
+        return $configValue ?: static::DEFAULT_ONLINE_MINUTES_INTERVAL;
     }
 }

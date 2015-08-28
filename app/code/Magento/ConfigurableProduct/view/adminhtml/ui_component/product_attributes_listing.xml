@@ -55,12 +55,18 @@
                 <item name="config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/columns</item>
                     <item name="displayArea" xsi:type="string">dataGridActions</item>
+                    <item name="columnsData" xsi:type="array">
+                        <item name="provider" xsi:type="string">product_attributes_listing.product_attributes_listing.product_attributes_columns</item>
+                    </item>
                 </item>
             </argument>
         </container>
         <filters name="listing_filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="links" xsi:type="array">
+                        <item name="applied" xsi:type="string">not-save-filter</item>
+                    </item>
                     <item name="displayArea" xsi:type="string">dataGridFilters</item>
                     <item name="dataScope" xsi:type="string">filters</item>
                     <item name="storageConfig" xsi:type="array">
@@ -171,6 +177,7 @@
                         <item name="provider" xsi:type="string">product_attributes_listing.product_attributes_listing.listing_top.bookmarks</item>
                         <item name="namespace" xsi:type="string">current.paging</item>
                     </item>
+                    <item name="selectProvider" xsi:type="string">product_attributes_listing.product_attributes_listing.product_attributes_columns.ids</item>
                     <item name="displayArea" xsi:type="string">bottom</item>
                     <item name="options" xsi:type="array">
                         <item name="20" xsi:type="array">
@@ -201,10 +208,12 @@
     <columns name="product_attributes_columns">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
+                <item name="storageConfig" xsi:type="array">
+                    <item name="provider" xsi:type="string">product_attributes_listing.product_attributes_listing.listing_top.bookmarks</item>
+                    <item name="namespace" xsi:type="string">current</item>
+                </item>
                 <item name="childDefaults" xsi:type="array">
-                    <item name="actionField" xsi:type="string">actions</item>
-                    <item name="clickAction" xsi:type="string">edit</item>
-                    <item name="appendTo" xsi:type="string">product_attributes_listing.product_attributes_listing.listing_top.columns_controls</item>
+                    <item name="controlVisibility" xsi:type="boolean">true</item>
                     <item name="storageConfig" xsi:type="array">
                         <item name="provider" xsi:type="string">product_attributes_listing.product_attributes_listing.listing_top.bookmarks</item>
                         <item name="root" xsi:type="string">columns.${ $.index }</item>
@@ -221,7 +230,7 @@
                 <item name="config" xsi:type="array">
                     <item name="indexField" xsi:type="string">attribute_id</item>
                     <item name="sortOrder" xsi:type="number">0</item>
-                    <item name="appendTo" xsi:type="string"></item>
+                    <item name="controlVisibility" xsi:type="string">false</item>
                 </item>
             </argument>
         </column>
@@ -245,7 +254,6 @@
                 </item>
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
-                    <item name="sorting" xsi:type="string">asc</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Attribute Label</item>
                 </item>

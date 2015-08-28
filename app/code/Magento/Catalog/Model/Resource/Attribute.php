@@ -32,7 +32,7 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
      * @param \Magento\Eav\Model\Resource\Entity\Type $eavEntityType
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param LockValidatorInterface $lockValidator
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -40,11 +40,11 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
         \Magento\Eav\Model\Resource\Entity\Type $eavEntityType,
         \Magento\Eav\Model\Config $eavConfig,
         LockValidatorInterface $lockValidator,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->attrLockValidator = $lockValidator;
         $this->_eavConfig = $eavConfig;
-        parent::__construct($context, $storeManager, $eavEntityType, $resourcePrefix);
+        parent::__construct($context, $storeManager, $eavEntityType, $connectionName);
     }
 
     /**
@@ -94,7 +94,7 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
                     'attribute_id = ?' => $object->getId(),
                     'store_id IN(?)' => $attributeStoreIds,
                 ];
-                $this->_getWriteAdapter()->delete($object->getBackendTable(), $delCondition);
+                $this->getConnection()->delete($object->getBackendTable(), $delCondition);
             }
         }
 
@@ -114,13 +114,13 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
             return $this;
         }
 
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getTable('eav_entity_attribute')
         )->where(
             'entity_attribute_id = ?',
             (int)$object->getEntityAttributeId()
         );
-        $result = $this->_getReadAdapter()->fetchRow($select);
+        $result = $this->getConnection()->fetchRow($select);
 
         if ($result) {
             $attribute = $this->_eavConfig->getAttribute(
@@ -138,7 +138,7 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
 
             $backendTable = $attribute->getBackend()->getTable();
             if ($backendTable) {
-                $select = $this->_getWriteAdapter()->select()->from(
+                $select = $this->getConnection()->select()->from(
                     $attribute->getEntity()->getEntityTable(),
                     'entity_id'
                 )->where(
@@ -150,12 +150,12 @@ class Attribute extends \Magento\Eav\Model\Resource\Entity\Attribute
                     'attribute_id =?' => $attribute->getId(),
                     'entity_id IN (?)' => $select,
                 ];
-                $this->_getWriteAdapter()->delete($backendTable, $clearCondition);
+                $this->getConnection()->delete($backendTable, $clearCondition);
             }
         }
 
         $condition = ['entity_attribute_id = ?' => $object->getEntityAttributeId()];
-        $this->_getWriteAdapter()->delete($this->getTable('eav_entity_attribute'), $condition);
+        $this->getConnection()->delete($this->getTable('eav_entity_attribute'), $condition);
 
         return $this;
     }

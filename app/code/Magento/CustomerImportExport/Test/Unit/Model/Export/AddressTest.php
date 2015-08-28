@@ -199,7 +199,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             $websiteData = ['id' => $id, 'code' => $code];
-            $websites[$id] = new \Magento\Framework\Object($websiteData);
+            $websites[$id] = new \Magento\Framework\DataObject($websiteData);
         }
 
         return $websites;

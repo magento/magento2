@@ -359,7 +359,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     /**
      * Check void availability
      * @return bool
-     * @internal param \Magento\Framework\Object $payment
+     * @internal param \Magento\Framework\DataObject $payment
      * @api
      */
     public function canVoid()
@@ -581,7 +581,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     /**
      * Order payment abstract method
      *
-     * @param \Magento\Framework\Object|InfoInterface $payment
+     * @param \Magento\Framework\DataObject|InfoInterface $payment
      * @param float $amount
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -599,7 +599,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     /**
      * Authorize payment abstract method
      *
-     * @param \Magento\Framework\Object|InfoInterface $payment
+     * @param \Magento\Framework\DataObject|InfoInterface $payment
      * @param float $amount
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -617,7 +617,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     /**
      * Capture payment abstract method
      *
-     * @param \Magento\Framework\Object|InfoInterface $payment
+     * @param \Magento\Framework\DataObject|InfoInterface $payment
      * @param float $amount
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -636,7 +636,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     /**
      * Refund specified amount for payment
      *
-     * @param \Magento\Framework\Object|InfoInterface $payment
+     * @param \Magento\Framework\DataObject|InfoInterface $payment
      * @param float $amount
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -654,7 +654,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     /**
      * Cancel payment abstract method
      *
-     * @param \Magento\Framework\Object|InfoInterface $payment
+     * @param \Magento\Framework\DataObject|InfoInterface $payment
      * @return $this
      * @api
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -667,7 +667,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     /**
      * Void payment abstract method
      *
-     * @param \Magento\Framework\Object|InfoInterface $payment
+     * @param \Magento\Framework\DataObject|InfoInterface $payment
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      * @api
@@ -758,7 +758,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     /**
      * Assign data to info model instance
      *
-     * @param array|\Magento\Framework\Object $data
+     * @param array|\Magento\Framework\DataObject $data
      * @return $this
      * @api
      */
@@ -766,7 +766,7 @@ abstract class AbstractMethod extends \Magento\Framework\Model\AbstractExtensibl
     {
         if (is_array($data)) {
             $this->getInfoInstance()->addData($data);
-        } elseif ($data instanceof \Magento\Framework\Object) {
+        } elseif ($data instanceof \Magento\Framework\DataObject) {
             $this->getInfoInstance()->addData($data->getData());
         }
         return $this;

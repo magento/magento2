@@ -22,7 +22,7 @@ class RestrictAdminBillingAgreementUsageTest extends \PHPUnit_Framework_TestCase
     protected $_observer;
 
     /**
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\DataObject
      */
     protected $_event;
 
@@ -33,7 +33,7 @@ class RestrictAdminBillingAgreementUsageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_event = new \Magento\Framework\Object();
+        $this->_event = new \Magento\Framework\DataObject();
 
         $this->_observer = new \Magento\Framework\Event\Observer();
         $this->_observer->setEvent($this->_event);

@@ -12,6 +12,7 @@ require_once __DIR__ . '/autoload.php';
 
 $testsBaseDir = dirname(__DIR__);
 $integrationTestsDir = realpath("{$testsBaseDir}/../integration");
+$fixtureBaseDir = $integrationTestsDir . '/testsuite';
 
 $logWriter = new \Zend_Log_Writer_Stream('php://output');
 $logWriter->setFormatter(new \Zend_Log_Formatter_Simple('%message%' . PHP_EOL));

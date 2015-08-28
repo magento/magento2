@@ -20,15 +20,15 @@ class Fulltext extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->_eventManager = $eventManager;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -48,8 +48,8 @@ class Fulltext extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function resetSearchResults()
     {
-        $adapter = $this->_getWriteAdapter();
-        $adapter->update($this->getTable('search_query'), ['is_processed' => 0], ['is_processed != 0']);
+        $connection = $this->getConnection();
+        $connection->update($this->getTable('search_query'), ['is_processed' => 0], ['is_processed != 0']);
         $this->_eventManager->dispatch('catalogsearch_reset_search_result');
         return $this;
     }

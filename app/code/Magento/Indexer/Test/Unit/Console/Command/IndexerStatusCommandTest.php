@@ -8,7 +8,7 @@ namespace Magento\Indexer\Test\Unit\Console\Command;
 use Magento\Indexer\Console\Command\IndexerStatusCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class IndexerStatusCommandTest extends IndexerCommandCommonTestSetup
+class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
 {
     /**
      * Command being tested
@@ -19,6 +19,7 @@ class IndexerStatusCommandTest extends IndexerCommandCommonTestSetup
 
     public function testExecuteAll()
     {
+        $this->configureAdminArea();
         $collection = $this->getMock('Magento\Indexer\Model\Indexer\Collection', [], [], '', false);
         $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
         $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');

@@ -63,7 +63,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
     /**
      * A variable for transporting output into observer during rendering
      *
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\DataObject
      */
     protected $_renderingOutput;
 
@@ -196,7 +196,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
         $cacheable = true
     ) {
         $this->_elementClass = 'Magento\Framework\View\Layout\Element';
-        $this->_renderingOutput = new \Magento\Framework\Object();
+        $this->_renderingOutput = new \Magento\Framework\DataObject();
 
         $this->_processorFactory = $processorFactory;
         $this->_eventManager = $eventManager;

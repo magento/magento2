@@ -168,4 +168,17 @@
             <argument name="entitySnapshot" xsi:type="object">EavVersionControlSnapshot</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="customer_online_grid_data_source" xsi:type="string">Magento\Customer\Model\Resource\Online\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\Resource\Online\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">customer_visitor</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\Customer\Model\Resource\Visitor</argument>
+        </arguments>
+    </type>
 </config>

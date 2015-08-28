@@ -78,7 +78,7 @@ class IndexBuilder implements IndexBuilderInterface
     public function build(RequestInterface $request)
     {
         $searchIndexTable = $this->scopeResolver->resolve($request->getIndex(), $request->getDimensions());
-        $select = $this->getSelect()
+        $select = $this->resource->getConnection()->select()
             ->from(
                 ['search_index' => $searchIndexTable],
                 ['entity_id' => 'entity_id']
@@ -113,7 +113,7 @@ class IndexBuilder implements IndexBuilderInterface
             $select->joinLeft(
                 ['stock_index' => $this->resource->getTableName('cataloginventory_stock_status')],
                 'search_index.entity_id = stock_index.product_id'
-                . $this->getReadConnection()->quoteInto(
+                . $this->resource->getConnection()->quoteInto(
                     ' AND stock_index.website_id = ?',
                     $this->storeManager->getWebsite()->getId()
                 ),
@@ -166,26 +166,6 @@ class IndexBuilder implements IndexBuilderInterface
     }
 
     /**
-     * Get read connection
-     *
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    private function getReadConnection()
-    {
-        return $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE);
-    }
-
-    /**
-     * Get empty Select
-     *
-     * @return Select
-     */
-    private function getSelect()
-    {
-        return $this->getReadConnection()->select();
-    }
-
-    /**
      * @param RequestInterface $request
      * @return bool
      */
@@ -203,7 +183,7 @@ class IndexBuilder implements IndexBuilderInterface
         $hasFilters = false;
         switch ($query->getType()) {
             case RequestQueryInterface::TYPE_BOOL:
-                /** @var \Magento\Framework\Search\Request\Query\Bool $query */
+                /** @var \Magento\Framework\Search\Request\Query\BoolExpression $query */
                 foreach ($query->getMust() as $subQuery) {
                     $hasFilters |= $this->hasFilters($subQuery);
                 }

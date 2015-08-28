@@ -41,7 +41,7 @@ abstract class AbstractEntity extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * @inheritdoc
      */
-    protected function _afterLoad(\Magento\Framework\Object $object)
+    protected function _afterLoad(\Magento\Framework\DataObject $object)
     {
         $this->entitySnapshot->registerSnapshot($object);
         return parent::_afterLoad($object);

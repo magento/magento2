@@ -105,7 +105,7 @@ define([
      * @returns {Object|Array}
      */
     function getModel(elem) {
-        return ko.contextFor(elem).$data;
+        return ko.dataFor(elem);
     }
 
     return Class.extend({
@@ -140,15 +140,13 @@ define([
          * @returns {Dnd} Chainbale.
          */
         initListeners: function () {
-            var addListener = document.addEventListener;
-
             if (isTouchDevice) {
-                addListener('touchmove', this.onMouseMove, false);
-                addListener('touchend', this.onMouseUp, false);
-                addListener('touchleave', this.onMouseUp, false);
+                document.addEventListener('touchmove', this.onMouseMove, false);
+                document.addEventListener('touchend', this.onMouseUp, false);
+                document.addEventListener('touchleave', this.onMouseUp, false);
             } else {
-                addListener('mousemove', this.onMouseMove, false);
-                addListener('mouseup', this.onMouseUp, false);
+                document.addEventListener('mousemove', this.onMouseMove, false);
+                document.addEventListener('mouseup', this.onMouseUp, false);
             }
 
             return this;
@@ -268,6 +266,29 @@ define([
         },
 
         /**
+         * Locates draggable table at the upper left corner.
+         *
+         * @returns {Dnd} Chainable.
+         */
+        _dropPosition: function () {
+            var dragTable = this.dragTable,
+                dragStyles = dragTable.style,
+                coords;
+
+            dragStyles.left = '0px';
+            dragStyles.top = '0px';
+
+            locate(dragTable, 0, 0);
+
+            coords = dragTable.getBoundingClientRect();
+
+            dragStyles.left = -1 * coords.left + 'px';
+            dragStyles.top = -1 * coords.top + 'px';
+
+            return this;
+        },
+
+        /**
          * Matches provided coordinates to available areas.
          *
          * @param {Number} x - X coordinate of a mouse pointer.
@@ -329,10 +350,11 @@ define([
 
             getModel(elem).dragging(true);
 
-            this._cacheCoords()
-                ._copyDimensions(elem);
-
             $(this.dragTable).removeClass(this.hiddenClass);
+
+            this._cacheCoords()
+                ._copyDimensions(elem)
+                ._dropPosition();
         },
 
         /**
