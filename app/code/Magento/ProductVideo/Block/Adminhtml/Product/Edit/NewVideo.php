@@ -90,7 +90,7 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
             'video_url',
             'text',
             [
-                'class' => 'edited-data',
+                'class' => 'edited-data validate-url',
                 'label' => __('Url'),
                 'title' => __('Url'),
                 'required' => true,
@@ -101,14 +101,14 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
 
 
         $fieldset->addField(
-            'video_name',
+            'video_title',
             'text',
             [
                 'class' => 'edited-data',
                 'label' => __('Title'),
                 'title' => __('Title'),
                 'required' => true,
-                'name' => 'video_name',
+                'name' => 'video_title',
             ]
         );
 
