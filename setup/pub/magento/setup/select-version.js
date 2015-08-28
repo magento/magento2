@@ -47,6 +47,18 @@ angular.module('select-version', ['ngStorage'])
             no: true
         };
 
+        $scope.$watch('currentPage + rowLimit', function() {
+            var begin = (($scope.currentPage - 1) * $scope.rowLimit);
+            var end = parseInt(begin) + parseInt(($scope.rowLimit));
+            $scope.numberOfPages = Math.ceil($scope.total/$scope.rowLimit);
+            if ($scope.components !== undefined) {
+                $scope.displayComponents = $scope.components.slice(begin, end);
+            }
+            if ($scope.currentPage > $scope.numberOfPages) {
+                $scope.currentPage = $scope.numberOfPages;
+            }
+        });
+
         $scope.$watch('updateComponents.no', function() {
             if (angular.equals($scope.updateComponents.no, true)) {
                 $scope.updateComponents.yes = false;
@@ -62,9 +74,10 @@ angular.module('select-version', ['ngStorage'])
                         success(function (data) {
                             if (data.responseType != 'error') {
                                 $scope.components = data.components;
+                                $scope.displayComponents = data.components;
                                 $scope.totalForGrid = data.total;
                                 $scope.total = data.total;
-                                $scope.currentPage = 0;
+                                $scope.currentPage = 1;
                                 $scope.rowLimit = 20;
                                 $scope.numberOfPages = Math.ceil(data.total/$scope.rowLimit);
                                 for (var i = 0; i < $scope.totalForGrid; i++) {
