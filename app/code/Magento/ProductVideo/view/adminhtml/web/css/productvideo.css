@@ -20,8 +20,8 @@
 }
 
 #add_video_button {
-    /*background: #fff url(../images/icon-movie.png) center;*/
-    background: #fff url(http://joxi.ru/ZrJVGD9tQBayrj.gif) 50% 50% no-repeat;
-    background-size: contain;
+    background: #fff url(../images/icon-movie.gif) 50% 25% no-repeat;
     border: none;
+    width: 100%;
+    height: 100%;
 }
