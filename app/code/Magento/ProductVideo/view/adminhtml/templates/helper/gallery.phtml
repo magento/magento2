@@ -8,7 +8,7 @@
 
 /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content */
 $elementName = $block->getElement()->getName() . '[images]';
-$placeholderText = 'Click here to add videos.';//TODO:Add __(translater) when any helper would be created
+$placeholderText = 'Click here to add videos.';//TODO:Add $someHelper->__(translater) when any helper would be created
 ?>
 <div id="<?php echo $block->getHtmlId() ?>"
      class='gallery'
@@ -30,7 +30,6 @@ $placeholderText = 'Click here to add videos.';//TODO:Add __(translater) when an
         <?php echo $block->getChildHtml('additional_buttons'); ?>
         <div class="image video-placeholder">
             <button id="add_video_button" title="New Video" type="button" class="action-default scalable" onclick="jQuery('#new-video').modal('openModal'); jQuery('#new_video_form')[0].reset();" data-ui-id="widget-button-1">
-<!--                <span>New Video</span>-->
                 <img class="spacer" src="<?php echo $block->getViewFileUrl('images/spacer.gif')?>"/>
                 <p class="image-placeholder-text"><?php echo $placeholderText; ?></p>
             </button>
