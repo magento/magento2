@@ -29,7 +29,7 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event\Observer */
     protected $_observerMock;
 
-    /** @var \Magento\Framework\Object */
+    /** @var \Magento\Framework\DataObject */
     protected $_transport;
 
     /**
@@ -69,7 +69,7 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
             true,
             ['getData', 'isScopePrivate', 'getNameInLayout', 'getUrl']
         );
-        $this->_transport = new \Magento\Framework\Object(['output' => 'test output html']);
+        $this->_transport = new \Magento\Framework\DataObject(['output' => 'test output html']);
     }
 
     /**
@@ -99,19 +99,29 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
         $this->_configMock->expects($this->any())->method('isEnabled')->will($this->returnValue($cacheState));
 
         if ($cacheState) {
-            $eventMock->expects($this->once())->method('getElementName')->will($this->returnValue('blockName'));
-            $eventMock->expects($this->once())->method('getTransport')->will($this->returnValue($this->_transport));
-            $this->_layoutMock->expects($this->once())->method('isCacheable')->will($this->returnValue(true));
+            $eventMock->expects($this->once())
+                ->method('getElementName')
+                ->will($this->returnValue('blockName'));
 
-            $this->_layoutMock->expects($this->any())->method('getUpdate')->will($this->returnSelf());
-            $this->_layoutMock->expects($this->any())->method('getHandles')->will($this->returnValue([]));
-            $this->_layoutMock->expects(
-                $this->once()
-            )->method(
-                    'getBlock'
-                )->will(
-                    $this->returnValue($this->_blockMock)
-                );
+            $eventMock->expects($this->once())
+                ->method('getTransport')
+                ->will($this->returnValue($this->_transport));
+
+            $this->_layoutMock->expects($this->once())
+                ->method('isCacheable')
+                ->will($this->returnValue(true));
+
+            $this->_layoutMock->expects($this->any())
+                ->method('getUpdate')
+                ->will($this->returnSelf());
+
+            $this->_layoutMock->expects($this->any())
+                ->method('getHandles')
+                ->will($this->returnValue([]));
+            
+            $this->_layoutMock->expects($this->once())
+                ->method('getBlock')
+                ->will($this->returnValue($this->_blockMock));
 
             if ($varnishIsEnabled) {
                 $this->_blockMock->expects($this->once())
@@ -123,20 +133,12 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
                     ->will($this->returnValue('page_cache/block/wrapesi/with/handles/and/other/stuff'));
             }
             if ($scopeIsPrivate) {
-                $this->_blockMock->expects(
-                    $this->once()
-                )->method(
-                        'getNameInLayout'
-                    )->will(
-                        $this->returnValue('testBlockName')
-                    );
-                $this->_blockMock->expects(
-                    $this->once()
-                )->method(
-                        'isScopePrivate'
-                    )->will(
-                        $this->returnValue($scopeIsPrivate)
-                    );
+                $this->_blockMock->expects($this->once())
+                    ->method('getNameInLayout')
+                    ->will($this->returnValue('testBlockName'));
+                $this->_blockMock->expects($this->once())
+                    ->method('isScopePrivate')
+                    ->will($this->returnValue($scopeIsPrivate));
             }
             $this->_configMock->expects($this->any())->method('getType')->will($this->returnValue($varnishIsEnabled));
         }

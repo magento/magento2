@@ -31,6 +31,7 @@ class TermBucket implements BucketInterface
      * @param string $name
      * @param string $field
      * @param array $metrics
+     * @codeCoverageIgnore
      */
     public function __construct($name, $field, array $metrics)
     {
@@ -49,6 +50,7 @@ class TermBucket implements BucketInterface
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getName()
     {
@@ -57,6 +59,7 @@ class TermBucket implements BucketInterface
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getField()
     {
@@ -65,6 +68,7 @@ class TermBucket implements BucketInterface
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getMetrics()
     {

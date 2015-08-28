@@ -57,7 +57,7 @@ class Downloadable
                 foreach ($data as $rowData) {
                     if (empty($rowData['is_delete'])) {
                         $hasDownloadableData = true;
-                        break;
+                        break 2;
                     }
                 }
             }

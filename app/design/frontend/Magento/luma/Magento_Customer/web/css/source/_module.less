@@ -68,6 +68,16 @@
     }
 }
 
+.form-create-account {
+    .fieldset-fullname {
+        .fields {
+            .field {
+                float: none;
+            }
+        }
+    }
+}
+
 .box-billing-address,
 .box-shipping-address,
 .box-information,
@@ -220,6 +230,21 @@
                 > .control {
                     width: 55%;
                 }
+            }
+        }
+    }
+
+    .form-create-account {
+        .fieldset-fullname {
+            .fields {
+                .field {
+                    float: left;
+                    margin: 0 @indent__s @indent__s 0;
+                }
+            }
+            .field-name-prefix,
+            .field-name-suffix {
+                width: 50px;
             }
         }
     }

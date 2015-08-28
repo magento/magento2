@@ -19,7 +19,12 @@ class WebConfiguration extends AbstractActionController
     public function indexAction()
     {
         $setupInfo = new SetupInfo($_SERVER);
-        $view = new ViewModel(['autoBaseUrl' => $setupInfo->getProjectUrl()]);
+        $view = new ViewModel(
+            [
+                'autoBaseUrl'   => $setupInfo->getProjectUrl(),
+                'autoAdminPath' => $setupInfo->getProjectAdminPath()
+            ]
+        );
         $view->setTerminal(true);
         return $view;
     }

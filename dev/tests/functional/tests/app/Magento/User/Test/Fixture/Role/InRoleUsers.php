@@ -7,37 +7,23 @@
 namespace Magento\User\Test\Fixture\Role;
 
 use Magento\User\Test\Fixture\User;
+use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class InRoleUsers
  *
  * Data keys:
- *  - dataSet
+ *  - dataset
  */
-class InRoleUsers implements FixtureInterface
+class InRoleUsers extends DataSource
 {
-    /**
-     * Array with data set configuration settings
-     *
-     * @var array
-     */
-    protected $params;
-
     /**
      * Array with Admin Users
      *
      * @var array
      */
     protected $adminUsers;
-
-    /**
-     * Array with usernames
-     *
-     * @var array
-     */
-    protected $data;
 
     /**
      * @construct
@@ -48,10 +34,10 @@ class InRoleUsers implements FixtureInterface
     public function __construct(FixtureFactory $fixtureFactory, array $params, array $data = [])
     {
         $this->params = $params;
-        if (isset($data['dataSet']) && $data['dataSet'] !== '-') {
-            $dataSets = explode(',', $data['dataSet']);
-            foreach ($dataSets as $dataSet) {
-                $adminUser = $fixtureFactory->createByCode('user', ['dataSet' => trim($dataSet)]);
+        if (isset($data['dataset']) && $data['dataset'] !== '-') {
+            $datasets = explode(',', $data['dataset']);
+            foreach ($datasets as $dataset) {
+                $adminUser = $fixtureFactory->createByCode('user', ['dataset' => trim($dataset)]);
                 if (!$adminUser->hasData('user_id')) {
                     $adminUser->persist();
                 }
@@ -59,39 +45,6 @@ class InRoleUsers implements FixtureInterface
                 $this->data[] = $adminUser->getUsername();
             }
         }
-    }
-
-    /**
-     * Persist user role
-     *
-     * @return void
-     */
-    public function persist()
-    {
-        //
-    }
-
-    /**
-     * Return array with usernames
-     *
-     * @param string $key [optional]
-     * @return array|null
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function getData($key = null)
-    {
-        return $this->data;
-    }
-
-    /**
-     * Return data set configuration settings
-     *
-     * @return array
-     */
-    public function getDataConfig()
-    {
-        return $this->params;
     }
 
     /**

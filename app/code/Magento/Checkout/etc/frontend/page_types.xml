@@ -9,7 +9,7 @@
     <type id="checkout_cart_configure" label="Configure Cart Item (Any)"/>
     <type id="checkout_cart_index" label="Shopping Cart"/>
     <type id="checkout_onepage_failure" label="One Page Checkout Failure"/>
-    <type id="checkout_onepage_index" label="One Page Checkout"/>
+    <type id="checkout_index_index" label="One Page Checkout"/>
     <type id="checkout_onepage_paymentmethod" label="One Page Checkout Choose Payment Method"/>
     <type id="checkout_onepage_review" label="One Page Checkout Overview"/>
     <type id="checkout_onepage_shippingmethod" label="One Page Checkout Choose Shipping Method"/>

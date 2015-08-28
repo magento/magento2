@@ -172,7 +172,9 @@ class DataFixture
             }
         } catch (\Exception $e) {
             throw new \Exception(
-                sprintf("Error in fixture: %s.\n %s", json_encode($fixture), $e->getMessage())
+                sprintf("Error in fixture: %s.\n %s", json_encode($fixture), $e->getMessage()),
+                500,
+                $e
             );
         }
     }

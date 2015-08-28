@@ -9,34 +9,34 @@
 ?>
 <?php /** @var $block \Magento\Downloadable\Block\Sales\Order\Email\Items\Downloadable */ ?>
 <?php $_item = $block->getItem() ?>
-<?php $_order = $block->getItem()->getOrder(); ?>
+<?php $_order = $block->getItem()->getOrder() ?>
 <tr>
-    <td align="left" valign="top" style="padding:3px 9px">
-        <strong><?php echo $block->escapeHtml($_item->getName()) ?></strong>
+    <td class="item-info has-extra">
+        <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
+        <p class="sku"><?= __('SKU'); ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
         <?php if ($block->getItemOptions()): ?>
-        <dl style="margin:0; padding:0;">
+        <dl>
             <?php foreach ($block->getItemOptions() as $option): ?>
-            <dt><strong><em><?php echo $option['label'] ?></em></strong></dt>
-            <dd style="margin:0; padding:0 0 0 9px;"><?php echo $option['value'] ?></dd>
+            <dt><strong><em><?= $option['label'] ?></em></strong></dt>
+            <dd><?= $option['value'] ?></dd>
             <?php endforeach; ?>
         </dl>
         <?php endif; ?>
         <?php if ($links = $block->getLinks()->getPurchasedItems()): ?>
-        <dl style="margin:0; padding:0;">
-            <dt><strong><em><?php echo $block->getLinksTitle() ?></em></strong></dt>
+        <dl>
+            <dt><strong><em><?= $block->getLinksTitle() ?></em></strong></dt>
             <?php foreach ($links as $link): ?>
-                <dd style="margin:0; padding:0 0 0 9px;">
-                    <?php echo $block->escapeHtml($link->getLinkTitle()) ?>&nbsp;
-                    (<a href="<?php echo $block->getPurchasedLinkUrl($link) ?>" style="color:#1E7EC8;"><?php echo __('download') ?></a>)
+                <dd>
+                    <?= $block->escapeHtml($link->getLinkTitle()) ?>&nbsp;
+                    (<a href="<?= $block->getPurchasedLinkUrl($link) ?>"><?= __('download') ?></a>)
                 </dd>
             <?php endforeach; ?>
         </dl>
         <?php endif; ?>
-        <?php echo $block->escapeHtml($_item->getDescription()) ?>
+        <?= $block->escapeHtml($_item->getDescription()) ?>
     </td>
-    <td align="left" valign="top" style="padding:3px 9px"><?php echo $block->escapeHtml($block->getSku($_item)) ?></td>
-    <td align="center" valign="top" style="padding:3px 9px"><?php echo $_item->getQty()*1 ?></td>
-    <td align="right" valign="top" style="padding:3px 9px">
-        <?php echo $block->getItemPrice($_item); ?>
+    <td class="item-qty"><?= $_item->getQty() * 1 ?></td>
+    <td class="item-price">
+        <?= $block->getItemPrice($_item) ?>
     </td>
 </tr>

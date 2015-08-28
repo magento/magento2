@@ -20,14 +20,14 @@ class Password extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
     /**
      * Magento string lib
      *
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
     /**
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      */
-    public function __construct(\Magento\Framework\Stdlib\String $string)
+    public function __construct(\Magento\Framework\Stdlib\StringUtils $string)
     {
         $this->string = $string;
     }
@@ -37,7 +37,7 @@ class Password extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
      * a) check some rules for password
      * b) transform temporary attribute 'password' into real attribute 'password_hash'
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -49,20 +49,11 @@ class Password extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
         if ($length > 0) {
             if ($length < self::MIN_PASSWORD_LENGTH) {
                 throw new LocalizedException(
-                    __('The password must have at least %1 characters.', self::MIN_PASSWORD_LENGTH)
+                    __('Please enter a password with at least %1 characters.', self::MIN_PASSWORD_LENGTH)
                 );
             }
 
-            if ($this->string->substr(
-                $password,
-                0,
-                1
-            ) == ' ' || $this->string->substr(
-                $password,
-                $length - 1,
-                1
-            ) == ' '
-            ) {
+            if (trim($password) != $password) {
                 throw new LocalizedException(__('The password can not begin or end with a space.'));
             }
 
@@ -71,7 +62,7 @@ class Password extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
     }
 
     /**
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return bool
      */
     public function validate($object)

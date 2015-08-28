@@ -5,6 +5,8 @@
  */
 namespace Magento\Checkout\Test\Unit\Block\Onepage;
 
+use Magento\Sales\Model\Order;
+
 /**
  * Class SuccessTest
  * @package Magento\Checkout\Block\Onepage
@@ -22,11 +24,6 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
     protected $orderConfig;
 
     /**
-     * @var \Magento\Sales\Model\OrderFactory | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $orderFactory;
-
-    /**
      * @var \Magento\Checkout\Model\Session | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $checkoutSession;
@@ -36,14 +33,17 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->orderConfig = $this->getMock('Magento\Sales\Model\Order\Config', [], [], '', false);
-        $this->orderFactory = $this->getMock('Magento\Sales\Model\OrderFactory', ['create'], [], '', false);
-        $this->checkoutSession = $this->getMock('Magento\Checkout\Model\Session', ['getLastOrderId'], [], '', false);
+
+        $this->checkoutSession = $this->getMockBuilder(
+            'Magento\Checkout\Model\Session'
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->block = $objectManager->getObject(
             'Magento\Checkout\Block\Onepage\Success',
             [
                 'orderConfig' => $this->orderConfig,
-                'orderFactory' => $this->orderFactory,
                 'checkoutSession' => $this->checkoutSession
             ]
         );
@@ -67,35 +67,36 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider invisibleStatusesProvider
+     *
      * @param array $invisibleStatuses
-     * @param string $orderStatus
      * @param bool $expectedResult
      */
-    public function testToHtmlOrderVisibleOnFront(array $invisibleStatuses, $orderStatus, $expectedResult)
+    public function testToHtmlOrderVisibleOnFront(array $invisibleStatuses, $expectedResult)
     {
         $orderId = 5;
-        $order = $this->getMock('Magento\Sales\Model\Order', ['getId', '__wakeup', 'load', 'getStatus'], [], '', false);
+        $realOrderId = 100003332;
+        $status = Order::STATE_PENDING_PAYMENT;
 
-        $order->expects($this->any())
-            ->method('load')
-            ->with($orderId)
-            ->will($this->returnValue($order));
-        $order->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue($orderId));
-        $order->expects($this->any())
-            ->method('getStatus')
-            ->will($this->returnValue($orderStatus));
+        $order = $this->getMockBuilder('Magento\Sales\Model\Order')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->checkoutSession->expects($this->once())
-            ->method('getLastOrderId')
-            ->will($this->returnValue($orderId));
+            ->method('getLastRealOrder')
+            ->willReturn($order);
+        $order->expects($this->atLeastOnce())
+            ->method('getEntityId')
+            ->willReturn($orderId);
+        $order->expects($this->atLeastOnce())
+            ->method('getIncrementId')
+            ->willReturn($realOrderId);
+        $order->expects($this->atLeastOnce())
+            ->method('getStatus')
+            ->willReturn($status);
+
         $this->orderConfig->expects($this->any())
             ->method('getInvisibleOnFrontStatuses')
-            ->will($this->returnValue($invisibleStatuses));
-        $this->orderFactory->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($order));
+            ->willReturn($invisibleStatuses);
 
         $this->block->toHtml();
 
@@ -105,8 +106,8 @@ class SuccessTest extends \PHPUnit_Framework_TestCase
     public function invisibleStatusesProvider()
     {
         return [
-            [['status1', 'status2'], 'status1', false],
-            [['status1', 'status2'], 'status3', true]
+            [[Order::STATE_PENDING_PAYMENT, 'status2'],  false],
+            [['status1', 'status2'], true]
         ];
     }
 }

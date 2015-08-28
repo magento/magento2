@@ -85,7 +85,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         $this->reportResource = $this->getMock(
             'Magento\Sales\Model\Resource\Report',
-            ['getReadConnection', 'getMainTable'],
+            ['getConnection', 'getMainTable'],
             [],
             '',
             false
@@ -100,7 +100,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->selectMock = $this->getMock(
-            'Zend_Db_Select',
+            'Magento\Framework\DB\Select',
             ['from', 'where', 'group'],
             [],
             '',
@@ -112,7 +112,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->selectMock));
 
         $this->reportResource->expects($this->any())
-            ->method('getReadConnection')
+            ->method('getConnection')
             ->will($this->returnValue($this->connection));
         $this->reportResource->expects($this->any())
             ->method('getMainTable')

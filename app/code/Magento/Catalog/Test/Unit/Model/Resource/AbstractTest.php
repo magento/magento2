@@ -53,7 +53,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $object->setData('test_attr', 'test_attr');
         $object->setData('attribute_set_id', $set);
 
-        $entityType = new \Magento\Framework\Object();
+        $entityType = new \Magento\Framework\DataObject();
         $entityType->setEntityTypeCode('test');
         $entityType->setEntityTypeId(0);
         $entityType->setEntityTable('table');

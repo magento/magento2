@@ -18,7 +18,7 @@ class DirTest extends \PHPUnit_Framework_TestCase
     protected $filesystemMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\String|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_stringMock;
 
@@ -43,7 +43,7 @@ class DirTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
-        $this->_stringMock = $this->getMock('Magento\Framework\Stdlib\String', [], [], '', false, false);
+        $this->_stringMock = $this->getMock('Magento\Framework\Stdlib\StringUtils', [], [], '', false, false);
         $this->moduleRegistryMock = $this->getMock(
             'Magento\Framework\Module\ModuleRegistryInterface',
             [],

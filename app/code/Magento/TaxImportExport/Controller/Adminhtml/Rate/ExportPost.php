@@ -18,7 +18,7 @@ class ExportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
     public function execute()
     {
         /** start csv content and set template */
-        $headers = new \Magento\Framework\Object(
+        $headers = new \Magento\Framework\DataObject(
             [
                 'code' => __('Code'),
                 'country_name' => __('Country'),
@@ -82,5 +82,18 @@ class ExportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
             $content .= $rate->toString($template) . "\n";
         }
         return $this->fileFactory->create('tax_rates.csv', $content, DirectoryList::VAR_DIR);
+    }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed(
+            'Magento_Tax::manage_tax'
+        ) || $this->_authorization->isAllowed(
+            'Magento_TaxImportExport::import_export'
+        );
+
     }
 }

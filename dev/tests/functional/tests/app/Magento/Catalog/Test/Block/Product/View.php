@@ -113,7 +113,7 @@ class View extends AbstractConfigureBlock
     protected $clickAddToCompare = '.action.tocompare';
 
     /**
-     * "Add to Wishlist" button.
+     * Locator value for "Add to Wish List" button.
      *
      * @var string
      */
@@ -125,6 +125,20 @@ class View extends AbstractConfigureBlock
      * @var string
      */
     protected $messageBlock = '.page.messages';
+
+    /**
+     * Minicart block locator.
+     *
+     * @var string
+     */
+    protected $miniCartBlock = '[data-block="minicart"]';
+
+    /**
+     * Success message selector.
+     *
+     * @var string
+     */
+    protected $successMessage = '[data-ui-id$=message-success]';
 
     /**
      * Get block price.
@@ -147,14 +161,21 @@ class View extends AbstractConfigureBlock
      */
     public function addToCart(FixtureInterface $product)
     {
+        /** @var \Magento\Checkout\Test\Block\Cart\Sidebar $miniCart */
+        $miniCart = $this->blockFactory->create(
+            '\Magento\Checkout\Test\Block\Cart\Sidebar',
+            ['element' => $this->browser->find($this->miniCartBlock)]
+        );
         /** @var CatalogProductSimple $product */
         $checkoutData = $product->getCheckoutData();
 
+        $miniCart->waitInit();
         $this->fillOptions($product);
         if (isset($checkoutData['qty'])) {
             $this->setQty($checkoutData['qty']);
         }
         $this->clickAddToCart();
+        $miniCart->waitLoader();
     }
 
     /**
@@ -353,7 +374,7 @@ class View extends AbstractConfigureBlock
     }
 
     /**
-     * Click "Add to Wishlist" button.
+     * Click "Add to Wish List".
      *
      * @return void
      */

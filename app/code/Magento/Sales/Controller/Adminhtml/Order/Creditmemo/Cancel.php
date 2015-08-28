@@ -9,10 +9,6 @@ use Magento\Backend\App\Action;
 
 class Cancel extends \Magento\Backend\App\Action
 {
-    /**
-     * @var \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader
-     */
-    protected $creditmemoLoader;
 
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
@@ -21,15 +17,12 @@ class Cancel extends \Magento\Backend\App\Action
 
     /**
      * @param Action\Context $context
-     * @param \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
     ) {
-        $this->creditmemoLoader = $creditmemoLoader;
         $this->resultForwardFactory = $resultForwardFactory;
         parent::__construct($context);
     }
@@ -49,30 +42,21 @@ class Cancel extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $this->creditmemoLoader->setOrderId($this->getRequest()->getParam('order_id'));
-        $this->creditmemoLoader->setCreditmemoId($this->getRequest()->getParam('creditmemo_id'));
-        $this->creditmemoLoader->setCreditmemo($this->getRequest()->getParam('creditmemo'));
-        $this->creditmemoLoader->setInvoiceId($this->getRequest()->getParam('invoice_id'));
-        $creditmemo = $this->creditmemoLoader->load();
-        if ($creditmemo) {
+        $creditmemoId = $this->getRequest()->getParam('creditmemo_id');
+        if ($creditmemoId) {
             try {
-                $creditmemo->cancel();
-                $transactionSave = $this->_objectManager->create('Magento\Framework\DB\Transaction');
-                $transactionSave->addObject($creditmemo);
-                $transactionSave->addObject($creditmemo->getOrder());
-
-                if ($creditmemo->getInvoice()) {
-                    $transactionSave->addObject($creditmemo->getInvoice());
-                }
-                $transactionSave->save();
+                $creditmemoManagement = $this->_objectManager->create(
+                    'Magento\Sales\Api\CreditmemoManagementInterface'
+                );
+                $creditmemoManagement->cancel($creditmemoId);
                 $this->messageManager->addSuccess(__('The credit memo has been canceled.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addError(__('You canceled the credit memo.'));
+                $this->messageManager->addError(__('Credit memo has not been canceled.'));
             }
             $resultRedirect = $this->resultRedirectFactory->create();
-            $resultRedirect->setPath('sales/*/view', ['creditmemo_id' => $creditmemo->getId()]);
+            $resultRedirect->setPath('sales/*/view', ['creditmemo_id' => $creditmemoId]);
             return $resultRedirect;
         } else {
             $resultForward = $this->resultForwardFactory->create();

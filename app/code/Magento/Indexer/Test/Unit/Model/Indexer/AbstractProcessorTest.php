@@ -7,20 +7,22 @@ namespace Magento\Indexer\Test\Unit\Model\Indexer;
 
 class AbstractProcessorTest extends \PHPUnit_Framework_TestCase
 {
+    const INDEXER_ID = 'stub_indexer_id';
+    
     /**
      * @var \Magento\Indexer\Test\Unit\Model\Indexer\AbstractProcessorStub
      */
     protected $model;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_indexerRegistryMock;
 
     protected function setUp()
     {
         $this->_indexerRegistryMock = $this->getMock(
-            '\Magento\Indexer\Model\IndexerRegistry',
+            '\Magento\Framework\Indexer\IndexerRegistry',
             ['isScheduled', 'get', 'reindexRow', 'reindexList', 'reindexAll', 'invalidate'],
             [],
             '',
@@ -34,7 +36,7 @@ class AbstractProcessorTest extends \PHPUnit_Framework_TestCase
     public function testGetIndexer()
     {
         $this->_indexerRegistryMock->expects($this->once())->method('get')->with(
-            \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID
+            self::INDEXER_ID
         )->willReturnSelf();
         $this->model->getIndexer();
     }
@@ -42,7 +44,7 @@ class AbstractProcessorTest extends \PHPUnit_Framework_TestCase
     public function testReindexAll()
     {
         $this->_indexerRegistryMock->expects($this->once())->method('get')->with(
-            \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID
+            self::INDEXER_ID
         )->willReturnSelf();
         $this->_indexerRegistryMock->expects($this->once())->method('reindexAll')->willReturnSelf();
         $this->model->reindexAll();
@@ -51,7 +53,7 @@ class AbstractProcessorTest extends \PHPUnit_Framework_TestCase
     public function testMarkIndexerAsInvalid()
     {
         $this->_indexerRegistryMock->expects($this->once())->method('get')->with(
-            \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID
+            self::INDEXER_ID
         )->willReturnSelf();
         $this->_indexerRegistryMock->expects($this->once())->method('invalidate')->willReturnSelf();
         $this->model->markIndexerAsInvalid();
@@ -59,7 +61,7 @@ class AbstractProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIndexerId()
     {
-        $this->assertEquals(\Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID, $this->model->getIndexerId());
+        $this->assertEquals(self::INDEXER_ID, $this->model->getIndexerId());
     }
 
     /**
@@ -71,13 +73,13 @@ class AbstractProcessorTest extends \PHPUnit_Framework_TestCase
         $id = 1;
         if ($scheduled) {
             $this->_indexerRegistryMock->expects($this->once())->method('get')->with(
-                \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID
+                self::INDEXER_ID
             )->willReturnSelf();
             $this->_indexerRegistryMock->expects($this->once())->method('isScheduled')->willReturn($scheduled);
             $this->assertEquals(null, $this->model->reindexRow($id));
         } else {
             $this->_indexerRegistryMock->expects($this->exactly(2))->method('get')->with(
-                \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID
+                self::INDEXER_ID
             )->willReturnSelf();
             $this->_indexerRegistryMock->expects($this->once())->method('isScheduled')->willReturn($scheduled);
             $this->_indexerRegistryMock->expects($this->once())->method('reindexRow')->with($id)->willReturnSelf();
@@ -94,13 +96,13 @@ class AbstractProcessorTest extends \PHPUnit_Framework_TestCase
         $ids = [1];
         if ($scheduled) {
             $this->_indexerRegistryMock->expects($this->once())->method('get')->with(
-                \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID
+                self::INDEXER_ID
             )->willReturnSelf();
             $this->_indexerRegistryMock->expects($this->once())->method('isScheduled')->willReturn($scheduled);
             $this->assertEquals(null, $this->model->reindexList($ids));
         } else {
             $this->_indexerRegistryMock->expects($this->exactly(2))->method('get')->with(
-                \Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID
+                self::INDEXER_ID
             )->willReturnSelf();
             $this->_indexerRegistryMock->expects($this->once())->method('isScheduled')->willReturn($scheduled);
             $this->_indexerRegistryMock->expects($this->once())->method('reindexList')->with($ids)->willReturnSelf();
@@ -117,5 +119,17 @@ class AbstractProcessorTest extends \PHPUnit_Framework_TestCase
             [true],
             [false]
         ];
+    }
+
+    /**
+     * Test isIndexerScheduled()
+     */
+    public function testIsIndexerScheduled()
+    {
+        $this->_indexerRegistryMock->expects($this->once())->method('get')->with(
+            \Magento\Indexer\Test\Unit\Model\Indexer\AbstractProcessorStub::INDEXER_ID
+        )->willReturnSelf();
+        $this->_indexerRegistryMock->expects($this->once())->method('isScheduled')->willReturn(false);
+        $this->model->isIndexerScheduled();
     }
 }

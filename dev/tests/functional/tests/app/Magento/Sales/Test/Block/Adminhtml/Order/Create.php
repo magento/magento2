@@ -234,8 +234,7 @@ class Create extends Block
             ['element' => $this->_rootElement->find($this->itemsBlock)]
         );
         foreach ($products as $product) {
-            $items->getItemProductByName($product->getName())
-                ->fill($product->getDataFieldConfig('checkout_data')['source']);
+            $items->getItemProductByName($product->getName())->fillCheckoutData($product->getCheckoutData());
         }
         $this->updateItems();
     }
@@ -256,17 +255,19 @@ class Create extends Block
      *
      * @param FixtureInterface $address
      * @param string $saveAddress
+     * @param bool $setShippingAddress [optional]
      * @return void
      */
-    public function fillAddresses(FixtureInterface $address, $saveAddress = 'No')
+    public function fillAddresses(FixtureInterface $address, $saveAddress = 'No', $setShippingAddress = true)
     {
         $this->getShippingAddressBlock()->uncheckSameAsBillingShippingAddress();
-        $this->getTemplateBlock()->waitLoader();
         $this->getBillingAddressBlock()->fill($address);
         $this->getBillingAddressBlock()->saveInAddressBookBillingAddress($saveAddress);
         $this->getTemplateBlock()->waitLoader();
-        $this->getShippingAddressBlock()->setSameAsBillingShippingAddress();
-        $this->getTemplateBlock()->waitLoader();
+        if ($setShippingAddress) {
+            $this->getShippingAddressBlock()->setSameAsBillingShippingAddress();
+            $this->getTemplateBlock()->waitLoader();
+        }
     }
 
     /**

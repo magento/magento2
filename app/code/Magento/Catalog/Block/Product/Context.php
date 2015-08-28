@@ -72,6 +72,11 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     protected $pageConfig;
 
     /**
+     * @var ImageBuilder
+     */
+    protected $imageBuilder;
+
+    /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -94,6 +99,9 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * @param \Magento\Framework\View\TemplateEnginePool $enginePool
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\View\Page\Config $pageConfig
+     * @param \Magento\Framework\View\Element\Template\File\Resolver $resolver
+     * @param \Magento\Framework\View\Element\Template\File\Validator $validator
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxHelper
@@ -103,9 +111,9 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * @param \Magento\Wishlist\Helper\Data $wishlistHelper
      * @param \Magento\Catalog\Helper\Product\Compare $compareProduct
      * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @param ImageBuilder $imageBuilder
      * @param ReviewRendererInterface $reviewRenderer
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
-     * @param \Magento\Framework\View\Page\Config $pageConfig
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -133,6 +141,8 @@ class Context extends \Magento\Framework\View\Element\Template\Context
         \Magento\Framework\App\State $appState,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\View\Page\Config $pageConfig,
+        \Magento\Framework\View\Element\Template\File\Resolver $resolver,
+        \Magento\Framework\View\Element\Template\File\Validator $validator,
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\Framework\Registry $registry,
         \Magento\Tax\Helper\Data $taxHelper,
@@ -142,10 +152,12 @@ class Context extends \Magento\Framework\View\Element\Template\Context
         \Magento\Wishlist\Helper\Data $wishlistHelper,
         \Magento\Catalog\Helper\Product\Compare $compareProduct,
         \Magento\Catalog\Helper\Image $imageHelper,
+        \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder,
         ReviewRendererInterface $reviewRenderer,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
     ) {
         $this->imageHelper = $imageHelper;
+        $this->imageBuilder = $imageBuilder;
         $this->compareProduct = $compareProduct;
         $this->wishlistHelper = $wishlistHelper;
         $this->cartHelper = $cartHelper;
@@ -179,7 +191,9 @@ class Context extends \Magento\Framework\View\Element\Template\Context
             $enginePool,
             $appState,
             $storeManager,
-            $pageConfig
+            $pageConfig,
+            $resolver,
+            $validator
         );
     }
 
@@ -229,6 +243,14 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     public function getImageHelper()
     {
         return $this->imageHelper;
+    }
+
+    /**
+     * @return \Magento\Catalog\Block\Product\ImageBuilder
+     */
+    public function getImageBuilder()
+    {
+        return $this->imageBuilder;
     }
 
     /**

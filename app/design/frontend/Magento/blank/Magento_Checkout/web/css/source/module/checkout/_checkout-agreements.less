@@ -1,0 +1,34 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Common
+//  _____________________________________________
+
+& when (@media-common = true) {
+    .checkout-agreements-block {
+        margin-bottom: @indent__base;
+
+        .action-show {
+            &:extend(.abs-action-button-as-link all);
+            vertical-align: baseline;
+        }
+    }
+
+    // Checkout Agreements in popup
+    .checkout-agreements-items {
+        &:extend(.abs-reset-list all);
+        padding-bottom: @indent__l;
+
+        .checkout-agreements-item {
+            margin-bottom: @indent__base;
+        }
+
+        .checkout-agreements-item-title {
+            &:extend(.abs-checkout-title all);
+            border-bottom: 0;
+        }
+    }
+}

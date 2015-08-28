@@ -6,11 +6,13 @@
 
 // @codingStandardsIgnoreFile
 
+namespace Magento\Framework\File\Test\Unit;
+
+use Magento\Framework\Filesystem\Driver\File;
+
 /**
  * Test class for \Magento\Framework\File\Csv.
  */
-namespace Magento\Framework\File\Test\Unit;
-
 class CsvTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -22,7 +24,7 @@ class CsvTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = new \Magento\Framework\File\Csv();
+        $this->_model = new \Magento\Framework\File\Csv(new File());
     }
 
     protected function tearDown()
@@ -54,7 +56,7 @@ class CsvTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage File "FileNameThatShouldNotExist" do not exists
+     * @expectedExceptionMessage File "FileNameThatShouldNotExist" does not exist
      */
     public function testGetDataFileNonExistent()
     {

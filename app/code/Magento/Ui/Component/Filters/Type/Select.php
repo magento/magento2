@@ -32,33 +32,23 @@ class Select extends AbstractFilter
     protected $optionsProvider;
 
     /**
-     * Constructor
-     *
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param OptionSourceInterface $optionsProvider
+     * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
+     * @param OptionSourceInterface|null $optionsProvider
      * @param array $components
      * @param array $data
      */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
+        \Magento\Framework\Api\FilterBuilder $filterBuilder,
         OptionSourceInterface $optionsProvider = null,
         array $components = [],
         array $data = []
     ) {
         $this->optionsProvider = $optionsProvider;
-        parent::__construct($context, $uiComponentFactory, $components, $data);
-    }
-
-    /**
-     * Get component name
-     *
-     * @return string
-     */
-    public function getComponentName()
-    {
-        return static::NAME;
+        parent::__construct($context, $uiComponentFactory, $filterBuilder, $components, $data);
     }
 
     /**
@@ -101,25 +91,27 @@ class Select extends AbstractFilter
      */
     protected function applyFilter()
     {
-        $condition = $this->getCondition();
-        if ($condition !== null) {
-            $this->getContext()->getDataProvider()->addFilter($this->getName(), $condition);
+        if (isset($this->filterData[$this->getName()])) {
+            $value = $this->filterData[$this->getName()];
+
+            if (!empty($value) || is_numeric($value)) {
+                $filter = $this->filterBuilder->setConditionType('eq')
+                    ->setField($this->getName())
+                    ->setValue($value)
+                    ->create();
+
+                $this->getContext()->getDataProvider()->addFilter($filter);
+            }
         }
     }
 
     /**
-     * Get condition by data type
+     * Returns options provider
      *
-     * @return array|null
+     * @return OptionSourceInterface
      */
-    public function getCondition()
+    public function getOptionProvider()
     {
-        $value = isset($this->filterData[$this->getName()]) ? $this->filterData[$this->getName()] : null;
-        $condition = null;
-        if (!empty($value) || is_numeric($value)) {
-            $condition = ['eq' => $value];
-        }
-
-        return $condition;
+        return $this->optionsProvider;
     }
 }

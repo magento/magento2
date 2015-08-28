@@ -13,7 +13,7 @@ use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Controller\RegistryConstants;
 use Magento\Customer\Model\Address\Mapper;
 use Magento\Framework\Message\Error;
-use Magento\Framework\ObjectFactory;
+use Magento\Framework\DataObjectFactory as ObjectFactory;
 use Magento\Framework\Api\DataObjectHelper;
 
 /**
@@ -24,7 +24,7 @@ use Magento\Framework\Api\DataObjectHelper;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-class Index extends \Magento\Backend\App\Action
+abstract class Index extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\Validator
@@ -70,7 +70,7 @@ class Index extends \Magento\Backend\App\Action
     /** @var \Magento\Framework\Math\Random */
     protected $_random;
 
-    /** @var \Magento\Framework\ObjectFactory */
+    /** @var ObjectFactory */
     protected $_objectFactory;
 
     /**
@@ -229,20 +229,16 @@ class Index extends \Magento\Backend\App\Action
     /**
      * Customer initialization
      *
-     * @param string $idFieldName
      * @return string customer id
      */
-    protected function _initCustomer($idFieldName = 'id')
+    protected function initCurrentCustomer()
     {
-        $customerId = (int)$this->getRequest()->getParam($idFieldName);
-        $customer = $this->_objectManager->create('Magento\Customer\Model\Customer');
+        $customerId = (int)$this->getRequest()->getParam('id');
+
         if ($customerId) {
-            $customer->load($customerId);
             $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customerId);
         }
 
-        // TODO: Investigate if any piece of code still relies on this; remove if not.
-        $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER, $customer);
         return $customerId;
     }
 

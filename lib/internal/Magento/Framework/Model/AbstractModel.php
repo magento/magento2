@@ -3,7 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Model;
 
 use Magento\Framework\Phrase;
@@ -15,7 +14,7 @@ use Magento\Framework\Phrase;
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-abstract class AbstractModel extends \Magento\Framework\Object
+abstract class AbstractModel extends \Magento\Framework\DataObject
 {
     /**
      * Prefix of model events names
@@ -185,7 +184,7 @@ abstract class AbstractModel extends \Magento\Framework\Object
         $this->_actionValidator = $context->getActionValidator();
 
         if (method_exists($this->_resource, 'getIdFieldName')
-            || $this->_resource instanceof \Magento\Framework\Object
+            || $this->_resource instanceof \Magento\Framework\DataObject
         ) {
             $this->_idFieldName = $this->_getResource()->getIdFieldName();
         }
@@ -455,7 +454,7 @@ abstract class AbstractModel extends \Magento\Framework\Object
     {
         if (empty($this->_resourceName) && empty($this->_resource)) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase('Resource is not set.')
+                new \Magento\Framework\Phrase('The resource isn\'t set.')
             );
         }
 
@@ -936,5 +935,15 @@ abstract class AbstractModel extends \Magento\Framework\Object
     public function getStoredData()
     {
         return $this->storedData;
+    }
+
+    /**
+     * Returns _eventPrefix
+     *
+     * @return string
+     */
+    public function getEventPrefix()
+    {
+        return $this->_eventPrefix;
     }
 }

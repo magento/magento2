@@ -1268,10 +1268,13 @@ input.no-display,
         border-bottom: 0;
     }
 
-    .fieldset-wrapper-title > .actions,
     .fieldset .legend > .actions {
         float: right;
         padding-top: 8px;
+    }
+
+    .fieldset-wrapper-title > .actions {
+        float: right;
     }
 
     .fieldset > .legend + br {
@@ -2665,14 +2668,6 @@ input.no-display,
 
     // Content
 
-    .field-store_default_content .buttons-set {
-        margin-bottom: 9px;
-    }
-
-    .field-store_default_content .buttons-set button {
-        margin-right: 4px;
-    }
-
     .field-store_0_content_use input[type="checkbox"] {
         margin-right: 8px;
         position: relative;
@@ -2696,10 +2691,6 @@ input.no-display,
         margin-top: 25px;
         overflow: auto;
         padding-bottom: 10px;
-    }
-
-    .cms-hierarchy .buttons-set {
-        margin-bottom: 10px;
     }
 
     .cms-hierarchy .cms-hierarchy-tree {
@@ -2746,32 +2737,10 @@ input.no-display,
     }
 
     //
-    //  CMS -> Static Blocks
-    //  --------------------------------------
-
-
-    #buttonsblock_content.buttons-set {
-        margin-bottom: 9px;
-    }
-
-    #buttonsblock_content.buttons-set button {
-        margin-right: 4px;
-    }
-
-    //
     //  CMS -> Manage Content
     //  --------------------------------------
 
-
     // Content
-
-    .cms-manage-content-actions .buttons-set {
-        margin-bottom: 9px;
-    }
-
-    .cms-manage-content-actions .buttons-set button {
-        margin-right: 4px;
-    }
 
     .cms-manage-content-actions textarea {
         width: 100%;
@@ -2919,14 +2888,6 @@ input.no-display,
 
     .field-attributes_box .control-value {
         width: 100%;
-    }
-
-    .adminhtml-googleshopping-types-new #attribute_set {
-        padding: 0;
-    }
-
-    .adminhtml-googleshopping-types-new #gcontent_attributes_container {
-        margin-top: -6px;
     }
 
     //
@@ -3771,7 +3732,7 @@ input.no-display,
     }
 
     //
-    //  Shopping Cart Price Rule
+    //  Cart Price Rule
     //  --------------------------------------
 
     .fieldset .field-coupon_code,
@@ -4331,23 +4292,6 @@ input.no-display,
     }
 }
 
-.adminhtml-googleshopping-items-index {
-    .admin__scope-old {
-        .grid-title {
-            padding: 15px;
-            .title {
-                font-size: 18px;
-            }
-        }
-        .grid {
-            padding-bottom: 25px;
-        }
-        .page-actions {
-            float: right;
-        }
-    }
-}
-
 .adminhtml-system-backup-index,
 .adminhtml-scheduled-operation-index,
 .adminhtml-system-currency-index,
@@ -4416,13 +4360,11 @@ input.no-display,
     }
 }
 
-[class^=' newsletter-'] {
-    .admin__scope-old {
-        .buttons-set {
-            margin: 0 0 15px;
-            button {
-                margin-right: 4px;
-            }
+.admin__scope-old {
+    .buttons-set {
+        margin: 0 0 15px;
+        button {
+            margin-right: 4px;
         }
     }
 }

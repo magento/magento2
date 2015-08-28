@@ -59,9 +59,9 @@ class ThemeValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
         $theme->expects($this->once())->method('getId')->willReturn(6);
-        $defaultEntity = new \Magento\Framework\Object(['value' => 6, 'scope' => 'default', 'scope_id' => 8]);
-        $websitesEntity = new \Magento\Framework\Object(['value' => 6, 'scope' => 'websites', 'scope_id' => 8]);
-        $storesEntity = new \Magento\Framework\Object(['value' => 6, 'scope' => 'stores', 'scope_id' => 8]);
+        $defaultEntity = new \Magento\Framework\DataObject(['value' => 6, 'scope' => 'default', 'scope_id' => 8]);
+        $websitesEntity = new \Magento\Framework\DataObject(['value' => 6, 'scope' => 'websites', 'scope_id' => 8]);
+        $storesEntity = new \Magento\Framework\DataObject(['value' => 6, 'scope' => 'stores', 'scope_id' => 8]);
         $this->themeProvider->expects($this->once())->method('getThemeByFullPath')->willReturn($theme);
         $this->configData->expects($this->once())->method('getCollection')->willReturn($this->configData);
         $this->configData
@@ -81,9 +81,9 @@ class ThemeValidatorTest extends \PHPUnit_Framework_TestCase
         $result = $this->themeValidator->validateIsThemeInUse(['frontend/Magento/a']);
         $this->assertEquals(
             [
-                'frontend/Magento/a is in use in default config',
-                'frontend/Magento/a is in use in website websiteA',
-                'frontend/Magento/a is in use in store storeA'
+                '<error>frontend/Magento/a is in use in default config</error>',
+                '<error>frontend/Magento/a is in use in website websiteA</error>',
+                '<error>frontend/Magento/a is in use in store storeA</error>'
             ],
             $result
         );

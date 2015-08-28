@@ -75,21 +75,21 @@ interface AdapterInterface
     /**
      * Begin new DB transaction for connection
      *
-     * @return \Magento\Framework\DB\Adapter\Pdo\Mysql
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
     public function beginTransaction();
 
     /**
      * Commit DB transaction
      *
-     * @return \Magento\Framework\DB\Adapter\Pdo\Mysql
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
     public function commit();
 
     /**
      * Roll-back DB transaction
      *
-     * @return \Magento\Framework\DB\Adapter\Pdo\Mysql
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
     public function rollBack();
 
@@ -128,6 +128,16 @@ interface AdapterInterface
      * @return \Zend_Db_Statement_Interface
      */
     public function createTemporaryTable(Table $table);
+
+    /**
+     * Create temporary table from other table
+     *
+     * @param string $temporaryTableName
+     * @param string $originTableName
+     * @param bool $ifNotExists
+     * @return \Zend_Db_Statement_Interface
+     */
+    public function createTemporaryTableLike($temporaryTableName, $originTableName, $ifNotExists = false);
 
     /**
      * Drop temporary table from database
@@ -222,7 +232,7 @@ interface AdapterInterface
      * @param array|string $definition
      * @param boolean $flushData
      * @param string $schemaName
-     * @return \Magento\Framework\DB\Adapter\Pdo\Mysql
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
     public function modifyColumnByDdl($tableName, $columnName, $definition, $flushData = false, $schemaName = null);
 
@@ -502,7 +512,7 @@ interface AdapterInterface
      * Prepares and executes an SQL statement with bound data.
      *
      * @param  mixed  $sql  The SQL statement with placeholders.
-     *                      May be a string or \Zend_Db_Select.
+     *                      May be a string or \Magento\Framework\DB\Select.
      * @param  mixed  $bind An array of data or data itself to bind to the placeholders.
      * @return \Zend_Db_Statement_Interface
      */
@@ -512,7 +522,7 @@ interface AdapterInterface
      * Fetches all SQL result rows as a sequential array.
      * Uses the current fetchMode for the adapter.
      *
-     * @param string|\Zend_Db_Select $sql  An SQL SELECT statement.
+     * @param string|\Magento\Framework\DB\Select $sql  An SQL SELECT statement.
      * @param mixed                 $bind Data to bind into SELECT placeholders.
      * @param mixed                 $fetchMode Override current fetch mode.
      * @return array
@@ -523,7 +533,7 @@ interface AdapterInterface
      * Fetches the first row of the SQL result.
      * Uses the current fetchMode for the adapter.
      *
-     * @param string|\Zend_Db_Select $sql An SQL SELECT statement.
+     * @param string|\Magento\Framework\DB\Select $sql An SQL SELECT statement.
      * @param mixed $bind Data to bind into SELECT placeholders.
      * @param mixed                 $fetchMode Override current fetch mode.
      * @return array
@@ -539,7 +549,7 @@ interface AdapterInterface
      * rows with duplicate values in the first column will
      * overwrite previous data.
      *
-     * @param string|\Zend_Db_Select $sql An SQL SELECT statement.
+     * @param string|\Magento\Framework\DB\Select $sql An SQL SELECT statement.
      * @param mixed $bind Data to bind into SELECT placeholders.
      * @return array
      */
@@ -550,7 +560,7 @@ interface AdapterInterface
      *
      * The first column in each row is used as the array key.
      *
-     * @param string|\Zend_Db_Select $sql An SQL SELECT statement.
+     * @param string|\Magento\Framework\DB\Select $sql An SQL SELECT statement.
      * @param mixed $bind Data to bind into SELECT placeholders.
      * @return array
      */
@@ -562,7 +572,7 @@ interface AdapterInterface
      * The first column is the key, the second column is the
      * value.
      *
-     * @param string|\Zend_Db_Select $sql An SQL SELECT statement.
+     * @param string|\Magento\Framework\DB\Select $sql An SQL SELECT statement.
      * @param mixed $bind Data to bind into SELECT placeholders.
      * @return array
      */
@@ -571,7 +581,7 @@ interface AdapterInterface
     /**
      * Fetches the first column of the first row of the SQL result.
      *
-     * @param string|\Zend_Db_Select $sql An SQL SELECT statement.
+     * @param string|\Magento\Framework\DB\Select $sql An SQL SELECT statement.
      * @param mixed $bind Data to bind into SELECT placeholders.
      * @return string
      */
@@ -680,10 +690,10 @@ interface AdapterInterface
     /**
      * Set cache adapter
      *
-     * @param \Magento\Framework\Cache\FrontendInterface $adapter
+     * @param \Magento\Framework\Cache\FrontendInterface $cacheAdapter
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    public function setCacheAdapter(\Magento\Framework\Cache\FrontendInterface $adapter);
+    public function setCacheAdapter(\Magento\Framework\Cache\FrontendInterface $cacheAdapter);
 
     /**
      * Allow DDL caching
@@ -917,6 +927,17 @@ interface AdapterInterface
      * @return string
      */
     public function getTableName($tableName);
+
+
+    /**
+     * Build a trigger name based on table name and trigger details
+     *
+     * @param string $tableName  The table that is the subject of the trigger
+     * @param string $time  Either "before" or "after"
+     * @param string $event  The DB level event which activates the trigger, i.e. "update" or "insert"
+     * @return string
+     */
+    public function getTriggerName($tableName, $time, $event);
 
     /**
      * Retrieve valid index name

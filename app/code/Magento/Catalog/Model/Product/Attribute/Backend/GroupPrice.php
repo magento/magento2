@@ -24,6 +24,7 @@ class GroupPrice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupP
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
+     * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\GroupPrice $productAttributeBackendGroupPrice
@@ -33,6 +34,7 @@ class GroupPrice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupP
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
+        \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Catalog\Model\Resource\Product\Attribute\Backend\GroupPrice $productAttributeBackendGroupPrice
@@ -43,6 +45,7 @@ class GroupPrice extends \Magento\Catalog\Model\Product\Attribute\Backend\GroupP
             $storeManager,
             $catalogData,
             $config,
+            $localeFormat,
             $catalogProductType,
             $groupManagement
         );

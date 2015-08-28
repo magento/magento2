@@ -7,12 +7,11 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Checkout\Test\TestCase\OnePageCheckoutTest">
-        <variation name="OnePageCheckoutTestVariation24">
-            <data name="description" xsi:type="string">MAGETWO-12848 – Use UPS Online Shipping Carrier on Checkout as a Registered Customer</data>
+        <variation name="OnePageCheckoutTestVariation24" summary="Use UPS Online Shipping Carrier on Checkout as a Registered Customer" ticketId="MAGETWO-12848">
             <data name="products" xsi:type="string">catalogProductSimple::default, configurableProduct::default, bundleProduct::bundle_fixed_product</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
-            <data name="customer/dataSet" xsi:type="string">customer_US</data>
-            <data name="billingAddress/dataSet" xsi:type="string">customer_US</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="billingAddress/dataset" xsi:type="string">US_address_1</data>
             <data name="shipping/shipping_service" xsi:type="string">United Parcel Service</data>
             <data name="shipping/shipping_method" xsi:type="string">UPS Ground</data>
             <data name="cart/data/shipping_method" xsi:type="string">UPS Ground</data>
@@ -24,12 +23,12 @@
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty"/>
         </variation>
         <variation name="OnePageCheckoutTestVariation25">
-            <data name="description" xsi:type="string">Checkout as guest using UPS with US shipping origin and UK customer</data>
+            <data name="description" xsi:type="string">Check Out as Guest using UPS with US shipping origin and UK customer</data>
             <data name="products" xsi:type="string">catalogProductSimple::default, configurableProduct::default, bundleProduct::bundle_fixed_product</data>
             <data name="checkoutMethod" xsi:type="string">guest</data>
-            <data name="customer/dataSet" xsi:type="string">customer_UK</data>
-            <data name="address/dataSet" xsi:type="string">customer_UK</data>
-            <data name="billingAddress/dataSet" xsi:type="string">customer_UK</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
+            <data name="address/dataset" xsi:type="string">UK_address</data>
+            <data name="billingAddress/dataset" xsi:type="string">UK_address</data>
             <data name="shipping/shipping_service" xsi:type="string">United Parcel Service</data>
             <data name="shipping/shipping_method" xsi:type="string">UPS Worldwide Expedited</data>
             <data name="cart/data/shipping_method" xsi:type="string">UPS Worldwide Expedited</data>

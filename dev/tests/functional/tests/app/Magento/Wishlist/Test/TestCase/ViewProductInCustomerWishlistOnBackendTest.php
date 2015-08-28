@@ -15,7 +15,7 @@ use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
  *
  * Preconditions:
  * 1. Create customer.
- * 2. Create products from dataSet.
+ * 2. Create products from dataset.
  * 3. Add products to the customer's wish list (composite products should be configured).
  *
  * Steps:

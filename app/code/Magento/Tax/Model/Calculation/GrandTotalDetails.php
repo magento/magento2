@@ -7,19 +7,19 @@
 namespace Magento\Tax\Model\Calculation;
 
 use Magento\Tax\Api\Data\GrandTotalDetailsInterface;
-use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Api\AbstractSimpleObject;
 
 /**
  * Grand Total Tax Details Model
  */
-class GrandTotalDetails extends AbstractExtensibleModel implements GrandTotalDetailsInterface
+class GrandTotalDetails extends AbstractSimpleObject implements GrandTotalDetailsInterface
 {
     /**#@+
      * Constants defined for keys of array, makes typos less likely
      */
-    const AMOUNT        = 'amount';
-    const RATES         = 'rates';
-    const GROUP_ID      = 'group_id';
+    const AMOUNT = 'amount';
+    const RATES = 'rates';
+    const GROUP_ID = 'group_id';
     /**#@-*/
 
     /**
@@ -27,7 +27,7 @@ class GrandTotalDetails extends AbstractExtensibleModel implements GrandTotalDet
      */
     public function getGroupId()
     {
-        return $this->getData(self::GROUP_ID);
+        return $this->_get(self::GROUP_ID);
     }
 
     /**
@@ -43,7 +43,7 @@ class GrandTotalDetails extends AbstractExtensibleModel implements GrandTotalDet
      */
     public function getAmount()
     {
-        return $this->getData(self::AMOUNT);
+        return $this->_get(self::AMOUNT);
     }
 
     /**
@@ -59,7 +59,7 @@ class GrandTotalDetails extends AbstractExtensibleModel implements GrandTotalDet
      */
     public function getRates()
     {
-        return $this->getData(self::RATES);
+        return $this->_get(self::RATES);
     }
 
     /**
@@ -68,27 +68,5 @@ class GrandTotalDetails extends AbstractExtensibleModel implements GrandTotalDet
     public function setRates($rates)
     {
         return $this->setData(self::RATES, $rates);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return \Magento\Tax\Api\Data\GrandTotalDetailsExtensionInterface|null
-     */
-    public function getExtensionAttributes()
-    {
-        return $this->_getExtensionAttributes();
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @param \Magento\Tax\Api\Data\GrandTotalDetailsExtensionInterface $extensionAttributes
-     * @return $this
-     */
-    public function setExtensionAttributes(
-        \Magento\Tax\Api\Data\GrandTotalDetailsExtensionInterface $extensionAttributes
-    ) {
-        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

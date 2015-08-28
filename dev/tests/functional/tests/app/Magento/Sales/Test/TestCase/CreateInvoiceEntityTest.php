@@ -19,7 +19,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 1. Go to Sales > Orders.
  * 2. Select created order in the grid and open it.
  * 3. Click 'Invoice' button.
- * 4. Fill data according to dataSet.
+ * 4. Fill data according to dataset.
  * 5. Click 'Submit Invoice' button.
  * 6. Perform assertions.
  *

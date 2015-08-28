@@ -19,7 +19,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     {
         $resourceMock = $this->getMock(
             'Magento\Framework\Model\Resource\AbstractResource',
-            ['_construct', '_getReadAdapter', '_getWriteAdapter', 'getIdFieldName'],
+            ['_construct', 'getConnection', 'getIdFieldName'],
             [],
             '',
             false
@@ -57,5 +57,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(32000, $this->_model->getCustomerGroupId());
         $this->_model->setCustomerGroupId(2);
         $this->assertEquals(2, $this->_model->getCustomerGroupId());
+    }
+
+    public function testGetIdentities()
+    {
+        $this->_model->setProductId(1);
+        $this->assertEquals(['catalog_product_1'], $this->_model->getIdentities());
     }
 }

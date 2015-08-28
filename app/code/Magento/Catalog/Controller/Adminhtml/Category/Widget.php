@@ -12,7 +12,7 @@ use Magento\Framework\View\Element\BlockInterface;
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class Widget extends \Magento\Backend\App\Action
+abstract class Widget extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\View\LayoutFactory

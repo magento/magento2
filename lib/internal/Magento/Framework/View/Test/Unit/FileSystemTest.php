@@ -39,6 +39,11 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
     protected $_staticFileResolution;
 
     /**
+     * @var \Magento\Framework\View\Design\FileResolution\Fallback\EmailTemplateFile|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_emailTemplateFileResolution;
+
+    /**
      * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_assetRepo;
@@ -57,6 +62,9 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
         $this->_staticFileResolution = $this->getMock(
             'Magento\Framework\View\Design\FileResolution\Fallback\StaticFile', [], [], '', false
         );
+        $this->_emailTemplateFileResolution = $this->getMock(
+            'Magento\Framework\View\Design\FileResolution\Fallback\EmailTemplateFile', [], [], '', false
+        );
         $this->_assetRepo = $this->getMock('Magento\Framework\View\Asset\Repository',
             ['extractScope', 'updateDesignParams', 'createAsset'], [], '', false
         );
@@ -66,6 +74,7 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
             $this->_templateFileResolution,
             $this->_localeFileResolution,
             $this->_staticFileResolution,
+            $this->_emailTemplateFileResolution,
             $this->_assetRepo
         );
     }
@@ -245,5 +254,28 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
                 '../../../one',
             ],
         ];
+    }
+
+    public function testGetEmailTemplateFile()
+    {
+        $locale = \Magento\Setup\Module\I18n\Locale::DEFAULT_SYSTEM_LOCALE;
+        $params = [
+            'area'       => 'some_area',
+            'themeModel' => $this->getMock(
+                'Magento\Framework\View\Design\ThemeInterface', [], [], '', false, false
+            ),
+            'module'     => 'Some_Module',
+            'locale'     => $locale
+        ];
+        $file = 'Some_Module::some_file.ext';
+        $expected = 'path/to/some_file.ext';
+
+        $this->_emailTemplateFileResolution->expects($this->once())
+            ->method('getFile')
+            ->with($params['area'], $params['themeModel'], $locale, $file, 'Some_Module')
+            ->will($this->returnValue($expected));
+
+        $actual = $this->_model->getEmailTemplateFileName($file, $params, 'Some_Module');
+        $this->assertEquals($expected, $actual);
     }
 }

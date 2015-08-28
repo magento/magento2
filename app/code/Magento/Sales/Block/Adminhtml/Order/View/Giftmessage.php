@@ -125,10 +125,10 @@ class Giftmessage extends \Magento\Backend\Block\Widget
     /**
      * Set entity for form
      *
-     * @param \Magento\Framework\Object $entity
+     * @param \Magento\Framework\DataObject $entity
      * @return $this
      */
-    public function setEntity(\Magento\Framework\Object $entity)
+    public function setEntity(\Magento\Framework\DataObject $entity)
     {
         $this->_entity = $entity;
         return $this;
@@ -137,7 +137,7 @@ class Giftmessage extends \Magento\Backend\Block\Widget
     /**
      * Retrieve entity for form
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getEntity()
     {

@@ -67,7 +67,9 @@
     <virtualType name="Magento\ConfigurableProduct\Pricing\Price\Pool" type="Magento\Framework\Pricing\Price\Pool">
         <arguments>
             <argument name="prices" xsi:type="array">
-                <item name="attribute_price" xsi:type="string">Magento\ConfigurableProduct\Pricing\Price\AttributePrice</item>
+                <item name="regular_price" xsi:type="string">Magento\ConfigurableProduct\Pricing\Price\ConfigurableRegularPrice</item>
+                <item name="final_price" xsi:type="string">Magento\ConfigurableProduct\Pricing\Price\FinalPrice</item>
+                <item name="base_price" xsi:type="string">Magento\ConfigurableProduct\Pricing\Price\BasePrice</item>
             </argument>
             <argument name="target" xsi:type="object">Magento\Catalog\Pricing\Price\Pool</argument>
         </arguments>

@@ -40,7 +40,7 @@ class Collection extends \Magento\Review\Model\Resource\Review\Collection
         \Magento\Review\Model\Rating\Option\VoteFactory $voteFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Customer\Model\Resource\Customer $customerResource,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->_customerResource = $customerResource;
@@ -76,14 +76,14 @@ class Collection extends \Magento\Review\Model\Resource\Review\Collection
      */
     protected function _joinCustomers()
     {
-        /** @var $adapter \Magento\Framework\DB\Adapter\AdapterInterface */
-        $adapter = $this->getConnection();
+        /** @var $connection \Magento\Framework\DB\Adapter\AdapterInterface */
+        $connection = $this->getConnection();
         //Prepare fullname field result
-        $customerFullname = $adapter->getConcatSql(['customer.firstname', 'customer.lastname'], ' ');
+        $customerFullname = $connection->getConcatSql(['customer.firstname', 'customer.lastname'], ' ');
         $this->getSelect()->reset(
-            \Zend_Db_Select::COLUMNS
+            \Magento\Framework\DB\Select::COLUMNS
         )->joinInner(
-            ['customer' => $adapter->getTableName('customer_entity')],
+            ['customer' => $connection->getTableName('customer_entity')],
             'customer.entity_id = detail.customer_id',
             []
         )->columns(
@@ -107,12 +107,12 @@ class Collection extends \Magento\Review\Model\Resource\Review\Collection
     public function getSelectCountSql()
     {
         $countSelect = clone $this->_select;
-        $countSelect->reset(\Zend_Db_Select::ORDER);
-        $countSelect->reset(\Zend_Db_Select::GROUP);
-        $countSelect->reset(\Zend_Db_Select::HAVING);
-        $countSelect->reset(\Zend_Db_Select::LIMIT_COUNT);
-        $countSelect->reset(\Zend_Db_Select::LIMIT_OFFSET);
-        $countSelect->reset(\Zend_Db_Select::COLUMNS);
+        $countSelect->reset(\Magento\Framework\DB\Select::ORDER);
+        $countSelect->reset(\Magento\Framework\DB\Select::GROUP);
+        $countSelect->reset(\Magento\Framework\DB\Select::HAVING);
+        $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
+        $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
 
         $countSelect->columns(new \Zend_Db_Expr('COUNT(DISTINCT detail.customer_id)'));
 

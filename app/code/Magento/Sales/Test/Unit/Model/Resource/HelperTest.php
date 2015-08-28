@@ -25,7 +25,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $adapterMock;
+    private $connectionMock;
 
     /**
      * @var \Magento\Sales\Model\Resource\Helper
@@ -54,7 +54,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->adapterMock = $this->getMock(
+        $this->connectionMock = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
             [],
             [],
@@ -83,7 +83,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $mainTable = 'main_table';
         $aggregationTable = 'aggregation_table';
         $this->resourceHelper->expects($this->once())->method('updateReportRatingPos')->with(
-            $this->adapterMock,
+            $this->connectionMock,
             $expectedType,
             'qty_ordered',
             $mainTable,
@@ -91,8 +91,8 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         );
         $this->appResource->expects($this->once())
             ->method('getConnection')
-            ->with('sales_write')
-            ->willReturn($this->adapterMock);
+            ->with('sales')
+            ->willReturn($this->connectionMock);
         $this->helper->getBestsellersReportUpdateRatingPos(
             $aggregation,
             $aggregationAliases,

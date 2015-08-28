@@ -1,0 +1,30 @@
+{
+  "name": "magento/module-advanced-pricing-import-export",
+  "description": "N/A",
+  "require": {
+    "php": "~5.5.0|~5.6.0",
+    "magento/module-catalog": "1.0.0-beta",
+    "magento/module-catalog-inventory": "1.0.0-beta",
+    "magento/module-eav": "1.0.0-beta",
+    "magento/module-import-export": "1.0.0-beta",
+    "magento/module-catalog-import-export": "1.0.0-beta",
+    "magento/module-customer": "1.0.0-beta",
+    "magento/module-store": "1.0.0-beta",
+    "magento/framework": "1.0.0-beta",
+    "magento/magento-composer-installer": "*"
+  },
+  "type": "magento2-module",
+  "version": "1.0.0-beta",
+  "license": [
+    "OSL-3.0",
+    "AFL-3.0"
+  ],
+  "extra": {
+    "map": [
+      [
+        "*",
+        "Magento/AdvancedPricingImportExport"
+      ]
+    ]
+  }
+}

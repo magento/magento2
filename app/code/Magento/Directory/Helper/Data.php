@@ -138,12 +138,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve country collection
      *
+     * @param mixed $store
      * @return \Magento\Directory\Model\Resource\Country\Collection
      */
-    public function getCountryCollection()
+    public function getCountryCollection($store = null)
     {
         if (!$this->_countryCollection->isLoaded()) {
-            $this->_countryCollection->loadByStore();
+            $this->_countryCollection->loadByStore($store);
         }
         return $this->_countryCollection;
     }
@@ -160,28 +161,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $cacheKey = 'DIRECTORY_REGIONS_JSON_STORE' . $this->_storeManager->getStore()->getId();
             $json = $this->_configCacheType->load($cacheKey);
             if (empty($json)) {
-                $countryIds = [];
-                foreach ($this->getCountryCollection() as $country) {
-                    $countryIds[] = $country->getCountryId();
-                }
-                $collection = $this->_regCollectionFactory->create();
-                $collection->addCountryFilter($countryIds)->load();
-                $regions = [
-                    'config' => [
-                        'show_all_regions' => $this->isShowNonRequiredState(),
-                        'regions_required' => $this->getCountriesWithStatesRequired(),
-                    ],
-                ];
-                foreach ($collection as $region) {
-                    /** @var $region \Magento\Directory\Model\Region */
-                    if (!$region->getRegionId()) {
-                        continue;
-                    }
-                    $regions[$region->getCountryId()][$region->getRegionId()] = [
-                        'code' => $region->getCode(),
-                        'name' => (string)__($region->getName()),
-                    ];
-                }
+                $regions = $this->getRegionData();
                 $json = $this->jsonHelper->jsonEncode($regions);
                 if ($json === false) {
                     $json = 'false';
@@ -323,5 +303,37 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
+    }
+
+    /**
+     * Retrieve regions data
+     *
+     * @return array
+     */
+    public function getRegionData()
+    {
+        $countryIds = [];
+        foreach ($this->getCountryCollection() as $country) {
+            $countryIds[] = $country->getCountryId();
+        }
+        $collection = $this->_regCollectionFactory->create();
+        $collection->addCountryFilter($countryIds)->load();
+        $regions = [
+            'config' => [
+                'show_all_regions' => $this->isShowNonRequiredState(),
+                'regions_required' => $this->getCountriesWithStatesRequired(),
+            ],
+        ];
+        foreach ($collection as $region) {
+            /** @var $region \Magento\Directory\Model\Region */
+            if (!$region->getRegionId()) {
+                continue;
+            }
+            $regions[$region->getCountryId()][$region->getRegionId()] = [
+                'code' => $region->getCode(),
+                'name' => (string)__($region->getName()),
+            ];
+        }
+        return $regions;
     }
 }

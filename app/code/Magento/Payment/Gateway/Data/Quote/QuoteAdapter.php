@@ -5,10 +5,14 @@
  */
 namespace Magento\Payment\Gateway\Data\Quote;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Payment\Gateway\Data\AddressAdapterInterface;
 
+/**
+ * Class QuoteAdapter
+ */
 class QuoteAdapter implements OrderAdapterInterface
 {
     /**
@@ -85,5 +89,55 @@ class QuoteAdapter implements OrderAdapterInterface
         return $this->addressAdapterFactory->create(
             ['address' => $this->quote->getShippingAddress()]
         );
+    }
+
+    /**
+     * Returns order store id
+     *
+     * @return int
+     */
+    public function getStoreId()
+    {
+        return $this->quote->getStoreId();
+    }
+
+    /**
+     * Returns order id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->quote->getId();
+    }
+
+    /**
+     * Returns order grand total amount
+     *
+     * @return null
+     */
+    public function getGrandTotalAmount()
+    {
+        return null;
+    }
+
+    /**
+     * Returns list of line items in the cart
+     *
+     * @return \Magento\Quote\Api\Data\CartItemInterface[]|null
+     */
+    public function getItems()
+    {
+        return $this->quote->getItems();
+    }
+
+    /**
+     * Gets the remote IP address for the order.
+     *
+     * @return string|null Remote IP address.
+     */
+    public function getRemoteIp()
+    {
+        return null;
     }
 }

@@ -17,11 +17,11 @@ class ConfigOptionsListConstants
     const CONFIG_PATH_INSTALL_DATE = 'install/date';
     const CONFIG_PATH_CRYPT_KEY = 'crypt/key';
     const CONFIG_PATH_SESSION_SAVE = 'session/save';
-    const CONFIG_PATH_DEFINITION_FORMAT = 'definition/format';
     const CONFIG_PATH_RESOURCE_DEFAULT_SETUP = 'resource/default_setup/connection';
     const CONFIG_PATH_DB_CONNECTION_DEFAULT = 'db/connection/default';
     const CONFIG_PATH_DB_CONNECTIONS = 'db/connection';
     const CONFIG_PATH_DB_PREFIX = 'db/table_prefix';
+    const CONFIG_PATH_X_FRAME_OPT = 'x-frame-options';
     /**#@-*/
 
     /**#@+
@@ -67,7 +67,7 @@ class ConfigOptionsListConstants
     const KEY_INIT_STATEMENTS = 'initStatements';
     const KEY_ACTIVE = 'active';
     /**#@-*/
-    
+
     /**
      * Db config key
      */

@@ -1,0 +1,54 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\Paypal\Test\Unit\Model;
+
+use Magento\Paypal\Model\ExpressConfigProvider;
+
+class ExpressConfigProviderTest extends \PHPUnit_Framework_TestCase
+{
+    public function testGetConfig()
+    {
+        $localeResolver = $this->getMock('Magento\Framework\Locale\ResolverInterface', [], [], '', false);
+        $localeResolver->expects($this->once())->method('getLocale');
+
+        $configFactory = $this->getMock('Magento\Paypal\Model\ConfigFactory', ['create'], [], '', false);
+
+        $currentCustomer = $this->getMock('Magento\Customer\Helper\Session\CurrentCustomer', [], [], '', false);
+        $currentCustomer->expects($this->atLeastOnce())->method('getCustomerId')->willReturn(12);
+
+        $paymentHelper= $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
+
+        $paypalHelper = $this->getMock('Magento\Paypal\Helper\Data', [], [], '', false);
+        $paypalHelper->expects($this->atLeastOnce())->method('shouldAskToCreateBillingAgreement')->willReturn(false);
+
+        $config = $this->getMock('Magento\Paypal\Model\Config', [], [], '', false);
+        $config->expects($this->once())->method('getPaymentMarkWhatIsPaypalUrl');
+        $config->expects($this->once())->method('getPaymentMarkImageUrl');
+        $config->expects($this->atLeastOnce())->method('setMethod');
+
+        $configFactory->expects($this->once())->method('create')->willReturn($config);
+
+        $payment = $this->getMock(
+            'Magento\Paypal\Model\Payflowpro',
+            ['isAvailable', 'getCheckoutRedirectUrl'],
+            [],
+            'paymentInstance',
+            false
+        );
+        $payment->expects($this->atLeastOnce())->method('isAvailable')->willReturn(true);
+        $payment->expects($this->atLeastOnce())->method('getCheckoutRedirectUrl')->willReturn('http://redirect.url');
+        $paymentHelper->expects($this->atLeastOnce())->method('getMethodInstance')->willReturn($payment);
+        
+        $configProvider = new ExpressConfigProvider(
+            $configFactory,
+            $localeResolver,
+            $currentCustomer,
+            $paypalHelper,
+            $paymentHelper
+        );
+        $configProvider->getConfig();
+    }
+}

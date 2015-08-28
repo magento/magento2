@@ -11,7 +11,7 @@
  */
 namespace Magento\Reports\Controller\Adminhtml;
 
-class Index extends \Magento\Backend\App\Action
+abstract class Index extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory

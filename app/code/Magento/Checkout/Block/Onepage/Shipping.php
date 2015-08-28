@@ -17,7 +17,7 @@ use Magento\Customer\Model\Address\Config as AddressConfig;
 class Shipping extends \Magento\Checkout\Block\Onepage\AbstractOnepage
 {
     /**
-     * Sales Qoute Shipping Address instance
+     * Sales Quote Shipping Address instance
      *
      * @var \Magento\Quote\Model\Quote\Address
      */

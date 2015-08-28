@@ -5,6 +5,8 @@
  */
 namespace Magento\CatalogImportExport\Model\Import\Product\Type;
 
+use Magento\Framework\App\Resource;
+
 /**
  * Import entity abstract product type model
  *
@@ -12,6 +14,13 @@ namespace Magento\CatalogImportExport\Model\Import\Product\Type;
  */
 abstract class AbstractType
 {
+    /**
+     * Common attributes cache
+     *
+     * @var array
+     */
+    public static $commonAttributesCache = [];
+
     /**
      * Product type attribute sets and attributes parameters.
      *
@@ -89,19 +98,33 @@ abstract class AbstractType
     protected $_prodAttrColFac;
 
     /**
+     * @var \Magento\Framework\App\Resource
+     */
+    protected $_resource;
+
+    /**
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    protected $connection;
+
+
+    /**
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac
+     * @param \Magento\Framework\App\Resource $resource
      * @param array $params
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $prodAttrColFac,
+        \Magento\Framework\App\Resource $resource,
         array $params
     ) {
         $this->_attrSetColFac = $attrSetColFac;
         $this->_prodAttrColFac = $prodAttrColFac;
-
+        $this->_resource = $resource;
+        $this->_connection = $resource->getConnection();
         if ($this->isSuitable()) {
             if (!isset($params[0])
                 || !isset($params[1])
@@ -160,50 +183,91 @@ abstract class AbstractType
     protected function _initAttributes()
     {
         // temporary storage for attributes' parameters to avoid double querying inside the loop
-        $attributesCache = [];
-
-        foreach ($this->_attrSetColFac->create()->setEntityTypeFilter(
-            $this->_entityModel->getEntityTypeId()
-        ) as $attributeSet) {
-            foreach ($this->_prodAttrColFac->create()->setAttributeSetFilter($attributeSet->getId()) as $attribute) {
-                $attributeCode = $attribute->getAttributeCode();
-                $attributeId = $attribute->getId();
-
-                if ($attribute->getIsVisible() || in_array($attributeCode, $this->_forcedAttributesCodes)) {
-                    if (!isset($attributesCache[$attributeId])) {
-                        $attributesCache[$attributeId] = [
-                            'id' => $attributeId,
-                            'code' => $attributeCode,
-                            'is_global' => $attribute->getIsGlobal(),
-                            'is_required' => $attribute->getIsRequired(),
-                            'is_unique' => $attribute->getIsUnique(),
-                            'frontend_label' => $attribute->getFrontendLabel(),
-                            'is_static' => $attribute->isStatic(),
-                            'apply_to' => $attribute->getApplyTo(),
-                            'type' => \Magento\ImportExport\Model\Import::getAttributeType($attribute),
-                            'default_value' => strlen(
-                                $attribute->getDefaultValue()
-                            ) ? $attribute->getDefaultValue() : null,
-                            'options' => $this->_entityModel->getAttributeOptions(
-                                $attribute,
-                                $this->_indexValueAttributes
-                            ),
-                        ];
-                    }
-                    $this->_addAttributeParams(
-                        $attributeSet->getAttributeSetName(),
-                        $attributesCache[$attributeId],
-                        $attribute
-                    );
+        $entityId = $this->_entityModel->getEntityTypeId();
+        $entityAttributes = $this->_connection->fetchPairs(
+            $this->_connection->select()->from(
+                ['attr' => $this->_resource->getTableName('eav_entity_attribute')],
+                ['attr.attribute_id']
+            )->joinLeft(
+                ['set' => $this->_resource->getTableName('eav_attribute_set')],
+                'set.attribute_set_id = attr.attribute_set_id',
+                ['set.attribute_set_name']
+            )->where(
+                $this->_connection->quoteInto('attr.entity_type_id IN (?)', $entityId)
+            )
+        );
+        $absentKeys = [];
+        foreach ($entityAttributes as $attributeId => $attributeSetName) {
+            if (!isset(self::$commonAttributesCache[$attributeId])) {
+                if (!isset($absentKeys[$attributeSetName])) {
+                    $absentKeys[$attributeSetName] = [];
                 }
+                $absentKeys[$attributeSetName][] = $attributeId;
+            }
+        }
+        foreach ($absentKeys as $attributeSetName => $attributeIds) {
+            $this->attachAttributesById($attributeSetName, $attributeIds);
+        }
+        foreach ($entityAttributes as $attributeId => $attributeSetName) {
+            if (isset(self::$commonAttributesCache[$attributeId])) {
+                $attribute = self::$commonAttributesCache[$attributeId];
+                $this->_addAttributeParams(
+                    $attributeSetName,
+                    self::$commonAttributesCache[$attributeId],
+                    $attribute
+                );
             }
         }
         return $this;
     }
 
     /**
-     * In case we've dynamically added new attribute option during import we need
-     * to add it to our cache in order to keep it up to date.
+     * Attach Attributes By Id
+     *
+     * @param string $attributeSetName
+     * @param array $attributeIds
+     * @return void
+     */
+    protected function attachAttributesById($attributeSetName, $attributeIds)
+    {
+        foreach ($this->_prodAttrColFac->create()->addFieldToFilter(
+            'main_table.attribute_id',
+            ['in' => $attributeIds]
+        ) as $attribute) {
+            $attributeCode = $attribute->getAttributeCode();
+            $attributeId = $attribute->getId();
+
+            if ($attribute->getIsVisible() || in_array($attributeCode, $this->_forcedAttributesCodes)) {
+                self::$commonAttributesCache[$attributeId] = [
+                    'id' => $attributeId,
+                    'code' => $attributeCode,
+                    'is_global' => $attribute->getIsGlobal(),
+                    'is_required' => $attribute->getIsRequired(),
+                    'is_unique' => $attribute->getIsUnique(),
+                    'frontend_label' => $attribute->getFrontendLabel(),
+                    'is_static' => $attribute->isStatic(),
+                    'apply_to' => $attribute->getApplyTo(),
+                    'type' => \Magento\ImportExport\Model\Import::getAttributeType($attribute),
+                    'default_value' => strlen(
+                        $attribute->getDefaultValue()
+                    ) ? $attribute->getDefaultValue() : null,
+                    'options' => $this->_entityModel->getAttributeOptions(
+                        $attribute,
+                        $this->_indexValueAttributes
+                    ),
+                ];
+                $this->_addAttributeParams(
+                    $attributeSetName,
+                    self::$commonAttributesCache[$attributeId],
+                    $attribute
+                );
+            }
+        }
+    }
+
+    /**
+     * In case we've dynamically added new attribute option during import we need to add it to our cache
+     * in order to keep it up to date.
      *
      * @param string $code
      * @param string $optionKey

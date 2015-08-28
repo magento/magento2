@@ -84,18 +84,14 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
 
         $this->contextMock->expects($this->once())
-            ->method('getData')
+            ->method('getVaryString')
             ->with()
-            ->will(
-                $this->returnValue($data)
-            );
+            ->will($this->returnValue($expectedCookieValue));
 
         $this->cookieMetadataFactoryMock->expects($this->once())
             ->method('createSensitiveCookieMetadata')
             ->with()
-            ->will(
-                $this->returnValue($sensitiveCookieMetadataMock)
-            );
+            ->will($this->returnValue($sensitiveCookieMetadataMock));
 
         $this->cookieManagerMock->expects($this->once())
             ->method('setSensitiveCookie')
@@ -111,6 +107,10 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ->method('setPath')
             ->with('/')
             ->will($this->returnSelf());
+        $this->contextMock->expects($this->once())
+            ->method('getVaryString')
+            ->with()
+            ->will($this->returnValue(null));
         $this->cookieMetadataFactoryMock->expects($this->once())
             ->method('createCookieMetadata')
             ->with()
@@ -270,5 +270,12 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
         \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
         $this->model->__wakeup();
+    }
+
+    public function testSetXFrameOptions()
+    {
+        $value = 'DENY';
+        $this->model->setXFrameOptions($value);
+        $this->assertSame($value, $this->model->getHeader(Http::HEADER_X_FRAME_OPT)->getFieldValue());
     }
 }

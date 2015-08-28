@@ -8,8 +8,10 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\Mview\View\State\CollectionInterface" type="Magento\Indexer\Model\Resource\Mview\View\State\Collection" />
     <preference for="Magento\Framework\Mview\View\StateInterface" type="Magento\Indexer\Model\Mview\View\State" />
-    <preference for="Magento\Indexer\Model\ConfigInterface" type="Magento\Indexer\Model\Config" />
-    <preference for="Magento\Indexer\Model\IndexerInterface" type="Magento\Indexer\Model\Indexer" />
+    <preference for="Magento\Framework\Indexer\ConfigInterface" type="Magento\Indexer\Model\Config" />
+    <preference for="Magento\Framework\Indexer\IndexerInterface" type="Magento\Indexer\Model\Indexer" />
+    <preference for="Magento\Framework\Indexer\Table\StrategyInterface" type="Magento\Framework\Indexer\Table\Strategy" />
+    <type name="Magento\Framework\Indexer\Table\StrategyInterface" shared="false" />
     <type name="Magento\Indexer\Model\Indexer">
         <arguments>
             <argument name="view" xsi:type="object" shared="false">Magento\Framework\Mview\View</argument>
@@ -18,6 +20,11 @@
     <type name="Magento\Indexer\Model\Config">
         <arguments>
             <argument name="configData" xsi:type="object">Magento\Indexer\Model\Config\Data\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Indexer\Model\HandlerPool">
+        <arguments>
+            <argument name="defaultHandler" xsi:type="object">Magento\Indexer\Model\Handler\DefaultHandler</argument>
         </arguments>
     </type>
     <type name="Magento\Indexer\Model\Config\Data">

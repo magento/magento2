@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Search\Response;
 
+use Magento\Framework\Api\Search\AggregationInterface;
 use Magento\Framework\Search\Document;
 use Magento\Framework\Search\ResponseInterface;
 
@@ -23,15 +24,15 @@ class QueryResponse implements ResponseInterface, \IteratorAggregate, \Countable
     /**
      * Aggregation Collection
      *
-     * @var Aggregation
+     * @var AggregationInterface
      */
     protected $aggregations;
 
     /**
      * @param Document[] $documents
-     * @param Aggregation $aggregations
+     * @param AggregationInterface $aggregations
      */
-    public function __construct(array $documents, Aggregation $aggregations)
+    public function __construct(array $documents, AggregationInterface $aggregations)
     {
         $this->documents = $documents;
         $this->aggregations = $aggregations;
@@ -57,9 +58,7 @@ class QueryResponse implements ResponseInterface, \IteratorAggregate, \Countable
     }
 
     /**
-     * Return Aggregation Collection
-     *
-     * @return Aggregation
+     * {@inheritdoc}
      */
     public function getAggregations()
     {

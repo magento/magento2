@@ -285,6 +285,16 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
                     DirectoryList::LIB_WEB,
                 ],
             ],
+            // Single test, as emails will always be loaded in a modular context with no locale specificity
+            'email' => [
+                \Magento\Framework\View\Design\Fallback\RulePool::TYPE_EMAIL_TEMPLATE,
+                [],
+                [
+                    DirectoryList::THEMES . '/area/current_theme_path/namespace_module/email',
+                    DirectoryList::THEMES . '/area/parent_theme_path/namespace_module/email',
+                    DirectoryList::MODULES . '/namespace/module/view/area/email',
+                ],
+            ],
         ];
     }
 }

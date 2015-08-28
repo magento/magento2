@@ -4,16 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Reports\Test\Unit\Model\Resource\Report\Collection;
 
 class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var AbstractCollection
+     * Tested collection
+     *
+     * @var \Magento\Reports\Model\Resource\Report\Collection\AbstractCollection
      */
-    protected $_model;
+    protected $collection;
 
     protected function setUp()
     {
@@ -25,11 +25,11 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 
         $resource = $this->getMockBuilder('\Magento\Framework\Model\Resource\Db\AbstractDb')
             ->disableOriginalConstructor()
-            ->setMethods(['getReadConnection'])
+            ->setMethods(['getConnection'])
             ->getMockForAbstractClass();
-        $resource->method('getReadConnection')->willReturn($connection);
+        $resource->method('getConnection')->willReturn($connection);
 
-        $this->_model = new \Magento\Reports\Model\Resource\Report\Collection\AbstractCollection(
+        $this->collection = new \Magento\Reports\Model\Resource\Report\Collection\AbstractCollection(
             $entityFactory,
             $logger,
             $fetchStrategy,
@@ -41,15 +41,15 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testIsSubtotalsGetDefault()
     {
-        $this->assertFalse($this->_model->isSubTotals());
+        $this->assertFalse($this->collection->isSubTotals());
     }
 
     public function testSetIsSubtotals()
     {
-        $this->_model->setIsSubTotals(true);
-        $this->assertTrue($this->_model->isSubTotals());
+        $this->collection->setIsSubTotals(true);
+        $this->assertTrue($this->collection->isSubTotals());
 
-        $this->_model->setIsSubTotals(false);
-        $this->assertFalse($this->_model->isSubTotals());
+        $this->collection->setIsSubTotals(false);
+        $this->assertFalse($this->collection->isSubTotals());
     }
 }

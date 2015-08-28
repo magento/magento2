@@ -92,6 +92,7 @@ class ProductVariationsBuilderTest extends \PHPUnit_Framework_TestCase
         $this->product->expects($this->once())->method('getData')->willReturn($productData);
         $this->product->expects($this->once())->method('getName')->willReturn('simple');
         $this->product->expects($this->once())->method('getSku')->willReturn('simple-sku');
+        $this->product->expects($this->once())->method('getPrice')->willReturn(10);
 
         $output->expects($this->at(0))->method('setData')->with($productData);
 

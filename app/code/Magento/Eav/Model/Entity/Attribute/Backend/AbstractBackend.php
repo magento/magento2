@@ -152,7 +152,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * Set entity value id
      *
-     * @param \Magento\Framework\Object $entity
+     * @param \Magento\Framework\DataObject $entity
      * @param int $valueId
      * @return $this
      */
@@ -179,7 +179,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * Get entity value id
      *
-     * @param \Magento\Framework\Object $entity
+     * @param \Magento\Framework\DataObject $entity
      * @return int
      */
     public function getEntityValueId($entity)
@@ -212,7 +212,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * Validate object
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return bool
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -246,7 +246,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * After load method
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -258,7 +258,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * Before save method
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      */
     public function beforeSave($object)
@@ -274,7 +274,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * After save method
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -286,7 +286,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * Before delete method
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -298,7 +298,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * After delete method
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -310,7 +310,7 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
     /**
      * Retrieve data for update attribute
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return array
      */
     public function getAffectedFields($object)

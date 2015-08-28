@@ -4,15 +4,20 @@
  * See COPYING.txt for license details.
  */
 -->
-
 <div class="admin__data-grid-wrap">
-    <table class="data-grid">
+    <table
+        class="data-grid"
+        data-bind="
+            afterRender: dndConfig.enabled ?
+                function (elem) { dnd('setTable', elem); } :
+                false,
+            css: {
+                'data-grid-draggable': dndConfig.enabled
+            }">
         <thead data-part="head">
             <tr data-part="head.row">
                 <!-- ko foreach: elems -->
-                    <!-- ko if: visible -->
-                        <!-- ko template: getHeader() --><!-- /ko -->
-                    <!-- /ko -->
+                    <!-- ko template: getHeader() --><!-- /ko -->
                 <!-- /ko -->
             </tr>
         </thead>
@@ -21,9 +26,7 @@
                 <!-- ko foreach: { data: rows, as: 'row' } -->
                     <tr data-part="body.row">
                         <!-- ko foreach: { data: $parent.elems, as: 'field' }  -->
-                            <!-- ko if: visible -->
-                                <!-- ko template: getBody() --><!-- /ko -->
-                            <!-- /ko -->
+                            <!-- ko template: getBody() --><!-- /ko -->
                         <!-- /ko -->
                     </tr>
                 <!-- /ko -->
@@ -31,10 +34,13 @@
 
             <!-- ko ifnot: hasData() -->
                 <tr class="data-grid-tr-no-data">
-                    <td data-bind="attr: { colspan: getColspan() },
-                                   text: $t('We couldn\'t find any records.')"></td>
+                    <td data-bind="attr: { colspan: countVisible() },
+                                   i18n: 'We couldn\'t find any records.'"></td>
                 </tr>
             <!-- /ko -->
         </tbody>
     </table>
+    <!-- ko if: dndConfig.enabled -->
+        <!-- ko template: dndConfig.containerTmpl --><!-- /ko -->
+    <!-- /ko -->
 </div>

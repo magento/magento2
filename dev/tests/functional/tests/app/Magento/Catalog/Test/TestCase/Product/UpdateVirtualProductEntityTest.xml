@@ -6,20 +6,17 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Catalog\Test\TestCase\Product\UpdateVirtualProductEntityTest">
+    <testCase name="Magento\Catalog\Test\TestCase\Product\UpdateVirtualProductEntityTest" summary="Update Virtual Product" ticketId="MAGETWO-26204">
         <variation name="UpdateVirtualProductEntityTestVariation1">
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">99.99</data>
-            <data name="product/data/tax_class_id/dataSet" xsi:type="string">None</data>
+            <data name="product/data/tax_class_id/dataset" xsi:type="string">None</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">999</data>
             <data name="product/data/is_virtual" xsi:type="string">Yes</data>
-            <data name="product/data/category_ids/presets" xsi:type="string">default_subcategory</data>
-            <data name="product/data/group_price/preset" xsi:type="string">-</data>
-            <data name="product/data/special_price" xsi:type="string">-</data>
-            <data name="product/data/tier_price/preset" xsi:type="string">MAGETWO-23002</data>
+            <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
+            <data name="product/data/tier_price/dataset" xsi:type="string">MAGETWO-23002</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
-            <data name="product/data/custom_options/preset" xsi:type="string">-</data>
             <data name="product/data/visibility" xsi:type="string">Catalog</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
@@ -35,21 +32,16 @@
             <data name="product/data/name" xsi:type="string">virtual_product_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">120.00</data>
-            <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
+            <data name="product/data/tax_class_id/dataset" xsi:type="string">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">999</data>
             <data name="product/data/is_virtual" xsi:type="string">Yes</data>
-            <data name="product/data/category_ids/presets" xsi:type="string">-</data>
-            <data name="product/data/group_price/preset" xsi:type="string">-</data>
             <data name="product/data/special_price" xsi:type="string">45</data>
-            <data name="product/data/tier_price/preset" xsi:type="string">-</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
-            <data name="product/data/custom_options/preset" xsi:type="string">-</data>
             <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
@@ -60,21 +52,17 @@
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">185.00</data>
-            <data name="product/data/tax_class_id/dataSet" xsi:type="string">None</data>
+            <data name="product/data/tax_class_id/dataset" xsi:type="string">None</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">999</data>
             <data name="product/data/is_virtual" xsi:type="string">Yes</data>
-            <data name="product/data/category_ids/presets" xsi:type="string">default_subcategory</data>
-            <data name="product/data/group_price/preset" xsi:type="string">-</data>
-            <data name="product/data/special_price" xsi:type="string">-</data>
-            <data name="product/data/tier_price/preset" xsi:type="string">MAGETWO-23002</data>
+            <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
+            <data name="product/data/tier_price/dataset" xsi:type="string">MAGETWO-23002</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
-            <data name="product/data/custom_options/preset" xsi:type="string">-</data>
             <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductOutOfStock" />
@@ -85,15 +73,9 @@
             <data name="product/data/name" xsi:type="string">virtual_product_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">99.99</data>
-            <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
-            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">-</data>
+            <data name="product/data/tax_class_id/dataset" xsi:type="string">taxable_goods</data>
             <data name="product/data/is_virtual" xsi:type="string">Yes</data>
-            <data name="product/data/category_ids/presets" xsi:type="string">-</data>
-            <data name="product/data/group_price/preset" xsi:type="string">-</data>
-            <data name="product/data/special_price" xsi:type="string">-</data>
-            <data name="product/data/tier_price/preset" xsi:type="string">-</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
-            <data name="product/data/custom_options/preset" xsi:type="string">-</data>
             <data name="product/data/visibility" xsi:type="string">Search</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
@@ -107,15 +89,9 @@
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">5.00</data>
-            <data name="product/data/tax_class_id/dataSet" xsi:type="string">None</data>
-            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">-</data>
+            <data name="product/data/tax_class_id/dataset" xsi:type="string">None</data>
             <data name="product/data/is_virtual" xsi:type="string">Yes</data>
-            <data name="product/data/category_ids/presets" xsi:type="string">-</data>
-            <data name="product/data/group_price/preset" xsi:type="string">-</data>
-            <data name="product/data/special_price" xsi:type="string">-</data>
-            <data name="product/data/tier_price/preset" xsi:type="string">-</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
-            <data name="product/data/custom_options/preset" xsi:type="string">-</data>
             <data name="product/data/visibility" xsi:type="string">Catalog</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
@@ -129,15 +105,13 @@
             <data name="product/data/name" xsi:type="string">virtual_product_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">145.00</data>
-            <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
+            <data name="product/data/tax_class_id/dataset" xsi:type="string">taxable_goods</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">999</data>
             <data name="product/data/is_virtual" xsi:type="string">Yes</data>
-            <data name="product/data/category_ids/presets" xsi:type="string">default_subcategory</data>
-            <data name="product/data/group_price/preset" xsi:type="string">MAGETWO-23055</data>
-            <data name="product/data/special_price" xsi:type="string">-</data>
-            <data name="product/data/tier_price/preset" xsi:type="string">MAGETWO-23002</data>
+            <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
+            <data name="product/data/group_price/dataset" xsi:type="string">not_logged_in_90</data>
+            <data name="product/data/tier_price/dataset" xsi:type="string">MAGETWO-23002</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
-            <data name="product/data/custom_options/preset" xsi:type="string">-</data>
             <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
@@ -153,15 +127,11 @@
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">99.99</data>
-            <data name="product/data/tax_class_id/dataSet" xsi:type="string">None</data>
-            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">-</data>
+            <data name="product/data/tax_class_id/dataset" xsi:type="string">None</data>
             <data name="product/data/is_virtual" xsi:type="string">Yes</data>
-            <data name="product/data/category_ids/presets" xsi:type="string">default_subcategory</data>
-            <data name="product/data/group_price/preset" xsi:type="string">-</data>
+            <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
             <data name="product/data/special_price" xsi:type="string">45</data>
-            <data name="product/data/tier_price/preset" xsi:type="string">-</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
-            <data name="product/data/custom_options/preset" xsi:type="string">-</data>
             <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
@@ -175,15 +145,10 @@
             <data name="product/data/name" xsi:type="string">virtual_product_%isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">5.00</data>
-            <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
-            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">-</data>
+            <data name="product/data/tax_class_id/dataset" xsi:type="string">taxable_goods</data>
             <data name="product/data/is_virtual" xsi:type="string">Yes</data>
-            <data name="product/data/category_ids/presets" xsi:type="string">-</data>
-            <data name="product/data/group_price/preset" xsi:type="string">MAGETWO-23055</data>
-            <data name="product/data/special_price" xsi:type="string">-</data>
-            <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+            <data name="product/data/group_price/dataset" xsi:type="string">not_logged_in_90</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
-            <data name="product/data/custom_options/preset" xsi:type="string">-</data>
             <data name="product/data/visibility" xsi:type="string">Search</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
@@ -197,15 +162,12 @@
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">120.00</data>
-            <data name="product/data/tax_class_id/dataSet" xsi:type="string">None</data>
+            <data name="product/data/tax_class_id/dataset" xsi:type="string">None</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">999</data>
             <data name="product/data/is_virtual" xsi:type="string">Yes</data>
-            <data name="product/data/category_ids/presets" xsi:type="string">default_subcategory</data>
-            <data name="product/data/group_price/preset" xsi:type="string">-</data>
-            <data name="product/data/special_price" xsi:type="string">-</data>
-            <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+            <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
-            <data name="product/data/custom_options/preset" xsi:type="string">options-suite</data>
+            <data name="product/data/custom_options/dataset" xsi:type="string">options_suite</data>
             <data name="product/data/visibility" xsi:type="string">Search</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
@@ -220,15 +182,10 @@
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">99.99</data>
-            <data name="product/data/tax_class_id/dataSet" xsi:type="string">taxable_goods</data>
-            <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">-</data>
+            <data name="product/data/tax_class_id/dataset" xsi:type="string">taxable_goods</data>
             <data name="product/data/is_virtual" xsi:type="string">Yes</data>
-            <data name="product/data/category_ids/presets" xsi:type="string">-</data>
-            <data name="product/data/group_price/preset" xsi:type="string">MAGETWO-23055</data>
-            <data name="product/data/special_price" xsi:type="string">-</data>
-            <data name="product/data/tier_price/preset" xsi:type="string">-</data>
+            <data name="product/data/group_price/dataset" xsi:type="string">not_logged_in_90</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">Out of Stock</data>
-            <data name="product/data/custom_options/preset" xsi:type="string">-</data>
             <data name="product/data/visibility" xsi:type="string">Catalog, Search</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
@@ -242,24 +199,20 @@
             <data name="product/data/name" xsi:type="string">VirtualProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">virtual_sku_%isolation%</data>
             <data name="product/data/price/value" xsi:type="string">99.99</data>
-            <data name="product/data/tax_class_id/dataSet" xsi:type="string">None</data>
+            <data name="product/data/tax_class_id/dataset" xsi:type="string">None</data>
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">999</data>
             <data name="product/data/is_virtual" xsi:type="string">Yes</data>
-            <data name="product/data/category_ids/presets" xsi:type="string">default_subcategory</data>
-            <data name="product/data/group_price/preset" xsi:type="string">MAGETWO-23055</data>
-            <data name="product/data/special_price" xsi:type="string">-</data>
-            <data name="product/data/tier_price/preset" xsi:type="string">MAGETWO-23002</data>
+            <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
+            <data name="product/data/group_price/dataset" xsi:type="string">not_logged_in_90</data>
+            <data name="product/data/tier_price/dataset" xsi:type="string">MAGETWO-23002</data>
             <data name="product/data/quantity_and_stock_status/is_in_stock" xsi:type="string">In Stock</data>
-            <data name="product/data/custom_options/preset" xsi:type="string">-</data>
             <data name="product/data/visibility" xsi:type="string">Catalog</data>
             <data name="product/data/url_key" xsi:type="string">virtual-product-%isolation%</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSpecialPriceOnProductPage" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductGroupedPriceOnProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductInCategory" />

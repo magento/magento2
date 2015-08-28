@@ -32,6 +32,8 @@
                     <xs:element type="dataSource" name="dataSource"/>
                     <xs:element type="argumentType" name="argument"/>
                     <xs:element type="bookmark" name="bookmark"/>
+                    <xs:element name="filterSearch" type="filterSearch" />
+                    <xs:element type="exportButton" name="exportButton"/>
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>
@@ -85,7 +87,6 @@
         <xs:complexContent>
             <xs:extension base="filters">
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
-                    <xs:element name="filterDate" type="filterDate" />
                     <xs:element name="filterInput" type="filterInput" />
                     <xs:element name="filterRange" type="filterRangeConfiguration" />
                     <xs:element name="filterSelect" type="filterSelect" />

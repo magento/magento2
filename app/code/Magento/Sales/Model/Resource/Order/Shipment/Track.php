@@ -6,7 +6,7 @@
 namespace Magento\Sales\Model\Resource\Order\Shipment;
 
 use Magento\Sales\Model\Resource\EntityAbstract as SalesResource;
-use Magento\Sales\Model\Resource\EntitySnapshot;
+use Magento\Framework\Model\Resource\Db\VersionControl\Snapshot;
 use Magento\Sales\Model\Spi\ShipmentTrackResourceInterface;
 
 /**
@@ -34,28 +34,28 @@ class Track extends SalesResource implements ShipmentTrackResourceInterface
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Sales\Model\Resource\Attribute $attribute
      * @param \Magento\SalesSequence\Model\Manager $sequenceManager
-     * @param EntitySnapshot $entitySnapshot
-     * @param \Magento\Sales\Model\Resource\EntityRelationComposite $entityRelationComposite
+     * @param Snapshot $entitySnapshot
+     * @param \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite
      * @param \Magento\Sales\Model\Order\Shipment\Track\Validator $validator
-     * @param string $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
+        Snapshot $entitySnapshot,
+        \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite,
         \Magento\Sales\Model\Resource\Attribute $attribute,
         \Magento\SalesSequence\Model\Manager $sequenceManager,
-        EntitySnapshot $entitySnapshot,
-        \Magento\Sales\Model\Resource\EntityRelationComposite $entityRelationComposite,
         \Magento\Sales\Model\Order\Shipment\Track\Validator $validator,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->validator = $validator;
         parent::__construct(
             $context,
-            $attribute,
-            $sequenceManager,
             $entitySnapshot,
             $entityRelationComposite,
-            $resourcePrefix
+            $attribute,
+            $sequenceManager,
+            $connectionName
         );
     }
 

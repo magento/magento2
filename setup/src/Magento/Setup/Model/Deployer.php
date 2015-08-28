@@ -10,6 +10,7 @@ use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\App\View\Deployment\Version;
 use Magento\Framework\App\View\Asset\Publisher;
 use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Config\Theme;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Translate\Js\Config as JsTranslationConfig;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -33,9 +34,6 @@ class Deployer
     /** @var Version\StorageInterface */
     private $versionStorage;
 
-    /** @var \Magento\Framework\Stdlib\DateTime */
-    private $dateTime;
-
     /** @var \Magento\Framework\View\Asset\Repository */
     private $assetRepo;
 
@@ -57,9 +55,6 @@ class Deployer
     /** @var \Magento\Framework\View\Template\Html\MinifierInterface */
     private $htmlMinifier;
 
-    /** @var \Magento\Framework\View\Asset\MinifyService */
-    protected $minifyService;
-
     /**
      * @var ObjectManagerInterface
      */
@@ -74,8 +69,6 @@ class Deployer
      * @param Files $filesUtil
      * @param OutputInterface $output
      * @param Version\StorageInterface $versionStorage
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Framework\View\Asset\MinifyService $minifyService
      * @param JsTranslationConfig $jsTranslationConfig
      * @param bool $isDryRun
      */
@@ -83,18 +76,15 @@ class Deployer
         Files $filesUtil,
         OutputInterface $output,
         Version\StorageInterface $versionStorage,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\View\Asset\MinifyService $minifyService,
         JsTranslationConfig $jsTranslationConfig,
         $isDryRun = false
     ) {
         $this->filesUtil = $filesUtil;
         $this->output = $output;
         $this->versionStorage = $versionStorage;
-        $this->dateTime = $dateTime;
         $this->isDryRun = $isDryRun;
-        $this->minifyService = $minifyService;
         $this->jsTranslationConfig = $jsTranslationConfig;
+        $this->parentTheme = [];
     }
 
     /**
@@ -125,8 +115,14 @@ class Deployer
                     $this->count = 0;
                     $this->errorCount = 0;
                     foreach ($appFiles as $info) {
-                        list($fileArea, , , $module, $filePath) = $info;
-                        if ($fileArea == $area || $fileArea == 'base') {
+                        list($fileArea, $fileTheme, , $module, $filePath) = $info;
+                        if (($fileArea == $area || $fileArea == 'base') &&
+                            ($fileTheme == '' || $fileTheme == $themePath ||
+                                in_array(
+                                    $fileArea . Theme::THEME_PATH_SEPARATOR . $fileTheme,
+                                    $this->findAncestors($area . Theme::THEME_PATH_SEPARATOR . $themePath)
+                                ))
+                        ) {
                             $this->deployFile($filePath, $area, $themePath, $locale, $module);
                         }
                     }
@@ -151,7 +147,7 @@ class Deployer
         $this->count = 0;
         foreach ($this->filesUtil->getPhtmlFiles(false, false) as $template) {
             $this->htmlMinifier->minify($template);
-            if ($this->output->isVerbose()) {
+            if ($this->output->isVeryVerbose()) {
                 $this->output->writeln($template . " minified\n");
             } else {
                 $this->output->write('.');
@@ -264,15 +260,16 @@ class Deployer
             $logMessage .= ", module '$module'";
         }
 
-        $this->verboseLog($logMessage);
+        if ($this->output->isVeryVerbose()) {
+            $this->output->writeln($logMessage);
+        }
 
         try {
             $asset = $this->assetRepo->createAsset(
                 $requestedPath,
                 ['area' => $area, 'theme' => $themePath, 'locale' => $locale, 'module' => $module]
             );
-            $asset = $this->minifyService->getAssets([$asset], true)[0];
-            if ($this->output->isVerbose()) {
+            if ($this->output->isVeryVerbose()) {
                 $this->output->writeln("\tDeploying the file to '{$asset->getPath()}'");
             } else {
                 $this->output->write('.');
@@ -284,22 +281,37 @@ class Deployer
                 $this->bundleManager->addAsset($asset);
             }
             $this->count++;
-        } catch (\Magento\Framework\View\Asset\File\NotFoundException $e) {
-            // File was not found by Fallback (possibly because it's wrong context for it) - there is nothing to publish
-            $this->verboseLog(
-                "\tNotice: Could not find file '$filePath'. This file may not be relevant for the theme or area."
-            );
         } catch (\Less_Exception_Compiler $e) {
             $this->verboseLog(
                 "\tNotice: Could not parse LESS file '$filePath'. "
                 . "This may indicate that the file is incomplete, but this is acceptable. "
                 . "The file '$filePath' will be combined with another LESS file."
             );
+            $this->verboseLog("\tCompiler error: " . $e->getMessage());
         } catch (\Exception $e) {
             $this->output->writeln($e->getMessage() . " ($logMessage)");
-            $this->verboseLog((string)$e);
+            $this->verboseLog($e->getTraceAsString());
             $this->errorCount++;
         }
+    }
+
+    /**
+     * Find ancestor themes' full paths
+     *
+     * @param string $themeFullPath
+     * @return string[]
+     */
+    private function findAncestors($themeFullPath)
+    {
+        /** @var \Magento\Framework\View\Design\Theme\ListInterface $themeCollection */
+        $themeCollection = $this->objectManager->get('Magento\Framework\View\Design\Theme\ListInterface');
+        $theme = $themeCollection->getThemeByFullPath($themeFullPath);
+        $ancestors = $theme->getInheritedThemes();
+        $ancestorThemeFullPath = [];
+        foreach ($ancestors as $ancestor) {
+            $ancestorThemeFullPath[] = $ancestor->getFullPath();
+        }
+        return $ancestorThemeFullPath;
     }
 
     /**

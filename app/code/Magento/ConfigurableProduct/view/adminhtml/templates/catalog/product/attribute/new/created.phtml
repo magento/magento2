@@ -11,7 +11,7 @@
     var data = <?php echo $block->getAttributesBlockJson() ?>;
     var set = data.set || {id: $('#attribute_set_id').val()};
     if (data.tab == 'variations') {
-        $('#configurable-attributes-container').trigger('add', data.attribute);
+        $('[data-role=product-variations-generator]').trigger('add', data.attribute);
     } else {
         $('[data-form=edit-product]').trigger('changeAttributeSet', set);
     }

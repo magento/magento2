@@ -10,7 +10,7 @@
         <variation name="NavigateMenuTest96">
             <data name="menuItem" xsi:type="string">Content > Frontend Apps</data>
             <data name="pageTitle" xsi:type="string">Frontend Apps</data>
-            <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
+            <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable" />
         </variation>
     </testCase>
 </config>

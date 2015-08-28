@@ -8,14 +8,22 @@ namespace Magento\Framework\Filter\Test\Unit;
 
 class TemplateTest extends \PHPUnit_Framework_TestCase
 {
-    public function testFilter()
+    /**
+     * @var \Magento\Framework\Filter\Template
+     */
+    private $templateFilter;
+
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        /** @var \Magento\Framework\Filter\Template $templateFilter */
-        $templateFilter = $objectManager->getObject('Magento\Framework\Filter\Template');
-        $templateFilter->setVariables(
+        $this->templateFilter = $objectManager->getObject('Magento\Framework\Filter\Template');
+    }
+
+    public function testFilter()
+    {
+        $this->templateFilter->setVariables(
             [
-                'customer' => new \Magento\Framework\Object(['firstname' => 'Felicia', 'lastname' => 'Henry']),
+                'customer' => new \Magento\Framework\DataObject(['firstname' => 'Felicia', 'lastname' => 'Henry']),
                 'company' => 'A. L. Price',
                 'street1' => '687 Vernon Street',
                 'city' => 'Parker Dam',
@@ -55,6 +63,129 @@ T: 760-663-5876
 
 EXPECTED_RESULT;
 
-        $this->assertEquals($expectedResult, $templateFilter->filter($template), 'Template was processed incorrectly');
+        $this->assertEquals(
+            $expectedResult,
+            $this->templateFilter->filter($template),
+            'Template was processed incorrectly'
+        );
+    }
+
+    /**
+     * @covers \Magento\Framework\Filter\Template::afterFilter
+     * @covers \Magento\Framework\Filter\Template::addAfterFilterCallback
+     */
+    public function testAfterFilter()
+    {
+        $value = 'test string';
+        $expectedResult = 'TEST STRING';
+
+        // Build arbitrary object to pass into the addAfterFilterCallback method
+        $callbackObject = $this->getMockBuilder('stdObject')
+            ->setMethods(['afterFilterCallbackMethod'])
+            ->getMock();
+
+        $callbackObject->expects($this->once())
+            ->method('afterFilterCallbackMethod')
+            ->with($value)
+            ->will($this->returnValue($expectedResult));
+
+        // Add callback twice to ensure that the check in addAfterFilterCallback prevents the callback from being called
+        // more than once
+        $this->templateFilter->addAfterFilterCallback([$callbackObject, 'afterFilterCallbackMethod']);
+        $this->templateFilter->addAfterFilterCallback([$callbackObject, 'afterFilterCallbackMethod']);
+
+        $this->assertEquals($expectedResult, $this->templateFilter->filter($value));
+    }
+
+    /**
+     * @covers \Magento\Framework\Filter\Template::afterFilter
+     * @covers \Magento\Framework\Filter\Template::addAfterFilterCallback
+     * @covers \Magento\Framework\Filter\Template::resetAfterFilterCallbacks
+     */
+    public function testAfterFilterCallbackReset()
+    {
+        $value = 'test string';
+        $expectedResult = 'TEST STRING';
+
+        // Build arbitrary object to pass into the addAfterFilterCallback method
+        $callbackObject = $this->getMockBuilder('stdObject')
+            ->setMethods(['afterFilterCallbackMethod'])
+            ->getMock();
+
+        $callbackObject->expects($this->once())
+            ->method('afterFilterCallbackMethod')
+            ->with($value)
+            ->will($this->returnValue($expectedResult));
+
+        $this->templateFilter->addAfterFilterCallback([$callbackObject, 'afterFilterCallbackMethod']);
+
+        // Callback should run and filter content
+        $this->assertEquals($expectedResult, $this->templateFilter->filter($value));
+
+        // Callback should *not* run as callbacks should be reset
+        $this->assertEquals($value, $this->templateFilter->filter($value));
+    }
+
+    /**
+     * @covers \Magento\Framework\Filter\Template::varDirective
+     * @covers \Magento\Framework\Filter\Template::getVariable
+     * @covers \Magento\Framework\Filter\Template::getStackArgs
+     * @dataProvider varDirectiveDataProvider
+     */
+    public function testVarDirective($construction, $variables, $expectedResult)
+    {
+        $this->templateFilter->setVariables($variables);
+        $this->assertEquals($expectedResult, $this->templateFilter->filter($construction));
+    }
+
+    public function varDirectiveDataProvider()
+    {
+        /* @var $stub \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject */
+        $stub = $this->getMockBuilder('\Magento\Framework\DataObject')
+            ->disableOriginalConstructor()
+            ->disableProxyingToOriginalMethods()
+            ->setMethods(['bar'])
+            ->getMock();
+
+        $stub->expects($this->once())
+            ->method('bar')
+            ->will($this->returnCallback(function ($arg) {
+                return serialize($arg);
+            }));
+
+        return [
+            'no variables' => [
+                '{{var}}',
+                [],
+                '{{var}}',
+            ],
+            'invalid variable' => [
+                '{{var invalid}}',
+                ['foobar' => 'barfoo'],
+                '',
+            ],
+            'string variable' => [
+                '{{var foobar}}',
+                ['foobar' => 'barfoo'],
+                'barfoo',
+            ],
+            'array argument to method' => [
+                '{{var foo.bar([param_1:value_1, param_2:$value_2, param_3:[a:$b, c:$d]])}}',
+                [
+                    'foo' => $stub,
+                    'value_2' => 'lorem',
+                    'b' => 'bee',
+                    'd' => 'dee',
+                ],
+                serialize([
+                    'param_1' => 'value_1',
+                    'param_2' => 'lorem',
+                    'param_3' => [
+                        'a' => 'bee',
+                        'c' => 'dee',
+                    ],
+                ]),
+            ],
+        ];
     }
 }

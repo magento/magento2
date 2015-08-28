@@ -5,6 +5,8 @@
  */
 namespace Magento\Shipping\Model\Carrier;
 
+use Magento\Quote\Model\Quote\Address\RateRequest;
+
 /**
  * Interface AbstractCarrierInterface
  */
@@ -22,18 +24,18 @@ interface AbstractCarrierInterface
     /**
      * Collect and get rates
      *
-     * @param \Magento\Framework\Object $request
-     * @return \Magento\Framework\Object|bool|null
+     * @param RateRequest $request
+     * @return \Magento\Framework\DataObject|bool|null
      * @api
      */
-    public function collectRates(\Magento\Framework\Object $request);
+    public function collectRates(RateRequest $request);
 
     /**
      * Do request to shipment
      * Implementation must be in overridden method
      *
-     * @param \Magento\Framework\Object $request
-     * @return \Magento\Framework\Object
+     * @param \Magento\Framework\DataObject $request
+     * @return \Magento\Framework\DataObject
      * @api
      */
     public function requestToShipment($request);
@@ -42,8 +44,8 @@ interface AbstractCarrierInterface
      * Do return of shipment
      * Implementation must be in overridden method
      *
-     * @param \Magento\Framework\Object $request
-     * @return \Magento\Framework\Object
+     * @param \Magento\Framework\DataObject $request
+     * @return \Magento\Framework\DataObject
      * @api
      */
     public function returnOfShipment($request);
@@ -51,11 +53,11 @@ interface AbstractCarrierInterface
     /**
      * Return container types of carrier
      *
-     * @param \Magento\Framework\Object|null $params
+     * @param \Magento\Framework\DataObject|null $params
      * @return array
      * @api
      */
-    public function getContainerTypes(\Magento\Framework\Object $params = null);
+    public function getContainerTypes(\Magento\Framework\DataObject $params = null);
 
     /**
      * Get Container Types, that could be customized
@@ -68,27 +70,27 @@ interface AbstractCarrierInterface
     /**
      * Return delivery confirmation types of carrier
      *
-     * @param \Magento\Framework\Object|null $params
+     * @param \Magento\Framework\DataObject|null $params
      * @return array
      * @api
      */
-    public function getDeliveryConfirmationTypes(\Magento\Framework\Object $params = null);
+    public function getDeliveryConfirmationTypes(\Magento\Framework\DataObject $params = null);
 
     /**
-     * @param \Magento\Framework\Object $request
+     * @param \Magento\Framework\DataObject $request
      * @return $this|bool|false|\Magento\Framework\Model\AbstractModel
      * @api
      */
-    public function checkAvailableShipCountries(\Magento\Framework\Object $request);
+    public function checkAvailableShipCountries(\Magento\Framework\DataObject $request);
 
     /**
      * Processing additional validation to check is carrier applicable.
      *
-     * @param \Magento\Framework\Object $request
-     * @return $this|\Magento\Framework\Object|boolean
+     * @param \Magento\Framework\DataObject $request
+     * @return $this|\Magento\Framework\DataObject|boolean
      * @api
      */
-    public function proccessAdditionalValidation(\Magento\Framework\Object $request);
+    public function proccessAdditionalValidation(\Magento\Framework\DataObject $request);
 
     /**
      * Determine whether current carrier enabled for activity
@@ -138,15 +140,6 @@ interface AbstractCarrierInterface
      * @api
      */
     public function getFinalPriceWithHandlingFee($cost);
-
-    /**
-     * Return weight in pounds
-     *
-     * @param int $weight in someone measure
-     * @return float Weight in pounds
-     * @api
-     */
-    public function convertWeightToLbs($weight);
 
     /**
      * Set the number of boxes for shipping
@@ -202,9 +195,9 @@ interface AbstractCarrierInterface
     /**
      * Return content types of package
      *
-     * @param \Magento\Framework\Object $params
+     * @param \Magento\Framework\DataObject $params
      * @return array
      * @api
      */
-    public function getContentTypes(\Magento\Framework\Object $params);
+    public function getContentTypes(\Magento\Framework\DataObject $params);
 }

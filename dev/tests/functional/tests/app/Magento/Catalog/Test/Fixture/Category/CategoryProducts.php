@@ -6,35 +6,20 @@
 
 namespace Magento\Catalog\Test\Fixture\Category;
 
+use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class CategoryProducts
- * Prepare products
+ * Prepare products.
  */
-class CategoryProducts implements FixtureInterface
+class CategoryProducts extends DataSource
 {
     /**
-     * Prepared dataSet data
-     *
-     * @var array|null
-     */
-    protected $data;
-
-    /**
-     * Return products
+     * Return products.
      *
      * @var array
      */
     protected $products = [];
-
-    /**
-     * Fixture params
-     *
-     * @var array
-     */
-    protected $params;
 
     /**
      * @constructor
@@ -45,11 +30,11 @@ class CategoryProducts implements FixtureInterface
     public function __construct(FixtureFactory $fixtureFactory, array $params, $data = [])
     {
         $this->params = $params;
-        if (!empty($data['dataSet']) && $data['dataSet'] !== '-') {
-            $dataSet = array_map('trim', explode(',', $data['dataSet']));
-            foreach ($dataSet as $value) {
+        if (!empty($data['dataset']) && $data['dataset'] !== '-') {
+            $dataset = array_map('trim', explode(',', $data['dataset']));
+            foreach ($dataset as $value) {
                 $explodeValue = explode('::', $value);
-                $product = $fixtureFactory->createByCode($explodeValue[0], ['dataSet' => $explodeValue[1]]);
+                $product = $fixtureFactory->createByCode($explodeValue[0], ['dataset' => $explodeValue[1]]);
                 if (!$product->getId()) {
                     $product->persist();
                 }
@@ -60,40 +45,7 @@ class CategoryProducts implements FixtureInterface
     }
 
     /**
-     * Persist attribute options
-     *
-     * @return void
-     */
-    public function persist()
-    {
-        //
-    }
-
-    /**
-     * Return prepared data set
-     *
-     * @param string|null $key [optional]
-     * @return array|null
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function getData($key = null)
-    {
-        return $this->data;
-    }
-
-    /**
-     * Return data set configuration settings
-     *
-     * @return array
-     */
-    public function getDataConfig()
-    {
-        return $this->params;
-    }
-
-    /**
-     * Return products
+     * Return products.
      *
      * @return array
      */

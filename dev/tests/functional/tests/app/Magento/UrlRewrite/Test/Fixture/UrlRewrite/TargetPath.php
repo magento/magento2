@@ -6,37 +6,24 @@
 
 namespace Magento\UrlRewrite\Test\Fixture\UrlRewrite;
 
+use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class TargetPath
- * Prepare Target Path
+ * Prepare Target Path.
  */
-class TargetPath implements FixtureInterface
+class TargetPath extends DataSource
 {
     /**
-     * Resource data
-     *
-     * @var string
-     */
-    protected $data;
-
-    /**
-     * Return entity
+     * Return entity.
      *
      * @var FixtureInterface
      */
     protected $entity = null;
 
     /**
-     * Data set configuration settings
-     *
-     * @var array
-     */
-    protected $params;
-
-    /**
+     * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param array $params
      * @param string $data [optional]
@@ -48,11 +35,11 @@ class TargetPath implements FixtureInterface
             $this->data = $data;
             return;
         }
-        preg_match('`%(.*?)%`', $data['entity'], $dataSet);
-        $entityConfig = isset($dataSet[1]) ? explode('::', $dataSet[1]) : [];
+        preg_match('`%(.*?)%`', $data['entity'], $dataset);
+        $entityConfig = isset($dataset[1]) ? explode('::', $dataset[1]) : [];
         if (count($entityConfig) > 1) {
             /** @var FixtureInterface $fixture */
-            $this->entity = $fixtureFactory->createByCode($entityConfig[0], ['dataSet' => $entityConfig[1]]);
+            $this->entity = $fixtureFactory->createByCode($entityConfig[0], ['dataset' => $entityConfig[1]]);
             $this->entity->persist();
             $id = $this->entity->hasData('id') ? $this->entity->getId() : $this->entity->getPageId();
             $this->data = preg_replace('`(%.*?%)`', $id, $data['entity']);
@@ -62,40 +49,7 @@ class TargetPath implements FixtureInterface
     }
 
     /**
-     * Persist custom selections products
-     *
-     * @return void
-     */
-    public function persist()
-    {
-        //
-    }
-
-    /**
-     * Return prepared data
-     *
-     * @param string|null $key
-     * @return string
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function getData($key = null)
-    {
-        return $this->data;
-    }
-
-    /**
-     * Return data set configuration settings
-     *
-     * @return array
-     */
-    public function getDataConfig()
-    {
-        return $this->params;
-    }
-
-    /**
-     * Return entity
+     * Return entity.
      *
      * @return FixtureInterface|null
      */

@@ -5,17 +5,16 @@
  */
 namespace Magento\Ui\Component;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Magento\Framework\View\Element\UiComponent\JsConfigInterface;
 use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
 
 /**
  * Abstract class AbstractComponent
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-abstract class AbstractComponent extends Object implements UiComponentInterface, JsConfigInterface
+abstract class AbstractComponent extends DataObject implements UiComponentInterface
 {
     /**
      * Render context
@@ -227,6 +226,7 @@ abstract class AbstractComponent extends Object implements UiComponentInterface,
      *
      * @param array $dataSource
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function prepareDataSource(array & $dataSource)
     {

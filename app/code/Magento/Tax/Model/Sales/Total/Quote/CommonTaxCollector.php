@@ -11,7 +11,7 @@ namespace Magento\Tax\Model\Sales\Total\Quote;
 use Magento\Customer\Api\Data\AddressInterfaceFactory as CustomerAddressFactory;
 use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
 use Magento\Customer\Api\Data\RegionInterfaceFactory as CustomerAddressRegionFactory;
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Quote\Model\Quote\Address as QuoteAddress;
 use Magento\Quote\Model\Quote\Address\Total\AbstractTotal;
 use Magento\Quote\Model\Quote\Item\AbstractItem;

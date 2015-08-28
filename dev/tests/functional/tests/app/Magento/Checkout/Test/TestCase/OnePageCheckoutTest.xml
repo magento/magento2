@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\Checkout\Test\TestCase\OnePageCheckoutTest" summary="OnePageCheckout within Offline Payment Methods" ticketId="MAGETWO-27485">
+        <variation name="OnePageCheckoutTestVariation1" />
+    </testCase>
+</config>

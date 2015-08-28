@@ -10,18 +10,17 @@ use Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertSearchTermSuccessMassDeleteMessage
- * Assert that success message is displayed after search terms were mass deleted
+ * Assert that success message is displayed after search terms were mass deleted.
  */
 class AssertSearchTermSuccessMassDeleteMessage extends AbstractConstraint
 {
     /**
      * Text value to be checked
      */
-    const SUCCESS_MESSAGE = 'Total of %d record(s) were deleted';
+    const SUCCESS_MESSAGE = 'Total of %d record(s) were deleted.';
 
     /**
-     * Assert that success message is displayed after search terms were mass deleted
+     * Assert that success message is displayed after search terms were mass deleted.
      *
      * @param array $searchTerms
      * @param CatalogSearchIndex $indexPage
@@ -39,7 +38,7 @@ class AssertSearchTermSuccessMassDeleteMessage extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */

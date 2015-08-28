@@ -71,6 +71,8 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Pseudo constructor
+     *
      * @return void
      */
     protected function _construct()
@@ -82,10 +84,14 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
         if (isset($this->_columnGroupBy)) {
             $this->isColumnGrouped($this->_columnGroupBy, true);
         }
-        $this->setEmptyCellLabel(__('We couldn\'t find records for this period.'));
+        $this->setEmptyCellLabel(__('We can\'t find records for this period.'));
     }
 
     /**
+     * Get resource collection name
+     *
+     * @codeCoverageIgnore
+     *
      * @return string
      */
     public function getResourceCollectionName()
@@ -297,8 +303,8 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
 
             $this->_addOrderStatusFilter($totalsCollection, $filterData);
 
-            if (count($totalsCollection->getItems()) < 1 || !$filterData->getData('from')) {
-                $this->setTotals(new \Magento\Framework\Object());
+            if ($totalsCollection->load()->getSize() < 1 || !$filterData->getData('from')) {
+                $this->setTotals(new \Magento\Framework\DataObject());
                 $this->setCountTotals(false);
             } else {
                 foreach ($totalsCollection->getItems() as $item) {
@@ -339,9 +345,11 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @param array $storeIds
+     * StoreIds setter
      *
+     * @param array $storeIds
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setStoreIds($storeIds)
     {
@@ -379,7 +387,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Add order status filter
      *
      * @param \Magento\Reports\Model\Resource\Report\Collection\AbstractCollection $collection
-     * @param \Magento\Framework\Object $filterData
+     * @param \Magento\Framework\DataObject $filterData
      * @return $this
      */
     protected function _addOrderStatusFilter($collection, $filterData)
@@ -393,9 +401,10 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
      * Can be overridden in child classes if custom filter needed
      *
      * @param \Magento\Reports\Model\Resource\Report\Collection\AbstractCollection $collection
-     * @param \Magento\Framework\Object $filterData
+     * @param \Magento\Framework\DataObject $filterData
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codeCoverageIgnore
      */
     protected function _addCustomFilter($collection, $filterData)
     {

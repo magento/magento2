@@ -70,13 +70,13 @@
                             <argument name="column_css_class" xsi:type="string">col-status</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="base_grand_total">
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="grand_total">
                         <arguments>
-                            <argument name="id" xsi:type="string">base_grand_total</argument>
+                            <argument name="id" xsi:type="string">grand_total</argument>
                             <argument name="header" xsi:type="string" translate="true">Amount</argument>
                             <argument name="type" xsi:type="string">currency</argument>
-                            <argument name="currency" xsi:type="string">base_currency_code</argument>
-                            <argument name="index" xsi:type="string">base_grand_total</argument>
+                            <argument name="currency" xsi:type="string">order_currency_code</argument>
+                            <argument name="index" xsi:type="string">grand_total</argument>
                             <argument name="header_css_class" xsi:type="string">col-qty</argument>
                             <argument name="column_css_class" xsi:type="string">col-qty</argument>
                         </arguments>

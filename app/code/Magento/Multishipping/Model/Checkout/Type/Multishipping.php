@@ -19,7 +19,7 @@ use Magento\Framework\Exception\LocalizedException;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Multishipping extends \Magento\Framework\Object
+class Multishipping extends \Magento\Framework\DataObject
 {
     /**
      * Quote shipping addresses items cache
@@ -593,10 +593,10 @@ class Multishipping extends \Magento\Framework\Object
     public function setPaymentMethod($payment)
     {
         if (!isset($payment['method'])) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Payment method is not defined'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('A payment method is not defined.'));
         }
         if (!$this->paymentSpecification->isSatisfiedBy($payment['method'])) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('The requested Payment Method is not available for multishipping.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('The requested payment method is not available for multishipping.'));
         }
         $quote = $this->getQuote();
         $quote->getPayment()->importData($payment);
@@ -878,7 +878,7 @@ class Multishipping extends \Magento\Framework\Object
                     ->setConditionType('eq')
                     ->create();
                 $addresses = (array)($this->addressRepository->getList(
-                    $this->searchCriteriaBuilder->addFilter([$filter])->create()
+                    $this->searchCriteriaBuilder->addFilters([$filter])->create()
                 )->getItems());
                 if ($addresses) {
                     $address = reset($addresses);

@@ -133,20 +133,20 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     /**
      * Returns additional params for processing options
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     protected function _getProcessingParams()
     {
         $buyRequest = $this->getRequest();
         $params = $buyRequest->getData('_processing_params');
         /*
-         * Notice check for params to be \Magento\Framework\Object - by using object we protect from
+         * Notice check for params to be \Magento\Framework\DataObject - by using object we protect from
          * params being forged and contain data from user frontend input
          */
-        if ($params instanceof \Magento\Framework\Object) {
+        if ($params instanceof \Magento\Framework\DataObject) {
             return $params;
         }
-        return new \Magento\Framework\Object();
+        return new \Magento\Framework\DataObject();
     }
 
     /**
@@ -226,7 +226,7 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         } catch (ProductException $e) {
             switch ($this->getProcessMode()) {
                 case \Magento\Catalog\Model\Product\Type\AbstractType::PROCESS_MODE_FULL:
-                    throw new LocalizedException(__('Please specify the product\'s required option(s).'));
+                    throw new LocalizedException(__('Please specify product\'s required option(s).'));
                     break;
                 default:
                     $this->setUserValue(null);

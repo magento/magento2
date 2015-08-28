@@ -9,7 +9,7 @@ use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Object\IdentityInterface;
+use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Pricing\Object\SaleableInterface;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Framework\Api\Data\ImageContentInterface;
@@ -216,7 +216,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     protected $_filesystem;
 
-    /** @var \Magento\Indexer\Model\IndexerRegistry */
+    /** @var \Magento\Framework\Indexer\IndexerRegistry */
     protected $indexerRegistry;
 
     /**
@@ -318,6 +318,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     ];
 
     /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface
+     */
+    protected $joinProcessor;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -339,7 +344,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param Resource\Product\Collection $resourceCollection
      * @param \Magento\Framework\Data\CollectionFactory $collectionFactory
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
+     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @param Indexer\Product\Flat\Processor $productFlatIndexerProcessor
      * @param Indexer\Product\Price\Processor $productPriceIndexerProcessor
      * @param Indexer\Product\Eav\Processor $productEavIndexerProcessor
@@ -351,6 +356,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory
      * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -377,7 +383,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         Resource\Product\Collection $resourceCollection,
         \Magento\Framework\Data\CollectionFactory $collectionFactory,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
+        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor,
         \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor,
         \Magento\Catalog\Model\Indexer\Product\Eav\Processor $productEavIndexerProcessor,
@@ -389,6 +395,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory,
         \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
         array $data = []
     ) {
         $this->metadataService = $metadataService;
@@ -417,6 +424,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->productLinkExtensionFactory = $productLinkExtensionFactory;
         $this->mediaGalleryEntryFactory = $mediaGalleryEntryFactory;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->joinProcessor = $joinProcessor;
         parent::__construct(
             $context,
             $registry,
@@ -1151,11 +1159,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getFinalPrice($qty = null)
     {
-        $price = $this->_getData('final_price');
-        if ($price !== null) {
-            return $price;
+        if ($this->_getData('final_price') === null) {
+            $this->setFinalPrice($this->getPriceModel()->getFinalPrice($qty, $this));
         }
-        return $this->getPriceModel()->getFinalPrice($qty, $this);
+        return $this->_getData('final_price');
     }
 
     /**
@@ -1509,9 +1516,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                     continue;
                 }
                 $image['url'] = $this->getMediaConfig()->getMediaUrl($image['file']);
-                $image['id'] = isset($image['value_id']) ? $image['value_id'] : null;
+                $image['id'] = !empty($image['value_id']) ? $image['value_id'] : null;
                 $image['path'] = $directory->getAbsolutePath($this->getMediaConfig()->getMediaPath($image['file']));
-                $images->addItem(new \Magento\Framework\Object($image));
+                $images->addItem(new \Magento\Framework\DataObject($image));
             }
             $this->setData('media_gallery_images', $images);
         }
@@ -1653,7 +1660,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 
         $salable = $this->isAvailable();
 
-        $object = new \Magento\Framework\Object(['product' => $this, 'is_salable' => $salable]);
+        $object = new \Magento\Framework\DataObject(['product' => $this, 'is_salable' => $salable]);
         $this->_eventManager->dispatch(
             'catalog_product_is_salable_after',
             ['product' => $this, 'salable' => $object]
@@ -1961,7 +1968,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getOptions()
     {
         if (empty($this->_options) && $this->getHasOptions() && !$this->optionsInitialized) {
-            foreach ($this->getProductOptionsCollection() as $option) {
+            $collection = $this->getProductOptionsCollection();
+            $this->joinProcessor->process($collection);
+            foreach ($collection as $option) {
                 $option->setProduct($this);
                 $this->addOption($option);
             }
@@ -2146,12 +2155,12 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Parse buyRequest into options values used by product
      *
-     * @param  \Magento\Framework\Object $buyRequest
-     * @return \Magento\Framework\Object
+     * @param  \Magento\Framework\DataObject $buyRequest
+     * @return \Magento\Framework\DataObject
      */
-    public function processBuyRequest(\Magento\Framework\Object $buyRequest)
+    public function processBuyRequest(\Magento\Framework\DataObject $buyRequest)
     {
-        $options = new \Magento\Framework\Object();
+        $options = new \Magento\Framework\DataObject();
 
         /* add product custom options data */
         $customOptions = $buyRequest->getOptions();
@@ -2179,13 +2188,13 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Get preconfigured values from product
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getPreconfiguredValues()
     {
         $preConfiguredValues = $this->getData('preconfigured_values');
         if (!$preConfiguredValues) {
-            $preConfiguredValues = new \Magento\Framework\Object();
+            $preConfiguredValues = new \Magento\Framework\DataObject();
         }
 
         return $preConfiguredValues;

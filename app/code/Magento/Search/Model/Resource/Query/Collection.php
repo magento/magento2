@@ -41,7 +41,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\DB\Helper $resourceHelper
-     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
@@ -51,7 +51,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\DB\Helper $resourceHelper,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->_storeManager = $storeManager;
@@ -104,7 +104,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     {
         $ifSynonymFor = $this->getConnection()->getIfNullSql('synonym_for', 'query_text');
         $this->getSelect()->reset(
-            \Zend_Db_Select::FROM
+            \Magento\Framework\DB\Select::FROM
         )->distinct(
             true
         )->from(
@@ -139,9 +139,9 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         );
 
         $this->getSelect()->reset(
-            \Zend_Db_Select::FROM
+            \Magento\Framework\DB\Select::FROM
         )->reset(
-            \Zend_Db_Select::COLUMNS
+            \Magento\Framework\DB\Select::COLUMNS
         )->distinct(
             true
         )->from(

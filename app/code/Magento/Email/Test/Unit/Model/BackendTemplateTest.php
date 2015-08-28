@@ -80,25 +80,14 @@ class BackendTemplateTest extends \PHPUnit_Framework_TestCase
         \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerBackup);
     }
 
-    public function testGetSystemConfigPathsWhereUsedAsDefaultNoTemplateCode()
+    public function testGetSystemConfigPathsWhereCurrentlyUsedNoId()
     {
-        $this->assertEquals([], $this->model->getSystemConfigPathsWhereUsedAsDefault());
+        $this->assertEquals([], $this->model->getSystemConfigPathsWhereCurrentlyUsed());
     }
 
-    public function testGetSystemConfigPathsWhereUsedAsDefaultValidTemplateCode()
-    {
-        $this->model->setData('orig_template_code', 1);
-        $this->assertEquals([['path' => 'test']], $this->model->getSystemConfigPathsWhereUsedAsDefault());
-    }
-
-    public function testGetSystemConfigPathsWhereUsedCurrentlyNoId()
-    {
-        $this->assertEquals([], $this->model->getSystemConfigPathsWhereUsedCurrently());
-    }
-
-    public function testGetSystemConfigPathsWhereUsedCurrentlyValidId()
+    public function testGetSystemConfigPathsWhereCurrentlyUsedValidId()
     {
         $this->model->setId(1);
-        $this->assertEquals(['test_config' => 2015], $this->model->getSystemConfigPathsWhereUsedCurrently());
+        $this->assertEquals(['test_config' => 2015], $this->model->getSystemConfigPathsWhereCurrentlyUsed());
     }
 }

@@ -6,29 +6,58 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Catalog\Controller\Adminhtml\Product\Builder;
+use Magento\Backend\App\Action\Context;
+use Magento\Ui\Component\MassAction\Filter;
+use Magento\Catalog\Model\Resource\Product\CollectionFactory;
+
 class MassDelete extends \Magento\Catalog\Controller\Adminhtml\Product
 {
+    /**
+     * Massactions filter
+     *
+     * @var Filter
+     */
+    protected $filter;
+
+    /**
+     * @var CollectionFactory
+     */
+    protected $collectionFactory;
+
+    /**
+     * @param Context $context
+     * @param Builder $productBuilder
+     * @param Filter $filter
+     * @param CollectionFactory $collectionFactory
+     */
+    public function __construct(
+        Context $context,
+        Builder $productBuilder,
+        Filter $filter,
+        CollectionFactory $collectionFactory
+    ) {
+        $this->filter = $filter;
+        $this->collectionFactory = $collectionFactory;
+        parent::__construct($context, $productBuilder);
+    }
+
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
-        $productIds = $this->getRequest()->getParam('product');
-        if (!is_array($productIds) || empty($productIds)) {
-            $this->messageManager->addError(__('Please select product(s).'));
-        } else {
-            try {
-                foreach ($productIds as $productId) {
-                    $product = $this->_objectManager->get('Magento\Catalog\Model\Product')->load($productId);
-                    $product->delete();
-                }
-                $this->messageManager->addSuccess(
-                    __('A total of %1 record(s) have been deleted.', count($productIds))
-                );
-            } catch (\Exception $e) {
-                $this->messageManager->addError($e->getMessage());
-            }
+        $collection = $this->filter->getCollection($this->collectionFactory->create());
+        $productDeleted = 0;
+        foreach ($collection->getItems() as $product) {
+            $product->delete();
+            $productDeleted++;
         }
-        return $this->resultRedirectFactory->create()->setPath('catalog/*/index');
+        $this->messageManager->addSuccess(
+            __('A total of %1 record(s) have been deleted.', $productDeleted)
+        );
+
+        return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath('catalog/*/index');
     }
 }

@@ -20,6 +20,12 @@
                 <item name="label" xsi:type="string"/>
                 <item name="value" xsi:type="string">1234-123-123</item>
             </field>
+            <field name="general/store_information/hours" xsi:type="array">
+                <item name="scope" xsi:type="string">general</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">Mon - Fri, 8AM - 5PM</item>
+            </field>
             <field name="general/store_information/country_id" xsi:type="array">
                 <item name="scope" xsi:type="string">general</item>
                 <item name="scope_id" xsi:type="number">1</item>

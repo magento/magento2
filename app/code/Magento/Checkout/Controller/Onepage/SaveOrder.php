@@ -5,7 +5,7 @@
  */
 namespace Magento\Checkout\Controller\Onepage;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\PaymentException;
 
 /**
@@ -31,7 +31,7 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
             return $this->_ajaxRedirectResponse();
         }
 
-        $result = new Object();
+        $result = new DataObject();
         try {
             $agreementsValidator = $this->_objectManager->get('Magento\Checkout\Model\Agreements\AgreementsValidator');
             if (!$agreementsValidator->isValid(array_keys($this->getRequest()->getPost('agreement', [])))) {
@@ -113,7 +113,7 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
             $result->setData('error', true);
             $result->setData(
                 'error_messages',
-                __('Something went wrong processing your order. Please try again later.')
+                __('Something went wrong while processing your order. Please try again later.')
             );
         }
         /**

@@ -28,5 +28,5 @@ interface CreditmemoSearchResultInterface extends \Magento\Framework\Api\SearchR
      * @param \Magento\Sales\Api\Data\CreditmemoInterface[] $items
      * @return $this
      */
-    public function setItems(array $items = null);
+    public function setItems(array $items);
 }

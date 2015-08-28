@@ -33,7 +33,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Category extends \Magento\Catalog\Model\AbstractModel implements
-    \Magento\Framework\Object\IdentityInterface,
+    \Magento\Framework\DataObject\IdentityInterface,
     \Magento\Catalog\Api\Data\CategoryInterface,
     \Magento\Catalog\Api\Data\CategoryTreeInterface
 {
@@ -43,7 +43,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      */
     const ENTITY = 'catalog_category';
 
-    /**
+    /**#@+
      * Category display modes
      */
     const DM_PRODUCT = 'PRODUCTS';
@@ -51,7 +51,16 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     const DM_PAGE = 'PAGE';
 
     const DM_MIXED = 'PRODUCTS_AND_PAGE';
+    /**#@-*/
 
+    /**
+     * Id of root category
+     */
+    const ROOT_CATEGORY_ID = 0;
+
+    /**
+     * Id of category tree root
+     */
     const TREE_ROOT_ID = 1;
 
     const CACHE_TAG = 'catalog_category';
@@ -201,7 +210,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /** @var UrlFinderInterface */
     protected $urlFinder;
 
-    /** @var \Magento\Indexer\Model\IndexerRegistry */
+    /** @var \Magento\Framework\Indexer\IndexerRegistry */
     protected $indexerRegistry;
 
     /**
@@ -231,7 +240,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param Indexer\Category\Flat\State $flatState
      * @param \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator
      * @param UrlFinderInterface $urlFinder
-     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
+     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @param CategoryRepositoryInterface $categoryRepository
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
@@ -255,7 +264,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         Indexer\Category\Flat\State $flatState,
         \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator,
         UrlFinderInterface $urlFinder,
-        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
+        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         CategoryRepositoryInterface $categoryRepository,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
@@ -374,8 +383,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         } catch (NoSuchEntityException $e) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
-                    'Sorry, but we can\'t move the category because we can\'t find the new parent category you'
-                    . ' selected.'
+                    'Sorry, but we can\'t find the new parent category you selected.'
                 ),
                 $e
             );
@@ -383,13 +391,12 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
 
         if (!$this->getId()) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Sorry, but we can\'t move the category because we can\'t find the new category you selected.')
+                __('Sorry, but we can\'t find the new category you selected.')
             );
         } elseif ($parent->getId() == $this->getId()) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __(
-                    'We can\'t perform this category move operation because the parent category matches the child'
-                    . 'category.'
+                    'We can\'t move the category because the parent category name matches the child category name.'
                 )
             );
         }
@@ -944,7 +951,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Return parent categories of current category
      *
-     * @return \Magento\Framework\Object[]|\Magento\Catalog\Model\Category[]
+     * @return \Magento\Framework\DataObject[]|\Magento\Catalog\Model\Category[]
      */
     public function getParentCategories()
     {

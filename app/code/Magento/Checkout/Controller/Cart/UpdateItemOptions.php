@@ -39,7 +39,7 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
                 throw new \Magento\Framework\Exception\LocalizedException(__('We can\'t find the quote item.'));
             }
 
-            $item = $this->cart->updateItem($id, new \Magento\Framework\Object($params));
+            $item = $this->cart->updateItem($id, new \Magento\Framework\DataObject($params));
             if (is_string($item)) {
                 throw new \Magento\Framework\Exception\LocalizedException(__($item));
             }
@@ -86,7 +86,7 @@ class UpdateItemOptions extends \Magento\Checkout\Controller\Cart
                 return $this->resultRedirectFactory->create()->setUrl($this->_redirect->getRedirectUrl($cartUrl));
             }
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We cannot update the item.'));
+            $this->messageManager->addException($e, __('We can\'t update the item right now.'));
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
             return $this->_goBack();
         }

@@ -16,7 +16,7 @@ use Magento\Framework\Filesystem\DriverPool;
  * @method string getTime()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Backup extends \Magento\Framework\Object implements \Magento\Framework\Backup\Db\BackupInterface
+class Backup extends \Magento\Framework\DataObject implements \Magento\Framework\Backup\Db\BackupInterface
 {
     /**
      * Compress rate
@@ -357,7 +357,7 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
             $this->_getStream()->write($string);
         } catch (\Magento\Framework\Exception\FileSystemException $e) {
             throw new \Magento\Framework\Exception\InputException(
-                __('Something went wrong writing to the backup file "%1".', $this->getFileName())
+                __('Something went wrong while writing to the backup file "%1".', $this->getFileName())
             );
         }
 

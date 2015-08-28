@@ -16,15 +16,15 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Action
     /**
      * Renderer for "Action" column in Newsletter templates grid
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         if ($row->isValidForSend()) {
             $actions[] = [
                 'url' => $this->getUrl('*/queue/edit', ['template_id' => $row->getId()]),
-                'caption' => __('Queue Newsletter...'),
+                'caption' => __('Queue Newsletter'),
             ];
         }
 

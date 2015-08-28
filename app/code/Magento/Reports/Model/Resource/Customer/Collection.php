@@ -81,7 +81,8 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
      * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Framework\Object\Copy\Config $fieldsetConfig
+     * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot
+     * @param \Magento\Framework\DataObject\Copy\Config $fieldsetConfig
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      * @param \Magento\Quote\Model\Resource\Quote\Item\CollectionFactory $quoteItemFactory
      * @param \Magento\Sales\Model\Resource\Order\Collection $orderResource
@@ -100,11 +101,12 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
         \Magento\Eav\Model\EntityFactory $eavEntityFactory,
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Framework\Object\Copy\Config $fieldsetConfig,
+        \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
+        \Magento\Framework\DataObject\Copy\Config $fieldsetConfig,
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\Quote\Model\Resource\Quote\Item\CollectionFactory $quoteItemFactory,
         \Magento\Sales\Model\Resource\Order\Collection $orderResource,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         $modelName = self::CUSTOMER_MODEL_NAME
     ) {
         parent::__construct(
@@ -117,6 +119,7 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
             $eavEntityFactory,
             $resourceHelper,
             $universalFactory,
+            $entitySnapshot,
             $fieldsetConfig,
             $connection,
             $modelName
@@ -183,9 +186,9 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
         $customerIds = $this->getColumnValues($this->getResource()->getIdFieldName());
 
         if ($this->_addOrderStatistics && !empty($customerIds)) {
-            $adapter = $this->orderResource->getConnection();
-            $baseSubtotalRefunded = $adapter->getIfNullSql('orders.base_subtotal_refunded', 0);
-            $baseSubtotalCanceled = $adapter->getIfNullSql('orders.base_subtotal_canceled', 0);
+            $connection = $this->orderResource->getConnection();
+            $baseSubtotalRefunded = $connection->getIfNullSql('orders.base_subtotal_refunded', 0);
+            $baseSubtotalCanceled = $connection->getIfNullSql('orders.base_subtotal_canceled', 0);
 
             $totalExpr = $this->_addOrderStatFilter ?
                 "(orders.base_subtotal-{$baseSubtotalCanceled}-{$baseSubtotalRefunded})*orders.base_to_global_rate" :
@@ -249,12 +252,12 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
     public function getSelectCountSql()
     {
         $countSelect = clone $this->getSelect();
-        $countSelect->reset(\Zend_Db_Select::ORDER);
-        $countSelect->reset(\Zend_Db_Select::LIMIT_COUNT);
-        $countSelect->reset(\Zend_Db_Select::LIMIT_OFFSET);
-        $countSelect->reset(\Zend_Db_Select::COLUMNS);
-        $countSelect->reset(\Zend_Db_Select::GROUP);
-        $countSelect->reset(\Zend_Db_Select::HAVING);
+        $countSelect->reset(\Magento\Framework\DB\Select::ORDER);
+        $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
+        $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
+        $countSelect->reset(\Magento\Framework\DB\Select::GROUP);
+        $countSelect->reset(\Magento\Framework\DB\Select::HAVING);
         $countSelect->columns("count(DISTINCT e.entity_id)");
 
         return $countSelect;

@@ -22,7 +22,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
     protected $_widget;
 
     /**
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
@@ -32,13 +32,14 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Backend\Model\UrlInterface $backendUrlBuilder
+     * @param \Magento\Framework\UrlInterface $urlModel
+     * @param \Pelago\Emogrifier $emogrifier
      * @param \Magento\Widget\Model\Resource\Widget $widgetResource
      * @param \Magento\Widget\Model\Widget $widget
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\View\Asset\Repository $assetRepo,
@@ -48,7 +49,8 @@ class Filter extends \Magento\Cms\Model\Template\Filter
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Framework\App\State $appState,
-        \Magento\Backend\Model\UrlInterface $backendUrlBuilder,
+        \Magento\Framework\UrlInterface $urlModel,
+        \Pelago\Emogrifier $emogrifier,
         \Magento\Widget\Model\Resource\Widget $widgetResource,
         \Magento\Widget\Model\Widget $widget
     ) {
@@ -65,7 +67,8 @@ class Filter extends \Magento\Cms\Model\Template\Filter
             $layout,
             $layoutFactory,
             $appState,
-            $backendUrlBuilder
+            $urlModel,
+            $emogrifier
         );
     }
 
@@ -77,7 +80,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      */
     public function widgetDirective($construction)
     {
-        $params = $this->_getIncludeParameters($construction[2]);
+        $params = $this->getParameters($construction[2]);
 
         // Determine what name block should have in layout
         $name = null;
@@ -119,7 +122,7 @@ class Filter extends \Magento\Cms\Model\Template\Filter
      */
     public function mediaDirective($construction)
     {
-        $params = $this->_getIncludeParameters($construction[2]);
+        $params = $this->getParameters($construction[2]);
         return $this->_storeManager->getStore()
             ->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA) . $params['url'];
     }

@@ -1,0 +1,58 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@color-border-legend: @color-gray80;
+
+//
+
+.form-legend,
+.form-legend-light,
+.form-legend-expand {
+    display: block;
+    margin: 0;
+}
+
+.form-legend,
+.form-legend-expand {
+    margin-bottom: 2.5em;
+    padding-top: 1.5em;
+    font-weight: @font-weight__semibold;
+    font-size: 1.25em;
+}
+
+.form-legend {
+    width: 100%;
+    border-top: 1px solid @color-border-legend;
+}
+
+.form-legend-light {
+    margin-bottom: 1.5em;
+    font-size: 1em;
+}
+
+.form-legend-expand {
+    cursor: pointer;
+    transition: opacity .2s linear;
+    &:hover {
+        opacity: .85;
+    }
+    &.expanded {
+        &:after {
+            content: @icon-expand-close__content;
+        }
+    }
+    &:after {
+        margin-left: .5em;
+        font-weight: @font-weight__regular;
+        font-size: 1.15em;
+        font-family: @icons__font-family;
+        content: @icon-expand-open__content;
+        vertical-align: sub;
+    }
+}

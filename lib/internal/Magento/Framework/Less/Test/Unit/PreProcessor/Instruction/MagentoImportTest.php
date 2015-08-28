@@ -76,7 +76,7 @@ class MagentoImportTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcess($originalContent, $foundPath, $resolvedPath, $foundFiles, $expectedContent)
     {
-        $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain($this->asset, $originalContent, 'css');
+        $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain($this->asset, $originalContent, 'css', 'path');
         $relatedAsset = $this->getMock('\Magento\Framework\View\Asset\File', [], [], '', false);
         $relatedAsset->expects($this->once())
             ->method('getFilePath')
@@ -135,6 +135,27 @@ class MagentoImportTest extends \PHPUnit_Framework_TestCase
                 ],
                 "@import 'Magento_Module::some/file.css';\n@import 'Magento_Two::some/file.css';\n",
             ],
+            'non-modular reference notation' => [
+                '//@magento_import (reference) "some/file.css";',
+                'some/file.css',
+                'some/file.css',
+                [
+                    ['module' => null, 'filename' => 'some/file.css'],
+                    ['module' => null, 'filename' => 'theme/some/file.css'],
+                ],
+                "@import (reference) 'some/file.css';\n@import (reference) 'some/file.css';\n",
+            ],
+            'modular reference' => [
+                '//@magento_import (reference) "Magento_Module::some/file.css";',
+                'Magento_Module::some/file.css',
+                'some/file.css',
+                [
+                    ['module' => 'Magento_Module', 'filename' => 'some/file.css'],
+                    ['module' => 'Magento_Two', 'filename' => 'some/file.css'],
+                ],
+                "@import (reference) 'Magento_Module::some/file.css';\n" .
+                "@import (reference) 'Magento_Two::some/file.css';\n",
+            ],
         ];
     }
 
@@ -142,7 +163,7 @@ class MagentoImportTest extends \PHPUnit_Framework_TestCase
     {
         $originalContent = 'color: #000000;';
         $expectedContent = 'color: #000000;';
-        $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain($this->asset, $originalContent, 'css');
+        $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain($this->asset, $originalContent, 'css', 'orig');
         $this->assetRepo->expects($this->never())
             ->method('createRelated');
         $this->object->process($chain);
@@ -153,7 +174,7 @@ class MagentoImportTest extends \PHPUnit_Framework_TestCase
     public function testProcessException()
     {
         $chain = new \Magento\Framework\View\Asset\PreProcessor\Chain(
-            $this->asset, '//@magento_import "some/file.css";', 'css'
+            $this->asset, '//@magento_import "some/file.css";', 'css', 'path'
         );
         $exception = new \LogicException('Error happened');
         $this->assetRepo->expects($this->once())

@@ -7,14 +7,11 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php
-/**
- * @see \Magento\Bundle\Block\Adminhtml\Sales\Order\Items\Renderer
- */
-?>
+
+<?php /** @var $block \Magento\Bundle\Block\Adminhtml\Sales\Order\Items\Renderer */ ?>
 
 <?php $_item = $block->getItem() ?>
-<?php $items = $block->getChilds($_item); ?>
+<?php $items = $block->getChildren($_item); ?>
 <?php $_count = count($items) ?>
 <?php $_index = 0 ?>
 

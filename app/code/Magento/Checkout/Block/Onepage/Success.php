@@ -6,6 +6,7 @@
 namespace Magento\Checkout\Block\Onepage;
 
 use Magento\Customer\Model\Context;
+use Magento\Sales\Model\Order;
 
 /**
  * One page checkout success page
@@ -16,16 +17,6 @@ class Success extends \Magento\Framework\View\Element\Template
      * @var \Magento\Checkout\Model\Session
      */
     protected $_checkoutSession;
-
-    /**
-     * @var \Magento\Customer\Model\Session
-     */
-    protected $_customerSession;
-
-    /**
-     * @var \Magento\Sales\Model\OrderFactory
-     */
-    protected $_orderFactory;
 
     /**
      * @var \Magento\Sales\Model\Order\Config
@@ -40,8 +31,6 @@ class Success extends \Magento\Framework\View\Element\Template
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Sales\Model\Order\Config $orderConfig
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
@@ -49,29 +38,15 @@ class Success extends \Magento\Framework\View\Element\Template
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Sales\Model\Order\Config $orderConfig,
         \Magento\Framework\App\Http\Context $httpContext,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->_checkoutSession = $checkoutSession;
-        $this->_customerSession = $customerSession;
-        $this->_orderFactory = $orderFactory;
         $this->_orderConfig = $orderConfig;
         $this->_isScopePrivate = true;
         $this->httpContext = $httpContext;
-    }
-
-    /**
-     * See if the order has state, visible on frontend
-     *
-     * @return bool
-     */
-    public function isOrderVisible()
-    {
-        return (bool)$this->_getData('is_order_visible');
     }
 
     /**
@@ -91,34 +66,60 @@ class Success extends \Magento\Framework\View\Element\Template
      */
     protected function _beforeToHtml()
     {
-        $this->_prepareLastOrder();
+        $this->prepareBlockData();
         return parent::_beforeToHtml();
     }
 
     /**
-     * Get last order ID from session, fetch it and check whether it can be viewed, printed etc
+     * Prepares block data
      *
      * @return void
      */
-    protected function _prepareLastOrder()
+    protected function prepareBlockData()
     {
-        $orderId = $this->_checkoutSession->getLastOrderId();
-        if ($orderId) {
-            $order = $this->_orderFactory->create()->load($orderId);
-            if ($order->getId()) {
-                $isVisible = !in_array($order->getStatus(), $this->_orderConfig->getInvisibleOnFrontStatuses());
-                $canView = $this->httpContext->getValue(Context::CONTEXT_AUTH) && $isVisible;
-                $this->addData(
-                    [
-                        'is_order_visible' => $isVisible,
-                        'view_order_url' => $this->getUrl('sales/order/view/', ['order_id' => $orderId]),
-                        'print_url' => $this->getUrl('sales/order/print', ['order_id' => $orderId]),
-                        'can_print_order' => $isVisible,
-                        'can_view_order'  => $canView,
-                        'order_id'  => $order->getIncrementId(),
-                    ]
-                );
-            }
-        }
+        $order = $this->_checkoutSession->getLastRealOrder();
+
+        $this->addData(
+            [
+                'is_order_visible' => $this->isVisible($order),
+                'view_order_url' => $this->getUrl(
+                    'sales/order/view/',
+                    ['order_id' => $order->getEntityId()]
+                ),
+                'print_url' => $this->getUrl(
+                    'sales/order/print',
+                    ['order_id' => $order->getEntityId()]
+                ),
+                'can_print_order' => $this->isVisible($order),
+                'can_view_order'  => $this->canViewOrder($order),
+                'order_id'  => $order->getIncrementId()
+            ]
+        );
+    }
+
+    /**
+     * Is order visible
+     *
+     * @param Order $order
+     * @return bool
+     */
+    protected function isVisible(Order $order)
+    {
+        return !in_array(
+            $order->getStatus(),
+            $this->_orderConfig->getInvisibleOnFrontStatuses()
+        );
+    }
+
+    /**
+     * Can view order
+     *
+     * @param Order $order
+     * @return bool
+     */
+    protected function canViewOrder(Order $order)
+    {
+        return $this->httpContext->getValue(Context::CONTEXT_AUTH)
+            && $this->isVisible($order);
     }
 }

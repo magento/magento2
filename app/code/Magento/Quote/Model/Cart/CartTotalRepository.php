@@ -11,6 +11,7 @@ use Magento\Quote\Api\CartTotalRepositoryInterface;
 use Magento\Catalog\Helper\Product\ConfigurationPool;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Quote\Model\Cart\Totals\ItemConverter;
+use Magento\Quote\Api\CouponManagementInterface;
 
 /**
  * Cart totals data object.
@@ -39,24 +40,40 @@ class CartTotalRepository implements CartTotalRepositoryInterface
     /**
      * @var ConfigurationPool
      */
-    private $converter;
+    private $itemConverter;
+
+    /**
+     * @var CouponManagementInterface
+     */
+    protected $couponService;
+
+    /**
+     * @var TotalsConverter
+     */
+    protected $totalsConverter;
 
     /**
      * @param Api\Data\TotalsInterfaceFactory $totalsFactory
      * @param QuoteRepository $quoteRepository
      * @param DataObjectHelper $dataObjectHelper
+     * @param CouponManagementInterface $couponService
+     * @param TotalsConverter $totalsConverter
      * @param ItemConverter $converter
      */
     public function __construct(
         Api\Data\TotalsInterfaceFactory $totalsFactory,
         QuoteRepository $quoteRepository,
         DataObjectHelper $dataObjectHelper,
+        CouponManagementInterface $couponService,
+        TotalsConverter $totalsConverter,
         ItemConverter $converter
     ) {
         $this->totalsFactory = $totalsFactory;
         $this->quoteRepository = $quoteRepository;
         $this->dataObjectHelper = $dataObjectHelper;
-        $this->converter = $converter;
+        $this->couponService = $couponService;
+        $this->totalsConverter = $totalsConverter;
+        $this->itemConverter = $converter;
     }
 
     /**
@@ -82,11 +99,19 @@ class CartTotalRepository implements CartTotalRepositoryInterface
         $totals = $this->totalsFactory->create();
         $this->dataObjectHelper->populateWithArray($totals, $totalsData, '\Magento\Quote\Api\Data\TotalsInterface');
         $items = [];
+        $weeeTaxAppliedAmount = 0;
         foreach ($quote->getAllVisibleItems() as $index => $item) {
-            $items[$index] = $this->converter->modelToDataObject($item);
+            $items[$index] = $this->itemConverter->modelToDataObject($item);
+            $weeeTaxAppliedAmount += $item->getWeeeTaxAppliedRowAmount();
         }
+        $totals->setCouponCode($this->couponService->get($cartId));
+        $calculatedTotals = $this->totalsConverter->process($quote->getTotals());
+        $amount = $totals->getGrandTotal() - $totals->getTaxAmount();
+        $amount = $amount > 0 ? $amount : 0;
+        $totals->setGrandTotal($amount);
+        $totals->setTotalSegments($calculatedTotals);
         $totals->setItems($items);
-
+        $totals->setWeeeTaxAppliedAmount($weeeTaxAppliedAmount);
         return $totals;
     }
 }

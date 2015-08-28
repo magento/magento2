@@ -5,9 +5,8 @@
  */
 namespace Magento\Tax\Test\Unit\Model;
 
+use Magento\Framework\Api\SortOrder;
 use \Magento\Tax\Model\TaxRuleRepository;
-
-use Magento\Framework\Api\SearchCriteria as SearchCriteria;
 
 class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -47,6 +46,11 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $resource;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $extensionAttributesJoinProcessorMock;
+
+    /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
@@ -78,13 +82,21 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->resource = $this->getMock('\Magento\Tax\Model\Resource\Calculation\Rule', [], [], '', false);
+        $this->extensionAttributesJoinProcessorMock = $this->getMock(
+            '\Magento\Framework\Api\ExtensionAttribute\JoinProcessor',
+            ['process'],
+            [],
+            '',
+            false
+        );
 
         $this->model = new TaxRuleRepository(
             $this->taxRuleRegistry,
             $this->searchResultFactory,
             $this->ruleFactory,
             $this->collectionFactory,
-            $this->resource
+            $this->resource,
+            $this->extensionAttributesJoinProcessorMock
         );
     }
 
@@ -181,6 +193,10 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
         $filterMock = $this->getMock('\Magento\Framework\Api\Filter', [], [], '', false);
         $sortOrderMock = $this->getMock('\Magento\Framework\Api\SortOrder', [], [], '', false);
 
+        $this->extensionAttributesJoinProcessorMock->expects($this->once())
+            ->method('process')
+            ->with($collectionMock);
+
         $this->searchResultsMock->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock);
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($collectionMock);
         $searchCriteriaMock->expects($this->once())->method('getFilterGroups')->willReturn([$filterGroupMock]);
@@ -198,7 +214,7 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->searchResultsMock->expects($this->once())->method('setTotalCount')->with($collectionSize);
         $searchCriteriaMock->expects($this->once())->method('getSortOrders')->willReturn([$sortOrderMock]);
         $sortOrderMock->expects($this->once())->method('getField')->willReturn('sort_order');
-        $sortOrderMock->expects($this->once())->method('getDirection')->willReturn(SearchCriteria::SORT_ASC);
+        $sortOrderMock->expects($this->once())->method('getDirection')->willReturn(SortOrder::SORT_ASC);
         $collectionMock->expects($this->once())->method('addOrder')->with('position', 'ASC');
         $searchCriteriaMock->expects($this->once())->method('getCurrentPage')->willReturn($currentPage);
         $collectionMock->expects($this->once())->method('setCurPage')->with($currentPage);

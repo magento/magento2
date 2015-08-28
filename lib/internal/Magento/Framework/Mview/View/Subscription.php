@@ -8,22 +8,20 @@
 
 namespace Magento\Framework\Mview\View;
 
+use Magento\Framework\App\Resource;
+use Magento\Framework\DB\Ddl\Trigger;
+
 class Subscription implements SubscriptionInterface
 {
     /**
-     * Trigger name qualifier
-     */
-    const TRIGGER_NAME_QUALIFIER = 'trg';
-
-    /**
-     * Database write connection
+     * Database connection
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    protected $write;
+    protected $connection;
 
     /**
-     * @var \Magento\Framework\DB\Ddl\Trigger
+     * @var \Magento\Framework\DB\Ddl\TriggerFactory
      */
     protected $triggerFactory;
 
@@ -55,12 +53,12 @@ class Subscription implements SubscriptionInterface
     protected $linkedViews = [];
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var Resource
      */
     protected $resource;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param Resource $resource
      * @param \Magento\Framework\DB\Ddl\TriggerFactory $triggerFactory
      * @param \Magento\Framework\Mview\View\CollectionInterface $viewCollection
      * @param \Magento\Framework\Mview\ViewInterface $view
@@ -68,14 +66,14 @@ class Subscription implements SubscriptionInterface
      * @param string $columnName
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        Resource $resource,
         \Magento\Framework\DB\Ddl\TriggerFactory $triggerFactory,
         \Magento\Framework\Mview\View\CollectionInterface $viewCollection,
         \Magento\Framework\Mview\ViewInterface $view,
         $tableName,
         $columnName
     ) {
-        $this->write = $resource->getConnection('core_write');
+        $this->connection = $resource->getConnection();
         $this->triggerFactory = $triggerFactory;
         $this->viewCollection = $viewCollection;
         $this->view = $view;
@@ -91,23 +89,14 @@ class Subscription implements SubscriptionInterface
      */
     public function create()
     {
-        foreach (\Magento\Framework\DB\Ddl\Trigger::getListOfEvents() as $event) {
-            $triggerName = $this->getTriggerName(
-                $this->resource->getTableName($this->getTableName()),
-                \Magento\Framework\DB\Ddl\Trigger::TIME_AFTER,
-                $event
-            );
-
-            /** @var \Magento\Framework\DB\Ddl\Trigger $trigger */
-            $trigger = $this->triggerFactory->create()->setName(
-                $triggerName
-            )->setTime(
-                \Magento\Framework\DB\Ddl\Trigger::TIME_AFTER
-            )->setEvent(
-                $event
-            )->setTable(
-                $this->resource->getTableName($this->getTableName())
-            );
+        foreach (Trigger::getListOfEvents() as $event) {
+            $triggerName = $this->getAfterEventTriggerName($event);
+            /** @var Trigger $trigger */
+            $trigger = $this->triggerFactory->create()
+                ->setName($triggerName)
+                ->setTime(Trigger::TIME_AFTER)
+                ->setEvent($event)
+                ->setTable($this->resource->getTableName($this->tableName));
 
             $trigger->addStatement($this->buildStatement($event, $this->getView()->getChangelog()));
 
@@ -117,8 +106,8 @@ class Subscription implements SubscriptionInterface
                 $trigger->addStatement($this->buildStatement($event, $view->getChangelog()));
             }
 
-            $this->write->dropTrigger($trigger->getName());
-            $this->write->createTrigger($trigger);
+            $this->connection->dropTrigger($trigger->getName());
+            $this->connection->createTrigger($trigger);
         }
 
         return $this;
@@ -131,23 +120,14 @@ class Subscription implements SubscriptionInterface
      */
     public function remove()
     {
-        foreach (\Magento\Framework\DB\Ddl\Trigger::getListOfEvents() as $event) {
-            $triggerName = $this->getTriggerName(
-                $this->resource->getTableName($this->getTableName()),
-                \Magento\Framework\DB\Ddl\Trigger::TIME_AFTER,
-                $event
-            );
-
-            /** @var \Magento\Framework\DB\Ddl\Trigger $trigger */
-            $trigger = $this->triggerFactory->create()->setName(
-                $triggerName
-            )->setTime(
-                \Magento\Framework\DB\Ddl\Trigger::TIME_AFTER
-            )->setEvent(
-                $event
-            )->setTable(
-                $this->resource->getTableName($this->getTableName())
-            );
+        foreach (Trigger::getListOfEvents() as $event) {
+            $triggerName = $this->getAfterEventTriggerName($event);
+            /** @var Trigger $trigger */
+            $trigger = $this->triggerFactory->create()
+                ->setName($triggerName)
+                ->setTime(Trigger::TIME_AFTER)
+                ->setEvent($event)
+                ->setTable($this->resource->getTableName($this->getTableName()));
 
             // Add statements for linked views
             foreach ($this->getLinkedViews() as $view) {
@@ -155,11 +135,11 @@ class Subscription implements SubscriptionInterface
                 $trigger->addStatement($this->buildStatement($event, $view->getChangelog()));
             }
 
-            $this->write->dropTrigger($trigger->getName());
+            $this->connection->dropTrigger($trigger->getName());
 
             // Re-create trigger if trigger used by linked views
             if ($trigger->getStatements()) {
-                $this->write->createTrigger($trigger);
+                $this->connection->createTrigger($trigger);
             }
         }
 
@@ -204,21 +184,21 @@ class Subscription implements SubscriptionInterface
     protected function buildStatement($event, $changelog)
     {
         switch ($event) {
-            case \Magento\Framework\DB\Ddl\Trigger::EVENT_INSERT:
-            case \Magento\Framework\DB\Ddl\Trigger::EVENT_UPDATE:
+            case Trigger::EVENT_INSERT:
+            case Trigger::EVENT_UPDATE:
                 return sprintf(
                     "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);",
-                    $this->write->quoteIdentifier($this->resource->getTableName($changelog->getName())),
-                    $this->write->quoteIdentifier($changelog->getColumnName()),
-                    $this->write->quoteIdentifier($this->getColumnName())
+                    $this->connection->quoteIdentifier($this->resource->getTableName($changelog->getName())),
+                    $this->connection->quoteIdentifier($changelog->getColumnName()),
+                    $this->connection->quoteIdentifier($this->getColumnName())
                 );
 
-            case \Magento\Framework\DB\Ddl\Trigger::EVENT_DELETE:
+            case Trigger::EVENT_DELETE:
                 return sprintf(
                     "INSERT IGNORE INTO %s (%s) VALUES (OLD.%s);",
-                    $this->write->quoteIdentifier($this->resource->getTableName($changelog->getName())),
-                    $this->write->quoteIdentifier($changelog->getColumnName()),
-                    $this->write->quoteIdentifier($this->getColumnName())
+                    $this->connection->quoteIdentifier($this->resource->getTableName($changelog->getName())),
+                    $this->connection->quoteIdentifier($changelog->getColumnName()),
+                    $this->connection->quoteIdentifier($this->getColumnName())
                 );
 
             default:
@@ -227,25 +207,26 @@ class Subscription implements SubscriptionInterface
     }
 
     /**
-     * Retrieve trigger name
+     * Build an "after" event for the given table and event
      *
-     * Build a trigger name by concatenating trigger name prefix, table name,
-     * trigger time and trigger event.
+     * @param string $event The DB level event, like "update" or "insert"
      *
-     * @param string $tableName
-     * @param string $time
-     * @param string $event
      * @return string
      */
-    protected function getTriggerName($tableName, $time, $event)
+    private function getAfterEventTriggerName($event)
     {
-        return self::TRIGGER_NAME_QUALIFIER . '_' . $tableName . '_' . $time . '_' . $event;
+        return $this->resource->getTriggerName(
+            $this->resource->getTableName($this->getTableName()),
+            Trigger::TIME_AFTER,
+            $event
+        );
     }
 
     /**
      * Retrieve View related to subscription
      *
      * @return \Magento\Framework\Mview\ViewInterface
+     * @codeCoverageIgnore
      */
     public function getView()
     {
@@ -256,6 +237,7 @@ class Subscription implements SubscriptionInterface
      * Retrieve table name
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getTableName()
     {
@@ -266,6 +248,7 @@ class Subscription implements SubscriptionInterface
      * Retrieve table column name
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getColumnName()
     {

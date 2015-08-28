@@ -6,15 +6,15 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Tax\Test\TestCase\TaxCalculationTest">
+    <testCase name="Magento\Tax\Test\TestCase\TaxCalculationTest" summary="Apply Taxes for products" ticketId="MAGETWO-27809">
         <variation name="TaxCalculationTestVariation1">
             <data name="description" xsi:type="string">Simple product tier price with sales rule, customer tax equals store tax and catalog price including tax</data>
-            <data name="configData" xsi:type="string">row_cat_incl_ship_excl_after_disc_on_excl, display_excluding_including_tax</data>
+            <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods, row_cat_incl_ship_excl_after_disc_on_excl, display_excluding_including_tax</data>
             <data name="product" xsi:type="string">catalogProductSimple::simple_with_tier_price_and_category</data>
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups_no_coupon</data>
             <data name="catalogRule" xsi:type="string">-</data>
             <data name="taxRule" xsi:type="string">customer_equals_store_rate</data>
-            <data name="customer/dataSet" xsi:type="string">johndoe_unique</data>
+            <data name="customer/dataset" xsi:type="string">johndoe_unique</data>
             <data name="qty" xsi:type="string">3</data>
             <data name="prices/category_price_excl_tax" xsi:type="string">277.14</data>
             <data name="prices/category_price_incl_tax" xsi:type="string">300.00</data>
@@ -38,12 +38,12 @@
         </variation>
         <variation name="TaxCalculationTestVariation2">
             <data name="description" xsi:type="string">Simple product group price with sales rule, customer tax greater than store tax and catalog price excluding tax</data>
-            <data name="configData" xsi:type="string">row_cat_excl_ship_incl_before_disc_on_incl, display_excluding_including_tax</data>
+            <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods, row_cat_excl_ship_incl_before_disc_on_incl, display_excluding_including_tax</data>
             <data name="product" xsi:type="string">catalogProductSimple::simple_with_group_price_and_category</data>
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups_no_coupon</data>
             <data name="catalogRule" xsi:type="string">-</data>
             <data name="taxRule" xsi:type="string">customer_greater_store_rate</data>
-            <data name="customer/dataSet" xsi:type="string">johndoe_unique</data>
+            <data name="customer/dataset" xsi:type="string">johndoe_unique</data>
             <data name="qty" xsi:type="string">3</data>
             <data name="prices/category_price_excl_tax" xsi:type="string">90.99</data>
             <data name="prices/category_price_incl_tax" xsi:type="string">98.61</data>
@@ -67,12 +67,12 @@
         </variation>
         <variation name="TaxCalculationTestVariation3">
             <data name="description" xsi:type="string">Simple product group price with sales rule, customer tax less than store tax and catalog price excluding tax</data>
-            <data name="configData" xsi:type="string">total_cat_excl_ship_incl_after_disc_on_excl, display_excluding_including_tax</data>
+            <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods, total_cat_excl_ship_incl_after_disc_on_excl, display_excluding_including_tax</data>
             <data name="product" xsi:type="string">catalogProductSimple::simple_with_group_price_and_category</data>
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups_no_coupon</data>
             <data name="catalogRule" xsi:type="string">-</data>
             <data name="taxRule" xsi:type="string">customer_less_store_rate</data>
-            <data name="customer/dataSet" xsi:type="string">johndoe_unique</data>
+            <data name="customer/dataset" xsi:type="string">johndoe_unique</data>
             <data name="qty" xsi:type="string">3</data>
             <data name="prices/category_price_excl_tax" xsi:type="string">90.99</data>
             <data name="prices/category_price_incl_tax" xsi:type="string">98.50</data>
@@ -96,12 +96,12 @@
         </variation>
         <variation name="TaxCalculationTestVariation4">
             <data name="description" xsi:type="string">Simple product special price with sales rule, customer tax less than store tax and catalog price including tax</data>
-            <data name="configData" xsi:type="string">row_cat_incl_ship_excl_before_disc_on_incl, display_excluding_including_tax</data>
+            <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods, row_cat_incl_ship_excl_before_disc_on_incl, display_excluding_including_tax</data>
             <data name="product" xsi:type="string">catalogProductSimple::product_with_special_price_and_category</data>
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups_no_coupon</data>
             <data name="catalogRule" xsi:type="string">-</data>
             <data name="taxRule" xsi:type="string">customer_less_store_rate</data>
-            <data name="customer/dataSet" xsi:type="string">johndoe_unique</data>
+            <data name="customer/dataset" xsi:type="string">johndoe_unique</data>
             <data name="qty" xsi:type="string">3</data>
             <data name="prices/category_price_excl_tax" xsi:type="string">83.05</data>
             <data name="prices/category_price_incl_tax" xsi:type="string">89.90</data>
@@ -125,12 +125,12 @@
         </variation>
         <variation name="TaxCalculationTestVariation5">
             <data name="description" xsi:type="string">Simple product tier price with sales rule, customer tax less than store tax and catalog price including tax</data>
-            <data name="configData" xsi:type="string">unit_cat_incl_ship_incl_before_disc_on_incl, display_excluding_including_tax</data>
+            <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods, unit_cat_incl_ship_incl_before_disc_on_incl, display_excluding_including_tax</data>
             <data name="product" xsi:type="string">catalogProductSimple::simple_with_tier_price_and_category</data>
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups_no_coupon</data>
             <data name="catalogRule" xsi:type="string">-</data>
             <data name="taxRule" xsi:type="string">customer_less_store_rate</data>
-            <data name="customer/dataSet" xsi:type="string">johndoe_unique</data>
+            <data name="customer/dataset" xsi:type="string">johndoe_unique</data>
             <data name="qty" xsi:type="string">3</data>
             <data name="prices/category_price_excl_tax" xsi:type="string">276.81</data>
             <data name="prices/category_price_incl_tax" xsi:type="string">299.65</data>
@@ -154,12 +154,12 @@
         </variation>
         <variation name="TaxCalculationTestVariation6">
             <data name="description" xsi:type="string">Simple product special price with sales rule, customer tax equals store tax and catalog price excluding tax</data>
-            <data name="configData" xsi:type="string">total_cat_excl_ship_incl_before_disc_on_incl, display_excluding_including_tax</data>
+            <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods, total_cat_excl_ship_incl_before_disc_on_incl, display_excluding_including_tax</data>
             <data name="product" xsi:type="string">catalogProductSimple::product_with_special_price_and_category</data>
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups_no_coupon</data>
             <data name="catalogRule" xsi:type="string">-</data>
             <data name="taxRule" xsi:type="string">customer_equals_store_rate</data>
-            <data name="customer/dataSet" xsi:type="string">johndoe_unique</data>
+            <data name="customer/dataset" xsi:type="string">johndoe_unique</data>
             <data name="qty" xsi:type="string">3</data>
             <data name="prices/category_price_excl_tax" xsi:type="string">90.00</data>
             <data name="prices/category_price_incl_tax" xsi:type="string">97.43</data>
@@ -183,12 +183,12 @@
         </variation>
         <variation name="TaxCalculationTestVariation7">
             <data name="description" xsi:type="string">Simple product group price with sales rule, customer tax equals store tax and catalog price excluding tax</data>
-            <data name="configData" xsi:type="string">unit_cat_excl_ship_excl_after_disc_on_excl, display_excluding_including_tax</data>
+            <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods, unit_cat_excl_ship_excl_after_disc_on_excl, display_excluding_including_tax</data>
             <data name="product" xsi:type="string">catalogProductSimple::simple_with_group_price_and_category</data>
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups_no_coupon</data>
             <data name="catalogRule" xsi:type="string">-</data>
             <data name="taxRule" xsi:type="string">customer_equals_store_rate</data>
-            <data name="customer/dataSet" xsi:type="string">johndoe_unique</data>
+            <data name="customer/dataset" xsi:type="string">johndoe_unique</data>
             <data name="qty" xsi:type="string">3</data>
             <data name="prices/category_price_excl_tax" xsi:type="string">90.99</data>
             <data name="prices/category_price_incl_tax" xsi:type="string">98.50</data>
@@ -212,12 +212,12 @@
         </variation>
         <variation name="TaxCalculationTestVariation8">
             <data name="description" xsi:type="string">Simple product special price with sales rule, customer tax greater than store tax and catalog price including tax</data>
-            <data name="configData" xsi:type="string">total_cat_incl_ship_excl_before_disc_on_excl, display_excluding_including_tax</data>
+            <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods, total_cat_incl_ship_excl_before_disc_on_excl, display_excluding_including_tax</data>
             <data name="product" xsi:type="string">catalogProductSimple::simple_with_group_price_and_category</data>
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups_no_coupon</data>
             <data name="catalogRule" xsi:type="string">-</data>
             <data name="taxRule" xsi:type="string">customer_greater_store_rate</data>
-            <data name="customer/dataSet" xsi:type="string">johndoe_unique</data>
+            <data name="customer/dataset" xsi:type="string">johndoe_unique</data>
             <data name="qty" xsi:type="string">3</data>
             <data name="prices/category_price_excl_tax" xsi:type="string">84.06</data>
             <data name="prices/category_price_incl_tax" xsi:type="string">91.10</data>
@@ -241,12 +241,12 @@
         </variation>
         <variation name="TaxCalculationTestVariation9">
             <data name="description" xsi:type="string">Simple product tier price with sales rule, customer tax greater than store tax and catalog price excluding tax</data>
-            <data name="configData" xsi:type="string">total_cat_excl_ship_incl_after_disc_on_incl, display_excluding_including_tax</data>
+            <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods, total_cat_excl_ship_incl_after_disc_on_incl, display_excluding_including_tax</data>
             <data name="product" xsi:type="string">catalogProductSimple::simple_with_tier_price_and_category</data>
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups_no_coupon</data>
             <data name="catalogRule" xsi:type="string">-</data>
             <data name="taxRule" xsi:type="string">customer_greater_store_rate</data>
-            <data name="customer/dataSet" xsi:type="string">johndoe_unique</data>
+            <data name="customer/dataset" xsi:type="string">johndoe_unique</data>
             <data name="qty" xsi:type="string">3</data>
             <data name="prices/category_price_excl_tax" xsi:type="string">300.00</data>
             <data name="prices/category_price_incl_tax" xsi:type="string">325.13</data>
@@ -270,12 +270,12 @@
         </variation>
         <variation name="TaxCalculationTestVariation10">
             <data name="description" xsi:type="string">Simple product special price with sales rule, customer tax greater than store tax and catalog price excluding tax</data>
-            <data name="configData" xsi:type="string">unit_cat_excl_ship_incl_after_disc_on_excl, display_excluding_including_tax</data>
+            <data name="configData" xsi:type="string">shipping_tax_class_taxable_goods, unit_cat_excl_ship_incl_after_disc_on_excl, display_excluding_including_tax</data>
             <data name="product" xsi:type="string">catalogProductSimple::product_with_special_price_and_category</data>
             <data name="salesRule" xsi:type="string">active_sales_rule_for_all_groups_no_coupon</data>
             <data name="catalogRule" xsi:type="string">-</data>
             <data name="taxRule" xsi:type="string">customer_greater_store_rate</data>
-            <data name="customer/dataSet" xsi:type="string">johndoe_unique</data>
+            <data name="customer/dataset" xsi:type="string">johndoe_unique</data>
             <data name="qty" xsi:type="string">3</data>
             <data name="prices/category_price_excl_tax" xsi:type="string">90.00</data>
             <data name="prices/category_price_incl_tax" xsi:type="string">97.54</data>

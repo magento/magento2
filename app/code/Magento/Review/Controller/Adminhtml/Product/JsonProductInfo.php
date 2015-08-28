@@ -11,7 +11,7 @@ use Magento\Framework\Registry;
 use Magento\Review\Model\ReviewFactory;
 use Magento\Review\Model\RatingFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\Controller\ResultFactory;
 
 class JsonProductInfo extends ProductController
@@ -44,7 +44,7 @@ class JsonProductInfo extends ProductController
      */
     public function execute()
     {
-        $response = new Object();
+        $response = new DataObject();
         $id = $this->getRequest()->getParam('id');
         if (intval($id) > 0) {
             $product = $this->productRepository->getById($id);
@@ -53,7 +53,7 @@ class JsonProductInfo extends ProductController
             $response->setError(0);
         } else {
             $response->setError(1);
-            $response->setMessage(__('We can\'t get the product ID.'));
+            $response->setMessage(__('We can\'t retrieve the product ID.'));
         }
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);

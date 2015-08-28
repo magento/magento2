@@ -39,7 +39,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Sales\Model\Resource\Report $resource
-     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -47,7 +47,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Sales\Model\Resource\Report $resource,
-        $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $resource->init($this->_aggregationTable);
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $resource, $connection);
@@ -60,16 +60,16 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
      */
     protected function _getSelectedColumns()
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         if ('month' == $this->_period) {
-            $this->_periodFormat = $adapter->getDateFormatSql('period', '%Y-%m');
+            $this->_periodFormat = $connection->getDateFormatSql('period', '%Y-%m');
         } elseif ('year' == $this->_period) {
-            $this->_periodFormat = $adapter->getDateExtractSql(
+            $this->_periodFormat = $connection->getDateExtractSql(
                 'period',
                 \Magento\Framework\DB\Adapter\AdapterInterface::INTERVAL_YEAR
             );
         } else {
-            $this->_periodFormat = $adapter->getDateFormatSql('period', '%Y-%m-%d');
+            $this->_periodFormat = $connection->getDateFormatSql('period', '%Y-%m-%d');
         }
 
         if (!$this->isTotals()) {
@@ -102,16 +102,16 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
     }
 
     /**
-     * Add selected data
+     * Apply custom columns before load
      *
      * @return $this
      */
-    protected function _initSelect()
+    protected function _beforeLoad()
     {
         $this->getSelect()->from($this->getResource()->getMainTable(), $this->_getSelectedColumns());
         if (!$this->isTotals()) {
             $this->getSelect()->group($this->_periodFormat);
         }
-        return parent::_initSelect();
+        return parent::_beforeLoad();
     }
 }

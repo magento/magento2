@@ -55,14 +55,17 @@ class Minsaleqty extends \Magento\Config\Block\System\Config\Form\Field\FieldArr
     /**
      * Prepare existing row data object
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return void
      */
-    protected function _prepareArrayRow(\Magento\Framework\Object $row)
+    protected function _prepareArrayRow(\Magento\Framework\DataObject $row)
     {
+        $optionExtraAttr = [];
+        $optionExtraAttr['option_' . $this->_getGroupRenderer()->calcOptionHash($row->getData('customer_group_id'))] =
+            'selected="selected"';
         $row->setData(
-            'option_extra_attr_' . $this->_getGroupRenderer()->calcOptionHash($row->getData('customer_group_id')),
-            'selected="selected"'
+            'option_extra_attrs',
+            $optionExtraAttr
         );
     }
 }

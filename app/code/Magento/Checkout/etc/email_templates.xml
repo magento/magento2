@@ -6,5 +6,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Email/etc/email_templates.xsd">
-    <template id="checkout_payment_failed_template" label="Payment Failed" file="failed_payment.html" type="html" module="Magento_Checkout"/>
+    <template id="checkout_payment_failed_template" label="Payment Failed" file="failed_payment.html" type="html" module="Magento_Checkout" area="adminhtml"/>
 </config>

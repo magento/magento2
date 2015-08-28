@@ -7,11 +7,18 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
     <repository class="Magento\Customer\Test\Repository\CustomerGroup">
+        <dataset name="default">
+            <field name="customer_group_code" xsi:type="string">customer_code_%isolation%</field>
+            <field name="tax_class_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">customer_tax_class</item>
+            </field>
+        </dataset>
+
         <dataset name="General">
             <field name="customer_group_id" xsi:type="string">1</field>
             <field name="customer_group_code" xsi:type="string">General</field>
             <field name="tax_class_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">retail_customer</item>
+                <item name="dataset" xsi:type="string">retail_customer</item>
             </field>
         </dataset>
 
@@ -19,7 +26,7 @@
             <field name="customer_group_id" xsi:type="string">3</field>
             <field name="customer_group_code" xsi:type="string">Retailer</field>
             <field name="tax_class_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">retail_customer</item>
+                <item name="dataset" xsi:type="string">retail_customer</item>
             </field>
         </dataset>
 
@@ -27,7 +34,7 @@
             <field name="customer_group_id" xsi:type="string">2</field>
             <field name="customer_group_code" xsi:type="string">Wholesale</field>
             <field name="tax_class_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">retail_customer</item>
+                <item name="dataset" xsi:type="string">retail_customer</item>
             </field>
         </dataset>
 
@@ -40,42 +47,42 @@
             <field name="customer_group_id" xsi:type="string">0</field>
             <field name="customer_group_code" xsi:type="string">NOT LOGGED IN</field>
             <field name="tax_class_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">retail_customer</item>
+                <item name="dataset" xsi:type="string">retail_customer</item>
             </field>
         </dataset>
 
         <dataset name="customer_group_retail_customer">
             <field name="customer_group_code" xsi:type="string">Customer_group_%isolation%</field>
             <field name="tax_class_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">retail_customer</item>
+                <item name="dataset" xsi:type="string">retail_customer</item>
             </field>
         </dataset>
 
         <dataset name="valid_vat_id_domestic">
             <field name="customer_group_code" xsi:type="string">Valid VAT ID Domestic %isolation%</field>
             <field name="tax_class_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">retail_customer</item>
+                <item name="dataset" xsi:type="string">retail_customer</item>
             </field>
         </dataset>
 
         <dataset name="valid_vat_id_intra_union">
             <field name="customer_group_code" xsi:type="string">Valid VAT ID Intra %isolation%</field>
             <field name="tax_class_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">retail_customer</item>
+                <item name="dataset" xsi:type="string">retail_customer</item>
             </field>
         </dataset>
 
         <dataset name="invalid_vat_id">
             <field name="customer_group_code" xsi:type="string">Invalid VAT ID %isolation%</field>
             <field name="tax_class_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">retail_customer</item>
+                <item name="dataset" xsi:type="string">retail_customer</item>
             </field>
         </dataset>
 
         <dataset name="validation_error_vat_id">
             <field name="customer_group_code" xsi:type="string">Error VAT ID %isolation%</field>
             <field name="tax_class_id" xsi:type="array">
-                <item name="dataSet" xsi:type="string">retail_customer</item>
+                <item name="dataset" xsi:type="string">retail_customer</item>
             </field>
         </dataset>
     </repository>

@@ -6,14 +6,16 @@
 
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config;
 
-use Magento\Backend\Test\Block\Widget\Form;
 use Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config\Attribute\AttributeSelector;
+use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\ObjectManager;
 
 /**
  * Attribute block in Variation section.
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Attribute extends Form
 {
@@ -41,7 +43,7 @@ class Attribute extends Form
      *
      * @var string
      */
-    protected $createNewVariationSet = '[data-ui-id$="add-attribute"]';
+    protected $createNewVariationSet = '[title="Create New Attribute"]';
 
     /**
      * New attribute frame selector
@@ -69,21 +71,37 @@ class Attribute extends Form
      *
      * @var string
      */
-    protected $attributeBlockByName = './/*[*/strong[contains(@class,"title") and contains(.,"%s")]]';
+    protected $attributeBlockByName = '[data-attribute-title="%s"]';
 
+    /**
+     * Selector attribute value by label
+     *
+     * @var string
+     */
+    protected $attributeOptionByName = '[data-attribute-option-title="%s"]';
+
+    // @codingStandardsIgnoreStart
     /**
      * Selector for attribute block
      *
      * @var string
      */
-    protected $attributeBlock = '//div[@id="configurable-attributes-container"]/div[contains(@class,"entry-edit")][%d]';
+    protected $attributeBlock = '//div[@data-role="configurable-attributes-container"]/div[@data-role="attribute-info"][%d]';
+    // @codingStandardsIgnoreEnd
 
     /**
-     * Selector for "Add Option" button
+     * Selector for "Create New Value" button
      *
      * @var string
      */
-    protected $addOption = '[role="button"]';
+    protected $addOption = '[data-action=addOption]';
+
+    /**
+     * Selector for "Next" button in wizard
+     *
+     * @var string
+     */
+    protected $nextButton = '[data-role=step-wizard-next] button';
 
     /**
      * Selector for option container
@@ -128,6 +146,13 @@ class Attribute extends Form
     protected $configContent = '#super_config-content';
 
     /**
+     * Backend abstract block.
+     *
+     * @var string
+     */
+    protected $templateBlock = './ancestor::body';
+
+    /**
      * Fill attributes
      *
      * @param array $attributes
@@ -136,19 +161,32 @@ class Attribute extends Form
     public function fillAttributes(array $attributes)
     {
         foreach ($attributes as $attribute) {
-            $isExistAttribute = $this->isExistAttribute($attribute['frontend_label']);
-
-            if (!$isExistAttribute && empty($attribute['attribute_id'])) {
+            if (empty($attribute['attribute_id'])) {
                 $this->createNewVariationSet($attribute);
-                $this->waitBlock($this->newAttributeFrame);
-                $this->fillOptions($attribute);
-            } else {
-                if (!$isExistAttribute) {
-                    $this->getAttributeSelector()->setValue($attribute['frontend_label']);
-                }
-                $this->updateOptions($attribute);
             }
         }
+
+        foreach ($attributes as $attribute) {
+            $this->getAttributesGrid()->searchAndSelect(['frontend_label' => $attribute['frontend_label']]);
+            $this->browser->find($this->nextButton)->click();
+            $this->getTemplateBlock()->waitLoader();
+            $this->updateOptions($attribute);
+        }
+
+        $this->browser->find($this->nextButton)->click();
+        $this->getTemplateBlock()->waitLoader();
+        $this->browser->find($this->nextButton)->click();
+    }
+
+    /**
+     * @return \Magento\Ui\Test\Block\Adminhtml\DataGrid
+     */
+    protected function getAttributesGrid()
+    {
+        return $this->blockFactory->create(
+            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\AttributesGrid',
+            ['element' => $this->browser->find('.admin__data-grid-outer-wrap')]
+        );
     }
 
     /**
@@ -164,9 +202,10 @@ class Attribute extends Form
             ['data' => $attribute]
         );
 
-        $this->_rootElement->find($this->createNewVariationSet)->click();
+        $this->browser->find($this->createNewVariationSet)->click();
         $this->getEditAttributeForm()->fill($attributeFixture);
         $this->getEditAttributeForm()->saveAttributeForm();
+        $this->waitBlock($this->newAttributeFrame);
     }
 
     /**
@@ -195,13 +234,12 @@ class Attribute extends Form
      */
     protected function fillOptions(array $attribute)
     {
-        $attributeBlock = $this->_rootElement->find(
+        $attributeBlock = $this->browser->find(
             sprintf($this->attributeBlockByName, $attribute['frontend_label']),
             Locator::SELECTOR_XPATH
         );
         $count = 0;
 
-        $this->showAttributeContent($attributeBlock);
         if (isset($attribute['label'])) {
             $attributeBlock->find($this->attributeLabel)->setValue($attribute['label']);
         }
@@ -226,28 +264,25 @@ class Attribute extends Form
      */
     protected function updateOptions(array $attribute)
     {
-        $attributeBlock = $this->_rootElement->find(
-            sprintf($this->attributeBlockByName, $attribute['frontend_label']),
-            Locator::SELECTOR_XPATH
-        );
+        $attributeBlock = $this->browser->find(sprintf($this->attributeBlockByName, $attribute['frontend_label']));
         $count = 0;
 
-        $this->showAttributeContent($attributeBlock);
-        if (isset($attribute['label'])) {
-            $attributeBlock->find($this->attributeLabel)->setValue($attribute['label']);
-        }
         foreach ($attribute['options'] as $option) {
             $count++;
-            $optionContainer = $attributeBlock->find(
-                sprintf($this->optionContainerByNumber, $count),
-                Locator::SELECTOR_XPATH
-            );
+            $label = isset($option['admin']) ? $option['admin'] : $option['label'];
+            $optionContainer = $attributeBlock->find(sprintf($this->attributeOptionByName, $label));
 
-            if (!$optionContainer->isVisible() && $this->isVisibleOption($attributeBlock, $count - 1)) {
+            if (!$optionContainer->isVisible()) {
+                $mapping = $this->dataMapping($option);
                 $attributeBlock->find($this->addOption)->click();
+
+                $optionContainer = $attributeBlock->find('[data-attribute-option-title=""]');
+
+                $this->getElement($optionContainer, $mapping['label'])
+                    ->setValue($mapping['label']['value']);
+                $this->getTemplateBlock()->waitLoader();
+                $optionContainer->find('[data-action=save]')->click();
             }
-            $mapping = $this->dataMapping($option);
-            $this->_fill($mapping, $optionContainer);
         }
     }
 
@@ -296,6 +331,7 @@ class Attribute extends Form
     /**
      * Get attributes data
      *
+     * @deprecated
      * @return array
      */
     public function getAttributesData()
@@ -307,7 +343,6 @@ class Attribute extends Form
         /** @var SimpleElement $attributeBlock */
         $attributeBlock = $this->_rootElement->find(sprintf($this->attributeBlock, $count), Locator::SELECTOR_XPATH);
         while ($attributeBlock->isVisible()) {
-            $this->showAttributeContent($attributeBlock);
             $attribute = [
                 'frontend_label' => $attributeBlock->find($this->attributeTitle)->getText(),
                 'label' => $attributeBlock->find($this->attributeLabel)->getValue(),
@@ -386,5 +421,18 @@ class Attribute extends Form
         }
 
         return $data;
+    }
+
+    /**
+     * Get backend abstract block.
+     *
+     * @return \Magento\Backend\Test\Block\Template
+     */
+    protected function getTemplateBlock()
+    {
+        return $this->blockFactory->create(
+            'Magento\Backend\Test\Block\Template',
+            ['element' => $this->_rootElement->find($this->templateBlock, Locator::SELECTOR_XPATH)]
+        );
     }
 }

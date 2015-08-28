@@ -5,6 +5,9 @@
  */
 namespace Magento\Payment\Gateway\Data;
 
+/**
+ * Interface OrderAdapterInterface
+ */
 interface OrderAdapterInterface
 {
     /**
@@ -41,4 +44,39 @@ interface OrderAdapterInterface
      * @return AddressAdapterInterface
      */
     public function getShippingAddress();
+
+    /**
+     * Returns order store id
+     *
+     * @return int
+     */
+    public function getStoreId();
+
+    /**
+     * Returns order id
+     *
+     * @return int
+     */
+    public function getId();
+
+    /**
+     * Returns order grand total amount
+     *
+     * @return float
+     */
+    public function getGrandTotalAmount();
+
+    /**
+     * Returns list of line items in the cart
+     *
+     * @return array
+     */
+    public function getItems();
+
+    /**
+     * Gets the remote IP address for the order.
+     *
+     * @return string|null Remote IP address.
+     */
+    public function getRemoteIp();
 }

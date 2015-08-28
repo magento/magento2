@@ -13,13 +13,13 @@ define([
         defaults: {
             headerTmpl: 'ui/grid/columns/multiselect',
             bodyTmpl: 'ui/grid/cells/multiselect',
+            sortable: false,
             menuVisible: false,
             excludeMode: false,
             allSelected: false,
             indetermine: false,
             selected: [],
             excluded: [],
-            ns: '${ $.provider }:params',
             actions: [{
                 value: 'selectAll',
                 label: $t('Select all')
@@ -40,7 +40,7 @@ define([
             },
 
             listens: {
-                '${ $.ns }.filters': 'deselectAll',
+                '${ $.provider }:params.filters': 'deselectAll',
                 selected: 'onSelectedChange',
                 rows: 'onRowsChange'
             },
@@ -74,20 +74,105 @@ define([
 
         /**
          * Toggles menu with a list of select actions.
+         *
+         * @returns {Multiselect} Chainable.
          */
         toggleMenu: function () {
             this.menuVisible(!this.menuVisible());
+
+            return this;
         },
 
         /**
          * Hides menu with a list of select actions.
+         *
+         * @returns {Multiselect} Chainable.
          */
         hideMenu: function () {
             this.menuVisible(false);
+
+            return this;
         },
 
         /**
-         * Selects all grid records, even those that are not visible on the page.
+         * Selects specified record.
+         *
+         * @param {*} id - See definition of 'getId' method.
+         * @param {Boolean} [isIndex=false] - See definition of 'getId' method.
+         * @returns {Multiselect} Chainable.
+         */
+        select: function (id, isIndex) {
+            this._setSelection(id, isIndex, true);
+
+            return this;
+        },
+
+        /**
+         * Deselects specified record.
+         *
+         * @param {*} id - See definition of 'getId' method.
+         * @param {Boolean} [isIndex=false] - See definition of 'getId' method.
+         * @returns {Multiselect} Chainable.
+         */
+        deselect: function (id, isIndex) {
+            this._setSelection(id, isIndex, false);
+
+            return this;
+        },
+
+        /**
+         * Toggles selection of a specified record.
+         *
+         * @param {*} id - See definition of 'getId' method.
+         * @param {Boolean} [isIndex=false] - See definition of 'getId' method.
+         * @returns {Multiselect} Chainable.
+         */
+        toggleSelect: function (id, isIndex) {
+            this._setSelection(id, isIndex, !this.isSelected(id, isIndex));
+
+            return this;
+        },
+
+        /**
+         * Checks if specified record is selected.
+         *
+         * @param {*} id - See definition of 'getId' method.
+         * @param {Boolean} [isIndex=false] - See definition of 'getId' method.
+         * @returns {Boolean}
+         */
+        isSelected: function (id, isIndex) {
+            id = this.getId(id, isIndex);
+
+            return this.selected.contains(id);
+        },
+
+        /**
+         * Selects/deselects specified record base on a 'select' parameter value.
+         *
+         * @param {*} id - See definition of 'getId' method.
+         * @param {Boolean} [isIndex=false] - See definition of 'getId' method.
+         * @param {Boolean} select - Whether to select/deselect record.
+         * @returns {Multiselect} Chainable.
+         */
+        _setSelection: function (id, isIndex, select) {
+            var selected = this.selected;
+
+            id = this.getId(id, isIndex);
+
+            if (!select && this.isSelected(id)) {
+                selected.remove(id);
+            } else if (select) {
+                selected.push(id);
+            }
+
+            return this;
+        },
+
+        /**
+         * Selects all records, even those that
+         * are not visible on the page.
+         *
+         * @returns {Multiselect} Chainable.
          */
         selectAll: function () {
             this.excludeMode(true);
@@ -99,13 +184,14 @@ define([
         },
 
         /**
-         * Deselects all grid records.
+         * Deselects all records.
+         *
+         * @returns {Multiselect} Chainable.
          */
         deselectAll: function () {
             this.excludeMode(false);
 
-            this.clearExcluded()
-                .deselectPage();
+            this.clearExcluded();
             this.selected.removeAll();
 
             return this;
@@ -113,31 +199,40 @@ define([
 
         /**
          * Selects or deselects all records.
+         *
+         * @returns {Multiselect} Chainable.
          */
         toggleSelectAll: function () {
-            return this.allSelected() ?
-                    this.deselectAll() :
-                    this.selectAll();
+            this.allSelected() ?
+                this.deselectAll() :
+                this.selectAll();
+
+            return this;
         },
 
         /**
          * Selects all records on the current page.
+         *
+         * @returns {Multiselect} Chainable.
          */
         selectPage: function () {
-            this.selected(
-                _.union(this.selected(), this.getIds())
-            );
+            var selected = _.union(this.selected(), this.getIds());
+
+            this.selected(selected);
 
             return this;
         },
 
         /**
          * Deselects all records on the current page.
+         *
+         * @returns {Multiselect} Chainable.
          */
         deselectPage: function () {
-            var currentPageIds = this.getIds();
+            var pageIds = this.getIds();
+
             this.selected.remove(function (value) {
-                return currentPageIds.indexOf(value) !== -1;
+                return !!~pageIds.indexOf(value);
             });
 
             return this;
@@ -165,8 +260,26 @@ define([
                 ids = _.pluck(items, this.indexField);
 
             return exclude ?
-                    _.difference(ids, this.excluded()) :
-                    ids;
+                _.difference(ids, this.excluded()) :
+                ids;
+        },
+
+        /**
+         * Returns identifier of a record.
+         *
+         * @param {*} id - Id of a record or its' index in a rows array.
+         * @param {Boolean} [isIndex=false] - Flag that specifies whith what
+         *      kind of identifier we are dealing with.
+         * @returns {*}
+         */
+        getId: function (id, isIndex) {
+            var record = this.rows()[id];
+
+            if (isIndex && record) {
+                id = record[this.indexField];
+            }
+
+            return id;
         },
 
         /**
@@ -189,8 +302,8 @@ define([
         },
 
         /**
-         * Calculates number of the selected records.
-         * Changes value of `totalSelected`.
+         * Calculates number of selected records and
+         * updates 'totalSelected' property.
          *
          * @returns {Multiselect} Chainable.
          */
@@ -209,53 +322,71 @@ define([
         },
 
         /**
-         * Exports selections to the data provider.
+         * Returns selections data.
+         *
+         * @returns {Object}
          */
-        exportSelections: function () {
-            var data = {},
-                type;
-
-            type = this.excludeMode() ? 'excluded' : 'selected';
-
-            data[type] = this[type]();
-            data.total = this.totalSelected();
-
-            this.source('set', 'config.multiselect', data);
+        getSelections: function () {
+            return {
+                excluded: this.excluded(),
+                selected: this.selected(),
+                total: this.totalSelected(),
+                excludeMode: this.excludeMode(),
+                params: this.getFiltering()
+            };
         },
 
         /**
-         * Defines if provided select/deselect action is relevant.
+         * Extracts filtering data from data provider.
+         *
+         * @returns {Object} Current filters state.
+         */
+        getFiltering: function () {
+            var source = this.source(),
+                keys = ['filters', 'search', 'namespace'];
+
+            if (!source) {
+                return {};
+            }
+
+            return _.pick(source.get('params'), keys);
+        },
+
+        /**
+         * Defines if provided select/deselect actions is relevant.
+         * E.g. there is no need in a 'select page' action if only one
+         * page is available.
          *
          * @param {String} actionId - Id of the action to be checked.
          * @returns {Boolean}
          */
         isActionRelevant: function (actionId) {
-            var pageIds = this.getIds().length,
-                multiplePages = pageIds < this.totalRecords();
+            var pageIds         = this.getIds().length,
+                multiplePages   = pageIds < this.totalRecords(),
+                relevant        = true;
 
             switch (actionId) {
                 case 'selectPage':
-
-                    return multiplePages && !this.isPageSelected(true);
+                    relevant = multiplePages && !this.isPageSelected(true);
+                    break;
 
                 case 'deselectPage':
-
-                    return multiplePages && this.isPageSelected();
+                    relevant =  multiplePages && this.isPageSelected();
+                    break;
 
                 case 'selectAll':
-
-                    return !this.allSelected();
+                    relevant = !this.allSelected();
+                    break;
 
                 case 'deselectAll':
-
-                    return this.totalSelected() > 0;
+                    relevant = this.totalSelected() > 0;
             }
 
-            return true;
+            return relevant;
         },
 
         /**
-         * Defines if current page has selected records on it.
+         * Checks if current page has selected records.
          *
          * @param {Boolean} [all=false] - If set to 'true' checks that every
          *      record on the page is selected. Otherwise checks that
@@ -286,6 +417,8 @@ define([
         /**
          * Updates values of the 'allSelected'
          * and 'indetermine' properties.
+         *
+         * @returns {Multiselect} Chainable.
          */
         updateState: function () {
             var selected        = this.selected().length,
@@ -303,21 +436,20 @@ define([
             }
 
             this.allSelected(allSelected);
-            this.indetermine(totalSelected > 0 && !allSelected);
+            this.indetermine(totalSelected && !allSelected);
 
             return this;
         },
 
         /**
-         * Callback method to handle change of the selected items.
+         * Callback method to handle changes of selected items.
          *
-         * @param {Array} selected - List of the currently selected items.
+         * @param {Array} selected - An array of currently selected items.
          */
         onSelectedChange: function (selected) {
             this.updateExcluded(selected)
                 .countSelected()
-                .updateState()
-                .exportSelections();
+                .updateState();
         },
 
         /**
@@ -325,12 +457,12 @@ define([
          * based on "selectMode" property.
          */
         onRowsChange: function () {
-            var newSelected;
+            var newSelections;
 
             if (this.excludeMode()) {
-                newSelected = _.union(this.getIds(true), this.selected());
+                newSelections = _.union(this.getIds(true), this.selected());
 
-                this.selected(newSelected);
+                this.selected(newSelections);
             }
         }
     });

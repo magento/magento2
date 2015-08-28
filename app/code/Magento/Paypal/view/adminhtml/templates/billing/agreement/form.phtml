@@ -1,0 +1,26 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php $_code = $block->getMethodCode() ?>
+<fieldset class="form-list" id="payment_form_<?php echo $_code ?>" style="display:none;">
+    <div class="admin__field _required">
+        <label for="<?php echo $_code ?>_ba_agreement_id"
+               class="admin__field-label"><span><?php echo __('Billing Agreement') ?></span></label>
+        <div class="admin__field-control">
+            <select id="<?php echo $_code ?>_ba_agreement_id"
+                    name="payment[<?php echo $block->getTransportBAId(); ?>]"
+                    class="required-entry admin__control-select">
+                <option value=""><?php echo __('Please Select') ?></option>
+                <?php foreach ($block->getBillingAgreements() as $id => $referenceId): ?>
+                    <option value="<?php echo $id ?>"><?php echo $block->escapeHtml($referenceId) ?></option>
+                <?php endforeach ?>
+            </select>
+        </div>
+    </div>
+</fieldset>

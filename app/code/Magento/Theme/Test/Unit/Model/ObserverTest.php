@@ -44,6 +44,16 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $eventDispatcher;
 
     /**
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $logger;
+
+    /**
+     * @var \Magento\Theme\Model\Theme\Registration|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $registration;
+
+    /**
      * @var \Magento\Theme\Model\Observer
      */
     protected $themeObserver;
@@ -112,6 +122,11 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
+        $this->registration = $this->getMockBuilder('Magento\Theme\Model\Theme\Registration')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->logger = $this->getMockBuilder('Psr\Log\LoggerInterface')->getMock();
+
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->themeObserver = $objectManagerHelper->getObject(
             'Magento\Theme\Model\Observer',
@@ -122,7 +137,9 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
                 'themeConfig' => $this->themeConfig,
                 'eventDispatcher' => $this->eventDispatcher,
                 'themeImageFactory' => $this->themeImageFactory,
-                'updateCollection' => $this->updateCollection
+                'updateCollection' => $this->updateCollection,
+                'registration' => $this->registration,
+                'logger' => $this->logger,
             ]
         );
     }
@@ -142,6 +159,20 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->themeCustomization->expects($this->once())->method('getFiles')->will($this->returnValue([$file]));
         $this->assetsMock->expects($this->once())->method('add')->with($this->anything(), $asset);
+
+        $observer = new \Magento\Framework\Event\Observer();
+        $this->themeObserver->applyThemeCustomization($observer);
+    }
+
+    public function testApplyThemeCustomizationException()
+    {
+        $file = $this->getMock('Magento\Theme\Model\Theme\File', [], [], '', false);
+        $file->expects($this->any())
+            ->method('getCustomizationService')
+            ->willThrowException(new \InvalidArgumentException());
+
+        $this->themeCustomization->expects($this->once())->method('getFiles')->will($this->returnValue([$file]));
+        $this->logger->expects($this->once())->method('critical');
 
         $observer = new \Magento\Framework\Event\Observer();
         $this->themeObserver->applyThemeCustomization($observer);
@@ -232,5 +263,28 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->themeConfig->expects($this->never())->method('isThemeAssignedToStore');
 
         $this->themeObserver->cleanThemeRelatedContent($observerMock);
+    }
+
+    public function testThemeRegistration()
+    {
+        $pattern = 'some pattern';
+        $eventMock = $this->getMockBuilder('Magento\Framework\Event')
+            ->setMethods(['getPathPattern'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $eventMock->expects($this->any())->method('getPathPattern')->willReturn($pattern);
+        $observerMock = $this->getMockBuilder('Magento\Framework\Event\Observer')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $observerMock->expects($this->any())->method('getEvent')->willReturn($eventMock);
+        $this->registration->expects($this->once())
+            ->method('register')
+            ->with($pattern)
+            ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('exception')));
+        $this->logger->expects($this->once())
+            ->method('critical');
+
+        /** @var $observerMock \Magento\Framework\Event\Observer */
+        $this->themeObserver->themeRegistration($observerMock);
     }
 }

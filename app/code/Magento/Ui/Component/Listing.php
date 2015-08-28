@@ -6,8 +6,6 @@
 namespace Magento\Ui\Component;
 
 use Magento\Ui\Component\Listing\Columns;
-use Magento\Ui\Component\Listing\Columns\Column;
-use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
 
 /**
  * Class Listing
@@ -36,9 +34,6 @@ class Listing extends AbstractComponent
      */
     public function getDataSourceData()
     {
-        return [
-            'data' => $this->getContext()->getDataProvider()->getData(),
-            'totalCount' => $this->getContext()->getDataProvider()->count()
-        ];
+        return ['data' => $this->getContext()->getDataProvider()->getData()];
     }
 }

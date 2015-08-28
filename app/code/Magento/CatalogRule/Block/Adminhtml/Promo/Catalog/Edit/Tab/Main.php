@@ -33,7 +33,7 @@ class Main extends Generic implements TabInterface
     protected $_searchCriteriaBuilder;
 
     /**
-     * @var \Magento\Framework\Convert\Object
+     * @var \Magento\Framework\Convert\DataObject
      */
     protected $_objectConverter;
 
@@ -43,7 +43,7 @@ class Main extends Generic implements TabInterface
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param \Magento\Framework\Convert\Object $objectConverter
+     * @param \Magento\Framework\Convert\DataObject $objectConverter
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param array $data
      */
@@ -53,7 +53,7 @@ class Main extends Generic implements TabInterface
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepository,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Magento\Framework\Convert\Object $objectConverter,
+        \Magento\Framework\Convert\DataObject $objectConverter,
         \Magento\Store\Model\System\Store $systemStore,
         array $data = []
     ) {
@@ -68,6 +68,7 @@ class Main extends Generic implements TabInterface
      * Prepare content for tab
      *
      * @return \Magento\Framework\Phrase
+     * @codeCoverageIgnore
      */
     public function getTabLabel()
     {
@@ -78,6 +79,7 @@ class Main extends Generic implements TabInterface
      * Prepare title for tab
      *
      * @return \Magento\Framework\Phrase
+     * @codeCoverageIgnore
      */
     public function getTabTitle()
     {
@@ -88,6 +90,7 @@ class Main extends Generic implements TabInterface
      * Returns status flag about this tab can be showed or not
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function canShowTab()
     {
@@ -98,6 +101,7 @@ class Main extends Generic implements TabInterface
      * Returns status flag about this tab hidden or not
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isHidden()
     {

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Search;
 
-use Magento\Framework\Search\Request\BucketInterface;
+use Magento\Framework\Search\Request\BucketInterface as RequestBucketInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\QueryInterface;
 
@@ -27,7 +27,7 @@ class Request implements RequestInterface
     protected $index;
 
     /**
-     * @var BucketInterface[]
+     * @var RequestBucketInterface[]
      */
     protected $buckets;
 
@@ -60,7 +60,7 @@ class Request implements RequestInterface
      * @param int|null $from
      * @param int|null $size
      * @param Dimension[] $dimensions
-     * @param BucketInterface[] $buckets
+     * @param RequestBucketInterface[] $buckets
      */
     public function __construct(
         $name,

@@ -8,7 +8,8 @@ namespace Magento\Framework\Data\Collection;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Api\ExtensionAttribute\JoinData;
+use Magento\Framework\Api\ExtensionAttribute\JoinDataInterface;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use Psr\Log\LoggerInterface as Logger;
 
 /**
@@ -20,14 +21,14 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * DB connection
      *
-     * @var \Zend_Db_Adapter_Abstract
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     protected $_conn;
 
     /**
      * Select object
      *
-     * @var \Zend_Db_Select
+     * @var \Magento\Framework\DB\Select
      */
     protected $_select;
 
@@ -87,23 +88,23 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     private $_fetchStrategy;
 
     /**
-     * Flag which determines if extension attributes were joined before the collection was loaded.
+     * Join processor is set only if extension attributes were joined before the collection was loaded.
      *
-     * @var callable|null
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface|null
      */
-    protected $extensionAttributesExtractorCallback;
+    protected $extensionAttributesJoinProcessor;
 
     /**
      * @param EntityFactoryInterface $entityFactory
      * @param Logger $logger
      * @param FetchStrategyInterface $fetchStrategy
-     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      */
     public function __construct(
         EntityFactoryInterface $entityFactory,
         Logger $logger,
         FetchStrategyInterface $fetchStrategy,
-        $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         parent::__construct($entityFactory);
         $this->_fetchStrategy = $fetchStrategy;
@@ -158,10 +159,10 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Get collection item identifier
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return mixed
      */
-    protected function _getItemId(\Magento\Framework\Object $item)
+    protected function _getItemId(\Magento\Framework\DataObject $item)
     {
         if ($field = $this->getIdFieldName()) {
             return $item->getData($field);
@@ -172,18 +173,12 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Set database connection adapter
      *
-     * @param \Zend_Db_Adapter_Abstract $conn
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $conn
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function setConnection($conn)
+    public function setConnection(\Magento\Framework\DB\Adapter\AdapterInterface $conn)
     {
-        if (!$conn instanceof \Zend_Db_Adapter_Abstract) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase('dbModel read resource does not implement \Zend_Db_Adapter_Abstract')
-            );
-        }
-
         $this->_conn = $conn;
         $this->_select = $this->_conn->select();
         $this->_isOrdersRendered = false;
@@ -191,7 +186,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     }
 
     /**
-     * Get \Zend_Db_Select instance
+     * Get \Magento\Framework\DB\Select instance
      *
      * @return Select
      */
@@ -234,10 +229,10 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
         $this->_renderFilters();
 
         $countSelect = clone $this->getSelect();
-        $countSelect->reset(\Zend_Db_Select::ORDER);
-        $countSelect->reset(\Zend_Db_Select::LIMIT_COUNT);
-        $countSelect->reset(\Zend_Db_Select::LIMIT_OFFSET);
-        $countSelect->reset(\Zend_Db_Select::COLUMNS);
+        $countSelect->reset(\Magento\Framework\DB\Select::ORDER);
+        $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
+        $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
 
         $countSelect->columns('COUNT(*)');
 
@@ -248,7 +243,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      * Get sql select string or object
      *
      * @param   bool $stringMode
-     * @return  string || \Zend_Db_Select
+     * @return  string|\Magento\Framework\DB\Select
      */
     public function getSelectSql($stringMode = false)
     {
@@ -383,7 +378,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
                 $conditions[] = $this->_translateCondition($value, isset($condition[$key]) ? $condition[$key] : null);
             }
 
-            $resultCondition = '(' . implode(') ' . \Zend_Db_Select::SQL_OR . ' (', $conditions) . ')';
+            $resultCondition = '(' . implode(') ' . \Magento\Framework\DB\Select::SQL_OR . ' (', $conditions) . ')';
         } else {
             $resultCondition = $this->_translateCondition($field, $condition);
         }
@@ -576,12 +571,24 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
                     $item->setIdFieldName($this->getIdFieldName());
                 }
                 $item->addData($row);
+                $this->beforeAddLoadedItem($item);
                 $this->addItem($item);
             }
         }
         $this->_setIsLoaded();
         $this->_afterLoad();
         return $this;
+    }
+
+    /**
+     * Let do something before add loaded item in collection
+     *
+     * @param \Magento\Framework\DataObject $item
+     * @return \Magento\Framework\DataObject
+     */
+    protected function beforeAddLoadedItem(\Magento\Framework\DataObject $item)
+    {
+        return $item;
     }
 
     /**
@@ -743,24 +750,24 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
         $this->_setIsLoaded(false);
         $this->_items = [];
         $this->_data = null;
-        $this->extensionAttributesExtractorCallback = null;
+        $this->extensionAttributesJoinProcessor = null;
         return $this;
     }
 
     /**
      * Fetch collection data
      *
-     * @param \Zend_Db_Select $select
+     * @param Select $select
      * @return array
      */
-    protected function _fetchAll(\Zend_Db_Select $select)
+    protected function _fetchAll(Select $select)
     {
         $data = $this->_fetchStrategy->fetchAll($select, $this->_bindParams);
-        if ($this->extensionAttributesExtractorCallback && is_callable($this->extensionAttributesExtractorCallback)) {
+        if ($this->extensionAttributesJoinProcessor) {
             foreach ($data as $key => $dataItem) {
-                $data[$key] = call_user_func_array(
-                    $this->extensionAttributesExtractorCallback,
-                    [$this->_itemObjectClass, $dataItem]
+                $data[$key] = $this->extensionAttributesJoinProcessor->extractExtensionAttributes(
+                    $this->_itemObjectClass,
+                    $dataItem
                 );
             }
         }
@@ -812,30 +819,44 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     /**
      * Join extension attribute.
      *
-     * @param \Magento\Framework\Api\ExtensionAttribute\JoinData $join
-     * @param callable $extensionAttributesExtractorCallback
+     * @param JoinDataInterface $join
+     * @param JoinProcessorInterface $extensionAttributesJoinProcessor
      * @return $this
      */
-    public function joinExtensionAttribute($join, $extensionAttributesExtractorCallback)
-    {
-        $selectFrom = $this->getSelect()->getPart(\Zend_Db_Select::FROM);
+    public function joinExtensionAttribute(
+        JoinDataInterface $join,
+        JoinProcessorInterface $extensionAttributesJoinProcessor
+    ) {
+        $selectFrom = $this->getSelect()->getPart(\Magento\Framework\DB\Select::FROM);
         $joinRequired = !isset($selectFrom[$join->getReferenceTableAlias()]);
         if ($joinRequired) {
+            $joinOn = $this->getMainTableAlias() . '.' . $join->getJoinField()
+                . ' = ' . $join->getReferenceTableAlias() . '.' . $join->getReferenceField();
             $this->getSelect()->joinLeft(
                 [$join->getReferenceTableAlias() => $this->getResource()->getTable($join->getReferenceTable())],
-                $this->getMainTableAlias() . '.' . $join->getJoinField()
-                . ' = ' . $join->getReferenceTableAlias() . '.' . $join->getReferenceField(),
+                $joinOn,
                 []
             );
         }
         $columns = [];
         foreach ($join->getSelectFields() as $selectField) {
-            $fieldAlias = $join->getReferenceTableAlias() . '_' . $selectField;
-            $columns[$fieldAlias] = $join->getReferenceTableAlias() . '.' . $selectField;
+            $fieldWIthDbPrefix = $selectField[JoinDataInterface::SELECT_FIELD_WITH_DB_PREFIX];
+            $columns[$selectField[JoinDataInterface::SELECT_FIELD_INTERNAL_ALIAS]] = $fieldWIthDbPrefix;
+            $this->addFilterToMap($selectField[JoinDataInterface::SELECT_FIELD_EXTERNAL_ALIAS], $fieldWIthDbPrefix);
         }
         $this->getSelect()->columns($columns);
-        $this->extensionAttributesExtractorCallback = $extensionAttributesExtractorCallback;
+        $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         return $this;
+    }
+
+    /**
+     * Get collection item object class name.
+     *
+     * @return string
+     */
+    public function getItemObjectClass()
+    {
+        return $this->_itemObjectClass;
     }
 
     /**
@@ -846,7 +867,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      */
     private function getMainTableAlias()
     {
-        foreach ($this->getSelect()->getPart(\Zend_Db_Select::FROM) as $tableAlias => $tableMetadata) {
+        foreach ($this->getSelect()->getPart(\Magento\Framework\DB\Select::FROM) as $tableAlias => $tableMetadata) {
             if ($tableMetadata['joinType'] == 'from') {
                 return $tableAlias;
             }

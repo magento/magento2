@@ -70,4 +70,14 @@ class RepositoryGenerator implements OperationInterface
             class_exists($entityName);
         }
     }
+
+    /**
+     * Returns operation name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return 'Repositories code generation';
+    }
 }

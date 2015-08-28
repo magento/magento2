@@ -11,6 +11,9 @@
  */
 namespace Magento\Framework\DB\Test\Unit\Adapter\Pdo;
 
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
+
 class MysqlTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -37,7 +40,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $string = $this->getMock('Magento\Framework\Stdlib\String');
+        $string = $this->getMock('Magento\Framework\Stdlib\StringUtils');
         $dateTime = $this->getMock('Magento\Framework\Stdlib\DateTime');
         $logger = $this->getMockForAbstractClass('Magento\Framework\DB\LoggerInterface');
         $this->_mockAdapter = $this->getMock(
@@ -149,18 +152,18 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
         } catch (\Exception $e) {
             $this->assertNotContains(
                 $e->getMessage(),
-                \Magento\Framework\DB\Adapter\AdapterInterface::ERROR_DDL_MESSAGE
+                AdapterInterface::ERROR_DDL_MESSAGE
             );
         }
 
-        $select = new \Zend_Db_Select($this->_mockAdapter);
+        $select = new Select($this->_mockAdapter);
         $select->from('user');
         try {
             $this->_mockAdapter->query($select);
         } catch (\Exception $e) {
             $this->assertNotContains(
                 $e->getMessage(),
-                \Magento\Framework\DB\Adapter\AdapterInterface::ERROR_DDL_MESSAGE
+                AdapterInterface::ERROR_DDL_MESSAGE
             );
         }
     }
@@ -226,7 +229,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             throw new \Exception('Test Failed!');
         } catch (\Exception $e) {
             $this->assertEquals(
-                \Magento\Framework\DB\Adapter\AdapterInterface::ERROR_ASYMMETRIC_ROLLBACK_MESSAGE,
+                AdapterInterface::ERROR_ASYMMETRIC_ROLLBACK_MESSAGE,
                 $e->getMessage()
             );
         }
@@ -242,7 +245,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             throw new \Exception('Test Failed!');
         } catch (\Exception $e) {
             $this->assertEquals(
-                \Magento\Framework\DB\Adapter\AdapterInterface::ERROR_ASYMMETRIC_COMMIT_MESSAGE,
+                AdapterInterface::ERROR_ASYMMETRIC_COMMIT_MESSAGE,
                 $e->getMessage()
             );
         }
@@ -354,7 +357,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             throw new \Exception('Test Failed!');
         } catch (\Exception $e) {
             $this->assertEquals(
-                \Magento\Framework\DB\Adapter\AdapterInterface::ERROR_ROLLBACK_INCOMPLETE_MESSAGE,
+                AdapterInterface::ERROR_ROLLBACK_INCOMPLETE_MESSAGE,
                 $e->getMessage()
             );
             $this->_adapter->rollBack();
@@ -377,7 +380,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             throw new \Exception('Test Failed!');
         } catch (\Exception $e) {
             $this->assertEquals(
-                \Magento\Framework\DB\Adapter\AdapterInterface::ERROR_ROLLBACK_INCOMPLETE_MESSAGE,
+                AdapterInterface::ERROR_ROLLBACK_INCOMPLETE_MESSAGE,
                 $e->getMessage()
             );
             $this->_adapter->rollBack();
@@ -516,15 +519,15 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddColumn($options, $expectedQuery)
     {
-        $adapter = $this->getMock(
+        $connectionMock = $this->getMock(
             '\Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['tableColumnExists', '_getTableName', 'rawQuery', 'resetDdlCache', 'quote'], [], '', false
         );
 
-        $adapter->expects($this->any())->method('_getTableName')->will($this->returnArgument(0));
-        $adapter->expects($this->any())->method('quote')->will($this->returnArgument(0));
-        $adapter->expects($this->once())->method('rawQuery')->with($expectedQuery);
-        $adapter->addColumn('tableName', 'columnName', $options);
+        $connectionMock->expects($this->any())->method('_getTableName')->will($this->returnArgument(0));
+        $connectionMock->expects($this->any())->method('quote')->will($this->returnArgument(0));
+        $connectionMock->expects($this->once())->method('rawQuery')->with($expectedQuery);
+        $connectionMock->addColumn('tableName', 'columnName', $options);
     }
 
     /**
@@ -547,6 +550,30 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
                 'expectedQuery' => 'ALTER TABLE `tableName` ADD COLUMN `columnName` int UNSIGNED '
                     . 'NOT NULL default  auto_increment COMMENT Some field AFTER `Previous field` ',
             ]
+        ];
+    }
+
+    /**
+     * @dataProvider getIndexNameDataProvider
+     */
+    public function testGetIndexName($name, $fields, $indexType, $expectedName)
+    {
+        $resultIndexName = $this->_mockAdapter->getIndexName($name, $fields, $indexType);
+        $this->assertTrue(
+            strpos($resultIndexName, $expectedName) === 0,
+            "Index name '$resultIndexName' did not begin with expected value '$expectedName'"
+        );
+    }
+
+    public function getIndexNameDataProvider()
+    {
+        // 65 characters long - will be compressed
+        $longTableName = '__________________________________________________long_table_name';
+        return [
+            [$longTableName, [], AdapterInterface::INDEX_TYPE_UNIQUE, 'UNQ_'],
+            [$longTableName, [], AdapterInterface::INDEX_TYPE_FULLTEXT, 'FTI_'],
+            [$longTableName, [], AdapterInterface::INDEX_TYPE_INDEX, 'IDX_'],
+            ['short_table_name', ['field1', 'field2'], '', 'SHORT_TABLE_NAME_FIELD1_FIELD2'],
         ];
     }
 }

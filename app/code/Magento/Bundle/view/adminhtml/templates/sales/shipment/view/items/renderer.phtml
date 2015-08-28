@@ -7,15 +7,11 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php
-/**
- * @see \Magento\Bundle\Block\Adminhtml\Sales\Order\Items\Renderer
- */
-?>
+<?php /** @var $block \Magento\Bundle\Block\Adminhtml\Sales\Order\Items\Renderer */ ?>
 
 <?php $_item = $block->getItem() ?>
 <?php $items = array_merge([$_item->getOrderItem()], $_item->getOrderItem()->getChildrenItems()) ?>
-<?php $shipItems = $block->getChilds($_item) ?>
+<?php $shipItems = $block->getChildren($_item) ?>
 <?php $_count = count($items) ?>
 <?php $_index = 0 ?>
 

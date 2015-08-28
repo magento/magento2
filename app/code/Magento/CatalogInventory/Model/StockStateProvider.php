@@ -13,7 +13,7 @@ use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
 use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Math\Division as MathDivision;
-use Magento\Framework\Object\Factory as ObjectFactory;
+use Magento\Framework\DataObject\Factory as ObjectFactory;
 
 /**
  * Interface StockStateProvider
@@ -95,7 +95,7 @@ class StockStateProvider implements StockStateProviderInterface
      * @param int|float $qty
      * @param int|float $summaryQty
      * @param int|float $origQty
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -153,7 +153,7 @@ class StockStateProvider implements StockStateProviderInterface
         if (!$stockItem->getIsInStock()) {
             $result->setHasError(true)
                 ->setMessage(__('This product is out of stock.'))
-                ->setQuoteMessage(__('Some of the products are currently out of stock.'))
+                ->setQuoteMessage(__('Some of the products are out of stock.'))
                 ->setQuoteMessageIndex('stock');
             $result->setItemUseOldQty(true);
             return $result;
@@ -294,16 +294,16 @@ class StockStateProvider implements StockStateProviderInterface
     /**
      * @param StockItemInterface $stockItem
      * @param float|int $qty
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function checkQtyIncrements(StockItemInterface $stockItem, $qty)
     {
-        $result = new \Magento\Framework\Object();
+        $result = new \Magento\Framework\DataObject();
         if ($stockItem->getSuppressCheckQtyIncrements()) {
             return $result;
         }
 
-        $qtyIncrements = $stockItem->getQtyIncrements();
+        $qtyIncrements = $stockItem->getQtyIncrements() * 1;
 
         if ($qtyIncrements && $this->mathDivision->getExactDivision($qty, $qtyIncrements) != 0) {
             $result->setHasError(true)
@@ -312,10 +312,14 @@ class StockStateProvider implements StockStateProviderInterface
                 ->setQuoteMessageIndex('qty');
             if ($stockItem->getIsChildItem()) {
                 $result->setMessage(
-                    __('You can buy %1 only in increments of %2.', $stockItem->getProductName(), $qtyIncrements * 1)
+                    __(
+                        'You can buy %1 only in quantities of %2 at a time.',
+                        $stockItem->getProductName(),
+                        $qtyIncrements
+                    )
                 );
             } else {
-                $result->setMessage(__('You can buy this product only in increments of %1.', $qtyIncrements * 1));
+                $result->setMessage(__('You can buy this product only in quantities of %1 at a time.', $qtyIncrements));
             }
         }
         return $result;

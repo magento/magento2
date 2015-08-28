@@ -35,10 +35,6 @@ use Magento\Catalog\Model\Product\Exception as ProductException;
  */
 class Item extends AbstractModel implements ItemInterface
 {
-    const EXCEPTION_CODE_NOT_SALABLE = 901;
-
-    const EXCEPTION_CODE_HAS_REQUIRED_OPTIONS = 902;
-
     /**
      * Custom path to download attached file
      * @var string
@@ -423,7 +419,7 @@ class Item extends AbstractModel implements ItemInterface
             if (!isset($urlData[$product->getId()])) {
                 return false;
             }
-            $product->setUrlDataObject(new \Magento\Framework\Object($urlData));
+            $product->setUrlDataObject(new \Magento\Framework\DataObject($urlData));
             $visibility = $product->getUrlDataObject()->getVisibility();
             if (!in_array($visibility, $product->getVisibleInSiteVisibilities())) {
                 return false;
@@ -471,18 +467,18 @@ class Item extends AbstractModel implements ItemInterface
      * Returns formatted buy request - object, holding request received from
      * product view page with keys and options for configured product
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getBuyRequest()
     {
         $option = $this->getOptionByCode('info_buyRequest');
         $initialData = $option ? unserialize($option->getValue()) : null;
 
-        if ($initialData instanceof \Magento\Framework\Object) {
+        if ($initialData instanceof \Magento\Framework\DataObject) {
             $initialData = $initialData->getData();
         }
 
-        $buyRequest = new \Magento\Framework\Object($initialData);
+        $buyRequest = new \Magento\Framework\DataObject($initialData);
         $buyRequest->setOriginalQty($buyRequest->getQty())->setQty($this->getQty() * 1);
         return $buyRequest;
     }
@@ -490,12 +486,12 @@ class Item extends AbstractModel implements ItemInterface
     /**
      * Merge data to item info_buyRequest option
      *
-     * @param array|\Magento\Framework\Object $buyRequest
+     * @param array|\Magento\Framework\DataObject $buyRequest
      * @return $this
      */
     public function mergeBuyRequest($buyRequest)
     {
-        if ($buyRequest instanceof \Magento\Framework\Object) {
+        if ($buyRequest instanceof \Magento\Framework\DataObject) {
             $buyRequest = $buyRequest->getData();
         }
 
@@ -520,7 +516,7 @@ class Item extends AbstractModel implements ItemInterface
      * Set buy request - object, holding request received from
      * product view page with keys and options for configured product
      *
-     * @param \Magento\Framework\Object $buyRequest
+     * @param \Magento\Framework\DataObject $buyRequest
      * @return $this
      */
     public function setBuyRequest($buyRequest)
@@ -536,7 +532,7 @@ class Item extends AbstractModel implements ItemInterface
      * Check product representation in item
      *
      * @param   \Magento\Catalog\Model\Product $product
-     * @param   \Magento\Framework\Object $buyRequest
+     * @param   \Magento\Framework\DataObject $buyRequest
      * @return  bool
      */
     public function isRepresent($product, $buyRequest)
@@ -654,7 +650,7 @@ class Item extends AbstractModel implements ItemInterface
     /**
      * Add option to item
      *
-     * @param   Option|\Magento\Framework\Object|array $option
+     * @param   Option|\Magento\Framework\DataObject|array $option
      * @return  $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -664,7 +660,7 @@ class Item extends AbstractModel implements ItemInterface
             $option = $this->_wishlistOptFactory->create()->setData($option)->setItem($this);
         } elseif ($option instanceof Option) {
             $option->setItem($this);
-        } elseif ($option instanceof \Magento\Framework\Object) {
+        } elseif ($option instanceof \Magento\Framework\DataObject) {
             $option = $this->_wishlistOptFactory->create()->setData($option->getData())
                ->setProduct($option->getProduct())
                ->setItem($this);
@@ -749,11 +745,11 @@ class Item extends AbstractModel implements ItemInterface
      *
      * We have to customize only controller url, so return it.
      *
-     * @return null|\Magento\Framework\Object
+     * @return null|\Magento\Framework\DataObject
      */
     public function getFileDownloadParams()
     {
-        $params = new \Magento\Framework\Object();
+        $params = new \Magento\Framework\DataObject();
         $params->setUrl($this->_customOptionDownloadUrl);
         return $params;
     }

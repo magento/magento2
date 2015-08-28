@@ -32,7 +32,9 @@ class Config
 
     const KEY_ACL_RESOURCES = 'resources';
 
-    const CACHE_ID = 'soap-services-config';
+    const CONFIG_CACHE_ID = 'soap-services-config';
+
+    const REFLECTED_TYPES_CACHE_ID = 'soap-reflected-types';
 
     /**#@-*/
 
@@ -70,8 +72,15 @@ class Config
      */
     protected $cache;
 
-    /** @var \Magento\Framework\Registry */
+    /**
+     * @var \Magento\Framework\Registry
+     */
     protected $registry;
+
+    /**
+     * @var \Magento\Framework\Reflection\TypeProcessor
+     */
+    protected $typeProcessor;
 
     /**
      * Initialize dependencies.
@@ -82,6 +91,7 @@ class Config
      * @param \Magento\Webapi\Model\Soap\Config\ClassReflector $classReflector
      * @param WebApiCache $cache
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -89,7 +99,8 @@ class Config
         \Magento\Webapi\Model\Config $config,
         \Magento\Webapi\Model\Soap\Config\ClassReflector $classReflector,
         WebApiCache $cache,
-        \Magento\Framework\Registry $registry
+        \Magento\Framework\Registry $registry,
+        \Magento\Framework\Reflection\TypeProcessor $typeProcessor
     ) {
         $this->modulesDirectory = $filesystem->getDirectoryRead(DirectoryList::MODULES);
         $this->config = $config;
@@ -97,8 +108,7 @@ class Config
         $this->classReflector = $classReflector;
         $this->cache = $cache;
         $this->registry = $registry;
-        //Initialize cache
-        $this->soapServices = $this->initServicesMetadata();
+        $this->typeProcessor = $typeProcessor;
     }
 
     /**
@@ -141,15 +151,18 @@ class Config
      *
      * @return array
      */
-    protected function getSoapServicesConfig()
+    public function getSoapServicesConfig()
     {
         if (null === $this->soapServices) {
-            $soapServicesConfig = $this->cache->load(self::CACHE_ID);
-            if ($soapServicesConfig && is_string($soapServicesConfig)) {
+            $soapServicesConfig = $this->cache->load(self::CONFIG_CACHE_ID);
+            $typesData = $this->cache->load(self::REFLECTED_TYPES_CACHE_ID);
+            if ($soapServicesConfig && is_string($soapServicesConfig) && $typesData && is_string($typesData)) {
                 $this->soapServices = unserialize($soapServicesConfig);
+                $this->typeProcessor->setTypesData(unserialize($typesData));
             } else {
                 $this->soapServices = $this->initServicesMetadata();
-                $this->cache->save(serialize($this->soapServices), self::CACHE_ID);
+                $this->cache->save(serialize($this->soapServices), self::CONFIG_CACHE_ID);
+                $this->cache->save(serialize($this->typeProcessor->getTypesData()), self::REFLECTED_TYPES_CACHE_ID);
             }
         }
         return $this->soapServices;

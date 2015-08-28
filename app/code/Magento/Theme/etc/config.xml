@@ -42,7 +42,7 @@ Disallow: /*SID=
                 <welcome>Default welcome msg!</welcome>
             </header>
             <footer translate="copyright">
-                <copyright>&amp;copy; 2015 Magento Demo Store. All Rights Reserved.</copyright>
+                <copyright>Copyright &#169; 2015 Magento. All rights reserved.</copyright>
             </footer>
         </design>
         <theme>

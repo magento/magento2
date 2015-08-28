@@ -43,12 +43,12 @@ class Plugin
     /**
      * Add rule to isGirthAllowed() method
      *
-     * @param \Magento\Framework\Object $subject $subject
+     * @param \Magento\Framework\DataObject $subject $subject
      * @param bool $result
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterIsGirthAllowed(\Magento\Framework\Object $subject, $result)
+    public function afterIsGirthAllowed(\Magento\Framework\DataObject $subject, $result)
     {
         return $result && $this->uspsHelper->displayGirthValue($this->request->getParam('method'));
     }
@@ -56,12 +56,12 @@ class Plugin
     /**
      * Add rule to isGirthAllowed() method
      *
-     * @param \Magento\Framework\Object $subject
+     * @param \Magento\Framework\DataObject $subject
      * @param \Closure $proceed
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundCheckSizeAndGirthParameter(\Magento\Framework\Object $subject, \Closure $proceed)
+    public function aroundCheckSizeAndGirthParameter(\Magento\Framework\DataObject $subject, \Closure $proceed)
     {
         $carrier = $subject->getCarrier();
         $size = $subject->getSourceSizeModel();

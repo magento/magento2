@@ -35,8 +35,8 @@ class StrategyTest extends \PHPUnit_Framework_TestCase
     public function testToOptionArray()
     {
         $expected = [
-            ['label' => 'Dictionary (Translation on frontend side)', 'value' => Config::DICTIONARY_STRATEGY],
-            ['label' => 'Embedded (Translation on backend side)', 'value' => Config::EMBEDDED_STRATEGY]
+            ['label' => 'Dictionary (Translation on Storefront side)', 'value' => Config::DICTIONARY_STRATEGY],
+            ['label' => 'Embedded (Translation on Admin side)', 'value' => Config::EMBEDDED_STRATEGY]
         ];
         $this->assertEquals($expected, $this->model->toOptionArray());
     }

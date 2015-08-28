@@ -15,7 +15,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Storage extends \Magento\Framework\Object
+class Storage extends \Magento\Framework\DataObject
 {
     const DIRECTORY_NAME_REGEXP = '/^[a-z0-9\-\_]+$/si';
 
@@ -185,68 +185,92 @@ class Storage extends \Magento\Framework\Object
     }
 
     /**
-     * Return one-level child directories for specified path
+     * Create sub directories if DB storage is used
      *
-     * @param string $path Parent directory path
-     * @return \Magento\Framework\Data\Collection\Filesystem
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @param string $path
+     * @return void
      */
-    public function getDirsCollection($path)
+    protected function createSubDirectories($path)
     {
         if ($this->_coreFileStorageDb->checkDbUsage()) {
             /** @var \Magento\MediaStorage\Model\File\Storage\Directory\Database $subDirectories */
             $subDirectories = $this->_directoryDatabaseFactory->create();
-            $subDirectories->getSubdirectories($path);
-            foreach ($subDirectories as $directory) {
+            $directories = $subDirectories->getSubdirectories($path);
+            foreach ($directories as $directory) {
                 $fullPath = rtrim($path, '/') . '/' . $directory['name'];
                 $this->_directory->create($fullPath);
             }
         }
+    }
 
+    /**
+     * Prepare and get conditions for exclude directories
+     *
+     * @return array
+     */
+    protected function getConditionsForExcludeDirs()
+    {
         $conditions = ['reg_exp' => [], 'plain' => []];
 
         if ($this->_dirs['exclude']) {
             foreach ($this->_dirs['exclude'] as $dir) {
-                $conditions[$dir->getAttribute('regexp') ? 'reg_exp' : 'plain'][$dir] = true;
+                $conditions[!empty($dir['regexp']) ? 'reg_exp' : 'plain'][$dir['name']] = true;
             }
         }
 
         // "include" section takes precedence and can revoke directory exclusion
         if ($this->_dirs['include']) {
             foreach ($this->_dirs['include'] as $dir) {
-                unset($conditions['regexp'][(string)$dir], $conditions['plain'][$dir]);
+                unset($conditions['reg_exp'][$dir['name']], $conditions['plain'][$dir['name']]);
             }
         }
 
+        return $conditions;
+    }
+
+    /**
+     * Remove excluded directories from collection
+     *
+     * @param \Magento\Framework\Data\Collection\Filesystem $collection
+     * @param array $conditions
+     * @return \Magento\Framework\Data\Collection\Filesystem
+     */
+    protected function removeItemFromCollection($collection, $conditions)
+    {
         $regExp = $conditions['reg_exp'] ? '~' . implode('|', array_keys($conditions['reg_exp'])) . '~i' : null;
-        $collection = $this->getCollection(
-            $path
-        )->setCollectDirs(
-            true
-        )->setCollectFiles(
-            false
-        )->setCollectRecursively(
-            false
-        );
         $storageRootLength = strlen($this->_cmsWysiwygImages->getStorageRoot());
 
         foreach ($collection as $key => $value) {
             $rootChildParts = explode('/', substr($value->getFilename(), $storageRootLength));
 
-            if (array_key_exists(
-                $rootChildParts[0],
-                $conditions['plain']
-            ) || $regExp && preg_match(
-                $regExp,
-                $value->getFilename()
-            )
-            ) {
+            if (array_key_exists($rootChildParts[1], $conditions['plain'])
+                || ($regExp && preg_match($regExp, $value->getFilename()))) {
+
                 $collection->removeItemByKey($key);
             }
         }
 
         return $collection;
+    }
+
+    /**
+     * Return one-level child directories for specified path
+     *
+     * @param string $path Parent directory path
+     * @return \Magento\Framework\Data\Collection\Filesystem
+     */
+    public function getDirsCollection($path)
+    {
+        $this->createSubDirectories($path);
+
+        $collection = $this->getCollection($path)
+            ->setCollectDirs(true)
+            ->setCollectFiles(false)
+            ->setCollectRecursively(false);
+
+        $conditions = $this->getConditionsForExcludeDirs();
+
+        return $this->removeItemFromCollection($collection, $conditions);
     }
 
     /**
@@ -344,7 +368,7 @@ class Storage extends \Magento\Framework\Object
     {
         if (!preg_match(self::DIRECTORY_NAME_REGEXP, $name)) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Please correct the folder name. Use only letters, numbers, underscores and dashes.')
+                __('Please rename the folder using only letters, numbers, underscores and dashes.')
             );
         }
 

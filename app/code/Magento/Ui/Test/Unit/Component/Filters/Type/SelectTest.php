@@ -28,6 +28,11 @@ class SelectTest extends \PHPUnit_Framework_TestCase
     protected $uiComponentFactory;
 
     /**
+     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $filterBuilderMock;
+
+    /**
      * Set up
      */
     public function setUp()
@@ -38,10 +43,16 @@ class SelectTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->uiComponentFactory = $this->getMock(
             'Magento\Framework\View\Element\UiComponentFactory',
             ['create'],
+            [],
+            '',
+            false
+        );
+        $this->filterBuilderMock = $this->getMock(
+            'Magento\Framework\Api\FilterBuilder',
+            [],
             [],
             '',
             false
@@ -55,7 +66,13 @@ class SelectTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetComponentName()
     {
-        $date = new Select($this->contextMock, $this->uiComponentFactory, null, []);
+        $date = new Select(
+            $this->contextMock,
+            $this->uiComponentFactory,
+            $this->filterBuilderMock,
+            null,
+            []
+        );
 
         $this->assertTrue($date->getComponentName() === Select::NAME);
     }
@@ -104,7 +121,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
             );
             $dataProvider->expects($this->any())
                 ->method('addFilter')
-                ->with($name, $expectedCondition);
+                ->with($expectedCondition, $name);
 
             $this->contextMock->expects($this->any())
                 ->method('getDataProvider')
@@ -124,7 +141,14 @@ class SelectTest extends \PHPUnit_Framework_TestCase
             ->with($name, Select::COMPONENT, ['context' => $this->contextMock, 'options' => $selectOptions])
             ->willReturn($uiComponent);
 
-        $date = new Select($this->contextMock, $this->uiComponentFactory, $selectOptions, [], ['name' => $name]);
+        $date = new Select(
+            $this->contextMock,
+            $this->uiComponentFactory,
+            $this->filterBuilderMock,
+            $selectOptions,
+            [],
+            ['name' => $name]
+        );
 
         $date->prepare();
     }

@@ -60,26 +60,35 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
         }
 
         // The following code is a workaround for custom address attributes
-        if (isset($jsLayout['components']['checkout']['children']['steps']['children']['billingAddress']
-            ['children']['billing-address-fieldset']['children']
+        if (isset($jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
+            ['payment']['children']
         )) {
-            $fields = $jsLayout['components']['checkout']['children']['steps']['children']['billingAddress']
-            ['children']['billing-address-fieldset']['children'];
-            $jsLayout['components']['checkout']['children']['steps']['children']['billingAddress']
-            ['children']['billing-address-fieldset']['children'] = $this->merger->merge(
-                $elements,
-                'checkoutProvider',
-                'billingAddress',
-                $fields
-            );
+            if (!isset($jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
+                ['payment']['children']['payments-list']['children'])) {
+                $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
+                ['payment']['children']['payments-list']['children'] = [];
+            }
+
+            $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
+            ['payment']['children']['payments-list']['children'] =
+                array_merge_recursive(
+                    $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
+                    ['payment']['children']['payments-list']['children'],
+                    $this->processPaymentConfiguration(
+                        $jsLayout['components']['checkout']['children']['steps']['children']['billing-step']['children']
+                        ['payment']['children']['renders']['children'],
+                        $elements
+                    )
+                );
         }
-        if (isset($jsLayout['components']['checkout']['children']['steps']['children']['shippingAddress']
-            ['children']['shipping-address-fieldset']['children']
+
+        if (isset($jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']
+            ['children']['shippingAddress']['children']['shipping-address-fieldset']['children']
         )) {
-            $fields = $jsLayout['components']['checkout']['children']['steps']['children']['shippingAddress']
-            ['children']['shipping-address-fieldset']['children'];
-            $jsLayout['components']['checkout']['children']['steps']['children']['shippingAddress']
-            ['children']['shipping-address-fieldset']['children'] = $this->merger->merge(
+            $fields = $jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']
+            ['children']['shippingAddress']['children']['shipping-address-fieldset']['children'];
+            $jsLayout['components']['checkout']['children']['steps']['children']['shipping-step']
+            ['children']['shippingAddress']['children']['shipping-address-fieldset']['children'] = $this->merger->merge(
                 $elements,
                 'checkoutProvider',
                 'shippingAddress',
@@ -87,5 +96,92 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
             );
         }
         return $jsLayout;
+    }
+
+    /**
+     * Inject billing address component into every payment component
+     *
+     * @param array $configuration list of payment components
+     * @param array $elements attributes that must be displayed in address form
+     * @return array
+     */
+    private function processPaymentConfiguration(array &$configuration, array $elements)
+    {
+        $output = [];
+        foreach ($configuration as $paymentGroup => $groupConfig) {
+            foreach ($groupConfig['methods'] as $paymentCode => $paymentComponent) {
+                if (empty($paymentComponent['isBillingAddressRequired'])) {
+                    continue;
+                }
+                $output[$paymentCode . '-form'] = [
+                    'component' => 'Magento_Checkout/js/view/billing-address',
+                    'displayArea' => 'billing-address-form-' . $paymentCode,
+                    'provider' => 'checkoutProvider',
+                    'deps' => 'checkoutProvider',
+                    'dataScopePrefix' => 'billingAddress' . $paymentCode,
+                    'sortOrder' => 1,
+                    'children' => [
+                        'form-fields' => [
+                            'component' => 'uiComponent',
+                            'displayArea' => 'additional-fieldsets',
+                            'children' => $this->merger->merge(
+                                $elements,
+                                'checkoutProvider',
+                                'billingAddress' . $paymentCode,
+                                [
+                                    'country_id' => [
+                                        'sortOrder' => 115,
+                                    ],
+                                    'region' => [
+                                        'visible' => false,
+                                    ],
+                                    'region_id' => [
+                                        'component' => 'Magento_Ui/js/form/element/region',
+                                        'config' => [
+                                            'template' => 'ui/form/field',
+                                            'elementTmpl' => 'ui/form/element/select',
+                                            'customEntry' => 'billingAddress' . $paymentCode . '.region',
+                                        ],
+                                        'validation' => [
+                                            'validate-select' => true,
+                                        ],
+                                        'filterBy' => [
+                                            'target' => '${ $.provider }:${ $.parentScope }.country_id',
+                                            'field' => 'country_id',
+                                        ],
+                                    ],
+                                    'postcode' => [
+                                        'component' => 'Magento_Ui/js/form/element/post-code',
+                                        'validation' => [
+                                            'required-entry' => true,
+                                        ],
+                                    ],
+                                    'company' => [
+                                        'validation' => [
+                                            'min_text_length' => 0,
+                                        ],
+                                    ],
+                                    'fax' => [
+                                        'validation' => [
+                                            'min_text_length' => 0,
+                                        ],
+                                    ],
+                                    'telephone' => [
+                                        'config' => [
+                                            'tooltip' => [
+                                                'description' => 'For delivery questions.',
+                                            ],
+                                        ],
+                                    ],
+                                ]
+                            ),
+                        ],
+                    ],
+                ];
+            }
+            unset($configuration[$paymentGroup]['methods']);
+        }
+
+        return $output;
     }
 }

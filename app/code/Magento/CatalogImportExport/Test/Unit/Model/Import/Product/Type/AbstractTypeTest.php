@@ -32,6 +32,21 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
     protected $objectManagerHelper;
 
     /**
+     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resource;
+
+    /**
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $connection;
+
+    /**
+     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $select;
+
+    /**
      * @var AbstractType|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $abstractType;
@@ -75,7 +90,9 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         );
         $attrCollection = $this->getMock(
             '\Magento\Eav\Model\Resource\Entity\Attribute\Collection',
-            [],
+            [
+                'addFieldToFilter',
+            ],
             [],
             '',
             false
@@ -101,6 +118,10 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $entityAttributes = [
+            'attribute_id' => 'attributeSetName'
+        ];
+
         $this->entityModel->expects($this->any())->method('getEntityTypeId')->willReturn(3);
         $this->entityModel->expects($this->any())->method('getAttributeOptions')->willReturn(['option1', 'option2']);
         $attrSetColFactory->expects($this->any())->method('create')->willReturn($attrSetCollection);
@@ -121,6 +142,75 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $attribute->expects($this->any())->method('getDefaultValue')->willReturn('default_value');
         $attribute->expects($this->any())->method('usesSource')->willReturn(true);
         $attribute->expects($this->any())->method('getFrontendInput')->willReturn('multiselect');
+        $attrCollection
+            ->expects($this->any())
+            ->method('addFieldToFilter')
+            ->with(
+                'main_table.attribute_id',
+                ['in' => [
+                    key($entityAttributes)
+                ]]
+            )
+            ->willReturn([$attribute]);
+
+        $this->connection = $this->getMock(
+            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            [
+                'select',
+                'fetchAll',
+                'fetchPairs',
+                'joinLeft',
+                'insertOnDuplicate',
+                'delete',
+                'quoteInto'
+            ],
+            [],
+            '',
+            false
+        );
+        $this->select = $this->getMock(
+            'Magento\Framework\DB\Select',
+            [
+                'from',
+                'where',
+                'joinLeft',
+                'getConnection',
+            ],
+            [],
+            '',
+            false
+        );
+        $this->select->expects($this->any())->method('from')->will($this->returnSelf());
+        $this->select->expects($this->any())->method('where')->will($this->returnSelf());
+        $this->select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
+        $this->connection->expects($this->any())->method('select')->will($this->returnValue($this->select));
+        $connection = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $connection->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
+        $this->select->expects($this->any())->method('getConnection')->willReturn($connection);
+        $this->connection->expects($this->any())->method('insertOnDuplicate')->willReturnSelf();
+        $this->connection->expects($this->any())->method('delete')->willReturnSelf();
+        $this->connection->expects($this->any())->method('quoteInto')->willReturn('');
+        $this->connection
+            ->expects($this->any())
+            ->method('fetchPairs')
+            ->will($this->returnValue($entityAttributes));
+
+        $this->resource = $this->getMock(
+            '\Magento\Framework\App\Resource',
+            [
+                'getConnection',
+                'getTableName',
+            ],
+            [],
+            '',
+            false
+        );
+        $this->resource->expects($this->any())->method('getConnection')->will(
+            $this->returnValue($this->connection)
+        );
+        $this->resource->expects($this->any())->method('getTableName')->will(
+            $this->returnValue('tableName')
+        );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->simpleType = $this->objectManagerHelper->getObject(
@@ -129,6 +219,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
                 'attrSetColFac' => $attrSetColFactory,
                 'prodAttrColFac' => $attrColFactory,
                 'params' => [$this->entityModel, 'simple'],
+                'resource' => $this->resource,
             ]
         );
 
@@ -178,12 +269,17 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $rowNum = 1;
         $this->entityModel->expects($this->any())->method('getRowScope')->willReturn(null);
         $this->entityModel->expects($this->never())->method('addRowError');
+        $this->setPropertyValue($this->simpleType, '_attributes', [
+            $rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET] => [],
+        ]);
         $this->assertTrue($this->simpleType->isRowValid($rowData, $rowNum));
     }
 
     public function testIsRowValidError()
     {
-        $rowData = ['_attribute_set' => 'attribute_set_name'];
+        $rowData = [
+            '_attribute_set' => 'attribute_set_name',
+        ];
         $rowNum = 1;
         $this->entityModel->expects($this->any())->method('getRowScope')->willReturn(1);
         $this->entityModel->expects($this->once())->method('addRowError')
@@ -193,6 +289,14 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
                 'attr_code'
             )
             ->willReturnSelf();
+        $this->setPropertyValue($this->simpleType, '_attributes', [
+            $rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET] => [
+                'attr_code' => [
+                    'is_required' => true,
+                ],
+            ],
+        ]);
+
         $this->assertFalse($this->simpleType->isRowValid($rowData, $rowNum));
     }
 

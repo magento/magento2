@@ -24,7 +24,7 @@ class Storage
     /**
      * Existing customers information. In form of:
      *
-     * [customer e-mail] => array(
+     * [customer email] => array(
      *    [website id 1] => customer_id 1,
      *    [website id 2] => customer_id 2,
      *           ...       =>     ...      ,
@@ -94,10 +94,10 @@ class Storage
     /**
      * Add customer to array
      *
-     * @param \Magento\Framework\Object|\Magento\Customer\Model\Customer $customer
+     * @param \Magento\Framework\DataObject|\Magento\Customer\Model\Customer $customer
      * @return $this
      */
-    public function addCustomer(\Magento\Framework\Object $customer)
+    public function addCustomer(\Magento\Framework\DataObject $customer)
     {
         $email = strtolower(trim($customer->getEmail()));
         if (!isset($this->_customerIds[$email])) {

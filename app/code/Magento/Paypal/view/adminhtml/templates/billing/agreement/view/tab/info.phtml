@@ -1,0 +1,41 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<section class="admin__page-section">
+    <div class="admin__page-section-title">
+        <span class="title"><?php echo __('General Information'); ?></span>
+    </div>
+    <div class="admin__page-section-content log-details">
+        <table class="data-table admin__table-secondary order-billing-agreement-table">
+            <tbody>
+                <tr>
+                    <th><?php echo __('Reference ID'); ?></th>
+                    <td><?php echo $block->escapeHtml($block->getReferenceId()) ?></td>
+                </tr>
+                <tr>
+                    <th><?php echo __('Customer'); ?></th>
+                    <td>
+                        <a href="<?php echo $block->getCustomerUrl(); ?>">
+                            <?php echo $block->getCustomerEmail() ?>
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <th><?php echo __('Status'); ?></th>
+                    <td><?php echo $block->getStatus() ?></td>
+                </tr>
+                <tr>
+                    <th><?php echo __('Created At'); ?></th>
+                    <td><?php echo $block->getCreatedAt(); ?></td>
+                </tr>
+                <tr>
+                    <th><?php echo __('Updated At'); ?></th>
+                    <td><?php echo $block->getUpdatedAt(); ?></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>

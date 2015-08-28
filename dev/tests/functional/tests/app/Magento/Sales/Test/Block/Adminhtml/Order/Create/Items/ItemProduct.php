@@ -8,9 +8,9 @@ namespace Magento\Sales\Test\Block\Adminhtml\Order\Create\Items;
 
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
- * Class ItemProduct
  * Item product block.
  */
 class ItemProduct extends Form
@@ -74,6 +74,27 @@ class ItemProduct extends Form
         }
 
         return $result;
+    }
+
+    /**
+     * Fill the root form with checkout data.
+     *
+     * @param array $data
+     * @param SimpleElement|null $element
+     * @return $this
+     */
+    public function fillCheckoutData(array $data, SimpleElement $element = null)
+    {
+        if (isset($data['cartItem'])) {
+            unset($data['cartItem']);
+        }
+        if (isset($data['options'])) {
+            unset($data['options']);
+        }
+        $mapping = $this->dataMapping($data);
+        $this->_fill($mapping, $element);
+
+        return $this;
     }
 
     /**

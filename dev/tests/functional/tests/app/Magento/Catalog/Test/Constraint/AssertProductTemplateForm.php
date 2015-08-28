@@ -43,7 +43,7 @@ class AssertProductTemplateForm extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             $filterAttribute['set_name'],
             $productSetEdit->getAttributeSetEditBlock()->getAttributeSetName(),
-            'Attribute Set not found'
+            'Product Template not found'
             . "\nExpected: " . $filterAttribute['set_name']
             . "\nActual: " . $productSetEdit->getAttributeSetEditBlock()->getAttributeSetName()
         );

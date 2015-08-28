@@ -24,11 +24,6 @@ class StockStateProviderTest extends \PHPUnit_Framework_TestCase
     protected $stockStateProvider;
 
     /**
-     * @var \Magento\CatalogInventory\Api\Data\StockItemInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $stockItem;
-
-    /**
      * @var \Magento\Catalog\Model\ProductFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $productFactory;
@@ -49,12 +44,12 @@ class StockStateProviderTest extends \PHPUnit_Framework_TestCase
     protected $localeFormat;
 
     /**
-     * @var \Magento\Framework\Object\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject\Factory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectFactory;
 
     /**
-     * @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $object;
 
@@ -62,11 +57,6 @@ class StockStateProviderTest extends \PHPUnit_Framework_TestCase
      * @var float
      */
     protected $qty = 50.5;
-
-    /**
-     * @var int
-     */
-    protected $qtyDivision = 0;
 
     /**
      * @var bool
@@ -126,9 +116,6 @@ class StockStateProviderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->mathDivision->expects($this->any())
-            ->method('getExactDivision')
-            ->willReturn($this->qtyDivision);
 
         $this->localeFormat = $this->getMockForAbstractClass(
             '\Magento\Framework\Locale\FormatInterface',
@@ -138,8 +125,8 @@ class StockStateProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getNumber')
             ->willReturn($this->qty);
 
-        $this->object = $this->objectManagerHelper->getObject('Magento\Framework\Object');
-        $this->objectFactory = $this->getMock('\Magento\Framework\Object\Factory', ['create'], [], '', false);
+        $this->object = $this->objectManagerHelper->getObject('Magento\Framework\DataObject');
+        $this->objectFactory = $this->getMock('\Magento\Framework\DataObject\Factory', ['create'], [], '', false);
         $this->objectFactory->expects($this->any())->method('create')->willReturn($this->object);
 
         $this->product = $this->getMock(
@@ -398,6 +385,38 @@ class StockStateProviderTest extends \PHPUnit_Framework_TestCase
                     'checkQuoteItemQty' => true,
                 ]
             ]
+        ];
+    }
+
+    /**
+     * @param bool $isChildItem
+     * @param string $expectedMsg
+     * @dataProvider checkQtyIncrementsMsgDataProvider
+     */
+    public function testCheckQtyIncrementsMsg($isChildItem, $expectedMsg)
+    {
+        $qty = 1;
+        $qtyIncrements = 5;
+        $stockItem = $this->getMockBuilder('Magento\CatalogInventory\Api\Data\StockItemInterface')
+            ->disableOriginalConstructor()
+            ->setMethods($this->stockItemMethods)
+            ->getMockForAbstractClass();
+        $stockItem->expects($this->any())->method('getSuppressCheckQtyIncrements')->willReturn(false);
+        $stockItem->expects($this->any())->method('getQtyIncrements')->willReturn($qtyIncrements);
+        $stockItem->expects($this->any())->method('getIsChildItem')->willReturn($isChildItem);
+        $stockItem->expects($this->any())->method('getProductName')->willReturn('Simple Product');
+        $this->mathDivision->expects($this->any())->method('getExactDivision')->willReturn(1);
+
+        $result = $this->stockStateProvider->checkQtyIncrements($stockItem, $qty);
+        $this->assertTrue($result->getHasError());
+        $this->assertEquals($expectedMsg, $result->getMessage()->render());
+    }
+
+    public function checkQtyIncrementsMsgDataProvider()
+    {
+        return [
+            [true, 'You can buy Simple Product only in quantities of 5 at a time.'],
+            [false, 'You can buy this product only in quantities of 5 at a time.'],
         ];
     }
 }

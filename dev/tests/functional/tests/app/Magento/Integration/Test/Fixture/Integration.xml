@@ -6,86 +6,40 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/fixture.xsd">
-  <fixture name="integration" module="Magento_Integration" type="composite" entity_type="integration" collection="Magento\Integration\Model\Resource\Integration\Collection" repository_class="Magento\Integration\Test\Repository\Integration" handler_interface="Magento\Integration\Test\Handler\Integration\IntegrationInterface" class="Magento\Integration\Test\Fixture\Integration">
-    <dataset name="default">
-        <field name="name" xsi:type="string">default_integration_%isolation%</field>
-        <field name="email" xsi:type="string">test_%isolation%@example.com</field>
-        <field name="resource_access" xsi:type="string">All</field>
-    </dataset>
-    <field name="integration_id" is_required="1">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="name" is_required="" group="integration_info">
-      <default_value xsi:type="string">default_integration_%isolation%</default_value>
-    </field>
-    <field name="email" is_required="" group="integration_info">
-      <default_value xsi:type="string">test_%isolation%@example.com</default_value>
-    </field>
-    <field name="endpoint" is_required="" group="integration_info">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="status" is_required="">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="consumer_id" is_required="">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="created_at" is_required="">
-      <default_value xsi:type="string">CURRENT_TIMESTAMP</default_value>
-    </field>
-    <field name="updated_at" is_required="">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="setup_type" is_required="">
-      <default_value xsi:type="number">0</default_value>
-    </field>
-    <field name="identity_link_url" is_required="" group="integration_info">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="entity_id" is_required="1">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="admin_id" is_required="">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="customer_id" is_required="">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="type" is_required="">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="token" is_required="">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="secret" is_required="">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="verifier" is_required="">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="callback_url" is_required="">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="revoked" is_required="">
-      <default_value xsi:type="number">0</default_value>
-    </field>
-    <field name="authorized" is_required="">
-      <default_value xsi:type="number">0</default_value>
-    </field>
-    <field name="user_type" is_required="">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="key" is_required="">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="rejected_callback_url" is_required="">
-      <default_value xsi:type="null"/>
-    </field>
-    <field name="resource_access" group="api">
-      <default_value xsi:type="string">All</default_value>
-    </field>
-    <field name="resources" group="api"/>
-    <field name="token_secret" group="integration_info"/>
-    <field name="consumer_secret" group="integration_info"/>
-  </fixture>
+    <fixture name="integration"
+             module="Magento_Integration"
+             type="composite"
+             entity_type="integration"
+             collection="Magento\Integration\Model\Resource\Integration\Collection"
+             repository_class="Magento\Integration\Test\Repository\Integration"
+             handler_interface="Magento\Integration\Test\Handler\Integration\IntegrationInterface"
+             class="Magento\Integration\Test\Fixture\Integration">
+        <field name="integration_id" is_required="1" />
+        <field name="name" is_required="" group="integration_info" />
+        <field name="email" is_required="" group="integration_info" />
+        <field name="endpoint" is_required="" group="integration_info" />
+        <field name="status" is_required="" />
+        <field name="consumer_id" is_required="" />
+        <field name="created_at" is_required="" />
+        <field name="updated_at" is_required="" />
+        <field name="setup_type" is_required="" />
+        <field name="identity_link_url" is_required="" group="integration_info" />
+        <field name="entity_id" is_required="1" />
+        <field name="admin_id" is_required="" />
+        <field name="customer_id" is_required="" />
+        <field name="type" is_required="" />
+        <field name="token" is_required="" />
+        <field name="secret" is_required="" />
+        <field name="verifier" is_required="" />
+        <field name="callback_url" is_required="" />
+        <field name="revoked" is_required="" />
+        <field name="authorized" is_required="" />
+        <field name="user_type" is_required="" />
+        <field name="key" is_required="" />
+        <field name="rejected_callback_url" is_required="" />
+        <field name="resource_access" group="api" />
+        <field name="resources" group="api" />
+        <field name="token_secret" group="integration_info" />
+        <field name="consumer_secret" group="integration_info" />
+    </fixture>
 </config>

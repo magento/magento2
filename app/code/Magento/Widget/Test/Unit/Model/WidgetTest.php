@@ -8,33 +8,34 @@ namespace Magento\Widget\Test\Unit\Model;
 class WidgetTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Widget\Model\Config\Data|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Widget\Model\Config\Data|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_storage;
+    protected $dataStorageMock;
 
     /**
      * @var \Magento\Widget\Model\Widget
      */
-    protected $_model;
+    protected $widget;
 
     public function setUp()
     {
-        $this->_storage = $this->getMockBuilder(
-            'Magento\Widget\Model\Config\Data'
-        )->disableOriginalConstructor()->getMock();
+        $this->dataStorageMock = $this->getMockBuilder('Magento\Widget\Model\Config\Data')
+            ->disableOriginalConstructor()
+            ->getMock();
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $objectManagerHelper->getObject('Magento\Widget\Model\Widget', ['dataStorage' => $this->_storage]);
-        $this->_model = $objectManagerHelper->getObject(
+        $this->widget = $objectManagerHelper->getObject(
             'Magento\Widget\Model\Widget',
-            ['dataStorage' => $this->_storage]
+            ['dataStorage' => $this->dataStorageMock]
         );
     }
 
     public function testGetWidgets()
     {
         $expected = ['val1', 'val2'];
-        $this->_storage->expects($this->once())->method('get')->will($this->returnValue($expected));
-        $result = $this->_model->getWidgets();
+        $this->dataStorageMock->expects($this->once())
+            ->method('get')
+            ->willReturn($expected);
+        $result = $this->widget->getWidgets();
         $this->assertEquals($expected, $result);
     }
 
@@ -42,8 +43,10 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
     {
         $configFile = __DIR__ . '/_files/mappedConfigArrayAll.php';
         $widgets = include $configFile;
-        $this->_storage->expects($this->once())->method('get')->will($this->returnValue($widgets));
-        $result = $this->_model->getWidgets(['name' => 'CMS Page Link', 'description' => 'Link to a CMS Page']);
+        $this->dataStorageMock->expects($this->once())
+            ->method('get')
+            ->willReturn($widgets);
+        $result = $this->widget->getWidgets(['name' => 'CMS Page Link', 'description' => 'Link to a CMS Page']);
         $configFileOne = __DIR__ . '/_files/mappedConfigArray1.php';
         $expected = ['cms_page_link' => include $configFileOne];
         $this->assertEquals($expected, $result);
@@ -53,8 +56,10 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
     {
         $configFile = __DIR__ . '/_files/mappedConfigArrayAll.php';
         $widgets = include $configFile;
-        $this->_storage->expects($this->once())->method('get')->will($this->returnValue($widgets));
-        $result = $this->_model->getWidgets(['name' => 'unknown', 'description' => 'unknown']);
+        $this->dataStorageMock->expects($this->once())
+            ->method('get')
+            ->willReturn($widgets);
+        $result = $this->widget->getWidgets(['name' => 'unknown', 'description' => 'unknown']);
         $expected = [];
         $this->assertEquals($expected, $result);
     }
@@ -63,16 +68,63 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
     {
         $widgetOne = ['@' => ['type' => 'type1']];
         $widgets = ['widget1' => $widgetOne];
-        $this->_storage->expects($this->any())->method('get')->will($this->returnValue($widgets));
-        $this->assertEquals($widgetOne, $this->_model->getWidgetByClassType('type1'));
-        $this->assertNull($this->_model->getWidgetByClassType('type2'));
+        $this->dataStorageMock->expects($this->any())
+            ->method('get')
+            ->willReturn($widgets);
+        $this->assertEquals($widgetOne, $this->widget->getWidgetByClassType('type1'));
+        $this->assertNull($this->widget->getWidgetByClassType('type2'));
     }
 
     public function testGetWidgetDeclarationTypeWithBackslashes()
     {
         $this->assertContains(
             'Magento\\\\Widget\\\\Backslashed\\\\ClassName',
-            $this->_model->getWidgetDeclaration('Magento\Widget\Backslashed\ClassName')
+            $this->widget->getWidgetDeclaration('Magento\Widget\Backslashed\ClassName')
         );
+    }
+
+    public function testGetConfigAsObject()
+    {
+        $configFile = __DIR__ . '/_files/mappedConfigArrayAll.php';
+        $widgets = include $configFile;
+        $this->dataStorageMock->expects($this->once())
+            ->method('get')
+            ->willReturn($widgets);
+
+        $resultObject = $this->widget->getConfigAsObject('Magento\Cms\Block\Widget\Page\Link');
+        $this->assertInstanceOf('Magento\Framework\DataObject', $resultObject);
+
+        $this->assertSame('CMS Page Link', $resultObject->getName());
+        $this->assertSame('Link to a CMS Page', $resultObject->getDescription());
+        $this->assertSame('1', $resultObject->getIsEmailCompatible());
+        $this->assertSame('Magento_Cms::images/widget_page_link.png', $resultObject->getPlaceholderImage());
+
+        $resultParameters = $resultObject->getParameters();
+        $this->assertInstanceOf('Magento\Framework\DataObject', $resultParameters['page_id' ]);
+        $this->assertInstanceOf('Magento\Framework\DataObject', $resultParameters['anchor_text']);
+        $this->assertInstanceOf('Magento\Framework\DataObject', $resultParameters['template']);
+
+        $supportedContainersExpected = [
+            '0' => [
+                'container_name' => 'left',
+                'template' => ['default' => 'default', 'names_only' => 'link_inline'],
+            ],
+            '1' => [
+                'container_name' => 'content',
+                'template' => ['grid' => 'default', 'list' => 'list']
+            ],
+        ];
+        $this->assertSame($supportedContainersExpected, $resultObject->getSupportedContainers());
+    }
+
+    public function testGetConfigAsObjectWidgetNoFound()
+    {
+        $this->dataStorageMock->expects($this->once())
+            ->method('get')
+            ->willReturn([]);
+
+        $resultObject = $this->widget->getConfigAsObject('Magento\Cms\Block\Widget\Page\Link');
+        $this->assertInstanceOf('Magento\Framework\DataObject', $resultObject);
+        $this->assertSame([], $resultObject->getData());
     }
 }

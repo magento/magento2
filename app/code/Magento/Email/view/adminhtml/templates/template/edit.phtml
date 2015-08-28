@@ -4,8 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Framework\App\TemplateTypesInterface;
+
 // @codingStandardsIgnoreFile
 
+/** @var $block \Magento\Email\Block\Adminhtml\Template\Edit */
 ?>
 <?php if (!$block->getEditMode()): ?>
 <form action="<?php echo $block->getLoadUrl() ?>" method="post" id="email_template_load_form">
@@ -86,8 +89,7 @@ require([
 
             this.bindEvents();
 
-            this.renderPaths(<?php echo $block->getUsedDefaultForPaths(); ?>, 'used_default_for');
-            this.renderPaths(<?php echo $block->getUsedCurrentlyForPaths(); ?>, 'used_currently_for');
+            this.renderPaths(<?php echo $block->getCurrentlyUsedForPaths(); ?>, 'currently_used_for');
         },
 
         bindEvents: function(){
@@ -109,7 +111,7 @@ require([
         },
 
         stripTags: function () {
-            if(!window.confirm("<?php echo __('Are you sure that you want to strip tags?') ?>")) {
+            if(!window.confirm("<?php echo __('Are you sure you want to strip tags?') ?>")) {
                 return false;
             }
             this.unconvertedText = $('template_text').value;
@@ -140,9 +142,9 @@ require([
         },
         preview: function() {
             if (this.typeChange) {
-                $('preview_type').value = 1;
+                $('preview_type').value = <?php echo TemplateTypesInterface::TYPE_TEXT ?>;
             } else {
-                $('preview_type').value = 2;
+                $('preview_type').value = <?php echo $block->getTemplateType() ?>;
             }
             if (typeof tinyMCE == 'undefined' || !tinyMCE.getInstanceById('template_text')) {
                 $('preview_text').value = $('template_text').value;
@@ -160,7 +162,7 @@ require([
         },
 
         deleteTemplate: function() {
-            if(window.confirm("<?php echo __('Are you sure that you want to delete this template?') ?>")) {
+            if(window.confirm("<?php echo __('Are you sure you want to delete this template?') ?>")) {
                    window.location.href = '<?php echo $block->getDeleteUrl() ?>';
             }
         },
@@ -194,18 +196,18 @@ require([
                                   $('convert_button').show();
                               }
                           }
-                          if (pair.key == 'orig_template_used_default_for') {
+                          if (pair.key == 'orig_template_currently_used_for') {
                                if(pair.value.length){
-                                   $('used_default_for').show();
-                                   this.renderPaths(pair.value, 'used_default_for');
+                                   $('currently_used_for').show();
+                                   this.renderPaths(pair.value, 'currently_used_for');
                                }
                                else{
-                                   $('used_default_for').hide();
+                                   $('currently_used_for').hide();
                                }
                           }
                        }.bind(this));
                    } else {
-                       alert('<?php echo __('Failed to load template. See error log for details.') ?>');
+                       alert('<?php echo __('The template did not load. Please review the log for details.') ?>');
                    }
                }.bind(this)
             });
@@ -215,7 +217,7 @@ require([
         renderPaths: function(paths, fieldId) {
             var field = $(fieldId);
             if (field) {
-                field.down('div').update(this.parsePath(paths, '<span class="path-delimiter">&nbsp;-&gt;&nbsp;</span>', '<br />'));
+                field.down('div').down('div').update(this.parsePath(paths, '<span class="path-delimiter">&nbsp;-&gt;&nbsp;</span>', '<br />'));
             }
         },
 

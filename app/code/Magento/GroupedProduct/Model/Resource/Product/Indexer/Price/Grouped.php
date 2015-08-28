@@ -17,7 +17,7 @@ class Grouped extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defa
      */
     public function reindexAll()
     {
-        $this->useIdxTable(true);
+        $this->tableStrategy->setUseIdxTable(true);
         $this->beginTransaction();
         try {
             $this->_prepareGroupedProductPriceData();
@@ -54,10 +54,10 @@ class Grouped extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defa
         if (!$this->hasEntity() && empty($entityIds)) {
             return $this;
         }
-        $write = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         $table = $this->getIdxTable();
 
-        $select = $write->select()->from(
+        $select = $connection->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
             'entity_id'
         )->joinLeft(
@@ -72,8 +72,8 @@ class Grouped extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defa
         );
         $this->_addWebsiteJoinToSelect($select, true);
         $this->_addProductWebsiteJoinToSelect($select, 'cw.website_id', 'e.entity_id');
-        $minCheckSql = $write->getCheckSql('le.required_options = 0', 'i.min_price', 0);
-        $maxCheckSql = $write->getCheckSql('le.required_options = 0', 'i.max_price', 0);
+        $minCheckSql = $connection->getCheckSql('le.required_options = 0', 'i.min_price', 0);
+        $maxCheckSql = $connection->getCheckSql('le.required_options = 0', 'i.max_price', 0);
         $select->columns(
             'website_id',
             'cw'
@@ -86,7 +86,7 @@ class Grouped extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defa
             'i.entity_id = l.linked_product_id AND i.website_id = cw.website_id' .
             ' AND i.customer_group_id = cg.customer_group_id',
             [
-                'tax_class_id' => $this->_getReadAdapter()->getCheckSql(
+                'tax_class_id' => $this->getConnection()->getCheckSql(
                     'MIN(i.tax_class_id) IS NULL',
                     '0',
                     'MIN(i.tax_class_id)'
@@ -123,7 +123,7 @@ class Grouped extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defa
         );
 
         $query = $select->insertFromSelect($table);
-        $write->query($query);
+        $connection->query($query);
 
         return $this;
     }

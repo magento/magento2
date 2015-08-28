@@ -118,7 +118,7 @@ class Customer extends AbstractCustomer
     protected $masterAttributeCode = 'email';
 
     /**
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
@@ -133,7 +133,7 @@ class Customer extends AbstractCustomer
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
@@ -176,7 +176,10 @@ class Customer extends AbstractCustomer
         $this->_permanentAttributes[] = self::COLUMN_WEBSITE;
         $this->_indexValueAttributes[] = 'group_id';
 
-        $this->addMessageTemplate(self::ERROR_DUPLICATE_EMAIL_SITE, __('E-mail is duplicated in import file'));
+        $this->addMessageTemplate(
+            self::ERROR_DUPLICATE_EMAIL_SITE,
+            __('This email is found more than once in the import file.')
+        );
         $this->addMessageTemplate(
             self::ERROR_ROW_IS_ORPHAN,
             __('Orphan rows that will be skipped due default row errors')
@@ -185,8 +188,11 @@ class Customer extends AbstractCustomer
             self::ERROR_INVALID_STORE,
             __('Invalid value in Store column (store does not exists?)')
         );
-        $this->addMessageTemplate(self::ERROR_EMAIL_SITE_NOT_FOUND, __('E-mail and website combination is not found'));
-        $this->addMessageTemplate(self::ERROR_PASSWORD_LENGTH, __('Invalid password length'));
+        $this->addMessageTemplate(
+            self::ERROR_EMAIL_SITE_NOT_FOUND,
+            __('We can\'t find that email and website combination.')
+        );
+        $this->addMessageTemplate(self::ERROR_PASSWORD_LENGTH, __('Please enter a password with a valid length.'));
 
         $this->_initStores(true)->_initAttributes();
 

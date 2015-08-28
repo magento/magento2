@@ -37,7 +37,7 @@ class AssertCustomerGroupOnCustomerForm extends AbstractConstraint
         $customer = $fixtureFactory->createByCode(
             'customer',
             [
-                'dataSet' => 'defaultBackend',
+                'dataset' => 'defaultBackend',
                 'data' => ['group_id' => ['customerGroup' => $customerGroup]]
             ]
         );

@@ -24,15 +24,15 @@ class Design extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param DateTime $dateTime
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         DateTime $dateTime,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->dateTime = $dateTime;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -72,7 +72,7 @@ class Design extends \Magento\Framework\Model\Resource\Db\AbstractDb
             > (new \DateTime($object->getDateTo()))->getTimestamp()
         ) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Start date cannot be greater than end date.')
+                __('The start date can\'t follow the end date.')
             );
         }
 
@@ -85,10 +85,7 @@ class Design extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         if ($check) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __(
-                    'Your design change for the specified store intersects with another one, please specify another'
-                    . ' date range.'
-                )
+                __('The date range for this design change overlaps another design change for the specified store.')
             );
         }
 
@@ -116,8 +113,8 @@ class Design extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _checkIntersection($storeId, $dateFrom, $dateTo, $currentId)
     {
-        $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             ['main_table' => $this->getTable('design_change')]
         )->where(
             'main_table.store_id = :store_id'
@@ -173,7 +170,7 @@ class Design extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $bind['date_from'] = $dateFrom;
         }
 
-        $result = $adapter->fetchOne($select, $bind);
+        $result = $connection->fetchOne($select, $bind);
         return $result;
     }
 
@@ -186,7 +183,7 @@ class Design extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function loadChange($storeId, $date)
     {
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             ['main_table' => $this->getTable('design_change')]
         )->where(
             'store_id = :store_id'
@@ -198,6 +195,6 @@ class Design extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         $bind = ['store_id' => (int)$storeId, 'required_date' => $date];
 
-        return $this->_getReadAdapter()->fetchRow($select, $bind);
+        return $this->getConnection()->fetchRow($select, $bind);
     }
 }

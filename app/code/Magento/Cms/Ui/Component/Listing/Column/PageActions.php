@@ -17,7 +17,8 @@ use Magento\Framework\UrlInterface;
 class PageActions extends Column
 {
     /** Url path */
-    const CMS_URL_PATH = 'cms/page/edit';
+    const CMS_URL_PATH_EDIT = 'cms/page/edit';
+    const CMS_URL_PATH_DELETE = 'cms/page/delete';
 
     /** @var UrlBuilder */
     protected $actionUrlBuilder;
@@ -25,9 +26,10 @@ class PageActions extends Column
     /** @var UrlInterface */
     protected $urlBuilder;
 
-    /** @var string */
-    private $url;
-
+    /**
+     * @var string
+     */
+    private $editUrl;
 
     /**
      * @param ContextInterface $context
@@ -36,7 +38,7 @@ class PageActions extends Column
      * @param UrlInterface $urlBuilder
      * @param array $components
      * @param array $data
-     * @param string $url
+     * @param string $editUrl
      */
     public function __construct(
         ContextInterface $context,
@@ -45,11 +47,11 @@ class PageActions extends Column
         UrlInterface $urlBuilder,
         array $components = [],
         array $data = [],
-        $url = self::CMS_URL_PATH
+        $editUrl = self::CMS_URL_PATH_EDIT
     ) {
         $this->urlBuilder = $urlBuilder;
         $this->actionUrlBuilder = $actionUrlBuilder;
-        $this->url = $url;
+        $this->editUrl = $editUrl;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
@@ -63,15 +65,23 @@ class PageActions extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
+                $name = $this->getData('name');
                 if (isset($item['page_id'])) {
-                    $item[$this->getData('name')]['edit'] = [
-                        'href' => $this->urlBuilder->getUrl($this->url, ['page_id' => $item['page_id']]),
-                        'label' => __('Edit'),
-                        'hidden' => true
+                    $item[$name]['edit'] = [
+                        'href' => $this->urlBuilder->getUrl($this->editUrl, ['page_id' => $item['page_id']]),
+                        'label' => __('Edit')
+                    ];
+                    $item[$name]['delete'] = [
+                        'href' => $this->urlBuilder->getUrl(self::CMS_URL_PATH_DELETE, ['page_id' => $item['page_id']]),
+                        'label' => __('Delete'),
+                        'confirm' => [
+                            'title' => __('Delete "${ $.$data.title }"'),
+                            'message' => __('Are you sure you wan\'t to delete a "${ $.$data.title }" record?')
+                        ]
                     ];
                 }
                 if (isset($item['identifier'])) {
-                    $item[$this->getData('name')]['preview'] = [
+                    $item[$name]['preview'] = [
                         'href' => $this->actionUrlBuilder->getUrl(
                             $item['identifier'],
                             isset($item['_first_store_id']) ? $item['_first_store_id'] : null,

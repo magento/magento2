@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Registry;
 use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
 use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
+use Magento\Sales\Model\Order\ShipmentFactory;
 use Magento\Sales\Model\Order\Invoice;
 
 /**
@@ -29,6 +30,11 @@ class Save extends \Magento\Backend\App\Action
     protected $shipmentSender;
 
     /**
+     * @var ShipmentFactory
+     */
+    protected $shipmentFactory;
+
+    /**
      * @var Registry
      */
     protected $registry;
@@ -38,16 +44,19 @@ class Save extends \Magento\Backend\App\Action
      * @param Registry $registry
      * @param InvoiceSender $invoiceSender
      * @param ShipmentSender $shipmentSender
+     * @param ShipmentFactory $shipmentFactory
      */
     public function __construct(
         Action\Context $context,
         Registry $registry,
         InvoiceSender $invoiceSender,
-        ShipmentSender $shipmentSender
+        ShipmentSender $shipmentSender,
+        ShipmentFactory $shipmentFactory
     ) {
         $this->registry = $registry;
         $this->invoiceSender = $invoiceSender;
         $this->shipmentSender = $shipmentSender;
+        $this->shipmentFactory = $shipmentFactory;
         parent::__construct($context);
     }
 
@@ -67,30 +76,19 @@ class Save extends \Magento\Backend\App\Action
      */
     protected function _prepareShipment($invoice)
     {
-        $savedQtys = [];
-        $data = $this->getRequest()->getParam('invoice');
-        if (isset($data['items'])) {
-            $savedQtys = $data['items'];
-        }
-        $shipment = $this->_objectManager->create(
-            'Magento\Sales\Model\Service\Order',
-            ['order' => $invoice->getOrder()]
-        )->prepareShipment(
-            $savedQtys
+        $invoiceData = $this->getRequest()->getParam('invoice');
+
+        $shipment = $this->shipmentFactory->create(
+            $invoice->getOrder(),
+            isset($invoiceData['items']) ? $invoiceData['items'] : [],
+            $this->getRequest()->getPost('tracking')
         );
+
         if (!$shipment->getTotalQty()) {
             return false;
         }
 
-        $shipment->register();
-        $tracks = $this->getRequest()->getPost('tracking');
-        if ($tracks) {
-            foreach ($tracks as $data) {
-                $track = $this->_objectManager->create('Magento\Sales\Model\Order\Shipment\Track')->addData($data);
-                $shipment->addTrack($track);
-            }
-        }
-        return $shipment;
+        return $shipment->register();
     }
 
     /**
@@ -129,17 +127,17 @@ class Save extends \Magento\Backend\App\Action
                 );
             }
 
+            $invoiceManagement = $this->_objectManager->create('Magento\Sales\Api\InvoiceManagementInterface');
             /** @var \Magento\Sales\Model\Order\Invoice $invoice */
-            $invoice = $this->_objectManager->create('Magento\Sales\Model\Service\Order', ['order' => $order])
-                ->prepareInvoice($invoiceItems);
+            $invoice = $invoiceManagement->prepareInvoice($orderId, $invoiceItems);
 
             if (!$invoice) {
-                throw new LocalizedException(__('We can\'t save the invoice.'));
+                throw new LocalizedException(__('We can\'t save the invoice right now.'));
             }
 
             if (!$invoice->getTotalQty()) {
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Cannot create an invoice without products.')
+                    __('You can\'t create an invoice without products.')
                 );
             }
             $this->registry->register('current_invoice', $invoice);
@@ -199,7 +197,7 @@ class Save extends \Magento\Backend\App\Action
                 }
             } catch (\Exception $e) {
                 $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-                $this->messageManager->addError(__('We can\'t send the invoice email.'));
+                $this->messageManager->addError(__('We can\'t send the invoice email right now.'));
             }
             if ($shipment) {
                 try {
@@ -208,7 +206,7 @@ class Save extends \Magento\Backend\App\Action
                     }
                 } catch (\Exception $e) {
                     $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
-                    $this->messageManager->addError(__('We can\'t send the shipment.'));
+                    $this->messageManager->addError(__('We can\'t send the shipment right now.'));
                 }
             }
             $this->_objectManager->get('Magento\Backend\Model\Session')->getCommentText(true);
@@ -216,7 +214,7 @@ class Save extends \Magento\Backend\App\Action
         } catch (LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We can\'t save the invoice.'));
+            $this->messageManager->addError(__('We can\'t save the invoice right now.'));
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
         return $resultRedirect->setPath('sales/*/new', ['order_id' => $orderId]);

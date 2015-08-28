@@ -29,11 +29,12 @@ class Widget extends \Magento\Backend\Block\Widget\Form\Container
 
         $this->removeButton('reset');
         $this->removeButton('back');
-        $this->buttonList->update('save', 'label', __('Insert Widget'));
+        $this->buttonList->update('save', 'label', __('Insert Frontend App'));
         $this->buttonList->update('save', 'class', 'action-primary add-widget');
         $this->buttonList->update('save', 'id', 'insert_button');
         $this->buttonList->update('save', 'onclick', 'wWidget.insertWidget()');
         $this->buttonList->update('save', 'region', 'footer');
+        $this->buttonList->update('save', 'data_attribute', []);
 
         $this->_formScripts[] = 'require(["mage/adminhtml/wysiwyg/widget"], function(){wWidget = new WysiwygWidget.Widget(' .
             '"widget_options_form", "select_widget_type", "widget_options", "' .

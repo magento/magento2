@@ -45,7 +45,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->_localeResolver = $localeResolver;
@@ -194,7 +194,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         if (count($options) > 0) {
             array_unshift(
                 $options,
-                ['title ' => null, 'value' => null, 'label' => __('Please select region, state or province')]
+                ['title ' => null, 'value' => null, 'label' => __('Please select a region, state or province.')]
             );
         }
         return $options;

@@ -13,9 +13,6 @@ namespace Magento\Framework\Api;
  */
 interface SearchCriteriaInterface
 {
-    const SORT_ASC = 1;
-    const SORT_DESC = -1;
-
     /**
      * Get a list of filter groups.
      *

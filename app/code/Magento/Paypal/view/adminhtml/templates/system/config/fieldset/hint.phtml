@@ -1,0 +1,43 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * @see \Magento\Paypal\Block\System\Config\Fieldset\Hint
+ */
+?>
+<?php
+    if ($block->getHelpLink()):
+?>
+<div class="paypal-payment-notice">
+    <?php echo __('Not sure what PayPal payment method to use? Click <a href="%1" target="_blank">here</a> to learn more.', $block->getHelpLink()); ?>
+</div>
+<?php
+    endif;
+?>
+<script>
+require(['jquery', 'prototype'], function(jQuery){
+    window.paypalToggleSolution = function (id, url) {
+        var doScroll = false;
+        Fieldset.toggleCollapse(id, url);
+        if ($(this).hasClassName("open")) {
+            $$(".with-button button.button").each(function(anotherButton) {
+                if (anotherButton != this && $(anotherButton).hasClassName("open")) {
+                    $(anotherButton).click();
+                    doScroll = true;
+                }
+            }.bind(this));
+        }
+        if (doScroll) {
+            var pos = Element.cumulativeOffset($(this));
+            window.scrollTo(pos[0], pos[1] - 45);
+        }
+    }
+});
+</script>

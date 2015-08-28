@@ -8,7 +8,6 @@
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/layout_generic.xsd">
     <container name="root" label="Root">
         <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config" template="Magento_ConfigurableProduct::catalog/product/edit/super/generator.phtml" name="product-variations-generator" as="generator">
-            <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config" template="Magento_ConfigurableProduct::catalog/product/edit/super/attribute-js-template.phtml" as="template"/>
             <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Attribute" template="Magento_ConfigurableProduct::catalog/product/edit/super/attribute-template.phtml" as="attribute-renderer"/>
             <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Matrix" template="Magento_ConfigurableProduct::catalog/product/edit/super/matrix.phtml" as="matrix"/>
         </block>

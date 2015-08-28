@@ -161,7 +161,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * Needed to implement \Magento\Catalog\Model\Product\Configuration\Item\Interface.
      * Return null, as quote item needs no additional configuration.
      *
-     * @return null|\Magento\Framework\Object
+     * @return null|\Magento\Framework\DataObject
      */
     public function getFileDownloadParams()
     {

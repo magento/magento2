@@ -13,10 +13,8 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeNew;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for UpdateProductAttributeEntity
- *
  * Preconditions:
- * Preset : AttributeOptions
+ * Dataset : AttributeOptions
  * 1. Attribute is created (Attribute)
  * 2. Attribute set is created (Product Template)
  *

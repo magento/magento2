@@ -18,7 +18,6 @@
             <argument name="formIds" xsi:type="array">
                 <item name="user_login" xsi:type="string">user_login</item>
                 <item name="guest_checkout" xsi:type="string">guest_checkout</item>
-                <item name="register_during_checkout" xsi:type="string">register_during_checkout</item>
             </argument>
         </arguments>
     </type>

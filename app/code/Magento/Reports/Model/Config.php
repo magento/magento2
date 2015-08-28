@@ -8,7 +8,7 @@ namespace Magento\Reports\Model;
 /**
  * Configuration for reports
  */
-class Config extends \Magento\Framework\Object
+class Config extends \Magento\Framework\DataObject
 {
     /**
      * @var \Magento\Framework\Module\Dir\Reader

@@ -6,25 +6,18 @@
 
 namespace Magento\Catalog\Test\Fixture\CatalogAttributeSet;
 
-use Magento\Catalog\Test\Fixture\CatalogAttributeSet;
+use Magento\Mtf\Fixture\DataSource;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Catalog\Test\Fixture\CatalogAttributeSet;
 
 /**
  * Class SkeletonSet
  *
  *  Data keys:
- *  - dataSet
+ *  - dataset
  */
-class SkeletonSet implements FixtureInterface
+class SkeletonSet extends DataSource
 {
-    /**
-     * Attribute Set name
-     *
-     * @var string
-     */
-    protected $data;
-
     /**
      * New Attribute Set
      *
@@ -33,6 +26,7 @@ class SkeletonSet implements FixtureInterface
     protected $attributeSet;
 
     /**
+     * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param array $params
      * @param array $data
@@ -40,8 +34,8 @@ class SkeletonSet implements FixtureInterface
     public function __construct(FixtureFactory $fixtureFactory, array $params, array $data = [])
     {
         $this->params = $params;
-        if (isset($data['dataSet']) && $data['dataSet'] !== '-') {
-            $parentSet = $fixtureFactory->createByCode('catalogAttributeSet', ['dataSet' => $data['dataSet']]);
+        if (isset($data['dataset']) && $data['dataset'] !== '-') {
+            $parentSet = $fixtureFactory->createByCode('catalogAttributeSet', ['dataset' => $data['dataset']]);
             if (!$parentSet->hasData('attribute_set_id')) {
                 $parentSet->persist();
             }
@@ -52,29 +46,6 @@ class SkeletonSet implements FixtureInterface
     }
 
     /**
-     * Persist attribute options
-     *
-     * @return void
-     */
-    public function persist()
-    {
-        //
-    }
-
-    /**
-     * Return prepared data set
-     *
-     * @param string|null $key
-     * @return mixed
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function getData($key = null)
-    {
-        return $this->data;
-    }
-
-    /**
      * Get Attribute Set
      *
      * @return array
@@ -82,15 +53,5 @@ class SkeletonSet implements FixtureInterface
     public function getAttributeSet()
     {
         return $this->attributeSet;
-    }
-
-    /**
-     * Return data set configuration settings
-     *
-     * @return array
-     */
-    public function getDataConfig()
-    {
-        return $this->params;
     }
 }

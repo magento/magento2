@@ -10,45 +10,23 @@ define([
 ], function (ko, _, utils, registry) {
     'use strict';
 
-    function getIndex(container, target) {
-        var result;
-
-        container.some(function (item, index) {
-            result = index;
-
-            return item && (item.name === target || item === target);
-        });
-
-        return result;
-    }
-
+    /**
+     * Removes non plain object items from the specfied array.
+     *
+     * @param {Array} container - Array whose value should be filtered.
+     * @returns {Array}
+     */
     function compact(container) {
         return container.filter(utils.isObject);
     }
 
-    function reserve(container, elem, position) {
-        var offset = position,
-            target;
-
-        if (_.isObject(position)) {
-            target = position.after || position.before;
-            offset = getIndex(container, target);
-
-            if (position.after) {
-                ++offset;
-            }
-        }
-
-        offset = utils.formatOffset(container, offset);
-
-        container[offset] ?
-            container.splice(offset, 0, elem) :
-            container[offset] = elem;
-
-        return offset;
-    }
-
     return {
+        /**
+         * Retrieves requested region.
+         * Creates region if it was not created yet
+         *
+         * @returns {ObservableArray}.
+         */
         getRegion: function (name) {
             var regions = this.regions = this.regions || {};
 
@@ -59,23 +37,55 @@ define([
             return regions[name];
         },
 
+        /**
+         * Replaces specified regions' data with a provided one.
+         * Creates region if it was not created yet.
+         *
+         * @param {Array} items - New regions' data.
+         * @param {String} name - Name of the region.
+         * @returns {Component} Chainable.
+         */
         updateRegion: function (items, name) {
             var region = this.getRegion(name);
 
             region(items);
+
+            return this;
         },
 
         /**
          * Requests specified components to insert
          * them into 'elems' array starting from provided position.
          *
-         * @param {String} elem - Name of the component to insert.
+         * @param {(String|Array)} elems - Name of the component to insert.
          * @param {Number} [position=-1] - Position at which to insert elements.
          * @returns {Component} Chainable.
          */
-        insertChild: function (elem, position) {
-            reserve(this._elems, elem, position);
-            registry.get(elem, this._insert);
+        insertChild: function (elems, position) {
+            var container = this._elems,
+                update;
+
+            if (!Array.isArray(elems)) {
+                elems = [elems];
+            }
+
+            elems.map(function (item) {
+                return item.elem ?
+                    utils.insert(item.elem, container, item.position) :
+                    utils.insert(item, container, position);
+            }).forEach(function (item) {
+                if (item === true) {
+                    update = true;
+                } else if (_.isString(item)) {
+                    registry.get(item, this._insert);
+                } else if (utils.isObject(item)) {
+                    this._insert(item);
+                }
+            }, this);
+
+            if (update) {
+                this._update();
+            }
 
             return this;
         },
@@ -157,11 +167,9 @@ define([
         _insert: function (elem) {
             var index = this._elems.indexOf(elem.name);
 
-            if (!~index) {
-                return;
+            if (~index) {
+                this._elems[index] = elem;
             }
-
-            this._elems[index] = elem;
 
             this._update()
                 .initElement(elem);

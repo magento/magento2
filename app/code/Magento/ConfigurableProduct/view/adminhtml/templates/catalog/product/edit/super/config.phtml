@@ -14,22 +14,32 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
     <div class="fieldset-wrapper admin__collapsible-block-wrapper" id="<?php echo $block->getId() ?>-wrapper" data-panel="product-variations">
         <div class="fieldset-wrapper-title">
             <strong class="admin__collapsible-title" data-toggle="collapse" data-target="#<?php echo $block->getId() ?>-content">
-                <span><?php echo __('Variations') ?></span>
+                <span><?= __('Configurations') ?></span>
             </strong>
         </div>
 
         <div class="fieldset-wrapper-content collapse" data-collapsed="true" id="<?php echo $block->getId() ?>-content">
-            <fieldset class="fieldset">
-                <div class="field" id="variations-search-field">
-                    <label class="label" for="configurable-attribute-selector"><span>Search</span></label>
-                    <div class="control">
-                        <input type="text" id="configurable-attribute-selector" class="input-text search"
-                               placeholder="start typing to search attribute" title="Select Attribute"
-                               autocomplete="off"/>
+            <div data-bind="scope: 'variation-steps-wizard'" class="product-create-configuration">
+                <div class="product-create-configuration-info">
+                    <div class="note">
+                        <?= __('Configurable products allow customers to choose options (Ex: shirt color).
+                    You need to create a simple product for each configuration (Ex: a product for each color).');?>
                     </div>
-                    <?php echo $block->getChildHtml('add_attribute'); ?>
                 </div>
-
+                <div class="product-create-configuration-actions">
+                    <button data-action="open-steps-wizard" title="Create Product Configurations"
+                            class="action-secondary" data-bind="click: open">
+                        <span data-role="button-label" data-edit-label="<?= __('Edit Configurations') ?>">
+                            <?= $block->getProduct()->getId()
+                                && $block->getProduct()->getTypeId() === 'configurable'
+                                ? __('Edit Configurations')
+                                : __('Create Configurations')
+                            ?>
+                        </span>
+                    </button>
+                </div>
+            </div>
+            <fieldset class="fieldset">
                 <?php echo $block->getChildHtml('generator'); ?>
 
                 <!-- Select Associated Product popup -->
@@ -50,7 +60,8 @@ require([
     'jquery/jquery.tabs',
     'mage/mage',
     'mage/backend/menu',
-    'Magento_ConfigurableProduct/catalog/product-variation',
+    'Magento_Ui/js/modal/modal',
+    'mage/translate',
     'domReady!'
 ], function($, mageTemplate){
     'use strict';
@@ -65,6 +76,7 @@ require([
         currentProductTemplateControl = $('#product-template-suggest-container .action-dropdown > .action-toggle'),
         attributesInput = $("input[name='attributes[]']", variationsContainer),
         hasVariations = <?php echo($block->getProduct()->getTypeId() == Configurable::TYPE_CODE || $block->getRequest()->has('attributes')) ? 'true' : 'false' ?>,
+        noImageUrl = '<?= $block->getNoImageUrl() ?>',
         isLocked = function (element) {
             return element.is('[data-locked]');
         },
@@ -89,14 +101,8 @@ require([
             inventoryAvailabilityField.removeProp('disabled');
             setElementDisabled(qtyField, true, true);
             setElementDisabled(stockAvailabilityField, false, false);
-            $.each($.mage.variationsAttributes($('#configurable-attributes-container')).getAttributes(), function() {
-                $('#attribute-' + this.code + '-container select').prop('disabled', true);
-            })
         })
         .on('hide', function() {
-            if ($.mage.variationsAttributes($('#configurable-attributes-container')).getAttributes().length) {
-                return;
-            }
             currentProductTemplateControl
                 .removeClass('disabled')
                 .removeProp('disabled');
@@ -107,81 +113,14 @@ require([
         })
         .collapse(hasVariations ? 'show' : 'hide');
 
-    var $gridDialog = $('#associated-products-container').dialog({
-        title: 'Select Associated Product',
-        autoOpen: false,
-        minWidth: 980,
-        width: '75%',
-        modal: true,
-        resizable: true,
-        position: {
-            my: 'left top',
-            at: 'center top',
-            of: 'body'
-        },
-        open: function () {
-            $(this).closest('.ui-dialog').addClass('ui-dialog-active');
-
-            var topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 30;
-            $(this).closest('.ui-dialog').css('margin-top', topMargin);
-        },
-        close: function() {
-            $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
-        }
+    var $gridDialog = $('#associated-products-container').modal({
+        title: $.mage.__('Select Associated Product'),
+        type: 'popup'
     });
 
     $('[data-panel=product-variations]')
-        .on('generate', '[data-role=product-variations-matrix]', function(event, data) {
-            var form = $('[data-form=edit-product]');
-            if (!form.valid()) {
-                form.data('validator').focusInvalid();
-                return;
-            }
-            $.ajax({
-                url: data.url,
-                data: form.serialize(),
-                dataType: 'html',
-                context: variationsContainer,
-                showLoader: true
-            }).success(function(data) {
-                $('[data-role=product-variations-generator]').html(data).trigger('contentUpdated');
-                $('#product_type_id').val('configurable').trigger('change');
-            });
-        })
-        .on('add-option', '[data-action=add-option]', function(event) {
-            var attributeContainer = $(event.target).closest('[data-role=configurable-attribute]'),
-                panel = attributeContainer.closest('[data-panel=product-variations]'),
-                newOptionsCount = attributeContainer.data('newOptionsCount') || 0,
-                attribute = attributeContainer.data('attribute'),
-                tmpl;
-
-            tmpl = mageTemplate(panel.find('[data-template-for=new-option]').html(), {
-                data: {
-                    attribute: {
-                        id: attribute.attribute_id || attribute.id
-                    },
-                    option: {
-                        id: 'new-option-' + newOptionsCount
-                    }
-                }
-            });
-
-            attributeContainer.find('[data-role=options]')
-                .append($(tmpl))
-                .trigger('contentUpdated');
-            
-            attributeContainer.data('newOptionsCount', ++newOptionsCount);
-        })
         .on('disable', '[data-role=product-variations-matrix]', function() {
             $(this).html('');
-        })
-        .on('click', '[data-column=entity_id]', function() {
-            var entityCheckBox = $(this);
-            entityCheckBox.closest('tr').find('input[type!=checkbox],button').each(function () {
-                if (!isLocked($(this))) {
-                    $(this).prop('disabled', !entityCheckBox.is(':checked'));
-                }
-            });
         })
         .on('click', '[data-action=choose]', function(event) {
             event.preventDefault();
@@ -197,7 +136,7 @@ require([
                 'attributes[]': attributeIds
             };
             grid.reload(null, function() {
-                $gridDialog.dialog('open')
+                $gridDialog.trigger('openModal');
             });
 
             grid.rowClickCallback = function(grid, event) {
@@ -210,47 +149,43 @@ require([
                 if ($gridRow.find(columnSelectorTemplate.replace('%s', 'entity_id')).length) {
                     var $matrixRow = $button.parents('[data-role=row]');
 
-                    $.each('name,sku,qty,weight,entity_id'.split(','), function () {
+                    $.each('name,sku,qty,weight,entity_id,price'.split(','), function () {
                         var columnSelector = columnSelectorTemplate.replace('%s', this),
                             target = $matrixRow.find(columnSelector),
-                            value = $.trim($gridRow.find(columnSelector).text()),
-                            button = target.find('[data-action=choose]');
+                            value = $.trim($gridRow.find(columnSelector).text());
 
-                        target[target.is('input[type=checkbox]') ? 'val' : 'text'](value).append(button);
+                        target[target.is('input') ? 'val' : 'text'](value);//.append(button);
                     });
-
-                    $matrixRow.find(columnSelectorTemplate.replace('%s', 'entity_id'))
-                        .prop({checked: true, disabled: false});
-
-                    $matrixRow.find('[data-action=no-image]').trigger('click');
 
                     var parentElement = $matrixRow.find('[data-column=image]'),
                         uploaderControl = parentElement.find('[data-action=upload-image]', parentElement),
-                        imageElement = $matrixRow.find('[data-role=image]');
+                        imageElement = $matrixRow.find('[data-role=image]'),
+                        selectedImageSrc = $gridRow.find('[data-role=image-url]').val();
 
                     if (imageElement.length) {
-                        imageElement.attr('src', $gridRow.find('[data-role=image-url]').val());
+                        selectedImageSrc = selectedImageSrc || noImageUrl;
+                        imageElement.attr('src', selectedImageSrc);
                     } else {
-                        var tmpl = matrix.find('[data-template-for=variation-image]').html();
+                        var tmpl = $('[data-role=product-variations-matrix]').find('[data-template-for=variation-image]').html();
 
                         tmpl = mageTemplate(tmpl, {
                             data: {
-                                url: $gridRow.find('[data-role=image-url]').val()
+                                url: selectedImageSrc
                             }
                         });
 
                         $(tmpl).prependTo(uploaderControl);
                     }
-
                     $matrixRow.find('[name=image]')
-                        .attr('src', $gridRow.find('[data-role=image-url]').val())
+                        .attr('src', selectedImageSrc)
                         .attr('data-locked', '1')
                         .trigger('click')
                         .prop({disabled: true});
 
                     $matrixRow.find('[name$="[image]"]').remove();
+                    $matrixRow.find('[data-block="variation-images"]').remove();
                 }
-                $gridDialog.dialog('close');
+                $gridDialog.trigger('closeModal');
             };
         });
 });

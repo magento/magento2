@@ -81,16 +81,17 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Customer\Model\Config\Backend\CreateAccount\DisableAutoGroupAssignDefault</backend_model>
                 </field>
-                <field id="vat_frontend_visibility" translate="label" type="select" sortOrder="58" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Show VAT Number on Frontend</label>
-                    <comment>To show VAT number on frontend, set Show VAT Number on Frontend option to Yes.</comment>
+                <field id="vat_frontend_visibility" translate="label comment" type="select" sortOrder="58" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Show VAT Number on Storefront</label>
+                    <comment>To show VAT number on Storefront, set Show VAT Number on Storefront option to Yes.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="email_domain" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Default Email Domain</label>
                 </field>
-                <field id="email_template" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="email_template" translate="label comment" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Default Welcome Email</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
                 <field id="email_identity" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -101,13 +102,17 @@
                     <label>Require Emails Confirmation</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="email_confirmation_template" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="email_confirmation_template" translate="label comment" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Confirmation Link Email</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
                 <field id="email_confirmed_template" translate="label comment" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Welcome Email</label>
-                    <comment>This email will be sent instead of default welcome email, after account confirmation.</comment>
+                    <comment><![CDATA[
+                        This email will be sent instead of the Default Welcome Email, after account confirmation. <br /><br />
+                        Email template chosen based on theme fallback when "Default" option is selected.
+                    ]]></comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
                 <field id="generate_human_friendly_id" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="0" showInStore="0">
@@ -117,16 +122,19 @@
             </group>
             <group id="password" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Password Options</label>
-                <field id="forgot_email_template" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="forgot_email_template" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Forgot Email Template</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
-                <field id="remind_email_template" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="remind_email_template" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Remind Email Template</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
-                <field id="reset_password_template" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="reset_password_template" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Reset Password Template</label>
+                    <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
                 <field id="forgot_email_identity" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -214,6 +222,13 @@
                 </field>
                 <field id="pdf" type="textarea" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>PDF</label>
+                </field>
+            </group>
+            <group id="online_customers" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Online Customers Options</label>
+                <field id="online_minutes_interval" translate="label comment" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Online Minutes Interval</label>
+                    <comment>Leave empty for default (15 minutes).</comment>
                 </field>
             </group>
         </section>

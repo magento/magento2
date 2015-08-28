@@ -6,49 +6,14 @@
 
 namespace Magento\Sales\Test\Block\Adminhtml\Order;
 
-use Magento\Backend\Test\Block\Widget\Grid as GridInterface;
 use Magento\Mtf\Client\Locator;
+use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 
 /**
- * Sales order grid.
+ * Backend Data Grid for managing "Sales Order" entities.
  */
-class Grid extends GridInterface
+class Grid extends DataGrid
 {
-    /**
-     * 'Add New' order button.
-     *
-     * @var string
-     */
-    protected $addNewOrder = "../*[@class='page-actions']//*[@id='add']";
-
-    /**
-     * Purchase Point Filter selector.
-     *
-     * @var string
-     */
-    protected $purchasePointFilter = '//*[@data-ui-id="widget-grid-column-filter-store-0-filter-store-id"]';
-
-    /**
-     * Purchase Point Filter option group elements selector.
-     *
-     * @var string
-     */
-    protected $purchasePointOptGroup = '//*[@data-ui-id="widget-grid-column-filter-store-0-filter-store-id"]/optgroup';
-
-    /**
-     * Order Id td selector.
-     *
-     * @var string
-     */
-    protected $editLink = 'td[class*=col-action] a';
-
-    /**
-     * First row selector.
-     *
-     * @var string
-     */
-    protected $firstRowSelector = '//tbody/tr[1]//a';
-
     /**
      * Filters array mapping.
      *
@@ -56,20 +21,76 @@ class Grid extends GridInterface
      */
     protected $filters = [
         'id' => [
-            'selector' => 'input[name="real_order_id"]',
+            'selector' => '[name="filters[increment_id]"]',
         ],
         'status' => [
-            'selector' => 'select[name="status"]',
+            'selector' => '[name="filters[status]"]',
             'input' => 'select',
         ],
+        'purchase_date_from' => [
+            'selector' => '[name="filters[created_at][from]"]',
+        ],
+        'purchase_date_to' => [
+            'selector' => '[name="filters[created_at][to]"]',
+        ],
+        'base_grand_total_from' => [
+            'selector' => '[name="filters[base_grand_total][from]"]',
+        ],
+        'base_grand_total_to' => [
+            'selector' => '[name="filters[base_grand_total][to]"]',
+        ],
+        'purchased_gran_total_from' => [
+            'selector' => '[name="filters[grand_total][from]"]',
+        ],
+        'purchased_gran_total_to' => [
+            'selector' => '[name="filters[grand_total][to]"]',
+        ],
+        'purchase_point' => [
+            'selector' => '[name="filters[store_id]"]',
+            'input' => 'selectstore'
+        ],
+        'bill_to_name' => [
+            'selector' => '[name="filters[billing_name]"]'
+        ],
+        'ship_to_name' => [
+            'selector' => '[name="filters[shipping_name]"]',
+        ]
     ];
 
     /**
+     * @var string
+     */
+    protected $createNewOrder = '[data-ui-id="add-button"]';
+
+    /**
+     * Purchase Point Filter selector.
+     *
+     * @var string
+     */
+    protected $purchasePointFilter = '[name="filters[store_id]"]';
+
+    /**
+     * Order Id td selector.
+     *
+     * @var string
+     */
+    protected $editLink = 'a.action-menu-item';
+
+    /**
+     * First row selector.
+     *
+     * @var string
+     */
+    protected $firstRowSelector = '//tbody/tr[1]/td[contains(@class,"data-grid-actions-cell")]/a';
+
+    /**
      * Start to create new order.
+     *
+     * @return void
      */
     public function addNewOrder()
     {
-        $this->_rootElement->find($this->addNewOrder, Locator::SELECTOR_XPATH)->click();
+        $this->_rootElement->find($this->createNewOrder)->click();
     }
 
     /**
@@ -79,12 +100,13 @@ class Grid extends GridInterface
      */
     public function getPurchasePointStoreGroups()
     {
-        $storeGroupElements = $this->_rootElement->find($this->purchasePointFilter, Locator::SELECTOR_XPATH)
-            ->getElements('.//optgroup[./option]', Locator::SELECTOR_XPATH);
+        $this->openFilterBlock();
+        $storeGroupElements = $this->_rootElement->find($this->purchasePointFilter)
+            ->getElements('//option/preceding-sibling::optgroup[1]', Locator::SELECTOR_XPATH);
         $result = [];
 
         foreach ($storeGroupElements as $storeGroupElement) {
-            $result[] = trim($storeGroupElement->getAttribute('label'), ' ');
+            $result[] = trim($storeGroupElement->getAttribute('label'));
         }
 
         return $result;

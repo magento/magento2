@@ -26,7 +26,7 @@ class CartItem extends AbstractCartItem
      *
      * @var string
      */
-    protected $removeItem = '.action.delete';
+    protected $removeItem = '.action-delete';
 
     /**
      * Get bundle options
@@ -36,11 +36,11 @@ class CartItem extends AbstractCartItem
     protected $bundleOptions = './/dl[contains(@class, "item-options")]/dd[%d]/span[@class="price"][%d]';
 
     /**
-     * 'Move to Wishlist' button
+     * Locator value for "Move to Wish List" button.
      *
      * @var string
      */
-    protected $wishlistButton = '.towishlist';
+    protected $wishlistButton = '.action-towishlist';
 
     /**
      * Quantity input selector
@@ -48,13 +48,6 @@ class CartItem extends AbstractCartItem
      * @var string
      */
     protected $name = '.product-item-name a';
-
-    /**
-     * Cart item sub-total xpath selector
-     *
-     * @var string
-     */
-    protected $subtotalPrice = './/td[@class="col subtotal"]//*[@class="price-excluding-tax"]//span[@class="price"]';
 
     /**
      * Get product name
@@ -93,6 +86,19 @@ class CartItem extends AbstractCartItem
     }
 
     /**
+     * Get product price excluding tax
+     *
+     * @return string|null
+     */
+    public function getPriceExclTax()
+    {
+        $cartProductPrice = $this->_rootElement->find($this->priceExclTax, Locator::SELECTOR_XPATH);
+        return $cartProductPrice->isVisible()
+            ? str_replace(',', '', $this->escapeCurrency($cartProductPrice->getText()))
+            : null;
+    }
+
+    /**
      * Set product quantity
      *
      * @param int $qty
@@ -120,7 +126,20 @@ class CartItem extends AbstractCartItem
      */
     public function getSubtotalPrice()
     {
-        $cartProductPrice = $this->_rootElement->find($this->subtotalPrice, Locator::SELECTOR_XPATH);
+        $cartProductPrice = $this->_rootElement->find($this->subtotalPrice);
+        return $cartProductPrice->isVisible()
+            ? str_replace(',', '', $this->escapeCurrency($cartProductPrice->getText()))
+            : null;
+    }
+
+    /**
+     * Get sub-total excluding tax for the specified item in the cart
+     *
+     * @return string|null
+     */
+    public function getSubtotalPriceExclTax()
+    {
+        $cartProductPrice = $this->_rootElement->find($this->subTotalPriceExclTax);
         return $cartProductPrice->isVisible()
             ? str_replace(',', '', $this->escapeCurrency($cartProductPrice->getText()))
             : null;
@@ -133,7 +152,7 @@ class CartItem extends AbstractCartItem
      */
     public function getSubtotalPriceInclTax()
     {
-        $cartProductPrice = $this->_rootElement->find($this->subTotalPriceInclTax, Locator::SELECTOR_XPATH);
+        $cartProductPrice = $this->_rootElement->find($this->subTotalPriceInclTax);
         return $cartProductPrice->isVisible()
             ? str_replace(',', '', $this->escapeCurrency($cartProductPrice->getText()))
             : null;
@@ -249,7 +268,7 @@ class CartItem extends AbstractCartItem
     }
 
     /**
-     * Click on move to wishlist button
+     * Click "Move to Wish List".
      *
      * @return void
      */

@@ -11,7 +11,7 @@ namespace Magento\Checkout\Test\Unit\Helper;
 use \Magento\Checkout\Helper\Cart;
 
 use Magento\Framework\App\Action\Action;
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Quote\Model\Quote\Item;
 
 class CartTest extends \PHPUnit_Framework_TestCase
@@ -155,18 +155,20 @@ class CartTest extends \PHPUnit_Framework_TestCase
     {
         $productEntityId = 1;
         $storeId = 1;
+        $isRequestSecure = false;
         $productMock = $this->getMock('\Magento\Catalog\Model\Product',
             ['getEntityId', 'hasUrlDataObject', 'getUrlDataObject', '__wakeup'], [], '', false);
         $productMock->expects($this->any())->method('getEntityId')->will($this->returnValue($productEntityId));
         $productMock->expects($this->any())->method('hasUrlDataObject')->will($this->returnValue(true));
         $productMock->expects($this->any())->method('getUrlDataObject')
-            ->will($this->returnValue(new Object(['store_id' => $storeId])));
+            ->will($this->returnValue(new DataObject(['store_id' => $storeId])));
 
         $currentUrl = 'http://www.example.com/';
         $this->urlBuilderMock->expects($this->any())->method('getCurrentUrl')->will($this->returnValue($currentUrl));
 
         $this->requestMock->expects($this->any())->method('getRouteName')->will($this->returnValue('checkout'));
         $this->requestMock->expects($this->any())->method('getControllerName')->will($this->returnValue('cart'));
+        $this->requestMock->expects($this->once())->method('isSecure')->willReturn($isRequestSecure);
 
         $params = [
             Action::PARAM_NAME_URL_ENCODED => strtr(base64_encode($currentUrl), '+/=', '-_,'),
@@ -175,6 +177,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             '_scope' => $storeId,
             '_scope_to_url' => true,
             'in_cart' => 1,
+            '_secure' => $isRequestSecure
         ];
 
         $this->urlBuilderMock->expects($this->once())->method('getUrl')->with('checkout/cart/add', $params);

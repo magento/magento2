@@ -92,7 +92,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->resourceMock = $this->getMock(
-            '\Magento\Customer\Model\Resource\Customer', //'\Magento\Framework\Object',
+            '\Magento\Customer\Model\Resource\Customer', //'\Magento\Framework\DataObject',
             ['getIdFieldName'],
             [],
             '',
@@ -171,16 +171,16 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
                 array_merge($data, ['email' => 'wrong@email']),
                 ['Please correct this email address: "wrong@email".']
             ],
-            [array_diff_key($data, ['dob' => '']), ['The Date of Birth is required.']],
-            [array_diff_key($data, ['taxvat' => '']), ['The TAX/VAT number is required.']],
-            [array_diff_key($data, ['gender' => '']), ['Gender is required.']],
+            [array_diff_key($data, ['dob' => '']), ['Please enter a date of birth.']],
+            [array_diff_key($data, ['taxvat' => '']), ['Please enter a TAX/VAT number.']],
+            [array_diff_key($data, ['gender' => '']), ['Please enter a gender.']],
             [$data, true],
         ];
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Wrong transactional account email type
+     * @expectedExceptionMessage Please correct the transactional account email type.
      */
     public function testSendNewAccountEmailException()
     {

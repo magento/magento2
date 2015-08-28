@@ -83,7 +83,7 @@ class PlaceOrderStep implements TestStepInterface
         if (isset($this->prices['grandTotal'])) {
             $this->assertGrandTotalOrderReview->processAssert($this->checkoutOnepage, $this->prices['grandTotal']);
         }
-        $this->checkoutOnepage->getReviewBlock()->placeOrder();
+        $this->checkoutOnepage->getPaymentBlock()->getSelectedPaymentMethodBlock()->clickPlaceOrder();
 
         return ['orderId' => $this->checkoutOnepageSuccess->getSuccessBlock()->getGuestOrderId()];
     }

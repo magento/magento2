@@ -84,13 +84,9 @@ class ProductRepositoryTest extends WebapiAbstract
                 "position" => 0,
                 "values" => [
                     [
-                        "pricing_value" => 10,
-                        "is_percent" =>  0,
                         "value_index" =>  $options[0]['option_id'],
                     ],
                     [
-                        "pricing_value" => 5,
-                        "is_percent" =>  1,
                         "value_index" =>  $options[1]['option_id'],
                     ]
                 ],
@@ -203,8 +199,6 @@ class ProductRepositoryTest extends WebapiAbstract
             'position' => 1,
             'values' => [
                 [
-                    'pricing_value' => 15,
-                    'is_percent' => 1,
                     'value_index' => $option['values'][0]['value_index'],
                 ],
             ],

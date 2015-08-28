@@ -6,6 +6,8 @@
  */
 namespace Magento\Email\Controller\Adminhtml\Email\Template;
 
+use Magento\Framework\App\TemplateTypesInterface;
+
 class Save extends \Magento\Email\Controller\Adminhtml\Email\Template
 {
     /**
@@ -43,17 +45,17 @@ class Save extends \Magento\Email\Controller\Adminhtml\Email\Template
             );
 
             if (!$template->getId()) {
-                $template->setTemplateType(\Magento\Email\Model\Template::TYPE_HTML);
+                $template->setTemplateType(TemplateTypesInterface::TYPE_HTML);
             }
 
             if ($request->getParam('_change_type_flag')) {
-                $template->setTemplateType(\Magento\Framework\App\TemplateTypesInterface::TYPE_TEXT);
+                $template->setTemplateType(TemplateTypesInterface::TYPE_TEXT);
                 $template->setTemplateStyles('');
             }
 
             $template->save();
             $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
-            $this->messageManager->addSuccess(__('The email template has been saved.'));
+            $this->messageManager->addSuccess(__('You saved the email template.'));
             $this->_redirect('adminhtml/*');
         } catch (\Exception $e) {
             $this->_objectManager->get(

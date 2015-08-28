@@ -16,16 +16,28 @@ use Magento\Framework\DB\Select;
 
 abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
-    const IDX_SUFFIX = '_idx';
-
-    const TMP_SUFFIX = '_tmp';
+    /**
+     * Constructor
+     *
+     * @var \Magento\Framework\Indexer\Table\StrategyInterface
+     */
+    protected $tableStrategy;
 
     /**
-     * Flag that defines if need to use "_idx" index table suffix instead of "_tmp"
+     * Class constructor
      *
-     * @var bool
+     * @param \Magento\Framework\Model\Resource\Db\Context $context
+     * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
+     * @param string $connectionName
      */
-    protected $_isNeedUseIdxTable = false;
+    public function __construct(
+        \Magento\Framework\Model\Resource\Db\Context $context,
+        \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
+        $connectionName = null
+    ) {
+        $this->tableStrategy = $tableStrategy;
+        parent::__construct($context, $connectionName);
+    }
 
     /**
      * Reindex all
@@ -34,7 +46,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
      */
     public function reindexAll()
     {
-        $this->useIdxTable(true);
+        $this->tableStrategy->setUseIdxTable(true);
         return $this;
     }
 
@@ -45,7 +57,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
      */
     protected function _getIndexAdapter()
     {
-        return $this->_getWriteAdapter();
+        return $this->getConnection();
     }
 
     /**
@@ -56,14 +68,10 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
      */
     public function getIdxTable($table = null)
     {
-        $suffix = self::TMP_SUFFIX;
-        if ($this->_isNeedUseIdxTable) {
-            $suffix = self::IDX_SUFFIX;
-        }
         if ($table) {
-            return $table . $suffix;
+            return $this->tableStrategy->prepareTableName($table);
         }
-        return $this->getMainTable() . $suffix;
+        return $this->tableStrategy->prepareTableName($this->getMainTable());
     }
 
     /**
@@ -78,7 +86,7 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
             /**
              * Can't use truncate because of transaction
              */
-            $this->_getWriteAdapter()->delete($this->getMainTable());
+            $this->getConnection()->delete($this->getMainTable());
             $this->insertFromTable($this->getIdxTable(), $this->getMainTable(), false);
             $this->commit();
         } catch (\Exception $e) {
@@ -99,11 +107,11 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
     public function insertFromTable($sourceTable, $destTable, $readToIndex = true)
     {
         if ($readToIndex) {
-            $sourceColumns = array_keys($this->_getWriteAdapter()->describeTable($sourceTable));
-            $targetColumns = array_keys($this->_getWriteAdapter()->describeTable($destTable));
+            $sourceColumns = array_keys($this->getConnection()->describeTable($sourceTable));
+            $targetColumns = array_keys($this->getConnection()->describeTable($destTable));
         } else {
             $sourceColumns = array_keys($this->_getIndexAdapter()->describeTable($sourceTable));
-            $targetColumns = array_keys($this->_getWriteAdapter()->describeTable($destTable));
+            $targetColumns = array_keys($this->getConnection()->describeTable($destTable));
         }
         $select = $this->_getIndexAdapter()->select()->from($sourceTable, $sourceColumns);
 
@@ -124,11 +132,11 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
     public function insertFromSelect($select, $destTable, array $columns, $readToIndex = true)
     {
         if ($readToIndex) {
-            $from = $this->_getWriteAdapter();
+            $from = $this->getConnection();
             $to = $this->_getIndexAdapter();
         } else {
             $from = $this->_getIndexAdapter();
-            $to = $this->_getWriteAdapter();
+            $to = $this->getConnection();
         }
 
         if ($from === $to) {
@@ -156,26 +164,12 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
     }
 
     /**
-     * Set or get what either "_idx" or "_tmp" suffixed temporary index table need to use
-     *
-     * @param bool $value
-     * @return bool
-     */
-    public function useIdxTable($value = null)
-    {
-        if ($value !== null) {
-            $this->_isNeedUseIdxTable = (bool)$value;
-        }
-        return $this->_isNeedUseIdxTable;
-    }
-
-    /**
      * Clean up temporary index table
      *
      * @return void
      */
     public function clearTemporaryIndexTable()
     {
-        $this->_getWriteAdapter()->delete($this->getIdxTable());
+        $this->getConnection()->delete($this->getIdxTable());
     }
 }
