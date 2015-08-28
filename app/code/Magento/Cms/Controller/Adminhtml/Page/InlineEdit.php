@@ -41,6 +41,7 @@ class InlineEdit extends \Magento\Backend\App\Action
 
     /**
      * @return \Magento\Framework\Controller\ResultInterface
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
