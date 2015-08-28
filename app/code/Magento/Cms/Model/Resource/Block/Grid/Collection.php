@@ -10,8 +10,7 @@ use Magento\Framework\Search\AggregationInterface;
 use Magento\Cms\Model\Resource\Block\Collection as BlockCollection;
 
 /**
- * Class Collection
- * Collection for displaying grid of sales documents
+ * Collection for displaying grid of cms blocks
  */
 class Collection extends BlockCollection implements SearchResultInterface
 {
@@ -25,8 +24,9 @@ class Collection extends BlockCollection implements SearchResultInterface
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param null|\Zend_Db_Adapter_Abstract $mainTable
-     * @param \Magento\Framework\Model\Resource\Db\AbstractDb $eventPrefix
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param string $mainTable
+     * @param string $eventPrefix
      * @param string $eventObject
      * @param string $resourceModel
      * @param string $model
@@ -40,6 +40,7 @@ class Collection extends BlockCollection implements SearchResultInterface
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         $mainTable,
         $eventPrefix,
         $eventObject,
@@ -53,6 +54,7 @@ class Collection extends BlockCollection implements SearchResultInterface
             $logger,
             $fetchStrategy,
             $eventManager,
+            $storeManager,
             $connection,
             $resource
         );
