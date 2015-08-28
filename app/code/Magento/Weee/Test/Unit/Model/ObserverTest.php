@@ -71,7 +71,13 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $weeeHelper->expects($this->any())
             ->method('getWeeeAttributesForBundle')
-            ->will($this->returnValue([1=> ['fpt1' => $weeeObject1], 2 =>['fpt1'=>$weeeObject1, 'fpt2'=> $weeeObject2]]));
+            ->will($this->returnValue([
+                1=> ['fpt1' => $weeeObject1],
+                2 =>[
+                    'fpt1'=>$weeeObject1,
+                    'fpt2'=> $weeeObject2
+                ]
+            ]));
 
         $objectManager = new ObjectManager($this);
         $weeeObserverObject = $objectManager->getObject(
