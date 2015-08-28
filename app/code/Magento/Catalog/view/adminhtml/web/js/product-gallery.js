@@ -316,30 +316,6 @@ define([
 
             if ($imageContainer.find('input[name*="media_type"]').val() == 'external-video') {
                 $('#new-video').modal('openModal');
-                var formFields = $('#new_video_form').find('.edited-data');
-
-                $.each(formFields, function (i, field) {
-                    $(field).val($imageContainer.find('input[name*="' + field.name + '"]').val());
-                })
-
-                var flagChecked = ($imageContainer.find('input[name*="disabled"]').val() == 1) ? true : false;
-                $('#new_video_disabled').prop('checked', flagChecked);
-
-                var file = $('#file_name').val($imageContainer.find('input[name*="file"]').val());
-
-                $('#video_base_image').prop('checked', false).prop('disabled', false);
-                if ($('[name="product[image]"]').val() == file.val()) {
-                    $('#video_base_image').prop('checked', true);
-                }
-                $('#video_small_image').prop('checked', false).prop('disabled', false);
-                if ($('[name="product[small_image]"]').val() == file.val()) {
-                    $('#video_small_image').prop('checked', true);
-                }
-                $('#video_thumb_image').prop('checked', false).prop('disabled', false);
-                if ($('[name="product[thumbnail]"]').val() == file.val()) {
-                    $('#video_thumb_image').prop('checked', true);
-                }
-
                 return;
             }
 
