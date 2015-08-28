@@ -79,10 +79,10 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
         );
 
         $fieldset->addField(
-            'provider',
+            'video_provider',
             'hidden',
             [
-                'name' => 'provider',
+                'name' => 'video_provider',
             ]
         );
 
