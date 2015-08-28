@@ -156,12 +156,16 @@ define([
          */
         initListeners: function () {
             if (isTouchDevice) {
-                document.addEventListener('touchmove', this.onMouseMove, false);
-                document.addEventListener('touchend', this.onMouseUp, false);
-                document.addEventListener('touchleave', this.onMouseUp, false);
+                $(document).on({
+                    touchmove: this.onMouseMove,
+                    touchend: this.onMouseUp,
+                    touchleave: this.onMouseUp
+                });
             } else {
-                document.addEventListener('mousemove', this.onMouseMove, false);
-                document.addEventListener('mouseup', this.onMouseUp, false);
+                $(document).on({
+                    mousemove: this.onMouseMove,
+                    mouseup: this.onMouseUp
+                });
             }
 
             return this;
@@ -188,7 +192,8 @@ define([
          * @returns {Dnd} Chainable.
          */
         initColumn: function (column) {
-            var model = getModel(column);
+            var model = getModel(column),
+                eventName;
 
             if (!model || !model.draggable) {
                 return this;
@@ -207,10 +212,11 @@ define([
                 }
             });
 
-            isTouchDevice ?
-                column.addEventListener('touchstart', this.onMouseDown, false) :
-                column.addEventListener('mousedown', this.onMouseDown, false);
+            eventName = isTouchDevice ?
+                'touchstart' :
+                'mousedown';
 
+            $(column).on(eventName, this.onMouseDown);
             $.async.remove(column, this.removeColumn);
 
             return this;
