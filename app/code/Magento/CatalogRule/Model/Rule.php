@@ -42,6 +42,10 @@ use Magento\Catalog\Model\Product;
  */
 class Rule extends \Magento\Rule\Model\AbstractModel
 {
+    const PERCENTAGE_VALIDATION_ERR_MSG = 'Percentage discount should be between 0 and 100.';
+    const NOT_NEGATIVE_VALIDATION_ERR_MSG = 'Discount value should be 0 or greater.';
+    const INCORRECT_ACTION_ERR_MSG = 'Unknown action.';
+
     /**
      * Prefix of model events names
      *
@@ -345,6 +349,58 @@ class Rule extends \Magento\Rule\Model\AbstractModel
             $map[$website->getId()] = $website->getDefaultStore()->getId();
         }
         return $map;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validateData(\Magento\Framework\Object $object)
+    {
+        $result = parent::validateData($object);
+        if ($result === true) {
+            $result = [];
+        }
+
+        $action = $object->getData('simple_action');
+        $discount = $object->getData('discount_amount');
+        $result = array_merge($result, $this->validateDiscount($action, $discount));
+        if ($object->getData('sub_is_enable') == 1) {
+            $action = $object->getData('sub_simple_action');
+            $discount = $object->getData('sub_discount_amount');
+            $result = array_merge($result, $this->validateDiscount($action, $discount));
+        }
+
+        return !empty($result) ? $result : true;
+    }
+
+    /**
+     * Validate discount based on action
+     *
+     * @param string $action
+     * @param string|int|float $discount
+     *
+     * @return array Validation errors
+     */
+    protected function validateDiscount($action, $discount)
+    {
+        $result = [];
+        switch ($action) {
+            case 'by_percent':
+            case 'to_percent':
+                if ($discount < 0 || $discount > 100) {
+                    $result[] = __(self::PERCENTAGE_VALIDATION_ERR_MSG);
+                };
+                break;
+            case 'by_fixed':
+            case 'to_fixed':
+                if ($discount < 0) {
+                    $result[] = __(self::NOT_NEGATIVE_VALIDATION_ERR_MSG);
+                };
+                break;
+            default:
+                $result[] = __(self::INCORRECT_ACTION_ERR_MSG);
+        }
+        return $result;
     }
 
     /**
