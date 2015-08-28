@@ -89,7 +89,8 @@ class MassEnableTest extends AbstractMassActionTest
      */
     protected function getPageMock()
     {
-        $pageMock = $this->getMock('Magento\Cms\Model\Resource\Page\Collection',
+        $pageMock = $this->getMock(
+            'Magento\Cms\Model\Resource\Page\Collection',
             ['setIsActive', 'save'],
             [],
             '',
