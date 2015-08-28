@@ -7,7 +7,7 @@ namespace Magento\Cms\Test\Unit\Controller\Adminhtml;
 
 use Magento\Framework\Controller\ResultFactory;
 
-abstract class AbstractMassDeleteTest extends \PHPUnit_Framework_TestCase
+abstract class AbstractMassActionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
