@@ -94,6 +94,14 @@
                     <comment>Email template chosen based on theme fallback when "Default" option is selected.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
                 </field>
+                <field id="email_no_password_template" translate="label comment" type="select" sortOrder="75" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Default Welcome Email Without Password</label>
+                    <comment><![CDATA[
+                        This email will be sent instead of the Default Welcome Email, if a customer was created without password. <br /><br />
+                        Email template chosen based on theme fallback when "Default" option is selected.
+                    ]]></comment>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
                 <field id="email_identity" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Email Sender</label>
                     <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
@@ -237,6 +245,12 @@
                 <field id="validate_vat_number" translate="button_label" sortOrder="62" showInDefault="1" showInWebsite="1" showInStore="0">
                     <button_label>Validate VAT Number</button_label>
                     <frontend_model>Magento\Customer\Block\Adminhtml\System\Config\Validatevat</frontend_model>
+                </field>
+            </group>
+            <group id="restriction">
+                <field id="autocomplete_on_storefront" type="select" translate="label" sortOrder="65" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Enable Autocomplete on login/forgot password forms</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
         </section>
