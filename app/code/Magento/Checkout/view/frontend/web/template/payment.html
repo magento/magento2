@@ -19,6 +19,9 @@
         <form id="co-payment-form" class="form payments" novalidate="novalidate">
             <input data-bind='attr: {value: getFormKey()}' type="hidden" name="form_key"/>
             <fieldset class="fieldset">
+                <legend class="legend">
+                    <span><?php echo __('Payment Information') ?></span>
+                </legend>
                 <!-- ko foreach: getRegion('beforeMethods') -->
                     <!-- ko template: getTemplate() --><!-- /ko -->
                 <!-- /ko -->
