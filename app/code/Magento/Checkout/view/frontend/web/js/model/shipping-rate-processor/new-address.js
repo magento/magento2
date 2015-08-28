@@ -20,9 +20,6 @@ define(
              * @param {Object} address
              */
             getRates: function (address) {
-                if (shippingService.isLoading()) {
-                    return;
-                }
                 shippingService.isLoading(true);
                 var cache = rateRegistry.get(address.getCacheKey()),
                     serviceUrl = resourceUrlManager.getUrlForEstimationShippingMethodsForNewAddress(quote),
