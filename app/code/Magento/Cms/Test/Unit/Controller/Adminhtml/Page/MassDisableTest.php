@@ -7,12 +7,12 @@ namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Page;
 
 use Magento\Cms\Test\Unit\Controller\Adminhtml\AbstractMassActionTest;
 
-class MassDeleteTest extends AbstractMassActionTest
+class MassDisableTest extends AbstractMassActionTest
 {
     /**
-     * @var \Magento\Cms\Controller\Adminhtml\Page\MassDelete
+     * @var \Magento\Cms\Controller\Adminhtml\Page\MassDisable
      */
-    protected $massDeleteController;
+    protected $massDisableController;
 
     /**
      * @var \Magento\Cms\Model\Resource\Page\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -38,8 +38,8 @@ class MassDeleteTest extends AbstractMassActionTest
 
         $this->pageCollectionMock = $this->getMock('Magento\Cms\Model\Resource\Page\Collection', [], [], '', false);
 
-        $this->massDeleteController = $this->objectManager->getObject(
-            'Magento\Cms\Controller\Adminhtml\Page\MassDelete',
+        $this->massDisableController = $this->objectManager->getObject(
+            'Magento\Cms\Controller\Adminhtml\Page\MassDisable',
             [
                 'context' => $this->contextMock,
                 'filter' => $this->filterMock,
@@ -48,9 +48,9 @@ class MassDeleteTest extends AbstractMassActionTest
         );
     }
 
-    public function testMassDeleteAction()
+    public function testMassDisableAction()
     {
-        $deletedPagesCount = 2;
+        $disabledPagesCount = 2;
 
         $collection = [
             $this->getPageMock(),
@@ -64,14 +64,14 @@ class MassDeleteTest extends AbstractMassActionTest
             ->with($this->pageCollectionMock)
             ->willReturn($this->pageCollectionMock);
 
-        $this->pageCollectionMock->expects($this->once())->method('getSize')->willReturn($deletedPagesCount);
+        $this->pageCollectionMock->expects($this->once())->method('getSize')->willReturn($disabledPagesCount);
         $this->pageCollectionMock->expects($this->once())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator($collection));
 
         $this->messageManagerMock->expects($this->once())
             ->method('addSuccess')
-            ->with(__('A total of %1 record(s) have been deleted.', $deletedPagesCount));
+            ->with(__('A total of %1 record(s) have been disabled.', $disabledPagesCount));
         $this->messageManagerMock->expects($this->never())->method('addError');
 
         $this->resultRedirectMock->expects($this->once())
@@ -79,7 +79,7 @@ class MassDeleteTest extends AbstractMassActionTest
             ->with('*/*/')
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirectMock, $this->massDeleteController->execute());
+        $this->assertSame($this->resultRedirectMock, $this->massDisableController->execute());
     }
 
     /**
@@ -89,8 +89,14 @@ class MassDeleteTest extends AbstractMassActionTest
      */
     protected function getPageMock()
     {
-        $pageMock = $this->getMock('Magento\Cms\Model\Resource\Page\Collection', ['delete'], [], '', false);
-        $pageMock->expects($this->once())->method('delete')->willReturn(true);
+        $pageMock = $this->getMock('Magento\Cms\Model\Resource\Page\Collection',
+            ['setIsActive', 'save'],
+            [],
+            '',
+            false
+        );
+        $pageMock->expects($this->once())->method('setIsActive')->with(false)->willReturn(true);
+        $pageMock->expects($this->once())->method('save')->willReturn(true);
 
         return $pageMock;
     }
