@@ -119,8 +119,10 @@ define([
                     text: $.mage.__('Delete'),
                     class: 'action-primary video-delete-button',
                     click: function (e) {
-                        //@todo delete
                         $('#new-video').modal('closeModal');
+                        var removed = $('[name*="' + $('#new_video_form #item_id').val() + '[removed]"]');
+                        removed.val(1);
+                        removed.parent().hide();
                     }
                 },
                 {
@@ -133,33 +135,7 @@ define([
                 }],
                 opened: function(e) {
                     $('#video_url').focus();
-                    $(document).on('click', '.item.image', function() {
-                        var formFields = $('#new_video_form').find('.edited-data');
-                        var container = $(this);
 
-                        $.each(formFields, function (i, field) {
-                            $(field).val(container.find('input[name*="' + field.name + '"]').val());
-                        });
-
-                        var flagChecked = (container.find('input[name*="disabled"]').val() == 1) ? true : false;
-                        $('#new_video_disabled').prop('checked', flagChecked);
-
-                        var file = $('#file_name').val(container.find('input[name*="file"]').val());
-
-                        $.each($('.video_image_role'), function(){
-                            $(this).prop('checked', false).prop('disabled', false);
-                        });
-
-                        $.each($('.video-placeholder').siblings('input:hidden'), function() {
-                            if ($(this).val() == file.val()) {
-                                var start = this.name.indexOf('[') + 1;
-                                var end = this.name.length - 1;
-                                var imageRole = this.name.substring(start, end);
-                                $('#new_video_form input[value="' + imageRole + '"]').prop('checked', true);
-                            }
-                        });
-
-                    });
                 },
                 closed: function() {
                     newVideoForm.validation('clearError');
@@ -200,6 +176,33 @@ define([
                 $('.video-delete-button').show();
                 $('.video-edit').show();
                 $('.modal-title').html('Edit video');
+            });
+            $(document).on('click', '.item.image', function() {
+                var formFields = $('#new_video_form').find('.edited-data');
+                var container = $(this);
+
+                $.each(formFields, function (i, field) {
+                    $(field).val(container.find('input[name*="' + field.name + '"]').val());
+                });
+
+                var flagChecked = (container.find('input[name*="disabled"]').val() == 1) ? true : false;
+                $('#new_video_disabled').prop('checked', flagChecked);
+
+                var file = $('#file_name').val(container.find('input[name*="file"]').val());
+
+                $.each($('.video_image_role'), function(){
+                    $(this).prop('checked', false).prop('disabled', false);
+                });
+
+                $.each($('.video-placeholder').siblings('input:hidden'), function() {
+                    if ($(this).val() == file.val()) {
+                        var start = this.name.indexOf('[') + 1;
+                        var end = this.name.length - 1;
+                        var imageRole = this.name.substring(start, end);
+                        $('#new_video_form input[value="' + imageRole + '"]').prop('checked', true);
+                    }
+                });
+
             });
         },
 
