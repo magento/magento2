@@ -96,6 +96,9 @@ abstract class AbstractServiceCollection extends \Magento\Framework\Data\Collect
      * <pre>
      * $field = ['age', 'name'];
      * $condition = [42, ['like' => 'Mage']];
+     * or
+     * ['rate', 'tax_postcode']
+     * [['from'=>"3",'to'=>'8.25'], ['like' =>'%91000%']];
      * </pre>
      * The above would find where age equal to 42 OR name like %Mage%.
      *
@@ -112,17 +115,46 @@ abstract class AbstractServiceCollection extends \Magento\Framework\Data\Collect
             );
         } elseif (is_array($field) && !count($field)>0) {
             throw new LocalizedException(
-                new \Magento\Framework\Phrase('When passing in a field array there must one field into the array.')
+                new \Magento\Framework\Phrase(
+                    'When passing an array of fields there must be at least one field in the array.'
+                )
             );
         }
+        $this->processFilters($field, $condition);
+        return $this;
+    }
+
+    /**
+     * Pre-process filters to create multiple groups in case of multiple conditions eg: from & to
+     * @param string|array $field
+     * @param string|int|array $condition
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function processFilters($field, $condition)
+    {
         if (!is_array($field) && is_array($condition)) {
             foreach ($condition as $key => $value) {
                 $this->fieldFilters[] = ['field' => $field, 'condition' => [$key => $value]];
             }
+        } elseif (is_array($field) && is_array($condition)) {
+            foreach ($condition as $key => $cond) {
+                if (is_array($cond) && count($cond)>1) {
+                    //we Do want multiple groups in this case
+                    foreach ($cond as $keycond => $value) {
+                        $this->fieldFilters[] = ['field' => $field[$key], 'condition' => [$keycond => $value]];
+                    }
+                } else {
+                    //we don't want multiple groups in this case
+                    $this->fieldFilters[] = [
+                        'field' => $field,
+                        'condition' => is_array($cond)? [key($condition) => reset($condition)] :$condition
+                    ];
+                    break;
+                }
+            }
         } else {
             $this->fieldFilters[] = ['field' => $field, 'condition' => $condition];
         }
-        return $this;
     }
 
     /**
