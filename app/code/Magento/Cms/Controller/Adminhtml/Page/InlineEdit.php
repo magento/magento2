@@ -41,7 +41,6 @@ class InlineEdit extends \Magento\Backend\App\Action
 
     /**
      * @return \Magento\Framework\Controller\ResultInterface
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
@@ -50,41 +49,41 @@ class InlineEdit extends \Magento\Backend\App\Action
         $error = false;
         $messages = [];
 
-        if ($this->getRequest()->getParam('isAjax')) {
-            $postItems = $this->getRequest()->getParam('items', []);
-            if (!count($postItems)) {
-                $messages[] = __('Please correct the data sent.');
-                $error = true;
-            } else {
-                foreach (array_keys($postItems) as $pageId) {
-                    /** @var \Magento\Cms\Model\Page $page */
-                    $page = $this->pageRepository->getById($pageId);
-                    try {
-                        $pageData = $this->dataProcessor->filter($postItems[$pageId]);
-                        if (!$this->dataProcessor->validate($pageData)
-                            || !$this->dataProcessor->validateRequireEntry($pageData)
-                        ) {
-                            $error = true;
-                            foreach ($this->messageManager->getMessages(true)->getItems() as $error) {
-                                $messages[] = $this->getErrorWithPageId($page, $error->getText());
-                            }
-                        }
-                        $page->setData(array_merge($page->getData(), $pageData));
-                        $this->pageRepository->save($page);
-                    } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                        $messages[] = $this->getErrorWithPageId($page, $e->getMessage());
-                        $error = true;
-                    } catch (\RuntimeException $e) {
-                        $messages[] = $this->getErrorWithPageId($page, $e->getMessage());
-                        $error = true;
-                    } catch (\Exception $e) {
-                        $messages[] = $this->getErrorWithPageId(
-                            $page,
-                            __('Something went wrong while saving the page.')
-                        );
-                        $error = true;
+        $postItems = $this->getRequest()->getParam('items', []);
+        if (!($this->getRequest()->getParam('isAjax') && count($postItems))) {
+            return $resultJson->setData([
+                'messages' => [__('Please correct the data sent.')],
+                'error' => true
+            ]);
+        }
+
+        foreach (array_keys($postItems) as $pageId) {
+            /** @var \Magento\Cms\Model\Page $page */
+            $page = $this->pageRepository->getById($pageId);
+            try {
+                $pageData = $this->dataProcessor->filter($postItems[$pageId]);
+                if (!$this->dataProcessor->validate($pageData)
+                    || !$this->dataProcessor->validateRequireEntry($pageData)
+                ) {
+                    $error = true;
+                    foreach ($this->messageManager->getMessages(true)->getItems() as $error) {
+                        $messages[] = $this->getErrorWithPageId($page, $error->getText());
                     }
                 }
+                $page->setData(array_merge($page->getData(), $pageData));
+                $this->pageRepository->save($page);
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                $messages[] = $this->getErrorWithPageId($page, $e->getMessage());
+                $error = true;
+            } catch (\RuntimeException $e) {
+                $messages[] = $this->getErrorWithPageId($page, $e->getMessage());
+                $error = true;
+            } catch (\Exception $e) {
+                $messages[] = $this->getErrorWithPageId(
+                    $page,
+                    __('Something went wrong while saving the page.')
+                );
+                $error = true;
             }
         }
 

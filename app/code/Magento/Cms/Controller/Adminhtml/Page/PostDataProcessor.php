@@ -100,7 +100,7 @@ class PostDataProcessor
             if (in_array($field, array_keys($requiredFields)) && $value == '') {
                 $errorNo = false;
                 $this->messageManager->addError(
-                    'To apply changes you should fill in hidden required "' . $requiredFields[$field] . '" field'
+                    __( 'To apply changes you should fill in hidden required "' . $requiredFields[$field] . '" field')
                 );
             }
         }

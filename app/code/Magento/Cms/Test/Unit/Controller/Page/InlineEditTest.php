@@ -126,11 +126,11 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $this->request->expects($this->at(0))
+        $this->request->expects($this->at(1))
             ->method('getParam')
             ->with('isAjax')
             ->willReturn(true);
-        $this->request->expects($this->at(1))
+        $this->request->expects($this->at(0))
             ->method('getParam')
             ->with('items', [])
             ->willReturn($postData);
@@ -243,17 +243,17 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteWithoutData()
     {
-        $this->request->expects($this->at(0))
-            ->method('getParam')
-            ->with('isAjax')
-            ->willReturn(true);
-        $this->request->expects($this->at(1))
-            ->method('getParam')
-            ->with('items', [])
-            ->willReturn([]);
         $this->jsonFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->resultJson);
+        $this->request->expects($this->at(0))
+            ->method('getParam')
+            ->with('items', [])
+            ->willReturn([]);
+        $this->request->expects($this->at(1))
+            ->method('getParam')
+            ->with('isAjax', null)
+            ->willReturn(true);
         $this->resultJson->expects($this->once())
             ->method('setData')
             ->with([
