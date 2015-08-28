@@ -53,7 +53,7 @@ class InlineEdit extends \Magento\Backend\App\Action
         if (!($this->getRequest()->getParam('isAjax') && count($postItems))) {
             return $resultJson->setData([
                 'messages' => [__('Please correct the data sent.')],
-                'error' => true
+                'error' => true,
             ]);
         }
 
