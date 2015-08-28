@@ -88,6 +88,11 @@ class Switcher extends \Magento\Backend\Block\Template
     protected $_storeFactory;
 
     /**
+     * @var bool
+     */
+    protected $isUsingIframe = false;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
      * @param \Magento\Store\Model\GroupFactory $storeGroupFactory
@@ -557,5 +562,19 @@ class Switcher extends \Magento\Backend\Block\Template
             ) . '</span></a></span>' . ' </div>';
         }
         return $html;
+    }
+
+    /**
+     * @param $state
+     */
+    public function setUseIframe($state = false) {
+        $this->isUsingIframe = (bool) $state;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUsingIframe() {
+        return $this->isUsingIframe;
     }
 }
