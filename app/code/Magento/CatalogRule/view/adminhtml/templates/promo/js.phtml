@@ -44,7 +44,9 @@ function changeValidationForSubDiscountPercent()
         if ($('rule_sub_simple_action').value == 'by_percent' || $('rule_sub_simple_action').value == 'to_percent') {
             $('rule_sub_discount_amount').addClassName('validate-number-range number-range-0.00-100.00');
         } else {
-            $('rule_sub_discount_amount').removeClassName('validate-number-range').removeClassName('number-range-0.00-100.00');
+            $('rule_sub_discount_amount').
+                removeClassName('validate-number-range').
+                removeClassName('number-range-0.00-100.00');
         }
     }
 

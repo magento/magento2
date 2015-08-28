@@ -8,6 +8,11 @@ namespace Magento\CatalogRule\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * Class RuleTest
+ * @package Magento\CatalogRule\Test\Unit\Model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RuleTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\CatalogRule\Model\Rule */
@@ -335,6 +340,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
      * Test isRuleBehaviorChanged action
      *
      * @dataProvider isRuleBehaviorChangedDataProvider
+     *
      * @param array $dataArray
      * @param array $originDataArray
      * @param bool $isObjectNew
