@@ -113,7 +113,7 @@ abstract class AbstractServiceCollection extends \Magento\Framework\Data\Collect
             throw new LocalizedException(
                 new \Magento\Framework\Phrase('When passing in a field array there must be a matching condition array.')
             );
-        } elseif (is_array($field) && !count($field)>0) {
+        } elseif (is_array($field) && !count($field) > 0) {
             throw new LocalizedException(
                 new \Magento\Framework\Phrase(
                     'When passing an array of fields there must be at least one field in the array.'
@@ -129,32 +129,67 @@ abstract class AbstractServiceCollection extends \Magento\Framework\Data\Collect
      * @param string|array $field
      * @param string|int|array $condition
      * @return null
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function processFilters($field, $condition)
+    {
+        //test if we have multiple conditions per field
+        $requiresMultipleFilterGroups =false;
+        if (is_array($condition)) {
+            foreach ($condition as $cond) {
+                if (is_array($cond) && count($cond) > 1) {
+                    $requiresMultipleFilterGroups = true;
+                    break;
+                }
+            }
+        }
+
+        if ($requiresMultipleFilterGroups) {
+            $this->addFilterGroupsForMultipleConditions($field, $condition);
+        } else {
+            $this->addFilterGroupsForSingleConditions($field, $condition);
+        }
+        return $this;
+    }
+
+    /**
+     * Return a single filter group in case of single conditions
+     * @param string|array $field
+     * @param string|int|array $condition
+     * @return null
+     */
+    private function addFilterGroupsForSingleConditions($field, $condition)
+    {
+        $this->fieldFilters[] = ['field' => $field, 'condition' => $condition];
+    }
+
+    /**
+     * Return multiple filters groups in case of multiple conditions eg: from & to
+     * @param string|array $field
+     * @param string|int|array $condition
+     * @return null
+     */
+    private function addFilterGroupsForMultipleConditions($field, $condition)
     {
         if (!is_array($field) && is_array($condition)) {
             foreach ($condition as $key => $value) {
                 $this->fieldFilters[] = ['field' => $field, 'condition' => [$key => $value]];
             }
         } elseif (is_array($field) && is_array($condition)) {
-            foreach ($condition as $key => $cond) {
-                if (is_array($cond) && count($cond)>1) {
+            $cnt = 0;
+            foreach ($condition as $cond) {
+                if (is_array($cond)) {
                     //we Do want multiple groups in this case
-                    foreach ($cond as $keycond => $value) {
-                        $this->fieldFilters[] = ['field' => $field[$key], 'condition' => [$keycond => $value]];
+                    foreach ($cond as $condKey => $condValue) {
+                        $this->fieldFilters[] = [
+                            'field' => array_slice($field, $cnt, 1, true),
+                            'condition' => [$condKey => $condValue]
+                        ];
                     }
                 } else {
-                    //we don't want multiple groups in this case
-                    $this->fieldFilters[] = [
-                        'field' => $field,
-                        'condition' => is_array($cond)? [key($condition) => reset($condition)] :$condition
-                    ];
-                    break;
+                    $this->fieldFilters[] = ['field' => array_slice($field, $cnt, 1, true), 'condition' => $cond];
                 }
+                $cnt++;
             }
-        } else {
-            $this->fieldFilters[] = ['field' => $field, 'condition' => $condition];
         }
     }
 
