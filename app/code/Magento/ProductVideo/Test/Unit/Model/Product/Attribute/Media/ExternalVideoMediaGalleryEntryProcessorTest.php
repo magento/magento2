@@ -38,7 +38,8 @@ class ExternalVideoMediaGalleryEntryProcessorTest extends \PHPUnit_Framework_Tes
     protected $attributeMock;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager|\Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoMediaGalleryEntryProcessor
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * |\Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoMediaGalleryEntryProcessor
      */
     protected $modelObject;
 
