@@ -103,8 +103,9 @@ class ExternalVideoMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryP
     {
         foreach ($videoDataCollection as $mediaItem) {
             if (!empty($mediaItem[self::ADDITIONAL_STORE_DATA_KEY])) {
-                foreach ($mediaItem[self::ADDITIONAL_STORE_DATA_KEY] as $item) {
-                    $this->saveVideoValuesItem($item);
+                foreach ($mediaItem[self::ADDITIONAL_STORE_DATA_KEY] as $additionalStoreItem) {
+                    $additionalStoreItem['value_id'] = $mediaItem['value_id'];
+                    $this->saveVideoValuesItem($additionalStoreItem);
                 }
             }
         }
@@ -246,9 +247,6 @@ class ExternalVideoMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryP
     {
         $ids = [];
         foreach ($mediaCollection as $item) {
-            if ($item['media_type'] == ExternalVideoMediaEntryConverter::MEDIA_TYPE_CODE) {
-                $item['save_data_from'] = 4;
-            }
             if (!empty($item['media_type'])
                 && !$item['removed']
                 && $item['media_type'] == ExternalVideoMediaEntryConverter::MEDIA_TYPE_CODE
@@ -360,9 +358,11 @@ class ExternalVideoMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryP
     protected function addAdditionalStoreData(array $mediaCollection, array $data)
     {
         foreach ($mediaCollection as &$mediaItem) {
-            $additionalData = $this->getAdditionalStoreDataByValueId($data, $mediaItem['value_id']);
-            if (!empty($additionalData)) {
-                $mediaItem[self::ADDITIONAL_STORE_DATA_KEY] = $additionalData;
+            if (!empty($mediaItem['save_data_from'])) {
+                $additionalData = $this->createAdditionalStoreDataCollection($data, $mediaItem['save_data_from']);
+                if (!empty($additionalData)) {
+                    $mediaItem[self::ADDITIONAL_STORE_DATA_KEY] = $additionalData;
+                }
             }
         }
 
@@ -370,15 +370,16 @@ class ExternalVideoMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryP
     }
 
     /**
-     * @param $data
-     * @param $valueId
+     * @param array $storeData
+     * @param int $valueId
      * @return array
      */
-    protected function getAdditionalStoreDataByValueId($data, $valueId)
+    protected function createAdditionalStoreDataCollection(array $storeData, $valueId)
     {
         $result = [];
-        foreach ($data as $item) {
+        foreach ($storeData as $item) {
             if ($item['value_id'] == $valueId) {
+                unset($item['value_id']);
                 $result[] = $item;
             }
         }
