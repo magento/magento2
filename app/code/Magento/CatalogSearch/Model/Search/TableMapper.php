@@ -106,10 +106,7 @@ class TableMapper
         } elseif ($filter->getType() === FilterInterface::TYPE_TERM) {
             $table = $this->resource->getTableName('catalog_product_index_eav');
             $alias = 'cpie';
-            $mapOn = sprintf(
-                'search_index.entity_id = %1$s.entity_id AND search_index.attribute_id = %1$s.attribute_id',
-                $alias
-            );
+            $mapOn = sprintf('search_index.entity_id = %1$s.entity_id', $alias);
             $mappedFields = [];
         } else {
             /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $attribute */
