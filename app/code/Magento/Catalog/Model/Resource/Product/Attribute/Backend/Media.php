@@ -52,6 +52,7 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param int|null $storeId
      * @param array|null $cols
      * @param array $leftJoinTables
+     * @param string $whereCondition
      * @return array
      */
     public function loadDataFromTableByValueId(
@@ -59,8 +60,9 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
         array $ids,
         $storeId = null,
         array $cols = null,
-        array $leftJoinTables = [])
-    {
+        array $leftJoinTables = [],
+        $whereCondition = null
+    ) {
         if (null == $cols) {
             $cols = '*';
         }
@@ -75,6 +77,9 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
             );
         if (null !== $storeId) {
             $select->where($mainTableAlias.'.store_id = ?', $storeId);
+        }
+        if (null !== $whereCondition) {
+            $select->where($whereCondition);
         }
         foreach ($leftJoinTables as $joinParameters) {
             $select->joinLeft($joinParameters[0], $joinParameters[1], $joinParameters[2]);
