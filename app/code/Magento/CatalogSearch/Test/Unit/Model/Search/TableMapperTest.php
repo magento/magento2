@@ -198,7 +198,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->method('joinLeft')
             ->with(
                 ['cpie' => 'prefix_catalog_product_index_eav'],
-                'search_index.entity_id = cpie.entity_id AND search_index.attribute_id = cpie.attribute_id',
+                'search_index.entity_id = cpie.entity_id',
                 []
             )
             ->willReturnSelf();
@@ -226,7 +226,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->method('joinLeft')
             ->with(
                 ['cpie' => 'prefix_catalog_product_index_eav'],
-                'search_index.entity_id = cpie.entity_id AND search_index.attribute_id = cpie.attribute_id',
+                'search_index.entity_id = cpie.entity_id',
                 []
             )
             ->willReturnSelf();
@@ -255,7 +255,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->method('joinLeft')
             ->with(
                 ['cpie' => 'prefix_catalog_product_index_eav'],
-                'search_index.entity_id = cpie.entity_id AND search_index.attribute_id = cpie.attribute_id',
+                'search_index.entity_id = cpie.entity_id',
                 []
             )
             ->willReturnSelf();
@@ -293,7 +293,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->method('joinLeft')
             ->with(
                 ['cpie' => 'prefix_catalog_product_index_eav'],
-                'search_index.entity_id = cpie.entity_id AND search_index.attribute_id = cpie.attribute_id',
+                'search_index.entity_id = cpie.entity_id',
                 []
             )
             ->willReturnSelf();
@@ -323,7 +323,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->method('joinLeft')
             ->with(
                 ['cpie' => 'prefix_catalog_product_index_eav'],
-                'search_index.entity_id = cpie.entity_id AND search_index.attribute_id = cpie.attribute_id',
+                'search_index.entity_id = cpie.entity_id',
                 []
             )
             ->willReturnSelf();
