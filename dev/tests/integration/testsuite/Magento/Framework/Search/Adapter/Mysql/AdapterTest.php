@@ -369,4 +369,30 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             ['peoples', 'green', ['from' => '12', 'to' => '22'], 2],
         ];
     }
+
+    /**
+     * @magentoDbIsolation disabled
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_store catalog/search/engine mysql
+     * @magentoConfigFixture current_store catalog/search/search_type 2
+     * @magentoDataFixture Magento/Framework/Search/_files/filterable_attribute.php
+     */
+    public function testCustomFilterableAttribute()
+    {
+        /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $attribute */
+        $attribute = $this->objectManager->get('Magento\Catalog\Model\Resource\Eav\Attribute')
+            ->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'filterable_attribute');
+        $optionsCollection = $this->objectManager->get('Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection');
+        $options = $optionsCollection->setAttributeFilter($attribute->getId())->getItems();
+        $option = array_pop($options);
+
+        $this->requestBuilder->bind('filterable_attribute', $option->getId());
+        $this->requestBuilder->bind('price.from', 9);
+        $this->requestBuilder->bind('price.to', 12);
+        $this->requestBuilder->bind('category_ids', 2);
+        $this->requestBuilder->setRequestName('filterable_custom_attribute');
+
+        $queryResponse = $this->executeQuery();
+        $this->assertEquals(1, $queryResponse->count());
+    }
 }
