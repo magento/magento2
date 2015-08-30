@@ -10,13 +10,13 @@ $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create
     'Magento\Catalog\Setup\CategorySetup',
     ['resourceName' => 'catalog_setup']
 );
-/** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
-$attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+/** @var $selectAttribute \Magento\Catalog\Model\Resource\Eav\Attribute */
+$selectAttribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     'Magento\Catalog\Model\Resource\Eav\Attribute'
 );
-$attribute->setData(
+$selectAttribute->setData(
     [
-        'attribute_code' => 'filterable_attribute',
+        'attribute_code' => 'select_attribute',
         'entity_type_id' => $installer->getEntityTypeId('catalog_product'),
         'is_global' => 1,
         'frontend_input' => 'select',
@@ -28,19 +28,46 @@ $attribute->setData(
         'backend_type' => 'int',
     ]
 );
-$attribute->save();
-
+$selectAttribute->save();
 /* Assign attribute to attribute set */
-$installer->addAttributeToGroup('catalog_product', 'Default', 'General', $attribute->getId());
+$installer->addAttributeToGroup('catalog_product', 'Default', 'General', $selectAttribute->getId());
 
-/* Create simple products per each option */
-/** @var $options \Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection */
-$options = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+/** @var $selectOptions \Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection */
+$selectOptions = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     'Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection'
 );
-$options->setAttributeFilter($attribute->getId());
+$selectOptions->setAttributeFilter($selectAttribute->getId());
 
-foreach ($options as $option) {
+$multiselectAttribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    'Magento\Catalog\Model\Resource\Eav\Attribute'
+);
+$multiselectAttribute->setData(
+    [
+        'attribute_code' => 'multiselect_attribute',
+        'entity_type_id' => $installer->getEntityTypeId('catalog_product'),
+        'is_global' => 1,
+        'frontend_input' => 'multiselect',
+        'is_filterable' => 1,
+        'option' => [
+            'value' => ['option_0' => ['Option 1'], 'option_1' => ['Option 2']],
+            'order' => ['option_0' => 1, 'option_1' => 2],
+        ],
+        'backend_type' => 'varchar',
+    ]
+);
+$multiselectAttribute->save();
+/* Assign attribute to attribute set */
+$installer->addAttributeToGroup('catalog_product', 'Default', 'General', $multiselectAttribute->getId());
+
+/** @var $multiselectOptions \Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection */
+$multiselectOptions = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    'Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection'
+);
+$multiselectOptions->setAttributeFilter($multiselectAttribute->getId());
+
+
+/* Create simple products per each select(dropdown) option */
+foreach ($selectOptions as $option) {
     /** @var $product \Magento\Catalog\Model\Product */
     $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
     $product->setTypeId(
@@ -69,7 +96,10 @@ foreach ($options as $option) {
         'Magento\Catalog\Model\Product\Action'
     )->updateAttributes(
         [$product->getId()],
-        [$attribute->getAttributeCode() => $option->getId()],
+        [
+            $selectAttribute->getAttributeCode() => $option->getId(),
+            $multiselectAttribute->getAttributeCode() => $multiselectOptions->getLastItem()->getId()
+        ],
         $product->getStoreId()
     );
 }

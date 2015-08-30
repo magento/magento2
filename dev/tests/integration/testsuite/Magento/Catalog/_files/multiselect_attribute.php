@@ -31,7 +31,7 @@ $attribute->setData(
         'used_in_product_listing' => 0,
         'used_for_sort_by' => 0,
         'frontend_label' => ['Multiselect Attribute'],
-        'backend_type' => 'int',
+        'backend_type' => 'varchar',
         'option' => [
             'value' => [
                 'option_1' => ['Option 1'],
