@@ -71,7 +71,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
                 'original' => $image->getData('large_image_url'),
                 'caption' => $image->getLabel(),
                 'position' => $image->getPosition(),
-                'is_main' => $this->isMainImage($image),
+                'isMain' => $this->isMainImage($image),
             ];
         }
         return json_encode($imagesItems);
