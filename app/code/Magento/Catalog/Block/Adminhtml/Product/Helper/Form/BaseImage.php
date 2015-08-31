@@ -71,7 +71,7 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
      */
     public function getLabel()
     {
-        return __('Images');
+        return __('Images & Videos');
     }
 
     /**
@@ -85,6 +85,7 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
         $uploadUrl = $this->_escaper->escapeHtml($this->_getUploadUrl());
         $spacerImage = $this->_assetRepo->getUrl('images/spacer.gif');
         $imagePlaceholderText = __('Click here or drag and drop to add images.');
+        $videoPlaceholderText = __('Click here to add videos.');
         $deleteImageText = __('Delete image');
         $makeBaseText = __('Make Base');
         $hiddenText = __('Hidden');
@@ -100,6 +101,12 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
         <img class="spacer" src="{$spacerImage}"/>
         <p class="image-placeholder-text">{$imagePlaceholderText}</p>
     </div>
+    <div class="image video-placeholder">
+            <button id="add_video_button" title="New Video" type="button" class="action-default scalable" onclick="jQuery('#new-video').modal('openModal'); jQuery('#new_video_form')[0].reset();" data-ui-id="widget-button-1">
+                <img class="spacer" src="{$spacerImage}"/>
+                <p class="image-placeholder-text">{$videoPlaceholderText}</p>
+            </button>
+        </div>
     <script id="{$htmlId}-template" data-template="image" type="text/x-magento-template">
         <div class="image">
             <img class="spacer" src="{$spacerImage}"/>
