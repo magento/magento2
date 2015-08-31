@@ -3060,7 +3060,6 @@ return [
     ['Magento\Integration\Model\Integration\Factory', 'Magento\Integration\Model\IntegrationFactory'],
     ['Magento\Webapi\Model\PathProcessor', 'Magento\Webapi\Controller\PathProcessor'],
     ['Magento\Webapi\Helper\Data', 'Magento\Webapi\Model\Soap\Config'],
-    ['Magento\Webapi\Model\Config\ClassReflector', 'Magento\Webapi\Model\Soap\Config\ClassReflector'],
     ['Magento\Webapi\Model\Soap\Server\Factory', 'Magento\Webapi\Model\Soap\ServerFactory'],
     ['Magento\Webapi\Model\Soap\Wsdl\Factory', 'Magento\Webapi\Model\Soap\WsdlFactory'],
     [
