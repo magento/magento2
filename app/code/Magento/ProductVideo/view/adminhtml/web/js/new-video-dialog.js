@@ -84,7 +84,7 @@ define([
             }
             this._removeImage(oldFile);
             this._setImage(newFile, imageData);
-            if(oldFile && imageData.old_file) { // For questions about this behavior refer to Vadim Zubovich
+            if(oldFile && imageData.old_file) { 
                 var oldImageId = this.findElementId(tmpOldFile);
                 var newImageId = this.findElementId(tmpNewFile);
                 var fc = jQuery('#item_id').val();
