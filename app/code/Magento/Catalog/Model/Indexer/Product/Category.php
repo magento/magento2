@@ -15,12 +15,12 @@ class Category extends \Magento\Catalog\Model\Indexer\Category\Product
     /**
      * @param \Magento\Catalog\Model\Indexer\Category\Product\Action\FullFactory $fullActionFactory
      * @param Category\Action\RowsFactory $rowsActionFactory
-     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
+     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      */
     public function __construct(
         \Magento\Catalog\Model\Indexer\Category\Product\Action\FullFactory $fullActionFactory,
         Category\Action\RowsFactory $rowsActionFactory,
-        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
+        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
     ) {
         parent::__construct($fullActionFactory, $rowsActionFactory, $indexerRegistry);
     }

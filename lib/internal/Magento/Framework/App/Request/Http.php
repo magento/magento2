@@ -7,6 +7,7 @@ namespace Magento\Framework\App\Request;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\RequestSafetyInterface;
 use Magento\Framework\App\Route\ConfigInterface\Proxy as ConfigInterface;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
 use Magento\Framework\ObjectManagerInterface;
@@ -16,7 +17,7 @@ use Magento\Framework\Stdlib\StringUtils;
 /**
  * Http request
  */
-class Http extends Request implements RequestInterface
+class Http extends Request implements RequestInterface, RequestSafetyInterface
 {
     /**#@+
      * HTTP Ports
@@ -78,6 +79,16 @@ class Http extends Request implements RequestInterface
      * @var ObjectManagerInterface
      */
     protected $objectManager;
+
+    /**
+     * @var bool|null
+     */
+    protected $isSafeMethod = null;
+
+    /**
+     * @var array
+     */
+    protected $safeRequestTypes = ['GET', 'HEAD', 'TRACE', 'OPTIONS'];
 
     /**
      * @param CookieReaderInterface $cookieReader
@@ -414,6 +425,21 @@ class Http extends Request implements RequestInterface
         );
 
         return $this->initialRequestSecure($offLoaderHeader);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isSafeMethod()
+    {
+        if ($this->isSafeMethod === null) {
+            if (isset($_SERVER['REQUEST_METHOD']) && (in_array($_SERVER['REQUEST_METHOD'], $this->safeRequestTypes))) {
+                $this->isSafeMethod = true;
+            } else {
+                $this->isSafeMethod = false;
+            }
+        }
+        return $this->isSafeMethod;
     }
 
     /**
