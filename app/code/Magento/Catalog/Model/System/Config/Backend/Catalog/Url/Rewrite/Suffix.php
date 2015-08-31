@@ -62,7 +62,7 @@ class Suffix extends \Magento\Framework\App\Config\Value
     ) {
         parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
         $this->urlRewriteHelper = $urlRewriteHelper;
-        $this->connection = $appResource->getConnection(Resource::DEFAULT_WRITE_RESOURCE);
+        $this->connection = $appResource->getConnection();
         $this->urlFinder = $urlFinder;
         $this->storeManager = $storeManager;
     }

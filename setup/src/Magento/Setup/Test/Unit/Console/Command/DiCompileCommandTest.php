@@ -90,14 +90,25 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
         $this->filesystem->expects($this->atLeastOnce())->method('getDirectoryWrite')->willReturn($writeDirectory);
 
         $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
+        $progressBar = $this->getMockBuilder(
+            'Symfony\Component\Console\Helper\ProgressBar'
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->objectManager->expects($this->once())->method('configure');
+        $this->objectManager
+            ->expects($this->once())
+            ->method('create')
+            ->with('Symfony\Component\Console\Helper\ProgressBar')
+            ->willReturn($progressBar);
         $this->manager->expects($this->exactly(6))->method('addOperation');
         $this->manager->expects($this->once())->method('process');
         $tester = new CommandTester($this->command);
         $tester->execute([]);
-        $this->assertEquals(
-            'Generated code and dependency injection configuration successfully.' . PHP_EOL,
-            $tester->getDisplay()
+        $this->assertContains(
+            'Generated code and dependency injection configuration successfully.',
+            explode(PHP_EOL, $tester->getDisplay())
         );
     }
 }

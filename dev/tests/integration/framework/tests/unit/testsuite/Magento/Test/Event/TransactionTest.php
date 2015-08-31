@@ -42,10 +42,10 @@ class TransactionTest extends \PHPUnit_Framework_TestCase
         );
         $this->_object = $this->getMock(
             'Magento\TestFramework\Event\Transaction',
-            ['_getAdapter'],
+            ['_getConnection'],
             [$this->_eventManager]
         );
-        $this->_object->expects($this->any())->method('_getAdapter')->will($this->returnValue($this->_adapter));
+        $this->_object->expects($this->any())->method('_getConnection')->will($this->returnValue($this->_adapter));
     }
 
     /**

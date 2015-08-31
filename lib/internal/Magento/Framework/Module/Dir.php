@@ -10,7 +10,7 @@ namespace Magento\Framework\Module;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\Stdlib\String as StringHelper;
+use Magento\Framework\Stdlib\StringUtils as StringHelper;
 use Magento\Framework\Module\ModuleRegistryInterface;
 
 class Dir
@@ -32,7 +32,7 @@ class Dir
     protected $_modulesDirectory;
 
     /**
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $_string;
 

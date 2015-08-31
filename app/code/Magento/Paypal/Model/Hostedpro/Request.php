@@ -10,7 +10,7 @@ namespace Magento\Paypal\Model\Hostedpro;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Request extends \Magento\Framework\Object
+class Request extends \Magento\Framework\DataObject
 {
     /**
      * Request's order model
@@ -194,11 +194,11 @@ class Request extends \Magento\Framework\Object
     /**
      * Get shipping address request data
      *
-     * @param \Magento\Framework\Object $address
+     * @param \Magento\Framework\DataObject $address
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function _getShippingAddress(\Magento\Framework\Object $address)
+    protected function _getShippingAddress(\Magento\Framework\DataObject $address)
     {
         $region = $address->getRegionCode() ? $address->getRegionCode() : $address->getRegion();
         $request = [
@@ -222,11 +222,11 @@ class Request extends \Magento\Framework\Object
     /**
      * Get billing address request data
      *
-     * @param \Magento\Framework\Object $address
+     * @param \Magento\Framework\DataObject $address
      * @return array
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function _getBillingAddress(\Magento\Framework\Object $address)
+    protected function _getBillingAddress(\Magento\Framework\DataObject $address)
     {
         $region = $address->getRegionCode() ? $address->getRegionCode() : $address->getRegion();
         $request = [

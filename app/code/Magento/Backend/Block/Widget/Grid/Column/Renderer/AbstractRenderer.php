@@ -6,7 +6,7 @@
 namespace Magento\Backend\Block\Widget\Grid\Column\Renderer;
 
 use Magento\Backend\Block\Widget\Grid\Column;
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 
 /**
  * Backend grid item abstract renderer
@@ -48,7 +48,7 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
      * @param   Object $row
      * @return  string
      */
-    public function render(Object $row)
+    public function render(DataObject $row)
     {
         if ($this->getColumn()->getEditable()) {
             $value = $this->_getValue($row);
@@ -65,7 +65,7 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
      * @param Object $row
      * @return string
      */
-    public function renderExport(Object $row)
+    public function renderExport(DataObject $row)
     {
         return $this->render($row);
     }
@@ -74,7 +74,7 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
      * @param Object $row
      * @return mixed
      */
-    protected function _getValue(Object $row)
+    protected function _getValue(DataObject $row)
     {
         if ($getter = $this->getColumn()->getGetter()) {
             if (is_string($getter)) {
@@ -91,7 +91,7 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
      * @param Object $row
      * @return string
      */
-    public function _getInputValueElement(Object $row)
+    public function _getInputValueElement(DataObject $row)
     {
         return '<input type="text" class="input-text ' .
             $this->getColumn()->getValidateClass() .
@@ -107,7 +107,7 @@ abstract class AbstractRenderer extends \Magento\Backend\Block\AbstractBlock imp
      * @param Object $row
      * @return mixed
      */
-    protected function _getInputValue(Object $row)
+    protected function _getInputValue(DataObject $row)
     {
         return $this->_getValue($row);
     }

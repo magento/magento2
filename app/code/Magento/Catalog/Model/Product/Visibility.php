@@ -14,7 +14,7 @@ namespace Magento\Catalog\Model\Product;
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\DB\Ddl\Table;
 
-class Visibility extends \Magento\Framework\Object implements OptionSourceInterface
+class Visibility extends \Magento\Framework\DataObject implements OptionSourceInterface
 {
     const VISIBILITY_NOT_VISIBLE = 1;
 

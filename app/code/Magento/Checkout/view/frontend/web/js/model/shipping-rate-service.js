@@ -6,28 +6,29 @@
 /*global define*/
 define(
     [
+        'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/shipping-rate-processor/new-address',
         'Magento_Checkout/js/model/shipping-rate-processor/customer-address'
     ],
-    function(defaultProcessor, customerAddressProcessor) {
+    function(quote, defaultProcessor, customerAddressProcessor) {
         "use strict";
         var processors = [];
         processors['default'] =  defaultProcessor;
         processors['customer-address'] = customerAddressProcessor;
 
+        quote.shippingAddress.subscribe(function () {
+            var type = quote.shippingAddress().getType();
+            var rates = [];
+            if (processors[type]) {
+                rates = processors[type].getRates(quote.shippingAddress());
+            } else {
+                rates = processors['default'].getRates(quote.shippingAddress());
+            }
+        });
+
         return {
             registerProcessor: function(type, processor) {
                 processors[type] = processor;
-            },
-            getRates: function (address) {
-                var type = address.getType();
-                var rates = [];
-                if (processors[type]) {
-                    rates = processors[type].getRates(address);
-                } else {
-                    rates = processors['default'].getRates(address);
-                }
-                return rates;
             }
         }
     }

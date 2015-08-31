@@ -36,9 +36,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $resourceMock;
 
     /**
-     * @var \Zend_Db_Adapter_Pdo_Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $adapterMock;
+    protected $connectionMock;
 
     /**
      * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
@@ -63,11 +63,11 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
         $this->loggerMock = $this->getMock('Psr\Log\LoggerInterface');
         $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\Resource\Db\AbstractDb')
-            ->setMethods(['getReadConnection', 'getMainTable', 'getTable'])
+            ->setMethods(['getConnection', 'getMainTable', 'getTable'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->adapterMock = $this->getMock(
-            'Zend_Db_Adapter_Pdo_Mysql',
+        $this->connectionMock = $this->getMock(
+            '\Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['select', 'query'],
             [],
             '',
@@ -76,14 +76,14 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->selectMock = $this->getMock(
             'Magento\Framework\DB\Select',
             ['from'],
-            ['adapter' => $this->adapterMock]
+            ['adapter' => $this->connectionMock]
         );
-        $this->adapterMock->expects($this->once())
+        $this->connectionMock->expects($this->once())
             ->method('select')
             ->will($this->returnValue($this->selectMock));
         $this->resourceMock->expects($this->once())
-            ->method('getReadConnection')
-            ->will($this->returnValue($this->adapterMock));
+            ->method('getConnection')
+            ->will($this->returnValue($this->connectionMock));
         $this->resourceMock->expects($this->once())
             ->method('getMainTable')
             ->willReturn('main_table_name');
@@ -112,7 +112,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('fetch')
             ->will($this->returnValue($data));
 
-        $this->adapterMock->expects($this->once())
+        $this->connectionMock->expects($this->once())
             ->method('query')
             ->with($this->selectMock, $this->anything())
             ->will($this->returnValue($statementMock));
@@ -139,7 +139,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->with($this->selectMock, [])
             ->will($this->returnValue([$data]));
 
-        $objectMock = $this->getMock('Magento\Framework\Object', ['addData'], []);
+        $objectMock = $this->getMock('Magento\Framework\DataObject', ['addData'], []);
         $objectMock->expects($this->once())
             ->method('addData')
             ->with($data);

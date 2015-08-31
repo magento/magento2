@@ -9,8 +9,9 @@ define([
     'uiComponent',
     'Magento_Checkout/js/action/select-shipping-address',
     'Magento_Checkout/js/model/quote',
-    'Magento_Checkout/js/model/shipping-address/form-popup-state'
-], function($, ko, Component, selectShippingAddressAction, quote, formPopUpState) {
+    'Magento_Checkout/js/model/shipping-address/form-popup-state',
+    'Magento_Checkout/js/checkout-data'
+], function($, ko, Component, selectShippingAddressAction, quote, formPopUpState, checkoutData) {
     'use strict';
     var countryData = window.checkoutConfig.countryData;
     return Component.extend({
@@ -39,6 +40,7 @@ define([
         /** Set selected customer shipping address  */
         selectAddress: function() {
             selectShippingAddressAction(this.address());
+            checkoutData.setSelectedShippingAddress(this.address().getKey());
         },
 
         editAddress: function() {

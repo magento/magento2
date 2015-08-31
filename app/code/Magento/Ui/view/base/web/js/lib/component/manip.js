@@ -167,11 +167,9 @@ define([
         _insert: function (elem) {
             var index = this._elems.indexOf(elem.name);
 
-            if (!~index) {
-                return;
+            if (~index) {
+                this._elems[index] = elem;
             }
-
-            this._elems[index] = elem;
 
             this._update()
                 .initElement(elem);

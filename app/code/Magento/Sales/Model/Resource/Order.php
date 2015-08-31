@@ -58,7 +58,7 @@ class Order extends SalesResource implements OrderResourceInterface
      * @param Snapshot $entitySnapshot
      * @param RelationComposite $entityRelationComposite
      * @param StateHandler $stateHandler
-     * @param string $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -67,7 +67,7 @@ class Order extends SalesResource implements OrderResourceInterface
         Attribute $attribute,
         Manager $sequenceManager,
         StateHandler $stateHandler,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->stateHandler = $stateHandler;
         parent::__construct(
@@ -76,7 +76,7 @@ class Order extends SalesResource implements OrderResourceInterface
             $entityRelationComposite,
             $attribute,
             $sequenceManager,
-            $resourcePrefix
+            $connectionName
         );
     }
 
@@ -90,8 +90,8 @@ class Order extends SalesResource implements OrderResourceInterface
      */
     public function aggregateProductsByTypes($orderId, $productTypeIds = [], $isProductTypeIn = false)
     {
-        $adapter = $this->getReadConnection();
-        $select = $adapter->select()
+        $connection = $this->getConnection();
+        $select = $connection->select()
             ->from(
                 ['o' => $this->getTable('sales_order_item')],
                 ['o.product_type', new \Zend_Db_Expr('COUNT(*)')]
@@ -108,7 +108,7 @@ class Order extends SalesResource implements OrderResourceInterface
                 $productTypeIds
             );
         }
-        return $adapter->fetchPairs($select);
+        return $connection->fetchPairs($select);
     }
 
     /**

@@ -59,7 +59,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable $catalogProductTypeConfigurable
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute $resource
-     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -71,7 +71,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\ConfigurableProduct\Model\Product\Type\Configurable $catalogProductTypeConfigurable,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute $resource,
-        $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_productTypeConfigurable = $catalogProductTypeConfigurable;

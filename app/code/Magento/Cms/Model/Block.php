@@ -6,7 +6,7 @@
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\Data\BlockInterface;
-use Magento\Framework\Object\IdentityInterface;
+use Magento\Framework\DataObject\IdentityInterface;
 
 /**
  * CMS block model

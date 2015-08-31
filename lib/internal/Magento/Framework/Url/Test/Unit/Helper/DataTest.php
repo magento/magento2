@@ -126,7 +126,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'http://example.com?null&string=value&array[]=arrayVal1&array[]=arrayVal2&array[]=arrayVal3',
             ],
             'object' => [
-                ['object' => new \Magento\Framework\Object()],
+                ['object' => new \Magento\Framework\DataObject()],
                 'http://example.com',
             ]
         ];

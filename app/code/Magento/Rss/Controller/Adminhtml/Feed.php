@@ -9,7 +9,7 @@ namespace Magento\Rss\Controller\Adminhtml;
  * Class Feed
  * @package Magento\Rss\Controller
  */
-class Feed extends \Magento\Backend\App\Action
+abstract class Feed extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Rss\Model\RssManager

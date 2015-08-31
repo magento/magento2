@@ -476,7 +476,6 @@
                 "components/jquery": "1.11.0",
                 "components/jqueryui": "1.10.4",
                 "linkorb/jsmin-php": "1.1.2",
-                "phpseclib/phpseclib": "0.2.1",
                 "tinymce/tinymce": "3.4.7",
                 "trentrichardson/jquery-timepicker-addon": "1.4.3",
                 "twbs/bootstrap": "3.1.0"
@@ -488,7 +487,6 @@
                     "colinmollenhour/cache-backend-redis": "lib/internal/Cm/Cache/Backend/Redis.php",
                     "colinmollenhour/credis": "lib/internal/Credis",
                     "linkorb/jsmin-php": "lib/internal/JSMin",
-                    "phpseclib/phpseclib": "lib/internal/phpseclib",
                     "components/jquery": [
                         "lib/web/jquery.js",
                         "lib/web/jquery/jquery.min.js",
@@ -511,10 +509,6 @@
                     [
                         "lib/internal/LinLibertineFont",
                         "lib/internal/LinLibertineFont"
-                    ],
-                    [
-                        "lib/internal/phpseclib",
-                        "lib/internal/phpseclib"
                     ],
                     [
                         "lib/internal/Credis",
@@ -1300,7 +1294,6 @@
                 "magento/module-directory": "0.74.0-beta9",
                 "magento/module-eav": "0.74.0-beta9",
                 "magento/module-indexer": "0.74.0-beta9",
-                "magento/module-log": "0.74.0-beta9",
                 "magento/module-media-storage": "0.74.0-beta9",
                 "magento/module-msrp": "0.74.0-beta9",
                 "magento/module-page-cache": "0.74.0-beta9",
@@ -2738,39 +2731,6 @@
             "description": "N/A"
         },
         {
-            "name": "magento/module-log",
-            "version": "0.74.0-beta9",
-            "dist": {
-                "type": "zip",
-                "url": "https://packages.magento.com/_packages/magento_module-log-0.74.0-beta9.zip",
-                "reference": null,
-                "shasum": "ce8f197c54c4865aad81d9d49fa20680f73f1c0e"
-            },
-            "require": {
-                "magento/framework": "0.74.0-beta9",
-                "magento/magento-composer-installer": "*",
-                "magento/module-backend": "0.74.0-beta9",
-                "magento/module-customer": "0.74.0-beta9",
-                "magento/module-eav": "0.74.0-beta9",
-                "magento/module-store": "0.74.0-beta9",
-                "php": "~5.5.0|~5.6.0"
-            },
-            "type": "magento2-module",
-            "extra": {
-                "map": [
-                    [
-                        "*",
-                        "Magento/Log"
-                    ]
-                ]
-            },
-            "license": [
-                "OSL-3.0",
-                "AFL-3.0"
-            ],
-            "description": "N/A"
-        },
-        {
             "name": "magento/module-media-storage",
             "version": "0.74.0-beta9",
             "dist": {
@@ -3180,7 +3140,6 @@
                 "magento/module-customer": "0.74.0-beta9",
                 "magento/module-downloadable": "0.74.0-beta9",
                 "magento/module-eav": "0.74.0-beta9",
-                "magento/module-log": "0.74.0-beta9",
                 "magento/module-quote": "0.74.0-beta9",
                 "magento/module-review": "0.74.0-beta9",
                 "magento/module-sales": "0.74.0-beta9",
@@ -4252,7 +4211,6 @@
                 "magento/module-indexer": "0.74.0-beta9",
                 "magento/module-integration": "0.74.0-beta9",
                 "magento/module-layered-navigation": "0.74.0-beta9",
-                "magento/module-log": "0.74.0-beta9",
                 "magento/module-media-storage": "0.74.0-beta9",
                 "magento/module-msrp": "0.74.0-beta9",
                 "magento/module-multishipping": "0.74.0-beta9",

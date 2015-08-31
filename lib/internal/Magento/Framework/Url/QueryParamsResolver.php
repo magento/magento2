@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Url;
 
-class QueryParamsResolver extends \Magento\Framework\Object implements QueryParamsResolverInterface
+class QueryParamsResolver extends \Magento\Framework\DataObject implements QueryParamsResolverInterface
 {
     /**
      * {@inheritdoc}

@@ -13,7 +13,7 @@ use Magento\Framework\App\RequestInterface;
 /**
  * Customer reviews controller
  */
-class Customer extends Action
+abstract class Customer extends Action
 {
     /**
      * Customer session model

@@ -579,7 +579,7 @@ class Adapter implements MethodInterface
     {
         if (is_array($data)) {
             $this->getInfoInstance()->addData($data);
-        } elseif ($data instanceof \Magento\Framework\Object) {
+        } elseif ($data instanceof \Magento\Framework\DataObject) {
             $this->getInfoInstance()->addData($data->getData());
         }
         return $this;

@@ -49,13 +49,15 @@
                             <label>Merchant ID</label>
                             <config_path>payment/braintree/merchant_id</config_path>
                         </field>
-                        <field id="public_key" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="public_key" translate="label" type="obscure" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Public Key</label>
                             <config_path>payment/braintree/public_key</config_path>
+                            <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         </field>
-                        <field id="private_key" translate="label" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="private_key" translate="label" type="obscure" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Private Key</label>
                             <config_path>payment/braintree/private_key</config_path>
+                            <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         </field>
                         <field id="sort_order" translate="label" type="text" sortOrder="230" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Sort Order</label>

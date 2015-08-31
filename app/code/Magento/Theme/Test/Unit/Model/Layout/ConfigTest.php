@@ -5,7 +5,7 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Layout;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Theme\Model\Layout\Config;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
@@ -41,7 +41,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $data = ['code' => ['label' => 'Test Label', 'code' => 'testCode']];
         $expectedResult = [
-            'code' => new Object(['label' => __('Test Label'), 'code' => 'testCode']),
+            'code' => new DataObject(['label' => __('Test Label'), 'code' => 'testCode']),
         ];
 
         $this->dataStorage->expects($this->once())

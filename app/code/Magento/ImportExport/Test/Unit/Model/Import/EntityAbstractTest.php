@@ -53,7 +53,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getModelDependencies()
     {
-        $string = new \Magento\Framework\Stdlib\String();
+        $string = new \Magento\Framework\Stdlib\StringUtils();
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $importFactory = $this->getMock('Magento\ImportExport\Model\ImportFactory', [], [], '', false);
         $resourceHelper = $this->getMock('Magento\ImportExport\Model\Resource\Helper', [], [], '', false);

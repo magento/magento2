@@ -219,7 +219,7 @@ class Options extends \Magento\Framework\View\Element\Template
             $config[$option->getId()] = $priceValue;
         }
 
-        $configObj = new \Magento\Framework\Object(
+        $configObj = new \Magento\Framework\DataObject(
             [
                 'config' => $config,
             ]

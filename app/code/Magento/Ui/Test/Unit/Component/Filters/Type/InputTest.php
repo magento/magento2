@@ -28,6 +28,11 @@ class InputTest extends \PHPUnit_Framework_TestCase
     protected $uiComponentFactory;
 
     /**
+     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $filterBuilderMock;
+
+    /**
      * Set up
      */
     public function setUp()
@@ -38,10 +43,16 @@ class InputTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $this->uiComponentFactory = $this->getMock(
             'Magento\Framework\View\Element\UiComponentFactory',
             ['create'],
+            [],
+            '',
+            false
+        );
+        $this->filterBuilderMock = $this->getMock(
+            'Magento\Framework\Api\FilterBuilder',
+            [],
             [],
             '',
             false
@@ -55,7 +66,12 @@ class InputTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetComponentName()
     {
-        $date = new Input($this->contextMock, $this->uiComponentFactory, []);
+        $date = new Input(
+            $this->contextMock,
+            $this->uiComponentFactory,
+            $this->filterBuilderMock,
+            []
+        );
 
         $this->assertTrue($date->getComponentName() === Input::NAME);
     }
@@ -116,7 +132,13 @@ class InputTest extends \PHPUnit_Framework_TestCase
             ->with($name, Input::COMPONENT, ['context' => $this->contextMock])
             ->willReturn($uiComponent);
 
-        $date = new Input($this->contextMock, $this->uiComponentFactory, [], ['name' => $name]);
+        $date = new Input(
+            $this->contextMock,
+            $this->uiComponentFactory,
+            $this->filterBuilderMock,
+            [],
+            ['name' => $name]
+        );
 
         $date->prepare();
     }

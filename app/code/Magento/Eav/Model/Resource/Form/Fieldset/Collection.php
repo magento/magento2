@@ -49,7 +49,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         FetchStrategyInterface $fetchStrategy,
         ManagerInterface $eventManager,
         StoreManagerInterface $storeManager,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         AbstractDb $resource = null
     ) {
         $this->_storeManager = $storeManager;
@@ -134,7 +134,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         if ($this->getStoreId() == 0) {
             $select->columns('label', 'default_label');
         } else {
-            $labelExpr = $select->getAdapter()->getIfNullSql('store_label.label', 'default_label.label');
+            $labelExpr = $select->getConnection()->getIfNullSql('store_label.label', 'default_label.label');
             $joinCondition = $this->getConnection()->quoteInto(
                 'main_table.fieldset_id = store_label.fieldset_id AND store_label.store_id = ?',
                 (int)$this->getStoreId()

@@ -7,7 +7,7 @@ namespace Magento\User\Controller\Adminhtml\User;
 
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 
-class Role extends \Magento\Backend\App\AbstractAction
+abstract class Role extends \Magento\Backend\App\AbstractAction
 {
     /**
      * Core registry

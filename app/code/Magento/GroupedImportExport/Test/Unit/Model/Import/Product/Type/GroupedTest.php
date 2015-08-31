@@ -121,7 +121,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         );
         $this->select = $this->getMock(
             'Magento\Framework\DB\Select',
-            ['from', 'where', 'joinLeft', 'getAdapter'],
+            ['from', 'where', 'joinLeft', 'getConnection'],
             [],
             '',
             false
@@ -130,9 +130,9 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $this->select->expects($this->any())->method('where')->will($this->returnSelf());
         $this->select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
         $this->connection->expects($this->any())->method('select')->will($this->returnValue($this->select));
-        $adapter = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
-        $adapter->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
-        $this->select->expects($this->any())->method('getAdapter')->willReturn($adapter);
+        $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $connectionMock->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
+        $this->select->expects($this->any())->method('getConnection')->willReturn($connectionMock);
         $this->connection->expects($this->any())->method('insertOnDuplicate')->willReturnSelf();
         $this->connection->expects($this->any())->method('delete')->willReturnSelf();
         $this->connection->expects($this->any())->method('quoteInto')->willReturn('');

@@ -10,6 +10,9 @@
 @minicart__border-color: @color-gray80;
 @minicart__padding-horizontal: @indent__base;
 
+@minicart-qty__height: 24px;
+
+
 //
 //  Common
 //  _____________________________________________
@@ -157,22 +160,26 @@
                 }
                 white-space: nowrap;
                 .counter.qty {
-                    &.empty {
-                       display: none;
-                    }
                     .css(background, @active__color);
-                    border-radius: 2px;
                     .css(color, @page__background-color);
-                    clip: none;
+                    .css(height, @minicart-qty__height);
+                    .css(line-height, @minicart-qty__height);
+                    border-radius: 2px;
                     display: inline-block;
-                    height: 24px;
-                    line-height: 24px;
-                    min-width: 18px;
                     margin: 3px 0 0;
-                    padding: 0 3px;
+                    min-width: 18px;
                     overflow: hidden;
+                    padding: 0 3px;
                     text-align: center;
                     white-space: normal;
+                    &.empty {
+                        display: none;
+                    }
+                    .loader {
+                        > img {
+                            .css(max-width, @minicart-qty__height);
+                        }
+                    }
                 }
                 .counter-label {
                     &:extend(.abs-visually-hidden all);

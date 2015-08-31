@@ -78,7 +78,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     protected $productMock;
 
     /**
-     * @var \Magento\Framework\Object\Factory |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject\Factory |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectFactoryMock;
 
@@ -128,7 +128,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     protected $customerRepositoryMock;
 
     /**
-     * @var \Magento\Framework\Object\Copy | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject\Copy | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectCopyServiceMock;
 
@@ -183,14 +183,14 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             ['getById']
         );
         $this->objectCopyServiceMock = $this->getMock(
-            'Magento\Framework\Object\Copy',
+            'Magento\Framework\DataObject\Copy',
             ['copyFieldsetToTarget'],
             [],
             '',
             false
         );
         $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
-        $this->objectFactoryMock = $this->getMock('\Magento\Framework\Object\Factory', ['create'], [], '', false);
+        $this->objectFactoryMock = $this->getMock('\Magento\Framework\DataObject\Factory', ['create'], [], '', false);
         $this->quoteAddressFactoryMock->expects(
             $this->any()
         )->method(
@@ -803,7 +803,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     {
         $expectedResult = 'test_string';
         $requestMock = $this->getMock(
-            '\Magento\Framework\Object'
+            '\Magento\Framework\DataObject'
         );
         $this->objectFactoryMock->expects($this->once())
             ->method('create')
@@ -842,7 +842,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
 
         $expectedResult = $itemMock;
         $requestMock = $this->getMock(
-            '\Magento\Framework\Object'
+            '\Magento\Framework\DataObject'
         );
         $this->objectFactoryMock->expects($this->once())
             ->method('create')

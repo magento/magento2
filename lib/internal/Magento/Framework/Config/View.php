@@ -26,6 +26,7 @@ class View extends \Magento\Framework\Config\AbstractXml
      *
      * @param \DOMDocument $dom
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _extractData(\DOMDocument $dom)
     {
@@ -40,6 +41,21 @@ class View extends \Magento\Framework\Config\AbstractXml
                         $varName = $varNode->getAttribute('name');
                         $varValue = $varNode->nodeValue;
                         $result[$childNode->tagName][$moduleName][$varName] = $varValue;
+                    }
+                    break;
+                case 'images':
+                    $moduleName = $childNode->getAttribute('module');
+                    /** @var \DOMElement $node */
+                    foreach ($childNode->getElementsByTagName('image') as $node) {
+                        $imageId = $node->getAttribute('id');
+                        $result[$childNode->tagName][$moduleName][$imageId]['type'] = $node->getAttribute('type');
+                        foreach ($node->childNodes as $attribute) {
+                            if ($attribute->nodeType != XML_ELEMENT_NODE) {
+                                continue;
+                            }
+                            $nodeValue = $attribute->nodeValue;
+                            $result[$childNode->tagName][$moduleName][$imageId][$attribute->tagName] = $nodeValue;
+                        }
                     }
                     break;
                 case 'exclude':
@@ -80,6 +96,31 @@ class View extends \Magento\Framework\Config\AbstractXml
     }
 
     /**
+     * Retrieve a list images attributes in scope of specified module
+     *
+     * @param string $module
+     * @return array
+     */
+    public function getImages($module)
+    {
+        return isset($this->_data['images'][$module]) ? $this->_data['images'][$module] : [];
+    }
+
+    /**
+     * Retrieve array of image attributes
+     *
+     * @param string $module
+     * @param string $imageId
+     * @return array
+     */
+    public function getImageAttributes($module, $imageId)
+    {
+        return isset($this->_data['images'][$module][$imageId])
+            ? $this->_data['images'][$module][$imageId]
+            : [];
+    }
+
+    /**
      * Return copy of DOM
      *
      * @return \Magento\Framework\Config\Dom
@@ -107,7 +148,13 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     protected function _getIdAttributes()
     {
-        return ['/view/vars' => 'module', '/view/vars/var' => 'name', '/view/exclude/item' => ['type', 'item']];
+        return [
+            '/view/vars' => 'module',
+            '/view/vars/var' => 'name',
+            '/view/exclude/item' => ['type', 'item'],
+            '/view/images' => 'modulle',
+            '/view/images/image' => ['id', 'type'],
+        ];
     }
 
     /**

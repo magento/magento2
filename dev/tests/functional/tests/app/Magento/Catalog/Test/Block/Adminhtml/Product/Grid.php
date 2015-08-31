@@ -6,15 +6,16 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product;
 
-use \Magento\Ui\Test\Block\Adminhtml\DataGrid;
+use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 
 /**
- * Class Grid
- * Backend catalog product grid
+ * Backend catalog product grid.
  */
 class Grid extends DataGrid
 {
     /**
+     * Row pattern.
+     *
      * @var string
      */
     protected $rowPattern = './/tr[%s]';
@@ -62,19 +63,9 @@ class Grid extends DataGrid
     ];
 
     /**
-     * Temporary solution for fix grid loader
+     * Update attributes for selected items.
      *
-     * {@inheritdoc}
-     */
-    public function waitLoader()
-    {
-        parent::waitLoader();
-        sleep(4);
-    }
-    /**
-     * Update attributes for selected items
-     *
-     * @param array $items
+     * @param array $items [optional]
      * @return void
      */
     public function updateAttributes(array $items = [])

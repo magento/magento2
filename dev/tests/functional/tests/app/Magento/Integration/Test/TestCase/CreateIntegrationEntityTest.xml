@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Integration\Test\TestCase\CreateIntegrationEntityTest">
+    <testCase name="Magento\Integration\Test\TestCase\CreateIntegrationEntityTest" summary="Create Integration Entity" ticketId="MAGETWO-26009">
         <variation name="CreateIntegrationEntityTestVariation1">
             <data name="integration/data/name" xsi:type="string">Integration%isolation%</data>
             <data name="integration/data/email" xsi:type="string">test@example.com</data>

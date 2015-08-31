@@ -18,33 +18,28 @@ use Magento\Framework\App\Action\Action;
 <?php
 $_productCollection = $block->getLoadedProductCollection();
 $_helper = $this->helper('Magento\Catalog\Helper\Output');
-$imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
 ?>
 <?php if (!$_productCollection->count()): ?>
     <div class="message info empty"><div><?php echo __('We can\'t find products matching the selection.') ?></div></div>
 <?php else: ?>
     <?php echo $block->getToolbarHtml() ?>
     <?php echo $block->getAdditionalHtml() ?>
-    <?php if ($block->getMode() == 'grid') {
-    $viewMode = 'grid';
-    $image = 'category_page_grid';
-    $showDescription = false;
-    $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
-} else {
-    $viewMode = 'list';
-    $image = 'category_page_list';
-    $showDescription = true;
-    $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::FULL_VIEW;
-}
+    <?php
+    if ($block->getMode() == 'grid') {
+        $viewMode = 'grid';
+        $image = 'category_page_grid';
+        $showDescription = false;
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+    } else {
+        $viewMode = 'list';
+        $image = 'category_page_list';
+        $showDescription = true;
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::FULL_VIEW;
+    }
     /**
      * Position for actions regarding image size changing in vde if needed
      */
     $pos = $block->getPositioned();
-    $position = '';
-    if ($pos != null) {
-        $position = ' style="left:' . $block->getVar("{$image}:width") . 'px;'
-            . 'top:' . $block->getVar("{$image}:height") . 'px;"';
-    }
     ?>
     <div class="products wrapper <?php echo $viewMode; ?> products-<?php echo $viewMode; ?>">
         <?php $iterator = 1; ?>
@@ -53,9 +48,16 @@ $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\I
             <?php foreach ($_productCollection as $_product): ?>
                 <?php echo($iterator++ == 1) ? '<li class="item product product-item">' : '</li><li class="item product product-item">' ?>
                 <div class="product-item-info" data-container="product-grid">
+                    <?php
+                    $productImage = $block->getImage($_product, $image);
+                    if ($pos != null) {
+                        $position = ' style="left:' . $productImage->getWidth() . 'px;'
+                            . 'top:' . $productImage->getHeight() . 'px;"';
+                    }
+                    ?>
                     <?php // Product Image ?>
                     <a href="<?php echo $_product->getProductUrl() ?>" class="product photo product-item-photo" tabindex="-1">
-                        <?php echo $imageBlock->init($_product, $image)->toHtml() ?>
+                        <?php echo $productImage->toHtml(); ?>
                     </a>
                     <div class="product details product-item-details">
                         <?php

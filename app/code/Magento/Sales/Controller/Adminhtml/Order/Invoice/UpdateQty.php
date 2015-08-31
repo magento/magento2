@@ -77,8 +77,8 @@ class UpdateQty extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvo
             }
 
             /** @var \Magento\Sales\Model\Order\Invoice $invoice */
-            $invoice = $this->_objectManager->create('Magento\Sales\Model\Service\Order', ['order' => $order])
-                ->prepareInvoice($invoiceItems);
+            $invoiceManagement = $this->_objectManager->create('Magento\Sales\Api\InvoiceManagementInterface');
+            $invoice = $invoiceManagement->prepareInvoice($orderId, $invoiceItems);
 
             if (!$invoice->getTotalQty()) {
                 throw new \Magento\Framework\Exception\LocalizedException(

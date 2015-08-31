@@ -26,7 +26,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
             <?php else:?>
                 <span class="product-item-photo">
             <?php endif;?>
-            <?php echo $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image')->init($block->getProductForThumbnail(), 'cart_page_product_thumbnail')->toHtml(); ?>
+            <?php echo $block->getImage($block->getProductForThumbnail(), 'cart_page_product_thumbnail')->toHtml(); ?>
             <?php if ($block->hasProductUrl()):?>
                 </a>
             <?php else: ?>

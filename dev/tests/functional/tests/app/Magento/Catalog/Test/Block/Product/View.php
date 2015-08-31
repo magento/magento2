@@ -127,6 +127,20 @@ class View extends AbstractConfigureBlock
     protected $messageBlock = '.page.messages';
 
     /**
+     * Minicart block locator.
+     *
+     * @var string
+     */
+    protected $miniCartBlock = '[data-block="minicart"]';
+
+    /**
+     * Success message selector.
+     *
+     * @var string
+     */
+    protected $successMessage = '[data-ui-id$=message-success]';
+
+    /**
      * Get block price.
      *
      * @return Price
@@ -147,14 +161,21 @@ class View extends AbstractConfigureBlock
      */
     public function addToCart(FixtureInterface $product)
     {
+        /** @var \Magento\Checkout\Test\Block\Cart\Sidebar $miniCart */
+        $miniCart = $this->blockFactory->create(
+            '\Magento\Checkout\Test\Block\Cart\Sidebar',
+            ['element' => $this->browser->find($this->miniCartBlock)]
+        );
         /** @var CatalogProductSimple $product */
         $checkoutData = $product->getCheckoutData();
 
+        $miniCart->waitInit();
         $this->fillOptions($product);
         if (isset($checkoutData['qty'])) {
             $this->setQty($checkoutData['qty']);
         }
         $this->clickAddToCart();
+        $miniCart->waitLoader();
     }
 
     /**

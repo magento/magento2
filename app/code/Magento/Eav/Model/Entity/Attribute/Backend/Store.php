@@ -23,7 +23,7 @@ class Store extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Prepare data before save
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      */
     protected function _beforeSave($object)

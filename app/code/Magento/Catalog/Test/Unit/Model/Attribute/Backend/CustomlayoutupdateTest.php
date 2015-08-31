@@ -8,7 +8,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Attribute\Backend;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class CustomlayoutupdateTest extends \PHPUnit_Framework_TestCase
@@ -28,7 +28,7 @@ class CustomlayoutupdateTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateException()
     {
-        $object = new Object();
+        $object = new DataObject();
         $object->setData($this->attributeName, 'exception');
         $this->model->validate($object);
     }
@@ -39,7 +39,7 @@ class CustomlayoutupdateTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidate($data)
     {
-        $object = new Object();
+        $object = new DataObject();
         $object->setData($this->attributeName, $data);
 
         $this->assertTrue($this->model->validate($object));

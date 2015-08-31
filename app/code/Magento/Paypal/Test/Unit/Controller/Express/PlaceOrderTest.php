@@ -109,7 +109,7 @@ class PlaceOrderTest extends \Magento\Paypal\Test\Unit\Controller\ExpressTest
             ]
         )
         ) {
-            $payment = new \Magento\Framework\Object(['checkout_redirect_url' => $redirectUrl]);
+            $payment = new \Magento\Framework\DataObject(['checkout_redirect_url' => $redirectUrl]);
             $this->quote->expects($this->once())
                 ->method('getPayment')
                 ->will($this->returnValue($payment));

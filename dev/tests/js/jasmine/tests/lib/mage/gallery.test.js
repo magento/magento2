@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright ï¿½ 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -11,135 +11,109 @@ define([
 
     'use strict';
 
-    var body = $('body');
-    var galleryAPI;
-
-    var conf =  JSON.parse(config);
-
-    var dataToUpdate = [
-        {
-            img: 'data:image/png;base64,' +
-            'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP4Xw8AAoABf5/NhYYAAAAASUVORK5CYII='
-        }, {
-            img: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAw' +
-            'CAAAAC0lEQVR42mP4Xw8AAoABf5/NhYYAAAAASUVORK5CYII='
-        }, {
-            img: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAw' +
-            'CAAAAC0lEQVR42mP4Xw8AAoABf5/NhYYAAAAASUVORK5CYII='
-        }, {
-            img: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAw' +
-            'CAAAAC0lEQVR42mP4Xw8AAoABf5/NhYYAAAAASUVORK5CYII='
-        }
-    ];
+    var body = $('body'),
+        galleryAPI,
+        conf = JSON.parse(config),
+        gallerySelector = '[data-gallery-role="gallery"]',
+        magnifierSelector = '[data-gallery-role="magnifier"]',
+        stageSelector = '[data-gallery-role="stage-shaft"]',
+        navSelector = '[data-gallery-role="nav-frame"]',
+        dotSelector = '[data-nav-type="dot"]',
+        dataToUpdate = [
+            {
+                img: 'data:image/png;base64,' +
+                'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP4Xw8AAoABf5/NhYYAAAAASUVORK5CYII='
+            }, {
+                img: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAw' +
+                'CAAAAC0lEQVR42mP4Xw8AAoABf5/NhYYAAAAASUVORK5CYII='
+            }, {
+                img: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAw' +
+                'CAAAAC0lEQVR42mP4Xw8AAoABf5/NhYYAAAAASUVORK5CYII='
+            }, {
+                img: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAw' +
+                'CAAAAC0lEQVR42mP4Xw8AAoABf5/NhYYAAAAASUVORK5CYII='
+            }
+        ];
 
     gallery(magnifier(conf, body), body);
 
     beforeEach(function () {
-        galleryAPI = $('.fotorama-item').data('gallery');
+        galleryAPI = $(gallerySelector).data('gallery');
     });
 
-    describe('gallery magnifier', function () {
+    describe('magnifier/magnify', function () {
 
-        it('magnifier is defined', function () {
-            expect($('.fotorama-item').magnify).toBeDefined();
-            expect(typeof $('.fotorama-item').magnify).toBe('function');
-        });
+        if ('ontouchstart' in document.documentElement) {
+            it('magnifier is not initialized on mobile platforms', function () {
+                expect($(magnifierSelector).length).toBe(0);
+            });
+        } else {
+            it('magnifier is defined', function () {
+                expect($(gallerySelector).magnify).toBeDefined();
+                expect(typeof $(gallerySelector).magnify).toBe('function');
+                expect($(magnifierSelector).hasClass('hidden')).toBeTruthy();
+            });
 
-        it('magnifier largeWrapper config', function () {
-            expect('#' + $('.magnifier-large').parent().attr('id')).toBe(conf.magnifierOpts.largeWrapper);
-        });
-
-        it('magnifier thumb config', function () {
-            expect($('.magnifier-large').attr('src')).toBe($('.fotorama__stage__frame .fotorama__img').attr('src'));
-        });
-
-        it('magnifier appearing', function () {
-            var ev = conf.magnifierOpts.eventType === 'click' ? 'click':'mouseover';
-            expect($($('.magnifier-preview').children()[0]).attr('class')).toBe('magnifier-large hidden');
-            $('.fotorama__stage__frame .fotorama__img').trigger(ev);
-            expect($($('.magnifier-preview').children()[0]).attr('class')).toBe('magnifier-large');
-            $('.fotorama__stage__frame .fotorama__img').trigger('mouseleave');
-        });
+            it('magnifier is initialized on desktop platforms', function () {
+                expect($(magnifierSelector + ' img').attr('src')).toBe($(stageSelector + ' img').attr('src'));
+            });
+            it('magnifier appearing on event on desktop platforms', function () {
+                var ev = conf.magnifierOpts.eventType === 'click' ? 'click' : 'mouseover';
+                expect($($(magnifierSelector).children()[0]).hasClass('magnifier-large hidden')).toBeTruthy();
+                $(stageSelector + ' img').trigger(ev);
+                expect($($(magnifierSelector).children()[0]).hasClass('magnifier-large hidden')).toBeFalsy();
+                $(stageSelector + ' img').trigger('mouseleave');
+            });
+        }
     });
 
-    describe('gallery API', function () {
+    describe('mage/gallery/gallery', function () {
 
         it('gallery loaded', function () {
-            expect($('.fotorama__nav__frame').length).toBe(conf.data.length);
+            expect($(navSelector).length).toBe(conf.data.length);
         });
 
         it('show last', function () {
             galleryAPI.last();
-            expect($('.fotorama__nav__shaft .fotorama__nav__frame:eq('+ (conf.data.length-1) +')')
-                .hasClass('fotorama__active')).toBeTruthy();
+            expect($(navSelector + ':eq(' + (conf.data.length - 1) + ')')
+                .attr('data-active') === 'true').toBeTruthy();
         });
 
         it('show first', function () {
             galleryAPI.first();
-            expect($('.fotorama__nav__shaft .fotorama__nav__frame:eq(0)').hasClass('fotorama__active')).toBeTruthy();
+            expect($(navSelector + ':eq(0)').attr('data-active') === 'true').toBeTruthy();
         });
 
         it('show next', function () {
             galleryAPI.next();
-            expect($('.fotorama__nav__shaft .fotorama__nav__frame:eq(1)').hasClass('fotorama__active')).toBeTruthy();
+            expect($(navSelector + ':eq(1)').attr('data-active') === 'true').toBeTruthy();
         });
 
         it('show previos', function () {
             galleryAPI.prev();
-            expect($('.fotorama__nav__shaft .fotorama__nav__frame:eq(0)').hasClass('fotorama__active')).toBeTruthy();
+            expect($(navSelector + ':eq(0)').attr('data-active') === 'true').toBeTruthy();
         });
 
         it('show by number', function () {
             galleryAPI.seek(3);
-            expect($('.fotorama__nav__shaft .fotorama__nav__frame:eq(2)').hasClass('fotorama__active')).toBeTruthy();
+            expect($(navSelector + ':eq(2)').attr('data-active') === 'true').toBeTruthy();
         });
 
         it('update options', function () {
-            expect($('.fotorama__nav-wrap .fotorama__nav').hasClass('fotorama__nav--thumbs')).toBeTruthy();
+            expect($(navSelector).attr('data-nav-type') === 'thumb').toBeTruthy();
             galleryAPI.updateOptions({
-                nav: "dots"
+                nav: 'dots'
             });
-            expect($('.fotorama__nav-wrap .fotorama__nav').hasClass('fotorama__nav--dots')).toBeTruthy();
+            expect($(dotSelector).length).toBe(conf.data.length);
         });
 
         it('update data', function () {
             galleryAPI.updateData(dataToUpdate);
-            expect($('.fotorama__nav__frame--dot').length).toBe(dataToUpdate.length);
+            expect($(dotSelector).length).toBe(dataToUpdate.length);
         });
 
-        describe('gallery with breakpoints', function () {
-            it('configuration stays default if breakpoint is not fired', function () {
-                galleryAPI.first();
-                galleryAPI.prev();
-                expect($('.fotorama__nav__shaft .fotorama__nav__frame--dot:eq(' + (dataToUpdate.length - 1) + ')').hasClass('fotorama__active')).toBeTruthy();
-                galleryAPI.first();
-                galleryAPI.updateOptions({
-                    "breakpoints": {
-                        "(max-width: 0px)": {
-                            "loop": false
-                        }
-                    }
-                });
-                galleryAPI.prev();
-                expect($('.fotorama__nav__shaft .fotorama__nav__frame--dot:eq(' + (dataToUpdate.length - 1) + ')').hasClass('fotorama__active')).toBeTruthy();
-            });
-
-            it('configuration could be updated with breakpoints', function () {
-                galleryAPI.first();
-                galleryAPI.prev();
-                expect($('.fotorama__nav__shaft .fotorama__nav__frame--dot:eq(' + (dataToUpdate.length - 1) + ')').hasClass('fotorama__active')).toBeTruthy();
-                galleryAPI.first();
-                galleryAPI.updateOptions({
-                    "breakpoints": {
-                        "(min-width: 1px)": {
-                            "loop": false
-                        }
-                    }
-                });
-                galleryAPI.prev();
-                expect($('.fotorama__nav__shaft .fotorama__nav__frame--dot:eq(0)').hasClass('fotorama__active')).toBeTruthy();
-            });
+        it('breakpoints override configs', function () {
+            expect($('.fotorama__arr').css('display')).toBe('none');
         });
     });
 });
-

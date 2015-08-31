@@ -532,7 +532,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $validationResult = $this->getMockBuilder('Magento\Framework\Object')
+        $validationResult = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->setMethods([
                 'getIsValid',

@@ -61,16 +61,16 @@ class ArrayUtilsTest extends \PHPUnit_Framework_TestCase
         // arrays
         $this->assertEquals($decorated, $this->_arrayUtils->decorateArray($original, ''));
 
-        // \Magento\Framework\Object
+        // \Magento\Framework\DataObject
         $sample = [
-            new \Magento\Framework\Object($original[0]),
-            new \Magento\Framework\Object($original[1]),
-            new \Magento\Framework\Object($original[2]),
+            new \Magento\Framework\DataObject($original[0]),
+            new \Magento\Framework\DataObject($original[1]),
+            new \Magento\Framework\DataObject($original[2]),
         ];
         $decoratedVo = [
-            new \Magento\Framework\Object($decorated[0]),
-            new \Magento\Framework\Object($decorated[1]),
-            new \Magento\Framework\Object($decorated[2]),
+            new \Magento\Framework\DataObject($decorated[0]),
+            new \Magento\Framework\DataObject($decorated[1]),
+            new \Magento\Framework\DataObject($decorated[2]),
         ];
         $this->assertEquals($decoratedVo, $this->_arrayUtils->decorateArray($sample, ''));
     }

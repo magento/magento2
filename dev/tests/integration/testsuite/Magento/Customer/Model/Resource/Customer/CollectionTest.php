@@ -24,7 +24,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testAddNameToSelect()
     {
         $this->_collection->addNameToSelect();
-        $joinParts = $this->_collection->getSelect()->getPart(\Zend_Db_Select::FROM);
+        $joinParts = $this->_collection->getSelect()->getPart(\Magento\Framework\DB\Select::FROM);
 
         $this->assertArrayHasKey('e', $joinParts);
         $this->assertCount(1, $joinParts);

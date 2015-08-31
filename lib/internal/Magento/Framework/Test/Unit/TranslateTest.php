@@ -271,8 +271,8 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
     protected function expectsSetConfig($themeId, $localeCode = 'en_US')
     {
         $this->locale->expects($this->any())->method('getLocale')->will($this->returnValue($localeCode));
-        $scope = new \Magento\Framework\Object(['code' => 'frontendCode', 'id' => 1]);
-        $scopeAdmin = new \Magento\Framework\Object(['code' => 'adminCode', 'id' => 0]);
+        $scope = new \Magento\Framework\DataObject(['code' => 'frontendCode', 'id' => 1]);
+        $scopeAdmin = new \Magento\Framework\DataObject(['code' => 'adminCode', 'id' => 0]);
         $this->scopeResolver->expects($this->any())
             ->method('getScope')
             ->will(
@@ -283,7 +283,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
                     ]
                 )
             );
-        $designTheme = new \Magento\Framework\Object(['id' => $themeId]);
+        $designTheme = new \Magento\Framework\DataObject(['id' => $themeId]);
         $this->viewDesign->expects($this->any())->method('getDesignTheme')->will($this->returnValue($designTheme));
     }
 }
