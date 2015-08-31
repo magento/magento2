@@ -75,6 +75,8 @@ define([
         },
 
         _replaceImage: function(oldFile, newFile, imageData) {
+            var tmpOldFile = oldFile;
+            var tmpNewFile = newFile;
             oldFile = this.__prepareFilename(oldFile);
             newFile = this.__prepareFilename(newFile);
             if(newFile == oldFile) {
@@ -84,6 +86,25 @@ define([
             }
             this._removeImage(oldFile);
             this._setImage(newFile, imageData);
+            if(oldFile && imageData.old_file) { // For questions about this behavior refer to Vadim Zubovich
+                var oldImageId = this.findElementId(tmpOldFile);
+                var newImageId = this.findElementId(tmpNewFile);
+                var fc = jQuery('#item_id').val();
+
+                var suff = 'product[media_gallery][images]' + fc;
+
+                var searchsuff = 'input[name="' + suff + '[value_id]"]';
+                var key = jQuery(searchsuff).val();
+                if(!key) {
+                    return;
+                }
+                var old_val_id_elem;
+                old_val_id_elem = document.createElement('input');
+                old_val_id_elem.setAttribute('type', 'hidden');
+                old_val_id_elem.setAttribute('value', key);
+                old_val_id_elem.setAttribute('name', 'product[media_gallery][images][' + newImageId + '][save_data_from]');
+                jQuery('form[data-form="edit-product"]').append(old_val_id_elem);
+            }
         },
 
         /**
@@ -120,7 +141,6 @@ define([
             var self        = this;
             var url         = this.options.saveVideoUrl;
             var fu          = jQuery('#new_video_screenshot');
-            var old_val_id_elem;
 
             var tmp_input   = document.createElement('input');
             tmp_input.setAttribute('name', fu.attr('name'));
@@ -144,25 +164,11 @@ define([
                     });
                     data['disabled'] = $('#new_video_disabled').prop('checked') ? 1 : 0;
                     data['media_type'] = 'external-video';
+                    data.old_file = oldFile;
                     oldFile  ?
                         self._replaceImage(oldFile, data.file, data):
                         self._setImage(data.file, data);
                     callback.call(0, data);
-
-                    if(oldFile) { // For questions about this behavior refer to Vadim Zubovich
-                        var fc = jQuery('#item_id').val();
-                        var suff = 'product[media_gallery][images]' + fc;
-                        var key = jQuery('input[name="' + suff + '[value_id]"]').val();
-                        if(key) {
-                            old_val_id_elem = document.createElement('input');
-                            old_val_id_elem.setAttribute('type', 'hidden');
-                            old_val_id_elem.setAttribute('value', key);
-                            old_val_id_elem.setAttribute('name', suff + '[save_data_from]');
-                        }
-                    }
-                    if(old_val_id_elem) {
-                        jQuery('form[data-form="edit-product"]').append(old_val_id_elem);
-                    }
                 }
             );
         },
@@ -297,6 +303,17 @@ define([
                     $('#new_video_form')[0].reset();
                 }
             });
+        },
+
+        /**
+         * Find element by fileName
+         */
+        findElementId: function (file) {
+            var elem = jQuery('.image.item').find('input[value="' + file + '"]');
+            if(!elem) {
+                return null;
+            }
+            return jQuery(elem).attr('name').replace('product[media_gallery][images][', '').replace('][file]', '');
         },
 
         /**
