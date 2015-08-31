@@ -31,12 +31,19 @@ class CustomerData extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Get sections that can not be cached on client-side
+     * Get sections that can not be cached on frontend-side
      *
      * @return array
      */
-    public function getMutableSections()
+    public function getNotCachedSections() {
+        return $this->nonCachedSections;
+    }
+
+    /**
+     * @return array
+     */
+    public function getNonCachedSectionKeys()
     {
-        return ['banner'];
+        return array_keys($this->nonCachedSections);
     }
 }
