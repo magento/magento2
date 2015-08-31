@@ -139,7 +139,7 @@
             <xs:element name="webapi" maxOccurs="1" minOccurs="0">
                 <xs:complexType>
                     <xs:sequence>
-                        <xs:element type="xs:string" name="token" maxOccurs="1" minOccurs="0"/>
+                        <xs:element type="xs:string" name="token" maxOccurs="1" minOccurs="1"/>
                     </xs:sequence>
                     <xs:attribute type="xs:unsignedByte" name="priority" use="required" />
                 </xs:complexType>
