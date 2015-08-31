@@ -70,8 +70,6 @@ require([
         collapsableWrapper = $("#<?php echo $block->getId()?>-wrapper"),
         collapsableArea = $('> .collapse', collapsableWrapper),
         stockAvailabilityField = $('#quantity_and_stock_status'),
-        productAttributes = <?= $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode(array_values($block->getAttributes())) ?>,
-        productDetails =  $('[data-tab-panel="product-details"]'),
         qtyField = $('#qty'),
         inventoryQty = $('#inventory_qty'),
         inventoryAvailabilityField = $('#inventory_stock_availability'),
@@ -89,9 +87,6 @@ require([
                     element.trigger('change')
                 }
             }
-        },
-        getConfigurableProductAttribute = function(attribute_code) {
-            return $('[data-attribute-code="' + attribute_code + '"] select', productDetails);
         };
 
     collapsableArea
@@ -106,15 +101,8 @@ require([
             inventoryAvailabilityField.removeProp('disabled');
             setElementDisabled(qtyField, true, true);
             setElementDisabled(stockAvailabilityField, false, false);
-            $.each(productAttributes, function() {
-                getConfigurableProductAttribute(this.attribute_code).prop('disabled', true);
-            });
         })
         .on('hide', function() {
-            if (productAttributes.length) {
-                return;
-            }
-
             currentProductTemplateControl
                 .removeClass('disabled')
                 .removeProp('disabled');
@@ -122,9 +110,6 @@ require([
             inventoryAvailabilityField.prop('disabled', true);
             setElementDisabled(stockAvailabilityField, true, false);
             setElementDisabled(qtyField, false, true);
-            $.each(productAttributes, function() {
-                getConfigurableProductAttribute(this.attribute_code).removeProp('disabled');
-            });
         })
         .collapse(hasVariations ? 'show' : 'hide');
 
