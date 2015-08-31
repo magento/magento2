@@ -10,6 +10,11 @@ namespace Magento\Framework\Filesystem\Driver;
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DriverInterface;
 
+/**
+ * Class File
+ * @package Magento\Framework\Filesystem\Driver
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
 class File implements DriverInterface
 {
     /**
@@ -404,6 +409,57 @@ class File implements DriverInterface
                     [$path, $this->getWarningMessage()]
                 )
             );
+        }
+        return $result;
+    }
+
+    /**
+     * Recursively change permissions of given path
+     *
+     * @param string $path
+     * @param int $dirPermissions
+     * @param int $filePermissions
+     * @return bool
+     * @throws FileSystemException
+     */
+    public function changePermissionsRecursively($path, $dirPermissions, $filePermissions)
+    {
+        $result = true;
+        if ($this->isFile($path)) {
+            $result = @chmod($path, $filePermissions);
+        } else {
+            $result = @chmod($path, $dirPermissions);
+        }
+        if (!$result) {
+            throw new FileSystemException(
+                new \Magento\Framework\Phrase(
+                    'Cannot change permissions for path "%1" %2',
+                    [$path, $this->getWarningMessage()]
+                )
+            );
+        }
+
+        $flags = \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::UNIX_PATHS;
+
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($path, $flags),
+            \RecursiveIteratorIterator::CHILD_FIRST
+        );
+        /** @var \FilesystemIterator $entity */
+        foreach ($iterator as $entity) {
+            if ($entity->isDir()) {
+                $result = @chmod($entity->getPathname(), $dirPermissions);
+            } else {
+                $result = @chmod($entity->getPathname(), $filePermissions);
+            }
+            if (!$result) {
+                throw new FileSystemException(
+                    new \Magento\Framework\Phrase(
+                        'Cannot change permissions for path "%1" %2',
+                        [$path, $this->getWarningMessage()]
+                    )
+                );
+            }
         }
         return $result;
     }

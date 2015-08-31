@@ -150,6 +150,7 @@ class TypeProcessor
      * @param string $class
      * @return array
      * @throws \InvalidArgumentException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _processComplexType($class)
     {
@@ -194,10 +195,17 @@ class TypeProcessor
         if ($isGetter && !$methodReflection->getNumberOfRequiredParameters()) {
             $returnMetadata = $this->getGetterReturnType($methodReflection);
             $fieldName = $this->dataObjectGetterNameToFieldName($methodReflection->getName());
+            if ($returnMetadata['description']) {
+                $description = $returnMetadata['description'];
+            } else {
+                $description = $this->dataObjectGetterDescriptionToFieldDescription(
+                    $methodReflection->getDocBlock()->getShortDescription()
+                );
+            }
             $this->_types[$typeName]['parameters'][$fieldName] = [
                 'type' => $this->register($returnMetadata['type']),
                 'required' => $returnMetadata['isRequired'],
-                'documentation' => $returnMetadata['description'],
+                'documentation' => $description,
             ];
         }
     }
@@ -244,6 +252,17 @@ class TypeProcessor
             $fieldName = $getterName;
         }
         return lcfirst($fieldName);
+    }
+
+    /**
+     * Convert Data Object getter short description into field description.
+     *
+     * @param string $shortDescription
+     * @return string
+     */
+    protected function dataObjectGetterDescriptionToFieldDescription($shortDescription)
+    {
+        return ucfirst(substr(strstr($shortDescription, " "), 1));
     }
 
     /**
@@ -297,6 +316,29 @@ class TypeProcessor
             'description' => $returnAnnotation->getDescription(),
             'parameterCount' => $methodReflection->getNumberOfRequiredParameters()
         ];
+    }
+
+    /**
+     * Get possible method exceptions
+     *
+     * @param \Zend\Code\Reflection\MethodReflection $methodReflection
+     * @return array
+     */
+    public function getExceptions($methodReflection)
+    {
+        $exceptions = [];
+        $methodDocBlock = $methodReflection->getDocBlock();
+        if ($methodDocBlock->hasTag('throws')) {
+            $throwsTypes = $methodDocBlock->getTags('throws');
+            if (is_array($throwsTypes)) {
+                /** @var $throwsType \Zend\Code\Reflection\DocBlock\Tag\ThrowsTag */
+                foreach ($throwsTypes as $throwsType) {
+                    $exceptions = array_merge($exceptions, $throwsType->getTypes());
+                }
+            }
+        }
+
+        return $exceptions;
     }
 
     /**
@@ -627,5 +669,46 @@ class TypeProcessor
     protected function classHasMethod(ClassReflection $class, $methodName)
     {
         return $class->hasMethod($methodName) && ($class->getMethod($methodName)->getName() == $methodName);
+    }
+
+    /**
+     * Process call info data from interface.
+     *
+     * @param array $interface
+     * @param string $serviceName API service name
+     * @param string $methodName
+     * @return $this
+     */
+    public function processInterfaceCallInfo($interface, $serviceName, $methodName)
+    {
+        foreach ($interface as $direction => $interfaceData) {
+            $direction = ($direction == 'in') ? 'requiredInput' : 'returned';
+            foreach ($interfaceData['parameters'] as $parameterData) {
+                if (!$this->isTypeSimple($parameterData['type']) && !$this->isTypeAny($parameterData['type'])) {
+                    $operation = $this->getOperationName($serviceName, $methodName);
+                    if ($parameterData['required']) {
+                        $condition = ($direction == 'requiredInput') ? 'yes' : 'always';
+                    } else {
+                        $condition = ($direction == 'requiredInput') ? 'no' : 'conditionally';
+                    }
+                    $callInfo = [];
+                    $callInfo[$direction][$condition]['calls'][] = $operation;
+                    $this->setTypeData($parameterData['type'], ['callInfo' => $callInfo]);
+                }
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Get name of operation based on service and method names.
+     *
+     * @param string $serviceName API service name
+     * @param string $methodName
+     * @return string
+     */
+    public function getOperationName($serviceName, $methodName)
+    {
+        return $serviceName . ucfirst($methodName);
     }
 }
