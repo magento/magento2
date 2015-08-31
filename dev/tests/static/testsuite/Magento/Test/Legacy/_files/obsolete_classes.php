@@ -3809,6 +3809,15 @@ return [
         'Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\ProductType'
         . '\Configurable'
     ],
+    ['Magento\Setup\Model\Deployer', 'Magento\Deploy\Model\Deployer'],
+    [
+        'Magento\Setup\Console\Command\DeployStaticContentCommand',
+        'Magento\Deploy\Console\Command\DeployStaticContentCommand'
+    ],
+    [
+        'Magento\Setup\Test\Unit\Console\Command\DeployStaticContentCommandTest',
+        'Magento\Deploy\Test\Unit\Console\Command\DeployStaticContentCommandTest'
+    ],
     ['Magento\Store\Model\Storage\Db', 'Magento\Store\Model\StoreManagerInterface'],
     ['Magento\Store\Model\Storage\DefaultStorage', 'Magento\Store\Model\StoreManagerInterface'],
     ['Magento\Store\Model\StorageFactory'],
@@ -3829,4 +3838,12 @@ return [
     ['Magento\CatalogSearch\Model\Layer\Advanced\Context'],
     ['Magento\CatalogSearch\Model\Layer\Advanced\FilterableAttributeList'],
     ['Magento\Customer\Model\Resource\Customer\CustomersTypeOptions'],
+    ['Magento\Framework\Gdata\Gshopping\Content'],
+    ['Magento\Framework\Gdata\Gshopping\Entry'],
+    ['Magento\Framework\Gdata\Gshopping\HttpException'],
+    ['Magento\Framework\Gdata\Gshopping\ItemQuery'],
+    ['Magento\Framework\Gdata\Gshopping\Extension\Tax'],
+    ['Magento\Framework\Gdata\Gshopping\Extension\Shipping'],
+    ['Magento\Framework\Gdata\Gshopping\Extension\Control'],
+    ['Magento\Framework\Gdata\Gshopping\Extension\Attribute'],
 ];
