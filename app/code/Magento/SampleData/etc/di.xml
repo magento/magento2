@@ -9,7 +9,8 @@
     <type name="Magento\Framework\Console\CommandList">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="sampleDataCommand" xsi:type="object">Magento\SampleData\Console\Command\SampleDataInstallCommand</item>
+                <item name="sampleDataInstallCommand" xsi:type="object">Magento\SampleData\Console\Command\SampleDataInstallCommand</item>
+                <item name="sampleDataDeployCommand" xsi:type="object">Magento\SampleData\Console\Command\SampleDataDeployCommand</item>
             </argument>
         </arguments>
     </type>
