@@ -112,6 +112,17 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @param \Magento\Catalog\Model\Product $object
      * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
+    public function beforeLoad($object)
+    {
+        $this->mediaEntryProcessorPool->processBeforeLoad($object, $this->getAttribute());
+    }
+
+    /**
+     * Load attribute data after product loaded
+     *
+     * @param \Magento\Catalog\Model\Product $object
+     * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+     */
     public function afterLoad($object)
     {
         $this->mediaEntryProcessorPool->processAfterLoad($object, $this->getAttribute());
@@ -129,12 +140,28 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * @param \Magento\Framework\DataObject $object
      * @return void
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function afterSave($object)
     {
         $this->mediaEntryProcessorPool->processAfterSave($object, $this->getAttribute());
+    }
+
+    /**
+     * @param \Magento\Framework\DataObject $object
+     * @return void
+     */
+    public function beforeDelete($object)
+    {
+        $this->mediaEntryProcessorPool->processBeforeDelete($object, $this->getAttribute());
+    }
+
+    /**
+     * @param \Magento\Framework\DataObject $object
+     * @return void
+     */
+    public function afterDelete($object)
+    {
+        $this->mediaEntryProcessorPool->processAfterDelete($object, $this->getAttribute());
     }
 
     /**

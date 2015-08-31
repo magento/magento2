@@ -21,6 +21,8 @@ class ExternalVideoMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryP
      */
     const GALLERY_VALUE_VIDEO_TABLE = 'catalog_product_entity_media_gallery_value_video';
 
+    const ADDITIONAL_STORE_DATA_KEY = 'additional_store_data';
+
     /**
      * @var array
      */
@@ -55,12 +57,28 @@ class ExternalVideoMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryP
      * @param AbstractAttribute $attribute
      * @return void
      */
+    public function beforeSave(Product $product, AbstractAttribute $attribute)
+    {
+        $mediaCollection = $this->getMediaEntriesDataCollection($product, $attribute);
+        if (!empty($mediaCollection)) {
+            $storeDataCollection = $this->loadStoreViewVideoData($mediaCollection, $product->getStoreId());
+            $mediaCollection = $this->addAdditionalStoreData($mediaCollection, $storeDataCollection);
+            $product->setData($attribute->getAttributeCode(), $mediaCollection);
+        }
+    }
+
+    /**
+     * @param Product $product
+     * @param AbstractAttribute $attribute
+     * @return void
+     */
     public function afterSave(Product $product, AbstractAttribute $attribute)
     {
         $mediaCollection = $this->getMediaEntriesDataCollection($product, $attribute);
         if (!empty($mediaCollection)) {
             $videoDataCollection = $this->collectVideoData($mediaCollection);
             $this->saveVideoData($videoDataCollection, $product->getStoreId());
+            $this->saveAdditionalStoreData($videoDataCollection);
         }
     }
 
@@ -73,12 +91,52 @@ class ExternalVideoMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryP
     {
         foreach ($videoDataCollection as $item) {
             $item['store_id'] = $storeId;
-            $this->resourceEntryMediaGallery->updateTable(
-                self::GALLERY_VALUE_VIDEO_TABLE,
-                $this->prepareVideoRowDataForSave($item),
-                ['value_id', 'store_id']
-            );
+            $this->saveVideoValuesItem($item);
         }
+    }
+
+    /**
+     * @param array $videoDataCollection
+     * @return void
+     */
+    protected function saveAdditionalStoreData(array $videoDataCollection)
+    {
+        foreach ($videoDataCollection as $mediaItem) {
+            if (!empty($mediaItem[self::ADDITIONAL_STORE_DATA_KEY])) {
+                foreach ($mediaItem[self::ADDITIONAL_STORE_DATA_KEY] as $additionalStoreItem) {
+                    $additionalStoreItem['value_id'] = $mediaItem['value_id'];
+                    $this->saveVideoValuesItem($additionalStoreItem);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param array $item
+     * @return void
+     */
+    protected function saveVideoValuesItem(array $item)
+    {
+        $this->resourceEntryMediaGallery->updateTable(
+            self::GALLERY_VALUE_VIDEO_TABLE,
+            $this->prepareVideoRowDataForSave($item),
+            ['value_id', 'store_id']
+        );
+    }
+
+    /**
+     * @param array $mediaCollection
+     * @param int $currentStoreId
+     * @return array
+     */
+    protected function excludeCurrentStoreRecord(array $mediaCollection, $currentStoreId)
+    {
+        return array_filter(
+            $mediaCollection,
+            function ($item) use ($currentStoreId) {
+                return $item['store_id'] == $currentStoreId ? false : true;
+            }
+        );
     }
 
     /**
@@ -95,6 +153,28 @@ class ExternalVideoMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryP
         }
 
         return $rowData;
+    }
+
+    /**
+     * @param array $mediaCollection
+     * @param int $excludedStore
+     * @return array
+     */
+    protected function loadStoreViewVideoData(array $mediaCollection, $excludedStore)
+    {
+        $ids = $this->collectVideoEntriesIdsToAdditionalLoad($mediaCollection);
+        $result = [];
+        if (!empty($ids)) {
+            $result = $this->resourceEntryMediaGallery->loadDataFromTableByValueId(
+                self::GALLERY_VALUE_VIDEO_TABLE,
+                $ids,
+                null,
+                $this->videoPropertiesDbMapping
+            );
+            $result = $this->excludeCurrentStoreRecord($result, $excludedStore);
+        }
+
+        return $result;
     }
 
     /**
@@ -118,12 +198,15 @@ class ExternalVideoMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryP
     }
 
     /**
-     * @param $rowData
+     * @param array $rowData
      * @return array
      */
-    protected function extractVideoDataFromRowData($rowData)
+    protected function extractVideoDataFromRowData(array $rowData)
     {
-        return array_intersect_key($rowData, $this->videoPropertiesDbMapping);
+        return array_intersect_key(
+            $rowData,
+            array_merge($this->videoPropertiesDbMapping, [self::ADDITIONAL_STORE_DATA_KEY => ''])
+        );
     }
 
     /**
@@ -157,23 +240,46 @@ class ExternalVideoMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryP
     }
 
     /**
+     * @param array $mediaCollection
+     * @return array
+     */
+    protected function collectVideoEntriesIdsToAdditionalLoad(array $mediaCollection)
+    {
+        $ids = [];
+        foreach ($mediaCollection as $item) {
+            if (!empty($item['media_type'])
+                && !$item['removed']
+                && $item['media_type'] == ExternalVideoMediaEntryConverter::MEDIA_TYPE_CODE
+                && isset($item['save_data_from'])
+            ) {
+                $ids[] = $item['save_data_from'];
+            }
+        }
+        return $ids;
+    }
+
+    /**
      * @param array $ids
      * @param int $storeId
      * @return array
      */
-    protected function loadVideoDataById(array $ids, $storeId)
+    protected function loadVideoDataById(array $ids, $storeId = null)
     {
         $mainTableAlias = $this->resourceEntryMediaGallery->getMainTableAlias();
+        $joinConditions = $mainTableAlias.'.value_id = store_value.value_id';
+        if (null !== $storeId) {
+            $joinConditions = implode(
+                ' AND ',
+                [
+                    $joinConditions,
+                    'store_value.store_id = ' . $storeId
+                ]
+            );
+        }
         $joinTable = [
             [
                 ['store_value' => $this->resourceEntryMediaGallery->getTable(self::GALLERY_VALUE_VIDEO_TABLE)],
-                implode(
-                    ' AND ',
-                    [
-                        $mainTableAlias.'.value_id = store_value.value_id',
-                        'store_value.store_id = ' . $storeId
-                    ]
-                ),
+                $joinConditions,
                 $this->getVideoProperties()
             ]
         ];
@@ -245,15 +351,53 @@ class ExternalVideoMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryP
     }
 
     /**
-     * @param array $mediaEntriesCollection
+     * @param array $mediaCollection
+     * @param array $data
      * @return array
      */
-    protected function createIndexedCollection(array $mediaEntriesCollection)
+    protected function addAdditionalStoreData(array $mediaCollection, array $data)
+    {
+        foreach ($mediaCollection as &$mediaItem) {
+            if (!empty($mediaItem['save_data_from'])) {
+                $additionalData = $this->createAdditionalStoreDataCollection($data, $mediaItem['save_data_from']);
+                if (!empty($additionalData)) {
+                    $mediaItem[self::ADDITIONAL_STORE_DATA_KEY] = $additionalData;
+                }
+            }
+        }
+
+        return ['images' => $mediaCollection];
+    }
+
+    /**
+     * @param array $storeData
+     * @param int $valueId
+     * @return array
+     */
+    protected function createAdditionalStoreDataCollection(array $storeData, $valueId)
+    {
+        $result = [];
+        foreach ($storeData as $item) {
+            if ($item['value_id'] == $valueId) {
+                unset($item['value_id']);
+                $result[] = $item;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array $mediaEntriesCollection
+     * @param string $indexKey
+     * @return array
+     */
+    protected function createIndexedCollection(array $mediaEntriesCollection, $indexKey = 'value_id')
     {
         $indexedCollection = [];
         foreach ($mediaEntriesCollection as $item) {
-            $id = $item['value_id'];
-            unset($item['value_id']);
+            $id = $item[$indexKey];
+            unset($item[$indexKey]);
             $indexedCollection[$id] = $item;
         }
 
