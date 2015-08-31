@@ -220,12 +220,16 @@
                     <item name="0" xsi:type="array">
                         <item name="type" xsi:type="string">enable</item>
                         <item name="label" xsi:type="string" translate="true">Enable</item>
-                        <item name="url" xsi:type="url" path="catalog/product/massEnable"/>
+                        <item name="url" xsi:type="url" path="catalog/product/massStatus">
+                            <param name="status">1</param>
+                        </item>
                     </item>
                     <item name="1" xsi:type="array">
                         <item name="type" xsi:type="string">disable</item>
                         <item name="label" xsi:type="string" translate="true">Disable</item>
-                        <item name="url" xsi:type="url" path="catalog/product/massDisable"/>
+                        <item name="url" xsi:type="url" path="catalog/product/massStatus">
+                            <param name="status">2</param>
+                        </item>
                     </item>
                 </argument>
             </action>
