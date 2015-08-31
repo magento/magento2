@@ -831,4 +831,104 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $xml = '<layout/>';
         $this->assertSame($xml, \Magento\Framework\View\Layout::LAYOUT_NODE);
     }
+
+    /**
+     * @param mixed $displayValue
+     * @dataProvider renderElementDisplayDataProvider
+     */
+    public function testRenderElementDisplay($displayValue)
+    {
+        $name = 'test_container';
+        $child = 'child_block';
+        $children = [$child => true];
+        $blockHtml = '<html/>';
+
+        $this->structureMock->expects($this->atLeastOnce())
+            ->method('getAttribute')
+            ->willReturnMap(
+                [
+                    [$name, 'display', $displayValue],
+                    [$child, 'display', $displayValue],
+                    [$child, 'type', \Magento\Framework\View\Layout\Element::TYPE_BLOCK]
+                ]
+            );
+
+        $this->structureMock->expects($this->atLeastOnce())->method('hasElement')
+            ->willReturnMap(
+                [
+                    [$child, true]
+                ]
+            );
+
+        $this->structureMock->expects($this->once())
+            ->method('getChildren')
+            ->with($name)
+            ->willReturn($children);
+
+        $block = $this->getMock('Magento\Framework\View\Element\AbstractBlock', [], [], '', false);
+        $block->expects($this->once())->method('toHtml')->willReturn($blockHtml);
+
+        $renderingOutput = new \Magento\Framework\DataObject();
+        $renderingOutput->setData('output', $blockHtml);
+
+        $this->eventManagerMock->expects($this->at(0))
+            ->method('dispatch')
+            ->with(
+                'core_layout_render_element',
+                ['element_name' => $child, 'layout' => $this->model, 'transport' => $renderingOutput]
+            );
+        $this->eventManagerMock->expects($this->at(1))
+            ->method('dispatch')
+            ->with(
+                'core_layout_render_element',
+                ['element_name' => $name, 'layout' => $this->model, 'transport' => $renderingOutput]
+            );
+
+        $this->model->setBlock($child, $block);
+        $this->assertEquals($blockHtml, $this->model->renderElement($name, false));
+    }
+
+    /**
+     * @param mixed $displayValue
+     * @dataProvider renderElementDoNotDisplayDataProvider
+     */
+    public function testRenderElementDoNotDisplay($displayValue)
+    {
+        $displayValue = 'false';
+        $name = 'test_container';
+        $blockHtml = '';
+
+        $this->structureMock->expects($this->atLeastOnce())
+            ->method('getAttribute')
+            ->willReturnMap([[$name, 'display', $displayValue]]);
+
+        $this->assertEquals($blockHtml, $this->model->renderElement($name, false));
+    }
+
+    /**
+     * @return array
+     */
+    public function renderElementDoNotDisplayDataProvider()
+    {
+        return [
+            ['false'],
+            ['0'],
+            [0]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function renderElementDisplayDataProvider()
+    {
+        return [
+            [true],
+            ['1'],
+            [1],
+            ['true'],
+            [false],
+            [null]
+        ];
+    }
 }
