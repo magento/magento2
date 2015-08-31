@@ -15,8 +15,6 @@ define([
     'use strict';
 
     /**
-     * @todo: replace image event handler
-     * @todo: remove image event handler
      */
     $.widget('mage.newVideoDialog', {
 
@@ -75,6 +73,8 @@ define([
         },
 
         _replaceImage: function(oldFile, newFile, imageData) {
+            var tmpOldFile = oldFile;
+            var tmpNewFile = newFile;
             oldFile = this.__prepareFilename(oldFile);
             newFile = this.__prepareFilename(newFile);
             if(newFile == oldFile) {
@@ -84,6 +84,25 @@ define([
             }
             this._removeImage(oldFile);
             this._setImage(newFile, imageData);
+            if(oldFile && imageData.old_file) {
+                var oldImageId = this.findElementId(tmpOldFile);
+                var newImageId = this.findElementId(tmpNewFile);
+                var fc = jQuery('#item_id').val();
+
+                var suff = 'product[media_gallery][images]' + fc;
+
+                var searchsuff = 'input[name="' + suff + '[value_id]"]';
+                var key = jQuery(searchsuff).val();
+                if(!key) {
+                    return;
+                }
+                var old_val_id_elem = document.createElement('input');
+                jQuery('form[data-form="edit-product"]').append(old_val_id_elem);
+                jQuery(old_val_id_elem).attr({
+                    type: 'hidden',
+                    name: 'product[media_gallery][images][' + newImageId + '][save_data_from]'
+                }).val(key);
+            }
         },
 
         /**
@@ -110,7 +129,6 @@ define([
         },
 
         /**
-         * @todo: Error handler !
          * @param file
          * @param oldFile
          * @param callback
@@ -119,52 +137,46 @@ define([
         _uploadImage: function(file, oldFile, callback) {
             var self        = this;
             var url         = this.options.saveVideoUrl;
-            var fu          = jQuery('#new_video_screenshot');
-            var old_val_id_elem;
+            var data = {
+                files: file,
+                url: url
+            };
+            this._uploadFile('send', data, function(result, textStatus, jqXHR) {
+                var data = JSON.parse(result);
+                $.each($('#new_video_form').serializeArray(), function(i, field) {
+                    data[field.name] = field.value;
+                });
+                data['disabled'] = $('#new_video_disabled').prop('checked') ? 1 : 0;
+                data['media_type'] = 'external-video';
+                data.old_file = oldFile;
+                oldFile  ?
+                    self._replaceImage(oldFile, data.file, data):
+                    self._setImage(data.file, data);
+                callback.call(0, data);
+            });
 
+        },
+
+        /**
+         *
+         * @returns {*}
+         * @private
+         */
+        _uploadFile: function(method, data, callback) {
+            var fu = jQuery('#new_video_screenshot');
             var tmp_input   = document.createElement('input');
-            tmp_input.setAttribute('name', fu.attr('name'));
-            tmp_input.setAttribute('value', fu.val());
-            tmp_input.setAttribute('type', 'file');
-            tmp_input.setAttribute('data-ui-ud', fu.attr('data-ui-ud'));
+            jQuery(tmp_input).attr({
+                name: fu.attr('name'),
+                value: fu.val(),
+                type: 'file',
+                'data-ui-ud': fu.attr('data-ui-ud')
+            }).css('display', 'none');
             fu.parent().append(tmp_input);
-
             var fileUploader = jQuery(tmp_input).fileupload();
-            fileUploader.fileupload(
-                'send',
-                {
-                    files: file,
-                    url: url
-                }).success(
-                function(result, textStatus, jqXHR) {
-                    tmp_input.remove();
-                    var data = JSON.parse(result);
-                    $.each($('#new_video_form').serializeArray(), function(i, field) {
-                        data[field.name] = field.value;
-                    });
-                    data['disabled'] = $('#new_video_disabled').prop('checked') ? 1 : 0;
-                    data['media_type'] = 'external-video';
-                    oldFile  ?
-                        self._replaceImage(oldFile, data.file, data):
-                        self._setImage(data.file, data);
-                    callback.call(0, data);
-
-                    if(oldFile) { // For questions about this behavior refer to Vadim Zubovich
-                        var fc = jQuery('#item_id').val();
-                        var suff = 'product[media_gallery][images]' + fc;
-                        var key = jQuery('input[name="' + suff + '[value_id]"]').val();
-                        if(key) {
-                            old_val_id_elem = document.createElement('input');
-                            old_val_id_elem.setAttribute('type', 'hidden');
-                            old_val_id_elem.setAttribute('value', key);
-                            old_val_id_elem.setAttribute('name', suff + '[save_data_from]');
-                        }
-                    }
-                    if(old_val_id_elem) {
-                        jQuery('form[data-form="edit-product"]').append(old_val_id_elem);
-                    }
-                }
-            );
+            fileUploader.fileupload(method, data).success(function(result, textStatus, jqXHR) {
+                tmp_input.remove();
+                callback.call(null, result, textStatus, jqXHR);
+            });
         },
 
         _create: function () {
@@ -272,7 +284,6 @@ define([
                         text: $.mage.__('Delete'),
                         class: 'action-primary video-delete-button',
                         click: function (e) {
-                            /** @todo: use _removeImage() */
                             $('#new-video').modal('closeModal');
                             var removed = $('[name*="' + $('#new_video_form #item_id').val() + '[removed]"]');
                             removed.val(1);
@@ -292,7 +303,10 @@ define([
 
                 },
                 closed: function() {
-                    newVideoForm.validation('clearError');
+                    try {
+                        newVideoForm.validation('clearError');
+                    } catch(e) {
+                    }
                     $('input[name*="' + $('#item_id').val() + '"]').parent().removeClass('active');
                     $('#new_video_form')[0].reset();
                 }
@@ -300,7 +314,17 @@ define([
         },
 
         /**
-         * @todo : refactoring need
+         * Find element by fileName
+         */
+        findElementId: function (file) {
+            var elem = jQuery('.image.item').find('input[value="' + file + '"]');
+            if(!elem) {
+                return null;
+            }
+            return jQuery(elem).attr('name').replace('product[media_gallery][images][', '').replace('][file]', '');
+        },
+
+        /**
          * @param imageData
          */
         saveImageRoles: function(imageData) {
@@ -315,14 +339,10 @@ define([
                     var end = el.name.indexOf(']');
                     var imageType = el.name.substring(start, end);
                     var imageCheckbox = $('#new_video_form input[value="' + imageType + '"]');
-                    if (imageCheckbox.prop('checked') ) {
-                        // Evil hack.
-                        // After closing the dialogue "image" it has to be completely removed from the "DOM"
-                        jQuery('#media_gallery_content').trigger('setImageType', {
-                            type: imageType,
-                            imageData: imageData
-                        });
-                    }
+                    jQuery('#media_gallery_content').trigger('setImageType', {
+                        type:  imageType,
+                        imageData: imageCheckbox.prop('checked') ? imageData : null
+                    });
                 });
             }
         },
