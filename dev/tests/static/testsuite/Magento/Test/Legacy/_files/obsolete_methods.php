@@ -2459,4 +2459,5 @@ return [
         'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
         'Magento\ConfigurableProduct\Model\Product\VariationHandler::fillSimpleProductData'
     ],
+    ['mergeBookmarkConfig', 'Magento\Ui\Model\Manager'],
 ];
