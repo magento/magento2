@@ -96,6 +96,19 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider getRequiredPhpVersionDataProvider
      */
+    public function testGetSuggestedPackages($composerDir)
+    {
+        $this->setupDirectoryMock($composerDir);
+        $composerInfo = new ComposerInformation($this->filesystemMock, $this->bufferIoFactoryMock);
+        $actualSuggestedExtensions = $composerInfo->getSuggestedPackages();
+        $this->assertArrayHasKey('psr/log', $actualSuggestedExtensions);
+    }
+
+    /**
+     * @param $composerDir string Directory under _files that contains composer files
+     *
+     * @dataProvider getRequiredPhpVersionDataProvider
+     */
     public function testGetRootRequiredPackagesAndTypes($composerDir)
     {
         $this->setupDirectoryMock($composerDir);

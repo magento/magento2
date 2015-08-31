@@ -119,6 +119,24 @@ class ComposerInformation
     }
 
     /**
+     * Retrieve list of suggested extensions
+     *
+     * Collect suggests from composer.lock file and modules composer.json files
+     *
+     * @return array
+     */
+    public function getSuggestedPackages()
+    {
+        $suggests = [];
+        /** @var \Composer\Package\CompletePackage $package */
+        foreach ($this->locker->getLockedRepository()->getPackages() as $package) {
+            $suggests += $package->getSuggests();
+        }
+
+        return array_unique($suggests);
+    }
+
+    /**
      * Collect required packages from root composer.lock file
      *
      * @return array
