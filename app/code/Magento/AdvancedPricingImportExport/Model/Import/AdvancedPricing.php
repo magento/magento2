@@ -46,6 +46,12 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
 
     const ENTITY_TYPE_CODE = 'advanced_pricing';
 
+    const VALIDATOR_MAIN = 'validator';
+
+    const VALIDATOR_WEBSITE = 'validator_website';
+
+    const VALIDATOR_GROUP_PRICE = 'validator_group_price';
+
     /**
      * Validation failure message template definitions
      *
@@ -121,9 +127,9 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     protected $_importProduct;
 
     /**
-     * @var AdvancedPricing\Validator
+     * @var array
      */
-    protected $_validator;
+    protected $_validators = [];
 
     /**
      * @var array
@@ -134,16 +140,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @var array
      */
     protected $_oldSkus;
-
-    /**
-     * @var AdvancedPricing\Validator\Website
-     */
-    protected $websiteValidator;
-
-    /**
-     * @var AdvancedPricing\Validator\GroupPrice
-     */
-    protected $groupPriceValidator;
 
     /**
      * Permanent entity columns.
@@ -183,6 +179,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param AdvancedPricing\Validator $validator
      * @param AdvancedPricing\Validator\Website $websiteValidator
      * @param AdvancedPricing\Validator\GroupPrice $groupPriceValidator
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
@@ -214,16 +211,27 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         $this->_catalogData = $catalogData;
         $this->_storeResolver = $storeResolver;
         $this->_importProduct = $importProduct;
-        $this->_validator = $validator->init($this);
+        $this->_validators[self::VALIDATOR_MAIN] = $validator->init($this);
         $this->_oldSkus = $this->retrieveOldSkus();
-        $this->websiteValidator = $websiteValidator;
-        $this->groupPriceValidator = $groupPriceValidator;
+        $this->_validators[self::VALIDATOR_WEBSITE] = $websiteValidator;
+        $this->_validators[self::VALIDATOR_GROUP_PRICE] = $groupPriceValidator;
         $this->errorAggregator = $errorAggregator;
         $this->_catalogProductEntity = $this->_resourceFactory->create()->getTable('catalog_product_entity');
 
         foreach (array_merge($this->errorMessageTemplates, $this->_messageTemplates) as $errorCode => $message) {
             $this->getErrorAggregator()->addErrorMessageTemplate($errorCode, $message);
         }
+    }
+
+    /**
+     * Validator object getter.
+     *
+     * @param string $type
+     * @return AdvancedPricing\Validator|AdvancedPricing\Validator\Website|AdvancedPricing\Validator\GroupPrice
+     */
+    protected function _getValidator($type)
+    {
+        return $this->_validators[$type];
     }
 
     /**
@@ -258,8 +266,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             }
             return true;
         }
-        if (!$this->_validator->isValid($rowData)) {
-            foreach ($this->_validator->getMessages() as $message) {
+        if (!$this->_getValidator(self::VALIDATOR_MAIN)->isValid($rowData)) {
+            foreach ($this->_getValidator(self::VALIDATOR_MAIN)->getMessages() as $message) {
                 $this->addRowError($message, $rowNum);
             }
         }
@@ -508,7 +516,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      */
     protected function getWebSiteId($websiteCode)
     {
-        $result = $websiteCode == $this->websiteValidator->getAllWebsitesValue() ||
+        $result = $websiteCode == $this->_getValidator(self::VALIDATOR_WEBSITE)->getAllWebsitesValue() ||
         $this->_catalogData->isPriceGlobal() ? 0 : $this->_storeResolver->getWebsiteCodeToId($websiteCode);
         return $result;
     }
@@ -521,7 +529,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      */
     protected function getCustomerGroupId($customerGroup)
     {
-        $customerGroups = $this->groupPriceValidator->getCustomerGroups();
+        $customerGroups = $this->_getValidator(self::VALIDATOR_GROUP_PRICE)->getCustomerGroups();
         return $customerGroup == self::VALUE_ALL_GROUPS ? 0 : $customerGroups[$customerGroup];
     }
 

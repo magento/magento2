@@ -51,7 +51,8 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
     }
 
     /**
-     * @param $attribute
+     * @param string $attribute
+     * @return void
      */
     protected function addDecimalError($attribute)
     {
