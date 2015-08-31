@@ -5,6 +5,7 @@
  */
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Filter;
 
+use Magento\Catalog\Model\Product;
 use Magento\CatalogSearch\Model\Search\TableMapper;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\Resource;
@@ -12,8 +13,8 @@ use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface;
-use Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer;
 use Magento\Framework\Search\Request\FilterInterface;
+use Magento\Store\Model\Store;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -83,24 +84,23 @@ class Preprocessor implements PreprocessorInterface
     /**
      * {@inheritdoc}
      */
-    public function process(FilterInterface $filter, $isNegation, $query, QueryContainer $queryContainer)
+    public function process(FilterInterface $filter, $isNegation, $query)
     {
-        return $this->processQueryWithField($filter, $isNegation, $query, $queryContainer);
+        return $this->processQueryWithField($filter, $isNegation, $query);
     }
 
     /**
      * @param FilterInterface $filter
      * @param bool $isNegation
      * @param string $query
-     * @param QueryContainer $queryContainer
      * @return string
      */
-    private function processQueryWithField(FilterInterface $filter, $isNegation, $query, QueryContainer $queryContainer)
+    private function processQueryWithField(FilterInterface $filter, $isNegation, $query)
     {
         $currentStoreId = $this->scopeResolver->getScope()->getId();
         $select = null;
         /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $attribute */
-        $attribute = $this->config->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $filter->getField());
+        $attribute = $this->config->getAttribute(Product::ENTITY, $filter->getField());
         $table = $attribute->getBackendTable();
         if ($filter->getField() === 'price') {
             $filterQuery = str_replace(
@@ -152,7 +152,7 @@ class Preprocessor implements PreprocessorInterface
                     'main_table.attribute_id = ?',
                     $attribute->getAttributeId()
                 )
-                ->where('main_table.store_id = ?', \Magento\Store\Model\Store::DEFAULT_STORE_ID)
+                ->where('main_table.store_id = ?', Store::DEFAULT_STORE_ID)
                 ->having($query);
         }
 
