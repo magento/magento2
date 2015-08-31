@@ -37,7 +37,7 @@ class CronScriptReadinessCheckTest extends \PHPUnit_Framework_TestCase
             ->willThrowException(new FileSystemException(new Phrase('')));
         $expected = [
             'success' => false,
-            'error' => 'Cron Job has not been configured yet' . CronScriptReadinessCheck::OTHER_CHECKS_WILL_FAIL_MSG
+            'error' => 'Cron job has not been configured yet' . CronScriptReadinessCheck::OTHER_CHECKS_WILL_FAIL_MSG
         ];
         $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkSetup());
     }
@@ -47,7 +47,7 @@ class CronScriptReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->read->expects($this->once())->method('readFile')->willReturn('');
         $expected = [
             'success' => false,
-            'error' => 'Cron Job has not been configured yet' . CronScriptReadinessCheck::OTHER_CHECKS_WILL_FAIL_MSG
+            'error' => 'Cron job has not been configured yet' . CronScriptReadinessCheck::OTHER_CHECKS_WILL_FAIL_MSG
         ];
         $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkSetup());
     }
@@ -75,7 +75,7 @@ class CronScriptReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->read->expects($this->once())->method('readFile')->willReturn(json_encode($json));
         $expected = [
             'success' => true,
-            'notice' => 'It is recommended to schedule Cron to run every 1 minute'
+            'notice' => 'We recommend you schedule cron to run every 1 minute'
         ];
         $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkSetup());
     }
@@ -89,8 +89,8 @@ class CronScriptReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->read->expects($this->once())->method('readFile')->willReturn(json_encode($json));
         $expected = [
             'success' => true,
-            'notice' => 'Unable to determine Cron time interval. ' .
-                'It is recommended to schedule Cron to run every 1 minute'
+            'notice' => 'Unable to determine cron time interval. ' .
+                'We recommend you schedule cron to run every 1 minute'
         ];
         $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkSetup());
     }
@@ -112,14 +112,14 @@ class CronScriptReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->read->expects($this->once())
             ->method('readFile')
             ->willThrowException(new FileSystemException(new Phrase('')));
-        $expected = ['success' => false, 'error' => 'Cron Job has not been configured yet'];
+        $expected = ['success' => false, 'error' => 'Cron job has not been configured yet'];
         $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkUpdater());
     }
 
     public function testCheckUpdaterNoCronConfigured()
     {
         $this->read->expects($this->once())->method('readFile')->willReturn('');
-        $expected = ['success' => false, 'error' => 'Cron Job has not been configured yet'];
+        $expected = ['success' => false, 'error' => 'Cron job has not been configured yet'];
         $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkUpdater());
     }
 
@@ -148,7 +148,7 @@ class CronScriptReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->read->expects($this->once())->method('readFile')->willReturn(json_encode($json));
         $expected = [
             'success' => true,
-            'notice' => 'It is recommended to schedule Cron to run every 1 minute'
+            'notice' => 'We recommend you schedule cron to run every 1 minute'
         ];
         $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkUpdater());
     }
@@ -164,8 +164,8 @@ class CronScriptReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->read->expects($this->once())->method('readFile')->willReturn(json_encode($json));
         $expected = [
             'success' => true,
-            'notice' => 'Unable to determine Cron time interval. ' .
-                'It is recommended to schedule Cron to run every 1 minute'
+            'notice' => 'Unable to determine cron time interval. ' .
+                'We recommend you schedule cron to run every 1 minute'
         ];
         $this->assertEquals($expected, $this->cronScriptReadinessCheck->checkUpdater());
     }
