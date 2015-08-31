@@ -70,8 +70,17 @@ class DataProvider implements DataProviderInterface
     public function getData($themePath)
     {
         $dictionary = [];
+        $areaCode = $this->appState->getAreaCode();
 
-        $files = $this->filesUtility->getJsFiles($this->appState->getAreaCode(), $themePath);
+        $files = $this->filesUtility->getJsFiles($areaCode, $themePath);
+        $staticHtmlFiles = $this->filesUtility->getStaticHtmlFiles($areaCode, $themePath);
+
+        if (is_array($staticHtmlFiles)) {
+            foreach ($staticHtmlFiles as $staticFile) {
+                $files[] = $staticFile;
+            }
+        }
+
         foreach ($files as $filePath) {
             $content = $this->rootDirectory->readFile($this->rootDirectory->getRelativePath($filePath[0]));
             foreach ($this->getPhrases($content) as $phrase) {
@@ -99,7 +108,11 @@ class DataProvider implements DataProviderInterface
             $result = preg_match_all($pattern, $content, $matches);
 
             if ($result) {
-                $phrases = array_merge($phrases, $matches[1]);
+                if (isset($matches[2])) {
+                    foreach ($matches[2] as $match) {
+                        $phrases[] = $match;
+                    }
+                }
             }
             if (false === $result) {
                 throw new \Exception(

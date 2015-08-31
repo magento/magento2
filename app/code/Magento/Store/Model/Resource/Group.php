@@ -44,18 +44,18 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _updateWebsiteDefaultGroup($websiteId, $groupId)
     {
-        $select = $this->_getWriteAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getMainTable(),
             'COUNT(*)'
         )->where(
             'website_id = :website'
         );
-        $count = $this->_getWriteAdapter()->fetchOne($select, ['website' => $websiteId]);
+        $count = $this->getConnection()->fetchOne($select, ['website' => $websiteId]);
 
         if ($count == 1) {
             $bind = ['default_group_id' => $groupId];
             $where = ['website_id = ?' => $websiteId];
-            $this->_getWriteAdapter()->update($this->getTable('store_website'), $bind, $where);
+            $this->getConnection()->update($this->getTable('store_website'), $bind, $where);
         }
         return $this;
     }
@@ -69,13 +69,13 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected function _changeWebsite(\Magento\Framework\Model\AbstractModel $model)
     {
         if ($model->getOriginalWebsiteId() && $model->getWebsiteId() != $model->getOriginalWebsiteId()) {
-            $select = $this->_getWriteAdapter()->select()->from(
+            $select = $this->getConnection()->select()->from(
                 $this->getTable('store_website'),
                 'default_group_id'
             )->where(
                 'website_id = :website_id'
             );
-            $groupId = $this->_getWriteAdapter()->fetchOne(
+            $groupId = $this->getConnection()->fetchOne(
                 $select,
                 ['website_id' => $model->getOriginalWebsiteId()]
             );
@@ -83,7 +83,7 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
             if ($groupId == $model->getId()) {
                 $bind = ['default_group_id' => 0];
                 $where = ['website_id = ?' => $model->getOriginalWebsiteId()];
-                $this->_getWriteAdapter()->update($this->getTable('store_website'), $bind, $where);
+                $this->getConnection()->update($this->getTable('store_website'), $bind, $where);
             }
         }
         return $this;
@@ -100,7 +100,7 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $bind = ['website_id' => $websiteId];
         $where = ['group_id = ?' => $groupId];
-        $this->_getWriteAdapter()->update($this->getTable('store'), $bind, $where);
+        $this->getConnection()->update($this->getTable('store'), $bind, $where);
         return $this;
     }
 
@@ -115,7 +115,7 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $bind = ['default_store_id' => $storeId];
         $where = ['group_id = ?' => $groupId];
-        $this->_getWriteAdapter()->update($this->getMainTable(), $bind, $where);
+        $this->getConnection()->update($this->getMainTable(), $bind, $where);
 
         return $this;
     }
@@ -130,17 +130,17 @@ class Group extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function countAll($countAdmin = false)
     {
-        $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()->from(['main' => $this->getMainTable()], 'COUNT(*)');
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(['main' => $this->getMainTable()], 'COUNT(*)');
         if (!$countAdmin) {
             $select->joinLeft(
                 ['store_website' => $this->getTable('store_website')],
                 'store_website.website_id = main.website_id',
                 null
             )->where(
-                sprintf('%s <> %s', $adapter->quoteIdentifier('code'), $adapter->quote('admin'))
+                sprintf('%s <> %s', $connection->quoteIdentifier('code'), $connection->quote('admin'))
             );
         }
-        return (int)$adapter->fetchOne($select);
+        return (int)$connection->fetchOne($select);
     }
 }

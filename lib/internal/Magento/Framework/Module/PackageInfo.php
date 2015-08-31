@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Module;
 
-use Magento\Framework\Stdlib\String;
+use Magento\Framework\Stdlib\StringUtils;
 
 /**
  * Provide information of dependencies and conflicts in composer.json files, mapping of package name to module name,
@@ -56,7 +56,7 @@ class PackageInfo
     private $reader;
 
     /**
-     * String utilities
+     * StringUtils utilities
      *
      * @var String
      */
@@ -67,9 +67,9 @@ class PackageInfo
      *
      * @param ModuleList\Loader $loader
      * @param Dir\Reader $reader
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      */
-    public function __construct(ModuleList\Loader $loader, Dir\Reader $reader, String $string)
+    public function __construct(ModuleList\Loader $loader, Dir\Reader $reader, StringUtils $string)
     {
         $this->loader = $loader;
         $this->reader = $reader;
@@ -87,7 +87,7 @@ class PackageInfo
             $jsonData = $this->reader->getComposerJsonFiles()->toArray();
             foreach (array_keys($this->loader->load()) as $moduleName) {
                 $key = $this->string->upperCaseWords($moduleName, '_', '/') . '/composer.json';
-                if (isset($jsonData[$key])) {
+                if (isset($jsonData[$key]) && $jsonData[$key]) {
                     $packageData = \Zend_Json::decode($jsonData[$key]);
                     if (isset($packageData['name'])) {
                         $this->packageModuleMap[$packageData['name']] = $moduleName;

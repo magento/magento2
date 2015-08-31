@@ -7,6 +7,7 @@
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
 use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Api\Filter;
 
 /**
  * Class RegularFilter
@@ -17,13 +18,11 @@ class RegularFilter implements FilterApplierInterface
      * Apply regular filters like collection filters
      *
      * @param AbstractDb $collection
-     * @param array $filters
+     * @param Filter $filter
      * @return void
      */
-    public function apply(AbstractDb $collection, $filters)
+    public function apply(AbstractDb $collection, Filter $filter)
     {
-        foreach ($filters as $filter) {
-            $collection->addFieldToFilter($filter['field'], $filter['condition']);
-        }
+        $collection->addFieldToFilter($filter->getField(), [$filter->getConditionType() => $filter->getValue()]);
     }
 }

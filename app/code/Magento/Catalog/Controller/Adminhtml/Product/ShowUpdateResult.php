@@ -39,7 +39,7 @@ class ShowUpdateResult extends \Magento\Catalog\Controller\Adminhtml\Product
     {
         $layout = false;
         if ($this->_session->hasCompositeProductResult()
-            && $this->_session->getCompositeProductResult() instanceof \Magento\Framework\Object
+            && $this->_session->getCompositeProductResult() instanceof \Magento\Framework\DataObject
         ) {
             $layout = $this->productCompositeHelper->renderUpdateResult($this->_session->getCompositeProductResult());
         }

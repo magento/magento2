@@ -10,20 +10,6 @@ namespace Magento\Framework\DB\Helper;
 abstract class AbstractHelper
 {
     /**
-     * Read adapter instance
-     *
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    protected $_readAdapter;
-
-    /**
-     * Write adapter instance
-     *
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    protected $_writeAdapter;
-
-    /**
      * Resource helper module prefix
      *
      * @var string
@@ -48,45 +34,15 @@ abstract class AbstractHelper
     }
 
     /**
-     * Retrieve connection for read data
-     *
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    protected function _getReadAdapter()
-    {
-        if (null === $this->_readAdapter) {
-            $this->_readAdapter = $this->_getConnection('read');
-        }
-
-        return $this->_readAdapter;
-    }
-
-    /**
-     * Retrieve connection for write data
-     *
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    protected function _getWriteAdapter()
-    {
-        if (null === $this->_writeAdapter) {
-            $this->_writeAdapter = $this->_getConnection('write');
-        }
-
-        return $this->_writeAdapter;
-    }
-
-    /**
      * Retrieves connection to the resource
      *
-     * @param string $name
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    protected function _getConnection($name)
+    protected function getConnection()
     {
-        $connection = sprintf('%s_%s', $this->_modulePrefix, $name);
-
-        return $this->_resource->getConnection($connection);
+        return $this->_resource->getConnection($this->_modulePrefix);
     }
+
 
     /**
      * Escapes value, that participates in LIKE, with '\' symbol.
@@ -168,7 +124,7 @@ abstract class AbstractHelper
      */
     public function getCILike($field, $value, $options = [])
     {
-        $quotedField = $this->_getReadAdapter()->quoteIdentifier($field);
+        $quotedField = $this->getConnection()->quoteIdentifier($field);
         return new \Zend_Db_Expr($quotedField . ' LIKE ' . $this->addLikeEscape($value, $options));
     }
 }

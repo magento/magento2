@@ -18,7 +18,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $model = new \Magento\Indexer\Block\Backend\Grid\Column\Renderer\Status($context);
-        $obj = new \Magento\Framework\Object();
+        $obj = new \Magento\Framework\DataObject();
         $obj->setGetter(null);
         $obj->setDefault('');
         $obj->setValue('');
@@ -27,25 +27,27 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $model->setColumn($obj);
         $model->setIndex($indexValues[0]);
         $result = $model->render($obj);
-        $this->assertEquals($result, '<span class="' . $expectedResult['class'] . '"><span>' . $expectedResult['text'] . '</span></span>');
+        $this->assertEquals(
+            $result,
+            '<span class="' . $expectedResult['class'] . '"><span>' . $expectedResult['text'] . '</span></span>'
+        );
     }
 
     public function renderDataProvider()
     {
         return [
             'set1' => [
-                [\Magento\Indexer\Model\Indexer\State::STATUS_INVALID],
+                [\Magento\Framework\Indexer\StateInterface::STATUS_INVALID],
                 ['class' => 'grid-severity-critical', 'text' => 'Reindex required']
             ],
             'set2' => [
-                [\Magento\Indexer\Model\Indexer\State::STATUS_VALID],
+                [\Magento\Framework\Indexer\StateInterface::STATUS_VALID],
                 ['class' => 'grid-severity-notice', 'text' => 'Ready']
             ],
             'set3' => [
-                [\Magento\Indexer\Model\Indexer\State::STATUS_WORKING],
+                [\Magento\Framework\Indexer\StateInterface::STATUS_WORKING],
                 ['class' => 'grid-severity-major', 'text' => 'Processing']
             ]
         ];
     }
-
 }

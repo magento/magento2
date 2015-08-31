@@ -10,6 +10,7 @@ namespace Magento\Catalog\Model\Resource\Collection;
  * Implement using different stores for retrieve attribute values
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCollection
 {
@@ -38,7 +39,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      * @param \Magento\Eav\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -53,7 +54,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
         \Magento\Eav\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->_storeManager = $storeManager;
         parent::__construct(
@@ -133,17 +134,17 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
             $attributeIds = $this->_selectAttributes;
         }
         $storeId = $this->getStoreId();
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $entityIdField = $this->getEntity()->getEntityIdField();
 
         if ($storeId) {
             $joinCondition = [
                 't_s.attribute_id = t_d.attribute_id',
                 't_s.entity_id = t_d.entity_id',
-                $adapter->quoteInto('t_s.store_id = ?', $storeId),
+                $connection->quoteInto('t_s.store_id = ?', $storeId),
             ];
 
-            $select = $adapter->select()->from(
+            $select = $connection->select()->from(
                 ['t_d' => $table],
                 [$entityIdField, 'attribute_id']
             )->where(
@@ -158,10 +159,10 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
                 []
             )->where(
                 't_d.store_id = ?',
-                $adapter->getIfNullSql('t_s.store_id', \Magento\Store\Model\Store::DEFAULT_STORE_ID)
+                $connection->getIfNullSql('t_s.store_id', \Magento\Store\Model\Store::DEFAULT_STORE_ID)
             );
         } else {
-            $select = $adapter->select()->from(
+            $select = $connection->select()->from(
                 $table,
                 [$entityIdField, 'attribute_id']
             )->where(
@@ -188,8 +189,8 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
     {
         $storeId = $this->getStoreId();
         if ($storeId) {
-            $adapter = $this->getConnection();
-            $valueExpr = $adapter->getCheckSql('t_s.value_id IS NULL', 't_d.value', 't_s.value');
+            $connection = $this->getConnection();
+            $valueExpr = $connection->getCheckSql('t_s.value_id IS NULL', 't_d.value', 't_s.value');
 
             $select->columns(
                 ['default_value' => 't_d.value', 'store_value' => 't_s.value', 'value' => $valueExpr]
@@ -219,7 +220,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
             $storeId = $this->getStoreId();
         }
 
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
         if ($storeId != $this->getDefaultStoreId() && !$attribute->isScopeGlobal()) {
             /**
@@ -233,8 +234,8 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
             $tableAlias = $this->getConnection()->getTableName($tableAlias);
 
             $defCondition = str_replace($tableAlias, $defAlias, $defCondition);
-            $defCondition .= $adapter->quoteInto(
-                " AND " . $adapter->quoteColumnAs("{$defAlias}.store_id", null) . " = ?",
+            $defCondition .= $connection->quoteInto(
+                " AND " . $connection->quoteColumnAs("{$defAlias}.store_id", null) . " = ?",
                 $this->getDefaultStoreId()
             );
 
@@ -255,7 +256,10 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
         } else {
             $storeId = $this->getDefaultStoreId();
         }
-        $condition[] = $adapter->quoteInto($adapter->quoteColumnAs("{$tableAlias}.store_id", null) . ' = ?', $storeId);
+        $condition[] = $connection->quoteInto(
+            $connection->quoteColumnAs("{$tableAlias}.store_id", null) . ' = ?',
+            $storeId
+        );
         return parent::_joinAttributeToSelect($method, $attribute, $tableAlias, $condition, $fieldCode, $fieldAlias);
     }
 }

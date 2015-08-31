@@ -15,21 +15,21 @@ interface TransactionInterface
     /**
      * Increment "transparent" transaction counter and start real transaction
      *
-     * @return \Zend_Db_Adapter_Abstract
+     * @return \Magento\Framework\DB\Adapter\Pdo\Mysql
      */
     public function beginTransparentTransaction();
 
     /**
      * Decrement "transparent" transaction counter and commit real transaction
      *
-     * @return \Zend_Db_Adapter_Abstract
+     * @return \Magento\Framework\DB\Adapter\Pdo\Mysql
      */
     public function commitTransparentTransaction();
 
     /**
      * Decrement "transparent" transaction counter and rollback real transaction
      *
-     * @return \Zend_Db_Adapter_Abstract
+     * @return \Magento\Framework\DB\Adapter\Pdo\Mysql
      */
     public function rollbackTransparentTransaction();
 }

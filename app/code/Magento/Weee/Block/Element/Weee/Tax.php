@@ -6,29 +6,39 @@
 
 namespace Magento\Weee\Block\Element\Weee;
 
+use \Magento\Framework\Currency;
+
 class Tax extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
+
     /**
-     * @var \Magento\Framework\Locale\Format
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
-    protected $localeFormat;
+    protected $storeManager;
+
+    /**
+     * @var \Magento\Framework\Locale\CurrencyInterface
+     */
+    protected $localeCurrency;
 
     /**
      * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Catalog\Helper\Product $helper
-     * @param \Magento\Framework\Locale\Format $localeFormat
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Data\Form\Element\Factory $factoryElement,
         \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection,
         \Magento\Framework\Escaper $escaper,
-        \Magento\Framework\Locale\Format $localeFormat,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
         array $data = []
     ) {
-        $this->localeFormat = $localeFormat;
+        $this->localeCurrency = $localeCurrency;
+        $this->storeManager = $storeManager;
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
     }
 
@@ -66,20 +76,20 @@ class Tax extends \Magento\Framework\Data\Form\Element\AbstractElement
             return null;
         }
 
-
-
         foreach ($values as $key => $value) {
-            if ($this->getEntityAttribute()) {
-                $format= $this->localeFormat->getPriceFormat();
-                $values[$key]['value'] = number_format(
-                    $value['value'],
-                    $format['precision'],
-                    $format['decimalSymbol'],
-                    $format['groupSymbol']
-                );
-            } else {
-                // default format:  1234.56
-                $values[$key]['value'] = number_format($value['value'], 2, null, '');
+            $price = array_key_exists('price', $value) ? $value['price'] : $value['value'];
+            try {
+                if ($attribute = $this->getEntityAttribute()) {
+                    $store = $this->getStore($attribute);
+                    $currency = $this->localeCurrency->getCurrency($store->getBaseCurrencyCode());
+
+                    $values[$key]['value'] = $currency->toCurrency($price, ['display' => Currency::NO_SYMBOL]);
+                } else {
+                    // default format:  1234.56
+                    $values[$key]['value'] = number_format($price, 2, null, '');
+                }
+            } catch (\Exception $e) {
+                $values[$key]['value'] = $price;
             }
         }
 

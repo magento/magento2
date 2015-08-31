@@ -12,8 +12,6 @@ var config = {
             "sticky":                 "mage/sticky",
             "tabs":                   "mage/tabs",
             "zoom":                   "mage/zoom",
-            "gallery":                "mage/gallery",
-            "galleryFullScreen":      "mage/gallery-fullscreen",
             "collapsible":            "mage/collapsible",
             "dropdownDialog":         "mage/dropdown",
             "dropdown":               "mage/dropdowns",

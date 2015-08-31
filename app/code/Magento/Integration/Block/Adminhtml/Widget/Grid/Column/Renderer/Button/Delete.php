@@ -7,7 +7,7 @@
  */
 namespace Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button;
 
 class Delete extends Button
@@ -15,10 +15,10 @@ class Delete extends Button
     /**
      * Return 'onclick' action for the button (redirect to the integration edit page).
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    protected function _getOnclickAttribute(Object $row)
+    protected function _getOnclickAttribute(DataObject $row)
     {
         return sprintf(
             "this.setAttribute('data-url', '%s')",
@@ -29,10 +29,10 @@ class Delete extends Button
     /**
      * Get title depending on whether element is disabled or not.
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    protected function _getTitleAttribute(Object $row)
+    protected function _getTitleAttribute(DataObject $row)
     {
         return $this->_isDisabled($row) ? __('Uninstall the extension to remove this integration') : __('Remove');
     }
@@ -40,10 +40,10 @@ class Delete extends Button
     /**
      * Determine whether current integration came from config file, thus can not be removed
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return bool
      */
-    protected function _isDisabled(Object $row)
+    protected function _isDisabled(DataObject $row)
     {
         return $this->_isConfigBasedIntegration($row);
     }

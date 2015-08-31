@@ -12,6 +12,7 @@
 namespace Magento\Newsletter\Block\Adminhtml\Template;
 
 use Magento\Backend\Block\Widget\Grid as WidgetGrid;
+use Magento\Framework\App\TemplateTypesInterface;
 
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -127,8 +128,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
                 'index' => 'template_type',
                 'type' => 'options',
                 'options' => [
-                    \Magento\Newsletter\Model\Template::TYPE_HTML => 'html',
-                    \Magento\Newsletter\Model\Template::TYPE_TEXT => 'text',
+                    TemplateTypesInterface::TYPE_HTML => 'html',
+                    TemplateTypesInterface::TYPE_TEXT => 'text',
                 ],
                 'header_css_class' => 'col-type',
                 'column_css_class' => 'col-type'
@@ -155,7 +156,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Get row url
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
     public function getRowUrl($row)

@@ -24,14 +24,14 @@
             class="action-submit"
             data-bind="click: function(){ $parent.close().saveView($data) }, attr: {title: $t('Save all changes')}"
             type="button">
-            <span data-bind="text: $t('Submit')"></span>
+            <span data-bind="i18n: 'Submit'"></span>
         </button>
         <div class="action-dropdown-menu-item-actions">
             <button
                 data-bind="click: function(){ $parent.close().removeView($data) }, attr: {title: $t('Delete bookmark')}"
                 class="action-delete"
                 type="button">
-                <span data-bind="text: $t('Delete')"></span>
+                <span data-bind="i18n: 'Delete'"></span>
             </button>
         </div>
     </div>
@@ -47,7 +47,7 @@
                 class="action-edit"
                 data-bind="click: startEdit, attr: {title: $t('Edit bookmark')}"
                 type="button">
-                <span data-bind="text: $t('Edit')"></span>
+                <span data-bind="i18n: 'Edit'"></span>
             </button>
         </div>
         <!-- /ko -->

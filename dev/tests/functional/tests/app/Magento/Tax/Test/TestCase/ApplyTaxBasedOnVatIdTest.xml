@@ -6,9 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Tax\Test\TestCase\ApplyTaxBasedOnVatIdTest">
-        <variation name="ApplyTaxBasedOnVatIdTestVariation1">
-            <data name="description" xsi:type="string">MAGETWO-13436: Automatic Apply Tax Based on VAT ID.</data>
+    <testCase name="Magento\Tax\Test\TestCase\ApplyTaxBasedOnVatIdTest" summary="Automatic Apply Tax Based on VAT ID " ticketId="MAGETWO-13436">
+        <variation name="ApplyTaxBasedOnVatIdTestVariation1" summary="Automatic Apply Tax Based on VAT ID" ticketId="MAGETWO-13436">
             <data name="vatConfig/dataset" xsi:type="string">enable_VAT_on_frontend</data>
             <data name="configData" xsi:type="string">default_tax_configuration, flatrate, checkmo, store_information_DE_with_VAT, enable_VAT_on_frontend</data>
             <data name="customer/dataset" xsi:type="string">customer_UK_address_with_VAT</data>

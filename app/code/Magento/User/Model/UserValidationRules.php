@@ -23,10 +23,10 @@ class UserValidationRules
     /**
      * Adds validation rule for user first name, last name, username and email
      *
-     * @param \Magento\Framework\Validator\Object $validator
-     * @return \Magento\Framework\Validator\Object
+     * @param \Magento\Framework\Validator\DataObject $validator
+     * @return \Magento\Framework\Validator\DataObject
      */
-    public function addUserInfoRules(\Magento\Framework\Validator\Object $validator)
+    public function addUserInfoRules(\Magento\Framework\Validator\DataObject $validator)
     {
         $userNameNotEmpty = new NotEmpty();
         $userNameNotEmpty->setMessage(__('User Name is a required field.'), \Zend_Validate_NotEmpty::IS_EMPTY);
@@ -37,7 +37,7 @@ class UserValidationRules
         $emailValidity = new EmailAddress();
         $emailValidity->setMessage(__('Please enter a valid email.'), \Zend_Validate_EmailAddress::INVALID);
 
-        /** @var $validator \Magento\Framework\Validator\Object */
+        /** @var $validator \Magento\Framework\Validator\DataObject */
         $validator->addRule(
             $userNameNotEmpty,
             'username'
@@ -58,10 +58,10 @@ class UserValidationRules
     /**
      * Adds validation rule for user password
      *
-     * @param \Magento\Framework\Validator\Object $validator
-     * @return \Magento\Framework\Validator\Object
+     * @param \Magento\Framework\Validator\DataObject $validator
+     * @return \Magento\Framework\Validator\DataObject
      */
-    public function addPasswordRules(\Magento\Framework\Validator\Object $validator)
+    public function addPasswordRules(\Magento\Framework\Validator\DataObject $validator)
     {
         $passwordNotEmpty = new NotEmpty();
         $passwordNotEmpty->setMessage(__('Password is required field.'), NotEmpty::IS_EMPTY);
@@ -93,12 +93,12 @@ class UserValidationRules
     /**
      * Adds validation rule for user password confirmation
      *
-     * @param \Magento\Framework\Validator\Object $validator
+     * @param \Magento\Framework\Validator\DataObject $validator
      * @param string $passwordConfirmation
-     * @return \Magento\Framework\Validator\Object
+     * @return \Magento\Framework\Validator\DataObject
      */
     public function addPasswordConfirmationRule(
-        \Magento\Framework\Validator\Object $validator,
+        \Magento\Framework\Validator\DataObject $validator,
         $passwordConfirmation
     ) {
         $passwordConfirmation = new \Zend_Validate_Identical($passwordConfirmation);

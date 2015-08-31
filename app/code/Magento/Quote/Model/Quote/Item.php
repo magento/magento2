@@ -596,7 +596,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
     /**
      * Add option to item
      *
-     * @param \Magento\Quote\Model\Quote\Item\Option|\Magento\Framework\Object $option
+     * @param \Magento\Quote\Model\Quote\Item\Option|\Magento\Framework\DataObject $option
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -605,7 +605,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
         if (is_array($option)) {
             $option = $this->_itemOptionFactory->create()->setData($option)->setItem($this);
         } elseif (
-            $option instanceof \Magento\Framework\Object &&
+            $option instanceof \Magento\Framework\DataObject &&
             !$option instanceof \Magento\Quote\Model\Quote\Item\Option
         ) {
             $option = $this->_itemOptionFactory->create()->setData(
@@ -636,11 +636,11 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * Example: cataloginventory decimal qty validation may change qty to int,
      * so need to change quote item qty option value.
      *
-     * @param \Magento\Framework\Object $option
+     * @param \Magento\Framework\DataObject $option
      * @param int|float|null $value
      * @return $this
      */
-    public function updateQtyOption(\Magento\Framework\Object $option, $value)
+    public function updateQtyOption(\Magento\Framework\DataObject $option, $value)
     {
         $optionProduct = $option->getProduct();
         $options = $this->getQtyOptions();
@@ -803,12 +803,12 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * Returns formatted buy request - object, holding request received from
      * product view page with keys and options for configured product
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getBuyRequest()
     {
         $option = $this->getOptionByCode('info_buyRequest');
-        $buyRequest = new \Magento\Framework\Object($option ? unserialize($option->getValue()) : []);
+        $buyRequest = new \Magento\Framework\DataObject($option ? unserialize($option->getValue()) : []);
 
         // Overwrite standard buy request qty, because item qty could have changed since adding to quote
         $buyRequest->setOriginalQty($buyRequest->getQty())->setQty($this->getQty() * 1);
@@ -867,7 +867,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
      * @param string|null $origin Usually a name of module, that embeds error
      * @param int|null $code Error code, unique for origin, that sets it
      * @param string|null $message Error message
-     * @param \Magento\Framework\Object|null $additionalData Any additional data, that caller would like to store
+     * @param \Magento\Framework\DataObject|null $additionalData Any additional data, that caller would like to store
      * @return $this
      */
     public function addErrorInfo($origin = null, $code = null, $message = null, $additionalData = null)

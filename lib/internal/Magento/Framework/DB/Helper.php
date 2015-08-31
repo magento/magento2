@@ -19,7 +19,7 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
      */
     protected function _prepareOrder(\Magento\Framework\DB\Select $select, $autoReset = false)
     {
-        $selectOrders = $select->getPart(\Zend_Db_Select::ORDER);
+        $selectOrders = $select->getPart(\Magento\Framework\DB\Select::ORDER);
         if (!$selectOrders) {
             return [];
         }
@@ -28,17 +28,17 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
         foreach ($selectOrders as $term) {
             if (is_array($term)) {
                 if (!is_numeric($term[0])) {
-                    $orders[] = sprintf('%s %s', $this->_getReadAdapter()->quoteIdentifier($term[0], true), $term[1]);
+                    $orders[] = sprintf('%s %s', $this->getConnection()->quoteIdentifier($term[0], true), $term[1]);
                 }
             } else {
                 if (!is_numeric($term)) {
-                    $orders[] = $this->_getReadAdapter()->quoteIdentifier($term, true);
+                    $orders[] = $this->getConnection()->quoteIdentifier($term, true);
                 }
             }
         }
 
         if ($autoReset) {
-            $select->reset(\Zend_Db_Select::ORDER);
+            $select->reset(\Magento\Framework\DB\Select::ORDER);
         }
 
         return $orders;
@@ -79,18 +79,18 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
      */
     protected function _prepareGroup(\Magento\Framework\DB\Select $select, $autoReset = false)
     {
-        $selectGroups = $select->getPart(\Zend_Db_Select::GROUP);
+        $selectGroups = $select->getPart(\Magento\Framework\DB\Select::GROUP);
         if (!$selectGroups) {
             return [];
         }
 
         $groups = [];
         foreach ($selectGroups as $term) {
-            $groups[] = $this->_getReadAdapter()->quoteIdentifier($term, true);
+            $groups[] = $this->getConnection()->quoteIdentifier($term, true);
         }
 
         if ($autoReset) {
-            $select->reset(\Zend_Db_Select::GROUP);
+            $select->reset(\Magento\Framework\DB\Select::GROUP);
         }
 
         return $groups;
@@ -106,13 +106,13 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
      */
     protected function _prepareHaving(\Magento\Framework\DB\Select $select, $autoReset = false)
     {
-        $selectHavings = $select->getPart(\Zend_Db_Select::HAVING);
+        $selectHavings = $select->getPart(\Magento\Framework\DB\Select::HAVING);
         if (!$selectHavings) {
             return [];
         }
 
         $havings = [];
-        $columns = $select->getPart(\Zend_Db_Select::COLUMNS);
+        $columns = $select->getPart(\Magento\Framework\DB\Select::COLUMNS);
         foreach ($columns as $columnEntry) {
             $correlationName = (string)$columnEntry[1];
             $column          = $columnEntry[2];
@@ -136,7 +136,7 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
         }
 
         if ($autoReset) {
-            $select->reset(\Zend_Db_Select::HAVING);
+            $select->reset(\Magento\Framework\DB\Select::HAVING);
         }
 
         return $havings;
@@ -187,12 +187,12 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
      */
     public function prepareColumnsList(\Magento\Framework\DB\Select $select, $groupByCondition = null)
     {
-        if (!count($select->getPart(\Zend_Db_Select::FROM))) {
-            return $select->getPart(\Zend_Db_Select::COLUMNS);
+        if (!count($select->getPart(\Magento\Framework\DB\Select::FROM))) {
+            return $select->getPart(\Magento\Framework\DB\Select::COLUMNS);
         }
 
-        $columns          = $select->getPart(\Zend_Db_Select::COLUMNS);
-        $tables           = $select->getPart(\Zend_Db_Select::FROM);
+        $columns          = $select->getPart(\Magento\Framework\DB\Select::COLUMNS);
+        $tables           = $select->getPart(\Magento\Framework\DB\Select::FROM);
         $preparedColumns  = [];
 
         foreach ($columns as $columnEntry) {
@@ -207,13 +207,13 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
                     throw new \Zend_Db_Exception("Can't prepare expression without alias");
                 }
             } else {
-                if ($column == \Zend_Db_Select::SQL_WILDCARD) {
+                if ($column == \Magento\Framework\DB\Select::SQL_WILDCARD) {
                     if ($tables[$correlationName]['tableName'] instanceof \Zend_Db_Expr) {
                         throw new \Zend_Db_Exception(
                             "Can't prepare expression when tableName is instance of \Zend_Db_Expr"
                         );
                     }
-                    $tableColumns = $this->_getReadAdapter()->describeTable($tables[$correlationName]['tableName']);
+                    $tableColumns = $this->getConnection()->describeTable($tables[$correlationName]['tableName']);
                     foreach (array_keys($tableColumns) as $col) {
                         $preparedColumns[strtoupper($col)] = [$correlationName, $col, null];
                     }
@@ -247,12 +247,12 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
         $additionalWhere = ''
     ) {
         if (is_array($fields)) {
-            $fieldExpr = $this->_getReadAdapter()->getConcatSql($fields, $fieldsDelimiter);
+            $fieldExpr = $this->getConnection()->getConcatSql($fields, $fieldsDelimiter);
         } else {
             $fieldExpr = $fields;
         }
         if ($additionalWhere) {
-            $fieldExpr = $this->_getReadAdapter()->getCheckSql($additionalWhere, $fieldExpr, "''");
+            $fieldExpr = $this->getConnection()->getCheckSql($additionalWhere, $fieldExpr, "''");
         }
         $separator = '';
         if ($groupConcatDelimiter) {
@@ -289,6 +289,6 @@ class Helper extends \Magento\Framework\DB\Helper\AbstractHelper
     public function addLikeEscape($value, $options = [])
     {
         $value = $this->escapeLikeValue($value, $options);
-        return new \Zend_Db_Expr($this->_getReadAdapter()->quote($value));
+        return new \Zend_Db_Expr($this->getConnection()->quote($value));
     }
 }

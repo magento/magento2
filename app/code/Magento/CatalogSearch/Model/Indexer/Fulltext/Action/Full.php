@@ -6,6 +6,7 @@
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
+use Magento\Framework\App\Resource;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -106,7 +107,7 @@ class Full
     protected $engine;
 
     /**
-     * @var \Magento\Framework\IndexerInterface
+     * @var \Magento\Framework\Indexer\SaveHandler\IndexerInterface
      */
     protected $indexHandler;
 
@@ -126,7 +127,7 @@ class Full
     protected $localeDate;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var Resource
      */
     protected $resource;
 
@@ -146,7 +147,12 @@ class Full
     private $dimensionFactory;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    protected $connection;
+
+    /**
+     * @param Resource $resource
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Search\Request\Config $searchRequestConfig
@@ -162,11 +168,11 @@ class Full
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\CatalogSearch\Model\Resource\Fulltext $fulltextResource
      * @param \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory
-     * @param \Magento\Indexer\Model\ConfigInterface $indexerConfig
+     * @param \Magento\Framework\Indexer\ConfigInterface $indexerConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        Resource $resource,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Search\Request\Config $searchRequestConfig,
@@ -182,9 +188,10 @@ class Full
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\CatalogSearch\Model\Resource\Fulltext $fulltextResource,
         \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory,
-        \Magento\Indexer\Model\ConfigInterface $indexerConfig
+        \Magento\Framework\Indexer\ConfigInterface $indexerConfig
     ) {
         $this->resource = $resource;
+        $this->connection = $resource->getConnection();
         $this->catalogProductType = $catalogProductType;
         $this->eavConfig = $eavConfig;
         $this->searchRequestConfig = $searchRequestConfig;
@@ -230,26 +237,6 @@ class Full
     }
 
     /**
-     * Retrieve connection for read data
-     *
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    protected function getReadAdapter()
-    {
-        return $this->resource->getConnection('read');
-    }
-
-    /**
-     * Retrieve connection for write data
-     *
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    protected function getWriteAdapter()
-    {
-        return $this->resource->getConnection('write');
-    }
-
-    /**
      * Regenerate search index for all stores
      *
      * @param int|array|null $productIds
@@ -278,7 +265,7 @@ class Full
      */
     protected function getProductIdsFromParents(array $entityIds)
     {
-        return $this->getWriteAdapter()
+        return $this->connection
             ->select()
             ->from($this->getTable('catalog_product_relation'), 'parent_id')
             ->distinct(true)
@@ -409,9 +396,7 @@ class Full
         $limit = 100
     ) {
         $websiteId = $this->storeManager->getStore($storeId)->getWebsiteId();
-        $writeAdapter = $this->getWriteAdapter();
-
-        $select = $writeAdapter->select()
+        $select = $this->connection->select()
             ->useStraightJoin(true)
             ->from(
                 ['e' => $this->getTable('catalog_product_entity')],
@@ -419,7 +404,7 @@ class Full
             )
             ->join(
                 ['website' => $this->getTable('catalog_product_website')],
-                $writeAdapter->quoteInto('website.product_id = e.entity_id AND website.website_id = ?', $websiteId),
+                $this->connection->quoteInto('website.product_id = e.entity_id AND website.website_id = ?', $websiteId),
                 []
             );
 
@@ -429,7 +414,7 @@ class Full
 
         $select->where('e.entity_id > ?', $lastProductId)->limit($limit)->order('e.entity_id');
 
-        $result = $writeAdapter->fetchAll($select);
+        $result = $this->connection->fetchAll($select);
 
         return $result;
     }
@@ -548,7 +533,7 @@ class Full
     protected function unifyField($field, $backendType = 'varchar')
     {
         if ($backendType == 'datetime') {
-            $expr = $this->getReadAdapter()->getDateFormatSql($field, '%Y-%m-%d %H:%i:%s');
+            $expr = $this->connection->getDateFormatSql($field, '%Y-%m-%d %H:%i:%s');
         } else {
             $expr = $field;
         }
@@ -567,17 +552,16 @@ class Full
     {
         $result = [];
         $selects = [];
-        $adapter = $this->getWriteAdapter();
-        $ifStoreValue = $adapter->getCheckSql('t_store.value_id > 0', 't_store.value', 't_default.value');
+        $ifStoreValue = $this->connection->getCheckSql('t_store.value_id > 0', 't_store.value', 't_default.value');
         foreach ($attributeTypes as $backendType => $attributeIds) {
             if ($attributeIds) {
                 $tableName = $this->getTable('catalog_product_entity_' . $backendType);
-                $selects[] = $adapter->select()->from(
+                $selects[] = $this->connection->select()->from(
                     ['t_default' => $tableName],
                     ['entity_id', 'attribute_id']
                 )->joinLeft(
                     ['t_store' => $tableName],
-                    $adapter->quoteInto(
+                    $this->connection->quoteInto(
                         't_default.entity_id=t_store.entity_id' .
                         ' AND t_default.attribute_id=t_store.attribute_id' .
                         ' AND t_store.store_id = ?',
@@ -598,8 +582,8 @@ class Full
         }
 
         if ($selects) {
-            $select = $adapter->select()->union($selects, \Zend_Db_Select::SQL_UNION_ALL);
-            $query = $adapter->query($select);
+            $select = $this->connection->select()->union($selects, \Magento\Framework\DB\Select::SQL_UNION_ALL);
+            $query = $this->connection->query($select);
             while ($row = $query->fetch()) {
                 $result[$row['entity_id']][$row['attribute_id']] = $row['value'];
             }
@@ -639,7 +623,7 @@ class Full
         ) ? $typeInstance->getRelationInfo() : false;
 
         if ($relation && $relation->getTable() && $relation->getParentFieldName() && $relation->getChildFieldName()) {
-            $select = $this->getReadAdapter()->select()->from(
+            $select = $this->connection->select()->from(
                 ['main' => $this->getTable($relation->getTable())],
                 [$relation->getChildFieldName()]
             )->where(
@@ -649,7 +633,7 @@ class Full
             if ($relation->getWhere() !== null) {
                 $select->where($relation->getWhere());
             }
-            return $this->getReadAdapter()->fetchCol($select);
+            return $this->connection->fetchCol($select);
         }
 
         return null;
@@ -659,12 +643,12 @@ class Full
      * Retrieve Product Emulator (Magento Object)
      *
      * @param string $typeId
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     protected function getProductEmulator($typeId)
     {
         if (!isset($this->productEmulators[$typeId])) {
-            $productEmulator = new \Magento\Framework\Object();
+            $productEmulator = new \Magento\Framework\DataObject();
             $productEmulator->setTypeId($typeId);
             $this->productEmulators[$typeId] = $productEmulator;
         }

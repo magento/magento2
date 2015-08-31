@@ -220,7 +220,10 @@ class Session extends \Magento\Framework\Model\AbstractModel
     protected function _afterLoad()
     {
         parent::_afterLoad();
-        $info = $this->jsonHelper->jsonDecode($this->getInfo());
+        $info = null;
+        if ($this->getInfo()) {
+            $info = $this->jsonHelper->jsonDecode($this->getInfo());
+        }
         if (is_array($info)) {
             foreach ($info as $key => $value) {
                 $this->setData($key, $value);

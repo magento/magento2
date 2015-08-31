@@ -122,6 +122,11 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     protected $filter;
 
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dateTimeFormatter;
+
     public function setUp()
     {
         $this->modelContext = $this->getMock('Magento\Framework\Model\Context', [], [], '', false);
@@ -208,6 +213,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->any())->method('getLayout')->will($this->returnValue($layout));
         $this->backendHelper = $this->getMock('Magento\Backend\Helper\Data', [], [], '', false);
         $this->importExportData = $this->getMock('Magento\ImportExport\Helper\Data', [], [], '', false);
+        $this->dateTimeFormatter = $this->getMock('Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface');
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->filter = $this->objectManagerHelper->getObject(
             'Magento\ImportExport\Block\Adminhtml\Export\Filter',
@@ -246,6 +252,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             $this->localeDate,
             $this->reservedAttributeList,
             $this->localeResolver,
+            $this->dateTimeFormatter,
             $this->resource,
             $this->resourceCollection
         );
@@ -254,7 +261,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $attribute->setOptions($attributeData['options']);
         $attribute->setFilterOptions($attributeData['filter_options']);
         $attribute->setBackendType($backendType);
-        $column = new \Magento\Framework\Object();
+        $column = new \Magento\Framework\DataObject();
         $column->setData($columnValue, 'value');
         $isExport = true;
         $this->filter->decorateFilter($value, $attribute, $column, $isExport);

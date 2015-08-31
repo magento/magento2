@@ -6,7 +6,7 @@
 namespace Magento\Customer\Api;
 
 use Magento\Customer\Api\Data\CustomerInterface as Customer;
-use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Customer as CustomerHelper;
@@ -458,8 +458,8 @@ class CustomerRepositoryTest extends WebapiAbstract
         $sortOrderBuilder = Bootstrap::getObjectManager()->create(
             'Magento\Framework\Api\SortOrderBuilder'
         );
-        /** @var \Magento\Framework\Api\SortOrder $sortOrder */
-        $sortOrder = $sortOrderBuilder->setField(Customer::EMAIL)->setDirection(SearchCriteria::SORT_ASC)->create();
+        /** @var SortOrder $sortOrder */
+        $sortOrder = $sortOrderBuilder->setField(Customer::EMAIL)->setDirection(SortOrder::SORT_ASC)->create();
         $this->searchCriteriaBuilder->setSortOrders([$sortOrder]);
 
         $searchCriteria = $this->searchCriteriaBuilder->create();
@@ -502,7 +502,7 @@ class CustomerRepositoryTest extends WebapiAbstract
             ->create();
         $this->searchCriteriaBuilder->addFilters([$filter1, $filter2]);
         $this->searchCriteriaBuilder->addFilters([$filter3]);
-        $this->searchCriteriaBuilder->setSortOrders([Customer::EMAIL => SearchCriteria::SORT_ASC]);
+        $this->searchCriteriaBuilder->setSortOrders([Customer::EMAIL => SortOrder::SORT_ASC]);
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $searchData = $searchCriteria->__toArray();
         $requestData = ['searchCriteria' => $searchData];

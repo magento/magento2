@@ -8,7 +8,7 @@ namespace Magento\Newsletter\Controller\Adminhtml;
 /**
  * Newsletter subscribers controller
  */
-class Subscriber extends \Magento\Backend\App\Action
+abstract class Subscriber extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\App\Response\Http\FileFactory

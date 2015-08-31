@@ -18,7 +18,7 @@ use Magento\Catalog\Model\Product;
  * @method int getStoreId()
  * @method \Magento\Catalog\Model\Product\Compare\Item setStoreId(int $value)
  */
-class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\Object\IdentityInterface
+class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * Model cache tag

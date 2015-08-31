@@ -10,6 +10,8 @@
 @minicart__border-color: @color-gray80;
 @minicart__padding-horizontal: @indent__base;
 
+@minicart-qty__height: 24px;
+
 //
 //  Common
 //  _____________________________________________
@@ -150,13 +152,12 @@
                     &:extend(.abs-visually-hidden all);
                 }
                 .counter.qty {
-                    border-radius: 2px;
-                    clip: none;
-                    .css(color, @page__background-color);
                     .css(background, @active__color);
+                    .css(color, @page__background-color);
+                    .css(height, @minicart-qty__height);
+                    .css(line-height, @minicart-qty__height);
+                    border-radius: 2px;
                     display: inline-block;
-                    height: 24px;
-                    line-height: 24px;
                     margin: 3px 0 0;
                     min-width: 18px;
                     overflow: hidden;
@@ -165,6 +166,11 @@
                     white-space: normal;
                     &.empty {
                         &:extend(.abs-no-display all);
+                    }
+                    .loader {
+                        > img {
+                            .css(max-width, @minicart-qty__height);
+                        }
                     }
                 }
                 .counter-label {

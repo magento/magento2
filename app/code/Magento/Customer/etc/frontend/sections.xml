@@ -10,4 +10,7 @@
     <action name="customer/account/logout"/>
     <action name="customer/account/loginPost"/>
     <action name="customer/account/createPost"/>
+    <action name="customer/ajax/login">
+        <section name="checkout-data"/>
+    </action>
 </config>

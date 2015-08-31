@@ -299,7 +299,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
     /**
      * Authorize payment
      *
-     * @param \Magento\Framework\Object|\Magento\Payment\Model\InfoInterface|Payment $payment
+     * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface|Payment $payment
      * @param float $amount
      * @return $this
      */
@@ -311,7 +311,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
     /**
      * Void payment
      *
-     * @param \Magento\Framework\Object|\Magento\Payment\Model\InfoInterface|Payment $payment
+     * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface|Payment $payment
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -324,7 +324,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
     /**
      * Capture payment
      *
-     * @param \Magento\Framework\Object|\Magento\Payment\Model\InfoInterface|Payment $payment
+     * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface|Payment $payment
      * @param float $amount
      * @return $this
      */
@@ -339,7 +339,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
     /**
      * Refund capture
      *
-     * @param \Magento\Framework\Object|\Magento\Payment\Model\InfoInterface|Payment $payment
+     * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface|Payment $payment
      * @param float $amount
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -353,7 +353,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
     /**
      * Cancel payment
      *
-     * @param \Magento\Framework\Object|\Magento\Payment\Model\InfoInterface|Payment $payment
+     * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface|Payment $payment
      * @return $this
      */
     public function cancel(\Magento\Payment\Model\InfoInterface $payment)
@@ -505,7 +505,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
     /**
      * Check void availability
      * @return bool
-     * @internal param \Magento\Framework\Object $payment
+     * @internal param \Magento\Framework\DataObject $payment
      */
     public function canVoid()
     {

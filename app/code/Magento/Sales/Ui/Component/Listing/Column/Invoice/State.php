@@ -8,7 +8,7 @@ namespace Magento\Sales\Ui\Component\Listing\Column\Invoice;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Sales\Model\Order\InvoiceFactory;
+use Magento\Sales\Api\InvoiceRepositoryInterface;
 
 /**
  * Class State
@@ -25,18 +25,18 @@ class State extends Column
      *
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param InvoiceFactory $invoiceFactory
+     * @param InvoiceRepositoryInterface $invoiceRepository
      * @param array $components
      * @param array $data
      */
     public function __construct(
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
-        InvoiceFactory $invoiceFactory,
+        InvoiceRepositoryInterface $invoiceRepository,
         array $components = [],
         array $data = []
     ) {
-        $this->states = $invoiceFactory->create()->getStates();
+        $this->states = $invoiceRepository->create()->getStates();
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
@@ -50,7 +50,9 @@ class State extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $item[$this->getData('name')] = $this->states[$item[$this->getData('name')]];
+                $item[$this->getData('name')] = isset($this->states[$item[$this->getData('name')]])
+                    ? $this->states[$item[$this->getData('name')]]
+                    : $item[$this->getData('name')];
             }
         }
     }

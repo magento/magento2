@@ -114,7 +114,8 @@ class InstallTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $variables);
         $this->assertArrayHasKey('console', $variables);
         $this->assertFalse($variables['success']);
-        $this->assertStringStartsWith('exception \'LogicException\' with message \'' . $e, $variables['console'][0]);
+        $this->assertContains('LogicException', $variables['console'][0]);
+        $this->assertContains($e, $variables['console'][0]);
     }
 
     public function testProgressActionWithSampleDataError()

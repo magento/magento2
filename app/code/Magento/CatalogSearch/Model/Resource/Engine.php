@@ -27,7 +27,7 @@ class Engine implements EngineInterface
     protected $catalogProductVisibility;
 
     /**
-     * @var \Magento\Indexer\Model\ScopeResolver\IndexScopeResolver
+     * @var \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver
      */
     private $indexScopeResolver;
 
@@ -35,11 +35,11 @@ class Engine implements EngineInterface
      * Construct
      *
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
-     * @param \Magento\Indexer\Model\ScopeResolver\IndexScopeResolver $indexScopeResolver
+     * @param \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver $indexScopeResolver
      */
     public function __construct(
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
-        \Magento\Indexer\Model\ScopeResolver\IndexScopeResolver $indexScopeResolver
+        \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver $indexScopeResolver
     ) {
         $this->catalogProductVisibility = $catalogProductVisibility;
         $this->indexScopeResolver = $indexScopeResolver;

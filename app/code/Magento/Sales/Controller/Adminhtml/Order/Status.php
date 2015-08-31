@@ -8,7 +8,7 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 /**
  * Order status management controller
  */
-class Status extends \Magento\Backend\App\Action
+abstract class Status extends \Magento\Backend\App\Action
 {
     /**
      * Core registry

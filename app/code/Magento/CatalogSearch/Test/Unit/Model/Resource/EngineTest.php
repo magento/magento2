@@ -33,7 +33,6 @@ class EngineTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $resource->expects($this->any())
             ->method('getConnection')
-            ->with(\Magento\Framework\App\Resource::DEFAULT_WRITE_RESOURCE)
             ->will($this->returnValue($this->connection));
 
         $resource->expects($this->any())

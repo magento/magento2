@@ -142,10 +142,10 @@ class Review extends \Magento\Framework\View\Element\Template
     /**
      * Get either shipping rate code or empty value on error
      *
-     * @param \Magento\Framework\Object $rate
+     * @param \Magento\Framework\DataObject $rate
      * @return string
      */
-    public function renderShippingRateValue(\Magento\Framework\Object $rate)
+    public function renderShippingRateValue(\Magento\Framework\DataObject $rate)
     {
         if ($rate->getErrorMessage()) {
             return '';
@@ -156,7 +156,7 @@ class Review extends \Magento\Framework\View\Element\Template
     /**
      * Get shipping rate code title and its price or error message
      *
-     * @param \Magento\Framework\Object $rate
+     * @param \Magento\Framework\DataObject $rate
      * @param string $format
      * @param string $inclTaxFormat
      * @return string

@@ -98,7 +98,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
                 }
 
                 if (isset($products[$product->getId()])) {
-                    $object = new \Magento\Framework\Object($products[$product->getId()]);
+                    $object = new \Magento\Framework\DataObject($products[$product->getId()]);
                     $item->getProduct()->setUrlDataObject($object);
                 }
             }

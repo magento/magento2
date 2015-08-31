@@ -67,6 +67,7 @@ class AdvancedPricingTab extends ProductTab
      * @param array|null $fields
      * @param SimpleElement|null $element
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getDataFormTab($fields = null, SimpleElement $element = null)
     {

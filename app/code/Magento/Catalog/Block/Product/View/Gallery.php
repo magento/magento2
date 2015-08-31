@@ -16,13 +16,44 @@ use Magento\Framework\Data\Collection;
 class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
 {
     /**
+     * @var \Magento\Framework\Config\View
+     */
+    protected $configView;
+
+    /**
      * Retrieve collection of gallery images
      *
      * @return Collection
      */
     public function getGalleryImages()
     {
-        return $this->getProduct()->getMediaGalleryImages();
+        $product = $this->getProduct();
+        $images = $product->getMediaGalleryImages();
+        if ($images instanceof \Magento\Framework\Data\Collection) {
+            foreach ($images as &$image) {
+                $image->setData(
+                    'small_image_url',
+                    $this->_imageHelper->init($product, 'product_page_image_small')
+                        ->setImageFile($image->getFile())
+                        ->getUrl()
+                );
+                $image->setData(
+                    'medium_image_url',
+                    $this->_imageHelper->init($product, 'product_page_image_medium')
+                        ->setImageFile($image->getFile())
+                        ->getUrl()
+                );
+                $image->setData(
+                    'large_image_url',
+                    $this->_imageHelper->init($product, 'product_page_image_large')
+                        ->setImageFile($image->getFile())
+                        ->getUrl()
+                );
+            }
+        }
+
+
+        return $images;
     }
 
     /**
@@ -33,22 +64,14 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     public function getGalleryImagesJson()
     {
         $imagesItems = [];
-
-        $imageWidth = $this->getVar("product_page_main_image:width");
-        $imageHeight = $this->getVar("product_page_main_image:height") ?: $imageWidth;
-        $whiteBorders =  $this->getVar("product_image_white_borders");
-        $thumbWidth =  $this->getVar("product_page_more_views:width");
-        $thumbHeight =  $this->getVar("product_page_more_views:height") ?: $thumbWidth;
-
-        foreach ($this->getProduct()->getMediaGalleryImages() as $image) {
-            $imageSmall = $this->getImageUrl($image, 'thumbnail', $whiteBorders, $thumbWidth, $thumbHeight);
-            $imageMedium = $this->getImageUrl($image, 'image', $whiteBorders, $imageWidth, $imageHeight);
-
+        foreach ($this->getGalleryImages() as $image) {
             $imagesItems[] = [
-                'img' => $imageMedium,
-                'thumb' => $imageSmall,
+                'thumb' => $image->getData('small_image_url'),
+                'img' => $image->getData('medium_image_url'),
+                'original' => $image->getData('large_image_url'),
                 'caption' => $image->getLabel(),
                 'position' => $image->getPosition(),
+                'is_main' => $this->isMainImage($image),
             ];
         }
         return json_encode($imagesItems);
@@ -57,7 +80,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     /**
      * Retrieve gallery url
      *
-     * @param null|\Magento\Framework\Object $image
+     * @param null|\Magento\Framework\DataObject $image
      * @return string
      */
     public function getGalleryUrl($image = null)
@@ -70,35 +93,39 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
-     * Get gallery image url
-     *
-     * @param \Magento\Framework\Object $image
-     * @param string $type
-     * @param boolean $whiteBorders
-     * @param null|number $width
-     * @param null|number $height
-     * @return string
-     */
-    public function getImageUrl($image, $type, $whiteBorders = false, $width = null, $height = null)
-    {
-        $product = $this->getProduct();
-        $img = $this->_imageHelper->init($product, $type, $image->getFile());
-        $img->constrainOnly(true)->keepAspectRatio(true)->keepFrame($whiteBorders);
-        if ($width || $height) {
-            $img->resize($width, $height);
-        }
-        return (string)$img;
-    }
-
-    /**
      * Is product main image
      *
-     * @param \Magento\Framework\Object $image
+     * @param \Magento\Framework\DataObject $image
      * @return bool
      */
     public function isMainImage($image)
     {
         $product = $this->getProduct();
         return $product->getImage() == $image->getFile();
+    }
+
+    /**
+     * @param string $imageId
+     * @param string $attributeName
+     * @param string $default
+     * @return string
+     */
+    public function getImageAttribute($imageId, $attributeName, $default = null)
+    {
+        $attributes = $this->getConfigView()->getImageAttributes('Magento_Catalog', $imageId);
+        return isset($attributes[$attributeName]) ? $attributes[$attributeName] : $default;
+    }
+
+    /**
+     * Retrieve config view
+     *
+     * @return \Magento\Framework\Config\View
+     */
+    private function getConfigView()
+    {
+        if (!$this->configView) {
+            $this->configView = $this->_viewConfig->getViewConfig();
+        }
+        return $this->configView;
     }
 }

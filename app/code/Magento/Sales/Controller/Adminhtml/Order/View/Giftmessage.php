@@ -10,7 +10,7 @@ namespace Magento\Sales\Controller\Adminhtml\Order\View;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Giftmessage extends \Magento\Backend\App\Action
+abstract class Giftmessage extends \Magento\Backend\App\Action
 {
     /**
      * Retrieve gift message save model

@@ -70,6 +70,11 @@ class VoidTest extends \PHPUnit_Framework_TestCase
     protected $resultForwardFactoryMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $invoiceManagement;
+
+    /**
      * @return void
      */
     public function setUp()
@@ -121,6 +126,14 @@ class VoidTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
+
+        $this->invoiceManagement = $this->getMockBuilder('Magento\Sales\Api\InvoiceManagementInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->objectManagerMock->expects($this->any())
+            ->method('get')
+            ->with('Magento\Sales\Api\InvoiceManagementInterface')
+            ->willReturn($this->invoiceManagement);
 
         $contextMock = $this->getMockBuilder('Magento\Backend\App\Action\Context')
             ->disableOriginalConstructor()
@@ -180,16 +193,17 @@ class VoidTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['setIsInProcess', '__wakeup'])
             ->getMock();
 
+        $this->invoiceManagement->expects($this->once())
+            ->method('setVoid')
+            ->with($invoiceId)
+            ->willReturn(true);
+
         $invoiceMock = $this->getMockBuilder('Magento\Sales\Model\Order\Invoice')
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
-        $invoiceMock->expects($this->once())
-            ->method('load')
-            ->with($invoiceId)
-            ->willReturnSelf();
-        $invoiceMock->expects($this->once())
-            ->method('void');
+        $invoiceMock->expects($this->any())
+            ->method('getEntityId')
+            ->will($this->returnValue($invoiceId));
         $invoiceMock->expects($this->any())
             ->method('getOrder')
             ->will($this->returnValue($orderMock));
@@ -199,7 +213,6 @@ class VoidTest extends \PHPUnit_Framework_TestCase
 
         $transactionMock = $this->getMockBuilder('Magento\Framework\DB\Transaction')
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $transactionMock->expects($this->at(0))
             ->method('addObject')
@@ -212,11 +225,18 @@ class VoidTest extends \PHPUnit_Framework_TestCase
         $transactionMock->expects($this->at(2))
             ->method('save');
 
+        $invoiceRepository = $this->getMockBuilder('Magento\Sales\Api\InvoiceRepositoryInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $invoiceRepository->expects($this->any())
+            ->method('get')
+            ->willReturn($invoiceMock);
+
         $this->objectManagerMock->expects($this->at(0))
             ->method('create')
-            ->with('Magento\Sales\Model\Order\Invoice')
-            ->willReturn($invoiceMock);
-        $this->objectManagerMock->expects($this->at(1))
+            ->with('Magento\Sales\Api\InvoiceRepositoryInterface')
+            ->willReturn($invoiceRepository);
+        $this->objectManagerMock->expects($this->at(2))
             ->method('create')
             ->with('Magento\Framework\DB\Transaction')
             ->will($this->returnValue($transactionMock));
@@ -250,18 +270,17 @@ class VoidTest extends \PHPUnit_Framework_TestCase
             ->with('invoice_id')
             ->will($this->returnValue($invoiceId));
 
-        $invoiceMock = $this->getMockBuilder('Magento\Sales\Model\Order\Invoice')
+        $invoiceRepository = $this->getMockBuilder('Magento\Sales\Api\InvoiceRepositoryInterface')
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
-        $invoiceMock->expects($this->once())
-            ->method('load')
+        $invoiceRepository->expects($this->any())
+            ->method('get')
             ->willReturn(null);
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('Magento\Sales\Model\Order\Invoice')
-            ->willReturn($invoiceMock);
+            ->with('Magento\Sales\Api\InvoiceRepositoryInterface')
+            ->willReturn($invoiceRepository);
 
         $this->messageManagerMock->expects($this->never())
             ->method('addError');
@@ -295,25 +314,32 @@ class VoidTest extends \PHPUnit_Framework_TestCase
             ->with('invoice_id')
             ->will($this->returnValue($invoiceId));
 
+        $this->invoiceManagement->expects($this->once())
+            ->method('setVoid')
+            ->with($invoiceId)
+            ->will($this->throwException($e));
+
         $invoiceMock = $this->getMockBuilder('Magento\Sales\Model\Order\Invoice')
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $invoiceMock->expects($this->once())
-            ->method('load')
-            ->with($invoiceId)
-            ->willReturnSelf();
-        $invoiceMock->expects($this->once())
-            ->method('void')
-            ->will($this->throwException($e));
+            ->method('getEntityId')
+            ->will($this->returnValue($invoiceId));
         $invoiceMock->expects($this->once())
             ->method('getId')
             ->will($this->returnValue($invoiceId));
 
+        $invoiceRepository = $this->getMockBuilder('Magento\Sales\Api\InvoiceRepositoryInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $invoiceRepository->expects($this->any())
+            ->method('get')
+            ->willReturn($invoiceMock);
+
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('Magento\Sales\Model\Order\Invoice')
-            ->willReturn($invoiceMock);
+            ->with('Magento\Sales\Api\InvoiceRepositoryInterface')
+            ->willReturn($invoiceRepository);
 
         $this->messageManagerMock->expects($this->once())
             ->method('addError');

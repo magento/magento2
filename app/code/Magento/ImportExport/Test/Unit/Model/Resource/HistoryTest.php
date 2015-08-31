@@ -29,7 +29,7 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->historyResourceModel = $this->getMock(
             'Magento\ImportExport\Model\Resource\History',
-            ['_getReadAdapter', 'getMainTable', 'getIdFieldName'],
+            ['getConnection', 'getMainTable', 'getIdFieldName'],
             [],
             '',
             false
@@ -54,7 +54,7 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
         $selectMock->expects($this->any())->method('limit')->will($this->returnSelf());
         $dbAdapterMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
         $dbAdapterMock->expects($this->any())->method('fetchOne')->will($this->returnValue('result'));
-        $this->historyResourceModel->expects($this->any())->method('_getReadAdapter')->willReturn($dbAdapterMock);
+        $this->historyResourceModel->expects($this->any())->method('getConnection')->willReturn($dbAdapterMock);
         $this->historyResourceModel->expects($this->any())->method('getMainTable')->willReturn('mainTable');
         $this->historyResourceModel->expects($this->any())->method('getIdFieldName')->willReturn('id');
     }

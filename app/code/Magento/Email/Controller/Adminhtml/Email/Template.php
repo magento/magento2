@@ -10,7 +10,7 @@ namespace Magento\Email\Controller\Adminhtml\Email;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Template extends \Magento\Backend\App\Action
+abstract class Template extends \Magento\Backend\App\Action
 {
     /**
      * Core registry

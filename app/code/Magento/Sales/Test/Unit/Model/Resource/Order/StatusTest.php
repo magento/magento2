@@ -33,7 +33,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $adapterMock;
+    protected $connectionMock;
 
     /**
      * @var \Magento\Framework\DB\Select
@@ -46,14 +46,14 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $this->selectMock->expects($this->any())->method('from')->will($this->returnSelf());
         $this->selectMock->expects($this->any())->method('where');
 
-        $this->adapterMock = $this->getMock(
+        $this->connectionMock = $this->getMock(
             '\Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['update', 'insertOnDuplicate'],
             [],
             '',
             false
         );
-        $this->adapterMock->expects($this->any())->method('select')->will($this->returnValue($this->selectMock));
+        $this->connectionMock->expects($this->any())->method('select')->will($this->returnValue($this->selectMock));
 
         $this->resourceMock = $this->getMock(
             '\Magento\Framework\App\Resource',
@@ -70,7 +70,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
             ->will(
-                $this->returnValue($this->adapterMock)
+                $this->returnValue($this->connectionMock)
             );
 
         $this->configMock = $this->getMock('\Magento\Eav\Model\Config', ['getConnectionName'], [], '', false);
@@ -87,14 +87,14 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $isDefault = 1;
         $visibleOnFront = 1;
         $tableName = 'sales_order_status_state';
-        $this->adapterMock->expects($this->once())
+        $this->connectionMock->expects($this->once())
             ->method('update')
             ->with(
                 $this->equalTo($tableName),
                 $this->equalTo(['is_default' => 0]),
                 $this->equalTo(['state = ?' => $state])
             );
-        $this->adapterMock->expects($this->once())
+        $this->connectionMock->expects($this->once())
             ->method('insertOnDuplicate')
             ->with(
                 $this->equalTo($tableName),

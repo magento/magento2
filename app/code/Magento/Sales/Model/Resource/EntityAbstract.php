@@ -60,7 +60,7 @@ abstract class EntityAbstract extends AbstractDb
      * @param RelationComposite $entityRelationComposite
      * @param Attribute $attribute
      * @param Manager $sequenceManager
-     * @param string $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -68,14 +68,14 @@ abstract class EntityAbstract extends AbstractDb
         RelationComposite $entityRelationComposite,
         \Magento\Sales\Model\Resource\Attribute $attribute,
         Manager $sequenceManager,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->attribute = $attribute;
         $this->sequenceManager = $sequenceManager;
-        if ($resourcePrefix === null) {
-            $resourcePrefix = 'sales';
+        if ($connectionName === null) {
+            $connectionName = 'sales';
         }
-        parent::__construct($context, $entitySnapshot, $entityRelationComposite, $resourcePrefix);
+        parent::__construct($context, $entitySnapshot, $entityRelationComposite, $connectionName);
     }
 
     /**
@@ -114,7 +114,7 @@ abstract class EntityAbstract extends AbstractDb
      * Perform actions before object save
      * Perform actions before object save, calculate next sequence value for increment Id
      *
-     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\Object $object
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
@@ -140,14 +140,14 @@ abstract class EntityAbstract extends AbstractDb
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        $adapter = $this->_getReadAdapter();
-        $columns = $adapter->describeTable($this->getMainTable());
+        $connection = $this->getConnection();
+        $columns = $connection->describeTable($this->getMainTable());
 
         if (isset($columns['created_at'], $columns['updated_at'])) {
-            $select = $adapter->select()
+            $select = $connection->select()
                 ->from($this->getMainTable(), ['created_at', 'updated_at'])
                 ->where($this->getIdFieldName() . ' = :entity_id');
-            $row = $adapter->fetchRow($select, [':entity_id' => $object->getId()]);
+            $row = $connection->fetchRow($select, [':entity_id' => $object->getId()]);
 
             if (is_array($row) && isset($row['created_at'], $row['updated_at'])) {
                 $object->setCreatedAt($row['created_at']);
@@ -164,10 +164,10 @@ abstract class EntityAbstract extends AbstractDb
      */
     protected function updateObject(\Magento\Framework\Model\AbstractModel $object)
     {
-        $condition = $this->_getWriteAdapter()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
+        $condition = $this->getConnection()->quoteInto($this->getIdFieldName() . '=?', $object->getId());
         $data = $this->_prepareDataForSave($object);
         unset($data[$this->getIdFieldName()]);
-        $this->_getWriteAdapter()->update($this->getMainTable(), $data, $condition);
+        $this->getConnection()->update($this->getMainTable(), $data, $condition);
     }
 
     /**
@@ -177,8 +177,8 @@ abstract class EntityAbstract extends AbstractDb
     {
         $bind = $this->_prepareDataForSave($object);
         unset($bind[$this->getIdFieldName()]);
-        $this->_getWriteAdapter()->insert($this->getMainTable(), $bind);
-        $object->setId($this->_getWriteAdapter()->lastInsertId($this->getMainTable()));
+        $this->getConnection()->insert($this->getMainTable(), $bind);
+        $object->setId($this->getConnection()->lastInsertId($this->getMainTable()));
         if ($this->_useIsObjectNew) {
             $object->isObjectNew(false);
         }

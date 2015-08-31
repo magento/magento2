@@ -15,6 +15,6 @@ class ResourceConfig implements \Magento\Framework\App\Resource\ConfigInterface
      */
     public function getConnectionName($resourceName)
     {
-        return \Magento\Framework\App\Resource\Config::DEFAULT_SETUP_CONNECTION;
+        return \Magento\Framework\App\Resource::DEFAULT_CONNECTION;
     }
 }

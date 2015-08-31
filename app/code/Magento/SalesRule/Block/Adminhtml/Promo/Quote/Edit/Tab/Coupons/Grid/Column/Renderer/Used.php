@@ -13,10 +13,10 @@ namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid\Co
 class Used extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
 {
     /**
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         $value = (int)$row->getData($this->getColumn()->getIndex());
         return empty($value) ? __('No') : __('Yes');

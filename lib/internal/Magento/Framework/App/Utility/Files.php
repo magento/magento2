@@ -523,6 +523,34 @@ class Files
     }
 
     /**
+     * Returns list of Static HTML files in Magento
+     *
+     * @param string $area
+     * @param string $themePath
+     * @param string $namespace
+     * @param string $module
+     * @return array
+     */
+    public function getStaticHtmlFiles($area = '*', $themePath = '*/*', $namespace = '*', $module = '*')
+    {
+        $key = $area . $themePath . $namespace . $module . __METHOD__ . $this->_path;
+        if (isset(self::$_cache[$key])) {
+            return self::$_cache[$key];
+        }
+        $files = self::getFiles(
+            [
+                "{$this->_path}/app/code/{$namespace}/{$module}/view/{$area}/web/template",
+                "{$this->_path}/app/design/{$area}/{$themePath}/web/template",
+                "{$this->_path}/app/design/{$area}/{$themePath}/{$module}/web/template"
+            ],
+            '*.html'
+        );
+        $result = self::composeDataSets($files);
+        self::$_cache[$key] = $result;
+        return $result;
+    }
+
+    /**
      * Get list of static view files that are subject of Magento static view files preprocessing system
      *
      * @param string $filePattern

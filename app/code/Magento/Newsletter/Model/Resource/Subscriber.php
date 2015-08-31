@@ -13,18 +13,11 @@ namespace Magento\Newsletter\Model\Resource;
 class Subscriber extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
-     * DB read connection
+     * DB connection
      *
-     * @var \Zend_Db_Adapter_Abstract
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    protected $_read;
-
-    /**
-     * DB write connection
-     *
-     * @var \Zend_Db_Adapter_Abstract
-     */
-    protected $_write;
+    protected $connection;
 
     /**
      * Name of subscriber link DB table
@@ -58,17 +51,17 @@ class Subscriber extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Framework\Math\Random $mathRandom
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Framework\Math\Random $mathRandom,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->_date = $date;
         $this->mathRandom = $mathRandom;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -81,8 +74,7 @@ class Subscriber extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $this->_init('newsletter_subscriber', 'subscriber_id');
         $this->_subscriberLinkTable = $this->getTable('newsletter_queue_link');
-        $this->_read = $this->_getReadAdapter();
-        $this->_write = $this->_getWriteAdapter();
+        $this->connection = $this->getConnection();
     }
 
     /**
@@ -104,9 +96,9 @@ class Subscriber extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function loadByEmail($subscriberEmail)
     {
-        $select = $this->_read->select()->from($this->getMainTable())->where('subscriber_email=:subscriber_email');
+        $select = $this->connection->select()->from($this->getMainTable())->where('subscriber_email=:subscriber_email');
 
-        $result = $this->_read->fetchRow($select, ['subscriber_email' => $subscriberEmail]);
+        $result = $this->connection->fetchRow($select, ['subscriber_email' => $subscriberEmail]);
 
         if (!$result) {
             return [];
@@ -123,17 +115,17 @@ class Subscriber extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function loadByCustomerData(\Magento\Customer\Api\Data\CustomerInterface $customer)
     {
-        $select = $this->_read->select()->from($this->getMainTable())->where('customer_id=:customer_id');
+        $select = $this->connection->select()->from($this->getMainTable())->where('customer_id=:customer_id');
 
-        $result = $this->_read->fetchRow($select, ['customer_id' => $customer->getId()]);
+        $result = $this->connection->fetchRow($select, ['customer_id' => $customer->getId()]);
 
         if ($result) {
             return $result;
         }
 
-        $select = $this->_read->select()->from($this->getMainTable())->where('subscriber_email=:subscriber_email');
+        $select = $this->connection->select()->from($this->getMainTable())->where('subscriber_email=:subscriber_email');
 
-        $result = $this->_read->fetchRow($select, ['subscriber_email' => $customer->getEmail()]);
+        $result = $this->connection->fetchRow($select, ['subscriber_email' => $customer->getEmail()]);
 
         if ($result) {
             return $result;
@@ -162,17 +154,17 @@ class Subscriber extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function received(\Magento\Newsletter\Model\Subscriber $subscriber, \Magento\Newsletter\Model\Queue $queue)
     {
-        $this->_write->beginTransaction();
+        $this->connection->beginTransaction();
         try {
             $data['letter_sent_at'] = $this->_date->gmtDate();
-            $this->_write->update(
+            $this->connection->update(
                 $this->_subscriberLinkTable,
                 $data,
                 ['subscriber_id = ?' => $subscriber->getId(), 'queue_id = ?' => $queue->getId()]
             );
-            $this->_write->commit();
+            $this->connection->commit();
         } catch (\Exception $e) {
-            $this->_write->rollBack();
+            $this->connection->rollBack();
             throw new \Magento\Framework\Exception\LocalizedException(__('We cannot mark as received subscriber.'));
         }
         return $this;

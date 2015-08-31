@@ -27,6 +27,11 @@ class RangeTest extends \PHPUnit_Framework_TestCase
     protected $uiComponentFactory;
 
     /**
+     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $filterBuilderMock;
+
+    /**
      * Set up
      */
     public function setUp()
@@ -45,6 +50,13 @@ class RangeTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->filterBuilderMock = $this->getMock(
+            'Magento\Framework\Api\FilterBuilder',
+            [],
+            [],
+            '',
+            false
+        );
     }
 
     /**
@@ -54,7 +66,12 @@ class RangeTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetComponentName()
     {
-        $range = new Range($this->contextMock, $this->uiComponentFactory, []);
+        $range = new Range(
+            $this->contextMock,
+            $this->uiComponentFactory,
+            $this->filterBuilderMock,
+            []
+        );
 
         $this->assertTrue($range->getComponentName() === Range::NAME);
     }
@@ -98,7 +115,13 @@ class RangeTest extends \PHPUnit_Framework_TestCase
                 ->willReturn($dataProvider);
         }
 
-        $range = new Range($this->contextMock, $this->uiComponentFactory, [], ['name' => $name]);
+        $range = new Range(
+            $this->contextMock,
+            $this->uiComponentFactory,
+            $this->filterBuilderMock,
+            [],
+            ['name' => $name]
+        );
         $range->prepare();
     }
 

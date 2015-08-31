@@ -35,7 +35,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'Magento/backend'
         );
 
-        $config = new \Magento\Framework\Object();
+        $config = new \Magento\Framework\DataObject();
         $settings = $this->_model->getPluginSettings($config);
 
         $this->assertArrayHasKey('widget_plugin_src', $settings);
@@ -56,7 +56,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetWidgetWindowUrl()
     {
-        $config = new \Magento\Framework\Object(['widget_filters' => ['is_email_compatible' => 1]]);
+        $config = new \Magento\Framework\DataObject(['widget_filters' => ['is_email_compatible' => 1]]);
 
         $url = $this->_model->getWidgetWindowUrl($config);
 

@@ -50,7 +50,9 @@ class Status extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                $item[$this->getData('name')] = $this->statuses[$item[$this->getData('name')]];
+                $item[$this->getData('name')] = isset($this->statuses[$item[$this->getData('name')]])
+                    ? $this->statuses[$item[$this->getData('name')]]
+                    : $item[$this->getData('name')];
             }
         }
     }

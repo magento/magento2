@@ -5,7 +5,7 @@
  */
 namespace Magento\Checkout\Controller\Onepage;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\PaymentException;
 
 /**
@@ -31,7 +31,7 @@ class SaveOrder extends \Magento\Checkout\Controller\Onepage
             return $this->_ajaxRedirectResponse();
         }
 
-        $result = new Object();
+        $result = new DataObject();
         try {
             $agreementsValidator = $this->_objectManager->get('Magento\Checkout\Model\Agreements\AgreementsValidator');
             if (!$agreementsValidator->isValid(array_keys($this->getRequest()->getPost('agreement', [])))) {

@@ -43,7 +43,7 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
      * @param string $attributeCode
      * @param string $serviceClass
      * @param array $attributeRepositoryResponse
-     * @param \Magento\Framework\Stdlib\String $stringUtility,
+     * @param \Magento\Framework\Stdlib\StringUtils $stringUtility,
      * @param array $serviceEntityTypeMapData
      * @param array $serviceBackendModelDataInterfaceMapData
      * @param string $expected
@@ -118,7 +118,7 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
             ->method('getFrontendInput')
             ->willReturn('image');
 
-        $stringUtility = new \Magento\Framework\Stdlib\String();
+        $stringUtility = new \Magento\Framework\Stdlib\StringUtils();
 
         return [
             [
@@ -184,9 +184,28 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    public function testGetTypeIfAttributeDoesNotExist()
+    {
+        $this->attributeRepository
+            ->expects($this->any())
+            ->method('get')
+            ->willReturn(new \Magento\Framework\Exception\NoSuchEntityException());
+
+        $this->eavCustomAttributeTypeLocator = new EavCustomAttributeTypeLocator(
+            $this->attributeRepository,
+            new \Magento\Framework\Stdlib\StringUtils(),
+            [],
+            []
+        );
+
+        $this->assertNull(
+            $this->eavCustomAttributeTypeLocator->getType('media_galley', 'Magento\Catalog\Api\Data\ProductInterface')
+        );
+    }
+
     public function testGetAllServiceDataInterfaceEmpty()
     {
-        $stringUtility = new \Magento\Framework\Stdlib\String();
+        $stringUtility = new \Magento\Framework\Stdlib\StringUtils();
         $this->eavCustomAttributeTypeLocator = new EavCustomAttributeTypeLocator(
             $this->attributeRepository,
             $stringUtility
@@ -201,7 +220,7 @@ class EavCustomAttributeTypeLocatorTest extends \PHPUnit_Framework_TestCase
             'ServiceB' => ['BackendB' => 'ServiceDataInterfaceB', 'BackendC' => 'ServiceDataInterfaceC'],
             'ServiceC' => ['BackendD' => 'ServiceDataInterfaceD']
         ];
-        $stringUtility = new \Magento\Framework\Stdlib\String();
+        $stringUtility = new \Magento\Framework\Stdlib\StringUtils();
         $this->eavCustomAttributeTypeLocator = new EavCustomAttributeTypeLocator(
             $this->attributeRepository, $stringUtility, [], $serviceBackendModelDataInterfaceMapData
         );
