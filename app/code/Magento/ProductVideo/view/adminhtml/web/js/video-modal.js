@@ -25,11 +25,12 @@ define([
 
             showModal: function(e)
             {
+                jQuery('.action-close[data-role="close-panel"]').click();
                 $('#new-video').modal('openModal');
                 $('.video_image_role').prop('disabled', false);
                 $('#new_video_form')[0].reset();
                 if ($('.image.item').length < 1) {
-                    $('.video_image_role').prop('checked', true).prop('disabled', true);
+                    $('.video_image_role').prop('checked', true);
                 }
             }
         }
