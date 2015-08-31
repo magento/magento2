@@ -332,14 +332,10 @@ define([
                     var end = el.name.indexOf(']');
                     var imageType = el.name.substring(start, end);
                     var imageCheckbox = $('#new_video_form input[value="' + imageType + '"]');
-                    if (imageCheckbox.prop('checked') ) {
-                        // Evil hack.
-                        // After closing the dialogue "image" it has to be completely removed from the "DOM"
-                        jQuery('#media_gallery_content').trigger('setImageType', {
-                            type: imageType,
-                            imageData: imageData
-                        });
-                    }
+                    jQuery('#media_gallery_content').trigger('setImageType', {
+                        type:  imageType,
+                        imageData: imageCheckbox.prop('checked') ? imageData : null
+                    });
                 });
             }
         },
