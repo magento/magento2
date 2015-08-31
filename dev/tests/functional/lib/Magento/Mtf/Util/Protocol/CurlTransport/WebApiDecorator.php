@@ -126,11 +126,11 @@ class WebApiDecorator implements CurlInterface
         $dom = new \DOMDocument();
         $dom->load($fileConfig);
 
-        $webapi = (new \DOMXPath($dom))->query('//config/handler/webapi')->item(0);
         $webapiToken = (new \DOMXPath($dom))->query('//config/handler/webapi/token')->item(0);
         if ($webapiToken) {
             $webapiToken->nodeValue = $integration->getToken();
         } else {
+            $webapi = (new \DOMXPath($dom))->query('//config/handler/webapi')->item(0);
             $webapi->appendChild($dom->createElement('token', $integration->getToken()));
         }
 
@@ -202,22 +202,5 @@ class WebApiDecorator implements CurlInterface
     public function close()
     {
         $this->transport->close();
-    }
-
-    /**
-     * Update index for all entities via webapi.
-     *
-     * @return string
-     */
-    public function reindexAll()
-    {
-        $this->write(
-            $_ENV['app_frontend_url'] . 'rest/V1/indexer/processor/all',
-            [],
-            CurlInterface::GET
-        );
-        $response = $this->read();
-
-        return $response;
     }
 }
