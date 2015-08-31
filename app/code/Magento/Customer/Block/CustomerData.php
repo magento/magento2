@@ -35,7 +35,8 @@ class CustomerData extends \Magento\Framework\View\Element\Template
      *
      * @return array
      */
-    public function getNotCachedSections() {
+    public function getNotCachedSections()
+    {
         return $this->nonCachedSections;
     }
 
