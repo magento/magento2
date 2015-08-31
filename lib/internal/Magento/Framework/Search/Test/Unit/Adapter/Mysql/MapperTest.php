@@ -103,7 +103,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(self::INDEX_NAME));
 
         $this->queryContainer = $this->getMockBuilder('Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer')
-            ->setMethods(['addMatchQuery', 'getMatchQueries', 'getFilterQueries'])
+            ->setMethods(['addMatchQuery', 'getMatchQueries'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->queryContainer->expects($this->any())

@@ -378,14 +378,12 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
 
         $attribute->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'multiselect_attribute');
         /** @var \Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection $multiselectOptions */
-        //TODO: MAGETWO-42197
-        /*$multiselectOptions = $this->objectManager
+        $multiselectOptions = $this->objectManager
             ->create('Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection')
-            ->setAttributeFilter($attribute->getId());*/
+            ->setAttributeFilter($attribute->getId());
 
         $this->requestBuilder->bind('select_attribute', $selectOptions->getLastItem()->getId());
-        //TODO: MAGETWO-42197
-        //$this->requestBuilder->bind('multiselect_attribute', $multiselectOptions->getLastItem()->getId());
+        $this->requestBuilder->bind('multiselect_attribute', $multiselectOptions->getLastItem()->getId());
         $this->requestBuilder->bind('price.from', 9);
         $this->requestBuilder->bind('price.to', 12);
         $this->requestBuilder->bind('category_ids', 2);
