@@ -42,7 +42,7 @@
             <data name="productPrice/0/special" xsi:type="string">5</data>
             <data name="productPrice/0/sub_total" xsi:type="string">5</data>
             <data name="productPrice/0/regular" xsi:type="string">10</data>
-            <data name="tag" xsi:type="string">test_type:acceptance_test, stable:no</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleInGrid" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedCatalogPage" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedProductPage" />
