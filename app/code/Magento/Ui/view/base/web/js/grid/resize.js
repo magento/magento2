@@ -143,7 +143,7 @@ define([
                 mousedown;
 
             $(column).on('click', this._eventProxy);
-            $(column).on('mousedown', this.mousedownHandler);
+            $(column).on('mousedown', this._eventProxy);
 
             events = $._data(column, 'events');
 
@@ -161,8 +161,13 @@ define([
          * @param {Object} event
          */
         _eventProxy: function (event) {
-            if ($(event.target).is('.' + this.resizableElementClass) && event.type === 'click') {
-                event.stopImmediatePropagation();
+            if ($(event.target).is('.' + this.resizableElementClass)) {
+
+                if (event.type === 'click') {
+                    event.stopImmediatePropagation();
+                } else if (event.type === 'mousedown') {
+                    this.mousedownHandler(event);
+                }
             }
         },
 
