@@ -27,6 +27,11 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
                     </div>
                 </div>
                 <div class="product-create-configuration-actions">
+                    <a class="action-menu-item" data-action="choose" onclick="jQuery('#associated-products-container').trigger('openModal');" href="#">
+                        <?= __('Add Products Manually');?>
+                    </a>
+                </div>
+                <div class="product-create-configuration-actions">
                     <button data-action="open-steps-wizard" title="Create Product Configurations"
                             class="action-secondary" data-bind="click: open">
                         <span data-role="button-label" data-edit-label="<?= __('Edit Configurations') ?>">
@@ -123,70 +128,7 @@ require([
             $(this).html('');
         })
         .on('click', '[data-action=choose]', function(event) {
-            event.preventDefault();
-            var grid = window.<?php echo $block->getGridJsObject() ?>;
-            var $button = $(this);
-            var attributeIds = [];
-            variationsContainer.find("input[name='attributes[]']").each(function () {
-                attributeIds.push($(this).val());
-            });
-
-            grid.reloadParams = {
-                filter: $button.data('attributes'),
-                'attributes[]': attributeIds
-            };
-            grid.reload(null, function() {
-                $gridDialog.trigger('openModal');
-            });
-
-            grid.rowClickCallback = function(grid, event) {
-                if (!this.rows || !this.rows.length) {
-                    return;
-                }
-                var $gridRow = $(event.target).closest('tr'),
-                    columnSelectorTemplate = '[data-column="%s"]';
-
-                if ($gridRow.find(columnSelectorTemplate.replace('%s', 'entity_id')).length) {
-                    var $matrixRow = $button.parents('[data-role=row]');
-
-                    $.each('name,sku,qty,weight,entity_id,price'.split(','), function () {
-                        var columnSelector = columnSelectorTemplate.replace('%s', this),
-                            target = $matrixRow.find(columnSelector),
-                            value = $.trim($gridRow.find(columnSelector).text());
-
-                        target[target.is('input') ? 'val' : 'text'](value);//.append(button);
-                    });
-
-                    var parentElement = $matrixRow.find('[data-column=image]'),
-                        uploaderControl = parentElement.find('[data-action=upload-image]', parentElement),
-                        imageElement = $matrixRow.find('[data-role=image]'),
-                        selectedImageSrc = $gridRow.find('[data-role=image-url]').val();
-
-                    if (imageElement.length) {
-                        selectedImageSrc = selectedImageSrc || noImageUrl;
-                        imageElement.attr('src', selectedImageSrc);
-                    } else {
-                        var tmpl = $('[data-role=product-variations-matrix]').find('[data-template-for=variation-image]').html();
-
-                        tmpl = mageTemplate(tmpl, {
-                            data: {
-                                url: selectedImageSrc
-                            }
-                        });
-
-                        $(tmpl).prependTo(uploaderControl);
-                    }
-                    $matrixRow.find('[name=image]')
-                        .attr('src', selectedImageSrc)
-                        .attr('data-locked', '1')
-                        .trigger('click')
-                        .prop({disabled: true});
-
-                    $matrixRow.find('[name$="[image]"]').remove();
-                    $matrixRow.find('[data-block="variation-images"]').remove();
-                }
-                $gridDialog.trigger('closeModal');
-            };
+            $gridDialog.trigger('openModal');
         });
 });
 </script>

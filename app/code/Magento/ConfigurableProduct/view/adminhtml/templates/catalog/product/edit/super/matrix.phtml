@@ -50,7 +50,7 @@ if ($variations) {
             }
 
             $productMatrix[] = [
-                'product_id' => $product->getId(),
+                'productId' => $product->getId(),
                 'images' => [
                     'preview' => $this->helper('Magento\Catalog\Helper\Image')
                         ->init($product, 'product_thumbnail_image')
@@ -256,41 +256,39 @@ if ($variations) {
                                 <!-- /ko -->
                             </td>
                             <!-- ko foreach: variation.options -->
-                                <td data-bind="text: label"></td>
+                            <td data-bind="text: label"></td>
                             <!-- /ko -->
                             <td class="data-grid-actions-cell">
-                                <input type="hidden" name="associated_product_ids[]"
-                                       data-bind="value: variation.productId"
-                                       data-column="entity_id"/>
+                                <input type="hidden" name="associated_product_ids[]" data-bind="value: variation.productId" data-column="entity_id"/>
                                 <div class="action-select-wrap" data-bind="
-                                    css : {
-                                        '_active' : $parent.opened() === $index()
-                                    },
-                                    outerClick: $parent.closeList.bind($parent, $index)">
-                                    <button class="action-select"
-                                        data-bind="click: $parent.toggleList.bind($parent, $index())">
+                                        css : {
+                                            '_active' : $parent.opened() === $index()
+                                        },
+                                        outerClick: $parent.closeList.bind($parent, $index)"
+                                >
+                                    <button class="action-select" data-bind="click: $parent.toggleList.bind($parent, $index())">
                                         <span data-bind="i18n: 'Select'"></span>
                                     </button>
-                                    <ul class="action-menu _active"
-                                        data-bind="css: {'_active': $parent.opened() === $index()}">
+                                    <ul class="action-menu _active" data-bind="css: {'_active': $parent.opened() === $index()}">
                                         <li>
                                             <a class="action-menu-item"
-                                               data-bind="attr: {'data-attributes': variation.attribute}"
+                                               data-bind="
+                                                    attr: {'data-attributes': variation.attribute},
+                                                    click: $parent.showGrid.bind($parent, $index())
+                                                "
                                                data-action="choose"
                                                href="#">
                                                 <?= __('Choose a different Product');?>
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="action-menu-item"
-                                               data-bind="
+                                            <a class="action-menu-item" data-bind="
                                                 i18n: variation.status == 1 ? 'Disable Product' : 'Enable Product',
                                                 click: $parent.toggleProduct.bind($parent, $index())">
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="action-menu-item"
-                                               data-bind="click: $parent.removeProduct.bind($parent, $index())">
+                                            <a class="action-menu-item" data-bind="click: $parent.removeProduct.bind($parent, $index())">
                                                 <?= __('Remove Product');?>
                                             </a>
                                         </li>
@@ -324,7 +322,10 @@ if ($variations) {
                         "component": "Magento_ConfigurableProduct/js/variations/variations",
                         "variations": <?= $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($productMatrix) ?>,
                         "productAttributes": <?= $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($attributes) ?>,
-                        "productUrl": "<?= $block->getUrl('catalog/product/edit', ['id' => '%id%']) ?>"
+                        "productUrl": "<?= $block->getUrl('catalog/product/edit', ['id' => '%id%']) ?>",
+                        "associatedProductsFilter": "configurable_associated_product_listing.configurable_associated_product_listing.listing_top.listing_filters",
+                        "associatedProductsProvider": "configurable_associated_product_listing.data_source"
+
                     }
                 }
             }
