@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Backend\Test\Model;
+namespace Magento\Backend\Test\Unit\Model;
 
 use Magento\Backend\Model\AdminPathConfig;
 use Magento\Store\Model\Store;
