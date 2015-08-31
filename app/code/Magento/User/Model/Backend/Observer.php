@@ -130,8 +130,6 @@ class Observer
      * @param EventObserver $observer
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function adminAuthenticate($observer)
     {
