@@ -210,12 +210,12 @@
                                 <item name="0" xsi:type="array">
                                     <item name="type" xsi:type="string">enable</item>
                                     <item name="label" xsi:type="string" translate="true">Enable</item>
-                                    <item name="url" xsi:type="string">catalog/product/massEnable</item>
+                                    <item name="url" xsi:type="string">catalog/product/massStatus/status/1</item>
                                 </item>
                                 <item name="1" xsi:type="array">
                                     <item name="type" xsi:type="string">disable</item>
                                     <item name="label" xsi:type="string" translate="true">Disable</item>
-                                    <item name="url" xsi:type="string">catalog/product/massDisable</item>
+                                    <item name="url" xsi:type="string">catalog/product/massStatus/status/2</item>
                                 </item>
                             </item>
                         </item>
