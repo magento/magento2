@@ -160,6 +160,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         $configData[] = $this->configGenerator->createDbConfig($data);
         $configData[] = $this->configGenerator->createResourceConfig();
         $configData[] = $this->configGenerator->createXFrameConfig();
+        $configData[] = $this->configGenerator->createModeConfig();
         return $configData;
     }
 
