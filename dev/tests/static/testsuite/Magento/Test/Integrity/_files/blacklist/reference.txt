@@ -71,3 +71,4 @@ Model3
 \Magento\Mtf\TestSuite\AppState
 \Magento\Framework\A
 \Magento\Framework\B
+DoubleColon
