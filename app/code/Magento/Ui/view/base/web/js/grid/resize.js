@@ -322,16 +322,15 @@ define([
             if (
                 this.resizable &&
                 this.minColumnWidth < cfg.curResizeElem.model.width + width &&
-                this.minColumnWidth < cfg.depResizeElem.model.width - width
+                this.minColumnWidth < cfg.depResizeElem.model.width - width &&
+                cfg.previousWidth !== width
             ) {
-                if (cfg.previousWidth !== width) {
-                    cfg.curResizeElem.model.width += width;
-                    cfg.depResizeElem.model.width -= width;
-                    $(cfg.curResizeElem.elem).outerWidth(cfg.curResizeElem.model.width);
-                    $(cfg.depResizeElem.elem).outerWidth(cfg.depResizeElem.model.width);
-                    cfg.previousWidth = width;
-                    cfg.curResizeElem.position = event.pageX;
-                }
+                cfg.curResizeElem.model.width += width;
+                cfg.depResizeElem.model.width -= width;
+                $(cfg.curResizeElem.elem).outerWidth(cfg.curResizeElem.model.width);
+                $(cfg.depResizeElem.elem).outerWidth(cfg.depResizeElem.model.width);
+                cfg.previousWidth = width;
+                cfg.curResizeElem.position = event.pageX;
             } else if (width <= -(cfg.curResizeElem.model.width - this.minColumnWidth)) {
                 $(cfg.curResizeElem.elem).outerWidth(this.minColumnWidth);
 
