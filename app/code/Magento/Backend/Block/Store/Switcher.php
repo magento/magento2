@@ -560,7 +560,7 @@ class Switcher extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Return iframe usage status
+     * Get whether iframe is being used
      *
      * @return bool
      */
