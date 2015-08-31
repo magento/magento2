@@ -67,7 +67,7 @@ class Form extends \Magento\Reports\Block\Adminhtml\Filter\Form
                     'name' => 'show_order_statuses',
                     'label' => __('Order Status'),
                     'options' => ['0' => __('Any'), '1' => __('Specified')],
-                    'note' => __('Applies to Any of the Specified Order Statuses except cancelled orders')
+                    'note' => __('Applies to Any of the Specified Order Statuses except canceled orders')
                 ],
                 'to'
             );
