@@ -7,9 +7,10 @@ namespace Magento\Backend\Model;
 
 use Magento\Framework\App\Router\PathConfigInterface;
 use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
 
-// Path config to be used in adminhtml area
+/**
+ * Path config to be used in adminhtml area
+ */
 class AdminPathConfig implements PathConfigInterface
 {
     /**
