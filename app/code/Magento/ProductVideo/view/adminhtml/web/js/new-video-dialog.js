@@ -298,7 +298,12 @@ define([
 
                 },
                 closed: function() {
-                    newVideoForm.validation('clearError');
+                    try {
+                        newVideoForm.validation('clearError');
+                    } catch(e) {
+                        // Crutch hack.
+                        // Very strange error.
+                    }
                     $('input[name*="' + $('#item_id').val() + '"]').parent().removeClass('active');
                     $('#new_video_form')[0].reset();
                 }
