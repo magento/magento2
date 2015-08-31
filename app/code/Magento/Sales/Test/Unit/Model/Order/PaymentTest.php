@@ -17,6 +17,7 @@ use Magento\Sales\Model\Order\Payment\Transaction;
  */
 class PaymentTest extends \PHPUnit_Framework_TestCase
 {
+    private $mockContext;
     /**
      * @var Payment
      */
@@ -91,8 +92,12 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Sales\Model\Order\Payment\Processor|\PHPUnit_Framework_MockObject_MockObject
      */
-
     protected $paymentProcessor;
+
+    /**
+     * @var \Magento\Sales\Model\OrderRepository|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $orderRepository;
 
     /**
      * @return void
@@ -105,11 +110,11 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $context = $this->getMockBuilder('Magento\Framework\Model\Context')
+        $this->mockContext = $this->getMockBuilder('Magento\Framework\Model\Context')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $context->expects($this->once())
+        $this->mockContext->expects($this->atLeastOnce())
             ->method('getEventDispatcher')
             ->will($this->returnValue($this->eventManagerMock));
 
@@ -132,6 +137,7 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['get', 'getByTransactionType', 'getByTransactionId'])
             ->getMock();
         $this->paymentProcessor = $this->getMock('Magento\Sales\Model\Order\Payment\Processor', [], [], '', false);
+        $this->orderRepository = $this->getMock('Magento\Sales\Model\OrderRepository', ['get'], [], '', false);
 
         $this->priceCurrencyMock->expects($this->any())
             ->method('format')
@@ -259,7 +265,10 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->initPayment($context);
+        $this->payment = $this->initPayment();
+        $this->payment->setMethod('any');
+        $this->payment->setOrder($this->orderMock);
+        $this->transactionId = 100;
     }
 
     protected function tearDown()
@@ -1212,6 +1221,26 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expects['base_shipping_captured'], $this->payment->getData('base_shipping_captured'));
     }
 
+    public function testGetOrder()
+    {
+        $payment = $this->initPayment();
+        $this->orderRepository->expects($this->once())->method('get')->willReturn($this->orderMock);
+        $payment->setParentId(1211);
+        $this->assertSame($this->orderMock, $payment->getOrder());
+    }
+
+    public function testGetOrderDefault()
+    {
+        $this->orderRepository->expects($this->never())->method('get');
+        $this->assertSame($this->orderMock, $this->payment->getOrder());
+    }
+
+    public function testGetOrderNull()
+    {
+        $payment = $this->initPayment();
+        $this->orderRepository->expects($this->never())->method('get');
+        $this->assertNull($payment->getOrder());
+    }
 
     public function testCancelInvoice()
     {
@@ -1408,29 +1437,22 @@ class PaymentTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * @param $context
-     */
-    protected function initPayment($context)
+    protected function initPayment()
     {
-        $this->payment = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
+        return (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
             'Magento\Sales\Model\Order\Payment',
             [
-                'context' => $context,
+                'context' => $this->mockContext,
                 'creditmemoFactory' => $this->creditmemoFactoryMock,
                 'paymentData' => $this->helperMock,
                 'priceCurrency' => $this->priceCurrencyMock,
                 'transactionRepository' => $this->transactionRepositoryMock,
                 'transactionManager' => $this->transactionManagerMock,
                 'transactionBuilder' => $this->transactionBuilderMock,
-                'paymentProcessor' => $this->paymentProcessor
+                'paymentProcessor' => $this->paymentProcessor,
+                'orderRepository' => $this->orderRepository
             ]
         );
-
-        $this->payment->setMethod('any');
-        $this->payment->setOrder($this->orderMock);
-
-        $this->transactionId = 100;
     }
 
     protected function assertOrderUpdated(

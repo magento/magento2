@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Webapi\Model\Soap\Config;
+namespace Magento\Webapi\Model\Config;
 
 use Zend\Code\Reflection\MethodReflection;
 
@@ -105,6 +105,10 @@ class ClassReflector
                 'required' => true,
             ];
         }
+        $exceptions = $this->_typeProcessor->getExceptions($method);
+        if (!empty($exceptions)) {
+            $methodData['interface']['out']['throws'] = $exceptions;
+        }
 
         return $methodData;
     }
@@ -128,6 +132,22 @@ class ClassReflector
                 'The docBlock of the method '.
                 $method->getDeclaringClass()->getName() . '::' .  $method->getName() . ' is empty.'
             );
+        }
+        return $this->_typeProcessor->getDescription($docBlock);
+    }
+
+    /**
+     * Retrieve class full documentation description.
+     *
+     * @param string $className
+     * @return string
+     */
+    public function extractClassDescription($className)
+    {
+        $classReflection = new \Zend\Code\Reflection\ClassReflection($className);
+        $docBlock = $classReflection->getDocBlock();
+        if (!$docBlock) {
+            return '';
         }
         return $this->_typeProcessor->getDescription($docBlock);
     }
