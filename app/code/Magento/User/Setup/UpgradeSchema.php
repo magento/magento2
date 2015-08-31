@@ -97,7 +97,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             'user_id',
             \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
         )->setComment(
-            'Enterprise Admin Passwords'
+            'Admin Passwords'
         );
         $installer->getConnection()->createTable($table);
 
