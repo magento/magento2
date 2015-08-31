@@ -84,7 +84,7 @@ define([
             }
             this._removeImage(oldFile);
             this._setImage(newFile, imageData);
-            if(oldFile && imageData.old_file) { 
+            if(oldFile && imageData.old_file) {
                 var oldImageId = this.findElementId(tmpOldFile);
                 var newImageId = this.findElementId(tmpNewFile);
                 var fc = jQuery('#item_id').val();
@@ -96,12 +96,12 @@ define([
                 if(!key) {
                     return;
                 }
-                var old_val_id_elem;
-                old_val_id_elem = document.createElement('input');
-                old_val_id_elem.setAttribute('type', 'hidden');
-                old_val_id_elem.setAttribute('value', key);
-                old_val_id_elem.setAttribute('name', 'product[media_gallery][images][' + newImageId + '][save_data_from]');
+                var old_val_id_elem = document.createElement('input');
                 jQuery('form[data-form="edit-product"]').append(old_val_id_elem);
+                jQuery(old_val_id_elem).attr({
+                    type: 'hidden',
+                    name: 'product[media_gallery][images][' + newImageId + '][save_data_from]'
+                }).val(key);
             }
         },
 
@@ -137,38 +137,46 @@ define([
         _uploadImage: function(file, oldFile, callback) {
             var self        = this;
             var url         = this.options.saveVideoUrl;
-            var fu          = jQuery('#new_video_screenshot');
+            var data = {
+                files: file,
+                url: url
+            };
+            this._uploadFile('send', data, function(result, textStatus, jqXHR) {
+                var data = JSON.parse(result);
+                $.each($('#new_video_form').serializeArray(), function(i, field) {
+                    data[field.name] = field.value;
+                });
+                data['disabled'] = $('#new_video_disabled').prop('checked') ? 1 : 0;
+                data['media_type'] = 'external-video';
+                data.old_file = oldFile;
+                oldFile  ?
+                    self._replaceImage(oldFile, data.file, data):
+                    self._setImage(data.file, data);
+                callback.call(0, data);
+            });
 
+        },
+
+        /**
+         *
+         * @returns {*}
+         * @private
+         */
+        _uploadFile: function(method, data, callback) {
+            var fu = jQuery('#new_video_screenshot');
             var tmp_input   = document.createElement('input');
-            tmp_input.setAttribute('name', fu.attr('name'));
-            tmp_input.setAttribute('value', fu.val());
-            tmp_input.setAttribute('type', 'file');
-            tmp_input.setAttribute('style', 'display: none;');
-            tmp_input.setAttribute('data-ui-ud', fu.attr('data-ui-ud'));
+            jQuery(tmp_input).attr({
+                name: fu.attr('name'),
+                value: fu.val(),
+                type: 'file',
+                'data-ui-ud': fu.attr('data-ui-ud')
+            }).css('display', 'none');
             fu.parent().append(tmp_input);
-
             var fileUploader = jQuery(tmp_input).fileupload();
-            fileUploader.fileupload(
-                'send',
-                {
-                    files: file,
-                    url: url
-                }).success(
-                function(result, textStatus, jqXHR) {
-                    tmp_input.remove();
-                    var data = JSON.parse(result);
-                    $.each($('#new_video_form').serializeArray(), function(i, field) {
-                        data[field.name] = field.value;
-                    });
-                    data['disabled'] = $('#new_video_disabled').prop('checked') ? 1 : 0;
-                    data['media_type'] = 'external-video';
-                    data.old_file = oldFile;
-                    oldFile  ?
-                        self._replaceImage(oldFile, data.file, data):
-                        self._setImage(data.file, data);
-                    callback.call(0, data);
-                }
-            );
+            fileUploader.fileupload(method, data).success(function(result, textStatus, jqXHR) {
+                tmp_input.remove();
+                callback.call(null, result, textStatus, jqXHR);
+            });
         },
 
         _create: function () {
