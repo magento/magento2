@@ -39,6 +39,11 @@ abstract class AbstractMassActionTest extends \PHPUnit_Framework_TestCase
      */
     protected $filterMock;
 
+    /**
+     * @var \Magento\Cms\Model\Resource\Page\Collection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $pageCollectionMock;
+
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -56,6 +61,8 @@ abstract class AbstractMassActionTest extends \PHPUnit_Framework_TestCase
             ->with(ResultFactory::TYPE_REDIRECT, [])
             ->willReturn($this->resultRedirectMock);
 
+        $this->pageCollectionMock = $this->getMock('Magento\Cms\Model\Resource\Page\Collection', [], [], '', false);
+
         $this->contextMock = $this->getMock('\Magento\Backend\App\Action\Context', [], [], '', false);
 
         $this->filterMock = $this->getMockBuilder('Magento\Ui\Component\MassAction\Filter')
@@ -65,4 +72,41 @@ abstract class AbstractMassActionTest extends \PHPUnit_Framework_TestCase
         $this->contextMock->expects($this->any())->method('getMessageManager')->willReturn($this->messageManagerMock);
         $this->contextMock->expects($this->any())->method('getResultFactory')->willReturn($this->resultFactoryMock);
     }
+
+    /**
+     * @param string $message
+     * @param int $size
+     */
+    protected function processMassAction($message, $size)
+    {
+        $collection = [
+            $this->getPageMock(),
+            $this->getPageMock()
+        ];
+
+        $this->filterMock->expects($this->once())
+            ->method('getCollection')
+            ->with($this->pageCollectionMock)
+            ->willReturn($this->pageCollectionMock);
+
+        $this->pageCollectionMock->expects($this->once())->method('getSize')->willReturn($size);
+        $this->pageCollectionMock->expects($this->once())
+            ->method('getIterator')
+            ->willReturn(new \ArrayIterator($collection));
+
+        $this->messageManagerMock->expects($this->once())
+            ->method('addSuccess')
+            ->with(__($message, $size));
+        $this->messageManagerMock->expects($this->never())->method('addError');
+
+        $this->resultRedirectMock->expects($this->once())
+            ->method('setPath')
+            ->with('*/*/')
+            ->willReturnSelf();
+    }
+
+    /**
+     * @return \Magento\Cms\Model\Resource\Page\Collection
+     */
+    abstract protected function getPageMock();
 }

@@ -19,11 +19,6 @@ class MassDeleteTest extends AbstractMassActionTest
      */
     protected $collectionFactoryMock;
 
-    /**
-     * @var \Magento\Cms\Model\Resource\Page\Collection|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $pageCollectionMock;
-
     protected function setUp()
     {
         parent::setUp();
@@ -35,8 +30,6 @@ class MassDeleteTest extends AbstractMassActionTest
             '',
             false
         );
-
-        $this->pageCollectionMock = $this->getMock('Magento\Cms\Model\Resource\Page\Collection', [], [], '', false);
 
         $this->massDeleteController = $this->objectManager->getObject(
             'Magento\Cms\Controller\Adminhtml\Page\MassDelete',
@@ -50,34 +43,12 @@ class MassDeleteTest extends AbstractMassActionTest
 
     public function testMassDeleteAction()
     {
-        $deletedPagesCount = 2;
-
-        $collection = [
-            $this->getPageMock(),
-            $this->getPageMock()
-        ];
+        $size = 2;
+        $message = 'A total of %1 record(s) have been deleted.';
 
         $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($this->pageCollectionMock);
 
-        $this->filterMock->expects($this->once())
-            ->method('getCollection')
-            ->with($this->pageCollectionMock)
-            ->willReturn($this->pageCollectionMock);
-
-        $this->pageCollectionMock->expects($this->once())->method('getSize')->willReturn($deletedPagesCount);
-        $this->pageCollectionMock->expects($this->once())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator($collection));
-
-        $this->messageManagerMock->expects($this->once())
-            ->method('addSuccess')
-            ->with(__('A total of %1 record(s) have been deleted.', $deletedPagesCount));
-        $this->messageManagerMock->expects($this->never())->method('addError');
-
-        $this->resultRedirectMock->expects($this->once())
-            ->method('setPath')
-            ->with('*/*/')
-            ->willReturnSelf();
+        $this->processMassAction($message, $size);
 
         $this->assertSame($this->resultRedirectMock, $this->massDeleteController->execute());
     }
