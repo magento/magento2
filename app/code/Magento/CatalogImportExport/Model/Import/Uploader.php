@@ -302,7 +302,14 @@ class Uploader extends \Magento\MediaStorage\Model\File\Uploader
     protected function _moveFile($tmpPath, $destPath)
     {
         if ($this->_directory->isFile($tmpPath)) {
-            return $this->_directory->copyFile($tmpPath, $destPath);
+            $tmpRealPath = $this->_directory->getDriver()->getRealPath(
+                $this->_directory->getAbsolutePath($tmpPath)
+            );
+            $destinationRealPath = $this->_directory->getDriver()->getRealPath(
+                $this->_directory->getAbsolutePath($destPath)
+            );
+            $isSameFile = $tmpRealPath === $destinationRealPath;
+            return $isSameFile ?: $this->_directory->copyFile($tmpPath, $destPath);
         } else {
             return false;
         }
