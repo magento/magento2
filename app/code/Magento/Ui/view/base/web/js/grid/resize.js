@@ -299,12 +299,8 @@ define([
 
             event.stopPropagation();
             this.resizable = true;
-
-            cfg.curResizeElem.model.width === 'auto' ?
-                cfg.curResizeElem.model.width = $(cfg.curResizeElem.elem).outerWidth() : false;
-            cfg.depResizeElem.model.width === 'auto' ?
-                cfg.depResizeElem.model.width = $(cfg.depResizeElem.elem).outerWidth() : false;
-
+            cfg.curResizeElem.model.width = $(cfg.curResizeElem.elem).outerWidth();
+            cfg.depResizeElem.model.width = $(cfg.depResizeElem.elem).outerWidth();
             body.addClass(this.inResizeClass);
             body.bind('mousemove', this.mousemoveHandler);
             $(window).bind('mouseup', this.mouseupHandler);
@@ -338,12 +334,14 @@ define([
                 }
             } else if (width <= -(cfg.curResizeElem.model.width - cfg.minColumnWidth)) {
                 $(cfg.curResizeElem.elem).outerWidth(cfg.minColumnWidth);
+
                 $(cfg.depResizeElem.elem).outerWidth(
                     cfg.depResizeElem.model.width +
                     cfg.curResizeElem.model.width -
                     cfg.minColumnWidth
                 );
             } else if (width >= cfg.depResizeElem.model.width - cfg.minColumnWidth) {
+
                 $(cfg.depResizeElem.elem).outerWidth(cfg.minColumnWidth);
                 $(cfg.curResizeElem.elem).outerWidth(
                     cfg.curResizeElem.model.width +
