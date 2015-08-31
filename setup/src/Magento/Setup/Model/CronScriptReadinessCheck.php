@@ -102,7 +102,7 @@ class CronScriptReadinessCheck
                     return ['success' => false, 'error' => 'Internal Error'];
             }
         } catch (\Magento\Framework\Exception\FileSystemException $e) {
-            $error = 'Cron Job has not been configured yet';
+            $error = 'Cron job has not been configured yet';
             if ($type == self::SETUP) {
                 $error .= self::OTHER_CHECKS_WILL_FAIL_MSG;
             }
@@ -120,7 +120,7 @@ class CronScriptReadinessCheck
             }
             return ['success' => false, 'error' => $jsonData[ReadinessCheck::KEY_READINESS_CHECKS]['error']];
         }
-        $error = 'Cron Job has not been configured yet';
+        $error = 'Cron job has not been configured yet';
         if ($type == self::SETUP) {
             $error .= self::OTHER_CHECKS_WILL_FAIL_MSG;
         }
@@ -148,13 +148,13 @@ class CronScriptReadinessCheck
             }
             return [
                 'success' => true,
-                'notice' => 'It is recommended to schedule Cron to run every 1 minute'
+                'notice' => 'We recommend you schedule cron to run every 1 minute'
             ];
         }
         return [
             'success' => true,
-            'notice' => 'Unable to determine Cron time interval. ' .
-                'It is recommended to schedule Cron to run every 1 minute'
+            'notice' => 'Unable to determine cron time interval. ' .
+                'We recommend you schedule cron to run every 1 minute'
         ];
     }
 }
