@@ -15,8 +15,6 @@ define([
     'use strict';
 
     /**
-     * @todo: replace image event handler
-     * @todo: remove image event handler
      */
     $.widget('mage.newVideoDialog', {
 
@@ -131,7 +129,6 @@ define([
         },
 
         /**
-         * @todo: Error handler !
          * @param file
          * @param oldFile
          * @param callback
@@ -279,7 +276,6 @@ define([
                         text: $.mage.__('Delete'),
                         class: 'action-primary video-delete-button',
                         click: function (e) {
-                            /** @todo: use _removeImage() */
                             $('#new-video').modal('closeModal');
                             var removed = $('[name*="' + $('#new_video_form #item_id').val() + '[removed]"]');
                             removed.val(1);
@@ -302,8 +298,6 @@ define([
                     try {
                         newVideoForm.validation('clearError');
                     } catch(e) {
-                        // Crutch hack.
-                        // Very strange error.
                     }
                     $('input[name*="' + $('#item_id').val() + '"]').parent().removeClass('active');
                     $('#new_video_form')[0].reset();
@@ -323,7 +317,6 @@ define([
         },
 
         /**
-         * @todo : refactoring need
          * @param imageData
          */
         saveImageRoles: function(imageData) {
