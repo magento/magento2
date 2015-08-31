@@ -232,6 +232,19 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test for changePermissionsRecursively method
+     */
+    public function testChangePermissionsRecursively()
+    {
+        $directory = $this->getDirectoryInstance('newDir1', 0777);
+        $directory->create('test_directory');
+        $directory->create('test_directory/subdirectory');
+        $directory->writeFile('test_directory/subdirectory/test_file.txt', 'Test Content');
+
+        $this->assertTrue($directory->changePermissionsRecursively('test_directory', 0750, 0640));
+    }
+
+    /**
      * Test for touch method
      *
      * @dataProvider touchProvider

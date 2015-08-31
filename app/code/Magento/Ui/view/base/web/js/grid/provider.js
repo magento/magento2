@@ -49,14 +49,15 @@ define([
          */
         reload: function () {
             this.trigger('reload');
+
             $.ajax({
                 url: this.update_url,
                 method: 'GET',
                 data: this.get('params'),
                 dataType: 'json'
             })
-                .error(this.onError)
-                .done(this.onReload);
+            .error(this.onError)
+            .done(this.onReload);
         },
 
         /**
@@ -64,7 +65,7 @@ define([
          */
         onError: function () {
             alert({
-                content: $t('Something go wrong')
+                content: $t('Something goes wrong')
             });
         },
 
