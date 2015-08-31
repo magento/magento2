@@ -18,23 +18,30 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Webapi\Model\Soap\Config */
     protected $_soapConfig;
 
+    /** @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    protected $objectManager;
+
     /**
      * Set up helper.
      */
     protected function setUp()
     {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
+        $typeProcessor = $this->objectManager->getObject('Magento\Framework\Reflection\TypeProcessor');
+
         $objectManagerMock = $this->getMockBuilder(
             'Magento\Framework\App\ObjectManager'
         )->disableOriginalConstructor()->getMock();
+
         $fileSystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
             ->disableOriginalConstructor()
             ->getMock();
         $classReflection = $this->getMock(
-            'Magento\Webapi\Model\Soap\Config\ClassReflector',
+            'Magento\Webapi\Model\Config\ClassReflector',
             ['reflectClassMethods'],
-            [],
-            '',
-            false
+            ['_typeProcessor' => $typeProcessor],
+            ''
         );
         $classReflection->expects($this->any())->method('reflectClassMethods')->will($this->returnValue([]));
 
@@ -94,16 +101,20 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         /** @var $config \Magento\Webapi\Model\Config */
         $config = new \Magento\Webapi\Model\Config($cacheMock, $readerMock);
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_soapConfig = $objectManager->getObject(
+        /** @var $config \Magento\Webapi\Model\ServiceMetadata */
+        $serviceMetadata = new \Magento\Webapi\Model\ServiceMetadata(
+            $config,
+            $cacheMock,
+            $classReflection,
+            $typeProcessor);
+
+        $this->_soapConfig = $this->objectManager->getObject(
             'Magento\Webapi\Model\Soap\Config',
             [
                 'objectManager' => $objectManagerMock,
                 'filesystem' => $fileSystemMock,
-                'config' => $config,
-                'classReflector' => $classReflection,
-                'cache' => $cacheMock,
-                'registry' => $registryMock
+                'registry' => $registryMock,
+                'serviceMetadata' => $serviceMetadata,
             ]
         );
         parent::setUp();
@@ -123,11 +134,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                         ],
                     ],
                     'class' => 'Magento\Customer\Api\AccountManagementInterface',
+                    'description' => 'Interface for managing customers accounts.',
                 ],
         ];
+
         $result = $this->_soapConfig->getRequestedSoapServices(
             ['customerAccountManagementV1', 'moduleBarV2', 'moduleBazV1']
         );
+
         $this->assertEquals($expectedResult, $result);
     }
 
@@ -152,75 +166,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $soapOperation = $this->_soapConfig
             ->getSoapOperation('Magento\Customer\Api\AccountManagementInterface', 'activate', 'V1');
         $this->assertEquals($expectedResult, $soapOperation);
-    }
-
-    /**
-     * Test identifying service name including subservices using class name.
-     *
-     * @dataProvider serviceNameDataProvider
-     */
-    public function testGetServiceName($className, $version, $preserveVersion, $expected)
-    {
-        $actual = $this->_soapConfig->getServiceName($className, $version, $preserveVersion);
-        $this->assertEquals($expected, $actual);
-    }
-
-    /**
-     * Dataprovider for testGetServiceName
-     *
-     * @return string
-     */
-    public function serviceNameDataProvider()
-    {
-        return [
-            ['Magento\Customer\Api\AccountManagementInterface', 'V1', false, 'customerAccountManagement'],
-            ['Magento\Customer\Api\AddressRepositoryInterface', 'V1', true, 'customerAddressRepositoryV1'],
-        ];
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @dataProvider dataProviderForTestGetServiceNameInvalidName
-     */
-    public function testGetServiceNameInvalidName($interfaceClassName, $version)
-    {
-        $this->_soapConfig->getServiceName($interfaceClassName, $version);
-    }
-
-    /**
-     * Dataprovider for testGetServiceNameInvalidName
-     *
-     * @return string
-     */
-    public function dataProviderForTestGetServiceNameInvalidName()
-    {
-        return [
-            ['BarV1Interface', 'V1'], // Missed vendor, module, 'Service'
-            ['Service\\V1Interface', 'V1'], // Missed vendor and module
-            ['Magento\\Foo\\Service\\BarVxInterface', 'V1'], // Version number should be a number
-            ['Magento\\Foo\\Service\\BarInterface', 'V1'], // Version missed
-            ['Magento\\Foo\\Service\\BarV1', 'V1'], // 'Interface' missed
-            ['Foo\\Service\\BarV1Interface', 'V1'], // Module missed
-            ['Foo\\BarV1Interface', 'V1'] // Module and 'Service' missed
-        ];
-    }
-
-    public function testGetServiceMetadata()
-    {
-        $expectedResult = [
-            'methods' => [
-                'activate' => [
-                    'method' => 'activate',
-                    'inputRequired' => '',
-                    'isSecure' => '',
-                    'resources' => [['Magento_Customer::manage']],
-                ],
-            ],
-            'class' => 'Magento\Customer\Api\AccountManagementInterface',
-        ];
-        $result = $this->_soapConfig->getServiceMetadata('customerAccountManagementV1');
-        $this->assertEquals($expectedResult, $result);
-
     }
 }
 
