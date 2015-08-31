@@ -571,8 +571,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
         $backendTable = null,
         $attributeId = 120,
         $positionInCollection = 0
-    )
-    {
+    ) {
         $attribute = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Eav\Attribute')
             ->setMethods(['getBackendType', 'getBackendTable', 'getId'])
             ->disableOriginalConstructor()
