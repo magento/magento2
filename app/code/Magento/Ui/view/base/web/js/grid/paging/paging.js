@@ -5,21 +5,11 @@
 define([
     'ko',
     'underscore',
+    'mageUtils',
     'uiLayout',
     'uiComponent'
-], function (ko, _, layout, Component) {
+], function (ko, _, utils, layout, Component) {
     'use strict';
-
-    /**
-     * Returns closest existing page number to page argument
-     * @param {Number} value
-     * @param {Number} min
-     * @param {Number} max
-     * @returns {Number} closest existing page number
-     */
-    function getInRange(value, min, max) {
-        return Math.min(Math.max(min, value), max);
-    }
 
     return Component.extend({
         defaults: {
@@ -211,7 +201,7 @@ define([
                 return 1;
             }
 
-            return getInRange(Math.round(value), 1, total);
+            return utils.inRange(Math.round(value), 1, total);
         },
 
         /**
@@ -233,7 +223,7 @@ define([
         onPagesChange: function (pages) {
             var current = this.current;
 
-            current(getInRange(current(), 1, pages));
+            current(utils.inRange(current(), 1, pages));
         }
     });
 });
