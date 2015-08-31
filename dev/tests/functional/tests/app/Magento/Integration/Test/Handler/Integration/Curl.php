@@ -26,7 +26,7 @@ class Curl extends AbstractCurl implements IntegrationInterface
     protected $patternField = '/<input[^>]+name="%s"[^>]+value="([^"]+)"[^>]+\/>/';
 
     /**
-     * List fields for getting.
+     * List fields of activation data for getting from page.
      *
      * @var array
      */
