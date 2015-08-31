@@ -3067,7 +3067,6 @@ return [
     ['Magento\Integration\Model\Integration\Factory', 'Magento\Integration\Model\IntegrationFactory'],
     ['Magento\Webapi\Model\PathProcessor', 'Magento\Webapi\Controller\PathProcessor'],
     ['Magento\Webapi\Helper\Data', 'Magento\Webapi\Model\Soap\Config'],
-    ['Magento\Webapi\Model\Config\ClassReflector', 'Magento\Webapi\Model\Soap\Config\ClassReflector'],
     ['Magento\Webapi\Model\Soap\Server\Factory', 'Magento\Webapi\Model\Soap\ServerFactory'],
     ['Magento\Webapi\Model\Soap\Wsdl\Factory', 'Magento\Webapi\Model\Soap\WsdlFactory'],
     [
@@ -3824,6 +3823,7 @@ return [
     ['Magento\Checkout\Model\Observer', 'corresponding classes in Magento\Checkout\Observer\*'],
     ['Magento\CurrencySymbol\Model\Observer', 'corresponding classes in Magento\CurrencySymbol\Observer\*'],
     ['Magento\Catalog\Model\Product\Image\View'],
+    ['Magento\Framework\View\Layout\Reader\Remove'],
     ['Magento\Tools\Console\CommandList'],
     ['Magento\CatalogSearch\Model\Layer\Advanced\CollectionFilter'],
     ['Magento\CatalogSearch\Model\Layer\Advanced\Context'],
