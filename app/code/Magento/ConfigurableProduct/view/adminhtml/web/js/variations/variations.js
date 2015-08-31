@@ -16,10 +16,10 @@ define([
             opened: false,
             attributes: [],
             productMatrix: [],
+            variations: [],
+            productAttributes: [],
             productAttributesMap: null
         },
-        variations: [],
-        productAttributes: [],
         initialize: function () {
             this._super();
             if (this.variations.length) {
@@ -80,7 +80,7 @@ define([
                 this.productMatrix.push(_.extend(variation, {
                     productId: variation.product_id || null,
                     name: variation.name || variation.sku,
-                    weight: variation.weight || this.getProductValue('weight'),
+                    weight: variation.weight,
                     attribute: JSON.stringify(attributes),
                     variationKey: _.values(attributes).join('-'),
                     editable: variation.editable === undefined ? !variation.product_id : variation.editable,

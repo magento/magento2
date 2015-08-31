@@ -40,6 +40,7 @@ define([
         generateGrid: function (variations, getSectionValue) {
             var productName = this.variationsComponent().getProductValue('name');
             var productPrice = this.variationsComponent().getProductValue('price');
+            var productWeight = this.variationsComponent().getProductValue('weight');
             var variationsKeys = [];
             var gridExisting = [];
             var gridNew = [];
@@ -48,16 +49,23 @@ define([
 
             _.each(variations, function (options) {
                 var images, sku, quantity, price;
+                var productId = this.variationsComponent().getProductIdByOptions(options);
+                if (productId) {
+                    var product = _.findWhere(this.variationsComponent().variations, {product_id: productId});
+                }
                 images = getSectionValue('images', options);
                 sku = productName + _.reduce(options, function (memo, option) {
                     return memo + '-' + option.label;
                 }, '');
                 quantity = getSectionValue('quantity', options);
+                if (!quantity && productId) {
+                    quantity = product.quantity;
+                }
                 price = getSectionValue('price', options);
-                price = price || productPrice;
-                var productId = this.variationsComponent().getProductIdByOptions(options);
+                if (!price) {
+                    price = productId ? product.price : productPrice;
+                }
                 if (productId && !images.file) {
-                    var product = _.findWhere(this.variationsComponent().variations, {product_id: productId});
                     images = product.images;
                 }
                 var variation = {
@@ -67,14 +75,17 @@ define([
                     quantity: quantity,
                     price: price,
                     product_id: productId,
+                    weight: productWeight,
                     editable: true
                 };
-                this.variations.push(variation);
                 if (productId) {
+                    variation.sku = product.sku;
+                    variation.weight = product.weight;
                     gridExisting.push(this.prepareRowForGrid(variation));
                 } else {
                     gridNew.push(this.prepareRowForGrid(variation));
                 }
+                this.variations.push(variation);
                 variationsKeys.push(this.variationsComponent().getVariationKey(options));
             }, this);
 
