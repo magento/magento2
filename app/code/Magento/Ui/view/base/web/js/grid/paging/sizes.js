@@ -10,17 +10,6 @@ define([
 ], function (ko, _, utils, Collapsible) {
     'use strict';
 
-    /**
-     * Returns closest existing page number to page argument
-     * @param {Number} value
-     * @param {Number} min
-     * @param {Number} max
-     * @returns {Number} closest existing page number
-     */
-    function getInRange(value, min, max) {
-        return Math.min(Math.max(min, value), max);
-    }
-
     return Collapsible.extend({
         defaults: {
             template: 'ui/grid/paging/sizes',
@@ -159,7 +148,7 @@ define([
         /**
          * Returns size which matches specified value.
          *
-         * @param {Number} value - Value of the item in sizes array.
+         * @param {Number} value - Value of the item.
          * @returns {Object|Undefined}
          */
         getSize: function (value) {
@@ -167,7 +156,9 @@ define([
         },
 
         /**
+         * Sets current size to the specified value.
          *
+         * @param {Number} value - Value of the size.
          * @returns {Sizes} Chainable.
          */
         setSize: function (value) {
@@ -215,11 +206,11 @@ define([
         },
 
         /**
-         * Updates existing value to the provided one.
+         * Updates existing value to the provided one. If new value
+         * is not specified, then sizes' '_value' property will be taken.
          *
-         *
-         * @param {Number} value
-         * @param {(Number|String)} [newValue=size._value]
+         * @param {Number} value - Value that should be updated.
+         * @param {(Number|String)} [newValue=size._value] - New size value.
          * @returns {Sizes} Chainable.
          */
         updateSize: function (value, newValue) {
@@ -275,7 +266,7 @@ define([
         },
 
         /**
-         * Hides and empties custom field.
+         * Hides and clears custom field.
          *
          * @returns {Sizes} Chainable.
          */
@@ -359,7 +350,7 @@ define([
                 return this.getFirst();
             }
 
-            return getInRange(Math.round(value), this.minSize, this.maxSize);
+            return utils.inRange(Math.round(value), this.minSize, this.maxSize);
         },
 
         /**
