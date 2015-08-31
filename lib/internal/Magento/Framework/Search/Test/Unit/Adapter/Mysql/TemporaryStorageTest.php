@@ -143,7 +143,7 @@ class TemporaryStorageTest extends \PHPUnit_Framework_TestCase
             ->with($this->tableName)
             ->willReturn($table);
         $this->adapter->expects($this->once())
-            ->method('dropTable');
+            ->method('dropTemporaryTable');
         $this->adapter->expects($this->once())
             ->method('createTemporaryTable')
             ->with($table);

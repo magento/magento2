@@ -74,7 +74,7 @@
             }
         }
         .admin__action-dropdown-menu {
-            .appearing__on();
+            display: block;
         }
     }
     &._disabled {
@@ -105,7 +105,6 @@
     letter-spacing: -.025em;
     padding: @action-dropdown__padding-top @action-dropdown__padding-right @action-dropdown__padding-bottom @action-dropdown__padding-horizontal;
     position: relative;
-    transition: border-color @appearing__transition-duration @apperaing__transition-timing-function;
     vertical-align: baseline;
     z-index: 2;
     &:hover,
@@ -125,10 +124,10 @@
 }
 
 .admin__action-dropdown-menu {
-    .appearing__off();
     background-color: @action-dropdown__background-color;
     border: 1px solid @action-dropdown__active__border-color;
     box-shadow: @component__box-shadow__base;
+    display: none;
     line-height: @line-height__base;
     margin-top: -1px;
     min-width: 120%;

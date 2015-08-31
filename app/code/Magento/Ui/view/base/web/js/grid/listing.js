@@ -4,10 +4,10 @@
  */
 define([
     'underscore',
-    'uiComponent',
     'Magento_Ui/js/lib/spinner',
-    'Magento_Ui/js/core/renderer/layout'
-], function (_, Component, loader, layout) {
+    'uiLayout',
+    'uiComponent'
+], function (_, loader, layout, Component) {
     'use strict';
 
     return Component.extend({
@@ -20,8 +20,15 @@ define([
             dndConfig: {
                 name: '${ $.name }_dnd',
                 component: 'Magento_Ui/js/grid/dnd',
-                containerTmpl: 'ui/grid/dnd/listing',
+                columnsProvider: '${ $.name }',
                 enabled: true
+            },
+            editorConfig: {
+                name: '${ $.name }_editor',
+                component: 'Magento_Ui/js/grid/editing/editor',
+                columnsProvider: '${ $.name }',
+                dataProvider: '${ $.provider }',
+                enabled: false
             },
             imports: {
                 rows: '${ $.provider }:data.items'
@@ -48,6 +55,10 @@ define([
                 this.initDnd();
             }
 
+            if (this.editorConfig.enabled) {
+                this.initEditor();
+            }
+
             return this;
         },
 
@@ -70,6 +81,17 @@ define([
          */
         initDnd: function () {
             layout([this.dndConfig]);
+
+            return this;
+        },
+
+        /**
+         * Creates inline editing component.
+         *
+         * @returns {Listing} Chainable.
+         */
+        initEditor: function () {
+            layout([this.editorConfig]);
 
             return this;
         },
@@ -145,6 +167,18 @@ define([
             this.insertChild(sorting);
 
             return this;
+        },
+
+        /**
+         * Returns instance of a column found by provided identifier.
+         *
+         * @param {String} index - Columns' identifier.
+         * @returns {Column}
+         */
+        getColumn: function (index) {
+            return this.elems.findWhere({
+                index: index
+            });
         },
 
         /**

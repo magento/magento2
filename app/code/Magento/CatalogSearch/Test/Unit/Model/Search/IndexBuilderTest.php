@@ -14,6 +14,9 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  */
 class IndexBuilderTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var  \Magento\CatalogSearch\Model\Search\TableMapper|MockObject */
+    private $tableMapper;
+
     /** @var  \Magento\Framework\Search\Adapter\Mysql\ConditionManager|MockObject */
     private $conditionManager;
 
@@ -70,11 +73,6 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getIndex', 'getDimensions', 'getQuery'])
             ->getMockForAbstractClass();
-        $this->request->expects($this->once())
-            ->method('getQuery')
-            ->willReturn(
-                $this->getMockBuilder('Magento\Framework\Search\Request\QueryInterface')->getMockForAbstractClass()
-            );
 
         $this->config = $this->getMockBuilder('\Magento\Framework\App\Config\ScopeConfigInterface')
             ->disableOriginalConstructor()
@@ -113,6 +111,14 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
                 }
             );
 
+        $this->tableMapper = $this->getMockBuilder('\Magento\CatalogSearch\Model\Search\TableMapper')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->tableMapper->expects($this->once())
+            ->method('addTables')
+            ->with($this->select, $this->request)
+            ->willReturnArgument(0);
+
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->target = $objectManagerHelper->getObject(
             'Magento\CatalogSearch\Model\Search\IndexBuilder',
@@ -121,7 +127,8 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
                 'config' => $this->config,
                 'storeManager' => $this->storeManager,
                 'conditionManager' => $this->conditionManager,
-                'scopeResolver' => $this->scopeResolver
+                'scopeResolver' => $this->scopeResolver,
+                'tableMapper' => $this->tableMapper,
             ]
         );
     }
