@@ -146,6 +146,7 @@ define([
             tmp_input.setAttribute('name', fu.attr('name'));
             tmp_input.setAttribute('value', fu.val());
             tmp_input.setAttribute('type', 'file');
+            tmp_input.setAttribute('style', 'display: none;');
             tmp_input.setAttribute('data-ui-ud', fu.attr('data-ui-ud'));
             fu.parent().append(tmp_input);
 
