@@ -52,10 +52,10 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
-        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
+        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->widgetResourceMock = $this->getMock('Magento\Widget\Model\Resource\Widget', [], [], '', false);
         $this->widgetMock = $this->getMock('Magento\Widget\Model\Widget', [], [], '', false);
-        $this->layoutMock = $this->getMock('Magento\Framework\View\LayoutInterface', [], [], '', false);
+        $this->layoutMock = $this->getMock('Magento\Framework\View\LayoutInterface');
 
         $this->filter = $this->objectManagerHelper->getObject(
             'Magento\Widget\Model\Template\Filter',
