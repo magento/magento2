@@ -15,15 +15,13 @@ use Magento\Framework\App\ScopeInterface as AppScopeInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Url\ScopeInterface as UrlScopeInterface;
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Store model
  *
- * @method Store setCode(string $value)
- * @method Store setWebsiteId(int $value)
  * @method Store setGroupId(int $value)
  * @method Store setName(string $value)
  * @method int getSortOrder()
@@ -36,7 +34,11 @@ use Magento\Store\Api\Data\StoreInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterface, IdentityInterface, StoreInterface
+class Store extends AbstractExtensibleModel implements
+    AppScopeInterface,
+    UrlScopeInterface,
+    IdentityInterface,
+    StoreInterface
 {
     /**
      * Entity name
@@ -307,6 +309,8 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Store\Model\Resource\Store $resource
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
@@ -333,6 +337,8 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Store\Model\Resource\Store $resource,
         \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
@@ -371,7 +377,15 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
         $this->_currencyInstalled = $currencyInstalled;
         $this->groupRepository = $groupRepository;
         $this->websiteRepository = $websiteRepository;
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $resource,
+            $resourceCollection,
+            $data
+        );
     }
 
     /**
@@ -471,6 +485,14 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
     public function getCode()
     {
         return $this->_getData('code');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setCode($code)
+    {
+        return $this->setData('code', $code);
     }
 
     /**
@@ -983,6 +1005,14 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
     }
 
     /**
+     * @inheritdoc
+     */
+    public function setWebsiteId($websiteId)
+    {
+        return $this->setData('website_id', $websiteId);
+    }
+
+    /**
      * Retrieve group identifier
      *
      * @return string|int|null
@@ -990,6 +1020,24 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
     public function getGroupId()
     {
         return $this->_getData('group_id');
+    }
+
+    /**
+     * Retrieve store group identifier
+     *
+     * @return string|int|null
+     */
+    public function getStoreGroupId()
+    {
+        return $this->getGroupId();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setStoreGroupId($storeGroupId)
+    {
+        return $this->setGroupId($storeGroupId);
     }
 
     /**
@@ -1187,5 +1235,22 @@ class Store extends AbstractModel implements AppScopeInterface, UrlScopeInterfac
     {
         $parsedUrl = parse_url($this->getBaseUrl());
         return isset($parsedUrl['path']) ? $parsedUrl['path'] : '/';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setExtensionAttributes(
+        \Magento\Store\Api\Data\StoreExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

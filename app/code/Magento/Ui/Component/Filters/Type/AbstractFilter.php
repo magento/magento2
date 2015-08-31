@@ -38,7 +38,7 @@ abstract class AbstractFilter extends AbstractComponent
     protected $uiComponentFactory;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder
+     * @var FilterBuilder
      */
     protected $filterBuilder;
 
