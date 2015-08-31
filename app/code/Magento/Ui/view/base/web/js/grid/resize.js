@@ -31,9 +31,9 @@ define([
             resizingColumnClass: '_resizing',
             inResizeClass: '_in-resize',
             visibleClass: '_resize-visible',
+            minColumnWidth: 40,
             resizable: false,
             resizeConfig: {
-                minColumnWidth: 40,
                 maxRowsHeight: [],
                 curResizeElem: {},
                 depResizeElem: {},
@@ -321,8 +321,8 @@ define([
 
             if (
                 this.resizable &&
-                cfg.minColumnWidth < cfg.curResizeElem.model.width + width &&
-                cfg.minColumnWidth < cfg.depResizeElem.model.width - width
+                this.minColumnWidth < cfg.curResizeElem.model.width + width &&
+                this.minColumnWidth < cfg.depResizeElem.model.width - width
             ) {
                 if (cfg.previousWidth !== width) {
                     cfg.curResizeElem.model.width += width;
@@ -332,21 +332,21 @@ define([
                     cfg.previousWidth = width;
                     cfg.curResizeElem.position = event.pageX;
                 }
-            } else if (width <= -(cfg.curResizeElem.model.width - cfg.minColumnWidth)) {
-                $(cfg.curResizeElem.elem).outerWidth(cfg.minColumnWidth);
+            } else if (width <= -(cfg.curResizeElem.model.width - this.minColumnWidth)) {
+                $(cfg.curResizeElem.elem).outerWidth(this.minColumnWidth);
 
                 $(cfg.depResizeElem.elem).outerWidth(
                     cfg.depResizeElem.model.width +
                     cfg.curResizeElem.model.width -
-                    cfg.minColumnWidth
+                    this.minColumnWidth
                 );
-            } else if (width >= cfg.depResizeElem.model.width - cfg.minColumnWidth) {
+            } else if (width >= cfg.depResizeElem.model.width - this.minColumnWidth) {
 
-                $(cfg.depResizeElem.elem).outerWidth(cfg.minColumnWidth);
+                $(cfg.depResizeElem.elem).outerWidth(this.minColumnWidth);
                 $(cfg.curResizeElem.elem).outerWidth(
                     cfg.curResizeElem.model.width +
                     cfg.depResizeElem.model.width -
-                    cfg.minColumnWidth
+                    this.minColumnWidth
                 );
             }
         },
@@ -388,7 +388,6 @@ define([
                 nextElemData = this.hasColumn(nextElemModel, true);
 
             if (nextElemData) {
-
                 if (nextElemModel.visible()) {
                     return nextElemData;
                 }
