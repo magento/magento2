@@ -56,7 +56,6 @@ define([
                 'mousedownHandler',
                 'mousemoveHandler',
                 'mouseupHandler',
-                'stopEventPropagation',
                 'refreshLastColumn',
                 'refreshMaxRowHeight',
                 '_eventProxy'
