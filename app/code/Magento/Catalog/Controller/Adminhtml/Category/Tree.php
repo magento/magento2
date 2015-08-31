@@ -43,7 +43,7 @@ class Tree extends \Magento\Catalog\Controller\Adminhtml\Category
     {
         $storeId = (int)$this->getRequest()->getParam('store');
         $categoryId = (int)$this->getRequest()->getParam('id');
-
+        $resultRedirect = $this->resultRedirectFactory->create();
         if ($storeId) {
             if (!$categoryId) {
                 $store = $this->_objectManager
@@ -57,7 +57,7 @@ class Tree extends \Magento\Catalog\Controller\Adminhtml\Category
         $category = $this->_initCategory(true);
         if (!$category) {
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-            $resultRedirect = $this->resultRedirectFactory->create();
+            
             return $resultRedirect->setPath('catalog/*/', ['_current' => true, 'id' => null]);
         }
 
@@ -65,7 +65,7 @@ class Tree extends \Magento\Catalog\Controller\Adminhtml\Category
         $root = $block->getRoot();
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultJsonFactory->create();
-        return $resultJson->setData([
+        $resultJson->setData([
             'data' => $block->getTree(),
             'parameters' => [
                 'text' => $block->buildNodeName($root),
@@ -78,5 +78,6 @@ class Tree extends \Magento\Catalog\Controller\Adminhtml\Category
                 'root_visible' => (int)$root->getIsVisible(),
             ],
         ]);
+        return $resultRedirect->setPath('catalog/category/edit', ['_current' => true, 'id' => $categoryId]);
     }
 }
