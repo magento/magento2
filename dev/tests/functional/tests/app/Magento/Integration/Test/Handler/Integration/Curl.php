@@ -26,7 +26,7 @@ class Curl extends AbstractCurl implements IntegrationInterface
     protected $patternField = '/<input[^>]+name="%s"[^>]+value="([^"]+)"[^>]+\/>/';
 
     /**
-     * Mapping fields.
+     * List fields for getting.
      *
      * @var array
      */
@@ -57,36 +57,67 @@ class Curl extends AbstractCurl implements IntegrationInterface
         $url = $_ENV['app_backend_url'] . 'admin/integration/save';
         $curl->write($url, $data);
         $response = $curl->read();
+        $curl->close();
         if (!strpos($response, 'data-ui-id="messages-message-success"')) {
-            $curl->close();
             throw new \Exception("Integration creation by curl handler was not successful! Response: $response");
         }
+        $result['integration_id'] = $this->getIntegrationId($fixture);
 
-        /* Get integration id */
-        $filter = $this->encodeFilter(['name' => $fixture->getName()]);
-        $url = $_ENV['app_backend_url'] . 'admin/integration/grid/page/2/filter/' . $filter;
-        $curl->write($url, $data);
-        $response = $curl->read();
-        preg_match('~<td.*?>.*?' . $data['name'] . '.*?/integration/edit/id/(\d+)/~siu', $response, $matches);
-        $result['integration_id'] = isset($matches[1]) ? $matches[1] : null;
-
-        /** Activate integration */
         if (isset($data['status']) && 'Active' == $data['status']) {
-            $url = 'admin/integration/permissionsDialog/id/' . $result['integration_id'] . '/reauthorize/0/';
-            $curl->write($_ENV['app_backend_url'] . $url, [], CurlInterface::GET);
-            $curl->read();
-
-            $url = 'admin/integration/tokensDialog/id/' . $result['integration_id'] . '/reauthorize/0/';
-            $curl->write($_ENV['app_backend_url'] . $url, [], CurlInterface::GET);
-            $response = $curl->read();
-            foreach ($this->fields as $field) {
-                $pattern = sprintf($this->patternField, $field);
-                preg_match($pattern, $response, $matches);
-                $result[$field] = isset($matches[1]) ? $matches[1] : null;
-            }
+            $fields = $this->activateIntegration($result['integration_id']);
+            $result = array_merge($result, $fields);
         }
 
+        return $result;
+    }
+
+    /**
+     * Get integration id.
+     *
+     * @param Integration $integration
+     * @return int|null
+     */
+    protected function getIntegrationId(Integration $integration)
+    {
+        $name = $integration->getName();
+        $filter = $this->encodeFilter(['name' => $integration->getName()]);
+        $url = $_ENV['app_backend_url'] . 'admin/integration/grid/filter/' . $filter;
+        $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
+
+        $curl->write($url);
+        $response = $curl->read();
         $curl->close();
+
+        preg_match('~<td.*?>.*?' . $name . '.*?/integration/edit/id/(\d+)/~siu', $response, $matches);
+        return isset($matches[1]) ? $matches[1] : null;
+    }
+
+    /**
+     * Activate integration.
+     *
+     * @param int $integrationId
+     * @return array
+     */
+    protected function activateIntegration($integrationId)
+    {
+        $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
+        $result = [];
+
+        $url = 'admin/integration/permissionsDialog/id/' . $integrationId . '/reauthorize/0/';
+        $curl->write($_ENV['app_backend_url'] . $url, [], CurlInterface::GET);
+        $curl->read();
+
+        $url = 'admin/integration/tokensDialog/id/' . $integrationId . '/reauthorize/0/';
+        $curl->write($_ENV['app_backend_url'] . $url, [], CurlInterface::GET);
+        $response = $curl->read();
+        $curl->close();
+
+        foreach ($this->fields as $field) {
+            $pattern = sprintf($this->patternField, $field);
+            preg_match($pattern, $response, $matches);
+            $result[$field] = isset($matches[1]) ? $matches[1] : null;
+        }
+
         return $result;
     }
 }
