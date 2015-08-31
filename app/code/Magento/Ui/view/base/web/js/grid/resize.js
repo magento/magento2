@@ -42,19 +42,24 @@ define([
         },
 
         /**
-         * Initialize application
+         * Initialize application -
+         * binding functions context,
+         * set handlers for table elements
+         *
+         * @returns {Object} Chainable
          */
         initialize: function () {
             _.bindAll(
                 this,
                 'initTable',
                 'initColumn',
-                'initTd',
                 'mousedownHandler',
                 'mousemoveHandler',
                 'mouseupHandler',
                 'stopEventPropagation',
-                'refreshLastColumn'
+                'refreshLastColumn',
+                'refreshMaxRowHeight',
+                '_eventProxy'
             );
 
             this._super();
@@ -63,16 +68,32 @@ define([
 
             $.async(this.tableSelector, this.initTable);
             $.async(this.columnSelector, this.initColumn);
-            $.async(this.fieldSelector, this.initTd);
+            $.async(this.fieldSelector, this.refreshMaxRowHeight);
 
             return this;
         },
 
+        /**
+         * Set table element and adds handler to mousedown on headers
+         *
+         * @returns {Object} Chainable
+         */
         initTable: function (table) {
             this.table = table;
-            $(table).on('mousedown', 'thead tr th .' + this.resizableElementClass, this.mousedownHandler);
+
+            return this;
         },
 
+        /**
+         * Init columns elements,
+         * set width to current column element,
+         * add resizable element to columns header,
+         * check and add no-resize class to last column,
+         * stop parents events,
+         * add handler to visibility column
+         *
+         * @param {Object} column - columns header element (th)
+         */
         initColumn: function (column) {
             var model = ko.dataFor(column);
 
@@ -90,10 +111,13 @@ define([
             model.on('visible', this.refreshLastColumn.bind(this, column));
         },
 
-        initTd: function (td) {
-            this.refreshMaxRowHeight(td);
-        },
-
+        /**
+         * Check element is resizable or not
+         * and append resizable element to DOM
+         *
+         * @param {Object} column - columns header element (th)
+         * @returns {Boolean}
+         */
         initResizableElement: function (column) {
             var model = ko.dataFor(column),
                 ctx = ko.contextFor(column),
@@ -108,14 +132,46 @@ define([
             return false;
         },
 
+        /**
+         * Check event target and if need stop parents event,
+         *
+         * @param {Object} column - columns header element (th)
+         * @returns {Boolean}
+         */
         setStopPropagationHandler: function (column) {
-            var events;
+            var events,
+                click,
+                mousedown;
 
-            $(column).on('click', this.stopEventPropagation);
-            events = $._data(column, 'events').click;
-            events.unshift(events.pop());
+            $(column).on('click', this._eventProxy);
+            $(column).on('mousedown', this.mousedownHandler);
+
+            events = $._data(column, 'events');
+
+            click = events.click;
+            mousedown = events.mousedown;
+            click.unshift(click.pop());
+            mousedown.unshift(mousedown.pop());
+
+            return this;
         },
 
+        /**
+         * Check event target and stop event if need
+         *
+         * @param {Object} event
+         */
+        _eventProxy: function (event) {
+            if ($(event.target).is('.' + this.resizableElementClass) && event.type === 'click') {
+                event.stopImmediatePropagation();
+            }
+        },
+
+        /**
+         * Check visible columns and set disable class to resizable elements,
+         *
+         * @param {Object} column - columns header element (th)
+         */
         refreshLastColumn: function (column) {
             var i = 0,
                 columns = $(column).parent().children().not(':hidden'),
@@ -134,6 +190,11 @@ define([
 
         },
 
+        /**
+         * Refresh max height to row elements,
+         *
+         * @param {Object} elem - (td)
+         */
         refreshMaxRowHeight: function (elem) {
             var rowsH = this.maxRowsHeight(),
                 curEL = $(elem).find('div'),
@@ -161,30 +222,74 @@ define([
             this.maxRowsHeight(rowsH);
         },
 
+        /**
+         * Set resize class to elements when resizable
+         */
+        _setResizeClass: function () {
+            var rowElements = $(this.table).find('tr');
+
+            rowElements
+                .find('td:eq(' + this.resizeConfig.curResizeElem.ctx.$index() + ')')
+                .addClass(this.resizingColumnClass);
+            rowElements
+                .find('td:eq(' + this.resizeConfig.depResizeElem.ctx.$index() + ')')
+                .addClass(this.resizingColumnClass);
+        },
+
+        /**
+         * Remove resize class to elements when resizable
+         */
+        _removeResizeClass: function () {
+            var rowElements = $(this.table).find('tr');
+
+            rowElements
+                .find('td:eq(' + this.resizeConfig.curResizeElem.ctx.$index() + ')')
+                .removeClass(this.resizingColumnClass);
+            rowElements
+                .find('td:eq(' + this.resizeConfig.depResizeElem.ctx.$index() + ')')
+                .removeClass(this.resizingColumnClass);
+        },
+
+        /**
+         * Check conditions to resize
+         *
+         * @returns {Boolean}
+         */
+        _canResize: function (column) {
+            if (
+                $(column).hasClass(this.visibleClass) ||
+                !$(this.resizeConfig.depResizeElem.elem).find('.' + this.resizableElementClass).length
+            ) {
+                return false;
+            }
+
+            return true;
+        },
+
+        /**
+         * Mouse down event handler,
+         * find current and dep column to resize
+         *
+         * @param {Object} event
+         */
         mousedownHandler: function (event) {
             var target = event.target,
+                column = $(target).parent()[0],
                 cfg = this.resizeConfig,
                 body = $('body');
 
-            cfg.curResizeElem.model = ko.dataFor($(target).parent()[0]);
-            cfg.curResizeElem.ctx = ko.contextFor($(target).parent()[0]);
+            event.stopImmediatePropagation();
+            cfg.curResizeElem.model = ko.dataFor(column);
+            cfg.curResizeElem.ctx = ko.contextFor(column);
             cfg.curResizeElem.elem = this.hasColumn(cfg.curResizeElem.model, true);
             cfg.curResizeElem.position = event.pageX;
             cfg.depResizeElem.elem = this.getNextElement(cfg.curResizeElem.elem);
             cfg.depResizeElem.model = ko.dataFor(cfg.depResizeElem.elem);
             cfg.depResizeElem.ctx = ko.contextFor(cfg.depResizeElem.elem);
 
-            $(this.table).find('tr')
-                .find('td:eq(' + cfg.curResizeElem.ctx.$index() + ')')
-                .addClass(this.resizingColumnClass);
-            $(this.table).find('tr')
-                .find('td:eq(' + cfg.depResizeElem.ctx.$index() + ')')
-                .addClass(this.resizingColumnClass);
+            this._setResizeClass();
 
-            if (
-                $(event.target).parent().hasClass(this.visibleClass) ||
-                !$(cfg.depResizeElem.elem).find('.' + this.resizableElementClass).length
-            ) {
+            if (!this._canResize(column)) {
                 return false;
             }
 
@@ -201,6 +306,12 @@ define([
             $(window).bind('mouseup', this.mouseupHandler);
         },
 
+        /**
+         * Mouse move event handler,
+         * change columns width
+         *
+         * @param {Object} event
+         */
         mousemoveHandler: function (event) {
             var cfg = this.resizeConfig,
                 width = event.pageX - cfg.curResizeElem.position;
@@ -239,9 +350,11 @@ define([
         },
 
         /**
-        * Mouse up handler
-        * @param {Object} event
-        */
+         * Mouse up event handler,
+         * change columns width
+         *
+         * @param {Object} event
+         */
         mouseupHandler: function (event) {
             var cfg = this.resizeConfig,
                 body = $('body');
@@ -249,13 +362,7 @@ define([
             event.stopPropagation();
             event.preventDefault();
 
-            $(this.table).find('tr')
-                .find('td:eq(' + cfg.curResizeElem.ctx.$index() + ')')
-                .removeClass(this.resizingColumnClass);
-            $(this.table).find('tr')
-                .find('td:eq(' + cfg.depResizeElem.ctx.$index() + ')')
-                .removeClass(this.resizingColumnClass);
-
+            this._removeResizeClass();
             this.storageColumnsData[cfg.curResizeElem.model.index] = cfg.curResizeElem.model.width;
             this.storageColumnsData[cfg.depResizeElem.model.index] = cfg.depResizeElem.model.width;
             this.resizable = false;
@@ -269,8 +376,9 @@ define([
 
         /**
          * Find dependency element
-         * @param {Number} index - current element index
-         * @param {Boolean} typeObject - type returned value (Object or string)
+         *
+         * @param {Object} element - current element
+         * @returns {Object} next element data
          */
         getNextElement: function (element) {
             var nextElem = $(element).next()[0],
@@ -287,14 +395,12 @@ define([
             }
         },
 
-        getColumnWidth: function (column) {
-            if (this.hasColumn(column)) {
-                return this.hasColumn(column, true).width();
-            }
-
-            return 'auto';
-        },
-
+        /**
+         * Get default width
+         *
+         * @param {Object} column - (th) element
+         * @return {String} width for current column
+         */
         getDefaultWidth: function (column) {
             var model = ko.dataFor(column);
 
@@ -303,12 +409,19 @@ define([
             }
 
             if (model.resizeDefaultWidth) {
-                return parseInt(model.resizeDefaultWidth);
+                return parseInt(model.resizeDefaultWidth, 10);
             }
 
             return 'auto';
         },
 
+        /**
+         * Check column is render or not
+         *
+         * @param {Object} model - cur column model
+         * @param {Boolean} returned - need return column object or not
+         * @return {Boolean} if returned param is false, returned boolean falue, else return current object data
+         */
         hasColumn: function (model, returned) {
             if (this.columnsElements.hasOwnProperty(model.index)) {
 
@@ -322,6 +435,13 @@ define([
             return false;
         },
 
+        /**
+         * Check row is render or not
+         *
+         * @param {Object} elem - cur column element
+         * @param {Boolean} returned - need return column object or not
+         * @return {Boolean} if returned param is false, returned boolean falue, else return current object data
+         */
         hasRow: function (elem, returned) {
             var i = 0,
                 el = this.maxRowsHeight(),
@@ -340,12 +460,6 @@ define([
             }
 
             return false;
-        },
-
-        stopEventPropagation: function (e) {
-            if ($(e.target).is('.' + this.resizableElementClass)) {
-                e.stopImmediatePropagation();
-            }
         }
     });
 });
