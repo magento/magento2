@@ -104,13 +104,20 @@ class TableMapper
             list($alias, $table, $mapOn, $mappedFields) = $fieldToTableMap;
             $table = $this->resource->getTableName($table);
         } elseif ($filter->getType() === FilterInterface::TYPE_TERM) {
-            $table = $this->resource->getTableName('catalog_product_index_eav');
-            $alias = 'cpie';
-            $mapOn = sprintf('search_index.entity_id = %1$s.entity_id', $alias);
-            $mappedFields = [];
+            $attribute = $this->getAttributeByCode($field);
+            if ($attribute) {
+                $table = $this->resource->getTableName('catalog_product_index_eav');
+                $alias = $field . '_filter';
+                $mapOn = sprintf(
+                    'search_index.entity_id = %1$s.entity_id AND %1$s.attribute_id = %2$d AND %1$s.store_id = %3$d',
+                    $alias,
+                    $attribute->getId(),
+                    $this->getStoreId()
+                );
+                $mappedFields = [];
+            }
         } else {
-            /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $attribute */
-            $attribute = $this->attributeCollection->getItemByColumnValue('attribute_code', $field);
+            $attribute = $this->getAttributeByCode($field);
             if ($attribute && $attribute->getBackendType() === AbstractAttribute::TYPE_STATIC) {
                 $table = $attribute->getBackendTable();
                 $alias = $this->getTableAlias($table);
@@ -202,6 +209,14 @@ class TableMapper
     }
 
     /**
+     * @return int
+     */
+    private function getStoreId()
+    {
+        return $this->storeManager->getStore()->getId();
+    }
+
+    /**
      * @param string $field
      * @return array|null
      */
@@ -234,5 +249,15 @@ class TableMapper
     private function getTableAlias($table)
     {
         return md5($table);
+    }
+
+    /**
+     * @param string $field
+     * @return \Magento\Catalog\Model\Resource\Eav\Attribute
+     */
+    private function getAttributeByCode($field)
+    {
+        $attribute = $this->attributeCollection->getItemByColumnValue('attribute_code', $field);
+        return $attribute;
     }
 }

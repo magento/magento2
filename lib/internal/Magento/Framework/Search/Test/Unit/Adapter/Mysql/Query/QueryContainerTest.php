@@ -82,15 +82,4 @@ class QueryContainerTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $queries);
         $this->assertEquals('asdf', reset($queries));
     }
-
-    public function testFilters()
-    {
-        $this->assertEmpty($this->queryContainer->getFilters());
-        $this->queryContainer->addFilter('filter');
-        $this->assertCount(1, $this->queryContainer->getFilters());
-        $this->assertEquals(1, $this->queryContainer->getFiltersCount());
-        $this->queryContainer->clearFilters();
-        $this->assertCount(0, $this->queryContainer->getFilters());
-        $this->assertEquals(1, $this->queryContainer->getFiltersCount());
-    }
 }

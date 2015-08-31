@@ -120,6 +120,7 @@ class Preprocessor implements PreprocessorInterface
             );
             return $filterQuery;
         } elseif ($filter->getType() === FilterInterface::TYPE_TERM) {
+            $alias = $this->tableMapper->getMappingAlias($filter);
             if (is_array($filter->getValue())) {
                 $value = sprintf(
                     '%s IN (%s)',
@@ -130,13 +131,11 @@ class Preprocessor implements PreprocessorInterface
                 $value = ($isNegation ? '!' : '') . '= ' . $filter->getValue();
             }
             $filterQuery = sprintf(
-                'cpie.store_id = %d AND cpie.attribute_id = %d AND cpie.value %s',
-                $this->scopeResolver->getScope()->getId(),
-                $attribute->getId(),
+                '%1$s.value %2$s',
+                $alias,
                 $value
             );
-            $queryContainer->addFilter($filterQuery);
-            return '';
+            return $filterQuery;
         } else {
             $select = $this->connection->select();
             $ifNullCondition = $this->connection->getIfNullSql('current_store.value', 'main_table.value');
