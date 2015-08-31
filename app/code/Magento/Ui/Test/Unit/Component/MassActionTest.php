@@ -57,115 +57,67 @@ class MassActionTest extends \PHPUnit_Framework_TestCase
     /**
      * Run test prepare method
      *
+     * @param string $componentName
+     * @param array $componentData
      * @return void
+     * @dataProvider getPrepareDataProvider
      */
-    public function testPrepare()
+    public function testPrepare($componentName, $componentData)
     {
-        $this->contextMock->expects($this->at(0))
-            ->method('getUrl')
-            ->with('/module/controller/firstAction', []);
-        $this->contextMock->expects($this->at(1))
-            ->method('getUrl')
-            ->with('/module/controller/secondSubAction1', []);
-        $this->contextMock->expects($this->at(2))
-            ->method('getUrl')
-            ->with('/module/controller/secondSubAction2', []);
+        /** @var \Magento\Ui\Component\Action $action */
+        $action = $this->objectManager->getObject(
+            'Magento\Ui\Component\MassAction',
+            [
+                'context' => $this->contextMock,
+                'data' => [
+                    'name' => $componentName,
+                    'config' => $componentData,
+                ]
+            ]
+        );
         /** @var MassAction $massAction */
         $massAction = $this->objectManager->getObject(
             'Magento\Ui\Component\MassAction',
             [
                 'context' => $this->contextMock,
-                'data' => [
-                    'config' => [
-                        'actions' => [
-                            [
-                                'type' => 'first_action',
-                                'label' => 'First Action',
-                                'url' => '/module/controller/firstAction'
-                            ],
-                            [
-                                'type' => 'second_action',
-                                'label' => 'Second Action',
-                                'actions' => [
-                                    [
-                                        'type' => 'second_sub_action1',
-                                        'label' => 'Second Sub Action 1',
-                                        'url' => '/module/controller/secondSubAction1'
-                                    ],
-                                    [
-                                        'type' => 'second_sub_action2',
-                                        'label' => 'Second Sub Action 2',
-                                        'url' => '/module/controller/secondSubAction2'
-                                    ],
-                                ]
-                            ],
-                        ]
-                    ]
-
-                ]
+                'data' => []
             ]
         );
+        $massAction->addComponent('action', $action);
         $massAction->prepare();
+        $this->assertEquals(['actions' => [$action->getConfiguration()]], $massAction->getConfiguration());
     }
 
-    /**
-     * Run test prepare method with dynamic actions
-     *
-     * @return void
-     */
-    public function testPrepareWithDynamicActions()
+    public function getPrepareDataProvider()
     {
-        $this->contextMock->expects($this->at(2))
-            ->method('getUrl')
-            ->with('/module/controller/firstAction', []);
-        $options = $this->getMockBuilder('Magento\Framework\Data\OptionSourceInterface')->getMockForAbstractClass();
-        $options->expects($this->any())
-            ->method('toOptionArray')
-            ->willReturn([
-                'second_action' => [
-                    [
-                        'type' => 'second_sub_action1',
-                        'label' => 'Second Sub Action 1',
-                        'url' => ['param' => '21']
-                    ],
-                    [
-                        'type' => 'second_sub_action2',
-                        'label' => 'Second Sub Action 2',
-                        'url' => ['param' => '22']
-                    ],
-                ]
-            ]);
-        $this->contextMock->expects($this->at(0))
-            ->method('getUrl')
-            ->with('/module/controller/secondSubAction', ['param' => '21']);
-        $this->contextMock->expects($this->at(1))
-            ->method('getUrl')
-            ->with('/module/controller/secondSubAction', ['param' => '22']);
-        /** @var MassAction $massAction */
-        $massAction = $this->objectManager->getObject(
-            'Magento\Ui\Component\MassAction',
+        return [
             [
-                'context' => $this->contextMock,
-                'data' => [
-                    'config' => [
-                        'actions' => [
-                            'first_action' => [
-                                'type' => 'first_action',
-                                'label' => 'First Action',
-                                'url' => '/module/controller/firstAction'
-                            ],
-                            'second_action' => [
-                                'type' => 'second_action',
-                                'label' => 'Second Action',
-                                'url' => '/module/controller/secondSubAction'
-                            ],
-                        ]
-                    ]
-
+                'test_component1',
+                [
+                    'type' => 'first_action',
+                    'label' => 'First Action',
+                    'url' => '/module/controller/firstAction'
                 ],
-                'optionsProvider' => $options,
-            ]
-        );
-        $massAction->prepare();
+            ],
+            [
+                'test_component2',
+                [
+                    'type' => 'second_action',
+                    'label' => 'Second Action',
+                    'actions' => [
+                        [
+                            'type' => 'second_sub_action1',
+                            'label' => 'Second Sub Action 1',
+                            'url' => '/module/controller/secondSubAction1'
+                        ],
+                        [
+                            'type' => 'second_sub_action2',
+                            'label' => 'Second Sub Action 2',
+                            'url' => '/module/controller/secondSubAction2'
+                        ],
+                    ]
+                ],
+            ],
+        ];
     }
 }
