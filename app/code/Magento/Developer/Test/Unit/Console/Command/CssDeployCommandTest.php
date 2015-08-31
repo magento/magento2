@@ -112,7 +112,7 @@ class CssDeployCommandTest extends \PHPUnit_Framework_TestCase
         $this->sourceFileGeneratorPool->expects($this->once())
             ->method('create')
             ->with('less')
-            ->willReturn($this->getMock('Magento\Framework\Less\FileGenerator', [], [], '', false));
+            ->willReturn($this->getMock('Magento\Framework\View\Asset\SourceFileGeneratorInterface'));
         $this->assetRepo->expects($this->once())
             ->method('createAsset')
             ->with(
@@ -144,7 +144,10 @@ class CssDeployCommandTest extends \PHPUnit_Framework_TestCase
                 'type' => 'less'
             ]
         );
-        $this->assertContains('Successfully processed LESS and/or SASS files', $commandTester->getDisplay());
+        $this->assertContains(
+            'Successfully processed dynamic stylesheet into CSS',
+            $commandTester->getDisplay()
+        );
     }
 
     /**

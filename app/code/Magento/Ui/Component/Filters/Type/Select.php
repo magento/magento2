@@ -93,9 +93,10 @@ class Select extends AbstractFilter
     {
         if (isset($this->filterData[$this->getName()])) {
             $value = $this->filterData[$this->getName()];
+            $conditionType = is_array($value) ? 'in' : 'eq';
 
             if (!empty($value) || is_numeric($value)) {
-                $filter = $this->filterBuilder->setConditionType('eq')
+                $filter = $this->filterBuilder->setConditionType($conditionType)
                     ->setField($this->getName())
                     ->setValue($value)
                     ->create();
