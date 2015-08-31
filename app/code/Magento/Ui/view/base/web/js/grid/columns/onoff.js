@@ -5,8 +5,9 @@
 define([
     'underscore',
     'mage/translate',
-    './multiselect'
-], function (_, $t, Column) {
+    './multiselect',
+    'uiRegistry'
+], function (_, $t, Column, registry) {
     'use strict';
 
     return Column.extend({
@@ -47,7 +48,8 @@ define([
          * @returns void
          */
         setDefaultSelections: function() {
-            if (this.selected().length != this.selectedData.length) {
+            var positionCacheValid = registry.get('position_cache_valid');
+            if (this.selected().length != this.selectedData.length && !positionCacheValid) {
                 // Check selected data
                 for (var key in this.selectedData) {
                     if (this.selected().indexOf(key) === -1) {
@@ -62,6 +64,7 @@ define([
                     }
                 }
             }
+            registry.set('position_cache_valid', true);
         },
 
         /**
