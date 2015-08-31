@@ -248,25 +248,11 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      */
     public function setStreet($street)
     {
+        if (is_array($street)) {
+            $street = $this->_implodeArrayValues($street);
+        }
         $this->setData('street', $street);
         return $this;
-    }
-
-    /**
-     * Enforce format of the street field
-     *
-     * @param array|string $key
-     * @param null $value
-     * @return \Magento\Framework\DataObject
-     */
-    public function setData($key, $value = null)
-    {
-        if (is_array($key)) {
-            $key = $this->_implodeArrayField($key);
-        } elseif (is_array($value)) {
-            $value = $this->_implodeArrayValues($value);
-        }
-        return parent::setData($key, $value);
     }
 
     /**
