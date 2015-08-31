@@ -71,7 +71,7 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
      */
     public function getLabel()
     {
-        return __('Images & Videos');
+        return __('Images and Videos');
     }
 
     /**
@@ -89,7 +89,7 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
         $deleteImageText = __('Delete image');
         $makeBaseText = __('Make Base');
         $hiddenText = __('Hidden');
-        $imageManagementText = __('Image Management');
+        $imageManagementText = __('Images and Videos');
         /** @var $product \Magento\Catalog\Model\Product */
         $html = <<<HTML
 <div id="{$htmlId}-container" class="images"

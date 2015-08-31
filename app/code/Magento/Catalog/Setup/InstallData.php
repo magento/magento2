@@ -187,7 +187,7 @@ class InstallData implements InstallDataInterface
                 'tab_group_code' => 'basic',
                 'sort_order' => 10,
             ],
-            'Images & Videos' => [
+            'Images' => [
                 'attribute_group_name' => $newImagesTabName,
                 'attribute_group_code' => preg_replace('/[^a-z0-9]+/', '-', strtolower($newImagesTabName)),
                 'tab_group_code' => 'basic',
