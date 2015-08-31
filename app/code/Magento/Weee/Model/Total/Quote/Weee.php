@@ -74,7 +74,8 @@ class Weee extends AbstractTotal
     public function __construct(
         \Magento\Weee\Helper\Data $weeeData,
         PriceCurrencyInterface $priceCurrency
-    ) {
+    )
+    {
         $this->priceCurrency = $priceCurrency;
         $this->weeeData = $weeeData;
         $this->setCode('weee');
@@ -103,13 +104,15 @@ class Weee extends AbstractTotal
         $this->weeeTotalExclTax = 0;
         $this->weeeBaseTotalExclTax = 0;
         foreach ($items as $item) {
-            $this->_resetItemData($item);
+            $this->resetItemTaxData($item);
             if ($item->getParentItem()) {
                 continue;
             }
+            $this->resetItemWeeeData($item);
             if ($item->getHasChildren() && $item->isChildrenCalculated()) {
                 foreach ($item->getChildren() as $child) {
-                    $this->_resetItemData($child);
+                    $this->resetItemWeeeData($child);
+                    $this->resetItemTaxData($child);
                     $this->_process($address, $child);
                 }
                 $this->_recalculateParent($item);
@@ -293,15 +296,25 @@ class Weee extends AbstractTotal
         $item->setAssociatedTaxables($associatedTaxables);
     }
 
+
     /**
      * Reset information about FPT for shopping cart item
      *
      * @param   \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return  void
      */
-    protected function _resetItemData($item)
-    {
+    protected function resetItemWeeeData($item) {
         $this->weeeData->setApplied($item, []);
+    }
+
+    /**
+     * Reset information about Tax on FPT for shopping cart item
+     *
+     * @param   \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @return  void
+     */
+    protected function resetItemTaxData($item)
+    {
         $item->setAssociatedTaxables([]);
 
         $item->setBaseWeeeTaxDisposition(0);
