@@ -193,7 +193,7 @@ class UpgradeData implements UpgradeDataInterface
             $entityTypeId = $customerSetup->getEntityTypeId(Customer::ENTITY);
             $attributeId = $customerSetup->getAttributeId($entityTypeId, 'gender');
 
-            $option = ['attribute_id' => $attributeId, 'values' => [2 => 'Not Specified']];
+            $option = ['attribute_id' => $attributeId, 'values' => [3 => 'Not Specified']];
             $customerSetup->addAttributeOption($option);
         }
 

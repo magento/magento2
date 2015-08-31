@@ -324,7 +324,7 @@ class CustomerSetup extends EavSetup
                         'validate_rules' => 'a:0:{}',
                         'position' => 110,
                         'admin_checkout' => 1,
-                        'option' => ['values' => ['Male', 'Female', 'Not Specified']],
+                        'option' => ['values' => ['Male', 'Female']],
                     ],
                     'disable_auto_group_change' => [
                         'type' => 'static',
