@@ -23,14 +23,6 @@ class Review extends \Magento\Braintree\Controller\PayPal
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Braintree\Model\Config\PayPal $braintreePayPalConfig
      * @param \Magento\Paypal\Model\Config $paypalConfig
-     */
-
-    /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Braintree\Model\Config\PayPal $braintreePayPalConfig
-     * @param \Magento\Paypal\Model\Config $paypalConfig
      * @param \Magento\Braintree\Model\CheckoutFactory $checkoutFactory
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      */
@@ -102,7 +94,6 @@ class Review extends \Magento\Braintree\Controller\PayPal
                 $e,
                 __('We can\'t initialize checkout review.')
             );
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
 
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
