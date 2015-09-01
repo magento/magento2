@@ -9,11 +9,11 @@
     <container name="container1" label="Container 1">
         <block class="Magento\Framework\View\Element\Text" name="no_name2"/>
     </container>
-    <remove name="container1"/>
-    <remove name="child_block1"/>
+    <referenceContainer name="container1" remove="true"/>
+    <referenceBlock name="child_block1" remove="true"/>
     <block class="Magento\Framework\View\Element\Text" name="block_container" as="block.container">
         <block class="Magento\Framework\View\Element\Text" name="child_block1"/>
         <block class="Magento\Framework\View\Element\Text" name="child_block2"/>
     </block>
-    <remove name="not_exist"/>
+    <referenceContainer name="not_exist" remove="true"/>
 </layout>
