@@ -170,7 +170,6 @@ class CopyTest extends \PHPUnit_Framework_TestCase
     public function testGetCopyFieldsetToTargetWhenTargetIsExtensibleDataInterface()
     {
         $fields['code']['aspect'] = 'value';
-        $target['code'] = [];
         $this->fieldsetConfigMock
             ->expects($this->once())
             ->method('getFieldset')
@@ -229,7 +228,6 @@ class CopyTest extends \PHPUnit_Framework_TestCase
     {
         $fields['code']['aspect'] = 'value';
         $source['code'] = 'code';
-        $target['code'] = [];
         $this->fieldsetConfigMock
             ->expects($this->once())
             ->method('getFieldset')
