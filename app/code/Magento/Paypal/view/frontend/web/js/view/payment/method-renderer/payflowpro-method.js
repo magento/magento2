@@ -43,8 +43,14 @@ define(
             },
 
             placeOrder: function() {
+                var self = this;
                 if (this.validateHandler() && additionalValidators.validate()) {
-                    this.placeOrderHandler();
+                    this.isPlaceOrderActionAllowed(false);
+                    $.when(setPaymentInformationAction()).done(function() {
+                        self.placeOrderHandler();
+                    }).fail(function() {
+                        self.isPlaceOrderActionAllowed(true);
+                    });
                 }
             }
         });
