@@ -40,7 +40,7 @@ class Import extends \Magento\Catalog\Model\Indexer\Product\Price\Plugin\Abstrac
     /**
      * Get price indexer
      *
-     * @return \Magento\Indexer\Model\IndexerInterface
+     * @return \Magento\Framework\Indexer\IndexerInterface
      */
     protected function getPriceIndexer()
     {
