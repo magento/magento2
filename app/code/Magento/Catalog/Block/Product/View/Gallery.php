@@ -52,7 +52,6 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
             }
         }
 
-
         return $images;
     }
 
