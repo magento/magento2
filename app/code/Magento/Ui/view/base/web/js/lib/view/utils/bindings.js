@@ -1,3 +1,7 @@
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 define([
     'ko',
     'jquery',
@@ -19,11 +23,14 @@ define([
      * Removes from the provided array all non-root nodes located inside
      * of the comment element as long as the closing comment tags.
      *
-     * @param {Array} nodes - An array of nodes to be processed.
+     * @param {(Array|ArrayLike)} nodes - An array of nodes to be processed.
      * @returns {Array}
      */
     function normalize(nodes) {
-        var result = nodes.slice();
+        var result;
+
+        nodes   = _.toArray(nodes);
+        result  = nodes.slice();
 
         nodes.forEach(function (node) {
             if (node.nodeType === 8) {
@@ -38,11 +45,12 @@ define([
 
     /**
      *
+     *
      * @param {...Object} extenders
      * @returns {jQueryCollection} Chainable.
      */
     $.fn.extendCtx = function () {
-        var nodes       = normalize(_.toArray(this)),
+        var nodes       = normalize(this),
             extenders   = _.toArray(arguments);
 
         nodes.forEach(function (node) {
@@ -62,7 +70,7 @@ define([
      * @returns {jQueryCollection} Chainable.
      */
     $.fn.applyBindings = function (ctx) {
-        var nodes = normalize(_.toArray(this)),
+        var nodes = normalize(this),
             nodeCtx;
 
         if (isDomElement(ctx)) {
@@ -86,7 +94,7 @@ define([
      * @returns {jQueryCollection} Chainable.
      */
     $.fn.bindings = function (data, ctx) {
-        var nodes    = normalize(_.toArray(this)),
+        var nodes    = normalize(this),
             bindings = data,
             nodeCtx;
 
