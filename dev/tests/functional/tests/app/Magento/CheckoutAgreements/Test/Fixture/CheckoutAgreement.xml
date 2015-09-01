@@ -18,6 +18,7 @@
         <field name="checkbox_text" is_required="" />
         <field name="is_active" is_required="" />
         <field name="is_html" is_required="" />
+        <field name="mode" is_required="" />
         <field name="stores" source="Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement\Stores" />
     </fixture>
 </config>
