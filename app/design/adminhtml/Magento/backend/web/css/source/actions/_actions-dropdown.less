@@ -148,9 +148,9 @@
 //  Generic select lists
 
 .selectmenu {
-    .__form-control-pattern();
+    &:extend(.abs-form-control-pattern);
     &._focus {
-        .__form-control-pattern__focus();
+        &:extend(.abs-form-control-pattern:focus);
     }
     display: inline-block;
     padding-left: 1.5rem;
@@ -159,7 +159,7 @@
     width: auto;
     z-index: 1;
     &:hover {
-        .__form-control-pattern__hover();
+        &:extend(.abs-form-control-pattern:hover);
     }
     &._active {
         z-index: @action-select__z-index;
@@ -231,14 +231,14 @@
     }
     .selectmenu:hover & {
         &:before {
-            .__form-control-pattern__hover();
+            &:extend(.abs-form-control-pattern:hover);
         }
     }
     .selectmenu._active &:before {
         border-color: @action__active__border-color;
     }
     .selectmenu._focus &:before {
-        .__form-control-pattern__focus();
+        &:extend(.abs-form-control-pattern:focus);
     }
     body._keyfocus &:focus {
         box-shadow: none;
@@ -259,13 +259,6 @@
     }
 }
 .selectmenu-items {
-    ul {
-        float: left;
-        list-style-type: none;
-        margin: 0;
-        min-width: 100%;
-        padding: 0;
-    }
     background: @action-dropdown__background-color;
     border: 1px solid @action__active__border-color;
     box-shadow: @component__box-shadow__base;
@@ -279,6 +272,13 @@
     top: 100%;
     &._active {
         display: block;
+    }
+    ul {
+        float: left;
+        list-style-type: none;
+        margin: 0;
+        min-width: 100%;
+        padding: 0;
     }
     li {
         .vendor-prefix-display(flex);
@@ -331,10 +331,11 @@
     display: block;
     font-size: @font-size__base;
     font-weight: @font-weight__regular;
+    min-width: 100%;
     padding: 1rem 6rem 1rem 1.5rem;
     text-align: left;
     transition: background .2s linear;
-    width: 100%;
+    width: 5rem;
     &:hover,
     &:focus {
         background: @action-menu__hover__background-color;
