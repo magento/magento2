@@ -23,6 +23,8 @@ define([
             storage.removeAll();
             var date = new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000);
             $.localStorage.set('mage-cache-timeout', date);
+        } else {
+            invalidateNonCachedSections(options);
         }
     };
 
@@ -33,10 +35,10 @@ define([
         }
     };
 
-    var invalidateCacheBySections = function(settings) {
-        if (settings.mutableSections && _.intersection(storage.keys(), settings.mutableSections).length > 0) {
-            storage.removeAll();
-        }
+    var invalidateNonCachedSections = function(options) {
+        _.each(options.nonCachedSections, function (sectionName) {
+            storageInvalidation.set(sectionName, true);
+        });
     }
 
     var dataProvider = {
@@ -135,7 +137,6 @@ define([
             options = settings;
             invalidateCacheBySessionTimeOut(settings);
             invalidateCacheByCloseCookieSession();
-            invalidateCacheBySections(settings);
             customerData.init();
         }
     };
