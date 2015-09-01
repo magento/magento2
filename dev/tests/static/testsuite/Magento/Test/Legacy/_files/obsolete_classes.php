@@ -3067,7 +3067,6 @@ return [
     ['Magento\Integration\Model\Integration\Factory', 'Magento\Integration\Model\IntegrationFactory'],
     ['Magento\Webapi\Model\PathProcessor', 'Magento\Webapi\Controller\PathProcessor'],
     ['Magento\Webapi\Helper\Data', 'Magento\Webapi\Model\Soap\Config'],
-    ['Magento\Webapi\Model\Config\ClassReflector', 'Magento\Webapi\Model\Soap\Config\ClassReflector'],
     ['Magento\Webapi\Model\Soap\Server\Factory', 'Magento\Webapi\Model\Soap\ServerFactory'],
     ['Magento\Webapi\Model\Soap\Wsdl\Factory', 'Magento\Webapi\Model\Soap\WsdlFactory'],
     [
@@ -3838,4 +3837,9 @@ return [
     ['Magento\Framework\Gdata\Gshopping\Extension\Shipping'],
     ['Magento\Framework\Gdata\Gshopping\Extension\Control'],
     ['Magento\Framework\Gdata\Gshopping\Extension\Attribute'],
+    ['Magento\Checkout\Model\Agreements\AgreementsValidator', 'Magento\CheckoutAgreements\Model\AgreementsValidator'],
+    [
+        'Magento\Checkout\Model\Agreements\AgreementsProviderInterface',
+        'Magento\CheckoutAgreements\Model\AgreementsProviderInterface'
+    ],
 ];
