@@ -84,14 +84,22 @@
                                 <input name="shipping_method"
                                        class="radio"
                                        type="radio"
-                                       data-bind="attr: {checked: $parent.rates().length == 1, 'value' : method.carrier_code + '_' + method.method_code, 'id': 's_method_' + method.method_code, 'aria-labelledby': 'label_method_' + method.method_code + ' ' + 'label_carrier_' + method.carrier_code}" />
+                                       data-bind="attr: {
+                                                    checked: $parent.rates().length == 1,
+                                                    'value' : method.carrier_code + '_' + method.method_code,
+                                                    'id': 's_method_' + method.method_code,
+                                                    'aria-labelledby': 'label_method_' + method.method_code + '_' + method.carrier_code + ' ' + 'label_carrier_' + method.method_code + '_' + method.carrier_code
+                                                 }" />
                                 <!-- /ko -->
                                 <!--ko ifnot: ($parent.rates().length == 1)-->
                                 <input name="shipping_method" type="radio"
                                        data-bind="
                                                 value: method.carrier_code + '_' + method.method_code,
                                                 checked: $parent.isSelected,
-                                                attr: {'id': 's_method_' + method.carrier_code + '_' + method.method_code},
+                                                attr: {
+                                                    'id': 's_method_' + method.carrier_code + '_' + method.method_code,
+                                                    'aria-labelledby': 'label_method_' + method.method_code + '_' + method.carrier_code + ' ' + 'label_carrier_' + method.method_code + '_' + method.carrier_code
+                                                },
                                                 click: $parent.selectShippingMethod"
                                        class="radio"/>
                                 <!--/ko-->
@@ -104,10 +112,10 @@
                             </td>
 
                             <td class="col col-method"
-                                    data-bind="i18n: method.method_title, attr: {'id': 'label_method_' + method.method_code}"></td>
+                                    data-bind="i18n: method.method_title, attr: {'id': 'label_method_' + method.method_code + '_' + method.carrier_code}"></td>
 
                             <td class="col col-carrier"
-                                    data-bind="i18n: method.carrier_title, attr: {'id': 'label_carrier_' + method.carrier_code}"></td>
+                                    data-bind="i18n: method.carrier_title, attr: {'id': 'label_carrier_' + method.method_code + '_' + method.carrier_code}"></td>
                         </tr>
 
                         <!-- ko if:  method.error_message -->
