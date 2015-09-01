@@ -160,7 +160,7 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
                     $count .
                     '"><span>' .
                     $_value->getTitle() .
-                    '</span>' .
+                    '</span> ' .
                     $priceStr .
                     '</label>';
                 $selectHtml .= '</div>';
