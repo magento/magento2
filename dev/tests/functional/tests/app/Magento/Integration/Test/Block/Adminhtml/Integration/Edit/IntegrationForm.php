@@ -7,7 +7,6 @@
 namespace Magento\Integration\Test\Block\Adminhtml\Integration\Edit;
 
 use Magento\Backend\Test\Block\Widget\FormTabs;
-use Magento\Backend\Block\Widget\Tab;
 
 /**
  * Integration form block.

@@ -13,22 +13,22 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 /**
  * Assert error message is displayed in message block.
  */
-class AssertIntegrationErrorMessage extends AbstractConstraint
+class AssertIntegrationNameDuplicationErrorMessage extends AbstractConstraint
 {
+    const ERROR_DUPLICATE_INTEGRATION_NAME = "Integration with name '%s' exists.";
+
     /**
      * Assert error message is displayed in message block.
      *
      * @param IntegrationIndex $integrationIndexPage
      * @param Integration $integration
-     * @param string $errorMessage
      * @return void
      */
     public function processAssert(
         IntegrationIndex $integrationIndexPage,
-        Integration $integration,
-        $errorMessage
+        Integration $integration
     ) {
-        $expectedMessage = sprintf($errorMessage, $integration->getName());
+        $expectedMessage = sprintf(self::ERROR_DUPLICATE_INTEGRATION_NAME, $integration->getName());
         $actualMessage = $integrationIndexPage->getMessagesBlock()->getErrorMessages();
         \PHPUnit_Framework_Assert::assertEquals(
             $expectedMessage,
@@ -46,6 +46,6 @@ class AssertIntegrationErrorMessage extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Integration error message is correct.';
+        return 'Duplicated integration name error message is correct.';
     }
 }

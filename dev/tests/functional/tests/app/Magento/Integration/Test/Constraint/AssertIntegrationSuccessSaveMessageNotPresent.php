@@ -10,9 +10,9 @@ use Magento\Integration\Test\Page\Adminhtml\IntegrationIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Assert that there is no integration's been saved message
+ * Assert that there is no integration's been saved message.
  */
-class AssertNoIntegrationSuccessSaveMessage extends AbstractConstraint
+class AssertIntegrationSuccessSaveMessageNotPresent extends AbstractConstraint
 {
     /**
      * Assert that there is no integration's been saved message.
