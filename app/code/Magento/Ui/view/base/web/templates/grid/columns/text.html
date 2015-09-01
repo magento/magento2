@@ -7,16 +7,11 @@
 <th
     class="data-grid-th"
     data-bind="
-        afterRender: draggable && $parent.dndConfig.enabled ?
-            (function (elem) { $parent.dnd('addColumn', elem); }) :
-            false,
         css: {
             '_sortable': sortable,
             '_draggable': draggable,
             '_ascend': sorting() === 'asc',
-            '_descend': sorting() === 'desc',
-            '_dragover-left': dragover() === 'right',
-            '_dragover-right': dragover() === 'left'
+            '_descend': sorting() === 'desc'
         },
         click: sort,
         visible: visible">
