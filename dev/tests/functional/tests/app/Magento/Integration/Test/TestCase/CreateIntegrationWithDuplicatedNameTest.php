@@ -66,7 +66,7 @@ class CreateIntegrationWithDuplicatedNameTest extends Injectable
      * Create Integration Entity with existing name test.
      *
      * @param Integration $integration
-     * @return Integration
+     * @return array
      */
     public function test(Integration $integration)
     {
