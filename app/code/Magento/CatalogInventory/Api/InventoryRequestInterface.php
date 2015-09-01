@@ -2,37 +2,32 @@
 
 namespace Magento\CatalogInventory\Api;
 
-use Magento\Catalog\Api\Data\ProductInterface;
-
 /**
- * Request for the inventory records or reservation
+ * Request for the inventory records
  *
  * @api
  */
 interface InventoryRequestInterface
 {
     /**
-     * Returns request identifier it will be used to return matched inventory item
-     *
-     * The best option to use spl_object_hash
+     * Returns identifier of the request
      *
      * @return string
      */
     public function getId();
 
     /**
-     * Returns requested quantity for specified product
+     * Returns an associative array of product requested quantities
+     * in relation to its identifiers
      *
-     * @return float
-     */
-    public function getQuantity();
-
-    /**
-     * Returns product used for reservation
+     * This way of request creation allows to
      *
-     * @return ProductInterface
+     * The result looks like the following:
+     * [$productId => $productQty]
+     *
+     * @return string[]
      */
-    public function getProduct();
+    public function getProductQuantities();
 
     /**
      * Flag for notifying inventory resolver that multiple inventories
