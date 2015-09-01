@@ -105,7 +105,7 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $selectCondition = [];
         foreach ($idKeyNames as $key) {
             if (isset($data[$key])) {
-                $selectCondition[] = $this->getConnection()->quoteInto($key . ' = ? ', $data[$key]);
+                $selectCondition[] = $this->getConnection()->quoteInto($key . ' = ?', $data[$key]);
             }
         }
         $selectCondition = implode(' AND ', $selectCondition);
@@ -213,7 +213,6 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
         )->where(
             $mainTableAlias.'.attribute_id = ?',
             $attributeId
-
         )->where(
             $mainTableAlias.'.disabled = 0'
         )->where(
