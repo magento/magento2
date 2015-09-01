@@ -73,7 +73,7 @@ class InlineEdit extends \Magento\Customer\Controller\Adminhtml\Index
      * Update customer data
      *
      * @param array $data
-     * @return bool|CustomerInterface
+     * @return void
      */
     protected function updateCustomer(array $data)
     {
@@ -93,6 +93,7 @@ class InlineEdit extends \Magento\Customer\Controller\Adminhtml\Index
      * Update customer address data
      *
      * @param array $data
+     * @return void
      */
     protected function updateDefaultBilling(array $data)
     {
@@ -118,6 +119,7 @@ class InlineEdit extends \Magento\Customer\Controller\Adminhtml\Index
      * Add new address to customer
      *
      * @param array $data
+     * @return void
      */
     protected function addNewBilling(array $data)
     {
@@ -139,22 +141,18 @@ class InlineEdit extends \Magento\Customer\Controller\Adminhtml\Index
      * Save customer with error catching
      *
      * @param CustomerInterface $customer
-     * @return bool
+     * @return void
      */
     protected function saveCustomer(CustomerInterface $customer)
     {
         try {
             $this->_customerRepository->save($customer);
-        } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
-            $this->messageManager->addError($this->getErrorWithCustomerId($e->getMessage()));
-        } catch (\Magento\Framework\Validator\Exception $e) {
-            $this->messageManager->addError($this->getErrorWithCustomerId($e->getMessage()));
-        } catch (\Magento\Framework\Exception\InputException $e) {
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($this->getErrorWithCustomerId($e->getMessage()));
         } catch (\Exception $e) {
             $this->messageManager->addError($this->getErrorWithCustomerId('We can\'t save the customer.'));
+            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
-        return true;
     }
 
     /**
@@ -166,6 +164,7 @@ class InlineEdit extends \Magento\Customer\Controller\Adminhtml\Index
     protected function processAddressData(array $data)
     {
         if (isset($data['street'])) {
+            //TODO: will be refactored after problem with street field parsing will be resolved
             $data['street'] = explode("\n", $data['street']);
         }
         foreach (['firstname', 'lastname'] as $requiredField) {
@@ -204,10 +203,12 @@ class InlineEdit extends \Magento\Customer\Controller\Adminhtml\Index
      * Set customer
      *
      * @param CustomerInterface $customer
+     * @return $this
      */
     protected function setCustomer(CustomerInterface $customer)
     {
         $this->customer = $customer;
+        return $this;
     }
 
     /**

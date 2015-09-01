@@ -19,6 +19,7 @@ class ColumnFactory
      */
     protected $jsComponentMap = [
         'text' => 'Magento_Ui/js/grid/columns/column',
+        'select' => 'Magento_Ui/js/grid/columns/select',
         'date' => 'Magento_Ui/js/grid/columns/date',
     ];
 
@@ -29,7 +30,7 @@ class ColumnFactory
         'default' => 'text',
         'text' => 'text',
         'boolean' => 'text',
-        'select' => 'text',
+        'select' => 'select',
         'multiselect' => 'text',
         'date' => 'date',
     ];
@@ -55,6 +56,7 @@ class ColumnFactory
         $config = array_merge([
             'label' => __($attributeData[AttributeMetadata::FRONTEND_LABEL]),
             'dataType' => $this->getDataType($attributeData[AttributeMetadata::FRONTEND_INPUT]),
+            'editor' => $this->getDataType($attributeData[AttributeMetadata::FRONTEND_INPUT]),
             'align' => 'left',
             'visible' => (bool)$attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID],
         ], $config);
