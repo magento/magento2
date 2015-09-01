@@ -13,9 +13,24 @@ define(
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/action/create-billing-address',
         'Magento_Checkout/js/action/select-billing-address',
+        'Magento_Checkout/js/checkout-data',
+        'Magento_Checkout/js/model/checkout-data-resolver',
+        'Magento_Customer/js/customer-data',
         'mage/translate'
     ],
-    function (ko, Component, customer, addressList, quote, createBillingAddress, selectBillingAddress, $t) {
+    function (
+        ko,
+        Component,
+        customer,
+        addressList,
+        quote,
+        createBillingAddress,
+        selectBillingAddress,
+        checkoutData,
+        checkoutDataResolver,
+        customerData,
+        $t
+    ) {
         'use strict';
 
         var lastSelectedBillingAddress = null,
@@ -24,8 +39,10 @@ define(
                 return $t('New Address');
             },
             customerAddressId: null
-        };
-        var addressOptions = addressList().filter(function(address, index, addresses) {
+            },
+            countryData = customerData.get('directory-data');
+
+        var addressOptions = addressList().filter(function(address) {
             return address.getType() == 'customer-address';
         });
         addressOptions.push(newAddressOption);
@@ -38,7 +55,7 @@ define(
             initialize: function () {
                 this._super();
                 quote.paymentMethod.subscribe(function() {
-                    this.cancelAddressEdit();
+                    checkoutDataResolver.resolveBillingAddress();
                 }, this);
             },
 
@@ -48,7 +65,8 @@ define(
                         selectedAddress: null,
                         isAddressDetailsVisible: quote.billingAddress() != null,
                         isAddressFormVisible: !customer.isLoggedIn() || addressOptions.length == 1,
-                        isAddressSameAsShipping: false
+                        isAddressSameAsShipping: false,
+                        saveInAddressBook: true
                     });
 
                 quote.billingAddress.subscribe(function(newAddress) {
@@ -57,6 +75,9 @@ define(
                             && newAddress.getCacheKey() == quote.shippingAddress().getCacheKey()
                             && !quote.isVirtual()
                     );
+                    if (newAddress != null && newAddress.saveInAddressBook !== undefined) {
+                        this.saveInAddressBook(newAddress.saveInAddressBook);
+                    }
                     this.isAddressDetailsVisible(true);
                 }, this);
 
@@ -67,8 +88,6 @@ define(
                 return !quote.isVirtual() && quote.shippingAddress()
                     && quote.shippingAddress().canUseForBilling();
             }),
-
-            saveInAddressBook: true,
 
             currentBillingAddress: quote.billingAddress,
 
@@ -89,25 +108,29 @@ define(
                     quote.billingAddress(null);
                     this.isAddressDetailsVisible(false);
                 }
+                checkoutData.setSelectedBillingAddress(null);
                 return true;
             },
 
             updateAddress: function () {
                 if (this.selectedAddress() && this.selectedAddress() != newAddressOption) {
                     selectBillingAddress(this.selectedAddress());
+                    checkoutData.setSelectedBillingAddress(this.selectedAddress().getKey());
                 } else {
                     this.source.set('params.invalid', false);
                     this.source.trigger(this.dataScopePrefix + '.data.validate');
                     if (!this.source.get('params.invalid')) {
-                        var addressData = this.source.get(this.dataScopePrefix);
-
+                        var addressData = this.source.get(this.dataScopePrefix),
+                            newBillingAddress = createBillingAddress(addressData);
                         if (this.isCustomerLoggedIn && !this.customerHasAddresses) {
-                            this.saveInAddressBook = true;
+                            this.saveInAddressBook(true);
                         }
-                        addressData.save_in_address_book = this.saveInAddressBook;
+                        addressData.save_in_address_book = this.saveInAddressBook();
 
                         // New address must be selected as a billing address
-                        selectBillingAddress(createBillingAddress(addressData));
+                        selectBillingAddress(newBillingAddress);
+                        checkoutData.setSelectedBillingAddress(newBillingAddress.getKey());
+                        checkoutData.setNewCustomerBillingAddress(addressData);
                     }
                 }
             },
@@ -139,6 +162,10 @@ define(
 
             onAddressChange: function (address) {
                 this.isAddressFormVisible(address == newAddressOption);
+            },
+
+            getCountryName: function(countryId) {
+                return (countryData()[countryId] != undefined) ? countryData()[countryId].name : "";
             }
         });
     }

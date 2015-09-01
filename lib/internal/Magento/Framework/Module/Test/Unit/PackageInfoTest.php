@@ -47,7 +47,7 @@ class PackageInfoTest extends \PHPUnit_Framework_TestCase
             ->method('getComposerJsonFiles')
             ->will($this->returnValue($fileIteratorMock));
 
-        $this->packageInfo = new PackageInfo($this->loader, $this->reader, new \Magento\Framework\Stdlib\String());
+        $this->packageInfo = new PackageInfo($this->loader, $this->reader, new \Magento\Framework\Stdlib\StringUtils());
     }
 
     public function testGetModuleName()

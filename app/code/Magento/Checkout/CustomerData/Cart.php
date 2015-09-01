@@ -11,7 +11,7 @@ use Magento\Customer\CustomerData\SectionSourceInterface;
 /**
  * Cart source
  */
-class Cart extends \Magento\Framework\Object implements SectionSourceInterface
+class Cart extends \Magento\Framework\DataObject implements SectionSourceInterface
 {
     /**
      * @var \Magento\Customer\Model\Session
@@ -154,7 +154,7 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
                 if (!isset($products[$productId])) {
                     continue;
                 }
-                $urlDataObject = new \Magento\Framework\Object($products[$productId]);
+                $urlDataObject = new \Magento\Framework\DataObject($products[$productId]);
                 $item->getProduct()->setUrlDataObject($urlDataObject);
             }
             $items[] = $this->itemPoolInterface->getItemData($item);

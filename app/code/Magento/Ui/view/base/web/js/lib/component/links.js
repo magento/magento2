@@ -6,12 +6,20 @@ define([
     'ko',
     'underscore',
     'mageUtils',
-    'Magento_Ui/js/lib/registry/registry'
+    'uiRegistry'
 ], function (ko, _, utils, registry) {
     'use strict';
 
-    function extractData(placeholder, data, direction) {
+    function parseData(placeholder, data, direction) {
+        if (typeof data !== 'string') {
+            return false;
+        }
+
         data = data.split(':');
+
+        if (!data[0]) {
+            return false;
+        }
 
         if (!data[1]) {
             data[1] = data[0];
@@ -29,7 +37,7 @@ define([
         return typeof value !== 'undefined' && value != null;
     }
 
-    function update(data, owner, value) {
+    function updateValue(data, owner, value) {
         var component = owner.component,
             property = owner.property,
             linked = data.linked;
@@ -100,8 +108,8 @@ define([
     }
 
     function setData(maps, property, data) {
-        var direction = data.direction,
-            map = maps[direction];
+        var direction   = data.direction,
+            map         = maps[direction];
 
         data.linked = false;
 
@@ -112,31 +120,42 @@ define([
         setLinked(maps[direction][property], data);
     }
 
-    function transfer(owner, property, data, type) {
-        var direction = data.direction;
+    function setLink(target, owner, data, property, immediate) {
+        var direction = data.direction,
+            formated = form(target, owner, data.property, property, direction),
+            callback,
+            value;
 
-        registry.get(data.target, function (target) {
-            var formated = form(target, owner, data.property, property, direction),
-                callback,
-                value;
+        owner = formated.owner;
+        target = formated.target;
 
-            owner = formated.owner;
-            target = formated.target;
+        callback = updateValue.bind(null, data, target);
 
-            if (type === 'link' || type === 'both') {
-                callback = update.bind(null, data, target);
+        owner.component.on(owner.property, callback, target.component.name);
 
-                owner.component.on(owner.property, callback, target.component.name);
+        if (immediate) {
+            value = getValue(owner);
+
+            if (notEmpty(value)) {
+                updateValue(data, target, value);
             }
+        }
+    }
 
-            if (type === 'transfer' || type === 'both') {
-                value = getValue(owner);
+    function transfer(owner, data) {
+        var args = _.toArray(arguments);
 
-                if (notEmpty(value)) {
-                    update(data, target, value);
-                }
-            }
-        });
+        if (owner.name === data.target) {
+            args.unshift(owner);
+
+            setLink.apply(null, args);
+        } else {
+            registry.get(data.target, function (target) {
+                args.unshift(target);
+
+                setLink.apply(null, args);
+            });
+        }
     }
 
     return {
@@ -147,7 +166,7 @@ define([
             }
         },
 
-        setListners: function (listeners) {
+        setListeners: function (listeners) {
             var owner = this,
                 data;
 
@@ -157,10 +176,12 @@ define([
 
                 sources.forEach(function (target) {
                     callbacks.forEach(function (callback) {
-                        data = extractData(owner.name, target, 'imports');
+                        data = parseData(owner.name, target, 'imports');
 
-                        setData(owner.maps, callback, data);
-                        transfer(owner, callback, data, 'link');
+                        if (data) {
+                            setData(owner.maps, callback, data);
+                            transfer(owner, data, callback);
+                        }
                     });
                 });
             });
@@ -169,14 +190,19 @@ define([
         },
 
         setLinks: function (links, direction) {
-            var property,
+            var owner = this,
+                property,
                 data;
 
             for (property in links) {
-                data = extractData(this.name, links[property], direction);
+                if (links.hasOwnProperty(property)) {
+                    data = parseData(owner.name, links[property], direction);
 
-                setData(this.maps, property, data);
-                transfer(this, property, data, 'both');
+                    if (data) {
+                        setData(owner.maps, property, data);
+                        transfer(owner, data, property, true);
+                    }
+                }
             }
 
             return this;

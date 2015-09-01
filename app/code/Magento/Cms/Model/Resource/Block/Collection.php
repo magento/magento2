@@ -1,37 +1,32 @@
 <?php
 /**
- * Cms block grid collection
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model\Resource\Block;
 
+use \Magento\Cms\Model\Resource\AbstractCollection;
+
 /**
- * Class Collection
+ * CMS Block Collection
  */
-class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
     /**
-     * @return \Magento\Cms\Model\Resource\Block\Collection
+     * @var string
+     */
+    protected $_idFieldName = 'block_id';
+
+    /**
+     * Perform operations after collection load
+     *
+     * @return $this
      */
     protected function _afterLoad()
     {
-        $this->walk('afterLoad');
-        parent::_afterLoad();
-    }
+        $this->performAfterLoad('cms_block_store', 'block_id');
 
-    /**
-     * @param string|array $field
-     * @param string|int|array|null $condition
-     * @return \Magento\Cms\Model\Resource\Block\Collection
-     */
-    public function addFieldToFilter($field, $condition = null)
-    {
-        if ($field == 'store_id') {
-            return $this->addStoreFilter($condition, false);
-        }
-        return parent::addFieldToFilter($field, $condition);
+        return parent::_afterLoad();
     }
 
     /**
@@ -58,42 +53,15 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     /**
      * Add filter by store
      *
-     * @param int|\Magento\Store\Model\Store $store
+     * @param int|array|\Magento\Store\Model\Store $store
      * @param bool $withAdmin
      * @return $this
      */
     public function addStoreFilter($store, $withAdmin = true)
     {
-        if ($store instanceof \Magento\Store\Model\Store) {
-            $store = [$store->getId()];
-        }
-
-        if (!is_array($store)) {
-            $store = [$store];
-        }
-
-        if ($withAdmin) {
-            $store[] = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
-        }
-
-        $this->addFilter('store', ['in' => $store], 'public');
+        $this->performAddStoreFilter($store, $withAdmin);
 
         return $this;
-    }
-
-    /**
-     * Get SQL for get record count.
-     * Extra GROUP BY strip added.
-     *
-     * @return \Magento\Framework\DB\Select
-     */
-    public function getSelectCountSql()
-    {
-        $countSelect = parent::getSelectCountSql();
-
-        $countSelect->reset(\Zend_Db_Select::GROUP);
-
-        return $countSelect;
     }
 
     /**
@@ -103,15 +71,6 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _renderFiltersBefore()
     {
-        if ($this->getFilter('store')) {
-            $this->getSelect()->join(
-                ['store_table' => $this->getTable('cms_block_store')],
-                'main_table.block_id = store_table.block_id',
-                []
-            )->group(
-                'main_table.block_id'
-            );
-        }
-        parent::_renderFiltersBefore();
+        $this->joinStoreRelationTable('cms_block_store', 'block_id');
     }
 }

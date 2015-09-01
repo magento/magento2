@@ -5,7 +5,7 @@
  */
 namespace Magento\Paypal\Model\Payflow\Service\Response\Validator;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Paypal\Model\Payflowpro;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Paypal\Model\Payflow\Service\Response\ValidatorInterface;
@@ -37,7 +37,7 @@ class ResponseValidator implements ValidatorInterface
      * @return void
      * @throws LocalizedException
      */
-    public function validate(Object $response)
+    public function validate(DataObject $response)
     {
         switch ($response->getResult()) {
             case Payflowpro::RESPONSE_CODE_APPROVED:

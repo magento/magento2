@@ -13,14 +13,14 @@ class Metadata extends \Magento\Framework\Model\Resource\Db\VersionControl\Metad
     /**
      * Returns list of entity fields that are applicable for persistence operations
      *
-     * @param \Magento\Framework\Object $entity
+     * @param \Magento\Framework\DataObject $entity
      * @return array
      */
-    public function getFields(\Magento\Framework\Object $entity)
+    public function getFields(\Magento\Framework\DataObject $entity)
     {
         $entityClass = get_class($entity);
         if (!isset($this->metadataInfo[$entityClass])) {
-            $fields = $entity->getResource()->getReadConnection()->describeTable(
+            $fields = $entity->getResource()->getConnection()->describeTable(
                 $entity->getResource()->getEntityTable()
             );
 

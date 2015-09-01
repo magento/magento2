@@ -8,7 +8,7 @@ namespace Magento\Sitemap\Controller\Adminhtml;
 /**
  * XML sitemap controller
  */
-class Sitemap extends \Magento\Backend\App\Action
+abstract class Sitemap extends \Magento\Backend\App\Action
 {
     /**
      * Init actions

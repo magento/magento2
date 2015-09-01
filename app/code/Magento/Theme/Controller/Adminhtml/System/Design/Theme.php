@@ -9,7 +9,7 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design;
 
-class Theme extends \Magento\Backend\App\Action
+abstract class Theme extends \Magento\Backend\App\Action
 {
     /**
      * Core registry

@@ -8,7 +8,7 @@ namespace Magento\Backend\Controller\Adminhtml;
 use Magento\Backend\App\Action;
 use Magento\Framework\Exception\LocalizedException;
 
-class Cache extends Action
+abstract class Cache extends Action
 {
     /**
      * @var \Magento\Framework\App\Cache\TypeListInterface

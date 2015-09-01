@@ -39,7 +39,7 @@ class SearchEngine implements SearchEngineInterface
      */
     public function search(RequestInterface $request)
     {
-        return $this->getAdapter()->query($request);
+        return $this->getConnection()->query($request);
     }
 
     /**
@@ -47,7 +47,7 @@ class SearchEngine implements SearchEngineInterface
      *
      * @return AdapterInterface
      */
-    protected function getAdapter()
+    protected function getConnection()
     {
         if ($this->adapter === null) {
             $this->adapter = $this->adapterFactory->create();

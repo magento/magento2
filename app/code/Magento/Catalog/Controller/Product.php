@@ -10,7 +10,7 @@ namespace Magento\Catalog\Controller;
 use Magento\Catalog\Controller\Product\View\ViewInterface;
 use Magento\Catalog\Model\Product as ModelProduct;
 
-class Product extends \Magento\Framework\App\Action\Action implements ViewInterface
+abstract class Product extends \Magento\Framework\App\Action\Action implements ViewInterface
 {
     /**
      * Initialize requested product object
@@ -22,7 +22,7 @@ class Product extends \Magento\Framework\App\Action\Action implements ViewInterf
         $categoryId = (int)$this->getRequest()->getParam('category', false);
         $productId = (int)$this->getRequest()->getParam('id');
 
-        $params = new \Magento\Framework\Object();
+        $params = new \Magento\Framework\DataObject();
         $params->setCategoryId($categoryId);
 
         /** @var \Magento\Catalog\Helper\Product $product */

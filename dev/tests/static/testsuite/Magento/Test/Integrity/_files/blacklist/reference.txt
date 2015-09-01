@@ -58,10 +58,10 @@ Model3
 \Magento\Mtf\ObjectManager\Config\Mapper\Dom
 \Magento\Mtf\Data\Argument\Interpreter\Constant
 \Magento\Mtf\Data\Argument\Interpreter\Boolean
-\Magento\Mtf\Data\Argument\Interpreter\String
+\Magento\Mtf\Data\Argument\Interpreter\StringType
 \Magento\Mtf\Data\Argument\Interpreter\Number
 \Magento\Mtf\Data\Argument\Interpreter\NullType
-\Magento\Mtf\Data\Argument\Interpreter\Object
+\Magento\Mtf\Data\Argument\Interpreter\ObjectType
 \Magento\Mtf\Data\Argument\Interpreter\Argument
 \Magento\Mtf\Data\Argument\Interpreter\ArrayType
 \Magento\Mtf\Data\Argument\InterpreterInterface
@@ -71,3 +71,4 @@ Model3
 \Magento\Mtf\TestSuite\AppState
 \Magento\Framework\A
 \Magento\Framework\B
+DoubleColon

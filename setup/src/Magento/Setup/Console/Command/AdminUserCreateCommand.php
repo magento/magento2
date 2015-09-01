@@ -102,7 +102,7 @@ class AdminUserCreateCommand extends AbstractSetupCommand
     public function validate(InputInterface $input)
     {
         $errors = [];
-        $user = new \Magento\Framework\Object();
+        $user = new \Magento\Framework\DataObject();
         $user->setFirstname($input->getOption(AdminAccount::KEY_FIRST_NAME))
             ->setLastname($input->getOption(AdminAccount::KEY_LAST_NAME))
             ->setUsername($input->getOption(AdminAccount::KEY_USER))
@@ -112,7 +112,7 @@ class AdminUserCreateCommand extends AbstractSetupCommand
                 ? '' : $input->getOption(AdminAccount::KEY_PASSWORD)
             );
 
-        $validator = new \Magento\Framework\Validator\Object;
+        $validator = new \Magento\Framework\Validator\DataObject;
         $this->validationRules->addUserInfoRules($validator);
         $this->validationRules->addPasswordRules($validator);
 

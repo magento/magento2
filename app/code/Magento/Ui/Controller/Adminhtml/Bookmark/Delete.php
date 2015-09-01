@@ -48,7 +48,7 @@ class Delete extends AbstractAction
      *
      * @return void
      */
-    public function execute()
+    protected function execute()
     {
         $viewIds = explode('.', $this->_request->getParam('data'));
         $bookmark = $this->bookmarkManagement->getByIdentifierNamespace(

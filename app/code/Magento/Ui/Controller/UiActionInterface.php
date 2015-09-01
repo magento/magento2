@@ -15,5 +15,5 @@ interface UiActionInterface
      *
      * @return mixed
      */
-    public function execute();
+    public function executeAjaxRequest();
 }

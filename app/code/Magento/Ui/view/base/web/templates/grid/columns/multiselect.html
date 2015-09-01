@@ -5,9 +5,9 @@
  */
 -->
 
-<th class="data-grid-multiselect-cell">
+<th class="data-grid-multicheck-cell">
     <div
-        class="action-multiselect-wrap"
+        class="action-multicheck-wrap"
         data-bind="css: { '_active': menuVisible, '_disabled': !totalRecords()},
                    outerClick: hideMenu">
         <input
@@ -20,22 +20,20 @@
                        enable: totalRecords">
         <label for="mass-select-checkbox"></label>
         <button
-            class="action-multiselect-toggle"
+            class="action-multicheck-toggle"
             data-toggle="dropdown"
             data-bind="css: { '_active': menuVisible },
                        click: toggleMenu,
                        enable: totalRecords">
-            <span data-bind="text: $t('Options')"></span>
+            <span data-bind="i18n: 'Options'"></span>
         </button>
         <ul
             class="action-menu"
-            data-bind="click: hideMenu">
-            <!-- ko foreach: actions -->
+            data-bind="click: hideMenu, foreach: actions">
             <li data-bind="click: $parent[value].bind($parent),
                            visible: $parent.isActionRelevant(value)">
                 <span class="action-menu-item" data-bind="text: label"></span>
             </li>
-            <!-- /ko -->
         </ul>
     </div>
 </th>

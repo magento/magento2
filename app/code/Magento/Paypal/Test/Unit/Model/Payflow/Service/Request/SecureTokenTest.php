@@ -6,7 +6,7 @@
 namespace Magento\Paypal\Test\Unit\Model\Payflow\Service\Request;
 
 use Magento\Framework\Math\Random;
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\UrlInterface;
 use Magento\Paypal\Model\Payflow\Service\Request\SecureToken;
 use Magento\Paypal\Model\Payflow\Transparent;
@@ -51,7 +51,7 @@ class SecureTokenTest extends \PHPUnit_Framework_TestCase
 
     public function testRequestToken()
     {
-        $request = new Object();
+        $request = new DataObject();
         $secureTokenID = 'Sdj46hDokds09c8k2klaGJdKLl032ekR';
 
         $this->transparent->expects($this->once())
@@ -64,7 +64,7 @@ class SecureTokenTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->getMock('Magento\Paypal\Model\PayflowConfig', [], [], '', false));
         $this->transparent->expects($this->once())
             ->method('postRequest')
-            ->willReturn(new Object());
+            ->willReturn(new DataObject());
 
         $this->mathRandom->expects($this->once())
             ->method('getUniqueHash')

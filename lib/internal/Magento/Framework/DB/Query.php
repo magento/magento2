@@ -69,10 +69,10 @@ class Query implements QueryInterface
      * @var array
      */
     protected $countSqlSkipParts = [
-        \Zend_Db_Select::ORDER => true,
-        \Zend_Db_Select::LIMIT_COUNT => true,
-        \Zend_Db_Select::LIMIT_OFFSET => true,
-        \Zend_Db_Select::COLUMNS => true,
+        \Magento\Framework\DB\Select::ORDER => true,
+        \Magento\Framework\DB\Select::LIMIT_COUNT => true,
+        \Magento\Framework\DB\Select::LIMIT_OFFSET => true,
+        \Magento\Framework\DB\Select::COLUMNS => true,
     ];
 
     /**
@@ -111,10 +111,10 @@ class Query implements QueryInterface
     public function getAllIds()
     {
         $idsSelect = clone $this->getSelect();
-        $idsSelect->reset(\Zend_Db_Select::ORDER);
-        $idsSelect->reset(\Zend_Db_Select::LIMIT_COUNT);
-        $idsSelect->reset(\Zend_Db_Select::LIMIT_OFFSET);
-        $idsSelect->reset(\Zend_Db_Select::COLUMNS);
+        $idsSelect->reset(\Magento\Framework\DB\Select::ORDER);
+        $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
+        $idsSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
         $idsSelect->columns($this->getResource()->getIdFieldName(), 'main_table');
         return $this->getConnection()->fetchCol($idsSelect, $this->bindParams);
     }
@@ -218,7 +218,7 @@ class Query implements QueryInterface
      */
     public function getConnection()
     {
-        return $this->getSelect()->getAdapter();
+        return $this->getSelect()->getConnection();
     }
 
     /**

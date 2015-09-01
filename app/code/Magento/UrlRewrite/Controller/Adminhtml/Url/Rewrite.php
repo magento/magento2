@@ -12,7 +12,7 @@ use Magento\Catalog\Model\Product;
 /**
  * URL rewrite adminhtml controller
  */
-class Rewrite extends Action
+abstract class Rewrite extends Action
 {
     /**#@+
      * Entity types

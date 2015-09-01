@@ -46,13 +46,15 @@ if ($variations) {
                     'value' => $optionId,
                 ];
                 $variationOptions[] = $variationOption;
-                $attributes[$attribute->getAttributeId()]['chosen'][] = $variationOption;
+                $attributes[$attribute->getAttributeId()]['chosen'][$optionId] = $variationOption;
             }
 
             $productMatrix[] = [
                 'product_id' => $product->getId(),
                 'images' => [
-                    'preview' => (string)$this->helper('Magento\Catalog\Helper\Image')->init($product, 'thumbnail')
+                    'preview' => $this->helper('Magento\Catalog\Helper\Image')
+                        ->init($product, 'product_thumbnail_image')
+                        ->getUrl()
                 ],
                 'sku' => $product->getSku(),
                 'name' => $product->getName(),
@@ -64,6 +66,7 @@ if ($variations) {
             ];
         }
     }
+    $attributes = array_values($attributes);
 }
 ?>
 
@@ -105,7 +108,7 @@ if ($variations) {
                 </div>
                 <!-- /ko -->
             </div>
-            <div class="admin__data-grid-wrap">
+            <div class="admin__data-grid-wrap admin__data-grid-wrap-static">
                 <table class="data-grid"
                 ">
                 <thead>
@@ -137,31 +140,30 @@ if ($variations) {
                 </tr>
                 </thead>
                 <tbody data-bind="foreach: {data: productMatrix, as: 'variation'}">
-                <tr data-role="row" data-bind="attr: {class:  $index() % 2 ? 'even' : '', 'data-row-number': $index()}">
+                <tr data-role="row" data-bind="css: { _disabled: !variation.status, even: $index() % 2 }, attr: { 'data-row-number': $index() }">
                     <td class="col-image" data-column="image">
                         <div class="actions split actions-image-uploader">
-                            <!-- ko if: variation.readonly -->
+                            <div class="action-upload action split" data-action="upload-image">
+                                <!-- ko if: $parent.isShowPreviewImage(variation) -->
                                 <img data-bind='attr: {src: variation.images.preview}' class="variation" data-role="image"/>
-                            <!-- /ko -->
-                            <!-- ko ifnot: variation.readonly -->
-                                <!-- ko ifnot: variation.images.file-->
-                                <div class="action-upload action split" data-action="upload-image">
-                                    <input type="hidden" data-bind="attr: {id: $parent.getRowId(variation, 'image'), name: $parent.getVariationRowName(variation, 'image')}"/>
-                                    <span><?= __('Upload Image'); ?></span>
-                                    <input name="image" type="file"
-                                           data-url="<?= $block->escapeHtml($block->getImageUploadUrl()) ?>"
-                                           title="<?= $block->escapeHtml(__('Upload image')); ?>"/>
-                                </div>
-                                <button type="button" class="action toggle no-display" data-toggle="dropdown"
-                                        data-mage-init='{"dropdown":{}}'>
-                                    <span><?= __('Select'); ?></span>
-                                </button>
                                 <!-- /ko -->
+                                <!-- ko if: variation.editable-->
+                                <input type="hidden" data-bind="attr: {id: $parent.getRowId(variation, 'image'), name: $parent.getVariationRowName(variation, 'image')}"/>
+                                <span><?= __('Upload Image'); ?></span>
+                                <input name="image" type="file"
+                                       data-url="<?= $block->escapeHtml($block->getImageUploadUrl()) ?>"
+                                       title="<?= $block->escapeHtml(__('Upload image')); ?>"/>
+                                <!-- /ko -->
+                            </div>
+                            <!-- ko if: variation.editable -->
                             <!-- ko if: variation.images.file -->
-                                <img data-bind='attr: {src: variation.images.preview}' class="variation" data-role="image"/>
-                                <span data-bind="html: $parent.generateImageGallery(variation)"></span>
+                                <span data-bind="html: $parent.generateImageGallery(variation)" data-block="variation-images"></span>
                             <!-- /ko -->
                             <!-- /ko -->
+                            <button type="button" class="action toggle no-display" data-toggle="dropdown"
+                                    data-mage-init='{"dropdown":{}}'>
+                                <span><?= __('Select'); ?></span>
+                            </button>
                             <ul class="dropdown">
                                 <li>
                                     <a class="item" data-action="no-image"><?= __('No Image'); ?></a>
@@ -170,35 +172,35 @@ if ($variations) {
                         </div>
                     </td>
                     <td class="col-name" data-column="name">
-                        <!-- ko if: variation.readonly -->
+                        <!-- ko ifnot: variation.editable -->
                         <a target="_blank" data-bind="text: variation.name,
                             attr: {href: variation.productUrl}">
                         </a>
                         <!-- /ko -->
-                        <!-- ko ifnot: variation.readonly -->
-                        <input type="text" data-bind="attr: {id: $parent.getRowId(variation, 'name'), name: $parent.getVariationRowName(variation, 'name'), value: variation.sku}"/>
+                        <!-- ko if: variation.editable -->
+                        <input type="text" class="required-entry" data-bind="attr: {id: $parent.getRowId(variation, 'name'), name: $parent.getVariationRowName(variation, 'name'), value: variation.sku}"/>
                         <input type="hidden" data-bind="attr: {id: $parent.getRowId(variation, 'configurable_attribute'), name: $parent.getVariationRowName(variation, 'configurable_attribute'), value: variation.attribute}"/>
-                        <input type="hidden" data-role="status" data-bind="attr: {name: $parent.getVariationRowName(variation, 'status'), value: variation.status}"/>
                         <!-- /ko -->
+                        <input type="hidden" data-role="status" data-bind="attr: {name: $parent.getVariationRowName(variation, 'status'), value: variation.status}"/>
                     </td>
                     <td class="col-sku" data-column="sku">
-                        <!-- ko if: variation.readonly -->
+                        <!-- ko ifnot: variation.editable -->
                             <!-- ko text: variation.sku --><!--/ko-->
                         <!-- /ko -->
-                        <!-- ko ifnot: variation.readonly -->
-                        <input type="text"
+                        <!-- ko if: variation.editable -->
+                        <input type="text" class="required-entry"
                                data-bind="attr: {id: $parent.getRowId(variation, 'sku'), name: $parent.getVariationRowName(variation, 'sku'), value: variation.sku}"/>
                         <!-- /ko -->
                     </td>
                     <td class="col-price" data-column="price">
-                        <!-- ko if: variation.readonly -->
+                        <!-- ko ifnot: variation.editable -->
                             <!-- ko text: variation.price --><!--/ko-->
                         <!-- /ko -->
-                        <!-- ko ifnot: variation.readonly -->
+                        <!-- ko if: variation.editable -->
                         <div class="addon">
                             <input type="text"
                                    id=""
-                                   class="validate-zero-or-greater"
+                                   class="required-entry validate-zero-or-greater"
                                    data-bind="attr: {id: $parent.getRowId(variation, 'price'), name: $parent.getVariationRowName(variation, 'price'), value: variation.price}"/>
                             <label class="addafter"
                                    data-bind="attr: {for: $parent.getRowId(variation, 'price')"><strong>$</strong></label>
@@ -207,22 +209,22 @@ if ($variations) {
 
                     </td>
                     <td class="col-qty" data-column="qty">
-                        <!-- ko if: variation.readonly -->
+                        <!-- ko ifnot: variation.editable -->
                             <!-- ko text: variation.quantity --><!--/ko-->
                         <!-- /ko -->
-                        <!-- ko ifnot: variation.readonly -->
+                        <!-- ko if: variation.editable -->
                         <input type="text"
-                               class="validate-number"
+                               class="validate-zero-or-greater"
                                data-bind="attr: {id: $parent.getRowId(variation, 'qty'), name: $parent.getVariationRowName(variation, 'quantity_and_stock_status/qty'), value: variation.quantity}"/>
                         <!-- /ko -->
 
                     </td>
                     <td class="col-weight" data-column="weight">
-                        <!-- ko if: variation.readonly -->
+                        <!-- ko ifnot: variation.editable -->
                             <!-- ko text: variation.weight --><!--/ko-->
                         <!-- /ko -->
-                        <!-- ko ifnot: variation.readonly -->
-                        <input type="text"
+                        <!-- ko if: variation.editable -->
+                        <input type="text" class="validate-zero-or-greater"
                                data-bind="attr: {id: $parent.getRowId(variation, 'weight'), name: $parent.getVariationRowName(variation, 'weight'), value: variation.weight}"/>
                         <!-- /ko -->
 
@@ -239,20 +241,18 @@ if ($variations) {
                             },
                             outerClick: $parent.closeList.bind($parent, $index())">
                             <button class="action-select" data-bind="click: $parent.toggleList.bind($parent, $index())">
-                                <span data-bind="text: $t('Select')"></span>
+                                <span data-bind="i18n: 'Select'"></span>
                             </button>
                             <ul class="action-menu _active" data-bind="css: {'_active': $parent.opened() === $index()}">
                                 <li>
                                     <a class="action-menu-item" data-bind="attr: {'data-attributes': variation.attribute}"
                                        data-action="choose" href="#"><?= __('Choose a different Product');?></a>
                                 </li>
-                                <!-- ko ifnot: variation.readonly -->
                                 <li>
                                     <a class="action-menu-item" data-bind="
-                                    text: variation.status == 1 ? $t('Disable Product') : $t('Enable Product'),
+                                    i18n: variation.status == 1 ? 'Disable Product' : 'Enable Product',
                                     click: $parent.toggleProduct.bind($parent, $index())"></a>
                                 </li>
-                                <!-- /ko -->
                                 <li>
                                     <a class="action-menu-item" data-bind="click: $parent.removeProduct.bind($parent, $index())">
                                         <?= __('Remove Product');?>
@@ -269,6 +269,17 @@ if ($variations) {
         </div>
     <!-- /ko -->
 </div>
+<div data-role="step-wizard-dialog"
+     data-mage-init='{"Magento_Ui/js/modal/modal":{"type":"slide","title":"<?= __('Create Product Configurations') ?>",
+     "buttons":[]}}'
+     class="no-display">
+    <?php
+    echo $block->getVariationWizard([
+        'attributes' => $attributes,
+        'configurations' => $productMatrix
+    ]);
+    ?>
+</div>
 <script type="text/x-magento-init">
     {
         "*": {
@@ -277,7 +288,7 @@ if ($variations) {
                     "configurableVariations": {
                         "component": "Magento_ConfigurableProduct/js/variations/variations",
                         "variations": <?= $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($productMatrix) ?>,
-                        "productAttributes": <?= $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode(array_values($attributes)) ?>,
+                        "productAttributes": <?= $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($attributes) ?>,
                         "productUrl": "<?= $block->getUrl('catalog/product/edit', ['id' => '%id%']) ?>"
                     }
                 }

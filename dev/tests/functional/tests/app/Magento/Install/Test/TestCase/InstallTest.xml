@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Install\Test\TestCase\InstallTest">
+    <testCase name="Magento\Install\Test\TestCase\InstallTest" summary="[Web Setup][Auto] Install CE Magento via Web Interface" ticketId="MAGETWO-31431">
         <variation name="InstallTestVariation1">
             <data name="description" xsi:type="string">Install with default values.</data>
             <data name="user/dataset" xsi:type="string">default</data>

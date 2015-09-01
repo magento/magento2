@@ -7,8 +7,7 @@ define([
     'underscore',
     'ko',
     'Magento_Customer/js/section-config',
-    'jquery/jquery-storageapi',
-    'jquery/jquery.cookie'
+    'jquery/jquery-storageapi'
 ], function ($, _, ko, sectionConfig) {
     'use strict';
 
@@ -43,6 +42,7 @@ define([
             return result;
         },
         getFromServer: function (sectionNames) {
+            sectionNames = sectionConfig.filterClientSideSections(sectionNames);
             var parameters = _.isArray(sectionNames) ? {sections: sectionNames.join(',')} : [];
             return $.getJSON(options.sectionLoadUrl, parameters).fail(function(jqXHR) {
                 throw new Error(jqXHR);
@@ -111,6 +111,11 @@ define([
         },
         get: function (sectionName) {
             return buffer.get(sectionName);
+        },
+        set: function (sectionName, sectionData) {
+            var data = {};
+            data[sectionName] = sectionData;
+            buffer.update(data);
         },
         reload: function (sectionNames) {
             return dataProvider.getFromServer(sectionNames).done(function (sections) {

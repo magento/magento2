@@ -456,7 +456,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->method('isAjax')
             ->willReturn($isAjax);
 
-        $buyRequestMock = $this->getMockBuilder('Magento\Framework\Object')
+        $buyRequestMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -662,7 +662,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->method('getParams')
             ->willReturn($params);
 
-        $buyRequestMock = $this->getMockBuilder('Magento\Framework\Object')
+        $buyRequestMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -823,7 +823,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->method('getParams')
             ->willReturn($params);
 
-        $buyRequestMock = $this->getMockBuilder('Magento\Framework\Object')
+        $buyRequestMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
 

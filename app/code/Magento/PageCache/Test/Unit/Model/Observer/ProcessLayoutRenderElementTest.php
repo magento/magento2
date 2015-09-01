@@ -29,7 +29,7 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Event\Observer */
     protected $_observerMock;
 
-    /** @var \Magento\Framework\Object */
+    /** @var \Magento\Framework\DataObject */
     protected $_transport;
 
     /**
@@ -69,7 +69,7 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
             true,
             ['getData', 'isScopePrivate', 'getNameInLayout', 'getUrl']
         );
-        $this->_transport = new \Magento\Framework\Object(['output' => 'test output html']);
+        $this->_transport = new \Magento\Framework\DataObject(['output' => 'test output html']);
     }
 
     /**

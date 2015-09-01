@@ -10,7 +10,7 @@ use Magento\Backend\App\AbstractAction;
 /**
  * Auth backend controller
  */
-class Auth extends AbstractAction
+abstract class Auth extends AbstractAction
 {
     /**
      * Check if user has permissions to access this controller

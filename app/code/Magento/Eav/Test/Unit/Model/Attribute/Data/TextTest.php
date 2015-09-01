@@ -31,7 +31,7 @@ class TextTest extends \PHPUnit_Framework_TestCase
             false
         );
         $logger = $this->getMock('Psr\Log\LoggerInterface');
-        $helper = $this->getMock('Magento\Framework\Stdlib\String', [], [], '', false, false);
+        $helper = $this->getMock('Magento\Framework\Stdlib\StringUtils', [], [], '', false, false);
 
         $attributeData = [
             'store_label' => 'Test',

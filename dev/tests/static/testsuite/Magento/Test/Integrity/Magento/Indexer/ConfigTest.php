@@ -19,7 +19,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getXsd()
     {
-        return '/app/code/Magento/Indexer/etc/indexer_merged.xsd';
+        return '/lib/internal/Magento/Framework/Indexer/etc/indexer_merged.xsd';
     }
 
     /**
@@ -69,7 +69,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getFileXsd()
     {
-        return '/app/code/Magento/Indexer/etc/indexer.xsd';
+        return '/lib/internal/Magento/Framework/Indexer/etc/indexer.xsd';
     }
 
     /**
@@ -79,6 +79,6 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getXmlName()
     {
-        return '/app/code/Magento/Indexer/etc/indexer.xml';
+        return '/lib/internal/Magento/Framework/Indexer/etc/indexer.xml';
     }
 }

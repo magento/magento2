@@ -11,13 +11,13 @@ use Magento\Customer\Model\Metadata\Form\Text;
 
 class TextTest extends AbstractFormTestCase
 {
-    /** @var \Magento\Framework\Stdlib\String */
+    /** @var \Magento\Framework\Stdlib\StringUtils */
     protected $stringHelper;
 
     protected function setUp()
     {
         parent::setUp();
-        $this->stringHelper = new \Magento\Framework\Stdlib\String();
+        $this->stringHelper = new \Magento\Framework\Stdlib\StringUtils();
     }
 
     /**

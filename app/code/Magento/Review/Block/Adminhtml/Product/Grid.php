@@ -148,7 +148,7 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
     /**
      * Get catalog product row url
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
     public function getRowUrl($row)

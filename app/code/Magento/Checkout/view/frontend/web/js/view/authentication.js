@@ -21,6 +21,7 @@ define(
             isCustomerLoginRequired: checkoutConfig.isCustomerLoginRequired,
             registerUrl: checkoutConfig.registerUrl,
             forgotPasswordUrl: checkoutConfig.forgotPasswordUrl,
+            autocomplete: checkoutConfig.autocomplete,
             defaults: {
                 template: 'Magento_Checkout/authentication'
             },
@@ -42,7 +43,7 @@ define(
                 if($(loginForm).validation()
                     && $(loginForm).validation('isValid')
                 ) {
-                    loginAction(loginData);
+                    loginAction(loginData, checkoutConfig.checkoutUrl);
                 }
             }
         });

@@ -339,10 +339,10 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
     /**
      * Validate rule conditions to determine if rule can run
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return bool
      */
-    public function validate(\Magento\Framework\Object $object)
+    public function validate(\Magento\Framework\DataObject $object)
     {
         return $this->getConditions()->validate($object);
     }
@@ -350,12 +350,12 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
     /**
      * Validate rule data
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return bool|string[] - return true if validation passed successfully. Array with errors description otherwise
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function validateData(\Magento\Framework\Object $object)
+    public function validateData(\Magento\Framework\DataObject $object)
     {
         $result = [];
         $fromDate = $toDate = null;

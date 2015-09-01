@@ -26,7 +26,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Helper\Product\Configuration $productConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @param \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param PriceCurrencyInterface $priceCurrency
@@ -39,7 +39,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Catalog\Helper\Product\Configuration $productConfig,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Catalog\Helper\Image $imageHelper,
+        \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder,
         \Magento\Framework\Url\Helper\Data $urlHelper,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         PriceCurrencyInterface $priceCurrency,
@@ -52,7 +52,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
             $context,
             $productConfig,
             $checkoutSession,
-            $imageHelper,
+            $imageBuilder,
             $urlHelper,
             $messageManager,
             $priceCurrency,

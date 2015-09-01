@@ -2,6 +2,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'underscore',
     'mageUtils',
@@ -19,7 +20,7 @@ define([
             disabled: false,
             tmpPath: 'ui/form/element/',
             tooltipTpl: 'ui/form/element/helper/tooltip',
-            input_type: 'input',
+            'input_type': 'input',
             placeholder: '',
             description: '',
             label: '',
@@ -29,7 +30,6 @@ define([
             additionalClasses: {},
 
             listens: {
-                value: 'onUpdate',
                 visible: 'setPreview',
                 '${ $.provider }:data.reset': 'reset',
                 '${ $.provider }:${ $.customScope ? $.customScope + "." : ""}data.validate': 'validate'
@@ -48,11 +48,8 @@ define([
             _.bindAll(this, 'reset');
 
             this._super()
+                .setInitialValue()
                 ._setClasses();
-
-            this.initialValue = this.getInitialValue();
-
-            this.value(this.initialValue);
 
             return this;
         },
@@ -95,27 +92,41 @@ define([
         },
 
         /**
+         * Sets initial value of the element and subscribes to it's changes.
+         *
+         * @returns {Abstract} Chainable.
+         */
+        setInitialValue: function () {
+            this.initialValue = this.getInitialValue();
+
+            this.value(this.initialValue);
+            this.on('value', this.onUpdate.bind(this));
+
+            return this;
+        },
+
+        /**
          * Extends 'additionalClasses' object.
          *
          * @returns {Abstract} Chainable.
          */
         _setClasses: function () {
-            var addtional = this.additionalClasses,
+            var additional = this.additionalClasses,
                 classes;
 
-            if (_.isString(addtional)) {
-                addtional = this.additionalClasses.split(' ');
+            if (_.isString(additional) && additional.trim().length) {
+                additional = this.additionalClasses.trim().split(' ');
                 classes = this.additionalClasses = {};
 
-                addtional.forEach(function (name) {
+                additional.forEach(function (name) {
                     classes[name] = true;
                 }, this);
             }
 
             _.extend(this.additionalClasses, {
-                required:   this.required,
-                _error:     this.error,
-                _disabled:  this.disabled
+                required: this.required,
+                _error: this.error,
+                _disabled: this.disabled
             });
 
             return this;
@@ -134,7 +145,7 @@ define([
                 return !utils.isEmpty(value = v);
             });
 
-            return utils.isEmpty(value) ? '' : value;
+            return this.normalizeData(value);
         },
 
         /**
@@ -179,6 +190,11 @@ define([
             return !this.visible() ? false : notEqual;
         },
 
+        /**
+         * Checks if 'value' is not empty.
+         *
+         * @returns {Boolean}
+         */
         hasData: function () {
             return !utils.isEmpty(this.value());
         },
@@ -202,11 +218,21 @@ define([
         },
 
         /**
+         * Converts values like 'null' or 'undefined' to an empty string.
+         *
+         * @param {*} value - Value to be processed.
+         * @returns {*}
+         */
+        normalizeData: function (value) {
+            return utils.isEmpty(value) ? '' : value;
+        },
+
+        /**
          * Validates itself by it's validation rules using validator object.
          * If validation of a rule did not pass, writes it's message to
          * 'error' observable property.
          *
-         * @returns {Boolean} True, if element is invalid.
+         * @returns {Object} Validate information.
          */
         validate: function () {
             var value = this.value(),

@@ -35,8 +35,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
      */
     protected $params;
 
-    /** @var
-     * \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+    /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $connection;
 
@@ -75,9 +74,9 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $select->expects($this->any())->method('from')->will($this->returnSelf());
         $select->expects($this->any())->method('where')->will($this->returnSelf());
         $select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
-        $adapter = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
-        $adapter->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
-        $select->expects($this->any())->method('getAdapter')->willReturn($adapter);
+        $connection = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $connection->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
+        $select->expects($this->any())->method('getConnection')->willReturn($connection);
         $this->connection->expects($this->any())->method('select')->will($this->returnValue($select));
         $this->connection->expects($this->any())->method('fetchPairs')->will($this->returnValue([
             '1' => '1', '2' => '2'
@@ -168,11 +167,11 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             $allowImport
         ));
 
-        $adapter = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
-        $adapter->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
+        $connection = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $connection->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
 
         $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
-        $select->expects($this->any())->method('getAdapter')->willReturn($adapter);
+        $select->expects($this->any())->method('getConnection')->willReturn($connection);
         $select->expects($this->any())->method('from')->will($this->returnSelf());
         $select->expects($this->any())->method('where')->will($this->returnSelf());
         $select->expects($this->any())->method('joinLeft')->will($this->returnSelf());

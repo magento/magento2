@@ -130,7 +130,10 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $dbSelect->expects($this->any())->method('from')->willReturnSelf();
         $dbSelect->expects($this->any())->method('where')->willReturnSelf();
 
-        $dbAdapter = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $dbAdapter = $this->getMockBuilder('Magento\Framework\DB\Adapter\Pdo\Mysql')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $dbAdapter->expects($this->any())
             ->method('describeTable')
             ->with('customer_address_entity')
@@ -148,7 +151,10 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $dbAdapter->expects($this->any())->method('lastInsertId');
         $dbAdapter->expects($this->any())->method('select')->willReturn($dbSelect);
 
-        $resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $resource = $this->getMockBuilder('Magento\Framework\App\Resource')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $resource->expects($this->any())->method('getConnection')->will($this->returnValue($dbAdapter));
         $resource->expects($this->any())->method('getTableName')->will($this->returnValue('customer_address_entity'));
 

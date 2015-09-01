@@ -142,9 +142,13 @@ class AttributeMerger
             'visible' => isset($additionalConfig['visible']) ? $additionalConfig['visible'] : true,
         ];
 
-        $defaultValue = $this->getDefaultValue($attributeCode);
-        if (null !== $defaultValue) {
-            $element['value'] = $defaultValue;
+        if (isset($attributeConfig['value']) && $attributeConfig['value'] != null) {
+            $element['value'] = $attributeConfig['value'];
+        } else {
+            $defaultValue = $this->getDefaultValue($attributeCode);
+            if (null !== $defaultValue) {
+                $element['value'] = $defaultValue;
+            }
         }
         return $element;
     }

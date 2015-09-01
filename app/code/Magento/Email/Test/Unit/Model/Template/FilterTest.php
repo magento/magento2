@@ -16,7 +16,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\Stdlib\String|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject
      */
     private $string;
 
@@ -79,7 +79,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $this->string = $this->getMockBuilder('\Magento\Framework\Stdlib\String')
+        $this->string = $this->getMockBuilder('\Magento\Framework\Stdlib\StringUtils')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -272,7 +272,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             ],
             'CSS with error does not get inlined' => [
                 '<html><p></p></html>',
-                \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX,
+                \Magento\Framework\Css\PreProcessor\AdapterInterface::ERROR_MESSAGE_PREFIX,
                 ['<html><p></p></html>'],
             ],
             'Ensure disableStyleBlocksParsing option is working' => [

@@ -2,12 +2,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'jquery',
     'underscore',
     'mageUtils',
-    'uiComponent'
-], function ($, _, utils, Component) {
+    'uiComponent',
+    'Magento_Ui/js/modal/alert',
+    'mage/translate'
+], function ($, _, utils, Component, alert, $t) {
     'use strict';
 
     return Component.extend({
@@ -17,6 +20,9 @@ define([
             }
         },
 
+        /**
+         * initialize provider
+         */
         initialize: function () {
             utils.limit(this, 'reload', 200);
             _.bindAll(this, 'onReload');
@@ -24,6 +30,9 @@ define([
             return this._super();
         },
 
+        /**
+         * initialize config
+         */
         initConfig: function () {
             this._super();
 
@@ -35,6 +44,9 @@ define([
             return this;
         },
 
+        /**
+         * reload data from server
+         */
         reload: function () {
             this.trigger('reload');
 
@@ -43,9 +55,23 @@ define([
                 method: 'GET',
                 data: this.get('params'),
                 dataType: 'json'
-            }).done(this.onReload);
+            })
+            .error(this.onError)
+            .done(this.onReload);
         },
 
+        /**
+         * alert with error message
+         */
+        onError: function () {
+            alert({
+                content: $t('Something goes wrong')
+            });
+        },
+
+        /**
+         * set data and triggered reloaded
+         */
         onReload: function (data) {
             this.set('data', data)
                 .trigger('reloaded');

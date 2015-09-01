@@ -43,7 +43,7 @@ class ShortcutTest extends \PHPUnit_Framework_TestCase
     protected $urlBuilderMock;
 
     /**
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\DataObject
      */
     protected $container;
 
@@ -90,7 +90,7 @@ class ShortcutTest extends \PHPUnit_Framework_TestCase
             ->method('getUrlBuilder')
             ->willReturn($this->urlBuilderMock);
 
-        $this->container = new \Magento\Framework\Object(
+        $this->container = new \Magento\Framework\DataObject(
             [
                 'module_name' => 'Magento_Catalog',
             ]
@@ -127,7 +127,7 @@ class ShortcutTest extends \PHPUnit_Framework_TestCase
     public function testGetAmount()
     {
         $amount = 10.5;
-        $quote = new \Magento\Framework\Object(
+        $quote = new \Magento\Framework\DataObject(
             [
                 'base_grand_total' => $amount,
             ]
@@ -156,9 +156,9 @@ class ShortcutTest extends \PHPUnit_Framework_TestCase
     {
         $currency = 'USD';
 
-        $quote = new \Magento\Framework\Object(
+        $quote = new \Magento\Framework\DataObject(
             [
-                'currency' => new \Magento\Framework\Object(
+                'currency' => new \Magento\Framework\DataObject(
                     [
                         'base_currency_code' => $currency,
                     ]
@@ -256,7 +256,7 @@ class ShortcutTest extends \PHPUnit_Framework_TestCase
             'Magento\Braintree\Block\PayPal\Shortcut',
             [
                 'data' => [
-                    'container' => new \Magento\Framework\Object(
+                    'container' => new \Magento\Framework\DataObject(
                         [
                             'module_name' => 'Magento_Catalog',
                         ]
@@ -283,7 +283,7 @@ class ShortcutTest extends \PHPUnit_Framework_TestCase
             [
                 'mathRandom' => $this->mathRandomMock,
                 'data' => [
-                    'container' => new \Magento\Framework\Object(
+                    'container' => new \Magento\Framework\DataObject(
                         [
                             'module_name' => 'Magento_Checkout',
                         ]

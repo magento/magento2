@@ -1,0 +1,51 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!--@subject Update to your {{var store.getFrontendName()}} credit memo @-->
+<!--@vars {
+"var comment":"Credit Memo Comment",
+"var creditmemo.increment_id":"Credit Memo Id",
+"var this.getUrl($store, 'customer/account/')":"Customer Account URL",
+"var order.getCustomerName()":"Customer Name",
+"var order.increment_id":"Order Id",
+"var order.getStatusLabel()":"Order Status"
+} @-->
+{{template config_path="design/email/header_template"}}
+
+<table>
+    <tr class="email-intro">
+        <td>
+            <p class="greeting">{{trans "%name," name=$order.getCustomerName()}}</p>
+            <p>
+                {{trans
+                    "Your order #%increment_id has been updated with a status of <strong>%order_status</strong>."
+
+                    increment_id=$order.increment_id
+                    order_status=$order.getStatusLabel()
+                |raw}}
+                {{trans 'You can check the status of your order by <a href="%account_url">logging into your account</a>.' account_url=$this.getUrl($store,'customer/account/') |raw}}
+            </p>
+            <p>
+                {{trans 'If you have questions about your order, you can email us at <a href="mailto:%store_email">%store_email</a>.' store_email=$store_email |raw}}
+            </p>
+        </td>
+    </tr>
+    <tr class="email-information">
+        <td>
+            {{depend comment}}
+            <table class="message-info">
+                <tr>
+                    <td>
+                        {{var comment|escape|nl2br}}
+                    </td>
+                </tr>
+            </table>
+            {{/depend}}
+        </td>
+    </tr>
+</table>
+
+{{template config_path="design/email/footer_template"}}
