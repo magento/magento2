@@ -74,8 +74,7 @@ class Weee extends AbstractTotal
     public function __construct(
         \Magento\Weee\Helper\Data $weeeData,
         PriceCurrencyInterface $priceCurrency
-    )
-    {
+    ) {
         $this->priceCurrency = $priceCurrency;
         $this->weeeData = $weeeData;
         $this->setCode('weee');
@@ -250,8 +249,13 @@ class Weee extends AbstractTotal
      * @param   float $baseRowValueInclTax
      * @return  $this
      */
-    protected function processTotalAmount($address, $rowValueExclTax, $baseRowValueExclTax, $rowValueInclTax, $baseRowValueInclTax)
-    {
+    protected function processTotalAmount(
+        $address,
+        $rowValueExclTax,
+        $baseRowValueExclTax,
+        $rowValueInclTax,
+        $baseRowValueInclTax
+    ) {
         if (!$this->weeeData->isTaxable($this->_store)) {
             //Accumulate the values.  Will be used later in the 'weee tax' collector
             $this->weeeTotalExclTax += $this->priceCurrency->round($rowValueExclTax);
