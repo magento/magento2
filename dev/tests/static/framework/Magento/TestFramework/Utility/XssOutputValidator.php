@@ -13,7 +13,7 @@ class XssOutputValidator
 {
     const ESCAPE_NOT_VERIFIED_PATTERN = '/\* @escapeNotVerified \*/';
 
-    const ESCAPED_PATTERN = '/\* @escaped \*/';
+    const ESCAPED_PATTERN = '/\* @noEscaped \*/';
 
     /**
      * Store origin for replacements

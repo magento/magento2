@@ -25,7 +25,7 @@ class XssPhtmlTemplateTest extends \PHPUnit_Framework_TestCase
             /**
              * Static test will cover the following cases:
              *
-             * 1. /\* @escaped \*\/ before output. Output doesn't require escaping. Test is green.
+             * 1. /\* @noEscaped \*\/ before output. Output doesn't require escaping. Test is green.
              * 2. /\* @escapeNotVerified \*\/ before output. Output escaping is not checked and
              *    should be verified (Additional command should be provided to run report which will
              *    show list of defects). Test is green.
