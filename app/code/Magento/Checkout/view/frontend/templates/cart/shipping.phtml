@@ -80,7 +80,7 @@
     <?php if (($_shippingRateGroups = $block->getEstimateRates())): ?>
     <form id="co-shipping-method-form" action="<?php echo $block->getUrl('checkout/cart/estimateUpdatePost') ?>" method="post">
         <fieldset class="fieldset rates">
-            <legend>Shipping Methods</legend>
+            <legend><?php echo __('Shipping Methods') ?></legend>
             <dl class="items methods">
                 <?php foreach ($_shippingRateGroups as $code => $_rates): ?>
                     <dt class="item-title"><span><?php echo $block->escapeHtml($block->getCarrierName($code)) ?></span></dt>
