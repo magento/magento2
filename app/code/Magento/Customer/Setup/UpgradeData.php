@@ -56,11 +56,10 @@ class UpgradeData implements UpgradeDataInterface
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
+        /** @var CustomerSetup $customerSetup */
+        $customerSetup = $this->customerSetupFactory->create(['setup' => $setup]);
 
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
-            /** @var CustomerSetup $customerSetup */
-            $customerSetup = $this->customerSetupFactory->create(['setup' => $setup]);
-
             $entityAttributes = [
                 'customer' => [
                     'website_id' => [
@@ -185,11 +184,18 @@ class UpgradeData implements UpgradeDataInterface
                     $attribute->save();
                 }
             }
+            $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
+            $indexer->reindexAll();
+            $this->eavConfig->clear();
         }
 
-        $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
-        $indexer->reindexAll();
-        $this->eavConfig->clear();
+        if (version_compare($context->getVersion(), '2.0.2') < 0) {
+            $entityTypeId = $customerSetup->getEntityTypeId(Customer::ENTITY);
+            $attributeId = $customerSetup->getAttributeId($entityTypeId, 'gender');
+
+            $option = ['attribute_id' => $attributeId, 'values' => [3 => 'Not Specified']];
+            $customerSetup->addAttributeOption($option);
+        }
 
         $setup->endSetup();
     }

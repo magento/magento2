@@ -120,11 +120,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     protected $accountManagement;
 
     /**
-     * @var \Magento\Checkout\Model\Agreements\AgreementsValidator  $agreementsValidator
-     */
-    protected $agreementsValidator;
-
-    /**
      * @param EventManager $eventManager
      * @param QuoteValidator $quoteValidator
      * @param OrderFactory $orderFactory
@@ -143,7 +138,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Api\AccountManagementInterface $accountManagement
-     * @param \Magento\Checkout\Model\Agreements\AgreementsValidator $agreementsValidator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -164,8 +158,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         StoreManagerInterface $storeManager,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Customer\Api\AccountManagementInterface $accountManagement,
-        \Magento\Checkout\Model\Agreements\AgreementsValidator $agreementsValidator
+        \Magento\Customer\Api\AccountManagementInterface $accountManagement
     ) {
         $this->eventManager = $eventManager;
         $this->quoteValidator = $quoteValidator;
@@ -185,7 +178,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $this->checkoutSession = $checkoutSession;
         $this->accountManagement = $accountManagement;
         $this->customerSession = $customerSession;
-        $this->agreementsValidator = $agreementsValidator;
     }
 
     /**
@@ -296,7 +288,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
     /**
      * {@inheritdoc}
      */
-    public function placeOrder($cartId, $agreements = null, PaymentInterface $paymentMethod = null)
+    public function placeOrder($cartId, PaymentInterface $paymentMethod = null)
     {
         $quote = $this->quoteRepository->getActive($cartId);
         if ($paymentMethod) {
