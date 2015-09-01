@@ -348,7 +348,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $construction = ["{{config path={$path}}}", 'config', " path={$path}"];
         $scopeConfigValue = 'value';
 
-        $storeMock = $this->getMock('Magento\Store\Api\Data\StoreInterface',[], [], '', false);
+        $storeMock = $this->getMock('Magento\Store\Api\Data\StoreInterface', [], [], '', false);
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->once())->method('getId')->willReturn(1);
 
@@ -369,7 +369,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $construction = ["{{config path={$path}}}", 'config', " path={$path}"];
         $scopeConfigValue = '';
 
-        $storeMock = $this->getMock('Magento\Store\Api\Data\StoreInterface',[], [], '', false);
+        $storeMock = $this->getMock('Magento\Store\Api\Data\StoreInterface', [], [], '', false);
         $this->storeManager->expects($this->once())->method('getStore')->willReturn($storeMock);
         $storeMock->expects($this->once())->method('getId')->willReturn(1);
 

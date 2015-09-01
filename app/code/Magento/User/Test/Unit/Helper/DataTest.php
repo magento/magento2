@@ -60,7 +60,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $value = '123';
         $this->configMock->expects($this->once())
             ->method('getValue')
-            ->with( \Magento\User\Helper\Data::XML_PATH_ADMIN_RESET_PASSWORD_LINK_EXPIRATION_PERIOD)
+            ->with(\Magento\User\Helper\Data::XML_PATH_ADMIN_RESET_PASSWORD_LINK_EXPIRATION_PERIOD)
             ->willReturn($value);
         $this->assertEquals((int) $value, $this->model->getResetPasswordLinkExpirationPeriod());
     }
