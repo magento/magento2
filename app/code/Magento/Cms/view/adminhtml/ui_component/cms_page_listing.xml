@@ -374,16 +374,6 @@
                 <item name="config" xsi:type="array">
                     <item name="selectProvider" xsi:type="string">cms_page_listing.cms_page_listing.cms_page_columns.ids</item>
                     <item name="displayArea" xsi:type="string">bottom</item>
-                    <item name="actions" xsi:type="array">
-                        <item name="edit" xsi:type="array">
-                            <item name="type" xsi:type="string">edit</item>
-                            <item name="label" xsi:type="string" translate="true">Edit</item>
-                            <item name="callback" xsi:type="array">
-                                <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing.cms_page_columns_editor</item>
-                                <item name="target" xsi:type="string">editSelected</item>
-                            </item>
-                        </item>
-                    </item>
                     <item name="indexField" xsi:type="string">page_id</item>
                 </item>
             </argument>
@@ -415,6 +405,18 @@
                         <item name="type" xsi:type="string">enable</item>
                         <item name="label" xsi:type="string" translate="true">Enable</item>
                         <item name="url" xsi:type="url" path="cms/page/massEnable"/>
+                    </item>
+                </argument>
+            </action>
+            <action name="edit">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">edit</item>
+                        <item name="label" xsi:type="string" translate="true">Edit</item>
+                        <item name="callback" xsi:type="array">
+                            <item name="provider" xsi:type="string">cms_page_listing.cms_page_listing.cms_page_columns_editor</item>
+                            <item name="target" xsi:type="string">editSelected</item>
+                        </item>
                     </item>
                 </argument>
             </action>
