@@ -259,4 +259,98 @@ class ExternalVideoMediaGalleryEntryProcessorTest extends \PHPUnit_Framework_Tes
 
         $this->modelObject->afterLoad($this->productMock, $this->attributeMock);
     }
+
+    public function testBeforeSave()
+    {
+        $mediaData = [
+            'images' => [
+                '72mljfhmasfilp9cuq' => [
+                    'position' => '3',
+                    'media_type' => 'external-video',
+                    'file' => '/i/n/index111111.jpg',
+                    'value_id' => '4',
+                    'label' => '',
+                    'disabled' => '0',
+                    'removed' => '',
+                    'video_provider' => 'youtube',
+                    'video_url' => 'https://www.youtube.com/watch?v=abcdefghij',
+                    'video_title' => 'Some second title',
+                    'video_description' => 'Description second',
+                    'video_metadata' => 'meta two',
+                    'role' => '',
+                    'save_data_from' => '4',
+                ],
+                'w596fi79hv1p6wj21u' => [
+                    'position' => '4',
+                    'media_type' => 'image',
+                    'video_provider' => '',
+                    'file' => '/h/d/hd_image.jpg',
+                    'value_id' => '7',
+                    'label' => '',
+                    'disabled' => '0',
+                    'removed' => '',
+                    'video_url' => '',
+                    'video_title' => '',
+                    'video_description' => '',
+                    'video_metadata' => '',
+                    'role' => '',
+                ],
+                'tcodwd7e0dirifr64j' => [
+                    'position' => '4',
+                    'media_type' => 'external-video',
+                    'file' => '/s/a/sample_3.jpg',
+                    'value_id' => '5',
+                    'label' => '',
+                    'disabled' => '0',
+                    'removed' => '',
+                    'video_provider' => 'youtube',
+                    'video_url' => 'https://www.youtube.com/watch?v=ab123456',
+                    'video_title' => 'Some second title',
+                    'video_description' => 'Description second',
+                    'video_metadata' => 'meta two',
+                    'role' => '',
+                ],
+            ],
+        ];
+
+        $this->productMock->expects($this->once())->method('getData')->with('media_gallery')->willReturn($mediaData);
+        $this->productMock->expects($this->once())->method('getStoreId')->willReturn(0);
+
+        $resourceEntryResult = [
+            [
+                'value_id' => '4',
+                'store_id' => 1,
+                'video_provider_default' => 'youtube',
+                'video_url_default' => 'https://www.youtube.com/watch?v=abcdefghij',
+                'video_title_default' => 'Some first title',
+                'video_description_default' => 'Description first',
+                'video_metadata_default' => 'meta one',
+                'video_provider' => 'youtube',
+                'video_url' => 'https://www.youtube.com/watch?v=abcdefghij',
+                'video_title' => 'Some first title',
+                'video_description' => 'Description first',
+                'video_metadata' => 'meta one',
+            ],
+            [
+                'value_id' => '5',
+                'store_id' => 0,
+                'video_provider_default' => 'youtube',
+                'video_url_default' => 'https://www.youtube.com/watch?v=ab123456',
+                'video_title_default' => 'Some second title',
+                'video_description_default' => 'Description second',
+                'video_metadata_default' => 'meta two',
+                'video_provider' => 'youtube',
+                'video_url' => 'https://www.youtube.com/watch?v=ab123456',
+                'video_title' => 'Some second title',
+                'video_description' => 'Description second',
+                'video_metadata' => '',
+            ]
+        ];
+
+        $this->resourceEntryMediaGalleryMock->expects($this->once())->method('loadDataFromTableByValueId')->willReturn(
+            $resourceEntryResult
+        );
+
+        $this->modelObject->beforeSave($this->productMock, $this->attributeMock);
+    }
 }
