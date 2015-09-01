@@ -82,8 +82,7 @@
         <fieldset class="fieldset rates">
             <legend class="legend">
                 <span><?php echo __('Shipping Methods') ?></span>
-            </legend>
-            <br />
+            </legend><br />
             <dl class="items methods">
                 <?php foreach ($_shippingRateGroups as $code => $_rates): ?>
                     <dt class="item-title"><span><?php echo $block->escapeHtml($block->getCarrierName($code)) ?></span></dt>
