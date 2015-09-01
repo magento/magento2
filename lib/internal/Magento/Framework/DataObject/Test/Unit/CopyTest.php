@@ -177,10 +177,26 @@ class CopyTest extends \PHPUnit_Framework_TestCase
             ->with('fieldset', 'global')
             ->will($this->returnValue($fields));
 
-        $sourceMock = $this->getMock('Magento\Framework\Api\ExtensibleDataInterface',
-            ['getExtensionAttributes', 'getCode'], [], '', false);
-        $targetMock = $this->getMock('Magento\Framework\Api\ExtensibleDataInterface',
-            ['getExtensionAttributes', 'setCode', 'setExtensionAttributes'], [], '', false);
+        $sourceMock = $this->getMock(
+            'Magento\Framework\Api\ExtensibleDataInterface',
+            [
+                'getExtensionAttributes', 'getCode'
+            ],
+            [],
+            '',
+            false
+        );
+        $targetMock = $this->getMock(
+            'Magento\Framework\Api\ExtensibleDataInterface',
+            [
+                'getExtensionAttributes',
+                'setCode',
+                'setExtensionAttributes'
+            ],
+            [],
+            '',
+            false
+        );
 
         $sourceMock
             ->expects($this->any())
@@ -220,10 +236,24 @@ class CopyTest extends \PHPUnit_Framework_TestCase
             ->with('fieldset', 'global')
             ->will($this->returnValue($fields));
 
-        $sourceMock = $this->getMock('Magento\Framework\Api\AbstractSimpleObject',
-            ['__toArray'], [], '', false);
-        $targetMock = $this->getMock('Magento\Framework\Api\AbstractSimpleObject',
-            ['setCode'], [], '', false);
+        $sourceMock = $this->getMock(
+            'Magento\Framework\Api\AbstractSimpleObject',
+            [
+                '__toArray'
+            ],
+            [],
+            '',
+            false
+        );
+        $targetMock = $this->getMock(
+            'Magento\Framework\Api\AbstractSimpleObject',
+            [
+                'setCode'
+            ],
+            [],
+            '',
+            false
+        );
 
         $sourceMock
             ->expects($this->once())
