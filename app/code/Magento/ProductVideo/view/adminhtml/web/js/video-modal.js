@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright ï¿½ 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -25,7 +25,6 @@ define([
 
             showModal: function(e)
             {
-                jQuery('.action-close[data-role="close-panel"]').click();
                 $('#new-video').modal('openModal');
                 $('.video_image_role').prop('disabled', false);
                 $('#new_video_form')[0].reset();

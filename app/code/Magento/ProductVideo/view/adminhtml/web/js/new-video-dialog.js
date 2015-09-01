@@ -185,6 +185,7 @@ define([
                 var tmp = imgs[i];
                 this._images[tmp.file] = tmp;
             }
+
             this._bind();
             var widget = this;
             var newVideoForm = $('#new_video_form');
@@ -294,23 +295,30 @@ define([
                         text: $.mage.__('Cancel'),
                         class: 'video-cancel-button',
                         click: function (e) {
-                            newVideoForm.validation('clearError');
-                            $('#new-video').modal('closeModal');
+                            widget._onClose(e);
                         }
                     }],
                 opened: function(e) {
                     $('#video_url').focus();
+                    // Close image edit dialog.
+                    jQuery('.action-close[data-role="close-panel"]').click();
 
                 },
-                closed: function() {
-                    try {
-                        newVideoForm.validation('clearError');
-                    } catch(e) {
-                    }
-                    $('input[name*="' + $('#item_id').val() + '"]').parent().removeClass('active');
-                    $('#new_video_form')[0].reset();
+                closed: function(e) {
+                    widget._onClose(e);
                 }
             });
+        },
+
+
+        _onClose: function() {
+            var newVideoForm = $('#new_video_form');
+            $('input[name*="' + $('#item_id').val() + '"]').parent().removeClass('active');
+            newVideoForm[0].reset();
+            try {
+                newVideoForm.validation('clearError');
+            } catch(e) {}
+            this.element.modal('closeModal');
         },
 
         /**
