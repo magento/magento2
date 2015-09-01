@@ -634,7 +634,6 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
-                    <item name="editor" xsi:type="string">text</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>

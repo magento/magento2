@@ -163,10 +163,6 @@ class InlineEdit extends \Magento\Customer\Controller\Adminhtml\Index
      */
     protected function processAddressData(array $data)
     {
-        if (isset($data['street'])) {
-            //TODO: will be refactored after problem with street field parsing will be resolved
-            $data['street'] = explode("\n", $data['street']);
-        }
         foreach (['firstname', 'lastname'] as $requiredField) {
             if (empty($data[$requiredField])) {
                 $data[$requiredField] =  $this->getCustomer()->{'get' . ucfirst($requiredField)}();
