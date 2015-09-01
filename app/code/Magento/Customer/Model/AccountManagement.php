@@ -57,6 +57,8 @@ class AccountManagement implements AccountManagementInterface
      */
     const XML_PATH_REGISTER_EMAIL_TEMPLATE = 'customer/create_account/email_template';
 
+    const XML_PATH_REGISTER_NO_PASSWORD_EMAIL_TEMPLATE = 'customer/create_account/email_no_password_template';
+
     const XML_PATH_REGISTER_EMAIL_IDENTITY = 'customer/create_account/email_identity';
 
     const XML_PATH_REMIND_EMAIL_TEMPLATE = 'customer/password/remind_email_template';
@@ -76,8 +78,14 @@ class AccountManagement implements AccountManagementInterface
     // Constants for the type of new account email to be sent
     const NEW_ACCOUNT_EMAIL_REGISTERED = 'registered';
 
+    // welcome email, when password setting is required
+    const NEW_ACCOUNT_EMAIL_REGISTERED_NO_PASSWORD = 'registered_no_password';
+
     // welcome email, when confirmation is enabled
     const NEW_ACCOUNT_EMAIL_CONFIRMATION = 'confirmation';
+
+    // confirmation email, when account is confirmed
+    const NEW_ACCOUNT_EMAIL_CONFIRMED = 'confirmed';
 
     /**
      * Constants for types of emails to send out.
@@ -470,10 +478,10 @@ class AccountManagement implements AccountManagementInterface
     ) {
         if (!is_null($password)) {
             $this->checkPasswordStrength($password);
+            $hash = $this->createPasswordHash($password);
         } else {
-            $password = $this->mathRandom->getRandomString(self::MIN_PASSWORD_LENGTH);
+            $hash = null;
         }
-        $hash = $this->createPasswordHash($password);
         return $this->createAccountWithPasswordHash($customer, $hash, $redirectUrl);
     }
 
@@ -566,21 +574,14 @@ class AccountManagement implements AccountManagementInterface
     protected function sendEmailConfirmation(CustomerInterface $customer, $redirectUrl)
     {
         try {
-            if ($this->isConfirmationRequired($customer)) {
-                $this->sendNewAccountEmail(
-                    $customer,
-                    self::NEW_ACCOUNT_EMAIL_CONFIRMATION,
-                    $redirectUrl,
-                    $customer->getStoreId()
-                );
-            } else {
-                $this->sendNewAccountEmail(
-                    $customer,
-                    self::NEW_ACCOUNT_EMAIL_REGISTERED,
-                    $redirectUrl,
-                    $customer->getStoreId()
-                );
+            $hash = $this->customerRegistry->retrieveSecureData($customer->getId())->getPasswordHash();
+            $templateType = self::NEW_ACCOUNT_EMAIL_REGISTERED;
+            if ($this->isConfirmationRequired($customer) && $hash != '') {
+                $templateType = self::NEW_ACCOUNT_EMAIL_CONFIRMATION;
+            } elseif ($hash == '') {
+                $templateType = self::NEW_ACCOUNT_EMAIL_REGISTERED_NO_PASSWORD;
             }
+                $this->sendNewAccountEmail($customer, $templateType, $redirectUrl, $customer->getStoreId());
         } catch (MailException $e) {
             // If we are not able to send a new account email, this should be ignored
             $this->logger->critical($e);
@@ -806,7 +807,7 @@ class AccountManagement implements AccountManagementInterface
      */
     protected function sendNewAccountEmail(
         $customer,
-        $type = 'registered',
+        $type = self::NEW_ACCOUNT_EMAIL_REGISTERED,
         $backUrl = '',
         $storeId = '0',
         $sendemailStoreId = null
@@ -901,14 +902,19 @@ class AccountManagement implements AccountManagementInterface
     protected function getTemplateTypes()
     {
         /**
-         * 'registered'   welcome email, when confirmation is disabled
-         * 'confirmed'    welcome email, when confirmation is enabled
-         * 'confirmation' email with confirmation link
+         * self::NEW_ACCOUNT_EMAIL_REGISTERED               welcome email, when confirmation is disabled
+         *                                                  and password is set
+         * self::NEW_ACCOUNT_EMAIL_REGISTERED_NO_PASSWORD   welcome email, when confirmation is disabled
+         *                                                  and password is not set
+         * self::NEW_ACCOUNT_EMAIL_CONFIRMED                welcome email, when confirmation is enabled
+         *                                                  and password is set
+         * self::NEW_ACCOUNT_EMAIL_CONFIRMATION             email with confirmation link
          */
         $types = [
-            'registered' => self::XML_PATH_REGISTER_EMAIL_TEMPLATE,
-            'confirmed' => self::XML_PATH_CONFIRMED_EMAIL_TEMPLATE,
-            'confirmation' => self::XML_PATH_CONFIRM_EMAIL_TEMPLATE,
+            self::NEW_ACCOUNT_EMAIL_REGISTERED => self::XML_PATH_REGISTER_EMAIL_TEMPLATE,
+            self::NEW_ACCOUNT_EMAIL_REGISTERED_NO_PASSWORD => self::XML_PATH_REGISTER_NO_PASSWORD_EMAIL_TEMPLATE,
+            self::NEW_ACCOUNT_EMAIL_CONFIRMED => self::XML_PATH_CONFIRMED_EMAIL_TEMPLATE,
+            self::NEW_ACCOUNT_EMAIL_CONFIRMATION => self::XML_PATH_CONFIRM_EMAIL_TEMPLATE,
         ];
         return $types;
     }

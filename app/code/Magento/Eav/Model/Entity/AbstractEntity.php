@@ -1306,6 +1306,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
 
             if (!$attribute->isInSet($newObject->getAttributeSetId()) && !in_array($k, $staticFields)) {
                 $this->_aggregateDeleteData($delete, $attribute, $newObject);
+                continue;
             }
 
             $attrId = $attribute->getAttributeId();
