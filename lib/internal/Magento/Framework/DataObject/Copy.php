@@ -57,6 +57,8 @@ class Copy
      * @return array|\Magento\Framework\DataObject|null the value of $target
      *
      * @api
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function copyFieldsetToTarget($fieldset, $aspect, $source, $target, $root = 'global')
     {
@@ -89,12 +91,12 @@ class Copy
                     $target->{$method}($value);
                 } else {
                     // If we couldn't find the method, check if we can set it from the extension attributes
-                    $extension_attributes = $target->getExtensionAttributes();
-                    if ($extension_attributes == null) {
-                        $extension_attributes = $this->_extensionAttributesFactory->create(get_class($target));
+                    $extensionAttributes = $target->getExtensionAttributes();
+                    if ($extensionAttributes == null) {
+                        $extensionAttributes = $this->_extensionAttributesFactory->create(get_class($target));
                     }
-                    $extension_attributes->{$method}($value);
-                    $target->setExtensionAttributes($extension_attributes);
+                    $extensionAttributes->{$method}($value);
+                    $target->setExtensionAttributes($extensionAttributes);
                 }
             } elseif ($source instanceof \Magento\Framework\Api\AbstractSimpleObject) {
                 $method = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $code)));
@@ -213,15 +215,16 @@ class Copy
                 $value = $source->{$method}();
             } else {
                 // If we couldn't find the method, check if we can get it from the extension attributes
-                $extension_attributes = $source->getExtensionAttributes();
-                $value = $extension_attributes->{$method}();
+                $extensionAttributes = $source->getExtensionAttributes();
+                $value = $extensionAttributes->{$method}();
             }
         } elseif ($source instanceof \Magento\Framework\Api\AbstractSimpleObject) {
             $sourceArray = $source->__toArray();
             $value = isset($sourceArray[$code]) ? $sourceArray[$code] : null;
         } else {
-            throw new \InvalidArgumentException('Source should be array, Magento Object,
-                ExtensibleDataInterface, or AbstractSimpleObject');
+            throw new \InvalidArgumentException(
+                'Source should be array, Magento Object, ExtensibleDataInterface, or AbstractSimpleObject'
+            );
         }
         return $value;
     }
