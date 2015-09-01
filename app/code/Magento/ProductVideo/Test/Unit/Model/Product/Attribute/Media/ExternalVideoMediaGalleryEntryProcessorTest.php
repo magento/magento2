@@ -213,6 +213,17 @@ class ExternalVideoMediaGalleryEntryProcessorTest extends \PHPUnit_Framework_Tes
                     'video_description' => 'Description second',
                     'video_metadata' => 'meta two',
                     'role' => '',
+                    'additional_store_data' => [
+                        0 =>
+                            [
+                                'store_id' => '0',
+                                'video_provider' => null,
+                                'video_url' => 'https://www.youtube.com/watch?v=ab123456',
+                                'video_title' => 'New Title',
+                                'video_description' => 'New Description',
+                                'video_metadata' => 'New metadata',
+                            ],
+                    ]
                 ],
             ],
         ];
@@ -278,11 +289,10 @@ class ExternalVideoMediaGalleryEntryProcessorTest extends \PHPUnit_Framework_Tes
                     'video_description' => 'Description second',
                     'video_metadata' => 'meta two',
                     'role' => '',
-                    'save_data_from' => '4',
                 ],
                 'w596fi79hv1p6wj21u' => [
                     'position' => '4',
-                    'media_type' => 'image',
+                    'media_type' => 'external-video',
                     'video_provider' => '',
                     'file' => '/h/d/hd_image.jpg',
                     'value_id' => '7',
@@ -298,17 +308,19 @@ class ExternalVideoMediaGalleryEntryProcessorTest extends \PHPUnit_Framework_Tes
                 'tcodwd7e0dirifr64j' => [
                     'position' => '4',
                     'media_type' => 'external-video',
-                    'file' => '/s/a/sample_3.jpg',
-                    'value_id' => '5',
+                    'video_provider' => '',
+                    'file' => '/h/d/hd_image.jpg',
+                    'value_id' => '',
                     'label' => '',
                     'disabled' => '0',
                     'removed' => '',
-                    'video_provider' => 'youtube',
-                    'video_url' => 'https://www.youtube.com/watch?v=ab123456',
-                    'video_title' => 'Some second title',
-                    'video_description' => 'Description second',
-                    'video_metadata' => 'meta two',
+                    'video_url' => '',
+                    'video_title' => '',
+                    'video_description' => '',
+                    'video_metadata' => '',
                     'role' => '',
+                    'save_data_from' => '7',
+                    'new_file' => '/i/n/index_4.jpg',
                 ],
             ],
         ];
@@ -332,8 +344,8 @@ class ExternalVideoMediaGalleryEntryProcessorTest extends \PHPUnit_Framework_Tes
                 'video_metadata' => 'meta one',
             ],
             [
-                'value_id' => '5',
-                'store_id' => 0,
+                'value_id' => '7',
+                'store_id' => 1,
                 'video_provider_default' => 'youtube',
                 'video_url_default' => 'https://www.youtube.com/watch?v=ab123456',
                 'video_title_default' => 'Some second title',
