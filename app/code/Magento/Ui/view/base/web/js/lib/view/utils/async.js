@@ -1,3 +1,7 @@
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 define([
     'ko',
     'jquery',
@@ -10,7 +14,7 @@ define([
     'use strict';
 
     /**
-     * Checks if provided  value is a dom element.
+     * Checks if provided value is a dom element.
      *
      * @param {*} node - Value to be checked.
      * @returns {Boolean}
@@ -20,28 +24,41 @@ define([
     }
 
     /**
+     * Parses provided string and extracts
+     * component, context and selector data from it.
      *
+     * @param {String} str - String to be processed.
+     * @returns {Object} Data retrieved from string.
+     *
+     * @example Sample format.
+     *      '{{component}}:{{ctx}} -> {{selector}}'
+     *
+     *      component - Name of component.
+     *      ctx - Selector of the root node upon which component is binded.
+     *      selector - Selector of DOM elements located
+     *          inside of a previously specified context.
      */
-    function parseString(str) {
-        var data = str.trim().split('->'),
-            result = {};
+    function parseSelector(str) {
+        var data    = str.trim().split('->'),
+            result  = {},
+            componentData;
 
         if (data.length === 1) {
             if (!~data[0].indexOf(':')) {
                 result.selector = data[0];
             } else {
-                data = data[0].split(':');
-
-                result.component = data[0];
-                result.ctx = data[1];
+                componentData = data[0];
             }
         } else {
+            componentData   = data[0];
             result.selector = data[1];
+        }
 
-            data = data[0].split(':');
+        if (componentData) {
+            componentData = componentData.split(':');
 
-            result.component = data[0];
-            result.ctx = data[1];
+            result.component = componentData[0];
+            result.ctx = componentData[1];
         }
 
         _.each(result, function (value, key) {
@@ -52,7 +69,12 @@ define([
     }
 
     /**
+     * Internal method used to normalize argumnets passed
+     * to 'async' module methods.
      *
+     * @param {(String|Objetc)} selector
+     * @param {(HTMLElement|Object|String)} [ctx]
+     * @returns {Object}
      */
     function parseData(selector, ctx) {
         var data = {};
@@ -67,7 +89,7 @@ define([
             }
         } else {
             data = _.isString(selector) ?
-                parseString(selector) :
+                parseSelector(selector) :
                 selector;
         }
 
@@ -78,7 +100,7 @@ define([
 
     /**
      * Creates promise that will be resolved
-     * when requested component will be registred.
+     * when requested component is registred.
      *
      * @param {String} name - Name of component.
      * @returns {jQueryPromise}
@@ -99,6 +121,8 @@ define([
 
     /**
      *
+     * @param {Object} data
+     * @param {Object} component
      */
     function setRootListener(data, component) {
         boundedNodes.get(component, function (root) {
@@ -112,10 +136,39 @@ define([
         });
     }
 
+    /*eslint-disable no-unused-vars*/
     /**
+     * Sets listener for the appearance of elements which
+     * matches specified selector data.
      *
+     * @param {(String|Object)} selector - Valid css selector or a string
+     *      in format acceptable by 'parseSelector' method or an object with
+     *      'component', 'selector' and 'ctx' properties.
+     * @param {(HTMLElement|Object|String)} [ctx] - Optional context parameter
+     *      which might be a DOM element, component instance or components' name.
+     * @param {Function} fn - Callback that will be invoked
+     *      when required DOM element appears.
+     *
+     * @example
+     *      Creating listener of the 'span' nodes appearance,
+     *      located inside of 'div' nodes, which are binded to 'cms_page_listing' component:
+     *
+     *      $.async('cms_page_listing:div -> span', function (node) {});
+     *
+     * @example Another syntaxes of the previous example.
+     *      $.async({
+     *          component: 'cms_page_listing',
+     *          ctx: 'div',
+     *          selector: 'span'
+     *       }, function (node) {});
+     *
+     * @example Listens for appearance of any child node inside of specified component.
+     *      $.async('> *', 'cms_page_lsiting', function (node) {});
+     *
+     * @example Listens for appearance of 'span' nodes inside of specific context.
+     *      $.async('span', document.getElementById('test'), function (node) {});
      */
-    $.async = function () {
+    $.async = function (selector, ctx, fn) {
         var args = _.toArray(arguments),
             data = parseData.apply(null, _.initial(args));
 
@@ -128,51 +181,52 @@ define([
             domObserver.get(data.selector, data.fn, data.ctx);
         }
     };
+    /*eslint-enable no-unused-vars*/
 
     _.extend($.async, {
+        /*eslint-disable no-unused-vars*/
         /**
+         * Returns collection of elements found by provided selector data.
          *
-         * @returns {Array}
+         * @param {(String|Object)} selector - See 'async' definition.
+         * @param {(HTMLElement|Object|String)} [ctx] - See 'async' definition.
+         * @returns {Array} An array of DOM elements.
          */
-        get: function () {
+        get: function (selector, ctx) {
             var data        = parseData.apply(null, arguments),
                 component   = data.component,
                 nodes;
 
-            if (data.component) {
-                if (_.isString(component)) {
-                    component = registry.get(component);
-                }
-
-                if (!component) {
-                    return [];
-                }
-
-                nodes = boundedNodes.get(component);
-                nodes = $(nodes).filter(data.ctx).toArray();
-
-                return data.selector ?
-                    $(data.selector, nodes).toArray() :
-                    nodes;
+            if (!component) {
+                return $(data.selector, data.ctx).toArray();
+            } else if (_.isString(component)) {
+                component = registry.get(component);
             }
 
-            return $(data.selector, data.ctx).toArray();
+            if (!component) {
+                return [];
+            }
+
+            nodes = boundedNodes.get(component);
+            nodes = $(nodes).filter(data.ctx).toArray();
+
+            return data.selector ?
+                $(data.selector, nodes).toArray() :
+                nodes;
         },
+        /*eslint-enable no-unused-vars*/
 
         /**
+         * Sets removal listener of the specified nodes.
          *
+         * @param {{HTMLElement|Array|ArrayLike}} nodes - Nodes whose removal to track.
+         * @param {Function} fn - Callback that will be invoked when node is removed.
          */
-        remove: function (selector, ctx, fn) {
-            var args = _.toArray(arguments);
-
-            fn = _.last(args);
-
-            if (!_.isString(selector)) {
-                domObserver.remove(selector, fn);
-            }
+        remove: function (nodes, fn) {
+            domObserver.remove(nodes, fn);
         },
 
-        parseString: parseString
+        parseSelector: parseSelector
     });
 
     return $;
