@@ -124,21 +124,11 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
         );
 
         $fieldset->addField(
-            'video_metadata',
-            'text',
-            [
-                'class' => 'edited-data',
-                'label' => __('Metadata'),
-                'title' => __('Metadata'),
-                'name' => 'video_metadata',
-            ]
-        );
-
-        $fieldset->addField(
             'new_video_screenshot',
             'file',
             [
                 'label' => __('Preview Image'),
+                'required' => true,
                 'title' => __('Preview Image'),
                 'name' => 'image',
             ]
