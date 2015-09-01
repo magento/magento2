@@ -10,6 +10,40 @@ use Magento\Framework\Controller\ResultFactory;
 class PlaceOrder extends \Magento\Braintree\Controller\PayPal
 {
     /**
+     * @var \Magento\Checkout\Api\AgreementsValidatorInterface
+     */
+    protected $agreementsValidator;
+
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Braintree\Model\Config\PayPal $braintreePayPalConfig
+     * @param \Magento\Paypal\Model\Config $paypalConfig
+     * @param \Magento\Braintree\Model\CheckoutFactory $checkoutFactory
+     * @param \Magento\Checkout\Api\AgreementsValidatorInterface $agreementsValidator
+     */
+    public function __construct(
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Braintree\Model\Config\PayPal $braintreePayPalConfig,
+        \Magento\Paypal\Model\Config $paypalConfig,
+        \Magento\Braintree\Model\CheckoutFactory $checkoutFactory,
+        \Magento\Checkout\Api\AgreementsValidatorInterface $agreementsValidator
+    ) {
+        $this->agreementsValidator = $agreementsValidator;
+        parent::__construct(
+            $context,
+            $customerSession,
+            $checkoutSession,
+            $braintreePayPalConfig,
+            $paypalConfig,
+            $checkoutFactory
+        );
+    }
+
+    /**
      * Submit the order
      *
      * @return \Magento\Framework\Controller\Result\Redirect
@@ -17,6 +51,11 @@ class PlaceOrder extends \Magento\Braintree\Controller\PayPal
     public function execute()
     {
         try {
+            if (!$this->agreementsValidator->isValid(array_keys($this->getRequest()->getPost('agreement', [])))) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Please agree to all the terms and conditions before placing the order.')
+                );
+            }
             $this->initCheckout();
             $this->getCheckout()->place(null);
 
