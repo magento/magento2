@@ -3,10 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Checkout\Test\Unit\Model\Agreements;
+namespace Magento\CheckoutAgreements\Test\Unit\Model;
 
-use \Magento\Checkout\Model\Agreements\AgreementsValidator;
-
+use Magento\CheckoutAgreements\Model\AgreementsValidator;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class AgreementsValidatorTest extends \PHPUnit_Framework_TestCase
@@ -41,7 +40,7 @@ class AgreementsValidatorTest extends \PHPUnit_Framework_TestCase
     public function testIsValid($data, $result)
     {
         $this->object = $this->objectManagerHelper->getObject(
-            'Magento\Checkout\Model\Agreements\AgreementsValidator',
+            'Magento\CheckoutAgreements\Model\AgreementsValidator',
             []
         );
         $this->assertEquals($result, $this->object->isValid($data));
@@ -69,13 +68,13 @@ class AgreementsValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testNotIsValid($data, $result)
     {
-        $provider = $this->getMockForAbstractClass('Magento\Checkout\Model\Agreements\AgreementsProviderInterface');
+        $provider = $this->getMockForAbstractClass('\Magento\CheckoutAgreements\Model\AgreementsProviderInterface');
         $provider->expects($this->once())
             ->method('getRequiredAgreementIds')
             ->will($this->returnValue([1, 3, '4']));
 
         $this->object = $this->objectManagerHelper->getObject(
-            'Magento\Checkout\Model\Agreements\AgreementsValidator',
+            'Magento\CheckoutAgreements\Model\AgreementsValidator',
             ['list' => [$provider]]
         );
         $this->assertEquals($result, $this->object->isValid($data));
