@@ -26,6 +26,16 @@ class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGall
     }
 
     /**
+     * Get media type
+     *
+     * @return string
+     */
+    public function getMediaType()
+    {
+        return $this->getData(self::MEDIA_TYPE);
+    }
+
+    /**
      * Retrieve gallery entry alternative text
      *
      * @return string
@@ -81,6 +91,17 @@ class Entry extends AbstractExtensibleModel implements ProductAttributeMediaGall
     public function getContent()
     {
         return $this->getData(self::CONTENT);
+    }
+
+    /**
+     * Set media type
+     *
+     * @param string $mediaType
+     * @return $this
+     */
+    public function setMediaType($mediaType)
+    {
+        return $this->setData(self::MEDIA_TYPE, $mediaType);
     }
 
     /**

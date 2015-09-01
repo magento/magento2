@@ -71,6 +71,11 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     protected $_productFactory;
 
     /**
+     * @var Media\MediaGalleryEntryProcessorPool
+     */
+    protected $mediaEntryProcessorPool;
+
+    /**
      * Construct
      *
      * @param \Magento\Catalog\Model\Resource\ProductFactory $productFactory
@@ -88,7 +93,8 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $resourceProductAttribute
+        \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $resourceProductAttribute,
+        \Magento\Catalog\Model\Product\Attribute\Backend\Media\MediaGalleryEntryProcessorPool $mediaEntryProcessorPool
     ) {
         $this->_productFactory = $productFactory;
         $this->_eventManager = $eventManager;
@@ -97,6 +103,18 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $this->_resourceModel = $resourceProductAttribute;
         $this->_mediaConfig = $mediaConfig;
         $this->_mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->mediaEntryProcessorPool = $mediaEntryProcessorPool;
+    }
+
+    /**
+     * Load attribute data after product loaded
+     *
+     * @param \Magento\Catalog\Model\Product $object
+     * @return \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
+     */
+    public function beforeLoad($object)
+    {
+        $this->mediaEntryProcessorPool->processBeforeLoad($object, $this->getAttribute());
     }
 
     /**
@@ -107,37 +125,43 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     public function afterLoad($object)
     {
-        $attrCode = $this->getAttribute()->getAttributeCode();
-        $value = [];
-        $value['images'] = [];
-        $value['values'] = [];
-        $localAttributes = ['label', 'position', 'disabled'];
-
-        foreach ($this->_getResource()->loadGallery($object, $this) as $image) {
-            foreach ($localAttributes as $localAttribute) {
-                if ($image[$localAttribute] === null) {
-                    $image[$localAttribute] = $this->_getDefaultValue($localAttribute, $image);
-                }
-            }
-            $value['images'][] = $image;
-        }
-
-        $object->setData($attrCode, $value);
-        return $this;
+        $this->mediaEntryProcessorPool->processAfterLoad($object, $this->getAttribute());
     }
 
     /**
-     * @param string $key
-     * @param string[] &$image
-     * @return string
+     * @param \Magento\Framework\DataObject $object
+     * @return void
      */
-    protected function _getDefaultValue($key, &$image)
+    public function beforeSave($object)
     {
-        if (isset($image[$key . '_default'])) {
-            return $image[$key . '_default'];
-        }
+        $this->mediaEntryProcessorPool->processBeforeSave($object, $this->getAttribute());
+    }
 
-        return '';
+    /**
+     * @param \Magento\Framework\DataObject $object
+     * @return void
+     */
+    public function afterSave($object)
+    {
+        $this->mediaEntryProcessorPool->processAfterSave($object, $this->getAttribute());
+    }
+
+    /**
+     * @param \Magento\Framework\DataObject $object
+     * @return void
+     */
+    public function beforeDelete($object)
+    {
+        $this->mediaEntryProcessorPool->processBeforeDelete($object, $this->getAttribute());
+    }
+
+    /**
+     * @param \Magento\Framework\DataObject $object
+     * @return void
+     */
+    public function afterDelete($object)
+    {
+        $this->mediaEntryProcessorPool->processAfterDelete($object, $this->getAttribute());
     }
 
     /**
@@ -163,185 +187,6 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         }
 
         return true;
-    }
-
-    /**
-     * @param \Magento\Framework\DataObject $object
-     * @return $this|void
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     */
-    public function beforeSave($object)
-    {
-        $attrCode = $this->getAttribute()->getAttributeCode();
-        $value = $object->getData($attrCode);
-        if (!is_array($value) || !isset($value['images'])) {
-            return;
-        }
-
-        if (!is_array($value['images']) && strlen($value['images']) > 0) {
-            $value['images'] = $this->jsonHelper->jsonDecode($value['images']);
-        }
-
-        if (!is_array($value['images'])) {
-            $value['images'] = [];
-        }
-
-        $clearImages = [];
-        $newImages = [];
-        $existImages = [];
-        if ($object->getIsDuplicate() != true) {
-            foreach ($value['images'] as &$image) {
-                if (!empty($image['removed'])) {
-                    $clearImages[] = $image['file'];
-                } elseif (empty($image['value_id'])) {
-                    $newFile = $this->_moveImageFromTmp($image['file']);
-                    $image['new_file'] = $newFile;
-                    $newImages[$image['file']] = $image;
-                    $this->_renamedImages[$image['file']] = $newFile;
-                    $image['file'] = $newFile;
-                } else {
-                    $existImages[$image['file']] = $image;
-                }
-            }
-        } else {
-            // For duplicating we need copy original images.
-            $duplicate = [];
-            foreach ($value['images'] as &$image) {
-                if (empty($image['value_id'])) {
-                    continue;
-                }
-                $duplicate[$image['value_id']] = $this->_copyImage($image['file']);
-                $image['new_file'] = $duplicate[$image['value_id']];
-                $newImages[$image['file']] = $image;
-            }
-
-            $value['duplicate'] = $duplicate;
-        }
-
-        foreach ($object->getMediaAttributes() as $mediaAttribute) {
-            $mediaAttrCode = $mediaAttribute->getAttributeCode();
-            $attrData = $object->getData($mediaAttrCode);
-
-            if (in_array($attrData, $clearImages)) {
-                $object->setData($mediaAttrCode, 'no_selection');
-            }
-
-            if (in_array($attrData, array_keys($newImages))) {
-                $object->setData($mediaAttrCode, $newImages[$attrData]['new_file']);
-                $object->setData($mediaAttrCode . '_label', $newImages[$attrData]['label']);
-            }
-
-            if (in_array($attrData, array_keys($existImages))) {
-                $object->setData($mediaAttrCode . '_label', $existImages[$attrData]['label']);
-            }
-        }
-
-        $object->setData($attrCode, $value);
-
-        return $this;
-    }
-
-    /**
-     * Retrieve renamed image name
-     *
-     * @param string $file
-     * @return string
-     */
-    public function getRenamedImage($file)
-    {
-        if (isset($this->_renamedImages[$file])) {
-            return $this->_renamedImages[$file];
-        }
-
-        return $file;
-    }
-
-    /**
-     * @param \Magento\Framework\DataObject $object
-     * @return void
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     */
-    public function afterSave($object)
-    {
-        if ($object->getIsDuplicate() == true) {
-            $this->duplicate($object);
-            return;
-        }
-
-        $attrCode = $this->getAttribute()->getAttributeCode();
-        $value = $object->getData($attrCode);
-        if (!is_array($value) || !isset($value['images']) || $object->isLockedAttribute($attrCode)) {
-            return;
-        }
-
-        $storeId = $object->getStoreId();
-
-        $storeIds = $object->getStoreIds();
-        $storeIds[] = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
-
-        // remove current storeId
-        $storeIds = array_flip($storeIds);
-        unset($storeIds[$storeId]);
-        $storeIds = array_keys($storeIds);
-
-        $images = $this->_productFactory->create()->getAssignedImages($object, $storeIds);
-
-        $picturesInOtherStores = [];
-        foreach ($images as $image) {
-            $picturesInOtherStores[$image['filepath']] = true;
-        }
-
-        $recordsToDelete = [];
-        $filesToDelete = [];
-        foreach ($value['images'] as &$image) {
-            if (!empty($image['removed'])) {
-                if (!empty($image['value_id']) && !isset($picturesInOtherStores[$image['file']])) {
-                    $recordsToDelete[] = $image['value_id'];
-                    $filesToDelete[] = ltrim($image['file'], '/');
-                }
-                continue;
-            }
-
-            if (empty($image['value_id'])) {
-                $data = [];
-                $data['entity_id'] = $object->getId();
-                $data['attribute_id'] = $this->getAttribute()->getId();
-                $data['value'] = $image['file'];
-                $image['value_id'] = $this->_getResource()->insertGallery($data);
-            }
-
-            $this->_getResource()->deleteGalleryValueInStore($image['value_id'], $object->getStoreId());
-
-            // Add per store labels, position, disabled
-            $data = [];
-            $data['value_id'] = $image['value_id'];
-
-            $data['label'] = isset($image['label']) ? $image['label'] : '';
-            $data['position'] = isset($image['position']) ? (int)$image['position'] : 0;
-            $data['disabled'] = isset($image['disabled']) ? (int)$image['disabled'] : 0;
-            $data['store_id'] = (int)$object->getStoreId();
-            $data['entity_id'] = (int)$object->getId();
-
-            $this->_getResource()->insertGalleryValueInStore($data);
-        }
-
-        $this->_getResource()->deleteGallery($recordsToDelete);
-        $this->removeDeletedImages($filesToDelete);
-        $object->setData($attrCode, $value);
-    }
-
-    /**
-     * @param array $files
-     * @return null
-     */
-    protected function removeDeletedImages(array $files)
-    {
-        $catalogPath = $this->_mediaConfig->getBaseMediaPath();
-        foreach ($files as $filePath) {
-            $this->_mediaDirectory->delete($catalogPath . '/' . $filePath);
-        }
     }
 
     /**
@@ -432,45 +277,6 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         }
 
         return $fileName;
-    }
-
-    /**
-     * Add images with different media attributes.
-     * Image will be added only once if the same image is used with different media attributes
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param array $fileAndAttributesArray array of arrays of filename and corresponding media attribute
-     * @param string $filePath path, where image cand be found
-     * @param boolean $move if true, it will move source file
-     * @param boolean $exclude mark image as disabled in product page view
-     * @return array array of parallel arrays with original and renamed files
-     */
-    public function addImagesWithDifferentMediaAttributes(
-        \Magento\Catalog\Model\Product $product,
-        $fileAndAttributesArray,
-        $filePath = '',
-        $move = false,
-        $exclude = true
-    ) {
-        $alreadyAddedFiles = [];
-        $alreadyAddedFilesNames = [];
-
-        foreach ($fileAndAttributesArray as $key => $value) {
-            $keyInAddedFiles = array_search($value['file'], $alreadyAddedFiles, true);
-            if ($keyInAddedFiles === false) {
-                $savedFileName = $this->addImage($product, $filePath . $value['file'], null, $move, $exclude);
-                $alreadyAddedFiles[$key] = $value['file'];
-                $alreadyAddedFilesNames[$key] = $savedFileName;
-            } else {
-                $savedFileName = $alreadyAddedFilesNames[$keyInAddedFiles];
-            }
-
-            if ($value['mediaAttribute'] !== null) {
-                $this->setMediaAttribute($product, $value['mediaAttribute'], $savedFileName);
-            }
-        }
-
-        return ['alreadyAddedFiles' => $alreadyAddedFiles, 'alreadyAddedFilesNames' => $alreadyAddedFilesNames];
     }
 
     /**
@@ -633,38 +439,6 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
-     * Move image from temporary directory to normal
-     *
-     * @param string $file
-     * @return string
-     */
-    protected function _moveImageFromTmp($file)
-    {
-        $file = $this->getFilenameFromTmp($file);
-        $destinationFile = $this->_getUniqueFileName($file);
-
-        /** @var $storageHelper \Magento\MediaStorage\Helper\File\Storage\Database */
-        $storageHelper = $this->_fileStorageDb;
-
-        if ($storageHelper->checkDbUsage()) {
-            $storageHelper->renameFile(
-                $this->_mediaConfig->getTmpMediaShortUrl($file),
-                $this->_mediaConfig->getMediaShortUrl($destinationFile)
-            );
-
-            $this->_mediaDirectory->delete($this->_mediaConfig->getTmpMediaPath($file));
-            $this->_mediaDirectory->delete($this->_mediaConfig->getMediaPath($destinationFile));
-        } else {
-            $this->_mediaDirectory->renameFile(
-                $this->_mediaConfig->getTmpMediaPath($file),
-                $this->_mediaConfig->getMediaPath($destinationFile)
-            );
-        }
-
-        return str_replace('\\', '/', $destinationFile);
-    }
-
-    /**
      * Duplicate temporary images
      *
      * @param string $file
@@ -716,44 +490,6 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         }
 
         return $destFile;
-    }
-
-    /**
-     * Copy image and return new filename.
-     *
-     * @param string $file
-     * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    protected function _copyImage($file)
-    {
-        try {
-            $destinationFile = $this->_getUniqueFileName($file);
-
-            if (!$this->_mediaDirectory->isFile($this->_mediaConfig->getMediaPath($file))) {
-                throw new \Exception();
-            }
-
-            if ($this->_fileStorageDb->checkDbUsage()) {
-                $this->_fileStorageDb->copyFile(
-                    $this->_mediaDirectory->getAbsolutePath($this->_mediaConfig->getMediaShortUrl($file)),
-                    $this->_mediaConfig->getMediaShortUrl($destinationFile)
-                );
-                $this->_mediaDirectory->delete($this->_mediaConfig->getMediaPath($destinationFile));
-            } else {
-                $this->_mediaDirectory->copyFile(
-                    $this->_mediaConfig->getMediaPath($file),
-                    $this->_mediaConfig->getMediaPath($destinationFile)
-                );
-            }
-
-            return str_replace('\\', '/', $destinationFile);
-        } catch (\Exception $e) {
-            $file = $this->_mediaConfig->getMediaPath($file);
-            throw new LocalizedException(
-                __('We couldn\'t copy file %1. Please delete media with non-existing images and try again.', $file)
-            );
-        }
     }
 
     /**

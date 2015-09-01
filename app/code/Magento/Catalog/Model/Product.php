@@ -13,6 +13,7 @@ use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Pricing\Object\SaleableInterface;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Framework\Api\Data\ImageContentInterface;
+use Magento\Framework\Api\Data\VideoContentInterface;
 
 /**
  * Catalog product model
@@ -323,6 +324,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $joinProcessor;
 
     /**
+     * @var Product\Attribute\Backend\Media\MediaGalleryEntryConverterPool
+     */
+    protected $mediaGalleryEntryConverterPool;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -355,6 +361,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory
      * @param \Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory
      * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory
+     * @param \Magento\Catalog\Model\Product\Attribute\Backend\Media\MediaGalleryEntryConverterPool $mediaGalleryEntryConverterPool
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      * @param array $data
@@ -394,6 +401,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory,
         \Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory,
         \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory,
+        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory $mediaGalleryEntryExtensionFactory,
+        \Magento\Framework\Api\Data\VideoContentInterfaceFactory $videoEntryFactory,
+        \Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageMediaEntryConverter $imageMediaEntryConverter,
+        \Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoMediaEntryConverter $externalVideoMediaEntryConverter,
+        \Magento\Catalog\Model\Product\Attribute\Backend\Media\MediaGalleryEntryConverterPool $mediaGalleryEntryConverterPool,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
         array $data = []
@@ -423,6 +435,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->productLinkFactory = $productLinkFactory;
         $this->productLinkExtensionFactory = $productLinkExtensionFactory;
         $this->mediaGalleryEntryFactory = $mediaGalleryEntryFactory;
+        $this->mediaGalleryEntryExtensionFactory        = $mediaGalleryEntryExtensionFactory;
+        $this->videoEntryFactory = $videoEntryFactory;
+        $this->imageMediaEntryConverter = $imageMediaEntryConverter;
+        $this->externalVideoMediaEntryConverter = $externalVideoMediaEntryConverter;
+        $this->mediaGalleryEntryConverterPool = $mediaGalleryEntryConverterPool;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->joinProcessor = $joinProcessor;
         parent::__construct(
@@ -2535,22 +2552,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     protected function convertToMediaGalleryInterface(array $mediaGallery)
     {
-        $productImages = $this->getMediaAttributeValues();
-
         $entries = [];
         foreach ($mediaGallery as $image) {
-            if (!isset($image['types'])) {
-                $image['types'] = array_keys($productImages, $image['file']);
-            }
-            $entry = $this->mediaGalleryEntryFactory->create();
-            $this->dataObjectHelper->populateWithArray(
-                $entry,
-                $image,
-                '\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface'
-            );
-            if (isset($image['value_id'])) {
-                $entry->setId($image['value_id']);
-            }
+            $entry = $this->mediaGalleryEntryConverterPool->getConverterByMediaType($image['media_type'])->convertTo($this, $image);
             $entries[] = $entry;
         }
         return $entries;
@@ -2571,45 +2575,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * @param ImageContentInterface $content
-     * @return array
-     */
-    protected function convertFromMediaGalleryEntryContentInterface(
-        ImageContentInterface $content = null
-    ) {
-        if ($content == null) {
-            return null;
-        } else {
-            return [
-                'data' => [
-                    ImageContentInterface::BASE64_ENCODED_DATA => $content->getBase64EncodedData(),
-                    ImageContentInterface::TYPE => $content->getType(),
-                    ImageContentInterface::NAME => $content->getName(),
-                ],
-            ];
-        }
-    }
-
-    /**
-     * @param ProductAttributeMediaGalleryEntryInterface $entry
-     * @return array
-     */
-    protected function convertFromMediaGalleryInterface(ProductAttributeMediaGalleryEntryInterface $entry)
-    {
-        $entryArray = [
-            "value_id" => $entry->getId(),
-            "file" => $entry->getFile(),
-            "label" => $entry->getLabel(),
-            "position" => $entry->getPosition(),
-            "disabled" => $entry->isDisabled(),
-            "types" => $entry->getTypes(),
-            "content" => $this->convertFromMediaGalleryEntryContentInterface($entry->getContent()),
-        ];
-
-        return $entryArray;
-    }
-
-    /**
      * @param ProductAttributeMediaGalleryEntryInterface[] $mediaGalleryEntries
      * @return $this
      */
@@ -2618,7 +2583,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         if ($mediaGalleryEntries !== null) {
             $images = [];
             foreach ($mediaGalleryEntries as $entry) {
-                $images[] = $this->convertFromMediaGalleryInterface($entry);
+                $images[] = $this->mediaGalleryEntryConverterPool->getConverterByMediaType($entry->getMediaType())->convertFrom($entry);
             }
             $this->setData('media_gallery', ['images' => $images]);
 

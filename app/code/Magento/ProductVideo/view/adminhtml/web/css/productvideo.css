@@ -1,0 +1,41 @@
+.image.video-placeholder {
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.image.video-placeholder {
+    /*background: #fff url(../images/icon-movie.png) center;*/
+    background-color: #fff;
+    font-size: 4rem;
+    line-height: inherit;
+    color: #ccc;
+    overflow: hidden;
+    speak: none;
+    font-weight: normal;
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+  position: relative;
+}
+.image.video-placeholder:before {
+  background: url(../images/gallery-sprite.png) no-repeat left bottom;
+  content: '';
+  position: absolute;
+  height: 49px;
+  width: 49px;
+  left: 50%;
+  top: 18px;
+  margin-left: -24px;
+  opacity: 0.7;
+}
+#add_video_button {
+  background: rgba(0,0,0,0);
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+.video-placeholder .image-placeholder-text {
+  font-weight: 400;
+}
