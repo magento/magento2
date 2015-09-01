@@ -92,6 +92,11 @@ define([
         },
         removeProduct: function (rowIndex) {
             this.productMatrix.splice(rowIndex, 1);
+            if (this.productMatrix().length === 0) {
+                this.attributes.each(function(attribute) {
+                    $('[data-attribute-code="' + attribute.code + '"] select').removeProp('disabled');
+                });
+            }
         },
         toggleProduct: function (rowIndex) {
             var productChanged = {};
