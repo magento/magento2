@@ -15,7 +15,7 @@ define([
             template: 'ui/grid/paging/sizes',
             value: 20,
             minSize: 1,
-            maxSize: 1000,
+            maxSize: 999,
             customVisible: false,
             customValue: '',
             options: {
@@ -209,7 +209,7 @@ define([
          * Updates existing value to the provided one. If new value
          * is not specified, then sizes' '_value' property will be taken.
          *
-         * @param {Number} value - Value that should be updated.
+         * @param {Number} value - Existing value that should be updated.
          * @param {(Number|String)} [newValue=size._value] - New size value.
          * @returns {Sizes} Chainable.
          */
@@ -256,7 +256,7 @@ define([
         },
 
         /**
-         * Chechks if provided value exists in the sizes list.
+         * Checks if provided value exists in the sizes list.
          *
          * @param {Number} value - Value to be checked.
          * @returns {Boolean}

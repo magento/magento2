@@ -12,9 +12,10 @@ define([
      /**
      * Wrapper for ko.observable and ko.observableArray.
      * Assignes one or another ko property to obj[key]
-     * @param  {Object} obj   - object to store property to
-     * @param  {String} key   - key
-     * @param  {*} value      - initial value of observable
+     *
+     * @param {Object} obj - object to store property to
+     * @param {String} key - key
+     * @param {*} value - initial value of observable
      */
     function observe(obj, key, value) {
         var method = Array.isArray(value) ? 'observableArray' : 'observable';
@@ -38,20 +39,21 @@ define([
 
     return {
         /**
-         * Retrieves nested data.
+         * Returns value of the nested property.
          *
          * @param {String} path - Path to the property.
-         * @returns {*}
+         * @returns {*} Value of the property.
          */
         get: function (path) {
             return utils.nested(this, path);
         },
 
         /**
-         * Sets value property to path and triggers update by path, passing result.
+         * Sets provided value as a value of the specified nested property.
+         * Triggers changes notifications, if value has mutated.
          *
-         * @param {String} path
-         * @param {*} value
+         * @param {String} path - Path to property.
+         * @param {*} value - New value of the property.
          * @returns {Component} Chainable.
          */
         set: function (path, value) {
@@ -72,9 +74,9 @@ define([
         },
 
         /**
-         * Removes nested data from the object.
+         * Removes nested property from the object.
          *
-         * @param {String} path - Path to the property that should be removed.
+         * @param {String} path - Path to the property.
          * @returns {Component} Chainable.
          */
         remove: function (path) {
@@ -103,7 +105,7 @@ define([
          * Else, path is considered as object.
          * Assignes props to this based on incoming params
          *
-         * @param {Object|String} path
+         * @param {(Object|String)} path
          * @returns {Component} Chainable.
          */
         observe: function (path) {
@@ -156,9 +158,10 @@ define([
         },
 
         /**
+         * Stores value of the specified property in components' storage module.
          *
          * @param {String} property
-         * @param {*} data
+         * @param {*} [data=this[property]]
          * @returns {Component} Chainable.
          */
         store: function (property, data) {
@@ -173,7 +176,10 @@ define([
         },
 
         /**
+         * Removes stored property.
          *
+         * @param {String} property - Property to be removed from storage.
+         * @returns {Component} Chainable.
          */
         removeStored: function (property) {
             var ns = this.storageConfig.namespace,
