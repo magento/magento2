@@ -1,5 +1,5 @@
 <?php /* @escapeNotVerified */ echo $block->getSomeData();?>
-<?php /* @escaped */ echo $block->getSomeData();?>
+<?php /* @noEscaped */ echo $block->getSomeData();?>
 <input name="form_key" type="hidden" value="<?php echo $block->escapeUrl($var) ?>" />
 <input name="form_key" type="hidden" value="<?php echo $block->escapeQuote('bla') ?>" />
 <input name="form_key" type="hidden" value="<?php echo $block->escapeXssInUrl("bla bla") ?>" />
@@ -15,7 +15,7 @@ echo $var;
     (bool)$var .
     $block->escapeXssInUrl("bla bla");
 ?>
-<?php /* @escaped */ echo '\'' . $code . '\',\'' . $block->escapeQuote($data['parentSymbol']) . '\''; ?>
+<?php /* @noEscaped */ echo '\'' . $code . '\',\'' . $block->escapeQuote($data['parentSymbol']) . '\''; ?>
 
 <?php
 /**
