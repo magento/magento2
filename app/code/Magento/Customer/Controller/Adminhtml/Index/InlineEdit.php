@@ -151,7 +151,7 @@ class InlineEdit extends \Magento\Customer\Controller\Adminhtml\Index
             $this->messageManager->addError($this->getErrorWithCustomerId($e->getMessage()));
         } catch (\Exception $e) {
             $this->messageManager->addError($this->getErrorWithCustomerId('We can\'t save the customer.'));
-            $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
+            $this->logger->critical($e);
         }
     }
 
