@@ -6,9 +6,10 @@
 define(
     [
         'Magento_Payment/js/view/payment/iframe',
-        'Magento_Checkout/js/model/payment/additional-validators'
+        'Magento_Checkout/js/model/payment/additional-validators',
+        'Magento_Checkout/js/action/set-payment-information'
     ],
-    function (Component, additionalValidators) {
+    function (Component, additionalValidators, setPaymentInformationAction) {
         'use strict';
 
         return Component.extend({
