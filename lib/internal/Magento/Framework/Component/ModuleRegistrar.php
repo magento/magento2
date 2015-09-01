@@ -3,15 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Module;
+namespace Magento\Framework\Component;
 
 /**
- * Provides ability to statically register modules which do not reside in the modules directory. Not all modules
- * will be registered by default.
+ * Provides ability to statically register modules
  *
  * @author Josh Di Fabio <joshdifabio@gmail.com>
  */
-class Registrar implements ModuleRegistryInterface
+class ModuleRegistrar implements ComponentRegistryInterface
 {
     /**
      * Paths to modules
@@ -21,13 +20,13 @@ class Registrar implements ModuleRegistryInterface
     private static $modulePaths = [];
 
     /**
-     * Sets the location of a module. Necessary for modules which do not reside in modules directory
+     * Sets the location of a module.
      *
      * @param string $moduleName Fully-qualified module name
      * @param string $path Absolute file path to the module
      * @return void
      */
-    public static function registerModule($moduleName, $path)
+    public static function register($moduleName, $path)
     {
         self::$modulePaths[$moduleName] = $path;
     }
@@ -35,7 +34,7 @@ class Registrar implements ModuleRegistryInterface
     /**
      * {@inheritdoc}
      */
-    public function getModulePaths()
+    public function getPaths()
     {
         return self::$modulePaths;
     }
@@ -43,7 +42,7 @@ class Registrar implements ModuleRegistryInterface
     /**
      * {@inheritdoc}
      */
-    public function getModulePath($moduleName)
+    public function getPath($moduleName)
     {
         return isset(self::$modulePaths[$moduleName]) ? self::$modulePaths[$moduleName] : null;
     }

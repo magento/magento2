@@ -66,7 +66,14 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->converter = $this->getMock('Magento\Framework\Module\Declaration\Converter\Dom', [], [], '', false);
         $this->parser = $this->getMock('Magento\Framework\Xml\Parser', [], [], '', false);
         $this->parser->expects($this->once())->method('initErrorHandler');
-        $this->registry = $this->getMock('Magento\Framework\Module\ModuleRegistryInterface', [], [], '', false, false);
+        $this->registry = $this->getMock(
+            'Magento\Framework\Component\ComponentRegistryInterface',
+            [],
+            [],
+            '',
+            false,
+            false
+        );
         $this->driver = $this->getMock('Magento\Framework\Filesystem\DriverInterface', [], [], '', false, false);
         $this->loader = new Loader($this->filesystem, $this->converter, $this->parser, $this->registry, $this->driver);
     }
@@ -82,7 +89,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             // so expected sequence is a -> e -> c -> d -> b
         ];
         $this->dir->expects($this->once())->method('search')->willReturn(['a', 'b', 'c']);
-        $this->registry->expects($this->once())->method('getModulePaths')->willReturn(['/path/to/d', '/path/to/e']);
+        $this->registry->expects($this->once())->method('getPaths')->willReturn(['/path/to/d', '/path/to/e']);
         $this->dir->expects($this->exactly(3))->method('readFile')->will($this->returnValueMap([
             ['a', null, null, self::$sampleXml],
             ['b', null, null, self::$sampleXml],
@@ -122,9 +129,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             ['c', null, null, self::$sampleXml],
             ['d', null, null, self::$sampleXml],
         ]));
-        $this->registry->expects($this->once())
-            ->method('getModulePaths')
-            ->willReturn([]);
+        $this->registry->expects($this->once())->method('getPaths')->willReturn([]);
         $this->converter->expects($this->at(0))->method('convert')->willReturn(['a' => $fixture['a']]);
         $this->converter->expects($this->at(1))->method('convert')->willReturn(['b' => $fixture['b']]);
         $this->converter->expects($this->at(2))->method('convert')->willReturn(['c' => $fixture['c']]);
@@ -155,7 +160,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         ]));
         $this->converter->expects($this->at(0))->method('convert')->willReturn(['a' => $fixture['a']]);
         $this->converter->expects($this->at(1))->method('convert')->willReturn(['b' => $fixture['b']]);
-        $this->registry->expects($this->once())->method('getModulePaths')->willReturn([]);
+        $this->registry->expects($this->once())->method('getPaths')->willReturn([]);
         $this->loader->load();
     }
 }

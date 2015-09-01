@@ -10,7 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Module\Declaration\Converter\Dom;
 use Magento\Framework\Xml\Parser;
-use Magento\Framework\Module\ModuleRegistryInterface;
+use Magento\Framework\Component\ComponentRegistryInterface;
 use Magento\Framework\Filesystem\DriverInterface;
 
 /**
@@ -44,7 +44,7 @@ class Loader
     /**
      * Module registry
      *
-     * @var ModuleRegistryInterface
+     * @var ComponentRegistryInterface
      */
     private $moduleRegistry;
 
@@ -61,14 +61,14 @@ class Loader
      * @param Filesystem $filesystem
      * @param Dom $converter
      * @param Parser $parser
-     * @param ModuleRegistryInterface $moduleRegistry
+     * @param ComponentRegistryInterface $moduleRegistry
      * @param DriverInterface $filesystemDriver
      */
     public function __construct(
         Filesystem $filesystem,
         Dom $converter,
         Parser $parser,
-        ModuleRegistryInterface $moduleRegistry,
+        ComponentRegistryInterface $moduleRegistry,
         DriverInterface $filesystemDriver
     ) {
         $this->filesystem = $filesystem;
@@ -130,7 +130,7 @@ class Loader
             yield [$filePath, $modulesDir->readFile($filePath)];
         }
 
-        foreach ($this->moduleRegistry->getModulePaths() as $modulePath) {
+        foreach ($this->moduleRegistry->getPaths() as $modulePath) {
             $filePath =  str_replace(['\\', '/'], DIRECTORY_SEPARATOR, "$modulePath/etc/module.xml");
             yield [$filePath, $this->filesystemDriver->fileGetContents($filePath)];
         }
