@@ -26,19 +26,19 @@ class IndexerStatusCommandTest extends AbstractIndexerCommandCommonSetup
         $indexerOne
             ->expects($this->once())
             ->method('getStatus')
-            ->willReturn(\Magento\Indexer\Model\Indexer\State::STATUS_VALID);
+            ->willReturn(\Magento\Framework\Indexer\StateInterface::STATUS_VALID);
         $indexerTwo = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
         $indexerTwo->expects($this->once())->method('getTitle')->willReturn('Title_indexerTwo');
         $indexerTwo
             ->expects($this->once())
             ->method('getStatus')
-            ->willReturn(\Magento\Indexer\Model\Indexer\State::STATUS_INVALID);
+            ->willReturn(\Magento\Framework\Indexer\StateInterface::STATUS_INVALID);
         $indexerThree = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
         $indexerThree->expects($this->once())->method('getTitle')->willReturn('Title_indexerThree');
         $indexerThree
             ->expects($this->once())
             ->method('getStatus')
-            ->willReturn(\Magento\Indexer\Model\Indexer\State::STATUS_WORKING);
+            ->willReturn(\Magento\Framework\Indexer\StateInterface::STATUS_WORKING);
         $indexerFour = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
         $indexerFour->expects($this->once())->method('getTitle')->willReturn('Title_indexerFour');
         $collection

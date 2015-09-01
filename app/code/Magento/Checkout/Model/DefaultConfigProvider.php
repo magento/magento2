@@ -285,7 +285,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
         );
         $output['postCodes'] = $this->postCodesConfig->getPostCodes();
         $output['imageData'] = $this->imageProvider->getImages($quoteId);
-        $output['countryData'] = $this->getCountryData();
         $output['defaultCountryId'] = $this->directoryHelper->getDefaultCountry();
         $output['totalsData'] = $this->getTotalsData();
         $output['shippingPolicy'] = [
@@ -303,7 +302,21 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $output['activeCarriers'] = $this->getActiveCarriers();
         $output['originCountryCode'] = $this->getOriginCountryCode();
         $output['paymentMethods'] = $this->getPaymentMethods();
+        $output['autocomplete'] = $this->isAutocompleteEnabled();
         return $output;
+    }
+
+    /**
+     * Is autocomplete enabled for storefront
+     *
+     * @return string
+     */
+    private function isAutocompleteEnabled()
+    {
+         return $this->scopeConfig->getValue(
+             \Magento\Customer\Model\Form::XML_PATH_ENABLE_AUTOCOMPLETE,
+             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+         ) ? 'on' : 'off';
     }
 
     /**
@@ -520,27 +533,6 @@ class DefaultConfigProvider implements ConfigProviderInterface
     protected function getStaticBaseUrl()
     {
         return $this->checkoutSession->getQuote()->getStore()->getBaseUrl(UrlInterface::URL_TYPE_STATIC);
-    }
-
-    /**
-     * Return countries data
-     * @return array
-     */
-    private function getCountryData()
-    {
-        $country = [];
-        $regionsData = $this->directoryHelper->getRegionData();
-        foreach ($this->directoryHelper->getCountryCollection() as $code => $data) {
-            $country[$code]['name'] = $data->getName();
-            if (array_key_exists($code, $regionsData)) {
-                foreach ($regionsData[$code] as $key => $region) {
-                    $country[$code]['regions'][$key]['code'] = $region['code'];
-                    $country[$code]['regions'][$key]['name'] = $region['name'];
-                }
-            }
-
-        }
-        return $country;
     }
 
     /**

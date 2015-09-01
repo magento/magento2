@@ -55,7 +55,7 @@ class PlaceOrderTest extends \Magento\Paypal\Test\Unit\Controller\ExpressTest
         $oldCallback = &$this->objectManagerCallback;
         $this->objectManagerCallback = function ($className) use ($code, $oldCallback) {
             $instance = call_user_func($oldCallback, $className);
-            if ($className == 'Magento\Checkout\Model\Agreements\AgreementsValidator') {
+            if ($className == '\Magento\CheckoutAgreements\Model\AgreementsValidator') {
                 $exception = $this->getMock(
                     'Magento\Paypal\Model\Api\ProcessableException',
                     ['getUserMessage'],
