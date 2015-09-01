@@ -30,7 +30,7 @@ class AssertTermRequireMessageOnMultishippingCheckout extends AbstractConstraint
      *
      * @param MultishippingCheckoutOverview $page
      * @param TestStepFactory $stepFactory
-     * @param array $product
+     * @param array $products
      * @param array $payment
      * @param array $shipping
      * @return void
@@ -38,20 +38,20 @@ class AssertTermRequireMessageOnMultishippingCheckout extends AbstractConstraint
     public function processAssert(
         MultishippingCheckoutOverview $page,
         TestStepFactory $stepFactory,
-        $product,
+        $products,
         $payment,
         $shipping
     ) {
         $customer = ['customer' => ['dataset' => 'johndoe_with_multiple_addresses']];
         $customer = $stepFactory->create('\Magento\Customer\Test\TestStep\CreateCustomerStep', $customer)->run();
-        $product = $stepFactory->create('\Magento\Catalog\Test\TestStep\CreateProductsStep', ['products' => $product])
+        $products = $stepFactory->create('\Magento\Catalog\Test\TestStep\CreateProductsStep', ['products' => $products])
             ->run();
         $stepFactory->create('\Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep', $customer)->run();
-        $stepFactory->create('\Magento\Checkout\Test\TestStep\AddProductsToTheCartStep', $product)->run();
+        $stepFactory->create('\Magento\Checkout\Test\TestStep\AddProductsToTheCartStep', $products)->run();
         $stepFactory->create('\Magento\Multishipping\Test\TestStep\ProceedToMultipleAddressCheckoutStep')->run();
         $stepFactory->create(
             '\Magento\Multishipping\Test\TestStep\FillCustomerAddressesStep',
-            array_merge($product, $customer)
+            array_merge($products, $customer)
         )->run();
         $stepFactory->create(
             '\Magento\Multishipping\Test\TestStep\FillShippingInformationStep',

@@ -3837,4 +3837,9 @@ return [
     ['Magento\Framework\Gdata\Gshopping\Extension\Shipping'],
     ['Magento\Framework\Gdata\Gshopping\Extension\Control'],
     ['Magento\Framework\Gdata\Gshopping\Extension\Attribute'],
+    ['Magento\Checkout\Model\Agreements\AgreementsValidator', 'Magento\CheckoutAgreements\Model\AgreementsValidator'],
+    [
+        'Magento\Checkout\Model\Agreements\AgreementsProviderInterface',
+        'Magento\CheckoutAgreements\Model\AgreementsProviderInterface'
+    ],
 ];
