@@ -269,6 +269,8 @@ define([
             events['mouseup ' + this.options.imageSelector] = function (event) {
                 if (!$(event.currentTarget).is('.ui-sortable-helper')) {
                     $(event.currentTarget).addClass('active');
+                    var itemId = $(event.currentTarget).find('input')[0].name.match(/\[([^\]]*)\]/g)[2];
+                    $('#item_id').val(itemId);
                     this._showDialog($(event.currentTarget).data('imageData'));
                 }
             };
@@ -311,6 +313,12 @@ define([
          */
         _showDialog: function (imageData) {
             var $imageContainer = this.findElement(imageData);
+
+            if ($imageContainer.find('input[name*="media_type"]').val() == 'external-video') {
+                $('#new-video').modal('openModal');
+                return;
+            }
+
             var dialogElement = $imageContainer.data('dialog');
 
             if ($imageContainer.is('.removed') || (dialogElement && dialogElement.is(':visible'))) {
