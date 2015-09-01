@@ -113,11 +113,11 @@ class Weee extends AbstractTotal
                 foreach ($item->getChildren() as $child) {
                     $this->resetItemWeeeData($child);
                     $this->resetItemTaxData($child);
-                    $this->_process($address, $child);
+                    $this->process($address, $child);
                 }
-                $this->_recalculateParent($item);
+                $this->recalculateParent($item);
             } else {
-                $this->_process($address, $item);
+                $this->process($address, $item);
             }
         }
         $address->setWeeeCodeToItemMap($this->weeeCodeToItemMap);
@@ -135,7 +135,7 @@ class Weee extends AbstractTotal
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    protected function _process(\Magento\Quote\Model\Quote\Address $address, $item)
+    protected function process(\Magento\Quote\Model\Quote\Address $address, $item)
     {
         $attributes = $this->weeeData->getProductWeeeAttributes(
             $item->getProduct(),
@@ -287,7 +287,7 @@ class Weee extends AbstractTotal
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _recalculateParent(\Magento\Quote\Model\Quote\Item\AbstractItem $item)
+    protected function recalculateParent(\Magento\Quote\Model\Quote\Item\AbstractItem $item)
     {
         $associatedTaxables = [];
         foreach ($item->getChildren() as $child) {
@@ -303,7 +303,8 @@ class Weee extends AbstractTotal
      * @param   \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return  void
      */
-    protected function resetItemWeeeData($item) {
+    protected function resetItemWeeeData($item)
+    {
         $this->weeeData->setApplied($item, []);
     }
 
