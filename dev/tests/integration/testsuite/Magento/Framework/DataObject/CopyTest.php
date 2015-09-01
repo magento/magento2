@@ -37,6 +37,113 @@ class CopyTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedTarget, $target);
     }
 
+    public function testCopyFieldsetWithExtensionAttributes()
+    {
+        $fieldsetConfigMock = $this->getMockBuilder('\Magento\Framework\DataObject\Copy\Config')
+            ->disableOriginalConstructor()
+            ->setMethods(['getFieldSet'])
+            ->getMock();
+
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $service = $objectManager->create(
+            'Magento\Framework\DataObject\Copy',
+            ['fieldsetConfig' => $fieldsetConfigMock]
+        );
+
+        $data = ['firstname' => ['name' => '*'], 'lastname' => ['name' => '*'], 'test_group_code' => ['name' => '*']];
+        $fieldsetConfigMock
+            ->expects($this->once())
+            ->method('getFieldSet')
+            ->willReturn($data);
+
+        $fieldset = 'customer_account';
+        $aspect = 'name';
+        $groupCode = 'general';
+        $firstName = 'First';
+        $data = [
+            'email'                => 'customer@example.com',
+            'firstname'            => $firstName,
+            'lastname'             => 'Last',
+            // see declaration in dev/tests/integration/testsuite/Magento/Framework/Api/etc/extension_attributes.xml
+            'extension_attributes' => ['test_group_code' => $groupCode]
+        ];
+        $dataWithExtraField = array_merge($data, ['undeclared_field' => 'will be omitted']);
+
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\Framework\Api\DataObjectHelper $dataObjectHelper */
+        $dataObjectHelper = $objectManager->get('Magento\Framework\Api\DataObjectHelper');
+        /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory */
+        $customerFactory = $objectManager->get('Magento\Customer\Api\Data\CustomerInterfaceFactory');
+        /** @var \Magento\Customer\Api\Data\CustomerInterface $source */
+        $source = $customerFactory->create();
+        $dataObjectHelper->populateWithArray(
+            $source,
+            $dataWithExtraField,
+            'Magento\Customer\Api\Data\CustomerInterface'
+        );
+        /** @var \Magento\Customer\Api\Data\CustomerInterface $target */
+        $target = $customerFactory->create();
+        $target = $service->copyFieldsetToTarget($fieldset, $aspect, $source, $target);
+
+        $this->assertInstanceOf('Magento\Customer\Api\Data\CustomerInterface', $target);
+        $this->assertNull(
+            $target->getEmail(),
+            "Email should not be set because it is not defined in the fieldset."
+        );
+        $this->assertEquals(
+            $firstName,
+            $target->getFirstname(),
+            "First name was not copied."
+        );
+        $this->assertEquals(
+            $groupCode,
+            $target->getExtensionAttributes()->getTestGroupCode(),
+            "Extension attribute was not copied."
+        );
+    }
+
+    public function testCopyFieldsetWithAbstractSimpleObject()
+    {
+        $fieldset = 'sales_copy_order';
+        $aspect = 'to_edit';
+
+        $fieldsetConfigMock = $this->getMockBuilder('\Magento\Framework\DataObject\Copy\Config')
+            ->disableOriginalConstructor()
+            ->setMethods(['getFieldSet'])
+            ->getMock();
+
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $service = $objectManager->create(
+            'Magento\Framework\DataObject\Copy',
+            ['fieldsetConfig' => $fieldsetConfigMock]
+        );
+
+        $data = ['store_label' => ['to_edit' => '*'], 'frontend_label' => ['to_edit' => '*'],
+                 'attribute_code' => ['to_edit' => '*'], 'note' => ['to_edit' => '*']];
+        $fieldsetConfigMock
+            ->expects($this->any())
+            ->method('getFieldSet')
+            ->willReturn($data);
+
+        $source = new \Magento\Customer\Model\Data\AttributeMetadata();
+        $source->setStoreLabel('storeLabel');
+        $source->setFrontendLabel('frontendLabel');
+        $source->setAttributeCode('attributeCode');
+        $source->setNote('note');
+
+        $target = new \Magento\Customer\Model\Data\AttributeMetadata();
+        $expectedTarget = $source;
+
+        $this->assertEquals(
+            $target,
+            $service->copyFieldsetToTarget('invalid_fieldset', $aspect, $source, $target)
+        );
+        $this->assertEquals(
+            $expectedTarget,
+            $service->copyFieldsetToTarget($fieldset, $aspect, $source, $target)
+        );
+    }
+
     public function testCopyFieldsetArrayTarget()
     {
         $fieldset = 'sales_copy_order';

@@ -24,15 +24,23 @@ class Copy
     protected $_eventManager = null;
 
     /**
+     * @var \Magento\Framework\Api\ExtensionAttributesFactory
+     */
+    protected $_extensionAttributesFactory;
+
+    /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\DataObject\Copy\Config $fieldsetConfig
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionAttributesFactory
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\DataObject\Copy\Config $fieldsetConfig
+        \Magento\Framework\DataObject\Copy\Config $fieldsetConfig,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionAttributesFactory
     ) {
         $this->_eventManager = $eventManager;
         $this->_fieldsetConfig = $fieldsetConfig;
+        $this->_extensionAttributesFactory = $extensionAttributesFactory;
     }
 
     /**
@@ -73,6 +81,24 @@ class Copy
 
             if ($targetIsArray) {
                 $target[$targetCode] = $value;
+            } else if ($source instanceof \Magento\Framework\Api\ExtensibleDataInterface) {
+                $method = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $code)));
+
+                $methodExists = method_exists($source, $method);
+                if ($methodExists == true) {
+                    $target->{$method}($value);
+                } else {
+                    // If we couldn't find the method, check if we can set it from the extension attributes
+                    $extension_attributes = $target->getExtensionAttributes();
+                    if ($extension_attributes == null) {
+                        $extension_attributes = $this->_extensionAttributesFactory->create(get_class($target));
+                    }
+                    $extension_attributes->{$method}($value);
+                    $target->setExtensionAttributes($extension_attributes);
+                }
+            } elseif ($source instanceof \Magento\Framework\Api\AbstractSimpleObject) {
+                $method = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $code)));
+                $target->{$method}($value);
             } else {
                 $target->setDataUsingMethod($targetCode, $value);
             }
@@ -157,11 +183,12 @@ class Copy
      */
     protected function _isFieldsetInputValid($source, $target)
     {
-        return (is_array(
-            $source
-        ) || $source instanceof \Magento\Framework\DataObject) && (is_array(
-            $target
-        ) || $target instanceof \Magento\Framework\DataObject);
+        return (is_array($source) || $source instanceof \Magento\Framework\DataObject ||
+            $source instanceof \Magento\Framework\Api\ExtensibleDataInterface ||
+            $source instanceof \Magento\Framework\Api\AbstractSimpleObject) && (
+            is_array($target) || $target instanceof \Magento\Framework\DataObject ||
+            $target instanceof \Magento\Framework\Api\ExtensibleDataInterface ||
+            $target instanceof \Magento\Framework\Api\AbstractSimpleObject);
     }
 
     /**
@@ -178,8 +205,23 @@ class Copy
             $value = isset($source[$code]) ? $source[$code] : null;
         } elseif ($source instanceof \Magento\Framework\DataObject) {
             $value = $source->getDataUsingMethod($code);
+        } elseif ($source instanceof \Magento\Framework\Api\ExtensibleDataInterface) {
+            $method = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $code)));
+
+            $methodExists = method_exists($source, $method);
+            if ($methodExists == true) {
+                $value = $source->{$method}();
+            } else {
+                // If we couldn't find the method, check if we can get it from the extension attributes
+                $extension_attributes = $source->getExtensionAttributes();
+                $value = $extension_attributes->{$method}();
+            }
+        } elseif ($source instanceof \Magento\Framework\Api\AbstractSimpleObject) {
+            $sourceArray = $source->__toArray();
+            $value = isset($sourceArray[$code]) ? $sourceArray[$code] : null;
         } else {
-            throw new \InvalidArgumentException('Source should be array or Magento Object');
+            throw new \InvalidArgumentException('Source should be array, Magento Object,
+                ExtensibleDataInterface, or AbstractSimpleObject');
         }
         return $value;
     }
