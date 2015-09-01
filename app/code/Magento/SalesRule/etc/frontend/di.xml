@@ -12,4 +12,16 @@
     <type name="Magento\SalesRule\Model\Rule">
         <plugin name="catalog_rule_model_Rule_after_loader" type="Magento\SalesRule\Model\Plugin\Rule"/>
     </type>
+    <type name="Magento\SalesRule\Helper\Coupon">
+        <arguments>
+            <argument name="couponParameters" xsi:type="array">
+                <item name="separator" xsi:type="string">-</item>
+                <item name="charset" xsi:type="array">
+                    <item name="alphanum" xsi:type="string">ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789</item>
+                    <item name="alpha" xsi:type="string">ABCDEFGHIJKLMNOPQRSTUVWXYZ</item>
+                    <item name="num" xsi:type="string">0123456789</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
