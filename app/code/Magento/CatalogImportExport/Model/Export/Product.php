@@ -881,11 +881,12 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                             }
                             $data[$itemId][$storeId][$fieldName] = $attrValue;
                         }
-                    }  else {
+                    } else {
                         $this->collectMultiselectValues($item, $code, $storeId);
                         if (!empty($this->collectedMultiselectsData[$storeId][$itemId][$code])) {
-                            $additionalAttributes[$code] = $fieldName .
-                                ImportProduct::PAIR_NAME_VALUE_SEPARATOR . implode(
+                            $additionalAttributes[$code] = $fieldName
+                                . ImportProduct::PAIR_NAME_VALUE_SEPARATOR
+                                . implode(
                                     ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
                                     $this->collectedMultiselectsData[$storeId][$itemId][$code]
                                 );
