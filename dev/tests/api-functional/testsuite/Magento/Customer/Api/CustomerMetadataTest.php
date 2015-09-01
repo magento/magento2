@@ -131,7 +131,6 @@ class CustomerMetadataTest extends WebapiAbstract
                     AttributeMetadata::REQUIRED         => true,
                     AttributeMetadata::DATA_MODEL       => '',
                     AttributeMetadata::OPTIONS          => [
-                        ['label' => 'Admin', 'value' => '0'],
                         ['label' => 'Main Website', 'value' => '1'],
                     ],
                     AttributeMetadata::FRONTEND_CLASS   => ' required-entry',
@@ -144,7 +143,7 @@ class CustomerMetadataTest extends WebapiAbstract
                     AttributeMetadata::IS_USED_IN_GRID  => true,
                     AttributeMetadata::IS_VISIBLE_IN_GRID => true,
                     AttributeMetadata::IS_FILTERABLE_IN_GRID => true,
-                    AttributeMetadata::IS_SEARCHABLE_IN_GRID => '',
+                    AttributeMetadata::IS_SEARCHABLE_IN_GRID => false,
                     AttributeMetadata::ATTRIBUTE_CODE   => 'website_id',
                 ],
             ]
