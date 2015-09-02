@@ -141,9 +141,10 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
      * Add options to component
      *
      * @param UiComponentInterface $component
-     * @param $attributeData
+     * @param array $attributeData
+     * @return void
      */
-    public function addOptions(UiComponentInterface $component, $attributeData)
+    public function addOptions(UiComponentInterface $component, array $attributeData)
     {
         $config = $component->getData('config');
         if (count($attributeData[AttributeMetadata::OPTIONS]) && !isset($config[AttributeMetadata::OPTIONS])) {

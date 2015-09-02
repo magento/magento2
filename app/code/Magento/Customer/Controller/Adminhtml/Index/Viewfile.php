@@ -88,7 +88,8 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        \Magento\Framework\Url\DecoderInterface $urlDecoder
+        \Magento\Framework\Url\DecoderInterface $urlDecoder,
+        \Psr\Log\LoggerInterface $logger
     ) {
         parent::__construct(
             $context,
@@ -115,7 +116,8 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
             $resultLayoutFactory,
             $resultPageFactory,
             $resultForwardFactory,
-            $resultJsonFactory
+            $resultJsonFactory,
+            $logger
         );
         $this->resultRawFactory = $resultRawFactory;
         $this->urlDecoder  = $urlDecoder;
