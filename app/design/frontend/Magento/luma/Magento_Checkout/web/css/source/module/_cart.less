@@ -38,11 +38,11 @@
     //  Summary block
     .cart-summary {
         &:extend(.abs-add-box-sizing all);
-        .css(background, @sidebar__background-color);
+        .lib-css(background, @sidebar__background-color);
         margin-bottom: @indent__m;
         padding: 1px 0 @indent__m;
         > .title {
-            .font-size(24);
+            .lib-font-size(24);
             display: none;
             font-weight: @font-weight__light;
             margin: 12px 0;
@@ -85,7 +85,7 @@
             &:extend(.abs-cart-block all);
             .title {
                 strong {
-                    .font-size(14);
+                    .lib-font-size(14);
                     font-weight: @font-weight__semibold;
                 }
             }
@@ -193,8 +193,8 @@
                     }
                 }
                 > .price {
-                    .css(color, @primary__color__lighter);
-                    .font-size(18);
+                    .lib-css(color, @primary__color__lighter);
+                    .lib-font-size(18);
                     font-weight: @font-weight__bold;
                 }
             }
@@ -226,7 +226,7 @@
                     position: absolute;
                     right: 16px;
                     top: 0;
-                    .icon-font(
+                    .lib-icon-font(
                     @icon-edit,
                     @_icon-font-size: 18px,
                     @_icon-font-line-height: 20px,
@@ -239,7 +239,7 @@
                 > .action-delete {
                     &:extend(.abs-action-button-as-link all);
                     right: 0;
-                    .icon-font-symbol(
+                    .lib-icon-font-symbol(
                     @_icon-font-content: @icon-trash
                     );
                 }
@@ -266,8 +266,8 @@
                     width: 100%;
                 }
                 &-item-name {
+                    .lib-font-size(18);
                     display: block;
-                    .font-size(18);
                     margin: -3px 0 @indent__xs;
                 }
             }
@@ -431,8 +431,8 @@
     //  Cross sell
     .block {
         &.crosssell {
+            .lib-css(padding, 0 @mobile-cart-padding);
             margin-top: 70px;
-            .css(padding, 0 @mobile-cart-padding);
             .product-item-info {
                 width: 200px;
             }
@@ -471,7 +471,7 @@
 
     //  Summary block
     .cart-summary {
-        .layout-column(2, 2, @layout-column-checkout__width-left);
+        .lib-layout-column(2, 2, @layout-column-checkout__width-left);
         padding: 1px @indent__base @indent__m;
         position: relative;
         > .title {
@@ -497,7 +497,7 @@
             }
             .fieldset {
                 .field {
-                    .form-field-type-revert(@_type: block);
+                    .lib-form-field-type-revert(@_type: block);
                     margin: 0 0 @indent__s;
                 }
             }
@@ -553,7 +553,7 @@
     //  Discount
     .cart-discount {
         &:extend(.abs-discount-block-desktop all);
-        .layout-column(2, 1, @layout-column-checkout__width-main);
+        .lib-layout-column(2, 1, @layout-column-checkout__width-main);
         border: 0;
         box-sizing: border-box;
         padding-right: 4%;
@@ -567,7 +567,7 @@
     //  Cross sell
     .block {
         &.crosssell {
-            .layout-column(2, 1, @layout-column-checkout__width-main);
+            .lib-layout-column(2, 1, @layout-column-checkout__width-main);
             &:extend(.abs-add-box-sizing-desktop all);
             padding: 0 4% 0 0;
             .products-grid .product-item {
