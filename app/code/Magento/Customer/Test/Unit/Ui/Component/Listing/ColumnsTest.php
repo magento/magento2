@@ -138,7 +138,20 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->with('config')
             ->willReturn([]);
-        $this->column->expects($this->once())
+        $this->column->expects($this->at(3))
+            ->method('setData')
+            ->with(
+                'config',
+                [
+                    'options' => [
+                        [
+                            'label' => 'Label',
+                            'value' => 'Value'
+                        ]
+                    ]
+                ]
+            );
+        $this->column->expects($this->at(5))
             ->method('setData')
             ->with(
                 'config',
@@ -146,8 +159,7 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
                     'name' => $attributeCode,
                     'dataType' => $backendType,
                     'visible' => true
-                ]
-            );
+                ]);
 
         $this->component->addColumn($attributeData, $attributeCode);
         $this->component->prepare();
@@ -186,7 +198,20 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
             ->method('getData')
             ->with('config')
             ->willReturn([]);
-        $this->column->expects($this->once())
+        $this->column->expects($this->at(3))
+            ->method('setData')
+            ->with(
+                'config',
+                [
+                    'options' => [
+                        [
+                            'label' => 'Label',
+                            'value' => 'Value'
+                        ]
+                    ]
+                ]
+            );
+        $this->column->expects($this->at(5))
             ->method('setData')
             ->with(
                 'config',
