@@ -58,6 +58,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Framework\Url\DecoderInterface $urlDecoder
+     * @param \Psr\Log\LoggerInterface $logger
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -87,9 +88,9 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        \Magento\Framework\Url\DecoderInterface $urlDecoder,
-        \Psr\Log\LoggerInterface $logger
+        \Magento\Framework\Url\DecoderInterface $urlDecoder
     ) {
         parent::__construct(
             $context,
