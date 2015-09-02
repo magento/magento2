@@ -159,7 +159,8 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
                     'name' => $attributeCode,
                     'dataType' => $backendType,
                     'visible' => true
-                ]);
+                ]
+            );
 
         $this->component->addColumn($attributeData, $attributeCode);
         $this->component->prepare();
