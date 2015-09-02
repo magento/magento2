@@ -107,6 +107,7 @@ class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
      * Get cookie restriction lifetime (in seconds)
      *
      * @return int
+     * @codeCoverageIgnore
      */
     public function getCookieRestrictionLifetime()
     {
