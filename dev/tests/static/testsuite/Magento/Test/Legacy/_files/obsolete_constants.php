@@ -319,8 +319,6 @@ return [
     ['CONFIG_KEY_FORMATS', 'Magento\ImportExport\Model\Export'],
     ['CONFIG_KEY_ENTITIES', 'Magento\ImportExport\Model\Import'],
     ['REGEX_RUN_MODEL', 'Magento\Cron\Model\Observer'],
-    ['XML_PATH_FRONT_NAME', 'Magento\DesignEditor\Helper\Data'],
-    ['XML_PATH_DISABLED_CACHE_TYPES', 'Magento\DesignEditor\Helper\Data'],
     ['XML_PATH_ENCRYPTION_MODEL', 'Magento\Core\Helper\Data'],
     ['CONFIG_KEY_PATH_TO_MAP_FILE', 'Magento\Framework\Module\Setup\Migration'],
     ['XML_PATH_SKIP_PROCESS_MODULES_UPDATES', 'Magento\Framework\App\UpdaterInterface'],
@@ -584,7 +582,6 @@ return [
         '\Magento\Framework\App\Filesystem',
         '\Magento\Framework\Filesystem\DirectoryList::SYS_TMP',
     ],
-    ['LAYOUT_NAVIGATION_CLASS_NAME', 'Magento\DesignEditor\Model\State'],
     [
         'TYPE_CONFIGURABLE',
         '\Magento\Catalog\Model\Product\Type',
