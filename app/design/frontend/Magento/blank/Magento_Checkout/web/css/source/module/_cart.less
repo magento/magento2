@@ -16,12 +16,12 @@
     //  Summary block
     .cart-summary {
         &:extend(.abs-add-box-sizing all);
-        .css(background, @sidebar__background-color);
+        .lib-css(background, @sidebar__background-color);
         margin-bottom: @indent__m;
         padding: 1px 15px @indent__m;
         > .title {
             display: block;
-            .heading(h3);
+            .lib-heading(h3);
         }
         .block {
             &:extend(.abs-discount-block all);
@@ -120,7 +120,7 @@
             &:extend(.abs-add-clearfix all);
             > .action {
                 &:extend(button all);
-                .link-as-button();
+                .lib-link-as-button();
                 margin-bottom: @indent__s;
                 margin-right: @indent__s;
                 &:last-child {
@@ -286,7 +286,7 @@
         .block {
             .fieldset {
                 .field {
-                    .form-field-type-revert(@_type: block);
+                    .lib-form-field-type-revert(@_type: block);
                     margin: 0 0 @indent__s;
                 }
             }
