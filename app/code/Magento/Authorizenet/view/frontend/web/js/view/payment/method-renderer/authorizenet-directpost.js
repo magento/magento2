@@ -8,9 +8,10 @@ define(
     [
         'jquery',
         'Magento_Payment/js/view/payment/iframe',
-        'Magento_Checkout/js/action/set-payment-information'
+        'Magento_Checkout/js/action/set-payment-information',
+        'Magento_Checkout/js/model/payment/additional-validators'
     ],
-    function ($, Component, setPaymentInformationAction) {
+    function ($, Component, setPaymentInformationAction, additionalValidators) {
         'use strict';
         return Component.extend({
             defaults: {
@@ -45,7 +46,7 @@ define(
 
             placeOrder: function() {
                 var self = this;
-                if (this.validateHandler()) {
+                if (this.validateHandler() && additionalValidators.validate()) {
                     this.isPlaceOrderActionAllowed(false);
                     $.when(setPaymentInformationAction()).done(function() {
                         self.placeOrderHandler();

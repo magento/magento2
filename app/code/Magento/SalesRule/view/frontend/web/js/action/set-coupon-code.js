@@ -18,9 +18,22 @@ define(
         'Magento_Ui/js/model/messageList',
         'mage/storage',
         'Magento_Checkout/js/action/get-totals',
-        'mage/translate'
+        'mage/translate',
+        'Magento_Checkout/js/model/payment/method-list'
     ],
-    function (ko, $, quote, urlManager, paymentService, errorProcessor, messageList, storage, getTotalsAction, $t) {
+    function (
+        ko,
+        $,
+        quote,
+        urlManager,
+        paymentService,
+        errorProcessor,
+        messageList,
+        storage,
+        getTotalsAction,
+        $t,
+        paymentMethodList
+    ) {
         'use strict';
         return function (couponCode, isApplied, isLoading) {
             var quoteId = quote.getQuoteId();
@@ -39,7 +52,7 @@ define(
                         getTotalsAction([], deferred);
                         $.when(deferred).done(function() {
                             paymentService.setPaymentMethods(
-                                paymentService.getAvailablePaymentMethods()
+                                paymentMethodList()
                             );
                         });
                         messageList.addSuccessMessage({'message': message});
