@@ -97,7 +97,7 @@ abstract class Account extends \Magento\Framework\App\Action\Action
         $pattern = '/^(' . implode('|', $this->getAllowedActions()) . ')$/i';
 
         if (!preg_match($pattern, $action)) {
-            if (!$this->_getSession()->authenticate($this)) {
+            if (!$this->_getSession()->authenticate()) {
                 $this->_actionFlag->set('', 'no-dispatch', true);
             }
         } else {
