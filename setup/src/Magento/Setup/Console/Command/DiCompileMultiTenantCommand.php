@@ -351,8 +351,9 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
         $directoryInstancesNamesList->getList($generationDir);
         $relations = $directoryInstancesNamesList->getRelations();
         // 2.2 Compression
-        if (!file_exists(dirname($relationsFile))) {
-            mkdir(dirname($relationsFile), DriverInterface::WRITEABLE_DIRECTORY_MODE, true);
+        $relationsFileDir = dirname($relationsFile);
+        if (!is_dir($relationsFileDir)) {
+            mkdir($relationsFileDir, DriverInterface::WRITEABLE_DIRECTORY_MODE, true);
         }
         $relations = array_filter($relations);
         file_put_contents($relationsFile, $serializer->serialize($relations));
@@ -368,8 +369,9 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
             }
         }
         $outputContent = $serializer->serialize($pluginDefinitions);
-        if (!file_exists(dirname($pluginDefFile))) {
-            mkdir(dirname($pluginDefFile), DriverInterface::WRITEABLE_DIRECTORY_MODE, true);
+        $pluginDefFileDir = dirname($pluginDefFile);
+        if (!is_dir($pluginDefFileDir)) {
+            mkdir($pluginDefFileDir, DriverInterface::WRITEABLE_DIRECTORY_MODE, true);
         }
         file_put_contents($pluginDefFile, $outputContent);
     }
