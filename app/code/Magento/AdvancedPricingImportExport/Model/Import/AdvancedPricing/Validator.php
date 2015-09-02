@@ -6,12 +6,12 @@
 namespace Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing;
 
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
-use \Magento\Framework\Validator\AbstractValidator;
+use Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractImportValidator;
 
-class Validator extends AbstractValidator implements RowValidatorInterface
+class Validator extends AbstractImportValidator implements RowValidatorInterface
 {
     /**
-     * @var RowValidatorInterface[]|AbstractValidator[]
+     * @var RowValidatorInterface[]|AbstractImportValidator[]
      */
     protected $validators = [];
 
@@ -43,14 +43,12 @@ class Validator extends AbstractValidator implements RowValidatorInterface
     }
 
     /**
-     * Init validators
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function init()
     {
         foreach ($this->validators as $validator) {
-            $validator->init();
+            $validator->setContext($this->getContext())->init();
         }
     }
 }

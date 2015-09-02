@@ -8,7 +8,7 @@ namespace Magento\CatalogImportExport\Model\Import\Product\Validator;
 use \Magento\Framework\Validator\AbstractValidator;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
-class SuperProductsSku extends AbstractValidator implements RowValidatorInterface
+class SuperProductsSku extends AbstractImportValidator implements RowValidatorInterface
 {
     /**
      * @var \Magento\CatalogImportExport\Model\Import\Product\SkuProcessor
@@ -22,14 +22,6 @@ class SuperProductsSku extends AbstractValidator implements RowValidatorInterfac
         \Magento\CatalogImportExport\Model\Import\Product\SkuProcessor $skuProcessor
     ) {
         $this->skuProcessor = $skuProcessor;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function init()
-    {
-        return $this;
     }
 
     /**
