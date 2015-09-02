@@ -58,6 +58,7 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
      * @param Config $eavConfig
      * @param \Magento\Eav\Api\Data\AttributeSetSearchResultsInterfaceFactory $searchResultFactory
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
+     * @codeCoverageIgnore
      */
     public function __construct(
         AttributeSetResource $attributeSetResource,
@@ -164,6 +165,7 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function deleteById($attributeSetId)
     {
