@@ -196,6 +196,17 @@ interface DriverInterface
     public function changePermissions($path, $permissions);
 
     /**
+     * Recursively hange permissions of given path
+     *
+     * @param string $path
+     * @param int $dirPermissions
+     * @param int $filePermissions
+     * @return bool
+     * @throws FileSystemException
+     */
+    public function changePermissionsRecursively($path, $dirPermissions, $filePermissions);
+
+    /**
      * Sets access and modification time of file.
      *
      * @param string $path

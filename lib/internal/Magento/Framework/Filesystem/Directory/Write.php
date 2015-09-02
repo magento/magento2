@@ -192,6 +192,21 @@ class Write extends Read implements WriteInterface
     }
 
     /**
+     * Recursively change permissions of given path
+     *
+     * @param string $path
+     * @param int $dirPermissions
+     * @param int $filePermissions
+     * @return bool
+     * @throws FileSystemException
+     */
+    public function changePermissionsRecursively($path, $dirPermissions, $filePermissions)
+    {
+        $absolutePath = $this->driver->getAbsolutePath($this->path, $path);
+        return $this->driver->changePermissionsRecursively($absolutePath, $dirPermissions, $filePermissions);
+    }
+
+    /**
      * Sets modification time of file, if file does not exist - creates file
      *
      * @param string $path
