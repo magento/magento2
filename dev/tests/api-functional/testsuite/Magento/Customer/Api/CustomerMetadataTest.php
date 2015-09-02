@@ -104,6 +104,7 @@ class CustomerMetadataTest extends WebapiAbstract
                         ['label' => '', 'value' => ''],
                         ['label' => 'Male', 'value' => '1'],
                         ['label' => 'Female', 'value' => '2'],
+                        ['label' => 'Not Specified', 'value' => '3']
                     ],
                     AttributeMetadata::FRONTEND_CLASS   => '',
                     AttributeMetadata::USER_DEFINED     => false,

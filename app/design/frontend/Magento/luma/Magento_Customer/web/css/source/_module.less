@@ -22,11 +22,11 @@
         }
         .block-title {
             &:extend(.abs-login-block-title all);
-            .font-size(18);
+            .lib-font-size(18);
         }
     }
     .fieldset {
-        .form-hasrequired(bottom);
+        .lib-form-hasrequired(bottom);
         &:after {
             margin-top: 35px;
         }
@@ -111,7 +111,7 @@
     }
 
     .table-wrapper {
-        .css(margin-bottom, @indent__base);
+        .lib-css(margin-bottom, @indent__base);
         border-bottom: 1px solid @account-table-border-bottom-color;
         &:last-child {
             margin-bottom: 0;
@@ -139,7 +139,7 @@
             .action {
                 &:extend(.abs-account-actions all);
                 &.delete {
-                    .css(color, @account-table-action-delete);
+                    .lib-css(color, @account-table-action-delete);
                 }
             }
         }
@@ -168,7 +168,7 @@
     }
     .title {
         strong {
-            .heading(h4);
+            .lib-heading(h4);
             .column.main & {
             }
         }
@@ -186,7 +186,7 @@
 }
 
 .control.captcha-image {
-    .css(margin-top, @indent__s);
+    .lib-css(margin-top, @indent__s);
     .captcha-img {
         vertical-align: middle;
     }
@@ -377,12 +377,12 @@
                     &:extend(.abs-add-clearfix-mobile-m all);
                     > .action {
                         float: right;
-                        .css(margin-top, @indent__xs);
+                        .lib-css(margin-top, @indent__xs);
                     }
                 }
                 .block-content {
                     .box {
-                        .css(margin-bottom, @indent__base);
+                        .lib-css(margin-bottom, @indent__base);
                         &:last-child {
                             margin-bottom: 0;
                         }
@@ -394,7 +394,7 @@
     .control.captcha-image {
         .captcha-img {
             display: block;
-            .css(margin-bottom, @indent__s);
+            .lib-css(margin-bottom, @indent__s);
         }
     }
     .customer-account-index {

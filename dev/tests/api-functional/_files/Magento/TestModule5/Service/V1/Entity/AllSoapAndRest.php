@@ -13,8 +13,15 @@ namespace Magento\TestModule5\Service\V1\Entity;
  */
 class AllSoapAndRest extends \Magento\Framework\Api\AbstractExtensibleObject
 {
+    /**
+     * Entity ID
+     */
     const ID = 'entity_id';
     const NAME = 'name';
+
+    /**
+     * Is Enabled
+     */
     const ENABLED = 'enabled';
     const HAS_ORDERS = 'orders';
 
