@@ -66,10 +66,10 @@ define([
          */
         _setImage: function(file, imageData) {
             file = this.__prepareFilename(file);
-            imageData.subclass = 'video-item';
             this._images[file] = imageData;
             jQuery('#media_gallery_content').trigger('addItem', imageData);
             this.element.trigger('setImage', imageData);
+            this._addVideoClass(imageData.url);
         },
 
         /**
@@ -195,12 +195,19 @@ define([
             });
         },
 
+
+        _addVideoClass: function(url) {
+            var class_video = 'video-input';
+            jQuery('img[src="' + url + '"]').addClass(class_video);
+        },
+
         _create: function () {
             var imgs = jQuery('#media_gallery_content').data('images') || [];
             for(var i = 0; i < imgs.length; i++) {
                 var tmp = imgs[i];
                 tmp.subclass = 'video-item';
                 this._images[tmp.file] = tmp;
+                this._addVideoClass(tmp.url);
             }
 
             this._bind();
@@ -218,13 +225,13 @@ define([
                     text: $.mage.__('Save'),
                     class: 'action-primary video-create-button',
                     click: function (e) {
-                        var file = jQuery('#new_video_screenshot').get(0);
+                        var nvs = jQuery('#new_video_screenshot');
+                        var file = nvs.get(0);
                         if(file && file.files && file.files.length) {
                             file =  file.files[0];
                         } else {
                             file = null;
                         }
-                        var nvs = jQuery('#new_video_screenshot');
                         var reqClass = 'required-entry _required';
                         if (!file) {
                             nvs.addClass(reqClass);
