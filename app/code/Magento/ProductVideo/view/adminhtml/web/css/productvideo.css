@@ -100,3 +100,15 @@
 .preview_hidden_image_input_button {
     display: none;
 }
+.video-item {
+  position: relative;
+}
+.video-item:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 9px;
+  background: url(../img/luma-gallery-sprite.png) bottom left;
+  width: 49px;
+  height: 40px;
+}
