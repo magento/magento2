@@ -70,7 +70,7 @@
     background-size+: @field-control__height 100%;
 
     background-image+: linear-gradient(@field-control__border-color,@field-control__border-color);
-    background-position+: ~'calc(100% - 33px)' 0;
+    background-position+: ~'calc(100% - @{field-control__height})' 0;
     background-size+: 1px 100%;
 
     padding-bottom: @field-control__padding-bottom - .1rem;
@@ -91,7 +91,7 @@
         background-position+: 100%;
 
         background-image+: linear-gradient(@field-control__focus__border-color, @field-control__focus__border-color);
-        background-position+: ~'calc(100% - 33px)' 0;
+        background-position+: ~'calc(100% - @{field-control__height})' 0;
         border-color: @field-control__focus__border-color;
     }
     &::-ms-expand {

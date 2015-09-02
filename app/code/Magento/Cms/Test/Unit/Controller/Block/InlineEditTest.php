@@ -89,15 +89,15 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
         $this->request->expects($this->at(1))
             ->method('getParam')
-            ->with('data', [])
+            ->with('items', [])
             ->willReturn($postData);
         $this->blockRepository->expects($this->once())
             ->method('getById')
             ->with(1)
             ->willReturn($this->cmsBlock);
         $this->cmsBlock->expects($this->atLeastOnce())
-            ->method('getTitle')
-            ->willReturn('Catalog Events Lister');
+            ->method('getId')
+            ->willReturn('1');
         $this->cmsBlock->expects($this->once())
             ->method('getData')
             ->willReturn([
@@ -125,7 +125,33 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with([
                 'messages' => [
-                    '[Block: Catalog Events Lister] Exception'
+                    '[Block ID: 1] Exception'
+                ],
+                'error' => true
+            ])
+            ->willReturnSelf();
+
+        $this->controller->execute();
+    }
+
+    public function testExecuteWithoutData()
+    {
+        $this->request->expects($this->at(0))
+            ->method('getParam')
+            ->with('isAjax')
+            ->willReturn(true);
+        $this->request->expects($this->at(1))
+            ->method('getParam')
+            ->with('items', [])
+            ->willReturn([]);
+        $this->jsonFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultJson);
+        $this->resultJson->expects($this->once())
+            ->method('setData')
+            ->with([
+                'messages' => [
+                    'Please correct the data sent.'
                 ],
                 'error' => true
             ])

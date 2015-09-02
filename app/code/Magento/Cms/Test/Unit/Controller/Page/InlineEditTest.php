@@ -126,13 +126,13 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $this->request->expects($this->at(0))
+        $this->request->expects($this->at(1))
             ->method('getParam')
             ->with('isAjax')
             ->willReturn(true);
-        $this->request->expects($this->at(1))
+        $this->request->expects($this->at(0))
             ->method('getParam')
-            ->with('data', [])
+            ->with('items', [])
             ->willReturn($postData);
         $this->pageRepository->expects($this->once())
             ->method('getById')
@@ -155,11 +155,11 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->method('getItems')
             ->willReturn([$this->message]);
         $this->message->expects($this->once())
-            ->method('toString')
+            ->method('getText')
             ->willReturn('Error message');
         $this->cmsPage->expects($this->atLeastOnce())
-            ->method('getTitle')
-            ->willReturn('404 Not Found');
+            ->method('getId')
+            ->willReturn('1');
         $this->cmsPage->expects($this->once())
             ->method('getData')
             ->willReturn([
@@ -189,8 +189,8 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with([
                 'messages' => [
-                    '[Page: 404 Not Found] Error message',
-                    '[Page: 404 Not Found] LocalizedException'
+                    '[Page ID: 1] Error message',
+                    '[Page ID: 1] LocalizedException'
                 ],
                 'error' => true
             ])
@@ -210,8 +210,8 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with([
                 'messages' => [
-                    '[Page: 404 Not Found] Error message',
-                    '[Page: 404 Not Found] RuntimeException'
+                    '[Page ID: 1] Error message',
+                    '[Page ID: 1] RuntimeException'
                 ],
                 'error' => true
             ])
@@ -231,8 +231,34 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with([
                 'messages' => [
-                    '[Page: 404 Not Found] Error message',
-                    '[Page: 404 Not Found] Something went wrong while saving the page.'
+                    '[Page ID: 1] Error message',
+                    '[Page ID: 1] Something went wrong while saving the page.'
+                ],
+                'error' => true
+            ])
+            ->willReturnSelf();
+
+        $this->controller->execute();
+    }
+
+    public function testExecuteWithoutData()
+    {
+        $this->jsonFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultJson);
+        $this->request->expects($this->at(0))
+            ->method('getParam')
+            ->with('items', [])
+            ->willReturn([]);
+        $this->request->expects($this->at(1))
+            ->method('getParam')
+            ->with('isAjax', null)
+            ->willReturn(true);
+        $this->resultJson->expects($this->once())
+            ->method('setData')
+            ->with([
+                'messages' => [
+                    'Please correct the data sent.'
                 ],
                 'error' => true
             ])

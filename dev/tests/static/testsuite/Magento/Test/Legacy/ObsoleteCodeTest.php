@@ -12,11 +12,6 @@ namespace Magento\Test\Legacy;
 
 class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * Message text that is used to render suggestions
-     */
-    const SUGGESTION_MESSAGE = 'Use "%s" instead.';
-
     /**@#+
      * Lists of obsolete entities from fixtures
      *
@@ -427,11 +422,11 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
             list($constant, $class, $replacement) = $row;
             if ($class) {
                 $class = ltrim($class, '\\');
-                $this->checkConstantWithFullClasspath($constant, $class, $replacement, $content);
-                $this->checkConstantWithClasspath($constant, $class, $replacement, $content);
+                $this->_checkConstantWithFullClasspath($constant, $class, $replacement, $content);
+                $this->_checkConstantWithClasspath($constant, $class, $replacement, $content);
             } else {
                 $regex = '\b' . preg_quote($constant, '/') . '\b';
-                $this->checkExistenceOfObsoleteConstants($regex, '', $content, $constant, $replacement, $class);
+                $this->_checkExistenceOfObsoleteConstants($regex, '', $content, $constant, $replacement, $class);
             }
         }
     }
@@ -469,11 +464,11 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
      * @param string $replacement
      * @param string $content
      */
-    private function checkConstantWithFullClasspath($constant, $class, $replacement, $content)
+    private function _checkConstantWithFullClasspath($constant, $class, $replacement, $content)
     {
         $constantRegex = preg_quote($constant, '/');
         $classRegex = preg_quote($class);
-        $this->checkExistenceOfObsoleteConstants(
+        $this->_checkExistenceOfObsoleteConstants(
             $constantRegex,
             $classRegex,
             $content,
@@ -491,7 +486,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
      * @param string $replacement
      * @param string $content
      */
-    private function checkConstantWithClasspath($constant, $class, $replacement, $content)
+    private function _checkConstantWithClasspath($constant, $class, $replacement, $content)
     {
         $classPathParts = explode('\\', $class);
         $classPartialPath = '';
@@ -521,7 +516,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
                     $this->_suggestReplacement(sprintf("Constant '%s' is obsolete.", $constant), $replacement)
                 );
             } else {
-                $this->checkExistenceOfObsoleteConstants(
+                $this->_checkExistenceOfObsoleteConstants(
                     $constantRegex,
                     $classRegex,
                     $content,
@@ -543,7 +538,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
      * @param string $replacement
      * @param string $class
      */
-    private function checkExistenceOfObsoleteConstants(
+    private function _checkExistenceOfObsoleteConstants(
         $constantRegex,
         $classRegex,
         $content,
@@ -562,14 +557,14 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
                 $matchClass = preg_match($classRegexFull, $content, $matchClassString);
                 if ($matchClass === 1) {
                     if ($matchClassString['classAlias']) {
-                        $result = $this->checkAliasUseNamespace(
+                        $result = $this->_checkAliasUseNamespace(
                             $constantRegex,
                             $matchConstantString,
                             $matchClassString,
                             $class
                         );
                     } else {
-                        $result = $this->checkNoAliasUseNamespace($matchConstantString, $matchClassString, $class);
+                        $result = $this->_checkNoAliasUseNamespace($matchConstantString, $matchClassString, $class);
                     }
                 } else {
                     foreach ($matchConstantString['classWithConst'] as $constantMatch) {
@@ -600,7 +595,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
      * @param string $class
      * @return int
      */
-    private function checkAliasUseNamespace(
+    private function _checkAliasUseNamespace(
         $constantRegex,
         $matchConstantString,
         $matchClassString,
@@ -618,7 +613,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
                 $foundAsComponent = true;
             }
             if (strpos($constantMatch, '::') !== false) {
-                $foundProperUse = $this->checkCompletePathOfClass(
+                $foundProperUse = $this->_checkCompletePathOfClass(
                     $constantMatch,
                     $matchClassString,
                     $class,
@@ -645,14 +640,14 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
      * @param string $class
      * @return int
      */
-    private function checkNoAliasUseNamespace(
+    private function _checkNoAliasUseNamespace(
         $matchConstantString,
         $matchClassString,
         $class
     ) {
         $foundProperUse = false;
         foreach ($matchConstantString['constPart'] as $constantMatch) {
-            $foundProperUse = $this->checkCompletePathOfClass(
+            $foundProperUse = $this->_checkCompletePathOfClass(
                 $constantMatch,
                 $matchClassString,
                 $class
@@ -678,7 +673,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
      * @param string $asComponent
      * @return bool
      */
-    private function checkCompletePathOfClass(
+    private function _checkCompletePathOfClass(
         $constantMatch,
         $matchClassString,
         $class,
@@ -706,7 +701,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
             ),
             '\\'
         ));
-        if ($this->checkClasspathProperDivisionNoConstantPath(
+        if ($this->_checkClasspathProperDivisionNoConstantPath(
             $pathInUseNamespaceTruncated,
             $pathInUseNamespace,
             $matchClassString,
@@ -715,7 +710,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
         )) {
             return true;
         } else {
-            return $this->checkClasspathProperDivisionWithConstantPath(
+            return $this->_checkClasspathProperDivisionWithConstantPath(
                 $pathInUseNamespaceTruncated,
                 $pathInUseNamespace,
                 $pathWithConst,
@@ -735,7 +730,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
      * @param bool $foundAsComponent
      * @return bool
      */
-    private function checkClasspathProperDivisionNoConstantPath(
+    private function _checkClasspathProperDivisionNoConstantPath(
         $pathInUseNamespaceTruncated,
         $pathInUseNamespace,
         $matchClassString,
@@ -760,7 +755,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
      * @param bool $foundAsComponent
      * @return bool
      */
-    private function checkClasspathProperDivisionWithConstantPath(
+    private function _checkClasspathProperDivisionWithConstantPath(
         $pathInUseNamespaceTruncated,
         $pathInUseNamespace,
         $pathWithConst,

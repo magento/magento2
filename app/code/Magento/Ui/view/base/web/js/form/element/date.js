@@ -15,6 +15,11 @@ define([
             options: {}
         },
 
+        /**
+         * Initializes regular properties of instance.
+         *
+         * @returns {Object} Chainable.
+         */
         initProperties: function () {
             this.dateFormat = utils.normalizeDate(this.dateFormat);
 
