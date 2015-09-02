@@ -19,6 +19,9 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     /** @var array */
     protected $validators = [];
 
+    /** @var \Magento\CatalogImportExport\Model\Import\Product|\PHPUnit_Framework_MockObject_MockObject */
+    protected $context;
+
     /** @var Validator\Media|\PHPUnit_Framework_MockObject_MockObject */
     protected $validatorOne;
 
@@ -27,6 +30,25 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $entityTypeModel = $this->getMock(
+            'Magento\CatalogImportExport\Model\Import\Product\Type\Simple',
+            ['retrieveAttributeFromCache'],
+            [],
+            '',
+            false
+        );
+        $entityTypeModel->expects($this->any())->method('retrieveAttributeFromCache')->willReturn([]);
+        $this->context = $this->getMock(
+            '\Magento\CatalogImportExport\Model\Import\Product',
+            ['retrieveProductTypeByName', 'retrieveMessageTemplate'],
+            [],
+            '',
+            false
+        );
+        $this->context->expects($this->any())->method('retrieveProductTypeByName')->willReturn($entityTypeModel);
+        $this->context->expects($this->any())->method('retrieveMessageTemplate')->willReturn('');
+
+
         $this->validatorOne = $this->getMock(
             'Magento\CatalogImportExport\Model\Import\Product\Validator\Media',
             [],
@@ -49,11 +71,12 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             'Magento\CatalogImportExport\Model\Import\Product\Validator',
             ['validators' => $this->validators]
         );
+        $this->validator->setContext($this->context)->init();
     }
 
     public function testIsValidCorrect()
     {
-        $value = 'val';
+        $value = ['product_type' => 'simple'];
         $this->validatorOne->expects($this->once())->method('isValid')->with($value)->willReturn(true);
         $this->validatorTwo->expects($this->once())->method('isValid')->with($value)->willReturn(true);
         $result = $this->validator->isValid($value);
