@@ -33,7 +33,6 @@ class InvalidateToken extends \Magento\Customer\Controller\Adminhtml\Index
     protected $tokenService;
 
     /**
-     * @param CustomerTokenServiceInterface $tokenService
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
@@ -59,6 +58,8 @@ class InvalidateToken extends \Magento\Customer\Controller\Adminhtml\Index
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @param CustomerTokenServiceInterface $tokenService
+     * @param \Psr\Log\LoggerInterface $logger
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -88,7 +89,8 @@ class InvalidateToken extends \Magento\Customer\Controller\Adminhtml\Index
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        CustomerTokenServiceInterface $tokenService
+        CustomerTokenServiceInterface $tokenService,
+        \Psr\Log\LoggerInterface $logger
     ) {
         $this->tokenService = $tokenService;
         parent::__construct(
@@ -116,7 +118,8 @@ class InvalidateToken extends \Magento\Customer\Controller\Adminhtml\Index
             $resultLayoutFactory,
             $resultPageFactory,
             $resultForwardFactory,
-            $resultJsonFactory
+            $resultJsonFactory,
+            $logger
         );
     }
 
