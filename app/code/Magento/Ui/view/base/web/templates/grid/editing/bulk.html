@@ -11,7 +11,7 @@
         foreach: fields">
     <td
         data-bind="
-            visible: visible,
+            visible: $parent.getColumn(index).visible,
             css: {
                 'data-grid-actions-cell': $parent.isActionsColumn($data)
             }">
