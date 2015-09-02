@@ -128,7 +128,6 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
             'file',
             [
                 'label' => __('Preview Image'),
-                'required' => true,
                 'title' => __('Preview Image'),
                 'name' => 'image',
             ]
