@@ -691,7 +691,11 @@ class Config extends AbstractConfig
      */
     public function getMerchantCountry()
     {
-        $countryCode = $this->_scopeConfig->getValue($this->_mapGeneralFieldset('merchant_country'));
+        $countryCode = $this->_scopeConfig->getValue(
+            $this->_mapGeneralFieldset('merchant_country'),
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $this->_storeId
+        );
         if (!$countryCode) {
             $countryCode = $this->directoryHelper->getDefaultCountry($this->_storeId);
         }
