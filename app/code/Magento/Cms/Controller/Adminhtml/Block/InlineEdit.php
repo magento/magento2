@@ -44,19 +44,24 @@ class InlineEdit extends \Magento\Backend\App\Action
         $messages = [];
 
         if ($this->getRequest()->getParam('isAjax')) {
-            $postData = $this->getRequest()->getParam('data', []);
-            foreach (array_keys($postData) as $blockId) {
-                /** @var \Magento\Cms\Model\Block $block */
-                $block = $this->blockRepository->getById($blockId);
-                try {
-                    $block->setData(array_merge($block->getData(), $postData[$blockId]));
-                    $this->blockRepository->save($block);
-                } catch (\Exception $e) {
-                    $messages[] = $this->getErrorWithBlockTitle(
-                        $block,
-                        __($e->getMessage())
-                    );
-                    $error = true;
+            $postItems = $this->getRequest()->getParam('items', []);
+            if (!count($postItems)) {
+                $messages[] = __('Please correct the data sent.');
+                $error = true;
+            } else {
+                foreach (array_keys($postItems) as $blockId) {
+                    /** @var \Magento\Cms\Model\Block $block */
+                    $block = $this->blockRepository->getById($blockId);
+                    try {
+                        $block->setData(array_merge($block->getData(), $postItems[$blockId]));
+                        $this->blockRepository->save($block);
+                    } catch (\Exception $e) {
+                        $messages[] = $this->getErrorWithBlockId(
+                            $block,
+                            __($e->getMessage())
+                        );
+                        $error = true;
+                    }
                 }
             }
         }
@@ -74,8 +79,8 @@ class InlineEdit extends \Magento\Backend\App\Action
      * @param string $errorText
      * @return string
      */
-    protected function getErrorWithBlockTitle(BlockInterface $block, $errorText)
+    protected function getErrorWithBlockId(BlockInterface $block, $errorText)
     {
-        return '[Block: ' . $block->getTitle() . '] ' . $errorText;
+        return '[Block ID: ' . $block->getId() . '] ' . $errorText;
     }
 }

@@ -18,6 +18,7 @@
                 <email_domain>example.com</email_domain>
                 <email_identity>general</email_identity>
                 <email_template>customer_create_account_email_template</email_template>
+                <email_no_password_template>customer_create_account_email_no_password_template</email_no_password_template>
                 <email_confirmation_template>customer_create_account_email_confirmation_template</email_confirmation_template>
                 <email_confirmed_template>customer_create_account_email_confirmed_template</email_confirmed_template>
                 <vat_frontend_visibility>0</vat_frontend_visibility>
@@ -85,5 +86,10 @@ T: {{var telephone}}
 {{depend vat_id}}<br/>VAT: {{var vat_id}}{{/depend}}|]]></pdf>
             </address_templates>
         </customer>
+        <general>
+            <restriction>
+                <autocomplete_on_storefront>0</autocomplete_on_storefront>
+            </restriction>
+        </general>
     </default>
 </config>

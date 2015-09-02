@@ -18,8 +18,8 @@
                 <argument name="grid_url" xsi:type="url" path="*/*/ordersgrid"/>
             </arguments>
         </referenceBlock>
-        <remove name="sales.order.grid.export"/>
-        <remove name="sales.order.grid.massaction"/>
+        <referenceBlock name="sales.order.grid.export" remove="true"/>
+        <referenceBlock name="sales.order.grid.massaction" remove="true"/>
         <referenceContainer name="content">
             <block class="Magento\Paypal\Block\Adminhtml\Billing\Agreement\View" name="paypal.billing.agreement.view"/>
         </referenceContainer>

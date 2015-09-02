@@ -761,7 +761,7 @@
 
 .abs-colon {
     &:after {
-        content: ": ";
+        content: ': ';
     }
 }
 
@@ -1187,5 +1187,52 @@
     }
     .table-caption {
         &:extend(.abs-no-display all);
+    }
+}
+
+//
+//  Shopping cart and payment disaount codes block
+//  ---------------------------------------------
+
+.abs-discount-block {
+    > .title {
+        border-top: @border-width__base solid @border-color__base;
+        cursor: pointer;
+        font-weight: @font-weight__semibold;
+        .icon-font(
+        @_icon-font-content: @icon-down,
+        @_icon-font-size: 30px,
+        @_icon-font-position: after,
+        @_icon-font-display: block
+        );
+        margin-bottom: 0;
+        overflow: hidden;
+        padding: 7px @indent__base 7px @indent__xs;
+        position: relative;
+        &:after {
+            position: absolute;
+            right: 0;
+            top: -5px;
+        }
+        strong {
+            .column.main & {
+                .font-size(18);
+                font-weight: @font-weight__regular;
+            }
+        }
+    }
+    > .content {
+        display: none;
+    }
+    &.active {
+        > .title {
+            .icon-font-symbol(
+            @_icon-font-content: @icon-prev,
+            @_icon-font-position: after
+            );
+        }
+        > .content {
+            display: block;
+        }
     }
 }
