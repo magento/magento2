@@ -69,6 +69,7 @@ class CheckoutAgreementsRepository implements CheckoutAgreementsRepositoryInterf
      * @param AgreementResource $agreementResource
      * @param AgreementFactory $agreementFactory
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @codeCoverageIgnore
      */
     public function __construct(
         AgreementCollectionFactory $collectionFactory,
