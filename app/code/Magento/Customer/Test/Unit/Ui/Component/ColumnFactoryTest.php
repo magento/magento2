@@ -75,6 +75,7 @@ class ColumnFactoryTest extends \PHPUnit_Framework_TestCase
                 'config' => [
                     'label' => __('Label'),
                     'dataType' => 'text',
+                    'editor' => 'text',
                     'align' => 'left',
                     'visible' => true,
                     'options' =>  [
