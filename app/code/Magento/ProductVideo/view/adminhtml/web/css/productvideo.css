@@ -88,7 +88,7 @@
   content: 'Role';
   position: absolute;
   color: #000;
-  width: 150px;
+  width: 34px;
   height: 20px;
   left: 1px;
   top: -2px;
@@ -99,4 +99,16 @@
 
 .preview_hidden_image_input_button {
     display: none;
+}
+.video-item {
+  position: relative;
+}
+.video-item:after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 9px;
+  background: url(../img/luma-gallery-sprite.png) bottom left;
+  width: 49px;
+  height: 40px;
 }
