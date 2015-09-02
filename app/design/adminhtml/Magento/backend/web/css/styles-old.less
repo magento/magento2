@@ -803,7 +803,7 @@ input.no-display,
 
     select {
         &:not([multiple]) {
-            .css(appearance, none, 1);
+            .lib-css(appearance, none, 1);
 
             display: inline-block;
             line-height: normal;
@@ -1071,8 +1071,8 @@ input.no-display,
     .control {
         .hasDatepicker {
             & + .ui-datepicker-trigger {
-                .button-reset();
-                .icon-font(
+                .lib-button-reset();
+                .lib-icon-font(
                 @icon-calendar,
                 @_icon-font-size: 42px,
                 @_icon-font-line-height: 30px,
@@ -4056,7 +4056,7 @@ input.no-display,
     }
 
     .rule-chooser .field-row {
-        .clearfix();
+        .lib-clearfix();
         display: block;
         margin-bottom: 17px;
         .input-text {
@@ -4751,7 +4751,6 @@ input.no-display,
         }
     }
 }
-
 
 //
 //  Products
