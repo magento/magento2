@@ -109,6 +109,10 @@ class AttributeMetadataConverter
             ->setIsSystem((boolean)$attribute->getIsSystem())
             ->setIsUserDefined((boolean)$attribute->getIsUserDefined())
             ->setBackendType($attribute->getBackendType())
-            ->setSortOrder((int)$attribute->getSortOrder());
+            ->setSortOrder((int)$attribute->getSortOrder())
+            ->setIsUsedInGrid($attribute->getIsUsedInGrid())
+            ->setIsVisibleInGrid($attribute->getIsVisibleInGrid())
+            ->setIsFilterableInGrid($attribute->getIsFilterableInGrid())
+            ->setIsSearchableInGrid($attribute->getIsSearchableInGrid());
     }
 }

@@ -46,7 +46,9 @@ class FlushCacheByTags
                 foreach ($tags as $tag) {
                     $tags[] = preg_replace("~_\\d+$~", '', $tag);
                 }
-                $this->_cache->clean(array_unique($tags));
+                if (!empty($tags)) {
+                    $this->_cache->clean(array_unique($tags));
+                }
             }
         }
     }

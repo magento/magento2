@@ -6,14 +6,14 @@
 
 namespace Magento\Customer\Test\Block\Adminhtml;
 
-use Magento\Backend\Test\Block\Widget\Grid as AbstractGrid;
+use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 
 /**
  * Class CustomerGrid
  * Backend customer grid
  *
  */
-class CustomerGrid extends AbstractGrid
+class CustomerGrid extends DataGrid
 {
     /**
      * Selector for action option select
@@ -29,13 +29,13 @@ class CustomerGrid extends AbstractGrid
      */
     protected $filters = [
         'name' => [
-            'selector' => '#customerGrid_filter_name',
+            'selector' => '.admin__data-grid-filters input[name*=name]',
         ],
         'email' => [
-            'selector' => '#customerGrid_filter_email',
+            'selector' => '.admin__data-grid-filters input[name*=email]',
         ],
         'group' => [
-            'selector' => '#customerGrid_filter_group',
+            'selector' => '.admin__data-grid-filters select[name*=group_id]',
             'input' => 'select',
         ],
     ];
