@@ -71,7 +71,11 @@
                            class="admin__page-nav-link <?php echo $_tabClass;?>"
                            data-tab-type="<?php echo $_tabType;?>" <?php echo $block->getUiId('tab', 'link', $_tab->getId()) ?>>
 
+                          <?php if ($block->escapeHtml($block->getTabLabel($_tab)) == 'Images') {?>
+                            <span>Images and Videos</span>
+                          <?php } else { ?>
                             <span><?php echo $block->escapeHtml($block->getTabLabel($_tab)); ?></span>
+                          <?php } ?>
 
                             <span class="admin__page-nav-item-messages" data-role="item-messages">
                                <span class="admin__page-nav-item-message _changed">
