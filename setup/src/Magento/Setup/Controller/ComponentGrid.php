@@ -39,6 +39,7 @@ class ComponentGrid extends AbstractActionController
     /**
      * @param ComposerInformation $composerInformation
      * @param ObjectManagerProvider $objectManagerProvider
+     * @param UpdatePackagesCache $updatePackagesCache
      */
     public function __construct(
         ComposerInformation $composerInformation,

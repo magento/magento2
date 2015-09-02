@@ -69,6 +69,8 @@ class UpdatePackagesCacheTest extends \PHPUnit_Framework_TestCase
             ['directoryList' => $this->directoryList]
         );
 
+        $this->composerJsonFinder = new ComposerJsonFinder($this->directoryList);
+
         /** @var \Magento\Framework\Composer\ComposerInformation $composerInfo */
         $this->composerInformation = $this->objectManager->create(
             'Magento\Framework\Composer\ComposerInformation',
@@ -79,8 +81,6 @@ class UpdatePackagesCacheTest extends \PHPUnit_Framework_TestCase
                 )
             ]
         );
-
-        $this->composerJsonFinder = new ComposerJsonFinder($this->directoryList);
     }
 
     public function testGetPackagesForUpdate()
