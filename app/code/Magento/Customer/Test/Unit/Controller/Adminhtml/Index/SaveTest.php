@@ -260,7 +260,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             \Magento\Customer\Api\Data\CustomerInterface::DEFAULT_BILLING => false,
             \Magento\Customer\Api\Data\CustomerInterface::DEFAULT_SHIPPING => false,
             'confirmation' => false,
-            'sendemail' => false,
             'id' => $customerId,
         ];
 

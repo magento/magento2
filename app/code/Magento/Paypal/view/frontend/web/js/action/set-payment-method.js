@@ -9,9 +9,10 @@ define(
         'Magento_Checkout/js/model/url-builder',
         'mage/storage',
         'Magento_Checkout/js/model/error-processor',
-        'Magento_Customer/js/model/customer'
+        'Magento_Customer/js/model/customer',
+        'Magento_Customer/js/customer-data'
     ],
-    function ($, quote, urlBuilder, storage, errorProcessor, customer) {
+    function ($, quote, urlBuilder, storage, errorProcessor, customer, customerData) {
         'use strict';
 
         return function () {
@@ -41,6 +42,7 @@ define(
                 serviceUrl, JSON.stringify(payload)
             ).done(
                 function () {
+                    customerData.invalidate(['cart']);
                     $.mage.redirect(window.checkoutConfig.payment.paypalExpress.redirectUrl[quote.paymentMethod().method]);
                 }
             ).fail(

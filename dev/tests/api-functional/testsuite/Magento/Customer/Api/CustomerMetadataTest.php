@@ -123,7 +123,6 @@ class CustomerMetadataTest extends WebapiAbstract
                     AttributeMetadata::MULTILINE_COUNT  => 0,
                     AttributeMetadata::DATA_MODEL       => '',
                     AttributeMetadata::OPTIONS          => [
-                        ['label' => 'Admin', 'value' => '0'],
                         ['label' => 'Main Website', 'value' => '1'],
                     ],
                     AttributeMetadata::FRONTEND_CLASS   => ' required-entry',

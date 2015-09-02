@@ -176,7 +176,7 @@ class UiComponentFactory extends Object
             /** @var \Magento\Framework\View\Element\UiComponentInterface $component */
             $component = $this->objectManager->create(
                 $className,
-                array_merge_recursive($componentArguments, $arguments)
+                array_replace_recursive($componentArguments, $arguments)
             );
 
             return $component;
