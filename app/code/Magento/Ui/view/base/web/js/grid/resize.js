@@ -31,6 +31,7 @@ define([
             resizingColumnClass: '_resizing',
             inResizeClass: '_in-resize',
             visibleClass: '_resize-visible',
+            cellContentElement: 'div.data-grid-cell-content',
             minColumnWidth: 40,
             resizable: false,
             resizeConfig: {
@@ -222,7 +223,7 @@ define([
                 });
             }
 
-            $(elem).parent().children().find('div._hideOverflow').css('max-height', height + 'px');
+            $(elem).parent().children().find(this.cellContentElement).css('max-height', height + 'px');
             this.maxRowsHeight(rowsH);
         },
 
