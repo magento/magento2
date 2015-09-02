@@ -135,6 +135,17 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
         );
 
         $fieldset->addField(
+            'new_video_screenshot_preview',
+            'button',
+            [
+                'class' => 'preview_hidden_image_input_button',
+                'label' => '',
+                'name' => '_preview',
+            ]
+        );
+
+
+        $fieldset->addField(
             'new_video_get',
             'button',
             [
