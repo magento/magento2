@@ -105,7 +105,7 @@ class Shipping extends Form
 
         // Test environment may become unstable when form fields are filled in a default manner.
         // Imitating behavior closer to the real user.
-        foreach ($mapping as $name => $field) {
+        foreach ($mapping as $field) {
             $this->_fill([$field], $this->_rootElement);
             $this->waitForUpdatedShippingMethods();
         }
