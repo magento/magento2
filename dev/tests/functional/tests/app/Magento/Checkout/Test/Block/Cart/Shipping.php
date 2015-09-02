@@ -74,6 +74,7 @@ class Shipping extends Form
      *
      * @param array $shipping
      * @return void
+     * @throws \Exception
      */
     public function selectShippingMethod(array $shipping)
     {
@@ -81,7 +82,13 @@ class Shipping extends Form
         if (!$this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->isVisible()) {
             $this->openEstimateShippingAndTax();
         }
-        $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->click();
+
+        $element = $this->_rootElement->find($selector, Locator::SELECTOR_XPATH);
+        if (!$element->isDisabled()) {
+            $element->click();
+        } else {
+            throw new \Exception("Unable to set value to field '$selector' as it's disabled.");
+        }
     }
 
     /**
@@ -95,8 +102,13 @@ class Shipping extends Form
         $this->openEstimateShippingAndTax();
         $data = $address->getData();
         $mapping = $this->dataMapping(array_intersect_key($data, array_flip($this->estimationFields)));
-        $this->_fill($mapping, $this->_rootElement);
-        $this->waitForUpdatedShippingMethods();
+
+        // Test environment may become unstable when form fields are filled in a default manner.
+        // Imitating behavior closer to the real user.
+        foreach ($mapping as $name => $field) {
+            $this->_fill([$field], $this->_rootElement);
+            $this->waitForUpdatedShippingMethods();
+        }
     }
 
     /**
