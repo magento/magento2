@@ -399,7 +399,13 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
-                    <item name="editor" xsi:type="string">text</item>
+                    <item name="editor" xsi:type="array">
+                        <item name="editorType" xsi:type="string">text</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="required-entry" xsi:type="boolean">true</item>
+                            <item name="validate-email" xsi:type="boolean">true</item>
+                        </item>
+                    </item>
                     <item name="sortable" xsi:type="string">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>
@@ -414,7 +420,12 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                 </item>
                 <item name="config" xsi:type="array">
-                    <item name="editor" xsi:type="string">select</item>
+                    <item name="editor" xsi:type="array">
+                        <item name="editorType" xsi:type="string">select</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="required-entry" xsi:type="boolean">true</item>
+                        </item>
+                    </item>
                     <item name="sortable" xsi:type="string">true</item>
                     <item name="dataType" xsi:type="string">select</item>
                     <item name="align" xsi:type="string">left</item>
@@ -500,7 +511,12 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                 </item>
                 <item name="config" xsi:type="array">
-                    <item name="editor" xsi:type="string">select</item>
+                    <item name="editor" xsi:type="array">
+                        <item name="editorType" xsi:type="string">select</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="required-entry" xsi:type="boolean">true</item>
+                        </item>
+                    </item>
                     <item name="dataType" xsi:type="string">select</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Web Site</item>

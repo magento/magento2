@@ -150,9 +150,9 @@ class UpgradeData implements UpgradeDataInterface
                         'is_searchable_in_grid' => true,
                     ],
                     'region_id' => [
-                        'is_used_in_grid' => true,
+                        'is_used_in_grid' => false,
                         'is_visible_in_grid' => false,
-                        'is_filterable_in_grid' => true,
+                        'is_filterable_in_grid' => false,
                         'is_searchable_in_grid' => false,
                     ],
                     'postcode' => [
@@ -168,6 +168,18 @@ class UpgradeData implements UpgradeDataInterface
                         'is_searchable_in_grid' => true,
                     ],
                     'fax' => [
+                        'is_used_in_grid' => true,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => false,
+                        'is_searchable_in_grid' => true,
+                    ],
+                    'firstname' => [
+                        'is_used_in_grid' => true,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => false,
+                        'is_searchable_in_grid' => true,
+                    ],
+                    'lastname' => [
                         'is_used_in_grid' => true,
                         'is_visible_in_grid' => false,
                         'is_filterable_in_grid' => false,
