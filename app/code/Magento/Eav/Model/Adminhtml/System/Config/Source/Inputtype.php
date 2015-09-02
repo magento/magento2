@@ -11,6 +11,7 @@ class Inputtype implements \Magento\Framework\Option\ArrayInterface
      * Return array of options
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function toOptionArray()
     {
