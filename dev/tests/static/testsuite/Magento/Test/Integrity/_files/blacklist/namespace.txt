@@ -61,3 +61,4 @@ setup/src/Magento/Setup/Test/Unit/Module/Di/_files/app/code/Magento/SomeModule/M
 setup/src/Magento/Setup/Test/Unit/Module/Di/_files/app/code/Magento/SomeModule/Helper/Test.php
 setup/src/Magento/Setup/Test/Unit/Module/Di/_files/app/code/Magento/SomeModule/Element.php
 setup/src/Magento/Setup/Test/Unit/Module/Di/_files/app/code/Magento/SomeModule/ElementFactory.php
+setup/src/Magento/Setup/Test/Unit/Module/Di/_files/app/code/Magento/SomeModule/Model/DoubleColon.php
