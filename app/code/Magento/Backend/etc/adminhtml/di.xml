@@ -75,7 +75,6 @@
     </type>
     <type name="Magento\Framework\Translate">
         <arguments>
-            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Translate</argument>
             <argument name="locale" xsi:type="object">Magento\Backend\Model\Locale\Resolver\Proxy</argument>
         </arguments>
     </type>
