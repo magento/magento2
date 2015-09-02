@@ -7,6 +7,8 @@
 
 namespace Magento\Mtf\Util\Generate\Factory;
 
+use Magento\Framework\Filesystem\DriverInterface;
+
 /**
  * Class AbstractFactory
  *
@@ -103,7 +105,7 @@ abstract class AbstractFactory
      * @return bool
      * @throws \Exception
      */
-    protected function checkAndCreateFolder($folder, $mode = 0770)
+    protected function checkAndCreateFolder($folder, $mode = DriverInterface::WRITEABLE_DIRECTORY_MODE)
     {
         if (is_dir($folder)) {
             return true;
