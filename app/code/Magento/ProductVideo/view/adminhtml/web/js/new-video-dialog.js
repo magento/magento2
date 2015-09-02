@@ -498,5 +498,8 @@ define([
 
     });
     $('#group-fields-image-management > legend > span').text('Images and Videos');
+    $('.video-create-button').on('click', function(){
+       $('#media_gallery_content').find('.video-item').parent().addClass('video-item');
+    });
     return $.mage.newVideoDialog;
 });
