@@ -30,14 +30,6 @@ class GroupPrice extends AbstractPrice implements RowValidatorInterface
 
     /**
      * {@inheritdoc}
-     */
-    public function init()
-    {
-        return parent::init();
-    }
-
-    /**
-     * {@inheritdoc}
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function isValid($value)
