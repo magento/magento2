@@ -20,7 +20,7 @@ use Magento\Framework\Stdlib\DateTime;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
+class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity implements ContextInterface
 {
     const CONFIG_KEY_PRODUCT_TYPES = 'global/importexport/import_product_types';
 
@@ -660,7 +660,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->_initAttributeSets()
             ->_initTypeModels()
             ->_initSkus();
-        $this->validator->init();
+        $this->validator->setContext($this)->init();
     }
 
     /**
@@ -2287,5 +2287,27 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         }
         $this->getOptionEntity()->validateAmbiguousData();
         return parent::_saveValidatedBunches();
+    }
+
+    /**
+     * Get context params
+     *
+     * @return array|null
+     */
+    public function getParams()
+    {
+        return $this->_parameters;
+    }
+
+    /**
+     * Get context param by name
+     *
+     * @param string $name
+     *
+     * @return mixed
+     */
+    public function getParam($name)
+    {
+        return isset($this->_parameters[$name]) ? $this->_parameters[$name] : null;
     }
 }
