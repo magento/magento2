@@ -31,11 +31,12 @@
   opacity: 0.7;
 }
 #add_video_button {
-  background: rgba(0,0,0,0);
-  width: 100%;
-  height: 100%;
-  border: 0;
+    background: #fff url(../images/icon-movie.gif) 50% 25% no-repeat;
+    border: none;
+    width: 100%;
+    height: 100%;
 }
-.video-placeholder .image-placeholder-text {
-  font-weight: 400;
+
+.preview_hidden_image_input_button {
+    display: none;
 }
