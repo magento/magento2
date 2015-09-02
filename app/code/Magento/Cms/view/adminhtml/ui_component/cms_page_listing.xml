@@ -145,18 +145,6 @@
                     </item>
                 </argument>
             </filterInput>
-            <filterSelect name="page_layout">
-                <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Cms\Model\Page\Source\PageLayout</argument>
-                </argument>
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">page_layout</item>
-                        <item name="label" xsi:type="string" translate="true">Layout</item>
-                        <item name="caption" xsi:type="string" translate="true">Select...</item>
-                    </item>
-                </argument>
-            </filterSelect>
             <filterSelect name="store_id">
                 <argument name="optionsProvider" xsi:type="configurableObject">
                     <argument name="class" xsi:type="string">Magento\Cms\Ui\Component\Listing\Column\Cms\Options</argument>
