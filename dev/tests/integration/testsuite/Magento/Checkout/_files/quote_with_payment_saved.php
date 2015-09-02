@@ -17,7 +17,6 @@ $paymentDetails = [
 
 $quote->getPayment()
     ->setMethod('checkmo')
-    ->setTitle('title')
     ->setPoNumber('poNumber')
     ->setCcOwner('tester')
     ->setCcType('visa')
