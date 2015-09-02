@@ -197,7 +197,7 @@ define([
 
 
         _addVideoClass: function(url) {
-            var class_video = 'video-input';
+            var class_video = 'video-item';
             jQuery('img[src="' + url + '"]').addClass(class_video);
         },
 
