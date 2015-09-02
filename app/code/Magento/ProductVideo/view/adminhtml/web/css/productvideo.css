@@ -31,10 +31,70 @@
   opacity: 0.7;
 }
 #add_video_button {
-    background: #fff url(../images/icon-movie.gif) 50% 25% no-repeat;
-    border: none;
-    width: 100%;
-    height: 100%;
+  background: rgba(0,0,0,0);
+  width: 100%;
+  height: 100%;
+  border: 0;
+  z-index: 5;
+  position: relative;
+}
+.video-placeholder .image-placeholder-text {
+  font-weight: 400;
+}
+.admin__field.field-video_base_image .admin__field-control,
+.admin__field.field-video_small_image .admin__field-control,
+.admin__field.field-video_thumb_image .admin__field-control,
+.admin__field.field-video_swatch_image .admin__field-control,
+.admin__field.field-new_video_disabled .admin__field-control {
+  width: 82px;
+  margin-left: calc( (100%) * .33333333 - 30px );
+}
+.admin__field.field-video_base_image .admin__field-control input,
+.admin__field.field-video_small_image .admin__field-control input,
+.admin__field.field-video_thumb_image .admin__field-control input,
+.admin__field.field-video_swatch_image .admin__field-control input,
+.admin__field.field-new_video_disabled .admin__field-control input {
+  float: right;
+}
+.admin__field.field-video_base_image .admin__field-label,
+.admin__field.field-video_small_image .admin__field-label,
+.admin__field.field-video_thumb_image .admin__field-label,
+.admin__field.field-video_swatch_image .admin__field-label,
+.admin__field.field-new_video_disabled .admin__field-label {
+  width: 200px;
+  position: absolute;
+  margin-left: calc( (100%) * .33333333 - 30px + 90px );
+}
+.admin__field.field-video_base_image .admin__field-label span,
+.admin__field.field-video_small_image .admin__field-label span,
+.admin__field.field-video_thumb_image .admin__field-label span,
+.admin__field.field-video_swatch_image .admin__field-label span,
+.admin__field.field-new_video_disabled .admin__field-label span {
+  float: left;
+}
+.admin__field.field-video_base_image,
+.admin__field.field-video_small_image,
+.admin__field.field-video_thumb_image,
+.admin__field.field-video_swatch_image {
+  margin-bottom: 20px !important;
+}
+.admin__field.field-new_video_disabled {
+  margin-top: 32px !important;
+}
+.admin__field.field-video_base_image .admin__field-control {
+  position: relative;
+}
+.admin__field.field-video_base_image .admin__field-control:after {
+  content: 'Role';
+  position: absolute;
+  color: #000;
+  width: 150px;
+  height: 20px;
+  left: 1px;
+  top: -2px;
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 1.4rem;
+  font-weight: 600;
 }
 
 .preview_hidden_image_input_button {

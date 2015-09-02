@@ -483,6 +483,6 @@ define([
         }
 
     });
-
+    $('#group-fields-image-management > legend > span').text('Images and Videos');
     return $.mage.newVideoDialog;
 });
