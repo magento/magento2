@@ -3,9 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\CheckoutAgreements\Model\Resource\Agreement;
 
 /**
@@ -16,7 +13,11 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     /**
      * @var array
      */
-    protected $_map = ['fields' => ['agreement_id' => 'main_table.agreement_id']];
+    protected $_map = [
+        'fields' => [
+            'agreement_id' => 'main_table.agreement_id'
+        ]
+    ];
 
     /**
      * Is store filter with admin store
@@ -32,7 +33,10 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _construct()
     {
-        $this->_init('Magento\CheckoutAgreements\Model\Agreement', 'Magento\CheckoutAgreements\Model\Resource\Agreement');
+        $this->_init(
+            'Magento\CheckoutAgreements\Model\Agreement',
+            'Magento\CheckoutAgreements\Model\Resource\Agreement'
+        );
     }
 
     /**
