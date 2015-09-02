@@ -88,6 +88,7 @@
     "requireOperatorBeforeLineBreak": true,
     "requirePaddingNewLinesAfterUseStrict": true,
     "requirePaddingNewLinesInObjects": true,
+    "requireParenthesesAroundIIFE": true,
     "requireSpaceAfterBinaryOperators": true,
     "requireSpaceBeforeBinaryOperators": true,
     "requireSpaceBeforeBlockStatements": true,
