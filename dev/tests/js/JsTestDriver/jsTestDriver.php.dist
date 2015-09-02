@@ -14,7 +14,6 @@ return array(
         '/dev/tests/js/JsTestDriver/framework',
         '/lib/web/mage/webapi.js',
         '/lib/web/mage/validation/validation.js',
-        '/app/code/Magento/DesignEditor/view/adminhtml/web/js/infinitescroll.js',
         '/lib/web/jquery/jstree/jquery.jstree.js',
         '/lib/web/jquery/jquery-ui-timepicker-addon.js',
         '/lib/web/mage/cookies.js',

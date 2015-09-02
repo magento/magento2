@@ -23,7 +23,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class BookmarkRepository implements BookmarkRepositoryInterface
 {
     /**
-     * @var \Magento\Ui\Model\BookmarkFactory
+     * @var \Magento\Ui\Api\Data\BookmarkInterfaceFactory
      */
     protected $bookmarkFactory;
 
@@ -38,12 +38,12 @@ class BookmarkRepository implements BookmarkRepositoryInterface
     protected $searchResultsFactory;
 
     /**
-     * @param \Magento\Ui\Model\BookmarkFactory $bookmarkFactory
+     * @param \Magento\Ui\Api\Data\BookmarkInterfaceFactory $bookmarkFactory
      * @param Bookmark $bookmarkResourceModel
      * @param \Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory $searchResultsFactory
      */
     public function __construct(
-        \Magento\Ui\Model\BookmarkFactory $bookmarkFactory,
+        \Magento\Ui\Api\Data\BookmarkInterfaceFactory $bookmarkFactory,
         \Magento\Ui\Model\Resource\Bookmark $bookmarkResourceModel,
         \Magento\Ui\Api\Data\BookmarkSearchResultsInterfaceFactory $searchResultsFactory
     ) {
