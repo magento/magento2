@@ -156,17 +156,6 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
         );
 
         $fieldset->addField(
-            'new_video_disabled',
-            'checkbox',
-            [
-                'class' => 'edited-data',
-                'label' => 'Hide from Product Page',
-                'title' => __('Hide from Product Page'),
-                'name' => 'disabled',
-            ]
-        );
-
-        $fieldset->addField(
             'video_base_image',
             'checkbox',
             [
@@ -211,6 +200,17 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
                 'title' => __('Swatch Image'),
                 'data-role' => 'role-type-selector',
                 'value' => 'swatch_image',
+            ]
+        );
+
+        $fieldset->addField(
+            'new_video_disabled',
+            'checkbox',
+            [
+                'class' => 'edited-data',
+                'label' => 'Hide from Product Page',
+                'title' => __('Hide from Product Page'),
+                'name' => 'disabled',
             ]
         );
 
