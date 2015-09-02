@@ -674,7 +674,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     {
         $postData = $this->_postDataHelper->getPostData(
             $this->getPagerUrl(),
-            [\Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->getPagerEncodedUrl()]
+            [\Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $this->getPagerEncodedUrl()]
         );
         $options = [
             'modeCookie' => ToolbarModel::MODE_COOKIE_NAME,

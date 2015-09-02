@@ -276,7 +276,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->messageManager->expects($this->once())
             ->method('addNotice')
             ->with('Please sign in to download your product or purchase <a href="product_url">product_name</a>.');
-        $this->session->expects($this->once())->method('authenticate')->with($this->link)->willReturn(true);
+        $this->session->expects($this->once())->method('authenticate')->willReturn(true);
         $this->objectManager->expects($this->at(4))
             ->method('create')
             ->with('Magento\Framework\UrlInterface')

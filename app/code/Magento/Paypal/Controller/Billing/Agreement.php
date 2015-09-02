@@ -42,7 +42,7 @@ abstract class Agreement extends \Magento\Framework\App\Action\Action
         if (!$request->isDispatched()) {
             return parent::dispatch($request);
         }
-        if (!$this->_getSession()->authenticate($this)) {
+        if (!$this->_getSession()->authenticate()) {
             $this->_actionFlag->set('', 'no-dispatch', true);
         }
         return parent::dispatch($request);

@@ -93,7 +93,7 @@ class Standard extends \Magento\Framework\App\Router\Base
      * Match provided request and if matched - return corresponding controller
      *
      * @param \Magento\Framework\App\RequestInterface $request
-     * @return \Magento\Framework\App\Action\Action|null
+     * @return \Magento\Framework\App\ActionInterface|null
      */
     public function match(\Magento\Framework\App\RequestInterface $request)
     {
