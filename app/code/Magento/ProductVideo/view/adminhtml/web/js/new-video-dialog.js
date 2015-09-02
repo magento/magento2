@@ -217,7 +217,7 @@ define([
                     class: 'action-primary video-create-button',
                     click: function (e) {
                         var file = jQuery('#new_video_screenshot').get(0);
-                        if(file) {
+                        if(file && file.files) {
                             file = file.files.length ? file.files[0] : null;
                         }
                         if (!file) {
