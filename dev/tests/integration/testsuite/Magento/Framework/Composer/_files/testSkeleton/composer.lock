@@ -1249,7 +1249,6 @@
                 "magento/module-directory": "0.74.0-beta2",
                 "magento/module-eav": "0.74.0-beta2",
                 "magento/module-indexer": "0.74.0-beta2",
-                "magento/module-log": "0.74.0-beta2",
                 "magento/module-media-storage": "0.74.0-beta2",
                 "magento/module-msrp": "0.74.0-beta2",
                 "magento/module-page-cache": "0.74.0-beta2",
@@ -2018,42 +2017,6 @@
             "description": "N/A"
         },
         {
-            "name": "magento/module-design-editor",
-            "version": "0.74.0-beta2",
-            "dist": {
-                "type": "zip",
-                "url": "https://packages.magento.com/_packages/magento_module-design-editor-0.74.0-beta2.zip",
-                "reference": null,
-                "shasum": "c506ce273b4578b949346ee4cdb4481ebdf1e3dc"
-            },
-            "require": {
-                "magento/framework": "0.74.0-beta2",
-                "magento/magento-composer-installer": "*",
-                "magento/module-backend": "0.74.0-beta2",
-                "magento/module-config": "0.74.0-beta2",
-                "magento/module-eav": "0.74.0-beta2",
-                "magento/module-media-storage": "0.74.0-beta2",
-                "magento/module-store": "0.74.0-beta2",
-                "magento/module-theme": "0.74.0-beta2",
-                "magento/module-translation": "0.74.0-beta2",
-                "php": "~5.5.0|~5.6.0"
-            },
-            "type": "magento2-module",
-            "extra": {
-                "map": [
-                    [
-                        "*",
-                        "Magento/DesignEditor"
-                    ]
-                ]
-            },
-            "license": [
-                "OSL-3.0",
-                "AFL-3.0"
-            ],
-            "description": "N/A"
-        },
-        {
             "name": "magento/module-developer",
             "version": "0.74.0-beta2",
             "dist": {
@@ -2685,39 +2648,6 @@
             "description": "N/A"
         },
         {
-            "name": "magento/module-log",
-            "version": "0.74.0-beta2",
-            "dist": {
-                "type": "zip",
-                "url": "https://packages.magento.com/_packages/magento_module-log-0.74.0-beta2.zip",
-                "reference": null,
-                "shasum": "108169619b608577c34411d7ba717298ba40d641"
-            },
-            "require": {
-                "magento/framework": "0.74.0-beta2",
-                "magento/magento-composer-installer": "*",
-                "magento/module-backend": "0.74.0-beta2",
-                "magento/module-customer": "0.74.0-beta2",
-                "magento/module-eav": "0.74.0-beta2",
-                "magento/module-store": "0.74.0-beta2",
-                "php": "~5.5.0|~5.6.0"
-            },
-            "type": "magento2-module",
-            "extra": {
-                "map": [
-                    [
-                        "*",
-                        "Magento/Log"
-                    ]
-                ]
-            },
-            "license": [
-                "OSL-3.0",
-                "AFL-3.0"
-            ],
-            "description": "N/A"
-        },
-        {
             "name": "magento/module-media-storage",
             "version": "0.74.0-beta2",
             "dist": {
@@ -3125,7 +3055,6 @@
                 "magento/module-customer": "0.74.0-beta2",
                 "magento/module-downloadable": "0.74.0-beta2",
                 "magento/module-eav": "0.74.0-beta2",
-                "magento/module-log": "0.74.0-beta2",
                 "magento/module-quote": "0.74.0-beta2",
                 "magento/module-review": "0.74.0-beta2",
                 "magento/module-sales": "0.74.0-beta2",
@@ -4152,7 +4081,6 @@
                 "magento/module-currency-symbol": "self.version",
                 "magento/module-customer": "self.version",
                 "magento/module-customer-import-export": "self.version",
-                "magento/module-design-editor": "self.version",
                 "magento/module-developer": "self.version",
                 "magento/module-dhl": "self.version",
                 "magento/module-directory": "self.version",
@@ -4171,7 +4099,6 @@
                 "magento/module-indexer": "self.version",
                 "magento/module-integration": "self.version",
                 "magento/module-layered-navigation": "self.version",
-                "magento/module-log": "self.version",
                 "magento/module-media-storage": "self.version",
                 "magento/module-msrp": "self.version",
                 "magento/module-multishipping": "self.version",
