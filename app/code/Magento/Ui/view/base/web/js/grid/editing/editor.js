@@ -277,15 +277,21 @@ define([
          * @returns {Editor} Chainable.
          */
         save: function () {
+            var data;
+
             if (!this.isValid()) {
                 return this;
             }
+
+            data = {
+                items: this.getData()
+            };
 
             this.clearMessages()
                 .columns('showLoader');
 
             this.client()
-                .save(this.getData())
+                .save(data)
                 .done(this.onDataSaved)
                 .fail(this.onSaveError);
 
