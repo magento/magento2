@@ -120,9 +120,10 @@ define([
     }
 
     /**
+     * Creates listener for the nodes binded to provided component.
      *
-     * @param {Object} data
-     * @param {Object} component
+     * @param {Object} data - Listener data.
+     * @param {Object} component - Associated with nodes component.
      */
     function setRootListener(data, component) {
         boundedNodes.get(component, function (root) {

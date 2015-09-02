@@ -198,8 +198,6 @@ define([
     function getNodes(selector, ctx) {
         var nodes = [];
 
-        ctx = ctx || document.body;
-
         if (typeof selector === 'object') {
             if (typeof selector.jquery === 'string' || !selector.tagName) {
                 nodes = _.toArray(selector);
@@ -207,7 +205,7 @@ define([
                 nodes = [selector];
             }
         } else if (typeof selector === 'string') {
-            nodes = _.toArray($(selector, ctx));
+            nodes = $(selector, ctx).toArray();
         }
 
         return nodes;
