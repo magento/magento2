@@ -8,7 +8,7 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 use Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory;
 use Magento\Framework\Search\Request\DimensionFactory;
-use Magento\Indexer\Model\ConfigInterface;
+use Magento\Framework\Indexer\ConfigInterface;
 
 class Store
 {
