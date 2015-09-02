@@ -235,9 +235,11 @@ define([
             rowElements
                 .find('td:eq(' + this.resizeConfig.curResizeElem.ctx.$index() + ')')
                 .addClass(this.resizingColumnClass);
+            $(this.resizeConfig.curResizeElem.elem).addClass(this.resizingColumnClass);
             rowElements
                 .find('td:eq(' + this.resizeConfig.depResizeElem.ctx.$index() + ')')
                 .addClass(this.resizingColumnClass);
+            $(this.resizeConfig.depResizeElem.elem).addClass(this.resizingColumnClass);
         },
 
         /**
@@ -249,9 +251,11 @@ define([
             rowElements
                 .find('td:eq(' + this.resizeConfig.curResizeElem.ctx.$index() + ')')
                 .removeClass(this.resizingColumnClass);
+            $(this.resizeConfig.curResizeElem.elem).removeClass(this.resizingColumnClass);
             rowElements
                 .find('td:eq(' + this.resizeConfig.depResizeElem.ctx.$index() + ')')
                 .removeClass(this.resizingColumnClass);
+            $(this.resizeConfig.depResizeElem.elem).removeClass(this.resizingColumnClass);
         },
 
         /**
