@@ -103,7 +103,7 @@ define(
                         clientToken: this.clientToken
                     });
                 } else {
-                    messageList.addErrorMessage({'message': 'Can not initialize PayPal (Braintree)'});
+                    this.messageContainer.addErrorMessage({'message': 'Can not initialize PayPal (Braintree)'});
                 }
 
                 return this;
@@ -116,7 +116,7 @@ define(
                     var self = this,
                         cardInfo = null;
 
-                    messageList.clear();
+                    this.messageContainer.clear();
                     this.quoteBaseGrandTotals = quote.totals().base_grand_total;
 
                     this.isPaymentProcessing = $.Deferred();
@@ -194,9 +194,9 @@ define(
                 this.paymentMethodNonce('');
 
                 if (_.isObject(error)) {
-                    messageList.addErrorMessage(error);
+                    this.messageContainer.addErrorMessage(error);
                 } else {
-                    messageList.addErrorMessage({
+                    this.messageContainer.addErrorMessage({
                         message: error
                     });
                 }

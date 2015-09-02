@@ -103,7 +103,7 @@ define(
                         }
                     });
                 } else {
-                    messageList.addErrorMessage({'message': 'Can not initialize PayPal (Braintree)'});
+                    this.messageContainer.addErrorMessage({'message': 'Can not initialize PayPal (Braintree)'});
                 }
             },
             isValid: function () {

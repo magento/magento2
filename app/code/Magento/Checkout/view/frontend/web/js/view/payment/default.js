@@ -15,7 +15,9 @@ define(
         'Magento_Checkout/js/checkout-data',
         'Magento_Checkout/js/model/checkout-data-resolver',
         'uiRegistry',
-        'Magento_Checkout/js/model/payment/additional-validators'
+        'Magento_Checkout/js/model/payment/additional-validators',
+        'Magento_Ui/js/model/messages',
+        'Magento_Ui/js/core/renderer/layout'
     ],
     function (
         ko,
@@ -29,7 +31,9 @@ define(
         checkoutData,
         checkoutDataResolver,
         registry,
-        additionalValidators
+        additionalValidators,
+        Messages,
+        layout
     ) {
         'use strict';
         return Component.extend({
@@ -81,6 +85,26 @@ define(
              * @returns {Component} Chainable.
              */
             initChildren: function () {
+                this.messageContainer = new Messages();
+                this.createMessagesComponent();
+
+                return this;
+            },
+
+            createMessagesComponent: function () {
+
+                var messagesComponent = {
+                    parent: this.name,
+                    name: this.name + '.messages',
+                    displayArea: 'messages',
+                    component: 'Magento_Ui/js/view/messages',
+                    config: {
+                        messageContainer: this.messageContainer
+                    }
+                };
+
+                layout([messagesComponent]);
+
                 return this;
             },
 
@@ -101,7 +125,7 @@ define(
                 }
                 if (emailValidationResult && this.validate() && additionalValidators.validate()) {
                     this.isPlaceOrderActionAllowed(false);
-                    placeOrder = placeOrderAction(this.getData(), this.redirectAfterPlaceOrder);
+                    placeOrder = placeOrderAction(this.getData(), this.redirectAfterPlaceOrder, this.messageContainer);
 
                     $.when(placeOrder).fail(function () {
                         self.isPlaceOrderActionAllowed(true);
