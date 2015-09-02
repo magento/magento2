@@ -140,6 +140,9 @@ define([
             });
 
             element = $(element).data('imageData', imageData);
+            if(imageData.subclass) {
+                element.addClass(imageData.subclass);
+            }
             if (count === 0) {
                 element.prependTo(this.element);
             } else {
