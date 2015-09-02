@@ -14,16 +14,16 @@
 & when (@media-common = true) {
 
 .fieldset {
-    .form-fieldset();
+    .lib-form-fieldset();
     &:last-child {
         margin-bottom: 0;
     }
     > .field,
     > .fields > .field {
-        .form-field();
+        .lib-form-field();
         &.no-label {
             > .label {
-                .visually-hidden();
+                .lib-visually-hidden();
             }
         }
         &.choice {
@@ -68,7 +68,7 @@ fieldset.field {
 }
 
 .select-styling() {
-    .css(appearance, none, 1);
+    .lib-css(appearance, none, 1);
     appearance: none;
     border: 1px solid @border-color__base;
     height: 32px;
@@ -97,7 +97,7 @@ div.mage-error[generated] {
 // TEMP
 
 .field .tooltip {
-    .tooltip(right);
+    .lib-tooltip(right);
     .tooltip-content {
         min-width: 200px;
         white-space: normal;
@@ -111,8 +111,8 @@ select:focus ~ .tooltip .tooltip-content {
 
 .hasDatepicker {
     + .ui-datepicker-trigger {
-        .button-reset();
-        .icon-font(
+        .lib-button-reset();
+        .lib-icon-font(
         @_icon-font-content: @icon-calendar,
         @_icon-font-color: @primary__color__lighter,
         @_icon-font-size: @icon-calendar__font-size,
@@ -160,6 +160,6 @@ select:focus ~ .tooltip .tooltip-content {
 //--------------------------------------
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .legend {
-        .css(border-bottom, @legend-border-bottom);
+        .lib-css(border-bottom, @legend-border-bottom);
     }
 }
