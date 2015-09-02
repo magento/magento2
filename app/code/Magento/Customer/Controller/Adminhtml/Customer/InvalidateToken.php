@@ -89,8 +89,8 @@ class InvalidateToken extends \Magento\Customer\Controller\Adminhtml\Index
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        CustomerTokenServiceInterface $tokenService,
-        \Psr\Log\LoggerInterface $logger
+        \Psr\Log\LoggerInterface $logger,
+        CustomerTokenServiceInterface $tokenService
     ) {
         $this->tokenService = $tokenService;
         parent::__construct(
