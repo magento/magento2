@@ -62,7 +62,8 @@ require([
     'mage/backend/menu',
     'Magento_Ui/js/modal/modal',
     'mage/translate',
-    'domReady!'
+    'domReady!',
+    'Magento_ConfigurableProduct/js/options/price-type-handler'
 ], function($, mageTemplate){
     'use strict';
 
@@ -101,6 +102,7 @@ require([
             inventoryAvailabilityField.removeProp('disabled');
             setElementDisabled(qtyField, true, true);
             setElementDisabled(stockAvailabilityField, false, false);
+            $('#super_config').trigger("setIsConfigurable");
         })
         .on('hide', function() {
             currentProductTemplateControl
@@ -110,6 +112,7 @@ require([
             inventoryAvailabilityField.prop('disabled', true);
             setElementDisabled(stockAvailabilityField, true, false);
             setElementDisabled(qtyField, false, true);
+            $('#super_config').trigger("setIsNotConfigurable");
         })
         .collapse(hasVariations ? 'show' : 'hide');
 

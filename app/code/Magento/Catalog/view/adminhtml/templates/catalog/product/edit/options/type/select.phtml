@@ -57,7 +57,9 @@
                    disabled="disabled"
                 <?php endif; ?>>
         </td>
-        <td class="col-price-type select-opt-price-type"><?php echo $block->getPriceTypeSelectHtml('<% if (typeof data.scopePriceDisabled != "undefined" && data.scopePriceDisabled != null) { %> disabled="disabled" <% } %>') ?><%- data.checkboxScopePrice %></td>
+        <td class="col-price-type select-opt-price-type">
+            <?php echo $block->getPriceTypeSelectHtml('data-attr="price-type" <% if (typeof data.scopePriceDisabled != "undefined" && data.scopePriceDisabled != null) { %> disabled="disabled" <% } %>') ?><%- data.checkboxScopePrice %>
+        </td>
         <?php else : ?>
         <input id="product_option_<%- data.id %>_select_<%- data.select_id %>_price" name="product[options][<%- data.id %>][values][<%- data.select_id %>][price]" type="hidden">
         <input id="product_option_<%- data.id %>_select_<%- data.select_id %>_price_type" name="product[options][<%- data.id %>][values][<%- data.select_id %>][price_type]" type="hidden">
