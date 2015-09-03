@@ -16,7 +16,7 @@ interface QtyCounterInterface
      * @param int[] $items
      * @param int $websiteId
      * @param string $operator +/-
-     * @return $this
+     * @return void
      */
     public function correctItemsQty(array $items, $websiteId, $operator);
 }
