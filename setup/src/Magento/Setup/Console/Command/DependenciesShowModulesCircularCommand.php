@@ -41,7 +41,7 @@ class DependenciesShowModulesCircularCommand extends AbstractDependenciesCommand
      */
     protected function buildReport($outputPath)
     {
-        $filesForParse = Files::init()->getComposerFiles('code', false);
+        $filesForParse = Files::init()->getComposerFiles('module', false);
 
         ServiceLocator::getCircularDependenciesReportBuilder()->build(
             [

@@ -8,6 +8,7 @@ namespace Magento\Translation\Model\Js;
 
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\App\State;
+use Magento\Framework\Component\ModuleRegistrar;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -56,7 +57,7 @@ class DataProvider implements DataProviderInterface
         $this->appState = $appState;
         $this->config = $config;
         $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
-        $this->filesUtility = (null !== $filesUtility) ? $filesUtility : new Files(BP);
+        $this->filesUtility = (null !== $filesUtility) ? $filesUtility : new Files(new ModuleRegistrar(), BP);
     }
 
     /**
