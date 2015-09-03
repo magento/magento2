@@ -21,7 +21,7 @@
         margin-bottom: @indent__xl;
 
         .legend.title {
-            .heading(h2);
+            .lib-heading(h2);
         }
 
         .product-add-form {
@@ -53,11 +53,11 @@
 
         .block-bundle-summary {
             &:extend(.abs-add-box-sizing all);
-            .css(background, @secondary__color);
+            .lib-css(background, @secondary__color);
             padding: @indent__s @indent__base;
 
             > .title > strong {
-                .heading(h2);
+                .lib-heading(h2);
             }
 
             .bundle-summary {
@@ -66,7 +66,7 @@
                     display: none;
                 }
                 > .subtitle {
-                    .heading(h3);
+                    .lib-heading(h3);
                     display: block;
                 }
             }
@@ -97,15 +97,15 @@
         .nested {
             .field.qty {
                 .label {
-                    .css(font-weight, @form-field-label__font-weight);
-                    .css(margin, 0 0 @indent__xs);
+                    .lib-css(font-weight, @form-field-label__font-weight);
+                    .lib-css(margin, 0 0 @indent__xs);
                     display: inline-block;
                 }
-                .css(margin-top, @form-field__vertical-indent);
+                .lib-css(margin-top, @form-field__vertical-indent);
             }
         }
         p.required {
-            .css(color, @form-field-label-asterisk__color);
+            .lib-css(color, @form-field-label-asterisk__color);
         }
     }
 
