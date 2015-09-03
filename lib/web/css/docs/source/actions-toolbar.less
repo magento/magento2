@@ -5,7 +5,7 @@
 
 //  # Actions toolbar
 //  Actions toolbar is a set of actions on a page, form and so on that includes primary and/or secondary actions.
-//  To customize action toolbar <code>.actions-toolbar()</code> mixin is used.
+//  To customize action toolbar <code>.lib-actions-toolbar()</code> mixin is used.
 //  To implement the Actions toolbar use the following markup
 //
 //  **Sample of using a button + link**
@@ -35,11 +35,11 @@
 //  ```
 
 .actions-toolbar {
-    .actions-toolbar();
+    .lib-actions-toolbar();
 }
 
 .example-actions-toolbar-1 {
-    .actions-toolbar();
+    .lib-actions-toolbar();
 }
 
 //  # Actions toolbar mixin variables
@@ -182,25 +182,25 @@
 //  ```
 
 .example-actions-toolbar-2 {
-    .actions-toolbar(
+    .lib-actions-toolbar(
         @_actions-toolbar-actions-position: justify
     );
 }
 
 .example-actions-toolbar-3 {
-    .actions-toolbar(
+    .lib-actions-toolbar(
         @_actions-toolbar-actions-position: left
     );
 }
 
 .example-actions-toolbar-4 {
-    .actions-toolbar(
+    .lib-actions-toolbar(
         @_actions-toolbar-actions-position: right
     );
 }
 
 .example-actions-toolbar-5 {
-    .actions-toolbar(
+    .lib-actions-toolbar(
         @_actions-toolbar-actions-position: center
     );
 }
@@ -262,21 +262,21 @@
 //  ```
 
 .example-actions-toolbar-6 {
-    .actions-toolbar(
+    .lib-actions-toolbar(
         @_actions-toolbar-actions-position: justify,
         @_actions-toolbar-actions-reverse: true
     );
 }
 
 .example-actions-toolbar-7 {
-    .actions-toolbar(
+    .lib-actions-toolbar(
         @_actions-toolbar-actions-position: left,
         @_actions-toolbar-actions-reverse: true
     );
 }
 
 .example-actions-toolbar-8 {
-    .actions-toolbar(
+    .lib-actions-toolbar(
         @_actions-toolbar-actions-position: right,
         @_actions-toolbar-actions-reverse: true
     );
@@ -330,21 +330,21 @@
 //  ```
 
 .example-actions-toolbar-9 {
-    .actions-toolbar(
+    .lib-actions-toolbar(
         @_actions-toolbar-margin: 10px,
         @_actions-toolbar-padding: 10px
     );
 }
 
 .example-actions-toolbar-10 {
-    .actions-toolbar(
+    .lib-actions-toolbar(
         @_actions-toolbar-actions-position: left,
         @_actions-toolbar-primary-actions-margin: 0 50px 0 0
     );
 }
 
 .example-actions-toolbar-11 {
-    .actions-toolbar(
+    .lib-actions-toolbar(
         @_actions-toolbar-actions-position: left,
         @_actions-toolbar-secondary-actions-margin: 0 50px 0 0
     );
@@ -352,7 +352,7 @@
 
 //  # Responsive actions toolbar
 //
-//  To set up responsive action toolbar, all floats of its elements should be cleared. To do this <code> .actions-toolbar-clear-floats()</code> mixin is used.
+//  To set up responsive action toolbar, all floats of its elements should be cleared. To do this <code>.lib-actions-toolbar-clear-floats()</code> mixin is used.
 //
 //  ``` html
 //  <div class="example-actions-toolbar-12">
@@ -366,11 +366,11 @@
 //  ```
 
 .example-actions-toolbar-12 {
-    .actions-toolbar();
+    .lib-actions-toolbar();
 }
 
 @media only screen and (max-width: @screen__m) {
     .example-actions-toolbar-12 {
-       .actions-toolbar-clear-floats();
+       .lib-actions-toolbar-clear-floats();
     }
 }

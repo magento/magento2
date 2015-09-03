@@ -5,7 +5,7 @@
  */
 -->
 
-<td data-bind="visible: visible">
+<td data-bind="visible: $parent.getColumn(index).visible">
     <div
         class="admin__field-control"
         data-bind="css: {
