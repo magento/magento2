@@ -1,0 +1,22 @@
+{
+    "name": "magento/module-mysql-mq",
+    "description": "N/A",
+    "require": {
+        "php": "~5.5.0|~5.6.0",
+        "magento/framework": "1.0.0-beta",
+        "magento/magento-composer-installer": "*"
+    },
+    "type": "magento2-module",
+    "version": "1.0.0-beta",
+    "license": [
+        "proprietary"
+    ],
+    "extra": {
+        "map": [
+            [
+                "*",
+                "Magento/MysqlMq"
+            ]
+        ]
+    }
+}
