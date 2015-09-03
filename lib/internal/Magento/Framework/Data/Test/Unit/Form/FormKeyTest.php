@@ -91,5 +91,4 @@ class FormKeyTest extends \PHPUnit_Framework_TestCase
 
         $this->formKey->set($formKeyValue);
     }
-
 }
