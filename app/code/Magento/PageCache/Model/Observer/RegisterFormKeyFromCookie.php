@@ -14,11 +14,6 @@ class RegisterFormKeyFromCookie
     private $cookieFormKey;
 
     /**
-     * @var \Magento\Framework\Session\Generic
-     */
-    private $session;
-
-    /**
      * @var \Magento\Framework\Escaper
      */
     private $escaper;
@@ -40,7 +35,6 @@ class RegisterFormKeyFromCookie
 
     /**
      * @param \Magento\Framework\App\PageCache\FormKey $formKey
-     * @param \Magento\Framework\Session\Generic $session
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\Data\Form\FormKey $sessionFormKey
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
@@ -48,13 +42,11 @@ class RegisterFormKeyFromCookie
      */
     public function __construct(
         \Magento\Framework\App\PageCache\FormKey $formKey,
-        \Magento\Framework\Session\Generic $session,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\Data\Form\FormKey $sessionFormKey,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Framework\Session\Config\ConfigInterface $sessionConfig
     ) {
-        $this->session = $session;
         $this->cookieFormKey = $formKey;
         $this->escaper = $escaper;
         $this->sessionFormKey = $sessionFormKey;
@@ -84,13 +76,15 @@ class RegisterFormKeyFromCookie
      */
     private function updateCookieFormKey($formKey)
     {
+        $cookieMetadata = $this->cookieMetadataFactory
+            ->createPublicCookieMetadata();
+        $cookieMetadata->setDomain($this->sessionConfig->getCookieDomain());
+        $cookieMetadata->setPath($this->sessionConfig->getCookiePath());
+        $cookieMetadata->setDuration($this->sessionConfig->getCookieLifetime());
+
         $this->cookieFormKey->set(
             $formKey,
-            $this->cookieMetadataFactory
-                ->createPublicCookieMetadata()
-                ->setDomain($this->sessionConfig->getCookieDomain())
-                ->setPath($this->sessionConfig->getCookiePath())
-                ->setDuration($this->sessionConfig->getCookieLifetime())
+            $cookieMetadata
         );
     }
 }
