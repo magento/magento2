@@ -149,8 +149,8 @@ interface ProcessingErrorAggregatorInterface
      */
     public function getErrorsCount(
         array $errorLevels = [
-            ProcessingError::ERROR_LEVEL_CRITICAL,
-            ProcessingError::ERROR_LEVEL_NOT_CRITICAL
+        ProcessingError::ERROR_LEVEL_CRITICAL,
+        ProcessingError::ERROR_LEVEL_NOT_CRITICAL
         ]
     );
 

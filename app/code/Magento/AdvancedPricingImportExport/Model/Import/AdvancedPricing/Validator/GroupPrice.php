@@ -50,7 +50,8 @@ class GroupPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valid
     }
 
     /**
-     * @param $attribute
+     * @param string $attribute
+     * @return void
      */
     protected function addDecimalError($attribute)
     {
@@ -67,6 +68,16 @@ class GroupPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valid
     }
 
     /**
+     * @return void
+     */
+    protected function initCustomerGroups()
+    {
+        if (!$this->customerGroups) {
+            $this->init($this->context);
+        }
+    }
+
+    /**
      * Validate value
      *
      * @param array $value
@@ -75,33 +86,29 @@ class GroupPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valid
     public function isValid($value)
     {
         $this->_clearMessages();
-        if (!$this->customerGroups) {
-            $this->init($this->context);
+        $this->initCustomerGroups();
+        if (!$this->isValidValueAndLength($value)) {
+            return true;
         }
-        $valid = true;
-        if ($this->isValidValueAndLength($value)) {
-            if (!isset($value[AdvancedPricing::COL_GROUP_PRICE_WEBSITE])
-                || !isset($value[AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP])
-                || $this->hasEmptyColumns($value)) {
-                $this->_addMessages([self::ERROR_GROUP_PRICE_DATA_INCOMPLETE]);
-                $valid = false;
-            } elseif (
-                $value[AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP] == AdvancedPricing::VALUE_ALL_GROUPS
-                || !isset($this->customerGroups[$value[AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP]])
-            ) {
-                $this->_addMessages([self::ERROR_INVALID_GROUP_PRICE_GROUP]);
-                $valid = false;
-            }
-            if ($valid) {
-                if (!is_numeric($value[AdvancedPricing::COL_GROUP_PRICE])
-                    || $value[AdvancedPricing::COL_GROUP_PRICE] < 0
-                ) {
-                    $this->addDecimalError(AdvancedPricing::COL_GROUP_PRICE);
-                    $valid = false;
-                }
-            }
+        if (!isset($value[AdvancedPricing::COL_GROUP_PRICE_WEBSITE])
+            || !isset($value[AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP])
+            || $this->hasEmptyColumns($value)) {
+            $this->_addMessages([self::ERROR_GROUP_PRICE_DATA_INCOMPLETE]);
+            return false;
+        } elseif (
+            $value[AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP] == AdvancedPricing::VALUE_ALL_GROUPS
+            || !isset($this->customerGroups[$value[AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP]])
+        ) {
+            $this->_addMessages([self::ERROR_INVALID_GROUP_PRICE_GROUP]);
+            return false;
         }
-        return $valid;
+        if (!is_numeric($value[AdvancedPricing::COL_GROUP_PRICE])
+            || $value[AdvancedPricing::COL_GROUP_PRICE] < 0
+        ) {
+            $this->addDecimalError(AdvancedPricing::COL_GROUP_PRICE);
+            return false;
+        }
+        return true;
     }
 
     /**

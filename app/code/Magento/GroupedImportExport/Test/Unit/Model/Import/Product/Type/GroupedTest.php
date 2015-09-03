@@ -108,12 +108,10 @@ class GroupedTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             '',
             false
         );
-        $entityAttributes = [
-            [
-                'attribute_set_name' => 'attribute_id',
-                'attribute_id' => 'attributeSetName',
-            ]
-        ];
+        $entityAttributes = [[
+            'attribute_set_name' => 'attribute_id',
+            'attribute_id' => 'attributeSetName',
+        ]];
         $this->connection = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['select', 'fetchAll', 'fetchPairs', 'joinLeft', 'insertOnDuplicate', 'delete', 'quoteInto'],

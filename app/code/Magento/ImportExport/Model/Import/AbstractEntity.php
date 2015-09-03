@@ -68,8 +68,10 @@ abstract class AbstractEntity
         self::ERROR_CODE_WRONG_QUOTES => "Curly quotes used instead of straight quotes",
         self::ERROR_CODE_COLUMNS_NUMBER => "Number of columns does not correspond to the number of rows in the header",
         self::ERROR_EXCEEDED_MAX_LENGTH => 'Attribute %s exceeded max length',
-        self::ERROR_INVALID_ATTRIBUTE_TYPE => 'Value for \'%s\' attribute contains incorrect value, acceptable values are in %s format',
-        self::ERROR_INVALID_ATTRIBUTE_OPTION => 'Value for \'%s\' attribute contains incorrect value, see acceptable values on settings specified for Admin',
+        self::ERROR_INVALID_ATTRIBUTE_TYPE =>
+            'Value for \'%s\' attribute contains incorrect value, acceptable values are in %s format',
+        self::ERROR_INVALID_ATTRIBUTE_OPTION =>
+            "Value for %s attribute contains incorrect value, see acceptable values on settings specified for Admin",
     ];
 
     /**#@-*/
@@ -363,6 +365,25 @@ abstract class AbstractEntity
             }
         }
         return $rowData;
+    }
+
+    /**
+     * Add errors to error aggregator
+     *
+     * @param string $code
+     * @param array|mixed $errors
+     * @return void
+     */
+    protected function addErrors($code, $errors)
+    {
+        if ($errors) {
+            $this->getErrorAggregator()->addError(
+                $code,
+                ProcessingError::ERROR_LEVEL_CRITICAL,
+                null,
+                implode('", "', $errors)
+            );
+        }
     }
 
     /**
@@ -750,7 +771,6 @@ abstract class AbstractEntity
      *
      * @return ProcessingErrorAggregatorInterface
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validateData()
     {
@@ -758,14 +778,7 @@ abstract class AbstractEntity
             $this->getErrorAggregator()->clear();
             // do all permanent columns exist?
             $absentColumns = array_diff($this->_permanentAttributes, $this->getSource()->getColNames());
-            if ($absentColumns) {
-                $this->getErrorAggregator()->addError(
-                    self::ERROR_CODE_COLUMN_NOT_FOUND,
-                    ProcessingError::ERROR_LEVEL_CRITICAL,
-                    null,
-                    implode(', ', $absentColumns)
-                );
-            }
+            $this->addErrors(self::ERROR_CODE_COLUMN_NOT_FOUND, $absentColumns);
 
             // check attribute columns names validity
             $columnNumber = 0;
@@ -784,30 +797,9 @@ abstract class AbstractEntity
                     }
                 }
             }
-            if ($invalidAttributes) {
-                $this->getErrorAggregator()->addError(
-                    self::ERROR_CODE_INVALID_ATTRIBUTE,
-                    ProcessingError::ERROR_LEVEL_CRITICAL,
-                    null,
-                    implode('", "', $invalidAttributes)
-                );
-            }
-            if ($emptyHeaderColumns) {
-                $this->getErrorAggregator()->addError(
-                    self::ERROR_CODE_COLUMN_EMPTY_HEADER,
-                    ProcessingError::ERROR_LEVEL_CRITICAL,
-                    null,
-                    implode('", "', $emptyHeaderColumns)
-                );
-            }
-            if ($invalidColumns) {
-                $this->getErrorAggregator()->addError(
-                    self::ERROR_CODE_COLUMN_NAME_INVALID,
-                    ProcessingError::ERROR_LEVEL_CRITICAL,
-                    null,
-                    implode('", "', $invalidColumns)
-                );
-            }
+            $this->addErrors(self::ERROR_CODE_INVALID_ATTRIBUTE, $invalidAttributes);
+            $this->addErrors(self::ERROR_CODE_COLUMN_EMPTY_HEADER, $emptyHeaderColumns);
+            $this->addErrors(self::ERROR_CODE_COLUMN_NAME_INVALID, $invalidColumns);
 
             if (!$this->getErrorAggregator()->getErrorsCount()) {
                 $this->_saveValidatedBunches();
