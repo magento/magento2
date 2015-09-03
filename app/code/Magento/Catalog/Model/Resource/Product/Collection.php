@@ -561,7 +561,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
             )->columns(
                 ['status' => new \Zend_Db_Expr(ProductStatus::STATUS_ENABLED)]
             );
-            $this->addAttributeToSelect(['entity_id', 'type_id', 'attribute_set_id']);
+            $this->addAttributeToSelect(['entity_id', 'type_id', 'attribute_set_id', 'sku']);
             if ($this->_catalogProductFlatState->getFlatIndexerHelper()->isAddChildData()) {
                 $this->getSelect()->where('e.is_child=?', 0);
                 $this->addAttributeToSelect(['child_id', 'is_child']);
