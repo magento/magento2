@@ -104,13 +104,9 @@ class InlineEdit extends \Magento\Customer\Controller\Adminhtml\Index
         /** @var \Magento\Customer\Api\Data\AddressInterface $address */
         foreach ($addresses as $address) {
             if ($address->isDefaultBilling()) {
-                $addressData = array_merge(
-                    $this->addressMapper->toFlatArray($address),
-                    $this->processAddressData($data)
-                );
                 $this->dataObjectHelper->populateWithArray(
                     $address,
-                    $addressData,
+                    $this->processAddressData($data),
                     '\Magento\Customer\Api\Data\AddressInterface'
                 );
                 break;

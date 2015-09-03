@@ -200,10 +200,6 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
         $this->address->expects($this->once())
             ->method('isDefaultBilling')
             ->willReturn(true);
-        $this->addressMapper->expects($this->once())
-            ->method('toFlatArray')
-            ->with($this->address)
-            ->willReturn([]);
         $this->dataObjectHelper->expects($this->at(0))
             ->method('populateWithArray')
             ->with(
