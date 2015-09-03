@@ -18,17 +18,26 @@ class ModuleRegistrarTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->module = new ModuleRegistrar();
-        ModuleRegistrar::register("test_module_one", "some/path/name/one");
-        ModuleRegistrar::register("test_module_two", "some/path/name/two");
     }
 
     public function testGetPaths()
     {
+        ModuleRegistrar::register("test_module_one", "some/path/name/one");
+        ModuleRegistrar::register("test_module_two", "some/path/name/two");
         $expected = [
             'test_module_one' => "some/path/name/one",
             'test_module_two' => "some/path/name/two",
         ];
         $this->assertSame($expected, $this->module->getPaths());
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage test_module_one already exists
+     */
+    public function testRegistrarWithException()
+    {
+        ModuleRegistrar::register("test_module_one", "some/path/name/one");
     }
 
     public function testGetPath()

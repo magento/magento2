@@ -18,17 +18,26 @@ class ThemeRegistrarTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->theme = new ThemeRegistrar();
-        ThemeRegistrar::register("test_theme_one", "some/path/name/one");
-        ThemeRegistrar::register("test_theme_two", "some/path/name/two");
     }
 
     public function testGetPaths()
     {
+        ThemeRegistrar::register("test_theme_one", "some/path/name/one");
+        ThemeRegistrar::register("test_theme_two", "some/path/name/two");
         $expected = [
             'test_theme_one' => "some/path/name/one",
             'test_theme_two' => "some/path/name/two",
         ];
         $this->assertSame($expected, $this->theme->getPaths());
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage test_theme_one already exists
+     */
+    public function testRegistrarWithException()
+    {
+        ThemeRegistrar::register("test_theme_one", "some/path/name/one");
     }
 
     public function testGetPath()
