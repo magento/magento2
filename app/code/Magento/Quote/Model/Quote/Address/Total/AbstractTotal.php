@@ -9,7 +9,7 @@ namespace Magento\Quote\Model\Quote\Address\Total;
  * Sales Quote Address Total  abstract model
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-abstract class AbstractTotal
+abstract class AbstractTotal implements \Magento\Quote\Model\Quote\Address\Total\CollectorInterface
 {
     /**
      * Total Code name
@@ -79,12 +79,15 @@ abstract class AbstractTotal
     /**
      * Collect totals process.
      *
-     * @param \Magento\Quote\Model\Quote\Address $address
+     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment
+     * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return $this
+     * @internal param \Magento\Quote\Model\Quote\Address $address
      */
-    public function collect(\Magento\Quote\Model\Quote\Address $address)
+    public function collect(\Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment, \Magento\Quote\Model\Quote\Address\Total $total)
     {
-        $this->_setAddress($address);
+        $this->_setAddress($shippingAssignment->getShipping()->getAddress());
+        $this->_setTotal($total);
         /**
          * Reset amounts
          */
@@ -96,10 +99,11 @@ abstract class AbstractTotal
     /**
      * Fetch (Retrieve data as array)
      *
-     * @param \Magento\Quote\Model\Quote\Address $address
+     * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return array
+     * @internal param \Magento\Quote\Model\Quote\Address $address
      */
-    public function fetch(\Magento\Quote\Model\Quote\Address $address)
+    public function fetch(\Magento\Quote\Model\Quote\Address\Total $total)
     {
         $this->_setAddress($address);
         return [];
@@ -132,6 +136,24 @@ abstract class AbstractTotal
     }
 
     /**
+     * @var \Magento\Quote\Model\Quote\Address\Total
+     */
+    protected $total;
+    public function _setTotal(\Magento\Quote\Model\Quote\Address\Total $total)
+    {
+        $this->total = $total;
+        return $this;
+    }
+
+    /**
+     * @return \Magento\Quote\Model\Quote\Address\Total
+     */
+    protected function _getTotal()
+    {
+        return $this->total;
+    }
+
+    /**
      * Set total model amount value to address
      *
      * @param   float $amount
@@ -140,7 +162,8 @@ abstract class AbstractTotal
     protected function _setAmount($amount)
     {
         if ($this->_canSetAddressAmount) {
-            $this->_getAddress()->setTotalAmount($this->getCode(), $amount);
+            //$this->_getAddress()->setTotalAmount($this->getCode(), $amount);
+            $this->_getTotal()->setTotalAmount($this->getCode(), $amount);
         }
         return $this;
     }
@@ -155,7 +178,8 @@ abstract class AbstractTotal
     protected function _setBaseAmount($baseAmount)
     {
         if ($this->_canSetAddressAmount) {
-            $this->_getAddress()->setBaseTotalAmount($this->getCode(), $baseAmount);
+            //$this->_getAddress()->setBaseTotalAmount($this->getCode(), $baseAmount);
+            $this->_getTotal()->setBaseTotalAmount($this->getCode(), $baseAmount);
         }
         return $this;
     }
@@ -169,7 +193,8 @@ abstract class AbstractTotal
     protected function _addAmount($amount)
     {
         if ($this->_canAddAmountToAddress) {
-            $this->_getAddress()->addTotalAmount($this->getCode(), $amount);
+            //$this->_getAddress()->addTotalAmount($this->getCode(), $amount);
+            $this->_getTotal()->addTotalAmount($this->getCode(), $amount);
         }
         return $this;
     }
@@ -183,7 +208,8 @@ abstract class AbstractTotal
     protected function _addBaseAmount($baseAmount)
     {
         if ($this->_canAddAmountToAddress) {
-            $this->_getAddress()->addBaseTotalAmount($this->getCode(), $baseAmount);
+            //$this->_getAddress()->addBaseTotalAmount($this->getCode(), $baseAmount);
+            $this->_getTotal()->addBaseTotalAmount($this->getCode(), $baseAmount);
         }
         return $this;
     }

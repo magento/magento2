@@ -1012,6 +1012,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         return $found;
     }
 
+    /******************************* Total Collector Interface *******************************************/
+
     /**
      * Get totals collector model
      *
@@ -1019,13 +1021,15 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     public function getTotalCollector()
     {
-        if ($this->_totalCollector === null) {
-            $this->_totalCollector = $this->_totalCollectorFactory->create(
-                ['store' => $this->getQuote()->getStore()]
-            );
-        }
+        die(__CLASS__ . " :: " . __METHOD__);
+//        if ($this->_totalCollector === null) {
+//            $this->_totalCollector = $this->_totalCollectorFactory->create(
+//                ['store' => $this->getQuote()->getStore()]
+//            );
+//        }
+//
+//        return $this->_totalCollector;
 
-        return $this->_totalCollector;
     }
 
     /**
@@ -1035,19 +1039,21 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     public function collectTotals()
     {
-        $this->_eventManager->dispatch(
-            $this->_eventPrefix . '_collect_totals_before',
-            [$this->_eventObject => $this]
-        );
-        foreach ($this->getTotalCollector()->getCollectors() as $model) {
-            $model->collect($this);
-        }
-        $this->_eventManager->dispatch(
-            $this->_eventPrefix . '_collect_totals_after',
-            [$this->_eventObject => $this]
-        );
-
-        return $this;
+        die(__CLASS__ . " :: " . __METHOD__);
+//        $this->_eventManager->dispatch(
+//            $this->_eventPrefix . '_collect_totals_before',
+//            [$this->_eventObject => $this]
+//        );
+//        foreach ($this->getTotalCollector()->getCollectors() as $model) {
+//            $model->collect($this);
+//        }
+//        $this->_eventManager->dispatch(
+//            $this->_eventPrefix . '_collect_totals_after',
+//            [$this->_eventObject => $this]
+//        );
+//
+//        return $this;
+        //@todo remove this method
     }
 
     /**
@@ -1086,6 +1092,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
 
         return $this;
     }
+
+    /******************************* End Total Collector Interface *******************************************/
 
     /**
      * Rewrite clone method
@@ -1173,6 +1181,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     {
         return $this->setData('applied_taxes', serialize($data));
     }
+
+    /******************************* Start Total Collector Interface *******************************************/
 
     /**
      * Set shipping amount
@@ -1336,6 +1346,8 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     {
         return $this->_baseTotalAmounts;
     }
+
+    /******************************* End Total Collector Interface *******************************************/
 
     /**
      * {@inheritdoc}

@@ -90,14 +90,17 @@ class CartTotalRepository implements CartTotalRepositoryInterface
          * @var \Magento\Quote\Model\Quote $quote
          */
         $quote = $this->quoteRepository->getActive($cartId);
-        $shippingAddress = $quote->getShippingAddress();
-        if ($quote->isVirtual()) {
-            $totalsData = array_merge($quote->getBillingAddress()->getData(), $quote->getData());
-        } else {
-            $totalsData = array_merge($shippingAddress->getData(), $quote->getData());
-        }
+//        $shippingAddress = $quote->getShippingAddress();
+//        if ($quote->isVirtual()) {
+//            $totalsData = array_merge($quote->getBillingAddress()->getData(), $quote->getData());
+//        } else {
+//            $totalsData = array_merge($shippingAddress->getData(), $quote->getData());
+//        }
+
+        $totalsList = $quote->getQuoteTotalsList();
+
         $totals = $this->totalsFactory->create();
-        $this->dataObjectHelper->populateWithArray($totals, $totalsData, '\Magento\Quote\Api\Data\TotalsInterface');
+        $this->dataObjectHelper->populateWithArray($totals, $totalsList->merge()->getData(), '\Magento\Quote\Api\Data\TotalsInterface');
         $items = [];
         $weeeTaxAppliedAmount = 0;
         foreach ($quote->getAllVisibleItems() as $index => $item) {
@@ -105,7 +108,7 @@ class CartTotalRepository implements CartTotalRepositoryInterface
             $weeeTaxAppliedAmount += $item->getWeeeTaxAppliedRowAmount();
         }
         $totals->setCouponCode($this->couponService->get($cartId));
-        $calculatedTotals = $this->totalsConverter->process($quote->getTotals());
+        $calculatedTotals = $this->totalsConverter->process($totalsList->fetch());
         $amount = $totals->getGrandTotal() - $totals->getTaxAmount();
         $amount = $amount > 0 ? $amount : 0;
         $totals->setGrandTotal($amount);

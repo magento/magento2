@@ -37,16 +37,18 @@ class Freeshipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTota
     /**
      * Collect information about free shipping for all address items
      *
-     * @param   \Magento\Quote\Model\Quote\Address $address
-     * @return  \Magento\OfflineShipping\Model\Quote\Freeshipping
+     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface|Address $shippingAssignment
+     * @param Address\Total $total
+     * @return Freeshipping
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function collect(Address $address)
+    public function collect(\Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment, \Magento\Quote\Model\Quote\Address\Total $total)
     {
-        parent::collect($address);
-        $quote = $address->getQuote();
+        parent::collect($shippingAssignment, $total);
+        $quote = $shippingAssignment->getQuote();
         $store = $this->_storeManager->getStore($quote->getStoreId());
 
+        $address = $shippingAssignment->getShipping()->getAddress();
         $address->setFreeShipping(0);
         $items = $this->_getAddressItems($address);
         if (!count($items)) {
@@ -92,11 +94,11 @@ class Freeshipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTota
      * Add information about free shipping for all address items to address object
      * By default we not present such information
      *
-     * @param   \Magento\Quote\Model\Quote\Address $address
-     * @return  \Magento\OfflineShipping\Model\Quote\Freeshipping
+     * @param Address|Address\Total $total
+     * @return Freeshipping
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function fetch(Address $address)
+    public function fetch(\Magento\Quote\Model\Quote\Address\Total $total)
     {
         return $this;
     }

@@ -12,34 +12,35 @@ class Shipping extends CommonTaxCollector
     /**
      * Collect tax totals for shipping. The result can be used to calculate discount on shipping
      *
-     * @param   Address $address
-     * @return  $this
+     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface|Address $shippingAssignment
+     * @param Address\Total $total
+     * @return $this
      */
-    public function collect(Address $address)
+    public function collect(\Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment, \Magento\Quote\Model\Quote\Address\Total $total)
     {
-        parent::collect($address);
-        $items = $this->_getAddressItems($address);
+        parent::collect($shippingAssignment, $total);
+        $items = $this->_getAddressItems($shippingAssignment);
         if (!$items) {
             return $this;
         }
 
         //Add shipping
-        $shippingDataObject = $this->getShippingDataObject($address, false);
-        $baseShippingDataObject = $this->getShippingDataObject($address, true);
+        $shippingDataObject = $this->getShippingDataObject($shippingAssignment, false);
+        $baseShippingDataObject = $this->getShippingDataObject($shippingAssignment, true);
         if ($shippingDataObject == null || $baseShippingDataObject == null) {
             return $this;
         }
 
-        $quoteDetails = $this->prepareQuoteDetails($address, [$shippingDataObject]);
+        $quoteDetails = $this->prepareQuoteDetails($shippingAssignment, [$shippingDataObject]);
         $taxDetails = $this->taxCalculationService
-            ->calculateTax($quoteDetails, $address->getQuote()->getStore()->getStoreId());
+            ->calculateTax($quoteDetails, $shippingAssignment->getQuote()->getStore()->getStoreId());
 
-        $baseQuoteDetails = $this->prepareQuoteDetails($address, [$baseShippingDataObject]);
+        $baseQuoteDetails = $this->prepareQuoteDetails($shippingAssignment, [$baseShippingDataObject]);
         $baseTaxDetails = $this->taxCalculationService
-            ->calculateTax($baseQuoteDetails, $address->getQuote()->getStore()->getStoreId());
+            ->calculateTax($baseQuoteDetails, $shippingAssignment->getQuote()->getStore()->getStoreId());
 
         $this->processShippingTaxInfo(
-            $address,
+            $shippingAssignment,
             $taxDetails->getItems()[self::ITEM_CODE_SHIPPING],
             $baseTaxDetails->getItems()[self::ITEM_CODE_SHIPPING]
         );

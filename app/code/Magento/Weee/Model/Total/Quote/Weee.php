@@ -84,18 +84,19 @@ class Weee extends AbstractTotal
     /**
      * Collect Weee amounts for the quote / order
      *
-     * @param   \Magento\Quote\Model\Quote\Address $address
-     * @return  $this
+     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface|\Magento\Quote\Model\Quote\Address $shippingAssignment
+     * @param \Magento\Quote\Model\Quote\Address\Total $total
+     * @return $this
      */
-    public function collect(\Magento\Quote\Model\Quote\Address $address)
+    public function collect(\Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment, \Magento\Quote\Model\Quote\Address\Total $total)
     {
-        AbstractTotal::collect($address);
-        $this->_store = $address->getQuote()->getStore();
+        AbstractTotal::collect($shippingAssignment, $total);
+        $this->_store = $shippingAssignment->getQuote()->getStore();
         if (!$this->weeeData->isEnabled($this->_store)) {
             return $this;
         }
 
-        $items = $this->_getAddressItems($address);
+        $items = $this->_getAddressItems($shippingAssignment);
         if (!count($items)) {
             return $this;
         }
@@ -110,16 +111,16 @@ class Weee extends AbstractTotal
             if ($item->getHasChildren() && $item->isChildrenCalculated()) {
                 foreach ($item->getChildren() as $child) {
                     $this->_resetItemData($child);
-                    $this->_process($address, $child);
+                    $this->_process($shippingAssignment, $child);
                 }
                 $this->_recalculateParent($item);
             } else {
-                $this->_process($address, $item);
+                $this->_process($shippingAssignment, $item);
             }
         }
-        $address->setWeeeCodeToItemMap($this->weeeCodeToItemMap);
-        $address->setWeeeTotalExclTax($this->weeeTotalExclTax);
-        $address->setWeeeBaseTotalExclTax($this->weeeBaseTotalExclTax);
+        $shippingAssignment->setWeeeCodeToItemMap($this->weeeCodeToItemMap);
+        $shippingAssignment->setWeeeTotalExclTax($this->weeeTotalExclTax);
+        $shippingAssignment->setWeeeBaseTotalExclTax($this->weeeBaseTotalExclTax);
         return $this;
     }
 
@@ -320,11 +321,11 @@ class Weee extends AbstractTotal
     /**
      * Delegate this to WeeeTax collector
      *
-     * @param   \Magento\Quote\Model\Quote\Address $address
-     * @return  $this
+     * @param \Magento\Quote\Model\Quote\Address|\Magento\Quote\Model\Quote\Address\Total $total
+     * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function fetch(\Magento\Quote\Model\Quote\Address $address)
+    public function fetch(\Magento\Quote\Model\Quote\Address\Total $total)
     {
         return $this;
     }

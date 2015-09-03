@@ -10,35 +10,33 @@ class Grand extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     /**
      * Collect grand total address amount
      *
-     * @param   \Magento\Quote\Model\Quote\Address $address
-     * @return  $this
+     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface|\Magento\Quote\Model\Quote\Address $shippingAssignment
+     * @param \Magento\Quote\Model\Quote\Address\Total $total
+     * @return $this
      */
-    public function collect(\Magento\Quote\Model\Quote\Address $address)
+    public function collect(\Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment, \Magento\Quote\Model\Quote\Address\Total $total)
     {
-        $totals = array_sum($address->getAllTotalAmounts());
-        $baseTotals = array_sum($address->getAllBaseTotalAmounts());
+        $totals = array_sum($total->getAllTotalAmounts());
+        $baseTotals = array_sum($total->getAllBaseTotalAmounts());
 
-        $address->setGrandTotal($totals);
-        $address->setBaseGrandTotal($baseTotals);
+        $total->setGrandTotal($totals);
+        $total->setBaseGrandTotal($baseTotals);
         return $this;
     }
 
     /**
      * Add grand total information to address
      *
-     * @param   \Magento\Quote\Model\Quote\Address $address
-     * @return  $this
+     * @param \Magento\Quote\Model\Quote\Address\Total $total
+     * @return $this
      */
-    public function fetch(\Magento\Quote\Model\Quote\Address $address)
+    public function fetch(\Magento\Quote\Model\Quote\Address\Total $total)
     {
-        $address->addTotal(
-            [
-                'code' => $this->getCode(),
-                'title' => __('Grand Total'),
-                'value' => $address->getGrandTotal(),
-                'area' => 'footer',
-            ]
-        );
-        return $this;
+        return [
+            'code' => $this->getCode(),
+            'title' => __('Grand Total'),
+            'value' => $total->getGrandTotal(),
+            'area' => 'footer',
+        ];
     }
 }
