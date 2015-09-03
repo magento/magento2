@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\Component\ModuleRegistrar;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Framework\App\ObjectManager;
 use Symfony\Component\Console\Input\InputInterface;
@@ -93,15 +94,25 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
     private $log;
 
     /**
+     * @var ModuleRegistrar
+     */
+    private $moduleRegistrar;
+
+    /**
      * Constructor
      *
      * @param ObjectManagerProvider $objectManagerProvider
      * @param DirectoryList $directoryList
+     * @param ModuleRegistrar $moduleRegistrar
      */
-    public function __construct(ObjectManagerProvider $objectManagerProvider, DirectoryList $directoryList)
-    {
+    public function __construct(
+        ObjectManagerProvider $objectManagerProvider,
+        DirectoryList $directoryList,
+        ModuleRegistrar $moduleRegistrar
+    ) {
         $this->objectManager = $objectManagerProvider->get();
         $this->directoryList = $directoryList;
+        $this->moduleRegistrar = $moduleRegistrar;
         parent::__construct();
     }
 
@@ -165,13 +176,17 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
 
         $generationDir = $input->getOption(self::INPUT_KEY_GENERATION) ? $input->getOption(self::INPUT_KEY_GENERATION)
             : $this->directoryList->getPath(DirectoryList::GENERATION);
+        $modulesExcludePatterns = [];
+        foreach ($this->moduleRegistrar->getPaths() as $modulePath) {
+            $modulesExcludePatterns[] = "#^" . $modulePath . "/Test#";
+        }
         $testExcludePatterns = [
-            "#^" . $this->directoryList->getPath(DirectoryList::MODULES) . "/[\\w]+/[\\w]+/Test#",
             "#^" . $this->directoryList->getPath(DirectoryList::LIB_INTERNAL)
             . "/[\\w]+/[\\w]+/([\\w]+/)?Test#",
             "#^" . $this->directoryList->getPath(DirectoryList::SETUP) . "/[\\w]+/[\\w]+/Test#",
             "#^" . $this->directoryList->getRoot() . "/dev/tools/Magento/Tools/[\\w]+/Test#"
         ];
+        $testExcludePatterns = array_merge($testExcludePatterns, $modulesExcludePatterns);
         $fileExcludePatterns = $input->getOption('exclude-pattern') ?
             [$input->getOption(self::INPUT_KEY_EXCLUDE_PATTERN)] : ['#[\\\\/]M1[\\\\/]#i'];
         $fileExcludePatterns = array_merge($fileExcludePatterns, $testExcludePatterns);
@@ -210,9 +225,13 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
     {
         // 1.1 Code scan
         $filePatterns = ['php' => '/.*\.php$/', 'di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/'];
-        $codeScanDir = $this->directoryList->getRoot() . '/app';
         $directoryScanner = new Scanner\DirectoryScanner();
-        $this->files = $directoryScanner->scan($codeScanDir, $filePatterns, $fileExcludePatterns);
+        foreach ($this->moduleRegistrar->getPaths() as $codeScanDir) {
+            $this->files = array_merge_recursive(
+                $this->files,
+                $directoryScanner->scan($codeScanDir, $filePatterns, $fileExcludePatterns)
+            );
+        }
         $this->files['additional'] = [$input->getOption(self::INPUT_KEY_EXTRA_CLASSES_FILE)];
         $repositoryScanner = new Scanner\RepositoryScanner();
         $repositories = $repositoryScanner->collectEntities($this->files['di']);
@@ -300,11 +319,11 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
         $relationsFile = $diDir . '/relations.ser';
         $pluginDefFile = $diDir . '/plugins.ser';
         $compilationDirs = [
-            $this->directoryList->getPath(DirectoryList::MODULES),
             $this->directoryList->getPath(DirectoryList::LIB_INTERNAL) . '/Magento',
             $this->directoryList->getPath(DirectoryList::SETUP) . '/Magento/Setup/Module',
             $this->directoryList->getRoot() . '/dev/tools/Magento/Tools',
         ];
+        $compilationDirs = array_merge($compilationDirs, $this->moduleRegistrar->getPaths());
         $serializer = $input->getOption(self::INPUT_KEY_SERIALIZER) == Igbinary::NAME ? new Igbinary() : new Standard();
         // 2.1 Code scan
         $validator = new \Magento\Framework\Code\Validator();

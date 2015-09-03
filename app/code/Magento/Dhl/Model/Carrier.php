@@ -177,7 +177,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @var \Magento\Framework\Filesystem\Directory\Read
      */
-    protected $modulesDirectory;
+    protected $directoryRead;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
@@ -244,7 +244,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
         array $data = []
     ) {
-        $this->modulesDirectory = $filesystem->getDirectoryRead(DirectoryList::MODULES);
+        $this->directoryRead = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->_carrierHelper = $carrierHelper;
         $this->_coreDate = $coreDate;
         $this->_storeManager = $storeManager;
@@ -1249,8 +1249,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     {
         if (empty($this->_countryParams)) {
             $etcPath = $this->_configReader->getModuleDir('etc', 'Magento_Dhl');
-            $countriesXmlPath = $this->modulesDirectory->getRelativePath($etcPath . '/countries.xml');
-            $countriesXml = $this->modulesDirectory->readFile($countriesXmlPath);
+            $countriesXmlPath = $this->directoryRead->getRelativePath($etcPath . '/countries.xml');
+            $countriesXml = $this->directoryRead->readFile($countriesXmlPath);
             $this->_countryParams = $this->_xmlElFactory->create(['data' => $countriesXml]);
         }
         if (isset($this->_countryParams->{$countryCode})) {

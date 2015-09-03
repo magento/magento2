@@ -100,16 +100,16 @@ class IncludeElement implements ElementInterface
      */
     protected function getContent($includePath)
     {
-        $modulesDirectory = $this->filesystem->getDirectoryRead(DirectoryList::MODULES);
+        $directoryRead = $this->filesystem->getDirectoryRead(DirectoryList::ROOT);
 
         // <include path="Magento_Payment::my_payment.xml" />
         list($moduleName, $filename) = explode('::', $includePath);
 
         $file = $this->moduleReader->getModuleDir('etc', $moduleName) . '/adminhtml/' . $filename;
-        $path = $modulesDirectory->getRelativePath($file);
+        $path = $directoryRead->getRelativePath($file);
 
-        if ($modulesDirectory->isExist($path) && $modulesDirectory->isFile($path)) {
-            return $modulesDirectory->readFile($path);
+        if ($directoryRead->isExist($path) && $directoryRead->isFile($path)) {
+            return $directoryRead->readFile($path);
         }
 
         throw new LocalizedException(__('The file "' . $path . '" does not exist'));

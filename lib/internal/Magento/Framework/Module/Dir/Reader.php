@@ -41,7 +41,7 @@ class Reader
     /**
      * @var Read
      */
-    protected $modulesDirectory;
+    protected $directoryRead;
 
     /**
      * @var FileIteratorFactory
@@ -63,7 +63,7 @@ class Reader
         $this->moduleDirs = $moduleDirs;
         $this->modulesList = $moduleList;
         $this->fileIteratorFactory = $fileIteratorFactory;
-        $this->modulesDirectory = $filesystem->getDirectoryRead(DirectoryList::MODULES);
+        $this->directoryRead = $filesystem->getDirectoryRead(DirectoryList::ROOT);
     }
 
     /**
@@ -77,12 +77,12 @@ class Reader
         $result = [];
         foreach ($this->modulesList->getNames() as $moduleName) {
             $file = $this->getModuleDir('etc', $moduleName) . '/' . $filename;
-            $path = $this->modulesDirectory->getRelativePath($file);
-            if ($this->modulesDirectory->isExist($path)) {
+            $path = $this->directoryRead->getRelativePath($file);
+            if ($this->directoryRead->isExist($path)) {
                 $result[] = $path;
             }
         }
-        return $this->fileIteratorFactory->create($this->modulesDirectory, $result);
+        return $this->fileIteratorFactory->create($this->directoryRead, $result);
     }
 
     /**
@@ -95,12 +95,12 @@ class Reader
         $result = [];
         foreach ($this->modulesList->getNames() as $moduleName) {
             $file = $this->getModuleDir('', $moduleName) . '/composer.json';
-            $path = $this->modulesDirectory->getRelativePath($file);
-            if ($this->modulesDirectory->isExist($path)) {
+            $path = $this->directoryRead->getRelativePath($file);
+            if ($this->directoryRead->isExist($path)) {
                 $result[] = $path;
             }
         }
-        return $this->fileIteratorFactory->create($this->modulesDirectory, $result);
+        return $this->fileIteratorFactory->create($this->directoryRead, $result);
     }
 
     /**
@@ -120,7 +120,7 @@ class Reader
             $recursiveIterator = new \RecursiveIteratorIterator($dirIterator, \RecursiveIteratorIterator::LEAVES_ONLY);
             /** @var \SplFileInfo $actionFile */
             foreach ($recursiveIterator as $actionFile) {
-                $actions[] = $this->modulesDirectory->getRelativePath($actionFile->getPathname());
+                $actions[] = $this->directoryRead->getRelativePath($actionFile->getPathname());
             }
         }
         return $actions;

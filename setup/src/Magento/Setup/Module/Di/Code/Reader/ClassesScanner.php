@@ -58,9 +58,14 @@ class ClassesScanner implements ClassesScannerInterface
             if ($fileItem->getExtension() !== 'php') {
                 continue;
             }
-            foreach ($this->excludePatterns as $excludePattern) {
-                if (preg_match($excludePattern, $fileItem->getRealPath())) {
-                    continue 2;
+            foreach ($this->excludePatterns as $excludePatterns) {
+                if (!is_array($excludePatterns)) {
+                    $excludePatterns = (array)$excludePatterns;
+                }
+                foreach ($excludePatterns as $excludePattern) {
+                    if (preg_match($excludePattern, $fileItem->getRealPath())) {
+                        continue 3;
+                    }
                 }
             }
             $fileScanner = new FileScanner($fileItem->getRealPath());

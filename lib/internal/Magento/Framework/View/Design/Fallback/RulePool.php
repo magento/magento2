@@ -7,6 +7,7 @@
 namespace Magento\Framework\View\Design\Fallback;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ModuleRegistrar;
 use Magento\Framework\Filesystem;
 use Magento\Framework\View\Design\Fallback\Rule\Composite;
 use Magento\Framework\View\Design\Fallback\Rule\ModularSwitch;
@@ -44,12 +45,18 @@ class RulePool
     private $rules = [];
 
     /**
+     * @var ModuleRegistrar
+     */
+    private $moduleRegistrar;
+
+    /**
      * Constructor
      *
      * @param Filesystem $filesystem
      */
-    public function __construct(Filesystem $filesystem)
+    public function __construct(Filesystem $filesystem, ModuleRegistrar $moduleRegistrar)
     {
+        $this->moduleRegistrar = $moduleRegistrar;
         $this->filesystem = $filesystem;
     }
 
@@ -67,6 +74,21 @@ class RulePool
     }
 
     /**
+     * Creates Rules using all module directories
+     *
+     * @param $pattern
+     * @return Simple[]
+     */
+    private function createModuleRules($pattern, $optionalParams = [])
+    {
+        $rules = [];
+        foreach ($this->moduleRegistrar->getPaths() as $modulePath) {
+            $rules[] = new Simple($modulePath . '/' . $pattern, $optionalParams);
+        }
+        return $rules;
+    }
+
+    /**
      * Retrieve newly created fallback rule for template files
      *
      * @return RuleInterface
@@ -74,17 +96,17 @@ class RulePool
     protected function createTemplateFileRule()
     {
         $themesDir = $this->filesystem->getDirectoryRead(DirectoryList::THEMES)->getAbsolutePath();
-        $modulesDir = $this->filesystem->getDirectoryRead(DirectoryList::MODULES)->getAbsolutePath();
+
         return new ModularSwitch(
             new Theme(
                 new Simple("$themesDir/<area>/<theme_path>/templates")
             ),
             new Composite(
-                [
-                    new Theme(new Simple("$themesDir/<area>/<theme_path>/<namespace>_<module>/templates")),
-                    new Simple("$modulesDir/<namespace>/<module>/view/<area>/templates"),
-                    new Simple("$modulesDir/<namespace>/<module>/view/base/templates"),
-                ]
+                array_merge(
+                    [new Theme(new Simple("$themesDir/<area>/<theme_path>/<namespace>_<module>/templates"))],
+                    $this->createModuleRules("view/<area>/templates"),
+                    $this->createModuleRules('view/base/templates')
+                )
             )
         );
     }
@@ -97,15 +119,15 @@ class RulePool
     protected function createFileRule()
     {
         $themesDir = $this->filesystem->getDirectoryRead(DirectoryList::THEMES)->getAbsolutePath();
-        $modulesDir = $this->filesystem->getDirectoryRead(DirectoryList::MODULES)->getAbsolutePath();
+
         return new ModularSwitch(
             new Theme(new Simple("$themesDir/<area>/<theme_path>")),
             new Composite(
-                [
-                    new Theme(new Simple("$themesDir/<area>/<theme_path>/<namespace>_<module>")),
-                    new Simple("$modulesDir/<namespace>/<module>/view/<area>"),
-                    new Simple("{$modulesDir}/<namespace>/<module>/view/base"),
-                ]
+                array_merge(
+                    [new Theme(new Simple("$themesDir/<area>/<theme_path>/<namespace>_<module>"))],
+                    $this->createModuleRules("view/<area>"),
+                    $this->createModuleRules('view/base')
+                )
             )
         );
     }
@@ -118,7 +140,6 @@ class RulePool
     protected function createViewFileRule()
     {
         $themesDir = rtrim($this->filesystem->getDirectoryRead(DirectoryList::THEMES)->getAbsolutePath(), '/');
-        $modulesDir = rtrim($this->filesystem->getDirectoryRead(DirectoryList::MODULES)->getAbsolutePath(), '/');
         $libDir = rtrim($this->filesystem->getDirectoryRead(DirectoryList::LIB_WEB)->getAbsolutePath(), '/');
         return new ModularSwitch(
             new Composite(
@@ -135,29 +156,25 @@ class RulePool
                 ]
             ),
             new Composite(
-                [
-                    new Theme(
-                        new Composite(
-                            [
-                                new Simple(
-                                    "$themesDir/<area>/<theme_path>/<namespace>_<module>/web/i18n/<locale>",
-                                    ['locale']
-                                ),
-                                new Simple("$themesDir/<area>/<theme_path>/<namespace>_<module>/web"),
-                            ]
+                array_merge(
+                    [
+                        new Theme(
+                            new Composite(
+                                [
+                                    new Simple(
+                                        "$themesDir/<area>/<theme_path>/<namespace>_<module>/web/i18n/<locale>",
+                                        ['locale']
+                                    ),
+                                    new Simple("$themesDir/<area>/<theme_path>/<namespace>_<module>/web"),
+                                ]
+                            )
                         )
-                    ),
-                    new Simple(
-                        "$modulesDir/<namespace>/<module>/view/<area>/web/i18n/<locale>",
-                        ['locale']
-                    ),
-                    new Simple(
-                        "$modulesDir/<namespace>/<module>/view/base/web/i18n/<locale>",
-                        ['locale']
-                    ),
-                    new Simple("$modulesDir/<namespace>/<module>/view/<area>/web"),
-                    new Simple("{$modulesDir}/<namespace>/<module>/view/base/web"),
-                ]
+                    ],
+                    $this->createModuleRules("view/<area>/web/i18n/<locale>", ['locale']),
+                    $this->createModuleRules("view/base/web/i18n/<locale>", ['locale']),
+                    $this->createModuleRules("view/<area>/web"),
+                    $this->createModuleRules('view/base/web')
+                )
             )
         );
     }
@@ -172,12 +189,12 @@ class RulePool
     protected function createEmailTemplateFileRule()
     {
         $themesDir = rtrim($this->filesystem->getDirectoryRead(DirectoryList::THEMES)->getAbsolutePath(), '/');
-        $modulesDir = rtrim($this->filesystem->getDirectoryRead(DirectoryList::MODULES)->getAbsolutePath(), '/');
+
         return new Composite(
-            [
-                new Theme(new Simple("$themesDir/<area>/<theme_path>/<namespace>_<module>/email")),
-                new Simple("$modulesDir/<namespace>/<module>/view/<area>/email"),
-            ]
+            array_merge(
+                [new Theme(new Simple("$themesDir/<area>/<theme_path>/<namespace>_<module>/email"))],
+                $this->createModuleRules("view/<area>/email")
+            )
         );
     }
 
