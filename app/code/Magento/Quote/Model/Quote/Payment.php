@@ -276,6 +276,27 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     }
 
     /**
+     * Get payment title
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->getData(self::KEY_TITLE);
+    }
+
+    /**
+     * Set payment title
+     *
+     * @param string $title
+     * @return $this
+     */
+    public function setTitle($title)
+    {
+        return $this->setData(self::KEY_TITLE, $title);
+    }
+
+    /**
      * Get credit card owner
      *
      * @return string|null
