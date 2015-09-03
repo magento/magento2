@@ -153,7 +153,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    protected function prepareMocksForTesting()
+    protected function prepareMocksForTesting($populateSequence = 0)
     {
         $this->resultJsonFactory->expects($this->once())
             ->method('create')
@@ -174,7 +174,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->method('toFlatArray')
             ->with($this->customerData)
             ->willReturn(['name' => 'Firstname Lastname']);
-        $this->dataObjectHelper->expects($this->at(1))
+        $this->dataObjectHelper->expects($this->at($populateSequence))
             ->method('populateWithArray')
             ->with(
                 $this->customerData,
@@ -184,6 +184,9 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
                 ],
                 '\Magento\Customer\Api\Data\CustomerInterface'
             );
+        $this->customerData->expects($this->any())
+            ->method('getId')
+            ->willReturn(12);
     }
 
     protected function prepareMocksForUpdateDefaultBilling()
@@ -207,45 +210,6 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
                 $addressData,
                 '\Magento\Customer\Api\Data\AddressInterface'
             );
-    }
-
-    protected function prepareMocksForAddNewBilling()
-    {
-        $this->prepareMocksForProcessAddressData();
-        $addressData = [
-            'postcode' => '07294',
-            'firstname' => 'Firstname',
-            'lastname' => 'Lastname',
-        ];
-
-        $this->addressDataFactory->expects($this->once())
-            ->method('create')
-            ->willReturn($this->address);
-        $this->dataObjectHelper->expects($this->at(0))
-            ->method('populateWithArray')
-            ->with(
-                $this->address,
-                $addressData,
-                '\Magento\Customer\Api\Data\AddressInterface'
-            );
-        $this->customerData->expects($this->atLeastOnce())
-            ->method('getId')
-            ->willReturn(12);
-        $this->address->expects($this->once())
-            ->method('setCustomerId')
-            ->with(12);
-        $this->address->expects($this->once())
-            ->method('setIsDefaultBilling')
-            ->with(true);
-        $this->addressRepository->expects($this->once())
-            ->method('save')
-            ->with($this->address);
-        $this->customerData->expects($this->once())
-            ->method('getAddresses')
-            ->willReturn([]);
-        $this->customerData->expects($this->once())
-            ->method('setAddresses')
-            ->with([$this->address]);
     }
 
     protected function prepareMocksForProcessAddressData()
@@ -283,25 +247,11 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteWithUpdateBilling()
     {
-        $this->prepareMocksForTesting();
+        $this->prepareMocksForTesting(1);
         $this->customerData->expects($this->once())
             ->method('getDefaultBilling')
             ->willReturn(23);
         $this->prepareMocksForUpdateDefaultBilling();
-        $this->customerRepository->expects($this->once())
-            ->method('save')
-            ->with($this->customerData);
-        $this->prepareMocksForErrorMessagesProcessing();
-        $this->assertSame($this->resultJson, $this->controller->execute());
-    }
-
-    public function testExecuteWithNewBilling()
-    {
-        $this->prepareMocksForTesting();
-        $this->customerData->expects($this->once())
-            ->method('getDefaultBilling')
-            ->willReturn(false);
-        $this->prepareMocksForAddNewBilling();
         $this->customerRepository->expects($this->once())
             ->method('save')
             ->with($this->customerData);
@@ -340,7 +290,6 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
         $this->customerData->expects($this->once())
             ->method('getDefaultBilling')
             ->willReturn(false);
-        $this->prepareMocksForAddNewBilling();
         $this->customerRepository->expects($this->once())
             ->method('save')
             ->with($this->customerData)
@@ -363,7 +312,6 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
         $this->customerData->expects($this->once())
             ->method('getDefaultBilling')
             ->willReturn(false);
-        $this->prepareMocksForAddNewBilling();
         $this->customerRepository->expects($this->once())
             ->method('save')
             ->with($this->customerData)

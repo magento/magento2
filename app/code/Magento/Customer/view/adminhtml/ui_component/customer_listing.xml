@@ -248,6 +248,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="selectProvider" xsi:type="string">customer_listing.customer_listing.customer_columns.ids</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/tree-massactions</item>
                     <item name="displayArea" xsi:type="string">bottom</item>
                     <item name="indexField" xsi:type="string">entity_id</item>
                 </item>
