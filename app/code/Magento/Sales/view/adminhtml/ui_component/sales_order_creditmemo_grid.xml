@@ -810,7 +810,7 @@
                 </item>
             </argument>
         </column>
-        <column name="actions" class="Magento\Sales\Ui\Component\Listing\Column\OrderCreditmemoActions">
+        <column name="actions" class="Magento\Sales\Ui\Component\Listing\Column\ViewAction">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="draggable" xsi:type="boolean">false</item>
@@ -821,6 +821,8 @@
                     <item name="data_type" xsi:type="string">actions</item>
                     <item name="filterable" xsi:type="boolean">false</item>
                     <item name="sortable" xsi:type="boolean">false</item>
+                    <item name="viewUrlPath" xsi:type="string">sales/creditmemo/view</item>
+                    <item name="urlEntityParamName" xsi:type="string">creditmemo_id</item>
                 </item>
             </argument>
         </column>
