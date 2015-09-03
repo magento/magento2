@@ -4143,7 +4143,7 @@
                 "magento/zendframework1": "1.12.10",
                 "monolog/monolog": "1.11.0",
                 "oyejorge/less.php": "1.7.0.3",
-                "php": "~5.5.0|~5.6.0",
+                "php": "~5.5.0|~5.6.0|~7.0.0",
                 "tubalmartin/cssmin": "2.4.8-p4",
                 "zendframework/zend-code": "2.3.1",
                 "zendframework/zend-config": "2.3.1",
