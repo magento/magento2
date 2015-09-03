@@ -10,5 +10,10 @@ namespace Magento\Framework\Component;
  */
 class LanguageRegistrar extends ComponentRegistrar
 {
-
+    /**
+     * Paths to languages
+     *
+     * @var string[]
+     */
+    protected static $componentPaths = [];
 }

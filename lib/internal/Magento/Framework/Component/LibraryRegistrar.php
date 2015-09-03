@@ -10,5 +10,10 @@ namespace Magento\Framework\Component;
  */
 class LibraryRegistrar extends ComponentRegistrar
 {
-
+    /**
+     * Paths to libraries
+     *
+     * @var string[]
+     */
+    protected static $componentPaths = [];
 }

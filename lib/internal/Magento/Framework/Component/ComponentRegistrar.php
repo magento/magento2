@@ -6,19 +6,13 @@
 namespace Magento\Framework\Component;
 
 /**
- * Provides ability to statically register components
+ * Provides ability to statically register components.
+ * All classes extending this class should have a protected variable $componentPaths
  *
  * @author Josh Di Fabio <joshdifabio@gmail.com>
  */
 abstract class ComponentRegistrar implements ComponentRegistrarInterface
 {
-    /**
-     * Paths to components
-     *
-     * @var string[]
-     */
-    private static $componentPaths = [];
-
     /**
      * Sets the location of a component.
      *
@@ -29,10 +23,10 @@ abstract class ComponentRegistrar implements ComponentRegistrarInterface
      */
     public static function register($componentName, $path)
     {
-        if (isset(self::$componentPaths[$componentName])) {
+        if (isset(static::$componentPaths[$componentName])) {
             throw new \LogicException ($componentName . ' already exists');
         } else {
-            self::$componentPaths[$componentName] = $path;
+            static::$componentPaths[$componentName] = $path;
         }
     }
 
@@ -41,7 +35,7 @@ abstract class ComponentRegistrar implements ComponentRegistrarInterface
      */
     public function getPaths()
     {
-        return self::$componentPaths;
+        return static::$componentPaths;
     }
 
     /**
@@ -49,6 +43,6 @@ abstract class ComponentRegistrar implements ComponentRegistrarInterface
      */
     public function getPath($componentName)
     {
-        return isset(self::$componentPaths[$componentName]) ? self::$componentPaths[$componentName] : null;
+        return isset(static::$componentPaths[$componentName]) ? static::$componentPaths[$componentName] : null;
     }
 }

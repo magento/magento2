@@ -12,5 +12,10 @@ namespace Magento\Framework\Component;
  */
 class ModuleRegistrar extends ComponentRegistrar
 {
-
+    /**
+     * Paths to modules
+     *
+     * @var string[]
+     */
+    protected static $componentPaths = [];
 }
