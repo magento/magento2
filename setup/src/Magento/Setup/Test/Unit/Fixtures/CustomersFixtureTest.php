@@ -54,7 +54,7 @@ class CustomersFixtureTest extends \PHPUnit_Framework_TestCase
                 'Magento\ImportExport\Model\Import',
                 [
                     'data' => [
-                        'entity' => 'catalog_product',
+                        'entity' => 'customer_composite',
                         'behavior' => 'append',
                         'validation_strategy' => 'validation-stop-on-errors'
                     ]
