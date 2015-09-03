@@ -128,7 +128,7 @@ abstract class AbstractServiceCollection extends \Magento\Framework\Data\Collect
      * Pre-process filters to create multiple groups in case of multiple conditions eg: from & to
      * @param string|array $field
      * @param string|int|array $condition
-     * @return null
+     * @return $this
      */
     private function processFilters($field, $condition)
     {
@@ -155,18 +155,19 @@ abstract class AbstractServiceCollection extends \Magento\Framework\Data\Collect
      * Return a single filter group in case of single conditions
      * @param string|array $field
      * @param string|int|array $condition
-     * @return null
+     * @return $this
      */
     private function addFilterGroupsForSingleConditions($field, $condition)
     {
         $this->fieldFilters[] = ['field' => $field, 'condition' => $condition];
+        return $this;
     }
 
     /**
      * Return multiple filters groups in case of multiple conditions eg: from & to
      * @param string|array $field
-     * @param string|int|array $condition
-     * @return null
+     * @param array $condition
+     * @return $this
      */
     private function addFilterGroupsForMultipleConditions($field, $condition)
     {
@@ -174,7 +175,7 @@ abstract class AbstractServiceCollection extends \Magento\Framework\Data\Collect
             foreach ($condition as $key => $value) {
                 $this->fieldFilters[] = ['field' => $field, 'condition' => [$key => $value]];
             }
-        } elseif (is_array($field) && is_array($condition)) {
+        } else {
             $cnt = 0;
             foreach ($condition as $cond) {
                 if (is_array($cond)) {
@@ -191,6 +192,7 @@ abstract class AbstractServiceCollection extends \Magento\Framework\Data\Collect
                 $cnt++;
             }
         }
+        return $this;
     }
 
     /**
