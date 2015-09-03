@@ -10,15 +10,15 @@
 //  **Note**: in variables lists allowable values are in "[]" brackets. If there are no allowable values provided, for this variable you can use: '' | false | value.
 //
 //  # Global forms elements customization
-//  The <code>.form-element-all()</code> mixin is used to set default styles for all form elements in the theme. To configure these elements global variables are used.
+//  The <code>.lib-form-element-all()</code> mixin is used to set default styles for all form elements in the theme. To configure these elements global variables are used.
 //
 //  # Fieldsets & fields customization
 //
-//  The <code>.form-fieldset()</code> mixin is used to customize form fieldset borders and legend.
+//  The <code>.lib-form-fieldset()</code> mixin is used to customize form fieldset borders and legend.
 //
-//  The <code>.form-field()</code> mixin is used to customize form elements.
+//  The <code>.lib-form-field()</code> mixin is used to customize form elements.
 //
-//  The <code>.form-hasrequired()</code> mixin is used to show and customize "required fields" message if the form or fieldset has required fields and a <code>data-hasrequired</code> attribute.
+//  The <code>.lib-form-hasrequired()</code> mixin is used to show and customize "required fields" message if the form or fieldset has required fields and a <code>data-hasrequired</code> attribute.
 //
 //  Using these mixins you can customize your forms. By default these mixins use global variables.
 //
@@ -213,19 +213,19 @@
 
 .example-form-1 {
     .example-form-1-fieldset {
-        .form-fieldset();
-        .form-hasrequired(bottom);
+        .lib-form-fieldset();
+        .lib-form-hasrequired(bottom);
         > .field {
-            .form-field();
+            .lib-form-field();
         }
     }
 }
 
 .example-form-2 {
     .example-form-2-fieldset {
-        .form-fieldset();
+        .lib-form-fieldset();
         > .field {
-            .form-field(
+            .lib-form-field(
                     @_type: block,
                     @_column: true
                 );
@@ -235,7 +235,7 @@
 
 //  # Fieldset and legend customization variables
 //
-//  The <code>.form-fieldset()</code> mixin variables
+//  The <code>.lib-form-fieldset()</code> mixin variables
 //  <pre>
 //    <table>
 //        <tr>
@@ -321,7 +321,7 @@
 //
 //  # Fields customization variables
 //
-//  The <code>.form-field()</code> mixin variables
+//  The <code>.lib-form-field()</code> mixin variables
 //
 //  <pre>
 //    <table>
@@ -407,7 +407,7 @@
 //            <td>Field label font weight</td>
 //        </tr>
 //        <tr>
-//            <th> @_label-font-style</th>
+//            <th>@_label-font-style</th>
 //            <td class="vars_value">@form-field-label__font-style</td>
 //            <td class="vars_value">false</td>
 //            <td>Field label font style</td>
@@ -609,7 +609,7 @@
 //
 //  # Required fields message customization variables
 //
-//  The <code>.form-hasrequired()</code> mixin variables
+//  The <code>.lib-form-hasrequired()</code> mixin variables
 //
 //  <pre>
 //    <table>
@@ -684,7 +684,7 @@
 //
 //  # Form element inputs customization
 //
-//  The <code>.form-element-input(@_type: *type*)</code> mixin is used to style form controls. This mixin accepts 1 mandatory parameter - the control type. This can be:
+//  The <code>.lib-form-element-input(@_type: *type*)</code> mixin is used to style form controls. This mixin accepts 1 mandatory parameter - the control type. This can be:
 //  * input-text - for all input-text-like inputs
 //  * input-radio - for radiobutton
 //  * input-checkbox - for checkbox
@@ -712,23 +712,23 @@ input[type="search"],
 input[type="number"],
 input[type="datetime"],
 input[type="email"] {
-    .form-element-input(@_type: input-text);
+    .lib-form-element-input(@_type: input-text);
     margin-bottom: 20px;
 }
 
 select {
-    .form-element-input(@_type: select);
+    .lib-form-element-input(@_type: select);
     margin-bottom: 20px;
 }
 
 select[multiple="multiple"] {
-    .css(height, auto);
+    .lib-css(height, auto);
     margin-bottom: 20px;
 }
 
 textarea {
-    .form-element-input(@_type: textarea);
-    .form-element-textarea-resize();
+    .lib-form-element-input(@_type: textarea);
+    .lib-form-element-textarea-resize();
 }
 
 //  # Form element inputs customization variables
@@ -919,18 +919,18 @@ textarea {
 //  </pre>
 
 //  # Form element choice
-//  The <code>.form-element-choise()</code> mixin is used to customize checkboxes and radio buttons.
+//  The <code>.lib-form-element-choise()</code> mixin is used to customize checkboxes and radio buttons.
 //  ```html
 //    <input type="checkbox" name="checkbox-example" /><label for="checkbox-example">Label for checkbox</label><br />
 //    <input type="radio" name="radio-example"  /><label for="radio-example">Label for radio button</label>
 //  ```
 
 input[type="checkbox"] {
-    .form-element-choice(@_type: input-checkbox);
+    .lib-form-element-choice(@_type: input-checkbox);
 }
 
 input[type="radio"] {
-    .form-element-choice(@_type: input-radio);
+    .lib-form-element-choice(@_type: input-radio);
 }
 
 //  # Form element choice variables
@@ -971,7 +971,7 @@ input[type="radio"] {
 //  </pre>
 
 //  # Custom color
-//  The <code>.form-element-color()</code> mixin is used to set form elements background and color.
+//  The <code>.lib-form-element-color()</code> mixin is used to set form elements background and color.
 //  ```css
 //  @_border-color: ''
 //  @_background: ''
@@ -994,7 +994,7 @@ input[type="radio"] {
 input.text-example-1,
 select.select-example-1,
 textarea.textarea-example-1 {
-    .form-element-color(
+    .lib-form-element-color(
         @_background: #fdf0d5,
         @_border-color: #fc0,
         @_color: #b30000,
@@ -1006,7 +1006,7 @@ textarea.textarea-example-1 {
 
 input.text-example-1,
 textarea.textarea-example-1 {
-    .form-element-color(
+    .lib-form-element-color(
         @_placeholder-color: #ccc
     );
 }
@@ -1016,7 +1016,7 @@ textarea.textarea-example-1 {
 // <input  type="number" class="number number-example" placeholder="placeholder, type = number " />
 // ```
 .number-example {
-    .form-element-number-reset();
+    .lib-form-element-number-reset();
 }
 
 // #  Input search - input-text view
@@ -1024,12 +1024,12 @@ textarea.textarea-example-1 {
 // <input  type="search" class="search search-example" placeholder="placeholder, type = search " />
 // ```
 .search-example {
-    .form-element-search-reset();
+    .lib-form-element-search-reset();
 }
 
 //  #  Form validation
 //
-// The <code>.form-validation-note()</code> mixin is used to customize form validation error messages.
+// The <code>.lib-form-validation-note()</code> mixin is used to customize form validation error messages.
 //
 // ```html
 // <input type="text" class="textarea-example-4 mage-error" placeholder="placeholder, type = text" />
@@ -1060,10 +1060,11 @@ textarea.textarea-example-1 {
 input,
 textarea,
 select {
-    .form-validation-note();
+    .lib-form-validation-note();
 }
 
-//  #  Form validation variables//  <pre>
+//  #  Form validation variables
+//  <pre>
 //    <table>
 //        <tr>
 //            <th class="vars_head">Mixin variable</th>
