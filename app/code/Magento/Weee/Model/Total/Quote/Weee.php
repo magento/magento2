@@ -106,12 +106,10 @@ class Weee extends AbstractTotal
             if ($item->getParentItem()) {
                 continue;
             }
-            $this->resetItemTaxData($item);
-            $this->resetItemWeeeData($item);
+            $this->resetItemData($item);
             if ($item->getHasChildren() && $item->isChildrenCalculated()) {
                 foreach ($item->getChildren() as $child) {
-                    $this->resetItemWeeeData($child);
-                    $this->resetItemTaxData($child);
+                    $this->resetItemData($child);
                     $this->process($address, $child);
                 }
                 $this->recalculateParent($item);
@@ -300,26 +298,16 @@ class Weee extends AbstractTotal
         $item->setAssociatedTaxables($associatedTaxables);
     }
 
-
     /**
-     * Reset information about FPT for shopping cart item
+     * Reset information about Tax and Wee on FPT for shopping cart item
      *
      * @param   \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return  void
      */
-    protected function resetItemWeeeData($item)
+    protected function resetItemData($item)
     {
         $this->weeeData->setApplied($item, []);
-    }
 
-    /**
-     * Reset information about Tax on FPT for shopping cart item
-     *
-     * @param   \Magento\Quote\Model\Quote\Item\AbstractItem $item
-     * @return  void
-     */
-    protected function resetItemTaxData($item)
-    {
         $item->setAssociatedTaxables([]);
 
         $item->setBaseWeeeTaxDisposition(0);
