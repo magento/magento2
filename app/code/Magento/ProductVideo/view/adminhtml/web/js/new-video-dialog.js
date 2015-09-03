@@ -24,14 +24,7 @@ define([
 
         _images: {},
 
-        _imageTypes: [
-            'image/jpeg',
-            'image/pjpeg',
-            'image/jpeg',
-            'image/pjpeg',
-            'image/png',
-            'image/gif'
-        ],
+        _imageTypes: ['.jpeg', '.pjpeg', '.jpeg', '.jpg', '.pjpeg', '.png', '.gif'],
 
         _bind: function() {
             var events = {
@@ -213,10 +206,10 @@ define([
             this._bind();
             var widget = this;
             var uploader = jQuery('#new_video_screenshot');
-
             uploader.on('change', this._onImageInputChange.bind(this));
-            this.toggleButtons();
             uploader.attr('accept', this._imageTypes.join(','));
+
+            this.toggleButtons();
             this.element.modal({
                 type: 'slide',
                 modalClass: 'mage-new-video-dialog form-inline',
@@ -294,9 +287,12 @@ define([
                                 $('[name*="' + $('#item_id').val() + '"]').siblings('.image-fade').css('visibility', 'hidden');
                             }
                             var imageData = widget._getImage($('#file_name').val());
-
-                            var fileName = $('#new_video_screenshot').get(0).files[0];
                             uploader.replaceWith(inputFile);
+
+                            var fileName = $('#new_video_screenshot').get(0).files;
+                            if(!fileName || !fileName.length) {
+                                fileName = null;
+                            }
 
                             var callback = function(code, data) {
                                 widget._onClose();
@@ -366,15 +362,43 @@ define([
             fr.readAsDataURL(file);
         },
 
+        /**
+         *  Image file input handler
+         * @private
+         */
         _onImageInputChange: function() {
             var file = document.getElementById('new_video_screenshot');
-            if(!file || !file.files || !file.files.length) {
+            var val = file.value;
+            var jFile = jQuery(file);
+            var prev = this._getPreviewImage();
+
+            if(!val) {
                 return;
             }
+            var ext = '.' + val.split('.').pop();
+            if(
+                ext.length < 2 ||
+                this._imageTypes.indexOf(ext) == -1 ||
+                !file.files  ||
+                !file.files.length
+
+            ) {
+                jFile.val('');
+                prev.remove();
+                this._previewImage = null;
+                return;
+            } // end if
             file = file.files[0];
             this._onPreview(null, file, true);
         },
 
+        /**
+         * Change Preview
+         * @param error
+         * @param src
+         * @param local
+         * @private
+         */
         _onPreview: function(error, src, local) {
             var img = this._getPreviewImage();
             if(error) {
@@ -404,6 +428,10 @@ define([
             return this._previewImage;
         },
 
+        /**
+         * Close dialog wrap
+         * @private
+         */
         _onClose: function() {
             $('#new-video').modal('closeModal');
         },
@@ -460,13 +488,11 @@ define([
                 $('.video-create-button').show();
                 $('.video-delete-button').hide();
                 $('.video-edit').hide();
-                $('.modal-title').html('New video');
             });
             $(document).on('click', '.item.image', function() {
                 $('.video-create-button').hide();
                 $('.video-delete-button').show();
                 $('.video-edit').show();
-                $('.modal-title').html('Edit video');
             });
             $(document).on('click', '.item.image', function() {
                 var formFields = $('#new_video_form').find('.edited-data');

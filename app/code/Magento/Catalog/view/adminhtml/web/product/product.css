@@ -149,15 +149,11 @@
 
 /* Gallery image panel */
 .admin__scope-old .image-panel {
-    display: none;
     position: relative;
     top: 5px;
     clear: both;
     background: #fff;
-    margin: 0 -2px 15px;
     padding: 20px 15px;
-    box-shadow: 0 1px 3px #aaa inset;
-    border-bottom: 1px solid #cfd0cb;
 }
 
 .admin__scope-old .image .file-row {

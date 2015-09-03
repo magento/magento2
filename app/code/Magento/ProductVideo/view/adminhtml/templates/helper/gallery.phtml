@@ -87,67 +87,62 @@ $elementName = $block->getElement()->getName() . '[images]';
         </div>
     </script>
     <script class="dialog-template" type="text/x-magento-template"  data-title="Image Options">
-        <div class="image-panel" data-role="dialog">
-            <div class="image-panel-preview">
-                <img src="<%- data.url %>" alt="<%- data.label %>" />
-            </div>
-            <div class="image-panel-controls">
-                <strong class="image-name"><%- data.label %></strong>
+            <div class="image-panel admin__scope-old ui-tabs-panel ui-widget-content ui-corner-bottom" data-role="dialog" style="display: block">
+                <div class="image-panel-preview">
+                    <img src="<%- data.url %>" alt="<%- data.label %>" />
+                </div>
+                <div class="image-panel-controls">
+                    <strong class="image-name"><%- data.label %></strong>
 
-                <fieldset class="fieldset fieldset-image-panel">
-                    <div class="field field-image-description">
-                        <label class="label" for="image-description">
-                            <span><?php echo __('Alt Text')?></span>
-                        </label>
-                        <div class="control">
-                            <textarea id="image-description"
-                                      rows="3"
-                                      name="<?php echo $elementName ?>[<%- data.file_id %>][label]"><%- data.label %></textarea>
+                    <fieldset class="fieldset fieldset-image-panel">
+                        <div class="field field-image-description">
+                            <label class="label" for="image-description">
+                                <span><?php echo __('Alt Text')?></span>
+                            </label>
+                            <div class="control">
+                                <textarea id="image-description"
+                                          rows="3"
+                                          name="<?php echo $elementName ?>[<%- data.file_id %>][label]"><%- data.label %></textarea>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="field field-image-role">
-                        <label class="label">
-                            <span><?php echo __('Role')?></span>
-                        </label>
-                        <div class="control">
-                            <ul class="multiselect-alt">
-                                <?php foreach ($block->getMediaAttributes() as $attribute) {
-                                    ?>
-                                    <li class="item">
-                                        <label>
-                                            <input class="image-type"
-                                                   data-role="type-selector"
-                                                   type="checkbox"
-                                                   value="<?php echo $block->escapeHtml($attribute->getAttributeCode()) ?>"
-                                                />
-                                            <?php echo $block->escapeHtml($attribute->getFrontendLabel()) ?>
-                                        </label>
-                                    </li>
-                                    <?php
+                        <div class="field field-image-role">
+                            <label class="label">
+                                <span><?php echo __('Role')?></span>
+                            </label>
+                            <div class="control">
+                                <ul class="multiselect-alt">
+                                    <?php foreach ($block->getMediaAttributes() as $attribute) {
+                                        ?>
+                                        <li class="item">
+                                            <label>
+                                                <input class="image-type"
+                                                       data-role="type-selector"
+                                                       type="checkbox"
+                                                       value="<?php echo $block->escapeHtml($attribute->getAttributeCode()) ?>"
+                                                    />
+                                                <?php echo $block->escapeHtml($attribute->getFrontendLabel()) ?>
+                                            </label>
+                                        </li>
+                                        <?php
 
-                                } ?>
-                            </ul>
+                                    } ?>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="field field-image-hide">
-                        <label class="label">
-                            <input type="checkbox"
-                                   data-role="visibility-trigger"
-                                   value="1"
-                                   name="<?php echo $elementName ?>[<%- data.file_id %>][disabled]"
-                            <% if (data.disabled == 1) { %>checked="checked"<% } %> />
-                            <span><?php echo __('Hide from Product Page')?></span>
-                        </label>
-                    </div>
-                </fieldset>
+                        <div class="field field-image-hide">
+                            <label class="label">
+                                <input type="checkbox"
+                                       data-role="visibility-trigger"
+                                       value="1"
+                                       name="<?php echo $elementName ?>[<%- data.file_id %>][disabled]"
+                                <% if (data.disabled == 1) { %>checked="checked"<% } %> />
+                                <span><?php echo __('Hide from Product Page')?></span>
+                            </label>
+                        </div>
+                    </fieldset>
+                </div>
             </div>
-
-            <button type="button" class="action-close" data-role="close-panel" title="<?php echo __('Close panel'); ?>">
-                <span><?php echo __('Close panel'); ?></span>
-            </button>
-            <div class="image-pointer"></div>
-        </div>
     </script>
 </div>
