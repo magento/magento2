@@ -2,7 +2,6 @@
 
 namespace Magento\CatalogInventory\Api\Data;
 
-use Magento\CatalogInventory\Api\LocationInformationInterface;
 use Magento\Directory\Api\Data\RegionInformationInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
 
@@ -13,15 +12,8 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  *
  * @api
  */
-interface WarehouseInterface extends LocationInformationInterface, ExtensibleDataInterface
+interface WarehouseInterface extends InventoryDataInterface, ExtensibleDataInterface
 {
-    /**
-     * Returns inventory identifier
-     *
-     * @return int
-     */
-    public function getId();
-
     /**
      * Sets name
      *
@@ -31,26 +23,12 @@ interface WarehouseInterface extends LocationInformationInterface, ExtensibleDat
     public function setName($name);
 
     /**
-     * Returns warehouse name
-     *
-     * @return string
-     */
-    public function getName();
-
-    /**
      * Sets unique code
      *
      * @param string $code
      * @return $this
      */
     public function setCode($code);
-
-    /**
-     * Returns unique warehouse code
-     *
-     * @return string
-     */
-    public function getCode();
 
     /**
      * Sets warehouse as virtual

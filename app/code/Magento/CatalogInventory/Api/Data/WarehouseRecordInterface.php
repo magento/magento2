@@ -11,35 +11,22 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  *
  * @api
  */
-interface WarehouseRecordInterface extends ExtensibleDataInterface
+interface WarehouseRecordInterface extends InventoryRecordDataInterface, ExtensibleDataInterface
 {
     /**
-     * Returns identifier of inventory record
+     * Returns identifier of assigned warehouse
      *
      * @return int
      */
-    public function getId();
+    public function getWebsiteId();
 
     /**
-     * Returns identifier of assigned product
+     * Sets warehouse identifier
      *
-     * @return int
+     * @param int $warehouseId
+     * @return $this
      */
-    public function getProductId();
-
-    /**
-     * Returns identifier of assigned inventory
-     *
-     * @return int
-     */
-    public function getInventoryId();
-
-    /**
-     * Returns available quantity of product in the specified warehouse
-     *
-     * @return float
-     */
-    public function getQuantity();
+    public function setWarehouseId($warehouseId);
 
     /**
      * Sets available quantity of product in the specified warehouse
@@ -64,22 +51,6 @@ interface WarehouseRecordInterface extends ExtensibleDataInterface
      * @return $this
      */
     public function setAvailabilityStatusCode($code);
-
-    /**
-     * Returns availability status code for warehouse record
-     *
-     * @return string
-     */
-    public function getAvailabilityStatusCode();
-
-    /**
-     * Returns instance of inventory interface
-     *
-     * Object should be set by inventory record repository
-     *
-     * @return InventoryInterface
-     */
-    public function getInventory();
 
     /**
      * Sets configuration object that is going to be used as configuration options

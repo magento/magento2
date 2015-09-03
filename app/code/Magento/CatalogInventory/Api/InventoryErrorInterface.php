@@ -6,6 +6,7 @@ use Magento\CatalogInventory\Api\Data\InventoryRecordInterface;
 /**
  * Inventory Error Interface
  *
+ * @api
  */
 interface InventoryErrorInterface
 {
@@ -29,7 +30,4 @@ interface InventoryErrorInterface
      * @return string
      */
     public function getMessage();
-
-
 }
-

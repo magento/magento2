@@ -2,47 +2,15 @@
 
 namespace Magento\CatalogInventory\Api\Data;
 
-use Magento\CatalogInventory\Api\LocationInformationInterface;
-use Magento\CatalogInventory\Api\ConfigurationInterface;
+use Magento\CatalogInventory\Api\ConfigurationAwareInterface;
 
 /**
  * Inventory interface
  *
  * @api
  */
-interface InventoryInterface extends LocationInformationInterface
+interface InventoryInterface extends InventoryDataInterface, ConfigurationAwareInterface
 {
-    /**
-     * Returns inventory identifier
-     *
-     * @return int
-     */
-    public function getId();
-
-    /**
-     * Returns inventory name
-     *
-     * @return string
-     */
-    public function getName();
-
-    /**
-     * Returns unique inventory code
-     *
-     * @return string
-     */
-    public function getCode();
-
-    /**
-     * Returns inventory configuration object
-     *
-     * Object should be set from inventory repository, after inventory is instantiated,
-     * so additional configuration overrides of inventory going to be applied as well
-     *
-     * @return ConfigurationInterface
-     */
-    public function getConfiguration();
-
     /**
      * Returns true if this inventory should be indexed
      *
