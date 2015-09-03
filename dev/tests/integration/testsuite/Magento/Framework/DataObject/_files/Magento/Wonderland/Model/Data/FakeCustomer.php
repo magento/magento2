@@ -134,8 +134,9 @@ class FakeCustomer extends \Magento\Framework\Api\AbstractExtensibleObject imple
      * @param \Magento\Wonderland\Api\Data\FakeCustomerExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(\Magento\Wonderland\Api\Data\FakeCustomerExtensionInterface $extensionAttributes)
-    {
+    public function setExtensionAttributes(
+        \Magento\Wonderland\Api\Data\FakeCustomerExtensionInterface $extensionAttributes
+    ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
 }
