@@ -246,7 +246,7 @@ class CopyTest extends \PHPUnit_Framework_TestCase
         $targetMock = $this->getMock(
             'Magento\Framework\Api\AbstractSimpleObject',
             [
-                'setCode'
+                'setData'
             ],
             [],
             '',
@@ -260,8 +260,8 @@ class CopyTest extends \PHPUnit_Framework_TestCase
 
         $targetMock
             ->expects($this->once())
-            ->method('setCode')
-            ->with('code');
+            ->method('setData')
+            ->with('code', 'code');
 
         $this->eventManagerMock->expects($this->once())->method('dispatch');
         $result = $this->copy->copyFieldsetToTarget('fieldset', 'aspect', $sourceMock, $targetMock);

@@ -39,12 +39,15 @@ class CopyTest extends \PHPUnit_Framework_TestCase
 
     public function testCopyFieldsetWithExtensionAttributes()
     {
+        $autoloadWrapper = \Magento\Framework\Autoload\AutoloaderRegistry::getAutoloader();
+        $autoloadWrapper->addPsr4('Magento\\Wonderland\\', realpath(__DIR__ . '/_files/Magento/Wonderland'));
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
         $fieldsetConfigMock = $this->getMockBuilder('\Magento\Framework\DataObject\Copy\Config')
             ->disableOriginalConstructor()
             ->setMethods(['getFieldSet'])
             ->getMock();
 
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $service = $objectManager->create(
             'Magento\Framework\DataObject\Copy',
             ['fieldsetConfig' => $fieldsetConfigMock]
@@ -69,23 +72,22 @@ class CopyTest extends \PHPUnit_Framework_TestCase
         ];
         $dataWithExtraField = array_merge($data, ['undeclared_field' => 'will be omitted']);
 
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Framework\Api\DataObjectHelper $dataObjectHelper */
         $dataObjectHelper = $objectManager->get('Magento\Framework\Api\DataObjectHelper');
-        /** @var \Magento\Customer\Api\Data\CustomerInterfaceFactory $customerFactory */
-        $customerFactory = $objectManager->get('Magento\Customer\Api\Data\CustomerInterfaceFactory');
-        /** @var \Magento\Customer\Api\Data\CustomerInterface $source */
+        /** @var \Magento\Wonderland\Model\Data\FakeCustomerFactory $customerFactory */
+        $customerFactory = $objectManager->get('Magento\Wonderland\Model\Data\FakeCustomerFactory');
+        /** @var \Magento\Wonderland\Api\Data\CustomerInterface $source */
         $source = $customerFactory->create();
         $dataObjectHelper->populateWithArray(
             $source,
             $dataWithExtraField,
-            'Magento\Customer\Api\Data\CustomerInterface'
+            'Magento\Wonderland\Api\Data\FakeCustomerInterface'
         );
-        /** @var \Magento\Customer\Api\Data\CustomerInterface $target */
+        /** @var \Magento\Wonderland\Api\Data\CustomerInterface $target */
         $target = $customerFactory->create();
         $target = $service->copyFieldsetToTarget($fieldset, $aspect, $source, $target);
 
-        $this->assertInstanceOf('Magento\Customer\Api\Data\CustomerInterface', $target);
+        $this->assertInstanceOf('Magento\Wonderland\Api\Data\FakeCustomerInterface', $target);
         $this->assertNull(
             $target->getEmail(),
             "Email should not be set because it is not defined in the fieldset."
@@ -104,6 +106,10 @@ class CopyTest extends \PHPUnit_Framework_TestCase
 
     public function testCopyFieldsetWithAbstractSimpleObject()
     {
+        $autoloadWrapper = \Magento\Framework\Autoload\AutoloaderRegistry::getAutoloader();
+        $autoloadWrapper->addPsr4('Magento\\Wonderland\\', realpath(__DIR__ . '/_files/Magento/Wonderland'));
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
         $fieldset = 'sales_copy_order';
         $aspect = 'to_edit';
 
@@ -112,7 +118,6 @@ class CopyTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getFieldSet'])
             ->getMock();
 
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $service = $objectManager->create(
             'Magento\Framework\DataObject\Copy',
             ['fieldsetConfig' => $fieldsetConfigMock]
@@ -125,13 +130,13 @@ class CopyTest extends \PHPUnit_Framework_TestCase
             ->method('getFieldSet')
             ->willReturn($data);
 
-        $source = new \Magento\Customer\Model\Data\AttributeMetadata();
+        $source = $objectManager->get('Magento\Wonderland\Model\Data\FakeAttributeMetadata');
         $source->setStoreLabel('storeLabel');
         $source->setFrontendLabel('frontendLabel');
         $source->setAttributeCode('attributeCode');
         $source->setNote('note');
 
-        $target = new \Magento\Customer\Model\Data\AttributeMetadata();
+        $target = $objectManager->get('Magento\Wonderland\Model\Data\FakeAttributeMetadata');
         $expectedTarget = $source;
 
         $this->assertEquals(
