@@ -1,3 +1,31 @@
+1.0.0-beta2
+=============
+* Fixed bugs:
+    * Fixed an issue where unable to export custom product attributes
+    * Fixed an issue where customer account page in Admin produces exception
+    * Fixed an issue where import validation is failed in case of import products for multiple websites
+    * Unable to import or export products with multi-select attributes
+    * Fixed an issue where DI compilation fails on class keyword 
+    * Fixed an issue where UK PayPal Website Payments Pro Hosted Solution doesn't work
+    * Fixed an issue where US PayPal payment methods are not working
+    * Fixed an issue where Authorize.net does not work in production mode
+    * Fixed an issue where widgets are not rendered on the CMS preview page
+    * Fixed an issue where CMS page preview not works when changing store view
+    * Fixed an issue where minicart is not cleared after placing an order via PayPal
+    * Fixed an issue where is not possible to use Authorize.net payment on checkout
+    * Fixed an issue where multiple stores at different paths rendering wrong store base_url
+    * Fixed an issue where unable to change the product attribute set (Product Template)
+    * Fixed an issue where there is address validation for guest customer
+    * Fixed an issue where no way to set password for customer after placing order
+
+1.0.0-beta1
+=============
+* Fixed bugs:
+    * Fixed an issue where custom attribute with 'Show on Storefront' = Yes makes the customer edit form empty
+    * Fixed an issue where product import loses images
+    * Fixed an issue where images are not uploaded with import procedure
+    * Fixed JS error when click 'Go to Checkout' button
+
 1.0.0-beta
 =============
 * Framework improvements:
