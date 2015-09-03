@@ -24,7 +24,7 @@ abstract class ComponentRegistrar implements ComponentRegistrarInterface
     public static function register($componentName, $path)
     {
         if (isset(static::$componentPaths[$componentName])) {
-            throw new \LogicException ($componentName . ' already exists');
+            throw new \LogicException($componentName . ' already exists');
         } else {
             static::$componentPaths[$componentName] = $path;
         }
