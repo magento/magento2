@@ -13,13 +13,13 @@
 & when (@media-common = true) {
 
 .fieldset {
-    .form-fieldset();
+    .lib-form-fieldset();
     &:last-child {
         margin-bottom: 0;
     }
     > .field,
     > .fields > .field {
-        .form-field();
+        .lib-form-field();
         &.no-label {
             > .label {
                 &:extend(.abs-visually-hidden all);
@@ -77,7 +77,7 @@ div.mage-error[generated] {
 }
 
 .field .tooltip {
-    .tooltip(right);
+    .lib-tooltip(right);
     .tooltip-content {
         min-width: 200px;
         white-space: normal;
@@ -91,8 +91,8 @@ select:focus ~ .tooltip .tooltip-content {
 
 .hasDatepicker {
     + .ui-datepicker-trigger {
-        .button-reset();
-        .icon-font(
+        .lib-button-reset();
+        .lib-icon-font(
         @_icon-font-content: @icon-calendar,
         @_icon-font-color: @primary__color__lighter,
         @_icon-font-size: @icon-calendar__font-size,
@@ -144,7 +144,7 @@ select:focus ~ .tooltip .tooltip-content {
             &:extend(.abs-margin-for-forms-desktop all);
         }
         > .field {
-            .form-field-type-revert();
+            .lib-form-field-type-revert();
             margin: 0 0 @form-field__vertical-indent__desktop;
         }
     }
