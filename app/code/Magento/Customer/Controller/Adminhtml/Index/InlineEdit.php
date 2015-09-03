@@ -11,7 +11,7 @@ use Magento\Customer\Api\Data\CustomerInterface;
 class InlineEdit extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /** @var CustomerInterface */
-    protected $customer;
+    private $customer;
 
     /**
      * @return \Magento\Framework\Controller\Result\Json
@@ -23,7 +23,10 @@ class InlineEdit extends \Magento\Customer\Controller\Adminhtml\Index
 
         $postItems = $this->getRequest()->getParam('items', []);
         if (!($this->getRequest()->getParam('isAjax') && count($postItems))) {
-            $this->getMessageManager()->addError(__('Please correct the data sent.'));
+            return $resultJson->setData([
+                'messages' => [__('Please correct the data sent.')],
+                'error' => true,
+            ]);
         }
 
         foreach (array_keys($postItems) as $customerId) {
@@ -149,6 +152,7 @@ class InlineEdit extends \Magento\Customer\Controller\Adminhtml\Index
             $this->_customerRepository->save($customer);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->getMessageManager()->addError($this->getErrorWithCustomerId($e->getMessage()));
+            $this->logger->critical($e);
         } catch (\Exception $e) {
             $this->getMessageManager()->addError($this->getErrorWithCustomerId('We can\'t save the customer.'));
             $this->logger->critical($e);
