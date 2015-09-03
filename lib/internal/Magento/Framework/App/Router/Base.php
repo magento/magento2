@@ -235,10 +235,9 @@ class Base implements \Magento\Framework\App\RouterInterface
      * Get not found controller instance
      *
      * @param string $currentModuleName
-     * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\App\ActionInterface|null
      */
-    protected function getNotFoundAction($currentModuleName, RequestInterface $request)
+    protected function getNotFoundAction($currentModuleName)
     {
         if (!$this->applyNoRoute) {
             return null;
@@ -303,7 +302,7 @@ class Base implements \Magento\Framework\App\RouterInterface
         }
 
         if (null == $actionInstance) {
-            $actionInstance = $this->getNotFoundAction($currentModuleName, $request);
+            $actionInstance = $this->getNotFoundAction($currentModuleName);
             if ($actionInstance === null) {
                 return null;
             }
