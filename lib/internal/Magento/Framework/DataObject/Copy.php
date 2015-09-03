@@ -101,7 +101,7 @@ class Copy
                         $extensionAttributes->{$method}($value);
                         $target->setExtensionAttributes($extensionAttributes);
                     } else {
-                        throw new \InvalidArgumentException('Method in extension does not exist.');
+                        throw new \InvalidArgumentException('Attribute in object does not exist.');
                     }
                 }
             } elseif ($target instanceof \Magento\Framework\Api\AbstractSimpleObject) {
@@ -230,7 +230,7 @@ class Copy
                     if ($extensionMethodExists == true) {
                         $value = $extensionAttributes->{$method}();
                     } else {
-                        throw new \InvalidArgumentException('Method in extension does not exist.');
+                        throw new \InvalidArgumentException('Attribute in object does not exist.');
                     }
                 }
             }
