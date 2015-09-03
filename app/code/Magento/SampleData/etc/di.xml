@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="sampleDataCommand" xsi:type="object">Magento\SampleData\Console\Command\SampleDataInstallCommand</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\SampleData\Model\BlackHoleFactory" type="\Magento\Framework\Mail\TransportInterfaceFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\SampleData\Model\BlackHole</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="blackHoleTransportBuilder" type="Magento\Framework\Mail\Template\TransportBuilder">
+        <arguments>
+            <argument name="mailTransportFactory" xsi:type="object" >Magento\SampleData\Model\BlackHoleFactory</argument>
+        </arguments>
+    </virtualType>
+    <virtualType  name="sampleDataAccountManagement" type="Magento\Customer\Model\AccountManagement">
+        <arguments>
+            <argument name="transportBuilder" xsi:type="object">blackHoleTransportBuilder</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\SampleData\Module\Customer\Setup\Customer">
+        <arguments>
+            <argument name="accountManagement" xsi:type="object">sampleDataAccountManagement</argument>
+        </arguments>
+    </type>
+</config>
