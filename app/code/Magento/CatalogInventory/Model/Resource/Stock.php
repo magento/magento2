@@ -156,8 +156,6 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb implements Q
         $connection->beginTransaction();
         $connection->update($this->getTable('cataloginventory_stock_item'), ['qty' => $value], $where);
         $connection->commit();
-
-        return $this;
     }
 
     /**
