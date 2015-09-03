@@ -58,8 +58,6 @@ class Copy
      * @throws \InvalidArgumentException
      *
      * @api
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function copyFieldsetToTarget($fieldset, $aspect, $source, $target, $root = 'global')
     {
@@ -85,25 +83,7 @@ class Copy
             if ($targetIsArray) {
                 $target[$targetCode] = $value;
             } else if ($target instanceof \Magento\Framework\Api\ExtensibleDataInterface) {
-                $method = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $code)));
-
-                $methodExists = method_exists($source, $method);
-                if ($methodExists == true) {
-                    $target->{$method}($value);
-                } else {
-                    // If we couldn't find the method, check if we can set it from the extension attributes
-                    $extensionAttributes = $target->getExtensionAttributes();
-                    if ($extensionAttributes == null) {
-                        $extensionAttributes = $this->extensionAttributesFactory->create(get_class($target));
-                    }
-                    $extensionMethodExists = method_exists($extensionAttributes, $method);
-                    if ($extensionMethodExists == true) {
-                        $extensionAttributes->{$method}($value);
-                        $target->setExtensionAttributes($extensionAttributes);
-                    } else {
-                        throw new \InvalidArgumentException('Attribute in object does not exist.');
-                    }
-                }
+                $this->accessExtensionSetMethod($target, $code, $value);
             } elseif ($target instanceof \Magento\Framework\Api\AbstractSimpleObject) {
                 $target->setData($code, $value);
             } else {
@@ -205,8 +185,6 @@ class Copy
      * @param string $code
      * @return mixed
      * @throws \InvalidArgumentException
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _getFieldsetFieldValue($source, $code)
     {
@@ -215,25 +193,7 @@ class Copy
         } elseif ($source instanceof \Magento\Framework\DataObject) {
             $value = $source->getDataUsingMethod($code);
         } elseif ($source instanceof \Magento\Framework\Api\ExtensibleDataInterface) {
-            $method = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $code)));
-
-            $methodExists = method_exists($source, $method);
-            if ($methodExists == true) {
-                $value = $source->{$method}();
-            } else {
-                // If we couldn't find the method, check if we can get it from the extension attributes
-                $extensionAttributes = $source->getExtensionAttributes();
-                if ($extensionAttributes == null) {
-                    throw new \InvalidArgumentException('Method in extension does not exist.');
-                } else {
-                    $extensionMethodExists = method_exists($extensionAttributes, $method);
-                    if ($extensionMethodExists == true) {
-                        $value = $extensionAttributes->{$method}();
-                    } else {
-                        throw new \InvalidArgumentException('Attribute in object does not exist.');
-                    }
-                }
-            }
+            $value = $this->accessExtensionGetMethod($source, $code);
         } elseif ($source instanceof \Magento\Framework\Api\AbstractSimpleObject) {
             $sourceArray = $source->__toArray();
             $value = isset($sourceArray[$code]) ? $sourceArray[$code] : null;
@@ -243,5 +203,70 @@ class Copy
             );
         }
         return $value;
+    }
+
+    /**
+     * Access the extension get method
+     *
+     * @param \Magento\Framework\Api\ExtensibleDataInterface $object
+     * @param string $code
+     *
+     * @return mixed
+     * @throws \InvalidArgumentException
+     */
+    protected function accessExtensionGetMethod($source, $code)
+    {
+        $method = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $code)));
+
+        $methodExists = method_exists($source, $method);
+        if ($methodExists == true) {
+            $value = $source->{$method}();
+        } else {
+            // If we couldn't find the method, check if we can get it from the extension attributes
+            $extensionAttributes = $source->getExtensionAttributes();
+            if ($extensionAttributes == null) {
+                throw new \InvalidArgumentException('Method in extension does not exist.');
+            } else {
+                $extensionMethodExists = method_exists($extensionAttributes, $method);
+                if ($extensionMethodExists == true) {
+                    $value = $extensionAttributes->{$method}();
+                } else {
+                    throw new \InvalidArgumentException('Attribute in object does not exist.');
+                }
+            }
+        }
+        return $value;
+    }
+
+    /**
+     * Access the extension set method
+     *
+     * @param \Magento\Framework\Api\ExtensibleDataInterface $object
+     * @param string $code
+     * @param mixed $value
+     *
+     * @throws \InvalidArgumentException
+     */
+    protected function accessExtensionSetMethod($target, $code, $value)
+    {
+        $method = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $code)));
+
+        $methodExists = method_exists($target, $method);
+        if ($methodExists == true) {
+            $target->{$method}($value);
+        } else {
+            // If we couldn't find the method, check if we can set it from the extension attributes
+            $extensionAttributes = $target->getExtensionAttributes();
+            if ($extensionAttributes == null) {
+                $extensionAttributes = $this->extensionAttributesFactory->create(get_class($target));
+            }
+            $extensionMethodExists = method_exists($extensionAttributes, $method);
+            if ($extensionMethodExists == true) {
+                $extensionAttributes->{$method}($value);
+                $target->setExtensionAttributes($extensionAttributes);
+            } else {
+                throw new \InvalidArgumentException('Attribute in object does not exist.');
+            }
+        }
     }
 }

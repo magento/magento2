@@ -38,6 +38,12 @@ dev/tests/integration/testsuite/Magento/Framework/Api/_files/Magento/Wonderland/
 dev/tests/integration/testsuite/Magento/Framework/Api/_files/Magento/Wonderland/Model/Data/FakeRegion.php
 dev/tests/integration/testsuite/Magento/Framework/Api/_files/Magento/Wonderland/Model/Data/FakeExtensibleOne.php
 dev/tests/integration/testsuite/Magento/Framework/Api/_files/Magento/Wonderland/Model/Data/FakeExtensibleTwo.php
+dev/tests/integration/testsuite/Magento/Framework/DataObject/_files/Magento/Wonderland/Api/Data/FakeAttributeMetadataInterface.php
+dev/tests/integration/testsuite/Magento/Framework/DataObject/_files/Magento/Wonderland/Api/Data/FakeCustomerInterface.php
+dev/tests/integration/testsuite/Magento/Framework/DataObject/_files/Magento/Wonderland/Model/Data/FakeAttributeMetadataInterface.php
+dev/tests/integration/testsuite/Magento/Framework/DataObject/_files/Magento/Wonderland/Model/Data/FakeCustomerInterface.php
+dev/tests/integration/testsuite/Magento/Framework/DataObject/_files/Magento/Wonderland/Model/FakeAttributeMetadataInterface.php
+dev/tests/integration/testsuite/Magento/Framework/DataObject/_files/Magento/Wonderland/Model/FakeCustomerInterface.php
 lib/internal/Magento/Framework/Backup/Test/Unit/_files/Fs.php
 lib/internal/Magento/Framework/Backup/Test/Unit/_files/Ftp.php
 lib/internal/Magento/Framework/Backup/Test/Unit/_files/Gz.php
