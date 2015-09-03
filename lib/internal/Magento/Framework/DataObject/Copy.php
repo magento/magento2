@@ -14,19 +14,19 @@ class Copy
     /**
      * @var \Magento\Framework\DataObject\Copy\Config
      */
-    protected $_fieldsetConfig;
+    protected $fieldsetConfig;
 
     /**
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $_eventManager = null;
+    protected $eventManager = null;
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttributesFactory
      */
-    protected $_extensionAttributesFactory;
+    protected $extensionAttributesFactory;
 
     /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -38,9 +38,9 @@ class Copy
         \Magento\Framework\DataObject\Copy\Config $fieldsetConfig,
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionAttributesFactory
     ) {
-        $this->_eventManager = $eventManager;
-        $this->_fieldsetConfig = $fieldsetConfig;
-        $this->_extensionAttributesFactory = $extensionAttributesFactory;
+        $this->eventManager = $eventManager;
+        $this->fieldsetConfig = $fieldsetConfig;
+        $this->extensionAttributesFactory = $extensionAttributesFactory;
     }
 
     /**
@@ -55,6 +55,7 @@ class Copy
      * @param array|\Magento\Framework\DataObject $target
      * @param string $root
      * @return array|\Magento\Framework\DataObject|null the value of $target
+     * @throws \InvalidArgumentException
      *
      * @api
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -65,7 +66,7 @@ class Copy
         if (!$this->_isFieldsetInputValid($source, $target)) {
             return null;
         }
-        $fields = $this->_fieldsetConfig->getFieldset($fieldset, $root);
+        $fields = $this->fieldsetConfig->getFieldset($fieldset, $root);
         if ($fields === null) {
             return $target;
         }
@@ -83,7 +84,7 @@ class Copy
 
             if ($targetIsArray) {
                 $target[$targetCode] = $value;
-            } else if ($source instanceof \Magento\Framework\Api\ExtensibleDataInterface) {
+            } else if ($target instanceof \Magento\Framework\Api\ExtensibleDataInterface) {
                 $method = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $code)));
 
                 $methodExists = method_exists($source, $method);
@@ -93,14 +94,18 @@ class Copy
                     // If we couldn't find the method, check if we can set it from the extension attributes
                     $extensionAttributes = $target->getExtensionAttributes();
                     if ($extensionAttributes == null) {
-                        $extensionAttributes = $this->_extensionAttributesFactory->create(get_class($target));
+                        $extensionAttributes = $this->extensionAttributesFactory->create(get_class($target));
                     }
-                    $extensionAttributes->{$method}($value);
-                    $target->setExtensionAttributes($extensionAttributes);
+                    $extensionMethodExists = method_exists($extensionAttributes, $method);
+                    if ($extensionMethodExists == true) {
+                        $extensionAttributes->{$method}($value);
+                        $target->setExtensionAttributes($extensionAttributes);
+                    } else {
+                        throw new \InvalidArgumentException('Method in extension does not exist.');
+                    }
                 }
-            } elseif ($source instanceof \Magento\Framework\Api\AbstractSimpleObject) {
-                $method = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $code)));
-                $target->{$method}($value);
+            } elseif ($target instanceof \Magento\Framework\Api\AbstractSimpleObject) {
+                $target->setData($code, $value);
             } else {
                 $target->setDataUsingMethod($targetCode, $value);
             }
@@ -128,7 +133,7 @@ class Copy
         if ($targetIsArray) {
             $target = new \Magento\Framework\DataObject($target);
         }
-        $this->_eventManager->dispatch(
+        $this->eventManager->dispatch(
             $eventName,
             ['target' => $target, 'source' => $source, 'root' => $root]
         );
@@ -155,7 +160,7 @@ class Copy
         if (!(is_array($source) || $source instanceof \Magento\Framework\DataObject)) {
             return null;
         }
-        $fields = $this->_fieldsetConfig->getFieldset($fieldset, $root);
+        $fields = $this->fieldsetConfig->getFieldset($fieldset, $root);
         if ($fields === null) {
             return null;
         }
@@ -216,7 +221,16 @@ class Copy
             } else {
                 // If we couldn't find the method, check if we can get it from the extension attributes
                 $extensionAttributes = $source->getExtensionAttributes();
-                $value = $extensionAttributes->{$method}();
+                if ($extensionAttributes == null) {
+                    throw new \InvalidArgumentException('Method in extension does not exist.');
+                } else {
+                    $extensionMethodExists = method_exists($extensionAttributes, $method);
+                    if ($extensionMethodExists == true) {
+                        $value = $extensionAttributes->{$method}();
+                    } else {
+                        throw new \InvalidArgumentException('Method in extension does not exist.');
+                    }
+                }
             }
         } elseif ($source instanceof \Magento\Framework\Api\AbstractSimpleObject) {
             $sourceArray = $source->__toArray();
