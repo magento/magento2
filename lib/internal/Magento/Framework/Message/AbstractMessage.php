@@ -26,10 +26,16 @@ abstract class AbstractMessage implements MessageInterface
     protected $isSticky = false;
 
     /**
+     * @var array
+     */
+    protected $data;
+
+    /**
      * @param string $text
      */
-    public function __construct($text)
-    {
+    public function __construct(
+        $text = null
+    ) {
         $this->text = $text;
     }
 
@@ -114,7 +120,39 @@ abstract class AbstractMessage implements MessageInterface
      */
     public function toString()
     {
-        $out = $this->getType() . ': ' . $this->getText();
+        $out = $this->getType() . ': ' . $this->getIdentifier() . ': ' . $this->getText();
         return $out;
+    }
+
+    /**
+     * Sets message data
+     *
+     * @param array $data
+     * @return $this
+     * @throws \InvalidArgumentException
+     */
+    public function setData(array $data = [])
+    {
+        array_walk_recursive(
+            $data,
+            function ($element) {
+                if (is_object($element) && !$element instanceof \Serializable) {
+                    throw new \InvalidArgumentException('Only serializable content is allowed.');
+                }
+            }
+        );
+
+        $this->data = $data;
+        return $this;
+    }
+
+    /**
+     * Returns message data
+     *
+     * @return array
+     */
+    public function getData()
+    {
+        return (array)$this->data;
     }
 }
