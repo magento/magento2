@@ -134,13 +134,15 @@ abstract class AbstractServiceCollection extends \Magento\Framework\Data\Collect
     {
         //test if we have multiple conditions per field
         $requiresMultipleFilterGroups = false;
-        if (is_array($condition)) {
+        if (is_array($field) && is_array($condition)) {
             foreach ($condition as $cond) {
                 if (is_array($cond) && count($cond) > 1) {
                     $requiresMultipleFilterGroups = true;
                     break;
                 }
             }
+        } elseif (is_array($condition)) {
+            $requiresMultipleFilterGroups = true;
         }
 
         if ($requiresMultipleFilterGroups) {
