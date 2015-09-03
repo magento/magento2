@@ -324,10 +324,10 @@ define([
 
             var dialogElement = $imageContainer.data('dialog');
 
-            if ($imageContainer.is('.removed') || (dialogElement && dialogElement.is(':visible'))) {
-                return;
-            }
-            this.element.find('[data-role=dialog]').trigger('close');
+            //if ($imageContainer.is('.removed') || (dialogElement && dialogElement.is(':visible'))) {
+            //    return;
+           // }
+            //this.element.find('[data-role=dialog]').trigger('close');
 
             if (!dialogElement && this.dialogTmpl) {
                 var $template = this.dialogTmpl({
@@ -337,9 +337,22 @@ define([
 
                 dialogElement = $($template);
 
+                dialogElement.modal({
+                    type: 'slide',
+                    title: $.mage.__('Edit Image'),
+                    modalClass: 'mage-edit-image-dialog form-inline',
+                    buttons: [{
+                        'text':     $.mage.__('Return'),
+                        'class': '  action-primary image-edit-button',
+                        click: function (e) {
+                            dialogElement.trigger('closeModal')
+                        }
+                    }]
+                });
+
                 dialogElement
-                    .data('imageContainer', $imageContainer)
-                    .on('open', $.proxy(function (event) {
+                    //.data('imageContainer', $imageContainer)
+                    .on('showModal', $.proxy(function (event) {
                         var imagesList = this.element.find(this.options.imageSelector + ':not(.removed), .image-placeholder');
                         var index = imagesList.index($imageContainer);
                         var positionIndex = Math.floor(index / imageCountInRow + 1) * imageCountInRow - 1;
@@ -367,18 +380,18 @@ define([
                             }, this));
                         this._setImagePointerPosition($imageContainer, dialogElement);
 
-                    }, this))
-                    .on('close', $.proxy(function (event) {
-                        $imageContainer.removeClass('active');
-                        $(event.target)
-                            .slideUp(400);
                     }, this));
+                    //.on('closeModal', $.proxy(function (event) {
+                    //    $imageContainer.removeClass('active');
+                    //    $(event.target)
+                    //        .slideUp(400);
+                    //}, this));
 
                 $imageContainer.data('dialog', dialogElement);
             }
-            if (dialogElement) {
-                dialogElement.trigger('open');
-            }
+            //if (dialogElement) {
+            dialogElement.trigger('openModal');
+            //}
         },
 
         /**
