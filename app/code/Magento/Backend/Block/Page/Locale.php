@@ -6,6 +6,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Page;
+
 use Magento\Framework\App\ActionInterface;
 
 class Locale extends \Magento\Backend\Block\Template
