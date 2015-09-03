@@ -245,6 +245,7 @@ class Copy
      * @param string $code
      * @param mixed $value
      *
+     * @return null
      * @throws \InvalidArgumentException
      */
     protected function accessExtensionSetMethod($target, $code, $value)
@@ -268,5 +269,7 @@ class Copy
                 throw new \InvalidArgumentException('Attribute in object does not exist.');
             }
         }
+
+        return null;
     }
 }
