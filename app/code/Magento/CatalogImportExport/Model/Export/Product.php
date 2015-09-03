@@ -880,7 +880,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                             }
                             $data[$itemId][$storeId][$fieldName] = $attrValue;
                         }
-                    }  else {
+                    } else {
                         $this->collectMultiselectValues($item, $code, $storeId);
                         if (!empty($this->collectedMultiselectsData[$storeId][$itemId][$code])) {
                             $additionalAttributes[$code] = $fieldName .

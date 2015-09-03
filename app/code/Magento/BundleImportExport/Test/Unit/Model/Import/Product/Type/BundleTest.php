@@ -52,40 +52,12 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
      */
     protected $setCollection;
 
-    protected function setUp()
+    /**
+     *
+     * @return void
+     */
+    protected function initFetchAllCalls()
     {
-        parent::setUp();
-
-        $this->entityModel = $this->getMock(
-            'Magento\CatalogImportExport\Model\Import\Product',
-            [
-                'getErrorAggregator',
-                'getBehavior',
-                'getNewSku',
-                'getNextBunch',
-                'isRowAllowedToImport',
-                'getRowScope',
-                'getConnection'
-            ],
-            [],
-            '',
-            false
-        );
-        $this->entityModel->method('getErrorAggregator')->willReturn($this->getErrorAggregatorObject());
-        $this->connection = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            ['select', 'fetchAll', 'fetchPairs', 'joinLeft', 'insertOnDuplicate', 'delete', 'quoteInto', 'fetchAssoc'],
-            [],
-            '',
-            false
-        );
-        $this->select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
-        $this->select->expects($this->any())->method('from')->will($this->returnSelf());
-        $this->select->expects($this->any())->method('where')->will($this->returnSelf());
-        $this->select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
-        $this->select->expects($this->any())->method('getConnection')->willReturn($this->connection);
-        $this->connection->expects($this->any())->method('select')->will($this->returnValue($this->select));
-
         $fetchAllForInitAttributes = [
             [
                 'attribute_set_name' => '1',
@@ -124,6 +96,42 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                 $fetchAllForInitAttributes,
                 $fetchAllForInitAttributes
             ));
+    }
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->entityModel = $this->getMock(
+            'Magento\CatalogImportExport\Model\Import\Product',
+            [
+                'getErrorAggregator',
+                'getBehavior',
+                'getNewSku',
+                'getNextBunch',
+                'isRowAllowedToImport',
+                'getRowScope',
+                'getConnection'
+            ],
+            [],
+            '',
+            false
+        );
+        $this->entityModel->method('getErrorAggregator')->willReturn($this->getErrorAggregatorObject());
+        $this->connection = $this->getMock(
+            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            ['select', 'fetchAll', 'fetchPairs', 'joinLeft', 'insertOnDuplicate', 'delete', 'quoteInto', 'fetchAssoc'],
+            [],
+            '',
+            false
+        );
+        $this->select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
+        $this->select->expects($this->any())->method('from')->will($this->returnSelf());
+        $this->select->expects($this->any())->method('where')->will($this->returnSelf());
+        $this->select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
+        $this->select->expects($this->any())->method('getConnection')->willReturn($this->connection);
+        $this->connection->expects($this->any())->method('select')->will($this->returnValue($this->select));
+        $this->initFetchAllCalls();
         $this->connection->expects($this->any())->method('insertOnDuplicate')->willReturnSelf();
         $this->connection->expects($this->any())->method('delete')->willReturnSelf();
         $this->connection->expects($this->any())->method('quoteInto')->willReturn('');

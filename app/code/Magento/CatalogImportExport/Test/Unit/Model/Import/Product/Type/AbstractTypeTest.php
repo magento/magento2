@@ -118,11 +118,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $entityAttributes = [
-            'attribute_id' => 'attributeSetName'
-        ];
-
-        $entityAttributes2 = [[
+        $entityAttributes = [[
             'attribute_id' => 'attribute_id',
             'attribute_set_name' => 'attributeSetName',
         ]];
@@ -196,7 +192,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $this->connection
             ->expects($this->any())
             ->method('fetchAll')
-            ->will($this->returnValue($entityAttributes2));
+            ->will($this->returnValue($entityAttributes));
 
         $this->resource = $this->getMock(
             '\Magento\Framework\App\Resource',

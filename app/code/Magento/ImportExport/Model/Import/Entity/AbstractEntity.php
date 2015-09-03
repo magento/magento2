@@ -332,6 +332,25 @@ abstract class AbstractEntity
     }
 
     /**
+     * Add errors to error aggregator
+     *
+     * @param string $code
+     * @param array|mixed $errors
+     * @return void
+     */
+    protected function addErrors($code, $errors)
+    {
+        if ($errors) {
+            $this->getErrorAggregator()->addError(
+                $code,
+                ProcessingError::ERROR_LEVEL_CRITICAL,
+                null,
+                implode('", "', $errors)
+            );
+        }
+    }
+
+    /**
      * Validate data rows and save bunches to DB.
      *
      * @return $this|void
@@ -728,14 +747,8 @@ abstract class AbstractEntity
         if (!$this->_dataValidated) {
             $this->getErrorAggregator()->clear();
             // do all permanent columns exist?
-            if ($absentColumns = array_diff($this->_permanentAttributes, $this->getSource()->getColNames())) {
-                $this->getErrorAggregator()->addError(
-                    self::ERROR_CODE_COLUMN_NOT_FOUND,
-                    ProcessingError::ERROR_LEVEL_CRITICAL,
-                    null,
-                    implode(', ', $absentColumns)
-                );
-            }
+            $absentColumns = array_diff($this->_permanentAttributes, $this->getSource()->getColNames());
+            $this->addErrors(self::ERROR_CODE_COLUMN_NOT_FOUND, $absentColumns);
 
             if (ImportExport::BEHAVIOR_DELETE != $this->getBehavior()) {
                 // check attribute columns names validity
@@ -755,31 +768,9 @@ abstract class AbstractEntity
                         }
                     }
                 }
-
-                if ($invalidAttributes) {
-                    $this->getErrorAggregator()->addError(
-                        self::ERROR_CODE_INVALID_ATTRIBUTE,
-                        ProcessingError::ERROR_LEVEL_CRITICAL,
-                        null,
-                        implode('", "', $invalidAttributes)
-                    );
-                }
-                if ($emptyHeaderColumns) {
-                    $this->getErrorAggregator()->addError(
-                        self::ERROR_CODE_COLUMN_EMPTY_HEADER,
-                        ProcessingError::ERROR_LEVEL_CRITICAL,
-                        null,
-                        implode('", "', $emptyHeaderColumns)
-                    );
-                }
-                if ($invalidColumns) {
-                    $this->getErrorAggregator()->addError(
-                        self::ERROR_CODE_COLUMN_NAME_INVALID,
-                        ProcessingError::ERROR_LEVEL_CRITICAL,
-                        null,
-                        implode('", "', $invalidColumns)
-                    );
-                }
+                $this->addErrors(self::ERROR_CODE_INVALID_ATTRIBUTE, $invalidAttributes);
+                $this->addErrors(self::ERROR_CODE_COLUMN_EMPTY_HEADER, $emptyHeaderColumns);
+                $this->addErrors(self::ERROR_CODE_COLUMN_NAME_INVALID, $invalidColumns);
             }
 
             if (!$this->getErrorAggregator()->getErrorsCount()) {
