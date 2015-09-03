@@ -82,12 +82,16 @@ class Copy
 
             if ($targetIsArray) {
                 $target[$targetCode] = $value;
+            } else if ($target instanceof \Magento\Framework\DataObject) {
+                $target->setDataUsingMethod($targetCode, $value);
             } else if ($target instanceof \Magento\Framework\Api\ExtensibleDataInterface) {
                 $this->accessExtensionSetMethod($target, $code, $value);
             } elseif ($target instanceof \Magento\Framework\Api\AbstractSimpleObject) {
                 $target->setData($code, $value);
             } else {
-                $target->setDataUsingMethod($targetCode, $value);
+                throw new \InvalidArgumentException(
+                    'Source should be array, Magento Object, ExtensibleDataInterface, or AbstractSimpleObject'
+                );
             }
         }
 
