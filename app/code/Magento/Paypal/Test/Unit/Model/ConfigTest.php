@@ -13,81 +13,106 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Config
      */
-    protected $_model;
+    private $model;
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_scopeConfig;
+    private $scopeConfig;
 
     /**
      * @var \Magento\Directory\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $directoryHelper;
+    private $directoryHelper;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $storeManager;
+
+    /**
+     * @var \Magento\Payment\Model\Source\CctypeFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $ccTypeFactory;
+
+    /**
+     * @var \Magento\Paypal\Model\CertFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $certFactory;
 
     protected function setUp()
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_scopeConfig = $this->getMock(
-            'Magento\Framework\App\Config\ScopeConfigInterface',
-            ['getValue', 'isSetFlag'],
-            [],
-            '',
-            false
-        );
-        $this->directoryHelper = $this->getMock('Magento\Directory\Helper\Data', ['getDefaultCountry'], [], '', false);
-        $this->_model = $helper->getObject(
-            'Magento\Paypal\Model\Config',
-            ['scopeConfig' => $this->_scopeConfig, 'directoryHelper' => $this->directoryHelper]
+        $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+
+        $this->directoryHelper = $this->getMockBuilder('Magento\Directory\Helper\Data')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+
+        $this->ccTypeFactory = $this->getMockBuilder('Magento\Payment\Model\Source\CctypeFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->certFactory = $this->getMockBuilder('Magento\Paypal\Model\CertFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->model = new Config(
+            $this->scopeConfig,
+            $this->directoryHelper,
+            $this->storeManager,
+            $this->ccTypeFactory,
+            $this->certFactory
         );
     }
 
     public function testGetCountryMethods()
     {
-        $this->assertNotContains('payflow_direct', $this->_model->getCountryMethods('GB'));
-        $this->assertContains(Config::METHOD_WPP_PE_EXPRESS, $this->_model->getCountryMethods('CA'));
-        $this->assertNotContains(Config::METHOD_WPP_PE_EXPRESS, $this->_model->getCountryMethods('GB'));
-        $this->assertContains(Config::METHOD_WPP_PE_EXPRESS, $this->_model->getCountryMethods('CA'));
-        $this->assertContains(Config::METHOD_WPP_EXPRESS, $this->_model->getCountryMethods('DE'));
-        $this->assertContains(Config::METHOD_BILLING_AGREEMENT, $this->_model->getCountryMethods('DE'));
-        $this->assertNotContains(Config::METHOD_WPP_PE_BML, $this->_model->getCountryMethods('other'));
-        $this->assertNotContains(Config::METHOD_WPP_BML, $this->_model->getCountryMethods('other'));
-        $this->assertNotContains(Config::METHOD_WPP_PE_BML, $this->_model->getCountryMethods('CA'));
-        $this->assertNotContains(Config::METHOD_WPP_BML, $this->_model->getCountryMethods('CA'));
-        $this->assertNotContains(Config::METHOD_WPP_PE_BML, $this->_model->getCountryMethods('GB'));
-        $this->assertNotContains(Config::METHOD_WPP_BML, $this->_model->getCountryMethods('GB'));
-        $this->assertNotContains(Config::METHOD_WPP_PE_BML, $this->_model->getCountryMethods('AU'));
-        $this->assertNotContains(Config::METHOD_WPP_BML, $this->_model->getCountryMethods('AU'));
-        $this->assertNotContains(Config::METHOD_WPP_PE_BML, $this->_model->getCountryMethods('NZ'));
-        $this->assertNotContains(Config::METHOD_WPP_BML, $this->_model->getCountryMethods('NZ'));
-        $this->assertNotContains(Config::METHOD_WPP_PE_BML, $this->_model->getCountryMethods('JP'));
-        $this->assertNotContains(Config::METHOD_WPP_BML, $this->_model->getCountryMethods('JP'));
-        $this->assertNotContains(Config::METHOD_WPP_PE_BML, $this->_model->getCountryMethods('FR'));
-        $this->assertNotContains(Config::METHOD_WPP_BML, $this->_model->getCountryMethods('FR'));
-        $this->assertNotContains(Config::METHOD_WPP_PE_BML, $this->_model->getCountryMethods('IT'));
-        $this->assertNotContains(Config::METHOD_WPP_BML, $this->_model->getCountryMethods('IT'));
-        $this->assertNotContains(Config::METHOD_WPP_PE_BML, $this->_model->getCountryMethods('ES'));
-        $this->assertNotContains(Config::METHOD_WPP_BML, $this->_model->getCountryMethods('ES'));
-        $this->assertNotContains(Config::METHOD_WPP_PE_BML, $this->_model->getCountryMethods('HK'));
-        $this->assertNotContains(Config::METHOD_WPP_BML, $this->_model->getCountryMethods('HK'));
-        $this->assertNotContains(Config::METHOD_WPP_PE_BML, $this->_model->getCountryMethods('DE'));
-        $this->assertNotContains(Config::METHOD_WPP_BML, $this->_model->getCountryMethods('DE'));
+        $this->assertNotContains('payflow_direct', $this->model->getCountryMethods('GB'));
+        $this->assertContains(Config::METHOD_WPP_PE_EXPRESS, $this->model->getCountryMethods('CA'));
+        $this->assertNotContains(Config::METHOD_WPP_PE_EXPRESS, $this->model->getCountryMethods('GB'));
+        $this->assertContains(Config::METHOD_WPP_PE_EXPRESS, $this->model->getCountryMethods('CA'));
+        $this->assertContains(Config::METHOD_WPP_EXPRESS, $this->model->getCountryMethods('DE'));
+        $this->assertContains(Config::METHOD_BILLING_AGREEMENT, $this->model->getCountryMethods('DE'));
+        $this->assertNotContains(Config::METHOD_WPP_PE_BML, $this->model->getCountryMethods('other'));
+        $this->assertNotContains(Config::METHOD_WPP_BML, $this->model->getCountryMethods('other'));
+        $this->assertNotContains(Config::METHOD_WPP_PE_BML, $this->model->getCountryMethods('CA'));
+        $this->assertNotContains(Config::METHOD_WPP_BML, $this->model->getCountryMethods('CA'));
+        $this->assertNotContains(Config::METHOD_WPP_PE_BML, $this->model->getCountryMethods('GB'));
+        $this->assertNotContains(Config::METHOD_WPP_BML, $this->model->getCountryMethods('GB'));
+        $this->assertNotContains(Config::METHOD_WPP_PE_BML, $this->model->getCountryMethods('AU'));
+        $this->assertNotContains(Config::METHOD_WPP_BML, $this->model->getCountryMethods('AU'));
+        $this->assertNotContains(Config::METHOD_WPP_PE_BML, $this->model->getCountryMethods('NZ'));
+        $this->assertNotContains(Config::METHOD_WPP_BML, $this->model->getCountryMethods('NZ'));
+        $this->assertNotContains(Config::METHOD_WPP_PE_BML, $this->model->getCountryMethods('JP'));
+        $this->assertNotContains(Config::METHOD_WPP_BML, $this->model->getCountryMethods('JP'));
+        $this->assertNotContains(Config::METHOD_WPP_PE_BML, $this->model->getCountryMethods('FR'));
+        $this->assertNotContains(Config::METHOD_WPP_BML, $this->model->getCountryMethods('FR'));
+        $this->assertNotContains(Config::METHOD_WPP_PE_BML, $this->model->getCountryMethods('IT'));
+        $this->assertNotContains(Config::METHOD_WPP_BML, $this->model->getCountryMethods('IT'));
+        $this->assertNotContains(Config::METHOD_WPP_PE_BML, $this->model->getCountryMethods('ES'));
+        $this->assertNotContains(Config::METHOD_WPP_BML, $this->model->getCountryMethods('ES'));
+        $this->assertNotContains(Config::METHOD_WPP_PE_BML, $this->model->getCountryMethods('HK'));
+        $this->assertNotContains(Config::METHOD_WPP_BML, $this->model->getCountryMethods('HK'));
+        $this->assertNotContains(Config::METHOD_WPP_PE_BML, $this->model->getCountryMethods('DE'));
+        $this->assertNotContains(Config::METHOD_WPP_BML, $this->model->getCountryMethods('DE'));
     }
 
     public function testGetBuildNotationCode()
     {
-        $this->_model->setMethod('payflow_direct');
-        $this->_model->setStoreId(123);
-        $this->_scopeConfig->expects($this->once())
+        $this->model->setMethod('payflow_direct');
+        $this->model->setStoreId(123);
+        $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->with('paypal/bncode', ScopeInterface::SCOPE_STORE, 123)
             ->will($this->returnValue('some BN code'));
-        $this->assertEquals('some BN code', $this->_model->getBuildNotationCode());
+        $this->assertEquals('some BN code', $this->model->getBuildNotationCode());
     }
 
     public function testIsMethodActive()
     {
-        $this->assertFalse($this->_model->isMethodActive('payflow_direct'));
+        $this->assertFalse($this->model->isMethodActive('payflow_direct'));
     }
 
     /**
@@ -95,7 +120,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsMethodAvailableWPPPE()
     {
-        $this->assertFalse($this->_model->isMethodAvailable('payflow_direct'));
+        $this->assertFalse($this->model->isMethodAvailable('payflow_direct'));
     }
 
     /**
@@ -103,17 +128,52 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsMethodAvailableForIsMethodActive($methodName, $expected)
     {
-        $this->_scopeConfig->expects($this->any())
+        $this->scopeConfig->expects($this->any())
             ->method('getValue')
             ->with('paypal/general/merchant_country')
             ->will($this->returnValue('US'));
-        $this->_scopeConfig->expects($this->exactly(2))
+        $this->scopeConfig->expects($this->exactly(2))
             ->method('isSetFlag')
             ->withAnyParameters()
             ->will($this->returnValue(true));
 
-        $this->_model->setMethod($methodName);
-        $this->assertEquals($expected, $this->_model->isMethodAvailable($methodName));
+        $this->model->setMethod($methodName);
+        $this->assertEquals($expected, $this->model->isMethodAvailable($methodName));
+    }
+
+
+    public function testGetMerchantCountryPaypal()
+    {
+        $this->scopeConfig->expects(static::once())
+            ->method('getValue')
+            ->with(
+                'paypal/general/merchant_country',
+                ScopeInterface::SCOPE_STORE,
+                null
+            )->willReturn('US');
+
+        $this->directoryHelper->expects(static::never())
+            ->method('getDefaultCountry');
+
+        static::assertEquals('US', $this->model->getMerchantCountry());
+    }
+
+    public function testGetMerchantCountryGeneral()
+    {
+        $this->scopeConfig->expects(static::once())
+            ->method('getValue')
+            ->with(
+                'paypal/general/merchant_country',
+                ScopeInterface::SCOPE_STORE,
+                null
+            )->willReturn(null);
+
+        $this->directoryHelper->expects(static::once())
+            ->method('getDefaultCountry')
+            ->with(null)
+            ->willReturn('US');
+
+        static::assertEquals('US', $this->model->getMerchantCountry());
     }
 
     /**
@@ -131,44 +191,44 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testIsCreditCardMethod()
     {
-        $this->assertFalse($this->_model->getIsCreditCardMethod('payflow_direct'));
+        $this->assertFalse($this->model->getIsCreditCardMethod('payflow_direct'));
     }
 
     public function testGetSpecificConfigPath()
     {
-        $this->_model->setMethod('payflow_direct');
-        $this->assertNull($this->_model->getValue('useccv'));
-        $this->assertNull($this->_model->getValue('vendor'));
+        $this->model->setMethod('payflow_direct');
+        $this->assertNull($this->model->getValue('useccv'));
+        $this->assertNull($this->model->getValue('vendor'));
 
         // _mapBmlFieldset
-        $this->_model->setMethod(Config::METHOD_WPP_BML);
-        $this->_scopeConfig->expects($this->once())
+        $this->model->setMethod(Config::METHOD_WPP_BML);
+        $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->with('payment/' . Config::METHOD_WPP_EXPRESS . '/allow_ba_signup')
             ->will($this->returnValue(1));
-        $this->assertEquals(1, $this->_model->getValue('allow_ba_signup'));
+        $this->assertEquals(1, $this->model->getValue('allow_ba_signup'));
     }
 
     public function testGetSpecificConfigPathPayflow()
     {
         // _mapBmlPayflowFieldset
-        $this->_model->setMethod(Config::METHOD_WPP_PE_BML);
-        $this->_scopeConfig->expects($this->once())
+        $this->model->setMethod(Config::METHOD_WPP_PE_BML);
+        $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->with('payment/' . Config::METHOD_WPP_PE_EXPRESS . '/allow_ba_signup')
             ->will($this->returnValue(1));
-        $this->assertEquals(1, $this->_model->getValue('allow_ba_signup'));
+        $this->assertEquals(1, $this->model->getValue('allow_ba_signup'));
     }
 
     public function testGetSpecificConfigPathPayflowAdvancedLink()
     {
         // _mapWpukFieldset
-        $this->_model->setMethod(Config::METHOD_PAYFLOWADVANCED);
-        $this->_scopeConfig->expects($this->once())
+        $this->model->setMethod(Config::METHOD_PAYFLOWADVANCED);
+        $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->with('payment/' . Config::METHOD_PAYFLOWADVANCED . '/payment_action')
             ->willReturn('Authorization');
-        $this->assertEquals('Authorization', $this->_model->getValue('payment_action'));
+        $this->assertEquals('Authorization', $this->model->getValue('payment_action'));
     }
 
     /**
@@ -176,11 +236,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPayPalBasicStartUrl($value, $url)
     {
-        $this->_scopeConfig->expects($this->once())
+        $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->with('payment/paypal_express/skip_order_review_step')
             ->will($this->returnValue($value));
-        $this->assertEquals($url, $this->_model->getPayPalBasicStartUrl('token'));
+        $this->assertEquals($url, $this->model->getPayPalBasicStartUrl('token'));
     }
 
     /**
@@ -197,16 +257,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetExpressCheckoutOrderUrl()
     {
         $url = 'https://www.paypal.com/cgi-bin/webscr?cmd=_express-checkout&order_id=orderId';
-        $this->assertEquals($url, $this->_model->getExpressCheckoutOrderUrl('orderId'));
+        $this->assertEquals($url, $this->model->getExpressCheckoutOrderUrl('orderId'));
     }
 
     public function testGetBmlPublisherId()
     {
-        $this->_scopeConfig->expects($this->once())
+        $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->with('payment/' . Config::METHOD_WPP_BML . '/publisher_id')
             ->will($this->returnValue('12345'));
-        $this->assertEquals('12345', $this->_model->getBmlPublisherId());
+        $this->assertEquals('12345', $this->model->getBmlPublisherId());
     }
 
     /**
@@ -214,11 +274,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetBmlPosition($section, $expected)
     {
-        $this->_scopeConfig->expects($this->once())
+        $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->with('payment/' . Config::METHOD_WPP_BML . '/' . $section . '_position')
             ->will($this->returnValue($expected));
-        $this->assertEquals($expected, $this->_model->getBmlPosition($section));
+        $this->assertEquals($expected, $this->model->getBmlPosition($section));
     }
 
     /**
@@ -237,11 +297,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetBmlSize($section, $expected)
     {
-        $this->_scopeConfig->expects($this->once())
+        $this->scopeConfig->expects($this->once())
             ->method('getValue')
             ->with('payment/' . Config::METHOD_WPP_BML . '/' . $section . '_size')
             ->will($this->returnValue($expected));
-        $this->assertEquals($expected, $this->_model->getBmlSize($section));
+        $this->assertEquals($expected, $this->model->getBmlSize($section));
     }
 
     /**
@@ -260,22 +320,22 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetBmlDisplay($section, $expectedValue, $expectedFlag, $expected)
     {
-        $this->_model->setStoreId(1);
+        $this->model->setStoreId(1);
         $this->directoryHelper->expects($this->any())
             ->method('getDefaultCountry')
             ->with(1)
             ->will($this->returnValue('US'));
-        $this->_scopeConfig->expects($this->any())
+        $this->scopeConfig->expects($this->any())
             ->method('isSetFlag')
             ->will($this->returnValue($expectedFlag));
-        $this->_scopeConfig->expects($this->any())
+        $this->scopeConfig->expects($this->any())
             ->method('getValue')
             ->will($this->returnValueMap([
                 ['payment/' . Config::METHOD_WPP_BML . '/' . $section . '_display', 'store', 1, $expectedValue],
                 ['payment/' . Config::METHOD_WPP_BML . '/active', 'store', 1, $expectedValue],
                 ['payment/' . Config::METHOD_WPP_PE_BML . '/active', 'store', 1, $expectedValue],
             ]));
-        $this->assertEquals($expected, $this->_model->getBmlDisplay($section));
+        $this->assertEquals($expected, $this->model->getBmlDisplay($section));
     }
 
     /**
@@ -310,10 +370,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $buttonType,
         $result
     ) {
-        $this->_model->setMethod(Config::METHOD_WPP_EXPRESS);
-        $this->_model->setStoreId(123);
+        $this->model->setMethod(Config::METHOD_WPP_EXPRESS);
+        $this->model->setStoreId(123);
 
-        $this->_scopeConfig->expects($this->any())
+        $this->scopeConfig->expects($this->any())
             ->method('getValue')
             ->willReturnMap([
                 ['paypal/wpp/button_flavor', ScopeInterface::SCOPE_STORE, 123, $areButtonDynamic],
@@ -323,7 +383,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $result,
-            $this->_model->getExpressCheckoutShortcutImageUrl($localeCode, $orderTotal, $pal)
+            $this->model->getExpressCheckoutShortcutImageUrl($localeCode, $orderTotal, $pal)
         );
     }
 
@@ -378,10 +438,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $sandboxFlag,
         $result
     ) {
-        $this->_model->setMethod(Config::METHOD_WPP_EXPRESS);
-        $this->_model->setStoreId(123);
+        $this->model->setMethod(Config::METHOD_WPP_EXPRESS);
+        $this->model->setStoreId(123);
 
-        $this->_scopeConfig->expects($this->any())
+        $this->scopeConfig->expects($this->any())
             ->method('getValue')
             ->willReturnMap([
                 ['paypal/wpp/button_flavor', ScopeInterface::SCOPE_STORE, 123, $areButtonDynamic],
@@ -390,7 +450,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $result,
-            $this->_model->getPaymentMarkImageUrl($localeCode, $orderTotal, $pal, $staticSize)
+            $this->model->getPaymentMarkImageUrl($localeCode, $orderTotal, $pal, $staticSize)
         );
     }
 
