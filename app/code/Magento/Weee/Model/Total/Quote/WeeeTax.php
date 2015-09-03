@@ -14,20 +14,21 @@ class WeeeTax extends Weee
     /**
      * Collect Weee taxes amount and prepare items prices for taxation and discount
      *
-     * @param   \Magento\Quote\Model\Quote\Address $address
-     * @return  $this
+     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface|\Magento\Quote\Model\Quote\Address $shippingAssignment
+     * @param \Magento\Quote\Model\Quote\Address\Total $total
+     * @return $this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function collect(\Magento\Quote\Model\Quote\Address $address)
+    public function collect(\Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment, \Magento\Quote\Model\Quote\Address\Total $total)
     {
-        \Magento\Quote\Model\Quote\Address\Total\AbstractTotal::collect($address);
-        $this->_store = $address->getQuote()->getStore();
+        \Magento\Quote\Model\Quote\Address\Total\AbstractTotal::collect($shippingAssignment, $total);
+        $this->_store = $shippingAssignment->getQuote()->getStore();
         if (!$this->weeeData->isEnabled($this->_store)) {
             return $this;
         }
 
-        $items = $this->_getAddressItems($address);
+        $items = $this->_getAddressItems($shippingAssignment);
         if (!count($items)) {
             return $this;
         }
@@ -35,16 +36,16 @@ class WeeeTax extends Weee
         //If Weee is not taxable, then the 'weee' collector has accumulated the non-taxable total values
         if (!$this->weeeData->isTaxable($this->_store)) {
             //Because Weee is not taxable:  Weee excluding tax == Weee including tax
-            $weeeTotal = $address->getWeeeTotalExclTax();
-            $weeeBaseTotal = $address->getWeeeBaseTotalExclTax();
+            $weeeTotal = $shippingAssignment->getWeeeTotalExclTax();
+            $weeeBaseTotal = $shippingAssignment->getWeeeBaseTotalExclTax();
 
             //Add to appropriate 'subtotal' or 'weee' accumulators
-            $this->processTotalAmount($address, $weeeTotal, $weeeBaseTotal, $weeeTotal, $weeeBaseTotal);
+            $this->processTotalAmount($shippingAssignment, $weeeTotal, $weeeBaseTotal, $weeeTotal, $weeeBaseTotal);
             return $this;
         }
 
-        $weeeCodeToItemMap = $address->getWeeeCodeToItemMap();
-        $extraTaxableDetails = $address->getExtraTaxableDetails();
+        $weeeCodeToItemMap = $shippingAssignment->getWeeeCodeToItemMap();
+        $extraTaxableDetails = $shippingAssignment->getExtraTaxableDetails();
 
         if (isset($extraTaxableDetails[self::ITEM_TYPE])) {
             foreach ($extraTaxableDetails[self::ITEM_TYPE] as $itemCode => $weeeAttributesTaxDetails) {
@@ -112,7 +113,7 @@ class WeeeTax extends Weee
                     ->setBaseWeeeTaxAppliedRowAmntInclTax($baseTotalRowValueInclTax);
 
                 $this->processTotalAmount(
-                    $address,
+                    $shippingAssignment,
                     $totalRowValueExclTax,
                     $baseTotalRowValueExclTax,
                     $totalRowValueInclTax,
@@ -159,18 +160,18 @@ class WeeeTax extends Weee
     /**
      * Fetch the Weee total amount for display in totals block when building the initial quote
      *
-     * @param   \Magento\Quote\Model\Quote\Address $address
-     * @return  $this
+     * @param \Magento\Quote\Model\Quote\Address|\Magento\Quote\Model\Quote\Address\Total $total
+     * @return $this
      */
-    public function fetch(\Magento\Quote\Model\Quote\Address $address)
+    public function fetch(\Magento\Quote\Model\Quote\Address\Total $total)
     {
         /** @var $items \Magento\Sales\Model\Order\Item[] */
-        $items = $this->_getAddressItems($address);
-        $store = $address->getQuote()->getStore();
+        $items = $this->_getAddressItems($total);
+        $store = $total->getQuote()->getStore();
 
         $weeeTotal = $this->weeeData->getTotalAmounts($items, $store);
         if ($weeeTotal) {
-            $address->addTotal(
+            $total->addTotal(
                 [
                     'code' => $this->getCode(),
                     'title' => __('FPT'),

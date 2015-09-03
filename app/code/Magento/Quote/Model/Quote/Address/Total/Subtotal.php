@@ -29,20 +29,23 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     /**
      * Collect address subtotal
      *
-     * @param Address $address
+     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment
+     * @param Address\Total $total
      * @return $this
      */
-    public function collect(Address $address)
+    public function collect(\Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment, \Magento\Quote\Model\Quote\Address\Total $total)
     {
-        parent::collect($address);
-        $address->setTotalQty(0);
+        parent::collect($shippingAssignment, $total);
+        $total->setTotalQty(0);
 
         $baseVirtualAmount = $virtualAmount = 0;
 
+        $address = $shippingAssignment->getShipping()->getAddress();
         /**
          * Process address items
          */
-        $items = $this->_getAddressItems($address);
+        //$items = $this->_getAddressItems($address);
+        $items = $shippingAssignment->getItems();
         foreach ($items as $item) {
             if ($this->_initItem($address, $item) && $item->getQty() > 0) {
                 /**
@@ -57,14 +60,14 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
             }
         }
 
-        $address->setBaseVirtualAmount($baseVirtualAmount);
-        $address->setVirtualAmount($virtualAmount);
+        $total->setBaseVirtualAmount($baseVirtualAmount);
+        $total->setVirtualAmount($virtualAmount);
 
         /**
          * Initialize grand totals
          */
-        $this->quoteValidator->validateQuoteAmount($address->getQuote(), $address->getSubtotal());
-        $this->quoteValidator->validateQuoteAmount($address->getQuote(), $address->getBaseSubtotal());
+        $this->quoteValidator->validateQuoteAmount($address->getQuote(), $total->getSubtotal());
+        $this->quoteValidator->validateQuoteAmount($address->getQuote(), $total->getBaseSubtotal());
         return $this;
     }
 
@@ -163,15 +166,12 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     /**
      * Assign subtotal amount and label to address object
      *
-     * @param Address $address
-     * @return $this
+     * @param Address\Total $total
+     * @return \string[]
      */
-    public function fetch(Address $address)
+    public function fetch(\Magento\Quote\Model\Quote\Address\Total $total)
     {
-        $address->addTotal(
-            ['code' => $this->getCode(), 'title' => __('Subtotal'), 'value' => $address->getSubtotal()]
-        );
-        return $this;
+        return ['code' => $this->getCode(), 'title' => $this->getLabel(), 'value' => $total->getSubtotal()];
     }
 
     /**

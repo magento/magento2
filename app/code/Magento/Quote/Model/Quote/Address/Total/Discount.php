@@ -32,31 +32,32 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote\Address $address
+     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface|\Magento\Quote\Model\Quote\Address $shippingAssignment
+     * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function collect(\Magento\Quote\Model\Quote\Address $address)
+    public function collect(\Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment, \Magento\Quote\Model\Quote\Address\Total $total)
     {
-        $quote = $address->getQuote();
+        $quote = $shippingAssignment->getQuote();
         $eventArgs = [
             'website_id' => $this->_storeManager->getStore($quote->getStoreId())->getWebsiteId(),
             'customer_group_id' => $quote->getCustomerGroupId(),
             'coupon_code' => $quote->getCouponCode(),
         ];
 
-        $address->setFreeShipping(0);
+        $shippingAssignment->setFreeShipping(0);
         $totalDiscountAmount = 0;
         $subtotalWithDiscount = 0;
         $baseTotalDiscountAmount = 0;
         $baseSubtotalWithDiscount = 0;
 
-        $items = $address->getAllItems();
+        $items = $shippingAssignment->getAllItems();
         if (!count($items)) {
-            $address->setDiscountAmount($totalDiscountAmount);
-            $address->setSubtotalWithDiscount($subtotalWithDiscount);
-            $address->setBaseDiscountAmount($baseTotalDiscountAmount);
-            $address->setBaseSubtotalWithDiscount($baseSubtotalWithDiscount);
+            $shippingAssignment->setDiscountAmount($totalDiscountAmount);
+            $shippingAssignment->setSubtotalWithDiscount($subtotalWithDiscount);
+            $shippingAssignment->setBaseDiscountAmount($baseTotalDiscountAmount);
+            $shippingAssignment->setBaseSubtotalWithDiscount($baseSubtotalWithDiscount);
             return $this;
         }
 
@@ -124,30 +125,30 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                 }
             }
         }
-        $address->setDiscountAmount($totalDiscountAmount);
-        $address->setSubtotalWithDiscount($subtotalWithDiscount);
-        $address->setBaseDiscountAmount($baseTotalDiscountAmount);
-        $address->setBaseSubtotalWithDiscount($baseSubtotalWithDiscount);
+        $shippingAssignment->setDiscountAmount($totalDiscountAmount);
+        $shippingAssignment->setSubtotalWithDiscount($subtotalWithDiscount);
+        $shippingAssignment->setBaseDiscountAmount($baseTotalDiscountAmount);
+        $shippingAssignment->setBaseSubtotalWithDiscount($baseSubtotalWithDiscount);
 
-        $address->setGrandTotal($address->getGrandTotal() - $address->getDiscountAmount());
-        $address->setBaseGrandTotal($address->getBaseGrandTotal() - $address->getBaseDiscountAmount());
+        $shippingAssignment->setGrandTotal($shippingAssignment->getGrandTotal() - $shippingAssignment->getDiscountAmount());
+        $shippingAssignment->setBaseGrandTotal($shippingAssignment->getBaseGrandTotal() - $shippingAssignment->getBaseDiscountAmount());
         return $this;
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote\Address $address
+     * @param \Magento\Quote\Model\Quote\Address|\Magento\Quote\Model\Quote\Address\Total $total
      * @return $this
      */
-    public function fetch(\Magento\Quote\Model\Quote\Address $address)
+    public function fetch(\Magento\Quote\Model\Quote\Address\Total $total)
     {
-        $amount = $address->getDiscountAmount();
+        $amount = $total->getDiscountAmount();
         if ($amount != 0) {
             $title = __('Discount');
-            $code = $address->getCouponCode();
+            $code = $total->getCouponCode();
             if (strlen($code)) {
                 $title = __('Discount (%1)', $code);
             }
-            $address->addTotal(['code' => $this->getCode(), 'title' => $title, 'value' => -$amount]);
+            $total->addTotal(['code' => $this->getCode(), 'title' => $title, 'value' => -$amount]);
         }
         return $this;
     }

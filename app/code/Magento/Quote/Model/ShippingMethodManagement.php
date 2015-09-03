@@ -220,7 +220,7 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
         $shippingAddress->setRegionId($regionId);
         $shippingAddress->setRegion($region);
         $shippingAddress->setCollectShippingRates(true);
-        $shippingAddress->collectTotals();
+        //$shippingAddress->collectTotals();
         $shippingRates = $shippingAddress->getGroupedAllShippingRates();
         foreach ($shippingRates as $carrierRates) {
             foreach ($carrierRates as $rate) {

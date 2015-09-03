@@ -103,7 +103,7 @@ class Collector extends \Magento\Sales\Model\Config\Ordered
     /**
      * Get total models array ordered for right display sequence
      *
-     * @return array
+     * @return \Magento\Quote\Model\Quote\Address\Total\AbstractTotal[]
      */
     public function getRetrievers()
     {

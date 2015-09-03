@@ -58,31 +58,32 @@ class Tax extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote\Address $address
+     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface|\Magento\Quote\Model\Quote\Address $shippingAssignment
+     * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function collect(\Magento\Quote\Model\Quote\Address $address)
+    public function collect(\Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment, \Magento\Quote\Model\Quote\Address\Total $total)
     {
-        $store = $address->getQuote()->getStore();
+        $store = $shippingAssignment->getQuote()->getStore();
 
-        $address->setTaxAmount(0);
-        $address->setBaseTaxAmount(0);
-        $address->setAppliedTaxes([]);
+        $shippingAssignment->setTaxAmount(0);
+        $shippingAssignment->setBaseTaxAmount(0);
+        $shippingAssignment->setAppliedTaxes([]);
 
-        $items = $address->getAllItems();
+        $items = $shippingAssignment->getAllItems();
         if (!count($items)) {
             return $this;
         }
-        $custTaxClassId = $address->getQuote()->getCustomerTaxClassId();
+        $custTaxClassId = $shippingAssignment->getQuote()->getCustomerTaxClassId();
 
         $taxCalculationModel = $this->_calculation;
         /* @var $taxCalculationModel \Magento\Tax\Model\Calculation */
         $request = $taxCalculationModel->getRateRequest(
-            $address,
-            $address->getQuote()->getBillingAddress(),
+            $shippingAssignment,
+            $shippingAssignment->getQuote()->getBillingAddress(),
             $custTaxClassId,
             $store
         );
@@ -111,23 +112,23 @@ class Tax extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                     $child->calcTaxAmount();
 
                     if ($discountBefore != $item->getDiscountAmount()) {
-                        $address->setDiscountAmount(
-                            $address->getDiscountAmount() + ($item->getDiscountAmount() - $discountBefore)
+                        $shippingAssignment->setDiscountAmount(
+                            $shippingAssignment->getDiscountAmount() + ($item->getDiscountAmount() - $discountBefore)
                         );
-                        $address->setBaseDiscountAmount(
-                            $address->getBaseDiscountAmount() + ($item->getBaseDiscountAmount() - $baseDiscountBefore)
+                        $shippingAssignment->setBaseDiscountAmount(
+                            $shippingAssignment->getBaseDiscountAmount() + ($item->getBaseDiscountAmount() - $baseDiscountBefore)
                         );
 
-                        $address->setGrandTotal(
-                            $address->getGrandTotal() - ($item->getDiscountAmount() - $discountBefore)
+                        $shippingAssignment->setGrandTotal(
+                            $shippingAssignment->getGrandTotal() - ($item->getDiscountAmount() - $discountBefore)
                         );
-                        $address->setBaseGrandTotal(
-                            $address->getBaseGrandTotal() - ($item->getBaseDiscountAmount() - $baseDiscountBefore)
+                        $shippingAssignment->setBaseGrandTotal(
+                            $shippingAssignment->getBaseGrandTotal() - ($item->getBaseDiscountAmount() - $baseDiscountBefore)
                         );
                     }
 
                     $this->_saveAppliedTaxes(
-                        $address,
+                        $shippingAssignment,
                         $taxCalculationModel->getAppliedRates($request),
                         $child->getTaxAmount(),
                         $child->getBaseTaxAmount(),
@@ -135,9 +136,9 @@ class Tax extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                     );
                 }
                 $itemTaxAmount = $item->getTaxAmount() + $item->getDiscountTaxCompensation();
-                $address->setTaxAmount($address->getTaxAmount() + $itemTaxAmount);
+                $shippingAssignment->setTaxAmount($shippingAssignment->getTaxAmount() + $itemTaxAmount);
                 $itemBaseTaxAmount = $item->getBaseTaxAmount() + $item->getBaseDiscountTaxCompensation();
-                $address->setBaseTaxAmount($address->getBaseTaxAmount() + $itemBaseTaxAmount);
+                $shippingAssignment->setBaseTaxAmount($shippingAssignment->getBaseTaxAmount() + $itemBaseTaxAmount);
             } else {
                 $discountBefore = $item->getDiscountAmount();
                 $baseDiscountBefore = $item->getBaseDiscountAmount();
@@ -150,28 +151,28 @@ class Tax extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                 $item->calcTaxAmount();
 
                 if ($discountBefore != $item->getDiscountAmount()) {
-                    $address->setDiscountAmount(
-                        $address->getDiscountAmount() + ($item->getDiscountAmount() - $discountBefore)
+                    $shippingAssignment->setDiscountAmount(
+                        $shippingAssignment->getDiscountAmount() + ($item->getDiscountAmount() - $discountBefore)
                     );
-                    $address->setBaseDiscountAmount(
-                        $address->getBaseDiscountAmount() + ($item->getBaseDiscountAmount() - $baseDiscountBefore)
+                    $shippingAssignment->setBaseDiscountAmount(
+                        $shippingAssignment->getBaseDiscountAmount() + ($item->getBaseDiscountAmount() - $baseDiscountBefore)
                     );
 
-                    $address->setGrandTotal(
-                        $address->getGrandTotal() - ($item->getDiscountAmount() - $discountBefore)
+                    $shippingAssignment->setGrandTotal(
+                        $shippingAssignment->getGrandTotal() - ($item->getDiscountAmount() - $discountBefore)
                     );
-                    $address->setBaseGrandTotal(
-                        $address->getBaseGrandTotal() - ($item->getBaseDiscountAmount() - $baseDiscountBefore)
+                    $shippingAssignment->setBaseGrandTotal(
+                        $shippingAssignment->getBaseGrandTotal() - ($item->getBaseDiscountAmount() - $baseDiscountBefore)
                     );
                 }
 
                 $itemTaxAmount = $item->getTaxAmount() + $item->getDiscountTaxCompensation();
-                $address->setTaxAmount($address->getTaxAmount() + $itemTaxAmount);
+                $shippingAssignment->setTaxAmount($shippingAssignment->getTaxAmount() + $itemTaxAmount);
                 $itemBaseTaxAmount = $item->getBaseTaxAmount() + $item->getBaseDiscountTaxCompensation();
-                $address->setBaseTaxAmount($address->getBaseTaxAmount() + $itemBaseTaxAmount);
+                $shippingAssignment->setBaseTaxAmount($shippingAssignment->getBaseTaxAmount() + $itemBaseTaxAmount);
 
                 $applied = $taxCalculationModel->getAppliedRates($request);
-                $this->_saveAppliedTaxes($address, $applied, $item->getTaxAmount(), $item->getBaseTaxAmount(), $rate);
+                $this->_saveAppliedTaxes($shippingAssignment, $applied, $item->getTaxAmount(), $item->getBaseTaxAmount(), $rate);
             }
         }
 
@@ -188,21 +189,21 @@ class Tax extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
             $rate = $taxCalculationModel->getRate($request->setProductClassId($shippingTaxClass));
             if ($rate) {
                 if (!$this->_taxData->shippingPriceIncludesTax()) {
-                    $shippingTax = $address->getShippingAmount() * $rate / 100;
-                    $shippingBaseTax = $address->getBaseShippingAmount() * $rate / 100;
+                    $shippingTax = $shippingAssignment->getShippingAmount() * $rate / 100;
+                    $shippingBaseTax = $shippingAssignment->getBaseShippingAmount() * $rate / 100;
                 } else {
-                    $shippingTax = $address->getShippingTaxAmount();
-                    $shippingBaseTax = $address->getBaseShippingTaxAmount();
+                    $shippingTax = $shippingAssignment->getShippingTaxAmount();
+                    $shippingBaseTax = $shippingAssignment->getBaseShippingTaxAmount();
                 }
 
                 $shippingTax = $this->priceCurrency->round($shippingTax);
                 $shippingBaseTax = $this->priceCurrency->round($shippingBaseTax);
 
-                $address->setTaxAmount($address->getTaxAmount() + $shippingTax);
-                $address->setBaseTaxAmount($address->getBaseTaxAmount() + $shippingBaseTax);
+                $shippingAssignment->setTaxAmount($shippingAssignment->getTaxAmount() + $shippingTax);
+                $shippingAssignment->setBaseTaxAmount($shippingAssignment->getBaseTaxAmount() + $shippingBaseTax);
 
                 $this->_saveAppliedTaxes(
-                    $address,
+                    $shippingAssignment,
                     $taxCalculationModel->getAppliedRates($request),
                     $shippingTax,
                     $shippingBaseTax,
@@ -212,12 +213,12 @@ class Tax extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         }
 
         if (!$this->_taxData->shippingPriceIncludesTax()) {
-            $address->setShippingTaxAmount($shippingTax);
-            $address->setBaseShippingTaxAmount($shippingBaseTax);
+            $shippingAssignment->setShippingTaxAmount($shippingTax);
+            $shippingAssignment->setBaseShippingTaxAmount($shippingBaseTax);
         }
 
-        $address->setGrandTotal($address->getGrandTotal() + $address->getTaxAmount());
-        $address->setBaseGrandTotal($address->getBaseGrandTotal() + $address->getBaseTaxAmount());
+        $shippingAssignment->setGrandTotal($shippingAssignment->getGrandTotal() + $shippingAssignment->getTaxAmount());
+        $shippingAssignment->setBaseGrandTotal($shippingAssignment->getBaseGrandTotal() + $shippingAssignment->getBaseTaxAmount());
         return $this;
     }
 
@@ -273,17 +274,17 @@ class Tax extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote\Address $address
+     * @param \Magento\Quote\Model\Quote\Address|\Magento\Quote\Model\Quote\Address\Total $total
      * @return $this
      */
-    public function fetch(\Magento\Quote\Model\Quote\Address $address)
+    public function fetch(\Magento\Quote\Model\Quote\Address\Total $total)
     {
-        $applied = $address->getAppliedTaxes();
-        $store = $address->getQuote()->getStore();
-        $amount = $address->getTaxAmount();
+        $applied = $total->getAppliedTaxes();
+        $store = $total->getQuote()->getStore();
+        $amount = $total->getTaxAmount();
 
         if ($amount != 0 || $this->_taxData->displayZeroTax($store)) {
-            $address->addTotal(
+            $total->addTotal(
                 [
                     'code' => $this->getCode(),
                     'title' => __('Tax'),

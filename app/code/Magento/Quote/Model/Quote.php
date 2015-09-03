@@ -328,6 +328,21 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $extensionAttributesJoinProcessor;
 
     /**
+     * @var \\Magento\Quote\Model\Quote\Address\Total\Composite
+     */
+    protected $shippingTotalsCollector;
+
+    /**
+     * @var \Magento\Quote\Model\ShippingFactory
+     */
+    protected $shippingFactory;
+
+    /**
+     * @var \Magento\Quote\Model\ShippingAssignmentFactory
+     */
+    protected $shippingAssignmentFactory;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -400,6 +415,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
         \Magento\Quote\Model\Cart\CurrencyFactory $currencyFactory,
         JoinProcessorInterface $extensionAttributesJoinProcessor,
+        \Magento\Quote\Model\Quote\Address\Total\Composite $shippingAddressTotalCollector,
+        \Magento\Quote\Model\ShippingFactory $shippingFactory,
+        \Magento\Quote\Model\ShippingAssignmentFactory $shippingAssignmentFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -433,6 +451,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
         $this->currencyFactory = $currencyFactory;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
+        $this->shippingTotalsCollector = $shippingAddressTotalCollector;
+        $this->shippingFactory = $shippingFactory;
+        $this->shippingAssignmentFactory = $shippingAssignmentFactory;
         parent::__construct(
             $context,
             $registry,
@@ -442,6 +463,23 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             $resourceCollection,
             $data
         );
+    }
+
+    /**
+     * @return Address\TotalsList
+     */
+    public function getQuoteTotalsList()
+    {
+        /** Build shipping assignment DTO  */
+        $shippingAssignment = $this->shippingAssignmentFactory->create();
+        $shipping = $this->shippingFactory->create();
+        $shipping->setMethod($this->getShippingAddress()->getShippingMethod());
+        $shipping->setAddress($this->getShippingAddress());
+        $shippingAssignment->setShipping($shipping);
+        $shippingAssignment->setItems($this->getAllItems());
+
+        $totals = $this->shippingTotalsCollector->collect($shippingAssignment, $this->getStoreId());
+        return $totals;
     }
 
     /**
@@ -1916,6 +1954,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $this->setGrandTotal(0);
         $this->setBaseGrandTotal(0);
 
+        /** @var \Magento\Quote\Model\Quote\Address $address */
         foreach ($this->getAllAddresses() as $address) {
             $address->setSubtotal(0);
             $address->setBaseSubtotal(0);
@@ -1923,7 +1962,20 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             $address->setGrandTotal(0);
             $address->setBaseGrandTotal(0);
 
-            $address->collectTotals();
+            //$address->collectTotals();
+
+
+            /** Build shipping assignment DTO  */
+            $shippingAssignment = $this->shippingAssignmentFactory->create();
+            $shipping = $this->shippingFactory->create();
+            $shipping->setMethod($this->getShippingAddress()->getShippingMethod());
+            $shipping->setAddress($this->getShippingAddress());
+            $shippingAssignment->setShipping($shipping);
+            $shippingAssignment->setItems($this->getAllItems());
+
+            $totals = $this->shippingTotalsCollector->collect($shippingAssignment, $this->getStoreId());
+
+
 
             $this->setSubtotal((float)$this->getSubtotal() + $address->getSubtotal());
             $this->setBaseSubtotal((float)$this->getBaseSubtotal() + $address->getBaseSubtotal());
@@ -2004,31 +2056,18 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         if ($this->isVirtual()) {
             return $this->getBillingAddress()->getTotals();
         }
+        $totals = $this->getQuoteTotalsList();
 
-        $shippingAddress = $this->getShippingAddress();
-        $totals = $shippingAddress->getTotals();
-        // Going through all quote addresses and merge their totals
-        foreach ($this->getAddressesCollection() as $address) {
-            if ($address->isDeleted() || $address === $shippingAddress) {
-                continue;
-            }
-            foreach ($address->getTotals() as $code => $total) {
-                if (isset($totals[$code])) {
-                    $totals[$code]->merge($total);
-                } else {
-                    $totals[$code] = $total;
-                }
-            }
-        }
 
         $sortedTotals = [];
-        foreach ($this->getBillingAddress()->getTotalCollector()->getRetrievers() as $total) {
-            /* @var $total \Magento\Quote\Model\Quote\Address\Total\AbstractTotal */
-            if (isset($totals[$total->getCode()])) {
-                $sortedTotals[$total->getCode()] = $totals[$total->getCode()];
-            }
-        }
-        return $sortedTotals;
+//        /** @todo remfactor this code $this->getBillingAddress()->getTotalCollector()->getRetrievers() */
+//        foreach ($this->getBillingAddress()->getTotalCollector()->getRetrievers() as $total) {
+//            /* @var $total \Magento\Quote\Model\Quote\Address\Total\AbstractTotal */
+//            if (isset($totals[$total->getCode()])) {
+//                $sortedTotals[$total->getCode()] = $totals[$total->getCode()];
+//            }
+//        }
+        return $totals->fetch();
     }
 
     /**

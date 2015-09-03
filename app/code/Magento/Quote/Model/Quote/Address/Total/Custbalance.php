@@ -8,16 +8,17 @@ namespace Magento\Quote\Model\Quote\Address\Total;
 class Custbalance extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 {
     /**
-     * @param \Magento\Quote\Model\Quote\Address $address
+     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface|\Magento\Quote\Model\Quote\Address $shippingAssignment
+     * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return $this
      */
-    public function collect(\Magento\Quote\Model\Quote\Address $address)
+    public function collect(\Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment, \Magento\Quote\Model\Quote\Address\Total $total)
     {
-        $address->setCustbalanceAmount(0);
-        $address->setBaseCustbalanceAmount(0);
+        $shippingAssignment->setCustbalanceAmount(0);
+        $shippingAssignment->setBaseCustbalanceAmount(0);
 
-        $address->setGrandTotal($address->getGrandTotal() - $address->getCustbalanceAmount());
-        $address->setBaseGrandTotal($address->getBaseGrandTotal() - $address->getBaseCustbalanceAmount());
+        $shippingAssignment->setGrandTotal($shippingAssignment->getGrandTotal() - $shippingAssignment->getCustbalanceAmount());
+        $shippingAssignment->setBaseGrandTotal($shippingAssignment->getBaseGrandTotal() - $shippingAssignment->getBaseCustbalanceAmount());
 
         return $this;
     }

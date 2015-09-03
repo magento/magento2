@@ -57,18 +57,19 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     /**
      * Collect address discount amount
      *
-     * @param Address $address
+     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface|Address $shippingAssignment
+     * @param Address\Total $total
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function collect(Address $address)
+    public function collect(\Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment, \Magento\Quote\Model\Quote\Address\Total $total)
     {
-        parent::collect($address);
-        $quote = $address->getQuote();
+        parent::collect($shippingAssignment, $total);
+        $quote = $shippingAssignment->getQuote();
         $store = $this->_storeManager->getStore($quote->getStoreId());
-        $this->_calculator->reset($address);
+        $this->_calculator->reset($shippingAssignment);
 
-        $items = $this->_getAddressItems($address);
+        $items = $this->_getAddressItems($shippingAssignment);
         if (!count($items)) {
             return $this;
         }
@@ -80,9 +81,9 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         ];
 
         $this->_calculator->init($store->getWebsiteId(), $quote->getCustomerGroupId(), $quote->getCouponCode());
-        $this->_calculator->initTotals($items, $address);
+        $this->_calculator->initTotals($items, $shippingAssignment);
 
-        $address->setDiscountDescription([]);
+        $shippingAssignment->setDiscountDescription([]);
 
         $items = $this->_calculator->sortItemsByPriority($items);
         /** @var \Magento\Quote\Model\Quote\Item $item */
@@ -126,15 +127,15 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         /**
          * Process shipping amount discount
          */
-        $address->setShippingDiscountAmount(0);
-        $address->setBaseShippingDiscountAmount(0);
-        if ($address->getShippingAmount()) {
-            $this->_calculator->processShippingAmount($address);
-            $this->_addAmount(-$address->getShippingDiscountAmount());
-            $this->_addBaseAmount(-$address->getBaseShippingDiscountAmount());
+        $shippingAssignment->setShippingDiscountAmount(0);
+        $shippingAssignment->setBaseShippingDiscountAmount(0);
+        if ($shippingAssignment->getShippingAmount()) {
+            $this->_calculator->processShippingAmount($shippingAssignment);
+            $this->_addAmount(-$shippingAssignment->getShippingDiscountAmount());
+            $this->_addBaseAmount(-$shippingAssignment->getBaseShippingDiscountAmount());
         }
 
-        $this->_calculator->prepareDescription($address);
+        $this->_calculator->prepareDescription($shippingAssignment);
         return $this;
     }
 
@@ -193,20 +194,20 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     /**
      * Add discount total information to address
      *
-     * @param Address $address
+     * @param Address|Address\Total $total
      * @return $this
      */
-    public function fetch(Address $address)
+    public function fetch(\Magento\Quote\Model\Quote\Address\Total $total)
     {
-        $amount = $address->getDiscountAmount();
+        $amount = $total->getDiscountAmount();
 
         if ($amount != 0) {
-            $description = $address->getDiscountDescription();
+            $description = $total->getDiscountDescription();
             $title = __('Discount');
             if (strlen($description)) {
                 $title = __('Discount (%1)', $description);
             }
-            $address->addTotal(['code' => $this->getCode(), 'title' => $title, 'value' => $amount]);
+            $total->addTotal(['code' => $this->getCode(), 'title' => $title, 'value' => $amount]);
         }
         return $this;
     }

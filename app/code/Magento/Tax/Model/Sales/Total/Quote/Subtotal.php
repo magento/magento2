@@ -17,34 +17,35 @@ class Subtotal extends CommonTaxCollector
      * Calculate tax on product items. The result will be used to determine shipping
      * and discount later.
      *
-     * @param   Address $address
-     * @return  $this
+     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface|Address $shippingAssignment
+     * @param Address\Total $total
+     * @return $this
      */
-    public function collect(Address $address)
+    public function collect(\Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment, \Magento\Quote\Model\Quote\Address\Total $total)
     {
-        parent::collect($address);
-        $items = $this->_getAddressItems($address);
+        parent::collect($shippingAssignment, $total);
+        $items = $this->_getAddressItems($shippingAssignment);
         if (!$items) {
             return $this;
         }
 
-        $priceIncludesTax = $this->_config->priceIncludesTax($address->getQuote()->getStore());
+        $priceIncludesTax = $this->_config->priceIncludesTax($shippingAssignment->getQuote()->getStore());
 
         //Setup taxable items
-        $itemDataObjects = $this->mapItems($address, $priceIncludesTax, false);
-        $quoteDetails = $this->prepareQuoteDetails($address, $itemDataObjects);
+        $itemDataObjects = $this->mapItems($shippingAssignment, $priceIncludesTax, false);
+        $quoteDetails = $this->prepareQuoteDetails($shippingAssignment, $itemDataObjects);
         $taxDetails = $this->taxCalculationService
-            ->calculateTax($quoteDetails, $address->getQuote()->getStore()->getStoreId());
+            ->calculateTax($quoteDetails, $shippingAssignment->getQuote()->getStore()->getStoreId());
 
-        $itemDataObjects = $this->mapItems($address, $priceIncludesTax, true);
-        $baseQuoteDetails = $this->prepareQuoteDetails($address, $itemDataObjects);
+        $itemDataObjects = $this->mapItems($shippingAssignment, $priceIncludesTax, true);
+        $baseQuoteDetails = $this->prepareQuoteDetails($shippingAssignment, $itemDataObjects);
         $baseTaxDetails = $this->taxCalculationService
-            ->calculateTax($baseQuoteDetails, $address->getQuote()->getStore()->getStoreId());
+            ->calculateTax($baseQuoteDetails, $shippingAssignment->getQuote()->getStore()->getStoreId());
 
         $itemsByType = $this->organizeItemTaxDetailsByType($taxDetails, $baseTaxDetails);
 
         if (isset($itemsByType[self::ITEM_TYPE_PRODUCT])) {
-            $this->processProductItems($address, $itemsByType[self::ITEM_TYPE_PRODUCT]);
+            $this->processProductItems($shippingAssignment, $itemsByType[self::ITEM_TYPE_PRODUCT]);
         }
 
         return $this;
