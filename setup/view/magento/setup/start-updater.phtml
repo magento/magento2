@@ -50,8 +50,7 @@
     ng-show="maintenanceCalled == maintenanceStatus"
     >
     <div ng-repeat="package in packages">
-        <div>{{package.name}} is ready to be
-            {{successPageAction}}{{package.version ? ' to ' + package.version : ''}}. </div>
+        <div>We're ready to {{type}} {{package.name}}{{package.version ? ' to ' + package.version : ''}}. </div>
     </div>
     <br/>
     <button
