@@ -148,9 +148,9 @@ class InlineEdit extends \Magento\Customer\Controller\Adminhtml\Index
         try {
             $this->_customerRepository->save($customer);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($this->getErrorWithCustomerId($e->getMessage()));
+            $this->getMessageManager()->addError($this->getErrorWithCustomerId($e->getMessage()));
         } catch (\Exception $e) {
-            $this->messageManager->addError($this->getErrorWithCustomerId('We can\'t save the customer.'));
+            $this->getMessageManager()->addError($this->getErrorWithCustomerId('We can\'t save the customer.'));
             $this->logger->critical($e);
         }
     }
