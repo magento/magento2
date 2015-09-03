@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "490e159b5b95cd3afb1d1f6e9992eee6",
+    "hash": "20c37ec30731e0b8d0cd52a33c9dec89",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -184,6 +184,35 @@
                 "schema"
             ],
             "time": "2015-07-14 16:29:50"
+        },
+        {
+            "name": "magento/composer",
+            "version": "1.0.1",
+            "dist": {
+                "type": "zip",
+                "url": "https://packages.magento.com/_packages/composer-1.0.1.zip",
+                "reference": null,
+                "shasum": "a4ecd6bc55c6b53a74a75a3624d30b529710c4a3"
+            },
+            "require": {
+                "composer/composer": "1.0.0-alpha10",
+                "php": "~5.5.0|~5.6.0",
+                "symfony/console": "~2.3 <2.7"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Magento\\Composer\\": "src"
+                }
+            },
+            "license": [
+                "OSL-3.0",
+                "AFL-3.0"
+            ],
+            "description": "Magento composer library helps to instantiate Composer application and run composer commands."
         },
         {
             "name": "magento/magento-composer-installer",
