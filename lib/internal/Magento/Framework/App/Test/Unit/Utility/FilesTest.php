@@ -6,6 +6,7 @@
 namespace Magento\Framework\App\Test\Unit\Utility;
 
 use \Magento\Framework\App\Utility\Files;
+use Magento\Framework\Component\ModuleRegistrar;
 
 class FilesTest extends \PHPUnit_Framework_TestCase
 {
@@ -14,10 +15,16 @@ class FilesTest extends \PHPUnit_Framework_TestCase
      */
     private static $baseDir;
 
+    /**
+     * @var ModuleRegistrar
+     */
+    private static $moduleRegistrar;
+
     public static function setUpBeforeClass()
     {
         self::$baseDir = __DIR__ . '/_files/foo';
-        Files::setInstance(new Files(self::$baseDir));
+        self::$moduleRegistrar = new ModuleRegistrar();
+        Files::setInstance(new Files(self::$moduleRegistrar, self::$baseDir));
     }
 
     public static function tearDownAfterClass()
