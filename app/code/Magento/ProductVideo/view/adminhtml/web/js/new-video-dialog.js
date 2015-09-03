@@ -367,10 +367,11 @@ define([
         },
 
         _onImageInputChange: function() {
-            var file = document.getElementById('new_video_screenshot').files[0];
-            if(!file) {
+            var file = document.getElementById('new_video_screenshot');
+            if(!file || !file.files || !file.files.length) {
                 return;
             }
+            file = file.files[0];
             this._onPreview(null, file, true);
         },
 
