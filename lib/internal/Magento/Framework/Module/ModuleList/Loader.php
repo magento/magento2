@@ -7,7 +7,6 @@
 namespace Magento\Framework\Module\ModuleList;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
 use Magento\Framework\Module\Declaration\Converter\Dom;
 use Magento\Framework\Xml\Parser;
 use Magento\Framework\Component\ComponentRegistrarInterface;
@@ -20,13 +19,6 @@ use Magento\Framework\Filesystem\DriverInterface;
  */
 class Loader
 {
-    /**
-     * Application filesystem
-     *
-     * @var Filesystem
-     */
-    private $filesystem;
-
     /**
      * Converter of XML-files to associative arrays (specific to module.xml file format)
      *
@@ -58,20 +50,17 @@ class Loader
     /**
      * Constructor
      *
-     * @param Filesystem $filesystem
      * @param Dom $converter
      * @param Parser $parser
      * @param ComponentRegistrarInterface $moduleRegistry
      * @param DriverInterface $filesystemDriver
      */
     public function __construct(
-        Filesystem $filesystem,
         Dom $converter,
         Parser $parser,
         ComponentRegistrarInterface $moduleRegistry,
         DriverInterface $filesystemDriver
     ) {
-        $this->filesystem = $filesystem;
         $this->converter = $converter;
         $this->parser = $parser;
         $this->parser->initErrorHandler();
@@ -125,13 +114,8 @@ class Loader
      */
     private function getModuleConfigs()
     {
-        $modulesDir = $this->filesystem->getDirectoryRead(DirectoryList::MODULES);
-        foreach ($modulesDir->search('*/*/etc/module.xml') as $filePath) {
-            yield [$filePath, $modulesDir->readFile($filePath)];
-        }
-
         foreach ($this->moduleRegistry->getPaths() as $modulePath) {
-            $filePath =  str_replace(['\\', '/'], DIRECTORY_SEPARATOR, "$modulePath/etc/module.xml");
+            $filePath = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, "$modulePath/etc/module.xml");
             yield [$filePath, $this->filesystemDriver->fileGetContents($filePath)];
         }
     }

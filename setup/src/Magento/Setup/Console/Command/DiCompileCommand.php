@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\Component\ModuleRegistrar;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\ObjectManagerInterface;
@@ -45,6 +46,11 @@ class DiCompileCommand extends Command
     private $excludedPathsList;
 
     /**
+     * @var ModuleRegistrar
+     */
+    private $moduleRegistrar;
+
+    /**
      * Constructor
      *
      * @param DeploymentConfig $deploymentConfig
@@ -58,13 +64,15 @@ class DiCompileCommand extends Command
         DirectoryList $directoryList,
         Manager $taskManager,
         ObjectManagerProvider $objectManagerProvider,
-        Filesystem $filesystem
+        Filesystem $filesystem,
+        ModuleRegistrar $moduleRegistrar
     ) {
         $this->deploymentConfig = $deploymentConfig;
         $this->directoryList    = $directoryList;
         $this->objectManager    = $objectManagerProvider->get();
         $this->taskManager      = $taskManager;
         $this->filesystem       = $filesystem;
+        $this->moduleRegistrar  = $moduleRegistrar;
         parent::__construct();
     }
 
@@ -85,7 +93,7 @@ class DiCompileCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $appCodePath = $this->directoryList->getPath(DirectoryList::MODULES);
+        $appCodePaths = $this->moduleRegistrar->getPaths();
         $libraryPath = $this->directoryList->getPath(DirectoryList::LIB_INTERNAL);
         $generationPath = $this->directoryList->getPath(DirectoryList::GENERATION);
         if (!$this->deploymentConfig->isAvailable()) {
@@ -94,12 +102,16 @@ class DiCompileCommand extends Command
         }
         $this->objectManager->get('Magento\Framework\App\Cache')->clean();
         $compiledPathsList = [
-            'application' => $appCodePath,
+            'application' => $appCodePaths,
             'library' => $libraryPath . '/Magento/Framework',
             'generated_helpers' => $generationPath
         ];
+        $excludedAppCodePaths = [];
+        foreach ($appCodePaths as $appCodePath) {
+            $excludedAppCodePaths[] = '#^' . $appCodePath . '/Test#';
+        }
         $this->excludedPathsList = [
-            'application' => '#^' . $appCodePath . '/[\\w]+/[\\w]+/Test#',
+            'application' => $excludedAppCodePaths,
             'framework' => '#^' . $libraryPath . '/[\\w]+/[\\w]+/([\\w]+/)?Test#'
         ];
         $dataAttributesIncludePattern = [
@@ -237,11 +249,11 @@ class DiCompileCommand extends Command
     ) {
         $operations = [
             OperationFactory::REPOSITORY_GENERATOR => [
-                'path' => $compiledPathsList['application'],
+                'paths' => $compiledPathsList['application'],
                 'filePatterns' => ['di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/']
             ],
             OperationFactory::DATA_ATTRIBUTES_GENERATOR => [
-                'path' => $compiledPathsList['application'],
+                'paths' => $compiledPathsList['application'],
                 'filePatterns' => $dataAttributesIncludePattern
             ],
             OperationFactory::APPLICATION_CODE_GENERATOR => [

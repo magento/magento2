@@ -62,6 +62,7 @@ abstract class AbstractCollector implements CollectorInterface
      */
     protected function getScopeDirectory()
     {
-        return DirectoryList::MODULES;
+        // TODO: remove this method in scope of MAGETWO-42266
+        return DirectoryList::ROOT;
     }
 }

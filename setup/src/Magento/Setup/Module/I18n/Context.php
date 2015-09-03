@@ -5,6 +5,10 @@
  */
 namespace Magento\Setup\Module\I18n;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ModuleRegistrar;
+use Magento\Framework\Filesystem;
+
 /**
  *  Context
  */
@@ -27,6 +31,27 @@ class Context
     /**#@-*/
 
     /**
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     */
+    private $directoryRead;
+
+    /**
+     * @var ModuleRegistrar
+     */
+    private $moduleRegistrar;
+
+    /**
+     * Constructor
+     *
+     * @param ModuleRegistrar $moduleRegistrar
+     */
+    public function __construct(Filesystem $filesystem, ModuleRegistrar $moduleRegistrar)
+    {
+        $this->directoryRead = $filesystem->getDirectoryRead(DirectoryList::ROOT);
+        $this->moduleRegistrar = $moduleRegistrar;
+    }
+
+    /**
      * Get context from file path in array(<context type>, <context value>) format
      * - for module: <Namespace>_<module name>
      * - for theme: <area>/<theme name>
@@ -38,10 +63,11 @@ class Context
      */
     public function getContextByPath($path)
     {
-        if ($value = strstr($path, '/app/code/')) {
+        $moduleDirs = $this->moduleRegistrar->getPaths();
+        $invertedModuleDirsMap = array_flip($moduleDirs);
+        if (isset($invertedModuleDirsMap[$path])) {
             $type = self::CONTEXT_TYPE_MODULE;
-            $value = explode('/', $value);
-            $value = $value[3] . '_' . $value[4];
+            $value = $invertedModuleDirsMap[$path];
         } elseif ($value = strstr($path, '/app/design/')) {
             $type = self::CONTEXT_TYPE_THEME;
             $value = explode('/', $value);
@@ -67,7 +93,8 @@ class Context
     {
         switch ($type) {
             case self::CONTEXT_TYPE_MODULE:
-                $path = 'app/code/' . str_replace('_', '/', $value);
+                $absolutePath = $this->moduleRegistrar->getPath($value);
+                $path = $this->directoryRead->getRelativePath($absolutePath);
                 break;
             case self::CONTEXT_TYPE_THEME:
                 $path = 'app/design/' . $value;

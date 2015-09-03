@@ -13,7 +13,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  */
 class Download extends ImportController
 {
-    const SAMPLE_FILES_DIRECTORY = 'Magento/ImportExport/Files/Sample/';
+    const SAMPLE_FILES_MODULE = 'Magento_ImportExport';
 
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
@@ -26,23 +26,38 @@ class Download extends ImportController
     protected $fileDirectory;
 
     /**
+     * @var \Magento\Framework\Module\Dir\Reader
+     */
+    protected $reader;
+
+    /**
+     * @var \Magento\Framework\App\Response\Http\FileFactory
+     */
+    protected $fileFactory;
+
+    /**
+     * Constructor
+     *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Framework\Module\Dir\Reader $reader
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        \Magento\Framework\Filesystem $filesystem
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\Module\Dir\Reader $reader
     ) {
         parent::__construct(
             $context
         );
         $this->fileFactory = $fileFactory;
         $this->resultRawFactory = $resultRawFactory;
-        $this->fileDirectory = $filesystem->getDirectoryWrite(DirectoryList::MODULES);
+        $this->fileDirectory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $this->reader = $reader;
     }
 
     /**
@@ -53,7 +68,8 @@ class Download extends ImportController
     public function execute()
     {
         $fileName = $this->getRequest()->getParam('filename') . '.csv';
-        $filePath = self::SAMPLE_FILES_DIRECTORY . $fileName;
+        $fileAbsolutePath = $this->reader->getModuleDir('', self::SAMPLE_FILES_MODULE) . '/' . $fileName;
+        $filePath = $this->fileDirectory->getRelativePath($fileAbsolutePath);
 
         if (!$this->fileDirectory->isFile($filePath)) {
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */

@@ -7,6 +7,7 @@ namespace Magento\PageCache\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Module\Dir;
 
 /**
  * Model is responsible for replacing default vcl template
@@ -66,7 +67,12 @@ class Config
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
-    protected $_modulesDirectory;
+    protected $directoryRead;
+
+    /**
+     * @var \Magento\Framework\Module\Dir\Reader
+     */
+    protected $reader;
 
     /**
      * @param Filesystem $filesystem
@@ -76,11 +82,13 @@ class Config
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\App\Cache\StateInterface $cacheState
+        \Magento\Framework\App\Cache\StateInterface $cacheState,
+        \Magento\Framework\Module\Dir\Reader $reader
     ) {
-        $this->_modulesDirectory = $filesystem->getDirectoryRead(DirectoryList::MODULES);
+        $this->directoryRead = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->_scopeConfig = $scopeConfig;
         $this->_cacheState = $cacheState;
+        $this->reader = $reader;
     }
 
     /**
@@ -114,7 +122,10 @@ class Config
      */
     public function getVclFile($vclTemplatePath)
     {
-        $data = $this->_modulesDirectory->readFile($this->_scopeConfig->getValue($vclTemplatePath));
+        $moduleEtcPath = $this->reader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_PageCache');
+        $configFilePath = $moduleEtcPath . '/' . $this->_scopeConfig->getValue($vclTemplatePath);
+        $configFilePath = $this->directoryRead->getRelativePath($configFilePath);
+        $data = $this->directoryRead->readFile($configFilePath);
         return strtr($data, $this->_getReplacements());
     }
 

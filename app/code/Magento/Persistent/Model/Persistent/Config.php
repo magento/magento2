@@ -60,7 +60,7 @@ class Config
      *
      * @var \Magento\Framework\Filesystem\Directory\Read;
      */
-    protected $_modulesDirectory;
+    protected $directoryRead;
 
     /**
      * @param \Magento\Framework\Config\DomFactory $domFactory
@@ -83,7 +83,7 @@ class Config
         $this->_layout = $layout;
         $this->_appState = $appState;
         $this->_persistentFactory = $persistentFactory;
-        $this->_modulesDirectory = $filesystem->getDirectoryRead(DirectoryList::MODULES);
+        $this->directoryRead = $filesystem->getDirectoryRead(DirectoryList::ROOT);
     }
 
     /**
@@ -107,15 +107,15 @@ class Config
     protected function _getConfigDomXPath()
     {
         if ($this->_configDomXPath === null) {
-            $filePath = $this->_modulesDirectory->getRelativePath($this->_configFilePath);
-            $isFile = $this->_modulesDirectory->isFile($filePath);
-            $isReadable = $this->_modulesDirectory->isReadable($filePath);
+            $filePath = $this->directoryRead->getRelativePath($this->_configFilePath);
+            $isFile = $this->directoryRead->isFile($filePath);
+            $isReadable = $this->directoryRead->isReadable($filePath);
             if (!$isFile || !$isReadable) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('We cannot load the configuration from file %1.', $this->_configFilePath)
                 );
             }
-            $xml = $this->_modulesDirectory->readFile($filePath);
+            $xml = $this->directoryRead->readFile($filePath);
             /** @var \Magento\Framework\Config\Dom $configDom */
             $configDom = $this->_domFactory->createDom(
                 [

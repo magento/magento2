@@ -25,13 +25,6 @@ class Dir
     /**#@-*/
 
     /**
-     * Modules root directory
-     *
-     * @var ReadInterface
-     */
-    protected $_modulesDirectory;
-
-    /**
      * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $_string;
@@ -44,16 +37,13 @@ class Dir
     private $moduleRegistry;
 
     /**
-     * @param Filesystem $filesystem
      * @param StringHelper $string
      * @param ComponentRegistrarInterface $moduleRegistry
      */
     public function __construct(
-        Filesystem $filesystem,
         StringHelper $string,
         ComponentRegistrarInterface $moduleRegistry
     ) {
-        $this->_modulesDirectory = $filesystem->getDirectoryRead(DirectoryList::MODULES);
         $this->_string = $string;
         $this->moduleRegistry = $moduleRegistry;
     }
@@ -68,10 +58,7 @@ class Dir
      */
     public function getDir($moduleName, $type = '')
     {
-        if (null === $path = $this->moduleRegistry->getPath($moduleName)) {
-            $relativePath = $this->_string->upperCaseWords($moduleName, '_', '/');
-            $path = $this->_modulesDirectory->getAbsolutePath($relativePath);
-        }
+        $path = $this->moduleRegistry->getPath($moduleName);
 
         if ($type) {
             if (!in_array($type, [
