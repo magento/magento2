@@ -33,8 +33,6 @@ class InlineEdit extends \Magento\Customer\Controller\Adminhtml\Index
             $this->setCustomer($this->_customerRepository->getById($customerId));
             if ($this->getCustomer()->getDefaultBilling()) {
                 $this->updateDefaultBilling($this->getData($postItems[$customerId]));
-            } else {
-                $this->addNewBilling($this->getData($postItems[$customerId]));
             }
             $this->updateCustomer($this->getData($postItems[$customerId], true));
             $this->saveCustomer($this->getCustomer());
@@ -112,28 +110,6 @@ class InlineEdit extends \Magento\Customer\Controller\Adminhtml\Index
                 break;
             }
         }
-    }
-
-    /**
-     * Add new address to customer
-     *
-     * @param array $data
-     * @return void
-     */
-    protected function addNewBilling(array $data)
-    {
-        $customer = $this->getCustomer();
-        /** @var \Magento\Customer\Api\Data\AddressInterface $address */
-        $address = $this->addressDataFactory->create();
-        $this->dataObjectHelper->populateWithArray(
-            $address,
-            $this->processAddressData($data),
-            '\Magento\Customer\Api\Data\AddressInterface'
-        );
-        $address->setCustomerId($customer->getId());
-        $address->setIsDefaultBilling(true);
-        $this->addressRepository->save($address);
-        $customer->setAddresses(array_merge($customer->getAddresses(), [$address]));
     }
 
     /**
