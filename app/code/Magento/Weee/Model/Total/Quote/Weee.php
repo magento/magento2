@@ -103,10 +103,10 @@ class Weee extends AbstractTotal
         $this->weeeTotalExclTax = 0;
         $this->weeeBaseTotalExclTax = 0;
         foreach ($items as $item) {
-            $this->resetItemTaxData($item);
             if ($item->getParentItem()) {
                 continue;
             }
+            $this->resetItemTaxData($item);
             $this->resetItemWeeeData($item);
             if ($item->getHasChildren() && $item->isChildrenCalculated()) {
                 foreach ($item->getChildren() as $child) {
