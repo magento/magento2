@@ -173,7 +173,6 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
     public function testProcessCategoryIds()
     {
         $expectedResult = 'category_ids_index.category_id = FilterValue';
-        $scopeId = 0;
         $isNegation = false;
         $query = 'SELECT category_ids FROM catalog_product_entity';
 
