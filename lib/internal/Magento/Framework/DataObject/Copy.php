@@ -205,6 +205,8 @@ class Copy
      * @param string $code
      * @return mixed
      * @throws \InvalidArgumentException
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _getFieldsetFieldValue($source, $code)
     {
