@@ -16,11 +16,6 @@ use Magento\Framework\Exception\LocalizedException;
 class ImageMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryProcessor
 {
     /**
-     * @var AbstractAttribute
-     */
-    protected $attribute;
-
-    /**
      * @param Product $product
      * @param AbstractAttribute $attribute
      * @return void
@@ -130,8 +125,7 @@ class ImageMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryProcessor
     public function afterSave(Product $product, AbstractAttribute $attribute)
     {
         if ($product->getIsDuplicate() == true) {
-            $this->attribute = $attribute;
-            $this->duplicate($product);
+            $this->duplicate($product, $attribute->getAttributeCode());
             return;
         }
 
@@ -206,13 +200,13 @@ class ImageMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryProcessor
     }
 
     /**
-     * @param \Magento\Framework\DataObject $product
+     * @param \Magento\Catalog\Model\Product $product
+     * @param string $attributeCode
      * @return $this
      */
-    protected function duplicate($product)
+    protected function duplicate($product, $attributeCode)
     {
-        $attrCode = $this->attribute->getAttributeCode();
-        $mediaGalleryData = $product->getData($attrCode);
+        $mediaGalleryData = $product->getData($attributeCode);
 
         if (!isset($mediaGalleryData['images']) || !is_array($mediaGalleryData['images'])) {
             return $this;
