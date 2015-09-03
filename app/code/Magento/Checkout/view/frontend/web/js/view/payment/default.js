@@ -14,7 +14,8 @@ define(
         'Magento_Checkout/js/model/payment-service',
         'Magento_Checkout/js/checkout-data',
         'Magento_Checkout/js/model/checkout-data-resolver',
-        'uiRegistry'
+        'uiRegistry',
+        'Magento_Checkout/js/model/payment/additional-validators'
     ],
     function (
         ko,
@@ -27,7 +28,8 @@ define(
         paymentService,
         checkoutData,
         checkoutDataResolver,
-        registry
+        registry,
+        additionalValidators
     ) {
         'use strict';
         return Component.extend({
@@ -97,13 +99,13 @@ define(
                     $(loginFormSelector).validation();
                     emailValidationResult = Boolean($(loginFormSelector + ' input[name=username]').valid());
                 }
-                if (emailValidationResult && this.validate()) {
+                if (emailValidationResult && this.validate() && additionalValidators.validate()) {
                     this.isPlaceOrderActionAllowed(false);
                     placeOrder = placeOrderAction(this.getData(), this.redirectAfterPlaceOrder);
 
-                    $.when(placeOrder).fail(function(){
+                    $.when(placeOrder).fail(function () {
                         self.isPlaceOrderActionAllowed(true);
-                    }).done(this.afterPlaceOrder);
+                    }).done(this.afterPlaceOrder.bind(this));
                     return true;
                 }
                 return false;

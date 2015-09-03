@@ -5,6 +5,8 @@
  */
 namespace Magento\Theme\Test\Unit\Block\Adminhtml\Wysiwyg\Files;
 
+use Magento\Theme\Model\Wysiwyg\Storage;
+
 class ContentTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -145,10 +147,12 @@ class ContentTest extends \PHPUnit_Framework_TestCase
     public function requestParamsProvider()
     {
         return [
-            'requestParams' => [
-                \Magento\Theme\Helper\Storage::PARAM_THEME_ID => 1,
-                \Magento\Theme\Helper\Storage::PARAM_CONTENT_TYPE => \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE,
-                \Magento\Theme\Helper\Storage::PARAM_NODE => 'root',
+            [
+                'requestParams' => [
+                    \Magento\Theme\Helper\Storage::PARAM_THEME_ID => 1,
+                    \Magento\Theme\Helper\Storage::PARAM_CONTENT_TYPE => Storage::TYPE_IMAGE,
+                    \Magento\Theme\Helper\Storage::PARAM_NODE => 'root',
+                ]
             ]
         ];
     }
@@ -178,7 +182,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
 
         $requestParams = [
             \Magento\Theme\Helper\Storage::PARAM_THEME_ID => 1,
-            \Magento\Theme\Helper\Storage::PARAM_CONTENT_TYPE => \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE,
+            \Magento\Theme\Helper\Storage::PARAM_CONTENT_TYPE => Storage::TYPE_IMAGE,
             \Magento\Theme\Helper\Storage::PARAM_NODE => 'root',
         ];
 

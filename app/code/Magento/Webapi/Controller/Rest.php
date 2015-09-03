@@ -8,6 +8,7 @@ namespace Magento\Webapi\Controller;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Webapi\ErrorProcessor;
+use Magento\Framework\Webapi\Request;
 use Magento\Framework\Webapi\ServiceInputProcessor;
 use Magento\Framework\Webapi\ServiceOutputProcessor;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
@@ -23,9 +24,15 @@ use Magento\Webapi\Controller\Rest\Router\Route;
  * TODO: Consider warnings suppression removal
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Rest implements \Magento\Framework\App\FrontControllerInterface
 {
+    /**
+     * Path for accessing REST API schema
+     */
+    const SCHEMA_PATH = '/schema';
+
     /**
      * @var Router
      */
@@ -102,6 +109,11 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     protected $serviceOutputProcessor;
 
     /**
+     * @var \Magento\Webapi\Model\Rest\Swagger\Generator
+     */
+    protected $swaggerGenerator;
+
+    /**
      * Initialize dependencies
      *
      * @param RestRequest $request
@@ -117,6 +129,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @param FieldsFilter $fieldsFilter
      * @param ParamsOverrider $paramsOverrider
      * @param ServiceOutputProcessor $serviceOutputProcessor
+     * @param \Magento\Webapi\Model\Rest\Swagger\Generator $swaggerGenerator,
      *
      * TODO: Consider removal of warning suppression
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -134,7 +147,8 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         \Magento\Framework\App\AreaList $areaList,
         FieldsFilter $fieldsFilter,
         ParamsOverrider $paramsOverrider,
-        ServiceOutputProcessor $serviceOutputProcessor
+        ServiceOutputProcessor $serviceOutputProcessor,
+        \Magento\Webapi\Model\Rest\Swagger\Generator $swaggerGenerator
     ) {
         $this->_router = $router;
         $this->_request = $request;
@@ -149,6 +163,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $this->fieldsFilter = $fieldsFilter;
         $this->paramsOverrider = $paramsOverrider;
         $this->serviceOutputProcessor = $serviceOutputProcessor;
+        $this->swaggerGenerator = $swaggerGenerator;
     }
 
     /**
@@ -164,34 +179,26 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $this->areaList->getArea($this->_appState->getAreaCode())
             ->load(\Magento\Framework\App\Area::PART_TRANSLATE);
         try {
-            $this->checkPermissions();
-            $route = $this->getCurrentRoute();
-            if ($route->isSecure() && !$this->_request->isSecure()) {
-                throw new \Magento\Framework\Webapi\Exception(__('Operation allowed only in HTTPS'));
+            if ($this->isSchemaRequest()) {
+                $this->processSchemaRequest();
+            } else {
+                $this->processApiRequest();
             }
-            /** @var array $inputData */
-            $inputData = $this->_request->getRequestData();
-            $serviceMethodName = $route->getServiceMethod();
-            $serviceClassName = $route->getServiceClass();
-            $inputData = $this->paramsOverrider->override($inputData, $route->getParameters());
-            $inputParams = $this->serviceInputProcessor->process($serviceClassName, $serviceMethodName, $inputData);
-            $service = $this->_objectManager->get($serviceClassName);
-            /** @var \Magento\Framework\Api\AbstractExtensibleObject $outputData */
-            $outputData = call_user_func_array([$service, $serviceMethodName], $inputParams);
-            $outputData = $this->serviceOutputProcessor->process(
-                $outputData,
-                $serviceClassName,
-                $serviceMethodName
-            );
-            if ($this->_request->getParam(FieldsFilter::FILTER_PARAMETER) && is_array($outputData)) {
-                $outputData = $this->fieldsFilter->filter($outputData);
-            }
-            $this->_response->prepareResponse($outputData);
         } catch (\Exception $e) {
             $maskedException = $this->_errorProcessor->maskException($e);
             $this->_response->setException($maskedException);
         }
         return $this->_response;
+    }
+
+    /**
+     * Check if current request is schema request.
+     *
+     * @return bool
+     */
+    protected function isSchemaRequest()
+    {
+        return $this->_request->getPathInfo() === self::SCHEMA_PATH;
     }
 
     /**
@@ -238,5 +245,60 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
             }
         }
         return true;
+    }
+
+    /**
+     * Execute schema request
+     *
+     * @return void
+     */
+    protected function processSchemaRequest()
+    {
+        $requestedServices = $this->_request->getRequestedServices('all');
+        $requestedServices = $requestedServices == Request::ALL_SERVICES
+            ? array_keys($this->swaggerGenerator->getListOfServices())
+            : $requestedServices;
+        $responseBody = $this->swaggerGenerator->generate(
+            $requestedServices,
+            $this->_request->getScheme(),
+            $this->_request->getHttpHost(),
+            $this->_request->getRequestUri()
+        );
+        $this->_response->setBody($responseBody)->setHeader('Content-Type', 'application/json');
+    }
+
+    /**
+     * Execute API request
+     *
+     * @return void
+     * @throws AuthorizationException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Webapi\Exception
+     */
+    protected function processApiRequest()
+    {
+        $this->checkPermissions();
+        $route = $this->getCurrentRoute();
+        if ($route->isSecure() && !$this->_request->isSecure()) {
+            throw new \Magento\Framework\Webapi\Exception(__('Operation allowed only in HTTPS'));
+        }
+        /** @var array $inputData */
+        $inputData = $this->_request->getRequestData();
+        $serviceMethodName = $route->getServiceMethod();
+        $serviceClassName = $route->getServiceClass();
+        $inputData = $this->paramsOverrider->override($inputData, $route->getParameters());
+        $inputParams = $this->serviceInputProcessor->process($serviceClassName, $serviceMethodName, $inputData);
+        $service = $this->_objectManager->get($serviceClassName);
+        /** @var \Magento\Framework\Api\AbstractExtensibleObject $outputData */
+        $outputData = call_user_func_array([$service, $serviceMethodName], $inputParams);
+        $outputData = $this->serviceOutputProcessor->process(
+            $outputData,
+            $serviceClassName,
+            $serviceMethodName
+        );
+        if ($this->_request->getParam(FieldsFilter::FILTER_PARAMETER) && is_array($outputData)) {
+            $outputData = $this->fieldsFilter->filter($outputData);
+        }
+        $this->_response->prepareResponse($outputData);
     }
 }

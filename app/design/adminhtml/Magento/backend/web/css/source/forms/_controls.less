@@ -58,7 +58,7 @@
 //  Select styles
 .admin__control-select {
     &:extend(.abs-form-control-pattern all);
-    .css(appearance, none, 1);
+    .lib-css(appearance, none, 1);
 
     background-repeat: no-repeat;
     background-image+: url('../images/arrows-bg.svg');
@@ -70,10 +70,12 @@
     background-size+: @field-control__height 100%;
 
     background-image+: linear-gradient(@field-control__border-color,@field-control__border-color);
-    background-position+: ~'calc(100% - 33px)' 0;
+    background-position+: ~'calc(100% - @{field-control__height})' 0;
     background-size+: 1px 100%;
 
+    padding-bottom: @field-control__padding-bottom - .1rem;
     padding-right: 4.4rem; // Distance between select switch and inner text
+    padding-top: @field-control__padding-top - .1rem;
     transition: @smooth__border-color;
 
     &:hover {
@@ -89,7 +91,7 @@
         background-position+: 100%;
 
         background-image+: linear-gradient(@field-control__focus__border-color, @field-control__focus__border-color);
-        background-position+: ~'calc(100% - 33px)' 0;
+        background-position+: ~'calc(100% - @{field-control__height})' 0;
         border-color: @field-control__focus__border-color;
     }
     &::-ms-expand {
@@ -188,8 +190,8 @@ option:empty {
 
 //  Control with additional prefix or suffix label
 .admin__control-addon {
-    .vendor-prefix-display(inline-flex);
-    .vendor-prefix-flex-direction(row);
+    .lib-vendor-prefix-display(inline-flex);
+    .lib-vendor-prefix-flex-direction(row);
     display: inline-flex;
     flex-flow: row nowrap;
     position: relative;
@@ -197,15 +199,15 @@ option:empty {
     z-index: 1;
     > [class*='admin__addon-'],
     > [class*='admin__control-'] {
-        .vendor-prefix-flex-basis(auto);
-        .vendor-prefix-flex-grow(0);
-        .vendor-prefix-flex-shrink(0);
+        .lib-vendor-prefix-flex-basis(auto);
+        .lib-vendor-prefix-flex-grow(0);
+        .lib-vendor-prefix-flex-shrink(0);
         position: relative;
         z-index: 1;
     }
     [class*='admin__control-'] {
-        .css(appearence,none);
-        .vendor-prefix-flex-grow(1);
+        .lib-css(appearence,none);
+        .lib-vendor-prefix-flex-grow(1);
         box-shadow: none;
         background-color: transparent;
         border-color: transparent;
