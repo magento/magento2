@@ -1826,7 +1826,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 $field = $this->quoteIdentifier($v);
             }
 
-            if ($field && $value) {
+            if ($field && is_string($value) && $value !== '') {
                 $updateFields[] = sprintf('%s = %s', $field, $value);
             }
         }
