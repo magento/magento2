@@ -6,13 +6,14 @@
 namespace Magento\Catalog\Model\Resource\Product;
 
 use Magento\Store\Model\Store;
+use Magento\Eav\Model\Resource\Attribute\DefaultEntityAttributes\ProviderInterface as DefaultAttributesProvider;
 
 /**
  * Catalog Product Flat resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Flat extends \Magento\Framework\Model\Resource\Db\AbstractDb
+class Flat extends \Magento\Framework\Model\Resource\Db\AbstractDb implements DefaultAttributesProvider
 {
     /**
      * Store scope Id
@@ -230,5 +231,20 @@ class Flat extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function getMainTable()
     {
         return $this->getFlatTableName($this->getStoreId());
+    }
+
+    /**
+     * Retrieve default entity static attributes
+     *
+     * @return string[]
+     */
+    public function getDefaultAttributes()
+    {
+        return array_unique(
+            array_merge(
+                \Magento\Catalog\Model\Resource\Product::DEFAULT_ATTRIBUTES,
+                [$this->getEntityIdField()]
+            )
+        );
     }
 }

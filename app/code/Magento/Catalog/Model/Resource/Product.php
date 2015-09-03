@@ -14,6 +14,11 @@ namespace Magento\Catalog\Model\Resource;
 class Product extends AbstractResource
 {
     /**
+     * Default product attributes
+     */
+    const DEFAULT_ATTRIBUTES = ['entity_id', 'attribute_set_id', 'type_id', 'created_at', 'updated_at', 'sku'];
+
+    /**
      * Product to website linkage table
      *
      * @var string
@@ -141,7 +146,7 @@ class Product extends AbstractResource
      */
     protected function _getDefaultAttributes()
     {
-        return ['entity_id', 'attribute_set_id', 'type_id', 'created_at', 'updated_at'];
+        return self::DEFAULT_ATTRIBUTES;
     }
 
     /**
