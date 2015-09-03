@@ -493,29 +493,6 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
-     * @param \Magento\Framework\DataObject $object
-     * @return $this
-     */
-    public function duplicate($object)
-    {
-        $attrCode = $this->getAttribute()->getAttributeCode();
-        $mediaGalleryData = $object->getData($attrCode);
-
-        if (!isset($mediaGalleryData['images']) || !is_array($mediaGalleryData['images'])) {
-            return $this;
-        }
-
-        $this->_getResource()->duplicate(
-            $this,
-            isset($mediaGalleryData['duplicate']) ? $mediaGalleryData['duplicate'] : [],
-            $object->getOriginalId(),
-            $object->getId()
-        );
-
-        return $this;
-    }
-
-    /**
      * Get filename which is not duplicated with other files in media temporary and media directories
      *
      * @param string $fileName
