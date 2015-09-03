@@ -22,7 +22,7 @@
         margin-bottom: @indent__xl;
 
         .legend.title {
-            .heading(h1);
+            .lib-heading(h1);
             border: 0;
             padding: 0;
         }
@@ -82,7 +82,7 @@
             > .title {
                 margin-bottom: 15px;
                 > strong {
-                    .heading(h2);
+                    .lib-heading(h2);
                 }
             }
             > .title,
@@ -105,7 +105,7 @@
                     display: none;
                 }
                 > .subtitle {
-                    .heading(h2);
+                    .lib-heading(h2);
                     display: block;
                 }
             }
@@ -130,7 +130,7 @@
                     &:extend(.abs-actions-addto all);
                     margin-right: 5%;
                     &.tocompare {
-                        .icon-font-symbol(
+                        .lib-icon-font-symbol(
                             @_icon-font-content: @icon-compare-full,
                             @_icon-font-position: before
                         );
@@ -145,11 +145,11 @@
             }
         }
         p.required {
-            .css(color, @form-field-label-asterisk__color);
+            .lib-css(color, @form-field-label-asterisk__color);
         }
         .nested {
             .field.qty {
-                .form-field-type(@_type: block);
+                .lib-form-field-type(@_type: block);
                 .label {
                     font-weight: @form-field-label__font-weight;
                 }
@@ -163,7 +163,6 @@
             font-weight: @font-weight__semibold;
         }
     }
-
 }
 
 //
@@ -195,7 +194,7 @@
             .price-box {
                 .price-wrapper,
                 .price-wrapper > .price {
-                    .css(color, @price-color);
+                    .lib-css(color, @price-color);
                     font-size: @price-size-desktop;
                     font-weight: @font-weight__semibold;
                     line-height: @price-size-desktop;
@@ -203,16 +202,16 @@
             }
             .price-container {
                 .weee {
-                    .css(color, @price-color);
+                    .lib-css(color, @price-color);
                     .price {
-                        .font-size(12);
+                        .lib-font-size(12);
                         font-weight: @font-weight__bold;
                     }
                 }
             }
             .price-including-tax + .price-excluding-tax {
                 .price {
-                    .font-size(14);
+                    .lib-font-size(14);
                     line-height: 16px;
                 }
             }

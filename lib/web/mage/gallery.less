@@ -93,7 +93,7 @@
         top: @gallery-close-position-top;
         right: @gallery-close-position-right;
         border: none;
-        .icon-image(
+        .lib-icon-image(
             @_icon-image: @gallery-sprite-svg,
             @_icon-image-width: @gallery-close-width,
             @_icon-image-height: @gallery-close-height,
@@ -116,7 +116,7 @@
             position: absolute;
             top: 50%;
             margin-top: -@gallery-control-height;
-            .icon-image(
+            .lib-icon-image(
             @_icon-image: @gallery-sprite-svg,
             @_icon-image-width: @gallery-control-width,
             @_icon-image-height: @gallery-control-height);
@@ -128,7 +128,7 @@
             left: @gallery-control-prev-position-left;
         }
         &.next {
-            .icon-sprite-position(
+            .lib-icon-sprite-position(
                 @_icon-sprite-position-x: 30,
                 @_icon-sprite-grid: 1px
             );
@@ -162,7 +162,7 @@
         bottom:0;
         box-sizing: border-box;
         ul {
-            .list-reset-styles();
+            .lib-list-reset-styles();
             white-space: nowrap;
             position: relative;
             vertical-align: top;
