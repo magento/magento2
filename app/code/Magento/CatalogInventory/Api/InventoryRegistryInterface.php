@@ -4,6 +4,7 @@ namespace Magento\CatalogInventory\Api;
 
 use Magento\CatalogInventory\Api\Data\InventoryInterface;
 use Magento\CatalogInventory\Api\Data\InventoryRecordInterface;
+use Magento\Framework\App\ScopeInterface;
 
 /**
  * Inventory registry interface
@@ -15,16 +16,16 @@ use Magento\CatalogInventory\Api\Data\InventoryRecordInterface;
 interface InventoryRegistryInterface
 {
     /**
-     * Returns main store inventory based on store configuration
+     * Returns main store inventory based on scope configuration
      * or other environment dependencies
      *
      * This one should be used only for filtering stock status on collections,
-     * used in indexers for applying inventory status limitations
+     * also should be used in indexers for applying inventory status limitations
      *
-     * @param int|null $storeId
+     * @param ScopeInterface $scope
      * @return InventoryInterface
      */
-    public function getInventory($storeId = null);
+    public function getInventory(ScopeInterface $scope);
 
     /**
      * Returns array of single inventory records per product id in current scope
@@ -33,10 +34,10 @@ interface InventoryRegistryInterface
      * [$productId => InventoryRecordInterface]
      *
      * @param int[] $productIds
-     * @param int|null $storeId
+     * @param ScopeInterface $scope
      * @return InventoryRecordInterface[]
      */
-    public function getSingleRecordForProducts(array $productIds, $storeId = null);
+    public function getSingleRecordForProducts(array $productIds, ScopeInterface $scope);
 
     /**
      * Returns array of multiple inventory records per product in current scope
@@ -45,10 +46,10 @@ interface InventoryRegistryInterface
      * [$productId => [InventoryRecordInterface, InventoryRecordInterface, InventoryRecordInterface]]
      *
      * @param int[] $productIds
-     * @param int|null $storeId
+     * @param ScopeInterface $scope
      * @return InventoryRecordInterface[][]
      */
-    public function getMultipleRecordsForProducts(array $productIds, $storeId = null);
+    public function getMultipleRecordsForProducts(array $productIds, ScopeInterface $scope);
 
     /**
      * Returns inventory records for specific delivery location and by taking into account
@@ -64,10 +65,10 @@ interface InventoryRegistryInterface
      *
      * @param InventoryRequestInterface[] $requests
      * @param LocationInformationInterface $location
-     * @param int|null $storeId
+     * @param ScopeInterface $scope
      * @return InventoryResponseInterface[]
      */
     public function getRecordsForLocationByRequests(
-        array $requests, LocationInformationInterface $location, $storeId = null
+        array $requests, LocationInformationInterface $location, ScopeInterface $scope
     );
 }
