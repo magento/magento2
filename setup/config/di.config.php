@@ -30,7 +30,7 @@ return [
                 'Magento\Framework\Locale\ConfigInterface' => 'Magento\Framework\Locale\Config',
                 'Magento\Framework\Module\ModuleRegistryInterface' => 'Magento\Framework\Module\Registrar',
                 'Magento\Framework\Filesystem\DriverInterface' => 'Magento\Framework\Filesystem\Driver\File',
-                'Magento\Framework\Component\ComponentRegistryInterface' =>
+                'Magento\Framework\Component\ComponentRegistrarInterface' =>
                     'Magento\Framework\Component\ModuleRegistrar',
             ],
         ],

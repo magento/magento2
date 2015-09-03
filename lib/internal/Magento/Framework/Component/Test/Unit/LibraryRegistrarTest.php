@@ -18,17 +18,26 @@ class LibraryRegistrarTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->library = new LibraryRegistrar();
-        LibraryRegistrar::register("test_library_one", "some/path/name/one");
-        LibraryRegistrar::register("test_library_two", "some/path/name/two");
     }
 
     public function testGetPaths()
     {
+        LibraryRegistrar::register("test_library_one", "some/path/name/one");
+        LibraryRegistrar::register("test_library_two", "some/path/name/two");
         $expected = [
             'test_library_one' => "some/path/name/one",
             'test_library_two' => "some/path/name/two",
         ];
         $this->assertSame($expected, $this->library->getPaths());
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage test_library_one already exists
+     */
+    public function testRegistrarWithException()
+    {
+        LibraryRegistrar::register("test_library_one", "some/path/name/one");
     }
 
     public function testGetPath()

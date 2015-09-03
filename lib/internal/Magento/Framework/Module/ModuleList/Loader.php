@@ -10,7 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Module\Declaration\Converter\Dom;
 use Magento\Framework\Xml\Parser;
-use Magento\Framework\Component\ComponentRegistryInterface;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Filesystem\DriverInterface;
 
 /**
@@ -44,7 +44,7 @@ class Loader
     /**
      * Module registry
      *
-     * @var ComponentRegistryInterface
+     * @var ComponentRegistrarInterface
      */
     private $moduleRegistry;
 
@@ -61,14 +61,14 @@ class Loader
      * @param Filesystem $filesystem
      * @param Dom $converter
      * @param Parser $parser
-     * @param ComponentRegistryInterface $moduleRegistry
+     * @param ComponentRegistrarInterface $moduleRegistry
      * @param DriverInterface $filesystemDriver
      */
     public function __construct(
         Filesystem $filesystem,
         Dom $converter,
         Parser $parser,
-        ComponentRegistryInterface $moduleRegistry,
+        ComponentRegistrarInterface $moduleRegistry,
         DriverInterface $filesystemDriver
     ) {
         $this->filesystem = $filesystem;

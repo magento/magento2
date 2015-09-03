@@ -67,7 +67,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->parser = $this->getMock('Magento\Framework\Xml\Parser', [], [], '', false);
         $this->parser->expects($this->once())->method('initErrorHandler');
         $this->registry = $this->getMock(
-            'Magento\Framework\Component\ComponentRegistryInterface',
+            'Magento\Framework\Component\ComponentRegistrarInterface',
             [],
             [],
             '',

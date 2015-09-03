@@ -18,17 +18,26 @@ class LanguageRegistrarTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->language = new LanguageRegistrar();
-        LanguageRegistrar::register("test_language_one", "some/path/name/one");
-        LanguageRegistrar::register("test_language_two", "some/path/name/two");
     }
 
     public function testGetPaths()
     {
+        LanguageRegistrar::register("test_language_one", "some/path/name/one");
+        LanguageRegistrar::register("test_language_two", "some/path/name/two");
         $expected = [
             'test_language_one' => "some/path/name/one",
             'test_language_two' => "some/path/name/two",
         ];
         $this->assertSame($expected, $this->language->getPaths());
+    }
+
+    /**
+     * @expectedException \LogicException
+     * @expectedExceptionMessage test_language_one already exists
+     */
+    public function testRegistrarWithException()
+    {
+        LanguageRegistrar::register("test_language_one", "some/path/name/one");
     }
 
     public function testGetPath()

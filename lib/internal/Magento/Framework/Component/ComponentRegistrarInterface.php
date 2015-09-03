@@ -8,7 +8,7 @@ namespace Magento\Framework\Component;
 /**
  * @author Josh Di Fabio <joshdifabio@gmail.com>
  */
-interface ComponentRegistryInterface
+interface ComponentRegistrarInterface
 {
     /**
      * Get list of registered Magento components

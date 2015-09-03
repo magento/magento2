@@ -28,7 +28,7 @@ class DirTest extends \PHPUnit_Framework_TestCase
     protected $directoryMock;
 
     /**
-     * @var \Magento\Framework\Component\ComponentRegistryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Component\ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $moduleRegistryMock;
 
@@ -45,7 +45,7 @@ class DirTest extends \PHPUnit_Framework_TestCase
         );
         $this->_stringMock = $this->getMock('Magento\Framework\Stdlib\StringUtils', [], [], '', false, false);
         $this->moduleRegistryMock = $this->getMock(
-            'Magento\Framework\Component\ComponentRegistryInterface',
+            'Magento\Framework\Component\ComponentRegistrarInterface',
             [],
             [],
             '',
