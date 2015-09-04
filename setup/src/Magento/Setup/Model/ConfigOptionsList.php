@@ -179,7 +179,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         $errors = [];
 
         if (isset($options[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS])
-            && !preg_match('/^[a-zA-Z0-9_:,. ]+$/', $options[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS])
+            && !preg_match('/^[a-zA-Z0-9_:,.\/ ]+$/', $options[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS])
         ) {
             $errors[] = "Invalid cache hosts '{$options[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS]}'";
         }
