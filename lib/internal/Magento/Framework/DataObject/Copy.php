@@ -84,10 +84,10 @@ class Copy
                 $target[$targetCode] = $value;
             } else if ($target instanceof \Magento\Framework\DataObject) {
                 $target->setDataUsingMethod($targetCode, $value);
-            } else if ($target instanceof \Magento\Framework\Api\ExtensibleDataInterface) {
-                $this->accessExtensionSetMethod($target, $code, $value);
             } elseif ($target instanceof \Magento\Framework\Api\AbstractSimpleObject) {
                 $target->setData($code, $value);
+            } else if ($target instanceof \Magento\Framework\Api\ExtensibleDataInterface) {
+                $this->accessExtensionSetMethod($target, $code, $value);
             } else {
                 throw new \InvalidArgumentException(
                     'Source should be array, Magento Object, ExtensibleDataInterface, or AbstractSimpleObject'
@@ -196,11 +196,11 @@ class Copy
             $value = isset($source[$code]) ? $source[$code] : null;
         } elseif ($source instanceof \Magento\Framework\DataObject) {
             $value = $source->getDataUsingMethod($code);
-        } elseif ($source instanceof \Magento\Framework\Api\ExtensibleDataInterface) {
-            $value = $this->accessExtensionGetMethod($source, $code);
         } elseif ($source instanceof \Magento\Framework\Api\AbstractSimpleObject) {
             $sourceArray = $source->__toArray();
             $value = isset($sourceArray[$code]) ? $sourceArray[$code] : null;
+        } elseif ($source instanceof \Magento\Framework\Api\ExtensibleDataInterface) {
+            $value = $this->accessExtensionGetMethod($source, $code);
         } else {
             throw new \InvalidArgumentException(
                 'Source should be array, Magento Object, ExtensibleDataInterface, or AbstractSimpleObject'
