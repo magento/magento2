@@ -14,10 +14,10 @@ $note = $element->getNote() ? '<div class="note">' . $element->getNote() . '</di
 $elementBeforeLabel = $element->getExtType() == 'checkbox' || $element->getExtType() == 'radio';
 $addOn = $element->getBeforeElementHtml() || $element->getAfterElementHtml();
 $fieldId = ($element->getHtmlContainerId()) ? ' id="' . $element->getHtmlContainerId() . '"' : '';
-$fieldClass = "field field-{$element->getId()} {$element->getCssClass()}";
+$fieldClass = "admin__field field field-{$element->getId()} {$element->getCssClass()}";
 $fieldClass .= ($elementBeforeLabel) ? ' choice' : '';
 $fieldClass .= ($addOn) ? ' with-addon' : '';
-$fieldClass .= ($element->getRequired()) ? ' required' : '';
+$fieldClass .= ($element->getRequired()) ? ' _required' : '';
 $fieldClass .= ($note) ? ' with-note' : '';
 
 $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
@@ -35,8 +35,9 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
             <?php echo $note ?>
         <?php else: ?>
             <?php echo $element->getLabelHtml() ?>
-            <div class="control">
+            <div class="admin__field-control control">
                 <?php echo($addOn) ? '<div class="addon">' . $element->getElementHtml() . '</div>' : $element->getElementHtml(); ?>
+                <?php echo $block->getHintHtml() ?>
                 <?php echo $note ?>
             </div>
         <?php endif; ?>
@@ -44,7 +45,6 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
             <div class="field-service" value-scope="<?php echo $element->getScopeLabel()?>">
             </div>
         <?php endif;?>
-        <?php echo $block->getHintHtml() ?>
     </div>
     <?php endif; ?>
 <?php endif; ?>
