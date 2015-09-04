@@ -5,10 +5,12 @@
  */
 namespace Magento\Setup\Controller;
 
+use Magento\Framework\App\MaintenanceMode;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
-class ReadinessCheck extends AbstractActionController
+class CompleteBackup extends AbstractActionController
 {
     /**
      * @return array|ViewModel
@@ -17,6 +19,7 @@ class ReadinessCheck extends AbstractActionController
     {
         $view = new ViewModel;
         $view->setTerminal(true);
+        $view->setTemplate('/magento/setup/complete-backup.phtml');
         return $view;
     }
 
@@ -26,7 +29,7 @@ class ReadinessCheck extends AbstractActionController
     public function progressAction()
     {
         $view = new ViewModel;
-        $view->setTemplate('/magento/setup/readiness-check/progress.phtml');
+        $view->setTemplate('/magento/setup/complete-backup/progress.phtml');
         $view->setTerminal(true);
         return $view;
     }
