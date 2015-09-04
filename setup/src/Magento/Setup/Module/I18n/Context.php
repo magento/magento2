@@ -31,11 +31,6 @@ class Context
     /**#@-*/
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
-     */
-    private $directoryRead;
-
-    /**
      * @var ComponentRegistrar
      */
     private $componentRegistrar;
@@ -45,9 +40,8 @@ class Context
      *
      * @param ComponentRegistrar $componentRegistrar
      */
-    public function __construct(Filesystem $filesystem, ComponentRegistrar $componentRegistrar)
+    public function __construct(ComponentRegistrar $componentRegistrar)
     {
-        $this->directoryRead = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->componentRegistrar = $componentRegistrar;
     }
 
@@ -94,7 +88,7 @@ class Context
         switch ($type) {
             case self::CONTEXT_TYPE_MODULE:
                 $absolutePath = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $value);
-                $path = $this->directoryRead->getRelativePath($absolutePath);
+                $path = str_replace(BP . '/', '', $absolutePath);
                 break;
             case self::CONTEXT_TYPE_THEME:
                 $path = 'app/design/' . $value;

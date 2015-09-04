@@ -126,7 +126,7 @@ class IncludeElementTest extends \PHPUnit_Framework_TestCase
 
         $this->filesystemMock->expects($this->once())
             ->method('getDirectoryRead')
-            ->with(DirectoryList::MODULES)
+            ->with(DirectoryList::ROOT)
             ->willReturn($modulesDirectoryMock);
 
         $this->moduleReaderMock->expects($this->once())

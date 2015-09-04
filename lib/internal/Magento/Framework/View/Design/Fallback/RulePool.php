@@ -11,6 +11,7 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem;
 use Magento\Framework\View\Design\Fallback\Rule\Composite;
 use Magento\Framework\View\Design\Fallback\Rule\ModularSwitch;
+use Magento\Framework\View\Design\Fallback\Rule\Module;
 use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
 use Magento\Framework\View\Design\Fallback\Rule\Simple;
 use Magento\Framework\View\Design\Fallback\Rule\Theme;
@@ -84,10 +85,11 @@ class RulePool
     private function createModuleRules($pattern, $optionalParams = [])
     {
         $rules = [];
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $modulePath) {
-            $rules[] = new Simple($modulePath . '/' . $pattern, $optionalParams);
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
+            list($namespace, $module) = explode('_', $moduleName);
+            $rules[] = new Module($modulePath . '/' . $pattern, $namespace, $module, $optionalParams);
         }
-        return $rules;
+        return [new Composite($rules)];
     }
 
     /**

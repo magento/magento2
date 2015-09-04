@@ -9,6 +9,9 @@
  */
 namespace Magento\TestFramework\Workaround\Cleanup;
 
+use Magento\Framework\Component\ModuleRegistrar;
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class StaticProperties
 {
     /**
@@ -19,7 +22,6 @@ class StaticProperties
      * @var array
      */
     protected static $_cleanableFolders = [
-        '/app/code/' => ['/app/code/*/*/Test/Unit/'],
         '/dev/tests/integration/framework' => [],
         '/lib/internal/' => ['/lib/internal/*/*/Test/Unit/', '/lib/internal/Magento/Framework/*/Test/Unit/']
     ];
@@ -41,6 +43,22 @@ class StaticProperties
         'Magento\TestFramework\Workaround\Cleanup\StaticProperties',
         'Magento\Framework\Phrase',
     ];
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $moduleRegistrar = new ModuleRegistrar();
+        /** @var \Magento\Framework\Filesystem $filesystem */
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Filesystem');
+        $dirRead = $filesystem->getDirectoryRead(DirectoryList::ROOT);
+        foreach ($moduleRegistrar->getPaths() as $moduleDir) {
+            $key = '/' . $dirRead->getRelativePath($moduleDir) . '/';
+            $value = $key . 'Test/Unit/';
+            self::$_cleanableFolders[$key] = [$value];
+        }
+    }
 
     /**
      * Check whether it is allowed to clean given class static variables

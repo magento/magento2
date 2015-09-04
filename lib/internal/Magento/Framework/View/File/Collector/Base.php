@@ -7,6 +7,7 @@ namespace Magento\Framework\View\File\Collector;
 
 use Magento\Framework\Filesystem;
 use Magento\Framework\Module\Dir\Search;
+use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\File\AbstractCollector;
 use Magento\Framework\View\File\Factory as FileFactory;
 use Magento\Framework\View\Helper\PathPattern as PathPatternHelper;
