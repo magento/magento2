@@ -49,7 +49,7 @@ define([
                         parent: '${ $.$data.filters.name }',
                         name: '${ $.$data.column.index }',
                         provider: '${ $.$data.filters.name }',
-                        dataScope: 'filters.${ $.$data.column.index }',
+                        dataScope: '${ $.$data.column.index }',
                         label: '${ $.$data.column.label }',
                         imports: {
                             visible: '${ $.$data.column.name }:visible'
@@ -68,7 +68,7 @@ define([
                         component: 'Magento_Ui/js/grid/filters/group',
                         childDefaults: {
                             component: 'Magento_Ui/js/form/element/date',
-                            provider: '${ $.parent }.${ $.name }',
+                            provider: '${ $.provider }',
                             dateFormat: 'MM/dd/YYYY',
                             template: 'ui/grid/filters/elements/date'
                         },
@@ -87,7 +87,7 @@ define([
                         component: 'Magento_Ui/js/grid/filters/group',
                         childDefaults: {
                             component: 'Magento_Ui/js/form/element/abstract',
-                            provider: '${ $.parent }.${ $.name }',
+                            provider: '${ $.provider }',
                             template: 'ui/grid/filters/elements/input'
                         },
                         children: {
