@@ -125,7 +125,7 @@ class ImageMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryProcessor
     public function afterSave(Product $product, AbstractAttribute $attribute)
     {
         if ($product->getIsDuplicate() == true) {
-            $this->duplicate($product);
+            $this->duplicate($product, $attribute->getAttributeCode());
             return;
         }
 
@@ -197,6 +197,29 @@ class ImageMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryProcessor
         $this->resourceEntryMediaGallery->deleteGallery($recordsToDelete);
         $this->removeDeletedImages($filesToDelete);
         $product->setData($attrCode, $value);
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\Product $product
+     * @param string $attributeCode
+     * @return $this
+     */
+    protected function duplicate($product, $attributeCode)
+    {
+        $mediaGalleryData = $product->getData($attributeCode);
+
+        if (!isset($mediaGalleryData['images']) || !is_array($mediaGalleryData['images'])) {
+            return $this;
+        }
+
+        $this->resourceEntryMediaGallery->duplicate(
+            $this,
+            isset($mediaGalleryData['duplicate']) ? $mediaGalleryData['duplicate'] : [],
+            $product->getOriginalId(),
+            $product->getId()
+        );
+
+        return $this;
     }
 
     /**
