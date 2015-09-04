@@ -77,7 +77,9 @@ try {
 
     \Magento\TestFramework\Helper\Bootstrap::setInstance(new \Magento\TestFramework\Helper\Bootstrap($bootstrap));
 
-    \Magento\Framework\App\Utility\Files::setInstance(new Magento\Framework\App\Utility\Files($magentoBaseDir));
+    \Magento\Framework\App\Utility\Files::setInstance(
+        new Magento\Framework\App\Utility\Files(new \Magento\Framework\Component\ComponentRegistrar(), $magentoBaseDir)
+    );
 
     /* Unset declared global variables to release the PHPUnit from maintaining their values between tests */
     unset($testsBaseDir, $magentoBaseDir, $logWriter, $settings, $shell, $application, $bootstrap);
