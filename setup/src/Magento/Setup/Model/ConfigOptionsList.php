@@ -141,6 +141,12 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 'If specified, then db connection validation will be skipped',
                 '-s'
             ),
+            new TextConfigOption(
+                ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS,
+                'Cache hosts'
+            ),
         ];
     }
 
@@ -161,6 +167,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         $configData[] = $this->configGenerator->createResourceConfig();
         $configData[] = $this->configGenerator->createXFrameConfig();
         $configData[] = $this->configGenerator->createModeConfig();
+        $configData[] = $this->configGenerator->createCacheHostsConfig($data);
         return $configData;
     }
 
@@ -170,6 +177,12 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     public function validate(array $options, DeploymentConfig $deploymentConfig)
     {
         $errors = [];
+
+        if (isset($options[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS])
+            && !preg_match('/^[a-zA-Z0-9_:,. ]+$/', $options[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS])
+        ) {
+            $errors[] = "Invalid cache hosts '{$options[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS]}'";
+        }
 
         if (isset($options[ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX])) {
             try {
