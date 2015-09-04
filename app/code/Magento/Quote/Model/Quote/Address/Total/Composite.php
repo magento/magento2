@@ -133,12 +133,11 @@ class Composite
 
         $totals = $this->totalListFactory->create();
         /** @var \Magento\Quote\Model\Quote\Address\Total $total */
-
+        $total = $this->totalFactory->create('Magento\Quote\Model\Quote\Address\Total');
         foreach ($this->getTotalCollector($storeId)->getCollectors() as $key => $collector) {
             if (!in_array($key, $this->allowedCollectors)) {
                 continue;
             }
-            $total = $this->totalFactory->create('Magento\Quote\Model\Quote\Address\Total');
             $collector->collect($shippingAssignment, $total);
             $result = $collector->fetch($total);
             $totals->add($total, $result);
