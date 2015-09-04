@@ -7,6 +7,7 @@ namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Customer\Model\AccountManagement;
 use Magento\Framework\App\Area;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\ScopeInterface;
 
@@ -1066,5 +1067,171 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $this->prepareInitiatePasswordReset($email, $templateIdentifier, $sender, $storeId, $customerId, $hash);
 
         $this->accountManagement->initiatePasswordReset($email, $template);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedExceptionMessage Invalid value of "" provided for the customerId field
+     */
+    public function testValidateResetPasswordTokenBadCustomerId()
+    {
+        $this->accountManagement->validateResetPasswordLinkToken(null, '');
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedExceptionMessage resetPasswordLinkToken is a required field
+     */
+    public function testValidateResetPasswordTokenBadResetPasswordLinkToken()
+    {
+        $this->accountManagement->validateResetPasswordLinkToken(22, null);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\State\InputMismatchException
+     * @expectedExceptionMessage Reset password token mismatch
+     */
+    public function testValidateResetPasswordTokenTokenMismatch()
+    {
+        $this->customerRegistry->expects($this->atLeastOnce())
+            ->method('retrieveSecureData')
+            ->willReturn($this->customerSecure);
+
+        $this->accountManagement->validateResetPasswordLinkToken(22, 'newStringToken');
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\State\ExpiredException
+     * @expectedExceptionMessage Reset password token expired
+     */
+    public function testValidateResetPasswordTokenTokenExpired()
+    {
+        $this->reInitModel();
+        $this->customerRegistry->expects($this->atLeastOnce())
+            ->method('retrieveSecureData')
+            ->willReturn($this->customerSecure);
+
+        $this->accountManagement->validateResetPasswordLinkToken(22, 'newStringToken');
+    }
+
+    /**
+     * return bool
+     */
+    public function testValidateResetPasswordToken()
+    {
+        $this->reInitModel();
+
+        $this->customer
+            ->expects($this->once())
+            ->method('getResetPasswordLinkExpirationPeriod')
+            ->willReturn(100000);
+
+        $this->customerRegistry->expects($this->atLeastOnce())
+            ->method('retrieveSecureData')
+            ->willReturn($this->customerSecure);
+
+        $this->assertTrue($this->accountManagement->validateResetPasswordLinkToken(22, 'newStringToken'));
+    }
+
+    /**
+     * reInit $this->accountManagement object
+     */
+    private function reInitModel()
+    {
+        $this->customerSecure = $this->getMockBuilder('Magento\Customer\Model\Data\CustomerSecure')
+            ->disableOriginalConstructor()
+            ->setMethods(['getRpToken', 'getRpTokenCreatedAt'])
+            ->getMock();
+
+        $this->customerSecure
+            ->expects($this->any())
+            ->method('getRpToken')
+            ->willReturn('newStringToken');
+
+        $date = date('Y-m-d', strtotime('-1 year'));
+
+        $this->customerSecure
+            ->expects($this->any())
+            ->method('getRpTokenCreatedAt')
+            ->willReturn($date);
+
+        $this->customer = $this->getMockBuilder('Magento\Customer\Model\Customer')
+            ->disableOriginalConstructor()
+            ->setMethods(['getResetPasswordLinkExpirationPeriod'])
+            ->getMock();
+
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->accountManagement = $this->objectManagerHelper->getObject(
+            'Magento\Customer\Model\AccountManagement',
+            [
+                'customerFactory' => $this->customerFactory,
+                'customerRegistry' => $this->customerRegistry,
+                'customerRepository' => $this->customerRepository,
+                'customerModel' => $this->customer,
+            ]
+        );
+    }
+
+    public function testChangeEmail()
+    {
+        $currentEmail = 'user1@example.com';
+        $newEmail = 'user1@example.com';
+        $customerId = 1;
+
+        $customerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+            ->getMockForAbstractClass();
+        $customerSecureMock = $this->getMockBuilder('Magento\Customer\Model\Data\CustomerSecure')
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'setRpToken',
+                'setRpTokenCreatedAt',
+            ])
+            ->getMock();
+
+        $customerMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($customerId);
+
+        $customerSecureMock->expects($this->once())
+            ->method('setRpToken')
+            ->with(null)
+            ->willReturnSelf();
+        $customerSecureMock->expects($this->once())
+            ->method('setRpTokenCreatedAt')
+            ->with(null)
+            ->willReturnSelf();
+
+        $this->customerRepository->expects($this->once())
+            ->method('get')
+            ->with($currentEmail)
+            ->willReturn($customerMock);
+        $this->customerRepository->expects($this->once())
+            ->method('save')
+            ->with($customerMock)
+            ->willReturnSelf();
+
+        $this->customerRegistry->expects($this->once())
+            ->method('retrieveSecureData')
+            ->with($customerId)
+            ->willReturn($customerSecureMock);
+
+        $this->assertTrue($this->accountManagement->changeEmail($currentEmail, $newEmail));
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\InvalidEmailOrPasswordException
+     * @expectedExceptionMessage Invalid login
+     */
+    public function testChangeException()
+    {
+        $currentEmail = 'user1@example.com';
+        $newEmail = 'user1@example.com';
+
+        $this->customerRepository->expects($this->once())
+            ->method('get')
+            ->with($currentEmail)
+            ->willThrowException(new NoSuchEntityException(__('NoSuchEntityException')));
+
+        $this->accountManagement->changeEmail($currentEmail, $newEmail);
     }
 }

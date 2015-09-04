@@ -134,6 +134,17 @@ interface AccountManagementInterface
     public function changePasswordById($customerId, $currentPassword, $newPassword);
 
     /**
+     * Change customer email.
+     *
+     * @api
+     * @param string $email
+     * @param string $newEmail
+     * @return bool true on success
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function changeEmail($email, $newEmail);
+
+    /**
      * Send an email to the customer with a password reset link.
      *
      * @api
