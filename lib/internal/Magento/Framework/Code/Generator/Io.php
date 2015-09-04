@@ -17,11 +17,6 @@ class Io
     const DEFAULT_DIRECTORY = 'var/generation';
 
     /**
-     * Directory permission for created directories
-     */
-    const DIRECTORY_PERMISSION = 0777;
-
-    /**
      * Path to directory where new file must be created
      *
      * @var string
