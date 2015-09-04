@@ -364,10 +364,10 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      */
     protected function postRequest(\Magento\Authorizenet\Model\Request $request)
     {
-        $debugData = ['request' => $request->getData()];
         $result = $this->responseFactory->create();
         $client = new \Magento\Framework\HTTP\ZendClient();
         $uri = $this->getConfigData('cgi_url');
+        $debugData = ['url' => $uri, 'request' => $request->getData()];
         $client->setUri($uri ? $uri : self::CGI_URL);
         $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
 
@@ -409,6 +409,7 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
                 ->setData('x_MD5_Hash', $r[37])
                 ->setXAccountNumber($r[50]);
         } else {
+            $this->_debug($debugData);
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Something went wrong in the payment gateway.')
             );
@@ -480,19 +481,19 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
         $client->setMethod(\Zend_Http_Client::POST);
         $client->setRawData($requestBody);
 
-        $debugData = ['request' => $requestBody];
+        $debugData = ['url' => $uri, 'request' => $requestBody];
 
         try {
             $responseBody = $client->request()->getBody();
             $debugData['result'] = $responseBody;
-            $this->_debug($debugData);
             libxml_use_internal_errors(true);
             $responseXmlDocument = new \Magento\Framework\Simplexml\Element($responseBody);
             libxml_use_internal_errors(false);
         } catch (\Exception $e) {
+            $this->_debug($debugData);
             throw new \Magento\Framework\Exception\LocalizedException(__('Payment updating error.'));
         }
-
+        $this->_debug($debugData);
         $this->transactionDetails[$transactionId] = $responseXmlDocument;
         return $responseXmlDocument;
     }
@@ -508,5 +509,13 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
         return isset($this->transactionDetails[$transactionId])
             ? $this->transactionDetails[$transactionId]
             : $this->loadTransactionDetails($transactionId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function _debug($debugData)
+    {
+        $this->logger->debug($debugData, ['not_empty_array'], (bool)$this->getConfigData('debug'));
     }
 }
