@@ -8,12 +8,25 @@ namespace Magento\Framework\Component;
 /**
  * Provides ability to statically register libraries
  */
-class LibraryRegistrar extends ComponentRegistrar
+class LibraryRegistrar extends AbstractComponentRegistrar
 {
     /**
-     * Paths to libraries
+     * This instance
      *
-     * @var string[]
+     * @var LibraryRegistrar
      */
-    protected static $componentPaths = [];
+    private static $instance;
+
+    /**
+     * returns an instance of library registrar
+     *
+     * @return LibraryRegistrar
+     */
+    public static function getInstance()
+    {
+        if (static::$instance === null) {
+            static::$instance = new LibraryRegistrar();
+        }
+        return static::$instance;
+    }
 }

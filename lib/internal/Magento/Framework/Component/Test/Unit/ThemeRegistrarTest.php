@@ -17,13 +17,13 @@ class ThemeRegistrarTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->theme = new ThemeRegistrar();
+        $this->theme = ThemeRegistrar::getInstance();
     }
 
     public function testGetPaths()
     {
-        ThemeRegistrar::register("test_theme_one", "some/path/name/one");
-        ThemeRegistrar::register("test_theme_two", "some/path/name/two");
+        $this->theme->register("test_theme_one", "some/path/name/one");
+        $this->theme->register("test_theme_two", "some/path/name/two");
         $expected = [
             'test_theme_one' => "some/path/name/one",
             'test_theme_two' => "some/path/name/two",
@@ -37,7 +37,7 @@ class ThemeRegistrarTest extends \PHPUnit_Framework_TestCase
      */
     public function testRegistrarWithException()
     {
-        ThemeRegistrar::register("test_theme_one", "some/path/name/one");
+        $this->theme->register("test_theme_one", "some/path/name/one");
     }
 
     public function testGetPath()

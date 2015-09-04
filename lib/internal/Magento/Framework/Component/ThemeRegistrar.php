@@ -6,14 +6,27 @@
 namespace Magento\Framework\Component;
 
 /**
- * Provides ability to statically register themes
+ * Provides ability to statically register libraries
  */
-class ThemeRegistrar extends ComponentRegistrar
+class ThemeRegistrar extends AbstractComponentRegistrar
 {
     /**
-     * Paths to themes
+     * This instance
      *
-     * @var string[]
+     * @var ThemeRegistrar
      */
-    protected static $componentPaths = [];
+    private static $instance;
+
+    /**
+     * returns an instance of theme registrar
+     *
+     * @return ThemeRegistrar
+     */
+    public static function getInstance()
+    {
+        if (static::$instance === null) {
+            static::$instance = new ThemeRegistrar();
+        }
+        return static::$instance;
+    }
 }

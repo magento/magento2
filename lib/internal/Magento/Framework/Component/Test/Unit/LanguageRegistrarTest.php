@@ -17,13 +17,13 @@ class LanguageRegistrarTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->language = new LanguageRegistrar();
+        $this->language = LanguageRegistrar::getInstance();
     }
 
     public function testGetPaths()
     {
-        LanguageRegistrar::register("test_language_one", "some/path/name/one");
-        LanguageRegistrar::register("test_language_two", "some/path/name/two");
+        $this->language->register("test_language_one", "some/path/name/one");
+        $this->language->register("test_language_two", "some/path/name/two");
         $expected = [
             'test_language_one' => "some/path/name/one",
             'test_language_two' => "some/path/name/two",
@@ -37,7 +37,7 @@ class LanguageRegistrarTest extends \PHPUnit_Framework_TestCase
      */
     public function testRegistrarWithException()
     {
-        LanguageRegistrar::register("test_language_one", "some/path/name/one");
+        $this->language->register("test_language_one", "some/path/name/one");
     }
 
     public function testGetPath()
