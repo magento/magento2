@@ -65,7 +65,7 @@ $item = $block->getItem();
 
             <?php if ($block->displayFinalPrice()): ?>
                 <span class="cart-tax-total"
-                    data-tax-toggle='{"itemTaxId" : "#eunit-item-tax-details<?php echo $item->getId(); ?>"}'>
+                      data-mage-init='{"taxToggle":  {"itemTaxId" : "#eunit-item-tax-details<?php echo $item->getId(); ?>"}}'>
                     <span class="weee" data-label="<?php echo $block->escapeHtml(__('Total')); ?>">
                         <?php echo $block->formatPrice($block->getFinalUnitDisplayPriceExclTax()); ?>
                     </span>
