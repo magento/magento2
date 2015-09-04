@@ -26,7 +26,7 @@ $numColumns = sizeof($block->getColumns());
 <?php if ($block->getCollection()): ?>
     <?php if ($block->canDisplayContainer()): ?>
 
-    <div id="<?php echo $block->getId() ?>" data-grid-id="<?php echo $block->getId() ?>">
+    <div id="<?php echo $this->escapeHtml($block->getId()) ?>" data-grid-id="<?php echo $this->escapeHtml($block->getId()) ?>">
     <?php else: ?>
         <?php echo $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
     <?php endif; ?>
@@ -41,8 +41,8 @@ $numColumns = sizeof($block->getColumns());
                 <div class="admin__data-grid-export">
                     <label
                         class="admin__control-support-text"
-                        for="<?php echo $block->getId() ?>_export"><?php echo __('Export to:') ?></label>
-                    <select name="<?php echo $block->getId() ?>_export" id="<?php echo $block->getId() ?>_export"
+                        for="<?php echo $this->escapeHtml($block->getId()) ?>_export"><?php echo __('Export to:') ?></label>
+                    <select name="<?php echo $this->escapeHtml($block->getId()) ?>_export" id="<?php echo $this->escapeHtml($block->getId()) ?>_export"
                             class="admin__control-select">
                         <?php foreach ($block->getExportTypes() as $_type): ?>
                             <option value="<?php echo $_type->getUrl() ?>"><?php echo $_type->getLabel() ?></option>
@@ -61,18 +61,18 @@ $numColumns = sizeof($block->getColumns());
                 <?php endif; ?>
                 <?php $countRecords = $block->getCollection()->getSize(); ?>
                 <div class="admin__control-support-text">
-                        <span id="<?php echo $block->getHtmlId() ?>-total-count" <?php echo $block->getUiId('total-count') ?>>
+                        <span id="<?php echo $this->escapeHtml($block->getHtmlId()) ?>-total-count" <?php echo $block->getUiId('total-count') ?>>
                             <?php echo $countRecords ?>
                         </span>
                     <?php echo __('records found') ?>
-                    <span id="<?php echo $block->getHtmlId() ?>_massaction-count"
+                    <span id="<?php echo $this->escapeHtml($block->getHtmlId()) ?>_massaction-count"
                           class="mass-select-info _empty"><strong data-role="counter">0</strong> <span><?php echo __('selected') ?></span></span>
                 </div>
 
             <?php if ($block->getPagerVisibility()): ?>
                 <div class="admin__data-grid-pager-wrap">
                     <select name="<?php echo $block->getVarNameLimit() ?>"
-                            id="<?php echo $block->getHtmlId()?>_page-limit"
+                            id="<?php echo $this->escapeHTML($block->getHtmlId())?>_page-limit"
                             onchange="<?php echo $block->getJsObjectName() ?>.loadByElement(this)"
                             class="admin__control-select">
                         <option value="20"<?php if ($block->getCollection()->getPageSize() == 20): ?>
@@ -91,7 +91,7 @@ $numColumns = sizeof($block->getColumns());
                             selected="selected"<?php endif; ?>>200
                         </option>
                     </select>
-                    <label for="<?php echo $block->getHtmlId()?><?php echo $block->getHtmlId()?>_page-limit"
+                    <label for="<?php echo $this->escapeHTML($block->getHtmlId())?><?php echo $this->escapeHTML($block->getHtmlId())?>_page-limit"
                         class="admin__control-support-text"><?php echo __('per page') ?></label>
 
                     <div class="admin__data-grid-pager">
@@ -107,12 +107,12 @@ $numColumns = sizeof($block->getColumns());
                             <button type="button" class="action-previous disabled"><span><?php echo __('Previous page') ?></span></button>
                         <?php endif; ?>
                         <input type="text"
-                               id="<?php echo $block->getHtmlId()?>_page-current"
+                               id="<?php echo $this->escapeHTML($block->getHtmlId())?>_page-current"
                                name="<?php echo $block->getVarNamePage() ?>"
                                value="<?php echo $_curPage ?>"
                                class="admin__control-text"
                                onkeypress="<?php echo $block->getJsObjectName() ?>.inputPage(event, '<?php echo $_lastPage ?>')" <?php echo $block->getUiId('current-page') ?> />
-                        <label class="admin__control-support-text" for="<?php echo $block->getHtmlId()?>_page-current">
+                        <label class="admin__control-support-text" for="<?php echo $this->escapeHTML($block->getHtmlId())?>_page-current">
                             <?php echo __('of %1', '<span>' . $block->getCollection()->getLastPageNumber() . '</span>') ?>
                         </label>
                         <?php if ($_curPage < $_lastPage): ?>
@@ -133,7 +133,7 @@ $numColumns = sizeof($block->getColumns());
     <?php endif; ?>
 
     <div class="admin__data-grid-wrap admin__data-grid-wrap-static">
-        <table class="data-grid" id="<?php echo $block->getId() ?>_table">
+        <table class="data-grid" id="<?php echo $this->escapeHtml($block->getId()) ?>_table">
             <?php
             /* This part is commented to remove all <col> tags from the code. */
             /* foreach ($block->getColumns() as $_column): ?>
@@ -263,7 +263,7 @@ $numColumns = sizeof($block->getColumns());
         registry.get('<?php echo $block->getDependencyJsObject() ?>', function (<?php echo $block->getDependencyJsObject() ?>) {
     <?php endif; ?>
 
-    <?php echo $block->getJsObjectName() ?> = new varienGrid('<?php echo $block->getId() ?>', '<?php echo $block->getGridUrl() ?>', '<?php echo $block->getVarNamePage() ?>', '<?php echo $block->getVarNameSort() ?>', '<?php echo $block->getVarNameDir() ?>', '<?php echo $block->getVarNameFilter() ?>');
+    <?php echo $block->getJsObjectName() ?> = new varienGrid(<?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getId()) ?>, '<?php echo $block->getGridUrl() ?>', '<?php echo $block->getVarNamePage() ?>', '<?php echo $block->getVarNameSort() ?>', '<?php echo $block->getVarNameDir() ?>', '<?php echo $block->getVarNameFilter() ?>');
     <?php echo $block->getJsObjectName() ?>.useAjax = '<?php echo $block->getUseAjax() ?>';
     <?php if ($block->getRowClickCallback()): ?>
     <?php echo $block->getJsObjectName() ?>.rowClickCallback = <?php echo $block->getRowClickCallback() ?>;
