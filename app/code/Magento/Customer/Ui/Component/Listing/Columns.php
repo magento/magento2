@@ -8,24 +8,26 @@ namespace Magento\Customer\Ui\Component\Listing;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Customer\Ui\Component\ColumnFactory;
 use Magento\Customer\Api\Data\AttributeMetadataInterface as AttributeMetadata;
-use\Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Ui\Component\Grid\Column\InlineEditUpdater;
+use Magento\Customer\Api\CustomerMetadataInterface;
 
 class Columns extends \Magento\Ui\Component\Listing\Columns
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $columnSortOrder;
 
-    /**
-     * @var AttributeRepository
-     */
+    /** @var AttributeRepository  */
     protected $attributeRepository;
+
+    /** @var InlineEditUpdater */
+    protected $inlineEditUpdater;
 
     /**
      * @param ContextInterface $context
      * @param ColumnFactory $columnFactory
      * @param AttributeRepository $attributeRepository
+     * @param InlineEditUpdater $inlineEditor
      * @param array $components
      * @param array $data
      */
@@ -33,12 +35,14 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
         ContextInterface $context,
         ColumnFactory $columnFactory,
         AttributeRepository $attributeRepository,
+        InlineEditUpdater $inlineEditor,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $components, $data);
         $this->columnFactory = $columnFactory;
         $this->attributeRepository = $attributeRepository;
+        $this->inlineEditUpdater = $inlineEditor;
     }
 
     /**
@@ -113,6 +117,14 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     {
         $component = $this->components[$attributeData[AttributeMetadata::ATTRIBUTE_CODE]];
         $this->addOptions($component, $attributeData);
+        if ($attributeData['entity_type_code'] == CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER) {
+            $this->inlineEditUpdater->applyEditing(
+                $component,
+                $attributeData[AttributeMetadata::FRONTEND_INPUT],
+                $attributeData[AttributeMetadata::VALIDATION_RULES],
+                $attributeData[AttributeMetadata::REQUIRED]
+            );
+        }
 
         if ($attributeData[AttributeMetadata::BACKEND_TYPE] != 'static') {
             if ($attributeData[AttributeMetadata::IS_USED_IN_GRID]) {
