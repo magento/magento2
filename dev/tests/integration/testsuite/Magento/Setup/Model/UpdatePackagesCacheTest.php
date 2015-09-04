@@ -10,6 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Composer\ComposerJsonFinder;
 use Magento\Framework\Composer\MagentoComposerApplicationFactory;
+use Magento\Framework\Stdlib\DateTime;
 
 /**
  * Tests Magento\Framework\ComposerInformation
@@ -22,12 +23,12 @@ class UpdatePackagesCacheTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Filesystem\DirectoryList
+     * @var \Magento\Framework\App\Filesystem\DirectoryList
      */
     private $directoryList;
 
     /**
-     * @var ComposerJsonFinder
+     * @var ComposerJsonFinder|\PHPUnit_Framework_MockObject_MockObject
      */
     private $composerJsonFinder;
 
@@ -53,23 +54,15 @@ class UpdatePackagesCacheTest extends \PHPUnit_Framework_TestCase
      */
     private function setupDirectory($composerDir)
     {
-        $directories = [
-            DirectoryList::CONFIG => [DirectoryList::PATH => __DIR__ . '/_files/'],
-            DirectoryList::ROOT => [DirectoryList::PATH => __DIR__ . '/_files/' . $composerDir],
-            DirectoryList::COMPOSER_HOME => [DirectoryList::PATH => __DIR__ . '/_files/' . $composerDir],
-        ];
+        $absoluteComposerDir = realpath(__DIR__ . '/_files/' . $composerDir . '/composer.json');
+        $this->composerJsonFinder = $this->getMockBuilder('Magento\Framework\Composer\ComposerJsonFinder')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->composerJsonFinder->expects($this->any())->method('findComposerJson')->willReturn($absoluteComposerDir);
 
-        $this->directoryList = $this->objectManager->create(
-            'Magento\Framework\App\Filesystem\DirectoryList',
-            ['root' => __DIR__ . '/_files/' . $composerDir, 'config' => $directories]
-        );
-
-        $this->filesystem = $this->objectManager->create(
-            'Magento\Framework\Filesystem',
-            ['directoryList' => $this->directoryList]
-        );
-
-        $this->composerJsonFinder = new ComposerJsonFinder($this->directoryList);
+        $this->directoryList = $this->objectManager->get('Magento\Framework\App\Filesystem\DirectoryList');
+        $this->filesystem = $this->objectManager->get('Magento\Framework\Filesystem');
 
         /** @var \Magento\Framework\Composer\ComposerInformation $composerInfo */
         $this->composerInformation = $this->objectManager->create(
@@ -85,7 +78,7 @@ class UpdatePackagesCacheTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPackagesForUpdate()
     {
-        $packageName = 'magento/language-de_de';
+        $packageName = 'magento/module-store';
 
         $this->setupDirectory('testSkeleton');
 
@@ -98,7 +91,8 @@ class UpdatePackagesCacheTest extends \PHPUnit_Framework_TestCase
                     $this->directoryList
                 ),
                 'filesystem' => $this->filesystem,
-                'composerInfo' => $this->composerInformation
+                'dateTime' => new DateTime(),
+                'composerInformation' => $this->composerInformation
             ]
         );
 
