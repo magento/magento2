@@ -8,13 +8,13 @@
     <div class="legend">
         <span><?php echo __('Additional Cache Management') ?></span>
     </div>
-    <div class="field">
+    <div class="admin__field">
         <button onclick="setLocation('<?php echo $block->getCleanImagesUrl() ?>')" type="button">
             <?php echo __('Flush Catalog Images Cache') ?>
         </button>
         <label class="label"><?php echo __('Pregenerated product images files') ?></label>
     </div>
-    <div class="field">
+    <div class="admin__field">
         <button onclick="setLocation('<?php echo $block->getCleanMediaUrl() ?>')" type="button">
             <?php echo __('Flush JavaScript/CSS Cache') ?>
         </button>
@@ -23,7 +23,7 @@
     <?php
     if (!$block->isInProductionMode()):
         ?>
-        <div class="field">
+        <div class="admin__field">
             <button onclick="setLocation('<?php echo $block->getCleanStaticFilesUrl() ?>')" type="button">
                 <?php echo __('Flush Static Files Cache') ?>
             </button>
