@@ -25,7 +25,7 @@ class ViewActionTest extends \PHPUnit_Framework_TestCase
     protected $urlBuilder;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
 
@@ -36,11 +36,11 @@ class ViewActionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $data
-     * @param $dataSourceItems
-     * @param $expectedDataSourceItems
-     * @param $expectedUrlPath
-     * @param $expectedUrlParam
+     * @param array $data
+     * @param array $dataSourceItems
+     * @param array $expectedDataSourceItems
+     * @param string $expectedUrlPath
+     * @param array $expectedUrlParam
      * @dataProvider prepareDataSourceDataProvider
      */
     public function testPrepareDataSource($data, $dataSourceItems, $expectedDataSourceItems, $expectedUrlPath, $expectedUrlParam)
@@ -67,6 +67,10 @@ class ViewActionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedDataSourceItems, $dataSource['data']['items']);
     }
 
+    /**
+     * Data provider for testPrepareDataSource
+     * @return array
+     */
     public function prepareDataSourceDataProvider()
     {
         return [
