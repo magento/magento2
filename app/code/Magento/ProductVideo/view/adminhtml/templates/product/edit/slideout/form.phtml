@@ -8,4 +8,12 @@
 <div id="<?php echo $block->getNameInLayout() ?>" style="display:none">
     <?php echo $block->getFormHtml();?>
     <?php echo $block->getAfterElementHtml();?>
+  <div id="video-player-preview-location">
+    <div class="video-player-container"></div>
+    <div class="video-information title"><label>Title: </label><span></span></div>
+    <div class="video-information uploaded"><label>Uploaded: </label><span></span></div>
+    <div class="video-information uploader"><label>Uploader: </label><span></span></div>
+    <div class="video-information duration"><label>Duration: </label><span></span></div>
+  </div>
 </div>
+
