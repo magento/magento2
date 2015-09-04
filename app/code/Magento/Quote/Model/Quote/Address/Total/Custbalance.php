@@ -5,20 +5,24 @@
  */
 namespace Magento\Quote\Model\Quote\Address\Total;
 
+use Magento\Quote\Api\Data\ShippingAssignmentInterface;
+use Magento\Quote\Model\Quote\Address\Total;
+
 class Custbalance extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 {
     /**
-     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface|\Magento\Quote\Model\Quote\Address $shippingAssignment
-     * @param \Magento\Quote\Model\Quote\Address\Total $total
+     * @param ShippingAssignmentInterface $shippingAssignment
+     * @param Total $total
      * @return $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function collect(\Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment, \Magento\Quote\Model\Quote\Address\Total $total)
+    public function collect(ShippingAssignmentInterface $shippingAssignment, Total $total)
     {
-        $shippingAssignment->setCustbalanceAmount(0);
-        $shippingAssignment->setBaseCustbalanceAmount(0);
+        $total->setCustbalanceAmount(0);
+        $total->setBaseCustbalanceAmount(0);
 
-        $shippingAssignment->setGrandTotal($shippingAssignment->getGrandTotal() - $shippingAssignment->getCustbalanceAmount());
-        $shippingAssignment->setBaseGrandTotal($shippingAssignment->getBaseGrandTotal() - $shippingAssignment->getBaseCustbalanceAmount());
+        $total->setGrandTotal($total->getGrandTotal() - $total->getCustbalanceAmount());
+        $total->setBaseGrandTotal($total->getBaseGrandTotal() - $total->getBaseCustbalanceAmount());
 
         return $this;
     }

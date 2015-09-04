@@ -2043,9 +2043,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
          * If quote is virtual we are using totals of billing address because
          * all items assigned to it
          */
-        if ($this->isVirtual()) {
-            return $this->getBillingAddress()->getTotals();
-        }
+
+        /** @TODO verify virtual quote support MAGETWO-38595*/
+//        if ($this->isVirtual()) {
+//            return $this->getBillingAddress()->getTotals();
+//        }
 
         $total = $this->totalsCollector->collectQuoteTotals($this);
 

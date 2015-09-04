@@ -80,7 +80,8 @@ class TotalsCollector
 
     protected $allowedCollectors = array(
         'subtotal',
-        'grand_total'
+        'grand_total',
+        'customerbalance'
     );
 
 

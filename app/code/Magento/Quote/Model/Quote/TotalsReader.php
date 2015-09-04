@@ -69,7 +69,8 @@ class TotalsReader
 
     protected $allowedCollectors = array(
         'subtotal',
-        'grand_total'
+        'grand_total',
+        'customerbalance'
     );
 
 
@@ -105,8 +106,10 @@ class TotalsReader
                 continue;
             }
             $data = $reader->fetch($total);
-            $totalInstance = $this->convert($data);
-            $output[$totalInstance->getCode()] = $totalInstance;
+            if ($data !== null) {
+                $totalInstance = $this->convert($data);
+                $output[$totalInstance->getCode()] = $totalInstance;
+            }
         }
 
         return $output;
