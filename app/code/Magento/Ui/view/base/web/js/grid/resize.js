@@ -26,13 +26,17 @@ define([
             },
             storageColumnsData: {},
             columnsElements: {},
+            tableWidth: 0,
+            sumColumnsWidth: 0,
             showLines: 4,
             resizableElementClass: 'shadow-div',
             resizingColumnClass: '_resizing',
+            fixedLayoutClass: '_layout-fixed',
             inResizeClass: '_in-resize',
             visibleClass: '_resize-visible',
             cellContentElement: 'div.data-grid-cell-content',
             minColumnWidth: 40,
+            windowResize: false,
             resizable: false,
             resizeConfig: {
                 maxRowsHeight: [],
@@ -59,7 +63,9 @@ define([
                 'mouseupHandler',
                 'refreshLastColumn',
                 'refreshMaxRowHeight',
-                '_eventProxy'
+                'preprocessingWidth',
+                '_eventProxy',
+                'checkAfterResize'
             );
 
             this._super();
@@ -80,8 +86,109 @@ define([
          */
         initTable: function (table) {
             this.table = table;
-
+            this.tableWidth = $(table).outerWidth();
+            $(table).addClass(this.fixedLayoutClass);
+            $(window).resize(this.checkAfterResize);
             return this;
+        },
+
+        /**
+         * Window resize handler,
+         * check changes on table width and
+         * set new width to variable
+         * after window resize start preprocessingWidth method
+         */
+        checkAfterResize: function () {
+            var tableWidth,
+                self = this;
+
+            setTimeout(function () {
+                tableWidth = $(self.table).outerWidth();
+
+                if (self.tableWidth !== tableWidth) {
+                    self.tableWidth = tableWidth;
+                } else {
+                    self.preprocessingWidth();
+                }
+            }, 300);
+        },
+
+        /**
+         * Check conditions to set minimal width
+         */
+        checkSumColumnsWidth: function () {
+            var table = $(this.table),
+                elems = table.find('th:not([style*="width: auto"]):visible'),
+                elemsWidthMin = table.find('th[style*="width: ' + (this.minColumnWidth - 1) + 'px"]:visible'),
+                elemsWidthAuto = table.find('th[style*="width: auto"]:visible'),
+                model;
+
+            this.sumColumnsWidth = 0;
+            _.each(elems, function (elem) {
+                model = ko.dataFor(elem);
+                model.width && model.width !== 'auto' ? this.sumColumnsWidth += model.width : false;
+            }, this);
+
+            if (
+                    this.sumColumnsWidth + elemsWidthAuto.length *
+                    this.minColumnWidth + elemsWidthMin.length *
+                    this.minColumnWidth > this.tableWidth
+            ) {
+                return true;
+            }
+
+            return false;
+        },
+
+        /**
+         * Set minimal width to element with "auto" width
+         */
+        setWidthToColumnsWidthAuto: function () {
+            var elemsWidthAuto = $(this.table).find('th[style*="width: auto"]:visible');
+
+            _.each(elemsWidthAuto, function (elem) {
+                $(elem).outerWidth(this.minColumnWidth - 1);
+            }, this);
+        },
+
+        /**
+         * Check conditions to set auto width
+         */
+        hasMinimal: function () {
+            var table = $(this.table),
+                elemsWidthMin = table.find('th[style*="width: ' + (this.minColumnWidth - 1) + 'px"]:visible'),
+                elemsWidthAuto = table.find('th[style*="width: auto"]:visible');
+
+            if (
+                    elemsWidthAuto && this.sumColumnsWidth + elemsWidthAuto.length *
+                    this.minColumnWidth + elemsWidthMin.length * this.minColumnWidth + 5 < this.tableWidth
+            ) {
+                return true;
+            }
+
+            return false;
+        },
+
+        /**
+         * Set "auto" width to element with minimal width
+         */
+        setAuto: function () {
+            var elemsWidthAuto = $(this.table).find('th[style*="width: ' + (this.minColumnWidth - 1) + 'px"]:visible');
+
+            _.each(elemsWidthAuto, function (elem) {
+                $(elem).outerWidth('auto');
+            }, this);
+        },
+
+        /**
+         * Check columns width and preprocessing
+         */
+        preprocessingWidth: function () {
+            if (this.checkSumColumnsWidth()) {
+                this.setWidthToColumnsWidthAuto();
+            } else if (this.hasMinimal()) {
+                this.setAuto();
+            }
         },
 
         /**
@@ -99,7 +206,7 @@ define([
 
             model.width = this.getDefaultWidth(column);
 
-            if (!this.hasColumn(model)) {
+            if (!this.hasColumn(model, false)) {
                 this.initResizableElement(column);
                 this.columnsElements[model.index] = column;
                 $(column).outerWidth(model.width);
@@ -107,8 +214,10 @@ define([
             }
 
             this.refreshLastColumn(column);
+            this.preprocessingWidth();
 
             model.on('visible', this.refreshLastColumn.bind(this, column));
+            model.on('visible', this.preprocessingWidth.bind(this));
         },
 
         /**
@@ -236,11 +345,9 @@ define([
             rowElements
                 .find('td:eq(' + this.resizeConfig.curResizeElem.ctx.$index() + ')')
                 .addClass(this.resizingColumnClass);
-            $(this.resizeConfig.curResizeElem.elem).addClass(this.resizingColumnClass);
             rowElements
                 .find('td:eq(' + this.resizeConfig.depResizeElem.ctx.$index() + ')')
                 .addClass(this.resizingColumnClass);
-            $(this.resizeConfig.depResizeElem.elem).addClass(this.resizingColumnClass);
         },
 
         /**
@@ -252,11 +359,9 @@ define([
             rowElements
                 .find('td:eq(' + this.resizeConfig.curResizeElem.ctx.$index() + ')')
                 .removeClass(this.resizingColumnClass);
-            $(this.resizeConfig.curResizeElem.elem).removeClass(this.resizingColumnClass);
             rowElements
                 .find('td:eq(' + this.resizeConfig.depResizeElem.ctx.$index() + ')')
                 .removeClass(this.resizingColumnClass);
-            $(this.resizeConfig.depResizeElem.elem).removeClass(this.resizingColumnClass);
         },
 
         /**
