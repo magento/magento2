@@ -5,7 +5,7 @@
     * Fixed an issue where customer account page in Admin produces exception
     * Fixed an issue where import validation is failed in case of import products for multiple websites
     * Unable to import or export products with multi-select attributes
-    * Fixed an issue where DI compilation fails on class keyword 
+    * Fixed an issue where DI compilation fails on class keyword
     * Fixed an issue where UK PayPal Website Payments Pro Hosted Solution doesn't work
     * Fixed an issue where US PayPal payment methods are not working
     * Fixed an issue where Authorize.net does not work in production mode
