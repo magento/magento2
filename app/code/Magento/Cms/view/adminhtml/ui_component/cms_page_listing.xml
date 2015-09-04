@@ -472,7 +472,7 @@
                 </item>
                 <item name="config" xsi:type="array">
                     <item name="resizeEnabled" xsi:type="boolean">false</item>
-                    <item name="resizeDefaultWidth" xsi:type="string">60</item>
+                    <item name="resizeDefaultWidth" xsi:type="string">55</item>
                     <item name="draggable" xsi:type="boolean">false</item>
                     <item name="indexField" xsi:type="string">page_id</item>
                     <item name="controlVisibility" xsi:type="boolean">false</item>
@@ -573,7 +573,6 @@
                 <item name="config" xsi:type="array">
                     <item name="editor" xsi:type="string">date</item>
                     <item name="dataType" xsi:type="string">date</item>
-                    <item name="resizeEnabled" xsi:type="boolean">false</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Created</item>
                 </item>
@@ -685,7 +684,7 @@
                 <item name="config" xsi:type="array">
                     <item name="draggable" xsi:type="boolean">false</item>
                     <item name="resizeEnabled" xsi:type="boolean">false</item>
-                    <item name="resizeDefaultWidth" xsi:type="string">120</item>
+                    <item name="resizeDefaultWidth" xsi:type="string">107</item>
                     <item name="dataType" xsi:type="string">actions</item>
                     <item name="indexField" xsi:type="string">page_id</item>
                     <item name="blockVisibility" xsi:type="boolean">true</item>
