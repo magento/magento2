@@ -121,6 +121,8 @@ class ImageMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryProcessor
      * @param Product $product
      * @param AbstractAttribute $attribute
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function afterSave(Product $product, AbstractAttribute $attribute)
     {
