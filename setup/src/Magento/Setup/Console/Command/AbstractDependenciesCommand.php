@@ -6,7 +6,7 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\App\Utility\Files;
-use Magento\Framework\Component\ModuleRegistrar;
+use Magento\Framework\Component\ComponentRegistrar;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -74,7 +74,7 @@ abstract class AbstractDependenciesCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            Files::setInstance(new Files(new ModuleRegistrar(), $input->getOption(self::INPUT_KEY_DIRECTORY)));
+            Files::setInstance(new Files(new ComponentRegistrar(), $input->getOption(self::INPUT_KEY_DIRECTORY)));
             $this->buildReport($input->getOption(self::INPUT_KEY_OUTPUT));
             $output->writeln('<info>Report successfully processed.</info>');
         } catch (\Exception $e) {
