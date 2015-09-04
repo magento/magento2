@@ -205,7 +205,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $registry=$this->getMock('Magento\Framework\Registry', [], [], '', false);
         $registry->expects($this->any())
             ->method('registry')
-            ->with('currentproduct')
+            ->with('current_product')
             ->will($this->returnValue($product));
 
         $this->assertEquals($testArray, $this->helperData->getWeeAttributesForBundle($product));
