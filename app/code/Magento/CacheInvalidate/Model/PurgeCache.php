@@ -63,20 +63,20 @@ class PurgeCache
     public function sendPurgeRequest($tagsPattern)
     {
         $config = $this->configReader->load(\Magento\Framework\Config\File\ConfigFilePool::APP_ENV);
-        $hosts = isset($config['cache_servers']) ? $config['cache_servers'] : ['127.0.0.1'];
+        $servers = isset($config['cache_servers']) ? $config['cache_servers'] : [['host' => '127.0.0.1']];
         $headers = ['X-Magento-Tags-Pattern' => $tagsPattern];
         $this->socketAdapter->setOptions(['timeout' => 10]);
-        foreach ($hosts as $host) {
-            if (!strpos($host, '://')) {
-                $host = 'http://' . $host;
+        foreach ($servers as $server) {
+            if (!strpos($server['host'], '://')) {
+                $server['host'] = 'http://' . $server['host'];
             }
-            $this->uri->parse($host);
-            if (!$this->uri->getPort()) {
-                $this->uri->setPort(80);
+            if (!isset($server['port'])) {
+                $server['port'] = 80;
             }
+            $uri = $server['host'] . ':' . $server['port'];
             try {
-                $this->socketAdapter->connect($this->uri->getHost(), $this->uri->getPort());
-                $this->socketAdapter->write('PURGE', $this->uri, '1.1', $headers);
+                $this->socketAdapter->connect($server['host'], $server['port']);
+                $this->socketAdapter->write('PURGE', $this->uri->parse($uri), '1.1', $headers);
                 $this->socketAdapter->close();
             } catch (Exception $e) {
                 $this->logger->critical($e->getMessage(), compact('hosts', 'tagsPattern'));
