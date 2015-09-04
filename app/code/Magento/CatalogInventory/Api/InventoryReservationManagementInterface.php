@@ -20,7 +20,7 @@ interface InventoryReservationManagementInterface
      *
      * @param InventoryRequestInterface $request
      * @param InventoryResponseInterface $response
-     * @return InventoryReservationInterface
+     * @return InventoryReservationInterface[]
      */
     public function createReservation(InventoryRequestInterface $request, InventoryResponseInterface $response);
 
@@ -32,7 +32,7 @@ interface InventoryReservationManagementInterface
      *
      * @param InventoryRequestInterface[] $requests
      * @param InventoryResponseInterface[] $responses
-     * @return InventoryReservationInterface[]
+     * @return InventoryReservationInterface[][]
      */
     public function createReservations($requests, $responses);
 

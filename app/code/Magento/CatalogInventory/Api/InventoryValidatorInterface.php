@@ -19,7 +19,7 @@ interface InventoryValidatorInterface
      * Validates inventory requests based on registry response
      *
      * @param InventoryRequestInterface[] $requests
-     * @param InventoryRecordInterface[][] $response
+     * @param InventoryResponseInterface[] $response
      * @return InventoryErrorInterface[]
      */
     public function validateRequests(array $requests, $response);
