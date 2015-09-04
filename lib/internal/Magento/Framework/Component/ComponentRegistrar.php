@@ -73,7 +73,8 @@ class ComponentRegistrar implements ComponentRegistrarInterface
     /**
      * Checks if type of component is valid
      *
-     * @param $type
+     * @param string $type
+     * @return void
      * @throws \LogicException
      */
     private static function validateType($type)
