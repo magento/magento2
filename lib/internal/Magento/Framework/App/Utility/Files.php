@@ -5,7 +5,7 @@
  */
 
 namespace Magento\Framework\App\Utility;
-use Magento\Framework\Component\ModuleRegistrar;
+use Magento\Framework\Component\ComponentRegistrar;
 
 /**
  * A helper to gather specific kind of files in Magento application
@@ -16,9 +16,9 @@ use Magento\Framework\Component\ModuleRegistrar;
 class Files
 {
     /**
-     * @var ModuleRegistrar
+     * @var ComponentRegistrar
      */
-    protected $moduleRegistrar;
+    protected $componentRegistrar;
 
     /**
      * @var \Magento\Framework\App\Utility\Files
@@ -88,19 +88,19 @@ class Files
     /**
      * Set path to source code
      *
-     * @param ModuleRegistrar $moduleRegistrar
+     * @param ComponentRegistrar $componentRegistrar
      * @param string $pathToSource
      */
-    public function __construct(ModuleRegistrar $moduleRegistrar, $pathToSource)
+    public function __construct(ComponentRegistrar $componentRegistrar, $pathToSource)
     {
-        $this->moduleRegistrar = $moduleRegistrar;
+        $this->ComponentRegistrar = $componentRegistrar;
         $this->_path = $pathToSource;
     }
 
     private function getModuleTestDirs()
     {
         $exclude = [];
-        foreach ($this->moduleRegistrar->getPaths() as $moduleDir) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
             $exclude[] = '#' . str_replace(BP . '/', '', $moduleDir) . '/Test#';
         }
         return $exclude;
@@ -109,7 +109,7 @@ class Files
     private function getModuleDirs()
     {
         $moduleDirs = [];
-        foreach ($this->moduleRegistrar->getPaths() as $path) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $path) {
             $moduleDirs[] = str_replace(BP, $this->_path, $path);
         }
         return $moduleDirs;
@@ -448,7 +448,7 @@ class Files
      */
     protected function _parseModuleLayout($file, $path)
     {
-        foreach ($this->moduleRegistrar->getPaths() as $moduleName => $modulePath) {
+        foreach ($this->ComponentRegistrar->getPaths() as $moduleName => $modulePath) {
             $modulePath = str_replace(BP . '/', '', $modulePath);
             if (preg_match(
                     '/^' . preg_quote("{$path}/{$modulePath}/", '/') . 'view\/([a-z]+)\/layout\/(.+)$/i',
@@ -714,7 +714,7 @@ class Files
      */
     protected function _parseModuleStatic($file, $path)
     {
-        foreach ($this->moduleRegistrar->getPaths() as $moduleName => $modulePath) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
             $modulePath = str_replace(BP . '/', '', $modulePath);
             if (preg_match(
                     '/^' . preg_quote("{$path}/{$modulePath}/", '/') . 'view\/([a-z]+)\/web\/(.+)$/i',
@@ -738,7 +738,7 @@ class Files
      */
     protected function _parseModuleLocaleStatic($file, $path)
     {
-        foreach ($this->moduleRegistrar->getPaths() as $moduleName => $modulePath) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
             $modulePath = str_replace(BP . '/', '', $modulePath);
             $appCode = preg_quote("{$path}/{$modulePath}/", '/');
             if (preg_match('/^' . $appCode . 'view\/([a-z]+)\/web\/i18n\/([a-z_]+)\/(.+)$/i', $file, $matches) === 1 ) {
@@ -893,7 +893,7 @@ class Files
      */
     protected function _parseModuleTemplate($file, $path)
     {
-        foreach ($this->moduleRegistrar->getPaths() as $moduleName => $modulePath) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
             $modulePath = str_replace(BP . '/', '', $modulePath);
             if (preg_match(
                     '/^' . preg_quote("{$path}/{$modulePath}/", '/') . 'view\/([a-z]+)\/templates\/(.+)$/i',
@@ -1261,7 +1261,12 @@ class Files
         $key = __METHOD__ . "/{$moduleName}";
         if (!isset(self::$_cache[$key])) {
             self::$_cache[$key] = file_exists(
-                "{$this->_path}/" . str_replace(BP . '/', '', $this->moduleRegistrar->getPath($moduleName))
+                "{$this->_path}/" . str_replace(
+                    BP .
+                    '/',
+                    '',
+                    $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName)
+                )
             );
         }
 

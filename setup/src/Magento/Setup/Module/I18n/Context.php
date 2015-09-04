@@ -6,7 +6,7 @@
 namespace Magento\Setup\Module\I18n;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Component\ModuleRegistrar;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem;
 
 /**
@@ -36,19 +36,19 @@ class Context
     private $directoryRead;
 
     /**
-     * @var ModuleRegistrar
+     * @var ComponentRegistrar
      */
-    private $moduleRegistrar;
+    private $componentRegistrar;
 
     /**
      * Constructor
      *
-     * @param ModuleRegistrar $moduleRegistrar
+     * @param ComponentRegistrar $componentRegistrar
      */
-    public function __construct(Filesystem $filesystem, ModuleRegistrar $moduleRegistrar)
+    public function __construct(Filesystem $filesystem, ComponentRegistrar $componentRegistrar)
     {
         $this->directoryRead = $filesystem->getDirectoryRead(DirectoryList::ROOT);
-        $this->moduleRegistrar = $moduleRegistrar;
+        $this->componentRegistrar = $componentRegistrar;
     }
 
     /**
@@ -63,7 +63,7 @@ class Context
      */
     public function getContextByPath($path)
     {
-        $moduleDirs = $this->moduleRegistrar->getPaths();
+        $moduleDirs = $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE);
         $invertedModuleDirsMap = array_flip($moduleDirs);
         if (isset($invertedModuleDirsMap[$path])) {
             $type = self::CONTEXT_TYPE_MODULE;
@@ -93,7 +93,7 @@ class Context
     {
         switch ($type) {
             case self::CONTEXT_TYPE_MODULE:
-                $absolutePath = $this->moduleRegistrar->getPath($value);
+                $absolutePath = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $value);
                 $path = $this->directoryRead->getRelativePath($absolutePath);
                 break;
             case self::CONTEXT_TYPE_THEME:

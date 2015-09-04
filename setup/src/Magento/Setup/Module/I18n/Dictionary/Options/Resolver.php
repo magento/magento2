@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Module\I18n\Dictionary\Options;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Component\ModuleRegistrar;
+use Magento\Framework\Component\ComponentRegistrar;
 
 /**
  * Dictionary generator options resolver
@@ -28,9 +28,9 @@ class Resolver implements ResolverInterface
     protected $withContext;
 
     /**
-     * @var ModuleRegistrar
+     * @var ComponentRegistrar
      */
-    protected $moduleRegistrar;
+    protected $componentRegistrar;
 
     /**
      * @var DirectoryList
@@ -41,18 +41,18 @@ class Resolver implements ResolverInterface
      * Resolver construct
      *
      * @param DirectoryList $directoryList
-     * @param ModuleRegistrar $moduleRegistrar
+     * @param ComponentRegistrar $componentRegistrar
      * @param string $directory
      * @param bool $withContext
      */
     public function __construct(
         DirectoryList $directoryList,
-        ModuleRegistrar $moduleRegistrar,
+        ComponentRegistrar $componentRegistrar,
         $directory,
         $withContext
     ) {
         $this->directoryList = $directoryList;
-        $this->moduleRegistrar = $moduleRegistrar;
+        $this->ComponentRegistrar = $componentRegistrar;
         $this->directory = $directory;
         $this->withContext = $withContext;
     }
@@ -66,7 +66,7 @@ class Resolver implements ResolverInterface
             if ($this->withContext) {
                 $this->directory = rtrim($this->directory, '\\/');
                 $moduleDirs = [];
-                foreach ($this->moduleRegistrar->getPaths() as $moduleDir) {
+                foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
                     $moduleDirs[] = str_replace($this->directoryList->getRoot(), $this->directory, $moduleDir) . '/';
                 }
                 $this->options = [
