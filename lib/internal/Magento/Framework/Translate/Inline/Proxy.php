@@ -28,7 +28,7 @@ class Proxy extends \Magento\Framework\Translate\Inline
     /**
      * Proxied instance
      *
-     * @var \Magento\DesignEditor\Model\Translate\Inline
+     * @var \Magento\Framework\Translate\Inline
      */
     protected $subject;
 
@@ -85,7 +85,7 @@ class Proxy extends \Magento\Framework\Translate\Inline
     /**
      * Get proxied instance
      *
-     * @return \Magento\DesignEditor\Model\Translate\Inline
+     * @return \Magento\Framework\Translate\Inline
      */
     protected function _getSubject()
     {
