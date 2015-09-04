@@ -5,9 +5,13 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Quote\Model\Quote\Address\Total;
+namespace Magento\Quote\Model\Quote;
 
-class CollectService
+use Magento\Quote\Model\Quote\Address\Total\Collector;
+use Magento\Quote\Model\Quote\Address\Total\CollectorFactory;
+use Magento\Quote\Model\Quote\Address\Total\CollectorInterface;
+
+class TotalsCollector
 {
 
     /**
@@ -58,6 +62,22 @@ class CollectService
      */
     protected $totalFactory;
 
+    /**
+     * @var \Magento\Quote\Model\Quote\TotalsCollectorList
+     */
+    protected $collectorList;
+
+
+    /**
+     * @var \Magento\Quote\Model\ShippingFactory
+     */
+    protected $shippingFactory;
+
+    /**
+     * @var \Magento\Quote\Model\ShippingAssignmentFactory
+     */
+    protected $shippingAssignmentFactory;
+
     protected $allowedCollectors = array(
         'subtotal',
         'grand_total'
@@ -70,7 +90,10 @@ class CollectService
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Quote\Model\Quote\Address\TotalsListFactory $totalListFactory,
-        \Magento\Quote\Model\Quote\Address\TotalFactory $totalFactory
+        \Magento\Quote\Model\Quote\Address\TotalFactory $totalFactory,
+        \Magento\Quote\Model\Quote\TotalsCollectorList $collectorList,
+        \Magento\Quote\Model\ShippingFactory $shippingFactory,
+        \Magento\Quote\Model\ShippingAssignmentFactory $shippingAssignmentFactory
     ) {
         $this->totalCollector = $totalCollector;
         $this->totalCollectorFactory = $totalCollectorFactory;
@@ -78,23 +101,26 @@ class CollectService
         $this->storeManager = $storeManager;
         $this->totalListFactory = $totalListFactory;
         $this->totalFactory = $totalFactory;
+        $this->collectorList = $collectorList;
+        $this->shippingFactory = $shippingFactory;
+        $this->shippingAssignmentFactory = $shippingAssignmentFactory;
     }
 
     /**
-     * Get totals collector model
-     *
-     * @return \Magento\Quote\Model\Quote\Address\Total\Collector
+     * @param \Magento\Quote\Model\Quote $quote
+     * @return Address\Total
      */
-    private function getTotalCollector($storeId)
+    public function collectQuoteTotals(\Magento\Quote\Model\Quote $quote)
     {
-        if ($this->totalCollector === null) {
-            $store = $this->storeManager->getStore($storeId);
-
-            $this->totalCollector = $this->totalCollectorFactory->create(
-                ['store' => $store]
-            );
-        }
-        return $this->totalCollector;
+        /** Build shipping assignment DTO  */
+        $shippingAssignment = $this->shippingAssignmentFactory->create();
+        $shipping = $this->shippingFactory->create();
+        $shipping->setMethod($quote->getShippingAddress()->getShippingMethod());
+        $shipping->setAddress($quote->getShippingAddress());
+        $shippingAssignment->setShipping($shipping);
+        $shippingAssignment->setItems($quote->getAllItems());
+        $total = $this->collectAddressTotals($shippingAssignment, $quote->getStoreId());
+        return $total;
     }
 
     /**
@@ -102,7 +128,7 @@ class CollectService
      * @param $storeId
      * @return \Magento\Quote\Model\Quote\Address\Total
      */
-    public function collect(\Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment, $storeId)
+    public function collectAddressTotals(\Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment, $storeId)
     {
         /** @todo Refactor this code \Magento\Quote\Model\Observer\Frontend\Quote\Address\CollectTotals::dispatch */
         $this->eventManager->dispatch(
@@ -112,7 +138,7 @@ class CollectService
         /** @var CollectorInterface $collector */
         /** @var \Magento\Quote\Model\Quote\Address\Total $total */
         $total = $this->totalFactory->create('Magento\Quote\Model\Quote\Address\Total');
-        foreach ($this->getTotalCollector($storeId)->getCollectors() as $key => $collector) {
+        foreach ($this->collectorList->getCollectors($storeId) as $key => $collector) {
             if (!in_array($key, $this->allowedCollectors)) {
                 continue;
             }

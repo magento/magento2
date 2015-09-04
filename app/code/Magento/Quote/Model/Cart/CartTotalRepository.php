@@ -53,9 +53,14 @@ class CartTotalRepository implements CartTotalRepositoryInterface
     protected $totalsConverter;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address\Total\FetchService
+     * @var \Magento\Quote\Model\Quote\TotalsReader
      */
     protected $reader;
+
+    /**
+     * @var \Magento\Quote\Model\Quote\TotalsCollector
+     */
+    protected $totalsCollector;
 
     /**
      * @param Api\Data\TotalsInterfaceFactory $totalsFactory
@@ -72,7 +77,8 @@ class CartTotalRepository implements CartTotalRepositoryInterface
         CouponManagementInterface $couponService,
         TotalsConverter $totalsConverter,
         ItemConverter $converter,
-        \Magento\Quote\Model\Quote\Address\Total\FetchService $reader
+        \Magento\Quote\Model\Quote\TotalsReader $reader,
+        \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
     ) {
         $this->totalsFactory = $totalsFactory;
         $this->quoteRepository = $quoteRepository;
@@ -81,6 +87,7 @@ class CartTotalRepository implements CartTotalRepositoryInterface
         $this->totalsConverter = $totalsConverter;
         $this->itemConverter = $converter;
         $this->reader = $reader;
+        $this->totalsCollector = $totalsCollector;
     }
 
     /**
@@ -104,8 +111,7 @@ class CartTotalRepository implements CartTotalRepositoryInterface
 //            $totalsData = array_merge($shippingAddress->getData(), $quote->getData());
 //        }
 
-        $total = $quote->getQuoteTotal();
-
+        $total = $this->totalsCollector->collectQuoteTotals($quote);
         $totals = $this->totalsFactory->create();
         $this->dataObjectHelper->populateWithArray($totals, $total->getData(), '\Magento\Quote\Api\Data\TotalsInterface');
         $items = [];

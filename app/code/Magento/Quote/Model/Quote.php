@@ -328,14 +328,14 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $extensionAttributesJoinProcessor;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address\Total\CollectService
+     * @var \Magento\Quote\Model\Quote\TotalsCollector
      */
-    protected $shippingTotalsCollector;
+    protected $totalsCollector;
 
     /**
-     * @var \\Magento\Quote\Model\Quote\Address\Total\FetchService
+     * @var \\Magento\Quote\Model\Quote\TotalsReader
      */
-    protected $shippingTotalsReader;
+    protected $totalsReader;
 
     /**
      * @var \Magento\Quote\Model\ShippingFactory
@@ -420,8 +420,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
         \Magento\Quote\Model\Cart\CurrencyFactory $currencyFactory,
         JoinProcessorInterface $extensionAttributesJoinProcessor,
-        \Magento\Quote\Model\Quote\Address\Total\CollectService $shippingAddressTotalCollector,
-        \Magento\Quote\Model\Quote\Address\Total\FetchService $shippingAddressTotalReader,
+        Quote\TotalsCollector $totalsCollector,
+        Quote\TotalsReader $totalsReader,
         \Magento\Quote\Model\ShippingFactory $shippingFactory,
         \Magento\Quote\Model\ShippingAssignmentFactory $shippingAssignmentFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -457,8 +457,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
         $this->currencyFactory = $currencyFactory;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
-        $this->shippingTotalsCollector = $shippingAddressTotalCollector;
-        $this->shippingTotalsReader = $shippingAddressTotalReader;
+        $this->totalsCollector = $totalsCollector;
+        $this->totalsReader = $totalsReader;
         $this->shippingFactory = $shippingFactory;
         $this->shippingAssignmentFactory = $shippingAssignmentFactory;
         parent::__construct(
@@ -470,23 +470,6 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             $resourceCollection,
             $data
         );
-    }
-
-    /**
-     * @return Address\Total
-     */
-    public function getQuoteTotal()
-    {
-        /** Build shipping assignment DTO  */
-        $shippingAssignment = $this->shippingAssignmentFactory->create();
-        $shipping = $this->shippingFactory->create();
-        $shipping->setMethod($this->getShippingAddress()->getShippingMethod());
-        $shipping->setAddress($this->getShippingAddress());
-        $shippingAssignment->setShipping($shipping);
-        $shippingAssignment->setItems($this->getAllItems());
-
-        $total = $this->shippingTotalsCollector->collect($shippingAssignment, $this->getStoreId());
-        return $total;
     }
 
     /**
@@ -1980,7 +1963,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             $shippingAssignment->setShipping($shipping);
             $shippingAssignment->setItems($this->getAllItems());
 
-            $totals = $this->shippingTotalsCollector->collect($shippingAssignment, $this->getStoreId());
+            $totals = $this->totalsCollector->collectAddressTotals($shippingAssignment, $this->getStoreId());
 
 
 
@@ -2063,8 +2046,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         if ($this->isVirtual()) {
             return $this->getBillingAddress()->getTotals();
         }
-        $total = $this->getQuoteTotal();
 
+        $total = $this->totalsCollector->collectQuoteTotals($this);
 
         $sortedTotals = [];
 //        /** @todo remfactor this code $this->getBillingAddress()->getTotalCollector()->getRetrievers() */
@@ -2074,7 +2057,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
 //                $sortedTotals[$total->getCode()] = $totals[$total->getCode()];
 //            }
 //        }
-        return $this->shippingTotalsReader->fetch($total, $this->getStoreId());
+        return $this->totalsReader->fetch($total, $this->getStoreId());
     }
 
     /**
