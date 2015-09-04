@@ -328,9 +328,14 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $extensionAttributesJoinProcessor;
 
     /**
-     * @var \\Magento\Quote\Model\Quote\Address\Total\Composite
+     * @var \Magento\Quote\Model\Quote\Address\Total\CollectService
      */
     protected $shippingTotalsCollector;
+
+    /**
+     * @var \\Magento\Quote\Model\Quote\Address\Total\FetchService
+     */
+    protected $shippingTotalsReader;
 
     /**
      * @var \Magento\Quote\Model\ShippingFactory
@@ -415,7 +420,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
         \Magento\Quote\Model\Cart\CurrencyFactory $currencyFactory,
         JoinProcessorInterface $extensionAttributesJoinProcessor,
-        \Magento\Quote\Model\Quote\Address\Total\Composite $shippingAddressTotalCollector,
+        \Magento\Quote\Model\Quote\Address\Total\CollectService $shippingAddressTotalCollector,
+        \Magento\Quote\Model\Quote\Address\Total\FetchService $shippingAddressTotalReader,
         \Magento\Quote\Model\ShippingFactory $shippingFactory,
         \Magento\Quote\Model\ShippingAssignmentFactory $shippingAssignmentFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -452,6 +458,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $this->currencyFactory = $currencyFactory;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
         $this->shippingTotalsCollector = $shippingAddressTotalCollector;
+        $this->shippingTotalsReader = $shippingAddressTotalReader;
         $this->shippingFactory = $shippingFactory;
         $this->shippingAssignmentFactory = $shippingAssignmentFactory;
         parent::__construct(
@@ -466,9 +473,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     }
 
     /**
-     * @return Address\TotalsList
+     * @return Address\Total
      */
-    public function getQuoteTotalsList()
+    public function getQuoteTotal()
     {
         /** Build shipping assignment DTO  */
         $shippingAssignment = $this->shippingAssignmentFactory->create();
@@ -478,8 +485,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $shippingAssignment->setShipping($shipping);
         $shippingAssignment->setItems($this->getAllItems());
 
-        $totals = $this->shippingTotalsCollector->collect($shippingAssignment, $this->getStoreId());
-        return $totals;
+        $total = $this->shippingTotalsCollector->collect($shippingAssignment, $this->getStoreId());
+        return $total;
     }
 
     /**
@@ -2056,7 +2063,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         if ($this->isVirtual()) {
             return $this->getBillingAddress()->getTotals();
         }
-        $totals = $this->getQuoteTotalsList();
+        $total = $this->getQuoteTotal();
 
 
         $sortedTotals = [];
@@ -2067,7 +2074,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
 //                $sortedTotals[$total->getCode()] = $totals[$total->getCode()];
 //            }
 //        }
-        return $totals->fetch();
+        return $this->shippingTotalsReader->fetch($total, $this->getStoreId());
     }
 
     /**

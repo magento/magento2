@@ -14,10 +14,4 @@ interface CollectorInterface
      * @return CollectorInterface
      */
     public function collect(\Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment, \Magento\Quote\Model\Quote\Address\Total $total);
-
-    /**
-     * @param \Magento\Quote\Model\Quote\Address\Total $total
-     * @return  []
-     */
-    public function fetch(\Magento\Quote\Model\Quote\Address\Total $total);
 }

@@ -9,7 +9,7 @@ namespace Magento\Quote\Model\Quote\Address\Total;
  * Sales Quote Address Total  abstract model
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-abstract class AbstractTotal implements \Magento\Quote\Model\Quote\Address\Total\CollectorInterface
+abstract class AbstractTotal implements CollectorInterface, ReaderInterface
 {
     /**
      * Total Code name
@@ -105,7 +105,7 @@ abstract class AbstractTotal implements \Magento\Quote\Model\Quote\Address\Total
      */
     public function fetch(\Magento\Quote\Model\Quote\Address\Total $total)
     {
-        $this->_setAddress($address);
+        //$this->_setAddress($address);
         return [];
     }
 

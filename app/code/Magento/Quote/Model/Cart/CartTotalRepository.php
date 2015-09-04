@@ -53,6 +53,11 @@ class CartTotalRepository implements CartTotalRepositoryInterface
     protected $totalsConverter;
 
     /**
+     * @var \Magento\Quote\Model\Quote\Address\Total\FetchService
+     */
+    protected $reader;
+
+    /**
      * @param Api\Data\TotalsInterfaceFactory $totalsFactory
      * @param QuoteRepository $quoteRepository
      * @param DataObjectHelper $dataObjectHelper
@@ -66,7 +71,8 @@ class CartTotalRepository implements CartTotalRepositoryInterface
         DataObjectHelper $dataObjectHelper,
         CouponManagementInterface $couponService,
         TotalsConverter $totalsConverter,
-        ItemConverter $converter
+        ItemConverter $converter,
+        \Magento\Quote\Model\Quote\Address\Total\FetchService $reader
     ) {
         $this->totalsFactory = $totalsFactory;
         $this->quoteRepository = $quoteRepository;
@@ -74,6 +80,7 @@ class CartTotalRepository implements CartTotalRepositoryInterface
         $this->couponService = $couponService;
         $this->totalsConverter = $totalsConverter;
         $this->itemConverter = $converter;
+        $this->reader = $reader;
     }
 
     /**
@@ -97,10 +104,10 @@ class CartTotalRepository implements CartTotalRepositoryInterface
 //            $totalsData = array_merge($shippingAddress->getData(), $quote->getData());
 //        }
 
-        $totalsList = $quote->getQuoteTotalsList();
+        $total = $quote->getQuoteTotal();
 
         $totals = $this->totalsFactory->create();
-        $this->dataObjectHelper->populateWithArray($totals, $totalsList->merge()->getData(), '\Magento\Quote\Api\Data\TotalsInterface');
+        $this->dataObjectHelper->populateWithArray($totals, $total->getData(), '\Magento\Quote\Api\Data\TotalsInterface');
         $items = [];
         $weeeTaxAppliedAmount = 0;
         foreach ($quote->getAllVisibleItems() as $index => $item) {
@@ -108,7 +115,7 @@ class CartTotalRepository implements CartTotalRepositoryInterface
             $weeeTaxAppliedAmount += $item->getWeeeTaxAppliedRowAmount();
         }
         $totals->setCouponCode($this->couponService->get($cartId));
-        $calculatedTotals = $this->totalsConverter->process($totalsList->fetch());
+        $calculatedTotals = $this->totalsConverter->process($this->reader->fetch($total, $quote->getStoreId()));
         $amount = $totals->getGrandTotal() - $totals->getTaxAmount();
         $amount = $amount > 0 ? $amount : 0;
         $totals->setGrandTotal($amount);

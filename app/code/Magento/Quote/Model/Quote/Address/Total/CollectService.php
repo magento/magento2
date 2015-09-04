@@ -7,7 +7,7 @@
 
 namespace Magento\Quote\Model\Quote\Address\Total;
 
-class Composite
+class CollectService
 {
 
     /**
@@ -98,9 +98,9 @@ class Composite
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote\Address $address
-     * @param int $storeId
-     * @return \Magento\Quote\Model\Quote\Address\TotalsList
+     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment
+     * @param $storeId
+     * @return \Magento\Quote\Model\Quote\Address\Total
      */
     public function collect(\Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment, $storeId)
     {
@@ -110,28 +110,6 @@ class Composite
             [$this->_eventObject => $shippingAssignment->getShipping()->getAddress()] //@todo extend parameters list based on client's code
         );
         /** @var CollectorInterface $collector */
-
-
-//        List of collectors:
-//
-//        Magento\CustomerBalance\Model\Total\Quote\Customerbalance
-//        Magento\GiftCardAccount\Model\Total\Quote\Giftcardaccount
-//        Magento\GiftWrapping\Model\Total\Quote\Tax\Giftwrapping
-//        Magento\GiftWrapping\Model\Total\Quote\Tax\GiftwrappingAfterTax
-//        Magento\Msrp\Model\Quote\Address\Total
-//        Magento\OfflineShipping\Model\Quote\Freeshipping
-//        Magento\Quote\Model\Quote\Address\Total\Subtotal
-//        Magento\Quote\Model\Quote\Address\Total\Shipping
-//        Magento\Quote\Model\Quote\Address\Total\Grand
-//        Magento\Reward\Model\Total\Quote\Reward
-//        Magento\SalesRule\Model\Quote\Discount
-//        Magento\Tax\Model\Sales\Total\Quote\Subtotal
-//        Magento\Tax\Model\Sales\Total\Quote\Shipping
-//        Magento\Tax\Model\Sales\Total\Quote\Tax
-//        Magento\Weee\Model\Total\Quote\Weee
-//        Magento\Weee\Model\Total\Quote\WeeeTax
-
-        $totals = $this->totalListFactory->create();
         /** @var \Magento\Quote\Model\Quote\Address\Total $total */
         $total = $this->totalFactory->create('Magento\Quote\Model\Quote\Address\Total');
         foreach ($this->getTotalCollector($storeId)->getCollectors() as $key => $collector) {
@@ -139,8 +117,6 @@ class Composite
                 continue;
             }
             $collector->collect($shippingAssignment, $total);
-            $result = $collector->fetch($total);
-            $totals->add($total, $result);
         }
 
         /**
@@ -151,12 +127,6 @@ class Composite
             $this->_eventPrefix . '_collect_totals_after',
             [$this->_eventObject => $shippingAssignment->getShipping()->getAddress()]//@todo extend parameters list based on client's code
         );
-
-        return $totals;
-    }
-
-    public function getCode()
-    {
-        return 'composite';
+        return $total;
     }
 }
