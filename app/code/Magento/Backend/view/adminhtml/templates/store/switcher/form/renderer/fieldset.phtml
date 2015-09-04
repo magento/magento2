@@ -13,11 +13,11 @@
 <?php endif; ?>
 
 <?php if (!$_element->getNoContainer()): ?>
-    <fieldset class="fieldset <?php echo $_element->getClass() ?>" id="<?php echo $_element->getHtmlId() ?>">
+    <fieldset class="admin__fieldset fieldset<?php echo $_element->getClass() ?>" id="<?php echo $_element->getHtmlId() ?>">
 <?php endif; ?>
 
     <?php if ($_element->getLegend()): ?>
-        <legend class="legend">
+        <legend class="admin__legend legend">
             <span><?php echo $_element->getLegend() ?></span>
         </legend>
         <?php echo $_element->getHeaderBar() ?>
