@@ -73,7 +73,7 @@ class DiCompileCommand extends Command
         $this->objectManager    = $objectManagerProvider->get();
         $this->taskManager      = $taskManager;
         $this->filesystem       = $filesystem;
-        $this->ComponentRegistrar  = $componentRegistrar;
+        $this->componentRegistrar  = $componentRegistrar;
         parent::__construct();
     }
 
