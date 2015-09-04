@@ -80,19 +80,7 @@ class Copy
             $targetCode = (string)$node[$aspect];
             $targetCode = $targetCode == '*' ? $code : $targetCode;
 
-            if ($targetIsArray) {
-                $target[$targetCode] = $value;
-            } else if ($target instanceof \Magento\Framework\DataObject) {
-                $target->setDataUsingMethod($targetCode, $value);
-            } elseif ($target instanceof \Magento\Framework\Api\AbstractSimpleObject) {
-                $target->setData($code, $value);
-            } else if ($target instanceof \Magento\Framework\Api\ExtensibleDataInterface) {
-                $this->accessExtensionSetMethod($target, $code, $value);
-            } else {
-                throw new \InvalidArgumentException(
-                    'Source should be array, Magento Object, ExtensibleDataInterface, or AbstractSimpleObject'
-                );
-            }
+            $target = $this->_setFieldsetFieldValue($target, $targetCode, $value);
         }
 
         $target = $this->dispatchCopyFieldSetEvent($fieldset, $aspect, $source, $target, $root, $targetIsArray);
@@ -185,8 +173,9 @@ class Copy
     /**
      * Get value of source by code
      *
-     * @param \Magento\Framework\DataObject|array $source
+     * @param mixed $source
      * @param string $code
+     *
      * @return mixed
      * @throws \InvalidArgumentException
      */
@@ -196,17 +185,48 @@ class Copy
             $value = isset($source[$code]) ? $source[$code] : null;
         } elseif ($source instanceof \Magento\Framework\DataObject) {
             $value = $source->getDataUsingMethod($code);
+        } elseif ($source instanceof \Magento\Framework\Api\ExtensibleDataInterface) {
+            $value = $this->accessExtensionGetMethod($source, $code);
         } elseif ($source instanceof \Magento\Framework\Api\AbstractSimpleObject) {
             $sourceArray = $source->__toArray();
             $value = isset($sourceArray[$code]) ? $sourceArray[$code] : null;
-        } elseif ($source instanceof \Magento\Framework\Api\ExtensibleDataInterface) {
-            $value = $this->accessExtensionGetMethod($source, $code);
         } else {
             throw new \InvalidArgumentException(
                 'Source should be array, Magento Object, ExtensibleDataInterface, or AbstractSimpleObject'
             );
         }
         return $value;
+    }
+
+    /**
+     * Set value of target by code
+     *
+     * @param mixed $target
+     * @param string $targetCode
+     * @param mixed $value
+     *
+     * @return mixed
+     * @throws \InvalidArgumentException
+     */
+    protected function _setFieldsetFieldValue($target, $targetCode, $value)
+    {
+        $targetIsArray = is_array($target);
+
+        if ($targetIsArray) {
+            $target[$targetCode] = $value;
+        } else if ($target instanceof \Magento\Framework\DataObject) {
+            $target->setDataUsingMethod($targetCode, $value);
+        } else if ($target instanceof \Magento\Framework\Api\ExtensibleDataInterface) {
+            $this->accessExtensionSetMethod($target, $targetCode, $value);
+        } elseif ($target instanceof \Magento\Framework\Api\AbstractSimpleObject) {
+            $target->setData($targetCode, $value);
+        } else {
+            throw new \InvalidArgumentException(
+                'Source should be array, Magento Object, ExtensibleDataInterface, or AbstractSimpleObject'
+            );
+        }
+
+        return $target;
     }
 
     /**
