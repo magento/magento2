@@ -69,7 +69,9 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe('rows');
+                .observe({
+                    rows: []
+                });
 
             return this;
         },
