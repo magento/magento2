@@ -127,7 +127,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $modulesDirectoryMock->expects($this->any())->method('isExist')
             ->with($configPath)
             ->will($this->returnValue(true));
-        $this->_filesystemMock->expects($this->any())->method('getDirectoryRead')->with(DirectoryList::MODULES)
+        $this->_filesystemMock->expects($this->any())->method('getDirectoryRead')->with(DirectoryList::ROOT)
             ->will($this->returnValue($modulesDirectoryMock));
 
         $this->_moduleListMock->expects($this->once())->method('getNames')->will($this->returnValue(['Test_Module']));
@@ -150,7 +150,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $modulesDirectoryMock->expects($this->any())->method('isExist')
             ->with($configPath)
             ->will($this->returnValue(true));
-        $this->_filesystemMock->expects($this->any())->method('getDirectoryRead')->with(DirectoryList::MODULES)
+        $this->_filesystemMock->expects($this->any())->method('getDirectoryRead')->with(DirectoryList::ROOT)
             ->will($this->returnValue($modulesDirectoryMock));
 
         $this->_moduleListMock->expects($this->once())->method('getNames')->will($this->returnValue(['Test_Module']));

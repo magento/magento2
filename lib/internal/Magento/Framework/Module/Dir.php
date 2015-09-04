@@ -8,6 +8,7 @@
 namespace Magento\Framework\Module;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Stdlib\StringUtils as StringHelper;
@@ -58,7 +59,7 @@ class Dir
      */
     public function getDir($moduleName, $type = '')
     {
-        $path = $this->moduleRegistry->getPath($moduleName);
+        $path = $this->moduleRegistry->getPath(ComponentRegistrar::MODULE, $moduleName);
 
         if ($type) {
             if (!in_array($type, [

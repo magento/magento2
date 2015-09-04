@@ -44,7 +44,11 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
                 return $dirMock;
             }));
 
-        $this->model = new RulePool($filesystemMock);
+        $componentRegistrar = $this->getMock('Magento\Framework\Component\ComponentRegistrar', [], [], '', false);
+        $componentRegistrar->expects($this->any())
+            ->method('getPaths')
+            ->willReturn(['Magento_Theme' => '/Magento/Theme', 'namespace_module' => '/namespace/module']);
+        $this->model = new RulePool($filesystemMock, $componentRegistrar);
 
         $parentTheme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
         $parentTheme->expects($this->any())->method('getThemePath')->will($this->returnValue('parent_theme_path'));
@@ -199,8 +203,8 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
                 [
                     DirectoryList::THEMES . '/area/current_theme_path/namespace_module',
                     DirectoryList::THEMES . '/area/parent_theme_path/namespace_module',
-                    DirectoryList::MODULES . '/namespace/module/view/area',
-                    DirectoryList::MODULES . '/namespace/module/view/base',
+                    '/namespace/module/view/area',
+                    '/namespace/module/view/base',
                 ],
             ],
             'file, non-modular' => [
@@ -218,8 +222,8 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
                 [
                     DirectoryList::THEMES . '/area/current_theme_path/namespace_module/templates',
                     DirectoryList::THEMES . '/area/parent_theme_path/namespace_module/templates',
-                    DirectoryList::MODULES . '/namespace/module/view/area/templates',
-                    DirectoryList::MODULES . '/namespace/module/view/base/templates',
+                    '/namespace/module/view/area/templates',
+                    '/namespace/module/view/base/templates',
                 ],
             ],
             'template, non-modular' => [
@@ -236,8 +240,8 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
                 [
                     DirectoryList::THEMES . '/area/current_theme_path/Magento_Theme/templates',
                     DirectoryList::THEMES . '/area/parent_theme_path/Magento_Theme/templates',
-                    DirectoryList::MODULES . '/Magento/Theme/view/area/templates',
-                    DirectoryList::MODULES . '/Magento/Theme/view/base/templates',
+                    '/Magento/Theme/view/area/templates',
+                    '/Magento/Theme/view/base/templates',
                 ],
             ],
 
@@ -249,10 +253,10 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
                     DirectoryList::THEMES . '/area/current_theme_path/namespace_module/web',
                     DirectoryList::THEMES . '/area/parent_theme_path/namespace_module/web/i18n/en_US',
                     DirectoryList::THEMES . '/area/parent_theme_path/namespace_module/web',
-                    DirectoryList::MODULES . '/namespace/module/view/area/web/i18n/en_US',
-                    DirectoryList::MODULES . '/namespace/module/view/base/web/i18n/en_US',
-                    DirectoryList::MODULES . '/namespace/module/view/area/web',
-                    DirectoryList::MODULES . '/namespace/module/view/base/web',
+                    '/namespace/module/view/area/web/i18n/en_US',
+                    '/namespace/module/view/base/web/i18n/en_US',
+                    '/namespace/module/view/area/web',
+                    '/namespace/module/view/base/web',
                 ],
             ],
             'view, modular non-localized' => [
@@ -261,8 +265,8 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
                 [
                     DirectoryList::THEMES . '/area/current_theme_path/namespace_module/web',
                     DirectoryList::THEMES . '/area/parent_theme_path/namespace_module/web',
-                    DirectoryList::MODULES . '/namespace/module/view/area/web',
-                    DirectoryList::MODULES . '/namespace/module/view/base/web',
+                    '/namespace/module/view/area/web',
+                    '/namespace/module/view/base/web',
                 ],
             ],
             'view, non-modular localized' => [
@@ -292,7 +296,7 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
                 [
                     DirectoryList::THEMES . '/area/current_theme_path/namespace_module/email',
                     DirectoryList::THEMES . '/area/parent_theme_path/namespace_module/email',
-                    DirectoryList::MODULES . '/namespace/module/view/area/email',
+                    '/namespace/module/view/area/email',
                 ],
             ],
         ];

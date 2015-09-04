@@ -46,6 +46,11 @@ class BaseTest extends \PHPUnit_Framework_TestCase
      */
     protected $themeMock;
 
+    /**
+     * @var \Magento\Framework\Module\Dir\Search|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $dirSearch;
+
     protected function setUp()
     {
         $this->filesystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
@@ -65,8 +70,10 @@ class BaseTest extends \PHPUnit_Framework_TestCase
 
         $this->filesystemMock->expects($this->once())
             ->method('getDirectoryRead')
-            ->with(DirectoryList::MODULES)
+            ->with(DirectoryList::ROOT)
             ->willReturn($this->directoryMock);
+
+        $this->dirSearch = $this->getMock('Magento\Framework\Module\Dir\Search', [], [], '', false);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->fileCollector = $this->objectManagerHelper->getObject(
@@ -75,7 +82,8 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 'filesystem' => $this->filesystemMock,
                 'fileFactory' => $this->fileFactoryMock,
                 'pathPatternHelper' => $this->pathPatternHelperMock,
-                'subDir' => 'layout'
+                'subDir' => 'layout',
+                'dirSearch' => $this->dirSearch,
             ]
         );
     }
@@ -97,6 +105,15 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 [
                     ['*/*/view/base/layout/*.xml', null, $sharedFiles],
                     ['*/*/view/frontend/layout/*.xml', null, $themeFiles]
+                ]
+            );
+
+        $this->dirSearch->expects($this->any())
+            ->method('collectFiles')
+            ->willReturnMap(
+                [
+                    ['view/base/layout/*.xml', $sharedFiles],
+                    ['view/frontend/layout/*.xml', $themeFiles]
                 ]
             );
         $this->pathPatternHelperMock->expects($this->once())

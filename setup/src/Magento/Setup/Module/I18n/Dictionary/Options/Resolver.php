@@ -52,7 +52,7 @@ class Resolver implements ResolverInterface
         $withContext
     ) {
         $this->directoryList = $directoryList;
-        $this->ComponentRegistrar = $componentRegistrar;
+        $this->componentRegistrar = $componentRegistrar;
         $this->directory = $directory;
         $this->withContext = $withContext;
     }
