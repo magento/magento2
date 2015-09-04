@@ -24,15 +24,17 @@ define([
                 provider: 'provider',
                 name: 'magento',
                 index: 'magento'
-            });
+            }),
+            type,
+            arg,
+            event;
 
         describe('"initialize" method', function () {
             it('Check for defined ', function () {
                 expect(obj.hasOwnProperty('initialize')).toBeDefined();
             });
             it('Check method type', function () {
-                var type = typeof obj.initialize;
-
+                type = typeof obj.initialize;
                 expect(type).toEqual('function');
             });
         });
@@ -41,13 +43,11 @@ define([
                 expect(obj.hasOwnProperty('initTable')).toBeDefined();
             });
             it('Check method type', function () {
-                var type = typeof obj.initTable;
-
+                type = typeof obj.initTable;
                 expect(type).toEqual('function');
             });
             it('Check returned value type if method called without arguments', function () {
-                var type = typeof obj.initTable();
-
+                type = typeof obj.initTable();
                 expect(type).toEqual('object');
             });
             it('Check "this.table" variable', function () {
@@ -78,19 +78,15 @@ define([
                 expect(obj.hasOwnProperty('initColumn')).toBeDefined();
             });
             it('Check method type', function () {
-                var type = typeof obj.initColumn;
-
+                type = typeof obj.initColumn;
                 expect(type).toEqual('function');
             });
             it('Check call "this.getDefaultWidth" method', function () {
-
                 spyOn(obj, 'getDefaultWidth');
                 obj.initColumn('magento');
-
                 expect(obj.getDefaultWidth).toHaveBeenCalledWith('magento');
             });
             it('Check call "this.hasColumn" method', function () {
-
                 spyOn(obj, 'hasColumn').and.callFake(function () {
                     return false;
                 });
@@ -138,13 +134,11 @@ define([
                     return {$index: 1, $parent: obj}
                 });
             });
-
             it('Check for defined ', function () {
                 expect(obj.hasOwnProperty('initResizableElement')).toBeDefined();
             });
             it('Check returned value type if method called without arguments', function () {
-                var type = typeof obj.initResizableElement('magento');
-
+                type = typeof obj.initResizableElement('magento');
                 expect(type).toEqual('boolean');
             });
             it('Check returned value', function () {
@@ -156,13 +150,11 @@ define([
                 expect(obj.hasOwnProperty('setStopPropagationHandler')).toBeDefined();
             });
             it('Check method type', function () {
-                var type = typeof obj.setStopPropagationHandler;
-
+                type = typeof obj.setStopPropagationHandler;
                 expect(type).toEqual('function');
             });
             it('Check returned value type if method called without arguments', function () {
-                var type = typeof obj.setStopPropagationHandler('magento');
-
+                type = typeof obj.setStopPropagationHandler('magento');
                 expect(type).toEqual('object');
             });
         });
@@ -171,8 +163,7 @@ define([
                 expect(obj.hasOwnProperty('refreshLastColumn')).toBeDefined();
             });
             it('Check method type', function () {
-                var type = typeof obj.setStopPropagationHandler;
-
+                type = typeof obj.setStopPropagationHandler;
                 expect(type).toEqual('function');
             });
         });
@@ -181,8 +172,7 @@ define([
                 expect(obj.hasOwnProperty('refreshMaxRowHeight')).toBeDefined();
             });
             it('Check method type', function () {
-                var type = typeof obj.refreshMaxRowHeight;
-
+                type = typeof obj.refreshMaxRowHeight;
                 expect(type).toEqual('function');
             });
             it('Check call "this.hasRow" method', function () {
@@ -194,8 +184,6 @@ define([
             });
         });
         describe('"mousedownHandler" method', function () {
-            var event;
-
             beforeEach(function(){
                 spyOn(ko, 'dataFor').and.callFake(function (data) {
                     return {
@@ -216,8 +204,7 @@ define([
                 expect(obj.hasOwnProperty('mousedownHandler')).toBeDefined();
             });
             it('Check method type', function () {
-                var type = typeof obj.mousedownHandler;
-
+                type = typeof obj.mousedownHandler;
                 expect(type).toEqual('function');
             });
             it('Check call "this.hasColumn" method', function () {
@@ -233,8 +220,6 @@ define([
             });
         });
         describe('"mousemoveHandler" method', function () {
-            var event;
-
             beforeEach(function(){
                 event = {stopImmediatePropagation: function(){}}
             });
@@ -243,12 +228,10 @@ define([
             });
             it('Check method type', function () {
                 var type = typeof obj.mousemoveHandler;
-
                 expect(type).toEqual('function');
             });
         });
         describe('"mouseupHandler" method', function () {
-            var event;
 
             beforeEach(function(){
                 event = {stopPropagation: function () {}, preventDefault: function () {}}
@@ -257,8 +240,7 @@ define([
                 expect(obj.hasOwnProperty('mouseupHandler')).toBeDefined();
             });
             it('Check method type', function () {
-                var type = typeof obj.mousemoveHandler;
-
+                type = typeof obj.mousemoveHandler;
                 expect(type).toEqual('function');
             });
             it('Check call "this.store" method', function () {
@@ -295,8 +277,7 @@ define([
                 expect(obj.hasOwnProperty('getNextElement')).toBeDefined();
             });
             it('Check method type', function () {
-                var type = typeof obj.getNextElement;
-
+                type = typeof obj.getNextElement;
                 expect(type).toEqual('function');
             });
             it('Check call "this.hasColumn" method', function () {
@@ -331,8 +312,7 @@ define([
                 expect(obj.hasOwnProperty('getDefaultWidth')).toBeDefined();
             });
             it('Check method type', function () {
-                var type = typeof obj.getDefaultWidth;
-
+                type = typeof obj.getDefaultWidth;
                 expect(type).toEqual('function');
             });
             it('Check return value if storage has data', function () {
@@ -349,30 +329,25 @@ define([
                 expect(obj.hasOwnProperty('hasColumn')).toBeDefined();
             });
             it('Check method type', function () {
-                var type = typeof obj.hasColumn;
-
+                type = typeof obj.hasColumn;
                 expect(type).toEqual('function');
             });
             it('Check return value type if "returned" arguments if false', function () {
-                var arg = { index: 'magento' };
-
+                arg = { index: 'magento' };
                 expect(typeof obj.hasColumn(arg, false)).toEqual('boolean');
             });
             it('Must return false if object columnsElements has not model.index property', function () {
-                var arg = { index: 'magento' };
-
+                arg = { index: 'magento' };
                 obj.columnsElements = {};
                 expect(obj.hasColumn(arg, false)).toEqual(false);
             });
             it('Must return true if object columnsElements has  model.index property', function () {
-                var arg = { index: 'magento' };
-
+                arg = { index: 'magento' };
                 obj.columnsElements = {magento: 'magentoProp'};
                 expect(obj.hasColumn(arg, false)).toEqual(true);
             });
             it('Must return property if object columnsElements has property and second argument is true', function () {
-                var arg = { index: 'magento' };
-
+                arg = { index: 'magento' };
                 obj.columnsElements = {magento: 'magentoProp'};
                 expect(obj.hasColumn(arg, true)).toEqual('magentoProp');
             });
@@ -382,30 +357,25 @@ define([
                 expect(obj.hasOwnProperty('hasRow')).toBeDefined();
             });
             it('Check method type', function () {
-                var type = typeof obj.hasRow;
-
+                type = typeof obj.hasRow;
                 expect(type).toEqual('function');
             });
             it('Check return value type if "returned" arguments if false', function () {
-                var arg = { elem: 'magento' };
-
+                arg = { elem: 'magento' };
                 expect(typeof obj.hasRow(arg, false)).toEqual('boolean');
             });
             it('Must return false if object maxRowsHeight has not elem property', function () {
-                var arg = { elem: 'magento' };
-
+                arg = { elem: 'magento' };
                 obj.maxRowsHeight([]);
                 expect(obj.hasRow(arg, false)).toEqual(false);
             });
             it('Must return true if object maxRowsHeight has  elem property', function () {
-                var arg = 'magento';
-
+                arg = 'magento';
                 obj.maxRowsHeight([{elem: 'magento'}]);
                 expect(obj.hasRow(arg, false)).toEqual(true);
             });
             it('Must return property if object maxRowsHeight has property and second argument is true', function () {
-                var arg = 'magento';
-
+                arg = 'magento';
                 obj.maxRowsHeight([{elem: 'magento'}]);
                 expect(typeof obj.hasRow(arg, true)).toEqual('object');
             });
