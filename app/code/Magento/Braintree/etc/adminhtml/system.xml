@@ -10,13 +10,13 @@
         <section id="payment">
             <group id="braintree_section" translate="label" type="text" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Braintree</label>
-                <comment><![CDATA[Add Braintree as additional payment method to your checkout page.]]></comment>
+                <comment><![CDATA[Accept credit/debit cards and PayPal in your Magento store. No setup or monthly fees and your customers never leave your store to complete the purchase.]]></comment>
                 <attribute type="expanded">1</attribute>
-                <fieldset_css>complex</fieldset_css>
+                <fieldset_css>complex braintree-section</fieldset_css>
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Group</frontend_model>
                 <group id="braintree" translate="label" type="text" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label><![CDATA[&nbsp;]]></label>
                     <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
-                    <comment><![CDATA[<a href="https://www.braintreegateway.com/login" target="_blank">Click here to login to your existing Braintree account</a>. Or to setup a new account and accept payments on your website, <a href="https://apply.braintreegateway.com/signup/us" target="_blank">click here to signup for a Braintree account</a>.]]></comment>
                     <attribute type="activity_path">payment/braintree/active</attribute>
                     <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
                         <label>Enabled Braintree</label>
@@ -35,6 +35,7 @@
                         </requires>
                     </field>
                     <group id="braintree_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="5">
+                        <comment><![CDATA[<a href="https://www.braintreegateway.com/login" target="_blank">Click here to login to your existing Braintree account</a>. Or to setup a new account and accept payments on your website, <a href="https://apply.braintreegateway.com/signup/us" target="_blank">click here to signup for a Braintree account</a>.]]></comment>
                         <label>Basic Braintree Settings</label>
                         <attribute type="expanded">1</attribute>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
