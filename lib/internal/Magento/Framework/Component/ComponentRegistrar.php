@@ -22,54 +22,16 @@ class ComponentRegistrar implements ComponentRegistrarInterface
     /**#@- */
 
     /**
-     * Paths to modules
+     * All paths
      *
-     * @var string[]
+     * @var array
      */
-    protected static $modulePaths;
-
-    /**
-     * Paths to themes
-     *
-     * @var string[]
-     */
-    protected static $themePaths;
-
-    /**
-     * Paths to language
-     *
-     * @var string[]
-     */
-    protected static $languagePaths;
-
-    /**
-     * Paths to library
-     *
-     * @var string[]
-     */
-    protected static $libraryPaths;
-
-    /**
-     * Type of registrar
-     *
-     * @var string
-     */
-    protected $type;
-
-    /**
-     * Constructor
-     *
-     * @param string $type
-     * @throws \LogicException
-     */
-    public function __construct($type)
-    {
-        if ($type === self::LANGUAGE || $type === self::MODULE || $type === self::LIBRARY || $type === self::THEME) {
-            $this->type = $type;
-        } else {
-            throw new \LogicException('\'' . $type . '\' is not a valid component type');
-        }
-    }
+    private static $paths = [
+        self::MODULE => [],
+        self::LIBRARY => [],
+        self::LANGUAGE => [],
+        self::THEME => [],
+    ];
 
     /**
      * Sets the location of a component.
@@ -82,69 +44,42 @@ class ComponentRegistrar implements ComponentRegistrarInterface
      */
     public static function register($type, $componentName, $path)
     {
-        switch ($type){
-            case self::MODULE :
-                if (isset(self::$modulePaths[$componentName])) {
-                    throw new \LogicException('\'' . $componentName . '\' module already exists');
-                } else {
-                    self::$modulePaths[$componentName] = $path;
-                }
-                break;
-            case self::LIBRARY :
-                if (isset(self::$libraryPaths[$componentName])) {
-                    throw new \LogicException('\'' . $componentName . '\' library already exists');
-                } else {
-                    self::$libraryPaths[$componentName] = $path;
-                }
-                break;
-            case self::THEME :
-                if (isset(self::$themePaths[$componentName])) {
-                    throw new \LogicException('\'' . $componentName . '\' theme already exists');
-                } else {
-                    self::$themePaths[$componentName] = $path;
-                }
-                break;
-            case self::LANGUAGE :
-                if (isset(self::$languagePaths[$componentName])) {
-                    throw new \LogicException('\'' . $componentName . '\' language already exists');
-                } else {
-                    self::$languagePaths[$componentName] = $path;
-                }
-                break;
+        self::validateType($type);
+        if (isset(self::$paths[$type][$componentName])) {
+            throw new \LogicException('\'' . $componentName . '\' component already exists');
+        } else {
+            self::$paths[$type][$componentName] = $path;
         }
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getPaths()
+    public function getPaths($type)
     {
-        switch ($this->type){
-            case self::MODULE :
-                return self::$modulePaths;
-            case self::LIBRARY :
-                return self::$libraryPaths;
-            case self::THEME :
-                return self::$themePaths;
-            case self::LANGUAGE :
-                return self::$languagePaths;
-        }
+        self::validateType($type);
+        return self::$paths[$type];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getPath($componentName)
+    public function getPath($type, $componentName)
     {
-        switch ($this->type){
-            case self::MODULE :
-                return isset(self::$modulePaths[$componentName]) ? self::$modulePaths[$componentName] : null;
-            case self::LIBRARY :
-                return isset(self::$libraryPaths[$componentName]) ? self::$libraryPaths[$componentName] : null;
-            case self::THEME :
-                return isset(self::$themePaths[$componentName]) ? self::$themePaths[$componentName] : null;
-            case self::LANGUAGE :
-                return isset(self::$languagePaths[$componentName]) ? self::$languagePaths[$componentName] : null;
+        self::validateType($type);
+        return isset(self::$paths[$type][$componentName]) ? self::$paths[$type][$componentName] : null;
+    }
+
+    /**
+     * Checks if type of component is valid
+     *
+     * @param $type
+     * @throws \LogicException
+     */
+    private static function validateType($type)
+    {
+        if (!in_array($type, array_keys(self::$paths))) {
+            throw new \LogicException('\'' . $type . '\' is not a valid component type');
         }
     }
 }
