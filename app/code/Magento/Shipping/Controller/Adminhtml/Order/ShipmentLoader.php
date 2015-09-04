@@ -12,14 +12,14 @@ use Magento\Framework\DataObject;
  * Class ShipmentLoader
  *
  * @package Magento\Shipping\Controller\Adminhtml\Order
- * @method ShipmentLoader setOrderId
- * @method ShipmentLoader setShipmentId
- * @method ShipmentLoader setShipment
- * @method ShipmentLoader setTracking
- * @method int getOrderId
- * @method int getShipmentId
- * @method array getShipment
- * @method array getTracking
+ * @method ShipmentLoader setOrderId($id)
+ * @method ShipmentLoader setShipmentId($id)
+ * @method ShipmentLoader setShipment($shipment)
+ * @method ShipmentLoader setTracking($tracking)
+ * @method int getOrderId()
+ * @method int getShipmentId()
+ * @method array getShipment()
+ * @method array getTracking()
  */
 class ShipmentLoader extends DataObject
 {

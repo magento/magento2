@@ -23,7 +23,7 @@ use Magento\Framework\Api\Data\ImageContentInterface;
  * @method array getAssociatedProductIds()
  * @method Product setNewVariationsAttributeSetId(int $value)
  * @method int getNewVariationsAttributeSetId()
- * @method int getPriceType
+ * @method int getPriceType()
  * @method Resource\Product\Collection getCollection()
  * @method string getUrlKey()
  * @method Product setUrlKey(string $urlKey)
