@@ -169,17 +169,17 @@ footer.footer {
 //
 //  Default properties for page columns are generated using alias mixins:
 //
-//  <code>#layout-columns</code> - sets columns container
+//  <code>#lib-layout-columns</code> - sets columns container
 //
-//  <code>#layout-columns > .main()</code> - alias for main column
+//  <code>#lib-layout-columns > .main()</code> - alias for main column
 //
-//  <code>#layout-columns > .left()</code> - alias for left column
+//  <code>#lib-layout-columns > .left()</code> - alias for left column
 //
-//  <code>#layout-columns > .right()</code> - alias for right column
+//  <code>#lib-layout-columns > .right()</code> - alias for right column
 //
-//  <code>#layout-columns > .reset()</code> - column width and order reset may be used in RWD
+//  <code>#lib-layout-columns > .reset()</code> - column width and order reset may be used in RWD
 //
-//  These aliases use default class names for layouts predefined in vars (i.e. <code>@layout-class-3columns: layout-3</code>) and general column mixin *[<code>.layout-column()</code>](#layout-column)*
+//  These aliases use default class names for layouts predefined in vars (i.e. <code>@layout-class-3columns: layout-3</code>) and general column mixin *[<code>.lib-layout-column()</code>](#layout-column)*
 //
 //  ## Three columns page layout
 //
@@ -241,24 +241,24 @@ footer.footer {
 //  ```
 
 .columns {
-    #layout-columns();
+    #lib-layout-columns();
     > .column {
         &:extend(.add-box-sizing all);
-        .css(padding-bottom, @indent__xl);
+        .lib-css(padding-bottom, @indent__xl);
     }
 }
 
 @media (min-width: 600px) {
     .column.main {
-        #layout-columns > .main();
+        #lib-layout-columns > .main();
     }
 
     .column.left {
-        #layout-columns > .left();
+        #lib-layout-columns > .left();
     }
 
     .column.right {
-        #layout-columns > .right();
+        #lib-layout-columns > .right();
     }
 }
 
@@ -285,11 +285,11 @@ footer.footer {
 //  To move main column to the left, change 2nd argument <code>@_order</code> for main and left columns:
 //
 //  ```less
-//  .column.main {
-//      .layout-column(3, 1, 60%);
+//  .lib-column.main {
+//      .lib-layout-column(3, 1, 60%);
 //  }
-//  .column.left {
-//      .layout-column(3, 2, 20%);
+//  .lib-column.left {
+//      .lib-layout-column(3, 2, 20%);
 //  }
 //  ```
 //
@@ -309,25 +309,25 @@ footer.footer {
 
 .layout-example-3 {
     .column.main {
-        .layout-column(3, 2, 60%);
+        .lib-layout-column(3, 2, 60%);
     }
     .column.left {
-        .layout-column(3, 1, 20%);
+        .lib-layout-column(3, 1, 20%);
     }
     .column.right {
-        .layout-column(3, 3, 20%);
+        .lib-layout-column(3, 3, 20%);
     }
 }
 
 .layout-example-3-1 {
     .column.main {
-        .layout-column(3, 1, 60%);
+        .lib-layout-column(3, 1, 60%);
     }
     .column.left {
-        .layout-column(3, 2, 20%);
+        .lib-layout-column(3, 2, 20%);
     }
     .column.right {
-        .layout-column(3, 3, 20%);
+        .lib-layout-column(3, 3, 20%);
     }
 }
 
@@ -360,7 +360,7 @@ footer.footer {
 
 //  # Layout width
 //
-//  The <code>.layout-width()</code> mixin is used to set default page width of the element the mixin is applyed to. It can be used to set width for the whole page wrapper or for the page elements individualy like header, footer, and so on.
+//  The <code>.lib-layout-width()</code> mixin is used to set default page width of the element the mixin is applyed to. It can be used to set width for the whole page wrapper or for the page elements individualy like header, footer, and so on.
 
 //  # Layout width variables
 //  <pre>
