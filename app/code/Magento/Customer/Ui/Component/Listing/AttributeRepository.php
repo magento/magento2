@@ -105,6 +105,9 @@ class AttributeRepository
                 AttributeMetadataInterface::IS_VISIBLE_IN_GRID => $attribute->getIsVisibleInGrid(),
                 AttributeMetadataInterface::IS_FILTERABLE_IN_GRID => $management->canBeFilterableInGrid($attribute),
                 AttributeMetadataInterface::IS_SEARCHABLE_IN_GRID => $management->canBeSearchableInGrid($attribute),
+                AttributeMetadataInterface::VALIDATION_RULES => $attribute->getValidationRules(),
+                AttributeMetadataInterface::REQUIRED => $attribute->isRequired(),
+                'entity_type_code' => $entityTypeCode,
             ];
         }
 

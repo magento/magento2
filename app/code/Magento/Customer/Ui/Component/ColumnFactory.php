@@ -6,30 +6,29 @@
 namespace Magento\Customer\Ui\Component;
 
 use Magento\Customer\Api\Data\AttributeMetadataInterface as AttributeMetadata;
+use Magento\Ui\Component\Grid\Column\InlineEditUpdater;
+use Magento\Customer\Api\CustomerMetadataInterface;
 
 class ColumnFactory
 {
-    /**
-     * @var \Magento\Framework\View\Element\UiComponentFactory
-     */
+    /** @var \Magento\Framework\View\Element\UiComponentFactory  */
     protected $componentFactory;
 
-    /**
-     * @var array
-     */
+    /** @var InlineEditUpdater */
+    protected $inlineEditUpdater;
+
+    /** @var array  */
     protected $jsComponentMap = [
         'text' => 'Magento_Ui/js/grid/columns/column',
         'select' => 'Magento_Ui/js/grid/columns/select',
         'date' => 'Magento_Ui/js/grid/columns/date',
     ];
 
-    /**
-     * @var array
-     */
+    /** @var array  */
     protected $dataTypeMap = [
         'default' => 'text',
         'text' => 'text',
-        'boolean' => 'text',
+        'boolean' => 'select',
         'select' => 'select',
         'multiselect' => 'text',
         'date' => 'date',
@@ -37,11 +36,14 @@ class ColumnFactory
 
     /**
      * @param \Magento\Framework\View\Element\UiComponentFactory $componentFactory
+     * @param InlineEditUpdater $inlineEditor
      */
     public function __construct(
-        \Magento\Framework\View\Element\UiComponentFactory $componentFactory
+        \Magento\Framework\View\Element\UiComponentFactory $componentFactory,
+        InlineEditUpdater $inlineEditor
     ) {
         $this->componentFactory = $componentFactory;
+        $this->inlineEditUpdater = $inlineEditor;
     }
 
     /**
@@ -56,7 +58,6 @@ class ColumnFactory
         $config = array_merge([
             'label' => __($attributeData[AttributeMetadata::FRONTEND_LABEL]),
             'dataType' => $this->getDataType($attributeData[AttributeMetadata::FRONTEND_INPUT]),
-            'editor' => $this->getDataType($attributeData[AttributeMetadata::FRONTEND_INPUT]),
             'align' => 'left',
             'visible' => (bool)$attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID],
         ], $config);
@@ -76,7 +77,16 @@ class ColumnFactory
             ],
             'context' => $context,
         ];
-        return $this->componentFactory->create($columnName, 'column', $arguments);
+        $column = $this->componentFactory->create($columnName, 'column', $arguments);
+        if ($attributeData['entity_type_code'] == CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER) {
+            $this->inlineEditUpdater->applyEditing(
+                $column,
+                $attributeData[AttributeMetadata::FRONTEND_INPUT],
+                $attributeData[AttributeMetadata::VALIDATION_RULES],
+                $attributeData[AttributeMetadata::REQUIRED]
+            );
+        }
+        return $column;
     }
 
     /**
