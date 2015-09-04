@@ -10,19 +10,24 @@ use Magento\Framework\Cache\InvalidateLogger;
 class PurgeCache
 {
     /**
-     * @var \Magento\PageCache\Helper\Data
+     * @var \Zend\Uri\Uri
      */
-    protected $helper;
+    protected $uri;
 
     /**
-     * @var \Magento\Framework\HTTP\Adapter\Curl
+     * @var \Zend\Http\Client\Adapter\Socket
      */
-    protected $curlAdapter;
+    protected $socketAdapter;
 
     /**
      * @var InvalidateLogger
      */
     private $logger;
+
+    /**
+     * @var \Magento\Framework\App\DeploymentConfig\Reader
+     */
+    private $configReader;
 
     /**
      * Constructor
@@ -32,13 +37,15 @@ class PurgeCache
      * @param InvalidateLogger $logger
      */
     public function __construct(
-        \Magento\PageCache\Helper\Data $helper,
-        \Magento\Framework\HTTP\Adapter\Curl $curlAdapter,
-        InvalidateLogger $logger
+        \Zend\Uri\Uri $uri,
+        \Zend\Http\Client\Adapter\Socket $socketAdapter,
+        InvalidateLogger $logger,
+        \Magento\Framework\App\DeploymentConfig\Reader $configReader
     ) {
-        $this->helper = $helper;
-        $this->curlAdapter = $curlAdapter;
+        $this->uri = $uri;
+        $this->socketAdapter = $socketAdapter;
         $this->logger = $logger;
+        $this->configReader = $configReader;
     }
 
     /**
@@ -50,11 +57,17 @@ class PurgeCache
      */
     public function sendPurgeRequest($tagsPattern)
     {
-        $headers = ["X-Magento-Tags-Pattern: {$tagsPattern}"];
-        $this->curlAdapter->setOptions([CURLOPT_CUSTOMREQUEST => 'PURGE']);
-        $this->curlAdapter->write('', $this->helper->getUrl('*'), '1.1', $headers);
-        $this->curlAdapter->read();
-        $this->curlAdapter->close();
+        $env = $this->configReader->load(\Magento\Framework\Config\File\ConfigFilePool::APP_ENV);
+        $hosts = isset($env['cache_servers']) ? $env['cache_servers'] : ['127.0.0.1:80'];
+
+        $headers = ['X-Magento-Tags-Pattern' => $tagsPattern];
+        $this->socketAdapter->setOptions(['timeout' => 10]);
+        foreach ($hosts as $host) {
+            $this->uri->parse('http://' . $host);
+            $this->socketAdapter->connect($this->uri->getHost(), $this->uri->getPort() ?: 80);
+            $this->socketAdapter->write('PURGE', $this->uri, '1.1', $headers);
+            $this->socketAdapter->close();
+        }
 
         $this->logger->execute(compact('tagsPattern'));
     }
