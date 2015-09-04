@@ -16,9 +16,6 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Zend\Http\Client\Adapter\Socket */
     protected $socketAdapterMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\PageCache\Helper\Data */
-    protected $helperMock;
-
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Cache\InvalidateLogger */
     protected $loggerMock;
 
@@ -30,7 +27,6 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->helperMock = $this->getMock('Magento\PageCache\Helper\Data', ['getUrl'], [], '', false);
         $this->uriMock = $this->getMock('\Zend\Uri\Uri', [], [], '', false);
         $this->socketAdapterMock = $this->getMock('\Zend\Http\Client\Adapter\Socket', [], [], '', false );
         $this->configReaderMock = $this->getMock('\Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false);
@@ -58,11 +54,11 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
             ->willReturn('');
         $this->uriMock->expects($this->once())
             ->method('parse')
-            ->with('http://127.0.0.1:80');
+            ->with('http://127.0.0.1');
         $this->uriMock->expects($this->once())
             ->method('getHost')
             ->willReturn('127.0.0.1');
-        $this->uriMock->expects($this->once())
+        $this->uriMock->expects($this->exactly(2))
             ->method('getPort')
             ->willReturn('80');
         $this->model->sendPurgeRequest('tags');
@@ -84,7 +80,7 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
         $this->uriMock->expects($this->once())
             ->method('getHost')
             ->willReturn('127.0.0.2');
-        $this->uriMock->expects($this->once())
+        $this->uriMock->expects($this->exactly(2))
             ->method('getPort')
             ->willReturn('1234');
         $this->model->sendPurgeRequest('tags');
@@ -103,19 +99,19 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
         $this->uriMock->expects($this->at(0))
             ->method('parse')
             ->with('http://127.0.0.1:8080');
-        $this->uriMock->expects($this->at(1))
+        $this->uriMock->expects($this->at(3))
             ->method('getHost')
             ->willReturn('127.0.0.1');
-        $this->uriMock->expects($this->at(2))
+        $this->uriMock->expects($this->at(4))
             ->method('getPort')
             ->willReturn('80');
-        $this->uriMock->expects($this->at(3))
+        $this->uriMock->expects($this->at(5))
             ->method('parse')
             ->with('http://127.0.0.2:1234');
-        $this->uriMock->expects($this->at(4))
+        $this->uriMock->expects($this->at(6))
             ->method('getHost')
             ->willReturn('127.0.0.2');
-        $this->uriMock->expects($this->at(5))
+        $this->uriMock->expects($this->at(7))
             ->method('getPort')
             ->willReturn('1234');
         $this->model->sendPurgeRequest('tags');
