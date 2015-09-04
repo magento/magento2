@@ -53,7 +53,6 @@ class ColumnFactory
         $config = array_merge([
             'label' => __($attribute->getDefaultFrontendLabel()),
             'dataType' => $this->getDataType($attribute),
-            'align' => 'left',
             'add_field' => true,
             'visible' => $attribute->getIsVisibleInGrid(),
         ], $config);
