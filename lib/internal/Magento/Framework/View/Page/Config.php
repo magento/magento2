@@ -93,7 +93,7 @@ class Config
     /**
      * @var \Magento\Framework\Locale\ResolverInterface
      */
-    protected $_localeResolver;
+    protected $localeResolver;
 
     /**
      * @var \Magento\Framework\View\Layout\BuilderInterface
@@ -138,11 +138,11 @@ class Config
         $this->scopeConfig = $scopeConfig;
         $this->favicon = $favicon;
         $this->title = $title;
-        $this->_localeResolver = $localeResolver;
+        $this->localeResolver = $localeResolver;
         $this->setElementAttribute(
             self::ELEMENT_TYPE_HTML,
             self::HTML_ATTRIBUTE_LANG,
-            str_replace('_','-',$this->_localeResolver->getLocale())
+            str_replace('_','-',$this->localeResolver->getLocale())
         );
     }
 
