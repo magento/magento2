@@ -36,6 +36,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     const BIND_EXCHANGE = 'exchange';
     const BIND_TOPIC = 'topic';
 
+    /**
+     * Map which allows optimized search of queues corresponding to the specified exchange and topic pair.
+     */
+    const EXCHANGE_TOPIC_TO_QUEUES_MAP = 'exchange_topic_to_queues_map';
+
     const ENV_QUEUE = 'queue';
     const ENV_TOPICS = 'topics';
     const ENV_CONSUMERS = 'consumers';
@@ -80,7 +85,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             self::PUBLISHERS => $publishers,
             self::TOPICS => $topics,
             self::CONSUMERS => $consumers,
-            self::BINDS => $binds
+            self::BINDS => $binds,
+            self::EXCHANGE_TOPIC_TO_QUEUES_MAP => $this->buildExchangeTopicToQueuesMap($binds)
         ];
     }
 
@@ -167,6 +173,21 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 self::BIND_EXCHANGE => $bindNode->attributes->getNamedItem('exchange')->nodeValue,
                 self::BIND_TOPIC => $bindNode->attributes->getNamedItem('topic')->nodeValue,
             ];
+        }
+        return $output;
+    }
+
+    /**
+     * Build map which allows optimized search of queues corresponding to the specified exchange and topic pair.
+     *
+     * @param array $binds
+     * @return array
+     */
+    protected function buildExchangeTopicToQueuesMap($binds)
+    {
+        $output = [];
+        foreach ($binds as $bind) {
+            $output[$bind[self::BIND_EXCHANGE] . '--' . $bind[self::BIND_TOPIC]][] = $bind[self::BIND_QUEUE];
         }
         return $output;
     }
