@@ -17,13 +17,13 @@ class LibraryRegistrarTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->library = new LibraryRegistrar();
+        $this->library = LibraryRegistrar::getInstance();
     }
 
     public function testGetPaths()
     {
-        LibraryRegistrar::register("test_library_one", "some/path/name/one");
-        LibraryRegistrar::register("test_library_two", "some/path/name/two");
+        $this->library->register("test_library_one", "some/path/name/one");
+        $this->library->register("test_library_two", "some/path/name/two");
         $expected = [
             'test_library_one' => "some/path/name/one",
             'test_library_two' => "some/path/name/two",
@@ -37,7 +37,7 @@ class LibraryRegistrarTest extends \PHPUnit_Framework_TestCase
      */
     public function testRegistrarWithException()
     {
-        LibraryRegistrar::register("test_library_one", "some/path/name/one");
+        $this->library->register("test_library_one", "some/path/name/one");
     }
 
     public function testGetPath()

@@ -10,12 +10,25 @@ namespace Magento\Framework\Component;
  *
  * @author Josh Di Fabio <joshdifabio@gmail.com>
  */
-class ModuleRegistrar extends ComponentRegistrar
+class ModuleRegistrar extends AbstractComponentRegistrar
 {
     /**
-     * Paths to modules
+     * This instance
      *
-     * @var string[]
+     * @var ModuleRegistrar
      */
-    protected static $componentPaths = [];
+    private static $instance;
+
+    /**
+     * returns an instance of module registrar
+     *
+     * @return ModuleRegistrar
+     */
+    public static function getInstance()
+    {
+        if (static::$instance === null) {
+            static::$instance = new ModuleRegistrar();
+        }
+        return static::$instance;
+    }
 }

@@ -8,12 +8,25 @@ namespace Magento\Framework\Component;
 /**
  * Provides ability to statically register language
  */
-class LanguageRegistrar extends ComponentRegistrar
+class LanguageRegistrar extends AbstractComponentRegistrar
 {
     /**
-     * Paths to languages
+     * This instance
      *
-     * @var string[]
+     * @var LanguageRegistrar
      */
-    protected static $componentPaths = [];
+    private static $instance;
+
+    /**
+     * returns an instance of language registrar
+     *
+     * @return LanguageRegistrar
+     */
+    public static function getInstance()
+    {
+        if (static::$instance === null) {
+            static::$instance = new LanguageRegistrar();
+        }
+        return static::$instance;
+    }
 }
