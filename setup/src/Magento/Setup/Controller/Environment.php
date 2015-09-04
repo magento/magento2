@@ -5,52 +5,91 @@
  */
 namespace Magento\Setup\Controller;
 
-use Composer\Package\Version\VersionParser;
+use Magento\Setup\Model\Cron\ReadinessCheck;
+use Magento\Setup\Model\CronScriptReadinessCheck;
+use Magento\Setup\Model\DependencyReadinessCheck;
+use Magento\Setup\Model\UninstallDependencyCheck;
+use Magento\Setup\Model\PhpReadinessCheck;
+use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
-use Magento\Framework\Composer\ComposerInformation;
-use Magento\Setup\Model\PhpInformation;
 use Magento\Setup\Model\FilePermissions;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 
 /**
  * Class Environment
  *
  * Provides information and checks about the environment.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Environment extends AbstractActionController
 {
     /**
-     * Model to determine PHP version, currently installed and required PHP extensions.
-     *
-     * @var \Magento\Setup\Model\PhpInformation
+     * Path to updater application
      */
-    protected $phpInformation;
+    const UPDATER_DIR = 'update';
 
     /**
-     * Version parser
+     * File system
      *
-     * @var VersionParser
+     * @var Filesystem
      */
-    protected $versionParser;
+    protected $filesystem;
+
+    /**
+     * Cron Script Readiness Check
+     *
+     * @var CronScriptReadinessCheck
+     */
+    protected $cronScriptReadinessCheck;
+
+    /**
+     * Dependency Readiness Check
+     *
+     * @var DependencyReadinessCheck
+     */
+    protected $dependencyReadinessCheck;
+
+    /**
+     * Uninstall Dependency Readiness Check
+     *
+     * @var UninstallDependencyCheck
+     */
+    protected $uninstallDependencyCheck;
+
+    /**
+     * PHP Readiness Check
+     *
+     * @var PhpReadinessCheck
+     */
+    protected $phpReadinessCheck;
 
     /**
      * Constructor
      *
-     * @param PhpInformation $phpInformation
      * @param FilePermissions $permissions
-     * @param VersionParser $versionParser
-     * @param ComposerInformation $composerInformation
+     * @param Filesystem $filesystem
+     * @param CronScriptReadinessCheck $cronScriptReadinessCheck
+     * @param DependencyReadinessCheck $dependencyReadinessCheck
+     * @param UninstallDependencyCheck $uninstallDependencyCheck
+     * @param PhpReadinessCheck $phpReadinessCheck
      */
     public function __construct(
-        PhpInformation $phpInformation,
         FilePermissions $permissions,
-        VersionParser $versionParser,
-        ComposerInformation $composerInformation
+        Filesystem $filesystem,
+        CronScriptReadinessCheck $cronScriptReadinessCheck,
+        DependencyReadinessCheck $dependencyReadinessCheck,
+        UninstallDependencyCheck $uninstallDependencyCheck,
+        PhpReadinessCheck $phpReadinessCheck
     ) {
-        $this->phpInformation = $phpInformation;
         $this->permissions = $permissions;
-        $this->versionParser = $versionParser;
-        $this->composerInformation = $composerInformation;
+        $this->filesystem = $filesystem;
+        $this->cronScriptReadinessCheck = $cronScriptReadinessCheck;
+        $this->dependencyReadinessCheck = $dependencyReadinessCheck;
+        $this->uninstallDependencyCheck = $uninstallDependencyCheck;
+        $this->phpReadinessCheck = $phpReadinessCheck;
     }
 
     /**
@@ -60,38 +99,13 @@ class Environment extends AbstractActionController
      */
     public function phpVersionAction()
     {
-        try {
-            $requiredVersion = $this->composerInformation->getRequiredPhpVersion();
-        } catch (\Exception $e) {
-            return new JsonModel(
-                [
-                    'responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR,
-                    'data' => [
-                        'error' => 'phpVersionError',
-                        'message' => 'Cannot determine required PHP version: ' . $e->getMessage()
-                    ],
-                ]
-            );
+        $type = $this->getRequest()->getContent();
+        $data = [];
+        if ($type == ReadinessCheckInstaller::INSTALLER) {
+            $data = $this->phpReadinessCheck->checkPhpVersion();
+        } elseif ($type == ReadinessCheckUpdater::UPDATER) {
+            $data = $this->getPhpChecksInfo(ReadinessCheck::KEY_PHP_VERSION_VERIFIED);
         }
-        $multipleConstraints = $this->versionParser->parseConstraints($requiredVersion);
-        try {
-            $normalizedPhpVersion = $this->versionParser->normalize(PHP_VERSION);
-        } catch (\UnexpectedValueException $e) {
-            $prettyVersion = preg_replace('#^([^~+-]+).*$#', '$1', PHP_VERSION);
-            $normalizedPhpVersion = $this->versionParser->normalize($prettyVersion);
-        }
-        $currentPhpVersion = $this->versionParser->parseConstraints($normalizedPhpVersion);
-        $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
-        if (!$multipleConstraints->matches($currentPhpVersion)) {
-            $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
-        }
-        $data = [
-            'responseType' => $responseType,
-            'data' => [
-                'required' => $requiredVersion,
-                'current' => PHP_VERSION,
-            ],
-        ];
         return new JsonModel($data);
     }
 
@@ -102,23 +116,13 @@ class Environment extends AbstractActionController
      */
     public function phpSettingsAction()
     {
-        $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
-
-        $settings = array_merge(
-            $this->checkXDebugNestedLevel()
-        );
-
-        foreach ($settings as $setting) {
-            if ($setting['error']) {
-                $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
-            }
+        $type = $this->getRequest()->getContent();
+        $data = [];
+        if ($type == ReadinessCheckInstaller::INSTALLER) {
+            $data = $this->phpReadinessCheck->checkPhpSettings();
+        } elseif ($type == ReadinessCheckUpdater::UPDATER) {
+            $data = $this->getPhpChecksInfo(ReadinessCheck::KEY_PHP_SETTINGS_VERIFIED);
         }
-
-        $data = [
-            'responseType' => $responseType,
-            'data' => $settings
-        ];
-
         return new JsonModel($data);
     }
 
@@ -129,35 +133,36 @@ class Environment extends AbstractActionController
      */
     public function phpExtensionsAction()
     {
-        try {
-            $required = $this->composerInformation->getRequiredExtensions();
-            $current = $this->phpInformation->getCurrent();
-
-        } catch (\Exception $e) {
-            return new JsonModel(
-                [
-                    'responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR,
-                    'data' => [
-                        'error' => 'phpExtensionError',
-                        'message' => 'Cannot determine required PHP extensions: ' . $e->getMessage()
-                    ],
-                ]
-            );
+        $type = $this->getRequest()->getContent();
+        $data = [];
+        if ($type == ReadinessCheckInstaller::INSTALLER) {
+            $data = $this->phpReadinessCheck->checkPhpExtensions();
+        } elseif ($type == ReadinessCheckUpdater::UPDATER) {
+            $data = $this->getPhpChecksInfo(ReadinessCheck::KEY_PHP_EXTENSIONS_VERIFIED);
         }
-        $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
-        $missing = array_values(array_diff($required, $current));
-        if ($missing) {
-            $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
-        }
-        $data = [
-            'responseType' => $responseType,
-            'data' => [
-                'required' => $required,
-                'missing' => $missing,
-            ],
-        ];
-
         return new JsonModel($data);
+    }
+
+    /**
+     * Gets the PHP check info from Cron status file
+     *
+     * @param string $type
+     * @return array
+     */
+    private function getPhpChecksInfo($type)
+    {
+        $read = $this->filesystem->getDirectoryRead(DirectoryList::VAR_DIR);
+        try {
+            $jsonData = json_decode($read->readFile(ReadinessCheck::SETUP_CRON_JOB_STATUS_FILE), true);
+            if (isset($jsonData[ReadinessCheck::KEY_PHP_CHECKS])
+                && isset($jsonData[ReadinessCheck::KEY_PHP_CHECKS][$type])
+            ) {
+                return  $jsonData[ReadinessCheck::KEY_PHP_CHECKS][$type];
+            }
+            return ['responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR];
+        } catch (\Exception $e) {
+            return ['responseType' => ResponseTypeInterface::RESPONSE_TYPE_ERROR];
+        }
     }
 
     /**
@@ -184,38 +189,100 @@ class Environment extends AbstractActionController
     }
 
     /**
-     * Checks if xdebug.max_nesting_level is set 200 or more
-     * @return array
+     * Verifies updater application exists
+     *
+     * @return JsonModel
      */
-    private function checkXDebugNestedLevel()
+    public function updaterApplicationAction()
     {
+        $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
+
+        if (!$this->filesystem->getDirectoryRead(DirectoryList::ROOT)->isExist(self::UPDATER_DIR)) {
+            $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
+        }
+        $data = [
+            'responseType' => $responseType
+        ];
+        return new JsonModel($data);
+    }
+
+    /**
+     * Verifies Setup and Updater Cron status
+     *
+     * @return JsonModel
+     */
+    public function cronScriptAction()
+    {
+        $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
+
+        $setupCheck = $this->cronScriptReadinessCheck->checkSetup();
+        $updaterCheck = $this->cronScriptReadinessCheck->checkUpdater();
         $data = [];
-        $error = false;
-    
-        $currentExtensions = $this->phpInformation->getCurrent();
-        if (in_array('xdebug', $currentExtensions)) {
+        if (!$setupCheck['success']) {
+            $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
+            $data['setupErrorMessage'] = 'Error from Setup Application Cron Script:<br/>' . $setupCheck['error'];
+        }
+        if (!$updaterCheck['success']) {
+            $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
+            $data['updaterErrorMessage'] = 'Error from Updater Application Cron Script:<br/>' . $updaterCheck['error'];
 
-            $currentXDebugNestingLevel = intval(ini_get('xdebug.max_nesting_level'));
-            $minimumRequiredXDebugNestedLevel = $this->phpInformation->getRequiredMinimumXDebugNestedLevel();
+        }
+        if (isset($setupCheck['notice'])) {
+            $data['setupNoticeMessage'] = 'Notice from Setup Application Cron Script:<br/>' . $setupCheck['notice'];
+        }
+        if (isset($updaterCheck['notice'])) {
+            $data['updaterNoticeMessage'] = 'Notice from Updater Application Cron Script:<br/>' .
+                $updaterCheck['notice'];
+        }
+        $data['responseType'] = $responseType;
+        return new JsonModel($data);
+    }
 
-            if ($minimumRequiredXDebugNestedLevel > $currentXDebugNestingLevel) {
-                $error = true;
-            }
+    /**
+     * Verifies component dependency
+     *
+     * @return JsonModel
+     */
+    public function componentDependencyAction()
+    {
+        $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
+        $packages = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
+        $data = [];
+        foreach ($packages as $package) {
+            $data[] = implode(' ', $package);
+        }
+        $dependencyCheck = $this->dependencyReadinessCheck->runReadinessCheck($data);
+        $data = [];
+        if (!$dependencyCheck['success']) {
+            $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
+            $data['errorMessage'] = $dependencyCheck['error'];
+        }
+        $data['responseType'] = $responseType;
+        return new JsonModel($data);
+    }
 
-            $message = sprintf(
-                'Your current setting of xdebug.max_nesting_level=%d.
-                 Magento 2 requires it to be set to %d or more.
-                 Edit your config, restart web server, and try again.',
-                $currentXDebugNestingLevel,
-                $minimumRequiredXDebugNestedLevel
-            );
+    /**
+     * Verifies component dependency for uninstall
+     *
+     * @return JsonModel
+     */
+    public function uninstallDependencyCheckAction()
+    {
+        $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
+        $packages = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
 
-            $data['xdebug_max_nesting_level'] = [
-                'message' => $message,
-                'error' => $error
-            ];
+        $packagesToDelete = [];
+        foreach ($packages as $package) {
+            $packagesToDelete[] = $package['name'];
         }
 
-        return $data;
+        $dependencyCheck = $this->uninstallDependencyCheck->runUninstallReadinessCheck($packagesToDelete);
+        $data = [];
+        if (!$dependencyCheck['success']) {
+            $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
+            $data['errorMessage'] = $dependencyCheck['error'];
+        }
+        $data['responseType'] = $responseType;
+        return new JsonModel($data);
     }
 }
