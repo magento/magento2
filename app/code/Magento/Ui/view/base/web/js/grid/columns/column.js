@@ -15,6 +15,7 @@ define([
             headerTmpl: 'ui/grid/columns/text',
             bodyTmpl: 'ui/grid/cells/text',
             disableAction: false,
+            controlVisibility: true,
             sortable: true,
             sorting: false,
             visible: true,

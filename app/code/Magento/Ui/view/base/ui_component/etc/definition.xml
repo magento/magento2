@@ -39,7 +39,6 @@
             <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/grid/search/search</item>
                 <item name="displayArea" xsi:type="string">dataGridFilters</item>
-
             </item>
         </argument>
     </filterSearch>
@@ -112,6 +111,9 @@
     <column class="Magento\Ui\Component\Listing\Columns\Column">
         <argument name="data" xsi:type="array">
             <item name="state_prefix" xsi:type="string">columns</item>
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+            </item>
         </argument>
     </column>
 
