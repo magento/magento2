@@ -10,7 +10,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 /**
  * Line count config model for customer address street attribute
  *
- * @method string getWebsiteCode
+ * @method string getWebsiteCode()
  */
 class Street extends \Magento\Framework\App\Config\Value
 {
