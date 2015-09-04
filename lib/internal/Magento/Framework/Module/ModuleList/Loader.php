@@ -10,6 +10,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Module\Declaration\Converter\Dom;
 use Magento\Framework\Xml\Parser;
 use Magento\Framework\Component\ComponentRegistrarInterface;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem\DriverInterface;
 
 /**
@@ -114,8 +115,9 @@ class Loader
      */
     private function getModuleConfigs()
     {
-        if (null !== $this->moduleRegistry->getPaths()) {
-            foreach ($this->moduleRegistry->getPaths() as $modulePath) {
+        $modulePaths = $this->moduleRegistry->getPaths(ComponentRegistrar::MODULE);
+        if (null !== $modulePaths) {
+            foreach ($modulePaths as $modulePath) {
                 $filePath = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, "$modulePath/etc/module.xml");
                 yield [$filePath, $this->filesystemDriver->fileGetContents($filePath)];
             }
