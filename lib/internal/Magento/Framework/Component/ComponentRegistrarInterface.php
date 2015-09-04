@@ -15,7 +15,7 @@ interface ComponentRegistrarInterface
      *
      * Returns an array where key is fully-qualified component name and value is absolute path to component
      *
-     * @param $type
+     * @param string $type
      * @return array
      */
     public function getPaths($type);
@@ -23,7 +23,7 @@ interface ComponentRegistrarInterface
     /**
      * Get path of a component if it is already registered
      *
-     * @param $type
+     * @param string $type
      * @param string $componentName
      * @return null|string
      */
