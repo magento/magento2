@@ -6,4 +6,6 @@
 
 require __DIR__ . '/autoload.php';
 
-\Magento\Framework\App\Utility\Files::setInstance(new \Magento\Framework\App\Utility\Files(BP));
+\Magento\Framework\App\Utility\Files::setInstance(
+    new \Magento\Framework\App\Utility\Files(new \Magento\Framework\Component\ComponentRegistrar(), BP)
+);

@@ -7,6 +7,7 @@
 namespace Magento\Framework\App\Utility;
 
 use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Component\ModuleRegistrar;
 
 class FilesTest extends \PHPUnit_Framework_TestCase
 {
@@ -33,7 +34,7 @@ class FilesTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->model = new Files(BP);
+        $this->model = new Files(new ModuleRegistrar, BP);
     }
 
     public function testGetPhpFilesExcludeTests()
@@ -46,7 +47,7 @@ class FilesTest extends \PHPUnit_Framework_TestCase
     public function testGetComposerExcludeTests()
     {
         $this->assertNoTestDirs(
-            $this->model->getComposerFiles('code', false)
+            $this->model->getComposerFiles('module', false)
         );
     }
 

@@ -7,7 +7,7 @@
 namespace Magento\Framework\View\Design\Fallback;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Component\ModuleRegistrar;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem;
 use Magento\Framework\View\Design\Fallback\Rule\Composite;
 use Magento\Framework\View\Design\Fallback\Rule\ModularSwitch;
@@ -45,18 +45,19 @@ class RulePool
     private $rules = [];
 
     /**
-     * @var ModuleRegistrar
+     * @var ComponentRegistrar
      */
-    private $moduleRegistrar;
+    private $componentRegistrar;
 
     /**
      * Constructor
      *
      * @param Filesystem $filesystem
+     * @param ComponentRegistrar $componentRegistrar
      */
-    public function __construct(Filesystem $filesystem, ModuleRegistrar $moduleRegistrar)
+    public function __construct(Filesystem $filesystem, ComponentRegistrar $componentRegistrar)
     {
-        $this->moduleRegistrar = $moduleRegistrar;
+        $this->componentRegistrar = $componentRegistrar;
         $this->filesystem = $filesystem;
     }
 
@@ -77,12 +78,13 @@ class RulePool
      * Creates Rules using all module directories
      *
      * @param $pattern
+     * @param array $optionalParams
      * @return Simple[]
      */
     private function createModuleRules($pattern, $optionalParams = [])
     {
         $rules = [];
-        foreach ($this->moduleRegistrar->getPaths() as $modulePath) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $modulePath) {
             $rules[] = new Simple($modulePath . '/' . $pattern, $optionalParams);
         }
         return $rules;

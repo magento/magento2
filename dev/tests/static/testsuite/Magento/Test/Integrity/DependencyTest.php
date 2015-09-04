@@ -629,7 +629,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     protected static function _initDependencies()
     {
-        $jsonFiles = \Magento\Framework\App\Utility\Files::init()->getComposerFiles('code/Magento/*/', false);
+        $jsonFiles = \Magento\Framework\App\Utility\Files::init()->getComposerFiles('module', false);
         foreach ($jsonFiles as $file) {
             $contents = file_get_contents($file);
             $decodedJson = json_decode($contents);

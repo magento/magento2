@@ -6,7 +6,7 @@
 
 namespace Magento\Setup\Console\Command;
 
-use Magento\Framework\Component\ModuleRegistrar;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\ObjectManagerInterface;
@@ -46,9 +46,9 @@ class DiCompileCommand extends Command
     private $excludedPathsList;
 
     /**
-     * @var ModuleRegistrar
+     * @var ComponentRegistrar
      */
-    private $moduleRegistrar;
+    private $componentRegistrar;
 
     /**
      * Constructor
@@ -58,6 +58,7 @@ class DiCompileCommand extends Command
      * @param Manager $taskManager
      * @param ObjectManagerProvider $objectManagerProvider
      * @param Filesystem $filesystem
+     * @param \Magento\Framework\Component\ComponentRegistrar $componentRegistrar
      */
     public function __construct(
         DeploymentConfig $deploymentConfig,
@@ -65,14 +66,14 @@ class DiCompileCommand extends Command
         Manager $taskManager,
         ObjectManagerProvider $objectManagerProvider,
         Filesystem $filesystem,
-        ModuleRegistrar $moduleRegistrar
+        ComponentRegistrar $componentRegistrar
     ) {
         $this->deploymentConfig = $deploymentConfig;
         $this->directoryList    = $directoryList;
         $this->objectManager    = $objectManagerProvider->get();
         $this->taskManager      = $taskManager;
         $this->filesystem       = $filesystem;
-        $this->moduleRegistrar  = $moduleRegistrar;
+        $this->componentRegistrar  = $componentRegistrar;
         parent::__construct();
     }
 
@@ -93,7 +94,7 @@ class DiCompileCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $appCodePaths = $this->moduleRegistrar->getPaths();
+        $appCodePaths = $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE);
         $libraryPath = $this->directoryList->getPath(DirectoryList::LIB_INTERNAL);
         $generationPath = $this->directoryList->getPath(DirectoryList::GENERATION);
         if (!$this->deploymentConfig->isAvailable()) {
