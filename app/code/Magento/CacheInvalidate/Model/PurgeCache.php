@@ -5,17 +5,21 @@
  */
 namespace Magento\CacheInvalidate\Model;
 
+use Symfony\Component\Config\Definition\Exception\Exception;
+use Zend\Uri\Uri;
+use Zend\Http\Client\Adapter\Socket;
 use Magento\Framework\Cache\InvalidateLogger;
+use Magento\Framework\App\DeploymentConfig\Reader;
 
 class PurgeCache
 {
     /**
-     * @var \Zend\Uri\Uri
+     * @var Uri
      */
     protected $uri;
 
     /**
-     * @var \Zend\Http\Client\Adapter\Socket
+     * @var Socket
      */
     protected $socketAdapter;
 
@@ -25,22 +29,23 @@ class PurgeCache
     private $logger;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig\Reader
+     * @var Reader
      */
     private $configReader;
 
     /**
      * Constructor
      *
-     * @param \Magento\PageCache\Helper\Data $helper
-     * @param \Magento\Framework\HTTP\Adapter\Curl $curlAdapter
+     * @param Uri $uri
+     * @param Socket $socketAdapter
      * @param InvalidateLogger $logger
+     * @param Reader $configReader
      */
     public function __construct(
-        \Zend\Uri\Uri $uri,
-        \Zend\Http\Client\Adapter\Socket $socketAdapter,
+        Uri $uri,
+        Socket $socketAdapter,
         InvalidateLogger $logger,
-        \Magento\Framework\App\DeploymentConfig\Reader $configReader
+        Reader $configReader
     ) {
         $this->uri = $uri;
         $this->socketAdapter = $socketAdapter;
@@ -57,18 +62,27 @@ class PurgeCache
      */
     public function sendPurgeRequest($tagsPattern)
     {
-        $env = $this->configReader->load(\Magento\Framework\Config\File\ConfigFilePool::APP_ENV);
-        $hosts = isset($env['cache_servers']) ? $env['cache_servers'] : ['127.0.0.1:80'];
-
+        $config = $this->configReader->load(\Magento\Framework\Config\File\ConfigFilePool::APP_ENV);
+        $hosts = isset($config['cache_servers']) ? $config['cache_servers'] : ['127.0.0.1'];
         $headers = ['X-Magento-Tags-Pattern' => $tagsPattern];
         $this->socketAdapter->setOptions(['timeout' => 10]);
         foreach ($hosts as $host) {
-            $this->uri->parse('http://' . $host);
-            $this->socketAdapter->connect($this->uri->getHost(), $this->uri->getPort() ?: 80);
-            $this->socketAdapter->write('PURGE', $this->uri, '1.1', $headers);
-            $this->socketAdapter->close();
+            if (!strpos($host, '://')) {
+                $host = 'http://' . $host;
+            }
+            $this->uri->parse($host);
+            if (!$this->uri->getPort()) {
+                $this->uri->setPort(80);
+            }
+            try {
+                $this->socketAdapter->connect($this->uri->getHost(), $this->uri->getPort());
+                $this->socketAdapter->write('PURGE', $this->uri, '1.1', $headers);
+                $this->socketAdapter->close();
+            } catch (Exception $e) {
+                $this->logger->critical($e->getMessage(), compact('hosts', 'tagsPattern'));
+            }
         }
 
-        $this->logger->execute(compact('tagsPattern'));
+        $this->logger->execute(compact('hosts', 'tagsPattern'));
     }
 }
