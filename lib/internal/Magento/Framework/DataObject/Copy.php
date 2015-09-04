@@ -186,7 +186,7 @@ class Copy
         } elseif ($source instanceof \Magento\Framework\DataObject) {
             $value = $source->getDataUsingMethod($code);
         } elseif ($source instanceof \Magento\Framework\Api\ExtensibleDataInterface) {
-            $value = $this->accessExtensionGetMethod($source, $code);
+            $value = $this->getAttributeValueFromExtensibleDataObject($source, $code);
         } elseif ($source instanceof \Magento\Framework\Api\AbstractSimpleObject) {
             $sourceArray = $source->__toArray();
             $value = isset($sourceArray[$code]) ? $sourceArray[$code] : null;
@@ -217,7 +217,7 @@ class Copy
         } else if ($target instanceof \Magento\Framework\DataObject) {
             $target->setDataUsingMethod($targetCode, $value);
         } else if ($target instanceof \Magento\Framework\Api\ExtensibleDataInterface) {
-            $this->accessExtensionSetMethod($target, $targetCode, $value);
+            $this->setAttributeValueFromExtensibleDataObject($target, $targetCode, $value);
         } elseif ($target instanceof \Magento\Framework\Api\AbstractSimpleObject) {
             $target->setData($targetCode, $value);
         } else {
@@ -238,7 +238,7 @@ class Copy
      * @return mixed
      * @throws \InvalidArgumentException
      */
-    protected function accessExtensionGetMethod($source, $code)
+    protected function getAttributeValueFromExtensibleDataObject($source, $code)
     {
         $method = 'get' . str_replace(' ', '', ucwords(str_replace('_', ' ', $code)));
 
@@ -272,7 +272,7 @@ class Copy
      * @return null
      * @throws \InvalidArgumentException
      */
-    protected function accessExtensionSetMethod($target, $code, $value)
+    protected function setAttributeValueFromExtensibleDataObject($target, $code, $value)
     {
         $method = 'set' . str_replace(' ', '', ucwords(str_replace('_', ' ', $code)));
 
