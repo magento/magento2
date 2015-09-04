@@ -169,12 +169,18 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
         $customerId = 1;
         $customerEmail = 'user1@example.com';
 
-        $currentCustomerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
-            ->getMockForAbstractClass();
-        $newCustomerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
-            ->getMockForAbstractClass();
         $address = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterface')
             ->getMockForAbstractClass();
+
+        $currentCustomerMock = $this->getCurrentCustomerMock($address);
+        $currentCustomerMock->expects($this->once())
+            ->method('getEmail')
+            ->willReturn($customerEmail);
+
+        $newCustomerMock = $this->getNewCustomerMock($customerId, $address);
+        $newCustomerMock->expects($this->once())
+            ->method('getEmail')
+            ->willReturn($customerEmail);
 
         $this->validator->expects($this->once())
             ->method('validate')
@@ -206,28 +212,6 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->method('extract')
             ->with('customer_account_edit', $this->request)
             ->willReturn($newCustomerMock);
-
-        $currentCustomerMock->expects($this->once())
-            ->method('getAddresses')
-            ->willReturn([$address]);
-        $currentCustomerMock->expects($this->once())
-            ->method('getEmail')
-            ->willReturn($customerEmail);
-
-        $newCustomerMock->expects($this->once())
-            ->method('setId')
-            ->with($customerId)
-            ->willReturnSelf();
-        $newCustomerMock->expects($this->once())
-            ->method('getAddresses')
-            ->willReturn(null);
-        $newCustomerMock->expects($this->once())
-            ->method('setAddresses')
-            ->with([$address])
-            ->willReturn(null);
-        $newCustomerMock->expects($this->once())
-            ->method('getEmail')
-            ->willReturn($customerEmail);
 
         $this->messageManager->expects($this->once())
             ->method('getMessages')
@@ -266,12 +250,18 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
         $customerId = 1;
         $customerEmail = 'user1@example.com';
 
-        $currentCustomerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
-            ->getMockForAbstractClass();
-        $newCustomerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
-            ->getMockForAbstractClass();
         $address = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterface')
             ->getMockForAbstractClass();
+
+        $currentCustomerMock = $this->getCurrentCustomerMock($address);
+        $currentCustomerMock->expects($this->exactly(2))
+            ->method('getEmail')
+            ->willReturn($customerEmail);
+
+        $newCustomerMock = $this->getNewCustomerMock($customerId, $address);
+        $newCustomerMock->expects($this->once())
+            ->method('getEmail')
+            ->willReturn($customerEmail);
 
         $this->validator->expects($this->once())
             ->method('validate')
@@ -302,34 +292,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
 
         // Prepare errors processing
         if (!empty($errors)) {
-            if (!empty($errors['exception'])) {
-                $exception = new $errors['exception'](__($errors['message']));
-
-                $this->customerAccountManagement->expects($this->once())
-                    ->method('changePassword')
-                    ->with($customerEmail, $currentPassword, $newPassword)
-                    ->willThrowException($exception);
-
-                $this->messageManager->expects($this->any())
-                    ->method('addException')
-                    ->with($exception, __('Something went wrong while changing the password.'))
-                    ->willReturnSelf();
-            }
-
-            $this->session->expects($this->once())
-                ->method('setCustomerFormData')
-                ->with(true)
-                ->willReturnSelf();
-
-            $this->messageManager->expects($this->any())
-                ->method('addError')
-                ->with($errors['message'])
-                ->willReturnSelf();
-
-            $this->resultRedirect->expects($this->once())
-                ->method('setPath')
-                ->with('*/*/edit')
-                ->willReturnSelf();
+            $this->mockChangePasswordErrors($currentPassword, $newPassword, $errors, $customerEmail);
         } else {
             $this->customerAccountManagement->expects($this->once())
                 ->method('changePassword')
@@ -360,28 +323,6 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->method('extract')
             ->with('customer_account_edit', $this->request)
             ->willReturn($newCustomerMock);
-
-        $currentCustomerMock->expects($this->once())
-            ->method('getAddresses')
-            ->willReturn([$address]);
-        $currentCustomerMock->expects($this->exactly(2))
-            ->method('getEmail')
-            ->willReturn($customerEmail);
-
-        $newCustomerMock->expects($this->once())
-            ->method('setId')
-            ->with($customerId)
-            ->willReturnSelf();
-        $newCustomerMock->expects($this->once())
-            ->method('getAddresses')
-            ->willReturn(null);
-        $newCustomerMock->expects($this->once())
-            ->method('setAddresses')
-            ->with([$address])
-            ->willReturn(null);
-        $newCustomerMock->expects($this->once())
-            ->method('getEmail')
-            ->willReturn($customerEmail);
 
         $this->messageManager->expects($this->once())
             ->method('getMessages')
@@ -465,12 +406,18 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
     ) {
         $customerId = 1;
 
-        $currentCustomerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
-            ->getMockForAbstractClass();
-        $newCustomerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
-            ->getMockForAbstractClass();
         $address = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterface')
             ->getMockForAbstractClass();
+
+        $currentCustomerMock = $this->getCurrentCustomerMock($address);
+        $currentCustomerMock->expects($this->exactly(2))
+            ->method('getEmail')
+            ->willReturn($currentEmail);
+
+        $newCustomerMock = $this->getNewCustomerMock($customerId, $address);
+        $newCustomerMock->expects($this->exactly(2))
+            ->method('getEmail')
+            ->willReturn($newEmail);
 
         $this->validator->expects($this->once())
             ->method('validate')
@@ -494,34 +441,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
 
         // Prepare errors processing
         if (!empty($errors)) {
-            if (!empty($errors['exception'])) {
-                $exception = new $errors['exception'](__($errors['message']));
-
-                $this->customerAccountManagement->expects($this->once())
-                    ->method('changeEmail')
-                    ->with($currentEmail, $newEmail)
-                    ->willThrowException($exception);
-
-                $this->messageManager->expects($this->any())
-                    ->method('addException')
-                    ->with($exception, __('Something went wrong while changing the email.'))
-                    ->willReturnSelf();
-            }
-
-            $this->session->expects($this->once())
-                ->method('setCustomerFormData')
-                ->with(true)
-                ->willReturnSelf();
-
-            $this->messageManager->expects($this->any())
-                ->method('addError')
-                ->with($errors['message'])
-                ->willReturnSelf();
-
-            $this->resultRedirect->expects($this->once())
-                ->method('setPath')
-                ->with('*/*/edit')
-                ->willReturnSelf();
+            $this->mockChangeEmailErrors($currentEmail, $newEmail, $errors);
         } else {
             $this->customerAccountManagement->expects($this->once())
                 ->method('changeEmail')
@@ -553,28 +473,6 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->with('customer_account_edit', $this->request)
             ->willReturn($newCustomerMock);
 
-        $currentCustomerMock->expects($this->once())
-            ->method('getAddresses')
-            ->willReturn([$address]);
-        $currentCustomerMock->expects($this->exactly(2))
-            ->method('getEmail')
-            ->willReturn($currentEmail);
-
-        $newCustomerMock->expects($this->once())
-            ->method('setId')
-            ->with($customerId)
-            ->willReturnSelf();
-        $newCustomerMock->expects($this->once())
-            ->method('getAddresses')
-            ->willReturn(null);
-        $newCustomerMock->expects($this->once())
-            ->method('setAddresses')
-            ->with([$address])
-            ->willReturn(null);
-        $newCustomerMock->expects($this->exactly(2))
-            ->method('getEmail')
-            ->willReturn($newEmail);
-
         $this->messageManager->expects($this->once())
             ->method('getMessages')
             ->willReturn($this->messageCollection);
@@ -582,7 +480,6 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
         $this->messageCollection->expects($this->once())
             ->method('getCount')
             ->willReturn($errors);
-
 
         $this->assertSame($this->resultRedirect, $this->model->execute());
     }
@@ -637,12 +534,18 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
         $customerId = 1;
         $customerEmail = 'user1@example.com';
 
-        $currentCustomerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
-            ->getMockForAbstractClass();
-        $newCustomerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
-            ->getMockForAbstractClass();
         $address = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterface')
             ->getMockForAbstractClass();
+
+        $currentCustomerMock = $this->getCurrentCustomerMock($address);
+        $currentCustomerMock->expects($this->once())
+            ->method('getEmail')
+            ->willReturn($customerEmail);
+
+        $newCustomerMock = $this->getNewCustomerMock($customerId, $address);
+        $newCustomerMock->expects($this->once())
+            ->method('getEmail')
+            ->willReturn($customerEmail);
 
         $exception = new $exception(__($message));
 
@@ -683,28 +586,6 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->method('extract')
             ->with('customer_account_edit', $this->request)
             ->willReturn($newCustomerMock);
-
-        $currentCustomerMock->expects($this->once())
-            ->method('getAddresses')
-            ->willReturn([$address]);
-        $currentCustomerMock->expects($this->once())
-            ->method('getEmail')
-            ->willReturn($customerEmail);
-
-        $newCustomerMock->expects($this->once())
-            ->method('setId')
-            ->with($customerId)
-            ->willReturnSelf();
-        $newCustomerMock->expects($this->once())
-            ->method('getAddresses')
-            ->willReturn(null);
-        $newCustomerMock->expects($this->once())
-            ->method('setAddresses')
-            ->with([$address])
-            ->willReturn(null);
-        $newCustomerMock->expects($this->once())
-            ->method('getEmail')
-            ->willReturn($customerEmail);
 
         $this->messageManager->expects($this->once())
             ->method('getMessages')
@@ -787,5 +668,123 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
         $this->resultRedirectFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->resultRedirect);
+    }
+
+    /**
+     * @param int $customerId
+     * @param \PHPUnit_Framework_MockObject_MockObject $address
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getNewCustomerMock($customerId, $address)
+    {
+        $newCustomerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+            ->getMockForAbstractClass();
+
+        $newCustomerMock->expects($this->once())
+            ->method('setId')
+            ->with($customerId)
+            ->willReturnSelf();
+        $newCustomerMock->expects($this->once())
+            ->method('getAddresses')
+            ->willReturn(null);
+        $newCustomerMock->expects($this->once())
+            ->method('setAddresses')
+            ->with([$address])
+            ->willReturn(null);
+
+        return $newCustomerMock;
+    }
+
+    /**
+     * @param \PHPUnit_Framework_MockObject_MockObject $address
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getCurrentCustomerMock($address)
+    {
+        $currentCustomerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+            ->getMockForAbstractClass();
+
+        $currentCustomerMock->expects($this->once())
+            ->method('getAddresses')
+            ->willReturn([$address]);
+
+        return $currentCustomerMock;
+    }
+
+    /**
+     * @param string $currentEmail
+     * @param string $newEmail
+     * @param [] $errors
+     * @return void
+     */
+    protected function mockChangeEmailErrors($currentEmail, $newEmail, $errors)
+    {
+        if (!empty($errors['exception'])) {
+            $exception = new $errors['exception'](__($errors['message']));
+
+            $this->customerAccountManagement->expects($this->once())
+                ->method('changeEmail')
+                ->with($currentEmail, $newEmail)
+                ->willThrowException($exception);
+
+            $this->messageManager->expects($this->any())
+                ->method('addException')
+                ->with($exception, __('Something went wrong while changing the email.'))
+                ->willReturnSelf();
+        }
+
+        $this->session->expects($this->once())
+            ->method('setCustomerFormData')
+            ->with(true)
+            ->willReturnSelf();
+
+        $this->messageManager->expects($this->any())
+            ->method('addError')
+            ->with($errors['message'])
+            ->willReturnSelf();
+
+        $this->resultRedirect->expects($this->once())
+            ->method('setPath')
+            ->with('*/*/edit')
+            ->willReturnSelf();
+    }
+
+    /**
+     * @param string $currentPassword
+     * @param string $newPassword
+     * @param [] $errors
+     * @param string $customerEmail
+     * @return void
+     */
+    protected function mockChangePasswordErrors($currentPassword, $newPassword, $errors, $customerEmail)
+    {
+        if (!empty($errors['exception'])) {
+            $exception = new $errors['exception'](__($errors['message']));
+
+            $this->customerAccountManagement->expects($this->once())
+                ->method('changePassword')
+                ->with($customerEmail, $currentPassword, $newPassword)
+                ->willThrowException($exception);
+
+            $this->messageManager->expects($this->any())
+                ->method('addException')
+                ->with($exception, __('Something went wrong while changing the password.'))
+                ->willReturnSelf();
+        }
+
+        $this->session->expects($this->once())
+            ->method('setCustomerFormData')
+            ->with(true)
+            ->willReturnSelf();
+
+        $this->messageManager->expects($this->any())
+            ->method('addError')
+            ->with($errors['message'])
+            ->willReturnSelf();
+
+        $this->resultRedirect->expects($this->once())
+            ->method('setPath')
+            ->with('*/*/edit')
+            ->willReturnSelf();
     }
 }
