@@ -69,6 +69,15 @@ class TotalsCollector
 
 
     /**
+     * Quote validator
+     *
+     * @var \Magento\Quote\Model\QuoteValidator
+     */
+    protected $quoteValidator;
+
+
+
+    /**
      * @var \Magento\Quote\Model\ShippingFactory
      */
     protected $shippingFactory;
@@ -94,7 +103,8 @@ class TotalsCollector
         \Magento\Quote\Model\Quote\Address\TotalFactory $totalFactory,
         \Magento\Quote\Model\Quote\TotalsCollectorList $collectorList,
         \Magento\Quote\Model\ShippingFactory $shippingFactory,
-        \Magento\Quote\Model\ShippingAssignmentFactory $shippingAssignmentFactory
+        \Magento\Quote\Model\ShippingAssignmentFactory $shippingAssignmentFactory,
+        \Magento\Quote\Model\QuoteValidator $quoteValidator
     ) {
         $this->totalCollector = $totalCollector;
         $this->totalCollectorFactory = $totalCollectorFactory;
@@ -105,6 +115,7 @@ class TotalsCollector
         $this->collectorList = $collectorList;
         $this->shippingFactory = $shippingFactory;
         $this->shippingAssignmentFactory = $shippingAssignmentFactory;
+        $this->quoteValidator = $quoteValidator;
     }
 
     /**
@@ -122,6 +133,136 @@ class TotalsCollector
         $shippingAssignment->setItems($quote->getAllItems());
         $total = $this->collectAddressTotals($shippingAssignment, $quote->getStoreId());
         return $total;
+    }
+
+    /**
+     * @param \Magento\Quote\Model\Quote $quote
+     * @return \Magento\Quote\Model\Quote\Address\Total
+     */
+    public function collect(\Magento\Quote\Model\Quote $quote)
+    {
+
+        /** @var \Magento\Quote\Model\Quote\Address\Total $total */
+        $total = $this->totalFactory->create('Magento\Quote\Model\Quote\Address\Total');
+
+        //protected $_eventPrefix = 'sales_quote';
+        //protected $_eventObject = 'quote';
+
+        $this->eventManager->dispatch(
+            'sales_quote_collect_totals_before',
+            ['quote' => $quote]
+        );
+
+        $this->_collectItemsQtys($quote);
+
+        $total->setSubtotal(0);
+        $total->setBaseSubtotal(0);
+
+        $total->setSubtotalWithDiscount(0);
+        $total->setBaseSubtotalWithDiscount(0);
+
+        $total->setGrandTotal(0);
+        $total->setBaseGrandTotal(0);
+
+        /** @var \Magento\Quote\Model\Quote\Address $address */
+        //foreach ($quote->getAllAddresses() as $address) {
+
+            /** Build shipping assignment DTO  */
+            $shippingAssignment = $this->shippingAssignmentFactory->create();
+            $shipping = $this->shippingFactory->create();
+            $shipping->setMethod($quote->getShippingAddress()->getShippingMethod());
+            $shipping->setAddress($quote->getShippingAddress());
+            $shippingAssignment->setShipping($shipping);
+            $shippingAssignment->setItems($quote->getAllItems());
+
+            $addressTotal = $this->collectAddressTotals($shippingAssignment, $quote->getStoreId());
+
+            $total->setSubtotal((float)$total->getSubtotal() + $addressTotal->getSubtotal());
+            $total->setBaseSubtotal((float)$total->getBaseSubtotal() + $addressTotal->getBaseSubtotal());
+
+            $total->setSubtotalWithDiscount(
+                (float)$total->getSubtotalWithDiscount() + $addressTotal->getSubtotalWithDiscount()
+            );
+            $total->setBaseSubtotalWithDiscount(
+                (float)$total->getBaseSubtotalWithDiscount() + $addressTotal->getBaseSubtotalWithDiscount()
+            );
+
+            $total->setGrandTotal((float)$total->getGrandTotal() + $addressTotal->getGrandTotal());
+            $total->setBaseGrandTotal((float)$total->getBaseGrandTotal() + $addressTotal->getBaseGrandTotal());
+        //}
+
+        $this->quoteValidator->validateQuoteAmount($quote, $quote->getGrandTotal());
+        $this->quoteValidator->validateQuoteAmount($quote, $quote->getBaseGrandTotal());
+
+        //$this->setData('trigger_recollect', 0);
+        $this->_validateCouponCode($quote);
+
+        //@todo modify arguments
+        $this->eventManager->dispatch(
+            'sales_quote_collect_totals_after',
+            ['quote' => $quote]
+        );
+
+        //$this->setTotalsCollectedFlag(true);
+        return $total;
+    }
+
+    /**
+     * @return $this
+     */
+    protected function _validateCouponCode(\Magento\Quote\Model\Quote $quote)
+    {
+        $code = $quote->getData('coupon_code');
+        if (strlen($code)) {
+            $addressHasCoupon = false;
+            $addresses = $quote->getAllAddresses();
+            if (count($addresses) > 0) {
+                foreach ($addresses as $address) {
+                    if ($address->hasCouponCode()) {
+                        $addressHasCoupon = true;
+                    }
+                }
+                if (!$addressHasCoupon) {
+                    $quote->setCouponCode('');
+                }
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Collect items qty
+     *
+     * @return $this
+     */
+    protected function _collectItemsQtys(\Magento\Quote\Model\Quote $quote)
+    {
+        $quote->setItemsCount(0);
+        $quote->setItemsQty(0);
+        $quote->setVirtualItemsQty(0);
+
+        foreach ($quote->getAllVisibleItems() as $item) {
+            if ($item->getParentItem()) {
+                continue;
+            }
+
+            $children = $item->getChildren();
+            if ($children && $item->isShipSeparately()) {
+                foreach ($children as $child) {
+                    if ($child->getProduct()->getIsVirtual()) {
+                        $quote->setVirtualItemsQty($quote->getVirtualItemsQty() + $child->getQty() * $item->getQty());
+                    }
+                }
+            }
+
+            if ($item->getProduct()->getIsVirtual()) {
+                $quote->setVirtualItemsQty($quote->getVirtualItemsQty() + $item->getQty());
+            }
+            $quote->setItemsCount($quote->getItemsCount() + 1);
+            $quote->setItemsQty((float)$quote->getItemsQty() + $item->getQty());
+        }
+
+        return $this;
     }
 
     /**

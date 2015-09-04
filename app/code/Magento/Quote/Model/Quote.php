@@ -1922,114 +1922,115 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function collectTotals()
     {
-        /**
-         * Protect double totals collection
-         */
-        if ($this->getTotalsCollectedFlag()) {
-            return $this;
-        }
-        $this->_eventManager->dispatch(
-            $this->_eventPrefix . '_collect_totals_before',
-            [$this->_eventObject => $this]
-        );
-
-        $this->_collectItemsQtys();
-
-        $this->setSubtotal(0);
-        $this->setBaseSubtotal(0);
-
-        $this->setSubtotalWithDiscount(0);
-        $this->setBaseSubtotalWithDiscount(0);
-
-        $this->setGrandTotal(0);
-        $this->setBaseGrandTotal(0);
-
-        /** @var \Magento\Quote\Model\Quote\Address $address */
-        foreach ($this->getAllAddresses() as $address) {
-            $address->setSubtotal(0);
-            $address->setBaseSubtotal(0);
-
-            $address->setGrandTotal(0);
-            $address->setBaseGrandTotal(0);
-
-            //$address->collectTotals();
-
-
-            /** Build shipping assignment DTO  */
-            $shippingAssignment = $this->shippingAssignmentFactory->create();
-            $shipping = $this->shippingFactory->create();
-            $shipping->setMethod($this->getShippingAddress()->getShippingMethod());
-            $shipping->setAddress($this->getShippingAddress());
-            $shippingAssignment->setShipping($shipping);
-            $shippingAssignment->setItems($this->getAllItems());
-
-            $totals = $this->totalsCollector->collectAddressTotals($shippingAssignment, $this->getStoreId());
-
-
-
-            $this->setSubtotal((float)$this->getSubtotal() + $address->getSubtotal());
-            $this->setBaseSubtotal((float)$this->getBaseSubtotal() + $address->getBaseSubtotal());
-
-            $this->setSubtotalWithDiscount(
-                (float)$this->getSubtotalWithDiscount() + $address->getSubtotalWithDiscount()
-            );
-            $this->setBaseSubtotalWithDiscount(
-                (float)$this->getBaseSubtotalWithDiscount() + $address->getBaseSubtotalWithDiscount()
-            );
-
-            $this->setGrandTotal((float)$this->getGrandTotal() + $address->getGrandTotal());
-            $this->setBaseGrandTotal((float)$this->getBaseGrandTotal() + $address->getBaseGrandTotal());
-        }
-
-        $this->quoteValidator->validateQuoteAmount($this, $this->getGrandTotal());
-        $this->quoteValidator->validateQuoteAmount($this, $this->getBaseGrandTotal());
-
-        $this->setData('trigger_recollect', 0);
-        $this->_validateCouponCode();
-
-        $this->_eventManager->dispatch(
-            $this->_eventPrefix . '_collect_totals_after',
-            [$this->_eventObject => $this]
-        );
-
-        $this->setTotalsCollectedFlag(true);
+        $total = $this->totalsCollector->collect($this);
+        $this->addData($total->getData());
         return $this;
+//        /**
+//         * Protect double totals collection
+//         */
+//        if ($this->getTotalsCollectedFlag()) {
+//            return $this;
+//        }
+//        $this->_eventManager->dispatch(
+//            $this->_eventPrefix . '_collect_totals_before',
+//            [$this->_eventObject => $this]
+//        );
+//
+//        $this->_collectItemsQtys();
+//
+//        $this->setSubtotal(0);
+//        $this->setBaseSubtotal(0);
+//
+//        $this->setSubtotalWithDiscount(0);
+//        $this->setBaseSubtotalWithDiscount(0);
+//
+//        $this->setGrandTotal(0);
+//        $this->setBaseGrandTotal(0);
+//
+//        /** @var \Magento\Quote\Model\Quote\Address $address */
+//        foreach ($this->getAllAddresses() as $address) {
+//            $address->setSubtotal(0);
+//            $address->setBaseSubtotal(0);
+//
+//            $address->setGrandTotal(0);
+//            $address->setBaseGrandTotal(0);
+//
+//            //$address->collectTotals();
+//
+//
+//            /** Build shipping assignment DTO  */
+//            $shippingAssignment = $this->shippingAssignmentFactory->create();
+//            $shipping = $this->shippingFactory->create();
+//            $shipping->setMethod($this->getShippingAddress()->getShippingMethod());
+//            $shipping->setAddress($this->getShippingAddress());
+//            $shippingAssignment->setShipping($shipping);
+//            $shippingAssignment->setItems($this->getAllItems());
+//
+//            $total = $this->totalsCollector->collectAddressTotals($shippingAssignment, $this->getStoreId());
+//
+//            $this->setSubtotal((float)$this->getSubtotal() + $total->getSubtotal());
+//            $this->setBaseSubtotal((float)$this->getBaseSubtotal() + $total->getBaseSubtotal());
+//
+//            $this->setSubtotalWithDiscount(
+//                (float)$this->getSubtotalWithDiscount() + $total->getSubtotalWithDiscount()
+//            );
+//            $this->setBaseSubtotalWithDiscount(
+//                (float)$this->getBaseSubtotalWithDiscount() + $total->getBaseSubtotalWithDiscount()
+//            );
+//
+//            $this->setGrandTotal((float)$this->getGrandTotal() + $total->getGrandTotal());
+//            $this->setBaseGrandTotal((float)$this->getBaseGrandTotal() + $total->getBaseGrandTotal());
+//        }
+//
+//        $this->quoteValidator->validateQuoteAmount($this, $this->getGrandTotal());
+//        $this->quoteValidator->validateQuoteAmount($this, $this->getBaseGrandTotal());
+//
+//        $this->setData('trigger_recollect', 0);
+//        $this->_validateCouponCode();
+//
+//        $this->_eventManager->dispatch(
+//            $this->_eventPrefix . '_collect_totals_after',
+//            [$this->_eventObject => $this]
+//        );
+//
+//        $this->setTotalsCollectedFlag(true);
+//        return $this;
     }
 
-    /**
-     * Collect items qty
-     *
-     * @return $this
-     */
-    protected function _collectItemsQtys()
-    {
-        $this->setItemsCount(0);
-        $this->setItemsQty(0);
-        $this->setVirtualItemsQty(0);
-
-        foreach ($this->getAllVisibleItems() as $item) {
-            if ($item->getParentItem()) {
-                continue;
-            }
-
-            $children = $item->getChildren();
-            if ($children && $item->isShipSeparately()) {
-                foreach ($children as $child) {
-                    if ($child->getProduct()->getIsVirtual()) {
-                        $this->setVirtualItemsQty($this->getVirtualItemsQty() + $child->getQty() * $item->getQty());
-                    }
-                }
-            }
-
-            if ($item->getProduct()->getIsVirtual()) {
-                $this->setVirtualItemsQty($this->getVirtualItemsQty() + $item->getQty());
-            }
-            $this->setItemsCount($this->getItemsCount() + 1);
-            $this->setItemsQty((float)$this->getItemsQty() + $item->getQty());
-        }
-
-        return $this;
-    }
+//    /**
+//     * Collect items qty
+//     *
+//     * @return $this
+//     */
+//    protected function _collectItemsQtys()
+//    {
+//        $this->setItemsCount(0);
+//        $this->setItemsQty(0);
+//        $this->setVirtualItemsQty(0);
+//
+//        foreach ($this->getAllVisibleItems() as $item) {
+//            if ($item->getParentItem()) {
+//                continue;
+//            }
+//
+//            $children = $item->getChildren();
+//            if ($children && $item->isShipSeparately()) {
+//                foreach ($children as $child) {
+//                    if ($child->getProduct()->getIsVirtual()) {
+//                        $this->setVirtualItemsQty($this->getVirtualItemsQty() + $child->getQty() * $item->getQty());
+//                    }
+//                }
+//            }
+//
+//            if ($item->getProduct()->getIsVirtual()) {
+//                $this->setVirtualItemsQty($this->getVirtualItemsQty() + $item->getQty());
+//            }
+//            $this->setItemsCount($this->getItemsCount() + 1);
+//            $this->setItemsQty((float)$this->getItemsQty() + $item->getQty());
+//        }
+//
+//        return $this;
+//    }
 
     /**
      * Get all quote totals (sorted by priority)
@@ -2463,28 +2464,28 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         return $this;
     }
 
-    /**
-     * @return $this
-     */
-    protected function _validateCouponCode()
-    {
-        $code = $this->_getData('coupon_code');
-        if (strlen($code)) {
-            $addressHasCoupon = false;
-            $addresses = $this->getAllAddresses();
-            if (count($addresses) > 0) {
-                foreach ($addresses as $address) {
-                    if ($address->hasCouponCode()) {
-                        $addressHasCoupon = true;
-                    }
-                }
-                if (!$addressHasCoupon) {
-                    $this->setCouponCode('');
-                }
-            }
-        }
-        return $this;
-    }
+//    /**
+//     * @return $this
+//     */
+//    protected function _validateCouponCode()
+//    {
+//        $code = $this->_getData('coupon_code');
+//        if (strlen($code)) {
+//            $addressHasCoupon = false;
+//            $addresses = $this->getAllAddresses();
+//            if (count($addresses) > 0) {
+//                foreach ($addresses as $address) {
+//                    if ($address->hasCouponCode()) {
+//                        $addressHasCoupon = true;
+//                    }
+//                }
+//                if (!$addressHasCoupon) {
+//                    $this->setCouponCode('');
+//                }
+//            }
+//        }
+//        return $this;
+//    }
 
     /**
      * Trigger collect totals after loading, if required
