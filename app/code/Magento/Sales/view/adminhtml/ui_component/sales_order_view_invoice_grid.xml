@@ -367,16 +367,18 @@
                 <item name="config" xsi:type="array">
                     <item name="selectProvider" xsi:type="string">sales_order_view_invoice_grid.sales_order_view_invoice_grid.sales_order_invoice_columns.ids</item>
                     <item name="displayArea" xsi:type="string">bottom</item>
-                    <item name="actions" xsi:type="array">
-                        <item name="pdfinvoices_order" xsi:type="array">
-                            <item name="type" xsi:type="string">pdfinvoices_order</item>
-                            <item name="label" xsi:type="string" translate="true">PDF Invoices</item>
-                            <item name="url" xsi:type="string">sales/invoice/pdfinvoices</item>
-                        </item>
-                    </item>
                     <item name="indexField" xsi:type="string">entity_id</item>
                 </item>
             </argument>
+            <action name="pdfinvoices_order">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">pdfinvoices_order</item>
+                        <item name="label" xsi:type="string" translate="true">PDF Invoices</item>
+                        <item name="url" xsi:type="url" path="sales/invoice/pdfinvoices"/>
+                    </item>
+                </argument>
+            </action>
         </massaction>
         <paging name="listing_paging">
             <argument name="data" xsi:type="array">
