@@ -65,7 +65,7 @@ define([
          */
         onError: function () {
             alert({
-                content: $t('Something go wrong')
+                content: $t('Something goes wrong')
             });
         },
 
