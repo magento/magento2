@@ -12,19 +12,14 @@ define([
 ], function ($) {
 
     $.widget('mage.productGallery',
-
         $.mage.productGallery,
         {
-
-
-
-
             _create: function() {
                 this._bind();
             },
 
             _bind: function() {
-                $(this.element).on('click', this.showModal.bind(this));
+                this.element.on('click', $.proxy(this.showModal, this));
                 $('.gallery.ui-sortable').on('openDialog', $.proxy(this._onOpenDialog, this));
             },
 
