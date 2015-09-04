@@ -191,7 +191,6 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $selects = [];
         for ($i = $queriesCount; $i >= 0; $i--) {
             $isLast = $i === 0;
-            var_dump([$queriesCount, $i, $isLast]);
             $select = $this->createSelectMock($previousSelect, $isLast, true);
             $previousSelect = $select;
             $selects[] = $select;
