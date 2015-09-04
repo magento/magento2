@@ -112,7 +112,7 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
     ) {
         $this->objectManager = $objectManagerProvider->get();
         $this->directoryList = $directoryList;
-        $this->ComponentRegistrar = $componentRegistrar;
+        $this->componentRegistrar = $componentRegistrar;
         parent::__construct();
     }
 
