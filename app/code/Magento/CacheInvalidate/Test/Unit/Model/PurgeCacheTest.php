@@ -53,9 +53,16 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->willReturn('');
         $this->uriMock->expects($this->once())
-            ->method('parse')
-            ->with('http://127.0.0.1:80')
-            ->willReturn($this->uriMock);
+            ->method('setScheme')
+            ->with('http')
+            ->willReturnSelf();
+        $this->uriMock->expects($this->once())
+            ->method('setHost')
+            ->with('127.0.0.1')
+            ->willReturnSelf();
+        $this->uriMock->expects($this->once())
+            ->method('setPort')
+            ->with(80);
         $this->model->sendPurgeRequest('tags');
     }
 
@@ -70,9 +77,16 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->willReturn(['cache_servers' => [['host' => '127.0.0.2', 'port' => 1234]]]);
         $this->uriMock->expects($this->once())
-            ->method('parse')
-            ->with('http://127.0.0.2:1234')
-            ->willReturn($this->uriMock);
+            ->method('setScheme')
+            ->with('http')
+            ->willReturnSelf();
+        $this->uriMock->expects($this->once())
+            ->method('setHost')
+            ->with('127.0.0.2')
+            ->willReturnSelf();
+        $this->uriMock->expects($this->once())
+            ->method('setPort')
+            ->with(1234);
         $this->model->sendPurgeRequest('tags');
     }
 
@@ -94,13 +108,27 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
                 ]
             );
         $this->uriMock->expects($this->at(0))
-            ->method('parse')
-            ->with('http://127.0.0.1:8080')
-            ->willReturn($this->uriMock);
+            ->method('setScheme')
+            ->with('http')
+            ->willReturnSelf();
         $this->uriMock->expects($this->at(1))
-            ->method('parse')
-            ->with('http://127.0.0.2:1234')
-            ->willReturn($this->uriMock);
+            ->method('setHost')
+            ->with('127.0.0.1')
+            ->willReturnSelf();
+        $this->uriMock->expects($this->at(2))
+            ->method('setPort')
+            ->with(8080);
+        $this->uriMock->expects($this->at(3))
+            ->method('setScheme')
+            ->with('http')
+            ->willReturnSelf();
+        $this->uriMock->expects($this->at(4))
+            ->method('setHost')
+            ->with('127.0.0.2')
+            ->willReturnSelf();
+        $this->uriMock->expects($this->at(5))
+            ->method('setPort')
+            ->with(1234);
         $this->model->sendPurgeRequest('tags');
     }
 }

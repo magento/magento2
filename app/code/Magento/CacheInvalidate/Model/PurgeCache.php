@@ -67,16 +67,18 @@ class PurgeCache
         $headers = ['X-Magento-Tags-Pattern' => $tagsPattern];
         $this->socketAdapter->setOptions(['timeout' => 10]);
         foreach ($servers as $server) {
-            if (!strpos($server['host'], '://')) {
-                $server['host'] = 'http://' . $server['host'];
-            }
-            if (!isset($server['port'])) {
-                $server['port'] = 80;
-            }
-            $uri = $server['host'] . ':' . $server['port'];
+            $port = isset($server['port']) ? $server['port'] : 80;
+            $this->uri->setScheme('http')
+                ->setHost($server['host'])
+                ->setPort($port);
             try {
-                $this->socketAdapter->connect($server['host'], $server['port']);
-                $this->socketAdapter->write('PURGE', $this->uri->parse($uri), '1.1', $headers);
+                $this->socketAdapter->connect($server['host'], $port);
+                $this->socketAdapter->write(
+                    'PURGE',
+                    $this->uri,
+                    '1.1',
+                    $headers
+                );
                 $this->socketAdapter->close();
             } catch (Exception $e) {
                 $this->logger->critical($e->getMessage(), compact('hosts', 'tagsPattern'));
