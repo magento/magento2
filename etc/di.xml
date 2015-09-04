@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\Amqp\PublisherInterface" type="Magento\Framework\Amqp\PublisherProxy"/>
+    <type name="Magento\Framework\Amqp\PublisherFactory">
+        <arguments>
+            <argument name="publishers" xsi:type="array">
+                <item name="mysql" xsi:type="array">
+                    <item name="type" xsi:type="object">Magento\MysqlMq\Model\Publisher</item>
+                    <item name="connectionName" xsi:type="string">mysql</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <!--<type name="Magento\Framework\Amqp\ConsumerFactory">-->
+        <!--<arguments>-->
+            <!--<argument name="consumers" xsi:type="array">-->
+                <!--<item name="mysql" xsi:type="array">-->
+                    <!--<item name="type" xsi:type="string">Magento\MysqlMq\Model\Consumer</item>-->
+                    <!--<item name="connectionName" xsi:type="string">mysql</item>-->
+                <!--</item>-->
+            <!--</argument>-->
+        <!--</arguments>-->
+    <!--</type>-->
+</config>
