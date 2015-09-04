@@ -108,13 +108,13 @@ class Mapper
      * Build adapter dependent query
      *
      * @param RequestInterface $request
-     * @throws \Exception
+     * @throws \LogicException
      * @return Select
      */
     public function buildQuery(RequestInterface $request)
     {
-        if (!isset($this->indexProviders[$request->getIndex()])) {
-            throw new \Exception('Index provider not configured');
+        if (!array_key_exists($request->getIndex(), $this->indexProviders)) {
+            throw new \LogicException('Index provider not configured');
         }
 
         $indexBuilder = $this->indexProviders[$request->getIndex()];
@@ -136,12 +136,6 @@ class Mapper
             $queryContainer
         );
 
-        $filtersCount = $queryContainer->getFiltersCount();
-        if ($filtersCount > 1) {
-            $select->group('entity_id');
-            $select->having('COUNT(DISTINCT search_index.attribute_id) = ' . $filtersCount);
-        }
-
         $select = $this->addDerivedQueries(
             $request,
             $queryContainer,
@@ -151,7 +145,7 @@ class Mapper
         );
 
         $select->limit($request->getSize());
-        $select->order('score ' . Select::SQL_DESC);
+        $select->order('relevance ' . Select::SQL_DESC);
         return $select;
     }
 
@@ -281,11 +275,6 @@ class Mapper
         foreach ($subQueryList as $subQuery) {
             $select = $this->processQuery($scoreBuilder, $subQuery, $select, $conditionType, $queryContainer);
         }
-        $filters = $queryContainer->getFilters();
-        if ($filters) {
-            $select->where('(' . implode(' OR ', $filters) . ')');
-            $queryContainer->clearFilters();
-        }
         return $select;
     }
 
@@ -319,7 +308,7 @@ class Mapper
                 $scoreBuilder->endQuery($query->getBoost());
                 break;
             case FilterQuery::REFERENCE_FILTER:
-                $filterCondition = $this->filterBuilder->build($query->getReference(), $conditionType, $queryContainer);
+                $filterCondition = $this->filterBuilder->build($query->getReference(), $conditionType);
                 if ($filterCondition) {
                     $select->where($filterCondition);
                 }
@@ -386,9 +375,11 @@ class Mapper
         IndexBuilderInterface $indexBuilder,
         array $matchQueries
     ) {
-        if (count($matchQueries)) {
+        $queriesCount = count($matchQueries);
+        if ($queriesCount) {
             $table = $this->temporaryStorage->storeDocumentsFromSelect($select);
             foreach ($matchQueries as $matchContainer) {
+                $queriesCount--;
                 $matchScoreBuilder = $this->scoreBuilderFactory->create();
                 $matchSelect = $this->matchBuilder->build(
                     $matchScoreBuilder,
@@ -396,9 +387,13 @@ class Mapper
                     $matchContainer->getRequest(),
                     $matchContainer->getConditionType()
                 );
-                $table = $this->mergeWithPreviousResult($matchSelect, $table, $matchScoreBuilder);
+                $select = $this->joinPreviousResultToSelect($matchSelect, $table, $matchScoreBuilder);
+                if ($queriesCount) {
+                    $previousResultTable = $table;
+                    $table = $this->temporaryStorage->storeDocumentsFromSelect($select);
+                    $this->getConnection()->dropTable($previousResultTable->getName());
+                }
             }
-            $select = $this->getConnection()->select()->from($table->getName());
         }
         return $select;
     }
@@ -407,10 +402,10 @@ class Mapper
      * @param Select $query
      * @param Table $previousResultTable
      * @param ScoreBuilder $scoreBuilder
-     * @return Table
+     * @return Select
      * @throws \Zend_Db_Exception
      */
-    private function mergeWithPreviousResult(Select $query, Table $previousResultTable, ScoreBuilder $scoreBuilder)
+    private function joinPreviousResultToSelect(Select $query, Table $previousResultTable, ScoreBuilder $scoreBuilder)
     {
         $query->joinInner(
             ['previous_results' => $previousResultTable->getName()],
@@ -422,9 +417,6 @@ class Mapper
 
         $query = $this->createAroundSelect($query, $scoreBuilder);
 
-        $table = $this->temporaryStorage->storeDocumentsFromSelect($query);
-
-        $this->getConnection()->dropTable($previousResultTable->getName());
-        return $table;
+        return $query;
     }
 }
