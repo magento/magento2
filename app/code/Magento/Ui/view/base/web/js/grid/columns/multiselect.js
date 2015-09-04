@@ -13,6 +13,7 @@ define([
         defaults: {
             headerTmpl: 'ui/grid/columns/multiselect',
             bodyTmpl: 'ui/grid/cells/multiselect',
+            controlVisibility: false,
             sortable: false,
             menuVisible: false,
             excludeMode: false,
