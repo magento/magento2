@@ -9,6 +9,7 @@ namespace Magento\ProductVideo\Model\Product\Attribute\Media;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageMediaEntryConverter;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory;
 
 /**
  * Converter for External Video media gallery type
@@ -29,15 +30,14 @@ class ExternalVideoMediaEntryConverter extends ImageMediaEntryConverter
      * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Api\Data\VideoContentInterfaceFactory $videoEntryFactory
-     * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory $mediaGalleryEntryExtensionFactory
+     * @param ProductAttributeMediaGalleryEntryExtensionFactory $mediaGalleryEntryExtensionFactory
      */
     public function __construct(
         \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Api\Data\VideoContentInterfaceFactory $videoEntryFactory,
-        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory $mediaGalleryEntryExtensionFactory
-    )
-    {
+        ProductAttributeMediaGalleryEntryExtensionFactory $mediaGalleryEntryExtensionFactory
+    ) {
         $this->videoEntryFactory = $videoEntryFactory;
         $this->mediaGalleryEntryExtensionFactory = $mediaGalleryEntryExtensionFactory;
         parent::__construct($mediaGalleryEntryFactory, $dataObjectHelper);
@@ -92,5 +92,4 @@ class ExternalVideoMediaEntryConverter extends ImageMediaEntryConverter
         $entryArray = array_merge($dataFromPreviewImageEntry, $entryArray);
         return $entryArray;
     }
-
 }

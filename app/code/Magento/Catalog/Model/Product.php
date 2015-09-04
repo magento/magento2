@@ -14,6 +14,9 @@ use Magento\Framework\Pricing\Object\SaleableInterface;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\Data\VideoContentInterface;
+use Magento\Catalog\Model\Product\Attribute\Backend\Media\MediaGalleryEntryConverterPool;
+use Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoMediaEntryConverter;
+use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory;
 
 /**
  * Catalog product model
@@ -324,6 +327,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $joinProcessor;
 
     /**
+     * Media converter pool
+     *
      * @var Product\Attribute\Backend\Media\MediaGalleryEntryConverterPool
      */
     protected $mediaGalleryEntryConverterPool;
@@ -361,7 +366,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory
      * @param \Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory
      * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory
-     * @param \Magento\Catalog\Model\Product\Attribute\Backend\Media\MediaGalleryEntryConverterPool $mediaGalleryEntryConverterPool
+     * @param ProductAttributeMediaGalleryEntryExtensionFactory $mediaGalleryEntryExtensionFactory
+     * @param \Magento\Framework\Api\Data\VideoContentInterfaceFactory $videoEntryFactory
+     * @param \Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageMediaEntryConverter $imageMediaEntryConverter
+     * @param ExternalVideoMediaEntryConverter $externalVideoMediaEntryConverter
+     * @param MediaGalleryEntryConverterPool $mediaGalleryEntryConverterPool
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      * @param array $data
@@ -404,8 +413,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory $mediaGalleryEntryExtensionFactory,
         \Magento\Framework\Api\Data\VideoContentInterfaceFactory $videoEntryFactory,
         \Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageMediaEntryConverter $imageMediaEntryConverter,
-        \Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoMediaEntryConverter $externalVideoMediaEntryConverter,
-        \Magento\Catalog\Model\Product\Attribute\Backend\Media\MediaGalleryEntryConverterPool $mediaGalleryEntryConverterPool,
+        ExternalVideoMediaEntryConverter $externalVideoMediaEntryConverter,
+        MediaGalleryEntryConverterPool $mediaGalleryEntryConverterPool,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
         array $data = []
@@ -2554,7 +2563,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         $entries = [];
         foreach ($mediaGallery as $image) {
-            $entry = $this->mediaGalleryEntryConverterPool->getConverterByMediaType($image['media_type'])->convertTo($this, $image);
+            $entry = $this
+                ->mediaGalleryEntryConverterPool
+                ->getConverterByMediaType($image['media_type'])
+                ->convertTo($this, $image);
             $entries[] = $entry;
         }
         return $entries;
@@ -2583,7 +2595,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         if ($mediaGalleryEntries !== null) {
             $images = [];
             foreach ($mediaGalleryEntries as $entry) {
-                $images[] = $this->mediaGalleryEntryConverterPool->getConverterByMediaType($entry->getMediaType())->convertFrom($entry);
+                $images[] = $this
+                    ->mediaGalleryEntryConverterPool
+                    ->getConverterByMediaType($entry->getMediaType())
+                    ->convertFrom($entry);
             }
             $this->setData('media_gallery', ['images' => $images]);
 

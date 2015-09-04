@@ -38,6 +38,7 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
      * Form preparation
      *
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {

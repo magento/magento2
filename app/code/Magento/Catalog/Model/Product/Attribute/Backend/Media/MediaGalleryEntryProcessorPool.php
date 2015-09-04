@@ -96,7 +96,7 @@ class MediaGalleryEntryProcessorPool
     }
 
     /**
-     * @param $actionName
+     * @param string $actionName
      * @param Product $product
      * @param AbstractAttribute $attribute
      * @return void

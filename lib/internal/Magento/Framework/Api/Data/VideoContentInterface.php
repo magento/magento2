@@ -5,6 +5,7 @@
  */
 
 namespace Magento\Framework\Api\Data;
+
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**

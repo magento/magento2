@@ -352,7 +352,7 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
         // Duplicate main entries of gallery
         foreach ($this->getConnection()->fetchAll($select) as $row) {
             $data = [
-                'attribute_id' => $attribute->getId(),
+                'attribute_id' => $attributeId,
                 'entity_id' => $newProductId,
                 'value' => isset($newFiles[$row['value_id']]) ? $newFiles[$row['value_id']] : $row['value'],
             ];
