@@ -10,6 +10,10 @@
         css: { _dragging: dragging },
         click: hasFieldAction() ?
             applyFieldAction.bind($data, row._rowIndex) :
-            false,
-        html: getLabel(row[field.index])"
-    data-action="grid-row-edit"></td>
+            false"
+    data-action="grid-row-edit">
+    <div
+            data-bind="html: getLabel(row[field.index])"
+            class="data-grid-cell-content">
+    </div>
+</td>
