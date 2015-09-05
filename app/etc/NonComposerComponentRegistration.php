@@ -6,7 +6,8 @@
 
 /**
  * A helper class.
- * Goes through app/code looking for *-registration.php files and executes them.
+ * Goes through non-composer components under app/code looking for their *-registration.php files and
+ * executes them to get these components registered with Magento framework.
  */
 class NonComposerComponentRegistrar 
 {
@@ -49,7 +50,7 @@ class NonComposerComponentRegistrar
         $recItrItr = new \RecursiveIteratorIterator($recDirItr);
         $dirItr = new \RegexIterator($recItrItr, self::REGISTRATION_FILES_REGEX);
 
-        // Go through each registration file and execute it so that all the components
+        // Go through each registration file and execute it so that all the non-components
         // get registered properly
         foreach ($dirItr as $fileInfo) {
             $fullFileName = $fileInfo->getPathname();
