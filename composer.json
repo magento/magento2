@@ -206,7 +206,7 @@
             "Magento\\Framework\\": "lib/internal/Magento/Framework/",
             "Magento\\Setup\\": "setup/src/Magento/Setup/"
         },
-	"files": ["test.php"]
+	"files": ["app/etc/NonComposerComponentRegistration.php"]
     },
     "autoload-dev": {
         "psr-4": {
