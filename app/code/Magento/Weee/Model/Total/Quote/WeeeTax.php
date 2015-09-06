@@ -21,12 +21,16 @@ class WeeeTax extends Weee
      */
     public function collect(\Magento\Quote\Model\Quote\Address $address)
     {
+        //Reset
         \Magento\Quote\Model\Quote\Address\Total\AbstractTotal::collect($address);
+
+        //Ensure Weee module is enabled
         $this->_store = $address->getQuote()->getStore();
         if (!$this->weeeData->isEnabled($this->_store)) {
             return $this;
         }
 
+        //Get all the items
         $items = $this->_getAddressItems($address);
         if (!count($items)) {
             return $this;
@@ -43,15 +47,29 @@ class WeeeTax extends Weee
             return $this;
         }
 
-        $weeeCodeToItemMap = $address->getWeeeCodeToItemMap();
+        //Ensure we have taxable weee data
         $extraTaxableDetails = $address->getExtraTaxableDetails();
-
         if (isset($extraTaxableDetails[self::ITEM_TYPE])) {
-            foreach ($extraTaxableDetails[self::ITEM_TYPE] as $itemCode => $weeeAttributesTaxDetails) {
-                $weeeCode = $weeeAttributesTaxDetails[0]['code'];
-                $item = $weeeCodeToItemMap[$weeeCode];
-                $this->weeeData->setApplied($item, []);
+            //Get mapping from weeeCode to item
+            $weeeCodeToItemMap = $address->getWeeeCodeToItemMap();
 
+            //Create mapping from item to weeeCode
+            $itemToWeeeCodeMap = $this->createItemToWeeeCodeMapping($weeeCodeToItemMap);
+
+            //Create mapping from weeeCode to weeeTaxDetails
+            $weeeCodeToWeeeTaxDetailsMap = [];
+            foreach ($extraTaxableDetails[self::ITEM_TYPE] as $weeeAttributesTaxDetails) {
+                foreach ($weeeAttributesTaxDetails as $weeeTaxDetails) {
+                    $weeeCode = $weeeTaxDetails['code'];
+                    $weeeCodeToWeeeTaxDetailsMap[$weeeCode][] = $weeeTaxDetails;
+                }
+            }
+
+            //Process each item that has taxable weee
+            foreach ($itemToWeeeCodeMap as $mapping) {
+                $item = $mapping['item'];
+
+                $this->weeeData->setApplied($item, []);
                 $productTaxes = [];
 
                 $totalValueInclTax = 0;
@@ -64,9 +82,13 @@ class WeeeTax extends Weee
                 $totalRowValueExclTax = 0;
                 $baseTotalRowValueExclTax = 0;
 
-                //Process each weee attribute of an item
-                foreach ($weeeAttributesTaxDetails as $weeeTaxDetails) {
-                    $weeeCode = $weeeTaxDetails[CommonTaxCollector::KEY_TAX_DETAILS_CODE];
+                //Process each taxed weee attribute of an item
+                foreach ($mapping['weeeCodes'] as $weeeCode) {
+                    if (!array_key_exists($weeeCode, $weeeCodeToWeeeTaxDetailsMap)) {
+                        //Need to ensure that everyone is in sync for which weee code to process
+                        continue;
+                    }
+                    $weeeTaxDetails = $weeeCodeToWeeeTaxDetailsMap[$weeeCode][0];
                     $attributeCode = explode('-', $weeeCode)[1];
 
                     $valueExclTax = $weeeTaxDetails[CommonTaxCollector::KEY_TAX_DETAILS_PRICE_EXCL_TAX];
@@ -101,6 +123,7 @@ class WeeeTax extends Weee
                         'base_row_amount_incl_tax' => $baseRowValueInclTax,
                     ];
                 }
+
                 $item->setWeeeTaxAppliedAmount($totalValueExclTax)
                     ->setBaseWeeeTaxAppliedAmount($baseTotalValueExclTax)
                     ->setWeeeTaxAppliedRowAmount($totalRowValueExclTax)
@@ -124,6 +147,50 @@ class WeeeTax extends Weee
         }
 
         return $this;
+    }
+
+    /**
+     * Given a mapping from a weeeCode to an item, create a mapping from the item to the list of weeeCodes.
+     *
+     * Example of input:
+     *  [
+     *      "weeeCode1" -> item1,
+     *      "weeeCode2" -> item1,
+     *      ...
+     *      "weeeCodeX" -> item22,
+     *      "weeeCodeY" -> item22,
+     *      ...
+     *   ]
+     *
+     * Example of output:
+     *  [
+     *    item1Id  -> [ "item"  -> item1,
+     *                  "weeeCodes" -> [weeeCode1, weeeCode2, ...]
+     *                ],
+     *    ...
+     *    item22Id -> [ "item"  -> item22,
+     *                  "weeeCodes" -> [weeeCodeX, weeeCodeY, ...]
+     *                ],
+     *    ...
+     *  ]
+     *
+     * @param array $weeeCodeToItemMap
+     * @return array
+     */
+    protected function createItemToWeeeCodeMapping($weeeCodeToItemMap)
+    {
+        $itemToCodeMap = [];
+        foreach ($weeeCodeToItemMap as $weeeCode => $item) {
+            $key = $item->getItemId();
+            if (!array_key_exists($key, $itemToCodeMap)) {
+                //Create the initial structure for this item
+                $itemToCodeMap[$key] = ['item' => $item, 'weeeCodes' => [$weeeCode]];
+            } else {
+                //Append the weeeCode to the existing structure
+                $itemToCodeMap[$key]['weeeCodes'][] = $weeeCode;
+            }
+        }
+        return $itemToCodeMap;
     }
 
     /**
