@@ -70,7 +70,8 @@ class TotalsReader
     protected $allowedCollectors = array(
         'subtotal',
         'grand_total',
-        'customerbalance'
+        'customerbalance',
+        'giftcardaccount'
     );
 
 
