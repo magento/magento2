@@ -22,6 +22,7 @@ class ConfigurableProductHandler
 
     /**
      * @param \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable $configurable
+     * @param ConfigurableProductsProvider $configurableProductsProvider
      */
     public function __construct(
         \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable $configurable,

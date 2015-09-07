@@ -36,6 +36,8 @@ class ProductRuleReindex
      * @param \Magento\CatalogRule\Model\Indexer\Product\ProductRuleIndexer $subject
      * @param \Closure $proceed
      * @param int $id
+     *
+     * @return void
      */
     public function aroundExecuteRow(
         \Magento\CatalogRule\Model\Indexer\Product\ProductRuleIndexer $subject,
@@ -54,7 +56,7 @@ class ProductRuleReindex
      * @param \Closure $proceed
      * @param array $ids
      *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @return void
      */
     public function aroundExecuteList(
         \Magento\CatalogRule\Model\Indexer\Product\ProductRuleIndexer $subject,
