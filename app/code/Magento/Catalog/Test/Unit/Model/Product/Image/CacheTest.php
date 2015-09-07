@@ -180,13 +180,6 @@ class CacheTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
 
         $this->imageHelper->expects($this->exactly(3))
-            ->method('resize')
-            ->will($this->returnValueMap([
-                [300, 300, $this->imageHelper],
-                [null, 200, $this->imageHelper],
-                [100, null, $this->imageHelper],
-            ]));
-        $this->imageHelper->expects($this->exactly(3))
             ->method('save')
             ->will($this->returnSelf());
 

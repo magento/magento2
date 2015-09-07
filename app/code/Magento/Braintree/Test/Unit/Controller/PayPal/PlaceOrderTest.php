@@ -219,8 +219,8 @@ class PlaceOrderTest extends \PHPUnit_Framework_TestCase
             ->willThrowException($exception);
 
         $this->messageManager->expects($this->once())
-            ->method('addError')
-            ->with($exceptionMsg);
+            ->method('addExceptionMessage')
+            ->with($exception, $exceptionMsg);
 
         $resultRedirect = $this->getMockBuilder('\Magento\Framework\Controller\Result\Redirect')
             ->disableOriginalConstructor()
