@@ -20,18 +20,25 @@ define([
             productAttributes: [],
             rowIndexToEdit: false,
             productAttributesMap: null,
+            associatedProductsModal: null,
             modules: {
                 associatedProductsFilter: '${ $.associatedProductsFilter }',
                 associatedProductsProvider: '${ $.associatedProductsProvider }'
             }
         },
         initialize: function () {
+            var $gridDialog;
             this._super();
 
             if (this.variations.length) {
                 this.render(this.variations, this.productAttributes);
             }
             this.initProductAttributesMap();
+
+            this.associatedProductsModal = $('#associated-products-container').modal({
+                title: $.mage.__('Select Associated Product'),
+                type: 'slide'
+            });
         },
 
         /**
@@ -51,7 +58,7 @@ define([
             };
             this.productAttributesMap[this.getVariationKey(newProduct.options)] = newProduct.productId;
             this.productMatrix.splice(this.rowIndexToEdit, 0, newProduct);
-            $('#associated-products-container').trigger('closeModal');
+            this.associatedProductsModal.trigger('closeModal');
         },
         initObservable: function () {
             this._super().observe('actions opened attributes productMatrix');
@@ -140,7 +147,19 @@ define([
             this.rowIndexToEdit = rowIndex;
             this.associatedProductsProvider().params.attribute_ids = _.keys(attributes);
             this.associatedProductsFilter().set('filters', attributes).apply();
-            $('#associated-products-container').trigger('openModal');
+            this.showMessageAssociatedGrid();
+            this.associatedProductsModal.trigger('openModal');
+        },
+        showMessageAssociatedGrid: function () {
+            if (this.associatedProductsProvider().data.items.length) {
+                this.associatedProductsModal
+                    .find('[data-role="messages"] div div')
+                    .text($.mage.__('Choose a new product to delete and replace the current product configuration.'));
+            } else {
+                this.associatedProductsModal
+                    .find('[data-role="messages"] div div')
+                    .text($.mage.__('For better results, add attributes and attribute values to your products.'));
+            }
         },
         toggleProduct: function (rowIndex) {
             var product, row, productChanged = {};

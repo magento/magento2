@@ -60,75 +60,44 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 <script>
 require([
     'jquery',
-    'mage/template',
-    'jquery/ui',
-    'jquery/jquery.tabs',
     'mage/mage',
-    'mage/backend/menu',
     'Magento_Ui/js/modal/modal',
     'mage/translate',
     'domReady!'
-], function($, mageTemplate){
+], function($){
     'use strict';
 
-    var variationsContainer = $("#<?php echo $block->getId()?>"),
-        collapsableWrapper = $("#<?php echo $block->getId()?>-wrapper"),
-        collapsableArea = $('> .collapse', collapsableWrapper),
-        stockAvailabilityField = $('#quantity_and_stock_status'),
-        qtyField = $('#qty'),
-        inventoryQty = $('#inventory_qty'),
-        inventoryAvailabilityField = $('#inventory_stock_availability'),
-        currentProductTemplateControl = $('#product-template-suggest-container .action-dropdown > .action-toggle'),
-        attributesInput = $("input[name='attributes[]']", variationsContainer),
-        hasVariations = <?php echo($block->getProduct()->getTypeId() === Configurable::TYPE_CODE || $block->getRequest()->has('attributes')) ? 'true' : 'false' ?>,
-        noImageUrl = '<?= $block->getNoImageUrl() ?>',
-        isLocked = function (element) {
-            return element.is('[data-locked]');
-        },
-        setElementDisabled = function (element, state, triggerEvent) {
-            if (!isLocked(element)) {
-                element.prop('disabled', state);
-                if (triggerEvent) {
-                    element.trigger('change')
-                }
-            }
-        };
+    var blockId = '#<?=$block->getId()?>';
+    var setElementDisabled = function ($element, state, triggerEvent) {
+        if (!$element.is('[data-locked]')) {
+            $element.prop('disabled', state);
 
-    collapsableArea
+            if (triggerEvent) {
+                $element.trigger('change');
+            }
+        }
+    };
+
+    $(blockId + '-wrapper > .collapse')
         .on('show', function() {
-            currentProductTemplateControl
+            $('#product-template-suggest-container .action-dropdown > .action-toggle')
                 .addClass('disabled')
                 .prop('disabled', true);
-
-            attributesInput.prop('disabled', false);
-
-            inventoryQty.prop('disabled', true);
-            inventoryAvailabilityField.removeProp('disabled');
-            setElementDisabled(qtyField, true, true);
-            setElementDisabled(stockAvailabilityField, false, false);
+            $(blockId + ' input[name="attributes[]"]').prop('disabled', false);
+            $('#inventory_qty').prop('disabled', true);
+            $('#inventory_stock_availability').removeProp('disabled');
+            setElementDisabled($('#qty'), true, true);
+            setElementDisabled($('#quantity_and_stock_status'), false, false);
         })
         .on('hide', function() {
-            currentProductTemplateControl
+            $('#product-template-suggest-container .action-dropdown > .action-toggle')
                 .removeClass('disabled')
                 .removeProp('disabled');
-            inventoryQty.removeProp('disabled');
-            inventoryAvailabilityField.prop('disabled', true);
-            setElementDisabled(stockAvailabilityField, true, false);
-            setElementDisabled(qtyField, false, true);
+            $('#inventory_qty').removeProp('disabled');
+            $('#inventory_stock_availability').prop('disabled', true);
+            setElementDisabled($('#quantity_and_stock_status'), true, false);
+            setElementDisabled($('#qty'), false, true);
         })
-        .collapse(hasVariations ? 'show' : 'hide');
-
-    var $gridDialog = $('#associated-products-container').modal({
-        title: $.mage.__('Select Associated Product'),
-        type: 'popup'
-    });
-
-    $('[data-panel=product-variations]')
-        .on('disable', '[data-role=product-variations-matrix]', function() {
-            $(this).html('');
-        })
-        .on('click', '[data-action=choose]', function(event) {
-            $gridDialog.trigger('openModal');
-        });
+        .collapse("<?php echo($block->getProduct()->getTypeId() === Configurable::TYPE_CODE || $block->getRequest()->has('attributes')) ? 'show' : 'hide' ?>");
 });
 </script>
