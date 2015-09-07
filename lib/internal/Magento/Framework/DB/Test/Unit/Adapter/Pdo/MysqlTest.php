@@ -203,6 +203,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
             ['TRUNCATE table user'],
             ['RENAME table user'],
             ['DROP table user'],
+            ["\n\r  \t aLTeR  \t \n \r table \t\r\n\n user  "],
         ];
     }
 
