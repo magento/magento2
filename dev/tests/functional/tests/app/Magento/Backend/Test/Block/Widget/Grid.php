@@ -137,14 +137,14 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $rowTemplate = 'td[contains(.,normalize-space("%s"))]';
+    protected $rowTemplate = 'td[contains(.,normalize-space(%s))]';
 
     /**
      * Secondary part of row locator template for getRow() method with strict option
      *
      * @var string
      */
-    protected $rowTemplateStrict = 'td[text()[normalize-space()="%s"]]';
+    protected $rowTemplateStrict = 'td[text()[normalize-space()=%s]]';
 
     /**
      * Magento grid loader
@@ -356,7 +356,7 @@ abstract class Grid extends Block
         $rowTemplate = ($isStrict) ? $this->rowTemplateStrict : $this->rowTemplate;
         $rows = [];
         foreach ($filter as $value) {
-            $rows[] = sprintf($rowTemplate, $value);
+            $rows[] = sprintf($rowTemplate, $this->xpathEscape($value));
         }
         $location = sprintf($this->rowPattern, implode(' and ', $rows));
         return $this->_rootElement->find($location, Locator::SELECTOR_XPATH);
@@ -452,5 +452,43 @@ abstract class Grid extends Block
     public function openFirstRow()
     {
         $this->_rootElement->find($this->firstRowSelector, Locator::SELECTOR_XPATH)->click();
+    }
+
+    /**
+     * Escape single and/or double quotes in XPath selector by concat()
+     *
+     * @param string $query
+     * @param string $delim [optional]
+     * @return string
+     */
+    protected function xpathEscape($query, $delim = '"')
+    {
+        if ((strpos($query, '\'') !== false) ||
+            (strpos($query, '"') !== false)) {
+            $quoteChars[] = '\'';
+            $quoteChars[] = '"';
+            $parts = [];
+            $currentPart = '';
+            foreach (str_split($query) as $character) {
+                if (in_array($character, $quoteChars)) {
+                    $parts[] = '\''.$currentPart.'\'';
+                    if ($character == '\'') {
+                        $parts[] = '"'.$character.'"';
+                    } else {
+                        $parts[] = '\''.$character.'\'';
+                    }
+                    $currentPart = '';
+                } else {
+                    $currentPart .= $character;
+                }
+            }
+            if ($currentPart) {
+                $parts[] = '\''.$currentPart.'\'';
+            }
+            $ret = 'concat('.implode(',', $parts).')';
+        } else {
+            $ret = $delim.$query.$delim;
+        }
+        return $ret;
     }
 }
