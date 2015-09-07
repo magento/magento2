@@ -404,15 +404,15 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     protected function _checkDdlTransaction($sql)
     {
-        if (is_string($sql) && $this->getTransactionLevel() > 0) {
+        if ($this->getTransactionLevel() > 0) {
+            $sql = ltrim(preg_replace('/\s+/', ' ', $sql));
             $sqlMessage = explode(' ', $sql, 3);
-            $startSql = strtolower(substr(ltrim($sqlMessage[0]), 0, 3));
+            $startSql = strtolower(substr($sqlMessage[0], 0, 3));
             if (in_array($startSql, $this->_ddlRoutines) && strcasecmp($sqlMessage[1], 'temporary') !== 0) {
                 trigger_error(AdapterInterface::ERROR_DDL_MESSAGE, E_USER_ERROR);
             }
         }
     }
-
 
     /**
      * Special handling for PDO query().

@@ -81,8 +81,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             ->create('Magento\Framework\Message\Error', ['text' => 'some text']);
         $errorMessageSecond = $this->objectManager
             ->create('Magento\Framework\Message\Error', ['text' => 'some text']);
-        $this->model->addUniqueMessages($errorMessageFirst);
-        $this->model->addUniqueMessages($errorMessageSecond);
+        $this->model->addUniqueMessages([$errorMessageFirst]);
+        $this->model->addUniqueMessages([$errorMessageSecond]);
 
         $this->assertEquals(1, $this->model->getMessages()->getCount());
         $this->assertEquals(

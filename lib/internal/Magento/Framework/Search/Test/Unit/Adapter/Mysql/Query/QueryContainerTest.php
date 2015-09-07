@@ -43,7 +43,7 @@ class QueryContainerTest extends \PHPUnit_Framework_TestCase
 
         $this->requestQuery = $this->getMockBuilder('Magento\Framework\Search\Request\QueryInterface')
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->queryContainer = $helper->getObject(
             'Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer',
