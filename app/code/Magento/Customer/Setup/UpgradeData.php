@@ -210,6 +210,9 @@ class UpgradeData implements UpgradeDataInterface
             ];
             $this->upgradeAttributes($entityAttributes, $customerSetup);
         }
+        $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
+        $indexer->reindexAll();
+        $this->eavConfig->clear();
         $setup->endSetup();
     }
 
@@ -229,8 +232,5 @@ class UpgradeData implements UpgradeDataInterface
                 $attribute->save();
             }
         }
-        $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
-        $indexer->reindexAll();
-        $this->eavConfig->clear();
     }
 }

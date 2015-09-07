@@ -21,6 +21,8 @@ class ValidationRules
     ];
 
     /**
+     * Return list of validation rules with their value
+     *
      * @param boolean $isRequired
      * @param array $validationRules
      * @return array
@@ -49,6 +51,8 @@ class ValidationRules
     }
 
     /**
+     * Return validation class based on rule name or value
+     *
      * @param ValidationRuleInterface $rule
      * @return string
      */
@@ -61,6 +65,8 @@ class ValidationRules
     }
 
     /**
+     * Return rule value
+     *
      * @param ValidationRuleInterface $rule
      * @return bool|string
      */
