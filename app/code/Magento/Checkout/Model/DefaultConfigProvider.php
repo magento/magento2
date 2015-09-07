@@ -551,7 +551,11 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $totalSegmentsData = [];
         /** @var \Magento\Quote\Model\Cart\TotalSegment $totalSegment */
         foreach ($totals->getTotalSegments() as $totalSegment) {
-            $totalSegmentsData[] = $totalSegment->toArray();
+            $totalSegmentArray = $totalSegment->toArray();
+            if (is_object($totalSegment->getExtensionAttributes())) {
+                $totalSegmentArray['extension_attributes'] = $totalSegment->getExtensionAttributes()->__toArray();
+            }
+            $totalSegmentsData[] = $totalSegmentArray;
         }
         $totals->setItems($items);
         $totals->setTotalSegments($totalSegmentsData);
