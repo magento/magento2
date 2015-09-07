@@ -14,6 +14,8 @@ define([
     return Column.extend({
         defaults: {
             bodyTmpl: 'ui/grid/cells/actions',
+            sortable: false,
+            draggable: false,
             actions: [],
             rows: [],
             templates: {

@@ -12,7 +12,7 @@
             <item name="template" xsi:type="string">templates/listing/default</item>
             <item name="save_parameters_in_session" xsi:type="string">1</item>
             <item name="client_root" xsi:type="string">mui/index/render</item>
-            <item name="js_config" xsi:type="array">
+            <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">uiComponent</item>
             </item>
         </argument>
@@ -20,17 +20,19 @@
 
     <paging class="Magento\Ui\Component\Paging">
         <argument name="data" xsi:type="array">
-            <item name="template" xsi:type="string">templates/paging/default</item>
-            <item name="js_config" xsi:type="array">
+            <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/grid/paging</item>
+                <item name="displayArea" xsi:type="string">bottom</item>
             </item>
         </argument>
     </paging>
 
     <filters class="Magento\Ui\Component\Filters">
         <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
+            <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/grid/filters/filters</item>
+                <item name="displayArea" xsi:type="string">dataGridFilters</item>
+                <item name="dataScope" xsi:type="string">filters</item>
             </item>
         </argument>
     </filters>
@@ -51,7 +53,7 @@
     </filterSelect>
     <filterRange class="Magento\Ui\Component\Filters\Type\Range">
         <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
+            <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/grid/filters/group</item>
             </item>
         </argument>
@@ -72,7 +74,7 @@
     </filterDate>
     <container class="Magento\Ui\Component\Container">
         <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
+            <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">uiComponent</item>
             </item>
             <item name="template" xsi:type="string">templates/container/default</item>
@@ -80,22 +82,22 @@
     </container>
     <massaction class="Magento\Ui\Component\MassAction">
         <argument name="data" xsi:type="array">
-            <item name="template" xsi:type="string">templates/listingcontainer/massaction/default</item>
-            <item name="js_config" xsi:type="array">
+            <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/grid/massactions</item>
+                <item name="displayArea" xsi:type="string">bottom</item>
             </item>
         </argument>
     </massaction>
     <actions class="Magento\Ui\Component\Control\Action">
         <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
+            <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/actions</item>
             </item>
         </argument>
     </actions>
     <action class="Magento\Ui\Component\Action">
         <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
+            <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">uiComponent</item>
             </item>
         </argument>
@@ -103,7 +105,7 @@
 
     <columns class="Magento\Ui\Component\Listing\Columns">
         <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
+            <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/grid/listing</item>
             </item>
         </argument>
@@ -111,12 +113,12 @@
     <column class="Magento\Ui\Component\Listing\Columns\Column">
         <argument name="data" xsi:type="array">
             <item name="state_prefix" xsi:type="string">columns</item>
-            <item name="js_config" xsi:type="array">
+            <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                <item name="dataType" xsi:type="string">text</item>
             </item>
         </argument>
     </column>
-
 
     <form class="Magento\Ui\Component\Form">
         <argument name="data" xsi:type="array">
@@ -281,15 +283,20 @@
     <!-- bookmark -->
     <bookmark class="Magento\Ui\Component\Bookmark">
         <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/bookmarks/bookmarks</item>
+                <item name="displayArea" xsi:type="string">dataGridActions</item>
+                <item name="storageConfig" xsi:type="array">
+                    <item name="saveUrl" xsi:type="url" path="mui/bookmark/save"/>
+                    <item name="deleteUrl" xsi:type="url" path="mui/bookmark/delete"/>
+                </item>
+            </item>
         </argument>
     </bookmark>
     <exportButton class="Magento\Ui\Component\ExportButton">
         <argument name="data" xsi:type="array">
-            <item name="template" xsi:type="string">templates/export/button</item>
-            <item name="js_config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/grid/export</item>
-            </item>
             <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/export</item>
                 <item name="displayArea" xsi:type="string">dataGridActions</item>
                 <item name="options" xsi:type="array">
                     <item name="cvs" xsi:type="array">

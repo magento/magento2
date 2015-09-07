@@ -15,6 +15,7 @@ define([
             bodyTmpl: 'ui/grid/cells/multiselect',
             controlVisibility: false,
             sortable: false,
+            draggable: false,
             menuVisible: false,
             excludeMode: false,
             allSelected: false,
