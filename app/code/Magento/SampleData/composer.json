@@ -6,6 +6,9 @@
         "magento/framework": "~1.0.0-beta",
         "magento/magento-composer-installer": "*"
     },
+    "suggest": {
+        "magento/sample-data-media": "Sample Data version:~0.42.0-beta2"
+    },
     "type": "magento2-module",
     "extra": {
         "map": [

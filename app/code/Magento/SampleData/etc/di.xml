@@ -11,6 +11,8 @@
             <argument name="commands" xsi:type="array">
                 <item name="sampleDataInstallCommand" xsi:type="object">Magento\SampleData\Console\Command\SampleDataInstallCommand</item>
                 <item name="sampleDataDeployCommand" xsi:type="object">Magento\SampleData\Console\Command\SampleDataDeployCommand</item>
+                <item name="sampleDataResetCommand" xsi:type="object">Magento\SampleData\Console\Command\SampleDataResetCommand</item>
+                <item name="sampleDataRemoveCommand" xsi:type="object">Magento\SampleData\Console\Command\SampleDataRemoveCommand</item>
             </argument>
         </arguments>
     </type>
