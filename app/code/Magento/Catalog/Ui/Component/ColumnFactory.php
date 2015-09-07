@@ -60,15 +60,20 @@ class ColumnFactory
         if ($attribute->usesSource()) {
             $config['options'] = $attribute->getSource()->getAllOptions();
         }
+        
+        if ($attribute->getIsFilterableInGrid()) {
+
+        }
+        
+        $config['component'] = $this->getJsComponent($config['dataType']);
+        
         $arguments = [
             'data' => [
-                'js_config' => [
-                    'component' => $this->getJsComponent($config['dataType']),
-                ],
                 'config' => $config,
             ],
             'context' => $context,
         ];
+        
         return $this->componentFactory->create($columnName, 'column', $arguments);
     }
 

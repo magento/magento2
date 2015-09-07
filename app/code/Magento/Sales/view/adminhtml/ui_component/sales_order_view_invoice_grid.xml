@@ -86,6 +86,7 @@
         <filters name="listing_filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="columnsProvider" xsi:type="string">sales_order_view_invoice_grid.sales_order_view_invoice_grid.sales_order_invoice_columns</item>
                     <item name="displayArea" xsi:type="string">dataGridFilters</item>
                     <item name="dataScope" xsi:type="string">filters</item>
                     <item name="storageConfig" xsi:type="array">
@@ -100,104 +101,6 @@
                     </item>
                 </item>
             </argument>
-            <filterInput name="increment_id">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">increment_id</item>
-                        <item name="label" xsi:type="string" translate="true">Invoice #</item>
-                    </item>
-                </argument>
-            </filterInput>
-            <filterRange name="created_at" class="Magento\Ui\Component\Filters\Type\DateRange">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">created_at</item>
-                        <item name="label" xsi:type="string" translate="true">Invoice Date</item>
-                        <item name="childDefaults" xsi:type="array">
-                            <item name="provider" xsi:type="string">sales_order_view_invoice_grid.sales_order_view_invoice_grid.listing_top.listing_filters</item>
-                        </item>
-                    </item>
-                </argument>
-                <filterDate name="from">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">from</item>
-                            <item name="label" xsi:type="string" translate="true">From</item>
-                            <item name="placeholder" xsi:type="string" translate="true">From</item>
-                            <item name="dateFormat" xsi:type="string" translate="true">MM/dd/YYYY</item>
-                        </item>
-                    </argument>
-                </filterDate>
-                <filterDate name="to">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">to</item>
-                            <item name="label" xsi:type="string" translate="true">To</item>
-                            <item name="placeholder" xsi:type="string" translate="true">To</item>
-                            <item name="dateFormat" xsi:type="string" translate="true">MM/dd/YYYY</item>
-                        </item>
-                    </argument>
-                </filterDate>
-            </filterRange>
-            <filterInput name="order_increment_id">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">order_increment_id</item>
-                        <item name="label" xsi:type="string" translate="true">Order #</item>
-                    </item>
-                </argument>
-            </filterInput>
-            <filterRange name="order_created_at" class="Magento\Ui\Component\Filters\Type\DateRange">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">order_created_at</item>
-                        <item name="label" xsi:type="string" translate="true">Order Date</item>
-                        <item name="childDefaults" xsi:type="array">
-                            <item name="provider" xsi:type="string">sales_order_view_invoice_grid.sales_order_view_invoice_grid.listing_top.listing_filters</item>
-                        </item>
-                    </item>
-                </argument>
-                <filterDate name="from">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">from</item>
-                            <item name="label" xsi:type="string" translate="true">From</item>
-                            <item name="placeholder" xsi:type="string" translate="true">From</item>
-                            <item name="dateFormat" xsi:type="string" translate="true">MM/dd/YYYY</item>
-                        </item>
-                    </argument>
-                </filterDate>
-                <filterDate name="to">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">to</item>
-                            <item name="label" xsi:type="string" translate="true">To</item>
-                            <item name="placeholder" xsi:type="string" translate="true">To</item>
-                            <item name="dateFormat" xsi:type="string" translate="true">MM/dd/YYYY</item>
-                        </item>
-                    </argument>
-                </filterDate>
-            </filterRange>
-            <filterInput name="billing_name">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">billing_name</item>
-                        <item name="label" xsi:type="string" translate="true">Bill-to Name</item>
-                    </item>
-                </argument>
-            </filterInput>
-            <filterSelect name="state">
-                <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Sales\Ui\Component\Listing\Column\Invoice\State\Options</argument>
-                </argument>
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="caption" xsi:type="string" translate="true">Select...</item>
-                        <item name="dataScope" xsi:type="string">state</item>
-                        <item name="label" xsi:type="string" translate="true">Status</item>
-                    </item>
-                </argument>
-            </filterSelect>
             <filterSelect name="store_id">
                 <argument name="optionsProvider" xsi:type="configurableObject">
                     <argument name="class" xsi:type="string">Magento\Store\Ui\Component\Listing\Column\Store\Options</argument>
@@ -210,157 +113,6 @@
                     </item>
                 </argument>
             </filterSelect>
-            <filterInput name="billing_address">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">billing_address</item>
-                        <item name="label" xsi:type="string" translate="true">Billing Address</item>
-                    </item>
-                </argument>
-            </filterInput>
-            <filterInput name="shipping_address">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">shipping_address</item>
-                        <item name="label" xsi:type="string" translate="true">Shipping Address</item>
-                    </item>
-                </argument>
-            </filterInput>
-            <filterInput name="customer_name">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">customer_name</item>
-                        <item name="label" xsi:type="string" translate="true">Customer Name</item>
-                    </item>
-                </argument>
-            </filterInput>
-            <filterInput name="customer_email">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">customer_email</item>
-                        <item name="label" xsi:type="string" translate="true">Customer Email</item>
-                    </item>
-                </argument>
-            </filterInput>
-            <filterSelect name="customer_group_id">
-                <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Customer\Ui\Component\Listing\Column\Group\Options</argument>
-                </argument>
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="caption" xsi:type="string" translate="true">Select...</item>
-                        <item name="dataScope" xsi:type="string">customer_group_id</item>
-                        <item name="label" xsi:type="string" translate="true">Customer Group</item>
-                    </item>
-                </argument>
-            </filterSelect>
-            <filterSelect name="payment_method">
-                <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Payment\Ui\Component\Listing\Column\Method\Options</argument>
-                </argument>
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="caption" xsi:type="string" translate="true">Select...</item>
-                        <item name="dataScope" xsi:type="string">payment_method</item>
-                        <item name="label" xsi:type="string" translate="true">Payment Method</item>
-                    </item>
-                </argument>
-            </filterSelect>
-            <filterInput name="shipping_information">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">shipping_information</item>
-                        <item name="label" xsi:type="string" translate="true">Shipping Information</item>
-                    </item>
-                </argument>
-            </filterInput>
-            <filterRange name="subtotal">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">subtotal</item>
-                        <item name="label" xsi:type="string" translate="true">Subtotal</item>
-                        <item name="childDefaults" xsi:type="array">
-                            <item name="provider" xsi:type="string">sales_order_view_invoice_grid.sales_order_view_invoice_grid.listing_top.listing_filters</item>
-                        </item>
-                    </item>
-                </argument>
-                <filterInput name="from">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">from</item>
-                            <item name="label" xsi:type="string" translate="true">From</item>
-                            <item name="placeholder" xsi:type="string" translate="true">From</item>
-                        </item>
-                    </argument>
-                </filterInput>
-                <filterInput name="to">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">to</item>
-                            <item name="label" xsi:type="string" translate="true">To</item>
-                            <item name="placeholder" xsi:type="string" translate="true">To</item>
-                        </item>
-                    </argument>
-                </filterInput>
-            </filterRange>
-            <filterRange name="shipping_and_handling">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">shipping_and_handling</item>
-                        <item name="label" xsi:type="string" translate="true">Shipping and Handling</item>
-                        <item name="childDefaults" xsi:type="array">
-                            <item name="provider" xsi:type="string">sales_order_view_invoice_grid.sales_order_view_invoice_grid.listing_top.listing_filters</item>
-                        </item>
-                    </item>
-                </argument>
-                <filterInput name="from">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">from</item>
-                            <item name="label" xsi:type="string" translate="true">From</item>
-                            <item name="placeholder" xsi:type="string" translate="true">From</item>
-                        </item>
-                    </argument>
-                </filterInput>
-                <filterInput name="to">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">to</item>
-                            <item name="label" xsi:type="string" translate="true">To</item>
-                            <item name="placeholder" xsi:type="string" translate="true">To</item>
-                        </item>
-                    </argument>
-                </filterInput>
-            </filterRange>
-            <filterRange name="grand_total">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">grand_total</item>
-                        <item name="label" xsi:type="string" translate="true">Grand Total</item>
-                        <item name="childDefaults" xsi:type="array">
-                            <item name="provider" xsi:type="string">sales_order_view_invoice_grid.sales_order_view_invoice_grid.listing_top.listing_filters</item>
-                        </item>
-                    </item>
-                </argument>
-                <filterInput name="from">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">from</item>
-                            <item name="label" xsi:type="string" translate="true">From</item>
-                            <item name="placeholder" xsi:type="string" translate="true">From</item>
-                        </item>
-                    </argument>
-                </filterInput>
-                <filterInput name="to">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">to</item>
-                            <item name="label" xsi:type="string" translate="true">To</item>
-                            <item name="placeholder" xsi:type="string" translate="true">To</item>
-                        </item>
-                    </argument>
-                </filterInput>
-            </filterRange>
         </filters>
         <massaction name="listing_massaction">
             <argument name="data" xsi:type="array">
@@ -451,6 +203,7 @@
         <column name="increment_id">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">Invoice</item>
@@ -460,6 +213,7 @@
         <column name="created_at">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">dateRange</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="label" xsi:type="string" translate="true">Invoice Date</item>
@@ -469,6 +223,7 @@
         <column name="order_increment_id">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Order #</item>
                 </item>
@@ -477,7 +232,7 @@
         <column name="order_created_at">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
+                    <item name="filter" xsi:type="string">dateRange</item>
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="label" xsi:type="string" translate="true">Order Date</item>
                 </item>
@@ -486,16 +241,19 @@
         <column name="billing_name">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Bill-to Name</item>
                 </item>
             </argument>
         </column>
-        <column name="state" class="Magento\Sales\Ui\Component\Listing\Column\Invoice\State">
+        <column name="state">
             <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Sales\Ui\Component\Listing\Column\Invoice\State\Options</item>
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">select</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
-                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="dataType" xsi:type="string">select</item>
                     <item name="label" xsi:type="string" translate="true">Status</item>
                 </item>
             </argument>
@@ -503,6 +261,7 @@
         <column name="grand_total" class="Magento\Sales\Ui\Component\Listing\Column\Price">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Amount</item>
                 </item>
@@ -522,6 +281,7 @@
         <column name="billing_address" class="Magento\Sales\Ui\Component\Listing\Column\Address">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
                     <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">text</item>
@@ -532,6 +292,7 @@
         <column name="shipping_address" class="Magento\Sales\Ui\Component\Listing\Column\Address">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
                     <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">text</item>
@@ -542,6 +303,7 @@
         <column name="customer_name">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Customer Name</item>
@@ -551,26 +313,33 @@
         <column name="customer_email">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Email</item>
                 </item>
             </argument>
         </column>
-        <column name="customer_group_id" class="Magento\Sales\Ui\Component\Listing\Column\CustomerGroup">
+        <column name="customer_group_id">
             <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Customer\Ui\Component\Listing\Column\Group\Options</item>
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                     <item name="visible" xsi:type="boolean">false</item>
-                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="dataType" xsi:type="string">select</item>
                     <item name="label" xsi:type="string" translate="true">Customer Group</item>
                 </item>
             </argument>
         </column>
-        <column name="payment_method" class="Magento\Sales\Ui\Component\Listing\Column\PaymentMethod">
+        <column name="payment_method">
             <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Payment\Ui\Component\Listing\Column\Method\Options</item>
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                     <item name="visible" xsi:type="boolean">false</item>
-                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="dataType" xsi:type="string">select</item>
                     <item name="label" xsi:type="string" translate="true">Payment Method</item>
                 </item>
             </argument>
@@ -578,6 +347,7 @@
         <column name="shipping_information">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Shipping Information</item>
@@ -587,6 +357,7 @@
         <column name="subtotal" class="Magento\Sales\Ui\Component\Listing\Column\Price">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Subtotal</item>
@@ -596,6 +367,7 @@
         <column name="shipping_and_handling" class="Magento\Sales\Ui\Component\Listing\Column\Price">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Shipping and Handling</item>
