@@ -65,7 +65,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         );
         $this->connection = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            ['select', 'fetchAll', 'fetchPairs', 'joinLeft', 'insertOnDuplicate', 'delete', 'quoteInto', 'fetchAssoc'],
+            ['select', 'fetchAll', 'joinLeft', 'insertOnDuplicate', 'delete', 'quoteInto', 'fetchAssoc'],
             [],
             '',
             false
@@ -78,8 +78,9 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $connection->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
         $select->expects($this->any())->method('getConnection')->willReturn($connection);
         $this->connection->expects($this->any())->method('select')->will($this->returnValue($select));
-        $this->connection->expects($this->any())->method('fetchPairs')->will($this->returnValue([
-            '1' => '1', '2' => '2'
+        $this->connection->expects($this->any())->method('fetchAll')->will($this->returnValue([
+            ['attribute_id' => '1', 'attribute_set_name' => '1'],
+            ['attribute_id' => '2', 'attribute_set_name' => '2']
         ]));
         $this->connection->expects($this->any())->method('insertOnDuplicate')->willReturnSelf();
         $this->connection->expects($this->any())->method('delete')->willReturnSelf();
