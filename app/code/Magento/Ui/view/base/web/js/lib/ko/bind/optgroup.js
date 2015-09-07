@@ -207,7 +207,6 @@ define([
                 }
 
                 return [option];
-
             }
 
             /**
