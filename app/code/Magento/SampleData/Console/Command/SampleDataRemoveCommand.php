@@ -10,7 +10,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\SampleData\Model\Dependency;
-use Magento\Framework\App\State;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\ArrayInputFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -19,9 +18,9 @@ use Composer\Console\Application;
 use Composer\Console\ApplicationFactory;
 
 /**
- * Command for deployment of Sample Data
+ * Command for remove Sample Data packages
  */
-class SampleDataDeployCommand extends Command
+class SampleDataRemoveCommand extends Command
 {
     /**
      * @var Filesystem
@@ -67,8 +66,8 @@ class SampleDataDeployCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('sampledata:deploy')
-            ->setDescription('Deploy sample data modules');
+        $this->setName('sampledata:remove')
+            ->setDescription('Remove all sample data packages from composer.json');
         parent::configure();
     }
 
@@ -81,12 +80,8 @@ class SampleDataDeployCommand extends Command
         if (!empty($sampleDataPackages)) {
             $baseDir = $this->filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath();
             $commonArgs = ['--working-dir' => $baseDir, '--no-interaction' => 1, '--no-progress' => 1];
-            $packages = [];
-            foreach ($sampleDataPackages as $name => $version) {
-                $packages[] = "$name:$version";
-            }
-            $commonArgs = array_merge(['packages' => $packages], $commonArgs);
-            $arguments = array_merge(['command' => 'require'], $commonArgs);
+            $packages = array_keys($sampleDataPackages);
+            $arguments = array_merge(['command' => 'remove', 'packages' => $packages], $commonArgs);
             /** @var ArrayInput $commandInput */
             $commandInput = $this->arrayInputFactory->create(['parameters' => $arguments]);
 
