@@ -24,12 +24,4 @@
     <type name="Magento\Catalog\Model\Resource\Product">
         <plugin name="reload_attributes" type="Magento\ConfigurableProduct\Plugin\Model\Resource\Product" />
     </type>
-    <type name="Magento\CatalogRule\Model\Rule">
-        <plugin name="addVariationsToProductRule" type="Magento\ConfigurableProduct\Plugin\CatalogRule\Model\Rule\ConfigurableProductHandler" />
-        <plugin name="configurableChildValidation" type="Magento\ConfigurableProduct\Plugin\CatalogRule\Model\Rule\Validation" />
-    </type>
-    <type name="Magento\CatalogRule\Model\Indexer\Product\ProductRuleIndexer">
-        <plugin name="productRuleReindex" type="Magento\ConfigurableProduct\Plugin\CatalogRule\Model\Indexer\ProductRuleReindex" />
-
-    </type>
 </config>
