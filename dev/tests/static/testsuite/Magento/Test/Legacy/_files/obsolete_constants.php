@@ -935,5 +935,4 @@ return [
         'Magento\Setup\Model\ConfigOptionsList',
         'Magento\Framework\Config\ConfigOptionsListConstants::KEY_MODULES'
     ],
-    ['CONFIG_PATH_RESOURCE_DEFAULT_SETUP', 'Magento\Framework\Config\ConfigOptionsListConstants'],
 ];
