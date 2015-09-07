@@ -506,8 +506,6 @@ lib/web/mage/dropdown.js
 lib/web/mage/dropdowns.js
 lib/web/mage/edit-trigger.js
 lib/web/mage/fieldset-controls.js
-lib/web/mage/gallery-fullscreen.js
-lib/web/mage/gallery.js
 lib/web/mage/ie-class-fixer.js
 lib/web/mage/item-table.js
 lib/web/mage/layout.js
