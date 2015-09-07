@@ -37,19 +37,27 @@ class Flat extends \Magento\Framework\Model\Resource\Db\AbstractDb implements De
     protected $_storeManager;
 
     /**
+     * @var \Magento\Catalog\Model\Product\Attribute\DefaultAttributes
+     */
+    protected $defaultAttributes;
+
+    /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $catalogConfig
+     * @param \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Config $catalogConfig,
+        \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes,
         $connectionName = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_catalogConfig = $catalogConfig;
+        $this->defaultAttributes = $defaultAttributes;
         parent::__construct($context, $connectionName);
     }
 
@@ -242,7 +250,7 @@ class Flat extends \Magento\Framework\Model\Resource\Db\AbstractDb implements De
     {
         return array_unique(
             array_merge(
-                \Magento\Catalog\Model\Resource\Product::DEFAULT_ATTRIBUTES,
+                $this->defaultAttributes->getDefaultAttributes(),
                 [$this->getEntityIdField()]
             )
         );
