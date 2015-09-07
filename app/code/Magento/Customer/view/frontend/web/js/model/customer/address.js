@@ -14,7 +14,7 @@ define([], function() {
             customerAddressId: addressData.id,
             email: addressData.email,
             countryId: addressData.country_id,
-            regionId: addressData.region.region_id,
+            regionId: addressData.region_id,
             regionCode: addressData.region.region_code,
             region: addressData.region.region,
             customerId: addressData.customer_id,
