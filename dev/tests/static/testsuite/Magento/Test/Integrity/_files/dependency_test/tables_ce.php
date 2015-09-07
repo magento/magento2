@@ -300,7 +300,6 @@ return [
     'admin_system_messages'                       => 'Magento\AdminNotification',
     'theme'                                       => 'Magento\Theme',
     'theme_files'                                 => 'Magento\Theme',
-    'vde_theme_change'                            => 'Magento\DesignEditor',
     'variable'                                    => 'Magento\Variable',
     'variable_value'                              => 'Magento\Variable',
 ];
