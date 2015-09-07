@@ -27,7 +27,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
     protected $fileSystem;
 
     /**
-     * @var \Magento\Framework\Image\Adapter
+     * @var \Magento\Framework\Image\Adapter\AbstractAdapter
      */
     protected $imageAdapter;
 
@@ -58,12 +58,15 @@ class RetrieveImage extends \Magento\Backend\App\Action
     {
         try {
             $remoteFileUrl = $this->getRequest()->getParam('remote_image');
-            $localFile = $this->generateTmpFileName($remoteFileUrl);
 
-            echo $localFilePath = $this->retrieveRemoteImage($remoteFileUrl, $localFile);
+            $localFileName = $this->parseOriginalFileName($remoteFileUrl);
+            $localTmpFileName = $this->generateTmpFileName($localFileName);
+            $localFileFullPath = $this->appendFileSystemPath($localTmpFileName);
 
-            $result['url'] = $this->mediaConfig->getTmpMediaUrl($localFile);
-            $result['file'] = $localFile;
+            $localFilePath = $this->retrieveRemoteImage($remoteFileUrl, $localFileFullPath);
+
+            $result['url'] = $this->mediaConfig->getTmpMediaUrl($localFilePath);
+            $result['file'] = $localFileName;
         } catch (\Exception $e) {
             $result = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
         }
@@ -75,18 +78,43 @@ class RetrieveImage extends \Magento\Backend\App\Action
         return $response;
     }
 
-    protected function retrieveRemoteImage($fileUrl, $localFile)
+    /**
+     * @param string $fileUrl
+     * @param string $localFilePath
+     */
+    protected function retrieveRemoteImage($fileUrl, $localFilePath)
+    {
+
+    }
+
+    /**
+     * @param string $fileUrl
+     * @return string
+     */
+    protected function parseOriginalFileName($fileUrl)
+    {
+        return basename($fileUrl);
+    }
+
+    /**
+     * @param string $fileName
+     * @return string
+     */
+    protected function generateTmpFileName($fileName)
+    {
+        return Uploader::getDispretionPath($fileName) . DIRECTORY_SEPARATOR . $fileName . '.tmp';
+    }
+
+    /**
+     * @param string $localTmpFile
+     * @return string
+     */
+    protected function appendFileSystemPath($localTmpFile)
     {
         /** @var \Magento\Framework\Filesystem\Directory\Read $mediaDirectory */
         $mediaDirectory = $this->fileSystem->getDirectoryRead(DirectoryList::MEDIA);
         $pathToSave = $mediaDirectory->getAbsolutePath($this->mediaConfig->getBaseTmpMediaPath());
 
-       return $pathToSave . $localFile;
-    }
-
-    protected function generateTmpFileName($fileUrl)
-    {
-        $fileName = basename($fileUrl);
-        return Uploader::getDispretionPath($fileName) . DIRECTORY_SEPARATOR . $fileName . '.tmp';
+        return $pathToSave . $localTmpFile;
     }
 }
