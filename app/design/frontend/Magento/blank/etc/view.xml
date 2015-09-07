@@ -185,6 +185,7 @@
         <var name="gallery:keyboard">true</var> <!-- Turn on/off keyboard arrows navigation (true/false) -->
         <var name="gallery:arrows">true</var> <!-- Turn on/off arrows on the sides preview (true/false) -->
         <var name="gallery:show_caption">false</var> <!-- Display alt text as image title (true/false) -->
+        <var name="gallery:allowfullscreen">true</var> <!-- Turn on/off fullscreen (true/false) -->
 
         <var name="magnifier:top"></var> <!-- Top position of magnifier -->
         <var name="magnifier:left"></var> <!-- Left position of magnifier -->

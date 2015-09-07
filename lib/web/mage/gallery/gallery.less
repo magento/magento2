@@ -58,16 +58,6 @@
     width: 100%;
 }
 
-.fotorama-image-reset {
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    max-height: 99999px !important;
-    max-width: 99999px !important;
-    min-height: 0 !important;
-    min-width: 0 !important;
-    padding: 0 !important;
-}
-
 .fotorama-grab-cursor {
     cursor: move;
     cursor: -webkit-grab;
@@ -202,8 +192,7 @@
 }
 
 .fotorama--fullscreen {
-    &:extend(.fotorama-image-reset);
-    background: @color-black;
+    background: @color-white;
     bottom: 0 !important;
     float: none !important;
     height: 100% !important;
@@ -214,9 +203,8 @@
     top: 0 !important;
     width: 100% !important;
     z-index: @z-index-10 !important;
-    .fotorama__stage,
-    .fotorama__nav {
-        background: @color-black;
+    .fotorama__wrap {
+        max-width: 100% !important;
     }
 }
 
@@ -583,6 +571,14 @@
     &:extend(.fotorama-no-tap);
     cursor: pointer;
     position: absolute;
+}
+
+.fotorama__arr {
+    z-index: @z-index-9;
+
+}
+.fotorama__fullscreen-icon,
+.fotorama__video-close {
     z-index: @z-index-10;
 }
 
@@ -629,7 +625,7 @@
     right: 2px;
     top: 2px;
     width: @size-fotorama-block;
-    z-index: 20;
+    z-index: @z-index-10;
 }
 
 .fotorama__fullscreen-icon {
@@ -642,7 +638,7 @@
 
 .fotorama--fullscreen {
     .fotorama__fullscreen-icon {
-        background-position: (-@fotorama_fullscreen_button) (-@fotorama_fullscreen_button);
+        background-position: (-@size-fotorama-block) 0;
     }
 }
 
@@ -859,7 +855,7 @@
     overflow: hidden;
     position: absolute;
     top: 0;
-    z-index: @z-index-10;
+    z-index: @z-index-9;
 }
 
 .magnify-lens {
