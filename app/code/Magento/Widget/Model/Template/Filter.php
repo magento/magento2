@@ -76,12 +76,12 @@ class Filter extends \Magento\Cms\Model\Template\Filter
     }
 
     /**
-     * Generate widget
+     * General method for generate widget
      *
      * @param string[] $construction
      * @return string
      */
-    public function widgetDirective($construction)
+    public function generateWidget($construction)
     {
         $params = $this->getParameters($construction[2]);
 
@@ -115,6 +115,17 @@ class Filter extends \Magento\Cms\Model\Template\Filter
         }
 
         return $widget->toHtml();
+    }
+
+    /**
+     * Generate widget
+     *
+     * @param string[] $construction
+     * @return string
+     */
+    public function widgetDirective($construction)
+    {
+        return $this->generateWidget($construction);
     }
 
     /**

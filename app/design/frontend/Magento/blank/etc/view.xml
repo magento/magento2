@@ -178,6 +178,29 @@
         </image>
     </images>
     <vars module="Magento_Catalog">
+
+        <!-- New gallery and magnifier theme settings -->
+        <var name="gallery:navigation">thumbs</var> <!-- Gallery navigation style (false/thumbs/dots) -->
+        <var name="gallery:loop">true</var> <!-- Gallery navigation loop (true/false) -->
+        <var name="gallery:keyboard">true</var> <!-- Turn on/off keyboard arrows navigation (true/false) -->
+        <var name="gallery:arrows">true</var> <!-- Turn on/off arrows on the sides preview (true/false) -->
+        <var name="gallery:show_caption">false</var> <!-- Display alt text as image title (true/false) -->
+
+        <var name="magnifier:top"></var> <!-- Top position of magnifier -->
+        <var name="magnifier:left"></var> <!-- Left position of magnifier -->
+        <var name="magnifier:width"></var> <!-- Width of magnifier block -->
+        <var name="magnifier:height"></var> <!-- Height of magnifier block -->
+        <var name="magnifier:action">hover</var> <!-- Action that atcivates zoom (hover/click) -->
+        <var name="magnifier:enabled">true</var> <!-- Turn on/off magnifier (true/false) -->
+        <!-- end -->
+
+        <var name="product_small_image_sidebar_size">100</var>  <!-- Override for small product image -->
+        <var name="product_base_image_size">275</var>           <!-- Override for base product image -->
+        <var name="product_base_image_icon_size">48</var>       <!-- Base product image icon size -->
+
+        <var name="product_list_image_size">166</var>           <!-- New Product image size used in product list -->
+        <var name="product_zoom_image_size">370</var>           <!-- New Product image size used for zooming -->
+
         <var name="product_image_white_borders">0</var>
     </vars>
     <vars module="Magento_Bundle">
