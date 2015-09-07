@@ -24,7 +24,7 @@ class ColumnFactoryTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Ui\Component\Listing\Columns\ColumnInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $column;
 
-    /** @var \Magento\Ui\Component\Grid\Column\InlineEditUpdater|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater|\PHPUnit_Framework_MockObject_MockObject */
     protected $inlineEditUpdater;
 
     /** @var ColumnFactory */
@@ -64,7 +64,9 @@ class ColumnFactoryTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->inlineEditUpdater = $this->getMockBuilder('Magento\Ui\Component\Grid\Column\InlineEditUpdater')
+        $this->inlineEditUpdater = $this->getMockBuilder(
+            'Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater'
+        )
             ->disableOriginalConstructor()
             ->getMock();
 
