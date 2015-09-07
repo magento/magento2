@@ -79,6 +79,7 @@ define([
             this.populateVariationMatrix(variations);
             this.attributes(attributes);
             this.initImageUpload();
+            this.disableConfigurableAttributes(attributes);
         },
         changeButtonWizard: function () {
             var $button = $('[data-action=open-steps-wizard] [data-role=button-label]');
@@ -116,6 +117,11 @@ define([
         removeProduct: function (rowIndex) {
             this.opened(false);
             this.productMatrix.splice(rowIndex, 1);
+            if (this.productMatrix().length === 0) {
+                this.attributes.each(function(attribute) {
+                    $('[data-attribute-code="' + attribute.code + '"] select').removeProp('disabled');
+                });
+            }
         },
         showGrid: function (rowIndex) {
             var attributes = JSON.parse(this.productMatrix()[rowIndex].attribute);
@@ -254,6 +260,11 @@ define([
                         parentElement.find('[data-toggle=dropdown]').trigger('close.dropdown').hide();
                     });
                 });
+            });
+        },
+        disableConfigurableAttributes: function(attributes) {
+            _.each(attributes, function (attribute) {
+                $('[data-attribute-code="' + attribute.code + '"] select').prop('disabled', true);
             });
         }
     });
