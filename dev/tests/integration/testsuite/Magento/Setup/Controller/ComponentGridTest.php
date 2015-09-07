@@ -8,13 +8,19 @@ namespace Magento\Setup\Controller;
 
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Module\PackageInfo;
+use Magento\Setup\Model\UpdatePackagesCache;
 
 class ComponentGridTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ComposerInformation
+     * @var ComposerInformation|\PHPUnit_Framework_MockObject_MockObject
      */
     private $composerInformationMock;
+
+    /**
+     * @var UpdatePackagesCache|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $updatePackagesCacheMock;
 
     /**
      * Module package info
@@ -101,12 +107,21 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->updatePackagesCacheMock = $this->getMock(
+            'Magento\Setup\Model\UpdatePackagesCache',
+            [],
+            [],
+            '',
+            false
+        );
+
         $packageInfoFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->packageInfo);
         $this->controller = new ComponentGrid(
             $this->composerInformationMock,
-            $objectManagerProvider
+            $objectManagerProvider,
+            $this->updatePackagesCacheMock
         );
     }
 
@@ -128,7 +143,7 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
         $this->composerInformationMock->expects($this->once())
             ->method('isPackageInComposerJson')
             ->willReturn(true);
-        $this->composerInformationMock->expects($this->once())
+        $this->updatePackagesCacheMock->expects($this->once())
             ->method('getPackagesForUpdate')
             ->willReturn($this->lastSyncData);
         $jsonModel = $this->controller->componentsAction();
@@ -153,9 +168,9 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
 
     public function testSyncAction()
     {
-        $this->composerInformationMock->expects($this->once())
+        $this->updatePackagesCacheMock->expects($this->once())
             ->method('syncPackagesForUpdate');
-        $this->composerInformationMock->expects($this->once())
+        $this->updatePackagesCacheMock->expects($this->once())
             ->method('getPackagesForUpdate')
             ->willReturn($this->lastSyncData);
         $jsonModel = $this->controller->syncAction();
