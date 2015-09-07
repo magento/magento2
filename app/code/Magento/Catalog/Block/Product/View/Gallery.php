@@ -30,7 +30,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
         $product = $this->getProduct();
         $images = $product->getMediaGalleryImages();
         if ($images instanceof \Magento\Framework\Data\Collection) {
-            foreach ($images as &$image) {
+            foreach ($images as $image) {
                 $image->setData(
                     'small_image_url',
                     $this->_imageHelper->init($product, 'product_page_image_small')
