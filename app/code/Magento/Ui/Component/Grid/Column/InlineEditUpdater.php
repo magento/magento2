@@ -27,7 +27,9 @@ class InlineEditUpdater
     /**
      * @param ValidationRules $validationRules
      */
-    public function __construct(ValidationRules $validationRules) {
+    public function __construct(
+        ValidationRules $validationRules
+    ) {
         $this->validationRules = $validationRules;
     }
 
@@ -35,7 +37,7 @@ class InlineEditUpdater
      * Add editor config
      *
      * @param UiComponentInterface $column
-     * @param $frontendInput
+     * @param string $frontendInput
      * @param array $validationRules
      * @param bool|false $isRequired
      * @return UiComponentInterface

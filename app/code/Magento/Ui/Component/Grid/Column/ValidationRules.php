@@ -21,8 +21,8 @@ class ValidationRules
     ];
 
     /**
-     * @param $isRequired
-     * @param $validationRules
+     * @param boolean $isRequired
+     * @param array $validationRules
      * @return array
      */
     public function getValidationRules($isRequired, $validationRules)
