@@ -30,7 +30,7 @@ class Custom extends \Magento\Framework\App\Config\Value
     const XML_PATH_WEB_COOKIE_HTTPONLY = 'web/cookie/cookie_httponly';
     const XML_PATH_WEB_COOKIE_RESTRICTION = 'web/cookie/cookie_restriction';
     const XML_PATH_GENERAL_LOCALE_TIMEZONE = 'general/locale/timezone';
-    const XML_PATH_GENERAL_LOCALE_CODE = 'general/locale/timezone';
+    const XML_PATH_GENERAL_LOCALE_CODE = 'general/locale/code';
     const XML_PATH_GENERAL_COUNTRY_DEFAULT = 'general/country/default';
     const XML_PATH_SYSTEM_BACKUP_ENABLED = 'system/backup/enabled';
     const XML_PATH_DEV_JS_MERGE_FILES = 'dev/js/merge_files';
