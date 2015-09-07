@@ -167,7 +167,7 @@ define([
              *
              * @param {*} obj
              */
-            function recursivePathBuilder(obj, key, origin) {
+            function recursivePathBuilder(obj) {
 
                 obj[optionTitle] = (this && this[optionTitle] ? this[optionTitle] + '/' : '') + obj[optionsText].trim();
 
