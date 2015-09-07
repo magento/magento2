@@ -74,7 +74,6 @@ define([
 
             $.async(this.tableSelector, this.initTable);
             $.async(this.columnSelector, this.initColumn);
-            //$.async(this.fieldSelector, this.refreshMaxRowHeight);
 
             return this;
         },
