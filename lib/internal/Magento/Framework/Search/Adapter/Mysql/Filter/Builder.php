@@ -11,7 +11,6 @@ use Magento\Framework\Search\Adapter\Mysql\Filter\Builder\FilterInterface;
 use Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Range;
 use Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Term;
 use Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Wildcard;
-use Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer;
 use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
 use Magento\Framework\Search\Request\Query\BoolExpression;
 
@@ -61,28 +60,27 @@ class Builder implements BuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function build(RequestFilterInterface $filter, $conditionType, QueryContainer $queryContainer)
+    public function build(RequestFilterInterface $filter, $conditionType)
     {
-        return $this->processFilter($filter, $this->isNegation($conditionType), $queryContainer);
+        return $this->processFilter($filter, $this->isNegation($conditionType));
     }
 
     /**
      * @param RequestFilterInterface $filter
      * @param bool $isNegation
-     * @param QueryContainer $queryContainer
      * @return string
      */
-    private function processFilter(RequestFilterInterface $filter, $isNegation, QueryContainer $queryContainer)
+    private function processFilter(RequestFilterInterface $filter, $isNegation)
     {
         if ($filter->getType() === RequestFilterInterface::TYPE_BOOL) {
-            $query = $this->processBoolFilter($filter, $isNegation, $queryContainer);
+            $query = $this->processBoolFilter($filter, $isNegation);
             $query = $this->conditionManager->wrapBrackets($query);
         } else {
             if (!isset($this->filters[$filter->getType()])) {
                 throw new \InvalidArgumentException('Unknown filter type ' . $filter->getType());
             }
             $query = $this->filters[$filter->getType()]->buildFilter($filter, $isNegation);
-            $query = $this->preprocessor->process($filter, $isNegation, $query, $queryContainer);
+            $query = $this->preprocessor->process($filter, $isNegation, $query);
         }
 
         return $query;
@@ -91,18 +89,16 @@ class Builder implements BuilderInterface
     /**
      * @param RequestFilterInterface|\Magento\Framework\Search\Request\Filter\Bool $filter
      * @param bool $isNegation
-     * @param QueryContainer $queryContainer
      * @return string
      */
-    private function processBoolFilter(RequestFilterInterface $filter, $isNegation, QueryContainer $queryContainer)
+    private function processBoolFilter(RequestFilterInterface $filter, $isNegation)
     {
-        $must = $this->buildFilters($filter->getMust(), Select::SQL_AND, $isNegation, $queryContainer);
-        $should = $this->buildFilters($filter->getShould(), Select::SQL_OR, $isNegation, $queryContainer);
+        $must = $this->buildFilters($filter->getMust(), Select::SQL_AND, $isNegation);
+        $should = $this->buildFilters($filter->getShould(), Select::SQL_OR, $isNegation);
         $mustNot = $this->buildFilters(
             $filter->getMustNot(),
             Select::SQL_AND,
-            !$isNegation,
-            $queryContainer
+            !$isNegation
         );
 
         $queries = [
@@ -118,14 +114,13 @@ class Builder implements BuilderInterface
      * @param \Magento\Framework\Search\Request\FilterInterface[] $filters
      * @param string $unionOperator
      * @param bool $isNegation
-     * @param QueryContainer $queryContainer
      * @return string
      */
-    private function buildFilters(array $filters, $unionOperator, $isNegation, QueryContainer $queryContainer)
+    private function buildFilters(array $filters, $unionOperator, $isNegation)
     {
         $queries = [];
         foreach ($filters as $filter) {
-            $filterQuery = $this->processFilter($filter, $isNegation, $queryContainer);
+            $filterQuery = $this->processFilter($filter, $isNegation);
             $queries[] = $this->conditionManager->wrapBrackets($filterQuery);
         }
         return $this->conditionManager->combineQueries($queries, $unionOperator);
