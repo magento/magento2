@@ -4,9 +4,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\ConfigurableProduct\Plugin\CatalogRule\Model\Indexer;
+namespace Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\Indexer;
 
-use \Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\CatalogRuleConfigurable\Plugin\CatalogRule\Model\ConfigurableProductsProvider;
 
 /**
  * Class ReindexProduct. Add configurable sub-products to reindex
@@ -16,19 +17,19 @@ class ProductRuleReindex
     /** @var Configurable */
     private $configurable;
 
-    /** @var \Magento\Framework\DB\Adapter\AdapterInterface */
-    private $connection;
+    /** @var ConfigurableProductsProvider */
+    private $configurableProductsProvider;
 
     /**
      * @param Configurable $configurable
-     * @param \Magento\Framework\App\Resource $resource
+     * @param ConfigurableProductsProvider $configurableProductsProvider
      */
     public function __construct(
         Configurable $configurable,
-        \Magento\Framework\App\Resource $resource
+        ConfigurableProductsProvider $configurableProductsProvider
     ) {
         $this->configurable = $configurable;
-        $this->connection = $resource->getConnection();
+        $this->configurableProductsProvider = $configurableProductsProvider;
     }
 
     /**
@@ -41,7 +42,7 @@ class ProductRuleReindex
         \Closure $proceed,
         $id
     ) {
-        $configurableProductIds = $this->getConfigurableIds([$id]);
+        $configurableProductIds = $this->configurableProductsProvider->getIds([$id]);
         $this->reindexSubProducts($configurableProductIds, $subject);
         if (!$configurableProductIds) {
             $proceed($id);
@@ -60,27 +61,12 @@ class ProductRuleReindex
         \Closure $proceed,
         array $ids
     ) {
-        $configurableProductIds = $this->getConfigurableIds($ids);
+        $configurableProductIds = $this->configurableProductsProvider->getIds($ids);
         $subProducts = $this->reindexSubProducts($configurableProductIds, $subject);
         $ids = array_diff($ids, $configurableProductIds, $subProducts);
         if ($ids) {
             $proceed($ids);
         }
-    }
-
-    /**
-     * @param array $ids
-     * @return array
-     */
-    private function getConfigurableIds(array $ids)
-    {
-        return $this->connection->fetchCol(
-            $this->connection
-                ->select()
-                ->from(['e' => $this->connection->getTableName('catalog_product_entity')], ['e.entity_id'])
-                ->where('e.type_id = ?', Configurable::TYPE_CODE)
-                ->where('e.entity_id IN (?)', $ids)
-        );
     }
 
     /**
