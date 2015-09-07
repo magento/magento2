@@ -24,9 +24,6 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Ui\Component\Listing\Columns\ColumnInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $column;
 
-    /** @var \Magento\Ui\Component\Grid\Column\InlineEditUpdater|\PHPUnit_Framework_MockObject_MockObject */
-    protected $inlineEditUpdater;
-
     /** @var Columns */
     protected $component;
 
@@ -66,15 +63,10 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->inlineEditUpdater = $this->getMockBuilder('Magento\Ui\Component\Grid\Column\InlineEditUpdater')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->component = new Columns(
             $this->context,
             $this->columnFactory,
-            $this->attributeRepository,
-            $this->inlineEditUpdater
+            $this->attributeRepository
         );
     }
 
@@ -139,10 +131,6 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
             'required'=> false,
             'entity_type_code' => 'customer',
         ];
-        $this->inlineEditUpdater->expects($this->once())
-            ->method('applyEditing')
-            ->with($this->column, 'text', [], false);
-
         $this->attributeRepository->expects($this->atLeastOnce())
             ->method('getList')
             ->willReturn([$attributeCode => $attributeData]);
