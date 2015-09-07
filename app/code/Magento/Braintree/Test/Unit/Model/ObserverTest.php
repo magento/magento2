@@ -104,13 +104,22 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $shipment3Qty = 3;
 
         $orderItem1 = new \Magento\Framework\DataObject(
-            ['id' => $orderItem1Id]
+            [
+                'id' => $orderItem1Id,
+                'qty_to_invoice' => $orderItem1Id
+            ]
         );
         $orderItem2 = new \Magento\Framework\DataObject(
-            ['id' => $orderItem2Id]
+            [
+                'id' => $orderItem2Id,
+                'qty_to_invoice' => $orderItem2Id
+            ]
         );
         $orderItem3 = new \Magento\Framework\DataObject(
-            ['id' => $orderItem3Id]
+            [
+                'id' => $orderItem3Id,
+                'qty_to_invoice' => $orderItem3Id
+            ]
         );
         $orderItems = [$orderItem1, $orderItem2, $orderItem3];
         $orderMock->expects($this->any())
