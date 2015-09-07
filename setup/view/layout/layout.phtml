@@ -13,7 +13,6 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Magento Setup Tool</title>
     <?php echo $this->headLink()
         ->appendStylesheet($this->basePath() . '/pub/styles/setup.css');
     ?>
@@ -26,13 +25,20 @@
         ->appendFile('pub/magento/setup/app.js')
         ->appendFile('pub/magento/setup/main.js')
         ->appendFile('pub/magento/setup/landing.js')
+        ->appendFile('pub/magento/setup/component-grid.js')
         ->appendFile('pub/magento/setup/readiness-check.js')
         ->appendFile('pub/magento/setup/add-database.js')
         ->appendFile('pub/magento/setup/web-configuration.js')
         ->appendFile('pub/magento/setup/customize-your-store.js')
         ->appendFile('pub/magento/setup/create-admin-account.js')
         ->appendFile('pub/magento/setup/install.js')
-        ->appendFile('pub/magento/setup/success.js');
+        ->appendFile('pub/magento/setup/success.js')
+        ->appendFile('pub/magento/setup/create-backup.js')
+        ->appendFile('pub/magento/setup/complete-backup.js')
+        ->appendFile('pub/magento/setup/data-option.js')
+        ->appendFile('pub/magento/setup/start-updater.js')
+        ->appendFile('pub/magento/setup/updater-success.js')
+        ->appendFile('pub/magento/setup/select-version.js');
     ?>
     <link
         rel="icon"
@@ -57,8 +63,6 @@
     <?php echo $this->inlineScript() ?>
 </head>
 <body>
-<main class="container">
-    <?php echo $this->content; ?>
-</main>
+<?php echo $this->content; ?>
 </body>
 </html>
