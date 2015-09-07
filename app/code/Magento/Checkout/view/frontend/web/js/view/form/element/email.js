@@ -28,8 +28,13 @@ define(
             defaults: {
                 template: 'Magento_Checkout/form/element/email',
                 email: checkoutData.getInputFieldEmailValue(),
+                emailFocused: false,
                 isLoading: false,
-                isPasswordVisible: false
+                isPasswordVisible: false,
+                listens: {
+                    email: 'emailHasChanged',
+                    emailFocused: 'validateEmail'
+                }
             },
             checkDelay: 2000,
             checkRequest: null,
@@ -40,16 +45,12 @@ define(
 
             initialize: function() {
                 this._super();
-                var self = this;
-                this.email.subscribe(function() {
-                    self.emailHasChanged();
-                });
             },
 
             /** Initialize observable properties */
             initObservable: function () {
                 this._super()
-                    .observe(['email', 'isLoading', 'isPasswordVisible']);
+                    .observe(['email', 'emailFocused', 'isLoading', 'isPasswordVisible']);
                 return this;
             },
 
@@ -101,11 +102,21 @@ define(
                 }
             },
 
-            validateEmail: function() {
-                var loginFormSelector = 'form[data-role=email-with-possible-login]';
-                $(loginFormSelector).validation();
-                var validationResult = $(loginFormSelector + ' input[name=username]').valid();
-                return Boolean(validationResult);
+            validateEmail: function (focused) {
+                var loginFormSelector = 'form[data-role=email-with-possible-login]',
+                    usernameSelector = loginFormSelector + ' input[name=username]',
+                    loginForm = $(loginFormSelector),
+                    validator;
+
+                loginForm.validation();
+
+                if (focused === false) {
+                    return !!$(usernameSelector).valid();
+                }
+
+                validator = loginForm.validate();
+
+                return validator.check(usernameSelector);
             },
 
             login: function(loginForm) {
