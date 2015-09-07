@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Ui\Test\Unit\Component\Grid\Column;
+namespace Magento\Customer\Test\Unit\Ui\Component\Listing\Column;
 
-use Magento\Ui\Component\Grid\Column\ValidationRules;
-use Magento\Ui\Component\Grid\Column\InlineEditUpdater;
+use Magento\Customer\Ui\Component\Listing\Column\ValidationRules;
+use Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater;
 use Magento\Customer\Api\Data\ValidationRuleInterface;
 
 class InlineEditUpdaterTest extends \PHPUnit_Framework_TestCase
@@ -25,7 +25,7 @@ class InlineEditUpdaterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->validationRules = $this->getMockBuilder('Magento\Ui\Component\Grid\Column\ValidationRules')
+        $this->validationRules = $this->getMockBuilder('Magento\Customer\Ui\Component\Listing\Column\ValidationRules')
             ->disableOriginalConstructor()
             ->getMock();
 

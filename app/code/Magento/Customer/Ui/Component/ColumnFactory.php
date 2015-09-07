@@ -6,7 +6,7 @@
 namespace Magento\Customer\Ui\Component;
 
 use Magento\Customer\Api\Data\AttributeMetadataInterface as AttributeMetadata;
-use Magento\Ui\Component\Grid\Column\InlineEditUpdater;
+use Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater;
 use Magento\Customer\Api\CustomerMetadataInterface;
 
 class ColumnFactory

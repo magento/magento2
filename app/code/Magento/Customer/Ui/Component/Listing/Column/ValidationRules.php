@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Ui\Component\Grid\Column;
+namespace Magento\Customer\Ui\Component\Listing\Column;
 
 use Magento\Customer\Api\Data\ValidationRuleInterface;
 
