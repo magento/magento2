@@ -1,13 +1,13 @@
 {
     "name": "magento/language-es_es",
     "description": "Spanish (Spain) language",
-    "version": "1.0.0-beta",
+    "version": "1.0.0-beta2",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
     "require": {
-        "magento/framework": "1.0.0-beta",
+        "magento/framework": "1.0.0-beta2",
         "magento/magento-composer-installer": "*"
     },
     "type": "magento2-language",
