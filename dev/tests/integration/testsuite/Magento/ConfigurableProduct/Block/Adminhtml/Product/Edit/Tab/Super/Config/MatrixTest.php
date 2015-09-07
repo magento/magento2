@@ -108,9 +108,9 @@ class MatrixTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
         $this->assertArrayHasKey($usedAttribute->getId(), $attributes);
 
         $this->assertArrayHasKey('label', $attributes[$usedAttribute->getId()]);
-        $this->assertEquals(static::ATTRIBUTE_LABEL, $attributes[$usedAttribute->getId()]['label']);
+        $this->assertEquals('Test Configurable', $attributes[$usedAttribute->getId()]['label']);
 
         $this->assertArrayHasKey('position', $attributes[$usedAttribute->getId()]);
-        $this->assertEquals(static::ATTRIBUTE_POSITION, $attributes[$usedAttribute->getId()]['position']);
+        $this->assertEquals(0, $attributes[$usedAttribute->getId()]['position']);
     }
 }
