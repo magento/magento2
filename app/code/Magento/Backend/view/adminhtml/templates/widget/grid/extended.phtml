@@ -263,7 +263,7 @@ $numColumns = sizeof($block->getColumns());
         registry.get('<?php echo $block->getDependencyJsObject() ?>', function (<?php echo $block->getDependencyJsObject() ?>) {
     <?php endif; ?>
 
-    <?php echo $block->getJsObjectName() ?> = new varienGrid(<?php echo $block->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getId()) ?>, '<?php echo $block->getGridUrl() ?>', '<?php echo $block->getVarNamePage() ?>', '<?php echo $block->getVarNameSort() ?>', '<?php echo $block->getVarNameDir() ?>', '<?php echo $block->getVarNameFilter() ?>');
+    <?php echo $block->getJsObjectName() ?> = new varienGrid(<?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getId()) ?>, '<?php echo $block->getGridUrl() ?>', '<?php echo $block->getVarNamePage() ?>', '<?php echo $block->getVarNameSort() ?>', '<?php echo $block->getVarNameDir() ?>', '<?php echo $block->getVarNameFilter() ?>');
     <?php echo $block->getJsObjectName() ?>.useAjax = '<?php echo $block->getUseAjax() ?>';
     <?php if ($block->getRowClickCallback()): ?>
     <?php echo $block->getJsObjectName() ?>.rowClickCallback = <?php echo $block->getRowClickCallback() ?>;
