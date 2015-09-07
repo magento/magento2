@@ -2113,11 +2113,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     {
         $definition = [];
         $indexes = $table->getIndexes();
-        $isEngineNdb = $table->getOption('type') == 'ndbcluster';
         foreach ($indexes as $indexData) {
             if (!empty($indexData['TYPE'])) {
                 //Skipping not supported fulltext indexes for NDB
-                if (($indexData['TYPE'] == AdapterInterface::INDEX_TYPE_FULLTEXT) && $isEngineNdb) {
+                if (($indexData['TYPE'] == AdapterInterface::INDEX_TYPE_FULLTEXT) && $this->isNdb($table)) {
                     continue;
                 }
                 switch ($indexData['TYPE']) {
@@ -2151,6 +2150,18 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         }
 
         return $definition;
+    }
+
+    /**
+     * Check if NDB is used for table
+     *
+     * @param Table $table
+     * @return bool
+     */
+    protected function isNdb(Table $table)
+    {
+        $engineType = strtolower($table->getOption('type'));
+        return $engineType == 'ndb' || $engineType == 'ndbcluster';
     }
 
     /**
