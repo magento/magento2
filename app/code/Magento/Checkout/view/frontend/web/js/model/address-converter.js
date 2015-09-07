@@ -29,8 +29,8 @@ define(
                 }
 
                 addressData.region = {
-                    region_id: null,
-                    region_code: null,
+                    region_id: addressData.region_id,
+                    region_code: addressData.region_code,
                     region: regionName
                 };
 

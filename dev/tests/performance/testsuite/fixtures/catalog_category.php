@@ -7,10 +7,7 @@
 /** @var \Magento\TestFramework\Application $this */
 
 /** @var \Magento\Catalog\Setup\CategorySetup $installer */
-$installer = $this->getObjectManager()->create(
-    'Magento\Catalog\Setup\CategorySetup',
-    ['resourceName' => 'catalog_setup']
-);
+$installer = $this->getObjectManager()->create('Magento\Catalog\Setup\CategorySetup');
 /**
  * After installation system has two categories: root one with ID:1 and Default category with ID:2
  */
