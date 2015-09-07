@@ -5,6 +5,9 @@
  */
 namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Index;
 
+/**
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ */
 class InlineEditTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Customer\Controller\Adminhtml\Index\InlineEdit */
