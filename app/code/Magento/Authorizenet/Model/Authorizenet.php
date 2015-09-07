@@ -54,6 +54,8 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
 
     const RESPONSE_REASON_CODE_PENDING_REVIEW_DECLINED = 254;
 
+    const PAYMENT_UPDATE_STATUS_CODE_SUCCESS = 'Ok';
+
     /**
      * Transaction fraud state key
      */
@@ -94,6 +96,11 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * @var array
      */
     protected $transactionDetails = [];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $_debugReplacePrivateDataKeys = ['password'];
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -381,21 +388,21 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
 
         try {
             $response = $client->request();
+            $responseBody = $response->getBody();
+            $debugData['response'] = $responseBody;
         } catch (\Exception $e) {
             $result->setXResponseCode(-1)
                 ->setXResponseReasonCode($e->getCode())
                 ->setXResponseReasonText($e->getMessage());
 
-            $debugData['result'] = $result->getData();
-            $this->_debug($debugData);
             throw new \Magento\Framework\Exception\LocalizedException(
                 $this->dataHelper->wrapGatewayError($e->getMessage())
             );
+        } finally {
+            $this->_debug($debugData);
         }
 
-        $responseBody = $response->getBody();
         $r = explode(self::RESPONSE_DELIM_CHAR, $responseBody);
-
         if ($r) {
             $result->setXResponseCode((int)str_replace('"', '', $r[0]))
                 ->setXResponseReasonCode((int)str_replace('"', '', $r[2]))
@@ -409,15 +416,10 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
                 ->setData('x_MD5_Hash', $r[37])
                 ->setXAccountNumber($r[50]);
         } else {
-            $this->_debug($debugData);
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Something went wrong in the payment gateway.')
             );
         }
-
-        $debugData['result'] = $result->getData();
-        $this->_debug($debugData);
-
         return $result;
     }
 
@@ -485,15 +487,26 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
 
         try {
             $responseBody = $client->request()->getBody();
-            $debugData['result'] = $responseBody;
+            $debugData['response'] = $responseBody;
             libxml_use_internal_errors(true);
             $responseXmlDocument = new \Magento\Framework\Simplexml\Element($responseBody);
             libxml_use_internal_errors(false);
         } catch (\Exception $e) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Unable to get transaction details. Try again later.')
+            );
+        } finally {
             $this->_debug($debugData);
-            throw new \Magento\Framework\Exception\LocalizedException(__('Payment updating error.'));
         }
-        $this->_debug($debugData);
+
+        if (!isset($responseXmlDocument->messages->resultCode)
+            || $responseXmlDocument->messages->resultCode != static::PAYMENT_UPDATE_STATUS_CODE_SUCCESS
+        ) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Unable to get transaction details. Try again later.')
+            );
+        }
+
         $this->transactionDetails[$transactionId] = $responseXmlDocument;
         return $responseXmlDocument;
     }
@@ -509,13 +522,5 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
         return isset($this->transactionDetails[$transactionId])
             ? $this->transactionDetails[$transactionId]
             : $this->loadTransactionDetails($transactionId);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _debug($debugData)
-    {
-        $this->logger->debug($debugData, ['not_empty_array'], (bool)$this->getConfigData('debug'));
     }
 }
