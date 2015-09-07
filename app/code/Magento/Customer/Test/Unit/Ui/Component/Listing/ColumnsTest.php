@@ -24,6 +24,9 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Ui\Component\Listing\Columns\ColumnInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $column;
 
+    /** @var \Magento\Ui\Component\Grid\Column\InlineEditUpdater|\PHPUnit_Framework_MockObject_MockObject */
+    protected $inlineEditUpdater;
+
     /** @var Columns */
     protected $component;
 
@@ -63,10 +66,15 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->inlineEditUpdater = $this->getMockBuilder('Magento\Ui\Component\Grid\Column\InlineEditUpdater')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->component = new Columns(
             $this->context,
             $this->columnFactory,
-            $this->attributeRepository
+            $this->attributeRepository,
+            $this->inlineEditUpdater
         );
     }
 
@@ -93,6 +101,9 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
                         'is_visible_in_grid' => true,
                         'is_filterable_in_grid' => true,
                         'is_searchable_in_grid' => true,
+                        'validation_rules' => [],
+                        'required'=> false,
+                        'entity_type_code' => 'customer_address',
                     ]
                 ]
             );
@@ -111,7 +122,7 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
         $backendType = 'backend-type';
         $attributeData = [
             'attribute_code' => 'billing_attribute_code',
-            'frontend_input' => 'frontend-input',
+            'frontend_input' => 'text',
             'frontend_label' => 'frontend-label',
             'backend_type' => 'backend-type',
             'options' => [
@@ -124,7 +135,13 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
             'is_visible_in_grid' => true,
             'is_filterable_in_grid' => true,
             'is_searchable_in_grid' => true,
+            'validation_rules' => [],
+            'required'=> false,
+            'entity_type_code' => 'customer',
         ];
+        $this->inlineEditUpdater->expects($this->once())
+            ->method('applyEditing')
+            ->with($this->column, 'text', [], false);
 
         $this->attributeRepository->expects($this->atLeastOnce())
             ->method('getList')
@@ -185,6 +202,9 @@ class ColumnsTest extends \PHPUnit_Framework_TestCase
             'is_visible_in_grid' => true,
             'is_filterable_in_grid' => true,
             'is_searchable_in_grid' => true,
+            'validation_rules' => [],
+            'required'=> false,
+            'entity_type_code' => 'customer_address',
         ];
 
         $this->attributeRepository->expects($this->atLeastOnce())
