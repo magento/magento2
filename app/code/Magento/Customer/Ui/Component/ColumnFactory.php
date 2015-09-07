@@ -78,14 +78,12 @@ class ColumnFactory
             'context' => $context,
         ];
         $column = $this->componentFactory->create($columnName, 'column', $arguments);
-        if ($attributeData['entity_type_code'] == CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER) {
-            $this->inlineEditUpdater->applyEditing(
-                $column,
-                $attributeData[AttributeMetadata::FRONTEND_INPUT],
-                $attributeData[AttributeMetadata::VALIDATION_RULES],
-                $attributeData[AttributeMetadata::REQUIRED]
-            );
-        }
+        $this->inlineEditUpdater->applyEditing(
+            $column,
+            $attributeData[AttributeMetadata::FRONTEND_INPUT],
+            $attributeData[AttributeMetadata::VALIDATION_RULES],
+            $attributeData[AttributeMetadata::REQUIRED]
+        );
         return $column;
     }
 
