@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -63,9 +62,9 @@ class RetrieveImage extends \Magento\Backend\App\Action
             $localTmpFileName = $this->generateTmpFileName($localFileName);
             $localFileFullPath = $this->appendFileSystemPath($localTmpFileName);
 
-            $localFilePath = $this->retrieveRemoteImage($remoteFileUrl, $localFileFullPath);
+            $this->retrieveRemoteImage($remoteFileUrl, $localFileFullPath);
 
-            $result['url'] = $this->mediaConfig->getTmpMediaUrl($localFilePath);
+            $result['url'] = $this->mediaConfig->getTmpMediaUrl($localTmpFileName);
             $result['file'] = $localFileName;
         } catch (\Exception $e) {
             $result = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
@@ -81,6 +80,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
     /**
      * @param string $fileUrl
      * @param string $localFilePath
+     * @return void
      */
     protected function retrieveRemoteImage($fileUrl, $localFilePath)
     {
