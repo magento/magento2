@@ -6,7 +6,7 @@
 
 namespace Magento\Translation\Model\Js;
 
-use \Magento\Framework\Phrase\Renderer\Translate;
+use Magento\Framework\Phrase\Renderer\Translate;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\App\State;
 use Magento\Framework\Filesystem;

@@ -84,42 +84,57 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     {
         $themePath = 'blank';
         $areaCode = 'adminhtml';
-        $files = [['path1'], ['path2'], ['path3'], ['path4']];
+
+        $filePaths = [['path1'], ['path2'], ['path3'], ['path4']];
+
+        $jsFilesMap = [
+            ['base', $themePath, '*', '*', [$filePaths[0]]],
+            [$areaCode, $themePath, '*', '*', [$filePaths[1]]]
+        ];
+        $staticFilesMap = [
+            ['base', $themePath, '*', '*', [$filePaths[2]]],
+            [$areaCode, $themePath, '*', '*', [$filePaths[3]]]
+        ];
 
         $relativePathMap = [
-            ['path1' => 'relativePath1'],
-            ['path2' => 'relativePath2'],
-            ['path3' => 'relativePath3'],
-            ['path4' => 'relativePath4']
-        ];
-        $contentsMap = [
-            ['relativePath1' => 'content1$.mage.__("hello1")content1'],
-            ['relativePath2' => 'content2$.mage.__("hello2")content2'],
-            ['relativePath3' => 'content2$.mage.__("hello3")content3'],
-            ['relativePath4' => 'content2$.mage.__("hello4")content4']
+            ['path1', 'relativePath1'],
+            ['path2', 'relativePath2'],
+            ['path3', 'relativePath3'],
+            ['path4', 'relativePath4']
         ];
 
-        $patterns = ['~\$\.mage\.__\([\'|\"](.+?)[\'|\"]\)~'];
+        $expectedResult = [
+            'hello1' => 'hello1translated',
+            'hello2' => 'hello2translated',
+            'hello3' => 'hello3translated',
+            'hello4' => 'hello4translated'
+        ];
+
+        $contentsMap = [
+            ['relativePath1', null, null, 'content1$.mage.__("hello1")content1'],
+            ['relativePath2', null, null, 'content2$.mage.__("hello2")content2'],
+            ['relativePath3', null, null, 'content2$.mage.__("hello3")content3'],
+            ['relativePath4', null, null, 'content2$.mage.__("hello4")content4']
+        ];
+
+        $translateMap = [
+            [['hello1'], [], 'hello1translated'],
+            [['hello2'], [], 'hello2translated'],
+            [['hello3'], [], 'hello3translated'],
+            [['hello4'], [], 'hello4translated']
+        ];
+
+        $patterns = ['~\$\.mage\.__\(([\'"])(.+?)\1\)~'];
 
         $this->appStateMock->expects($this->once())
             ->method('getAreaCode')
             ->willReturn($areaCode);
-        $this->filesUtilityMock->expects($this->at(0))
+        $this->filesUtilityMock->expects($this->any())
             ->method('getJsFiles')
-            ->with('base', $themePath)
-            ->willReturn([$files[0]]);
-        $this->filesUtilityMock->expects($this->at(1))
-            ->method('getJsFiles')
-            ->with($areaCode, $themePath)
-            ->willReturn([$files[1]]);
-        $this->filesUtilityMock->expects($this->at(2))
+            ->willReturnMap($jsFilesMap);
+        $this->filesUtilityMock->expects($this->any())
             ->method('getStaticHtmlFiles')
-            ->with('base', $themePath)
-            ->willReturn([$files[2]]);
-        $this->filesUtilityMock->expects($this->at(3))
-            ->method('getStaticHtmlFiles')
-            ->with($areaCode, $themePath)
-            ->willReturn([$files[3]]);
+            ->willReturnMap($staticFilesMap);
 
         $this->rootDirectoryMock->expects($this->any())
             ->method('getRelativePath')
@@ -130,7 +145,10 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->configMock->expects($this->any())
             ->method('getPatterns')
             ->willReturn($patterns);
+        $this->translateMock->expects($this->any())
+            ->method('render')
+            ->willReturnMap($translateMap);
 
-        $this->assertEquals([], $this->model->getData($themePath));
+        $this->assertEquals($expectedResult, $this->model->getData($themePath));
     }
 }
