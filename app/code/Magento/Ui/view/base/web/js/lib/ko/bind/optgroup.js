@@ -70,9 +70,12 @@ define([
 
                 // Filter out any entries marked as destroyed
                 filteredArray = ko.utils.arrayFilter(unwrappedArray, function (item) {
+                    if (item && !item.label) {
+                        return false;
+                    }
+
                     return includeDestroyed || item === undefined || item === null || !ko.utils.unwrapObservable(item._destroy);
                 });
-
                 filteredArray.map(recursivePathBuilder, null);
             }
 
@@ -164,11 +167,7 @@ define([
              *
              * @param {*} obj
              */
-            function recursivePathBuilder(obj) {
-
-                if (obj.label === null) {
-                    return;
-                }
+            function recursivePathBuilder(obj, key, origin) {
 
                 obj[optionTitle] = (this && this[optionTitle] ? this[optionTitle] + '/' : '') + obj[optionsText].trim();
 
@@ -251,11 +250,6 @@ define([
 
                     value = applyToObject(option, optionsValue, option);
                     label = applyToObject(option, optionsText, value);
-
-                    if (label === null) {
-                        return;
-                    }
-
                     obj[optionTitle] = applyToObject(option, optionsText + 'title', value);
 
                     if (Array.isArray(value)) {
