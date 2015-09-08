@@ -56,17 +56,20 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 require([
     'jquery',
     'mage/template',
+    'Magento_ConfigurableProduct/js/advanced-pricing-handler',
+    'Magento_ConfigurableProduct/js/options/price-type-handler',
     'jquery/ui',
     'jquery/jquery.tabs',
     'mage/mage',
     'mage/backend/menu',
     'Magento_Ui/js/modal/modal',
-    'Magento_ConfigurableProduct/js/advanced-pricing-handler',
-    'Magento_ConfigurableProduct/js/options/price-type-handler',
     'mage/translate',
     'domReady!'
-], function($, mageTemplate){
+], function($, mageTemplate, advancedPricingHandler, priceTypeHandler){
     'use strict';
+
+    advancedPricingHandler.init();
+    priceTypeHandler.init();
 
     var variationsContainer = $("#<?php echo $block->getId()?>"),
         collapsableWrapper = $("#<?php echo $block->getId()?>-wrapper"),
