@@ -10,7 +10,7 @@ define([
 ], function ($) {
     'use strict';
 
-    var priceTypeHandler = {
+    return {
         isConfigurable: false,
         messageInited: false,
         messageSelector: '[data-role=product-custom-options-content]',
@@ -34,27 +34,27 @@ define([
         },
         hideWarning: function () {
             $(this.messageSelector).notification('clear');
+        },
+        init: function () {
+            $('[data-form=edit-product]')
+                .on('change_configurable_type', function (event, isConfigurable) {
+                    this.isConfigurable = isConfigurable;
+                    this.checkPercentPriceTypeDomExist();
+                }.bind(this));
+
+            $('#product-edit-form-tabs').on('change', '.opt-type > select', function () {
+                var priceType = $('[data-attr="price-type"]'),
+                    optionPercentPriceType = priceType.find('option[value="percent"]');
+
+                if (this.isConfigurable) {
+                    this.showWarning();
+                    optionPercentPriceType.hide();
+                    optionPercentPriceType.parent().val() === 'percent' ? optionPercentPriceType.parent().val('fixed') : '';
+                } else {
+                    optionPercentPriceType.show();
+                    this.hideWarning();
+                }
+            }.bind(this));
         }
     };
-
-    $('[data-form=edit-product]')
-        .on('change_configurable_type', function (event, isConfigurable) {
-            priceTypeHandler.isConfigurable = isConfigurable;
-            priceTypeHandler.checkPercentPriceTypeDomExist();
-        });
-
-    $('#product-edit-form-tabs').on('change', '.opt-type > select', function () {
-        var priceType = $('[data-attr="price-type"]'),
-            optionPercentPriceType = priceType.find('option[value="percent"]');
-
-        if (priceTypeHandler.isConfigurable) {
-            priceTypeHandler.showWarning();
-            optionPercentPriceType.hide();
-            optionPercentPriceType.parent().val() === 'percent' ? optionPercentPriceType.parent().val('fixed') : '';
-        } else {
-            optionPercentPriceType.show();
-            priceTypeHandler.hideWarning();
-        }
-    });
-    return priceTypeHandler;
 });

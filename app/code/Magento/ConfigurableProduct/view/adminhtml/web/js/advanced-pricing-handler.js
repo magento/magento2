@@ -8,21 +8,25 @@ define([
 ], function ($) {
     'use strict';
 
-    $('[data-form=edit-product]')
-        .on('change_configurable_type', function (event, isConfigurable) {
-            var toggleDisabledAttribute = function (disabled) {
-                $('[data-tab-panel=advanced-pricing]').find('input,select').each(
-                    function (event, element) {
-                        $(element).attr('disabled', disabled);
+    return {
+        init: function () {
+            $('[data-form=edit-product]')
+                .on('change_configurable_type', function (event, isConfigurable) {
+                    var toggleDisabledAttribute = function (disabled) {
+                        $('[data-tab-panel=advanced-pricing]').find('input,select').each(
+                            function (event, element) {
+                                $(element).attr('disabled', disabled);
+                            }
+                        );
+                    };
+                    if (isConfigurable) {
+                        $('[data-ui-id=product-tabs-tab-link-advanced-pricing]').hide();
+                        toggleDisabledAttribute(true);
+                    } else {
+                        $('[data-ui-id=product-tabs-tab-link-advanced-pricing]').show();
+                        toggleDisabledAttribute(false);
                     }
-                );
-            };
-            if (isConfigurable) {
-                $('[data-ui-id=product-tabs-tab-link-advanced-pricing]').hide();
-                toggleDisabledAttribute(true);
-            } else {
-                $('[data-ui-id=product-tabs-tab-link-advanced-pricing]').show();
-                toggleDisabledAttribute(false);
-            }
-        });
+                });
+        }
+    };
 });
