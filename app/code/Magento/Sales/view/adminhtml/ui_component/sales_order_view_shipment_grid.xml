@@ -598,7 +598,7 @@
                     <item name="data_type" xsi:type="string">actions</item>
                     <item name="filterable" xsi:type="boolean">false</item>
                     <item name="sortable" xsi:type="boolean">false</item>
-                    <item name="viewUrlPath" xsi:type="string">admin/order_shipment/view</item>
+                    <item name="viewUrlPath" xsi:type="string">adminhtml/order_shipment/view</item>
                     <item name="urlEntityParamName" xsi:type="string">shipment_id</item>
                 </item>
             </argument>
