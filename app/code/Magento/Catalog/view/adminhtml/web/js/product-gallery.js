@@ -46,6 +46,7 @@ define([
          */
         _bind: function () {
             var events = {
+                openDialog: '_onOpenDialog',
                 addItem: '_addItem',
                 removeItem: '_removeItem',
                 setImageType: '_setImageType',
@@ -140,9 +141,6 @@ define([
             });
 
             element = $(element).data('imageData', imageData);
-            if(imageData.subclass) {
-                element.addClass(imageData.subclass);
-            }
             if (count === 0) {
                 element.prependTo(this.element);
             } else {
@@ -261,11 +259,7 @@ define([
          */
         _bind: function () {
             this._super();
-            var events = {
-                'change [data-role=visibility-trigger]': '_changeVisibility',
-                'change [data-role=type-selector]': '_changeType'
-            };
-
+            var events = {};
             events['click [data-role=close-panel]'] = $.proxy(function () {
                 this.element.find('[data-role=dialog]').trigger('close');
             }, this);
@@ -274,39 +268,28 @@ define([
                     $(event.currentTarget).addClass('active');
                     var itemId = $(event.currentTarget).find('input')[0].name.match(/\[([^\]]*)\]/g)[2];
                     $('#item_id').val(itemId);
-                    this._showDialog($(event.currentTarget).data('imageData'));
+                    this.element.trigger('openDialog', [$(event.currentTarget).data('imageData')]);
                 }
             };
             this._on(events);
             this.element.on('sortstart', $.proxy(function () {
                 this.element.find('[data-role=dialog]').trigger('close');
             }, this));
-
-            this.element.on('change', '[data-role=type-selector]', function () {
-                var parent = $(this).closest('.item'),
-                    selectedClass = 'selected';
-                parent.toggleClass(selectedClass, $(this).prop('checked'));
-            });
         },
 
         /**
-         * Set Position of Image Pointer
-         * @param image
-         * @param panel
+         *
+         * Click by image handler
+         *
+         * @param e
+         * @param imageData
          * @private
          */
-        _setImagePointerPosition: function (image, panel) {
-            var position = image.position(),
-                posX = position.left,
-                imageWidth = image.width(),
-                pointer = $('.image-pointer', panel),
-                pointerWidth = pointer.width(),
-                padding = -3,
-                pointerOffset = posX + padding + pointerWidth / 2 + imageWidth / 2;
-
-            pointer.css({
-                left: pointerOffset
-            });
+        _onOpenDialog: function(e, imageData) {
+            if(imageData.media_type != 'image') {
+                return;
+            }
+            this._showDialog(imageData);
         },
 
         /**
@@ -316,69 +299,71 @@ define([
          */
         _showDialog: function (imageData) {
             var $imageContainer = this.findElement(imageData);
-
-            if ($imageContainer.find('input[name*="media_type"]').val() == 'external-video') {
-                $('#new-video').modal('openModal');
-                return;
-            }
-
             var dialogElement = $imageContainer.data('dialog');
 
             if ($imageContainer.is('.removed') || (dialogElement && dialogElement.is(':visible'))) {
                 return;
             }
-            this.element.find('[data-role=dialog]').trigger('close');
 
-            if (!dialogElement && this.dialogTmpl) {
-                var $template = this.dialogTmpl({
-                        data: imageData
-                    }),
-                    imageCountInRow = 5;
-
-                dialogElement = $($template);
-
-                dialogElement
-                    .data('imageContainer', $imageContainer)
-                    .on('open', $.proxy(function (event) {
-                        var imagesList = this.element.find(this.options.imageSelector + ':not(.removed), .image-placeholder');
-                        var index = imagesList.index($imageContainer);
-                        var positionIndex = Math.floor(index / imageCountInRow + 1) * imageCountInRow - 1;
-                        if (positionIndex > imagesList.length - 1) {
-                            positionIndex = imagesList.length - 1;
-                        }
-                        var afterElement = imagesList.get(positionIndex);
-
-                        $(event.target)
-                            .insertAfter(afterElement)
-                            .slideDown(400);
-
-                        $(event.target)
-                            .find('[data-role=type-selector]')
-                            .each($.proxy(function (index, checkbox) {
-                                var $checkbox = $(checkbox),
-                                    parent = $checkbox.closest('.item'),
-                                    selectedClass = 'selected',
-                                    isChecked = this.options.types[$checkbox.val()].value == imageData.file;
-                                $checkbox.prop(
-                                    'checked',
-                                    isChecked
-                                );
-                                parent.toggleClass(selectedClass, isChecked);
-                            }, this));
-                        this._setImagePointerPosition($imageContainer, dialogElement);
-
-                    }, this))
-                    .on('close', $.proxy(function (event) {
-                        $imageContainer.removeClass('active');
-                        $(event.target)
-                            .slideUp(400);
-                    }, this));
-
-                $imageContainer.data('dialog', dialogElement);
+            if(!this.dialogTmpl) {
+                alert('System problem!');
+                return;
             }
-            if (dialogElement) {
-                dialogElement.trigger('open');
-            }
+
+            var $template = this.dialogTmpl({ data: imageData });
+            dialogElement = $($template);
+            dialogElement.modal({
+                'type': 'slide',
+                title: $.mage.__('Edit Image'),
+                buttons: [],
+                opened: function() {
+                    dialogElement.trigger('open');
+                },
+                closed: function(e) {
+                    dialogElement.trigger('close');
+                }
+            });
+            dialogElement
+                .data('imageContainer', $imageContainer)
+                .on('open', $.proxy(function (event) {
+                    $(event.target)
+                        .find('[data-role=type-selector]')
+                        .each($.proxy(function (index, checkbox) {
+                            var $checkbox = $(checkbox),
+                                parent = $checkbox.closest('.item'),
+                                selectedClass = 'selected',
+                                isChecked = this.options.types[$checkbox.val()].value == imageData.file;
+                            $checkbox.prop(
+                                'checked',
+                                isChecked
+                            );
+                            parent.toggleClass(selectedClass, isChecked);
+                        }, this));
+
+                }, this))
+                .on('close', $.proxy(function (event) {
+                    $imageContainer.removeClass('active');
+                    $imageContainer.data('dialog', null);
+                }, this));
+
+            $imageContainer.data('dialog', dialogElement);
+
+
+            var _changeDescription = function(e) {
+                var target = jQuery(e.target);
+                var targetName = target.attr('name');
+                jQuery('input[type="hidden"][name="'+ targetName + '"]').val(target.val());
+            };
+
+            dialogElement.on('change', '[data-role=type-selector]', function () {
+                var parent = $(this).closest('.item'),
+                    selectedClass = 'selected';
+                parent.toggleClass(selectedClass, $(this).prop('checked'));
+            });
+            dialogElement.on('change', '[data-role=type-selector]', $.proxy(this._changeType, this));
+            dialogElement.on('change', '[data-role=visibility-trigger]', $.proxy(this._changeVisibility, this));
+            dialogElement.on('change', '#image-description', _changeDescription);
+            dialogElement.modal('openModal');
         },
 
         /**

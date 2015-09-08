@@ -12,15 +12,23 @@ define([
 ], function ($) {
 
     $.widget('mage.productGallery',
+
         $.mage.productGallery,
         {
             _create: function() {
                 this._bind();
             },
 
-            _bind: function()
-            {
+            _bind: function() {
                 $(this.element).on('click', this.showModal.bind(this));
+                $('.gallery.ui-sortable').on('openDialog', $.proxy(this._onOpenDialog, this));
+            },
+
+            _onOpenDialog: function(e, imageData)  {
+                if(imageData.media_type != 'external-video') {
+                    return;
+                }
+                this.showModal();
             },
 
             showModal: function(e)
