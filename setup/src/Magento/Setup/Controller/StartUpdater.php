@@ -11,7 +11,7 @@ use Magento\Framework\Module\FullModuleList;
 use Magento\Setup\Model\Cron\JobComponentUninstall;
 use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
-use Magento\Setup\Model\Updater as ModelUpdater;
+use Magento\Setup\Model\Updater;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
@@ -42,26 +42,26 @@ class StartUpdater extends AbstractActionController
     private $navigation;
 
     /**
-     * @var ModelUpdater
+     * @var \Magento\Setup\Model\Updater
      */
     private $updater;
 
     /**
-     * @var FullModuleList
+     * @var \Magento\Framework\Module\FullModuleList
      */
     private $moduleList;
 
     /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Setup\Model\Navigation $navigation
-     * @param ModelUpdater $updater
-     * @param FullModuleList $moduleList
+     * @param \Magento\Setup\Model\Updater $updater
+     * @param \Magento\Framework\Module\FullModuleList $moduleList
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Setup\Model\Navigation $navigation,
-        ModelUpdater $updater,
-        FullModuleList $moduleList
+        \Magento\Setup\Model\Updater $updater,
+        \Magento\Framework\Module\FullModuleList $moduleList
     ) {
         $this->filesystem = $filesystem;
         $this->navigation = $navigation;
@@ -208,7 +208,7 @@ class StartUpdater extends AbstractActionController
 
             case 'upgrade':
             case 'update':
-                $cronTaskType = ModelUpdater::TASK_TYPE_UPDATE;
+                $cronTaskType = \Magento\Setup\Model\Updater::TASK_TYPE_UPDATE;
                 break;
 
             case 'enable':

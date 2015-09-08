@@ -56,11 +56,11 @@ class JobModule extends AbstractJob
      */
     private function setCommandString($name)
     {
-       if ($name == 'setup:module:enable') {
-           $this->cmdString = 'module:enable';
-       } else {
-           $this->cmdString = 'module:disable';
-       }
+        if ($name == 'setup:module:enable') {
+            $this->cmdString = 'module:enable';
+        } else {
+            $this->cmdString = 'module:disable';
+        }
     }
 
     /**
@@ -87,7 +87,7 @@ class JobModule extends AbstractJob
             $statusCode = $this->command->run(new ArrayInput($arguments), $this->output);
 
             // check for return statusCode to catch any Symfony errors
-            if( $statusCode != 0 ) {
+            if ( $statusCode != 0 ) {
                 throw new \RuntimeException('Symfony run() returned StatusCode: ' . $statusCode);
             }
 

@@ -141,7 +141,10 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnValueMap($valueMap));
 
-        $this->assertInstanceOf('Magento\Setup\Model\Cron\AbstractJob', $this->jobFactory->create('setup:module:disable', []));
+        $this->assertInstanceOf(
+            'Magento\Setup\Model\Cron\AbstractJob',
+            $this->jobFactory->create('setup:module:disable', [])
+        );
     }
 
     public function testModuleEnable()
@@ -156,7 +159,10 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnValueMap($valueMap));
 
-        $this->assertInstanceOf('Magento\Setup\Model\Cron\AbstractJob', $this->jobFactory->create('setup:module:enable', []));
+        $this->assertInstanceOf(
+            'Magento\Setup\Model\Cron\AbstractJob',
+            $this->jobFactory->create('setup:module:enable', [])
+        );
     }
 }
 
