@@ -18,4 +18,7 @@
     <event name="catalog_product_import_bunch_delete_after">
         <observer name="catalog_product_import_rewrites_delete" instance="Magento\CatalogUrlRewrite\Model\Product\Plugin\Import" method="clearProductUrls"/>
     </event>
+    <event name="catalog_product_save_after">
+        <observer name="process_url_rewrite_saving" instance="Magento\CatalogUrlRewrite\Model\Product\Observer" method="processUrlRewriteSaving"/>
+    </event>
 </config>
