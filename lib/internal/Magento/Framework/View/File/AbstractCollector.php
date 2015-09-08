@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\View\File;
 
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem;
 use Magento\Framework\View\File\Factory as FileFactory;
 use Magento\Framework\View\Helper\PathPattern as PathPatternHelper;
@@ -38,9 +39,9 @@ abstract class AbstractCollector implements CollectorInterface
     /**
      * Constructor
      *
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Framework\View\File\Factory $fileFactory
-     * @param \Magento\Framework\View\Helper\PathPattern $pathPatternHelper
+     * @param Filesystem $filesystem
+     * @param Factory $fileFactory
+     * @param PathPatternHelper $pathPatternHelper
      * @param string $subDir
      */
     public function __construct(
@@ -49,7 +50,6 @@ abstract class AbstractCollector implements CollectorInterface
         PathPatternHelper $pathPatternHelper,
         $subDir = ''
     ) {
-        $this->directory = $filesystem->getDirectoryRead($this->getScopeDirectory());
         $this->fileFactory = $fileFactory;
         $this->pathPatternHelper = $pathPatternHelper;
         $this->subDir = $subDir ? $subDir . '/' : '';

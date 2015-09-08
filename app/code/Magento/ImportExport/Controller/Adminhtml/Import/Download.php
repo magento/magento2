@@ -21,9 +21,9 @@ class Download extends ImportController
     protected $resultRawFactory;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory
      */
-    protected $fileDirectory;
+    protected $readFactory;
 
     /**
      * @var \Magento\Framework\Module\Dir\Reader
@@ -48,7 +48,7 @@ class Download extends ImportController
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory,
         \Magento\Framework\Module\Dir\Reader $reader
     ) {
         parent::__construct(
@@ -56,7 +56,7 @@ class Download extends ImportController
         );
         $this->fileFactory = $fileFactory;
         $this->resultRawFactory = $resultRawFactory;
-        $this->fileDirectory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $this->readFactory = $readFactory;
         $this->reader = $reader;
     }
 
@@ -68,10 +68,12 @@ class Download extends ImportController
     public function execute()
     {
         $fileName = $this->getRequest()->getParam('filename') . '.csv';
-        $fileAbsolutePath = $this->reader->getModuleDir('', self::SAMPLE_FILES_MODULE) . '/' . $fileName;
-        $filePath = $this->fileDirectory->getRelativePath($fileAbsolutePath);
+        $moduleDir = $this->reader->getModuleDir('', self::SAMPLE_FILES_MODULE);
+        $fileAbsolutePath = $moduleDir . '/' . $fileName;
+        $directoryRead = $this->readFactory->create($moduleDir);
+        $filePath = $directoryRead->getRelativePath($fileAbsolutePath);
 
-        if (!$this->fileDirectory->isFile($filePath)) {
+        if (!$directoryRead->isFile($filePath)) {
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $this->messageManager->addError(__('There is no sample file for this entity.'));
             $resultRedirect = $this->resultRedirectFactory->create();
@@ -79,8 +81,8 @@ class Download extends ImportController
             return $resultRedirect;
         }
 
-        $fileSize = isset($this->fileDirectory->stat($filePath)['size'])
-            ? $this->fileDirectory->stat($filePath)['size'] : null;
+        $fileSize = isset($directoryRead->stat($filePath)['size'])
+            ? $directoryRead->stat($filePath)['size'] : null;
 
         $this->fileFactory->create(
             $fileName,
@@ -92,7 +94,7 @@ class Download extends ImportController
 
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultRaw = $this->resultRawFactory->create();
-        $resultRaw->setContents($this->fileDirectory->readFile($filePath));
+        $resultRaw->setContents($directoryRead->readFile($filePath));
         return $resultRaw;
     }
 }

@@ -65,9 +65,9 @@ class Config
     protected $_cacheState;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @var Filesystem\Directory\ReadFactory
      */
-    protected $directoryRead;
+    protected $readFactory;
 
     /**
      * @var \Magento\Framework\Module\Dir\Reader
@@ -75,18 +75,18 @@ class Config
     protected $reader;
 
     /**
-     * @param Filesystem $filesystem
+     * @param Filesystem\Directory\ReadFactory $readFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
-     * @param \Magento\Framework\Module\Dir\Reader $reader
+     * @param Dir\Reader $reader
      */
     public function __construct(
-        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\Cache\StateInterface $cacheState,
         \Magento\Framework\Module\Dir\Reader $reader
     ) {
-        $this->directoryRead = $filesystem->getDirectoryRead(DirectoryList::ROOT);
+        $this->readFactory = $readFactory;
         $this->_scopeConfig = $scopeConfig;
         $this->_cacheState = $cacheState;
         $this->reader = $reader;
@@ -125,8 +125,9 @@ class Config
     {
         $moduleEtcPath = $this->reader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_PageCache');
         $configFilePath = $moduleEtcPath . '/' . $this->_scopeConfig->getValue($vclTemplatePath);
-        $configFilePath = $this->directoryRead->getRelativePath($configFilePath);
-        $data = $this->directoryRead->readFile($configFilePath);
+        $directoryRead = $this->readFactory->create($moduleEtcPath);
+        $configFilePath = $directoryRead->getRelativePath($configFilePath);
+        $data = $directoryRead->readFile($configFilePath);
         return strtr($data, $this->_getReplacements());
     }
 

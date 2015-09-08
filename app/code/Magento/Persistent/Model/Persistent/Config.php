@@ -56,11 +56,9 @@ class Config
     protected $_persistentFactory;
 
     /**
-     * Filesystem
-     *
-     * @var \Magento\Framework\Filesystem\Directory\Read;
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory
      */
-    protected $directoryRead;
+    protected $readFactory;
 
     /**
      * @param \Magento\Framework\Config\DomFactory $domFactory
@@ -76,14 +74,14 @@ class Config
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Framework\App\State $appState,
         \Magento\Persistent\Model\Factory $persistentFactory,
-        \Magento\Framework\Filesystem $filesystem
+        \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
     ) {
         $this->_domFactory = $domFactory;
         $this->_moduleReader = $moduleReader;
         $this->_layout = $layout;
         $this->_appState = $appState;
         $this->_persistentFactory = $persistentFactory;
-        $this->directoryRead = $filesystem->getDirectoryRead(DirectoryList::ROOT);
+        $this->readFactory = $readFactory;
     }
 
     /**
@@ -107,15 +105,19 @@ class Config
     protected function _getConfigDomXPath()
     {
         if ($this->_configDomXPath === null) {
-            $filePath = $this->directoryRead->getRelativePath($this->_configFilePath);
-            $isFile = $this->directoryRead->isFile($filePath);
-            $isReadable = $this->directoryRead->isReadable($filePath);
+            $dir = explode("/", $this->_configFilePath);
+            array_pop($dir);
+            $dir = implode("/", $dir);
+            $directoryRead = $this->readFactory->create($dir);
+            $filePath = $directoryRead->getRelativePath($this->_configFilePath);
+            $isFile = $directoryRead->isFile($filePath);
+            $isReadable = $directoryRead->isReadable($filePath);
             if (!$isFile || !$isReadable) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('We cannot load the configuration from file %1.', $this->_configFilePath)
                 );
             }
-            $xml = $this->directoryRead->readFile($filePath);
+            $xml = $directoryRead->readFile($filePath);
             /** @var \Magento\Framework\Config\Dom $configDom */
             $configDom = $this->_domFactory->createDom(
                 [

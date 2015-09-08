@@ -21,11 +21,6 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
     const APP = 'app';
 
     /**
-     * Modules
-     */
-    const MODULES = 'code';
-
-    /**
      * Themes
      */
     const THEMES = 'design';

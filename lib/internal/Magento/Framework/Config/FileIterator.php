@@ -5,6 +5,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Config;
+use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Class FileIterator
@@ -26,23 +27,20 @@ class FileIterator implements \Iterator, \Countable
     protected $position;
 
     /**
-     * Read directory
-     *
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @var DriverInterface
      */
-    protected $directoryRead;
+    protected $filesystemDriver;
 
     /**
      * Constructor
      *
-     * @param \Magento\Framework\Filesystem\Directory\ReadInterface $directory
      * @param array $paths
      */
-    public function __construct(\Magento\Framework\Filesystem\Directory\ReadInterface $directory, array $paths)
+    public function __construct(DriverInterface $filesystemDriver, array $paths)
     {
+        $this->filesystemDriver = $filesystemDriver;
         $this->paths = $paths;
         $this->position = 0;
-        $this->directoryRead = $directory;
     }
 
     /**
@@ -62,7 +60,7 @@ class FileIterator implements \Iterator, \Countable
      */
     public function current()
     {
-        return $this->directoryRead->readFile($this->key());
+        return $this->filesystemDriver->fileGetContents($this->key());
     }
 
     /**

@@ -59,7 +59,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
                 );
                 break;
             default:
-                $iterator = $this->iteratorFactory->create($this->themesDirectory, []);
+                $iterator = $this->iteratorFactory->create([]);
                 break;
         }
         return $iterator;
