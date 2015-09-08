@@ -9,7 +9,8 @@ class AssociatedProductsCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @magentoDataFixture Magento/GroupedProduct/_files/product_grouped.php
-     * @magentoAppIsolation enabled
+     * @magentoAppIsolation disabled
+     * @magentoDbIsolation disabled
      */
     public function testGetColumnValues()
     {
