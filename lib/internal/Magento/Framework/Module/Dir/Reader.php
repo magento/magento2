@@ -116,20 +116,18 @@ class Reader
     {
         $actions = [];
         foreach ($this->modulesList->getNames() as $moduleName) {
-            $actionDir = $this->getModuleDir('Controller', $moduleName);
+            $actionDir = $this->getModuleDir(Dir::MODULE_CONTROLLER_DIR, $moduleName);
             if (!file_exists($actionDir)) {
                 continue;
             }
             $dirIterator = new \RecursiveDirectoryIterator($actionDir, \RecursiveDirectoryIterator::SKIP_DOTS);
             $recursiveIterator = new \RecursiveIteratorIterator($dirIterator, \RecursiveIteratorIterator::LEAVES_ONLY);
-            $directoryRead = $this->readFactory->create($this->getModuleDir('', $moduleName));
+            $namespace = str_replace('_', '\\', $moduleName);
             /** @var \SplFileInfo $actionFile */
             foreach ($recursiveIterator as $actionFile) {
-                $actions[] = str_replace(
-                    '/',
-                    '_',
-                    $moduleName . '/' . $directoryRead->getRelativePath($actionFile->getPathname())
-                );
+                $actionName = str_replace('/', '\\', str_replace($actionDir, '', $actionFile->getPathname()));
+                $action = $namespace . "\\" . Dir::MODULE_CONTROLLER_DIR . substr($actionName, 0, -4);
+                $actions[strtolower($action)] = $action;
             }
         }
         return $actions;
@@ -161,5 +159,22 @@ class Reader
     public function setModuleDir($moduleName, $type, $path)
     {
         $this->customModuleDirs[$moduleName][$type] = $path;
+    }
+
+    /**
+     * Search entries for given regex pattern
+     *
+     * @param string $pattern
+     * @return string[]
+     */
+    public function search($pattern)
+    {
+        $result = [];
+        foreach ($this->modulesList->getNames() as $moduleName) {
+            $path = $this->getModuleDir('', $moduleName);
+            $files = $this->directoryRead->search($pattern, $path);
+            $result = array_merge($result, $files);
+        }
+        return $result;
     }
 }

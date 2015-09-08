@@ -5,15 +5,51 @@
  */
 namespace Magento\Framework\View\File\Collector\Override;
 
-use Magento\Framework\View\File\AbstractCollector;
-use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Theme\Dir;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\View\File\AbstractCollector;
+use Magento\Framework\View\File\Factory as FileFactory;
+use Magento\Framework\View\Helper\PathPattern as PathPatternHelper;
 
 /**
  * Source of view files that explicitly override base files introduced by modules
  */
 class Base extends AbstractCollector
 {
+    /**
+     * @var Dir
+     */
+    protected $themeDir;
+
+    /**
+     * @var ReadInterface
+     */
+    protected $rootDirectory;
+
+    /**
+     * Constructor
+     *
+     * @param Filesystem $filesystem
+     * @param FileFactory $fileFactory
+     * @param PathPatternHelper $pathPatternHelper
+     * @param string $subDir
+     * @param Dir $themeDir
+     */
+    public function __construct(
+        Filesystem $filesystem,
+        FileFactory $fileFactory,
+        PathPatternHelper $pathPatternHelper,
+        $subDir = '',
+        Dir $themeDir
+    ) {
+        $this->themeDir = $themeDir;
+        $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
+        parent::__construct($filesystem, $fileFactory, $pathPatternHelper, $subDir);
+    }
+
     /**
      * Retrieve files
      *
@@ -25,8 +61,8 @@ class Base extends AbstractCollector
     {
         $namespace = $module = '*';
         $themePath = $theme->getFullPath();
-        $searchPattern = "{$themePath}/{$namespace}_{$module}/{$this->subDir}{$filePath}";
-        $files = $this->directory->search($searchPattern);
+        $searchPattern = "{$namespace}_{$module}/{$this->subDir}{$filePath}";
+        $files = $this->rootDirectory->search($searchPattern, $this->themeDir->getPathByKey($themePath));
         $result = [];
         $pattern = "#(?<moduleName>[^/]+)/{$this->subDir}"
             . $this->pathPatternHelper->translatePatternFromGlob($filePath) . "$#i";

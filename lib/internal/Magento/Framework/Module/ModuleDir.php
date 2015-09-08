@@ -7,12 +7,10 @@
  */
 namespace Magento\Framework\Module;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\Stdlib\StringUtils as StringHelper;
 use Magento\Framework\Component\ComponentRegistrarInterface;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Stdlib\StringUtils as StringHelper;
 
 class Dir
 {
@@ -43,7 +41,6 @@ class Dir
      */
     public function __construct(StringHelper $string, ComponentRegistrarInterface $componentRegistrar)
     {
-        $this->_string = $string;
         $this->componentRegistrar = $componentRegistrar;
     }
 

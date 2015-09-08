@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\View\Design\Fallback\Rule;
 
+use Magento\Framework\Module\Dir\Reader;
+use Magento\Framework\Theme\Dir;
+
+
 /**
  * Class with simple substitution parameters to values
  */
@@ -25,7 +29,16 @@ class Simple implements RuleInterface
     protected $pattern;
 
     /**
-     * @var \Magento\Framework\Module\Dir\Reader
+     * Theme directory Handler
+     *
+     * @var Dir
+     */
+    protected $themeDirHandler;
+
+    /**
+     * Module directory reader
+     *
+     * @var Reader
      */
     protected $moduleDirReader;
 
@@ -34,15 +47,19 @@ class Simple implements RuleInterface
      *
      * @param string $pattern
      * @param array $optionalParams
+     * @param Dir $themeDirHandler
+     * @param Reader $moduleDirReader
      */
     public function __construct(
-        \Magento\Framework\Module\Dir\Reader $moduleDirReader,
         $pattern,
-        array $optionalParams = []
+        array $optionalParams = [],
+        Dir $themeDirHandler,
+        Reader $moduleDirReader
     ) {
-        $this->moduleDirReader = $moduleDirReader;
         $this->pattern = $pattern;
         $this->optionalParams = $optionalParams;
+        $this->themeDirHandler = $themeDirHandler;
+        $this->moduleDirReader = $moduleDirReader;
     }
 
     /**
@@ -58,6 +75,10 @@ class Simple implements RuleInterface
         if (strpos($pattern, '<module_dir>/<namespace>/<module>') !== false) {
             $path = $this->moduleDirReader->getModuleDir('', $params['namespace'] . '_' . $params['module']);
             $pattern = str_replace('<module_dir>/<namespace>/<module>', $path, $pattern);
+        }
+        if (strpos($pattern, '<theme_dir>/<area>/<theme_path>') !== false) {
+            $path = $this->themeDirHandler->getPathByKey($params['area'] . '/' . $params['theme_path']);
+            $pattern = str_replace('<theme_dir>/<area>/<theme_path>', $path, $pattern);
         }
         if (preg_match_all('/<([a-zA-Z\_]+)>/', $pattern, $matches)) {
             foreach ($matches[1] as $placeholder) {
