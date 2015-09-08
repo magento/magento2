@@ -61,10 +61,6 @@ class ColumnFactory
             $config['options'] = $attribute->getSource()->getAllOptions();
         }
         
-        if ($attribute->getIsFilterableInGrid()) {
-
-        }
-        
         $config['component'] = $this->getJsComponent($config['dataType']);
         
         $arguments = [
