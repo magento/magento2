@@ -8,10 +8,16 @@ return [
     'di' => [
         'allowed_controllers' => [
             'Magento\Setup\Controller\Index',
-            'Magento\Setup\Controller\Landing',
+            'Magento\Setup\Controller\LandingInstaller',
+            'Magento\Setup\Controller\LandingUpdater',
+            'Magento\Setup\Controller\CreateBackup',
+            'Magento\Setup\Controller\CompleteBackup',
             'Magento\Setup\Controller\Navigation',
+            'Magento\Setup\Controller\Home',
+            'Magento\Setup\Controller\SelectVersion',
             'Magento\Setup\Controller\License',
-            'Magento\Setup\Controller\ReadinessCheck',
+            'Magento\Setup\Controller\ReadinessCheckInstaller',
+            'Magento\Setup\Controller\ReadinessCheckUpdater',
             'Magento\Setup\Controller\Environment',
             'Magento\Setup\Controller\DatabaseCheck',
             'Magento\Setup\Controller\AddDatabase',
@@ -21,6 +27,13 @@ return [
             'Magento\Setup\Controller\Install',
             'Magento\Setup\Controller\Success',
             'Magento\Setup\Controller\Modules',
+            'Magento\Setup\Controller\ComponentGrid',
+            'Magento\Setup\Controller\StartUpdater',
+            'Magento\Setup\Controller\UpdaterSuccess',
+            'Magento\Setup\Controller\BackupActionItems',
+            'Magento\Setup\Controller\Maintenance',
+            'Magento\Setup\Controller\OtherComponentsGrid',
+            'Magento\Setup\Controller\DataOption',
         ],
         'instance' => [
             'preference' => [

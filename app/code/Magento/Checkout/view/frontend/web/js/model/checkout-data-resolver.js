@@ -18,7 +18,8 @@ define([
     'Magento_Checkout/js/action/select-payment-method',
     'Magento_Checkout/js/model/address-converter',
     'Magento_Checkout/js/action/select-billing-address',
-    'Magento_Checkout/js/action/create-billing-address'
+    'Magento_Checkout/js/action/create-billing-address',
+    'underscore'
 ], function (
     addressList,
     quote,
@@ -30,7 +31,8 @@ define([
     selectPaymentMethodAction,
     addressConverter,
     selectBillingAddress,
-    createBillingAddress
+    createBillingAddress,
+    _
 ) {
     'use strict';
 
@@ -39,9 +41,10 @@ define([
             if (checkoutData.getShippingAddressFromData()) {
                 var address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getShippingAddressFromData());
                 selectShippingAddress(address);
+            } else {
+                this.resolveShippingAddress();
             }
-            this.resolveShippingAddress(true);
-            if (quote.isVirtual) {
+            if (quote.isVirtual()) {
                if  (checkoutData.getBillingAddressFromData()) {
                     address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getBillingAddressFromData());
                     selectBillingAddress(address);
@@ -61,7 +64,6 @@ define([
         },
 
         applyShippingAddress: function (isEstimatedAddress) {
-
             if (addressList().length == 0) {
                 var address = addressConverter.formAddressDataToQuoteAddress(checkoutData.getShippingAddressFromData());
                 selectShippingAddress(address);
@@ -104,7 +106,7 @@ define([
 
         resolveShippingRates: function (ratesData) {
             var selectedShippingRate = checkoutData.getSelectedShippingRate();
-            var rateIsAvailable = false;
+            var availableRate = false;
 
             if (ratesData.length == 1) {
                 //set shipping rate if we have only one available shipping rate
@@ -112,32 +114,29 @@ define([
                 return;
             }
 
-            if(quote.shippingMethod()) {
-                rateIsAvailable = ratesData.some(function (rate) {
+            if (quote.shippingMethod()) {
+                availableRate = _.find(ratesData, function (rate) {
                     return rate.carrier_code == quote.shippingMethod().carrier_code
                         && rate.method_code == quote.shippingMethod().method_code;
                 });
             }
 
-            if (!rateIsAvailable && selectedShippingRate) {
-                rateIsAvailable = ratesData.some(function (rate) {
-                    if (rate.carrier_code + "_" + rate.method_code == selectedShippingRate) {
-                        selectShippingMethodAction(rate);
-                        return true;
-                    }
-                    return false;
-
+            if (!availableRate && selectedShippingRate) {
+                availableRate = _.find(ratesData, function (rate) {
+                    return rate.carrier_code + "_" + rate.method_code === selectedShippingRate;
                 });
             }
 
-            if (!rateIsAvailable && window.checkoutConfig.selectedShippingMethod) {
-                rateIsAvailable = true;
+            if (!availableRate && window.checkoutConfig.selectedShippingMethod) {
+                availableRate = true;
                 selectShippingMethodAction(window.checkoutConfig.selectedShippingMethod);
             }
 
             //Unset selected shipping method if not available
-            if (!rateIsAvailable) {
+            if (!availableRate) {
                 selectShippingMethodAction(null);
+            } else {
+                selectShippingMethodAction(availableRate);
             }
         },
 
