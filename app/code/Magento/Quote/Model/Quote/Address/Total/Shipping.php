@@ -34,23 +34,26 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function collect(\Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment, \Magento\Quote\Model\Quote\Address\Total $total)
-    {
+    public function collect(
+        \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment,
+        \Magento\Quote\Model\Quote\Address\Total $total
+    ) {
         parent::collect($shippingAssignment, $total);
 
-        $shippingAssignment->setWeight(0);
-        $shippingAssignment->setFreeMethodWeight(0);
-        $this->_setAmount(0)->_setBaseAmount(0);
+        $shippingAssignment->getShipping()->getAddress()->setWeight(0);
+        $shippingAssignment->getShipping()->getAddress()->setFreeMethodWeight(0);
+        $total->setTotalAmount($this->getCode(), 0);
+        $total->setBaseShippingAmount(0);
 
-        $items = $this->_getAddressItems($shippingAssignment);
+        $items = $shippingAssignment->getItems();
         if (!count($items)) {
             return $this;
         }
 
-        $method = $shippingAssignment->getShippingMethod();
-        $freeAddress = $shippingAssignment->getFreeShipping();
-        $addressWeight = $shippingAssignment->getWeight();
-        $freeMethodWeight = $shippingAssignment->getFreeMethodWeight();
+        $method = $shippingAssignment->getShipping()->getMethod();
+        $freeAddress = $shippingAssignment->getShipping()->getAddress()->getFreeShipping();
+        $addressWeight = $shippingAssignment->getShipping()->getAddress()->getWeight();
+        $freeMethodWeight = $shippingAssignment->getShipping()->getAddress()->getFreeMethodWeight();
 
         $addressQty = 0;
 
@@ -135,24 +138,32 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         }
 
         if (isset($addressQty)) {
-            $shippingAssignment->setItemQty($addressQty);
+            $shippingAssignment->getShipping()->getAddress()->setItemQty($addressQty);
         }
 
-        $shippingAssignment->setWeight($addressWeight);
-        $shippingAssignment->setFreeMethodWeight($freeMethodWeight);
+        $shippingAssignment->getShipping()->getAddress()->setWeight($addressWeight);
+        $shippingAssignment->getShipping()->getAddress()->setFreeMethodWeight($freeMethodWeight);
 
-        $shippingAssignment->collectShippingRates();
+        $shippingAssignment->getShipping()->getAddress()->collectShippingRates();
 
-        $this->_setAmount(0)->_setBaseAmount(0);
+        $total->setTotalAmount($this->getCode(), 0);
+        $total->setBaseShippingAmount(0);
 
         if ($method) {
-            foreach ($shippingAssignment->getAllShippingRates() as $rate) {
+            foreach ($shippingAssignment->getShipping()->getAddress()->getAllShippingRates() as $rate) {
                 if ($rate->getCode() == $method) {
-                    $amountPrice = $this->priceCurrency->convert($rate->getPrice(), $shippingAssignment->getQuote()->getStore());
-                    $this->_setAmount($amountPrice);
-                    $this->_setBaseAmount($rate->getPrice());
+                    $address = $shippingAssignment->getShipping()->getAddress();
+                    $store = $address->getQuote()->getStore();
+                    $amountPrice = $this->priceCurrency->convert(
+                        $rate->getPrice(),
+                        $store
+                    );
+                    $total->setTotalAmount($this->getCode(), $amountPrice);
+                    $total->setBaseShippingAmount($rate->getPrice());
                     $shippingDescription = $rate->getCarrierTitle() . ' - ' . $rate->getMethodTitle();
-                    $shippingAssignment->setShippingDescription(trim($shippingDescription, ' -'));
+                    $shippingAssignment->getShipping()
+                        ->getAddress()
+                        ->setShippingDescription(trim($shippingDescription, ' -'));
                     break;
                 }
             }
@@ -164,26 +175,22 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     /**
      * Add shipping totals information to address object
      *
-     * @param \Magento\Quote\Model\Quote\Address|\Magento\Quote\Model\Quote\Address\Total $total
-     * @return $this
+     * @param \Magento\Quote\Model\Quote\Address\Total $total
+     * @return array
      */
     public function fetch(\Magento\Quote\Model\Quote\Address\Total $total)
     {
+        $title = __('Shipping & Handling');
         $amount = $total->getShippingAmount();
         $shippingDescription = $total->getShippingDescription();
 
         if ($amount != 0 || $shippingDescription) {
-            $title = $shippingDescription ? __(
-                'Shipping & Handling (%1)',
-                $shippingDescription
-            ) : __(
-                'Shipping & Handling'
-            );
-
-            $total->addTotal(['code' => $this->getCode(), 'title' => $title, 'value' => $amount]);
+            if ($shippingDescription) {
+                $title = __('Shipping & Handling (%1)', $shippingDescription);
+            }
         }
 
-        return $this;
+        return ['code' => $this->getCode(), 'title' => $title, 'value' => $amount];
     }
 
     /**

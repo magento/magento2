@@ -91,7 +91,8 @@ class TotalsCollector
         'grand_total',
         'customerbalance',
         'giftcardaccount',
-        'msrp'
+        'msrp',
+        'shipping',
     );
 
     /**

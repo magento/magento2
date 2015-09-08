@@ -73,7 +73,8 @@ class TotalsReader
         'grand_total',
         'customerbalance',
         'giftcardaccount',
-        'msrp'
+        'msrp',
+        'shipping'
     );
 
     /**
