@@ -27,7 +27,7 @@ class Total extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     /**
      * Collect information about MSRP price enabled
      *
-     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface|\Magento\Quote\Model\Quote\Address $shippingAssignment
+     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return $this
      * @api
@@ -38,13 +38,12 @@ class Total extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     ) {
         parent::collect($shippingAssignment, $total);
 
-        $items = $this->_getAddressItems($shippingAssignment->getShipping()->getAddress());
-        if (!count($items)) {
+        if (!count($shippingAssignment->getItems())) {
             return $this;
         }
 
         $canApplyMsrp = false;
-        foreach ($items as $item) {
+        foreach ($shippingAssignment->getItems() as $item) {
             if (!$item->getParentItemId()
                     && $this->msrpData->isShowBeforeOrderConfirm($item->getProductId())
                     && $this->msrpData->isMinimalPriceLessMsrp($item->getProductId())
@@ -54,7 +53,7 @@ class Total extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
             }
         }
 
-        $total->setCanApplyMsrp((bool)$canApplyMsrp);
+        $total->setCanApplyMsrp($canApplyMsrp);
         return $this;
     }
 

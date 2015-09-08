@@ -19,12 +19,12 @@ interface ShippingAssignmentInterface extends \Magento\Framework\Api\ExtensibleD
     public function setShipping(\Magento\Quote\Api\Data\ShippingInterface $value);
 
     /**
-     * @return \Magento\Quote\Api\Data\CartInterface[]
+     * @return \Magento\Quote\Api\Data\CartItemInterface[]
      */
     public function getItems();
 
     /**
-     * @param \Magento\Quote\Api\Data\CartInterface[] $value
+     * @param \Magento\Quote\Api\Data\CartItemInterface[] $value
      * @return mixed
      */
     public function setItems($value);
