@@ -280,7 +280,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->willReturn($customerId);
 
         // Prepare errors processing
-        if (!empty($errors)) {
+        if ($errors['counter'] > 0) {
             $this->mockChangePasswordErrors($currentPassword, $newPassword, $errors, $customerEmail);
         } else {
             $this->customerAccountManagement->expects($this->once())
@@ -319,7 +319,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
 
         $this->messageCollection->expects($this->once())
             ->method('getCount')
-            ->willReturn($errors);
+            ->willReturn($errors['counter']);
 
 
         $this->assertSame($this->resultRedirect, $this->model->execute());
