@@ -14,22 +14,18 @@ define([
     describe('i18n binding', function () {
         var elWithStaticText = $('<span />'),
             elWithVariable = $('<span />'),
-            staticText = "staticText",
-            staticTextTranslated = "staticTextTranslated",
-            variableText = "variableText",
+            staticText = 'staticText',
+            staticTextTranslated = 'staticTextTranslated',
+            staticTextTranslatedRaw = '{{{staticTextTranslated}}{{staticTextTranslated}}{{staticText}}{{theme}}}',
+            variableText = 'variableText',
             variable = ko.observable(variableText),
-            variableTranslated = "variableTextTranslated",
-            mockStaticValueAccessor = function () {
-                return staticText
-            },
-            mockValueAccessor = function () {
-                return variable
-            },
+            variableTranslated = 'variableTextTranslated',
+            variableTranslatedRaw = '{{{variableTextTranslated}}{{variableTextTranslated}}{{variableText}}{{theme}}}',
             dataTranslateAttr = '[{"shown":"&","translated":"&","original":"$","location":"Span element"}]',
             dataTranslateAttrName = 'data-translate',
+            context = require.s.contexts._,
             manageInlineTranslation = function (state) {
-                var context = require.s.contexts._;
-                context.config['config'] = {
+                context.config.config = {
                     'Magento_Ui/js/lib/ko/bind/i18n': {
                         inlineTranslation: !!state
                     }
@@ -40,7 +36,7 @@ define([
             },
             turnOffInlineTranslation = function () {
                 manageInlineTranslation(false);
-            }
+            };
 
         beforeEach(function () {
             $(document.body).append(elWithStaticText);
@@ -55,8 +51,12 @@ define([
         it('if inline translation is off, just set text for element', function () {
             turnOffInlineTranslation();
 
-            ko.applyBindingsToNode(elWithStaticText[0], { i18n: staticText });
-            ko.applyBindingsToNode(elWithVariable[0], { i18n: variable });
+            ko.applyBindingsToNode(elWithStaticText[0], {
+                i18n: staticText
+            });
+            ko.applyBindingsToNode(elWithVariable[0], {
+                i18n: variable
+            });
 
             expect(elWithStaticText.text()).toEqual(staticText);
             expect(elWithVariable.text()).toEqual(variable());
@@ -68,38 +68,50 @@ define([
         'and there is no translation for this text, set original text for element', function () {
             turnOnInlineTranslation();
 
-            ko.applyBindingsToNode(elWithStaticText[0], { i18n: staticText });
-            ko.applyBindingsToNode(elWithVariable[0], { i18n: variable });
+            ko.applyBindingsToNode(elWithStaticText[0], {
+                i18n: staticText
+            });
+            ko.applyBindingsToNode(elWithVariable[0], {
+                i18n: variable
+            });
 
             expect(elWithStaticText.text()).toEqual(staticText);
             expect(elWithVariable.text()).toEqual(variableText);
-            expect(elWithStaticText.attr(dataTranslateAttrName)).toEqual(dataTranslateAttr.replace(/\$/g, staticText).replace(/\&/g, staticText));
-            expect(elWithVariable.attr(dataTranslateAttrName)).toEqual(dataTranslateAttr.replace(/\$/g, variableText).replace(/\&/g, variableText));
+            expect(elWithStaticText.attr(dataTranslateAttrName))
+                .toEqual(dataTranslateAttr.replace(/\$/g, staticText).replace(/\&/g, staticText));
+            expect(elWithVariable.attr(dataTranslateAttrName))
+                .toEqual(dataTranslateAttr.replace(/\$/g, variableText).replace(/\&/g, variableText));
         });
 
         it('if inline translation is on, ' +
-        'and there is translation for this text, set translated text for element', function () {
+        'and there is translation for this text,' +
+        ' set translated text for element', function () {
             turnOnInlineTranslation();
-            $.mage.translate.add(staticText, staticTextTranslated);
-            $.mage.translate.add(variableText, variableTranslated);
-            spyOn($.mage, '__').and.callThrough();
+            $.mage.translate.add(staticText, staticTextTranslatedRaw);
+            $.mage.translate.add(variableText, variableTranslatedRaw);
+            spyOn($.mage.translate, 'parsedTranslate').and.callThrough();
 
-            var context = require.s.contexts._;
             context.config.config = {
                 'Magento_Ui/js/lib/ko/bind/i18n': {
                     inlineTranslation: true
                 }
             };
 
-            ko.applyBindingsToNode(elWithStaticText[0], {i18n: staticText });
-            ko.applyBindingsToNode(elWithVariable[0], { i18n: variable });
+            ko.applyBindingsToNode(elWithStaticText[0], {
+                i18n: staticText
+            });
+            ko.applyBindingsToNode(elWithVariable[0], {
+                i18n: variable
+            });
 
-            expect($.mage.__).toHaveBeenCalledWith(staticText);
-            expect($.mage.__).toHaveBeenCalledWith(variableText);
+            expect($.mage.translate.parsedTranslate).toHaveBeenCalledWith(staticText);
+            expect($.mage.translate.parsedTranslate).toHaveBeenCalledWith(variableText);
             expect(elWithStaticText.text()).toEqual(staticTextTranslated);
             expect(elWithVariable.text()).toEqual(variableTranslated);
-            expect(elWithStaticText.attr(dataTranslateAttrName)).toEqual(dataTranslateAttr.replace(/\$/g, staticText).replace(/\&/g, staticTextTranslated));
-            expect(elWithVariable.attr(dataTranslateAttrName)).toEqual(dataTranslateAttr.replace(/\$/g, variableText).replace(/\&/g, variableTranslated));
+            expect(elWithStaticText.attr(dataTranslateAttrName))
+                .toEqual(dataTranslateAttr.replace(/\$/g, staticText).replace(/\&/g, staticTextTranslated));
+            expect(elWithVariable.attr(dataTranslateAttrName))
+                .toEqual(dataTranslateAttr.replace(/\$/g, variableText).replace(/\&/g, variableTranslated));
         });
     });
 });

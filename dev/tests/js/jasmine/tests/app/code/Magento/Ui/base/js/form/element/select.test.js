@@ -139,10 +139,61 @@ define([
                 expect(model.initInput()).toEqual(model);
             });
         });
+        describe('getOption method', function () {
+            it('check existed option', function () {
+                model.indexedOptions = {
+                    value: 'option'
+                };
+                expect(model.getOption('value')).toEqual('option');
+            });
+
+            it('check not existed option', function () {
+                expect(model.getOption('value')).not.toBeDefined();
+            });
+
+            it('check empty value', function () {
+                model.indexedOptions = {
+                    value: 'option'
+                };
+                expect(model.getOption('')).not.toBeDefined();
+            });
+        });
+        describe('normalizeData method', function () {
+            it('check on non empty value', function () {
+                spyOn(model, 'getOption').and.callThrough();
+                model.indexedOptions = {
+                    val: {
+                        value: 'value'
+                    }
+                };
+                expect(model.normalizeData('val')).toEqual('value');
+                expect(model.getOption).toHaveBeenCalledWith('val');
+            });
+            it('check on not existed option value', function () {
+                expect(model.normalizeData('value')).not.toBeDefined();
+            });
+            it('check on empty value', function () {
+                model.options = [{
+                        value: 'valFirst'
+                    },
+                    {
+                        value: 'valLast'
+                    }];
+                model.caption = false;
+                expect(model.normalizeData('')).toEqual('valFirst');
+            });
+        });
         describe('getInitialValue method', function () {
             it('check on non empty value', function () {
-                model.value('value');
+                model.value('val');
+                model.indexedOptions = {
+                    val: {
+                        value: 'value'
+                    }
+                };
+                spyOn(model, 'normalizeData').and.callThrough();
                 expect(model.getInitialValue()).toEqual('value');
+                expect(model.normalizeData).toHaveBeenCalledWith('val');
             });
             it('check on empty value', function () {
                 model.options = [{
