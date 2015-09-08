@@ -856,8 +856,6 @@ return [
         'Mage_Eav_Model_Entity_Attribute_Backend_Default',
     ],
     ['Magento\Customer\Exception'],
-    ['Mage_DesignEditor_Block_Page_Html_Head_Vde'],
-    ['Mage_DesignEditor_Block_Page_Html_Head'],
     ['Mage_Directory_Model_Resource_Currency_Collection'],
     ['Magento\Directory\Exception'],
     ['Mage_Downloadable_FileController', 'Magento\Downloadable\Controller\Adminhtml\Downloadable\File'],
@@ -2241,7 +2239,6 @@ return [
     ['Magento\Translation\Helper\Data'],
     ['Magento\Framework\Translate\Factory'],
     ['Magento\Backend\Model\Translate'],
-    ['Magento\DesignEditor\Model\Translate\InlineVde', 'Magento\DesignEditor\Model\Translate\Inline'],
     ['Magento\Backend\Model\Translate\Inline\ConfigFactory'],
     ['Magento\Framework\Translate\Inline\ConfigFactory'],
     ['Magento\Bundle\Model\Price\Index'],
@@ -2601,10 +2598,6 @@ return [
     ['Magento\Framework\View\Layout\File\SourceInterface', 'Magento\Framework\View\File\CollectorInterface'],
     ['Magento\Framework\View\Layout\File', 'Magento\Framework\View\File'],
     ['Magento\Framework\View\Url\Resolver', 'Magento\Framework\View\Asset\Repository'],
-    [
-        'Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Css\Group',
-        'Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Css',
-    ],
     ['Magento\Framework\Filter\GridArray\Grid'],
     ['Magento\Css\PreProcessor\Composite'],
     ['Magento\Css\PreProcessor\UrlResolver', 'Magento\Framework\View\Asset\PreProcessor\ModuleNotation'],
@@ -3067,7 +3060,6 @@ return [
     ['Magento\Integration\Model\Integration\Factory', 'Magento\Integration\Model\IntegrationFactory'],
     ['Magento\Webapi\Model\PathProcessor', 'Magento\Webapi\Controller\PathProcessor'],
     ['Magento\Webapi\Helper\Data', 'Magento\Webapi\Model\Soap\Config'],
-    ['Magento\Webapi\Model\Config\ClassReflector', 'Magento\Webapi\Model\Soap\Config\ClassReflector'],
     ['Magento\Webapi\Model\Soap\Server\Factory', 'Magento\Webapi\Model\Soap\ServerFactory'],
     ['Magento\Webapi\Model\Soap\Wsdl\Factory', 'Magento\Webapi\Model\Soap\WsdlFactory'],
     [
@@ -3833,6 +3825,7 @@ return [
     ['Magento\Checkout\Model\Observer', 'corresponding classes in Magento\Checkout\Observer\*'],
     ['Magento\CurrencySymbol\Model\Observer', 'corresponding classes in Magento\CurrencySymbol\Observer\*'],
     ['Magento\Catalog\Model\Product\Image\View'],
+    ['Magento\Framework\View\Layout\Reader\Remove'],
     ['Magento\Tools\Console\CommandList'],
     ['Magento\CatalogSearch\Model\Layer\Advanced\CollectionFilter'],
     ['Magento\CatalogSearch\Model\Layer\Advanced\Context'],
@@ -3846,4 +3839,10 @@ return [
     ['Magento\Framework\Gdata\Gshopping\Extension\Shipping'],
     ['Magento\Framework\Gdata\Gshopping\Extension\Control'],
     ['Magento\Framework\Gdata\Gshopping\Extension\Attribute'],
+    ['Magento\Checkout\Model\Agreements\AgreementsValidator', 'Magento\CheckoutAgreements\Model\AgreementsValidator'],
+    [
+        'Magento\Checkout\Model\Agreements\AgreementsProviderInterface',
+        'Magento\CheckoutAgreements\Model\AgreementsProviderInterface'
+    ],
+    ['Magento\Setup\Model\SampleData', 'Magento\SampleData\Model\SampleData'],
 ];

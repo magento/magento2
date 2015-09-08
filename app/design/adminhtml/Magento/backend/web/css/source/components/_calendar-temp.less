@@ -25,10 +25,11 @@
 .hasDatepicker {
     &.admin__control-text {
         width: 15rem;
+        padding-right: 3.5rem;
     }
     + .ui-datepicker-trigger {
-        .button-reset();
-        .icon-font(
+        .lib-button-reset();
+        .lib-icon-font(
         @_icon-font-content: @icon-calendar__content,
         @_icon-font: @icons-admin__font-name,
         @_icon-font-size: 2.1rem,
@@ -100,7 +101,7 @@
     line-height: 3rem;
     top: 0;
     span {
-        .visually-hidden();
+        .lib-visually-hidden();
     }
     &:before {
         color: #514943;

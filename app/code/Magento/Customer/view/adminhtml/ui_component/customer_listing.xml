@@ -248,31 +248,65 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="selectProvider" xsi:type="string">customer_listing.customer_listing.customer_columns.ids</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/tree-massactions</item>
                     <item name="displayArea" xsi:type="string">bottom</item>
-                    <item name="actions" xsi:type="array">
-                        <item name="delete" xsi:type="array">
-                            <item name="type" xsi:type="string">delete</item>
-                            <item name="label" xsi:type="string" translate="true">Delete</item>
-                            <item name="url" xsi:type="string">customer/index/massDelete</item>
-                            <item name="confirm" xsi:type="array">
-                                <item name="title" xsi:type="string" translate="true">Delete items</item>
-                                <item name="message" xsi:type="string" translate="true">Are you sure you wan't to delete selected items?</item>
-                            </item>
-                        </item>
-                        <item name="subscribe" xsi:type="array">
-                            <item name="type" xsi:type="string">subscribe</item>
-                            <item name="label" xsi:type="string" translate="true">Subscribe to Newsletter</item>
-                            <item name="url" xsi:type="string">customer/index/massSubscribe</item>
-                        </item>
-                        <item name="unsubscribe" xsi:type="array">
-                            <item name="type" xsi:type="string">unsubscribe</item>
-                            <item name="label" xsi:type="string" translate="true">Unsubscribe from Newsletter</item>
-                            <item name="url" xsi:type="string">customer/index/massUnsubscribe</item>
-                        </item>
-                    </item>
                     <item name="indexField" xsi:type="string">entity_id</item>
                 </item>
             </argument>
+            <action name="delete">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">delete</item>
+                        <item name="label" xsi:type="string" translate="true">Delete</item>
+                        <item name="url" xsi:type="url" path="customer/index/massDelete"/>
+                        <item name="confirm" xsi:type="array">
+                            <item name="title" xsi:type="string" translate="true">Delete items</item>
+                            <item name="message" xsi:type="string" translate="true">Are you sure to delete selected customers?</item>
+                        </item>
+                    </item>
+                </argument>
+            </action>
+            <action name="subscribe">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">subscribe</item>
+                        <item name="label" xsi:type="string" translate="true">Subscribe to Newsletter</item>
+                        <item name="url" xsi:type="url" path="customer/index/massSubscribe"/>
+                    </item>
+                </argument>
+            </action>
+            <action name="unsubscribe">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">unsubscribe</item>
+                        <item name="label" xsi:type="string" translate="true">Unsubscribe from Newsletter</item>
+                        <item name="url" xsi:type="url" path="customer/index/massUnsubscribe"/>
+                        <item name="confirm" xsi:type="array">
+                            <item name="title" xsi:type="string" translate="true">Unsubscribe from Newsletter</item>
+                            <item name="message" xsi:type="string" translate="true">Are you sure to unsubscribe selected customers from newsletter?</item>
+                        </item>
+                    </item>
+                </argument>
+            </action>
+            <action name="assign_to_group">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">assign_to_group</item>
+                        <item name="label" xsi:type="string" translate="true">Assign a Customer Group</item>
+                    </item>
+                </argument>
+                <argument name="actions" xsi:type="configurableObject">
+                    <argument name="class" xsi:type="string">Magento\Customer\Ui\Component\MassAction\Group\Options</argument>
+                    <argument name="data" xsi:type="array">
+                        <item name="urlPath" xsi:type="string">customer/index/massAssignGroup</item>
+                        <item name="paramName" xsi:type="string">group</item>
+                        <item name="confirm" xsi:type="array">
+                            <item name="title" xsi:type="string" translate="true">Assign a Customer Group</item>
+                            <item name="message" xsi:type="string" translate="true">Are you sure to assign selected customers to new group?</item>
+                        </item>
+                    </argument>
+                </argument>
+            </action>
         </massaction>
         <paging name="listing_paging">
             <argument name="data" xsi:type="array">

@@ -10,6 +10,7 @@ angular.module('component-grid', ['ngStorage'])
             $scope.componentsProcessed = false;
             $http.get('index.php/componentGrid/components').success(function(data) {
                 $scope.components = data.components;
+                $scope.displayComponents = data.components;
                 $scope.total = data.total;
                 if(typeof data.lastSyncData.lastSyncDate === "undefined") {
                     $scope.isOutOfSync = true;
@@ -18,10 +19,22 @@ angular.module('component-grid', ['ngStorage'])
                     $scope.isOutOfSync = false;
                 }
                 $scope.availableUpdatePackages = data.lastSyncData.packages;
-                $scope.currentPage = 0;
+                $scope.currentPage = 1;
                 $scope.rowLimit = 20;
-                $scope.numberOfPages = Math.ceil(data.total/$scope.rowLimit);
+                $scope.numberOfPages = Math.ceil($scope.total/$scope.rowLimit);
                 $scope.componentsProcessed = true;
+            });
+
+            $scope.$watch('currentPage + rowLimit', function() {
+                var begin = (($scope.currentPage - 1) * $scope.rowLimit);
+                var end = parseInt(begin) + parseInt(($scope.rowLimit));
+                $scope.numberOfPages = Math.ceil($scope.total/$scope.rowLimit);
+                if ($scope.components !== undefined) {
+                    $scope.displayComponents = $scope.components.slice(begin, end);
+                }
+                if ($scope.currentPage > $scope.numberOfPages) {
+                    $scope.currentPage = $scope.numberOfPages;
+                }
             });
 
             $scope.isOutOfSync = false;
@@ -70,6 +83,8 @@ angular.module('component-grid', ['ngStorage'])
 
                 if ($scope.isAvailableUpdatePackage(component.name)) {
                     return indicators.info[type];
+                } else if(component.disable === true) {
+                    return indicators.off[type];
                 }
                 return indicators.on[type];
             };
@@ -102,16 +117,24 @@ angular.module('component-grid', ['ngStorage'])
                 $state.go('root.readiness-check-uninstall');
             };
 
+            $scope.enableDisable = function(type, component) {
+                if (component.type.indexOf('module') >= 0 ) {
+                    $localStorage.packages = [
+                        {
+                            name: component.moduleName
+                        }
+                    ];
+                    if ($localStorage.titles[type].indexOf(component.moduleName) < 0 ) {
+                        $localStorage.titles[type] = type.charAt(0).toUpperCase() + type.slice(1) + ' '
+                            + component.moduleName;
+                    }
+                    $localStorage.componentType = component.type;
+                    $localStorage.moduleName = component.moduleName;
+                    $state.go('root.readiness-check-'+type);
+                }
+            };
+
             $scope.convertDate = function(date) {
                 return new Date(date);
             }
-        }])
-    .filter('startFrom', function() {
-        return function(input, start) {
-            if(input !== undefined && start !== 'NaN') {
-                start = parseInt(start, 10);
-                return input.slice(start);
-            }
-        }
-    })
-;
+        }]);
