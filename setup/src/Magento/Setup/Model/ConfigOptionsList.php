@@ -180,11 +180,17 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         $errors = [];
 
         if (isset($options[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS])) {
-            $errors = array_merge($errors, $this->validateHttpCacheHosts($options[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS]));
+            $errors = array_merge(
+                $errors,
+                $this->validateHttpCacheHosts($options[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS])
+            );
         }
 
         if (isset($options[ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX])) {
-            $errors = array_merge($errors, $this->validateDbPrefix($options[ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX]));
+            $errors = array_merge(
+                $errors,
+                $this->validateDbPrefix($options[ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX])
+            );
         }
 
         if (!$options[ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION]) {
