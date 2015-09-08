@@ -12,10 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Pricing\Object\SaleableInterface;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
-use Magento\Framework\Api\Data\ImageContentInterface;
-use Magento\Framework\Api\Data\VideoContentInterface;
 use Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool;
-use Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory;
 
 /**
@@ -286,11 +283,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $productLinkExtensionFactory;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory
-     */
-    protected $mediaGalleryEntryFactory;
-
-    /**
      * @var \Magento\Framework\Api\DataObjectHelper
      */
     protected $dataObjectHelper;
@@ -361,15 +353,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param Indexer\Product\Eav\Processor $productEavIndexerProcessor
      * @param CategoryRepositoryInterface $categoryRepository
      * @param Product\Image\CacheFactory $imageCacheFactory
-     * @param \Magento\Catalog\Model\ProductLink\CollectionProvider $entityCollectionProvider
-     * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
+     * @param ProductLink\CollectionProvider $entityCollectionProvider
+     * @param Product\LinkTypeProvider $linkTypeProvider
      * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory
      * @param \Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory
-     * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory
-     * @param ProductAttributeMediaGalleryEntryExtensionFactory $mediaGalleryEntryExtensionFactory
-     * @param \Magento\Framework\Api\Data\VideoContentInterfaceFactory $videoEntryFactory
-     * @param \Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter $imageMediaEntryConverter
-     * @param ExternalVideoEntryConverter $externalVideoMediaEntryConverter
      * @param EntryConverterPool $mediaGalleryEntryConverterPool
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
@@ -409,11 +396,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider,
         \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory,
         \Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory,
-        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory,
-        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory $mediaGalleryEntryExtensionFactory,
-        \Magento\Framework\Api\Data\VideoContentInterfaceFactory $videoEntryFactory,
-        \Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter $imageMediaEntryConverter,
-        ExternalVideoEntryConverter $externalVideoMediaEntryConverter,
         EntryConverterPool $mediaGalleryEntryConverterPool,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
@@ -443,11 +425,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->linkTypeProvider = $linkTypeProvider;
         $this->productLinkFactory = $productLinkFactory;
         $this->productLinkExtensionFactory = $productLinkExtensionFactory;
-        $this->mediaGalleryEntryFactory = $mediaGalleryEntryFactory;
-        $this->mediaGalleryEntryExtensionFactory        = $mediaGalleryEntryExtensionFactory;
-        $this->videoEntryFactory = $videoEntryFactory;
-        $this->imageMediaEntryConverter = $imageMediaEntryConverter;
-        $this->externalVideoMediaEntryConverter = $externalVideoMediaEntryConverter;
         $this->mediaGalleryEntryConverterPool = $mediaGalleryEntryConverterPool;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->joinProcessor = $joinProcessor;
