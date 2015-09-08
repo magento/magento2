@@ -47,6 +47,7 @@ define(
                 this._super();
 
                 this.shippingRates.subscribe(function (rates) {
+                    self.shippingRateGroups([]);
                     _.each(rates, function (rate) {
                         var carrierTitle = rate['carrier_title'];
 
