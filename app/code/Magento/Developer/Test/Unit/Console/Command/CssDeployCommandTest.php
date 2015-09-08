@@ -112,7 +112,9 @@ class CssDeployCommandTest extends \PHPUnit_Framework_TestCase
         $this->sourceFileGeneratorPool->expects($this->once())
             ->method('create')
             ->with('less')
-            ->willReturn($this->getMock('Magento\Framework\View\Asset\SourceFileGeneratorInterface'));
+            ->willReturn($this->getMock('Magento\Framework\Less\FileGenerator', [], [], '', false));
+        $asset = $this->getMockForAbstractClass('Magento\Framework\View\Asset\LocalInterface');
+        $asset->expects($this->once())->method('getContentType')->willReturn('type');
         $this->assetRepo->expects($this->once())
             ->method('createAsset')
             ->with(
@@ -123,18 +125,28 @@ class CssDeployCommandTest extends \PHPUnit_Framework_TestCase
                     'locale' => 'en_US'
                 ]
             )
-            ->willReturn(
-                $this->getMockForAbstractClass('Magento\Framework\View\Asset\LocalInterface')
-            );
+            ->willReturn($asset);
         $this->assetSource->expects($this->once())->method('findSource')->willReturn('/dev/null');
 
-        $this->chainFactory->expects($this->once())->method('create')->willReturn(
-            $this->getMock('Magento\Framework\View\Asset\PreProcessor\Chain', [], [], '', false)
-        );
+        $this->chainFactory->expects($this->once())
+            ->method('create')
+            ->with(
+                [
+                    'asset' => $asset,
+                    'origContent' => 'content',
+                    'origContentType' => 'type',
+                    'origAssetPath' => 'relative/path',
+                ]
+            )
+            ->willReturn($this->getMock('Magento\Framework\View\Asset\PreProcessor\Chain', [], [], '', false));
 
-        $this->filesystem->expects($this->atLeastOnce())->method('getDirectoryWrite')->willReturn(
+        $rootDir = $this->getMock('\Magento\Framework\Filesystem\Directory\WriteInterface', [], [], '', false);
+        $this->filesystem->expects($this->at(0))->method('getDirectoryWrite')->willReturn($rootDir);
+        $this->filesystem->expects($this->at(1))->method('getDirectoryWrite')->willReturn(
             $this->getMock('\Magento\Framework\Filesystem\Directory\WriteInterface', [], [], '', false)
         );
+        $rootDir->expects($this->atLeastOnce())->method('getRelativePath')->willReturn('relative/path');
+        $rootDir->expects($this->once())->method('readFile')->willReturn('content');
 
         $this->validator->expects($this->once())->method('isValid')->with('en_US')->willReturn(true);
 
