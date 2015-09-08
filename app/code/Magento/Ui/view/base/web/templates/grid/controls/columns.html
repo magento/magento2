@@ -17,14 +17,12 @@
         <div class="admin__action-dropdown-menu-header">
             <span data-bind="text: getHeaderMessage()"></span>
         </div>
-        <div class="admin__action-dropdown-menu-content">
-            <!-- ko foreach: elems -->
+        <div class="admin__action-dropdown-menu-content" data-bind="foreach: elems">
             <div class="admin__field-option">
                 <input data-bind="attr: {id: 'grid-controls-columns-' + index}, disable: $parent.isDisabled($data), checked: visible"
                        class="admin__control-checkbox" type="checkbox"/>
                 <label data-bind="text: label, attr: {for: 'grid-controls-columns-' + index}" class="admin__field-label"></label>
             </div>
-            <!-- /ko -->
         </div>
         <div class="admin__action-dropdown-menu-footer">
             <div class="admin__action-dropdown-footer-secondary-actions">

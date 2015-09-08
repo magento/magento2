@@ -30,11 +30,23 @@
                 </div>
 
                 <div class="attribute-entity-actions">
-                    <button type="button" class="action-select-all action-tertiary" data-bind="click: $parent.selectAllAttributes">
+                    <button type="button"
+                            class="action-select-all action-tertiary"
+                            data-bind="click: $parent.selectAllAttributes"
+                            title="<?= $block->escapeHtml(__('Select All')) ?>">
                         <span><?= __('Select All') ?></span>
                     </button>
-                    <button type="button" class="action-deselect-all action-tertiary" data-bind="click: $parent.deSelectAllAttributes">
+                    <button type="button"
+                            class="action-deselect-all action-tertiary"
+                            data-bind="click: $parent.deSelectAllAttributes"
+                            title="<?= $block->escapeHtml(__('Deselect All')) ?>">
                         <span><?= __('Deselect All') ?></span>
+                    </button>
+                    <button type="button"
+                            class="action-remove-all action-tertiary"
+                            data-bind="click: $parent.removeAttribute.bind($parent)"
+                            title="<?= $block->escapeHtml(__('Remove Attribute')) ?>">
+                        <span><?= __('Remove Attribute') ?></span>
                     </button>
                 </div>
             </div>
@@ -54,7 +66,7 @@
                             <div class="admin__field-control">
                                 <input class="admin__control-text"
                                        name="label"
-                                       data-bind="value: label"
+                                       data-bind="value: label, valueUpdate: 'keyup'"
                                        type="text" />
                             </div>
                             <button type="button"

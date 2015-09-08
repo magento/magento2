@@ -74,7 +74,7 @@
 //  ```
 
 .example-table-1 {
-    .table();
+    .lib-table();
 }
 
 //  # Table mixin variables
@@ -115,7 +115,7 @@
 
 //  # Table typography
 //
-//  The <code>.table-typography()</code> mixin provides table typography customization options.
+//  The <code>.lib-table-typography()</code> mixin provides table typography customization options.
 //
 //  ```html
 //    <table class="example-table-2">
@@ -184,7 +184,7 @@
 //  ```
 
 .example-table-2 {
-    .table-typography();
+    .lib-table-typography();
 }
 
 //  # Table typography mixin variables
@@ -273,7 +273,7 @@
 
 //  # Table caption
 //
-//  The <code>.table-caption()</code> mixin is used to customize table caption.
+//  The <code>.lib-table-caption()</code> mixin is used to customize table caption.
 //
 //  ```html
 //    <table class="example-table-3">
@@ -342,8 +342,8 @@
 //  ```
 
 .example-table-3 {
-    .table();
-    .table-caption(@_table-caption-color: #f00);
+    .lib-table();
+    .lib-table-caption(@_table-caption-color: #f00);
 }
 
 //  # Table caption mixin variables
@@ -420,7 +420,7 @@
 
 //  # Table cells resize
 //
-//  The <code>.table-resize()</code> mixin provides table header cells and table cells paddings reset.
+//  The <code>.lib-table-resize()</code> mixin provides table header cells and table cells paddings reset.
 //
 //  ```html
 //    <table class="example-table-4">
@@ -489,8 +489,8 @@
 //  ```
 
 .example-table-4 {
-    .table();
-    .table-resize(
+    .lib-table();
+    .lib-table-resize(
         @_td-padding-top: 15px,
         @_td-padding-right: 25px,
         @_td-padding-bottom: 5px,
@@ -564,7 +564,7 @@
 
 //  # Table background customization
 //
-//  The <code>.table-background-color()</code> mixin provides table cells background customization options.
+//  The <code>.lib-table-background-color()</code> mixin provides table cells background customization options.
 //
 //  ```html
 //    <table class="example-table-5">
@@ -633,8 +633,8 @@
 //  ```
 
 .example-table-5 {
-    .table();
-    .table-background-color(
+    .lib-table();
+    .lib-table-background-color(
         @_table-background-color: #fff,
         @_table-head-background-color: #ccf,
         @_table-foot-background-color: #cff,
@@ -687,7 +687,7 @@
 
 //  # Table borders customization
 //
-//  The <code>.table-bordered()</code> mixin provides table borders customization options. To setup table borders use the following allowed values for the <code>@_type</code> variable:
+//  The <code>.lib-table-bordered()</code> mixin provides table borders customization options. To setup table borders use the following allowed values for the <code>@_type</code> variable:
 //
 //  ```css
 //  normal - all borders are set up
@@ -764,8 +764,8 @@
 //  ```
 
 .example-table-6 {
-    .table();
-    .table-bordered();
+    .lib-table();
+    .lib-table-bordered();
 }
 
 //  # Table borders mixin variables
@@ -808,7 +808,7 @@
 //
 //  To set only horizontal borders for a table use:
 //  ```css
-//  .table-bordered(@_table_type: horizontal)
+//  .lib-table-bordered(@_table_type: horizontal)
 //  ```
 //
 //  ```html
@@ -878,8 +878,8 @@
 //  ```
 
 .example-table-7 {
-    .table();
-    .table-bordered(
+    .lib-table();
+    .lib-table-bordered(
         @_table_type: horizontal
     );
 }
@@ -888,7 +888,7 @@
 //
 //  To set only horizontal borders for a table use:
 //  ```css
-//  .table-bordered(@_table_type: vertical)
+//  .lib-table-bordered(@_table_type: vertical)
 //  ```
 //
 //  ```html
@@ -958,8 +958,8 @@
 //  ```
 
 .example-table-8 {
-    .table();
-    .table-bordered(
+    .lib-table();
+    .lib-table-bordered(
         @_table_type: vertical
     );
 }
@@ -968,7 +968,7 @@
 //
 //  To set bottom borders only for a table caption use:
 //  ```css
-//  .table-bordered(@_table_type: light)
+//  .lib-table-bordered(@_table_type: light)
 //  ```
 //
 //  ```html
@@ -1038,8 +1038,8 @@
 //  ```
 
 .example-table-9 {
-    .table();
-    .table-bordered(
+    .lib-table();
+    .lib-table-bordered(
         @_table_type: light
     );
 }
@@ -1048,7 +1048,7 @@
 //
 //  To clear all table borders use:
 //  ```css
-//  .table-bordered(@_table_type: clear)
+//  .lib-table-bordered(@_table_type: clear)
 //  ```
 //
 //  ```html
@@ -1118,15 +1118,15 @@
 //  ```
 
 .example-table-10 {
-    .table();
-    .table-bordered(
+    .lib-table();
+    .lib-table-bordered(
         @_table_type: clear
     );
 }
 
 //  # Striped table
 //
-//  The <code>.table-striped()</code> mixin sets color backgrounds to table rows.
+//  The <code>.lib-table-striped()</code> mixin sets color backgrounds to table rows.
 //
 //  ```html
 //    <table class="example-table-11">
@@ -1195,8 +1195,8 @@
 //  ```
 
 .example-table-11 {
-    .table();
-    .table-striped(
+    .lib-table();
+    .lib-table-striped(
         @_stripped-background-color: #ffc,
         @_stripped-color: #000,
         @_stripped-direction: horizontal,
@@ -1247,7 +1247,7 @@
 
 //  # Table with rows hover
 //
-//  The <code>.table-hover()</code> mixin sets color backgrounds to hovered table rows.
+//  The <code>.lib-table-hover()</code> mixin sets color backgrounds to hovered table rows.
 //
 //  ```html
 //    <table class="example-table-12">
@@ -1316,8 +1316,8 @@
 //  ```
 
 .example-table-12 {
-    .table();
-    .table-hover();
+    .lib-table();
+    .lib-table-hover();
 }
 
 //  # Table with rows hover mixin variables
@@ -1348,7 +1348,7 @@
 //
 //  Magento UI library employs two responsive tables technics which are applyed by calling an appropriate mixin.
 //
-//  The <code>.table-overflow()</code> mixin adds a horizontal scrollbar for a table. This mixin accepts no variables.
+//  The <code>.lib-table-overflow()</code> mixin adds a horizontal scrollbar for a table. This mixin accepts no variables.
 //
 //  ```html
 //    <div class="example-table-14">
@@ -1419,21 +1419,21 @@
 //  ```
 
 .example-table-13 {
-    .table();
-    .table-bordered();
-    .table-striped();
-    .table-hover();
+    .lib-table();
+    .lib-table-bordered();
+    .lib-table-striped();
+    .lib-table-hover();
 }
 
 @media only screen and (max-width: @screen__m) {
     .example-table-14 {
-        .table-overflow();
+        .lib-table-overflow();
     }
 }
 
 //  # Responsive table technics #2
 //
-//  The <code>.table-responsive()</code> mixin rearranges table cells for mobile version.
+//  The <code>.lib-table-responsive()</code> mixin rearranges table cells for mobile version.
 //
 //  ```html
 //    <table class="example-table-15">
@@ -1497,15 +1497,15 @@
 //  ```
 
 .example-table-15 {
-    .table();
-    .table-bordered();
-    .table-striped();
-    .table-hover();
+    .lib-table();
+    .lib-table-bordered();
+    .lib-table-striped();
+    .lib-table-hover();
 }
 
 @media only screen and (max-width: @screen__m) {
     .example-table-15 {
-        .table-responsive(
+        .lib-table-responsive(
             @_table-background-color-responsive: #cff,
             @_table-th-background-color-responsive: #ffc,
             @_reset-table-striped: true,

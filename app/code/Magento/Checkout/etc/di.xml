@@ -22,4 +22,8 @@
     <preference for="Magento\Checkout\Api\Data\PaymentDetailsInterface" type="Magento\Checkout\Model\PaymentDetails" />
     <preference for="Magento\Checkout\Api\GuestPaymentInformationManagementInterface" type="Magento\Checkout\Model\GuestPaymentInformationManagement" />
     <preference for="Magento\Checkout\Api\PaymentInformationManagementInterface" type="Magento\Checkout\Model\PaymentInformationManagement" />
+    <preference for="Magento\Checkout\Api\Data\TotalsInformationInterface" type="Magento\Checkout\Model\TotalsInformation" />
+    <preference for="Magento\Checkout\Api\GuestTotalsInformationManagementInterface" type="Magento\Checkout\Model\GuestTotalsInformationManagement" />
+    <preference for="Magento\Checkout\Api\TotalsInformationManagementInterface" type="Magento\Checkout\Model\TotalsInformationManagement" />
+    <preference for="Magento\Checkout\Api\AgreementsValidatorInterface" type="Magento\Checkout\Model\AgreementsValidator" />
 </config>

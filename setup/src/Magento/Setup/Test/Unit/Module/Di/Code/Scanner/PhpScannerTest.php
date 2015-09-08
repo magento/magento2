@@ -7,6 +7,8 @@ namespace Magento\Setup\Test\Unit\Module\Di\Code\Scanner;
 
 require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/Helper/Test.php';
 require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/ElementFactory.php';
+require_once __DIR__ . '/../../_files/app/code/Magento/SomeModule/Model/DoubleColon.php';
+
 class PhpScannerTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -35,7 +37,10 @@ class PhpScannerTest extends \PHPUnit_Framework_TestCase
             $this->_logMock = $this->getMock('\Magento\Setup\Module\Di\Compiler\Log\Log', [], [], '', false)
         );
         $this->_testDir = str_replace('\\', '/', realpath(__DIR__ . '/../../') . '/_files');
-        $this->_testFiles = [$this->_testDir . '/app/code/Magento/SomeModule/Helper/Test.php'];
+        $this->_testFiles = [
+            $this->_testDir . '/app/code/Magento/SomeModule/Helper/Test.php',
+            $this->_testDir . '/app/code/Magento/SomeModule/Model/DoubleColon.php'
+        ];
     }
 
     public function testCollectEntities()
