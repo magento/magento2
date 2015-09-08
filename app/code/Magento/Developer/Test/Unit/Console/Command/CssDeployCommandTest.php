@@ -112,7 +112,7 @@ class CssDeployCommandTest extends \PHPUnit_Framework_TestCase
         $this->sourceFileGeneratorPool->expects($this->once())
             ->method('create')
             ->with('less')
-            ->willReturn($this->getMock('Magento\Framework\Less\FileGenerator', [], [], '', false));
+            ->willReturn($this->getMock('Magento\Framework\View\Asset\SourceFileGeneratorInterface'));
         $asset = $this->getMockForAbstractClass('Magento\Framework\View\Asset\LocalInterface');
         $asset->expects($this->once())->method('getContentType')->willReturn('type');
         $this->assetRepo->expects($this->once())
