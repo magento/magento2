@@ -7,6 +7,7 @@ namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Setup\Module\Dependency\ServiceLocator;
 
@@ -67,7 +68,7 @@ class DependenciesShowFrameworkCommand extends AbstractDependenciesCommand
     {
         $root = $this->directoryList->getRoot();
         $filePaths = [];
-        foreach ($this->registrar->getPaths() as $modulePath) {
+        foreach ($this->registrar->getPaths(ComponentRegistrar::MODULE) as $modulePath) {
             $filePath = str_replace(
                 $root,
                 Files::init()->getPathToSource(),
