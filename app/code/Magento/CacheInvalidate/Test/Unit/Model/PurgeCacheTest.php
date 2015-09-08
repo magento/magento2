@@ -34,20 +34,17 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
     {
         $this->uriMock = $this->getMock('\Zend\Uri\Uri', [], [], '', false);
         $this->socketAdapterMock = $this->getMock('\Zend\Http\Client\Adapter\Socket', [], [], '', false);
-        $this->configReaderMock = $this->getMock('\Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false);
+        $this->configMock = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $this->loggerMock = $this->getMock('Magento\Framework\Cache\InvalidateLogger', [], [], '', false);
         $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->socketAdapterMock->expects($this->once())
             ->method('setOptions')
             ->with(['timeout' => 10]);
-        $this->requestMock->expects($this->any())
-            ->method('getHttpHost')
-            ->willReturn('127.0.0.1');
         $this->model = new \Magento\CacheInvalidate\Model\PurgeCache(
             $this->uriMock,
             $this->socketAdapterMock,
             $this->loggerMock,
-            $this->configReaderMock,
+            $this->config,
             $this->requestMock
         );
     }
@@ -59,9 +56,12 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
             ->with('PURGE', $this->uriMock, '1.1', $this->equalTo(['X-Magento-Tags-Pattern' => 'tags']));
         $this->socketAdapterMock->expects($this->once())
             ->method('close');
-        $this->configReaderMock->expects($this->once())
-            ->method('load')
+        $this->config->expects($this->once())
+            ->method('get')
             ->willReturn('');
+        $this->requestMock->expects($this->any())
+            ->method('getHttpHost')
+            ->willReturn('127.0.0.1');
         $this->uriMock->expects($this->once())
             ->method('setScheme')
             ->with('http')
@@ -72,7 +72,7 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->uriMock->expects($this->once())
             ->method('setPort')
-            ->with(80);
+            ->with(\Magento\CacheInvalidate\Model\PurgeCache::DEFAULT_PORT);
         $this->model->sendPurgeRequest('tags');
     }
 
@@ -83,8 +83,8 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
             ->with('PURGE', $this->uriMock, '1.1', $this->equalTo(['X-Magento-Tags-Pattern' => 'tags']));
         $this->socketAdapterMock->expects($this->once())
             ->method('close');
-        $this->configReaderMock->expects($this->once())
-            ->method('load')
+        $this->config->expects($this->once())
+            ->method('get')
             ->willReturn(
                 [ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS => [['host' => '127.0.0.2', 'port' => 1234]]]
             );
@@ -109,8 +109,8 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
             ->with('PURGE', $this->uriMock, '1.1', $this->equalTo(['X-Magento-Tags-Pattern' => 'tags']));
         $this->socketAdapterMock->expects($this->exactly(2))
             ->method('close');
-        $this->configReaderMock->expects($this->once())
-            ->method('load')
+        $this->config->expects($this->once())
+            ->method('get')
             ->willReturn(
                 [
                     ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS => [
