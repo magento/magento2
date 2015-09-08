@@ -31,9 +31,9 @@ define([
          * @returns {Collapsible} Chainable.
          */
         toggleOpened: function () {
-            if (this.collapsible) {
-                this.opened(!this.opened());
-            }
+            this.opened() ?
+                this.close() :
+                this.open();
 
             return this;
         },
