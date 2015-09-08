@@ -131,8 +131,6 @@ define([
                 column: column
             }, true, true);
 
-            field.visible  = column.visible;
-
             return field;
         },
 
@@ -162,6 +160,16 @@ define([
             return this.elems.findWhere({
                 index: index
             });
+        },
+
+        /**
+         * Returns instance of a column found by provided index.
+         *
+         * @param {String} index - Index of a column (e.g. 'title').
+         * @returns {Column}
+         */
+        getColumn: function (index) {
+            return this.columns().getColumn(index);
         },
 
         /**
