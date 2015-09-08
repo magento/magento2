@@ -150,6 +150,7 @@ class ExternalVideoEntryProcessor extends AbstractEntryProcessor
                 unset($rowData[$sourceKey]);
             }
         }
+        $rowData = array_intersect_key($rowData, array_flip($this->videoPropertiesDbMapping));
 
         return $rowData;
     }
