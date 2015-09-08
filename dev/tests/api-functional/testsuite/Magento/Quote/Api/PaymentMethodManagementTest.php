@@ -47,6 +47,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
             "cartId" => $cartId,
             "method" => [
                 'method' => 'checkmo',
+                'title' => 'title',
                 'po_number' => null,
                 'cc_owner' => 'John',
                 'cc_type' => null,
@@ -84,6 +85,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
             "cartId" => $cartId,
             "method" => [
                 'method' => 'checkmo',
+                'title' => 'title',
                 'po_number' => '200',
                 'cc_owner' => 'tester',
                 'cc_type' => 'test',
@@ -120,6 +122,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
             "cartId" => $cartId,
             "method" => [
                 'method' => 'checkmo',
+                'title' => 'title',
                 'po_number' => '200',
                 'cc_owner' => 'tester',
                 'cc_type' => 'test',
@@ -159,6 +162,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
             "cartId" => $cartId,
             "method" => [
                 'method' => 'checkmo',
+                'title' => 'title',
                 'po_number' => '200',
                 'cc_owner' => 'tester',
                 'cc_type' => 'test',
@@ -317,6 +321,7 @@ class PaymentMethodManagementTest extends \Magento\TestFramework\TestCase\Webapi
         $requestData = [
             "method" => [
                 'method' => 'checkmo',
+                'title' => 'title',
                 'po_number' => '200',
                 'cc_owner' => 'tester',
                 'cc_type' => 'test',

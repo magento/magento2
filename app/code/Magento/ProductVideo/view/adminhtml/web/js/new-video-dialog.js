@@ -585,6 +585,8 @@ define([
             });
         }
     });
-
+    $('.video-create-button').on('click', function(){
+       $('#media_gallery_content').find('.video-item').parent().addClass('video-item');
+    });
     return $.mage.newVideoDialog;
 });

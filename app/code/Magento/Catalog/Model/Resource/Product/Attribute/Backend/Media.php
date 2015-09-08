@@ -105,7 +105,7 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $selectCondition = [];
         foreach ($idKeyNames as $key) {
             if (isset($data[$key])) {
-                $selectCondition[] = $this->getConnection()->quoteInto($key . ' = ? ', $data[$key]);
+                $selectCondition[] = $this->getConnection()->quoteInto($key . ' = ?', $data[$key]);
             }
         }
         $selectCondition = implode(' AND ', $selectCondition);
@@ -213,7 +213,6 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
         )->where(
             $mainTableAlias.'.attribute_id = ?',
             $attributeId
-
         )->where(
             $mainTableAlias.'.disabled = 0'
         )->where(
@@ -330,20 +329,20 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Duplicates gallery db values
      *
-     * @param \Magento\Catalog\Model\Product\Attribute\Backend\Media $object
+     * @param int $attributeId
      * @param array $newFiles
      * @param int $originalProductId
      * @param int $newProductId
      * @return $this
      */
-    public function duplicate($object, $newFiles, $originalProductId, $newProductId)
+    public function duplicate($attributeId, $newFiles, $originalProductId, $newProductId)
     {
         $select = $this->getConnection()->select()->from(
             $this->getMainTable(),
             ['value_id', 'value']
         )->where(
             'attribute_id = ?',
-            $object->getAttribute()->getId()
+            $attributeId
         )->where(
             'entity_id = ?',
             $originalProductId
@@ -353,7 +352,7 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
         // Duplicate main entries of gallery
         foreach ($this->getConnection()->fetchAll($select) as $row) {
             $data = [
-                'attribute_id' => $object->getAttribute()->getId(),
+                'attribute_id' => $attribute->getId(),
                 'entity_id' => $newProductId,
                 'value' => isset($newFiles[$row['value_id']]) ? $newFiles[$row['value_id']] : $row['value'],
             ];
