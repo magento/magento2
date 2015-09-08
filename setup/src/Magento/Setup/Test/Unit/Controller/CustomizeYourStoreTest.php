@@ -16,7 +16,7 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
     private $controller;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\SampleData
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\SampleData\Model\SampleData
      */
     private $sampleData;
 
@@ -25,11 +25,33 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
      */
     private $lists;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ObjectManager
+     */
+    private $objectManager;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\Read
+     */
+    private $dirRead;
+
     public function setup()
     {
-        $this->sampleData = $this->getMock('\Magento\Setup\Model\SampleData', [], [], '', false);
+        $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
+        $this->objectManager = $this->getMock('Magento\Framework\App\ObjectManager', [], [], '', false);
+        $objectManagerProvider->expects($this->any())->method('get')->willReturn($this->objectManager);
+        $this->sampleData = $this->getMock(
+            'Magento\SampleData\Model\SampleData',
+            ['isInstalledSuccessfully', 'isInstallationError'],
+            [],
+            '',
+            false
+        );
         $this->lists = $this->getMock('\Magento\Framework\Setup\Lists', [], [], '', false);
-        $this->controller = new CustomizeYourStore($this->lists, $this->sampleData);
+        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $this->dirRead = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
+        $filesystem->expects($this->any())->method('getDirectoryRead')->willReturn($this->dirRead);
+        $this->controller = new CustomizeYourStore($filesystem, $this->lists, $objectManagerProvider);
     }
 
     /**
@@ -39,11 +61,17 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
      */
     public function testIndexAction($expected)
     {
-        $this->sampleData->expects($this->once())->method('isDeployed')->willReturn($expected['isSampledataEnabled']);
-        $this->sampleData->expects($this->once())->method('isInstalledSuccessfully')
-            ->willReturn($expected['isSampleDataInstalled']);
-        $this->sampleData->expects($this->once())->method('isInstallationError')
-            ->willReturn($expected['isSampleDataErrorInstallation']);
+        if ($expected['isSampledataEnabled']) {
+            $this->dirRead->expects($this->once())->method('isExist')->willReturn(true);
+            $this->objectManager->expects($this->once())->method('get')->willReturn($this->sampleData);
+            $this->sampleData->expects($this->once())->method('isInstalledSuccessfully')
+                ->willReturn($expected['isSampleDataInstalled']);
+            $this->sampleData->expects($this->once())->method('isInstallationError')
+                ->willReturn($expected['isSampleDataErrorInstallation']);
+        } else {
+            $this->dirRead->expects($this->once())->method('isExist')->willReturn(false);
+            $this->objectManager->expects($this->never())->method('get');
+        }
         $this->lists->expects($this->once())->method('getTimezoneList')->willReturn($expected['timezone']);
         $this->lists->expects($this->once())->method('getCurrencyList')->willReturn($expected['currency']);
         $this->lists->expects($this->once())->method('getLocaleList')->willReturn($expected['language']);
@@ -69,9 +97,9 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
         $currency = ['currency' => ['USD'=>'US Dollar', 'EUR' => 'Euro']];
         $language = ['language' => ['en_US'=>'English (USA)', 'en_UK' => 'English (UK)']];
         $sampleData = [
-            'isSampledataEnabled' => null,
-            'isSampleDataInstalled' => null,
-            'isSampleDataErrorInstallation' => null
+            'isSampledataEnabled' => false,
+            'isSampleDataInstalled' => false,
+            'isSampleDataErrorInstallation' => false
         ];
         $sampleDataTrue = array_merge($sampleData, ['isSampledataEnabled' => true]);
         $sampleDataFalse = array_merge($sampleData, ['isSampledataEnabled' => false]);

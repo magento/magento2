@@ -54,10 +54,6 @@ class InstallerFactoryTest extends \PHPUnit_Framework_TestCase
                 $this->getMock('Magento\Framework\Filesystem', [], [], '', false),
             ],
             [
-                'Magento\Setup\Model\SampleData',
-                $this->getMock('Magento\Setup\Model\SampleData', [], [], '', false),
-            ],
-            [
                 'Magento\Setup\Model\ObjectManagerProvider',
                 $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false),
             ],
