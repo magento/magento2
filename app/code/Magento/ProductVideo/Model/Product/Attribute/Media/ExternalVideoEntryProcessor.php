@@ -6,15 +6,15 @@
 
 namespace Magento\ProductVideo\Model\Product\Attribute\Media;
 
-use Magento\Catalog\Model\Product\Attribute\Backend\Media\AbstractMediaGalleryEntryProcessor;
+use Magento\Catalog\Model\Product\Attribute\Backend\Media\AbstractEntryProcessor;
 use Magento\Customer\Model\Resource\Form\Attribute;
 use \Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Catalog\Model\Product;
 
 /**
- * Class ImageMediaGalleryEntryProcessor
+ * Class ImageEntryProcessor
  */
-class ExternalVideoMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryProcessor
+class ExternalVideoEntryProcessor extends AbstractEntryProcessor
 {
     /**
      * Video Data Table name
@@ -117,10 +117,9 @@ class ExternalVideoMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryP
      */
     protected function saveVideoValuesItem(array $item)
     {
-        $this->resourceEntryMediaGallery->updateTable(
+        $this->resourceEntryMediaGallery->saveDataRow(
             self::GALLERY_VALUE_VIDEO_TABLE,
-            $this->prepareVideoRowDataForSave($item),
-            ['value_id', 'store_id']
+            $this->prepareVideoRowDataForSave($item)
         );
     }
 
@@ -187,7 +186,7 @@ class ExternalVideoMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryP
         foreach ($mediaCollection as $item) {
             if (!empty($item['media_type'])
                 && !$item['removed']
-                && $item['media_type'] == ExternalVideoMediaEntryConverter::MEDIA_TYPE_CODE
+                && $item['media_type'] == ExternalVideoEntryConverter::MEDIA_TYPE_CODE
             ) {
                 $videoData = $this->extractVideoDataFromRowData($item);
                 $videoDataCollection[] = $videoData;
@@ -232,7 +231,7 @@ class ExternalVideoMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryP
     {
         $ids = [];
         foreach ($mediaCollection as $item) {
-            if ($item['media_type'] == ExternalVideoMediaEntryConverter::MEDIA_TYPE_CODE) {
+            if ($item['media_type'] == ExternalVideoEntryConverter::MEDIA_TYPE_CODE) {
                 $ids[] = $item['value_id'];
             }
         }
@@ -249,7 +248,7 @@ class ExternalVideoMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryP
         foreach ($mediaCollection as $item) {
             if (!empty($item['media_type'])
                 && !$item['removed']
-                && $item['media_type'] == ExternalVideoMediaEntryConverter::MEDIA_TYPE_CODE
+                && $item['media_type'] == ExternalVideoEntryConverter::MEDIA_TYPE_CODE
                 && isset($item['save_data_from'])
             ) {
                 $ids[] = $item['save_data_from'];

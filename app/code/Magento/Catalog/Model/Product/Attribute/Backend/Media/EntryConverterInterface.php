@@ -10,9 +10,9 @@ use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Model\Product;
 
 /**
- * Interface MediaGalleryEntryConverterInterface. Create Media Gallery Entry and extract Entry data
+ * Interface EntryConverterInterface. Create Media Gallery Entry and extract Entry data
  */
-interface MediaGalleryEntryConverterInterface
+interface EntryConverterInterface
 {
     /**
      * Return Media Gallery Entry type

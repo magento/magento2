@@ -13,7 +13,7 @@ use Magento\Framework\Api\Data\ImageContentInterface;
 /**
  * Converter for Image media gallery type
  */
-class ImageMediaEntryConverter implements MediaGalleryEntryConverterInterface
+class ImageEntryConverter implements EntryConverterInterface
 {
     /**
      * Media Entry type code

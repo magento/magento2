@@ -13,7 +13,7 @@ namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
-use \Magento\Catalog\Model\Product\Attribute\Backend\Media\MediaGalleryEntryProcessorPool;
+use \Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryProcessorPool;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -72,7 +72,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     protected $_productFactory;
 
     /**
-     * @var Media\MediaGalleryEntryProcessorPool
+     * @var Media\EntryProcessorPool
      */
     protected $mediaEntryProcessorPool;
 
@@ -86,7 +86,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $resourceProductAttribute
-     * @param MediaGalleryEntryProcessorPool $mediaEntryProcessorPool
+     * @param EntryProcessorPool $mediaEntryProcessorPool
      */
     public function __construct(
         \Magento\Catalog\Model\Resource\ProductFactory $productFactory,
@@ -96,7 +96,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $resourceProductAttribute,
-        MediaGalleryEntryProcessorPool $mediaEntryProcessorPool
+        EntryProcessorPool $mediaEntryProcessorPool
     ) {
         $this->_productFactory = $productFactory;
         $this->_eventManager = $eventManager;

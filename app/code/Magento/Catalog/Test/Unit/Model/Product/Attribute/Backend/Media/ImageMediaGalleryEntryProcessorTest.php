@@ -39,7 +39,7 @@ class ImageMediaGalleryEntryProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
-     * |\Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageMediaGalleryEntryProcessor
+     * |\Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryProcessor
      */
     protected $modelObject;
 

@@ -14,8 +14,8 @@ use Magento\Framework\Pricing\Object\SaleableInterface;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\Data\VideoContentInterface;
-use Magento\Catalog\Model\Product\Attribute\Backend\Media\MediaGalleryEntryConverterPool;
-use Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoMediaEntryConverter;
+use Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool;
+use Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory;
 
 /**
@@ -329,7 +329,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Media converter pool
      *
-     * @var Product\Attribute\Backend\Media\MediaGalleryEntryConverterPool
+     * @var Product\Attribute\Backend\Media\EntryConverterPool
      */
     protected $mediaGalleryEntryConverterPool;
 
@@ -368,9 +368,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory
      * @param ProductAttributeMediaGalleryEntryExtensionFactory $mediaGalleryEntryExtensionFactory
      * @param \Magento\Framework\Api\Data\VideoContentInterfaceFactory $videoEntryFactory
-     * @param \Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageMediaEntryConverter $imageMediaEntryConverter
-     * @param ExternalVideoMediaEntryConverter $externalVideoMediaEntryConverter
-     * @param MediaGalleryEntryConverterPool $mediaGalleryEntryConverterPool
+     * @param \Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter $imageMediaEntryConverter
+     * @param ExternalVideoEntryConverter $externalVideoMediaEntryConverter
+     * @param EntryConverterPool $mediaGalleryEntryConverterPool
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      * @param array $data
@@ -412,9 +412,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory,
         \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory $mediaGalleryEntryExtensionFactory,
         \Magento\Framework\Api\Data\VideoContentInterfaceFactory $videoEntryFactory,
-        \Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageMediaEntryConverter $imageMediaEntryConverter,
-        ExternalVideoMediaEntryConverter $externalVideoMediaEntryConverter,
-        MediaGalleryEntryConverterPool $mediaGalleryEntryConverterPool,
+        \Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter $imageMediaEntryConverter,
+        ExternalVideoEntryConverter $externalVideoMediaEntryConverter,
+        EntryConverterPool $mediaGalleryEntryConverterPool,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
         array $data = []

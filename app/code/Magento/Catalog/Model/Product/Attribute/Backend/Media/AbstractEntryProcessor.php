@@ -11,11 +11,11 @@ use \Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
- * Class AbstractMediaGalleryEntryProcessor
+ * Class AbstractEntryProcessor
  *
  * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
-abstract class AbstractMediaGalleryEntryProcessor
+abstract class AbstractEntryProcessor
 {
     /**
      * @var \Magento\Catalog\Model\Resource\ProductFactory

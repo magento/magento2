@@ -13,13 +13,13 @@ class MediaGalleryEntryConverterPoolTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
-     * |\Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageMediaEntryConverter
+     * |\Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter
      */
     protected $imageMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
-     * |\Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoMediaEntryConverter
+     * |\Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter
      */
     protected $videoMock;
 

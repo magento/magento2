@@ -12,10 +12,10 @@ use \Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 /**
  * Class aggregate all Media Gallery Entry Converters
  */
-class MediaGalleryEntryProcessorPool
+class EntryProcessorPool
 {
     /**
-     * @var AbstractMediaGalleryEntryProcessor[]
+     * @var AbstractEntryProcessor[]
      */
     private $mediaGalleryEntryProcessorsCollection;
 
@@ -25,9 +25,9 @@ class MediaGalleryEntryProcessorPool
     public function __construct(array $mediaGalleryEntryProcessorsCollection)
     {
         foreach ($mediaGalleryEntryProcessorsCollection as $processor) {
-            if (!$processor instanceof AbstractMediaGalleryEntryProcessor) {
+            if (!$processor instanceof AbstractEntryProcessor) {
                 throw new \InvalidArgumentException(
-                    __('Media Gallery processor should be an instance of AbstractMediaGalleryEntryProcessor.')
+                    __('Media Gallery processor should be an instance of AbstractEntryProcessor.')
                 );
             }
         }

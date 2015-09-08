@@ -10,7 +10,7 @@ use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media;
-use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageMediaEntryConverter;
+use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
 
 /**
  * Upgrade the Catalog module DB scheme
@@ -23,7 +23,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         /** Add support video media attribute */
-        if (version_compare($context->getVersion(), '2.0.0', '<=')) {
+        if (version_compare($context->getVersion(), '2.0.0.1', '<=')) {
             $installer = $setup;
             $this->createValueToEntityTable($installer);
             /**
@@ -36,7 +36,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                     'length' => 32,
                     'nullable' => false,
-                    'default' => ImageMediaEntryConverter::MEDIA_TYPE_CODE,
+                    'default' => ImageEntryConverter::MEDIA_TYPE_CODE,
                     'comment' => 'Media entry type'
                 ]
             );
@@ -124,8 +124,13 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'Product entity ID'
             )
             ->addIndex(
-                $installer->getIdxName(Media::GALLERY_VALUE_TO_ENTITY_TABLE, ['entity_id']),
-                ['entity_id']
+                $installer->getIdxName(
+                    Media::GALLERY_VALUE_TO_ENTITY_TABLE,
+                    ['value_id', 'entity_id'],
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                ),
+                ['value_id', 'entity_id'],
+                ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
             )
             ->addForeignKey(
                 $installer->getFkName(

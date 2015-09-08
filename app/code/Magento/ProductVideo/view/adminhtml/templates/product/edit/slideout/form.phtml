@@ -5,7 +5,13 @@
  */
 /* @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\NewCategory */
 ?>
-<div id="<?php echo $block->getNameInLayout() ?>" style="display:none">
-    <?php echo $block->getFormHtml();?>
-    <?php echo $block->getAfterElementHtml();?>
+<div id="<?=$block->getNameInLayout();?>" style="display:none">
+    <?=$block->getFormHtml();?>
+    <script>
+        require(["jquery","mage/mage"],function($) {
+            $(function(){
+                $('#new-video').mage('newVideoDialog', <?=$block->getWidgetOptions();?>);
+            });
+        });
+    </script>
 </div>
