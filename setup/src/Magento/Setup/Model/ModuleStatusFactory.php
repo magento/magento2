@@ -37,5 +37,4 @@ class ModuleStatusFactory
     {
         return $this->objectManagerProvider->get()->get('Magento\Framework\Module\Status');
     }
-
 }

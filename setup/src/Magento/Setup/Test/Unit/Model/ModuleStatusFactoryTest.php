@@ -46,4 +46,3 @@ class ModuleStatusFactoryTest extends \PHPUnit_Framework_TestCase
         $this->moduleStatusFactory->create();
     }
 }
-
