@@ -6,7 +6,7 @@
 namespace Magento\Framework\View\Design\Fallback\Rule;
 
 use Magento\Framework\Module\Dir\Reader;
-use Magento\Framework\Module\ThemeDir;
+use Magento\Framework\Theme\Dir;
 
 
 /**
@@ -31,7 +31,7 @@ class Simple implements RuleInterface
     /**
      * Theme directory Handler
      *
-     * @var ThemeDir
+     * @var Dir
      */
     protected $themeDirHandler;
 
@@ -47,13 +47,13 @@ class Simple implements RuleInterface
      *
      * @param string $pattern
      * @param array $optionalParams
-     * @param ThemeDir $themeDirHandler
+     * @param Dir $themeDirHandler
      * @param Reader $moduleDirReader
      */
     public function __construct(
         $pattern,
         array $optionalParams = [],
-        ThemeDir $themeDirHandler,
+        Dir $themeDirHandler,
         Reader $moduleDirReader
     ) {
         $this->pattern = $pattern;

@@ -7,7 +7,7 @@ namespace Magento\PageCache\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Module\ModuleDir;
+use Magento\Framework\Module\Dir;
 
 /**
  * Model is responsible for replacing default vcl template
@@ -123,7 +123,7 @@ class Config
      */
     public function getVclFile($vclTemplatePath)
     {
-        $moduleEtcPath = $this->reader->getModuleDir(ModuleDir::MODULE_ETC_DIR, 'Magento_PageCache');
+        $moduleEtcPath = $this->reader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_PageCache');
         $configFilePath = $moduleEtcPath . '/' . $this->_scopeConfig->getValue($vclTemplatePath);
         $configFilePath = $this->directoryRead->getRelativePath($configFilePath);
         $data = $this->directoryRead->readFile($configFilePath);

@@ -8,8 +8,7 @@ namespace Magento\Framework\View\File\Collector\Override;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\Module\Dir\Search;
-use Magento\Framework\Module\ThemeDir;
+use Magento\Framework\Theme\Dir;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\File\AbstractCollector;
 use Magento\Framework\View\File\Factory as FileFactory;
@@ -21,7 +20,7 @@ use Magento\Framework\View\Helper\PathPattern as PathPatternHelper;
 class Base extends AbstractCollector
 {
     /**
-     * @var ThemeDir
+     * @var Dir
      */
     protected $themeDir;
 
@@ -37,14 +36,14 @@ class Base extends AbstractCollector
      * @param FileFactory $fileFactory
      * @param PathPatternHelper $pathPatternHelper
      * @param string $subDir
-     * @param ThemeDir $themeDir
+     * @param Dir $themeDir
      */
     public function __construct(
         Filesystem $filesystem,
         FileFactory $fileFactory,
         PathPatternHelper $pathPatternHelper,
         $subDir = '',
-        ThemeDir $themeDir
+        Dir $themeDir
     ) {
         $this->themeDir = $themeDir;
         $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);

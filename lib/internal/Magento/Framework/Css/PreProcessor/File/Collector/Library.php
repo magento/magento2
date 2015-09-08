@@ -8,7 +8,7 @@ namespace Magento\Framework\Css\PreProcessor\File\Collector;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\Module\ThemeDir;
+use Magento\Framework\Theme\Dir;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\File\CollectorInterface;
 use Magento\Framework\View\File\Factory;
@@ -30,7 +30,7 @@ class Library implements CollectorInterface
     protected $libraryDirectory;
 
     /**
-     * @var ThemeDir
+     * @var Dir
      */
     protected $themeDir;
 
@@ -48,13 +48,13 @@ class Library implements CollectorInterface
      * @param FileListFactory $fileListFactory
      * @param Filesystem $filesystem
      * @param Factory $fileFactory
-     * @param ThemeDir $themeDir
+     * @param Dir $themeDir
      */
     public function __construct(
         FileListFactory $fileListFactory,
         Filesystem $filesystem,
         Factory $fileFactory,
-        ThemeDir $themeDir
+        Dir $themeDir
     ) {
         $this->fileListFactory = $fileListFactory;
         $this->libraryDirectory = $filesystem->getDirectoryRead(DirectoryList::LIB_WEB);

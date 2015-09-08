@@ -12,7 +12,7 @@ use Magento\Framework\Config\FileIterator;
 use Magento\Framework\Config\FileIteratorFactory;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
-use Magento\Framework\Module\ModuleDir;
+use Magento\Framework\Module\Dir;
 use Magento\Framework\Module\ModuleListInterface;
 
 class Reader
@@ -27,7 +27,7 @@ class Reader
     /**
      * Directory registry
      *
-     * @var ModuleDir
+     * @var Dir
      */
     protected $moduleDirs;
 
@@ -49,13 +49,13 @@ class Reader
     protected $fileIteratorFactory;
 
     /**
-     * @param ModuleDir $moduleDirs
+     * @param Dir $moduleDirs
      * @param ModuleListInterface $moduleList
      * @param Filesystem $filesystem
      * @param FileIteratorFactory $fileIteratorFactory
      */
     public function __construct(
-        ModuleDir $moduleDirs,
+        Dir $moduleDirs,
         ModuleListInterface $moduleList,
         Filesystem $filesystem,
         FileIteratorFactory $fileIteratorFactory
@@ -112,7 +112,7 @@ class Reader
     {
         $actions = [];
         foreach ($this->modulesList->getNames() as $moduleName) {
-            $actionDir = $this->getModuleDir(ModuleDir::MODULE_CONTROLLER_DIR, $moduleName);
+            $actionDir = $this->getModuleDir(Dir::MODULE_CONTROLLER_DIR, $moduleName);
             if (!file_exists($actionDir)) {
                 continue;
             }
@@ -122,7 +122,7 @@ class Reader
             $namespace = str_replace('_', '\\', $moduleName);
             foreach ($recursiveIterator as $actionFile) {
                 $actionName = str_replace('/', '\\', str_replace($actionDir, '', $actionFile->getPathname()));
-                $action = $namespace . "\\" . ModuleDir::MODULE_CONTROLLER_DIR . substr($actionName, 0, -4);
+                $action = $namespace . "\\" . Dir::MODULE_CONTROLLER_DIR . substr($actionName, 0, -4);
                 $actions[strtolower($action)] = $action;
             }
         }

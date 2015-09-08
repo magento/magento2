@@ -12,7 +12,7 @@ use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Stdlib\StringUtils as StringHelper;
 
-class ModuleDir
+class Dir
 {
     /**#@+
      * Directories within modules
