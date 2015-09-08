@@ -45,9 +45,12 @@ define([
         },
         render: function (wizard) {
             this.wizard = wizard;
+            this.setNotificationMessage();
+        },
+        setNotificationMessage: function () {
             if (this.mode == 'edit') {
-                wizard.setNotificationMessage($.mage.__('When you remove or add an attribute, we automatically ' +
-                    'update all configurations and you will need to manually recreate the current configurations.'));
+                this.wizard.setNotificationMessage($.mage.__('When you remove or add an attribute, we automatically ' +
+                'update all configurations and you will need to manually recreate the current configurations.'));
             }
         },
         doSelectSavedAttributes: function() {
@@ -81,6 +84,7 @@ define([
             if (!wizard.data.attributesIds() || wizard.data.attributesIds().length === 0) {
                 throw new Error($.mage.__('Please, select attribute(s)'));
             }
+            this.setNotificationMessage();
         },
         back: function () {
         }

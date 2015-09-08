@@ -44,6 +44,20 @@ class DataGrid extends Grid
     protected $selectItem = 'tbody tr [data-action="select-row"]';
 
     /**
+     * Secondary part of row locator template for getRow() method
+     *
+     * @var string
+     */
+    protected $rowTemplate = 'td[*[contains(.,normalize-space("%s"))]]';
+
+    /**
+     * Secondary part of row locator template for getRow() method with strict option
+     *
+     * @var string
+     */
+    protected $rowTemplateStrict = 'td[*[text()[normalize-space()="%s"]]]';
+
+    /**
      * Mass action toggle list.
      *
      * @var string

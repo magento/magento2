@@ -9,6 +9,7 @@
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order\Payment\Info;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order;
@@ -98,6 +99,11 @@ class Payment extends Info implements OrderPaymentInterface
     protected $orderPaymentProcessor;
 
     /**
+     * @var OrderRepositoryInterface
+     */
+    protected $orderRepository;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -109,6 +115,8 @@ class Payment extends Info implements OrderPaymentInterface
      * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
      * @param \Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface $transactionManager
      * @param Transaction\BuilderInterface $transactionBuilder
+     * @param Payment\Processor $paymentProcessor
+     * @param OrderRepositoryInterface $orderRepository
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -127,6 +135,7 @@ class Payment extends Info implements OrderPaymentInterface
         ManagerInterface $transactionManager,
         \Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface $transactionBuilder,
         \Magento\Sales\Model\Order\Payment\Processor $paymentProcessor,
+        OrderRepositoryInterface $orderRepository,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -137,6 +146,7 @@ class Payment extends Info implements OrderPaymentInterface
         $this->transactionManager = $transactionManager;
         $this->transactionBuilder = $transactionBuilder;
         $this->orderPaymentProcessor = $paymentProcessor;
+        $this->orderRepository = $orderRepository;
         parent::__construct(
             $context,
             $registry,
@@ -178,11 +188,16 @@ class Payment extends Info implements OrderPaymentInterface
      * Retrieve order model object
      *
      * @codeCoverageIgnore
+     * @deprecated
      *
      * @return Order
      */
     public function getOrder()
     {
+        if (!$this->_order && $this->getParentId()) {
+            $this->_order = $this->orderRepository->get($this->getParentId());
+        }
+
         return $this->_order;
     }
 
