@@ -127,4 +127,22 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
         }
         return $this->configView;
     }
+
+    /**
+     * Retrieve media gallery data in JSON format
+     *
+     * @return string
+     */
+    public function getMediaGalleryDataJson()
+    {
+        $mediaGalleryData = [];
+        foreach ($this->getProduct()->getMediaGalleryImages() as $mediaGalleryImage) {
+            $mediaGalleryData[] = [
+                'mediaType' => $mediaGalleryImage->getMediaType(),
+                'videoUrl' => $mediaGalleryImage->getVideoUrl(),
+                'isBase' => $this->isMainImage($mediaGalleryImage),
+            ];
+        }
+        return json_encode($mediaGalleryData);
+    }
 }
