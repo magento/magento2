@@ -167,20 +167,12 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
     public function testGeneralSave()
     {
         $customerId = 1;
-        $customerEmail = 'user1@example.com';
 
         $address = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterface')
             ->getMockForAbstractClass();
 
         $currentCustomerMock = $this->getCurrentCustomerMock($address);
-        $currentCustomerMock->expects($this->once())
-            ->method('getEmail')
-            ->willReturn($customerEmail);
-
         $newCustomerMock = $this->getNewCustomerMock($customerId, $address);
-        $newCustomerMock->expects($this->once())
-            ->method('getEmail')
-            ->willReturn($customerEmail);
 
         $this->validator->expects($this->once())
             ->method('validate')
@@ -254,14 +246,11 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
 
         $currentCustomerMock = $this->getCurrentCustomerMock($address);
-        $currentCustomerMock->expects($this->exactly(2))
+        $currentCustomerMock->expects($this->once())
             ->method('getEmail')
             ->willReturn($customerEmail);
 
         $newCustomerMock = $this->getNewCustomerMock($customerId, $address);
-        $newCustomerMock->expects($this->once())
-            ->method('getEmail')
-            ->willReturn($customerEmail);
 
         $this->validator->expects($this->once())
             ->method('validate')
@@ -393,133 +382,6 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $currentEmail
-     * @param string $newEmail
-     * @param [] $errors
-     *
-     * @dataProvider changeEmailDataProvider
-     */
-    public function testChangeEmail(
-        $currentEmail,
-        $newEmail,
-        $errors
-    ) {
-        $customerId = 1;
-
-        $address = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterface')
-            ->getMockForAbstractClass();
-
-        $currentCustomerMock = $this->getCurrentCustomerMock($address);
-        $currentCustomerMock->expects($this->exactly(2))
-            ->method('getEmail')
-            ->willReturn($currentEmail);
-
-        $newCustomerMock = $this->getNewCustomerMock($customerId, $address);
-        $newCustomerMock->expects($this->exactly(2))
-            ->method('getEmail')
-            ->willReturn($newEmail);
-
-        $this->validator->expects($this->once())
-            ->method('validate')
-            ->with($this->request)
-            ->willReturn(true);
-
-        $this->request->expects($this->once())
-            ->method('isPost')
-            ->willReturn(true);
-        $this->request->expects($this->once())
-            ->method('getParam')
-            ->with('change_password')
-            ->willReturn(false);
-        $this->request->expects($this->any())
-            ->method('getPostValue')
-            ->willReturn(true);
-
-        $this->session->expects($this->once())
-            ->method('getCustomerId')
-            ->willReturn($customerId);
-
-        // Prepare errors processing
-        if (!empty($errors)) {
-            $this->mockChangeEmailErrors($currentEmail, $newEmail, $errors);
-        } else {
-            $this->customerAccountManagement->expects($this->once())
-                ->method('changeEmail')
-                ->with($currentEmail, $newEmail)
-                ->willReturnSelf();
-
-            $this->messageManager->expects($this->once())
-                ->method('addSuccess')
-                ->with(__('You saved the account information.'))
-                ->willReturnSelf();
-
-            $this->resultRedirect->expects($this->once())
-                ->method('setPath')
-                ->with('customer/account')
-                ->willReturnSelf();
-        }
-
-        $this->customerRepository->expects($this->once())
-            ->method('getById')
-            ->with($customerId)
-            ->willReturn($currentCustomerMock);
-        $this->customerRepository->expects($this->once())
-            ->method('save')
-            ->with($newCustomerMock)
-            ->willReturnSelf();
-
-        $this->customerExtractor->expects($this->once())
-            ->method('extract')
-            ->with('customer_account_edit', $this->request)
-            ->willReturn($newCustomerMock);
-
-        $this->messageManager->expects($this->once())
-            ->method('getMessages')
-            ->willReturn($this->messageCollection);
-
-        $this->messageCollection->expects($this->once())
-            ->method('getCount')
-            ->willReturn($errors);
-
-        $this->assertSame($this->resultRedirect, $this->model->execute());
-    }
-
-    /**
-     * @return array
-     */
-    public function changeEmailDataProvider()
-    {
-        return [
-            [
-                'current_email' => 'user1@example.com',
-                'new_email' => 'user2@example.com',
-                'errors' => [
-                    'counter' => 0,
-                    'message' => '',
-                ],
-            ],
-            [
-                'current_email' => 'user1@example.com',
-                'new_email' => 'user2@example.com',
-                'errors' => [
-                    'counter' => 1,
-                    'message' => 'AuthenticationException',
-                    'exception' => '\Magento\Framework\Exception\AuthenticationException',
-                ],
-            ],
-            [
-                'current_email' => 'user1@example.com',
-                'new_email' => 'user2@example.com',
-                'errors' => [
-                    'counter' => 1,
-                    'message' => 'Exception',
-                    'exception' => '\Exception',
-                ],
-            ],
-        ];
-    }
-
-    /**
      * @param int $counter
      * @param string $message
      * @param string $exception
@@ -532,20 +394,12 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
         $exception
     ) {
         $customerId = 1;
-        $customerEmail = 'user1@example.com';
 
         $address = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterface')
             ->getMockForAbstractClass();
 
         $currentCustomerMock = $this->getCurrentCustomerMock($address);
-        $currentCustomerMock->expects($this->once())
-            ->method('getEmail')
-            ->willReturn($customerEmail);
-
         $newCustomerMock = $this->getNewCustomerMock($customerId, $address);
-        $newCustomerMock->expects($this->once())
-            ->method('getEmail')
-            ->willReturn($customerEmail);
 
         $exception = new $exception(__($message));
 
@@ -709,44 +563,6 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$address]);
 
         return $currentCustomerMock;
-    }
-
-    /**
-     * @param string $currentEmail
-     * @param string $newEmail
-     * @param [] $errors
-     * @return void
-     */
-    protected function mockChangeEmailErrors($currentEmail, $newEmail, $errors)
-    {
-        if (!empty($errors['exception'])) {
-            $exception = new $errors['exception'](__($errors['message']));
-
-            $this->customerAccountManagement->expects($this->once())
-                ->method('changeEmail')
-                ->with($currentEmail, $newEmail)
-                ->willThrowException($exception);
-
-            $this->messageManager->expects($this->any())
-                ->method('addException')
-                ->with($exception, __('Something went wrong while changing the email.'))
-                ->willReturnSelf();
-        }
-
-        $this->session->expects($this->once())
-            ->method('setCustomerFormData')
-            ->with(true)
-            ->willReturnSelf();
-
-        $this->messageManager->expects($this->any())
-            ->method('addError')
-            ->with($errors['message'])
-            ->willReturnSelf();
-
-        $this->resultRedirect->expects($this->once())
-            ->method('setPath')
-            ->with('*/*/edit')
-            ->willReturnSelf();
     }
 
     /**
