@@ -66,18 +66,31 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\Account
             } catch (NoSuchEntityException $e) {
                 // Do nothing, we don't want anyone to use this action to determine which email accounts are registered.
             } catch (\Exception $exception) {
-                $this->messageManager->addExceptionMessage($exception, __('We\'re unable to send the password reset email.'));
+                $this->messageManager->addExceptionMessage(
+                    $exception,
+                    __('We\'re unable to send the password reset email.')
+                );
                 return $resultRedirect->setPath('*/*/forgotpassword');
             }
-            // @codingStandardsIgnoreStart
-            $this->messageManager->addSuccessMessage(
-                __('If there is an account associated with %1 you will receive an email with a link to reset your password.', $this->escaper->escapeHtml($email))
-            );
-            // @codingStandardsIgnoreEnd
+            $this->messageManager->addSuccessMessage($this->getSuccessMessage($email));
             return $resultRedirect->setPath('*/*/');
         } else {
             $this->messageManager->addErrorMessage(__('Please enter your email.'));
             return $resultRedirect->setPath('*/*/forgotpassword');
         }
+    }
+
+    /**
+     * Retrieve success message
+     *
+     * @param string $email
+     * @return \Magento\Framework\Phrase
+     */
+    protected function getSuccessMessage($email)
+    {
+        return __(
+            'If there is an account associated with %1 you will receive an email with a link to reset your password.',
+            $this->escaper->escapeHtml($email)
+        );
     }
 }
