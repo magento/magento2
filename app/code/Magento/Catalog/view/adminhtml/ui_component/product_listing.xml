@@ -252,28 +252,6 @@
                         <item name="namespace" xsi:type="string">current.paging</item>
                     </item>
                     <item name="displayArea" xsi:type="string">bottom</item>
-                    <item name="options" xsi:type="array">
-                        <item name="20" xsi:type="array">
-                            <item name="value" xsi:type="number">20</item>
-                            <item name="label" xsi:type="string" translate="true">20</item>
-                        </item>
-                        <item name="30" xsi:type="array">
-                            <item name="value" xsi:type="number">30</item>
-                            <item name="label" xsi:type="string" translate="true">30</item>
-                        </item>
-                        <item name="50" xsi:type="array">
-                            <item name="value" xsi:type="number">50</item>
-                            <item name="label" xsi:type="string" translate="true">50</item>
-                        </item>
-                        <item name="100" xsi:type="array">
-                            <item name="value" xsi:type="number">100</item>
-                            <item name="label" xsi:type="string" translate="true">100</item>
-                        </item>
-                        <item name="200" xsi:type="array">
-                            <item name="value" xsi:type="number">200</item>
-                            <item name="label" xsi:type="string" translate="true">200</item>
-                        </item>
-                    </item>
                 </item>
             </argument>
         </paging>
