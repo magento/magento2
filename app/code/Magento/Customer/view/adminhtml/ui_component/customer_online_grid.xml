@@ -40,11 +40,7 @@
         <bookmark name="bookmarks">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/bookmarks/bookmarks</item>
-                    <item name="displayArea" xsi:type="string">dataGridActions</item>
                     <item name="storageConfig" xsi:type="array">
-                        <item name="saveUrl" xsi:type="url" path="mui/bookmark/save"/>
-                        <item name="deleteUrl" xsi:type="url" path="mui/bookmark/delete"/>
                         <item name="namespace" xsi:type="string">customer_online_grid</item>
                     </item>
                 </item>
@@ -64,8 +60,7 @@
         <filters name="listing_filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="displayArea" xsi:type="string">dataGridFilters</item>
-                    <item name="dataScope" xsi:type="string">filters</item>
+                    <item name="columnsProvider" xsi:type="string">customer_online_grid.customer_online_grid.customer_online_columns</item>
                     <item name="storageConfig" xsi:type="array">
                         <item name="provider" xsi:type="string">customer_online_grid.customer_online_grid.listing_top.bookmarks</item>
                         <item name="namespace" xsi:type="string">current.filters</item>
@@ -73,107 +68,11 @@
                     <item name="childDefaults" xsi:type="array">
                         <item name="provider" xsi:type="string">customer_online_grid.customer_online_grid.listing_top.listing_filters</item>
                         <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">customer_online_grid.customer_online_grid.listing_top.bookmarks:current.columns.${ $.index }.visible</item>
+                            <item name="visible" xsi:type="string">customer_online_grid.customer_online_grid.customer_online_columns.${ $.index }:visible</item>
                         </item>
                     </item>
                 </item>
             </argument>
-            <filterRange name="customer_id">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">customer_id</item>
-                        <item name="label" xsi:type="string" translate="true">ID</item>
-                        <item name="childDefaults" xsi:type="array">
-                            <item name="provider" xsi:type="string">customer_online_grid.customer_online_grid.listing_top.listing_filters</item>
-                        </item>
-                    </item>
-                </argument>
-                <filterInput name="from">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">from</item>
-                            <item name="label" xsi:type="string" translate="true">From</item>
-                            <item name="placeholder" xsi:type="string" translate="true">From</item>
-                        </item>
-                    </argument>
-                </filterInput>
-                <filterInput name="to">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">to</item>
-                            <item name="label" xsi:type="string" translate="true">To</item>
-                            <item name="placeholder" xsi:type="string" translate="true">To</item>
-                        </item>
-                    </argument>
-                </filterInput>
-            </filterRange>
-            <filterInput name="firstname">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">firstname</item>
-                        <item name="label" xsi:type="string" translate="true">First Name</item>
-                    </item>
-                </argument>
-            </filterInput>
-            <filterInput name="lastname">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">lastname</item>
-                        <item name="label" xsi:type="string" translate="true">Last Name</item>
-                    </item>
-                </argument>
-            </filterInput>
-            <filterInput name="email">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">email</item>
-                        <item name="label" xsi:type="string" translate="true">Email</item>
-                    </item>
-                </argument>
-            </filterInput>
-            <filterRange name="last_visit_at"  class="Magento\Ui\Component\Filters\Type\DateRange">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">last_visit_at</item>
-                        <item name="label" xsi:type="string" translate="true">Last Activity</item>
-                        <item name="childDefaults" xsi:type="array">
-                            <item name="provider" xsi:type="string">customer_online_grid.customer_online_grid.listing_top.listing_filters</item>
-                        </item>
-                    </item>
-                </argument>
-                <filterDate name="from">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">from</item>
-                            <item name="label" xsi:type="string" translate="true">From</item>
-                            <item name="placeholder" xsi:type="string" translate="true">From</item>
-                            <item name="dateFormat" xsi:type="string" translate="true">MM/dd/YYYY</item>
-                        </item>
-                    </argument>
-                </filterDate>
-                <filterDate name="to">
-                    <argument name="data" xsi:type="array">
-                        <item name="config" xsi:type="array">
-                            <item name="dataScope" xsi:type="string">to</item>
-                            <item name="label" xsi:type="string" translate="true">To</item>
-                            <item name="placeholder" xsi:type="string" translate="true">To</item>
-                            <item name="dateFormat" xsi:type="string" translate="true">MM/dd/YYYY</item>
-                        </item>
-                    </argument>
-                </filterDate>
-            </filterRange>
-            <filterSelect name="visitor_type">
-                <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Customer\Ui\Component\Listing\Column\Online\Type\Options</argument>
-                </argument>
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="caption" xsi:type="string" translate="true">Select...</item>
-                        <item name="dataScope" xsi:type="string">visitor_type</item>
-                        <item name="label" xsi:type="string" translate="true">Type</item>
-                    </item>
-                </argument>
-            </filterSelect>
         </filters>
         <paging name="listing_paging">
             <argument name="data" xsi:type="array">
@@ -183,7 +82,6 @@
                         <item name="namespace" xsi:type="string">current.paging</item>
                     </item>
                     <item name="selectProvider" xsi:type="string">customer_online_grid.customer_online_grid.customer_online_columns.ids</item>
-                    <item name="displayArea" xsi:type="string">bottom</item>
                     <item name="options" xsi:type="array">
                         <item name="20" xsi:type="array">
                             <item name="value" xsi:type="number">20</item>
@@ -234,19 +132,12 @@
                 </item>
             </item>
         </argument>
-        <column name="ids" class="Magento\Ui\Component\MassAction\Columns\Column">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/multiselect</item>
-                    <item name="draggable" xsi:type="boolean">false</item>
-                    <item name="indexField" xsi:type="string">visitor_id</item>
-                </item>
-            </argument>
-        </column>
         <column name="customer_id">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
                     <item name="dataType" xsi:type="string">text</item>
+                    <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">ID</item>
                 </item>
             </argument>
@@ -254,6 +145,7 @@
         <column name="firstname">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">First Name</item>
                 </item>
@@ -262,6 +154,7 @@
         <column name="lastname">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Last Name</item>
                 </item>
@@ -270,6 +163,7 @@
         <column name="email">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Email</item>
                 </item>
@@ -294,6 +188,7 @@
         <column name="last_visit_at">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">dateRange</item>
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="label" xsi:type="string" translate="true">Last Activity</item>
                 </item>
@@ -301,9 +196,11 @@
         </column>
         <column name="visitor_type" class="Magento\Customer\Ui\Component\Listing\Column\Online\Type">
             <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Customer\Ui\Component\Listing\Column\Online\Type\Options</item>
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">select</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
-                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="dataType" xsi:type="string">select</item>
                     <item name="label" xsi:type="string" translate="true">Type</item>
                 </item>
             </argument>
