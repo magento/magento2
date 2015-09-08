@@ -6,13 +6,14 @@
 namespace Magento\Catalog\Model\Resource\Product;
 
 use Magento\Store\Model\Store;
+use Magento\Eav\Model\Resource\Attribute\DefaultEntityAttributes\ProviderInterface as DefaultAttributesProvider;
 
 /**
  * Catalog Product Flat resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Flat extends \Magento\Framework\Model\Resource\Db\AbstractDb
+class Flat extends \Magento\Framework\Model\Resource\Db\AbstractDb implements DefaultAttributesProvider
 {
     /**
      * Store scope Id
@@ -36,19 +37,27 @@ class Flat extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_storeManager;
 
     /**
+     * @var \Magento\Catalog\Model\Product\Attribute\DefaultAttributes
+     */
+    protected $defaultAttributes;
+
+    /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $catalogConfig
+     * @param \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes
      * @param string|null $resourcePrefix
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Config $catalogConfig,
+        \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes,
         $resourcePrefix = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_catalogConfig = $catalogConfig;
+        $this->defaultAttributes = $defaultAttributes;
         parent::__construct($context, $resourcePrefix);
     }
 
@@ -230,5 +239,20 @@ class Flat extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function getMainTable()
     {
         return $this->getFlatTableName($this->getStoreId());
+    }
+
+    /**
+     * Retrieve default entity static attributes
+     *
+     * @return string[]
+     */
+    public function getDefaultAttributes()
+    {
+        return array_unique(
+            array_merge(
+                $this->defaultAttributes->getDefaultAttributes(),
+                [$this->getEntityIdField()]
+            )
+        );
     }
 }
