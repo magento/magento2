@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!--
+/**
+* Copyright � 2015 Magento. All rights reserved.
+* See COPYING.txt for license details.
+*/
+-->
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="Magento_ProductVideo::css/product-video.css"/>
+        <link src="Magento_ProductVideo::js/fotorama-add-video-events.js"/>
+        <link src="Magento_ProductVideo::js/load-player.js"/>
+    </head>
+</page>
