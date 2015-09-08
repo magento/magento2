@@ -6,10 +6,17 @@
 'use strict';
 angular.module('readiness-check', [])
     .constant('COUNTER', 1)
-    .controller('readinessCheckController', ['$rootScope', '$scope', '$http', '$timeout', 'COUNTER', function ($rootScope, $scope, $http, $timeout, COUNTER) {
+    .controller('readinessCheckController', ['$rootScope', '$scope', '$localStorage', '$http', '$timeout', '$sce', '$state', 'COUNTER', function ($rootScope, $scope, $localStorage, $http, $timeout, $sce, $state, COUNTER) {
+        $scope.titles = $localStorage.titles;
+        $scope.moduleName = $localStorage.moduleName;
         $scope.progressCounter = COUNTER;
         $scope.startProgress = function() {
             ++$scope.progressCounter;
+        };
+        if ($state.current.type !== 'uninstall') {
+            $scope.dependencyUrl = 'index.php/environment/component-dependency';
+        } else {
+            $scope.dependencyUrl = 'index.php/environment/uninstall-dependency-check';
         };
         $scope.stopProgress = function() {
             --$scope.progressCounter;
@@ -58,10 +65,38 @@ angular.module('readiness-check', [])
             expanded: false,
             isRequestError: false
         };
-
+        $scope.updater = {
+            visible: false,
+            processed: false,
+            expanded: false,
+            isRequestError: false
+        };
+        $scope.cronScript = {
+            visible: false,
+            processed: false,
+            expanded: false,
+            isRequestError: false,
+            notice: false,
+            setupErrorMessage: '',
+            updaterErrorMessage: '',
+            setupNoticeMessage: '',
+            updaterNoticeMessage: ''
+        };
+        $scope.componentDependency = {
+            visible: false,
+            processed: false,
+            expanded: false,
+            isRequestError: false,
+            errorMessage: '',
+            packages: null
+        };
+        if ($localStorage.packages) {
+            $scope.componentDependency.packages = $localStorage.packages;
+        }
         $scope.items = {
             'php-version': {
                 url:'index.php/environment/php-version',
+                params: $scope.actionFrom,
                 show: function() {
                     $scope.startProgress();
                     $scope.version.visible = true;
@@ -78,6 +113,7 @@ angular.module('readiness-check', [])
             },
             'php-settings': {
                 url:'index.php/environment/php-settings',
+                params: $scope.actionFrom,
                 show: function() {
                     $scope.startProgress();
                     $scope.settings.visible = true;
@@ -94,6 +130,7 @@ angular.module('readiness-check', [])
             },
             'php-extensions': {
                 url:'index.php/environment/php-extensions',
+                params: $scope.actionFrom,
                 show: function() {
                     $scope.startProgress();
                     $scope.extensions.visible = true;
@@ -107,8 +144,11 @@ angular.module('readiness-check', [])
                 fail: function() {
                     $scope.requestFailedHandler($scope.extensions);
                 }
-            },
-            'file-permissions': {
+            }
+        };
+
+        if ($scope.actionFrom === 'installer') {
+            $scope.items['file-permissions'] = {
                 url:'index.php/environment/file-permissions',
                 show: function() {
                     $scope.startProgress();
@@ -123,14 +163,85 @@ angular.module('readiness-check', [])
                 fail: function() {
                     $scope.requestFailedHandler($scope.permissions);
                 }
-            }
-        };
+            };
+        }
+
+        if ($scope.actionFrom === 'updater') {
+            $scope.items['updater-application'] = {
+                url:'index.php/environment/updater-application',
+                show: function() {
+                    $scope.startProgress();
+                    $scope.updater.visible = true;
+                },
+                process: function(data) {
+                    $scope.updater.processed = true;
+                    angular.extend($scope.updater, data);
+                    $scope.updateOnProcessed($scope.updater.responseType);
+                    $scope.stopProgress();
+                },
+                fail: function() {
+                    $scope.requestFailedHandler($scope.updater);
+                }
+            };
+            $scope.items['cron-script'] = {
+                url:'index.php/environment/cron-script',
+                show: function() {
+                    $scope.startProgress();
+                    $scope.cronScript.visible = true;
+                },
+                process: function(data) {
+                    $scope.cronScript.processed = true;
+                    if (data.setupErrorMessage) {
+                        data.setupErrorMessage = $sce.trustAsHtml(data.setupErrorMessage);
+                    }
+                    if (data.updaterErrorMessage) {
+                        data.updaterErrorMessage = $sce.trustAsHtml(data.updaterErrorMessage);
+                    }
+                    if (data.setupNoticeMessage) {
+                        $scope.cronScript.notice = true;
+                        data.setupNoticeMessage = $sce.trustAsHtml(data.setupNoticeMessage);
+                    }
+                    if (data.updaterNoticeMessage) {
+                        $scope.cronScript.notice = true;
+                        data.updaterNoticeMessage = $sce.trustAsHtml(data.updaterNoticeMessage);
+                    }
+                    angular.extend($scope.cronScript, data);
+                    $scope.updateOnProcessed($scope.cronScript.responseType);
+                    $scope.stopProgress();
+                },
+                fail: function() {
+                    $scope.requestFailedHandler($scope.cronScript);
+                }
+            };
+            $scope.items['component-dependency'] = {
+                url: $scope.dependencyUrl,
+                params: $scope.componentDependency.packages,
+                show: function() {
+                    $scope.startProgress();
+                    $scope.componentDependency.visible = true;
+                },
+                process: function(data) {
+                    $scope.componentDependency.processed = true;
+                    if (data.errorMessage) {
+                        data.errorMessage = $sce.trustAsHtml(data.errorMessage);
+                    }
+                    angular.extend($scope.componentDependency, data);
+                    $scope.updateOnProcessed($scope.componentDependency.responseType);
+                    $scope.stopProgress();
+                },
+                fail: function() {
+                    $scope.requestFailedHandler($scope.componentDependency);
+                }
+            };
+        }
 
         $scope.isCompleted = function() {
             return $scope.version.processed
                 && $scope.settings.processed
                 && $scope.extensions.processed
-                && $scope.permissions.processed;
+                && ($scope.permissions.processed || ($scope.actionFrom === 'updater'))
+                && (($scope.cronScript.processed && $scope.componentDependency.processed && $scope.updater.processed)
+                || ($scope.actionFrom !== 'updater'));
         };
 
         $scope.updateOnProcessed = function(value) {
@@ -157,6 +268,13 @@ angular.module('readiness-check', [])
         };
 
         $scope.query = function(item) {
+            if (item.params) {
+                return $http.post(item.url, item.params)
+                    .success(function(data) { item.process(data) })
+                    .error(function(data, status) {
+                        item.fail();
+                    });
+            }
             return $http.get(item.url, {timeout: 3000})
                 .success(function(data) { item.process(data) })
                 .error(function(data, status) {
@@ -176,7 +294,7 @@ angular.module('readiness-check', [])
         };
 
         $scope.$on('$stateChangeSuccess', function (event, nextState) {
-            if (nextState.id == 'root.readiness-check.progress') {
+            if (nextState.id == 'root.readiness-check-' + nextState.type +'.progress') {
                 $scope.progress();
             }
         });
