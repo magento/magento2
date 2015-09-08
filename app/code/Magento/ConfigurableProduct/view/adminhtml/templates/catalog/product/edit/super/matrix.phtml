@@ -50,7 +50,7 @@ if ($variations) {
             }
 
             $productMatrix[] = [
-                'product_id' => $product->getId(),
+                'productId' => $product->getId(),
                 'images' => [
                     'preview' => $this->helper('Magento\Catalog\Helper\Image')
                         ->init($product, 'product_thumbnail_image')
@@ -71,7 +71,9 @@ if ($variations) {
 ?>
 
 <div data-bind="scope: 'configurableVariations'">
-    <h3 class="hidden" data-bind="css: {hidden: !showVariations() }" class="title"><?php echo __('Current Variations'); ?></h3>
+    <h3 class="hidden" data-bind="css: {hidden: !showVariations() }" class="title">
+        <?php echo __('Current Variations'); ?>
+    </h3>
 
     <script data-template-for="variation-image" type="text/x-magento-template">
         <img src="<%= data.url %>" class="variation" data-role="image"/>
@@ -80,190 +82,221 @@ if ($variations) {
         <div class="field hidden" data-bind="css: {hidden: !showVariations() }">
             <div data-role="configurable-attributes-container">
                 <!-- ko foreach: {data: attributes, as: 'attribute'} -->
-                <div data-role="attribute-info">
-                    <input name="attributes[]"
-                           data-bind="value: attribute.id, attr:{id: 'configurable_attribute_' + attribute.id}"
-                           type="hidden"/>
-                    <input
-                        data-bind="value: attribute.id, attr: {name: $parent.getAttributeRowName(attribute, 'attribute_id')}"
-                        type="hidden"/>
-                    <input
-                        data-bind="value: attribute.code, attr: {name: $parent.getAttributeRowName(attribute, 'code')}"
-                        type="hidden"/>
-                    <input
-                        data-bind="value: attribute.label, attr: {name: $parent.getAttributeRowName(attribute, 'label')}"
-                        type="hidden"/>
-                    <input data-bind="value: $index(), attr: {name: $parent.getAttributeRowName(attribute, 'position')}"
-                           type="hidden"/>
-                    <!-- ko foreach: {data: attribute.chosen, as: 'option'} -->
-                    <div data-role="option-info">
-                        <input value="1"
-                               data-bind="attr: {name: $parents[1].getOptionRowName(attribute, option, 'include')}"
+                    <div data-role="attribute-info">
+                        <input name="attributes[]"
+                               data-bind="value: attribute.id, attr:{id: 'configurable_attribute_' + attribute.id}"
                                type="hidden"/>
-                        <input
-                            data-bind="value: option.value, attr: {name: $parents[1].getOptionRowName(attribute, option, 'value_index')}"
+                        <input data-bind="value: attribute.id,
+                                attr: {name: $parent.getAttributeRowName(attribute, 'attribute_id')}"
                             type="hidden"/>
+                        <input data-bind="value: attribute.code,
+                                attr: {name: $parent.getAttributeRowName(attribute, 'code')}"
+                            type="hidden"/>
+                        <input
+                            data-bind="value: attribute.label,
+                                attr: {name: $parent.getAttributeRowName(attribute, 'label')}"
+                            type="hidden"/>
+                        <input data-bind="value: $index(),
+                            attr: {name: $parent.getAttributeRowName(attribute, 'position')}"
+                               type="hidden"/>
+                        <!-- ko foreach: {data: attribute.chosen, as: 'option'} -->
+                            <div data-role="option-info">
+                                <input value="1"
+                                       data-bind="attr: {name: $parents[1].getOptionRowName(attribute, option, 'include')}"
+                                       type="hidden"/>
+                                <input data-bind="value: option.value,
+                                    attr: {name: $parents[1].getOptionRowName(attribute, option, 'value_index')}"
+                                    type="hidden"/>
+                            </div>
+                        <!-- /ko -->
                     </div>
-                    <!-- /ko -->
-                </div>
                 <!-- /ko -->
             </div>
             <div class="admin__data-grid-wrap admin__data-grid-wrap-static">
-                <table class="data-grid"
-                ">
-                <thead>
-                <tr>
-                    <th class="data-grid-th data-grid-thumbnail-cell col-image" data-column="image">
-                        <?= __('Image'); ?>
-                    </th>
-                    <th class="data-grid-th col-name" data-column="name">
-                        <?= __('Name'); ?>
-                    </th>
-                    <th class="data-grid-th col-sku" data-column="sku">
-                        <?= __('SKU'); ?>
-                    </th>
-                    <th class="data-grid-th col-price" data-column="price">
-                        <?= __('Price'); ?>
-                    </th>
-                    <th class="data-grid-th col-qty" data-column="qty">
-                        <?= __('Quantity'); ?>
-                    </th>
-                    <th class="data-grid-th col-weight" data-column="weight">
-                        <?= __('Weight'); ?>
-                    </th>
-                    <!-- ko foreach: getAttributesOptions() -->
-                    <th data-bind="attr: {class:'data-grid-th col-' + $data.attribute_code}, text: $data.attribute_label"></th>
-                    <!-- /ko -->
-                    <th class="data-grid-th">
-                        <?= __('Actions'); ?>
-                    </th>
-                </tr>
-                </thead>
-                <tbody data-bind="foreach: {data: productMatrix, as: 'variation'}">
-                <tr data-role="row" data-bind="css: { _disabled: !variation.status, even: $index() % 2 }, attr: { 'data-row-number': $index() }">
-                    <td class="col-image" data-column="image">
-                        <div class="actions split actions-image-uploader">
-                            <div class="action-upload action split" data-action="upload-image">
-                                <!-- ko if: $parent.isShowPreviewImage(variation) -->
-                                <img data-bind='attr: {src: variation.images.preview}' class="variation" data-role="image"/>
-                                <!-- /ko -->
-                                <!-- ko if: variation.editable-->
-                                <input type="hidden" data-bind="attr: {id: $parent.getRowId(variation, 'image'), name: $parent.getVariationRowName(variation, 'image')}"/>
-                                <span><?= __('Upload Image'); ?></span>
-                                <input name="image" type="file"
-                                       data-url="<?= $block->escapeHtml($block->getImageUploadUrl()) ?>"
-                                       title="<?= $block->escapeHtml(__('Upload image')); ?>"/>
-                                <!-- /ko -->
-                            </div>
-                            <!-- ko if: variation.editable -->
-                            <!-- ko if: variation.images.file -->
-                                <span data-bind="html: $parent.generateImageGallery(variation)" data-block="variation-images"></span>
+                <table class="data-grid">
+                    <thead>
+                        <tr>
+                            <th class="data-grid-th data-grid-thumbnail-cell col-image" data-column="image">
+                                <?= __('Image'); ?>
+                            </th>
+                            <th class="data-grid-th col-name" data-column="name">
+                                <?= __('Name'); ?>
+                            </th>
+                            <th class="data-grid-th col-sku" data-column="sku">
+                                <?= __('SKU'); ?>
+                            </th>
+                            <th class="data-grid-th col-price" data-column="price">
+                                <?= __('Price'); ?>
+                            </th>
+                            <th class="data-grid-th col-qty" data-column="qty">
+                                <?= __('Quantity'); ?>
+                            </th>
+                            <th class="data-grid-th col-weight" data-column="weight">
+                                <?= __('Weight'); ?>
+                            </th>
+                            <!-- ko foreach: getAttributesOptions() -->
+                                <th data-bind="attr: {class:'data-grid-th col-' + $data.attribute_code},
+                                    text: $data.attribute_label">
+                                </th>
                             <!-- /ko -->
-                            <!-- /ko -->
-                            <button type="button" class="action toggle no-display" data-toggle="dropdown"
-                                    data-mage-init='{"dropdown":{}}'>
-                                <span><?= __('Select'); ?></span>
-                            </button>
-                            <ul class="dropdown">
-                                <li>
-                                    <a class="item" data-action="no-image"><?= __('No Image'); ?></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </td>
-                    <td class="col-name" data-column="name">
-                        <!-- ko ifnot: variation.editable -->
-                        <a target="_blank" data-bind="text: variation.name,
-                            attr: {href: variation.productUrl}">
-                        </a>
-                        <!-- /ko -->
-                        <!-- ko if: variation.editable -->
-                        <input type="text" class="required-entry" data-bind="attr: {id: $parent.getRowId(variation, 'name'), name: $parent.getVariationRowName(variation, 'name'), value: variation.sku}"/>
-                        <input type="hidden" data-bind="attr: {id: $parent.getRowId(variation, 'configurable_attribute'), name: $parent.getVariationRowName(variation, 'configurable_attribute'), value: variation.attribute}"/>
-                        <!-- /ko -->
-                        <input type="hidden" data-role="status" data-bind="attr: {name: $parent.getVariationRowName(variation, 'status'), value: variation.status}"/>
-                    </td>
-                    <td class="col-sku" data-column="sku">
-                        <!-- ko ifnot: variation.editable -->
-                            <!-- ko text: variation.sku --><!--/ko-->
-                        <!-- /ko -->
-                        <!-- ko if: variation.editable -->
-                        <input type="text" class="required-entry"
-                               data-bind="attr: {id: $parent.getRowId(variation, 'sku'), name: $parent.getVariationRowName(variation, 'sku'), value: variation.sku}"/>
-                        <!-- /ko -->
-                    </td>
-                    <td class="col-price" data-column="price">
-                        <!-- ko ifnot: variation.editable -->
-                            <!-- ko text: variation.price --><!--/ko-->
-                        <!-- /ko -->
-                        <!-- ko if: variation.editable -->
-                        <div class="addon">
-                            <input type="text"
-                                   id=""
-                                   class="required-entry validate-zero-or-greater"
-                                   data-bind="attr: {id: $parent.getRowId(variation, 'price'), name: $parent.getVariationRowName(variation, 'price'), value: variation.price}"/>
-                            <label class="addafter"
-                                   data-bind="attr: {for: $parent.getRowId(variation, 'price')"><strong>$</strong></label>
-                        </div>
-                        <!-- /ko -->
-
-                    </td>
-                    <td class="col-qty" data-column="qty">
-                        <!-- ko ifnot: variation.editable -->
-                            <!-- ko text: variation.quantity --><!--/ko-->
-                        <!-- /ko -->
-                        <!-- ko if: variation.editable -->
-                        <input type="text"
-                               class="validate-zero-or-greater"
-                               data-bind="attr: {id: $parent.getRowId(variation, 'qty'), name: $parent.getVariationRowName(variation, 'quantity_and_stock_status/qty'), value: variation.quantity}"/>
-                        <!-- /ko -->
-
-                    </td>
-                    <td class="col-weight" data-column="weight">
-                        <!-- ko ifnot: variation.editable -->
-                            <!-- ko text: variation.weight --><!--/ko-->
-                        <!-- /ko -->
-                        <!-- ko if: variation.editable -->
-                        <input type="text" class="validate-zero-or-greater"
-                               data-bind="attr: {id: $parent.getRowId(variation, 'weight'), name: $parent.getVariationRowName(variation, 'weight'), value: variation.weight}"/>
-                        <!-- /ko -->
-
-                    </td>
-                    <!-- ko foreach: variation.options -->
-                    <td data-bind="text: label"></td>
-                    <!-- /ko -->
-                    <td class="data-grid-actions-cell">
-                        <input type="hidden" name="associated_product_ids[]" data-bind="value: variation.productId" data-column="entity_id"/>
-
-                        <div class="action-select-wrap" data-bind="
-                            css : {
-                                '_active' : $parent.opened() === $index()
-                            },
-                            outerClick: $parent.closeList.bind($parent, $index())">
-                            <button class="action-select" data-bind="click: $parent.toggleList.bind($parent, $index())">
-                                <span data-bind="i18n: 'Select'"></span>
-                            </button>
-                            <ul class="action-menu _active" data-bind="css: {'_active': $parent.opened() === $index()}">
-                                <li>
-                                    <a class="action-menu-item" data-bind="attr: {'data-attributes': variation.attribute}"
-                                       data-action="choose" href="#"><?= __('Choose a different Product');?></a>
-                                </li>
-                                <li>
-                                    <a class="action-menu-item" data-bind="
-                                    i18n: variation.status == 1 ? 'Disable Product' : 'Enable Product',
-                                    click: $parent.toggleProduct.bind($parent, $index())"></a>
-                                </li>
-                                <li>
-                                    <a class="action-menu-item" data-bind="click: $parent.removeProduct.bind($parent, $index())">
-                                        <?= __('Remove Product');?>
+                            <th class="data-grid-th">
+                                <?= __('Actions'); ?>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: {data: productMatrix, as: 'variation'}">
+                        <tr data-role="row" data-bind="css: { _disabled: !variation.status, even: $index() % 2 },
+                            attr: { 'data-row-number': $index() }">
+                            <td class="col-image" data-column="image">
+                                <div class="actions split actions-image-uploader">
+                                    <div class="action-upload action split" data-action="upload-image">
+                                        <!-- ko if: $parent.isShowPreviewImage(variation) -->
+                                            <img data-bind='attr: {src: variation.images.preview}' class="variation"
+                                                 data-role="image"/>
+                                        <!-- /ko -->
+                                        <!-- ko if: variation.editable-->
+                                            <input type="hidden" data-bind="
+                                                attr: {id: $parent.getRowId(variation, 'image'),
+                                                name: $parent.getVariationRowName(variation, 'image')}"/>
+                                            <span><?= __('Upload Image'); ?></span>
+                                            <input name="image" type="file"
+                                                   data-url="<?= $block->escapeHtml($block->getImageUploadUrl()) ?>"
+                                                   title="<?= $block->escapeHtml(__('Upload image')); ?>"/>
+                                        <!-- /ko -->
+                                    </div>
+                                    <!-- ko if: variation.editable -->
+                                        <!-- ko if: variation.images.file -->
+                                            <span data-bind="html: $parent.generateImageGallery(variation)"
+                                                  data-block="variation-images"></span>
+                                        <!-- /ko -->
+                                    <!-- /ko -->
+                                    <button type="button" class="action toggle no-display" data-toggle="dropdown"
+                                            data-mage-init='{"dropdown":{}}'>
+                                        <span><?= __('Select'); ?></span>
+                                    </button>
+                                    <ul class="dropdown">
+                                        <li>
+                                            <a class="item" data-action="no-image"><?= __('No Image'); ?></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                            <td class="col-name" data-column="name">
+                                <!-- ko ifnot: variation.editable -->
+                                    <a target="_blank" data-bind="text: variation.name,
+                                        attr: {href: variation.productUrl}">
                                     </a>
-                                </li>
-
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
+                                <!-- /ko -->
+                                <!-- ko if: variation.editable -->
+                                    <input type="text" class="required-entry" data-bind="
+                                        attr: {id: $parent.getRowId(variation, 'name'),
+                                        name: $parent.getVariationRowName(variation, 'name'),
+                                         value: variation.sku}"/>
+                                    <input type="hidden" data-bind="
+                                        attr: {id: $parent.getRowId(variation, 'configurable_attribute'),
+                                        name: $parent.getVariationRowName(variation, 'configurable_attribute'),
+                                        value: variation.attribute}"/>
+                                <!-- /ko -->
+                                <input type="hidden" data-role="status" data-bind="
+                                    attr: {name: $parent.getVariationRowName(variation, 'status'),
+                                    value: variation.status}"/>
+                            </td>
+                            <td class="col-sku" data-column="sku">
+                                <!-- ko ifnot: variation.editable -->
+                                    <!-- ko text: variation.sku --><!--/ko-->
+                                <!-- /ko -->
+                                <!-- ko if: variation.editable -->
+                                    <input type="text" class="required-entry"
+                                           data-bind="attr: {id: $parent.getRowId(variation, 'sku'),
+                                            name: $parent.getVariationRowName(variation, 'sku'),
+                                            value: variation.sku}"/>
+                                <!-- /ko -->
+                            </td>
+                            <td class="col-price" data-column="price">
+                                <!-- ko ifnot: variation.editable -->
+                                    <!-- ko text: variation.price --><!--/ko-->
+                                <!-- /ko -->
+                                <!-- ko if: variation.editable -->
+                                    <div class="addon">
+                                        <input type="text"
+                                               id=""
+                                               class="required-entry validate-zero-or-greater"
+                                               data-bind="attr: {id: $parent.getRowId(variation, 'price'),
+                                                name: $parent.getVariationRowName(variation, 'price'),
+                                                 value: variation.price}"/>
+                                        <label class="addafter"
+                                               data-bind="attr: {for: $parent.getRowId(variation, 'price')">
+                                            <strong>$</strong>
+                                        </label>
+                                    </div>
+                                <!-- /ko -->
+                            </td>
+                            <td class="col-qty" data-column="qty">
+                                <!-- ko ifnot: variation.editable -->
+                                    <!-- ko text: variation.quantity --><!--/ko-->
+                                <!-- /ko -->
+                                <!-- ko if: variation.editable -->
+                                    <input type="text"
+                                           class="validate-zero-or-greater"
+                                           data-bind="attr: {id: $parent.getRowId(variation, 'qty'),
+                                            name: $parent.getVariationRowName(variation, 'quantity_and_stock_status/qty'),
+                                            value: variation.quantity}"/>
+                                <!-- /ko -->
+                            </td>
+                            <td class="col-weight" data-column="weight">
+                                <!-- ko ifnot: variation.editable -->
+                                    <!-- ko text: variation.weight --><!--/ko-->
+                                <!-- /ko -->
+                                <!-- ko if: variation.editable -->
+                                    <input type="text" class="validate-zero-or-greater"
+                                           data-bind="
+                                               attr: {id: $parent.getRowId(variation, 'weight'),
+                                               name: $parent.getVariationRowName(variation, 'weight'),
+                                               value: variation.weight}"/>
+                                <!-- /ko -->
+                            </td>
+                            <!-- ko foreach: variation.options -->
+                            <td data-bind="text: label"></td>
+                            <!-- /ko -->
+                            <td class="data-grid-actions-cell">
+                                <input type="hidden" name="associated_product_ids[]" data-bind="value: variation.productId" data-column="entity_id"/>
+                                <div class="action-select-wrap" data-bind="
+                                        css : {
+                                            '_active' : $parent.opened() === $index()
+                                        },
+                                        outerClick: $parent.closeList.bind($parent, $index)"
+                                >
+                                    <button class="action-select" data-bind="click: $parent.toggleList.bind($parent, $index())">
+                                        <span data-bind="i18n: 'Select'"></span>
+                                    </button>
+                                    <ul class="action-menu _active" data-bind="css: {'_active': $parent.opened() === $index()}">
+                                        <li>
+                                            <a class="action-menu-item"
+                                               data-bind="
+                                                    attr: {'data-attributes': variation.attribute},
+                                                    click: $parent.showGrid.bind($parent, $index())
+                                                "
+                                               data-action="choose"
+                                               href="#">
+                                                <?= __('Choose a different Product');?>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="action-menu-item" data-bind="
+                                                i18n: variation.status == 1 ? 'Disable Product' : 'Enable Product',
+                                                click: $parent.toggleProduct.bind($parent, $index())">
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="action-menu-item" data-bind="click: $parent.removeProduct.bind($parent, $index())">
+                                                <?= __('Remove Product');?>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -289,7 +322,10 @@ if ($variations) {
                         "component": "Magento_ConfigurableProduct/js/variations/variations",
                         "variations": <?= $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($productMatrix) ?>,
                         "productAttributes": <?= $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($attributes) ?>,
-                        "productUrl": "<?= $block->getUrl('catalog/product/edit', ['id' => '%id%']) ?>"
+                        "productUrl": "<?= $block->getUrl('catalog/product/edit', ['id' => '%id%']) ?>",
+                        "associatedProductsFilter": "configurable_associated_product_listing.configurable_associated_product_listing.listing_top.listing_filters",
+                        "associatedProductsProvider": "configurable_associated_product_listing.data_source"
+
                     }
                 }
             }

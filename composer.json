@@ -46,6 +46,7 @@
         "magento/magento-composer-installer": "*",
         "braintree/braintree_php": "2.39.0",
         "symfony/console": "~2.3 <2.7",
+        "symfony/event-dispatcher": "~2.1",
         "phpseclib/phpseclib": "~0.3",
         "tedivm/jshrink": "~1.0.1",
         "magento/composer": "~1.0.0"
@@ -105,7 +106,6 @@
         "magento/module-customer": "self.version",
         "magento/module-customer-import-export": "self.version",
         "magento/module-deploy": "self.version",
-        "magento/module-design-editor": "self.version",
         "magento/module-developer": "self.version",
         "magento/module-dhl": "self.version",
         "magento/module-directory": "self.version",
@@ -148,6 +148,7 @@
         "magento/module-shipping": "self.version",
         "magento/module-sitemap": "self.version",
         "magento/module-store": "self.version",
+        "magento/module-swagger": "self.version",
         "magento/module-swatches": "self.version",
         "magento/module-tax": "self.version",
         "magento/module-tax-import-export": "self.version",

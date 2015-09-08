@@ -67,7 +67,7 @@ return [
             'type'        => 'uninstall'
         ],
         [
-            'id'          => 'root.uninstall',
+            'id'          => 'root.start-updater-uninstall',
             'url'         => 'uninstall',
             'templateUrl' => "$base/start-updater",
             'title'       => "Uninstall",

@@ -20,7 +20,7 @@
     .table-comparison {
         .action.towishlist {
             &:extend(.abs-actions-addto all);
-            .icon-font-symbol(
+            .lib-icon-font-symbol(
             @_icon-font-content: @icon-wishlist-full,
             @_icon-font-position: before
             );
@@ -28,7 +28,7 @@
     }
 
     .account .table-wrapper .data.table.wishlist {
-        .table-bordered(
+        .lib-table-bordered(
         @_table_type: horizontal
         );
         thead > tr > th {
@@ -75,7 +75,7 @@
 
     .link.wishlist {
         .counter {
-            .css(color, @text__color__muted);
+            .lib-css(color, @text__color__muted);
             white-space: nowrap;
             &:before {
                 content: '(';
@@ -170,7 +170,7 @@
                     margin-right: @indent__base;
                 }
                 &-name {
-                    .font-size(16);
+                    .lib-font-size(16);
                 }
                 &-actions {
                     display: block;
@@ -228,7 +228,7 @@
 
     .cart.table-wrapper {
         .action-towishlist {
-            .icon-font(
+            .lib-icon-font(
             @icon-wishlist-full,
             @_icon-font-size: 18px,
             @_icon-font-line-height: 20px,
@@ -318,10 +318,10 @@
         .product-item-inner {
             @_shadow: 3px 4px 4px 0 rgba(0, 0, 0, .3);
 
-            .css(background, @color-white);
-            .css(border, @border-width__base solid @color-gray-light2);
+            .lib-css(background, @color-white);
+            .lib-css(border, @border-width__base solid @color-gray-light2);
             border-top: none;
-            .css(box-shadow, @_shadow);
+            .lib-css(box-shadow, @_shadow);
             display: none;
             left: 0;
             margin: 9px 0 0 -1px;
