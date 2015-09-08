@@ -44,7 +44,7 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
             $this->uriMock,
             $this->socketAdapterMock,
             $this->loggerMock,
-            $this->config,
+            $this->configMock,
             $this->requestMock
         );
     }
@@ -56,7 +56,7 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
             ->with('PURGE', $this->uriMock, '1.1', $this->equalTo(['X-Magento-Tags-Pattern' => 'tags']));
         $this->socketAdapterMock->expects($this->once())
             ->method('close');
-        $this->config->expects($this->once())
+        $this->configMock->expects($this->once())
             ->method('get')
             ->willReturn('');
         $this->requestMock->expects($this->any())
@@ -83,11 +83,9 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
             ->with('PURGE', $this->uriMock, '1.1', $this->equalTo(['X-Magento-Tags-Pattern' => 'tags']));
         $this->socketAdapterMock->expects($this->once())
             ->method('close');
-        $this->config->expects($this->once())
+        $this->configMock->expects($this->once())
             ->method('get')
-            ->willReturn(
-                [ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS => [['host' => '127.0.0.2', 'port' => 1234]]]
-            );
+            ->willReturn([['host' => '127.0.0.2', 'port' => 1234]]);
         $this->uriMock->expects($this->once())
             ->method('setScheme')
             ->with('http')
@@ -109,14 +107,12 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
             ->with('PURGE', $this->uriMock, '1.1', $this->equalTo(['X-Magento-Tags-Pattern' => 'tags']));
         $this->socketAdapterMock->expects($this->exactly(2))
             ->method('close');
-        $this->config->expects($this->once())
+        $this->configMock->expects($this->once())
             ->method('get')
             ->willReturn(
                 [
-                    ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS => [
-                        ['host' => '127.0.0.1', 'port' => 8080],
-                        ['host' => '127.0.0.2', 'port' => 1234]
-                    ]
+                    ['host' => '127.0.0.1', 'port' => 8080],
+                    ['host' => '127.0.0.2', 'port' => 1234]
                 ]
             );
         $this->uriMock->expects($this->at(0))
