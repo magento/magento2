@@ -6,7 +6,8 @@
 
 /**
  * A helper class.
- * Goes through app/code looking for *-registration.php files and executes them.
+ * Goes through non-composer components under app/code looking for their *-registration.php files and
+ * executes them to get these components registered with Magento framework.
  */
 class NonComposerComponentRegistrar 
 {
@@ -24,12 +25,31 @@ class NonComposerComponentRegistrar
         '/module-registration\.php$|library-registration\.php$|theme-registration\.php$|language-registration\.php$/';
 
     /**
+     * The list of directories to search for *-registration.php files
+     *
+     * @var string array $directoryList
+     */
+    private static $directoryList;
+
+    /**
      * Public static method to access the class instance
+     *
      * @return NonComposerComponentRegistrar
      */
-    public static function Instance() {
+    public static function getInstance()
+    {
         if (static::$instance === null) {
             static::$instance = new NonComposerComponentRegistrar();
+
+            // The supported directories are:
+            // 1. app/code
+            // 2. app/design
+            // 3. app/i18n
+            // 4. lib/internal/Magento/Framework
+            static::$directoryList[] = dirname(dirname(__FILE__)) . '/code';
+            static::$directoryList[] = dirname(dirname(__FILE__)) . '/design';
+            static::$directoryList[] = dirname(dirname(__FILE__)) . '/i18n';
+            static::$directoryList[] = dirname(dirname(dirname(__FILE__))) . '/lib/internal/Magento/Framework/';
         }
         return static::$instance;
     }
@@ -40,24 +60,27 @@ class NonComposerComponentRegistrar
      *
      * @return void
      */
-    public function Register() {
+    public function Register()
+    {
 
-        $recDirItr = new \RecursiveDirectoryIterator(
-            dirname(dirname(__FILE__)) . '/code',
-            \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::FOLLOW_SYMLINKS
-        );
-        $recItrItr = new \RecursiveIteratorIterator($recDirItr);
-        $dirItr = new \RegexIterator($recItrItr, self::REGISTRATION_FILES_REGEX);
+        foreach (static::$directoryList as $dir) {
+            $recDirItr = new \RecursiveDirectoryIterator(
+                $dir,
+                \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::FOLLOW_SYMLINKS
+            );
+            $recItrItr = new \RecursiveIteratorIterator($recDirItr);
+            $dirItr = new \RegexIterator($recItrItr, self::REGISTRATION_FILES_REGEX);
 
-        // Go through each registration file and execute it so that all the components
-        // get registered properly
-        foreach ($dirItr as $fileInfo) {
-            $fullFileName = $fileInfo->getPathname();
-            include $fullFileName;
+            // Go through each registration file and execute it so that all the non-components
+            // get registered properly
+            foreach ($dirItr as $fileInfo) {
+                $fullFileName = $fileInfo->getPathname();
+                include $fullFileName;
+            }
         }
     }
 }
 
 // Register all the non-composer components.
-NonComposerComponentRegistrar::Instance()->Register();
+NonComposerComponentRegistrar::getInstance()->Register();
 ?>
