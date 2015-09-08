@@ -40,8 +40,29 @@ interface EncryptorInterface
      * @param string $hash
      * @return bool
      * @throws \Exception
+     * @deprecated
      */
     public function validateHash($password, $hash);
+
+    /**
+     * Validate hash against hashing method (with or without salt)
+     *
+     * @param string $password
+     * @param string $hash
+     * @return bool
+     * @throws \Exception
+     */
+    public function isValidHash($password, $hash);
+
+    /**
+     * Validate hash by specified version
+     *
+     * @param string $password
+     * @param string $hash
+     * @param int $version
+     * @return bool
+     */
+    public function isValidHashByVersion($password, $hash, $version);
 
     /**
      * Encrypt a string
