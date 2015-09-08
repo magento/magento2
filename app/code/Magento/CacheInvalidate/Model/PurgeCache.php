@@ -10,6 +10,7 @@ use Zend\Uri\Uri;
 use Zend\Http\Client\Adapter\Socket;
 use Magento\Framework\Cache\InvalidateLogger;
 use Magento\Framework\App\DeploymentConfig\Reader;
+use \Magento\Framework\Config\ConfigOptionsListConstants;
 
 class PurgeCache
 {
@@ -63,7 +64,8 @@ class PurgeCache
     public function sendPurgeRequest($tagsPattern)
     {
         $config = $this->configReader->load(\Magento\Framework\Config\File\ConfigFilePool::APP_ENV);
-        $servers = isset($config['cache_servers']) ? $config['cache_servers'] : [['host' => '127.0.0.1']];
+        $servers = isset($config[ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS])
+            ? $config[ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS] : [['host' => '127.0.0.1']];
         $headers = ['X-Magento-Tags-Pattern' => $tagsPattern];
         $this->socketAdapter->setOptions(['timeout' => 10]);
         foreach ($servers as $server) {
