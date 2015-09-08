@@ -67,7 +67,14 @@ class TotalsCollectorList
         'grand_total'
     );
 
-
+    /**
+     * @param Collector $totalCollector
+     * @param CollectorFactory $totalCollectorFactory
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param Address\TotalsListFactory $totalListFactory
+     * @param Address\TotalFactory $totalFactory
+     */
     public function __construct(
         Collector $totalCollector,
         CollectorFactory $totalCollectorFactory,

@@ -21,6 +21,7 @@ class Total extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     public function __construct(\Magento\Msrp\Helper\Data $msrpData)
     {
         $this->msrpData = $msrpData;
+        $this->setCode('msrp');
     }
 
     /**
@@ -31,11 +32,13 @@ class Total extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @return $this
      * @api
      */
-    public function collect(\Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment, \Magento\Quote\Model\Quote\Address\Total $total)
-    {
+    public function collect(
+        \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment,
+        \Magento\Quote\Model\Quote\Address\Total $total
+    ) {
         parent::collect($shippingAssignment, $total);
 
-        $items = $this->_getAddressItems($shippingAssignment);
+        $items = $this->_getAddressItems($shippingAssignment->getShipping()->getAddress());
         if (!count($items)) {
             return $this;
         }
@@ -51,8 +54,20 @@ class Total extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
             }
         }
 
-        $shippingAssignment->setCanApplyMsrp($canApplyMsrp);
-
+        $total->setCanApplyMsrp((bool)$canApplyMsrp);
         return $this;
+    }
+
+    /**
+     * @param \Magento\Quote\Model\Quote\Address\Total $total
+     * @return array
+     */
+    public function fetch(\Magento\Quote\Model\Quote\Address\Total $total)
+    {
+        return [
+            'code' => $this->getCode(),
+            'title' => __('MSRP'),
+            'can_apply_msrp' => (bool)$total->getCanApplyMsrp()
+        ];
     }
 }
