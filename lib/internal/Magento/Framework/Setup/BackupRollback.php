@@ -13,6 +13,7 @@ use Magento\Framework\Backup\Filesystem;
 use Magento\Framework\Backup\Filesystem\Helper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 
@@ -120,7 +121,7 @@ class BackupRollback
             throw new LocalizedException(new Phrase("This backup type \'$type\' is not supported."));
         }
         if (!$this->file->isExists($this->backupsDir)) {
-            $this->file->createDirectory($this->backupsDir, 0777);
+            $this->file->createDirectory($this->backupsDir, DriverInterface::WRITEABLE_DIRECTORY_MODE);
         }
         $fsBackup->setBackupsDir($this->backupsDir);
         $fsBackup->setBackupExtension('tgz');
@@ -201,7 +202,7 @@ class BackupRollback
         $dbBackup = $this->objectManager->create('Magento\Framework\Backup\Db');
         $dbBackup->setRootDir($this->directoryList->getRoot());
         if (!$this->file->isExists($this->backupsDir)) {
-            $this->file->createDirectory($this->backupsDir, 0777);
+            $this->file->createDirectory($this->backupsDir, DriverInterface::WRITEABLE_DIRECTORY_MODE);
         }
         $dbBackup->setBackupsDir($this->backupsDir);
         $dbBackup->setBackupExtension('gz');
