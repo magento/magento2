@@ -48,9 +48,13 @@ class Updater
     {
         try {
             // write to .update_queue.json file
-            $this->queue->addJobs(
-                [['name' => $type, 'params' => array_merge(['components' => $packages], $additionalOptions)]]
-            );
+            $params = [];
+            if (!empty($packages)) {
+                $params['components'] = $packages;
+            }
+            array_push($params, $additionalOptions);
+
+            $this->queue->addJobs([['name' => $type, 'params' => $params]]);
             return '';
         } catch (\Exception $e) {
             return $e->getMessage();
