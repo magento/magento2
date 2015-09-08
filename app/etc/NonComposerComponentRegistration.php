@@ -60,7 +60,7 @@ class NonComposerComponentRegistrar
      *
      * @return void
      */
-    public function Register()
+    public function register()
     {
 
         foreach (static::$directoryList as $dir) {
@@ -82,5 +82,5 @@ class NonComposerComponentRegistrar
 }
 
 // Register all the non-composer components.
-NonComposerComponentRegistrar::getInstance()->Register();
+NonComposerComponentRegistrar::getInstance()->register();
 ?>
