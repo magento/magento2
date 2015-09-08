@@ -69,6 +69,11 @@ class Dom
     protected $_rootNamespace;
 
     /**
+    Magento\Framework\Config\Dom\UrnResolver
+     */
+    private static $urnResolver;
+
+    /**
      * Build DOM with initial XML contents and specifying identifier attributes for merging
      *
      * Format of $idAttributes: array('/xpath/to/some/node' => 'id_attribute_name')
@@ -260,6 +265,11 @@ class Dom
         $schemaFileName,
         $errorFormat = self::ERROR_FORMAT_DEFAULT
     ) {
+        echo "schema: " . $schemaFileName . "\n";
+        if (!self::$urnResolver) {
+            self::$urnResolver = new Dom\UrnResolver();
+        }
+        $schemaFileName = self::$urnResolver->getRealPath($schemaFileName);
         libxml_use_internal_errors(true);
         try {
             $result = $dom->schemaValidate($schemaFileName);
@@ -299,7 +309,19 @@ class Dom
             $result = str_replace($placeholder, $value, $result);
         }
         if (strpos($result, '%') !== false) {
-            throw new \InvalidArgumentException("Error format '{$format}' contains unsupported placeholders.");
+            if (preg_match_all('/%.+%/', $format, $matches)) {
+                $unsupported = [];
+                foreach ($matches[0] as $placeholder) {
+                    if (strpos($result, $placeholder)) {
+                        $unsupported[] = $placeholder;
+                    }
+                }
+                if (!empty($unsupported)) {
+                    throw new \InvalidArgumentException(
+                        "Error format '{$format}' contains unsupported placeholders: " . join(', ', $unsupported)
+                    );
+                }
+            }
         }
         return $result;
     }
