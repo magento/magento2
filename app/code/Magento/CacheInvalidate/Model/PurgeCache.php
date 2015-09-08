@@ -10,7 +10,8 @@ use Zend\Uri\Uri;
 use Zend\Http\Client\Adapter\Socket;
 use Magento\Framework\Cache\InvalidateLogger;
 use Magento\Framework\App\DeploymentConfig\Reader;
-use \Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\App\RequestInterface;
 
 class PurgeCache
 {
@@ -35,6 +36,11 @@ class PurgeCache
     private $configReader;
 
     /**
+     * @var RequestInterface
+     */
+    private $request;
+
+    /**
      * Constructor
      *
      * @param Uri $uri
@@ -46,12 +52,14 @@ class PurgeCache
         Uri $uri,
         Socket $socketAdapter,
         InvalidateLogger $logger,
-        Reader $configReader
+        Reader $configReader,
+        RequestInterface $request
     ) {
         $this->uri = $uri;
         $this->socketAdapter = $socketAdapter;
         $this->logger = $logger;
         $this->configReader = $configReader;
+        $this->request = $request;
     }
 
     /**
@@ -65,7 +73,8 @@ class PurgeCache
     {
         $config = $this->configReader->load(\Magento\Framework\Config\File\ConfigFilePool::APP_ENV);
         $servers = isset($config[ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS])
-            ? $config[ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS] : [['host' => '127.0.0.1']];
+            ? $config[ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS]
+            : [['host' => $this->request->getHttpHost()]];
         $headers = ['X-Magento-Tags-Pattern' => $tagsPattern];
         $this->socketAdapter->setOptions(['timeout' => 10]);
         foreach ($servers as $server) {
