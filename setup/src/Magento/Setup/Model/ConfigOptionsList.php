@@ -47,6 +47,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getOptions()
     {
@@ -145,7 +146,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS,
                 TextConfigOption::FRONTEND_WIZARD_TEXT,
                 ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS,
-                'Cache hosts'
+                'http Cache hosts'
             ),
         ];
     }
@@ -178,41 +179,16 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     {
         $errors = [];
 
-        if (isset($options[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS])
-            && !preg_match('/^[a-zA-Z0-9_:,.\/ ]+$/', $options[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS])
-        ) {
-            $errors[] = "Invalid cache hosts '{$options[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS]}'";
+        if (isset($options[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS])) {
+            $errors = array_merge($errors, $this->validateHttpCacheHosts($options[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS]));
         }
 
         if (isset($options[ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX])) {
-            try {
-                $this->dbValidator->checkDatabaseTablePrefix($options[ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX]);
-            } catch (\InvalidArgumentException $exception) {
-                $errors[] = $exception->getMessage();
-            }
+            $errors = array_merge($errors, $this->validateDbPrefix($options[ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX]));
         }
 
-        if (!$options[ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION] &&
-            (
-                $options[ConfigOptionsListConstants::INPUT_KEY_DB_NAME] !== null
-                || $options[ConfigOptionsListConstants::INPUT_KEY_DB_HOST] !== null
-                || $options[ConfigOptionsListConstants::INPUT_KEY_DB_USER] !== null
-                || $options[ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD] !== null
-            )
-        ) {
-            try {
-
-                $options = $this->getDbSettings($options, $deploymentConfig);
-
-                $this->dbValidator->checkDatabaseConnection(
-                    $options[ConfigOptionsListConstants::INPUT_KEY_DB_NAME],
-                    $options[ConfigOptionsListConstants::INPUT_KEY_DB_HOST],
-                    $options[ConfigOptionsListConstants::INPUT_KEY_DB_USER],
-                    $options[ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD]
-                );
-            } catch (\Exception $exception) {
-                $errors[] = $exception->getMessage();
-            }
+        if (!$options[ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION]) {
+            $errors = array_merge($errors, $this->validateDbSettings($options, $deploymentConfig));
         }
 
         $errors = array_merge(
@@ -307,6 +283,72 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             $errors[] = 'Invalid encryption key.';
         }
 
+        return $errors;
+    }
+
+    /**
+     * Validate http cache hosts
+     *
+     * @param string $option
+     * @return string[]
+     */
+    private function validateHttpCacheHosts($option)
+    {
+        $errors = [];
+        if (!preg_match('/^[a-zA-Z0-9_:,.\/ ]+$/', $option)
+        ) {
+            $errors[] = "Invalid http cache hosts '{$option}'";
+        }
+        return $errors;
+    }
+
+    /**
+     * Validate Db table prefix
+     *
+     * @param string $option
+     * @return string[]
+     */
+    private function validateDbPrefix($option)
+    {
+        $errors = [];
+        try {
+            $this->dbValidator->checkDatabaseTablePrefix($option);
+        } catch (\InvalidArgumentException $exception) {
+            $errors[] = $exception->getMessage();
+        }
+        return $errors;
+    }
+
+    /**
+     * Validate Db settings
+     *
+     * @param array $options
+     * @param DeploymentConfig $deploymentConfig
+     * @return string[]
+     */
+    private function validateDbSettings(array $options, DeploymentConfig $deploymentConfig)
+    {
+        $errors = [];
+
+        if ($options[ConfigOptionsListConstants::INPUT_KEY_DB_NAME] !== null
+            || $options[ConfigOptionsListConstants::INPUT_KEY_DB_HOST] !== null
+            || $options[ConfigOptionsListConstants::INPUT_KEY_DB_USER] !== null
+            || $options[ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD] !== null
+        ) {
+            try {
+
+                $options = $this->getDbSettings($options, $deploymentConfig);
+
+                $this->dbValidator->checkDatabaseConnection(
+                    $options[ConfigOptionsListConstants::INPUT_KEY_DB_NAME],
+                    $options[ConfigOptionsListConstants::INPUT_KEY_DB_HOST],
+                    $options[ConfigOptionsListConstants::INPUT_KEY_DB_USER],
+                    $options[ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD]
+                );
+            } catch (\Exception $exception) {
+                $errors[] = $exception->getMessage();
+            }
+        }
         return $errors;
     }
 }
