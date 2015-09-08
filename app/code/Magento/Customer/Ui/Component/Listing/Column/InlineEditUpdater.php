@@ -50,13 +50,18 @@ class InlineEditUpdater
     ) {
         if (in_array($frontendInput, $this->editableFields)) {
             $config = $column->getConfiguration();
-            $config['editor'] = [
-                'editorType' => $config['dataType']
-            ];
-            $validationRules = $this->validationRules->getValidationRules($isRequired, $validationRules);
-            if (!empty($validationRules)) {
-                $config['editor']['validation'] = $validationRules;
+            if (!(isset($config['editor']) && isset($config['editor']['editorType']))) {
+                $config['editor'] = [
+                    'editorType' => $config['dataType']
+                ];
             }
+
+            $validationRules = $this->validationRules->getValidationRules($isRequired, $validationRules);
+
+            if (!empty($config['editor']['validation'])) {
+                $validationRules = array_merge($config['editor']['validation'], $validationRules);
+            }
+            $config['editor']['validation'] = $validationRules;
             $column->setData('config', $config);
         }
         return $column;
