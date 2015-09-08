@@ -96,7 +96,9 @@ class JobModule extends AbstractJob
 
         } catch (\Exception $e) {
             $this->status->toggleUpdateError(true);
-            throw new \RuntimeException(sprintf('Could not complete %s successfully: %s', $this->cmdString, $e->getMessage()));
+            throw new \RuntimeException(
+                sprintf('Could not complete %s successfully: %s', $this->cmdString, $e->getMessage())
+            );
         }
     }
 }

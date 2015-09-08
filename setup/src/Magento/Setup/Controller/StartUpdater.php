@@ -135,27 +135,73 @@ class StartUpdater extends AbstractActionController
      */
     private function validatePayload(array $postPayload)
     {
+        $jobType = $postPayload[self::KEY_POST_JOB_TYPE];
+        $errorMessage = '';
+        switch($jobType) {
+            case 'uninstall':
+                $errorMessage = $this->validateUninstallPayload($postPayload);
+                break;
+
+            case 'update':
+                $errorMessage = $this->validateUpdatePayload($postPayload);
+                break;
+
+            case 'enable':
+            case 'disable':
+                $errorMessage = $this->validateEnableDisablePayload($postPayload);
+                break;
+        }
+        return $errorMessage;
+    }
+
+    /**
+     * Validate 'uninstall' job type payload
+     *
+     * @param array $postPayload
+     * @return string
+     */
+    private function validateUninstallPayload(array $postPayload)
+    {
+        $errorMessage = '';
+        if (!isset($postPayload[self::KEY_POST_DATA_OPTION])) {
+            $errorMessage = 'Missing dataOption' . PHP_EOL;
+        }
+        return $errorMessage;
+    }
+
+    /**
+     * Validate 'update' job type payload
+     *
+     * @param array $postPayload
+     * @return string
+     */
+    private function validateUpdatePayload(array $postPayload)
+    {
         $errorMessage = '';
         $packages = $postPayload[self::KEY_POST_PACKAGES];
-        $jobType = $postPayload[self::KEY_POST_JOB_TYPE];
-        if ($jobType == 'uninstall' && !isset($postPayload[self::KEY_POST_DATA_OPTION])) {
-            $errorMessage .= 'Missing dataOption' . PHP_EOL;
-        }
         foreach ($packages as $package) {
-            if (!isset($package[self::KEY_POST_PACKAGE_NAME])
-                || ($jobType == 'update' && !isset($package[self::KEY_POST_PACKAGE_VERSION]))
-            ) {
+            if ((!isset($package[self::KEY_POST_PACKAGE_NAME])) || (!isset($package[self::KEY_POST_PACKAGE_VERSION]))) {
                 $errorMessage .= 'Missing package information' . PHP_EOL;
                 break;
             }
+        }
+        return $errorMessage;
+    }
 
-            // enable or disable job types expect Magento module name
-            if (($jobType == 'enable') || ($jobType == 'disable')) {
-                // check to make sure that the passed in Magento module name is valid
-                if (!$this->moduleList->has($package[self::KEY_POST_PACKAGE_NAME])) {
-                    $errorMessage .= 'Invalid Magento module name: ' . $package[self::KEY_POST_PACKAGE_NAME] . PHP_EOL;
-                    break;
-                }
+    /**
+     * Validate 'enable/disable' job type payload
+     *
+     * @param array $postPayload
+     * @return string
+     */
+    private function validateEnableDisablePayload(array $postPayload)
+    {
+        $errorMessage = '';
+        $packages = $postPayload[self::KEY_POST_PACKAGES];
+        foreach ($packages as $package) {
+            if (!$this->moduleList->has($package[self::KEY_POST_PACKAGE_NAME])) {
+                $errorMessage .= 'Invalid Magento module name: ' . $package[self::KEY_POST_PACKAGE_NAME] . PHP_EOL;
+                break;
             }
         }
         return $errorMessage;
