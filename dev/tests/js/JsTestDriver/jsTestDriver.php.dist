@@ -28,8 +28,6 @@ return array(
         '/lib/web/mage/backend/menu.js',
         '/lib/web/mage/backend/suggest.js',
         '/lib/web/mage/backend/tree-suggest.js',
-        '/lib/web/mage/gallery.js',
-        '/lib/web/mage/gallery-fullscreen.js',
         '/lib/web/mage/zoom.js',
     ),
     'test' => array('/dev/tests/js/JsTestDriver/testsuite'),
