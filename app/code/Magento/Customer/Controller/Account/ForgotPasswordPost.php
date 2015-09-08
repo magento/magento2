@@ -54,9 +54,8 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\Account
         if ($email) {
             if (!\Zend_Validate::is($email, 'EmailAddress')) {
                 $this->_getSession()->setForgottenEmail($email);
-                $this->messageManager->addError(__('Please correct the email address.'));
-                $resultRedirect->setPath('*/*/forgotpassword');
-                return $resultRedirect;
+                $this->messageManager->addErrorMessage(__('Please correct the email address.'));
+                return $resultRedirect->setPath('*/*/forgotpassword');
             }
 
             try {
@@ -67,19 +66,18 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\Account
             } catch (NoSuchEntityException $e) {
                 // Do nothing, we don't want anyone to use this action to determine which email accounts are registered.
             } catch (\Exception $exception) {
-                $this->messageManager->addException($exception, __('We\'re unable to send the password reset email.'));
-                $resultRedirect->setPath('*/*/forgotpassword');
-                return $resultRedirect;
+                $this->messageManager->addExceptionMessage($exception, __('We\'re unable to send the password reset email.'));
+                return $resultRedirect->setPath('*/*/forgotpassword');
             }
             // @codingStandardsIgnoreStart
-            $this->messageManager->addSuccess(__('We\'ll email you a link to reset your password.'));
+            $this->messageManager->addSuccessMessage(
+                __('If there is an account associated with %1 you will receive an email with a link to reset your password.', $this->escaper->escapeHtml($email))
+            );
             // @codingStandardsIgnoreEnd
-            $resultRedirect->setPath('*/*/');
-            return $resultRedirect;
+            return $resultRedirect->setPath('*/*/');
         } else {
-            $this->messageManager->addError(__('Please enter your email.'));
-            $resultRedirect->setPath('*/*/forgotpassword');
-            return $resultRedirect;
+            $this->messageManager->addErrorMessage(__('Please enter your email.'));
+            return $resultRedirect->setPath('*/*/forgotpassword');
         }
     }
 }
