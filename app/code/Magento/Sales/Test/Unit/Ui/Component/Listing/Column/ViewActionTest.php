@@ -43,8 +43,13 @@ class ViewActionTest extends \PHPUnit_Framework_TestCase
      * @param array $expectedUrlParam
      * @dataProvider prepareDataSourceDataProvider
      */
-    public function testPrepareDataSource($data, $dataSourceItems, $expectedDataSourceItems, $expectedUrlPath, $expectedUrlParam)
-    {
+    public function testPrepareDataSource(
+        $data,
+        $dataSourceItems,
+        $expectedDataSourceItems,
+        $expectedUrlPath,
+        $expectedUrlParam
+    ) {
         $this->model = $this->objectManager->getObject(
             'Magento\Sales\Ui\Component\Listing\Column\ViewAction',
             [
