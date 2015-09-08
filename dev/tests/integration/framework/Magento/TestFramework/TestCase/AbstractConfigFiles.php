@@ -9,6 +9,7 @@
 namespace Magento\TestFramework\TestCase;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
 
 abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
 {
@@ -32,8 +33,14 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
      */
     protected $_objectManager;
 
+    /**
+     * @var ComponentRegistrar
+     */
+    protected $componentRegistrar;
+
     public function setUp()
     {
+        $this->componentRegistrar = new ComponentRegistrar();
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $xmlFiles = $this->getXmlConfigFiles();
         if (!empty($xmlFiles)) {
@@ -56,10 +63,7 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-            /** @var \Magento\Framework\Filesystem $filesystem */
-            $filesystem = $this->_objectManager->get('Magento\Framework\Filesystem');
-            $this->_schemaFile = $filesystem->getDirectoryRead($this->getDirectoryConstant())
-                ->getAbsolutePath($this->_getXsdPath());
+            $this->_schemaFile = $this->_getXsdPath();
         }
     }
 
@@ -132,20 +136,12 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $directory = $objectManager->get('Magento\Framework\Filesystem')
-            ->getDirectoryRead(DirectoryList::MODULES);
+            ->getDirectoryRead(DirectoryList::ROOT);
+        /** @var $moduleDirSearch \Magento\Framework\Module\Dir\Search */
+        $moduleDirSearch = $objectManager->get('Magento\Framework\Module\Dir\Search');
 
         return $objectManager->get('Magento\Framework\Config\FileIteratorFactory')
-            ->create($directory, $directory->search($this->_getConfigFilePathGlob()));
-    }
-
-    /**
-     * Returns directory (modules, library internal stc.) constant which contains XSD file
-     *
-     * @return string
-     */
-    protected function getDirectoryConstant()
-    {
-        return DirectoryList::MODULES;
+            ->create($directory, $moduleDirSearch->collectFiles($this->_getConfigFilePathGlob()));
     }
 
     /**

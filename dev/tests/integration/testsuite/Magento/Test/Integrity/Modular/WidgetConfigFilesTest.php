@@ -7,6 +7,8 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
+use Magento\Framework\Component\ComponentRegistrar;
+
 class WidgetConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractConfigFiles
 {
     /**
@@ -28,7 +30,7 @@ class WidgetConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractConf
      */
     protected function _getConfigFilePathGlob()
     {
-        return '/*/*/etc/widget.xml';
+        return 'etc/widget.xml';
     }
 
     /**
@@ -38,6 +40,7 @@ class WidgetConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractConf
      */
     protected function _getXsdPath()
     {
-        return '/Magento/Widget/etc/widget_file.xsd';
+        return $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_Widget') .
+            '/etc/widget_file.xsd';
     }
 }

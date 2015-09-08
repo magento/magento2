@@ -33,7 +33,7 @@ class PopulatorTest extends \PHPUnit_Framework_TestCase
 
         $mockAutoloader->expects($this->at(0))
             ->method('addPsr4')
-            ->with('Magento\\', [DirectoryList::MODULES . '/Magento/', DirectoryList::GENERATION . '/Magento/'], true);
+            ->with('Magento\\', [DirectoryList::GENERATION . '/Magento/'], true);
         $mockAutoloader->expects($this->at(1))
             ->method('addPsr0')
             ->with('Apache_', DirectoryList::LIB_INTERNAL, true);
@@ -51,7 +51,7 @@ class PopulatorTest extends \PHPUnit_Framework_TestCase
             ->with('Symfony\\', DirectoryList::LIB_INTERNAL, true);
         $mockAutoloader->expects($this->at(6))
             ->method('addPsr0')
-            ->with('', [DirectoryList::MODULES, DirectoryList::GENERATION]);
+            ->with('', [DirectoryList::GENERATION]);
 
         Populator::populateMappings($mockAutoloader, $this->mockDirectoryList);
     }

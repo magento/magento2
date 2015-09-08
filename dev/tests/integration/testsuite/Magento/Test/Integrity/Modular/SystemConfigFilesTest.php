@@ -20,10 +20,13 @@ class SystemConfigFilesTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\Filesystem $filesystem */
         $filesystem = $objectManager->get('Magento\Framework\Filesystem');
-        $modulesDir = $filesystem->getDirectoryRead(DirectoryList::MODULES)->getAbsolutePath();
-
-        $fileList = glob($modulesDir . '/*/*/etc/adminhtml/system.xml');
-
+        $modulesDir = $filesystem->getDirectoryRead(DirectoryList::ROOT);
+        /** @var $moduleDirSearch \Magento\Framework\Module\Dir\Search */
+        $moduleDirSearch = $objectManager->get('Magento\Framework\Module\Dir\Search');
+        $fileList = $moduleDirSearch->collectFiles('etc/adminhtml/system.xml');
+        foreach ($fileList as $key => $file) {
+            $fileList[$key] = $modulesDir->getAbsolutePath($file);
+        }
         $configMock = $this->getMock(
             'Magento\Framework\Module\Dir\Reader',
             ['getConfigurationFiles', 'getModuleDir'],
@@ -40,7 +43,7 @@ class SystemConfigFilesTest extends \PHPUnit_Framework_TestCase
             'etc',
             'Magento_Backend'
         )->will(
-            $this->returnValue($modulesDir . '/Magento/Backend/etc')
+            $this->returnValue($modulesDir->getAbsolutePath() . '/app/code/Magento/Backend/etc')
         );
         try {
             $objectManager->create(

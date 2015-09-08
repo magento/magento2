@@ -19,11 +19,13 @@ class ResourcesConfigFilesTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $filesystem \Magento\Framework\Filesystem */
         $filesystem = $objectManager->get('Magento\Framework\Filesystem');
-        $modulesDirectory = $filesystem->getDirectoryRead(DirectoryList::MODULES);
+        $modulesDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
+        /** @var $moduleDirSearch \Magento\Framework\Module\Dir\Search */
+        $moduleDirSearch = $objectManager->get('Magento\Framework\Module\Dir\Search');
         $fileIteratorFactory = $objectManager->get('Magento\Framework\Config\FileIteratorFactory');
         $xmlFiles = $fileIteratorFactory->create(
             $modulesDirectory,
-            $modulesDirectory->search('/*/*/etc/{*/resources.xml,resources.xml}')
+            $moduleDirSearch->collectFiles('etc/{*/resources.xml,resources.xml}')
         );
 
         $fileResolverMock = $this->getMock('Magento\Framework\Config\FileResolverInterface');

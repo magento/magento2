@@ -25,13 +25,22 @@ class Simple implements RuleInterface
     protected $pattern;
 
     /**
+     * @var \Magento\Framework\Module\Dir\Reader
+     */
+    protected $moduleDirReader;
+
+    /**
      * Constructor
      *
      * @param string $pattern
      * @param array $optionalParams
      */
-    public function __construct($pattern, array $optionalParams = [])
-    {
+    public function __construct(
+        \Magento\Framework\Module\Dir\Reader $moduleDirReader,
+        $pattern,
+        array $optionalParams = []
+    ) {
+        $this->moduleDirReader = $moduleDirReader;
         $this->pattern = $pattern;
         $this->optionalParams = $optionalParams;
     }
@@ -46,6 +55,10 @@ class Simple implements RuleInterface
     public function getPatternDirs(array $params)
     {
         $pattern = $this->pattern;
+        if (strpos($pattern, '<module_dir>/<namespace>/<module>') !== false) {
+            $path = $this->moduleDirReader->getModuleDir('', $params['namespace'] . '_' . $params['module']);
+            $pattern = str_replace('<module_dir>/<namespace>/<module>', $path, $pattern);
+        }
         if (preg_match_all('/<([a-zA-Z\_]+)>/', $pattern, $matches)) {
             foreach ($matches[1] as $placeholder) {
                 if (empty($params[$placeholder])) {

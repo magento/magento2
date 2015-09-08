@@ -6,6 +6,7 @@
 namespace Magento\Framework\Module\Dir;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Filesystem;
 
@@ -24,6 +25,12 @@ class Search
      */
     private $directoryRead;
 
+    /**
+     * Constructor
+     *
+     * @param ComponentRegistrarInterface $registrar
+     * @param Filesystem $filesystem
+     */
     public function __construct(ComponentRegistrarInterface $registrar, Filesystem $filesystem)
     {
         $this->registrar = $registrar;
@@ -33,13 +40,13 @@ class Search
     /**
      * Search for files in each module by pattern
      *
-     * @param $pattern
+     * @param string $pattern
      * @return array
      */
     public function collectFiles($pattern)
     {
         $files = [];
-        foreach ($this->registrar->getPaths() as $path) {
+        foreach ($this->registrar->getPaths(ComponentRegistrar::MODULE) as $path) {
             $relativePath = $this->directoryRead->getRelativePath($path);
             $files = array_merge($files, $this->directoryRead->search($relativePath . '/' . $pattern));
         }

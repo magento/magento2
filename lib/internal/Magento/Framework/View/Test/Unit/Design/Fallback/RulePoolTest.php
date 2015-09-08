@@ -48,7 +48,8 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
         $componentRegistrar->expects($this->any())
             ->method('getPaths')
             ->willReturn(['Magento_Theme' => '/Magento/Theme', 'namespace_module' => '/namespace/module']);
-        $this->model = new RulePool($filesystemMock, $componentRegistrar);
+        $simpleFactory = $this->getMock('Magento\Framework\View\Design\Fallback\Rule\SimpleFactory', [], [], '', false);
+        $this->model = new RulePool($simpleFactory, $filesystemMock, $componentRegistrar);
 
         $parentTheme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
         $parentTheme->expects($this->any())->method('getThemePath')->will($this->returnValue('parent_theme_path'));

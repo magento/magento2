@@ -164,6 +164,20 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
     }
 
     /**
+     * Get module directories exclude patterns
+     *
+     * @return array
+     */
+    private function getModuleExcludePatterns()
+    {
+        $modulesExcludePatterns = [];
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $modulePath) {
+            $modulesExcludePatterns[] = "#^" . $modulePath . "/Test#";
+        }
+        return $modulesExcludePatterns;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -176,10 +190,7 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
 
         $generationDir = $input->getOption(self::INPUT_KEY_GENERATION) ? $input->getOption(self::INPUT_KEY_GENERATION)
             : $this->directoryList->getPath(DirectoryList::GENERATION);
-        $modulesExcludePatterns = [];
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $modulePath) {
-            $modulesExcludePatterns[] = "#^" . $modulePath . "/Test#";
-        }
+        $modulesExcludePatterns = $this->getModuleExcludePatterns();
         $testExcludePatterns = [
             "#^" . $this->directoryList->getPath(DirectoryList::LIB_INTERNAL)
             . "/[\\w]+/[\\w]+/([\\w]+/)?Test#",
