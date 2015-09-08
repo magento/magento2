@@ -125,7 +125,7 @@ class AttributeColumnTest extends \PHPUnit_Framework_TestCase
                 'is_searchable_in_grid' => true,
             ]);
 
-        $this->component->prepareDataSource($dataSource);
+        $dataSource = $this->component->prepareDataSource($dataSource);
 
         $this->assertEquals($expectedSource, $dataSource);
     }

@@ -38,9 +38,9 @@ class AttributeColumn extends Column
      * Prepare Data Source
      *
      * @param array $dataSource
-     * @return void
+     * @return array
      */
-    public function prepareDataSource(array &$dataSource)
+    public function prepareDataSource(array $dataSource)
     {
         if (!isset($dataSource['data']['items'])) {
             return null;
@@ -60,5 +60,7 @@ class AttributeColumn extends Column
                 }
             }
         }
+
+        return $dataSource;
     }
 }

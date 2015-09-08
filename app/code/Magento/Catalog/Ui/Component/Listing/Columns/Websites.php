@@ -44,7 +44,7 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
     /**
      * {@inheritdoc}
      */
-    public function prepareDataSource(array & $dataSource)
+    public function prepareDataSource(array $dataSource)
     {
         $websiteNames = [];
         foreach ($this->getData('options') as $website) {
@@ -60,6 +60,8 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
                 $item[$fieldName] = implode(', ', $websites);
             }
         }
+
+        return $dataSource;
     }
 
     /**
