@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Module;
+namespace Magento\Framework\Theme;
 
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -15,7 +15,7 @@ use Magento\Framework\Filesystem;
 /**
  * Encapsulates directories structure of a Magento theme
  */
-class ThemeDir
+class Dir
 {
     /**
      * Module registry
