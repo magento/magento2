@@ -5,6 +5,8 @@
  */
 namespace Magento\Authorizenet\Model;
 
+use Magento\Payment\Model\Method\Logger;
+
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -100,7 +102,7 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
     /**
      * {@inheritdoc}
      */
-    protected $_debugReplacePrivateDataKeys = ['password'];
+    protected $_debugReplacePrivateDataKeys = ['merchantAuthentication', 'x_login'];
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -373,9 +375,9 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
     {
         $result = $this->responseFactory->create();
         $client = new \Magento\Framework\HTTP\ZendClient();
-        $uri = $this->getConfigData('cgi_url');
-        $debugData = ['url' => $uri, 'request' => $request->getData()];
-        $client->setUri($uri ? $uri : self::CGI_URL);
+        $url = $this->getConfigData('cgi_url') ?: self::CGI_URL;
+        $debugData = ['url' => $url, 'request' => $request->getData()];
+        $client->setUri($url);
         $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
 
         foreach ($request->getData() as $key => $value) {
@@ -476,14 +478,14 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
         );
 
         $client = new \Magento\Framework\HTTP\ZendClient();
-        $uri = $this->getConfigData('cgi_url_td');
-        $client->setUri($uri ? $uri : self::CGI_URL_TD);
+        $url = $this->getConfigData('cgi_url_td') ?: self::CGI_URL_TD;
+        $client->setUri($url);
         $client->setConfig(['timeout' => 45]);
         $client->setHeaders(['Content-Type: text/xml']);
         $client->setMethod(\Zend_Http_Client::POST);
         $client->setRawData($requestBody);
 
-        $debugData = ['url' => $uri, 'request' => $requestBody];
+        $debugData = ['url' => $url, 'request' => $this->removePrivateDataFromXml($requestBody)];
 
         try {
             $responseBody = $client->request()->getBody();
@@ -522,5 +524,21 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
         return isset($this->transactionDetails[$transactionId])
             ? $this->transactionDetails[$transactionId]
             : $this->loadTransactionDetails($transactionId);
+    }
+
+    /**
+     * Remove nodes with private data from XML string
+     *
+     * Uses values from $_debugReplacePrivateDataKeys property
+     *
+     * @param string $xml
+     * @return string
+     */
+    protected function removePrivateDataFromXml($xml)
+    {
+        foreach ($this->getDebugReplacePrivateDataKeys() as $key) {
+            $xml = preg_replace(sprintf('~(?<=<%s>).*?(?=</%s>)~', $key, $key), Logger::DEBUG_KEYS_MASK, $xml);
+        }
+        return $xml;
     }
 }
