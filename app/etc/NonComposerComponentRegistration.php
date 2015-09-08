@@ -6,8 +6,13 @@
 
 /**
  * A helper class.
- * Goes through non-composer components under app/code looking for their *-registration.php files and
- * executes them to get these components registered with Magento framework.
+ * Goes through non-composer components under:
+ * 1. app/code
+ * 2. app/design
+ * 3. app/i18n and
+ * 4. lib/internal/Magento/Framework
+ * looking for their *-registration.php files and executes them to get these components registered with Magento
+ * framework.
  */
 class NonComposerComponentRegistrar 
 {
@@ -63,9 +68,9 @@ class NonComposerComponentRegistrar
     public function register()
     {
 
-        foreach (static::$directoryList as $dir) {
+        foreach (static::$directoryList as $directory) {
             $recDirItr = new \RecursiveDirectoryIterator(
-                $dir,
+                $directory,
                 \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::FOLLOW_SYMLINKS
             );
             $recItrItr = new \RecursiveIteratorIterator($recDirItr);
