@@ -53,4 +53,7 @@
                   instance="Magento\PageCache\Model\Observer\RegisterFormKeyFromCookie"
                   method="execute" />
     </event>
+    <event name="customer_logout">
+        <observer name="FlushFormKeyOnLogout" instance="Magento\PageCache\Model\Observer\FlushFormKeyOnLogout" method="execute"/>
+    </event>
 </config>

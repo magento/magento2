@@ -245,4 +245,9 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
         $paramsReflection = $methodReflection->getParameters();
         $this->assertEquals('Name of the attribute', $this->_typeProcessor->getParamDescription($paramsReflection[0]));
     }
+
+    public function testGetOperationName()
+    {
+        $this->assertEquals("resNameMethodName", $this->_typeProcessor->getOperationName("resName", "methodName"));
+    }
 }
