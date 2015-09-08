@@ -95,3 +95,27 @@ Resources,Resources
 "Warning!\r\nThis action will remove this user from already assigned role\r\nAre you sure?","Warning!\r\nThis action will remove this user from already assigned role\r\nAre you sure?"
 "Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?","Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?"
 "Reset Password Template","Reset Password Template"
+No,No
+Yes,Yes
+Username,"Nome do usuário"
+"Locked Users","Usuários Bloqueados"
+"Unlocked %1 user(s).","Unlocked %1 user(s)."
+"This account is locked.","Esta conta está bloqueada."
+"It's time to change your password.","It's time to change your password."
+"It's time to <a href=""%1"">change your password</a>.","It's time to <a href=""%1"">change your password</a>."
+"Sorry, but this password has already been used. Please create another.","Sorry, but this password has already been used. Please create another."
+"Your password has expired; please contact your administrator.","Your password has expired; please contact your administrator."
+Recommended,Recomendado
+Forced,Forçado
+"Maximum Login Failures to Lockout Account","Maximum Login Failures to Lockout Account"
+"We will disable this feature if the value is empty.","We will disable this feature if the value is empty."
+"Lockout Time (minutes)","Lockout Time (minutes)"
+"Password Lifetime (days)","Password Lifetime (days)"
+"We will disable this feature if the value is empty. ","We will disable this feature if the value is empty. "
+"Password Change","Password Change"
+"Encryption Key Change","Mudança na Chave de Criptografia"
+"Admin Accounts Locks","Bloqueios para Contas de Administrador"
+Unlock,Desbloquear
+"Last login","Último login"
+Failures,Falhas
+Unlocked,"Bloqueado até"
