@@ -72,7 +72,7 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
             $options[11]->getDescription()
         );
         $this->assertInstanceOf('Magento\Framework\Setup\Option\TextConfigOption', $options[12]);
-        $this->assertSame('Cache hosts', $options[12]->getDescription());
+        $this->assertSame('http Cache hosts', $options[12]->getDescription());
         $this->assertEquals(13, count($options));
     }
 
@@ -137,7 +137,7 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
         $result = $this->object->validate($options, $this->deploymentConfig);
         if ($expectedError) {
             $this->assertCount(1, $result);
-            $this->assertEquals("Invalid cache hosts '$hosts'", $result[0]);
+            $this->assertEquals("Invalid http cache hosts '$hosts'", $result[0]);
         } else {
             $this->assertCount(0, $result);
         }
