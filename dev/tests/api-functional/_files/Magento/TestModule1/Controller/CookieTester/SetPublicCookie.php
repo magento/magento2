@@ -5,6 +5,7 @@
  */
 namespace Magento\TestModule1\Controller\CookieTester;
 
+use \Magento\Framework\App\RequestInterface;
 /**
  */
 class SetPublicCookie extends \Magento\TestModule1\Controller\CookieTester
@@ -14,37 +15,37 @@ class SetPublicCookie extends \Magento\TestModule1\Controller\CookieTester
      *
      * @return void
      */
-    public function execute()
+    public function execute(RequestInterface $request)
     {
         $publicCookieMetadata = $this->getCookieMetadataFactory()->createPublicCookieMetadata();
 
-        $cookieDomain = $this->getRequest()->getParam('cookie_domain');
+        $cookieDomain = $request->getParam('cookie_domain');
         if ($cookieDomain !== null) {
             $publicCookieMetadata->setDomain($cookieDomain);
         }
 
-        $cookiePath = $this->getRequest()->getParam('cookie_path');
+        $cookiePath = $request->getParam('cookie_path');
         if ($cookiePath !== null) {
             $publicCookieMetadata->setPath($cookiePath);
         }
 
-        $cookieDuration = $this->getRequest()->getParam('cookie_duration');
+        $cookieDuration = $request->getParam('cookie_duration');
         if ($cookieDuration !== null) {
             $publicCookieMetadata->setDuration($cookieDuration);
         }
 
-        $httpOnly = $this->getRequest()->getParam('cookie_httponly');
+        $httpOnly = $request->getParam('cookie_httponly');
         if ($httpOnly !== null) {
             $publicCookieMetadata->setHttpOnly($httpOnly);
         }
 
-        $secure = $this->getRequest()->getParam('cookie_secure');
+        $secure = $request->getParam('cookie_secure');
         if ($secure !== null) {
             $publicCookieMetadata->setSecure($secure);
         }
 
-        $cookieName = $this->getRequest()->getParam('cookie_name');
-        $cookieValue = $this->getRequest()->getParam('cookie_value');
+        $cookieName = $request->getParam('cookie_name');
+        $cookieValue = $request->getParam('cookie_value');
         $this->getCookieManager()->setPublicCookie($cookieName, $cookieValue, $publicCookieMetadata);
     }
 }
