@@ -52,9 +52,6 @@ class Mysql extends \Magento\Framework\Model\Resource\Type\Db implements Connect
     public function getConnection(DB\LoggerInterface $logger)
     {
         $connection = $this->getDbConnectionInstance($logger);
-        if (!empty($this->connectionConfig['initStatements']) && $connection) {
-            $connection->query($this->connectionConfig['initStatements']);
-        }
 
         $profiler = $connection->getProfiler();
         if ($profiler instanceof DB\Profiler) {
