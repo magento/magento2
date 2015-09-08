@@ -164,12 +164,12 @@ class Attribute extends Form
             if (empty($attribute['attribute_id'])) {
                 $this->createNewVariationSet($attribute);
             }
-            $this->getAttributesGrid()->searchAndSelect(['frontend_label' => $attribute['frontend_label']]);
         }
-        $this->browser->find($this->nextButton)->click();
-        $this->getTemplateBlock()->waitLoader();
 
         foreach ($attributes as $attribute) {
+            $this->getAttributesGrid()->searchAndSelect(['frontend_label' => $attribute['frontend_label']]);
+            $this->browser->find($this->nextButton)->click();
+            $this->getTemplateBlock()->waitLoader();
             $this->updateOptions($attribute);
         }
 
@@ -185,7 +185,7 @@ class Attribute extends Form
     {
         return $this->blockFactory->create(
             'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\AttributesGrid',
-            ['element' => $this->browser->find('.admin__data-grid-outer-wrap')]
+            ['element' => $this->browser->find('#variation-steps-wizard_step1 .admin__data-grid-outer-wrap')]
         );
     }
 
@@ -280,7 +280,7 @@ class Attribute extends Form
 
                 $this->getElement($optionContainer, $mapping['label'])
                     ->setValue($mapping['label']['value']);
-
+                $this->getTemplateBlock()->waitLoader();
                 $optionContainer->find('[data-action=save]')->click();
             }
         }

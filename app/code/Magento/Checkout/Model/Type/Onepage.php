@@ -3,12 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
-/**
- * One page checkout processing model
- */
 namespace Magento\Checkout\Model\Type;
 
 use Magento\Customer\Api\AccountManagementInterface;
@@ -199,7 +193,6 @@ class Onepage
      * @param \Magento\Quote\Model\QuoteManagement $quoteManagement
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     *
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -460,7 +453,9 @@ class Onepage
             /**
              * Billing address using options
              */
-            $usingCase = isset($data['use_for_shipping']) ? (bool)$data['use_for_shipping'] : self::NOT_USE_FOR_SHIPPING;
+            $usingCase = isset($data['use_for_shipping'])
+                ? (bool)$data['use_for_shipping']
+                : self::NOT_USE_FOR_SHIPPING;
 
             switch ($usingCase) {
                 case self::NOT_USE_FOR_SHIPPING:
@@ -479,31 +474,21 @@ class Onepage
 
                     // don't reset original shipping data, if it was not changed by customer
                     foreach ($shipping->getData() as $shippingKey => $shippingValue) {
-                        if (!is_null(
-                            $shippingValue
-                        ) && !is_null(
-                            $billing->getData($shippingKey)
-                        ) && !isset(
-                            $data[$shippingKey]
-                        ) && !in_array(
-                            $shippingKey,
-                            $requiredBillingAttributes
-                        )
+                        if ($shippingValue !== null
+                            && $billing->getData($shippingKey) !== null
+                            && !isset($data[$shippingKey])
+                            && !in_array($shippingKey, $requiredBillingAttributes)
                         ) {
                             $billing->unsetData($shippingKey);
                         }
                     }
-                    $shipping->addData(
-                        $billing->getData()
-                    )->setSameAsBilling(
-                        1
-                    )->setSaveInAddressBook(
-                        0
-                    )->setShippingMethod(
-                        $shippingMethod
-                    )->setCollectShippingRates(
-                        true
-                    )->collectTotals();
+                    $shipping->addData($billing->getData())
+                        ->setSameAsBilling(1)
+                        ->setSaveInAddressBook(0)
+                        ->setShippingMethod($shippingMethod)
+                        ->setCollectShippingRates(true)
+                        ->collectTotals();
+
                     if (!$this->isCheckoutMethodRegister()) {
                         $shipping->save();
                     }
@@ -518,20 +503,10 @@ class Onepage
             $address->save();
         }
 
-        $this->getCheckout()->setStepData(
-            'billing',
-            'allow',
-            true
-        )->setStepData(
-            'billing',
-            'complete',
-            true
-        )->setStepData(
-            'shipping',
-            'allow',
-            true
-        );
-
+        $this->getCheckout()
+            ->setStepData('billing', 'allow', true)
+            ->setStepData('billing', 'complete', true)
+            ->setStepData('shipping', 'allow', true);
         return [];
     }
 
@@ -558,7 +533,11 @@ class Onepage
         $quote = $this->getQuote();
         $isCustomerNew = !$quote->getCustomerId();
         $customer = $quote->getCustomer();
-        $customerData = $this->extensibleDataObjectConverter->toFlatArray($customer, [], '\Magento\Customer\Api\Data\CustomerInterface');
+        $customerData = $this->extensibleDataObjectConverter->toFlatArray(
+            $customer,
+            [],
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
 
         /** @var Form $customerForm */
         $customerForm = $this->_formFactory->create(
@@ -624,7 +603,11 @@ class Onepage
         $this->_objectCopyService->copyFieldsetToTarget(
             'customer_account',
             'to_quote',
-            $this->extensibleDataObjectConverter->toFlatArray($customer, [], '\Magento\Customer\Api\Data\CustomerInterface'),
+            $this->extensibleDataObjectConverter->toFlatArray(
+                $customer,
+                [],
+                '\Magento\Customer\Api\Data\CustomerInterface'
+            ),
             $quote
         );
 
@@ -949,11 +932,10 @@ class Onepage
                 $this->_logger->critical($e);
             }
         }
-        $this->_checkoutSession->setLastQuoteId(
-            $this->getQuote()->getId()
-        )->setLastSuccessQuoteId(
-            $this->getQuote()->getId()
-        )->clearHelperData();
+        $this->_checkoutSession
+            ->setLastQuoteId($this->getQuote()->getId())
+            ->setLastSuccessQuoteId($this->getQuote()->getId())
+            ->clearHelperData();
 
         if ($order) {
             $this->_eventManager->dispatch(
@@ -977,15 +959,11 @@ class Onepage
             }
 
             // add order information to the session
-            $this->_checkoutSession->setLastOrderId(
-                $order->getId()
-            )->setRedirectUrl(
-                $redirectUrl
-            )->setLastRealOrderId(
-                $order->getIncrementId()
-            )->setLastOrderStatus(
-                $order->getStatus()
-            );
+            $this->_checkoutSession
+                ->setLastOrderId($order->getId())
+                ->setRedirectUrl($redirectUrl)
+                ->setLastRealOrderId($order->getIncrementId())
+                ->setLastOrderStatus($order->getStatus());
         }
 
         $this->_eventManager->dispatch(

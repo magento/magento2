@@ -37,6 +37,7 @@ class Curl extends AbstractCurl implements CustomerInterface
         'gender' => [
             'Male' => 1,
             'Female' => 2,
+            'Not Specified' => 3
         ],
         'region_id' => [
             'California' => 12,
@@ -120,14 +121,22 @@ class Curl extends AbstractCurl implements CustomerInterface
      */
     protected function getCustomerId($email)
     {
-        $url = $_ENV['app_backend_url'] . 'customer/index/grid/filter/' . $this->encodeFilter(['email' => $email]);
+        $url = $_ENV['app_backend_url'] . 'mui/index/render/';
+        $data = [
+            'namespace' => 'customer_listing',
+            'filters' => [
+                'placeholder' => true,
+                'email' => $email
+            ],
+            'isAjax' => true
+        ];
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
 
-        $curl->write($url, [], CurlInterface::GET);
+        $curl->write($url, $data, CurlInterface::POST);
         $response = $curl->read();
         $curl->close();
 
-        preg_match('/data-column="entity_id"[^>]*>\s*([0-9]+)\s*</', $response, $match);
+        preg_match('/customer_listing_data_source.+items.+"entity_id":"(\d+)"/', $response, $match);
         return empty($match[1]) ? null : $match[1];
     }
 

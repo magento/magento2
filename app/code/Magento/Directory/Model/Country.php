@@ -198,11 +198,17 @@ T: {{telephone}}";
      *
      * @return string
      */
-    public function getName()
+    public function getName($locale = null)
     {
-        if (!$this->getData('name')) {
-            $this->setData('name', $this->_localeLists->getCountryTranslation($this->getId()));
+        if ($locale == null) {
+            $cache_key = 'name_default';
+        } else {
+            $cache_key = 'name_' . $locale;
         }
-        return $this->getData('name');
+
+        if (!$this->getData($cache_key)) {
+            $this->setData($cache_key, $this->_localeLists->getCountryTranslation($this->getId(), $locale));
+        }
+        return $this->getData($cache_key);
     }
 }
