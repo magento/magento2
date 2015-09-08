@@ -14,6 +14,9 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ForgotPasswordPost extends \Magento\Customer\Controller\Account
 {
     /** @var AccountManagementInterface */
