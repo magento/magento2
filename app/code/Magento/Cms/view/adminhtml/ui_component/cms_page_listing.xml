@@ -204,7 +204,6 @@
                     <item name="indexField" xsi:type="string">page_id</item>
                     <item name="clientConfig" xsi:type="array">
                         <item name="saveUrl" xsi:type="string">cms/page/inlineEdit</item>
-                        <item name="validateUrl" xsi:type="string">/path/to</item>
                         <item name="validateBeforeSave" xsi:type="boolean">false</item>
                     </item>
                 </item>

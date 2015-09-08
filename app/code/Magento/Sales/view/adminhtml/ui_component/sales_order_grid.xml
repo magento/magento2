@@ -427,7 +427,7 @@
                 </item>
             </argument>
         </column>
-        <actionsColumn name="actions">
+        <actionsColumn name="actions" class="Magento\Sales\Ui\Component\Listing\Column\OrderActions">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="indexField" xsi:type="string">entity_id</item>
