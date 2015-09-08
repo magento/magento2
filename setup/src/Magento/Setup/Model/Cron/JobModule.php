@@ -5,7 +5,6 @@
  */
 namespace Magento\Setup\Model\Cron;
 
-use Magento\Framework\Module\PackageInfoFactory;
 use Magento\Setup\Console\Command\AbstractSetupCommand;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -87,7 +86,7 @@ class JobModule extends AbstractJob
             $statusCode = $this->command->run(new ArrayInput($arguments), $this->output);
 
             // check for return statusCode to catch any Symfony errors
-            if ( $statusCode != 0 ) {
+            if ($statusCode != 0) {
                 throw new \RuntimeException('Symfony run() returned StatusCode: ' . $statusCode);
             }
 
