@@ -5,9 +5,12 @@
 /*global define*/
 define(
     [
-        'Magento_Payment/js/view/payment/iframe'
+        'jquery',
+        'Magento_Payment/js/view/payment/iframe',
+        'Magento_Checkout/js/model/payment/additional-validators',
+        'Magento_Checkout/js/action/set-payment-information'
     ],
-    function (Component) {
+    function ($, Component, additionalValidators, setPaymentInformationAction) {
         'use strict';
 
         return Component.extend({
@@ -42,8 +45,14 @@ define(
             },
 
             placeOrder: function() {
-                if (this.validateHandler()) {
-                    this.placeOrderHandler();
+                var self = this;
+                if (this.validateHandler() && additionalValidators.validate()) {
+                    this.isPlaceOrderActionAllowed(false);
+                    $.when(setPaymentInformationAction()).done(function() {
+                        self.placeOrderHandler();
+                    }).fail(function() {
+                        self.isPlaceOrderActionAllowed(true);
+                    });
                 }
             }
         });

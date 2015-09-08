@@ -47,14 +47,14 @@
 & when (@media-common = true) {
 
 body {
-    .css(background-color, @page__background-color);
+    .lib-css(background-color, @page__background-color);
 }
 
 //
 //    Header
 //--------------------------------------
 .page-header {
-    .css(background-color, @header__background-color);
+    .lib-css(background-color, @header__background-color);
     border-bottom: 1px solid @border-color__base;
     margin-bottom: @indent__base;
 }
@@ -103,8 +103,8 @@ body {
         left: 0;
         top: 0;
         text-align: center;
-        .css(background, @color-gray94);
-        .css(padding, @indent__s);
+        .lib-css(background, @color-gray94);
+        .lib-css(padding, @indent__s);
     }
 }
 
@@ -118,7 +118,7 @@ body {
     }
     &.noscript,
     &.cookie {
-        .message(@_message-type: global-note);
+        .lib-message(@_message-type: global-note);
         margin: 0;
     }
     &.cookie {
@@ -132,7 +132,7 @@ body {
         }
     }
     &.demo {
-        .message(@_message-type: global-caution);
+        .lib-message(@_message-type: global-caution);
         text-align: center;
         margin-bottom: 0;
     }
@@ -144,7 +144,7 @@ body {
 
 .page-footer {
     margin-top: auto;
-    .css(background-color, @footer__background-color);
+    .lib-css(background-color, @footer__background-color);
 }
 
 .footer {
@@ -177,7 +177,7 @@ body {
     .switcher {
         margin-right: 10px;
         .options {
-            .dropdown(
+            .lib-dropdown(
                 @_dropdown-actions-padding: 0,
                 @_dropdown-list-item-padding: 0,
                 @_dropdown-toggle-icon-content: @icon-down,
@@ -240,8 +240,8 @@ body {
     }
 
     .page-wrapper {
-        .vendor-prefix-display(flex);
-        .vendor-prefix-flex-direction(column);
+        .lib-vendor-prefix-display(flex);
+        .lib-vendor-prefix-flex-direction(column);
         min-height: 100%; // stretch content area for sticky footer
         > .breadcrumbs,
         > .top-container,
@@ -264,7 +264,7 @@ body {
             > .header.links {
                 float: right;
                 font-size: 0;
-                .list-inline();
+                .lib-list-inline();
                 > li {
                     font-size: @font-size__base;
                     margin: 0 0 0 15px;
@@ -274,7 +274,7 @@ body {
                     }
                     &.welcome {
                         a {
-                            .css(padding-left, @indent__xs);
+                            .lib-css(padding-left, @indent__xs);
                         }
                     }
                 }
