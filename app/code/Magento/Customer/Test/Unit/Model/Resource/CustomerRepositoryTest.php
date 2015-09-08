@@ -225,8 +225,6 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $storeId = 2;
         $this->prepareMocksForValidation(true);
 
-        $customerEmail = 'user1@example.com';
-
         $region = $this->getMockForAbstractClass('Magento\Customer\Api\Data\RegionInterface', [], '', false);
         $address = $this->getMockForAbstractClass(
             'Magento\Customer\Api\Data\AddressInterface',
