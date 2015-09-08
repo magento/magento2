@@ -201,7 +201,8 @@ define([
          * @param {Object} column - columns header element (th)
          */
         initColumn: function (column) {
-            var model = ko.dataFor(column);
+            var model = ko.dataFor(column),
+                table = this.table;
 
             model.width = this.getDefaultWidth(column);
 
@@ -214,6 +215,17 @@ define([
 
             this.refreshLastColumn(column);
             this.preprocessingWidth();
+
+            //TODO - Must be deleted when Firefox fixed problem with table-layout: fixed
+            //ticket to Firefox: https://bugs.webkit.org/show_bug.cgi?id=90068
+            if (navigator.userAgent.search(/Firefox/) > -1) {
+                setTimeout(function () {
+                    $(table).css('table-layout', 'auto');
+                    setTimeout(function () {
+                        $(table).css('table-layout', 'fixed');
+                    }, 500);
+                }, 500);
+            }
 
             model.on('visible', this.refreshLastColumn.bind(this, column));
             model.on('visible', this.preprocessingWidth.bind(this));
