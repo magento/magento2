@@ -32,7 +32,7 @@ class ImageMediaEntryConverterTest extends \PHPUnit_Framework_TestCase
     protected $productMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageMediaEntryConverter
+     * @var \Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter
      * |\Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $modelObject;

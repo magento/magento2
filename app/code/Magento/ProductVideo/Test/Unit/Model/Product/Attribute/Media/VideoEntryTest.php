@@ -7,7 +7,7 @@
 namespace Magento\ProductVideo\Test\Unit\Model\Product\Attribute\Media;
 
 /**
- * @codeCoverageIgnore
+ * VideoEntry test
  */
 class VideoEntryTest extends \PHPUnit_Framework_TestCase
 {

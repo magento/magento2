@@ -11,9 +11,9 @@ use \Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Class ImageMediaGalleryEntryProcessor
+ * Class ImageEntryProcessor
  */
-class ImageMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryProcessor
+class ImageEntryProcessor extends AbstractEntryProcessor
 {
     /**
      * @param Product $product

@@ -6,6 +6,8 @@
 
 namespace Magento\ProductVideo\Test\Unit\Model\Product\Attribute\Media;
 
+use Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter;
+
 class ExternalVideoMediaEntryConverterTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -43,7 +45,7 @@ class ExternalVideoMediaEntryConverterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
-     * |\Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoMediaEntryConverter
+     * |\Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter
      */
     protected $modelObject;
 
@@ -146,7 +148,7 @@ class ExternalVideoMediaEntryConverterTest extends \PHPUnit_Framework_TestCase
         $rowData = [
             'value_id' => '4',
             'file' => '/i/n/index111111.jpg',
-            'media_type' => 'external-video',
+            'media_type' => ExternalVideoEntryConverter::MEDIA_TYPE_CODE,
             'entity_id' => '1',
             'label' => '',
             'position' => '3',

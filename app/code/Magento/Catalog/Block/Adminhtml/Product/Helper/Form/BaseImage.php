@@ -90,6 +90,7 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
         $makeBaseText = __('Make Base');
         $hiddenText = __('Hidden');
         $imageManagementText = __('Images and Videos');
+        $addVideoTitle = __('New Video');
         /** @var $product \Magento\Catalog\Model\Product */
         $html = <<<HTML
 <div id="{$htmlId}-container" class="images"
@@ -102,11 +103,11 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
         <p class="image-placeholder-text">{$imagePlaceholderText}</p>
     </div>
     <div class="image video-placeholder">
-            <button id="add_video_button" title="New Video" type="button" class="action-default scalable" onclick="jQuery('#new-video').modal('openModal'); jQuery('#new_video_form')[0].reset();" data-ui-id="widget-button-1">
-                <img class="spacer" src="{$spacerImage}"/>
-                <p class="image-placeholder-text">{$videoPlaceholderText}</p>
-            </button>
-        </div>
+        <button id="add_video_button" title="{$addVideoTitle}" type="button" class="action-default scalable" onclick="jQuery('#new-video').modal('openModal'); jQuery('#new_video_form')[0].reset();" data-ui-id="widget-button-1">
+            <img class="spacer" src="{$spacerImage}"/>
+            <p class="image-placeholder-text">{$videoPlaceholderText}</p>
+        </button>
+    </div>
     <script id="{$htmlId}-template" data-template="image" type="text/x-magento-template">
         <div class="image">
             <img class="spacer" src="{$spacerImage}"/>
