@@ -10,8 +10,7 @@ define(
     function (Component, totals) {
         'use strict';
 
-        var isTaxDisplayedInGrandTotal = window.checkoutConfig.includeTaxInGrandTotal,
-            isFullTaxSummaryDisplayed = window.checkoutConfig.isFullTaxSummaryDisplayed,
+        var isFullTaxSummaryDisplayed = window.checkoutConfig.isFullTaxSummaryDisplayed,
             isZeroTaxDisplayed = window.checkoutConfig.isZeroTaxDisplayed;
 
         return Component.extend({
@@ -31,7 +30,7 @@ define(
              * @override
              */
             ifShowDetails: function () {
-                return isTaxDisplayedInGrandTotal && this.getPureValue() > 0 && isFullTaxSummaryDisplayed;
+                return this.getPureValue() > 0 && isFullTaxSummaryDisplayed;
             },
 
             /**
