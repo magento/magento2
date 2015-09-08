@@ -21,34 +21,42 @@ class Search
     private $registrar;
 
     /**
-     * @var Filesystem\Directory\ReadInterface
+     * @var Filesystem\Directory\ReadFactory
      */
-    private $directoryRead;
+    private $readFactory;
 
     /**
      * Constructor
      *
      * @param ComponentRegistrarInterface $registrar
-     * @param Filesystem $filesystem
+     * @param Filesystem\Directory\ReadFactory $readFactory
      */
-    public function __construct(ComponentRegistrarInterface $registrar, Filesystem $filesystem)
+    public function __construct(ComponentRegistrarInterface $registrar, Filesystem\Directory\ReadFactory $readFactory)
     {
         $this->registrar = $registrar;
-        $this->directoryRead = $filesystem->getDirectoryRead(DirectoryList::ROOT);
+        $this->readFactory = $readFactory;
     }
 
     /**
-     * Search for files in each module by pattern
+     * Search for files in each module by pattern, returns absolute paths
      *
      * @param string $pattern
      * @return array
      */
-    public function collectFiles($pattern)
+    public function collectFiles($pattern, $associative = false)
     {
         $files = [];
-        foreach ($this->registrar->getPaths(ComponentRegistrar::MODULE) as $path) {
-            $relativePath = $this->directoryRead->getRelativePath($path);
-            $files = array_merge($files, $this->directoryRead->search($relativePath . '/' . $pattern));
+        foreach ($this->registrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $path) {
+            $directoryRead = $this->readFactory->create($path);
+            $foundFiles = $directoryRead->search($pattern);
+            foreach ($foundFiles as $foundFile) {
+                $foundFile = $directoryRead->getAbsolutePath($foundFile);
+                if ($associative) {
+                    $files[$moduleName][] = $foundFile;
+                } else {
+                    $files[] = $foundFile;
+                }
+            }
         }
         return $files;
     }

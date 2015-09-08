@@ -35,8 +35,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $filesystemMock =
-            $this->getMock('Magento\Framework\Filesystem', ['getDirectoryRead'], [], '', false);
+        $readFactoryMock = $this->getMock('Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
         $this->_coreConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_cacheState = $this->getMockForAbstractClass('Magento\Framework\App\Cache\StateInterface');
 
@@ -47,12 +46,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $filesystemMock->expects(
-            $this->once()
+        $readFactoryMock->expects(
+            $this->any()
         )->method(
-            'getDirectoryRead'
-        )->with(
-            DirectoryList::ROOT
+            'create'
         )->will(
             $this->returnValue($modulesDirectoryMock)
         );
@@ -100,7 +97,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->moduleReader = $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false);
         $this->_model = new \Magento\PageCache\Model\Config(
-            $filesystemMock,
+            $readFactoryMock,
             $this->_coreConfigMock,
             $this->_cacheState,
             $this->moduleReader

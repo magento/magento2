@@ -48,10 +48,11 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
         switch ($scope) {
             case 'primary':
                 $directory = $this->filesystem->getDirectoryRead(DirectoryList::CONFIG);
-                $iterator = $this->iteratorFactory->create(
-                    $directory,
-                    $directory->search('{' . $filename . ',*/' . $filename . '}')
-                );
+                $absolutePaths = [];
+                foreach ($directory->search('{' . $filename . ',*/' . $filename . '}') as $path) {
+                    $absolutePaths[] = $directory->getAbsolutePath($path);
+                }
+                $iterator = $this->iteratorFactory->create($absolutePaths);
                 break;
             case 'global':
                 $iterator = $this->_moduleReader->getConfigurationFiles($filename);
