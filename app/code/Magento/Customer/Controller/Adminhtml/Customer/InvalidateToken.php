@@ -59,7 +59,6 @@ class InvalidateToken extends \Magento\Customer\Controller\Adminhtml\Index
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param CustomerTokenServiceInterface $tokenService
-     * @param \Psr\Log\LoggerInterface $logger
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -89,7 +88,6 @@ class InvalidateToken extends \Magento\Customer\Controller\Adminhtml\Index
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Psr\Log\LoggerInterface $logger,
         CustomerTokenServiceInterface $tokenService
     ) {
         $this->tokenService = $tokenService;
@@ -118,8 +116,7 @@ class InvalidateToken extends \Magento\Customer\Controller\Adminhtml\Index
             $resultLayoutFactory,
             $resultPageFactory,
             $resultForwardFactory,
-            $resultJsonFactory,
-            $logger
+            $resultJsonFactory
         );
     }
 

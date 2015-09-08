@@ -143,9 +143,6 @@ abstract class Index extends \Magento\Backend\App\Action
      */
     protected $resultJsonFactory;
 
-    /** @var \Psr\Log\LoggerInterface  */
-    protected $logger;
-
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
@@ -172,7 +169,6 @@ abstract class Index extends \Magento\Backend\App\Action
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Psr\Log\LoggerInterface $logger
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -201,8 +197,7 @@ abstract class Index extends \Magento\Backend\App\Action
         \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Psr\Log\LoggerInterface $logger
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_fileFactory = $fileFactory;
@@ -228,7 +223,6 @@ abstract class Index extends \Magento\Backend\App\Action
         $this->resultPageFactory = $resultPageFactory;
         $this->resultForwardFactory = $resultForwardFactory;
         $this->resultJsonFactory = $resultJsonFactory;
-        $this->logger = $logger;
         parent::__construct($context);
     }
 
