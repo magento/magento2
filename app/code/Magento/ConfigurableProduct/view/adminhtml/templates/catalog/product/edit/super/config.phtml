@@ -61,9 +61,10 @@ require([
     'mage/mage',
     'mage/backend/menu',
     'Magento_Ui/js/modal/modal',
+    'Magento_ConfigurableProduct/js/advanced-pricing-handler',
+    'Magento_ConfigurableProduct/js/options/price-type-handler',
     'mage/translate',
-    'domReady!',
-    'Magento_ConfigurableProduct/js/options/price-type-handler'
+    'domReady!'
 ], function($, mageTemplate){
     'use strict';
 
@@ -88,6 +89,11 @@ require([
                     element.trigger('change')
                 }
             }
+        },
+        configurableTypeHandler = function (isConfigurable) {
+            var productType = '<?= $block->getProduct()->getTypeId() ?>';
+            isConfigurable = productType == 'configurable' ? true : isConfigurable;
+            $('[data-form=edit-product]').trigger("change_configurable_type", isConfigurable);
         };
 
     collapsableArea
@@ -102,7 +108,7 @@ require([
             inventoryAvailabilityField.removeProp('disabled');
             setElementDisabled(qtyField, true, true);
             setElementDisabled(stockAvailabilityField, false, false);
-            $('#super_config').trigger("setIsConfigurable");
+            configurableTypeHandler(true);
         })
         .on('hide', function() {
             currentProductTemplateControl
@@ -112,7 +118,7 @@ require([
             inventoryAvailabilityField.prop('disabled', true);
             setElementDisabled(stockAvailabilityField, true, false);
             setElementDisabled(qtyField, false, true);
-            $('#super_config').trigger("setIsNotConfigurable");
+            configurableTypeHandler(false);
         })
         .collapse(hasVariations ? 'show' : 'hide');
 
