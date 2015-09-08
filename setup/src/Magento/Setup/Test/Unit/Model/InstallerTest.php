@@ -112,6 +112,16 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     private $dbValidator;
 
     /**
+     * @var \Magento\Setup\Module\SetupFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $setupFactory;
+
+    /**
+     * @var \Magento\Setup\Module\DataSetupFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dataSetupFactory;
+
+    /**
      * Sample DB configuration segment
      *
      * @var array
@@ -155,6 +165,8 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->configModel = $this->getMock('Magento\Setup\Model\ConfigModel', [], [], '', false);
         $this->cleanupFiles = $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false);
         $this->dbValidator = $this->getMock('Magento\Setup\Validator\DbValidator', [], [], '', false);
+        $this->setupFactory = $this->getMock('Magento\Setup\Module\SetupFactory', [], [], '', false);
+        $this->dataSetupFactory = $this->getMock('Magento\Setup\Module\DataSetupFactory', [], [], '', false);
         $this->object = $this->createObject();
     }
 
@@ -192,7 +204,9 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             $this->contextMock,
             $this->configModel,
             $this->cleanupFiles,
-            $this->dbValidator
+            $this->dbValidator,
+            $this->setupFactory,
+            $this->dataSetupFactory
         );
     }
 
@@ -226,11 +240,11 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $appState = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
             'Magento\Framework\App\State'
         );
+        $this->setupFactory->expects($this->atLeastOnce())->method('create')->with($resource)->willReturn($setup);
+        $this->dataSetupFactory->expects($this->atLeastOnce())->method('create')->willReturn($dataSetup);
         $this->objectManager->expects($this->any())
             ->method('create')
             ->will($this->returnValueMap([
-                ['Magento\Setup\Module\Setup', ['resource' => $resource], $setup],
-                ['Magento\Setup\Module\DataSetup', [], $dataSetup],
                 ['Magento\Framework\App\Cache\Manager', [], $cacheManager],
                 ['Magento\Framework\App\State', [], $appState],
             ]));
