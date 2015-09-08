@@ -5,6 +5,8 @@
  */
 namespace Magento\CacheInvalidate\Test\Unit\Model;
 
+use \Magento\Framework\Config\ConfigOptionsListConstants;
+
 class PurgeCacheTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\CacheInvalidate\Model\PurgeCache */
@@ -75,7 +77,9 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
             ->method('close');
         $this->configReaderMock->expects($this->once())
             ->method('load')
-            ->willReturn(['cache_servers' => [['host' => '127.0.0.2', 'port' => 1234]]]);
+            ->willReturn(
+                [ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS => [['host' => '127.0.0.2', 'port' => 1234]]]
+            );
         $this->uriMock->expects($this->once())
             ->method('setScheme')
             ->with('http')
@@ -101,7 +105,7 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
             ->method('load')
             ->willReturn(
                 [
-                    'cache_servers' => [
+                    ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS => [
                         ['host' => '127.0.0.1', 'port' => 8080],
                         ['host' => '127.0.0.2', 'port' => 1234]
                     ]
