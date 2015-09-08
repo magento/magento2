@@ -61,7 +61,7 @@ class WeeeTax extends Weee
             foreach ($extraTaxableDetails[self::ITEM_TYPE] as $weeeAttributesTaxDetails) {
                 foreach ($weeeAttributesTaxDetails as $weeeTaxDetails) {
                     $weeeCode = $weeeTaxDetails['code'];
-                    $weeeCodeToWeeeTaxDetailsMap[$weeeCode][] = $weeeTaxDetails;
+                    $weeeCodeToWeeeTaxDetailsMap[$weeeCode] = $weeeTaxDetails;
                 }
             }
 
@@ -88,7 +88,7 @@ class WeeeTax extends Weee
                         //Need to ensure that everyone is in sync for which weee code to process
                         continue;
                     }
-                    $weeeTaxDetails = $weeeCodeToWeeeTaxDetailsMap[$weeeCode][0];
+                    $weeeTaxDetails = $weeeCodeToWeeeTaxDetailsMap[$weeeCode];
                     $attributeCode = explode('-', $weeeCode)[1];
 
                     $valueExclTax = $weeeTaxDetails[CommonTaxCollector::KEY_TAX_DETAILS_PRICE_EXCL_TAX];
