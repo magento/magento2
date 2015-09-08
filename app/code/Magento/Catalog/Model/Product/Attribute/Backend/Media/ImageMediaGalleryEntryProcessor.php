@@ -266,12 +266,31 @@ class ImageMediaGalleryEntryProcessor extends AbstractMediaGalleryEntryProcessor
     }
 
     /**
+     * Check whether file to move exists. Getting unique name
+     *
      * @param string $file
+     * @param bool $forTmp
      * @return string
      */
-    protected function getUniqueFileName($file)
+    protected function getUniqueFileName($file, $forTmp = false)
     {
-        return strrpos($file, '.tmp') == strlen($file) - 4 ? substr($file, 0, strlen($file) - 4) : $file;
+        if ($this->fileStorageDb->checkDbUsage()) {
+            $destFile = $this->fileStorageDb->getUniqueFilename(
+                $this->mediaConfig->getBaseMediaUrlAddition(),
+                $file
+            );
+        } else {
+            $destinationFile = $forTmp
+                ? $this->mediaDirectory->getAbsolutePath($this->mediaConfig->getTmpMediaPath($file))
+                : $this->mediaDirectory->getAbsolutePath($this->mediaConfig->getMediaPath($file));
+            $destFile = dirname(
+                    $file
+                ) . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
+                    $destinationFile
+                );
+        }
+
+        return $destFile;
     }
 
 
