@@ -11,56 +11,61 @@
  * 2. app/design
  * 3. app/i18n and
  * 4. lib/internal/Magento/Framework
- * looking for their *-registration.php files and executes them to get these components registered with Magento
+ * looking for their registration.php files and executes them to get these components registered with Magento
  * framework.
  */
-class NonComposerComponentRegistrar 
+class NonComposerComponentRegistration
 {
     /**
-     * Instance of NonComposerComponentRegistrar class
+     * Instance of NonComposerComponentRegistration class
      *
-     * @var NonComposerComponentRegistrar instance
+     * @var NonComposerComponentRegistration instance
      */
     private static $instance = null;
 
     /**
      * Regex to filter the supported registration file types
      */
-    const REGISTRATION_FILES_REGEX =
-        '/module-registration\.php$|library-registration\.php$|theme-registration\.php$|language-registration\.php$/';
+    const REGISTRATION_FILES_REGEX = '/registration\.php$/';
 
     /**
-     * The list of directories to search for *-registration.php files
+     * The list of directories and max recursion depth while searching for registration.php files
      *
      * @var string array $directoryList
      */
     private static $directoryList;
 
     /**
+     * private constructor.
+     */
+    private function __construct()
+    {
+        // The supported directories are:
+        // 1. app/code => max recursion depth: 2
+        // 2. app/design => max recursion depth: 3
+        // 3. app/i18n => max recursion depth: 2
+        // 4. lib/internal => max recursion depth: 2
+        static::$directoryList[dirname(dirname(__FILE__)) . '/code'] = 2;
+        static::$directoryList[dirname(dirname(__FILE__)) . '/design'] = 3;
+        static::$directoryList[dirname(dirname(__FILE__)) . '/i18n'] = 2;
+        static::$directoryList[dirname(dirname(dirname(__FILE__))) . '/lib/internal'] = 2;
+    }
+
+    /**
      * Public static method to access the class instance
      *
-     * @return NonComposerComponentRegistrar
+     * @return NonComposerComponentRegistration
      */
     public static function getInstance()
     {
         if (static::$instance === null) {
-            static::$instance = new NonComposerComponentRegistrar();
-
-            // The supported directories are:
-            // 1. app/code
-            // 2. app/design
-            // 3. app/i18n
-            // 4. lib/internal/Magento/Framework
-            static::$directoryList[] = dirname(dirname(__FILE__)) . '/code';
-            static::$directoryList[] = dirname(dirname(__FILE__)) . '/design';
-            static::$directoryList[] = dirname(dirname(__FILE__)) . '/i18n';
-            static::$directoryList[] = dirname(dirname(dirname(__FILE__))) . '/lib/internal/Magento/Framework/';
+            static::$instance = new NonComposerComponentRegistration();
         }
         return static::$instance;
     }
 
     /**
-     * Find the registration files under 'app/code' and execute them. So that, these non-composer installed
+     * Find the registration files and execute them. So that, these non-composer installed
      * components are registered within the framework.
      *
      * @return void
@@ -68,12 +73,13 @@ class NonComposerComponentRegistrar
     public function register()
     {
 
-        foreach (static::$directoryList as $directory) {
+        foreach (static::$directoryList as $directory => $maxDepth) {
             $recDirItr = new \RecursiveDirectoryIterator(
                 $directory,
                 \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::FOLLOW_SYMLINKS
             );
             $recItrItr = new \RecursiveIteratorIterator($recDirItr);
+            $recItrItr->setMaxDepth($maxDepth);
             $dirItr = new \RegexIterator($recItrItr, self::REGISTRATION_FILES_REGEX);
 
             // Go through each registration file and execute it so that all the non-components
@@ -81,11 +87,12 @@ class NonComposerComponentRegistrar
             foreach ($dirItr as $fileInfo) {
                 $fullFileName = $fileInfo->getPathname();
                 include $fullFileName;
+                print $fullFileName . PHP_EOL;
             }
         }
     }
 }
 
 // Register all the non-composer components.
-NonComposerComponentRegistrar::getInstance()->register();
+NonComposerComponentRegistration::getInstance()->register();
 ?>
