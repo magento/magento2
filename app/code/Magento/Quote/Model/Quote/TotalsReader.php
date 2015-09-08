@@ -4,7 +4,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Quote\Model\Quote;
 
 use Magento\Quote\Model\Quote\Address\Total\Collector;
@@ -14,7 +13,6 @@ use Magento\Quote\Model\Quote\Address\Total\ReaderInterface;
 
 class TotalsReader
 {
-
     /**
      * Total models collector
      *
@@ -67,14 +65,26 @@ class TotalsReader
      */
     protected $collectorList;
 
+    /**
+     * @var array
+     */
     protected $allowedCollectors = array(
         'subtotal',
         'grand_total',
         'customerbalance',
-        'giftcardaccount'
+        'giftcardaccount',
+        'msrp'
     );
 
-
+    /**
+     * @param Collector $totalCollector
+     * @param CollectorFactory $totalCollectorFactory
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param Address\TotalsListFactory $totalListFactory
+     * @param Address\TotalFactory $totalFactory
+     * @param TotalsCollectorList $collectorList
+     */
     public function __construct(
         Collector $totalCollector,
         CollectorFactory $totalCollectorFactory,

@@ -13,7 +13,6 @@ use Magento\Quote\Model\Quote\Address\Total\CollectorInterface;
 
 class TotalsCollector
 {
-
     /**
      * Total models collector
      *
@@ -67,15 +66,12 @@ class TotalsCollector
      */
     protected $collectorList;
 
-
     /**
      * Quote validator
      *
      * @var \Magento\Quote\Model\QuoteValidator
      */
     protected $quoteValidator;
-
-
 
     /**
      * @var \Magento\Quote\Model\ShippingFactory
@@ -87,14 +83,29 @@ class TotalsCollector
      */
     protected $shippingAssignmentFactory;
 
+    /**
+     * @var array
+     */
     protected $allowedCollectors = array(
         'subtotal',
         'grand_total',
         'customerbalance',
-        'giftcardaccount'
+        'giftcardaccount',
+        'msrp'
     );
 
-
+    /**
+     * @param Collector $totalCollector
+     * @param CollectorFactory $totalCollectorFactory
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param Address\TotalsListFactory $totalListFactory
+     * @param Address\TotalFactory $totalFactory
+     * @param TotalsCollectorList $collectorList
+     * @param \Magento\Quote\Model\ShippingFactory $shippingFactory
+     * @param \Magento\Quote\Model\ShippingAssignmentFactory $shippingAssignmentFactory
+     * @param \Magento\Quote\Model\QuoteValidator $quoteValidator
+     */
     public function __construct(
         Collector $totalCollector,
         CollectorFactory $totalCollectorFactory,
