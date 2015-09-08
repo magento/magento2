@@ -15,10 +15,6 @@ define([
 
         $.mage.productGallery,
         {
-
-
-
-
             _create: function() {
                 this._bind();
             },
