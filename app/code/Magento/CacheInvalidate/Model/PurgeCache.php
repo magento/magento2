@@ -47,6 +47,7 @@ class PurgeCache
      * @param Socket $socketAdapter
      * @param InvalidateLogger $logger
      * @param Reader $configReader
+     * @param RequestInterface $request
      */
     public function __construct(
         Uri $uri,
