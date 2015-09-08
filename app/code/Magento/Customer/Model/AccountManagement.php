@@ -610,26 +610,6 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function changeEmail($email, $newEmail)
-    {
-        try {
-            $customer = $this->customerRepository->get($email);
-        } catch (NoSuchEntityException $e) {
-            throw new InvalidEmailOrPasswordException(__('Invalid login.'));
-        }
-
-        $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
-        $customerSecure->setRpToken(null);
-        $customerSecure->setRpTokenCreatedAt(null);
-
-        $this->customerRepository->save($customer);
-
-        return true;
-    }
-
-    /**
      * Change customer password.
      *
      * @param CustomerModel $customer

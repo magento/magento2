@@ -89,11 +89,6 @@ class EditPost extends \Magento\Customer\Controller\Account
                 $this->changeCustomerPassword($currentCustomer->getEmail());
             }
 
-            // Change customer email
-            if ($currentCustomer->getEmail() !== $customer->getEmail()) {
-                $this->changeCustomerEmail($currentCustomer->getEmail(), $customer->getEmail());
-            }
-
             try {
                 $this->customerRepository->save($customer);
             } catch (AuthenticationException $e) {
@@ -147,26 +142,6 @@ class EditPost extends \Magento\Customer\Controller\Account
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('Something went wrong while changing the password.'));
-        }
-
-        return $this;
-    }
-
-    /**
-     * Change customer email address
-     *
-     * @param string $email
-     * @param string $newEmail
-     * @return $this
-     */
-    protected function changeCustomerEmail($email, $newEmail)
-    {
-        try {
-            $this->customerAccountManagement->changeEmail($email, $newEmail);
-        } catch (AuthenticationException $e) {
-            $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Something went wrong while changing the email.'));
         }
 
         return $this;
