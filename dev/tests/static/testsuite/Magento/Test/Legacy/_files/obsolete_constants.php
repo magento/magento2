@@ -73,6 +73,7 @@ return [
     ['DEFAULT_THEME_NAME', 'Magento\Core\Model\Design\Package'],
     ['DEFAULT_STORE_ID', 'Magento\Catalog\Model\AbstractModel', 'Magento\Store\Model\Store::DEFAULT_STORE_ID'],
     ['DEFAULT_VALUE_TABLE_PREFIX'],
+    ['DIRECTORY_PERMISSION', 'Magento\Framework\Code\Generator\Io'],
     ['DIVIDE_EPSILON', 'Magento\Core\Helper\Data'],
     ['ENTITY_PRODUCT', 'Magento\Review\Model\Review'],
     ['EXCEPTION_CODE_IS_GROUPED_PRODUCT'],
