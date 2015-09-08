@@ -10,6 +10,9 @@ use Magento\Customer\Ui\Component\Listing\AttributeRepository;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class InlineEdit extends \Magento\Backend\App\Action
 {
     /** @var CustomerInterface */
@@ -53,7 +56,6 @@ class InlineEdit extends \Magento\Backend\App\Action
         $this->logger = $logger;
         parent::__construct($context);
     }
-
 
     /**
      * @return \Magento\Framework\Controller\Result\Json
