@@ -5,13 +5,55 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
+use Magento\Backend\App\Action;
 use Magento\Customer\Ui\Component\Listing\AttributeRepository;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 
-class InlineEdit extends \Magento\Customer\Controller\Adminhtml\Index
+class InlineEdit extends \Magento\Backend\App\Action
 {
     /** @var CustomerInterface */
     private $customer;
+
+    /** @var CustomerRepositoryInterface */
+    protected $customerRepository;
+
+    /** @var \Magento\Framework\Controller\Result\JsonFactory  */
+    protected $resultJsonFactory;
+
+    /** @var \Magento\Customer\Model\Customer\Mapper  */
+    protected $customerMapper;
+
+    /** @var \Magento\Framework\Api\DataObjectHelper  */
+    protected $dataObjectHelper;
+
+    /** @var \Psr\Log\LoggerInterface */
+    protected $logger;
+
+    /**
+     * @param Action\Context $context
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param \Psr\Log\LoggerInterface $logger
+     */
+    public function __construct(
+        Action\Context $context,
+        CustomerRepositoryInterface $customerRepository,
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
+        \Magento\Customer\Model\Customer\Mapper $customerMapper,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        \Psr\Log\LoggerInterface $logger
+    ) {
+        $this->customerRepository = $customerRepository;
+        $this->resultJsonFactory = $resultJsonFactory;
+        $this->customerMapper = $customerMapper;
+        $this->dataObjectHelper = $dataObjectHelper;
+        $this->logger = $logger;
+        parent::__construct($context);
+    }
+
 
     /**
      * @return \Magento\Framework\Controller\Result\Json
@@ -30,7 +72,7 @@ class InlineEdit extends \Magento\Customer\Controller\Adminhtml\Index
         }
 
         foreach (array_keys($postItems) as $customerId) {
-            $this->setCustomer($this->_customerRepository->getById($customerId));
+            $this->setCustomer($this->customerRepository->getById($customerId));
             if ($this->getCustomer()->getDefaultBilling()) {
                 $this->updateDefaultBilling($this->getData($postItems[$customerId]));
             }
@@ -121,7 +163,7 @@ class InlineEdit extends \Magento\Customer\Controller\Adminhtml\Index
     protected function saveCustomer(CustomerInterface $customer)
     {
         try {
-            $this->_customerRepository->save($customer);
+            $this->customerRepository->save($customer);
         } catch (\Magento\Framework\Exception\InputException $e) {
             $this->getMessageManager()->addError($this->getErrorWithCustomerId($e->getMessage()));
             $this->logger->critical($e);
@@ -205,5 +247,15 @@ class InlineEdit extends \Magento\Customer\Controller\Adminhtml\Index
     protected function getErrorWithCustomerId($errorText)
     {
         return '[Customer ID: ' . $this->getCustomer()->getId() . '] ' . __($errorText);
+    }
+
+    /**
+     * Customer access rights checking
+     *
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Magento_Customer::manage');
     }
 }
