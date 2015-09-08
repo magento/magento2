@@ -18,7 +18,10 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\View\Result\PageFactory;
 
-class ForgotPasswordPostextends extends \PHPUnit_Framework_TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class ForgotPasswordPostTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var ForgotPasswordPost
@@ -137,12 +140,14 @@ class ForgotPasswordPostextends extends \PHPUnit_Framework_TestCase
             ->with($email)
             ->willReturn($email);
 
-        // @codingStandardsIgnoreStart
+        $message = __(
+            'If there is an account associated with %1 you will receive an email with a link to reset your password.',
+            $email
+        );
         $this->messageManager->expects($this->once())
             ->method('addSuccessMessage')
-            ->with(__('If there is an account associated with %1 you will receive an email with a link to reset your password.', $email))
+            ->with($message)
             ->willReturnSelf();
-        // @codingStandardsIgnoreEnd
 
         $this->resultRedirect->expects($this->once())
             ->method('setPath')
@@ -171,12 +176,14 @@ class ForgotPasswordPostextends extends \PHPUnit_Framework_TestCase
             ->with($email)
             ->willReturn($email);
 
-        // @codingStandardsIgnoreStart
+        $message = __(
+            'If there is an account associated with %1 you will receive an email with a link to reset your password.',
+            $email
+        );
         $this->messageManager->expects($this->once())
             ->method('addSuccessMessage')
-            ->with(__('If there is an account associated with %1 you will receive an email with a link to reset your password.', $email))
+            ->with($message)
             ->willReturnSelf();
-        // @codingStandardsIgnoreEnd
 
         $this->resultRedirect->expects($this->once())
             ->method('setPath')
