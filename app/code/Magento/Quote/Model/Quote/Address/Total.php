@@ -35,6 +35,7 @@ class Total extends \Magento\Framework\DataObject
      */
     public function setShippingAmount($value, $alreadyExclTax = false)
     {
+        $this->_totalAmounts['shipping'] = $value;
         return $this->setData('shipping_amount', $value);
     }
 
