@@ -33,7 +33,7 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->uriMock = $this->getMock('\Zend\Uri\Uri', [], [], '', false);
-        $this->socketAdapterMock = $this->getMock('\Zend\Http\Client\Adapter\Socket', [], [], '', false );
+        $this->socketAdapterMock = $this->getMock('\Zend\Http\Client\Adapter\Socket', [], [], '', false);
         $this->configReaderMock = $this->getMock('\Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false);
         $this->loggerMock = $this->getMock('Magento\Framework\Cache\InvalidateLogger', [], [], '', false);
         $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
