@@ -114,6 +114,33 @@
             <xs:extension base="input"/>
         </xs:complexContent>
     </xs:complexType>
+    <xs:complexType name="component">
+        <xs:complexContent>
+            <xs:extension base="ui_element">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:group ref="configurable"/>
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="actionsColumn">
+        <xs:complexContent>
+            <xs:extension base="ui_element">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:group ref="configurable"/>
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="selectionsColumn">
+        <xs:complexContent>
+            <xs:extension base="ui_element">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:group ref="configurable"/>
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
     <xs:complexType name="container">
         <xs:complexContent>
             <xs:extension base="ui_element">

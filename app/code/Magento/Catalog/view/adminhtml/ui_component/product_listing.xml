@@ -46,7 +46,7 @@
                 </item>
             </argument>
         </bookmark>
-        <container name="columns_controls">
+        <component name="columns_controls">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/columns</item>
@@ -56,7 +56,7 @@
                     </item>
                 </item>
             </argument>
-        </container>
+        </component>
         <filters name="listing_filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -202,19 +202,17 @@
                 </item>
             </item>
         </argument>
-        <column name="ids" class="Magento\Ui\Component\MassAction\Columns\Column">
+        <selectionsColumn name="ids">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/multiselect</item>
                     <item name="indexField" xsi:type="string">entity_id</item>
                     <item name="sortOrder" xsi:type="number">0</item>
                 </item>
             </argument>
-        </column>
+        </selectionsColumn>
         <column name="entity_id">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">ID</item>
                     <item name="sortOrder" xsi:type="number">10</item>
@@ -229,7 +227,6 @@
                     <item name="sortable" xsi:type="boolean">false</item>
                     <item name="altField" xsi:type="string">name</item>
                     <item name="has_preview" xsi:type="string">1</item>
-                    <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Thumbnail</item>
                     <item name="sortOrder" xsi:type="number">20</item>
                 </item>
@@ -240,7 +237,6 @@
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">text</item>
                     <item name="add_field" xsi:type="boolean">true</item>
-                    <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Name</item>
                     <item name="sortOrder" xsi:type="number">30</item>
                 </item>
@@ -274,7 +270,6 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">text</item>
-                    <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">SKU</item>
                     <item name="sortOrder" xsi:type="number">60</item>
                 </item>
@@ -285,7 +280,6 @@
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">textRange</item>
                     <item name="add_field" xsi:type="boolean">true</item>
-                    <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Price</item>
                     <item name="sortOrder" xsi:type="number">70</item>
                 </item>
@@ -329,15 +323,13 @@
                 </item>
             </argument>
         </column>
-        <column name="actions" class="Magento\Catalog\Ui\Component\Listing\Columns\ProductActions">
+        <actionsColumn name="actions" class="Magento\Catalog\Ui\Component\Listing\Columns\ProductActions">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/actions</item>
+                    <item name="indexField" xsi:type="string">entity_id</item>
                     <item name="sortOrder" xsi:type="number">200</item>
-                    <item name="dataType" xsi:type="string">actions</item>
-                    <item name="label" xsi:type="string" translate="true">Action</item>
                 </item>
             </argument>
-        </column>
+        </actionsColumn>
     </columns>
 </listing>

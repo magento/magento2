@@ -53,6 +53,9 @@
             <xs:element type="bookmark" name="bookmark"/>
             <xs:element type="exportButton" name="exportButton"/>
             <xs:element type="action" name="action"/>
+            <xs:element name="component" type="component" />
+            <xs:element name="actionsColumn" type="actionsColumn" />
+            <xs:element name="selectionsColumn" type="selectionsColumn" />
         </xs:all>
     </xs:complexType>
     <!-- Custom configuration -->

@@ -54,7 +54,7 @@
                 </item>
             </argument>
         </bookmark>
-        <container name="columns_controls">
+        <component name="columns_controls">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="columnsData" xsi:type="array">
@@ -64,7 +64,7 @@
                     <item name="displayArea" xsi:type="string">dataGridActions</item>
                 </item>
             </argument>
-        </container>
+        </component>
         <filterSearch name="fulltext">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -186,7 +186,6 @@
                     <item name="indexField" xsi:type="string">block_id</item>
                     <item name="clientConfig" xsi:type="array">
                         <item name="saveUrl" xsi:type="string">cms/block/inlineEdit</item>
-                        <item name="validateUrl" xsi:type="string">/path/to</item>
                         <item name="validateBeforeSave" xsi:type="boolean">false</item>
                     </item>
                 </item>
@@ -207,19 +206,17 @@
                 </item>
             </item>
         </argument>
-        <column name="ids" class="Magento\Ui\Component\MassAction\Columns\Column">
+        <selectionsColumn name="ids">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/multiselect</item>
                     <item name="indexField" xsi:type="string">block_id</item>
                 </item>
             </argument>
-        </column>
+        </selectionsColumn>
         <column name="block_id">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">textRange</item>
-                    <item name="dataType" xsi:type="string">text</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">ID</item>
                 </item>
@@ -235,7 +232,6 @@
                         </item>
                     </item>
                     <item name="filter" xsi:type="string">text</item>
-                    <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Title</item>
                 </item>
             </argument>
@@ -251,7 +247,6 @@
                         </item>
                     </item>
                     <item name="filter" xsi:type="string">text</item>
-                    <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Identifier</item>
                 </item>
             </argument>
@@ -261,7 +256,6 @@
                 <item name="config" xsi:type="array">
                     <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
                     <item name="sortable" xsi:type="boolean">false</item>
-                    <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Store View</item>
                 </item>
             </argument>
@@ -307,15 +301,12 @@
                 </item>
             </argument>
         </column>
-        <column name="actions" class="Magento\Cms\Ui\Component\Listing\Column\BlockActions">
+        <actionsColumn name="actions" class="Magento\Cms\Ui\Component\Listing\Column\BlockActions">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/actions</item>
-                    <item name="dataType" xsi:type="string">actions</item>
                     <item name="indexField" xsi:type="string">block_id</item>
-                    <item name="label" xsi:type="string" translate="true">Action</item>
                 </item>
             </argument>
-        </column>
+        </actionsColumn>
     </columns>
 </listing>

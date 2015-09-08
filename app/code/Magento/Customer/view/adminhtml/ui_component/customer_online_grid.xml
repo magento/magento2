@@ -46,7 +46,7 @@
                 </item>
             </argument>
         </bookmark>
-        <container name="columns_controls">
+        <component name="columns_controls">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="columnsData" xsi:type="array">
@@ -56,7 +56,7 @@
                     <item name="displayArea" xsi:type="string">dataGridActions</item>
                 </item>
             </argument>
-        </container>
+        </component>
         <filters name="listing_filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -116,14 +116,6 @@
                     <item name="namespace" xsi:type="string">current</item>
                 </item>
                 <item name="childDefaults" xsi:type="array">
-                    <item name="fieldAction" xsi:type="array">
-                        <item name="provider" xsi:type="string">customer_online_grid.customer_online_grid.customer_online_columns.actions</item>
-                        <item name="target" xsi:type="string">applyAction</item>
-                        <item name="params" xsi:type="array">
-                            <item name="0" xsi:type="string">view</item>
-                            <item name="1" xsi:type="string">${ $.$data.rowIndex }</item>
-                        </item>
-                    </item>
                     <item name="storageConfig" xsi:type="array">
                         <item name="provider" xsi:type="string">customer_online_grid.customer_online_grid.listing_top.bookmarks</item>
                         <item name="root" xsi:type="string">columns.${ $.index }</item>
@@ -136,7 +128,6 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">textRange</item>
-                    <item name="dataType" xsi:type="string">text</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">ID</item>
                 </item>
@@ -146,7 +137,6 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">text</item>
-                    <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">First Name</item>
                 </item>
             </argument>
@@ -155,7 +145,6 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">text</item>
-                    <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Last Name</item>
                 </item>
             </argument>
@@ -164,7 +153,6 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">text</item>
-                    <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Email</item>
                 </item>
             </argument>
@@ -172,7 +160,6 @@
         <column name="remote_addr">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">IP Address</item>
                 </item>
             </argument>
@@ -194,7 +181,7 @@
                 </item>
             </argument>
         </column>
-        <column name="visitor_type" class="Magento\Customer\Ui\Component\Listing\Column\Online\Type">
+        <column name="visitor_type">
             <argument name="data" xsi:type="array">
                 <item name="options" xsi:type="object">Magento\Customer\Ui\Component\Listing\Column\Online\Type\Options</item>
                 <item name="config" xsi:type="array">
@@ -208,7 +195,6 @@
         <column name="last_url">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Last URL</item>
                 </item>
             </argument>

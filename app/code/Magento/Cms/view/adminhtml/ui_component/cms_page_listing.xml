@@ -54,7 +54,7 @@
                 </item>
             </argument>
         </bookmark>
-        <container name="columns_controls">
+        <component name="columns_controls">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="columnsData" xsi:type="array">
@@ -64,7 +64,7 @@
                     <item name="displayArea" xsi:type="string">dataGridActions</item>
                 </item>
             </argument>
-        </container>
+        </component>
         <filterSearch name="fulltext">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -225,19 +225,17 @@
                 </item>
             </item>
         </argument>
-        <column name="ids" class="Magento\Ui\Component\MassAction\Columns\Column">
+        <selectionsColumn name="ids">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/multiselect</item>
                     <item name="indexField" xsi:type="string">page_id</item>
                 </item>
             </argument>
-        </column>
+        </selectionsColumn>
         <column name="page_id">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">textRange</item>
-                    <item name="dataType" xsi:type="string">text</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">ID</item>
                 </item>
@@ -253,7 +251,6 @@
                             <item name="required-entry" xsi:type="boolean">true</item>
                         </item>
                     </item>
-                    <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Title</item>
                 </item>
             </argument>
@@ -268,7 +265,6 @@
                             <item name="validate-identifier" xsi:type="boolean">true</item>
                         </item>
                     </item>
-                    <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">URL Key</item>
                 </item>
             </argument>
@@ -290,7 +286,6 @@
                 <item name="config" xsi:type="array">
                     <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
                     <item name="sortable" xsi:type="boolean">false</item>
-                    <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Store View</item>
                 </item>
             </argument>
@@ -384,7 +379,6 @@
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">text</item>
                     <item name="editor" xsi:type="string">text</item>
-                    <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Meta Keywords</item>
                     <item name="visible" xsi:type="boolean">false</item>
                 </item>
@@ -395,21 +389,17 @@
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">text</item>
                     <item name="editor" xsi:type="string">text</item>
-                    <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Meta Description</item>
                     <item name="visible" xsi:type="boolean">false</item>
                 </item>
             </argument>
         </column>
-        <column name="actions" class="Magento\Cms\Ui\Component\Listing\Column\PageActions">
+        <actionsColumn name="actions" class="Magento\Cms\Ui\Component\Listing\Column\PageActions">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/actions</item>
-                    <item name="dataType" xsi:type="string">actions</item>
                     <item name="indexField" xsi:type="string">page_id</item>
-                    <item name="label" xsi:type="string" translate="true">Action</item>
                 </item>
             </argument>
-        </column>
+        </actionsColumn>
     </columns>
 </listing>
