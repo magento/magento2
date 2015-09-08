@@ -31,7 +31,7 @@
     .admin__field-tooltip-action {
         margin-left: 20px;
         display: inline-block;
-        .icon-font(
+        .lib-icon-font(
             @icon-help__content,
             @icons-admin__font-name,
             @_icon-font-size: 2.2rem,
@@ -50,7 +50,7 @@
         right: -70px;
         &:after,
         &:before {
-            .arrow(
+            .lib-arrow(
             @_position: down,
             @_size: 16px,
             @_color: @field-tooltip-content__border-color
@@ -72,7 +72,8 @@
 
 .abs-admin__field-tooltip-content {
     @_shadow: 0 2px 8px 0 rgba(0, 0, 0, .3);
-    .css(box-shadow, @_shadow);
+
+    .lib-css(box-shadow, @_shadow);
     background: @field-tooltip-content__background-color;
     border-radius: 1px;
     border: 1px solid @field-tooltip-content__border-color;

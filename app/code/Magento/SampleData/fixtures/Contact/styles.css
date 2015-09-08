@@ -1,0 +1,5 @@
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+.contact-index-index .fieldset{margin-bottom:20px}.contact-index-index .fieldset .legend{padding-bottom:0}.contact-info-number{display:block;font-size:36px;font-size:3.6rem;line-height:36px;font-weight:300}@media only screen and (max-width:767px){.contact-info-number{font-weight:300;margin-bottom:10px}}@media all and (min-width:768px),print{._rwd_width{min-width:0 !important;max-width:auto !important}._rwd_width_float{width:100% !important;float:none !important}.contact-index-index .fieldset .legend{border:none}.contact-index-index .column.main .widget.static.block{float:left;width:70%}.contact-info-number{margin-bottom:15px}.column:not(.sidebar-main) .form.contact,.column:not(.sidebar-additional) .form.contact{width:27%;float:right}}

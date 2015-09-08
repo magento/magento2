@@ -272,6 +272,7 @@ class Installer
         }
         $script[] = ['Installing database schema:', 'installSchema', []];
         $script[] = ['Installing user configuration...', 'installUserConfig', [$request]];
+        $script[] = ['Enabling caches:', 'enableCaches', []];
         $script[] = ['Installing data...', 'installDataFixtures', []];
         if (!empty($request[InstallCommand::INPUT_KEY_SALES_ORDER_INCREMENT_PREFIX])) {
             $script[] = [
@@ -281,10 +282,7 @@ class Installer
             ];
         }
         $script[] = ['Installing admin user...', 'installAdminUser', [$request]];
-        $script[] = ['Enabling caches:', 'enableCaches', []];
-        if (!empty($request[InstallCommand::INPUT_KEY_USE_SAMPLE_DATA]) && $this->sampleData->isDeployed()) {
-            $script[] = ['Installing sample data:', 'installSampleData', [$request]];
-        }
+        $script[] = ['Enabling caches:', 'cleanCaches', []];
         $script[] = ['Disabling Maintenance Mode:', 'setMaintenanceMode', [0]];
         $script[] = ['Post installation file permissions check...', 'checkApplicationFilePermissions', []];
 
@@ -741,6 +739,9 @@ class Installer
         $moduleNames = $this->moduleList->getNames();
         $moduleContextList = $this->generateListOfModuleContext($resource, $verType);
         foreach ($moduleNames as $moduleName) {
+//            if ($moduleName !== 'Magento_CatalogSampleData') {
+//                continue;
+//            }
             $this->log->log("Module '{$moduleName}':");
             $configVer = $this->moduleList->getOne($moduleName)['setup_version'];
             $currentVersion = $moduleContextList[$moduleName]->getVersion();
@@ -782,6 +783,7 @@ class Installer
         if ($type === 'schema') {
             $this->log->log('Schema post-updates:');
             foreach ($moduleNames as $moduleName) {
+//                continue;
                 $this->log->log("Module '{$moduleName}':");
                 $modulePostUpdater = $this->getSchemaDataHandler($moduleName, 'schema-recurring');
                 if ($modulePostUpdater) {
@@ -958,7 +960,7 @@ class Installer
     }
 
     /**
-     * Enables caches after installing application
+     * Enables caches
      *
      * @return void
      *
@@ -969,11 +971,24 @@ class Installer
         /** @var \Magento\Framework\App\Cache\Manager $cacheManager */
         $cacheManager = $this->objectManagerProvider->get()->create('Magento\Framework\App\Cache\Manager');
         $types = $cacheManager->getAvailableTypes();
-        $enabledTypes = $cacheManager->setEnabled($types, true);
-        $cacheManager->clean($enabledTypes);
-
+        $cacheManager->setEnabled($types, true);
         $this->log->log('Current status:');
         $this->log->log(print_r($cacheManager->getStatus(), true));
+    }
+
+    /**
+     * Clean caches after installing application
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
+     */
+    private function cleanCaches()
+    {
+        /** @var \Magento\Framework\App\Cache\Manager $cacheManager */
+        $cacheManager = $this->objectManagerProvider->get()->get('Magento\Framework\App\Cache\Manager');
+        $types = $cacheManager->getAvailableTypes();
+        $cacheManager->clean($types);
     }
 
     /**
