@@ -38,7 +38,7 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param int $attributeId
      * @return array
      */
-    public function loadProductGalleryByAttributeId(Product $product, $attributeId)
+    public function loadProductGalleryByAttributeId($product, $attributeId)
     {
         $select = $this->createBaseLoadSelect($product->getId(), $product->getStoreId(), $attributeId);
         $result = $this->getConnection()->fetchAll($select);
