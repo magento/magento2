@@ -24,6 +24,9 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\DeploymentConfig\Reader */
     protected $configReaderMock;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\RequestInterface */
+    protected $requestMock;
+
     /**
      * Set up all mocks and data for test
      */
@@ -33,14 +36,19 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
         $this->socketAdapterMock = $this->getMock('\Zend\Http\Client\Adapter\Socket', [], [], '', false );
         $this->configReaderMock = $this->getMock('\Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false);
         $this->loggerMock = $this->getMock('Magento\Framework\Cache\InvalidateLogger', [], [], '', false);
+        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->socketAdapterMock->expects($this->once())
             ->method('setOptions')
             ->with(['timeout' => 10]);
+        $this->requestMock->expects($this->any())
+            ->method('getHttpHost')
+            ->willReturn('127.0.0.1');
         $this->model = new \Magento\CacheInvalidate\Model\PurgeCache(
             $this->uriMock,
             $this->socketAdapterMock,
             $this->loggerMock,
-            $this->configReaderMock
+            $this->configReaderMock,
+            $this->requestMock
         );
     }
 
