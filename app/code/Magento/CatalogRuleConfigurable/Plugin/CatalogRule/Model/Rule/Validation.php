@@ -25,20 +25,20 @@ class Validation
     }
 
     /**
-     * @param \Magento\CatalogRule\Model\Rule $subject
+     * @param \Magento\CatalogRule\Model\Rule $rule
      * @param \Closure $proceed
      * @param \Magento\Framework\DataObject|\Magento\Catalog\Model\Product $product
      * @return bool
      */
     public function aroundValidate(
-        \Magento\CatalogRule\Model\Rule $subject,
+        \Magento\CatalogRule\Model\Rule $rule,
         \Closure $proceed,
         \Magento\Framework\DataObject $product
     ) {
         $validateResult = $proceed($product);
         if (!$validateResult && ($configurableProducts = $this->configurable->getParentIdsByChild($product->getId()))) {
             foreach ($configurableProducts as $configurableProductId) {
-                $validateResult = $subject->getConditions()->validateByEntityId($configurableProductId);
+                $validateResult = $rule->getConditions()->validateByEntityId($configurableProductId);
                 // If any of configurable product is valid for current rule, then their sub-product must be valid too
                 if ($validateResult) {
                     break;
