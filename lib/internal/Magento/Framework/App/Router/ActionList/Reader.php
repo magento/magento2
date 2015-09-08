@@ -6,17 +6,19 @@
  */
 namespace Magento\Framework\App\Router\ActionList;
 
+use Magento\Framework\Module\Dir\Reader as ModuleReader;
+
 class Reader
 {
     /**
-     * @var \Magento\Framework\Module\Dir\Reader
+     * @var ModuleReader
      */
     protected $moduleReader;
 
     /**
-     * @param \Magento\Framework\Module\Dir\Reader $moduleReader
+     * @param ModuleReader $moduleReader
      */
-    public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
+    public function __construct(ModuleReader $moduleReader)
     {
         $this->moduleReader = $moduleReader;
     }
@@ -29,11 +31,6 @@ class Reader
     public function read()
     {
         $actionFiles = $this->moduleReader->getActionFiles();
-        $actions = [];
-        foreach ($actionFiles as $actionFile) {
-            $action = str_replace('/', '\\', substr($actionFile, 0, -4));
-            $actions[strtolower($action)] = $action;
-        }
-        return $actions;
+        return $actionFiles;
     }
 }

@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Module\Dir;
 
-use Magento\Framework\Module\Dir as ModuleDir;
+use Magento\Framework\Module\ModuleDir;
 use Magento\Framework\Module\ModuleListInterface;
 
 class ReverseResolver

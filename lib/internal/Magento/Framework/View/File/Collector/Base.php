@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\View\File\Collector;
 
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Module\Dir\Search;
 use Magento\Framework\View\Design\ThemeInterface;
@@ -23,6 +25,13 @@ class Base extends AbstractCollector
     protected $dirSearch;
 
     /**
+     * Module registry
+     *
+     * @var ComponentRegistrarInterface
+     */
+    private $componentRegistrar;
+
+    /**
      * Constructor
      *
      * @param Search $dirSearch
@@ -30,15 +39,18 @@ class Base extends AbstractCollector
      * @param FileFactory $fileFactory
      * @param PathPatternHelper $pathPatternHelper
      * @param string $subDir
+     * @param ComponentRegistrarInterface $componentRegistrar
      */
     public function __construct(
         Search $dirSearch,
         Filesystem $filesystem,
         FileFactory $fileFactory,
         PathPatternHelper $pathPatternHelper,
-        $subDir = ''
+        $subDir = '',
+        ComponentRegistrarInterface $componentRegistrar
     ) {
         $this->dirSearch = $dirSearch;
+        $this->componentRegistrar = $componentRegistrar;
         parent::__construct($filesystem, $fileFactory, $pathPatternHelper, $subDir);
     }
 
@@ -58,10 +70,9 @@ class Base extends AbstractCollector
         $pattern = "#(?<namespace>[^/]+)/(?<module>[^/]+)/view/base/{$this->subDir}" . $filePathPtn . "$#i";
         foreach ($sharedFiles as $file) {
             $filename = $this->directory->getAbsolutePath($file);
-            if (!preg_match($pattern, $filename, $matches)) {
-                continue;
-            }
-            $moduleFull = "{$matches['namespace']}_{$matches['module']}";
+            $modulePath = preg_replace('/\/view\/base\/.*/', "", $filename);
+            $paths = $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE);
+            $moduleFull = array_search($modulePath, $paths);
             $result[] = $this->fileFactory->create($filename, $moduleFull, null, true);
         }
         $area = $theme->getData('area');
@@ -69,10 +80,9 @@ class Base extends AbstractCollector
         $pattern = "#(?<namespace>[^/]+)/(?<module>[^/]+)/view/{$area}/{$this->subDir}" . $filePathPtn . "$#i";
         foreach ($themeFiles as $file) {
             $filename = $this->directory->getAbsolutePath($file);
-            if (!preg_match($pattern, $filename, $matches)) {
-                continue;
-            }
-            $moduleFull = "{$matches['namespace']}_{$matches['module']}";
+            $modulePath = preg_replace('/\/view\/.*/', "", $filename);
+            $paths = $this->componentRegistrar->getPaths(ComponentRegistrar::THEME);
+            $moduleFull = array_search($modulePath, $paths);
             $result[] = $this->fileFactory->create($filename, $moduleFull);
         }
         return $result;
