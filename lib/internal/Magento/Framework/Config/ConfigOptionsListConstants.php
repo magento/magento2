@@ -22,7 +22,7 @@ class ConfigOptionsListConstants
     const CONFIG_PATH_DB_CONNECTIONS = 'db/connection';
     const CONFIG_PATH_DB_PREFIX = 'db/table_prefix';
     const CONFIG_PATH_X_FRAME_OPT = 'x-frame-options';
-    const CONFIG_PATH_CACHE_HOSTS = 'http-cache_hosts';
+    const CONFIG_PATH_CACHE_HOSTS = 'http_cache_hosts';
     /**#@-*/
 
     /**#@+
