@@ -78,6 +78,7 @@ class Config
      * @param Filesystem $filesystem
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
+     * @param \Magento\Framework\Module\Dir\Reader $reader
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,

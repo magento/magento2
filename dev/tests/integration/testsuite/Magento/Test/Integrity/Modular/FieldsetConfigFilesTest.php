@@ -7,6 +7,8 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
+use Magento\Framework\Component\ComponentRegistrar;
+
 class FieldsetConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractConfigFiles
 {
     /**
@@ -28,7 +30,7 @@ class FieldsetConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractCo
      */
     protected function _getConfigFilePathGlob()
     {
-        return '/*/*/etc/fieldset.xml';
+        return 'etc/fieldset.xml';
     }
 
     /**
@@ -38,6 +40,7 @@ class FieldsetConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractCo
      */
     protected function _getXsdPath()
     {
-        return '/../../lib/internal/Magento/Framework/DataObject/etc/fieldset_file.xsd';
+        return $this->componentRegistrar->getPath(ComponentRegistrar::LIBRARY, 'magento/framework') .
+            '/DataObject/etc/fieldset_file.xsd';
     }
 }

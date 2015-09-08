@@ -22,11 +22,10 @@ class Populator
      */
     public static function populateMappings(AutoloaderInterface $autoloader, DirectoryList $dirList)
     {
-        $modulesDir = $dirList->getPath(DirectoryList::MODULES);
         $generationDir = $dirList->getPath(DirectoryList::GENERATION);
         $frameworkDir = $dirList->getPath(DirectoryList::LIB_INTERNAL);
 
-        $autoloader->addPsr4('Magento\\', [$modulesDir . '/Magento/', $generationDir . '/Magento/'], true);
+        $autoloader->addPsr4('Magento\\', [$generationDir . '/Magento/'], true);
 
         $autoloader->addPsr0('Apache_', $frameworkDir, true);
         $autoloader->addPsr0('Cm_', $frameworkDir, true);
@@ -41,6 +40,6 @@ class Populator
         FileResolver::addIncludePath($generationDir);
 
         /** Required to autoload custom classes */
-        $autoloader->addPsr0('', [$modulesDir, $generationDir]);
+        $autoloader->addPsr0('', [$generationDir]);
     }
 }

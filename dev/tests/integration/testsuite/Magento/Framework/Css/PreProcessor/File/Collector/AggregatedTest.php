@@ -10,6 +10,7 @@ namespace Magento\Framework\Css\PreProcessor\File\Collector;
 
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
 
 class AggregatedTest extends \PHPUnit_Framework_TestCase
 {
@@ -49,9 +50,6 @@ class AggregatedTest extends \PHPUnit_Framework_TestCase
                     [
                         'root' => BP,
                         'config' => [
-                            DirectoryList::MODULES => [
-                                DirectoryList::PATH => dirname(dirname(__DIR__)) . '/_files/code',
-                            ],
                             DirectoryList::THEMES => [
                                 DirectoryList::PATH => dirname(dirname(__DIR__)) . '/_files/design',
                             ],
@@ -59,6 +57,18 @@ class AggregatedTest extends \PHPUnit_Framework_TestCase
                     ]
                 )
             ]
+        );
+
+        ComponentRegistrar::register(
+            ComponentRegistrar::MODULE,
+            'Magento_Other',
+            dirname(dirname(__DIR__)) . '/_files/code/Magento/Other'
+        );
+
+        ComponentRegistrar::register(
+            ComponentRegistrar::MODULE,
+            'Magento_Third',
+            dirname(dirname(__DIR__)) . '/_files/code/Magento/Third'
         );
 
         /** @var \Magento\Framework\View\File\Collector\Base $sourceBase */

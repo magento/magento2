@@ -73,6 +73,7 @@ class Validator
      *
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfigInterface
+     * @param ComponentRegistrar $componentRegistrar
      * @param string|null $scope
      */
     public function __construct(

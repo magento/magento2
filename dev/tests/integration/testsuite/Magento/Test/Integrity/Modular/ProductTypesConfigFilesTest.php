@@ -19,11 +19,13 @@ class ProductTypesConfigFilesTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $filesystem \Magento\Framework\Filesystem */
         $filesystem = $objectManager->get('Magento\Framework\Filesystem');
-        $modulesDirectory = $filesystem->getDirectoryRead(DirectoryList::MODULES);
+        $modulesDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
+        /** @var $moduleDirSearch \Magento\Framework\Module\Dir\Search */
+        $moduleDirSearch = $objectManager->get('Magento\Framework\Module\Dir\Search');
         $fileIteratorFactory = $objectManager->get('Magento\Framework\Config\FileIteratorFactory');
         $xmlFiles = $fileIteratorFactory->create(
             $modulesDirectory,
-            $modulesDirectory->search('/*/*/etc/{*/product_types.xml,product_types.xml}')
+            $moduleDirSearch->collectFiles('etc/{*/product_types.xml,product_types.xml}')
         );
 
         $fileResolverMock = $this->getMock('Magento\Framework\Config\FileResolverInterface');

@@ -5,6 +5,7 @@
  */
 
 namespace Magento\Framework\App\Utility;
+
 use Magento\Framework\Component\ComponentRegistrar;
 
 /**
@@ -93,10 +94,15 @@ class Files
      */
     public function __construct(ComponentRegistrar $componentRegistrar, $pathToSource)
     {
-        $this->ComponentRegistrar = $componentRegistrar;
+        $this->componentRegistrar = $componentRegistrar;
         $this->_path = $pathToSource;
     }
 
+    /**
+     * Get test directories in modules
+     *
+     * @return array
+     */
     private function getModuleTestDirs()
     {
         $exclude = [];
@@ -106,6 +112,11 @@ class Files
         return $exclude;
     }
 
+    /**
+     * Get module directories
+     *
+     * @return array
+     */
     private function getModuleDirs()
     {
         $moduleDirs = [];
@@ -268,7 +279,8 @@ class Files
             $configXmlPaths = [];
             foreach ($this->getModuleDirs() as $moduleDir) {
                 $configXmlPaths[] = $moduleDir . '/etc/config.xml';
-                $configXmlPaths[] = $moduleDir . '/etc/config.*.xml'; // Module DB-specific configs, e.g. config.mysql4.xml
+                // Module DB-specific configs, e.g. config.mysql4.xml
+                $configXmlPaths[] = $moduleDir . '/etc/config.*.xml';
             }
             $globPaths = ['app/etc/config.xml', 'app/etc/*/config.xml'];
             $globPaths = array_merge($globPaths, $configXmlPaths);
@@ -406,37 +418,50 @@ class Files
         $cacheKey = md5($this->_path . '|' . $location . '|' . implode('|', $params));
 
         if (!isset(self::$_cache[__METHOD__][$cacheKey])) {
-            $files = [];
-            $area = $params['area'];
-            $namespace = $params['namespace'];
-            $module = $params['module'];
-            if ($params['include_code']) {
-                $locationPaths = [];
-                foreach ($this->getModuleDirs() as $moduleDir) {
-                    $locationPaths[] = $moduleDir . "/view{$area}/{$location}";
-                }
-                $this->_accumulateFilesByPatterns(
-                    $locationPaths,
-                    '*.xml',
-                    $files,
-                    $params['with_metainfo'] ? '_parseModuleLayout' : false
-                );
-            }
-            if ($params['include_design']) {
-                $this->_accumulateFilesByPatterns(
-                    ["{$this->_path}/app/design/{$area}/{$params['theme_path']}/{$namespace}_{$module}/{$location}"],
-                    '*.xml',
-                    $files,
-                    $params['with_metainfo'] ? '_parseThemeLayout' : false
-                );
-            }
-            self::$_cache[__METHOD__][$cacheKey] = $files;
+            $this->populateLayoutXmlCache($params, $location, $cacheKey);
         }
 
         if ($asDataSet) {
             return self::composeDataSets(self::$_cache[__METHOD__][$cacheKey]);
         }
         return self::$_cache[__METHOD__][$cacheKey];
+    }
+
+    /**
+     * Helper method for getLayoutXmlFiles() to find the layout xml file and cache it
+     *
+     * @param $params
+     * @param $location
+     * @param $cacheKey
+     * @return void
+     */
+    private function populateLayoutXmlCache($params, $location, $cacheKey)
+    {
+        $files = [];
+        $area = $params['area'];
+        $namespace = $params['namespace'];
+        $module = $params['module'];
+        if ($params['include_code']) {
+            $locationPaths = [];
+            foreach ($this->getModuleDirs() as $moduleDir) {
+                $locationPaths[] = $moduleDir . "/view/{$area}/{$location}";
+            }
+            $this->_accumulateFilesByPatterns(
+                $locationPaths,
+                '*.xml',
+                $files,
+                $params['with_metainfo'] ? '_parseModuleLayout' : false
+            );
+        }
+        if ($params['include_design']) {
+            $this->_accumulateFilesByPatterns(
+                ["{$this->_path}/app/design/{$area}/{$params['theme_path']}/{$namespace}_{$module}/{$location}"],
+                '*.xml',
+                $files,
+                $params['with_metainfo'] ? '_parseThemeLayout' : false
+            );
+        }
+        self::$_cache[__METHOD__][$cacheKey] = $files;
     }
 
     /**
@@ -448,13 +473,13 @@ class Files
      */
     protected function _parseModuleLayout($file, $path)
     {
-        foreach ($this->ComponentRegistrar->getPaths() as $moduleName => $modulePath) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
             $modulePath = str_replace(BP . '/', '', $modulePath);
             if (preg_match(
-                    '/^' . preg_quote("{$path}/{$modulePath}/", '/') . 'view\/([a-z]+)\/layout\/(.+)$/i',
-                    $file,
-                    $matches
-                ) === 1
+                '/^' . preg_quote("{$path}/{$modulePath}/", '/') . 'view\/([a-z]+)\/layout\/(.+)$/i',
+                $file,
+                $matches
+            ) === 1
             ) {
                 list(, $area, $filePath) = $matches;
                 return [$area, '', $moduleName, $filePath, $file];
@@ -717,10 +742,10 @@ class Files
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
             $modulePath = str_replace(BP . '/', '', $modulePath);
             if (preg_match(
-                    '/^' . preg_quote("{$path}/{$modulePath}/", '/') . 'view\/([a-z]+)\/web\/(.+)$/i',
-                    $file,
-                    $matches
-                ) === 1
+                '/^' . preg_quote("{$path}/{$modulePath}/", '/') . 'view\/([a-z]+)\/web\/(.+)$/i',
+                $file,
+                $matches
+            ) === 1
             ) {
                 list(, $area, $filePath) = $matches;
                 return [$area, '', '', $moduleName, $filePath, $file];
@@ -741,7 +766,7 @@ class Files
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
             $modulePath = str_replace(BP . '/', '', $modulePath);
             $appCode = preg_quote("{$path}/{$modulePath}/", '/');
-            if (preg_match('/^' . $appCode . 'view\/([a-z]+)\/web\/i18n\/([a-z_]+)\/(.+)$/i', $file, $matches) === 1 ) {
+            if (preg_match('/^' . $appCode . 'view\/([a-z]+)\/web\/i18n\/([a-z_]+)\/(.+)$/i', $file, $matches) === 1) {
                 list(, $area, $locale, $filePath) = $matches;
                 return [$area, '', $locale, $moduleName, $filePath, $file];
             }
@@ -896,10 +921,10 @@ class Files
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
             $modulePath = str_replace(BP . '/', '', $modulePath);
             if (preg_match(
-                    '/^' . preg_quote("{$path}/{$modulePath}/", '/') . 'view\/([a-z]+)\/templates\/(.+)$/i',
-                    $file,
-                    $matches
-                ) === 1
+                '/^' . preg_quote("{$path}/{$modulePath}/", '/') . 'view\/([a-z]+)\/templates\/(.+)$/i',
+                $file,
+                $matches
+            ) === 1
             ) {
                 list(, $area, $filePath) = $matches;
                 return [$area, '', $moduleName, $filePath, $file];
