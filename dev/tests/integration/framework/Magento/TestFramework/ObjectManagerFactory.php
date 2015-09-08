@@ -6,6 +6,7 @@
 namespace Magento\TestFramework;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\DriverPool;
 
 /**
@@ -89,24 +90,21 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
                     'default_setup' => ['type' => 'Magento\TestFramework\Db\ConnectionAdapter']
                 ]
             );
+            $diPreferences = [];
+            $diPreferencesPath = __DIR__ . '/../../../etc/di/preferences/';
+
+            $preferenceFiles = glob($diPreferencesPath . '*.php');
+
+            foreach ($preferenceFiles as $file) {
+                if (!is_readable($file)) {
+                    throw new LocalizedException(__("'%1' is not readable file.", $file));
+                }
+                $diPreferences = array_replace($diPreferences, include $file);
+            }
+
             $this->_primaryConfigData['preferences'] = array_replace(
                 $this->_primaryConfigData['preferences'],
-                [
-                    'Magento\Framework\Stdlib\CookieManagerInterface' => 'Magento\TestFramework\CookieManager',
-                    'Magento\Framework\ObjectManager\DynamicConfigInterface' =>
-                        '\Magento\TestFramework\ObjectManager\Configurator',
-                    'Magento\Framework\App\RequestInterface' => 'Magento\TestFramework\Request',
-                    'Magento\Framework\App\Request\Http' => 'Magento\TestFramework\Request',
-                    'Magento\Framework\App\ResponseInterface' => 'Magento\TestFramework\Response',
-                    'Magento\Framework\App\Response\Http' => 'Magento\TestFramework\Response',
-                    'Magento\Framework\Interception\PluginListInterface' =>
-                        'Magento\TestFramework\Interception\PluginList',
-                    'Magento\Framework\Interception\ObjectManager\Config' =>
-                        'Magento\TestFramework\ObjectManager\Config',
-                    'Magento\Framework\View\LayoutInterface' => 'Magento\TestFramework\View\Layout',
-                    'Magento\Framework\App\Resource\ConnectionAdapterInterface' =>
-                        'Magento\TestFramework\Db\ConnectionAdapter',
-                ]
+                $diPreferences
             );
         }
         return $this->_primaryConfigData;

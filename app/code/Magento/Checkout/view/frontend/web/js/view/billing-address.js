@@ -15,6 +15,7 @@ define(
         'Magento_Checkout/js/action/select-billing-address',
         'Magento_Checkout/js/checkout-data',
         'Magento_Checkout/js/model/checkout-data-resolver',
+        'Magento_Customer/js/customer-data',
         'mage/translate'
     ],
     function (
@@ -27,6 +28,7 @@ define(
         selectBillingAddress,
         checkoutData,
         checkoutDataResolver,
+        customerData,
         $t
     ) {
         'use strict';
@@ -38,7 +40,7 @@ define(
             },
             customerAddressId: null
             },
-            countryData = window.checkoutConfig.countryData;
+            countryData = customerData.get('directory-data');
 
         var addressOptions = addressList().filter(function(address) {
             return address.getType() == 'customer-address';
@@ -163,7 +165,7 @@ define(
             },
 
             getCountryName: function(countryId) {
-                return (countryData[countryId] != undefined) ? countryData[countryId].name : "";
+                return (countryData()[countryId] != undefined) ? countryData()[countryId].name : "";
             }
         });
     }

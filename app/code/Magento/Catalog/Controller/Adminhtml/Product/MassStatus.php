@@ -57,7 +57,7 @@ class MassStatus extends \Magento\Catalog\Controller\Adminhtml\Product
      */
     public function execute()
     {
-        $productIds = (array) $this->getRequest()->getParam('product');
+        $productIds = (array) $this->getRequest()->getParam('selected');
         $storeId = (int) $this->getRequest()->getParam('store', 0);
         $status = (int) $this->getRequest()->getParam('status');
 
