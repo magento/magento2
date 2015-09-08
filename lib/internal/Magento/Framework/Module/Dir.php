@@ -35,18 +35,16 @@ class Dir
      *
      * @var ComponentRegistrarInterface
      */
-    private $moduleRegistry;
+    private $componentRegistrar;
 
     /**
      * @param StringHelper $string
-     * @param ComponentRegistrarInterface $moduleRegistry
+     * @param ComponentRegistrarInterface $componentRegistrar
      */
-    public function __construct(
-        StringHelper $string,
-        ComponentRegistrarInterface $moduleRegistry
-    ) {
+    public function __construct(StringHelper $string, ComponentRegistrarInterface $componentRegistrar)
+    {
         $this->_string = $string;
-        $this->moduleRegistry = $moduleRegistry;
+        $this->componentRegistrar = $componentRegistrar;
     }
 
     /**
@@ -59,7 +57,7 @@ class Dir
      */
     public function getDir($moduleName, $type = '')
     {
-        $path = $this->moduleRegistry->getPath(ComponentRegistrar::MODULE, $moduleName);
+        $path = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
 
         if ($type) {
             if (!in_array($type, [

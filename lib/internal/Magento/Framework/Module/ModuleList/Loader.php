@@ -116,11 +116,9 @@ class Loader
     private function getModuleConfigs()
     {
         $modulePaths = $this->moduleRegistry->getPaths(ComponentRegistrar::MODULE);
-        if (null !== $modulePaths) {
-            foreach ($modulePaths as $modulePath) {
-                $filePath = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, "$modulePath/etc/module.xml");
-                yield [$filePath, $this->filesystemDriver->fileGetContents($filePath)];
-            }
+        foreach ($modulePaths as $modulePath) {
+            $filePath = str_replace(['\\', '/'], DIRECTORY_SEPARATOR, "$modulePath/etc/module.xml");
+            yield [$filePath, $this->filesystemDriver->fileGetContents($filePath)];
         }
     }
 
