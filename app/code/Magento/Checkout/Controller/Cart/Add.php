@@ -4,9 +4,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Checkout\Controller\Cart;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -55,7 +52,7 @@ class Add extends \Magento\Checkout\Controller\Cart
     /**
      * Initialize product instance from request data
      *
-     * @return \Magento\Catalog\Model\Product || false
+     * @return \Magento\Catalog\Model\Product|false
      */
     protected function _initProduct()
     {
@@ -117,9 +114,9 @@ class Add extends \Magento\Checkout\Controller\Cart
                 if (!$this->cart->getQuote()->getHasError()) {
                     $message = __(
                         'You added %1 to your shopping cart.',
-                        $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($product->getName())
+                        $product->getName()
                     );
-                    $this->messageManager->addSuccess($message);
+                    $this->messageManager->addSuccessMessage($message);
                 }
                 return $this->goBack(null, $product);
             }

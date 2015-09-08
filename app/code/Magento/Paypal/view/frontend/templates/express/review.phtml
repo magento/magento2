@@ -9,9 +9,6 @@
 /** @var $block \Magento\Paypal\Block\Express\Review */
 
 ?>
-<div class="page-title-wrapper">
-    <h1 class="page-title"><span class="base"><?php echo __('Review Order') ?></span></h1>
-</div>
 <div class="paypal-review view">
     <div class="block block-order-details-view">
         <div class="block-content">
@@ -77,7 +74,9 @@
             <div class="box box-order-billing-address">
                 <strong class="box-title"><span><?php echo __('Payment Method') ?></span></strong>
                 <div class="box-content">
-                    <?php echo $block->escapeHtml($block->getPaymentMethodTitle()) ?>
+                    <?php echo $block->escapeHtml($block->getPaymentMethodTitle()) ?><br>
+                    <?php echo $block->escapeHtml($block->getEmail()) ?> <br>
+                    <img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png" alt="<?php echo __('Buy now with PayPal') ?>"/>
                 </div>
             <?php if ($block->getEditUrl()): ?>
                 <div class="box-actions">
@@ -90,6 +89,10 @@
         </div>
     </div>
 
+    <div class="paypal-review-discount">
+        <?php echo $block->getChildHtml('paypal.additional.actions') ?>
+    </div>
+
     <div class="paypal-review-items">
         <div class="paypal-review-title">
             <strong><?php echo __('Items in Your Shopping Cart') ?></strong>
@@ -97,9 +100,7 @@
                class="action edit"><span><?php echo __('Edit Shopping Cart') ?></span></a>
         </div>
 
-        <div id="details-reload" class="table-wrapper order-items">
-            <?php echo $block->getChildHtml('details') ?>
-        </div>
+        <?php echo $block->getChildHtml('details') ?>
 
         <form method="post" id="order-review-form" action="<?php echo $block->getPlaceOrderUrl() ?>" class="form">
             <?php echo $block->getChildHtml('agreements'); ?>

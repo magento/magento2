@@ -28,6 +28,7 @@ class Subtotal extends \Magento\Checkout\Block\Total\DefaultTotal
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Tax\Model\Config $taxConfig
+     * @param array $layoutProcessors
      * @param array $data
      */
     public function __construct(
@@ -36,10 +37,11 @@ class Subtotal extends \Magento\Checkout\Block\Total\DefaultTotal
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Sales\Model\Config $salesConfig,
         \Magento\Tax\Model\Config $taxConfig,
+        array $layoutProcessors = [],
         array $data = []
     ) {
         $this->_taxConfig = $taxConfig;
-        parent::__construct($context, $customerSession, $checkoutSession, $salesConfig, $data);
+        parent::__construct($context, $customerSession, $checkoutSession, $salesConfig, $layoutProcessors, $data);
         $this->_isScopePrivate = true;
     }
 
