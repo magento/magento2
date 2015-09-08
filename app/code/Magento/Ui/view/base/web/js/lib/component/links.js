@@ -37,9 +37,9 @@ define([
         return typeof value !== 'undefined' && value != null;
     }
 
-    function updateValue(data, owner, value) {
-        var component = owner.component,
-            property = owner.property,
+    function updateValue(data, owner, target, value) {
+        var component = target.component,
+            property = target.property,
             linked = data.linked;
 
         if (data.mute) {
@@ -48,6 +48,10 @@ define([
 
         if (linked) {
             linked.mute = true;
+        }
+
+        if (owner.component !== target.component) {
+            value = utils.copy(value);
         }
 
         component.set(property, value);
@@ -129,7 +133,7 @@ define([
         owner = formated.owner;
         target = formated.target;
 
-        callback = updateValue.bind(null, data, target);
+        callback = updateValue.bind(null, data, owner, target);
 
         owner.component.on(owner.property, callback, target.component.name);
 
@@ -137,7 +141,7 @@ define([
             value = getValue(owner);
 
             if (notEmpty(value)) {
-                updateValue(data, target, value);
+                updateValue(data, owner, target, value);
             }
         }
     }
