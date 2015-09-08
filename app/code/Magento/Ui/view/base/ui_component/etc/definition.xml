@@ -119,6 +119,31 @@
             </item>
         </argument>
     </column>
+    <actionsColumn class="Magento\Ui\Component\Listing\Columns\Column">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/actions</item>
+                <item name="dataType" xsi:type="string">actions</item>
+                <item name="label" xsi:type="string" translate="true">Action</item>
+            </item>
+        </argument>
+    </actionsColumn>
+    <selectionsColumn class="Magento\Ui\Component\MassAction\Columns\Column">
+        <argument name="data" xsi:type="array">
+            <item name="state_prefix" xsi:type="string">columns</item>
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/multiselect</item>
+            </item>
+        </argument>
+    </selectionsColumn>
+
+    <component class="Magento\Ui\Component\Container">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">uiComponent</item>
+            </item>
+        </argument>
+    </component>
 
     <form class="Magento\Ui\Component\Form">
         <argument name="data" xsi:type="array">
