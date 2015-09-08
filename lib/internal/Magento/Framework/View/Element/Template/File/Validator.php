@@ -69,6 +69,13 @@ class Validator
     protected $_compiledDir;
 
     /**
+     * Root directory
+     *
+     * @var string
+     */
+    protected $_rootDir;
+
+    /**
      * Class constructor
      *
      * @param \Magento\Framework\Filesystem $filesystem
@@ -85,9 +92,11 @@ class Validator
         $this->_filesystem = $filesystem;
         $this->_isAllowSymlinks = $scopeConfigInterface->getValue(self::XML_PATH_TEMPLATE_ALLOW_SYMLINK, $scope);
         $this->_themesDir = $this->_filesystem->getDirectoryRead(DirectoryList::THEMES)->getAbsolutePath();
+        $this->_rootDir = $this->_filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath();
         $this->moduleDirs = $componentRegistrar->getPaths(ComponentRegistrar::MODULE);
         $this->_compiledDir = $this->_filesystem->getDirectoryRead(DirectoryList::TEMPLATE_MINIFICATION_DIR)
             ->getAbsolutePath();
+
     }
 
     /**
@@ -107,9 +116,10 @@ class Validator
         if (!isset($this->_templatesValidationResults[$filename])) {
             $this->_templatesValidationResults[$filename] =
                 ($this->isPathInDirectories($filename, $this->_compiledDir)
-                || $this->isPathInDirectories($filename, $this->moduleDirs)
-                || $this->isPathInDirectories($filename, $this->_themesDir)
-                || $this->_isAllowSymlinks)
+                    || $this->isPathInDirectories($filename, $this->moduleDirs)
+                    || $this->isPathInDirectories($filename, $this->_themesDir)
+                    || $this->isPathInDirectories($filename, $this->_rootDir)
+                    || $this->_isAllowSymlinks)
                 && $this->getRootDirectory()->isFile($this->getRootDirectory()->getRelativePath($filename));
         }
         return $this->_templatesValidationResults[$filename];

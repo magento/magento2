@@ -12,7 +12,7 @@ use Magento\Framework\Config\FileIterator;
 use Magento\Framework\Config\FileIteratorFactory;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
-use Magento\Framework\Module\Dir;
+use Magento\Framework\Module\ModuleDir;
 use Magento\Framework\Module\ModuleListInterface;
 
 class Reader
@@ -27,7 +27,7 @@ class Reader
     /**
      * Directory registry
      *
-     * @var Dir
+     * @var ModuleDir
      */
     protected $moduleDirs;
 
@@ -49,13 +49,13 @@ class Reader
     protected $fileIteratorFactory;
 
     /**
-     * @param Dir $moduleDirs
+     * @param ModuleDir $moduleDirs
      * @param ModuleListInterface $moduleList
      * @param Filesystem $filesystem
      * @param FileIteratorFactory $fileIteratorFactory
      */
     public function __construct(
-        Dir $moduleDirs,
+        ModuleDir $moduleDirs,
         ModuleListInterface $moduleList,
         Filesystem $filesystem,
         FileIteratorFactory $fileIteratorFactory
@@ -112,15 +112,18 @@ class Reader
     {
         $actions = [];
         foreach ($this->modulesList->getNames() as $moduleName) {
-            $actionDir = $this->getModuleDir('Controller', $moduleName);
+            $actionDir = $this->getModuleDir(ModuleDir::MODULE_CONTROLLER_DIR, $moduleName);
             if (!file_exists($actionDir)) {
                 continue;
             }
             $dirIterator = new \RecursiveDirectoryIterator($actionDir, \RecursiveDirectoryIterator::SKIP_DOTS);
             $recursiveIterator = new \RecursiveIteratorIterator($dirIterator, \RecursiveIteratorIterator::LEAVES_ONLY);
             /** @var \SplFileInfo $actionFile */
+            $namespace = str_replace('_', '\\', $moduleName);
             foreach ($recursiveIterator as $actionFile) {
-                $actions[] = $this->directoryRead->getRelativePath($actionFile->getPathname());
+                $actionName = str_replace('/', '\\', str_replace($actionDir, '', $actionFile->getPathname()));
+                $action = $namespace . "\\" . ModuleDir::MODULE_CONTROLLER_DIR . substr($actionName, 0, -4);
+                $actions[strtolower($action)] = $action;
             }
         }
         return $actions;
@@ -152,5 +155,22 @@ class Reader
     public function setModuleDir($moduleName, $type, $path)
     {
         $this->customModuleDirs[$moduleName][$type] = $path;
+    }
+
+    /**
+     * Search entries for given regex pattern
+     *
+     * @param string $pattern
+     * @return string[]
+     */
+    public function search($pattern)
+    {
+        $result = [];
+        foreach ($this->modulesList->getNames() as $moduleName) {
+            $path = $this->getModuleDir('', $moduleName);
+            $files = $this->directoryRead->search($pattern, $path);
+            $result = array_merge($result, $files);
+        }
+        return $result;
     }
 }
