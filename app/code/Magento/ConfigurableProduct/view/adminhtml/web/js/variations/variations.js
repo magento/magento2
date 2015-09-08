@@ -27,7 +27,6 @@ define([
             }
         },
         initialize: function () {
-            var $gridDialog;
             this._super();
 
             if (this.variations.length) {
