@@ -31,9 +31,9 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\Read
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Module\ModuleList
      */
-    private $dirRead;
+    private $moduleList;
 
     public function setup()
     {
@@ -48,10 +48,8 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->lists = $this->getMock('\Magento\Framework\Setup\Lists', [], [], '', false);
-        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->dirRead = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        $filesystem->expects($this->any())->method('getDirectoryRead')->willReturn($this->dirRead);
-        $this->controller = new CustomizeYourStore($filesystem, $this->lists, $objectManagerProvider);
+        $this->moduleList = $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false);
+        $this->controller = new CustomizeYourStore($this->moduleList, $this->lists, $objectManagerProvider);
     }
 
     /**
@@ -62,14 +60,14 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
     public function testIndexAction($expected)
     {
         if ($expected['isSampledataEnabled']) {
-            $this->dirRead->expects($this->once())->method('isExist')->willReturn(true);
+            $this->moduleList->expects($this->once())->method('has')->willReturn(true);
             $this->objectManager->expects($this->once())->method('get')->willReturn($this->sampleData);
             $this->sampleData->expects($this->once())->method('isInstalledSuccessfully')
                 ->willReturn($expected['isSampleDataInstalled']);
             $this->sampleData->expects($this->once())->method('isInstallationError')
                 ->willReturn($expected['isSampleDataErrorInstallation']);
         } else {
-            $this->dirRead->expects($this->once())->method('isExist')->willReturn(false);
+            $this->moduleList->expects($this->once())->method('has')->willReturn(false);
             $this->objectManager->expects($this->never())->method('get');
         }
         $this->lists->expects($this->once())->method('getTimezoneList')->willReturn($expected['timezone']);
