@@ -78,7 +78,7 @@ class ExchangeRate extends \Magento\Framework\Api\AbstractExtensibleObject imple
      * @inheritDoc
      */
     public function setExtensionAttributes(
-        \Magento\Directory\Api\Data\ExchangeRateInterface $extensionAttributes
+        \Magento\Directory\Api\Data\ExchangeRateExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
