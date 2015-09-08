@@ -90,10 +90,9 @@ class DiCompileCommand extends Command
     /**
      * Checks that application is installed and DI resources are cleared
      *
-     * @param OutputInterface $output
-     * @return bool
+     * @return string[]
      */
-    private function canRun(OutputInterface $output)
+    private function checkEnvironment()
     {
         $messages = [];
         if (!$this->deploymentConfig->isAvailable()) {
@@ -109,16 +108,10 @@ class DiCompileCommand extends Command
          */
         $path = $this->directoryList->getPath(DirectoryList::DI);
         if ($this->fileDriver->isExists($path)) {
-            $messages[] = "DI configuration must be cleared before running compiler. Please delete '$path''";
+            $messages[] = "DI configuration must be cleared before running compiler. Please delete '$path'.";
         }
-        if ($messages) {
-            foreach ($messages as $line) {
-                $output->writeln($line);
-            }
-            return false;
-        } else {
-            return true;
-        }
+
+        return $messages;
     }
 
     /**
@@ -126,7 +119,11 @@ class DiCompileCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$this->canRun($output)) {
+        $errors = $this->checkEnvironment();
+        if ($errors) {
+            foreach ($errors as $line) {
+                $output->writeln($line);
+            }
             return;
         }
 
