@@ -99,6 +99,13 @@ class DataGrid extends Grid
     protected $fullTextSearchButton = '.data-grid-search-control-wrap .action-submit';
 
     /**
+     * Selector for no records row.
+     *
+     * @var string
+     */
+    protected $noRecords = '.data-grid-tr-no-data';
+
+    /**
      * Clear all applied Filters.
      *
      * @return void
