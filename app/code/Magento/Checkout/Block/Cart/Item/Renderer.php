@@ -3,14 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Checkout\Block\Cart\Item;
 
 use Magento\Checkout\Block\Cart\Item\Renderer\Actions;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
 
@@ -23,7 +21,8 @@ use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
  * @method \Magento\Checkout\Block\Cart\Item\Renderer setDeleteUrl(string)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Renderer extends \Magento\Framework\View\Element\Template implements \Magento\Framework\DataObject\IdentityInterface
+class Renderer extends \Magento\Framework\View\Element\Template implements
+    \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var \Magento\Checkout\Model\Session
@@ -87,6 +86,11 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     public $moduleManager;
 
     /**
+     * @var InterpretationStrategyInterface
+     */
+    private $messageInterpretationStrategy;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Helper\Product\Configuration $productConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -95,7 +99,9 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param InterpretationStrategyInterface $messageInterpretationStrategy
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -106,6 +112,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
         \Magento\Framework\Message\ManagerInterface $messageManager,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Module\Manager $moduleManager,
+        InterpretationStrategyInterface $messageInterpretationStrategy,
         array $data = []
     ) {
         $this->priceCurrency = $priceCurrency;
@@ -117,6 +124,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
         $this->moduleManager = $moduleManager;
+        $this->messageInterpretationStrategy = $messageInterpretationStrategy;
     }
 
     /**
@@ -202,7 +210,6 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
                 }
             }
         }
-
         return false;
     }
 
@@ -213,7 +220,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
      */
     public function getProductUrl()
     {
-        if (!is_null($this->_productUrl)) {
+        if ($this->_productUrl !== null) {
             return $this->_productUrl;
         }
         if ($this->getItem()->getRedirectUrl()) {
@@ -315,7 +322,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
             $additionalMessages = $collection->getItems();
             foreach ($additionalMessages as $message) {
                 /* @var $message \Magento\Framework\Message\MessageInterface */
-                $messages[] = ['text' => $message->getText(), 'type' => $message->getType()];
+                $messages[] = [
+                    'text' => $this->messageInterpretationStrategy->interpret($message),
+                    'type' => $message->getType()
+                ];
             }
         }
         $this->messageManager->getMessages('quote_item' . $quoteItem->getId())->clear();
