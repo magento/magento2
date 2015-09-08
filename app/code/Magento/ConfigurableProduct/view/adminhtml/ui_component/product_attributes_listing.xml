@@ -40,11 +40,7 @@
         <bookmark name="bookmarks">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/bookmarks/bookmarks</item>
-                    <item name="displayArea" xsi:type="string">dataGridActions</item>
                     <item name="storageConfig" xsi:type="array">
-                        <item name="saveUrl" xsi:type="url" path="mui/bookmark/save"/>
-                        <item name="deleteUrl" xsi:type="url" path="mui/bookmark/delete"/>
                         <item name="namespace" xsi:type="string">product_attributes_listing</item>
                     </item>
                 </item>
@@ -68,8 +64,6 @@
                         <item name="applied" xsi:type="string">not-save-filter</item>
                     </item>
                     <item name="columnsProvider" xsi:type="string">product_attributes_listing.product_attributes_listing.product_attributes_columns</item>
-                    <item name="displayArea" xsi:type="string">dataGridFilters</item>
-                    <item name="dataScope" xsi:type="string">filters</item>
                     <item name="storageConfig" xsi:type="array">
                         <item name="provider" xsi:type="string">product_attributes_listing.product_attributes_listing.listing_top.bookmarks</item>
                         <item name="namespace" xsi:type="string">current.filters</item>
@@ -77,7 +71,7 @@
                     <item name="childDefaults" xsi:type="array">
                         <item name="provider" xsi:type="string">product_attributes_listing.product_attributes_listing.listing_top.listing_filters</item>
                         <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">product_attributes_listing.product_attributes_listing.listing_top.bookmarks:current.columns.${ $.index }.visible</item>
+                            <item name="visible" xsi:type="string">product_attributes_listing.product_attributes_listing.product_attributes_columns:${ $.index }.visible</item>
                         </item>
                     </item>
                 </item>
@@ -91,7 +85,6 @@
                         <item name="namespace" xsi:type="string">current.paging</item>
                     </item>
                     <item name="selectProvider" xsi:type="string">product_attributes_listing.product_attributes_listing.product_attributes_columns.ids</item>
-                    <item name="displayArea" xsi:type="string">bottom</item>
                     <item name="options" xsi:type="array">
                         <item name="20" xsi:type="array">
                             <item name="value" xsi:type="number">20</item>
