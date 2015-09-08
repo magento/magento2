@@ -356,6 +356,10 @@ abstract class Grid extends Block
         $rowTemplate = ($isStrict) ? $this->rowTemplateStrict : $this->rowTemplate;
         $rows = [];
         foreach ($filter as $value) {
+            if (strpos($value, '"') !== false) {
+                $rowTemplate = str_replace('"', '', $rowTemplate);
+                $value = $this->xpathEscape($value);
+            }
             $rows[] = sprintf($rowTemplate, $value);
         }
         $location = sprintf($this->rowPattern, implode(' and ', $rows));
@@ -452,5 +456,31 @@ abstract class Grid extends Block
     public function openFirstRow()
     {
         $this->_rootElement->find($this->firstRowSelector, Locator::SELECTOR_XPATH)->click();
+    }
+
+    /**
+     * Escape single and/or double quotes in XPath selector by concat()
+     *
+     * @param string $query
+     * @param string $defaultDelim [optional]
+     * @return string
+     */
+    protected function xpathEscape($query, $defaultDelim = '"')
+    {
+        if (strpos($query, $defaultDelim) === false) {
+            return $defaultDelim . $query . $defaultDelim;
+        }
+        preg_match_all("#(?:('+)|[^']+)#", $query, $matches);
+        list($parts, $apos) = $matches;
+        $delim = '';
+        foreach ($parts as $i => &$part) {
+            $delim = $apos[$i] ? '"' : "'";
+            $part = $delim . $part . $delim;
+        }
+        if (count($parts) == 1) {
+            $parts[] = $delim . $delim;
+        }
+
+        return 'concat(' . implode(',', $parts) . ')';
     }
 }

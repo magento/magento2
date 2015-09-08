@@ -16,7 +16,7 @@
                 <tr class="data-row"
                     data-bind="
                         css: {
-                            '_even-row': !($index() % 2)
+                            '_odd-row': !!($index() % 2)
                         },
                         foreach: {
                             data: $parent.elems,
