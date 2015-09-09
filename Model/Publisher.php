@@ -9,7 +9,7 @@ namespace Magento\MysqlMq\Model;
 use Magento\Framework\Amqp\Config\Data as AmqpConfig;
 use Magento\Framework\Amqp\PublisherInterface;
 use Magento\MysqlMq\Model\Message;
-use Magento\MysqlMq\Model\MessageFactory;
+use Magento\Framework\Amqp\MessageFactory;
 
 /**
  * MySQL publisher implementation for message queue.
@@ -43,19 +43,16 @@ class Publisher implements PublisherInterface
     public function publish($topicName, $data)
     {
         $queueNames = $this->amqpConfig->getQueuesForTopic($topicName);
-        foreach ($queueNames as $queueName) {
-            /** @var Message $message */
-            $message = $this->messageFactory->create(
-                [
-                    Message::KEY_BODY => $data,
-                    Message::KEY_TOPIC_NAME => $topicName,
-                    Message::KEY_QUEUE_NAME => $queueName,
-                    Message::KEY_STATUS => Message::STATUS_NEW
-                    // TODO: Verify that updated_at is set automatically on save
-                ]
-            );
-            // TODO: Consider saving all messages with a single request to DB for optimization
-            $message->save();
-        }
+        /** @var Message $message */
+        $message = $this->messageFactory->create(
+            [
+                Message::KEY_BODY => $data,
+                Message::KEY_TOPIC_NAME => $topicName,
+                // TODO: Verify that updated_at is set automatically on save
+            ]
+        );
+        // TODO: Consider saving all messages with a single request to DB for optimization
+        $message->save();
+        $message->getResource()->linkQueues($queueNames);
     }
 }

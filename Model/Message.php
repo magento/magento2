@@ -13,7 +13,6 @@ class Message extends \Magento\Framework\Model\AbstractModel
 {
     const KEY_BODY = 'body';
     const KEY_TOPIC_NAME = 'topic_name';
-    const KEY_QUEUE_NAME = 'queue_name';
     const KEY_STATUS = 'status';
     const KEY_UPDATED_AT = 'updated_at';
 
@@ -47,16 +46,6 @@ class Message extends \Magento\Framework\Model\AbstractModel
     public function getTopicName()
     {
         return $this->getData(self::KEY_TOPIC_NAME);
-    }
-
-    /**
-     * Get queue name.
-     *
-     * @return string
-     */
-    public function getQueueName()
-    {
-        return $this->getData(self::KEY_QUEUE_NAME);
     }
 
     /**
