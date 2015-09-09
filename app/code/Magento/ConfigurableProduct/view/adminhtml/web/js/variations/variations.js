@@ -20,10 +20,8 @@ define([
             productAttributes: [],
             rowIndexToEdit: false,
             productAttributesMap: null,
-            associatedProductsModal: null,
             modules: {
-                associatedProductsFilter: '${ $.associatedProductsFilter }',
-                associatedProductsProvider: '${ $.associatedProductsProvider }'
+                associatedProductGrid: '${ $.configurableProductGrid }'
             }
         },
         initialize: function () {
@@ -33,31 +31,23 @@ define([
                 this.render(this.variations, this.productAttributes);
             }
             this.initProductAttributesMap();
-
-            this.associatedProductsModal = $('#associated-products-container').modal({
-                title: $.mage.__('Select Associated Product'),
-                type: 'slide'
-            });
         },
 
         /**
          * Select different product in configurations section
-         * @param rowIndex
+         * @param newProduct
          */
-        selectProduct: function (rowIndex) {
-            var productToEdit = this.productMatrix.splice(this.rowIndexToEdit, 1)[0],
-                newProduct = this.associatedProductsProvider().data.items[rowIndex];
-
+        chooseDifferentProduct: function (newProduct) {
+            var productToEdit = this.productMatrix.splice(this.rowIndexToEdit, 1)[0];
             newProduct = _.extend(productToEdit, newProduct);
-            newProduct.productId = productToEdit.entity_id;
-            newProduct.productUrl = this.buildProductUrl(newProduct.entity_id);
+            newProduct.productId = productToEdit['entity_id'];
+            newProduct.productUrl = this.buildProductUrl(newProduct['entity_id']);
             newProduct.editable = false;
             newProduct.images = {
-                preview: newProduct.thumbnail_src
+                preview: newProduct['thumbnail_src']
             };
             this.productAttributesMap[this.getVariationKey(newProduct.options)] = newProduct.productId;
             this.productMatrix.splice(this.rowIndexToEdit, 0, newProduct);
-            this.associatedProductsModal.trigger('closeModal');
         },
         initObservable: function () {
             this._super().observe('actions opened attributes productMatrix');
@@ -144,21 +134,7 @@ define([
         showGrid: function (rowIndex) {
             var attributes = JSON.parse(this.productMatrix()[rowIndex].attribute);
             this.rowIndexToEdit = rowIndex;
-            this.associatedProductsProvider().params.attribute_ids = _.keys(attributes);
-            this.associatedProductsFilter().set('filters', attributes).apply();
-            this.showMessageAssociatedGrid();
-            this.associatedProductsModal.trigger('openModal');
-        },
-        showMessageAssociatedGrid: function () {
-            if (this.associatedProductsProvider().data.items.length) {
-                this.associatedProductsModal
-                    .find('[data-role="messages"] div div')
-                    .text($.mage.__('Choose a new product to delete and replace the current product configuration.'));
-            } else {
-                this.associatedProductsModal
-                    .find('[data-role="messages"] div div')
-                    .text($.mage.__('For better results, add attributes and attribute values to your products.'));
-            }
+            this.associatedProductGrid().open(attributes);
         },
         toggleProduct: function (rowIndex) {
             var product, row, productChanged = {};
