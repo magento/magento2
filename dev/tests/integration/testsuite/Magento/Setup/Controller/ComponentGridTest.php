@@ -8,15 +8,19 @@ namespace Magento\Setup\Controller;
 
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Module\PackageInfo;
-use Magento\Framework\Module\ModuleList;
-use Magento\Framework\Module\FullModuleList;
+use Magento\Setup\Model\UpdatePackagesCache;
 
 class ComponentGridTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ComposerInformation
+     * @var ComposerInformation|\PHPUnit_Framework_MockObject_MockObject
      */
     private $composerInformationMock;
+
+    /**
+     * @var UpdatePackagesCache|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $updatePackagesCacheMock;
 
     /**
      * Module package info
@@ -24,20 +28,6 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
      * @var PackageInfo
      */
     private $packageInfo;
-
-    /**
-     * enabled module list
-     *
-     * @var ModuleList
-     */
-    private $moduleList;
-
-    /**
-     * all modules
-     *
-     * @var FullModuleList
-     */
-    private $fullModuleList;
 
     /**
      * Controller
@@ -97,22 +87,42 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
+        $objectManagerProvider->expects($this->once())
+            ->method('get')
+            ->willReturn($objectManager);
+        $packageInfoFactory = $this->getMock(
+            'Magento\Framework\Module\PackageInfoFactory',
+            [],
+            [],
+            '',
+            false
+        );
+        $objectManager->expects($this->once())
+            ->method('get')
+            ->willReturn($packageInfoFactory);
+        $this->packageInfo = $this->getMock(
+            'Magento\Framework\Module\PackageInfo',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->updatePackagesCacheMock = $this->getMock(
+            'Magento\Setup\Model\UpdatePackagesCache',
+            [],
+            [],
+            '',
+            false
+        );
 
-        $packageInfoFactory = $this->getMock('Magento\Framework\Module\PackageInfoFactory', [], [], '', false);
-        $this->moduleList = $this->getMock('Magento\Framework\Module\ModuleList', [], [], '', false);
-        $this->fullModuleList = $this->getMock('Magento\Framework\Module\FullModuleList', [], [], '', false);
-        $objectValueMap = [
-            ['Magento\Framework\Module\PackageInfoFactory', $packageInfoFactory],
-            ['Magento\Framework\Module\ModuleList', $this->moduleList],
-            ['Magento\Framework\Module\FullModuleList', $this->fullModuleList]
-        ];
-
-        $objectManager->expects($this->exactly(3))->method('get')->will($this->returnValueMap($objectValueMap));
-
-        $this->packageInfo = $this->getMock('Magento\Framework\Module\PackageInfo', [], [], '', false);
-        $packageInfoFactory->expects($this->once())->method('create')->willReturn($this->packageInfo);
-        $this->controller = new ComponentGrid($this->composerInformationMock, $objectManagerProvider);
+        $packageInfoFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->packageInfo);
+        $this->controller = new ComponentGrid(
+            $this->composerInformationMock,
+            $objectManagerProvider,
+            $this->updatePackagesCacheMock
+        );
     }
 
     public function testIndexAction()
@@ -124,107 +134,43 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
 
     public function testComponentsAction()
     {
-        $this->composerInformationMock->expects($this->once())
-            ->method('getPackagesForUpdate')
-            ->willReturn($this->lastSyncData);
+        $this->packageInfo->expects($this->once())
+            ->method('getModuleName')
+            ->willReturn('Sample_Module');
         $this->composerInformationMock->expects($this->once())
             ->method('getInstalledMagentoPackages')
             ->willReturn($this->componentData);
-        $this->fullModuleList->expects($this->once())
-            ->method('getNames')
-            ->willReturn(['Sample_Module_From_Filesystem_One', 'Sample_Module_From_Filesystem_Two']);
-        $objectValueMap = [
-            ['Sample_Module_From_Filesystem_One', 'magento/ModuleFromFilesystemOne'],
-            ['Sample_Module_From_Filesystem_Two', 'magento/ModuleFromFilesystemTwo'],
-        ];
-        $this->packageInfo->expects($this->exactly(2))
-            ->method('getPackageName')
-            ->will($this->returnValueMap($objectValueMap));
-        $objectValueMap = [
-            ['Sample_Module_From_Filesystem_One', '1.0.0'],
-            ['Sample_Module_From_Filesystem_Two', '2.0.0'],
-        ];
-        $this->packageInfo->expects($this->exactly(2))
-            ->method('getVersion')
-            ->will($this->returnValueMap($objectValueMap));
-        $objectValueMap = [
-            ['magento/ModuleFromFilesystemOne', 'Sample_Module_From_Filesystem_One'],
-            ['magento/ModuleFromFilesystemTwo', 'Sample_Module_From_Filesystem_Two'],
-            ['magento/sample-module1', 'Sample_Module'],
-        ];
-        $this->packageInfo->expects($this->exactly(3))
-            ->method('getModuleName')
-            ->will($this->returnValueMap($objectValueMap));
-
-        $objectValueMap = [
-            ['magento/ModuleFromFilesystemOne', false],
-            ['magento/ModuleFromFilesystemTwo', false],
-            ['magento/sample-module1', true],
-        ];
-        $this->composerInformationMock->expects($this->exactly(3))
+        $this->composerInformationMock->expects($this->once())
             ->method('isPackageInComposerJson')
-            ->will($this->returnValueMap($objectValueMap));
-
-        $objectValueMap = [
-            ['Sample_Module_From_Filesystem_One', true],
-            ['Sample_Module_From_Filesystem_Two', false],
-            ['Sample_Module', true],
-        ];
-        $this->moduleList->expects($this->exactly(3))
-            ->method('has')
-            ->will($this->returnValueMap($objectValueMap));
-
+            ->willReturn(true);
+        $this->updatePackagesCacheMock->expects($this->once())
+            ->method('getPackagesForUpdate')
+            ->willReturn($this->lastSyncData);
         $jsonModel = $this->controller->componentsAction();
         $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
         $variables = $jsonModel->getVariables();
         $this->assertArrayHasKey('success', $variables);
         $this->assertTrue($variables['success']);
-        $expected = [
-            [
-                'name' => 'magento/sample-module1',
-                'type' => 'magento2-module',
-                'version' => '1.0.0',
-                'update' => false,
-                'uninstall' => true,
-                'moduleName' => 'Sample_Module',
-                'enable'   => true,
-                'disable'   => false,
-                'vendor' => 'magento',
-            ],
-            [
-                'name' => 'magento/ModuleFromFilesystemOne',
-                'type' => 'magento2-module',
-                'version' => '1.0.0',
-                'update' => false,
-                'uninstall' => false,
-                'moduleName' => 'Sample_Module_From_Filesystem_One',
-                'enable'   => true,
-                'disable'   => false,
-                'vendor' => 'magento',
-            ],
-            [
-                'name' => 'magento/ModuleFromFilesystemTwo',
-                'type' => 'magento2-module',
-                'version' => '2.0.0',
-                'update' => false,
-                'uninstall' => false,
-                'moduleName' => 'Sample_Module_From_Filesystem_Two',
-                'enable'   => false,
-                'disable'   => true,
-                'vendor' => 'magento',
-            ],
-        ];
+        $expected = [[
+            'name' => 'magento/sample-module1',
+            'type' => 'magento2-module',
+            'version' => '1.0.0',
+            'update' => false,
+            'uninstall' => true,
+            'vendor' => 'magento',
+            'moduleName' => 'Sample_Module'
+        ]];
         $this->assertEquals($expected, $variables['components']);
         $this->assertArrayHasKey('total', $variables);
-        $this->assertEquals(3, $variables['total']);
+        $this->assertEquals(1, $variables['total']);
         $this->assertEquals($this->lastSyncData, $variables['lastSyncData']);
     }
 
     public function testSyncAction()
     {
-        $this->composerInformationMock->expects($this->once())
+        $this->updatePackagesCacheMock->expects($this->once())
             ->method('syncPackagesForUpdate');
-        $this->composerInformationMock->expects($this->once())
+        $this->updatePackagesCacheMock->expects($this->once())
             ->method('getPackagesForUpdate')
             ->willReturn($this->lastSyncData);
         $jsonModel = $this->controller->syncAction();
