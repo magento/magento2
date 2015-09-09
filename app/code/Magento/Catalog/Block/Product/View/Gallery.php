@@ -12,6 +12,7 @@
 namespace Magento\Catalog\Block\Product\View;
 
 use Magento\Framework\Data\Collection;
+use Magento\Framework\Json\EncoderInterface;
 
 class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
 {
@@ -19,6 +20,22 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
      * @var \Magento\Framework\Config\View
      */
     protected $configView;
+
+    /**
+     * @var \Magento\Framework\Json\EncoderInterface
+     */
+    protected $jsonEncoder;
+
+    public function __construct(
+        \Magento\Catalog\Block\Product\Context $context,
+        \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
+        EncoderInterface $jsonEncoder,
+        array $data = []
+    )
+    {
+        $this->jsonEncoder = $jsonEncoder;
+        parent::__construct($context, $arrayUtils, $data);
+    }
 
     /**
      * Retrieve collection of gallery images
@@ -54,6 +71,26 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
         }
 
         return $images;
+    }
+
+    /**
+     * Return magnifier options
+     *
+     * @return string
+     */
+    public function getMagnifier()
+    {
+        return $this->jsonEncoder->encode($this->getVar('magnifier'));
+    }
+
+    /**
+     * Return breakpoints options
+     *
+     * @return string
+     */
+    public function getBreakpoints()
+    {
+        return $this->jsonEncoder->encode($this->getVar('breakpoints'));
     }
 
     /**

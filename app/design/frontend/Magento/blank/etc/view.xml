@@ -180,18 +180,51 @@
     <vars module="Magento_Catalog">
 
         <!-- New gallery and magnifier theme settings -->
-        <var name="gallery:navigation">thumbs</var> <!-- Gallery navigation style (false/thumbs/dots) -->
-        <var name="gallery:loop">true</var> <!-- Gallery navigation loop (true/false) -->
-        <var name="gallery:keyboard">true</var> <!-- Turn on/off keyboard arrows navigation (true/false) -->
-        <var name="gallery:arrows">true</var> <!-- Turn on/off arrows on the sides preview (true/false) -->
-        <var name="gallery:show_caption">false</var> <!-- Display alt text as image title (true/false) -->
+        <var name="gallery">
+            <var name="navigation">thumbs</var> <!-- Gallery navigation style (false/thumbs/dots) -->
+            <var name="loop">true</var> <!-- Gallery navigation loop (true/false) -->
+            <var name="keyboard">true</var> <!-- Turn on/off keyboard arrows navigation (true/false) -->
+            <var name="arrows">true</var> <!-- Turn on/off arrows on the sides preview (true/false) -->
+            <var name="show_caption">false</var> <!-- Display alt text as image title (true/false) -->
+        </var>
 
-        <var name="magnifier:top"></var> <!-- Top position of magnifier -->
-        <var name="magnifier:left"></var> <!-- Left position of magnifier -->
-        <var name="magnifier:width"></var> <!-- Width of magnifier block -->
-        <var name="magnifier:height"></var> <!-- Height of magnifier block -->
-        <var name="magnifier:action">hover</var> <!-- Action that atcivates zoom (hover/click) -->
-        <var name="magnifier:enabled">true</var> <!-- Turn on/off magnifier (true/false) -->
+        <var name="magnifier">
+            <var name="top"></var> <!-- Top position of magnifier -->
+            <var name="left"></var> <!-- Left position of magnifier -->
+            <var name="width"></var> <!-- Width of magnifier block -->
+            <var name="height"></var> <!-- Height of magnifier block -->
+            <var name="action">hover</var> <!-- Action that atcivates zoom (hover/click) -->
+            <var name="enabled">true</var> <!-- Turn on/off magnifier (true/false) -->
+        </var>
+
+        <var name="breakpoints">
+            <var name="mobile">
+                <var name="conditions">
+                    <var name="max-width">767px</var>
+                </var>
+                <var name="options">
+                    <var name="options">
+                        <var name="nav">dots</var>
+                    </var>
+                    <var name="magnifierOpts">
+                        <var name="enabled">false</var>
+                    </var>
+                </var>
+            </var>
+            <var name="desktop">
+                <var name="conditions">
+                    <var name="max-width">768px</var>
+                </var>
+                <var name="options">
+                    <var name="options">
+                        <var name="nav">thumbs</var>
+                    </var>
+                    <var name="magnifierOpts">
+                        <var name="enabled">true</var>
+                    </var>
+                </var>
+            </var>
+        </var>
         <!-- end -->
 
         <var name="product_small_image_sidebar_size">100</var>  <!-- Override for small product image -->

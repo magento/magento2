@@ -18,6 +18,7 @@ use Magento\Framework\Api\Data\ImageContentInterface;
  * Catalog product model
  *
  * @method Product setHasError(bool $value)
+ * @method \Magento\Catalog\Model\Resource\Product getResource()
  * @method null|bool getHasError()
  * @method Product setAssociatedProductIds(array $productIds)
  * @method array getAssociatedProductIds()

@@ -36,12 +36,7 @@ class View extends \Magento\Framework\Config\AbstractXml
             switch ($childNode->tagName) {
                 case 'vars':
                     $moduleName = $childNode->getAttribute('module');
-                    /** @var $varNode \DOMElement */
-                    foreach ($childNode->getElementsByTagName('var') as $varNode) {
-                        $varName = $varNode->getAttribute('name');
-                        $varValue = $varNode->nodeValue;
-                        $result[$childNode->tagName][$moduleName][$varName] = $varValue;
-                    }
+                    $result[$childNode->tagName][$moduleName] = $this->parseVarElement($childNode);
                     break;
                 case 'images':
                     $moduleName = $childNode->getAttribute('module');
@@ -71,6 +66,24 @@ class View extends \Magento\Framework\Config\AbstractXml
     }
 
     /**
+     * @param \DOMElement $node
+     * @return string|[]
+     */
+    protected function parseVarElement(\DOMElement $node)
+    {
+        if ($node->getElementsByTagName('var')->length) {
+            $result = [];
+            foreach ($node->getElementsByTagName('var') as $varNode) {
+                $varName = $varNode->getAttribute('name');
+                $result[$varName] = $this->parseVarElement($varNode);
+            }
+        } else {
+            $result = $node->nodeValue;
+        }
+        return $result;
+    }
+
+    /**
      * Get a list of variables in scope of specified module
      *
      * Returns array(<var_name> => <var_value>)
@@ -88,11 +101,19 @@ class View extends \Magento\Framework\Config\AbstractXml
      *
      * @param string $module
      * @param string $var
-     * @return string|false
+     * @return string|false|array
      */
     public function getVarValue($module, $var)
     {
-        return isset($this->_data['vars'][$module][$var]) ? $this->_data['vars'][$module][$var] : false;
+        $value = $this->_data['vars'][$module];
+        foreach (explode('/', $var) as $node) {
+            if (is_array($value) && isset($value[$node])) {
+                $value = $value[$node];
+            } else {
+                return false;
+            }
+        }
+        return $value;
     }
 
     /**
