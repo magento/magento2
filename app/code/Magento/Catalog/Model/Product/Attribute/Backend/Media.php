@@ -296,6 +296,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
             'position' => 'position',
             'disabled' => 'disabled',
             'exclude' => 'disabled',
+            'media_type' => 'media_type',
         ];
 
         $attrCode = $this->getAttribute()->getAttributeCode();

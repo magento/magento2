@@ -186,7 +186,7 @@ class ExternalVideoEntryProcessor extends AbstractEntryProcessor
         $videoDataCollection = [];
         foreach ($mediaCollection as $item) {
             if (!empty($item['media_type'])
-                && !$item['removed']
+                && !empty($item['removed'])
                 && $item['media_type'] == ExternalVideoEntryConverter::MEDIA_TYPE_CODE
             ) {
                 $videoData = $this->extractVideoDataFromRowData($item);
@@ -248,7 +248,7 @@ class ExternalVideoEntryProcessor extends AbstractEntryProcessor
         $ids = [];
         foreach ($mediaCollection as $item) {
             if (!empty($item['media_type'])
-                && !$item['removed']
+                && !empty($item['removed'])
                 && $item['media_type'] == ExternalVideoEntryConverter::MEDIA_TYPE_CODE
                 && isset($item['save_data_from'])
             ) {
