@@ -43,8 +43,8 @@ class NonComposerComponentRegistration
         // 4. lib/internal
         static::$pathList[ ] = dirname(dirname(__FILE__)) . '/code/*/*/registration.php';
         static::$pathList[ ] = dirname(dirname(__FILE__)) . '/design/*/*/*/registration.php';
-        static::$pathList[ ] = dirname(dirname(__FILE__)) . '/i18n/*/*/registration.json';
-        static::$pathList[ ] = dirname(dirname(__FILE__)) . '/lib/internal/*/*/registration.json';
+        static::$pathList[ ] = dirname(dirname(__FILE__)) . '/i18n/*/*/registration.php';
+        static::$pathList[ ] = dirname(dirname(__FILE__)) . '/lib/internal/*/*/registration.php';
     }
 
     /**
