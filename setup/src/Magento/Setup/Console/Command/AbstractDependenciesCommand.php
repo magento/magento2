@@ -35,13 +35,6 @@ abstract class AbstractDependenciesCommand extends Command
         $this->setDefinition(
             [
                 new InputOption(
-                    self::INPUT_KEY_DIRECTORY,
-                    'd',
-                    InputOption::VALUE_REQUIRED,
-                    'Path to base directory for parsing',
-                    BP
-                ),
-                new InputOption(
                     self::INPUT_KEY_OUTPUT,
                     'o',
                     InputOption::VALUE_REQUIRED,
@@ -74,7 +67,7 @@ abstract class AbstractDependenciesCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            Files::setInstance(new Files(new ComponentRegistrar(), $input->getOption(self::INPUT_KEY_DIRECTORY)));
+            Files::setInstance(new Files(new ComponentRegistrar(), BP));
             $this->buildReport($input->getOption(self::INPUT_KEY_OUTPUT));
             $output->writeln('<info>Report successfully processed.</info>');
         } catch (\Exception $e) {

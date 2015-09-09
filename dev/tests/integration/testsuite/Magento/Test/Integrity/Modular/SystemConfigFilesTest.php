@@ -24,9 +24,6 @@ class SystemConfigFilesTest extends \PHPUnit_Framework_TestCase
         /** @var $moduleDirSearch \Magento\Framework\Module\Dir\Search */
         $moduleDirSearch = $objectManager->get('Magento\Framework\Module\Dir\Search');
         $fileList = $moduleDirSearch->collectFiles('etc/adminhtml/system.xml');
-        foreach ($fileList as $key => $file) {
-            $fileList[$key] = $modulesDir->getAbsolutePath($file);
-        }
         $configMock = $this->getMock(
             'Magento\Framework\Module\Dir\Reader',
             ['getConfigurationFiles', 'getModuleDir'],

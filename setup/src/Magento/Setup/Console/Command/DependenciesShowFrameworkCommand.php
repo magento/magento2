@@ -67,16 +67,7 @@ class DependenciesShowFrameworkCommand extends AbstractDependenciesCommand
      */
     protected function buildReport($outputPath)
     {
-        $root = $this->directoryList->getRoot();
-        $filePaths = [];
-        foreach ($this->registrar->getPaths(ComponentRegistrar::MODULE) as $modulePath) {
-            $filePath = str_replace(
-                $root,
-                Files::init()->getPathToSource(),
-                $modulePath
-            );
-            $filePaths[] = $filePath;
-        }
+        $filePaths = $this->registrar->getPaths(ComponentRegistrar::MODULE);
 
         $filesForParse = Files::init()->getFiles($filePaths, '*');
         $configFiles = Files::init()->getConfigFiles('module.xml', [], false);

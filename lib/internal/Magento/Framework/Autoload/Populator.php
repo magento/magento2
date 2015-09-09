@@ -22,7 +22,7 @@ class Populator
      */
     public static function populateMappings(AutoloaderInterface $autoloader, DirectoryList $dirList)
     {
-        $modulesDir = $dirList->getPath(DirectoryList::ROOT) . '/app/code/';
+        $modulesDir = $dirList->getPath(DirectoryList::ROOT) . '/app/code';
         $generationDir = $dirList->getPath(DirectoryList::GENERATION);
         $frameworkDir = $dirList->getPath(DirectoryList::LIB_INTERNAL);
 

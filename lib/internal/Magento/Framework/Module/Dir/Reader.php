@@ -7,11 +7,9 @@
  */
 namespace Magento\Framework\Module\Dir;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\FileIterator;
 use Magento\Framework\Config\FileIteratorFactory;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Module\ModuleListInterface;
 

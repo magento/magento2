@@ -38,9 +38,11 @@ class Search
     }
 
     /**
-     * Search for files in each module by pattern, returns absolute paths
+     * Search for files in each module by pattern, returns absolute paths.
+     * If $associative is set, key will be module name.
      *
      * @param string $pattern
+     * @param bool $associative
      * @return array
      */
     public function collectFiles($pattern, $associative = false)
