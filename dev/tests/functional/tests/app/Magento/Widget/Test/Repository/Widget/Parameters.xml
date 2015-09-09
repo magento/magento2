@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <repository class="Magento\Widget\Test\Repository\Widget\WidgetOptions">
+    <repository class="Magento\Widget\Test\Repository\Widget\Parameters">
         <dataset name="cmsPageLink">
             <field name="anchor_text" xsi:type="string">CustomText_%isolation%</field>
             <field name="title" xsi:type="string">CustomTitle_%isolation%</field>

@@ -12,19 +12,19 @@ use Magento\Widget\Test\Fixture\Widget;
 use Magento\Backend\Test\Block\Widget\Tab;
 
 /**
- * Widget options form
+ * Widget options form.
  */
 class Settings extends Tab
 {
     /**
-     * 'Continue' button locator
+     * 'Continue' button locator.
      *
      * @var string
      */
     protected $continueButton = './/button[contains(@data-ui-id, "widget-button")]';
 
     /**
-     * Click 'Continue' button
+     * Click 'Continue' button.
      *
      * @return void
      */
@@ -34,7 +34,7 @@ class Settings extends Tab
     }
 
     /**
-     * Fill data to fields on tab
+     * Fill data to fields on tab.
      *
      * @param array $fields
      * @param SimpleElement|null $element

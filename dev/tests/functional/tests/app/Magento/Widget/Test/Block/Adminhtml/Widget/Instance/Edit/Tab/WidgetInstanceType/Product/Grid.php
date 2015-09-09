@@ -4,24 +4,22 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\LayoutUpdatesType\Product;
-
-use Magento\Backend\Test\Block\Widget\Grid as GridInterface;
+namespace Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\WidgetInstanceType\Product;
 
 /**
- * Chooser product grid
+ * Chooser product grid.
  */
-class Grid extends GridInterface
+class Grid extends \Magento\Backend\Test\Block\Widget\Grid
 {
     /**
-     * An element locator which allows to select entities in grid
+     * An element locator which allows to select entities in grid.
      *
      * @var string
      */
     protected $selectItem = 'tbody tr td.a-center.col-in_products';
 
     /**
-     * Initialize block elements
+     * Initialize block elements.
      *
      * @var array
      */

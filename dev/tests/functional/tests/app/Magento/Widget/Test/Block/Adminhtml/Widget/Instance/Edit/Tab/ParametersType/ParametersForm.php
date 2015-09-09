@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\WidgetOptionsType;
+namespace Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\ParametersType;
 
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Locator;
@@ -15,7 +15,7 @@ use Magento\Backend\Test\Block\Template;
 /**
  * Responds for filling widget options form.
  */
-class WidgetOptionsForm extends Form
+class ParametersForm extends Form
 {
     /**
      * Select entity.
@@ -48,16 +48,16 @@ class WidgetOptionsForm extends Form
     /**
      * Filling widget options form.
      *
-     * @param array $widgetOptionsFields
+     * @param array $parametersFields
      * @param SimpleElement $element
      * @return void
      */
-    public function fillForm(array $widgetOptionsFields, SimpleElement $element = null)
+    public function fillForm(array $parametersFields, SimpleElement $element = null)
     {
         $element = $element === null ? $this->_rootElement : $element;
-        $mapping = $this->dataMapping($widgetOptionsFields);
+        $mapping = $this->dataMapping($parametersFields);
         $this->_fill(array_diff_key($mapping, ['entities' => '']), $element);
-        if (isset($widgetOptionsFields['entities'])) {
+        if (isset($parametersFields['entities'])) {
             $this->selectEntity($mapping['entities']);
         }
     }
