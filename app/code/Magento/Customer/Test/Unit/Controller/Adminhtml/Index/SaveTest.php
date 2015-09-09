@@ -299,6 +299,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             \Magento\Customer\Api\Data\CustomerInterface::DEFAULT_BILLING => $addressId,
             \Magento\Customer\Api\Data\CustomerInterface::DEFAULT_SHIPPING => $addressId,
             'confirmation' => false,
+            'sendemail_store_id' => '1',
             'id' => $customerId,
         ];
         $mergedAddressData = [
