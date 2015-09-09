@@ -7,7 +7,7 @@ namespace Magento\Framework\View\File\Collector\Override;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\Theme\Dir;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\File\AbstractCollector;
@@ -25,9 +25,9 @@ class Base extends AbstractCollector
     protected $themeDir;
 
     /**
-     * @var ReadInterface
+     * @var ReadFactory
      */
-    protected $rootDirectory;
+    private $readFactory;
 
     /**
      * Constructor
@@ -37,16 +37,18 @@ class Base extends AbstractCollector
      * @param PathPatternHelper $pathPatternHelper
      * @param string $subDir
      * @param Dir $themeDir
+     * @param ReadFactory $readFactory
      */
     public function __construct(
         Filesystem $filesystem,
         FileFactory $fileFactory,
         PathPatternHelper $pathPatternHelper,
         $subDir = '',
-        Dir $themeDir
+        Dir $themeDir,
+        ReadFactory $readFactory
     ) {
         $this->themeDir = $themeDir;
-        $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
+        $this->readFactory = $readFactory;
         parent::__construct($filesystem, $fileFactory, $pathPatternHelper, $subDir);
     }
 
@@ -61,8 +63,9 @@ class Base extends AbstractCollector
     {
         $namespace = $module = '*';
         $themePath = $theme->getFullPath();
+        $directoryRead = $this->readFactory->create($this->themeDir->getPathByKey($themePath));
         $searchPattern = "{$namespace}_{$module}/{$this->subDir}{$filePath}";
-        $files = $this->rootDirectory->search($searchPattern, $this->themeDir->getPathByKey($themePath));
+        $files = $directoryRead->search($searchPattern);
         $result = [];
         $pattern = "#(?<moduleName>[^/]+)/{$this->subDir}"
             . $this->pathPatternHelper->translatePatternFromGlob($filePath) . "$#i";

@@ -7,6 +7,7 @@ namespace Magento\Framework\Css\PreProcessor\File\Collector;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Theme\Dir;
 use Magento\Framework\View\Design\ThemeInterface;
@@ -40,27 +41,29 @@ class Library implements CollectorInterface
     protected $fileListFactory;
 
     /**
-     * @var ReadInterface
+     * @var ReadFactory
      */
-    protected $rootDirectory;
+    private $readFactory;
 
     /**
      * @param FileListFactory $fileListFactory
      * @param Filesystem $filesystem
      * @param Factory $fileFactory
      * @param Dir $themeDir
+     * @param ReadFactory $readFactory
      */
     public function __construct(
         FileListFactory $fileListFactory,
         Filesystem $filesystem,
         Factory $fileFactory,
-        Dir $themeDir
+        Dir $themeDir,
+        ReadFactory $readFactory
     ) {
         $this->fileListFactory = $fileListFactory;
         $this->libraryDirectory = $filesystem->getDirectoryRead(DirectoryList::LIB_WEB);
         $this->themeDir = $themeDir;
         $this->fileFactory = $fileFactory;
-        $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
+        $this->readFactory = $readFactory;
     }
 
     /**
@@ -78,11 +81,14 @@ class Library implements CollectorInterface
 
         foreach ($theme->getInheritedThemes() as $currentTheme) {
             $themeFullPath = $currentTheme->getFullPath();
-            $files = $this->rootDirectory->search(
-                "web/{$filePath}",
-                $this->themeDir->getPathByKey($themeFullPath)
-            );
-            $list->replace($this->createFiles($this->rootDirectory, $theme, $files));
+            $directoryRead = $this->readFactory->create($this->themeDir->getPathByKey($themeFullPath));
+            $foundFiles = $directoryRead->search("web/{$filePath}");
+            $files = [];
+            foreach ($foundFiles as $foundFile) {
+                $foundFile = $directoryRead->getAbsolutePath($foundFile);
+                $files[] = $foundFile;
+            }
+            $list->replace($this->createFiles($directoryRead, $theme, $files));
         }
         return $list->getAll();
     }

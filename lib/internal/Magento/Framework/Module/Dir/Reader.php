@@ -160,21 +160,4 @@ class Reader
     {
         $this->customModuleDirs[$moduleName][$type] = $path;
     }
-
-    /**
-     * Search entries for given regex pattern
-     *
-     * @param string $pattern
-     * @return string[]
-     */
-    public function search($pattern)
-    {
-        $result = [];
-        foreach ($this->modulesList->getNames() as $moduleName) {
-            $path = $this->getModuleDir('', $moduleName);
-            $files = $this->directoryRead->search($pattern, $path);
-            $result = array_merge($result, $files);
-        }
-        return $result;
-    }
 }
