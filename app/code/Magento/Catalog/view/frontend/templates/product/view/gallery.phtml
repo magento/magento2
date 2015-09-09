@@ -18,7 +18,7 @@
                 "mixins":["magnifier/magnify"],
                 "magnifierOpts": {
                     "enabled": <?php echo $block->getVar("magnifier:enabled"); ?>,
-                    "eventType": "<?php echo $block->getVar("magnifier:action"); ?>",
+                    "eventType": "<?php echo $block->getVar("magnifier:eventType"); ?>",
                     "width": "<?php echo $block->getVar("magnifier:width"); ?>",
                     "height": "<?php echo $block->getVar("magnifier:height"); ?>",
                     "top": "<?php echo $block->getVar("magnifier:top"); ?>",
@@ -26,11 +26,11 @@
                 },
                 "data": <?php echo $block->getGalleryImagesJson(); ?>,
                 "options": {
-                    "nav": "<?php echo $block->getVar("gallery:navigation"); ?>",
+                    "nav": "<?php echo $block->getVar("gallery:nav"); ?>",
                     "loop": <?php echo $block->getVar("gallery:loop"); ?>,
                     "keyboard": <?php echo $block->getVar("gallery:keyboard"); ?>,
                     "arrows": <?php echo $block->getVar("gallery:arrows"); ?>,
-                    "showCaption": <?php echo $block->getVar("gallery:show_caption"); ?>,
+                    "showCaption": <?php echo $block->getVar("gallery:showCaption"); ?>,
                     "width": <?php echo $block->getImageAttribute('product_page_image_medium', 'width'); ?>,
                     "thumbwidth": <?php echo $block->getImageAttribute('product_page_image_small', 'width'); ?>,
                     "thumbheight": <?php echo $block->getImageAttribute('product_page_image_small', 'height')
