@@ -767,7 +767,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  \Magento\Catalog\Model\Product $product
      * @return array
      */
-    public function getWeeAttributesForBundle($product)
+    public function getWeeeAttributesForBundle($product)
     {
         if ($product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
             $typeInstance = $product->getTypeInstance();
@@ -786,7 +786,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                     $product->getStore()->getWebsiteId()
                 );
                 foreach ($weeAttributes as $weeAttribute) {
-                    $insertedWeeCodesArray[$weeAttribute->getCode()]=$weeAttribute;
+                    $insertedWeeCodesArray[$selectionItem->getId()][$weeAttribute->getCode()]=$weeAttribute;
                 }
             }
             return $insertedWeeCodesArray;
