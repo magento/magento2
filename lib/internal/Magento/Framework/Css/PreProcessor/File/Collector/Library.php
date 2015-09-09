@@ -6,10 +6,11 @@
 namespace Magento\Framework\Css\PreProcessor\File\Collector;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\Theme\Dir;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\File\CollectorInterface;
 use Magento\Framework\View\File\Factory;
@@ -31,11 +32,6 @@ class Library implements CollectorInterface
     protected $libraryDirectory;
 
     /**
-     * @var Dir
-     */
-    protected $themeDir;
-
-    /**
      * @var FileListFactory
      */
     protected $fileListFactory;
@@ -46,24 +42,31 @@ class Library implements CollectorInterface
     private $readFactory;
 
     /**
+     * Component registry
+     *
+     * @var ComponentRegistrarInterface
+     */
+    private $componentRegistrar;
+
+    /**
      * @param FileListFactory $fileListFactory
      * @param Filesystem $filesystem
      * @param Factory $fileFactory
-     * @param Dir $themeDir
      * @param ReadFactory $readFactory
+     * @param ComponentRegistrarInterface $componentRegistrar
      */
     public function __construct(
         FileListFactory $fileListFactory,
         Filesystem $filesystem,
         Factory $fileFactory,
-        Dir $themeDir,
-        ReadFactory $readFactory
+        ReadFactory $readFactory,
+        ComponentRegistrarInterface $componentRegistrar
     ) {
         $this->fileListFactory = $fileListFactory;
         $this->libraryDirectory = $filesystem->getDirectoryRead(DirectoryList::LIB_WEB);
-        $this->themeDir = $themeDir;
         $this->fileFactory = $fileFactory;
         $this->readFactory = $readFactory;
+        $this->componentRegistrar = $componentRegistrar;
     }
 
     /**
@@ -81,7 +84,9 @@ class Library implements CollectorInterface
 
         foreach ($theme->getInheritedThemes() as $currentTheme) {
             $themeFullPath = $currentTheme->getFullPath();
-            $directoryRead = $this->readFactory->create($this->themeDir->getPathByKey($themeFullPath));
+            $directoryRead = $this->readFactory->create(
+                $this->componentRegistrar->getPath(ComponentRegistrar::THEME, $themeFullPath)
+            );
             $foundFiles = $directoryRead->search("web/{$filePath}");
             $files = [];
             foreach ($foundFiles as $foundFile) {

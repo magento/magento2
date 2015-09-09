@@ -5,8 +5,10 @@
  */
 namespace Magento\Framework\View\Design\Fallback\Rule;
 
+
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Module\Dir\Reader;
-use Magento\Framework\Theme\Dir;
 
 
 /**
@@ -29,11 +31,11 @@ class Simple implements RuleInterface
     protected $pattern;
 
     /**
-     * Theme directory Handler
+     * Component registry
      *
-     * @var Dir
+     * @var ComponentRegistrarInterface
      */
-    protected $themeDirHandler;
+    private $componentRegistrar;
 
     /**
      * Module directory reader
@@ -47,18 +49,18 @@ class Simple implements RuleInterface
      *
      * @param string $pattern
      * @param array $optionalParams
-     * @param Dir $themeDirHandler
+     * @param ComponentRegistrarInterface $componentRegistrar
      * @param Reader $moduleDirReader
      */
     public function __construct(
         $pattern,
         array $optionalParams = [],
-        Dir $themeDirHandler,
+        ComponentRegistrarInterface $componentRegistrar,
         Reader $moduleDirReader
     ) {
         $this->pattern = $pattern;
         $this->optionalParams = $optionalParams;
-        $this->themeDirHandler = $themeDirHandler;
+        $this->componentRegistrar = $componentRegistrar;
         $this->moduleDirReader = $moduleDirReader;
     }
 
@@ -77,7 +79,9 @@ class Simple implements RuleInterface
             $pattern = str_replace('<module_dir>/<namespace>/<module>', $path, $pattern);
         }
         if (strpos($pattern, '<theme_dir>/<area>/<theme_path>') !== false) {
-            $path = $this->themeDirHandler->getPathByKey($params['area'] . '/' . $params['theme_path']);
+            $path = $this->componentRegistrar->getPath(
+                ComponentRegistrar::THEME, $params['area'] . '/' . $params['theme_path']
+            );
             $pattern = str_replace('<theme_dir>/<area>/<theme_path>', $path, $pattern);
         }
         if (preg_match_all('/<([a-zA-Z\_]+)>/', $pattern, $matches)) {

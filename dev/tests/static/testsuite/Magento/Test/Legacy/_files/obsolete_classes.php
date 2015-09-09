@@ -3850,4 +3850,5 @@ return [
         'Magento\Framework\Module\ModuleRegistry',
         'Magento\Framework\Component\ComponentRegistrar'
     ],
+    ['Magento\Framework\App\Router\ActionList\Reader'],
 ];

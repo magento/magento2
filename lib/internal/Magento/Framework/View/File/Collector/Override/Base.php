@@ -6,9 +6,10 @@
 namespace Magento\Framework\View\File\Collector\Override;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
-use Magento\Framework\Theme\Dir;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\File\AbstractCollector;
 use Magento\Framework\View\File\Factory as FileFactory;
@@ -20,9 +21,11 @@ use Magento\Framework\View\Helper\PathPattern as PathPatternHelper;
 class Base extends AbstractCollector
 {
     /**
-     * @var Dir
+     * Component registry
+     *
+     * @var ComponentRegistrarInterface
      */
-    protected $themeDir;
+    private $componentRegistrar;
 
     /**
      * @var ReadFactory
@@ -36,7 +39,7 @@ class Base extends AbstractCollector
      * @param FileFactory $fileFactory
      * @param PathPatternHelper $pathPatternHelper
      * @param string $subDir
-     * @param Dir $themeDir
+     * @param ComponentRegistrarInterface $componentRegistrar
      * @param ReadFactory $readFactory
      */
     public function __construct(
@@ -44,10 +47,10 @@ class Base extends AbstractCollector
         FileFactory $fileFactory,
         PathPatternHelper $pathPatternHelper,
         $subDir = '',
-        Dir $themeDir,
+        ComponentRegistrarInterface $componentRegistrar,
         ReadFactory $readFactory
     ) {
-        $this->themeDir = $themeDir;
+        $this->componentRegistrar = $componentRegistrar;
         $this->readFactory = $readFactory;
         parent::__construct($filesystem, $fileFactory, $pathPatternHelper, $subDir);
     }
@@ -63,7 +66,9 @@ class Base extends AbstractCollector
     {
         $namespace = $module = '*';
         $themePath = $theme->getFullPath();
-        $directoryRead = $this->readFactory->create($this->themeDir->getPathByKey($themePath));
+        $directoryRead = $this->readFactory->create(
+            $this->componentRegistrar->getPath(ComponentRegistrar::THEME, $themePath)
+        );
         $searchPattern = "{$namespace}_{$module}/{$this->subDir}{$filePath}";
         $files = $directoryRead->search($searchPattern);
         $result = [];

@@ -16,7 +16,7 @@ use Magento\Framework\Filesystem;
 class Dir
 {
     /**
-     * Module registry
+     * Theme registry
      *
      * @var ComponentRegistrarInterface
      */
@@ -45,17 +45,5 @@ class Dir
                 return ['area' => $area, 'theme_path_pieces' => $pathPieces];
             }
         }
-    }
-
-    /**
-     * Retrieve a theme path by its key
-     *
-     * @param string $key
-     * @return string | null
-     */
-    public function getPathByKey($key)
-    {
-        $themePaths = $this->componentRegistrar->getPaths(ComponentRegistrar::THEME);
-        return isset($themePaths[$key]) ? $themePaths[$key] : null;
     }
 }
