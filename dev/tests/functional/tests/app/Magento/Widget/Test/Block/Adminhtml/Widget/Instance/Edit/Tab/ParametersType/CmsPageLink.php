@@ -4,26 +4,26 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\WidgetOptionsType;
+namespace Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\ParametersType;
 
 /**
- * Filling Widget Options that have cms page link type
+ * Filling Widget Options that have cms page link type.
  */
-class CmsPageLink extends WidgetOptionsForm
+class CmsPageLink extends ParametersForm
 {
     /**
-     * Cms Page Link grid block
+     * Cms Page Link grid block.
      *
      * @var string
      */
     protected $gridBlock = './ancestor::body//*[contains(@id, "responseCntoptions_fieldset")]';
 
     /**
-     * Path to grid
+     * Path to grid.
      *
      * @var string
      */
     // @codingStandardsIgnoreStart
-    protected $pathToGrid = 'Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\WidgetOptionsType\CmsPageLink\Grid';
+    protected $pathToGrid = 'Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\ParametersType\CmsPageLink\Grid';
     // @codingStandardsIgnoreEnd
 }

@@ -4,26 +4,26 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\WidgetOptionsType;
+namespace Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\ParametersType;
 
-use Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\WidgetOptionsType\CatalogCategoryLink\Form;
+use Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\ParametersType\CatalogCategoryLink\Form;
 use Magento\Mtf\Client\Element;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Filling Widget Options that have catalog category link type
+ * Filling Widget Options that have catalog category link type.
  */
-class CatalogCategoryLink extends WidgetOptionsForm
+class CatalogCategoryLink extends ParametersForm
 {
     /**
-     * Category Link block
+     * Category Link block.
      *
      * @var string
      */
     protected $cmsCategoryLink = './ancestor::body//*[contains(@id, "responseCntoptions_fieldset")]';
 
     /**
-     * Select category on widget options tab
+     * Select category on widget options tab.
      *
      * @param array $entities
      * @return void
@@ -33,16 +33,11 @@ class CatalogCategoryLink extends WidgetOptionsForm
         foreach ($entities['value'] as $entity) {
             $this->_rootElement->find($this->selectEntity)->click();
             $this->getTemplateBlock()->waitLoader();
-            // @codingStandardsIgnoreStart
             /** @var Form $catalogCategoryLinkForm */
             $catalogCategoryLinkForm = $this->blockFactory->create(
-                'Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\WidgetOptionsType\CatalogCategoryLink\Form',
-                [
-                    'element' => $this->_rootElement
-                        ->find($this->cmsCategoryLink, Locator::SELECTOR_XPATH)
-                ]
+                'Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\ParametersType\CatalogCategoryLink\Form',
+                ['element' => $this->_rootElement->find($this->cmsCategoryLink, Locator::SELECTOR_XPATH)]
             );
-            // @codingStandardsIgnoreEnd
             $elementNew = $this->_rootElement->find($this->cmsCategoryLink, Locator::SELECTOR_XPATH);
             $entities['value'] = $entity->getPath() . '/' . $entity->getName();
             $categoryFields['entities'] = $entities;

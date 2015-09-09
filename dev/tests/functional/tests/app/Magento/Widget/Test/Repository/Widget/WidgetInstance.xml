@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
-    <repository class="Magento\Widget\Test\Repository\Widget\LayoutUpdates">
+    <repository class="Magento\Widget\Test\Repository\Widget\WidgetInstance">
         <dataset name="all_pages">
             <field name="0" xsi:type="array">
                 <item name="page_group" xsi:type="string">Generic Pages/All Pages</item>

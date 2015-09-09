@@ -4,22 +4,22 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\WidgetOptionsType\CmsStaticBlock;
+namespace Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\ParametersType\CmsStaticBlock;
 
 /**
- * Chooser block grid
+ * Chooser block grid.
  */
 class Grid extends \Magento\Backend\Test\Block\Widget\Grid
 {
     /**
-     * An element locator which allows to select entities in grid
+     * An element locator which allows to select entities in grid.
      *
      * @var string
      */
     protected $selectItem = 'tbody tr td.a-left.col-chooser_title';
 
     /**
-     * Filters array mapping
+     * Filters array mapping.
      *
      * @var array
      */

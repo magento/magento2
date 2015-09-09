@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\LayoutUpdatesType;
+namespace Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\WidgetInstanceType;
 
 use Magento\Catalog\Test\Fixture\Category;
 use Magento\Mtf\Client\Locator;
@@ -13,25 +13,25 @@ use Magento\Mtf\Client\Element\SimpleElement;
 /**
  * Filling Categories type layout.
  */
-class Categories extends LayoutForm
+class Categories extends WidgetInstanceForm
 {
     /**
      * Filling layout form.
      *
-     * @param array $widgetOptionsFields
+     * @param array $parametersFields
      * @param SimpleElement $element
      * @return void
      */
-    public function fillForm(array $widgetOptionsFields, SimpleElement $element = null)
+    public function fillForm(array $parametersFields, SimpleElement $element = null)
     {
         $element = $element === null ? $this->_rootElement : $element;
-        $fields = $this->dataMapping(array_diff_key($widgetOptionsFields, ['entities' => '']));
+        $fields = $this->dataMapping(array_diff_key($parametersFields, ['entities' => '']));
         foreach ($fields as $key => $values) {
             $this->_fill([$key => $values], $element);
             $this->getTemplateBlock()->waitLoader();
         }
-        if (isset($widgetOptionsFields['entities'])) {
-            $this->selectCategory($widgetOptionsFields['entities'], $element);
+        if (isset($parametersFields['entities'])) {
+            $this->selectCategory($parametersFields['entities'], $element);
         }
     }
 

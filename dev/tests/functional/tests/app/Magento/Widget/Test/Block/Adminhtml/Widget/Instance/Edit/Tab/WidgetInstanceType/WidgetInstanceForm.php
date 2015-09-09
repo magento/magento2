@@ -4,40 +4,40 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\LayoutUpdatesType;
+namespace Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\WidgetInstanceType;
 
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
- * Responds for filling layout form
+ * Responds for filling layout form.
  */
-class LayoutForm extends Form
+class WidgetInstanceForm extends Form
 {
     /**
-     * Widget option chooser button
+     * Widget option chooser button.
      *
      * @var string
      */
     protected $chooser = '//*[@class="chooser_container"]//a/img[contains(@alt,"Open Chooser")]';
 
     /**
-     * Widget option apply button
+     * Widget option apply button.
      *
      * @var string
      */
     protected $apply = '//*[@class="chooser_container"]//a/img[contains(@alt,"Apply")]';
 
     /**
-     * Backend abstract block
+     * Backend abstract block.
      *
      * @var string
      */
     protected $templateBlock = './ancestor::body';
 
     /**
-     * Filling layout form
+     * Filling layout form.
      *
      * @param array $layoutFields
      * @param SimpleElement $element
@@ -54,7 +54,7 @@ class LayoutForm extends Form
     }
 
     /**
-     * Getting options data form on the product form
+     * Getting options data form on the product form.
      *
      * @param array $fields
      * @param SimpleElement $element
@@ -68,7 +68,7 @@ class LayoutForm extends Form
     }
 
     /**
-     * Get backend abstract block
+     * Get backend abstract block.
      *
      * @return \Magento\Backend\Test\Block\Template
      */

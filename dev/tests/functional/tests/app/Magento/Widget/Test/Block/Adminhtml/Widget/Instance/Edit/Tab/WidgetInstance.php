@@ -9,36 +9,36 @@ namespace Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Backend\Test\Block\Widget\Tab;
-use Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\LayoutUpdatesType\LayoutForm;
+use Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\WidgetInstanceType\WidgetInstanceForm;
 
 /**
- * Layout Updates form
+ * Widget instance (layout) form.
  */
-class LayoutUpdates extends Tab
+class WidgetInstance extends Tab
 {
     /**
-     * Backend abstract block
+     * Backend abstract block.
      *
      * @var string
      */
     protected $templateBlock = './ancestor::body';
 
     /**
-     * Form selector
+     * Form selector.
      *
      * @var string
      */
     protected $formSelector = './/div[contains(@id,"page_group_container_%d")]';
 
     /**
-     * 'Add Option' button
+     * 'Add Option' button.
      *
      * @var string
      */
     protected $addLayoutUpdates = 'button.action-add';
 
     /**
-     * Fill Layout Updates form
+     * Fill Widget instance (layout) form.
      *
      * @param array $fields
      * @param SimpleElement|null $element
@@ -47,11 +47,11 @@ class LayoutUpdates extends Tab
      */
     public function fillFormTab(array $fields, SimpleElement $element = null)
     {
-        foreach ($fields['layout']['value'] as $key => $field) {
+        foreach ($fields['widget_instance']['value'] as $key => $field) {
             $this->addLayoutUpdates();
-            $path = 'Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\LayoutUpdatesType\\';
+            $path = 'Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\WidgetInstanceType\\';
             $pageGroup = explode('/', $field['page_group']);
-            /** @var LayoutForm $layoutForm */
+            /** @var WidgetInstanceForm $layoutForm */
             $layoutForm = $this->blockFactory->create(
                 $path . str_replace(" ", "", $pageGroup[0]),
                 [
@@ -64,7 +64,7 @@ class LayoutUpdates extends Tab
     }
 
     /**
-     * Click Add Layout Updates button
+     * Click Add Layout Updates button.
      *
      * @return void
      */
@@ -74,7 +74,7 @@ class LayoutUpdates extends Tab
     }
 
     /**
-     * Get backend abstract block
+     * Get backend abstract block.
      *
      * @return \Magento\Backend\Test\Block\Template
      */

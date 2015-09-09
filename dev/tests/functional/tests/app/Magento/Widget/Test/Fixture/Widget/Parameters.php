@@ -6,15 +6,23 @@
 
 namespace Magento\Widget\Test\Fixture\Widget;
 
-use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\Fixture\DataSource;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Repository\RepositoryFactory;
 
 /**
- * Prepare Layout Updates for widget.
+ * Prepare Widget options for widget.
  */
-class LayoutUpdates extends DataSource
+class Parameters extends DataSource
 {
+    /**
+     * Widget option entities.
+     *
+     * @var array
+     */
+    protected $entities;
+
     /**
      * @constructor
      * @param RepositoryFactory $repositoryFactory
@@ -29,19 +37,31 @@ class LayoutUpdates extends DataSource
         array $data = []
     ) {
         $this->params = $params;
-
         if (isset($data['dataset']) && isset($this->params['repository'])) {
             $this->data = $repositoryFactory->get($this->params['repository'])->get($data['dataset']);
-            foreach ($this->data as $index => $layouts) {
-                if (isset($layouts['entities'])) {
-                    $explodeValue = explode('::', $layouts['entities']);
+            if (isset($this->data['entities'])) {
+                foreach ($this->data['entities'] as $index => $entity) {
+                    $explodeValue = explode('::', $entity);
                     $fixture = $fixtureFactory->createByCode($explodeValue[0], ['dataset' => $explodeValue[1]]);
                     $fixture->persist();
-                    $this->data[$index]['entities'] = $fixture;
+                    $this->data['entities'][$index] = $fixture;
+                    $this->entities[] = $fixture;
                 }
             }
+        } elseif (isset($data['entity']) && $data['entity'] instanceof FixtureInterface) {
+            $this->data['entities'][] = $data['entity'];
         } else {
             $this->data = $data;
         }
+    }
+
+    /**
+     * Return entities.
+     *
+     * @return array
+     */
+    public function getEntities()
+    {
+        return $this->entities;
     }
 }

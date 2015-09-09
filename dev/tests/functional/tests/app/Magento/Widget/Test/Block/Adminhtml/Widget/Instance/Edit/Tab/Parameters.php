@@ -7,14 +7,14 @@
 namespace Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab;
 
 use Magento\Backend\Test\Block\Widget\Tab;
-use Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\WidgetOptionsType\WidgetOptionsForm;
+use Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\ParametersType\ParametersForm;
 use Magento\Widget\Test\Fixture\Widget;
 use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Widget options form.
  */
-class WidgetOptions extends Tab
+class Parameters extends Tab
 {
     /**
      * Form selector.
@@ -28,7 +28,7 @@ class WidgetOptions extends Tab
      *
      * @var string
      */
-    protected $path = 'Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\WidgetOptionsType\\';
+    protected $path = 'Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\ParametersType\\';
 
     /**
      * Fill Widget options form.
@@ -39,14 +39,14 @@ class WidgetOptions extends Tab
      */
     public function fillFormTab(array $fields, SimpleElement $element = null)
     {
-        $data = $fields['widgetOptions']['value'];
+        $data = $fields['parameters']['value'];
         $path = $this->path . str_replace(' ', '', $fields['code']);
-        /** @var WidgetOptionsForm $widgetOptionsForm */
-        $widgetOptionsForm = $this->blockFactory->create(
+        /** @var ParametersForm $parametersForm */
+        $parametersForm = $this->blockFactory->create(
             $path,
             ['element' => $this->_rootElement->find($this->formSelector)]
         );
-        $widgetOptionsForm->fillForm($data, $element);
+        $parametersForm->fillForm($data, $element);
 
         return $this;
     }

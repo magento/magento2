@@ -4,47 +4,47 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\LayoutUpdatesType;
+namespace Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\WidgetInstanceType;
 
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Fixture\FixtureInterface;
-use Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\LayoutUpdatesType\Product\Grid;
+use Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\WidgetInstanceType\Product\Grid;
 
 /**
- * Filling Product type layout
+ * Filling Product type layout.
  */
-class Products extends LayoutForm
+class Products extends WidgetInstanceForm
 {
     /**
-     * Product grid block
+     * Product grid block.
      *
      * @var string
      */
     protected $productGrid = '//*[@class="chooser_container"]';
 
     /**
-     * Filling layout form
+     * Filling layout form.
      *
-     * @param array $widgetOptionsFields
+     * @param array $parametersFields
      * @param SimpleElement $element
      * @return void
      */
-    public function fillForm(array $widgetOptionsFields, SimpleElement $element = null)
+    public function fillForm(array $parametersFields, SimpleElement $element = null)
     {
         $element = $element === null ? $this->_rootElement : $element;
-        $fields = $this->dataMapping(array_diff_key($widgetOptionsFields, ['entities' => '']));
+        $fields = $this->dataMapping(array_diff_key($parametersFields, ['entities' => '']));
         foreach ($fields as $key => $values) {
             $this->_fill([$key => $values], $element);
             $this->getTemplateBlock()->waitLoader();
         }
-        if (isset($widgetOptionsFields['entities'])) {
-            $this->selectEntityInGrid($widgetOptionsFields['entities']);
+        if (isset($parametersFields['entities'])) {
+            $this->selectEntityInGrid($parametersFields['entities']);
         }
     }
 
     /**
-     * Select entity in grid on layout tab
+     * Select entity in grid on layout tab.
      *
      * @param FixtureInterface $product
      * @return void
@@ -56,7 +56,7 @@ class Products extends LayoutForm
 
         /** @var Grid $productGrid */
         $productGrid = $this->blockFactory->create(
-            'Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\LayoutUpdatesType\Product\Grid',
+            'Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\WidgetInstanceType\Product\Grid',
             [
                 'element' => $this->_rootElement
                     ->find($this->productGrid, Locator::SELECTOR_XPATH)
