@@ -19,7 +19,7 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
     protected $selectItem = 'tbody tr td.a-center.col-in_products';
 
     /**
-     * Initialize block elements.
+     * Filters array mapping.
      *
      * @var array
      */

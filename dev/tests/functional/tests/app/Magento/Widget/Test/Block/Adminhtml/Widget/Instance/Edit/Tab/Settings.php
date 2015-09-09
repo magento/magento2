@@ -44,5 +44,7 @@ class Settings extends Tab
     {
         parent::fillFormTab($fields, $element);
         $this->clickContinue();
+
+        return $this;
     }
 }

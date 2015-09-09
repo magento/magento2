@@ -58,7 +58,7 @@ class WidgetInstanceForm extends Form
      *
      * @param array $fields
      * @param SimpleElement $element
-     * @return $this
+     * @return array
      */
     public function getDataOptions(array $fields = null, SimpleElement $element = null)
     {
