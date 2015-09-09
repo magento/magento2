@@ -23,6 +23,8 @@ class Iframe extends \Magento\Paypal\Block\Iframe
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Paypal\Helper\Hss $hssHelper
      * @param \Magento\Payment\Helper\Data $paymentData
+     * @param \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
+     * @param \Magento\Framework\Module\Dir\Reader $reader
      * @param array $data
      */
     public function __construct(
@@ -31,10 +33,12 @@ class Iframe extends \Magento\Paypal\Block\Iframe
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Paypal\Helper\Hss $hssHelper,
         \Magento\Payment\Helper\Data $paymentData,
+        \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory,
+        \Magento\Framework\Module\Dir\Reader $reader,
         array $data = []
     ) {
         $this->_paymentData = $paymentData;
-        parent::__construct($context, $orderFactory, $checkoutSession, $hssHelper, $data);
+        parent::__construct($context, $orderFactory, $checkoutSession, $hssHelper, $readFactory, $reader, $data);
     }
 
     /**

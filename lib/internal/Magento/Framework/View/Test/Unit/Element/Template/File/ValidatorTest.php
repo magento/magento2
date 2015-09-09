@@ -109,7 +109,14 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->componentRegistrar = $this->getMock('Magento\Framework\Component\ComponentRegistrar', [], [], '', false);
         $this->componentRegistrar->expects($this->any())
             ->method('getPaths')
-            ->willReturn(['/magento/app/code/Some/Module']);
+            ->will(
+                $this->returnValueMap(
+                    [
+                        [ComponentRegistrar::MODULE, ['/magento/app/code/Some/Module']],
+                        [ComponentRegistrar::THEME, ['/magento/themes/default']]
+                    ]
+                )
+            );
         $this->_validator = new \Magento\Framework\View\Element\Template\File\Validator(
             $this->_fileSystemMock,
             $this->_scopeConfigMock,

@@ -17,16 +17,16 @@ class FileIterator extends \Magento\Framework\Config\FileIterator
     protected $_moduleDirResolver;
 
     /**
-     * @param \Magento\Framework\Filesystem\Directory\ReadInterface $directory
+     * @param \Magento\Framework\Filesystem\DriverInterface $filesystemDriver
      * @param array $paths
      * @param \Magento\Framework\Module\Dir\ReverseResolver $dirResolver
      */
     public function __construct(
-        \Magento\Framework\Filesystem\Directory\ReadInterface $directory,
+        \Magento\Framework\Filesystem\DriverInterface $filesystemDriver,
         array $paths,
         \Magento\Framework\Module\Dir\ReverseResolver $dirResolver
     ) {
-        parent::__construct($directory, $paths);
+        parent::__construct($filesystemDriver, $paths);
         $this->_moduleDirResolver = $dirResolver;
     }
 
@@ -36,14 +36,14 @@ class FileIterator extends \Magento\Framework\Config\FileIterator
      */
     public function current()
     {
-        $path = $this->directoryRead->getAbsolutePath($this->key());
+        $path = $this->key();
         $moduleName = $this->_moduleDirResolver->getModuleName($path);
         if (!$moduleName) {
             throw new \UnexpectedValueException(
                 sprintf("Unable to determine a module, file '%s' belongs to.", $this->key())
             );
         }
-        $contents = $this->directoryRead->readFile($this->key());
+        $contents = $this->filesystemDriver->fileGetContents($this->key());
         return str_replace('<template ', '<template module="' . $moduleName . '" ', $contents);
     }
 }
