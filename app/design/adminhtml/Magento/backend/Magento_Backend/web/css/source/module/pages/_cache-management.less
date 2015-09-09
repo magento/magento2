@@ -3,6 +3,10 @@
 //  * See COPYING.txt for license details.
 //  */
 
+//
+//  Cashe Management
+//  _____________________________________________
+
 @grid-severity-critical-background: #f9d4d4;
 @grid-severity-critical-color: #e22626;
 @grid-severity-critical-border-color: #e22626;
@@ -18,6 +22,17 @@
 @grid-severity-minor-background: #feeee1;
 @grid-severity-minor-color: #ed4f2e;
 @grid-severity-minor-border-color: #ed4f2e;
+
+@additional-cache-management-border: 1px solid #cac3b4;
+
+@additional-cache-management-heading-color: #303030;
+@additional-cache-management-heading-size: 1.7rem;
+
+@additional-cache-management-text-color: #303030;
+@additional-cache-management-text-size: 14px;
+
+@additional-cache-management-font-weight: 600;
+
 
 .grid-severity-critical,
 .grid-severity-major,
@@ -49,8 +64,8 @@
 
 .additional-cache-management {
     margin-bottom: 0;
-    .legend {
-        border-bottom: 1px solid #cac3b4;
+    h2 {
+        border-bottom: @additional-cache-management-border;
         box-sizing: border-box;
         float: left;
         margin: 0 0 18px;
@@ -58,17 +73,17 @@
         position: static;
         width: 100%;
         span {
-            color: #303030;
+            color: @additional-cache-management-heading-color;
             display: inline-block;
-            font-size: 1.7rem;
-            font-weight: 600;
+            font-size: @additional-cache-management-heading-size;
+            font-weight: @additional-cache-management-font-weight;
             padding: 7px 0 10px;
         }
     }
-    .label {
-        color: #303030;
-        font-size: 14px;
-        font-weight: 600;
+    span {
+        color: @additional-cache-management-text-color;
+        font-size: @additional-cache-management-text-size;
+        font-weight: @additional-cache-management-font-weight;
         margin: 5px 0 6px;
     }
 }
