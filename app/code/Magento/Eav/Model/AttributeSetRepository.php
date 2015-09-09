@@ -165,7 +165,6 @@ class AttributeSetRepository implements AttributeSetRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @codeCoverageIgnore
      */
     public function deleteById($attributeSetId)
     {
