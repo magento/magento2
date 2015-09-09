@@ -4,28 +4,31 @@
  */
 define([
     'ko',
+    'underscore',
+    'mageUtils',
+    'uiLayout',
     'uiComponent'
-], function (ko, Component) {
+], function (ko, _, utils, layout, Component) {
     'use strict';
-
-    /**
-     * Returns closest existing page number to page argument
-     * @param {Number} value
-     * @param {Number} max
-     * @returns {Number} closest existing page number
-     */
-    function getInRange(value, max) {
-        return Math.min(Math.max(1, value), max);
-    }
 
     return Component.extend({
         defaults: {
-            template: 'ui/grid/paging',
+            template: 'ui/grid/paging/paging',
             pageSize: 20,
             current: 1,
             selectProvider: '',
 
+            sizesConfig: {
+                component: 'Magento_Ui/js/grid/paging/sizes',
+                name: '${ $.name }_sizes',
+                storageConfig: {
+                    provider: '${ $.storageConfig.provider }',
+                    namespace: '${ $.storageConfig.namespace }'
+                }
+            },
+
             imports: {
+                pageSize: '${ $.sizesConfig.name }:value',
                 totalSelected: '${ $.selectProvider }:totalSelected',
                 totalRecords: '${ $.provider }:data.totalRecords'
             },
@@ -36,14 +39,14 @@ define([
                 pages: '${ $.provider }:data.pages'
             },
 
-            links: {
-                pageSize: '${ $.storageConfig.path }.pageSize'
-            },
-
             listens: {
                 'pages': 'onPagesChange',
                 'pageSize totalRecords': 'countPages',
                 '${ $.provider }:params.filters': 'goFirst'
+            },
+
+            modules: {
+                sizes: '${ $.sizesConfig.name }'
             }
         },
 
@@ -54,6 +57,7 @@ define([
          */
         initialize: function () {
             this._super()
+                .initSizes()
                 .countPages();
 
             return this;
@@ -71,13 +75,12 @@ define([
                     'totalRecords',
                     'pageSize',
                     'current',
-                    'pages'
+                    'pages',
+                    'options'
                 ]);
 
             this._current = ko.pureComputed({
-                read: function () {
-                    return +this.current();
-                },
+                read: this.current,
 
                 /**
                  * Validates page change according to user's input.
@@ -85,17 +88,59 @@ define([
                  * Calls reload method then.
                  */
                 write: function (value) {
-                    var valid;
+                    value = this.normalize(value);
 
-                    value = +value;
-                    valid = !isNaN(value) ? getInRange(value, this.pages()) : 1;
-
-                    this.current(valid);
+                    this.current(value);
                     this._current.notifySubscribers(value);
                 },
 
                 owner: this
             });
+
+            return this;
+        },
+
+        /**
+         * Initializes sizes component.
+         *
+         * @returns {Paging} Chainable.
+         */
+        initSizes: function () {
+            layout([this.sizesConfig]);
+
+            return this;
+        },
+
+        /**
+         * Sets cursor to the provied value.
+         *
+         * @param {(Number|String)} value - New value of the cursor.
+         * @returns {Paging} Chainable.
+         */
+        setPage: function (value) {
+            this.current(this.normalize(value));
+
+            return this;
+        },
+
+        /**
+         * Increments current page value.
+         *
+         * @returns {Paging} Chainable.
+         */
+        next: function () {
+            this.setPage(this.current() + 1);
+
+            return this;
+        },
+
+        /**
+         * Decrements current page value.
+         *
+         * @returns {Paging} Chainable.
+         */
+        prev: function () {
+            this.setPage(this.current() - 1);
 
             return this;
         },
@@ -123,29 +168,7 @@ define([
         },
 
         /**
-         * Increments current page value.
-         *
-         * @returns {Paging} Chainable.
-         */
-        next: function () {
-            this.current(this.current() + 1);
-
-            return this;
-        },
-
-        /**
-         * Decrements current page value.
-         *
-         * @returns {Paging} Chainable.
-         */
-        prev: function () {
-            this.current(this.current() - 1);
-
-            return this;
-        },
-
-        /**
-         * Checks if current page is the first page.
+         * Checks if current page is the first one.
          *
          * @returns {Boolean}
          */
@@ -154,12 +177,31 @@ define([
         },
 
         /**
-         * Checks if current page is the last page.
+         * Checks if current page is the last one.
          *
          * @returns {Boolean}
          */
         isLast: function () {
             return this.current() === this.pages();
+        },
+
+        /**
+         * Converts provided value to a number and puts
+         * it in range between 1 and total amount of pages.
+         *
+         * @param {(Number|String)} value - Value to be normalized.
+         * @returns {Number}
+         */
+        normalize: function (value) {
+            var total = this.pages();
+
+            value = +value;
+
+            if (isNaN(value)) {
+                return 1;
+            }
+
+            return utils.inRange(Math.round(value), 1, total);
         },
 
         /**
@@ -181,7 +223,7 @@ define([
         onPagesChange: function (pages) {
             var current = this.current;
 
-            current(getInRange(current(), pages));
+            current(utils.inRange(current(), 1, pages));
         }
     });
 });
