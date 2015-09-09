@@ -14,7 +14,7 @@
             id="mass-select-checkbox"
             class="admin__control-checkbox"
             type="checkbox"
-            data-bind="checked: allSelected,
+            data-bind="checked: allSelected(),
                        event: { change: toggleSelectAll },
                        css: { '_indeterminate': indetermine },
                        enable: totalRecords">
