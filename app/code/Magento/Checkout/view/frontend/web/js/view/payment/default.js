@@ -91,6 +91,11 @@ define(
                 return this;
             },
 
+            /**
+             * Create child message renderer component
+             *
+             * @returns {Component} Chainable.
+             */
             createMessagesComponent: function () {
 
                 var messagesComponent = {
