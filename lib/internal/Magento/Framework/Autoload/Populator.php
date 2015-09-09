@@ -6,7 +6,7 @@
 namespace Magento\Framework\Autoload;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Autoload\AutoloaderInterface;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem\FileResolver;
 
 /**
@@ -16,18 +16,24 @@ use Magento\Framework\Filesystem\FileResolver;
 class Populator
 {
     /**
-     * @param AutoloaderInterface $registry
+     * @param AutoloaderInterface $autoloader
      * @param DirectoryList $dirList
+     * @param ComponentRegistrar $componentRegistrar
      * @return void
      */
-    public static function populateMappings(AutoloaderInterface $autoloader, DirectoryList $dirList)
-    {
-        $modulesDir = $dirList->getPath(DirectoryList::ROOT) . '/app/code';
+    public static function populateMappings(
+        AutoloaderInterface $autoloader,
+        DirectoryList $dirList,
+        ComponentRegistrar $componentRegistrar
+    ) {
         $generationDir = $dirList->getPath(DirectoryList::GENERATION);
         $frameworkDir = $dirList->getPath(DirectoryList::LIB_INTERNAL);
 
-        $autoloader->addPsr4('Magento\\', [$modulesDir . '/Magento/', $generationDir . '/Magento/'], true);
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
+            $autoloader->addPsr4(str_replace('_', '\\', $moduleName) . '\\', [$moduleDir . '/'], true);
+        }
 
+        $autoloader->addPsr4('Magento\\', [$generationDir . '/Magento/'], true);
         $autoloader->addPsr0('Apache_', $frameworkDir, true);
         $autoloader->addPsr0('Cm_', $frameworkDir, true);
         $autoloader->addPsr0('Credis_', $frameworkDir, true);

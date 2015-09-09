@@ -34,25 +34,17 @@ class Resolver implements ResolverInterface
     protected $componentRegistrar;
 
     /**
-     * @var DirectoryList
-     */
-    protected $directoryList;
-
-    /**
      * Resolver construct
      *
-     * @param DirectoryList $directoryList
      * @param ComponentRegistrar $componentRegistrar
      * @param string $directory
      * @param bool $withContext
      */
     public function __construct(
-        DirectoryList $directoryList,
         ComponentRegistrar $componentRegistrar,
         $directory,
         $withContext
     ) {
-        $this->directoryList = $directoryList;
         $this->componentRegistrar = $componentRegistrar;
         $this->directory = $directory;
         $this->withContext = $withContext;
@@ -68,7 +60,9 @@ class Resolver implements ResolverInterface
                 $this->directory = rtrim($this->directory, '\\/');
                 $moduleDirs = [];
                 foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
-                    $moduleDirs[] = str_replace($this->directoryList->getRoot(), $this->directory, $moduleDir) . '/';
+                    if (strstr($moduleDir, $this->directory)) {
+                        $moduleDirs[] = $moduleDir . '/';
+                    }
                 }
                 $this->options = [
                     [
