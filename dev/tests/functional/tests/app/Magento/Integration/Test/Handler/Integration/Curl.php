@@ -80,7 +80,7 @@ class Curl extends AbstractCurl implements IntegrationInterface
     protected function getIntegrationId(Integration $integration)
     {
         $name = $integration->getName();
-        $filter = $this->encodeFilter(['name' => $integration->getName()]);
+        $filter = base64_encode('name=' . $integration->getName());
         $url = $_ENV['app_backend_url'] . 'admin/integration/grid/filter/' . $filter;
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
 

@@ -62,8 +62,6 @@ class Curl extends AbstractCurl
     protected $widgetInstanceTemplate = '';
 
     /**
-     * Constructor
-     *
      * @constructor
      * @param DataInterface $configuration
      */
@@ -205,7 +203,7 @@ class Curl extends AbstractCurl
      */
     protected function getThemeId($title)
     {
-        $filter = $this->encodeFilter(['theme_title' => $title]);
+        $filter = base64_encode('theme_title=' . $title);
         $url = $_ENV['app_backend_url'] . 'admin/system_design_theme/grid/filter/' . $filter;
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->write($url, [], CurlInterface::GET);
