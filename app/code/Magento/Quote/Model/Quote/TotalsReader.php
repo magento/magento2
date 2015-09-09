@@ -74,7 +74,8 @@ class TotalsReader
         'customerbalance',
         'giftcardaccount',
         'msrp',
-        'shipping'
+        'shipping',
+        'freeshipping'
     );
 
     /**

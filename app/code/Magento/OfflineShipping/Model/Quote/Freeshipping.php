@@ -10,16 +10,14 @@ use Magento\Quote\Model\Quote\Address;
 class Freeshipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 {
     /**
-     * Discount calculation object
-     *
      * @var \Magento\OfflineShipping\Model\SalesRule\Calculator
      */
-    protected $_calculator;
+    protected $calculator;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    protected $_storeManager;
+    protected $storeManager;
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -29,35 +27,39 @@ class Freeshipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTota
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\OfflineShipping\Model\SalesRule\Calculator $calculator
     ) {
-        $this->setCode('discount');
-        $this->_storeManager = $storeManager;
-        $this->_calculator = $calculator;
+        $this->setCode('freeshipping');
+        $this->storeManager = $storeManager;
+        $this->calculator = $calculator;
     }
 
     /**
      * Collect information about free shipping for all address items
      *
-     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface|Address $shippingAssignment
+     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment
      * @param Address\Total $total
-     * @return Freeshipping
+     * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function collect(\Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment, \Magento\Quote\Model\Quote\Address\Total $total)
-    {
+    public function collect(
+        \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment,
+        \Magento\Quote\Model\Quote\Address\Total $total
+    ) {
         parent::collect($shippingAssignment, $total);
-        $quote = $shippingAssignment->getQuote();
-        $store = $this->_storeManager->getStore($quote->getStoreId());
+        $quote = $shippingAssignment->getShipping()->getAddress()->getQuote();
+        $store = $this->storeManager->getStore($quote->getStoreId());
 
+        /** @var \Magento\Quote\Api\Data\AddressInterface $address */
         $address = $shippingAssignment->getShipping()->getAddress();
         $address->setFreeShipping(0);
-        $items = $this->_getAddressItems($address);
-        if (!count($items)) {
+
+        if (!count($shippingAssignment->getItems())) {
             return $this;
         }
-        $this->_calculator->init($store->getWebsiteId(), $quote->getCustomerGroupId(), $quote->getCouponCode());
 
+        $this->calculator->init($store->getWebsiteId(), $quote->getCustomerGroupId(), $quote->getCouponCode());
         $isAllFree = true;
-        foreach ($items as $item) {
+
+        foreach ($shippingAssignment->getItems() as $item) {
             if ($item->getNoDiscount()) {
                 $isAllFree = false;
                 $item->setFreeShipping(false);
@@ -68,12 +70,12 @@ class Freeshipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTota
                 if ($item->getParentItemId()) {
                     continue;
                 }
-                $this->_calculator->processFreeShipping($item);
+                $this->calculator->processFreeShipping($item);
                 $isItemFree = (bool)$item->getFreeShipping();
                 $isAllFree = $isAllFree && $isItemFree;
                 if ($item->getHasChildren() && $item->isChildrenCalculated()) {
                     foreach ($item->getChildren() as $child) {
-                        $this->_calculator->processFreeShipping($child);
+                        $this->calculator->processFreeShipping($child);
                         /**
                          * Parent free shipping we apply to all children
                          */
@@ -94,12 +96,12 @@ class Freeshipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTota
      * Add information about free shipping for all address items to address object
      * By default we not present such information
      *
-     * @param Address|Address\Total $total
-     * @return Freeshipping
+     * @param \Magento\Quote\Model\Quote\Address\Total $total
+     * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fetch(\Magento\Quote\Model\Quote\Address\Total $total)
     {
-        return $this;
+        return [];
     }
 }
