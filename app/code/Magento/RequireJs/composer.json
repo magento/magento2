@@ -12,12 +12,7 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/RequireJs"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ]
     }
 }
