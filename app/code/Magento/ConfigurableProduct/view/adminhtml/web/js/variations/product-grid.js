@@ -13,14 +13,15 @@ define([
 
     return Component.extend({
         defaults: {
-            associatedProductsModal: null,
-            associatedProductsGridUrl: '${ $.associatedProductsGridUrl }',
+            gridSelector: '#associated-products-container',
+            gridTitle: 'Select Associated Product',
+            gridModal: null,
             attributes: [],
             gridSelector: '[data-grid-id=associated-products-container]',
             modules: {
-                associatedProductsFilter: '${ $.associatedProductsFilter }',
-                associatedProductsProvider: '${ $.associatedProductsProvider }',
-                associatedProductsMassAction: '${ $.associatedProductsMassAction }',
+                productsFilter: '${ $.associatedProductsFilter }',
+                productsProvider: '${ $.associatedProductsProvider }',
+                productsMassAction: '${ $.associatedProductsMassAction }',
                 variationsComponent: '${ $.configurableVariations }'
             }
         },
@@ -32,7 +33,7 @@ define([
             this._super(options);
 
             var gridIsLoaded = false;
-            this.associatedProductsModal = $(this.gridSelector).modal({
+            this.productsModal = $(this.gridSelector).modal({
                 title: $.mage.__('Select Associated Product'),
                 type: 'slide',
                 opened: function () {
@@ -51,15 +52,6 @@ define([
         },
 
         /**
-         * @todo description
-         */
-        initObservable: function () {
-            this._super().observe('actions opened productMatrix');
-
-            return this;
-        },
-
-        /**
          * Select different product in configurations section
          * @param rowIndex
          */
@@ -73,26 +65,26 @@ define([
          */
         open: function (attributes, showMassActionColumn) {
             this.attributes = attributes;
-            this.associatedProductsMassAction(function(massActionComponent) {
+            this.productsMassAction(function(massActionComponent) {
                 massActionComponent.visible(showMassActionColumn);
             });
             this._setFilter();
             this._showMessageAssociatedGrid();
-            this.associatedProductsModal.modal('openModal');
+            this.gridModal.trigger('openModal');
         },
 
         /**
          * @todo description
          */
         close: function () {
-            this.associatedProductsModal.trigger('closeModal');
+            this.gridModal.trigger('closeModal');
         },
 
         /**
          * @todo description
          */
         getProduct: function (rowIndex) {
-            return this.associatedProductsProvider().data.items[rowIndex];
+            return this.productsProvider().data.items[rowIndex];
         },
 
         /**
@@ -105,7 +97,7 @@ define([
             var params = this.attributes
                 ? '?' + $.param({filters: this.attributes, attribute_ids: _.keys(this.attributes)})
                 : '';
-            return this.associatedProductsGridUrl + params;
+            return this.productsGridUrl + params;
         },
 
         /**
@@ -113,18 +105,18 @@ define([
          */
         _showMessageAssociatedGrid: function () {
             var messageInited = false;
-            this.associatedProductsProvider(function(provider) {
+            this.productsProvider(function(provider) {
                 if (!messageInited) {
-                    this.associatedProductsModal.notification();
+                    this.productsModal.notification();
                 }
-                this.associatedProductsModal.notification('clear');
+                this.productsModal.notification('clear');
                 if (provider.data.items.length) {
-                    this.associatedProductsModal.notification('add', {
+                    this.productsModal.notification('add', {
                         message: $.mage.__('Choose a new product to delete and replace the current product configuration.'),
                         messageContainer: this.gridSelector
                     });
                 } else {
-                    this.associatedProductsModal.notification('add', {
+                    this.productsModal.notification('add', {
                         message: $.mage.__('For better results, add attributes and attribute values to your products.'),
                         messageContainer: this.gridSelector
                     });
@@ -136,10 +128,10 @@ define([
          * @todo description
          */
         _setFilter: function () {
-            this.associatedProductsProvider(function(provider) {
+            this.productsProvider(function(provider) {
                 provider.params['attribute_ids'] = _.keys(this.attributes);
             }.bind(this));
-            this.associatedProductsFilter(function(filter) {
+            this.productsFilter(function(filter) {
                 filter.set('filters', this.attributes)
                 .apply();
             }.bind(this));
