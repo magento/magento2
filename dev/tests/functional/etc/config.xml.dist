@@ -22,8 +22,10 @@
         <backendName>backend</backendName>
     </install>
     <handler>
-        <webapi priority="0" />
-        <curl priority="1"/>
+        <webapi priority="0">
+            <token>integration_token</token>
+        </webapi>
+        <curl priority="1" />
         <ui priority="2" />
     </handler>
 </config>

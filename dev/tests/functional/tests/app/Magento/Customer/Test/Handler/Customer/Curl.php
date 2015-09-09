@@ -228,21 +228,4 @@ class Curl extends AbstractCurl implements CustomerInterface
 
         return $curlData;
     }
-
-    /**
-     * Encoded filter parameters
-     *
-     * @param array $filter
-     * @return string
-     */
-    protected function encodeFilter(array $filter)
-    {
-        $result = [];
-        foreach ($filter as $name => $value) {
-            $result[] = "{$name}={$value}";
-        }
-        $result = implode('&', $result);
-
-        return base64_encode($result);
-    }
 }
