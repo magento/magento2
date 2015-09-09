@@ -62,8 +62,6 @@ class Curl extends AbstractCurl
     protected $widgetInstanceTemplate = '';
 
     /**
-     * Constructor
-     *
      * @constructor
      * @param DataInterface $configuration
      */
@@ -205,7 +203,7 @@ class Curl extends AbstractCurl
      */
     protected function getThemeId($title)
     {
-        $filter = $this->encodeFilter(['theme_title' => $title]);
+        $filter = base64_encode('theme_title=' . $title);
         $url = $_ENV['app_backend_url'] . 'admin/system_design_theme/grid/filter/' . $filter;
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->write($url, [], CurlInterface::GET);
@@ -214,22 +212,5 @@ class Curl extends AbstractCurl
 
         preg_match('/<tr data-role="row" title="[^"]+system_design_theme\/edit\/id\/([\d]+)\/"/', $response, $match);
         return empty($match[1]) ? null : $match[1];
-    }
-
-    /**
-     * Encoded filter parameters.
-     *
-     * @param array $filter
-     * @return string
-     */
-    protected function encodeFilter(array $filter)
-    {
-        $result = [];
-        foreach ($filter as $name => $value) {
-            $result[] = "{$name}={$value}";
-        }
-        $result = implode('&', $result);
-
-        return base64_encode($result);
     }
 }

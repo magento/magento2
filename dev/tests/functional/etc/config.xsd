@@ -57,7 +57,7 @@
                         </xs:sequence>
                     </xs:complexType>
                 </xs:element>
-                <xs:element name="handler" minOccurs="0" maxOccurs="1" type="handlerTypes" />
+                <xs:element name="handler" minOccurs="1" maxOccurs="1" type="handlerTypes" />
             </xs:all>
         </xs:complexType>
     </xs:element>
@@ -138,11 +138,10 @@
         <xs:all>
             <xs:element name="webapi" maxOccurs="1" minOccurs="0">
                 <xs:complexType>
-                    <xs:simpleContent>
-                        <xs:extension base="xs:string">
-                            <xs:attribute type="xs:unsignedByte" name="priority" use="required" />
-                        </xs:extension>
-                    </xs:simpleContent>
+                    <xs:sequence>
+                        <xs:element type="xs:string" name="token" maxOccurs="1" minOccurs="1"/>
+                    </xs:sequence>
+                    <xs:attribute type="xs:unsignedByte" name="priority" use="required" />
                 </xs:complexType>
             </xs:element>
             <xs:element name="curl" maxOccurs="1" minOccurs="0">
