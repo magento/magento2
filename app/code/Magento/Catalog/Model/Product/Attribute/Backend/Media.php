@@ -22,11 +22,6 @@ use \Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryProcessorPool;
 class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
-     * @var array
-     */
-    protected $_renamedImages = [];
-
-    /**
      * Resource model
      *
      * @var \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media
