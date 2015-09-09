@@ -12,8 +12,10 @@ use Magento\Framework\Cache\InvalidateLogger;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\App\RequestInterface;
+
 /**
  * Class Observer
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Observer
 {
@@ -61,7 +63,6 @@ class Observer
      * @param InvalidateLogger $logger
      * @param DeploymentConfig $deploymentConfig
      * @param RequestInterface $request
-     * @internal param Reader $configReader
      */
     public function __construct(
         \Magento\PageCache\Model\Config $config,
