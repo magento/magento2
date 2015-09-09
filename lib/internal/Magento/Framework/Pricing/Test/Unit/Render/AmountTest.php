@@ -169,6 +169,9 @@ class AmountTest extends \PHPUnit_Framework_TestCase
         $this->rendererPool->expects($this->once())
             ->method('getAdjustmentRenders')
             ->will($this->returnValue($adjustmentRenders));
+        $this->amount->expects($this->atLeastOnce())
+            ->method('getAdjustmentAmount')
+            ->willReturn(true);
 
         $this->model->toHtml();
     }
@@ -226,6 +229,9 @@ class AmountTest extends \PHPUnit_Framework_TestCase
         $this->rendererPool->expects($this->once())
             ->method('getAdjustmentRenders')
             ->will($this->returnValue($adjustmentRenders));
+        $this->amount->expects($this->atLeastOnce())
+            ->method('getAdjustmentAmount')
+            ->willReturn(true);
 
         $this->model->toHtml();
 

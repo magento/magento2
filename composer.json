@@ -112,6 +112,7 @@
         "magento/module-downloadable": "self.version",
         "magento/module-eav": "self.version",
         "magento/module-email": "self.version",
+        "magento/module-encryption-key": "self.version",
         "magento/module-fedex": "self.version",
         "magento/module-gift-message": "self.version",
         "magento/module-google-adwords": "self.version",
