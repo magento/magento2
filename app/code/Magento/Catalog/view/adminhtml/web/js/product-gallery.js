@@ -286,7 +286,7 @@ define([
          * @private
          */
         _onOpenDialog: function(e, imageData) {
-            if(imageData.media_type != 'image') {
+            if(imageData.media_type && imageData.media_type != 'image') {
                 return;
             }
             this._showDialog(imageData);
