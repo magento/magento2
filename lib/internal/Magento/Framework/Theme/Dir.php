@@ -6,8 +6,6 @@
 
 namespace Magento\Framework\Theme;
 
-
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Filesystem;
@@ -25,37 +23,11 @@ class Dir
     private $componentRegistrar;
 
     /**
-     * Modules Directory
-     *
-     * @var string
-     */
-    private $modulesDirectory;
-
-    /**
-     * @param \Magento\Framework\Filesystem $filesystem
      * @param ComponentRegistrarInterface $componentRegistrar
      */
-    public function __construct(
-        \Magento\Framework\Filesystem $filesystem,
-        ComponentRegistrarInterface $componentRegistrar
-    ) {
-        $this->modulesDirectory = $filesystem->getDirectoryRead(DirectoryList::MODULES);
-        $this->componentRegistrar = $componentRegistrar;
-    }
-
-    /**
-     * Search themes for given regex pattern
-     *
-     * @param string $pattern
-     * @return string[]
-     */
-    public function search($pattern)
+    public function __construct(ComponentRegistrarInterface $componentRegistrar)
     {
-        $result = [];
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $path) {
-            $result = array_merge($result, $this->modulesDirectory->search($pattern, $path));
-        }
-        return $result;
+        $this->componentRegistrar = $componentRegistrar;
     }
 
     /**

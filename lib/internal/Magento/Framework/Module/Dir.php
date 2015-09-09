@@ -10,7 +10,6 @@ namespace Magento\Framework\Module;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Stdlib\StringUtils as StringHelper;
 
 class Dir
 {
@@ -24,11 +23,6 @@ class Dir
     /**#@-*/
 
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils
-     */
-    protected $_string;
-
-    /**
      * Module registry
      *
      * @var ComponentRegistrarInterface
@@ -36,10 +30,9 @@ class Dir
     private $componentRegistrar;
 
     /**
-     * @param StringHelper $string
      * @param ComponentRegistrarInterface $componentRegistrar
      */
-    public function __construct(StringHelper $string, ComponentRegistrarInterface $componentRegistrar)
+    public function __construct(ComponentRegistrarInterface $componentRegistrar)
     {
         $this->componentRegistrar = $componentRegistrar;
     }

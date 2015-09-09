@@ -65,9 +65,6 @@ class Base extends AbstractCollector
     {
         $result = [];
         $sharedFiles = $this->dirSearch->collectFiles("view/base/{$this->subDir}{$filePath}");
-
-        $filePathPtn = $this->pathPatternHelper->translatePatternFromGlob($filePath);
-        $pattern = "#(?<namespace>[^/]+)/(?<module>[^/]+)/view/base/{$this->subDir}" . $filePathPtn . "$#i";
         foreach ($sharedFiles as $file) {
             $filename = $this->directory->getAbsolutePath($file);
             $modulePath = preg_replace('/\/view\/base\/.*/', "", $filename);
@@ -77,7 +74,6 @@ class Base extends AbstractCollector
         }
         $area = $theme->getData('area');
         $themeFiles = $this->dirSearch->collectFiles("view/{$area}/{$this->subDir}{$filePath}");
-        $pattern = "#(?<namespace>[^/]+)/(?<module>[^/]+)/view/{$area}/{$this->subDir}" . $filePathPtn . "$#i";
         foreach ($themeFiles as $file) {
             $filename = $this->directory->getAbsolutePath($file);
             $modulePath = preg_replace('/\/view\/.*/', "", $filename);
