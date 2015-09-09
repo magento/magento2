@@ -5,7 +5,6 @@
  */
 namespace Magento\Setup\Console\Command;
 
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Framework\App\ObjectManager;
 use Symfony\Component\Console\Input\InputInterface;
@@ -14,6 +13,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Magento\Framework\Api\Code\Generator\Mapper;
 use Magento\Framework\Api\Code\Generator\SearchResults;
 use Magento\Framework\Autoload\AutoloaderRegistry;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Interception\Code\Generator\Interceptor;
 use Magento\Framework\ObjectManager\Code\Generator\Converter;
 use Magento\Framework\ObjectManager\Code\Generator\Factory;
@@ -192,12 +192,14 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
             : $this->directoryList->getPath(DirectoryList::GENERATION);
         $modulesExcludePatterns = $this->getModuleExcludePatterns();
         $testExcludePatterns = [
-            "#^" . $this->directoryList->getPath(DirectoryList::LIB_INTERNAL)
-            . "/[\\w]+/[\\w]+/([\\w]+/)?Test#",
             "#^" . $this->directoryList->getPath(DirectoryList::SETUP) . "/[\\w]+/[\\w]+/Test#",
             "#^" . $this->directoryList->getRoot() . "/dev/tools/Magento/Tools/[\\w]+/Test#"
         ];
-        $testExcludePatterns = array_merge($testExcludePatterns, $modulesExcludePatterns);
+        $librariesExcludePatterns = [];
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryPath) {
+            $librariesExcludePatterns[] = "#^" . $libraryPath . "/[\\w]+/[\\w]+/([\\w]+/)?Test#";
+        }
+        $testExcludePatterns = array_merge($testExcludePatterns, $modulesExcludePatterns, $librariesExcludePatterns);
         $fileExcludePatterns = $input->getOption('exclude-pattern') ?
             [$input->getOption(self::INPUT_KEY_EXCLUDE_PATTERN)] : ['#[\\\\/]M1[\\\\/]#i'];
         $fileExcludePatterns = array_merge($fileExcludePatterns, $testExcludePatterns);
@@ -330,13 +332,13 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
         $relationsFile = $diDir . '/relations.ser';
         $pluginDefFile = $diDir . '/plugins.ser';
         $compilationDirs = [
-            $this->directoryList->getPath(DirectoryList::LIB_INTERNAL) . '/Magento',
             $this->directoryList->getPath(DirectoryList::SETUP) . '/Magento/Setup/Module',
             $this->directoryList->getRoot() . '/dev/tools/Magento/Tools',
         ];
         $compilationDirs = array_merge(
             $compilationDirs,
-            $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE)
+            $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE),
+            $this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY)
         );
         $serializer = $input->getOption(self::INPUT_KEY_SERIALIZER) == Igbinary::NAME ? new Igbinary() : new Standard();
         // 2.1 Code scan

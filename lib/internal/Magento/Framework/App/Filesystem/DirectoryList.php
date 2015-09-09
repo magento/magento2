@@ -132,7 +132,6 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
             self::LOG => [parent::PATH => 'var/log'],
             self::DI => [parent::PATH => 'var/di'],
             self::GENERATION => [parent::PATH => 'var/generation'],
-            self::LOCALE => [parent::PATH => 'app/i18n'],
             self::SESSION => [parent::PATH => 'var/session'],
             self::MEDIA => [parent::PATH => 'pub/media', parent::URL_PATH => 'pub/media'],
             self::STATIC_VIEW => [parent::PATH => 'pub/static', parent::URL_PATH => 'pub/static'],

@@ -6,11 +6,11 @@
 
 namespace Magento\Setup\Console\Command;
 
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Module\Di\App\Task\Manager;
 use Magento\Setup\Module\Di\App\Task\OperationFactory;
@@ -95,7 +95,7 @@ class DiCompileCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $appCodePaths = $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE);
-        $libraryPath = $this->directoryList->getPath(DirectoryList::LIB_INTERNAL);
+        $libraryPaths = $this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
         $generationPath = $this->directoryList->getPath(DirectoryList::GENERATION);
         if (!$this->deploymentConfig->isAvailable()) {
             $output->writeln('You cannot run this command because the Magento application is not installed.');
@@ -104,16 +104,20 @@ class DiCompileCommand extends Command
         $this->objectManager->get('Magento\Framework\App\Cache')->clean();
         $compiledPathsList = [
             'application' => $appCodePaths,
-            'library' => $libraryPath . '/Magento/Framework',
+            'library' => $libraryPaths,
             'generated_helpers' => $generationPath
         ];
         $excludedAppCodePaths = [];
         foreach ($appCodePaths as $appCodePath) {
             $excludedAppCodePaths[] = '#^' . $appCodePath . '/Test#';
         }
+        $excludedLibraryPaths = [];
+        foreach ($libraryPaths as $libraryPath) {
+            $excludedLibraryPaths[] = '#^' . $libraryPath . '/[\\w]+/[\\w]+/([\\w]+/)?Test#';
+        }
         $this->excludedPathsList = [
             'application' => $excludedAppCodePaths,
-            'framework' => '#^' . $libraryPath . '/[\\w]+/[\\w]+/([\\w]+/)?Test#'
+            'framework' => $excludedLibraryPaths
         ];
         $dataAttributesIncludePattern = [
             'extension_attributes' => '/\/etc\/([a-zA-Z_]*\/extension_attributes|extension_attributes)\.xml$/'

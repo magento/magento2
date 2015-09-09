@@ -41,9 +41,6 @@ class Files
     /** @var string regex for test directories in tools */
     protected $toolsTestDirs = '#dev/tools/Magento/Tools/[\\w]+/Test#';
 
-    /** @var string regex for test directories in lib/internal */
-    protected $libTestDirs = '#lib/internal/[\\w]+/[\\w]+/([\\w]+/)?Test#';
-
     /**
      * Setter for an instance of self
      *
@@ -113,6 +110,24 @@ class Files
     }
 
     /**
+     * Get test directories in libraries
+     *
+     * @return array
+     */
+    private function getLibraryTestDirs()
+    {
+        $exclude = [];
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryDir) {
+            $exclude[] = '#' . $libraryDir . '/Test#';
+            $innerLevelDirs = glob($libraryDir . '/*/*/Test/', GLOB_NOSORT);
+            foreach ($innerLevelDirs as $innerLevelDir) {
+                $exclude[] = '#' . $innerLevelDir;
+            }
+        }
+        return $exclude;
+    }
+
+    /**
      * Getter for _path
      *
      * @return string
@@ -152,7 +167,11 @@ class Files
                     $files,
                     glob($this->_path . '/*.php', GLOB_NOSORT),
                     glob($this->_path . '/pub/*.php', GLOB_NOSORT),
-                    $this->getFilesSubset(["{$this->_path}/lib/internal/Magento"], '*.php', $this->libTestDirs)
+                    $this->getFilesSubset(
+                        $this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY),
+                        '*.php',
+                        $this->getLibraryTestDirs()
+                    )
                 );
             }
             if ($tests) {
@@ -206,8 +225,6 @@ class Files
             if ($tests) {
                 $testDirs = [
                     "{$this->_path}/dev/tests",
-                    "{$this->_path}/lib/internal/*/*/Test",
-                    "{$this->_path}/lib/internal/*/*/*/Test",
                     "{$this->_path}/dev/tools/Magento/Tools/*/Test",
                     "{$this->_path}/setup/src/Magento/Setup/Test",
                 ];
@@ -215,7 +232,7 @@ class Files
                 foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
                     $moduleTestDir[] = $moduleDir . '/Test';
                 }
-                $testDirs = array_merge($testDirs, $moduleTestDir);
+                $testDirs = array_merge($testDirs, $moduleTestDir, $this->getLibraryTestDirs());
                 $files = array_merge($files, self::getFiles($testDirs, '*.php'));
             }
             if ($devTools) {
@@ -227,7 +244,11 @@ class Files
             if ($lib) {
                 $files = array_merge(
                     $files,
-                    $this->getFilesSubset(["{$this->_path}/lib/internal/Magento"], '*.php', $this->libTestDirs)
+                    $this->getFilesSubset(
+                        $this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY),
+                        '*.php',
+                        $this->getLibraryTestDirs()
+                    )
                 );
             }
             self::$_cache[$key] = $files;
@@ -870,7 +891,7 @@ class Files
             $themePath = '*/*';
             $result = [];
             $moduleTemplatePaths = [];
-            foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
+            foreach ($this->getModuleDirs() as $moduleDir) {
                 $moduleTemplatePaths[] = $moduleDir . "/view/{$area}/templates";
             }
             $this->_accumulateFilesByPatterns(
@@ -1060,7 +1081,6 @@ class Files
         $namespace = implode('\\', $classParts);
         $path = implode('/', explode('\\', $class)) . '.php';
         $directories = [
-            '/lib/internal/',
             '/dev/tools/',
             '/dev/tests/api-functional/framework/',
             '/dev/tests/integration/framework/',
@@ -1078,6 +1098,9 @@ class Files
         }
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $fullModuleDir) {
             $directories[] = $fullModuleDir . '/';
+        }
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryDir) {
+            $directories[] = $libraryDir . '/';
         }
 
         foreach ($directories as $dir) {

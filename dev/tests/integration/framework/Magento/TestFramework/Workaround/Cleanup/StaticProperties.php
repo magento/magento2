@@ -9,7 +9,7 @@
  */
 namespace Magento\TestFramework\Workaround\Cleanup;
 
-use Magento\Framework\Component\ModuleRegistrar;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 class StaticProperties
@@ -23,7 +23,6 @@ class StaticProperties
      */
     protected static $_cleanableFolders = [
         '/dev/tests/integration/framework' => [],
-        '/lib/internal/' => ['/lib/internal/*/*/Test/Unit/', '/lib/internal/Magento/Framework/*/Test/Unit/']
     ];
 
     protected static $backupStaticVariables = [];
@@ -49,14 +48,20 @@ class StaticProperties
      */
     public function __construct()
     {
-        $moduleRegistrar = new ModuleRegistrar();
+        $componentRegistrar = new ComponentRegistrar();
         /** @var \Magento\Framework\Filesystem $filesystem */
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Filesystem');
         $dirRead = $filesystem->getDirectoryRead(DirectoryList::ROOT);
-        foreach ($moduleRegistrar->getPaths() as $moduleDir) {
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
             $key = '/' . $dirRead->getRelativePath($moduleDir) . '/';
             $value = $key . 'Test/Unit/';
             self::$_cleanableFolders[$key] = [$value];
+        }
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryDir) {
+            $key = '/' . $dirRead->getRelativePath($libraryDir) . '/';
+            $valueRootFolder = $key . '/Test/Unit/';
+            $valueSubFolder = $key . '/*/Test/Unit/';
+            self::$_cleanableFolders[$key] = [$valueSubFolder, $valueRootFolder];
         }
     }
 
