@@ -229,13 +229,6 @@
             transition-timing-function: ease-in-out;
             visibility: hidden;
             z-index: @submenu__z-index - 1;
-            &._overlap {
-                overflow-y: auto;
-                height: 100%;
-                &::-webkit-scrollbar {
-                    width: 0;
-                }
-            }
         }
         &._show  {
             > .submenu {
@@ -447,14 +440,6 @@
     right: 0;
     top: 0;
     z-index: @menu-overlay__z-index;
-}
-
-//  Hide submenu group section title for only one group in submenu
-.submenu-group-title {
-    .column:only-child .level-1:only-child > &,
-    .submenu-title ~ ul > .level-1:only-child > & {
-        display: none;
-    }
 }
 
 //

@@ -14,6 +14,7 @@ use Magento\Framework\Setup\Option\FlagConfigOption;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Setup\Validator\DbValidator;
+use Magento\Framework\App\ObjectManagerFactory;
 
 /**
  * Deployment configuration options needed for Setup application
@@ -68,7 +69,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 ConfigOptionsListConstants::INPUT_KEY_DEFINITION_FORMAT,
                 SelectConfigOption::FRONTEND_WIZARD_SELECT,
                 DefinitionFactory::getSupportedFormats(),
-                ConfigOptionsListConstants::CONFIG_PATH_DEFINITION_FORMAT,
+                ObjectManagerFactory::CONFIG_PATH_DEFINITION_FORMAT,
                 'Type of definitions used by Object Manager'
             ),
             new TextConfigOption(
@@ -159,6 +160,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         $configData[] = $this->configGenerator->createDbConfig($data);
         $configData[] = $this->configGenerator->createResourceConfig();
         $configData[] = $this->configGenerator->createXFrameConfig();
+        $configData[] = $this->configGenerator->createModeConfig();
         return $configData;
     }
 

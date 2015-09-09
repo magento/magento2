@@ -179,7 +179,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
             $swatchNamePath = $this->generateNamePath($imageConfig, $imageUrl, $swatchType);
             $image = $this->imageFactory->create($absoluteImagePath);
             $this->setupImageProperties($image);
-            $image->resize($imageConfig[$swatchType.':width'], $imageConfig[$swatchType.':height']);
+            $image->resize($imageConfig[$swatchType]['width'], $imageConfig[$swatchType]['height']);
             $this->setupImageProperties($image, true);
             $image->save($swatchNamePath['path_for_save'], $swatchNamePath['name']);
         }
@@ -236,7 +236,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         if ($imageConfig === null) {
             $imageConfig = $this->getImageConfig();
         }
-        return $imageConfig[$swatchType.':width'] . 'x' . $imageConfig[$swatchType.':height'];
+        return $imageConfig[$swatchType]['width'] . 'x' . $imageConfig[$swatchType]['height'];
     }
 
     /**
@@ -254,7 +254,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
             ]);
             $imageConfig = array_merge(
                 $imageConfig,
-                $config->getVars('Magento_Catalog')
+                $config->getImages('Magento_Catalog')
             );
         }
         return $imageConfig;

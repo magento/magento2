@@ -31,10 +31,14 @@ class ExportDownloadsCsvTest extends \Magento\Reports\Test\Unit\Controller\Admin
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->exportDownloadsCsv = new ExportDownloadsCsv(
-            $this->contextMock,
-            $this->fileFactoryMock,
-            $this->dateMock
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->exportDownloadsCsv = $objectManager->getObject(
+            'Magento\Reports\Controller\Adminhtml\Report\Product\ExportDownloadsCsv',
+            [
+                'context' => $this->contextMock,
+                'fileFactory' => $this->fileFactoryMock,
+                'dateFilter' => $this->dateMock,
+            ]
         );
     }
 

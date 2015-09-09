@@ -5,7 +5,6 @@
  */
 namespace Magento\Braintree\Model;
 
-use Magento\Braintree\Model\Config\PayPal as PayPalConfig;
 
 class Observer
 {
@@ -42,7 +41,6 @@ class Observer
      * @var \Magento\Framework\DB\TransactionFactory
      */
     protected $transactionFactory;
-
     /**
      * @param Vault $vault
      * @param \Magento\Braintree\Model\Config\Cc $config
@@ -81,21 +79,28 @@ class Observer
             && $order->canInvoice() && $this->shouldInvoice()) {
             $qtys = [];
             foreach ($shipment->getAllItems() as $shipmentItem) {
-                $qtys[$shipmentItem->getOrderItem()->getId()] = $shipmentItem->getQty();
+                if ($shipmentItem->getOrderItem()->getQtyToInvoice() >= $shipmentItem->getQty()) {
+                    $qtys[$shipmentItem->getOrderItem()->getId()] = $shipmentItem->getQty();
+                } else {
+                    $qtys[$shipmentItem->getOrderItem()->getId()] = $shipmentItem->getOrderItem()->getQtyToInvoice();
+                }
             }
             foreach ($order->getAllItems() as $orderItem) {
                 if (!array_key_exists($orderItem->getId(), $qtys)) {
                     $qtys[$orderItem->getId()] = 0;
                 }
             }
-            $invoice = $order->prepareInvoice($qtys);
-            $invoice->setRequestedCaptureCase(\Magento\Sales\Model\Order\Invoice::CAPTURE_ONLINE);
-            $invoice->register();
-            /** @var \Magento\Framework\DB\Transaction $transaction */
-            $transaction = $this->transactionFactory->create();
-            $transaction->addObject($invoice)
-                ->addObject($invoice->getOrder())
-                ->save();
+            if (array_sum($qtys)>0) {
+                $invoice = $order->prepareInvoice($qtys);
+                $invoice->setOrder($order);
+                $invoice->setRequestedCaptureCase(\Magento\Sales\Model\Order\Invoice::CAPTURE_ONLINE);
+                $invoice->register();
+                /** @var \Magento\Framework\DB\Transaction $transaction */
+                $transaction = $this->transactionFactory->create();
+                $transaction->addObject($invoice)
+                    ->addObject($invoice->getOrder())
+                    ->save();
+            }
         }
         return $this;
     }
@@ -169,5 +174,18 @@ class Observer
             $observer->getEvent()->getOrPosition()
         );
         $shortcutButtons->addShortcut($shortcut);
+    }
+
+    /**
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return void
+     */
+    public function processBraintreeAddress(\Magento\Framework\Event\Observer $observer)
+    {
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $observer->getEvent()->getQuote();
+        if ($quote->getPayment()->getMethod() === \Magento\Braintree\Model\PaymentMethod\PayPal:: METHOD_CODE) {
+            $quote->getBillingAddress()->setShouldIgnoreValidation(true);
+        }
     }
 }

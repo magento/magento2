@@ -53,17 +53,17 @@ class ProductImage
      * Replace original configurable product with first child
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @param \Magento\Catalog\Block\Product\Image $subject
+     * @param \Magento\Catalog\Block\Product\AbstractProduct $subject
      * @param \Magento\Catalog\Model\Product $product
      * @param string $location
-     * @param string $module
+     * @param array $attributes
      * @return array
      */
-    public function beforeInit(
-        \Magento\Catalog\Block\Product\Image $subject,
+    public function beforeGetImage(
+        \Magento\Catalog\Block\Product\AbstractProduct $subject,
         \Magento\Catalog\Model\Product $product,
         $location,
-        $module = 'Magento_Catalog'
+        array $attributes = []
     ) {
         if ($product->getTypeId() == \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE
             && ($location == self::CATEGORY_PAGE_GRID_LOCATION || $location == self::CATEGORY_PAGE_LIST_LOCATION)) {
@@ -75,7 +75,7 @@ class ProductImage
                 }
             }
         }
-        return [$product, $location, $module];
+        return [$product, $location, $attributes];
     }
 
     /**

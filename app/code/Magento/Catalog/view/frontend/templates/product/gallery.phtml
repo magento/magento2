@@ -6,6 +6,7 @@
 
 // @codingStandardsIgnoreFile
 
+/** @var \Magento\Catalog\Block\Product\Gallery $block */
 ?>
 <?php $_width = $block->getImageWidth(); ?>
 <div class="product-image-popup" style="width:<?php echo $_width; ?>px;">
@@ -23,7 +24,13 @@
     <?php if ($_imageTitle = $block->escapeHtml($block->getCurrentImage()->getLabel())): ?>
         <h1 class="image-label"><?php echo $_imageTitle ?></h1>
     <?php endif; ?>
-    <img src="<?php echo $this->helper('Magento\Catalog\Helper\Image')->init($block->getProduct(), 'image', $block->getImageFile()); ?>"<?php if ($_width): ?> width="<?php echo $_width ?>"<?php endif; ?> alt="<?php echo $block->escapeHtml($block->getCurrentImage()->getLabel()) ?>" title="<?php echo $block->escapeHtml($block->getCurrentImage()->getLabel()) ?>" id="product-gallery-image" class="image" data-mage-init='{"catalogGallery":{}}'/>
+    <?php
+        $imageUrl = $this->helper('Magento\Catalog\Helper\Image')
+            ->init($block->getProduct(), 'product_page_image_large')
+            ->setImageFile($block->getImageFile())
+            ->getUrl();
+    ?>
+    <img src="<?php echo $imageUrl; ?>"<?php if ($_width): ?> width="<?php echo $_width ?>"<?php endif; ?> alt="<?php echo $block->escapeHtml($block->getCurrentImage()->getLabel()) ?>" title="<?php echo $block->escapeHtml($block->getCurrentImage()->getLabel()) ?>" id="product-gallery-image" class="image" data-mage-init='{"catalogGallery":{}}'/>
     <div class="buttons-set"><a href="#" class="button" role="close-window"><span><?php echo __('Close Window') ?></span></a></div>
     <?php if ($block->getPreviousImageUrl() || $block->getNextImageUrl()): ?>
         <div class="nav">

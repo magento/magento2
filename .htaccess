@@ -1,5 +1,6 @@
 ############################################
-## uncomment the line below to enable developer mode
+## overrides deployment configuration mode value
+## use command bin/magento deploy:mode:set to switch modes
 
 #   SetEnv MAGE_MODE developer
 

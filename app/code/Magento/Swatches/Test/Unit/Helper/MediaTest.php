@@ -234,20 +234,28 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             [
                 'swatch_image',
                 [
-                    'swatch_image:width' => 30,
-                    'swatch_image:height' => 20,
-                    'swatch_thumb:width' => 110,
-                    'swatch_thumb:height' => 90,
+                    'swatch_image' => [
+                        'width' => 30,
+                        'height' => 20,
+                    ],
+                    'swatch_thumb' => [
+                        'width' => 110,
+                        'height' => 90,
+                    ],
                 ],
                 '30x20',
             ],
             [
                 'swatch_thumb',
                 [
-                    'swatch_image:width' => 30,
-                    'swatch_image:height' => 20,
-                    'swatch_thumb:width' => 110,
-                    'swatch_thumb:height' => 90,
+                    'swatch_image' => [
+                        'width' => 30,
+                        'height' => 20,
+                    ],
+                    'swatch_thumb' => [
+                        'width' => 110,
+                        'height' => 90,
+                    ],
                 ],
                 '110x90',
             ],
@@ -279,13 +287,17 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             ->willReturn($configMock);
 
         $imageConfig = [
-            'swatch_image:width' => 30,
-            'swatch_image:height' => 20,
-            'swatch_thumb:width' => 110,
-            'swatch_thumb:height' => 90,
+            'swatch_image' => [
+                'width' => 30,
+                'height' => 20,
+            ],
+            'swatch_thumb' => [
+                'width' => 110,
+                'height' => 90,
+            ],
         ];
 
-        $configMock->expects($this->any())->method('getVars')->willReturn($imageConfig);
+        $configMock->expects($this->any())->method('getImages')->willReturn($imageConfig);
     }
 
     public function testGetAttributeSwatchPath()

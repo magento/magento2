@@ -144,7 +144,11 @@ class Grid extends AbstractGrid
         }
         $columns = [];
         foreach ($this->columns as $key => $value) {
-            $columns[$key] = new \Zend_Db_Expr((string) $value);
+            if ($value instanceof \Zend_Db_Expr) {
+                $columns[$key] = $value;
+            } else {
+                $columns[$key] = new \Zend_Db_Expr($value);
+            }
         }
         $select->columns($columns);
         return $select;

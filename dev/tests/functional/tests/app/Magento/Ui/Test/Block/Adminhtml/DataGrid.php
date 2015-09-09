@@ -44,6 +44,20 @@ class DataGrid extends Grid
     protected $selectItem = 'tbody tr [data-action="select-row"]';
 
     /**
+     * Secondary part of row locator template for getRow() method
+     *
+     * @var string
+     */
+    protected $rowTemplate = 'td[*[contains(.,normalize-space("%s"))]]';
+
+    /**
+     * Secondary part of row locator template for getRow() method with strict option
+     *
+     * @var string
+     */
+    protected $rowTemplateStrict = 'td[*[text()[normalize-space()="%s"]]]';
+
+    /**
      * Mass action toggle list.
      *
      * @var string
@@ -55,7 +69,7 @@ class DataGrid extends Grid
      *
      * @var string
      */
-    protected $massActionToggleButton = '.action-multiselect-toggle';
+    protected $massActionToggleButton = '.action-multicheck-toggle';
 
     /**
      * Mass action button.
@@ -70,6 +84,33 @@ class DataGrid extends Grid
      * @var string
      */
     protected $actionButton = '.modal-inner-wrap .action-secondary';
+
+    /**
+     * Column header locator
+     *
+     * @var string
+     */
+    protected $columnHeader = "//th/span[.='%s']";
+
+    /**
+     * @var string
+     */
+    protected $rowById = "//tr[//input[@data-action='select-row' and @value='%s']]";
+
+    /**
+     * @var string
+     */
+    protected $cellByHeader = "//td[count(//th[span[.='%s']]/preceding-sibling::th)+1]";
+
+    /**
+     * @var string
+     */
+    protected $fullTextSearchField = '.data-grid-search-control-wrap .data-grid-search-control';
+
+    /**
+     * @var string
+     */
+    protected $fullTextSearchButton = '.data-grid-search-control-wrap .action-submit';
 
     /**
      * Clear all applied Filters.
@@ -200,5 +241,66 @@ class DataGrid extends Grid
         if ($acceptAlert) {
             $this->browser->find($this->actionButton)->click();
         }
+    }
+
+    /**
+     * @param string $columnLabel
+     */
+    public function sortByColumn($columnLabel)
+    {
+        $this->waitLoader();
+        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
+        $this->_rootElement->find(sprintf($this->columnHeader, $columnLabel), Locator::SELECTOR_XPATH)->click();
+    }
+
+    /**
+     * @return array|string
+     */
+    public function getFirstItemId()
+    {
+        $this->waitLoader();
+        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
+        return $this->_rootElement->find($this->selectItem)->getValue();
+    }
+
+    /**
+     * Return ids of all items currently displayed in grid
+     *
+     * @return string[]
+     */
+    public function getAllIds()
+    {
+        $this->waitLoader();
+        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
+        $rowsCheckboxes = $this->_rootElement->getElements($this->selectItem);
+        $ids = [];
+        foreach ($rowsCheckboxes as $checkbox) {
+            $ids[] = $checkbox->getValue();
+        }
+        return $ids;
+    }
+
+    /**
+     * @param string $id
+     * @param string $headerLabel
+     * @return array|string
+     */
+    public function getColumnValue($id, $headerLabel)
+    {
+        $this->waitLoader();
+        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
+        $selector = sprintf($this->rowById, $id) . sprintf($this->cellByHeader, $headerLabel);
+        return $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->getText();
+    }
+
+    /**
+     * @param string $text
+     */
+    public function fullTextSearch($text)
+    {
+        $this->waitLoader();
+        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
+        $this->_rootElement->find($this->fullTextSearchField)->setValue($text);
+        $this->_rootElement->find($this->fullTextSearchButton)->click();
     }
 }

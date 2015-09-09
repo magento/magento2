@@ -34,6 +34,25 @@ class AssertConfigurableProductPage extends AssertProductPage
     }
 
     /**
+     * Verify displayed product price on product page(front-end) equals passed from fixture
+     *
+     * @return string|null
+     */
+    protected function verifyPrice()
+    {
+        $priceBlock = $this->productView->getPriceBlock();
+        $formPrice = $priceBlock->isOldPriceVisible() ? $priceBlock->getOldPrice() : $priceBlock->getPrice();
+        $priceData = $this->product->getDataFieldConfig('price')['source']->getPriceData();
+        $fixturePrice = number_format($priceData['category_price'], 2, '.', '');
+
+        if ($fixturePrice != $formPrice) {
+            return "Displayed product price on product page(front-end) not equals passed from fixture. "
+            . "Actual: {$fixturePrice}, expected: {$formPrice}.";
+        }
+        return null;
+    }
+
+    /**
      * Verify displayed product attributes on product page(front-end) equals passed from fixture
      *
      * @return string|null

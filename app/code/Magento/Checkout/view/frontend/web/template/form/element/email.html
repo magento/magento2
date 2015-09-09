@@ -15,7 +15,7 @@
     <fieldset id="customer-email-fieldset" class="fieldset" data-bind="blockLoader: isLoading">
         <div class="field required">
             <label class="label" for="customer-email">
-                <span data-bind="text: $t('Email Address')"></span>
+                <span data-bind="i18n: 'Email Address'"></span>
             </label>
             <div class="control _with-tooltip">
                 <input class="input-text"
@@ -25,7 +25,7 @@
                        data-validate="{required:true, 'validate-email':true}"
                        id="customer-email" />
                 <!-- ko template: 'ui/form/element/helper/tooltip' --><!-- /ko -->
-                <span class="note" data-bind="fadeVisible: isPasswordVisible() == false"><!-- ko text: $t("You can create an account after checkout.")--><!-- /ko --></span>
+                <span class="note" data-bind="fadeVisible: isPasswordVisible() == false"><!-- ko i18n: "You can create an account after checkout."--><!-- /ko --></span>
             </div>
         </div>
 
@@ -33,7 +33,7 @@
         <fieldset class="fieldset hidden-fields" data-bind="fadeVisible: isPasswordVisible">
             <div class="field">
                 <label class="label" for="customer-password">
-                    <span data-bind="text: $t('Password')"></span>
+                    <span data-bind="i18n: 'Password'"></span>
                 </label>
                 <div class="control">
                     <input class="input-text"
@@ -41,8 +41,8 @@
                            type="password"
                            name="password"
                            id="customer-password"
-                           data-validate="{required:true, 'validate-password':true}" />
-                    <span class="note" data-bind="text: $t('You already have an account with us. Sign in or continue as guest.')"></span>
+                           data-validate="{required:true, 'validate-password':true}" autocomplete="off"/>
+                    <span class="note" data-bind="i18n: 'You already have an account with us. Sign in or continue as guest.'"></span>
                 </div>
 
             </div>
@@ -52,11 +52,11 @@
             <div class="actions-toolbar">
                 <input name="context" type="hidden" value="checkout" />
                 <div class="primary">
-                    <button type="submit" class="action login primary" data-action="checkout-method-login"><span data-bind="text: $t('Login')"></span></button>
+                    <button type="submit" class="action login primary" data-action="checkout-method-login"><span data-bind="i18n: 'Login'"></span></button>
                 </div>
                 <div class="secondary">
                     <a class="action remind" data-bind="attr: { href: forgotPasswordUrl }">
-                        <span data-bind="text: $t('Forgot Your Password?')"></span>
+                        <span data-bind="i18n: 'Forgot Your Password?'"></span>
                     </a>
                 </div>
             </div>

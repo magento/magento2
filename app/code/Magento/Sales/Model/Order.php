@@ -203,7 +203,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     protected $_productVisibility;
 
     /**
-     * @var \Magento\Sales\Api\InvoiceManagementInterface
+     * @var \Magento\Sales\Model\Service\InvoiceService
      */
     protected $invoiceManagement;
 
@@ -1397,13 +1397,13 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * @param Payment $payment
+     * @param \Magento\Sales\Api\Data\OrderPaymentInterface $payment
      * @return Payment
      */
-    public function setPayment(Payment $payment)
+    public function setPayment(\Magento\Sales\Api\Data\OrderPaymentInterface $payment)
     {
-        if (!$this->getIsMultiPayment() && ($old = $this->getPayment())) {
-            $payment->setId($old->getId());
+        if (!$this->getIsMultiPayment() && ($previousPayment = $this->getPayment())) {
+            $payment->setEntityId($previousPayment->getEntityId());
         }
         $this->addPayment($payment);
         return $payment;
@@ -1867,7 +1867,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function prepareInvoice($qtys = [])
     {
-        return $this->invoiceManagement->prepareInvoice($this->getEntityId(), $qtys);
+        return $this->invoiceManagement->prepareInvoice($this, $qtys);
     }
 
     /**

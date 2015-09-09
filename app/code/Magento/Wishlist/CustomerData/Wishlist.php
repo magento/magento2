@@ -23,10 +23,14 @@ class Wishlist implements SectionSourceInterface
      */
     protected $wishlistHelper;
 
-    /** @var \Magento\Catalog\Model\Product\Image\View */
-    protected $productImageView;
+    /**
+     * @var \Magento\Catalog\Helper\Image
+     */
+    protected $imageHelper;
 
-    /** @var \Magento\Framework\App\ViewInterface */
+    /**
+     * @var \Magento\Framework\App\ViewInterface
+     */
     protected $view;
 
     /**
@@ -37,17 +41,17 @@ class Wishlist implements SectionSourceInterface
     /**
      * @param \Magento\Wishlist\Helper\Data $wishlistHelper
      * @param \Magento\Wishlist\Block\Customer\Sidebar $block
-     * @param \Magento\Catalog\Model\Product\Image\View $productImageView
+     * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Framework\App\ViewInterface $view
      */
     public function __construct(
         \Magento\Wishlist\Helper\Data $wishlistHelper,
         \Magento\Wishlist\Block\Customer\Sidebar $block,
-        \Magento\Catalog\Model\Product\Image\View $productImageView,
+        \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Framework\App\ViewInterface $view
     ) {
         $this->wishlistHelper = $wishlistHelper;
-        $this->productImageView = $productImageView;
+        $this->imageHelper = $imageHelper;
         $this->block = $block;
         $this->view = $view;
     }
@@ -103,13 +107,13 @@ class Wishlist implements SectionSourceInterface
         foreach ($collection as $wishlistItem) {
             /** @var \Magento\Catalog\Model\Product $product */
             $product = $wishlistItem->getProduct();
-            $this->productImageView->init($product, 'wishlist_sidebar_block', 'Magento_Catalog');
+            $imageHelper = $this->imageHelper->init($product, 'wishlist_sidebar_block');
             $items[] = [
                 'image' => [
-                    'src' => $this->productImageView->getUrl(),
-                    'alt' => $this->productImageView->getLabel(),
-                    'width' => $this->productImageView->getWidth(),
-                    'height' => $this->productImageView->getHeight(),
+                    'src' => $imageHelper->getUrl(),
+                    'alt' => $imageHelper->getLabel(),
+                    'width' => $imageHelper->getWidth(),
+                    'height' => $imageHelper->getHeight(),
                 ],
                 'product_url' => $this->wishlistHelper->getProductUrl($wishlistItem),
                 'product_name' => $product->getName(),

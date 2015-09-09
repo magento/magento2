@@ -69,6 +69,8 @@ class ResetPasswordPost extends \Magento\Customer\Controller\Account
         try {
             $customerEmail = $this->customerRepository->getById($customerId)->getEmail();
             $this->accountManagement->resetPassword($customerEmail, $resetPasswordToken, $password);
+            $this->session->unsRpToken();
+            $this->session->unsRpCustomerId();
             $this->messageManager->addSuccess(__('You updated your password.'));
             $resultRedirect->setPath('*/*/login');
             return $resultRedirect;

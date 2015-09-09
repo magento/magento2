@@ -322,21 +322,21 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $this->productMock->expects($this->once())->method('getMediaAttributeValues')->willReturn($mediaGallery);
 
-        $this->imageHelperMock->expects($this->any())->method('init')->withConsecutive(
-            [$this->productMock, 'image', $image],
-            [$this->productMock, 'thumbnail', $image],
-            [$this->productMock, 'small_image', $image],
-            [$this->productMock, 'image', $image],
-            [$this->productMock, 'thumbnail', $image],
-            [$this->productMock, 'small_image', $image]
-        )->willReturnOnConsecutiveCalls(
-            'http://full_path_to_image/magento1.png',
-            'http://full_path_to_image/magento1.png',
-            'http://full_path_to_image/magento1.png',
-            'http://full_path_to_image/magento1.png',
-            'http://full_path_to_image/magento1.png',
-            'http://full_path_to_image/magento1.png'
-        );
+        $this->imageHelperMock->expects($this->any())
+            ->method('init')
+            ->willReturnMap([
+                [$this->productMock, 'product_page_image_large', [], $this->imageHelperMock],
+                [$this->productMock, 'product_page_image_medium', [], $this->imageHelperMock],
+                [$this->productMock, 'product_page_image_small', [], $this->imageHelperMock],
+            ]);
+
+        $this->imageHelperMock->expects($this->any())
+            ->method('setImageFile')
+            ->with($image)
+            ->willReturnSelf();
+        $this->imageHelperMock->expects($this->any())
+            ->method('getUrl')
+            ->willReturn('http://full_path_to_image/magento1.png');
 
         $mediaObject = $this->getMock('\Magento\Framework\DataObject', [], [], '', false);
         $iterator = new \ArrayIterator([$mediaObject]);

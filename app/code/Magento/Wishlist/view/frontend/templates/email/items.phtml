@@ -20,7 +20,7 @@
             <td class="col product">
                 <p>
                     <a href="<?= $block->getProductUrl($_product) ?>">
-                        <img src="<?= $block->getSmallImageUrl($_product) ?>" height="<?= $block->getSmallImageSize() ?>" alt=""/>
+                        <?php echo $block->getImage($_product, 'product_small_image')->toHtml(); ?>
                     </a>
                 </p>
 

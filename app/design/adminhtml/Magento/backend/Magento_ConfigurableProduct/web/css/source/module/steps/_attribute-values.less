@@ -45,6 +45,7 @@
 
         .action-select-all,
         .action-deselect-all {
+            display: inline-block;
             font-weight: @font-weight__regular;
             line-height: 1;
             margin: @indent__xs 0 0;
@@ -53,6 +54,21 @@
 
         .action-deselect-all {
             border-left: 1px solid @steps-wizard-attribute-entity__border-color;
+        }
+
+        .action-remove-all {
+            display: inline-block;
+            padding: 0;
+            vertical-align: top;
+            .lib-icon-font(
+            @steps-wizard-attribute-entity-action-remove__content,
+            @_icon-font: @icons-admin__font-name,
+            @_icon-font-size: 1.8rem,
+            @_icon-font-color: @image-gallery-icons__color,
+            @_icon-font-color-hover: @image-gallery-icons__hover__color,
+            @_icon-font-margin: -2px 0 0,
+            @_icon-font-text-hide: true
+            );
         }
     }
 
@@ -89,7 +105,7 @@
         padding: 0 @indent__s 0 0;
         vertical-align: middle;
 
-        .icon-font(
+        .lib-icon-font(
             @icon-gripper__content,
             @_icon-font: @icons-admin__font-name,
             @_icon-font-size: 1.8rem,

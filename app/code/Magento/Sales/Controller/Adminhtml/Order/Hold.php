@@ -18,8 +18,7 @@ class Hold extends \Magento\Sales\Controller\Adminhtml\Order
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($order) {
             try {
-                $orderManagement = $this->_objectManager->get('Magento\Sales\Api\OrderManagementInterface');
-                $orderManagement->hold($order->getEntityId());
+                $this->orderManagement->hold($order->getEntityId());
                 $this->messageManager->addSuccess(__('You put the order on hold.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());

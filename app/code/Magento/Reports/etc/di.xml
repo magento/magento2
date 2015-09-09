@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\Log\Model\Resource\Log">
+    <type name="Magento\Customer\Model\Resource\Visitor">
         <plugin name="reportLog" type="Magento\Reports\Model\Plugin\Log" />
     </type>
     <virtualType name="Magento\Reports\Model\Session\Storage" type="Magento\Framework\Session\Storage">
