@@ -11,12 +11,7 @@
   "license": [
     "proprietary"
   ],
-  "extra": {
-    "map": [
-      [
-        "*",
-        "Magento/Amqp"
-      ]
-    ]
+  "autoload": {
+    "files": [ "registration.php" ]
   }
 }
