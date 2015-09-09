@@ -4,13 +4,11 @@
  */
 define([
     'ko',
-    'jquery',
+    'Magento_Ui/js/lib/view/utils/async',
     'underscore',
     'uiRegistry',
-    'Magento_Ui/js/lib/ko/extender/bound-nodes',
-    'mage/utils/dom-observer',
     'uiClass'
-], function (ko, $, _, registry, boundedNodes, domObserver, Class) {
+], function (ko, $, _, registry, Class) {
     'use strict';
 
     var isTouchDevice = typeof document.ontouchstart !== 'undefined',
@@ -113,9 +111,11 @@ define([
 
     return Class.extend({
         defaults: {
+            rootSelector: '${ $.columnsProvider }:.admin__data-grid-wrap',
+            tableSelector: '${ $.rootSelector } -> table.data-grid',
+            columnSelector: '${ $.tableSelector } thead tr th',
             noSelectClass: '_no-select',
             hiddenClass: '_hidden',
-            columnSelector: 'thead tr th',
             fixedX: false,
             fixedY: true,
             minDistance: 2,
@@ -130,6 +130,7 @@ define([
         initialize: function () {
             _.bindAll(
                 this,
+                'initTable',
                 'initColumn',
                 'removeColumn',
                 'onMouseMove',
@@ -142,6 +143,9 @@ define([
             this._super()
                 .initListeners();
 
+            $.async(this.tableSelector, this.initTable);
+            $.async(this.columnSelector, this.initColumn);
+
             return this;
         },
 
@@ -151,33 +155,20 @@ define([
          * @returns {Dnd} Chainbale.
          */
         initListeners: function () {
-            var initRoot = this.initRoot.bind(this);
-
-            registry.get(this.columnsProvider, function (columns) {
-                boundedNodes.get(columns, initRoot);
-            });
-
             if (isTouchDevice) {
-                document.addEventListener('touchmove', this.onMouseMove, false);
-                document.addEventListener('touchend', this.onMouseUp, false);
-                document.addEventListener('touchleave', this.onMouseUp, false);
+                $(document).on({
+                    touchmove: this.onMouseMove,
+                    touchend: this.onMouseUp,
+                    touchleave: this.onMouseUp
+                });
             } else {
-                document.addEventListener('mousemove', this.onMouseMove, false);
-                document.addEventListener('mouseup', this.onMouseUp, false);
+                $(document).on({
+                    mousemove: this.onMouseMove,
+                    mouseup: this.onMouseUp
+                });
             }
 
             return this;
-        },
-
-        /**
-         * Initializes columns root node.
-         *
-         * @param {HTMLElement} node
-         */
-        initRoot: function (node) {
-            var table = $('> table.data-grid', node)[0];
-
-            this.initTable(table);
         },
 
         /**
@@ -191,9 +182,6 @@ define([
 
             $(table).addClass('data-grid-draggable');
 
-            domObserver.get(this.columnSelector, this.initColumn, table);
-            domObserver.remove(this.columnSelector, this.removeColumn, table);
-
             return this;
         },
 
@@ -204,7 +192,8 @@ define([
          * @returns {Dnd} Chainable.
          */
         initColumn: function (column) {
-            var model = getModel(column);
+            var model = getModel(column),
+                eventName;
 
             if (!model || !model.draggable) {
                 return this;
@@ -212,7 +201,7 @@ define([
 
             this.columns.push(column);
 
-            ko.applyBindingsToNode(column, {
+            $(column).bindings({
                 css: {
                     '_dragover-left': ko.computed(function () {
                         return model.dragover() === 'right';
@@ -221,11 +210,14 @@ define([
                         return model.dragover() === 'left';
                     })
                 }
-            }, model);
+            });
 
-            isTouchDevice ?
-                column.addEventListener('touchstart', this.onMouseDown, false) :
-                column.addEventListener('mousedown', this.onMouseDown, false);
+            eventName = isTouchDevice ?
+                'touchstart' :
+                'mousedown';
+
+            $(column).on(eventName, this.onMouseDown);
+            $.async.remove(column, this.removeColumn);
 
             return this;
         },
@@ -394,6 +386,7 @@ define([
          */
         grab: function (x, y, elem) {
             this.initDrag = true;
+
             this.grabbed = {
                 x: x,
                 y: y,
