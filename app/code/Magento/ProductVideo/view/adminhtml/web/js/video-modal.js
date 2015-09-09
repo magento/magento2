@@ -31,11 +31,10 @@ define([
                 this.showModal();
             },
 
-            showModal: function(e)
+            showModal: function(imageData)
             {
                 $('#new-video').modal('openModal');
                 $('.video_image_role').prop('disabled', false);
-                $('#new_video_form')[0].reset();
                 if ($('.image.item').length < 1) {
                     $('.video_image_role').prop('checked', true);
                 }
