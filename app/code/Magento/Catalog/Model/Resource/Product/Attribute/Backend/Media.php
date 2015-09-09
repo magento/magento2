@@ -302,14 +302,20 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function duplicate($attributeId, $newFiles, $originalProductId, $newProductId)
     {
+        $mainTableAlias = $this->getMainTableAlias();
+
         $select = $this->getConnection()->select()->from(
-            $this->getMainTable(),
+            [$mainTableAlias => $this->getMainTable()],
             ['value_id', 'value']
+        )->joinInner(
+            ['entity' => $this->getTable(self::GALLERY_VALUE_TO_ENTITY_TABLE)],
+            $mainTableAlias . '.value_id = entity.value_id',
+            ['entity_id' => 'entity_id']
         )->where(
             'attribute_id = ?',
             $attributeId
         )->where(
-            'entity_id = ?',
+            'entity.entity_id = ?',
             $originalProductId
         );
 
