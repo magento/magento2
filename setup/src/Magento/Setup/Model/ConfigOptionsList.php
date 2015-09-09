@@ -46,6 +46,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getOptions()
     {
@@ -140,6 +141,12 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 'If specified, then db connection validation will be skipped',
                 '-s'
             ),
+            new TextConfigOption(
+                ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS,
+                TextConfigOption::FRONTEND_WIZARD_TEXT,
+                ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS,
+                'HTTP gateway cache hosts'
+            ),
         ];
     }
 
@@ -159,16 +166,17 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         $configData[] = $this->configGenerator->createDbConfig($data);
         $configData[] = $this->configGenerator->createResourceConfig();
         $configData[] = $this->configGenerator->createXFrameConfig();
+        $configData[] = $this->configGenerator->createCacheHostsConfig($data);
         return $configData;
     }
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function validate(array $options, DeploymentConfig $deploymentConfig)
     {
         $errors = [];
-
         if (isset($options[ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX])) {
             try {
                 $this->dbValidator->checkDatabaseTablePrefix($options[ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX]);
@@ -176,7 +184,12 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 $errors[] = $exception->getMessage();
             }
         }
-
+        if (isset($options[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS])) {
+            $errors = array_merge(
+                $errors,
+                $this->validateHttpCacheHosts($options[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS])
+            );
+        }
         if (!$options[ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION] &&
             (
                 $options[ConfigOptionsListConstants::INPUT_KEY_DB_NAME] !== null
@@ -294,4 +307,21 @@ class ConfigOptionsList implements ConfigOptionsListInterface
 
         return $errors;
     }
+
+    /**
+     * Validate http cache hosts
+     *
+     * @param string $option
+     * @return string[]
+     */
+    private function validateHttpCacheHosts($option)
+    {
+        $errors = [];
+        if (!preg_match('/^[a-zA-Z0-9_:,.\/ ]+$/', $option)
+        ) {
+            $errors[] = "Invalid http cache hosts '{$option}'";
+        }
+        return $errors;
+    }
+
 }
