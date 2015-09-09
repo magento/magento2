@@ -31,6 +31,6 @@ class FileIteratorFactory
      */
     public function create($paths)
     {
-        return new \Magento\Framework\Config\FileIterator($this->filesystemDriver, $paths);
+        return new FileIterator($this->filesystemDriver, $paths);
     }
 }

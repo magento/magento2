@@ -99,15 +99,6 @@ class BaseTest extends \PHPUnit_Framework_TestCase
             'Namespace/Two/view/frontend/layout/three.xml'
         ];
 
-        $this->directoryMock->expects($this->any())
-            ->method('search')
-            ->willReturnMap(
-                [
-                    ['*/*/view/base/layout/*.xml', null, $sharedFiles],
-                    ['*/*/view/frontend/layout/*.xml', null, $themeFiles]
-                ]
-            );
-
         $this->dirSearch->expects($this->any())
             ->method('collectFiles')
             ->willReturnMap(

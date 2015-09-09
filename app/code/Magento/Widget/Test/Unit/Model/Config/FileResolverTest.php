@@ -67,7 +67,7 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
     public function testGetDefault()
     {
         $expected = new \StdClass();
-        $this->factory->expects($this->once())->method('create')->with($this->themesDir, [])->willReturn($expected);
+        $this->factory->expects($this->once())->method('create')->with([])->willReturn($expected);
         $this->assertSame($expected, $this->object->get('file', 'unknown'));
     }
 }

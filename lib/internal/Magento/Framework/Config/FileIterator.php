@@ -5,6 +5,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Config;
+
 use Magento\Framework\Filesystem\DriverInterface;
 
 /**
