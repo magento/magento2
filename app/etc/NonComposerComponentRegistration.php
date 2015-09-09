@@ -14,6 +14,7 @@
  * looking for their registration.php files and executes them to get these components registered with Magento
  * framework.
  */
+
 class NonComposerComponentRegistration
 {
     /**
@@ -23,17 +24,12 @@ class NonComposerComponentRegistration
      */
     private static $instance = null;
 
-    /**
-     * Regex to filter the supported registration file types
-     */
-    const REGISTRATION_FILES_REGEX = '/registration\.php$/';
-
-    /**
-     * The list of directories and max recursion depth while searching for registration.php files
+     /**
+     * The list of supported non-composer component paths
      *
-     * @var string array $directoryList
+     * @var string array $pathList
      */
-    private static $directoryList;
+    private static $pathList;
 
     /**
      * private constructor.
@@ -41,14 +37,14 @@ class NonComposerComponentRegistration
     private function __construct()
     {
         // The supported directories are:
-        // 1. app/code => max recursion depth: 2
-        // 2. app/design => max recursion depth: 3
-        // 3. app/i18n => max recursion depth: 2
-        // 4. lib/internal => max recursion depth: 2
-        static::$directoryList[dirname(dirname(__FILE__)) . '/code'] = 2;
-        static::$directoryList[dirname(dirname(__FILE__)) . '/design'] = 3;
-        static::$directoryList[dirname(dirname(__FILE__)) . '/i18n'] = 2;
-        static::$directoryList[dirname(dirname(dirname(__FILE__))) . '/lib/internal'] = 2;
+        // 1. app/code
+        // 2. app/design
+        // 3. app/i18n
+        // 4. lib/internal
+        static::$pathList[ ] = dirname(dirname(__FILE__)) . '/code/*/*/registration.php';
+        static::$pathList[ ] = dirname(dirname(__FILE__)) . '/design/*/*/*/registration.php';
+        static::$pathList[ ] = dirname(dirname(__FILE__)) . '/i18n/*/*/registration.json';
+        static::$pathList[ ] = dirname(dirname(__FILE__)) . '/lib/internal/*/*/registration.json';
     }
 
     /**
@@ -72,21 +68,14 @@ class NonComposerComponentRegistration
      */
     public function register()
     {
-
-        foreach (static::$directoryList as $directory => $maxDepth) {
-            $recDirItr = new \RecursiveDirectoryIterator(
-                $directory,
-                \FilesystemIterator::SKIP_DOTS | \FilesystemIterator::FOLLOW_SYMLINKS
-            );
-            $recItrItr = new \RecursiveIteratorIterator($recDirItr);
-            $recItrItr->setMaxDepth($maxDepth);
-            $dirItr = new \RegexIterator($recItrItr, self::REGISTRATION_FILES_REGEX);
-
-            // Go through each registration file and execute it so that all the non-components
-            // get registered properly
-            foreach ($dirItr as $fileInfo) {
-                $fullFileName = $fileInfo->getPathname();
-                include $fullFileName;
+        foreach (static::$pathList as $path) {
+            // Sorting is disabled intentionally for performance improvement
+            $files = glob($path, GLOB_NOSORT);
+            if ( $files === false ) {
+                throw new \RuntimeException('glob() returned error while searching in \'' . $path . '\'');
+            }
+            foreach ($files as $file) {
+                include $file;
             }
         }
     }
