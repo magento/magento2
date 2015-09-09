@@ -7,6 +7,8 @@
 namespace Magento\ProductVideo\Helper;
 
 use Magento\Framework\App\Area;
+use Magento\Framework\View\ConfigInterface;
+use Magento\Framework\View\DesignInterface;
 
 /**
  * Helper to get attributes for video
@@ -14,50 +16,50 @@ use Magento\Framework\App\Area;
  */
 class Media extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    /*
+    /**
      * Catalog Module
      */
     const MODULE_NAME = 'Magento_ProductVideo';
 
-    /*
+    /**
      * Video play attribute
      */
     const NODE_CONFIG_NAME_VIDEO_PLAY = 'video_play';
 
-    /*
+    /**
      * Video stop attribute
      */
     const NODE_CONFIG_NAME_VIDEO_STOP = 'video_stop';
 
-    /*
+    /**
      * Video color attribute
      */
     const NODE_CONFIG_NAME_VIDEO_BACKGROUND = 'video_background';
 
     /**
-     * @var \Magento\Framework\View\ConfigInterface
+     * @var ConfigInterface
      */
     protected $viewConfig;
 
     /**
      * Theme
      *
-     * @var \Magento\Framework\View\DesignInterface
+     * @var DesignInterface
      */
     protected $currentTheme;
 
-    /*
+    /**
      * Cached video config
      */
     protected $cachedVideoConfig;
 
     /**
-     * @param \Magento\Framework\View\ConfigInterface $configInterface
-     * @param \Magento\Framework\View\DesignInterface $designInterface
+     * @param ConfigInterface $configInterface
+     * @param DesignInterface $designInterface
      */
     public function __construct(
-        \Magento\Framework\View\ConfigInterface $configInterface,
-        \Magento\Framework\View\DesignInterface $designInterface
+        ConfigInterface $configInterface,
+        DesignInterface $designInterface
     ) {
         $this->viewConfig = $configInterface;
         $this->currentTheme = $designInterface->getDesignTheme();
