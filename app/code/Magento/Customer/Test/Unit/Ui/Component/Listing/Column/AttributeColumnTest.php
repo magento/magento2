@@ -62,19 +62,6 @@ class AttributeColumnTest extends \PHPUnit_Framework_TestCase
         $this->component->setData('name', 'gender');
     }
 
-    public function testPrepareDataSourceWithoutItems()
-    {
-        $dataSource = [
-            'data' => [
-
-            ]
-        ];
-        $this->attributeRepository->expects($this->never())
-            ->method('getMetadataByCode');
-
-        $this->assertNull($this->component->prepareDataSource($dataSource));
-    }
-
     public function testPrepareDataSource()
     {
         $genderOptionId = 1;

@@ -226,7 +226,6 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      *
      * @param array $dataSource
      * @return array
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function prepareDataSource(array $dataSource)
     {
