@@ -12,17 +12,6 @@ class Observer
     /**
      * @param mixed $observer
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function saveVideoAttributes($observer)
-    {
-        //@todo implement saving video
-    }
-
-    /**
-     * @param mixed $observer
-     * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function changeTemplate($observer)
     {
