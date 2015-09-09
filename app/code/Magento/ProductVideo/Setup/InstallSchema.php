@@ -10,7 +10,7 @@ use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media;
-use Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryProcessor;
+use Magento\ProductVideo\Model\Plugin\ExternalVideoEntryProcessor;
 
 /**
  * Class InstallSchema adds new table `eav_attribute_option_swatch`
