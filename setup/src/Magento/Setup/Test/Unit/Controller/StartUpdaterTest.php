@@ -54,7 +54,7 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->updater = $this->getMock('Magento\Setup\Model\Updater', [], [], '', false);
-        $this->fullModuleList = $this->getMock('\Magento\Framework\Module\FullModuleList', [], [], '', false);
+        $this->fullModuleList = $this->getMock('Magento\Framework\Module\FullModuleList', [], [], '', false);
         $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $this->navigation = $this->getMock('Magento\Setup\Model\Navigation', [], [], '', false);
         $this->controller = new StartUpdater(
@@ -182,9 +182,10 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
         $content = '{"packages":[{"name":"vendor\/package"}],"type":"enable",'
             . '"headerTitle": "Enable Package 1" }';
         $this->request->expects($this->any())->method('getContent')->willReturn($content);
+        $this->fullModuleList->expects($this->once())->method('has')->willReturn(true);
         $write = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface', [], '', false);
-        $this->filesystem->expects($this->any())->method('getDirectoryWrite')->willReturn($write);
-        $write->expects($this->any())
+        $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($write);
+        $write->expects($this->once())
             ->method('writeFile')
             ->with('.type.json', '{"type":"enable","headerTitle":"Enable Package 1","titles":["C"]}');
         $this->controller->setEvent($this->mvcEvent);
@@ -197,9 +198,10 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
         $content = '{"packages":[{"name":"vendor\/package"}],"type":"disable",'
             . '"headerTitle": "Disable Package 1" }';
         $this->request->expects($this->any())->method('getContent')->willReturn($content);
+        $this->fullModuleList->expects($this->once())->method('has')->willReturn(true);
         $write = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface', [], '', false);
-        $this->filesystem->expects($this->any())->method('getDirectoryWrite')->willReturn($write);
-        $write->expects($this->any())
+        $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($write);
+        $write->expects($this->once())
             ->method('writeFile')
             ->with('.type.json', '{"type":"disable","headerTitle":"Disable Package 1","titles":["D"]}');
         $this->controller->setEvent($this->mvcEvent);
