@@ -14,14 +14,9 @@
 </div>
 
 <div class="col-xs-7 admin__data-grid-pager-wrap">
-    <select
-        id="perPage"
-        class="admin__control-select"
-        data-bind="options: options,
-                   value: pageSize,
-                   optionsValue: 'value',
-                   optionsText: 'label'"></select>
-    <label class="admin__control-support-text" for="perPage">per page</label>
+    <!-- ko scope: sizes -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    <!-- /ko -->
 
     <div class="admin__data-grid-pager">
         <button
