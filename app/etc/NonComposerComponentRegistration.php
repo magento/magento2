@@ -87,7 +87,6 @@ class NonComposerComponentRegistration
             foreach ($dirItr as $fileInfo) {
                 $fullFileName = $fileInfo->getPathname();
                 include $fullFileName;
-                print $fullFileName . PHP_EOL;
             }
         }
     }
