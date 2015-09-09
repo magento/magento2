@@ -39,7 +39,7 @@ define([
                 divsAttrParams: {
                     'data-cl-elem': 'shadow-div'
                 },
-                enabled: true
+                enabled: false
             },
             imports: {
                 rows: '${ $.provider }:data.items'
