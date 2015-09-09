@@ -13,7 +13,7 @@
 <?php if ($block->getInstructions()): ?>
     <ul class="form-list checkout-agreements" id="payment_form_<?php echo $block->getMethodCode() ?>" style="display:none;">
         <li>
-            <div class="<?php echo $block->getMethodCode() ?>-instructions-content agreement-content">
+            <div class="<?php echo $block->getMethodCode() ?>-instructions-content checkout-agreement-item-content">
                 <?php echo nl2br($block->getInstructions()) ?>
             </div>
         </li>
