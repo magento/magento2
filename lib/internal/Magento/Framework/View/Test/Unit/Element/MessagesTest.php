@@ -10,6 +10,7 @@
 namespace Magento\Framework\View\Test\Unit\Element;
 
 use Magento\Framework\Message\Manager;
+use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 use \Magento\Framework\View\Element\Messages;
 
 use Magento\Framework\Message\ManagerInterface;
@@ -32,6 +33,11 @@ class MessagesTest extends \PHPUnit_Framework_TestCase
      */
     protected $collectionFactory;
 
+    /**
+     * @var InterpretationStrategyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $messageInterpretationStrategy;
+
     protected function setUp()
     {
         $this->collectionFactory = $this->getMockBuilder('Magento\Framework\Message\CollectionFactory')
@@ -42,10 +48,15 @@ class MessagesTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->messageInterpretationStrategy = $this->getMock(
+            'Magento\Framework\View\Element\Message\InterpretationStrategyInterface'
+        );
+
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->messages = $objectManager->getObject('Magento\Framework\View\Element\Messages', [
             'collectionFactory' => $this->collectionFactory,
-            'messageFactory' => $this->messageFactory
+            'messageFactory' => $this->messageFactory,
+            'interpretationStrategy' => $this->messageInterpretationStrategy
         ]);
     }
 
@@ -273,27 +284,23 @@ class MessagesTest extends \PHPUnit_Framework_TestCase
 
         $errorMock = $this->getMockBuilder('Magento\Framework\Message\MessageInterface')
             ->getMockForAbstractClass();
-        $errorMock->expects($this->once())
-            ->method('getText')
-            ->willReturn('Error message without HTML!');
-
         $warningMock = $this->getMockBuilder('Magento\Framework\Message\MessageInterface')
             ->getMockForAbstractClass();
-        $warningMock->expects($this->exactly(2))
-            ->method('getText')
-            ->willReturn('Warning message with <strong>HTML</strong>!');
-
         $noticeMock = $this->getMockBuilder('Magento\Framework\Message\MessageInterface')
             ->getMockForAbstractClass();
-        $noticeMock->expects($this->exactly(3))
-            ->method('getText')
-            ->willReturn('Notice message without HTML!');
-
         $successMock = $this->getMockBuilder('Magento\Framework\Message\MessageInterface')
             ->getMockForAbstractClass();
-        $successMock->expects($this->exactly(4))
-            ->method('getText')
-            ->willReturn('Success message with <strong>HTML</strong>!');
+
+        $this->messageInterpretationStrategy->expects(static::any())
+            ->method('interpret')
+            ->willReturnMap(
+                [
+                    [$errorMock, 'Error message without HTML!'],
+                    [$warningMock, 'Warning message with <strong>HTML</strong>!'],
+                    [$noticeMock, 'Notice message without HTML!'],
+                    [$successMock, 'Success message with <strong>HTML</strong>!']
+                ]
+            );
 
         $collectionMock = $this->initMessageCollection();
         $collectionMock->expects($this->exactly(4))

@@ -88,17 +88,11 @@ define([
          * @private
          */
         _create: function () {
-            var date,
-                formKey = $.mage.cookies.get('form_key');
+            var formKey = $.mage.cookies.get('form_key');
 
             if (!formKey) {
                 formKey = generateRandomString(this.options.allowedCharacters, this.options.length);
-                date = new Date();
-                date.setTime(date.getTime() + (365 * 24 * 60 * 60 * 1000));
-                $.mage.cookies.set('form_key', formKey, {
-                    expires: date,
-                    path: '/'
-                });
+                $.mage.cookies.set('form_key', formKey);
             }
             $(this.options.inputSelector).val(formKey);
         }

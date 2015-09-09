@@ -34,7 +34,7 @@ define(
                 if (!this.isFullMode()) {
                     return false;
                 }
-                return isTaxDisplayedInGrandTotal && this.getPureValue() > 0 && isFullTaxSummaryDisplayed;
+                return this.getPureValue() > 0 && isFullTaxSummaryDisplayed;
             },
             getPureValue: function() {
                 var amount = 0;
