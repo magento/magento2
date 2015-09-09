@@ -25,7 +25,6 @@
                     "left": "<?php echo $block->getVar("magnifier:left"); ?>"
                 },
                 "data": <?php echo $block->getGalleryImagesJson(); ?>,
-                "mediaGalleryData": <?php echo $block->getMediaGalleryDataJson(); ?>,
                 "options": {
                     "nav": "<?php echo $block->getVar("gallery:navigation"); ?>",
                     "loop": <?php echo $block->getVar("gallery:loop"); ?>,
@@ -57,4 +56,15 @@
             }
         }
     }
+</script>
+<!--Once this data has been received, <script> tag is erased-->
+<script>
+  var MediaGalleryData = '<?php echo $block->getMediaGalleryDataJson(); ?>';
+  var GeneralVideoSettings = {
+    PlayIfBase : true, //BOOLEAN
+    VideoBackgroundColor : "#402493", //HEX
+    VideoAutoRestart : false, //BOOLEAN
+    MobileFullscreen : true, //BOOLEAN
+    showRelatedYT : false //BOOLEAN
+  };
 </script>

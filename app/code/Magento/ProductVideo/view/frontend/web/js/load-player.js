@@ -75,6 +75,8 @@ require([ "jquery", "jquery/ui", "mage/gallery" ], function( $ ) {
       this._height = this.element.data('height');
       this._autoplay = !!this.element.data('autoplay');
       this._playing = this._autoplay || false;
+      this._loop = this.element.data('loop');
+      this._rel = this.element.data('related');
 
       this._responsive = true;
 
@@ -154,7 +156,9 @@ require([ "jquery", "jquery/ui", "mage/gallery" ], function( $ ) {
           if (self._autoplay) {
             self._params.autoplay = 1;
           }
-          self._params.rel = 0;
+          if (!self._rel) {
+            self._params.rel = 0;
+          }
 
           self._player = new YT.Player(self.element.children(':first')[0], {
             height: self._height,
@@ -176,6 +180,10 @@ require([ "jquery", "jquery/ui", "mage/gallery" ], function( $ ) {
                 }
 
                 self._trigger('statechange', {}, data);
+
+                if(data.data === YT.PlayerState.ENDED && self._loop){
+                  self._player.playVideo();
+                }
               }
             }
 
@@ -266,6 +274,9 @@ require([ "jquery", "jquery/ui", "mage/gallery" ], function( $ ) {
       if (this._autoplay) {
         additionalParams += '&autoplay=1';
       }
+      if (this._loop) {
+        additionalParams +='&loop=1';
+      }
 
       this.element.append(
         $('<iframe/>')
@@ -312,45 +323,4 @@ require([ "jquery", "jquery/ui", "mage/gallery" ], function( $ ) {
       return this._playing;
     }
   });
-
-  $.widget('mage.videoLoaderDOM', {
-    options : {
-      $fotoramaPreview : '.fotorama__stage__shaft.fotorama__grab',
-      $fotoramaMain : '.fotorama__stage__frame',
-      $fotoramaThumbnails : '.fotorama__nav.fotorama__nav--thumbs',
-      $fotoramaThumb : '.fotorama__nav__frame.fotorama__nav__frame--thumb'
-    },
-    _create : function () {
-      console.log('creating...');
-
-
-      var video_width = $(this.options.$fotoramaMain).width();
-      var video_height = $(this.options.$fotoramaMain).height();
-
-      //this.element.find(this.options.$fotoramaMain).append('<div style="position:absolute;" class="product-video" data-type="youtube" data-code="ubKinQvpc6w" data-width="'+video_width+'" data-height="'+video_height+'"></div>');
-      this._eventsDOM();
-    },
-    _eventsDOM : function () {
-      $('.fotorama__nav__shaft .fotorama__nav__frame').on('click', function (){
-        if ($(this).hasClass('fotorama__active')) {
-          console.log($(this).index());
-          setTimeout(function(){
-            $('.fotorama__stage__shaft .fotorama__active').css('border-left','10px solid black');
-          }, 400);
-        }
-      });
-    }
-  });
-
-  /*var waitForFotorama = setInterval(function () {
-    if ($('.fotorama__stage__frame').length > 0) {
-
-      clearInterval(waitForFotorama);
-      $('body').videoLoaderDOM();
-      $('.product-video').productVideoLoader();
-
-    }
-  }, 50);*/
-
-
 });
