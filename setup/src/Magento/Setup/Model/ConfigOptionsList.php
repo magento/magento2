@@ -173,6 +173,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function validate(array $options, DeploymentConfig $deploymentConfig)
     {
@@ -323,5 +324,4 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         }
         return $errors;
     }
-
 }
