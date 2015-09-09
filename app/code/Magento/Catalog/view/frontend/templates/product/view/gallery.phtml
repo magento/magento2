@@ -38,6 +38,12 @@
                         ?: $block->getImageAttribute('product_page_image_small', 'width'); ?>,
                     "height": <?php echo $block->getImageAttribute('product_page_image_medium', 'height')
                         ?: $block->getImageAttribute('product_page_image_medium', 'width'); ?>
+                    "transitionduration": <?php echo $block->getVar("gallery:transition:duration"); ?>,
+                    "transition": "<?php echo $block->getVar("gallery:transition:effect"); ?>"
+                },
+                "fullscreen": {
+                    "nav": "thumbs",
+                    "swipe": false
                 },
                 "breakpoints": {
                     "mobile": {

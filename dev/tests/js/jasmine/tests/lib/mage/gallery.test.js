@@ -19,6 +19,7 @@ define([
         stageSelector = '[data-gallery-role="stage-shaft"]',
         navSelector = '[data-gallery-role="nav-frame"]',
         dotSelector = '[data-nav-type="dot"]',
+        navWrap = '[data-gallery-role="nav-wrap"]',
         dataToUpdate = [
             {
                 img: 'data:image/png;base64,' +
@@ -33,7 +34,16 @@ define([
                 img: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAw' +
                 'CAAAAC0lEQVR42mP4Xw8AAoABf5/NhYYAAAAASUVORK5CYII='
             }
-        ];
+        ],
+        waitsFor = function (test, fn) {
+            if (test()) {
+                fn();
+            } else {
+                setTimeout(function () {
+                    waitsFor(test, fn);
+                }, 10);
+            }
+        };
 
     gallery(magnifier(conf, body), body);
 
@@ -114,6 +124,31 @@ define([
 
         it('breakpoints override configs', function () {
             expect($('.fotorama__arr').css('display')).toBe('none');
+        });
+
+        it('fullscreen enter', function (done) {
+            expect($(navWrap).css('display') === 'block').toBeTruthy();
+            galleryAPI.fotorama.requestFullScreen();
+
+            waitsFor(function () {
+                return $(navWrap).css('display') !== 'block';
+            }, function () {
+                expect($(navWrap).css('display') === 'none').toBeTruthy();
+                done();
+            });
+        });
+
+
+        it('fullscreen exit', function (done) {
+            expect($(navWrap).css('display') === 'none').toBeTruthy();
+            galleryAPI.fotorama.cancelFullScreen();
+
+            waitsFor(function () {
+                return $(navWrap).css('display') !== 'none';
+            }, function () {
+                expect($(navWrap).css('display') === 'block').toBeTruthy();
+                done();
+            });
         });
     });
 });
