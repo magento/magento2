@@ -16,12 +16,7 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/CheckoutAgreements"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ]
     }
 }

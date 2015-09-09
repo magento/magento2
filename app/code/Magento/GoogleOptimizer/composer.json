@@ -17,12 +17,7 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/GoogleOptimizer"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ]
     }
 }
