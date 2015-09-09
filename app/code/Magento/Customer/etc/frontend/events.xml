@@ -25,4 +25,7 @@
     <event name="customer_login">
         <observer name="customer_log_login" instance="Magento\Customer\Model\Observer\Log" method="logLastLoginAt" />
     </event>
+    <event name="customer_customer_authenticated">
+        <observer name="customer_password" instance="Magento\Customer\Model\Observer" method="upgradeCustomerPassword" />
+    </event>
 </config>
