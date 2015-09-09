@@ -12,6 +12,7 @@ use Magento\Setup\Model\ObjectManagerProvider;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
+use Magento\Setup\Model\UpdatePackagesCache;
 
 /**
  * Controller for component grid tasks
@@ -31,16 +32,24 @@ class ComponentGrid extends AbstractActionController
     private $packageInfo;
 
     /**
+     * @var UpdatePackagesCache
+     */
+    private $updatePackagesCache;
+
+    /**
      * @param ComposerInformation $composerInformation
      * @param ObjectManagerProvider $objectManagerProvider
+     * @param UpdatePackagesCache $updatePackagesCache
      */
     public function __construct(
         ComposerInformation $composerInformation,
-        ObjectManagerProvider $objectManagerProvider
+        ObjectManagerProvider $objectManagerProvider,
+        UpdatePackagesCache $updatePackagesCache
     ) {
         $this->composerInformation = $composerInformation;
         $this->packageInfo = $objectManagerProvider->get()
             ->get('Magento\Framework\Module\PackageInfoFactory')->create();
+        $this->updatePackagesCache = $updatePackagesCache;
     }
 
     /**
@@ -63,7 +72,7 @@ class ComponentGrid extends AbstractActionController
      */
     public function componentsAction()
     {
-        $lastSyncData = $this->composerInformation->getPackagesForUpdate();
+        $lastSyncData = $this->updatePackagesCache->getPackagesForUpdate();
         $components = $this->composerInformation->getInstalledMagentoPackages();
         foreach ($components as $component) {
             $components[$component['name']]['update'] = false;
@@ -103,8 +112,8 @@ class ComponentGrid extends AbstractActionController
      */
     public function syncAction()
     {
-        $this->composerInformation->syncPackagesForUpdate();
-        $lastSyncData = $this->composerInformation->getPackagesForUpdate();
+        $this->updatePackagesCache->syncPackagesForUpdate();
+        $lastSyncData = $this->updatePackagesCache->getPackagesForUpdate();
         return new JsonModel(
             [
                 'success' => true,

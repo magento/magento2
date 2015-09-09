@@ -24,12 +24,19 @@ define(
                 return rowTotalInclTax;
             },
 
+            getRowDisplayPriceInclTax: function(item) {
+                var rowTotalInclTax = parseFloat(item.row_total_incl_tax);
+                return rowTotalInclTax + this.getRowWeeeTaxInclTax(item);
+            },
+
             getRowWeeeTaxInclTax: function(item) {
-                var weeeTaxAppliedAmounts = JSON.parse(item.weee_tax_applied);
                 var totalWeeeTaxIncTaxApplied = 0;
-                weeeTaxAppliedAmounts.forEach(function (weeeTaxAppliedAmount) {
-                    totalWeeeTaxIncTaxApplied+=parseFloat(Math.max(weeeTaxAppliedAmount.row_amount_incl_tax, 0));
-                });
+                if (item.weee_tax_applied) {
+                    var weeeTaxAppliedAmounts = JSON.parse(item.weee_tax_applied);
+                    weeeTaxAppliedAmounts.forEach(function (weeeTaxAppliedAmount) {
+                        totalWeeeTaxIncTaxApplied += parseFloat(Math.max(weeeTaxAppliedAmount.row_amount_incl_tax, 0));
+                    });
+                }
                 return totalWeeeTaxIncTaxApplied;
             }
 

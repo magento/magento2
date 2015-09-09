@@ -19,6 +19,52 @@ define([
     };
 
     /**
+     * Checks if node represents an element node (nodeType === 1).
+     *
+     * @param {HTMLElement} node
+     * @returns {Boolean}
+     */
+    function isElementNode(node) {
+        return node.nodeType === 1;
+    }
+
+    /**
+     * Extracts all child descendant
+     * elements of a specified node.
+     *
+     * @param {HTMLElement} node
+     * @returns {Array}
+     */
+    function extractChildren(node) {
+        var children = node.querySelectorAll('*');
+
+        return _.toArray(children);
+    }
+
+    /**
+     * Removes all non-element nodes from provided array
+     * and appends to it descendant elements.
+     *
+     * @param {Array} nodes
+     * @returns {Array}
+     */
+    function formNodesList(nodes) {
+        var result = [],
+            children;
+
+        _.toArray(nodes)
+            .filter(isElementNode)
+            .forEach(function (node) {
+                result.push(node);
+
+                children = extractChildren(node);
+                result   = result.concat(children);
+            });
+
+        return result;
+    }
+
+    /**
      * Invokes callback passing node to it.
      *
      * @param {HTMLElement} node
@@ -99,16 +145,6 @@ define([
     }
 
     /**
-     * Checks if node represents an element node (nodeType === 1).
-     *
-     * @param {HTMLElement} node
-     * @returns {Boolean}
-     */
-    function isElementNode(node) {
-        return node.nodeType === 1;
-    }
-
-    /**
      * Calls handlers assocoiated with an added node.
      * Adds listeners for the node removal.
      *
@@ -162,8 +198,6 @@ define([
     function getNodes(selector, ctx) {
         var nodes = [];
 
-        ctx = ctx || document.body;
-
         if (typeof selector === 'object') {
             if (typeof selector.jquery === 'string' || !selector.tagName) {
                 nodes = _.toArray(selector);
@@ -171,7 +205,7 @@ define([
                 nodes = [selector];
             }
         } else if (typeof selector === 'string') {
-            nodes = _.toArray($(selector, ctx));
+            nodes = $(selector, ctx).toArray();
         }
 
         return nodes;
@@ -188,11 +222,11 @@ define([
             removedNodes = mutation.removedNodes;
 
         if (addedNodes.length) {
-            _.toArray(addedNodes).filter(isElementNode).forEach(processAdded);
+            formNodesList(addedNodes).forEach(processAdded);
         }
 
         if (removedNodes.length) {
-            _.toArray(removedNodes).filter(isElementNode).forEach(processRemoved);
+            formNodesList(removedNodes).forEach(processRemoved);
         }
     }
 
@@ -208,22 +242,7 @@ define([
     return {
         /**
          * Adds listener for the appearance of nodes that matches provided
-         * selector and which are inside of the provided context.
-         *
-         * @param {String} selector - CSS selector.
-         * @param {Function} callback - Function that will invoked when node appears.
-         * @param {HTMLElement} [ctx=document.body] - Context inside of which to search for the node.
-         */
-        add: function (selector, callback, ctx) {
-            addSelectorListener(selector, {
-                ctx: ctx,
-                callback: callback,
-                type: 'add'
-            });
-        },
-
-        /**
-         * Same as the 'add' method but callback will be
+         * selector and which are inside of the provided context. Callback will be
          * also invoked on elements which a currently present.
          *
          * @param {String} selector - CSS selector.
@@ -231,16 +250,19 @@ define([
          * @param {HTMLElement} [ctx=document.body] - Context inside of which to search for the node.
          */
         get: function (selector, callback, ctx) {
-            var data = {
-                ctx: ctx,
-                callback: callback
+            var data;
+
+            data = {
+                ctx: ctx || document.body,
+                callback: callback,
+                type: 'add'
             };
 
-            getNodes(selector, ctx).forEach(function (node) {
+            getNodes(selector, data.ctx).forEach(function (node) {
                 trigger(node, data);
             });
 
-            this.add.apply(this, arguments);
+            addSelectorListener(selector, data);
         },
 
         /**
@@ -249,21 +271,21 @@ define([
          * @param {(jQueryObject|HTMLElement|Array|String)} selector
          * @param {Function} callback - Function that will invoked when node is removed.
          * @param {HTMLElement} [ctx=document.body] - Context inside of which to search for the node.
-         * @param {Boolean} existing - Flag that indicates whether to listen
-         *      only for a currently present elements.
          */
-        remove: function (selector, callback, ctx, existing) {
-            var data = {
-                ctx: ctx,
+        remove: function (selector, callback, ctx) {
+            var data;
+
+            data = {
+                ctx: ctx || document.body,
                 callback: callback,
                 type: 'remove'
             };
 
-            getNodes(selector, ctx).forEach(function (node) {
+            getNodes(selector, data.ctx).forEach(function (node) {
                 addRemovalListener(node, data);
             });
 
-            if (typeof selector === 'string' && !existing) {
+            if (typeof selector === 'string') {
                 addSelectorListener(selector, data);
             }
         },
