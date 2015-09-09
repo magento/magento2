@@ -42,8 +42,12 @@
                     "transition": "<?php echo $block->getVar("gallery:transition:effect"); ?>"
                 },
                 "fullscreen": {
-                    "nav": "thumbs",
-                    "swipe": false
+                    "nav": "<?php echo $block->getVar("gallery:fullscreen:navigation"); ?>",
+                    "loop": <?php echo $block->getVar("gallery:fullscreen:loop"); ?>,
+                    "arrows": <?php echo $block->getVar("gallery:fullscreen:arrows"); ?>,
+                    "showCaption": <?php echo $block->getVar("gallery:fullscreen:show_caption"); ?>,
+                    "transitionduration": <?php echo $block->getVar("gallery:fullscreen:transition:duration"); ?>,
+                    "transition": "<?php echo $block->getVar("gallery:fullscreen:transition:effect"); ?>"
                 },
                 "breakpoints": {
                     "mobile": {
