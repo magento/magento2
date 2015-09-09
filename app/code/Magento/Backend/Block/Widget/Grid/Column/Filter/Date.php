@@ -6,6 +6,8 @@
 
 namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
+use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
+
 /**
  * Date grid column filter
  */
@@ -22,10 +24,16 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
     protected $localeResolver;
 
     /**
+     * @var DateTimeFormatterInterface
+     */
+    protected $dateTimeFormatter;
+
+    /**
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Framework\DB\Helper $resourceHelper
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param DateTimeFormatterInterface $dateTimeFormatter
      * @param array $data
      */
     public function __construct(
@@ -33,11 +41,13 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
         \Magento\Framework\DB\Helper $resourceHelper,
         \Magento\Framework\Math\Random $mathRandom,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        DateTimeFormatterInterface $dateTimeFormatter,
         array $data = []
     ) {
         $this->mathRandom = $mathRandom;
         $this->localeResolver = $localeResolver;
         parent::__construct($context, $resourceHelper, $data);
+        $this->dateTimeFormatter = $dateTimeFormatter;
     }
 
     /**
@@ -121,7 +131,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilt
     {
         $value = $this->getValue($index);
         if ($value instanceof \DateTime) {
-            return \IntlDateFormatter::formatObject(
+            return $this->dateTimeFormatter->formatObject(
                 $value,
                 $this->_localeDate->getDateFormat(\IntlDateFormatter::SHORT)
             );

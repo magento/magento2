@@ -18,7 +18,7 @@ interface FilterApplierInterface
      *
      * @param AbstractDb $collection
      * @param array $filters
-     * @return mixed
+     * @return void
      */
-    public function apply(AbstractDb $collection, $filters);
+    public function apply(AbstractDb $collection, \Magento\Framework\Api\Filter $filters);
 }

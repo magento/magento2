@@ -17,7 +17,6 @@ switch ($type = $block->getType()) {
             $type = 'related';
             $class = $type;
 
-            $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
             $image = 'related_products_list';
             $title = __('Related Products');
             $items = $block->getAllItems();
@@ -39,7 +38,6 @@ switch ($type = $block->getType()) {
             $type = 'related';
             $class = $type;
 
-            $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
             $image = 'related_products_list';
             $title = __('Related Products');
             $items = $block->getItems();
@@ -60,7 +58,6 @@ switch ($type = $block->getType()) {
             $type = 'upsell';
             $class = $type;
 
-            $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
             $image = 'upsell_products_list';
             $title = __('We found other products you might like!');
             $items = $block->getAllItems();
@@ -82,7 +79,6 @@ switch ($type = $block->getType()) {
             $type = 'upsell';
             $class = $type;
 
-            $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
             $image = 'upsell_products_list';
             $title = __('We found other products you might like!');
             $items = $block->getItemCollection()->getItems();
@@ -104,7 +100,6 @@ switch ($type = $block->getType()) {
             $type = 'crosssell';
             $class = $type;
 
-            $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
             $image = 'cart_cross_sell_products';
             $title = __('More Choices:');
             $items = $block->getItemCollection();
@@ -124,7 +119,6 @@ switch ($type = $block->getType()) {
             $type = 'crosssell';
             $class = $type;
 
-            $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
             $image = 'cart_cross_sell_products';
             $title = __('More Choices:');
             $items = $block->getItems();
@@ -146,7 +140,6 @@ switch ($type = $block->getType()) {
 
             $class = 'widget' . ' ' . $type;
 
-            $imageBlock = $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
             $image = 'new_products_content_widget_grid';
             $title = __('New Products');
             $items = $exist;
@@ -204,7 +197,7 @@ switch ($type = $block->getType()) {
                 <div class="product-item-info <?php echo $available; ?>">
                     <?php echo '<!-- ' . $image . '-->' ?>
                     <a href="<?php echo $block->getProductUrl($_item) ?>" class="product photo product-item-photo">
-                        <?php echo $imageBlock->init($_item, $image)->toHtml() ?>
+                        <?php echo $block->getImage($_item, $image)->toHtml(); ?>
                     </a>
                     <div class="product details product-item-details">
                         <strong class="product name product-item-name"><a class="product-item-link" title="<?php echo $block->escapeHtml($_item->getName()) ?>" href="<?php echo $block->getProductUrl($_item) ?>">

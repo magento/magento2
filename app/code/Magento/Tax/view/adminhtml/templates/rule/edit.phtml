@@ -73,7 +73,7 @@ require([
                 id = select.find('option').eq(index).attr('value'),
                 item;
 
-            $('body').trigger('processStart')
+            $('body').trigger('processStart');
             $.ajax({
                 type: "POST",
                 data: {id:id},
@@ -159,7 +159,7 @@ require([
                                 index = that.parent().index(),
                                 select = that.closest('.mselect-list').prev();
 
-                        $('body').trigger('processStart')
+                        $('body').trigger('processStart');
                         var ajaxOptions = {
                             type: 'POST',
                             data: {

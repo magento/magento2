@@ -163,9 +163,9 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->rssModel->expects($this->once())->method('getProductCollection')
             ->will($this->returnValue([$product]));
         $this->imageHelper->expects($this->once())->method('init')
-            ->with($product, 'thumbnail')
+            ->with($product, 'rss_thumbnail')
             ->will($this->returnSelf());
-        $this->imageHelper->expects($this->once())->method('resize')->with(75, 75)
+        $this->imageHelper->expects($this->once())->method('getUrl')
             ->will($this->returnValue('image_link'));
 
         $data = $this->block->getRssData();

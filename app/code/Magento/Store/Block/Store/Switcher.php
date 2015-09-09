@@ -85,8 +85,9 @@ class Switcher extends \Magento\Framework\View\Element\Template
         foreach ($groupCollection as $group) {
             $this->_groups[$group->getId()] = $group;
         }
+        /** @var \Magento\Store\Model\Store $store */
         foreach ($storeCollection as $store) {
-            if (!$store->getIsActive()) {
+            if (!$store->isActive()) {
                 continue;
             }
             $store->setLocaleCode($this->_scopeConfig->getValue(

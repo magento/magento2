@@ -71,6 +71,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_storeManager;
 
     /**
+     * @var string
+     */
+    protected $cacheProductWeeeAmount = '_cache_product_weee_amount';
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Weee\Model\Tax $weeeTax
@@ -192,17 +197,22 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getAmount($product, $website = null)
     {
-        /** @var \Magento\Store\Model\Store $store */
-        if ($website) {
-            $store = $this->_storeManager->getWebsite($website)->getDefaultGroup()->getDefaultStore();
-        } else {
-            $store = $product->getStore();
-        }
+        if (!$product->hasData($this->cacheProductWeeeAmount)) {
+            /** @var \Magento\Store\Model\Store $store */
+            if ($website) {
+                $store = $this->_storeManager->getWebsite($website)->getDefaultGroup()->getDefaultStore();
+            } else {
+                $store = $product->getStore();
+            }
 
-        if ($this->isEnabled($store)) {
-            return $this->_weeeTax->getWeeeAmount($product, null, null, $website);
+            $amount = 0;
+            if ($this->isEnabled($store)) {
+                $amount = $this->_weeeTax->getWeeeAmount($product, null, null, $website);
+            }
+
+            $product->setData($this->cacheProductWeeeAmount, $amount);
         }
-        return 0;
+        return $product->getData($this->cacheProductWeeeAmount);
     }
 
     /**
@@ -728,7 +738,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  \Magento\Catalog\Model\Product $product
      * @return array
      */
-    public function getWeeAttributesForBundle($product)
+    public function getWeeeAttributesForBundle($product)
     {
         if ($product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
             $typeInstance = $product->getTypeInstance();
@@ -747,7 +757,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                     $product->getStore()->getWebsiteId()
                 );
                 foreach ($weeAttributes as $weeAttribute) {
-                    $insertedWeeCodesArray[$weeAttribute->getCode()]=$weeAttribute;
+                    $insertedWeeCodesArray[$selectionItem->getId()][$weeAttribute->getCode()]=$weeAttribute;
                 }
             }
             return $insertedWeeCodesArray;

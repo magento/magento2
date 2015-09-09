@@ -231,11 +231,19 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      */
     protected function _afterLoad()
     {
+        $this->loadCouponCode();
+        return parent::_afterLoad();
+    }
+
+    /**
+     * @return void
+     */
+    public function loadCouponCode()
+    {
         $this->setCouponCode($this->getPrimaryCoupon()->getCode());
-        if ($this->getUsesPerCoupon() !== null && !$this->getUseAutoGeneration()) {
+        if ($this->getUsesPerCoupon() == null && !$this->getUseAutoGeneration()) {
             $this->setUsesPerCoupon($this->getPrimaryCoupon()->getUsageLimit());
         }
-        return parent::_afterLoad();
     }
 
     /**

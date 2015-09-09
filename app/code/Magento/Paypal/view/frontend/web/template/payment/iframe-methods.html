@@ -29,14 +29,15 @@
                         type="submit"
                         data-bind="click: placePendingPaymentOrder, attr: {title: $t('Continue')}, css: {disabled: !isPlaceOrderActionAllowed()}"
                         class="button action primary checkout">
-                    <span data-bind="text: $t('Continue')"></span>
+                    <span data-bind="i18n: 'Continue'"></span>
                 </button>
             </div>
         </div>
         <div data-bind="visible: isInAction()">
             <div id="iframe-warning" class="message notice">
-                <div><!-- ko text: $t('Please do not refresh the page until you complete payment.') --><!-- /ko --></div>
+                <div><!-- ko i18n: 'Please do not refresh the page until you complete payment.' --><!-- /ko --></div>
             </div>
+            <!-- ko if: isPaymentReady() -->
             <iframe data-bind="attr: {id: getCode() + '-iframe', src: getActionUrl()}"
                     data-container="paypal-iframe"
                     class="paypal iframe"
@@ -45,9 +46,9 @@
                     border="0"
                     height="610"
                     width="100%"
-            >
+                    >
             </iframe>
+            <!-- /ko -->
         </div>
     </div>
 </div>
-

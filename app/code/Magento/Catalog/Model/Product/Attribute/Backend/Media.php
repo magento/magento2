@@ -818,6 +818,9 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $images = (array)$object->getData($this->getAttribute()->getName());
         $tableName = $this->_getResource()->getMainTable();
         foreach ($images['images'] as $value) {
+            if (empty($value['value_id'])) {
+                continue;
+            }
             $data[$tableName][] = [
                 'attribute_id' => $this->getAttribute()->getAttributeId(),
                 'value_id' => $value['value_id'],

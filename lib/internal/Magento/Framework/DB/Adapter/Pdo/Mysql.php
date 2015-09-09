@@ -177,10 +177,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      * @var DateTime
      */
     protected $dateTime;
+
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    protected $logger;
 
     /**
      * @param \Magento\Framework\Stdlib\StringUtils|String $string
@@ -334,6 +335,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         /** @link http://bugs.mysql.com/bug.php?id=18551 */
         $this->_connection->query("SET SQL_MODE=''");
 
+        if (isset($this->_config['initStatements'])) {
+            $this->query($this->_config['initStatements']);
+        }
+
         if (!$this->_connectionFlagsSet) {
             $this->_connection->setAttribute(\PDO::ATTR_EMULATE_PREPARES, true);
             $this->_connection->setAttribute(\PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
@@ -399,15 +404,15 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     protected function _checkDdlTransaction($sql)
     {
-        if (is_string($sql) && $this->getTransactionLevel() > 0) {
+        if ($this->getTransactionLevel() > 0) {
+            $sql = ltrim(preg_replace('/\s+/', ' ', $sql));
             $sqlMessage = explode(' ', $sql, 3);
-            $startSql = strtolower(substr(ltrim($sqlMessage[0]), 0, 3));
+            $startSql = strtolower(substr($sqlMessage[0], 0, 3));
             if (in_array($startSql, $this->_ddlRoutines) && strcasecmp($sqlMessage[1], 'temporary') !== 0) {
                 trigger_error(AdapterInterface::ERROR_DDL_MESSAGE, E_USER_ERROR);
             }
         }
     }
-
 
     /**
      * Special handling for PDO query().
@@ -1821,7 +1826,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 $field = $this->quoteIdentifier($v);
             }
 
-            if ($field && $value) {
+            if ($field && is_string($value) && $value !== '') {
                 $updateFields[] = sprintf('%s = %s', $field, $value);
             }
         }
@@ -1973,8 +1978,10 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             implode(",\n", $sqlFragment),
             implode(" ", $tableOptions)
         );
+        $result = $this->query($sql);
+        $this->resetDdlCache($table->getName(), $table->getSchema());
 
-        return $this->query($sql);
+        return $result;
     }
 
     /**
@@ -2379,7 +2386,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $table = $this->quoteIdentifier($this->_getTableName($tableName, $schemaName));
         $query = 'DROP TABLE IF EXISTS ' . $table;
         $this->query($query);
-
+        $this->resetDdlCache($tableName, $schemaName);
         return true;
     }
 

@@ -5,10 +5,11 @@
  */
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
+use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Indexer\Console\Command\IndexerShowModeCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class IndexerShowModeCommandTest extends IndexerCommandCommonTestSetup
+class IndexerShowModeCommandTest extends AbstractIndexerCommandCommonSetup
 {
     /**
      * Command being tested
@@ -19,16 +20,16 @@ class IndexerShowModeCommandTest extends IndexerCommandCommonTestSetup
 
     public function testGetOptions()
     {
+        $this->stateMock->expects($this->never())->method('setAreaCode')->with(FrontNameResolver::AREA_CODE);
         $this->command = new IndexerShowModeCommand($this->objectManagerFactory);
         $optionsList = $this->command->getInputList();
-        $this->assertSame(2, sizeof($optionsList));
-        $this->assertSame('all', $optionsList[0]->getName());
-        $this->assertSame('index', $optionsList[1]->getName());
+        $this->assertSame(1, sizeof($optionsList));
+        $this->assertSame('index', $optionsList[0]->getName());
     }
 
     public function testExecuteAll()
     {
-
+        $this->configureAdminArea();
         $collection = $this->getMock('Magento\Indexer\Model\Indexer\Collection', [], [], '', false);
         $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
         $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');
@@ -52,6 +53,7 @@ class IndexerShowModeCommandTest extends IndexerCommandCommonTestSetup
 
     public function testExecuteWithIndex()
     {
+        $this->configureAdminArea();
         $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
         $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');
         $indexerOne->expects($this->once())->method('isScheduled')->willReturn(true);

@@ -29,7 +29,7 @@ module.exports = function (grunt) {
         grunt.option('force', true);
         grunt.task.run(tasks);
 
-        if (!grunt.option('path')) {
+        if (!grunt.option('file')) {
             fs.unlinkSync(pc.static.tmp);
         }
     });
