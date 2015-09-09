@@ -134,7 +134,7 @@ define([
         showGrid: function (rowIndex) {
             var attributes = JSON.parse(this.productMatrix()[rowIndex].attribute);
             this.rowIndexToEdit = rowIndex;
-            this.associatedProductGrid().open(attributes);
+            this.associatedProductGrid().open(attributes, false);
         },
         toggleProduct: function (rowIndex) {
             var product, row, productChanged = {};
