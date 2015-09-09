@@ -57,11 +57,8 @@ class Context
      */
     public function getContextByPath($path)
     {
-        $moduleDirs = $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE);
-        $invertedModuleDirsMap = array_flip($moduleDirs);
-        if (isset($invertedModuleDirsMap[$path])) {
+        if ($value = $this->getModuleName($path)) {
             $type = self::CONTEXT_TYPE_MODULE;
-            $value = $invertedModuleDirsMap[$path];
         } elseif ($value = strstr($path, '/app/design/')) {
             $type = self::CONTEXT_TYPE_THEME;
             $value = explode('/', $value);
@@ -73,6 +70,27 @@ class Context
             throw new \InvalidArgumentException(sprintf('Invalid path given: "%s".', $path));
         }
         return [$type, $value];
+    }
+
+    /**
+     * Try to get module name by path, return false if not a module
+     *
+     * @param string $path
+     * @return bool|string
+     */
+    private function getModuleName($path)
+    {
+        $moduleDirs = $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE);
+        $invertedModuleDirsMap = array_flip($moduleDirs);
+        $parts = explode('/', $path);
+        while (!empty($parts)) {
+            array_pop($parts);
+            $partialPath = implode('/', $parts);
+            if (isset($invertedModuleDirsMap[$partialPath])) {
+                return $invertedModuleDirsMap[$partialPath];
+            }
+        }
+        return false;
     }
 
     /**

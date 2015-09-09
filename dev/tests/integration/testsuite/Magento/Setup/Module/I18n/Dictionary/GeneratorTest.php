@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Module\I18n\Dictionary;
 
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Module\I18n\ServiceLocator;
 
 class GeneratorTest extends \PHPUnit_Framework_TestCase
@@ -34,6 +35,11 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     protected $generator;
 
+    /**
+     * @var array
+     */
+    protected $backupRegistrar;
+
     protected function setUp()
     {
         $this->testDir = realpath(__DIR__ . '/_files');
@@ -42,6 +48,11 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->outputFileName = $this->testDir . '/translate.csv';
         $this->generator = ServiceLocator::getDictionaryGenerator();
 
+        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
+        $paths = $reflection->getProperty('paths');
+        $paths->setAccessible(true);
+        $this->backupRegistrar = $paths->getValue();
+        $paths->setAccessible(false);
     }
 
     protected function tearDown()
@@ -53,6 +64,12 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $property->setAccessible(true);
         $property->setValue(null);
         $property->setAccessible(false);
+
+        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
+        $paths = $reflection->getProperty('paths');
+        $paths->setAccessible(true);
+        $paths->setValue($this->backupRegistrar);
+        $paths->setAccessible(false);
     }
 
     public function testGenerationWithoutContext()
@@ -64,6 +81,16 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerationWithContext()
     {
+        ComponentRegistrar::register(
+            ComponentRegistrar::MODULE,
+            'Magento_FirstModule',
+            $this->source . '/app/code/Magento/FirstModule'
+        );
+        ComponentRegistrar::register(
+            ComponentRegistrar::MODULE,
+            'Magento_SecondModule',
+            $this->source . '/app/code/Magento/SecondModule'
+        );
         $this->generator->generate($this->source, $this->outputFileName, true);
 
         $this->assertFileEquals($this->expectedDir . '/with_context.csv', $this->outputFileName);
