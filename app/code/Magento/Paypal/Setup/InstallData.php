@@ -48,8 +48,8 @@ class InstallData implements InstallDataInterface
          */
         $setup->startSetup();
 
-        $quoteInstaller = $this->quoteSetupFactory->create(['resourceName' => 'quote_setup']);
-        $salesInstaller = $this->salesSetupFactory->create(['resourceName' => 'sales_setup']);
+        $quoteInstaller = $this->quoteSetupFactory->create();
+        $salesInstaller = $this->salesSetupFactory->create();
         /**
          * Add paypal attributes to the:
          *  - sales/flat_quote_payment_item table
