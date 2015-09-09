@@ -45,6 +45,7 @@ define([
         },
 
         onHiddenChange: function (isHidden) {
+            // Hide message block if needed
             if (isHidden) {
                 var self = this;
                 setTimeout(function () {
