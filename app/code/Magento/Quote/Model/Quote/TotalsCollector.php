@@ -93,6 +93,7 @@ class TotalsCollector
         'giftcardaccount',
         'msrp',
         'shipping',
+        'freeshipping'
     );
 
     /**
