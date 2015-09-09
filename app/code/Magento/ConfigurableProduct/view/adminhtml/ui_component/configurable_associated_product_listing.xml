@@ -171,7 +171,7 @@
                 </item>
                 <item name="childDefaults" xsi:type="array">
                     <item name="fieldAction" xsi:type="array">
-                        <item name="provider" xsi:type="string">configurableVariations</item>
+                        <item name="provider" xsi:type="string">configurableProductGrid</item>
                         <item name="target" xsi:type="string">selectProduct</item>
                         <item name="params" xsi:type="array">
                             <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
