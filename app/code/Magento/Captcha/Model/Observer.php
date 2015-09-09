@@ -321,7 +321,9 @@ class Observer
      */
     public function resetAttemptForFrontend($observer)
     {
-        return $this->_getResourceModel()->deleteUserAttempts($observer->getModel()->getEmail());
+        /** @var \Magento\Customer\Model\Customer $model */
+        $model = $observer->getModel();
+        return $this->_getResourceModel()->deleteUserAttempts($model->getEmail());
     }
 
     /**

@@ -155,31 +155,51 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(self::BASE_TAX_AMOUNT_REFUNDED, $value);
     }
 
-    public function testGetWeeAttributesForBundle()
+    public function testGetWeeeAttributesForBundle()
     {
-        $weeObject = new \Magento\Framework\DataObject(
+        $prodId1 = 1;
+        $prodId2 = 2;
+        $fptCode1 = 'fpt' . $prodId1;
+        $fptCode2 = 'fpt' . $prodId2;
+
+        $weeeObject1 = new \Magento\Framework\DataObject(
             [
-                'code' => 'fpt',
+                'code' => $fptCode1,
                 'amount' => '15.0000',
             ]
         );
-        $testArray = ['fpt' => $weeObject];
+
+        $weeeObject2 = new \Magento\Framework\DataObject(
+            [
+                'code' => $fptCode2,
+                'amount' => '15.0000',
+            ]
+        );
+
+        $testArray = [$prodId1 => [$fptCode1 => $weeeObject1], $prodId2 => [$fptCode2 => $weeeObject2]];
 
         $this->weeeTax->expects($this->any())
             ->method('getProductWeeeAttributes')
-            ->will($this->returnValue([$weeObject]));
+            ->will($this->returnValue([$weeeObject1, $weeeObject2]));
 
-        $productSimple=$this->getMock('\Magento\Catalog\Model\Product\Type\Simple', [], [], '', false);
+        $productSimple = $this->getMock('\Magento\Catalog\Model\Product\Type\Simple', ['getId'], [], '', false);
 
-        $productInstance=$this->getMock('\Magento\Bundle\Model\Product\Type', [], [], '', false);
+        $productSimple->expects($this->at(0))
+            ->method('getId')
+            ->will($this->returnValue($prodId1));
+        $productSimple->expects($this->at(1))
+            ->method('getId')
+            ->will($this->returnValue($prodId2));
+
+        $productInstance = $this->getMock('\Magento\Bundle\Model\Product\Type', [], [], '', false);
         $productInstance->expects($this->any())
             ->method('getSelectionsCollection')
             ->will($this->returnValue([$productSimple]));
 
         $store=$this->getMock('\Magento\Store\Model\Store', [], [], '', false);
 
-
-        $product=$this->getMock(
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $this->getMock(
             '\Magento\Bundle\Model\Product',
             ['getTypeInstance', 'getStoreId', 'getStore', 'getTypeId'],
             [],
@@ -207,8 +227,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('registry')
             ->with('current_product')
             ->will($this->returnValue($product));
-
-        $this->assertEquals($testArray, $this->helperData->getWeeAttributesForBundle($product));
+        
+        $this->assertEquals($testArray, $this->helperData->getWeeeAttributesForBundle($product));
     }
 
     public function testGetAppliedSimple()
@@ -260,7 +280,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $itemProductBundle->expects($this->any())
             ->method('getChildren')
             ->will($this->returnValue([$itemProductSimple1, $itemProductSimple2]));
-
 
         $this->assertEquals($testArray, $this->helperData->getApplied($itemProductBundle));
     }
