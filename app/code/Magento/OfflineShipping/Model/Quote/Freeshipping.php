@@ -97,11 +97,11 @@ class Freeshipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTota
      * By default we not present such information
      *
      * @param \Magento\Quote\Model\Quote\Address\Total $total
-     * @return array
+     * @return null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fetch(\Magento\Quote\Model\Quote\Address\Total $total)
     {
-        return [];
+        return null;
     }
 }
