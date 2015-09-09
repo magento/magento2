@@ -58,9 +58,9 @@ class ComponentGrid extends AbstractActionController
      * @param UpdatePackagesCache $updatePackagesCache
      */
     public function __construct(
-        ComposerInformation $composerInformation,
-        ObjectManagerProvider $objectManagerProvider,
-        UpdatePackagesCache $updatePackagesCache
+        \Magento\Framework\Composer\ComposerInformation $composerInformation,
+        \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider,
+        \Magento\Setup\Model\UpdatePackagesCache $updatePackagesCache
     ) {
         $this->composerInformation = $composerInformation;
         $objectManager = $objectManagerProvider->get();
