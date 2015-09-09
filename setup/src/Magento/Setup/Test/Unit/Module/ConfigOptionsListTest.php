@@ -151,7 +151,7 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
             ['122.11.2.34:800', false],
             ['122.11.2.34:800,localhost', false],
             ['website.com:9000', false],
-            ['website.com/m2ce:9000', false],
+            ['website.com/m2ce:9000', true],
             ['website.com+:9000', true],
         ];
     }
