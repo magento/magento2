@@ -107,23 +107,9 @@ class Files
     {
         $exclude = [];
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
-            $exclude[] = '#' . str_replace(BP . '/', '', $moduleDir) . '/Test#';
+            $exclude[] = '#' . $moduleDir . '/Test#';
         }
         return $exclude;
-    }
-
-    /**
-     * Get module directories
-     *
-     * @return array
-     */
-    private function getModuleDirs()
-    {
-        $moduleDirs = [];
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $path) {
-            $moduleDirs[] = str_replace(BP, $this->_path, $path);
-        }
-        return $moduleDirs;
     }
 
     /**
@@ -155,7 +141,7 @@ class Files
                 $files = array_merge(
                     glob($this->_path . '/app/*.php', GLOB_NOSORT),
                     $this->getFilesSubset(
-                        $this->getModuleDirs(),
+                        $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE),
                         '*.php',
                         $this->getModuleTestDirs()
                     )
@@ -210,7 +196,11 @@ class Files
             if ($appCode) {
                 $files = array_merge(
                     $files,
-                    $this->getFilesSubset($this->getModuleDirs(), '*.php', $this->getModuleTestDirs())
+                    $this->getFilesSubset(
+                        $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE),
+                        '*.php',
+                        $this->getModuleTestDirs()
+                    )
                 );
             }
             if ($tests) {
@@ -222,7 +212,7 @@ class Files
                     "{$this->_path}/setup/src/Magento/Setup/Test",
                 ];
                 $moduleTestDir = [];
-                foreach ($this->getModuleDirs() as $moduleDir) {
+                foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
                     $moduleTestDir[] = $moduleDir . '/Test';
                 }
                 $testDirs = array_merge($testDirs, $moduleTestDir);
@@ -277,7 +267,7 @@ class Files
         $cacheKey = __METHOD__ . '|' . $this->_path . '|' . serialize(func_get_args());
         if (!isset(self::$_cache[$cacheKey])) {
             $configXmlPaths = [];
-            foreach ($this->getModuleDirs() as $moduleDir) {
+            foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
                 $configXmlPaths[] = $moduleDir . '/etc/config.xml';
                 // Module DB-specific configs, e.g. config.mysql4.xml
                 $configXmlPaths[] = $moduleDir . '/etc/config.*.xml';
@@ -443,7 +433,7 @@ class Files
         $module = $params['module'];
         if ($params['include_code']) {
             $locationPaths = [];
-            foreach ($this->getModuleDirs() as $moduleDir) {
+            foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
                 $locationPaths[] = $moduleDir . "/view/{$area}/{$location}";
             }
             $this->_accumulateFilesByPatterns(
@@ -468,15 +458,13 @@ class Files
      * Parse meta-info of a layout file in module
      *
      * @param string $file
-     * @param string $path
      * @return array
      */
-    protected function _parseModuleLayout($file, $path)
+    protected function _parseModuleLayout($file)
     {
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
-            $modulePath = str_replace(BP . '/', '', $modulePath);
             if (preg_match(
-                '/^' . preg_quote("{$path}/{$modulePath}/", '/') . 'view\/([a-z]+)\/layout\/(.+)$/i',
+                '/^' . preg_quote("{$modulePath}/", '/') . 'view\/([a-z]+)\/layout\/(.+)$/i',
                 $file,
                 $matches
             ) === 1
@@ -539,7 +527,7 @@ class Files
 
         if (!isset(self::$_cache[__METHOD__][$cacheKey])) {
             $etcAreaPaths = [];
-            foreach ($this->getModuleDirs() as $moduleDir) {
+            foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
                 $etcAreaPaths[] = $moduleDir . "/etc/{$params['area']}";
             }
             $files = self::getFiles(
@@ -572,7 +560,7 @@ class Files
             return self::$_cache[$key];
         }
         $moduleWebPaths = [];
-        foreach ($this->getModuleDirs() as $moduleName => $moduleDir) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
             $keyInfo = explode('_', $moduleName);
             if ($keyInfo[0] == $namespace || $namespace == '*') {
                 if ($keyInfo[1] == $module || $module == '*') {
@@ -612,7 +600,7 @@ class Files
             return self::$_cache[$key];
         }
         $moduleTemplatePaths = [];
-        foreach ($this->getModuleDirs() as $moduleName => $moduleDir) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
             $keyInfo = explode('_', $moduleName);
             if ($keyInfo[0] == $namespace || $namespace == '*') {
                 if ($keyInfo[1] == $module || $module == '*') {
@@ -654,7 +642,7 @@ class Files
         $result = [];
         $moduleWebPath = [];
         $moduleLocalePath = [];
-        foreach ($this->getModuleDirs() as $moduleDir) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
             $moduleWebPath[] = $moduleDir . "/view/{$area}/web";
             $moduleLocalePath[] = $moduleDir . "/view/{$area}/web/i18n/{$locale}";
         }
@@ -734,15 +722,13 @@ class Files
      * Parse meta-info of a static file in module
      *
      * @param string $file
-     * @param string $path
      * @return array
      */
-    protected function _parseModuleStatic($file, $path)
+    protected function _parseModuleStatic($file)
     {
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
-            $modulePath = str_replace(BP . '/', '', $modulePath);
             if (preg_match(
-                '/^' . preg_quote("{$path}/{$modulePath}/", '/') . 'view\/([a-z]+)\/web\/(.+)$/i',
+                '/^' . preg_quote("{$modulePath}/", '/') . 'view\/([a-z]+)\/web\/(.+)$/i',
                 $file,
                 $matches
             ) === 1
@@ -758,14 +744,12 @@ class Files
      * Parse meta-info of a localized (translated) static file in module
      *
      * @param string $file
-     * @param string $path
      * @return array
      */
-    protected function _parseModuleLocaleStatic($file, $path)
+    protected function _parseModuleLocaleStatic($file)
     {
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
-            $modulePath = str_replace(BP . '/', '', $modulePath);
-            $appCode = preg_quote("{$path}/{$modulePath}/", '/');
+            $appCode = preg_quote("{$modulePath}/", '/');
             if (preg_match('/^' . $appCode . 'view\/([a-z]+)\/web\/i18n\/([a-z_]+)\/(.+)$/i', $file, $matches) === 1) {
                 list(, $area, $locale, $filePath) = $matches;
                 return [$area, '', $locale, $moduleName, $filePath, $file];
@@ -844,7 +828,7 @@ class Files
         }
         $themePath = '*/*';
         $viewAreaPaths = [];
-        foreach ($this->getModuleDirs() as $moduleDir) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
             $viewAreaPaths[] = $moduleDir . "/view/{$area}";
         }
         $paths = [
@@ -886,7 +870,7 @@ class Files
             $themePath = '*/*';
             $result = [];
             $moduleTemplatePaths = [];
-            foreach ($this->getModuleDirs() as $moduleDir) {
+            foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
                 $moduleTemplatePaths[] = $moduleDir . "/view/{$area}/templates";
             }
             $this->_accumulateFilesByPatterns(
@@ -913,15 +897,13 @@ class Files
      * Parse meta-information from a modular template file
      *
      * @param string $file
-     * @param string $path
      * @return array
      */
-    protected function _parseModuleTemplate($file, $path)
+    protected function _parseModuleTemplate($file)
     {
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
-            $modulePath = str_replace(BP . '/', '', $modulePath);
             if (preg_match(
-                '/^' . preg_quote("{$path}/{$modulePath}/", '/') . 'view\/([a-z]+)\/templates\/(.+)$/i',
+                '/^' . preg_quote("{$modulePath}/", '/') . 'view\/([a-z]+)\/templates\/(.+)$/i',
                 $file,
                 $matches
             ) === 1
@@ -964,7 +946,7 @@ class Files
             return self::$_cache[$key];
         }
         $moduleEmailPaths = [];
-        foreach ($this->getModuleDirs() as $moduleDir) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
             $moduleEmailPaths[] = $moduleDir . "/view/email";
         }
         $files = self::getFiles($moduleEmailPaths, '*.html');
@@ -1045,7 +1027,7 @@ class Files
     {
         $primaryConfigs = glob($this->_path . '/app/etc/{di.xml,*/di.xml}', GLOB_BRACE);
         $moduleConfigs = [];
-        foreach ($this->getModuleDirs() as $moduleDir) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
             $moduleConfigs = array_merge($moduleConfigs, glob($moduleDir . '/etc/{di,*/di}.xml', GLOB_BRACE));
         }
         $configs = array_merge($primaryConfigs, $moduleConfigs);
@@ -1091,12 +1073,15 @@ class Files
             '/dev/tests/functional/tests/app/',
             '/setup/src/'
         ];
-        foreach ($this->getModuleDirs() as $fullModuleDir) {
-            $directories[] = str_replace($this->_path, '', $fullModuleDir) . '/';
+        foreach ($directories as $key => $dir) {
+            $directories[$key] = $this->_path . $dir;
+        }
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $fullModuleDir) {
+            $directories[] = $fullModuleDir . '/';
         }
 
         foreach ($directories as $dir) {
-            $fullPath = $this->_path . $dir . $path;
+            $fullPath = $dir . $path;
             /**
              * Use realpath() instead of file_exists() to avoid incorrect work on Windows because of case insensitivity
              * of file names
@@ -1138,7 +1123,7 @@ class Files
         }
 
         $result = [];
-        foreach ($this->getModuleDirs() as $moduleDir) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
             $iterator = new \DirectoryIterator($moduleDir . '/');
             foreach ($iterator as $file) {
                 if (!$file->isDot() && !in_array($file->getFilename(), ['Zend']) && $file->isDir()) {
@@ -1158,7 +1143,8 @@ class Files
      */
     public function getModuleFile($namespace, $module, $file)
     {
-        return $this->getModuleDirs()[$namespace . '_' . $module] . '/' . $file;
+        return $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE)[$namespace . '_' . $module] .
+        '/' . $file;
     }
 
     /**
@@ -1174,7 +1160,7 @@ class Files
         switch ($componentType) {
             case 'module':
                 $files = [];
-                foreach ($this->getModuleDirs() as $moduleDir) {
+                foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
                     $files = array_merge($files, glob($moduleDir . $pathPattern, GLOB_NOSORT | GLOB_BRACE));
                 }
                 return $files;
@@ -1196,7 +1182,10 @@ class Files
     {
         $key = __METHOD__ . "/{$module}";
         if (!isset(self::$_cache[$key])) {
-            $files = self::getFiles([$this->getModuleDirs()['Magento_'. $module]], '*.php');
+            $files = self::getFiles(
+                [$this->componentRegistrar->getPaths(ComponentRegistrar::MODULE)['Magento_'. $module]],
+                '*.php'
+            );
             self::$_cache[$key] = $files;
         }
 
@@ -1220,7 +1209,11 @@ class Files
         if (!isset(self::$_cache[$key])) {
             switch ($componentType) {
                 case 'module':
-                    $files = $this->getFilesSubset($this->getModuleDirs(), 'composer.json', $this->getModuleTestDirs());
+                    $files = $this->getFilesSubset(
+                        $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE),
+                        'composer.json',
+                        $this->getModuleTestDirs()
+                    );
                     break;
                 default:
                     // TODO: implement for other component type
@@ -1286,12 +1279,7 @@ class Files
         $key = __METHOD__ . "/{$moduleName}";
         if (!isset(self::$_cache[$key])) {
             self::$_cache[$key] = file_exists(
-                "{$this->_path}/" . str_replace(
-                    BP .
-                    '/',
-                    '',
-                    $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName)
-                )
+                $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName)
             );
         }
 
