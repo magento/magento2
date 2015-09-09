@@ -12,5 +12,5 @@
         </arguments>
     </virtualType>
 
-    <type name="Magento\Mtf\Util\Protocol\CurlTransport\WebApiDecorator" shared="true" />
+    <type name="Magento\Mtf\Util\Protocol\CurlTransport\WebapiDecorator" shared="true" />
 </config>

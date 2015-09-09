@@ -16,7 +16,7 @@ use Magento\Mtf\Util\Protocol\CurlTransport;
 /**
  * Curl transport on webapi.
  */
-class WebApiDecorator implements CurlInterface
+class WebapiDecorator implements CurlInterface
 {
     /**
      * Xpath to token in configuration file.
@@ -119,11 +119,10 @@ class WebApiDecorator implements CurlInterface
     protected function setConfiguration(Integration $integration)
     {
         $fileConfig = MTF_BP . '/etc/config.xml';
+        $dom = new \DOMDocument();
         if (!file_exists($fileConfig)) {
             copy(MTF_BP . '/etc/config.xml.dist', $fileConfig);
         }
-
-        $dom = new \DOMDocument();
         $dom->load($fileConfig);
 
         $webapiToken = (new \DOMXPath($dom))->query('//config/handler/webapi/token')->item(0);

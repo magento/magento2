@@ -76,7 +76,7 @@ class Curl extends AbstractCurl implements CatalogSearchQueryInterface
      */
     protected function getNewSearchTermId($queryText)
     {
-        $filter = $this->encodeFilter(['search_query' => $queryText]);
+        $filter = base64_encode('search_query=' . $queryText);
         $url = $_ENV['app_backend_url'] . $this->url . 'index/filter/' . $filter;
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->write($url, [], CurlInterface::GET);
