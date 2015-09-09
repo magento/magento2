@@ -15,6 +15,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * DataProvider for js translation
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProvider implements DataProviderInterface
 {
