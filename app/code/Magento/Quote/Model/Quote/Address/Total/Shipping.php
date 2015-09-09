@@ -43,7 +43,7 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         $shippingAssignment->getShipping()->getAddress()->setWeight(0);
         $shippingAssignment->getShipping()->getAddress()->setFreeMethodWeight(0);
         $total->setTotalAmount($this->getCode(), 0);
-        $total->setBaseShippingAmount(0);
+        $total->setBaseTotalAmount($this->getCode(), 0);
 
         $items = $shippingAssignment->getItems();
         if (!count($items)) {
@@ -146,9 +146,6 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 
         $shippingAssignment->getShipping()->getAddress()->collectShippingRates();
 
-        $total->setTotalAmount($this->getCode(), 0);
-        $total->setBaseShippingAmount(0);
-
         if ($method) {
             foreach ($shippingAssignment->getShipping()->getAddress()->getAllShippingRates() as $rate) {
                 if ($rate->getCode() == $method) {
@@ -159,7 +156,7 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                         $store
                     );
                     $total->setTotalAmount($this->getCode(), $amountPrice);
-                    $total->setBaseShippingAmount($rate->getPrice());
+                    $total->setBaseTotalAmount($this->getCode(), $rate->getPrice());
                     $shippingDescription = $rate->getCarrierTitle() . ' - ' . $rate->getMethodTitle();
                     $shippingAssignment->getShipping()
                         ->getAddress()
