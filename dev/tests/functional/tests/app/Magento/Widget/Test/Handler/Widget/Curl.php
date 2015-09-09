@@ -77,7 +77,7 @@ class Curl extends AbstractCurl
      *
      * @param FixtureInterface $fixture [optional]
      * @throws \Exception
-     * @return null|array instance id
+     * @return array
      */
     public function persist(FixtureInterface $fixture = null)
     {
@@ -137,7 +137,7 @@ class Curl extends AbstractCurl
      * Prepare entity parameters data.
      *
      * @param array $data
-     * @return mixed
+     * @return array
      */
     protected function prepareEntity(array $data)
     {
@@ -153,10 +153,10 @@ class Curl extends AbstractCurl
      * Prepare Widget Instance (layout) data.
      *
      * @param array $data
-     * @throws \Exception
      * @return array
+     * @throws \Exception
      */
-    protected function prepareWidgetInstance($data)
+    protected function prepareWidgetInstance(array $data)
     {
         $widgetInstances = [];
         foreach ($data['widget_instance'] as $key => $widgetInstance) {
