@@ -63,7 +63,10 @@ class ExternalVideoEntryProcessor extends AbstractEntryProcessor
         if (!empty($mediaCollection)) {
             $storeDataCollection = $this->loadStoreViewVideoData($mediaCollection, $product->getStoreId());
             $mediaCollection = $this->addAdditionalStoreData($mediaCollection, $storeDataCollection);
-            $product->setData($attribute->getAttributeCode(), $mediaCollection);
+            $product->setData(
+                $attribute->getAttributeCode(),
+                $mediaCollection + $product->getData($attribute->getAttributeCode())
+            );
         }
     }
 
