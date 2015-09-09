@@ -6,6 +6,7 @@
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Autoload\AutoloaderRegistry;
+use Magento\Framework\Component\ComponentRegistrar;
 
 require_once __DIR__ . '/../../../../app/bootstrap.php';
 require_once __DIR__ . '/autoload.php';
@@ -36,6 +37,18 @@ foreach ($iterator as $file) {
     }
 }
 unset($iterator, $file);
+
+// Register any necessary modules from the 'installed' location
+ComponentRegistrar::register(
+    ComponentRegistrar::MODULE,
+    'Magento_TestModuleIntegrationFromConfig',
+    __DIR__ . '/../../../../app/code/Magento/TestModuleIntegrationFromConfig'
+    );
+ComponentRegistrar::register(
+    ComponentRegistrar::MODULE,
+    'Magento_TestModuleJoinDirectives',
+    __DIR__ . '/../../../../app/code/Magento/TestModuleJoinDirectives'
+    );
 
 /* Bootstrap the application */
 $settings = new \Magento\TestFramework\Bootstrap\Settings($testsBaseDir, get_defined_constants());
