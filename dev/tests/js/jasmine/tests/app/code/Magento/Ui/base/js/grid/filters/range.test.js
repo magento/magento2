@@ -5,11 +5,11 @@
 
 define([
     'underscore',
-    'Magento_Ui/js/grid/filters/group'
+    'Magento_Ui/js/grid/filters/range'
 ], function (_, Group) {
     'use strict';
 
-    describe('ui/js/grid/filters/filters', function () {
+    describe('ui/js/grid/filters/range', function () {
         var group;
 
         beforeEach(function () {

@@ -65,41 +65,12 @@ define([
                         options: '${ JSON.stringify($.$data.column.options) }'
                     },
                     dateRange: {
-                        component: 'Magento_Ui/js/grid/filters/group',
-                        childDefaults: {
-                            component: 'Magento_Ui/js/form/element/date',
-                            provider: '${ $.provider }',
-                            dateFormat: 'MM/dd/YYYY',
-                            template: 'ui/grid/filters/elements/date'
-                        },
-                        children: {
-                            from: {
-                                label: 'from',
-                                dataScope: 'from'
-                            },
-                            to: {
-                                label: 'to',
-                                dataScope: 'to'
-                            }
-                        }
+                        component: 'Magento_Ui/js/grid/filters/range',
+                        rangeType: 'date'
                     },
                     textRange: {
-                        component: 'Magento_Ui/js/grid/filters/group',
-                        childDefaults: {
-                            component: 'Magento_Ui/js/form/element/abstract',
-                            provider: '${ $.provider }',
-                            template: 'ui/grid/filters/elements/input'
-                        },
-                        children: {
-                            from: {
-                                label: 'from',
-                                dataScope: 'from'
-                            },
-                            to: {
-                                label: 'to',
-                                dataScope: 'to'
-                            }
-                        }
+                        component: 'Magento_Ui/js/grid/filters/range',
+                        rangeType: 'text'
                     }
                 }
             },
@@ -110,7 +81,7 @@ define([
             },
             listens: {
                 active: 'updatePreviews',
-                applied: 'cancel extractActive'
+                applied: 'cancel updateActive'
             },
             links: {
                 applied: '${ $.storageConfig.path }'
@@ -136,7 +107,7 @@ define([
             this._super()
                 .initChips()
                 .cancel()
-                .extractActive();
+                .updateActive();
 
             return this;
         },
@@ -170,32 +141,43 @@ define([
         },
 
         /**
+         * Creates instance of a filter associated with the provided column.
          *
-         * @param {Object} filter
+         * @param {Column} column - Column component for which to create a filter.
          * @returns {Filters} Chainable.
          */
-        initFilter: function (filter) {
+        initFilter: function (column) {
+            var index = column.index,
+                filter;
+
+            if (!column.filter || this.getFilter(index)) {
+                return this;
+            }
+
+            filter = this.buildFilter(column);
+
             layout([filter]);
 
             return this;
         },
 
         /**
-         * Called when another element was added to current component.
+         * Called when another element was added to filters collection.
          *
          * @returns {Filters} Chainable.
          */
         initElement: function () {
             this._super()
-                .extractActive();
+                .updateActive();
 
             return this;
         },
 
         /**
+         * Returns instance of a filter found by provided index.
          *
-         * @param {String} index
-         * @returns {Filter|Undefined}
+         * @param {String} index - Index of a filter (e.g. 'title').
+         * @returns {Filter}
          */
         getFilter: function (index) {
             return this.elems.findWhere({
@@ -204,11 +186,32 @@ define([
         },
 
         /**
+         * Returns an array of range filters.
+         *
+         * @returns {Array}
+         */
+        getRanges: function () {
+            return this.elems.filter(function (filter) {
+                return filter.isRange;
+            });
+        },
+
+        /**
+         * Returns an array of non-range filters.
+         *
+         * @returns {Array}
+         */
+        getPlain: function () {
+            return this.elems.filter(function (filter) {
+                return !filter.isRange;
+            });
+        },
+
+        /**
          * Clears filters data.
          *
-         * @param {Object} [filter] - If provided, then only specified filter will be cleared.
-         *      Otherwise, clears all data.
-         *
+         * @param {Object} [filter] - If provided, then only specified
+         *      filter will be cleared. Otherwise, clears all data.
          * @returns {Filters} Chainable.
          */
         clear: function (filter) {
@@ -244,60 +247,59 @@ define([
         },
 
         /**
+         * Sets provided data to filter components (without applying it).
          *
-         * @param {Column} column
-         * @returns {Object}
+         * @param {Object} data - Filters data.
+         * @param {Boolean} [partial=false] - Flag that defines whether
+         *      to completely replace current filters data or to extend it.
+         * @returns {Filters} Chainable.
          */
-        buildFilter: function (column) {
-            var filters = this.templates.filters,
-                filter  = column.filter;
+        setData: function (data, partial) {
+            var filters = partial ? this.filters : {};
 
-            if (_.isObject(filter) && filter.filterType) {
-                filter = utils.extend({}, filters[filter.filterType], filter);
-            } else if (_.isString(filter)) {
-                filter = filters[filter];
-            }
+            data = utils.extend({}, filters, data);
 
-            filter = utils.extend({}, filters.base, filter);
-            filter = utils.template(filter, {
-                filters: this,
-                column: column
-            }, true, true);
-
-            return filter;
-        },
-
-        /**
-         *
-         * @param {Column} column
-         * @returns {Filters} Chainable
-         */
-        createFilter: function (column) {
-            var index = column.index,
-                filter;
-
-            if (!column.filter || this.getFilter(index)) {
-                return this;
-            }
-
-            filter = this.buildFilter(column);
-
-            this.initFilter(filter);
+            this.set('filters', data);
 
             return this;
         },
 
         /**
+         * Creates filter component configuration associated with the provided column.
+         *
+         * @param {Column} column - Column component whith a basic filter declaration.
+         * @returns {Object} Filters' configuration.
+         */
+        buildFilter: function (column) {
+            var filters = this.templates.filters,
+                filter  = column.filter,
+                type    = filters[filter.filterType];
+
+            if (_.isObject(filter) && type) {
+                filter = utils.extend({}, type, filter);
+            } else if (_.isString(filter)) {
+                filter = filters[filter];
+            }
+
+            filter = utils.extend({}, filters.base, filter);
+
+            return utils.template(filter, {
+                filters: this,
+                column: column
+            }, true, true);
+        },
+
+        /**
+         * Sorts filters by associated columns positions.
          *
          * @returns {Filters} Chainable
          */
-        updateFilters: function () {
+        resortByColumns: function () {
             var columns = this.columns().elems(),
-                filters = [],
-                filter;
+                filters = [];
 
             columns.forEach(function (column) {
-                filter = this.getFilter(column.index);
+                var filter = this.getFilter(column.index);
 
                 if (filter) {
                     filters.push(filter);
@@ -353,7 +355,7 @@ define([
          *
          * @returns {Filters} Chainable.
          */
-        extractActive: function () {
+        updateActive: function () {
             this.active(this.elems.filter('hasData'));
 
             return this;
@@ -374,12 +376,14 @@ define([
         },
 
         /**
+         * Listener of the columns provider children array changes.
          *
+         * @param {Array} columns - Current columns list.
          */
         onColumnsUpdate: function (columns) {
-            columns.forEach(this.createFilter, this);
+            columns.forEach(this.initFilter, this);
 
-            this.updateFilters();
+            this.resortByColumns();
         }
     });
 });

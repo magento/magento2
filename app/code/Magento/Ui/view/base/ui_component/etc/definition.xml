@@ -54,7 +54,7 @@
     <filterRange class="Magento\Ui\Component\Filters\Type\Range">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/grid/filters/group</item>
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/filters/range</item>
             </item>
         </argument>
     </filterRange>

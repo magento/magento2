@@ -119,19 +119,18 @@ define([
             var fields = this.templates.fields,
                 field  = column.editor;
 
-            if (typeof field === 'object' && field.editorType) {
+            if (_.isObject(field) && field.editorType) {
                 field = utils.extend({}, fields[field.editorType], field);
-            } else if (typeof field == 'string') {
+            } else if (_.isString(field)) {
                 field = fields[field];
             }
 
             field = utils.extend({}, fields.base, field);
-            field = utils.template(field, {
+
+            return utils.template(field, {
                 record: this,
                 column: column
             }, true, true);
-
-            return field;
         },
 
         /**
