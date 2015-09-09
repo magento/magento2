@@ -16,6 +16,7 @@ define([
             modules: {
                 associatedProductsFilter: '${ $.associatedProductsFilter }',
                 associatedProductsProvider: '${ $.associatedProductsProvider }',
+                associatedProductsMassAction: '${ $.associatedProductsMassAction }',
                 variationsComponent: '${ $.configurableVariations }'
             }
         },
@@ -53,7 +54,8 @@ define([
         /**
          * @todo description
          */
-        open: function (attributes) {
+        open: function (attributes, showMassActionColumn) {
+            this.associatedProductsMassAction().visible(showMassActionColumn);
             if (attributes) {
                 this._setFilter(attributes);
             }
