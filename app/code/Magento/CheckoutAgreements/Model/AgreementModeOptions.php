@@ -15,7 +15,6 @@ class AgreementModeOptions
      * Return list of agreement mode options array.
      *
      * @return array
-     * @codeCoverageIgnore
      */
     public function getOptionsArray()
     {

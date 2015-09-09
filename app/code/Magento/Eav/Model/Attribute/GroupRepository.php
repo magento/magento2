@@ -163,7 +163,6 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
 
     /**
      * {@inheritdoc}
-     * @codeCoverageIgnore
      */
     public function deleteById($groupId)
     {
