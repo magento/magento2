@@ -13,11 +13,37 @@ angular.module('readiness-check', [])
         $scope.startProgress = function() {
             ++$scope.progressCounter;
         };
-        if ($state.current.type !== 'uninstall') {
-            $scope.dependencyUrl = 'index.php/environment/component-dependency';
-        } else {
-            $scope.dependencyUrl = 'index.php/environment/uninstall-dependency-check';
+        $scope.componentDependency = {
+            visible: false,
+            processed: false,
+            expanded: false,
+            isRequestError: false,
+            errorMessage: '',
+            packages: null
         };
+        switch ($state.current.type) {
+            case 'uninstall':
+                $scope.dependencyUrl = 'index.php/environment/uninstall-dependency-check';
+                if ($localStorage.packages) {
+                    $scope.componentDependency.packages = $localStorage.packages;
+                }
+                break;
+            case 'enable':
+            case 'disable':
+                $scope.dependencyUrl = 'index.php/environment/enable-disable-dependency-check';
+                if ($localStorage.packages) {
+                    $scope.componentDependency.packages = {
+                        type: $state.current.type,
+                        packages: $localStorage.packages
+                    };
+                }
+                break;
+            default:
+                $scope.dependencyUrl = 'index.php/environment/component-dependency';
+                if ($localStorage.packages) {
+                    $scope.componentDependency.packages = $localStorage.packages;
+                }
+        }
         $scope.stopProgress = function() {
             --$scope.progressCounter;
             if ($scope.progressCounter == COUNTER) {
@@ -37,7 +63,6 @@ angular.module('readiness-check', [])
             $rootScope.hasErrors = true;
             $scope.stopProgress();
         };
-
         $scope.completed = false;
         $scope.hasErrors = false;
 
@@ -82,17 +107,6 @@ angular.module('readiness-check', [])
             setupNoticeMessage: '',
             updaterNoticeMessage: ''
         };
-        $scope.componentDependency = {
-            visible: false,
-            processed: false,
-            expanded: false,
-            isRequestError: false,
-            errorMessage: '',
-            packages: null
-        };
-        if ($localStorage.packages) {
-            $scope.componentDependency.packages = $localStorage.packages;
-        }
         $scope.items = {
             'php-version': {
                 url:'index.php/environment/php-version',
