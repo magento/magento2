@@ -6,6 +6,7 @@
 namespace Magento\Test\Integrity\App\Language;
 
 use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory;
 use Magento\Setup\Module\I18n\Locale;
 use Magento\Setup\Module\I18n\Pack\Writer\File\Csv;
@@ -89,7 +90,7 @@ class TranslationFilesTest extends TranslationFiles
     protected function getContext()
     {
         if ($this->context === null) {
-            $this->context = new \Magento\Setup\Module\I18n\Context();
+            $this->context = new \Magento\Setup\Module\I18n\Context(new ComponentRegistrar());
         }
         return $this->context;
     }
@@ -114,7 +115,7 @@ class TranslationFilesTest extends TranslationFiles
         $parserContextual = new \Magento\Setup\Module\I18n\Parser\Contextual(
             $filesCollector,
             new \Magento\Setup\Module\I18n\Factory(),
-            new \Magento\Setup\Module\I18n\Context()
+            new \Magento\Setup\Module\I18n\Context(new ComponentRegistrar())
         );
         foreach ($adapters as $type => $adapter) {
             $parserContextual->addAdapter($type, $adapter);
