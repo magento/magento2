@@ -139,10 +139,13 @@ define([
          * @return {Object} reference to this
          */
         trigger: function (name) {
-            var handlers = getEvents(this, name),
-                args = _.toArray(arguments).slice(1);
+            var handlers,
+                args;
 
-            if (!handlers) {
+            handlers = getEvents(this, name),
+            args = _.toArray(arguments).slice(1);
+
+            if (!handlers || !name) {
                 return true;
             }
 

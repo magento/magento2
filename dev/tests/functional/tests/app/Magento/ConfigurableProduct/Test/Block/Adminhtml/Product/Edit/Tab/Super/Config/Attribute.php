@@ -185,7 +185,7 @@ class Attribute extends Form
     {
         return $this->blockFactory->create(
             'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\AttributesGrid',
-            ['element' => $this->browser->find('.admin__data-grid-outer-wrap')]
+            ['element' => $this->browser->find('#variation-steps-wizard_step1 .admin__data-grid-outer-wrap')]
         );
     }
 
