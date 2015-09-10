@@ -174,19 +174,7 @@ class UpgradeData implements UpgradeDataInterface
                     ],
                 ],
             ];
-
-            foreach ($entityAttributes as $entityType => $attributes) {
-                foreach ($attributes as $attributeCode => $attributeData) {
-                    $attribute = $customerSetup->getEavConfig()->getAttribute($entityType, $attributeCode);
-                    foreach ($attributeData as $key => $value) {
-                        $attribute->setData($key, $value);
-                    }
-                    $attribute->save();
-                }
-            }
-            $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
-            $indexer->reindexAll();
-            $this->eavConfig->clear();
+            $this->upgradeAttributes($entityAttributes, $customerSetup);
         }
 
         if (version_compare($context->getVersion(), '2.0.2') < 0) {
@@ -197,6 +185,52 @@ class UpgradeData implements UpgradeDataInterface
             $customerSetup->addAttributeOption($option);
         }
 
+        if (version_compare($context->getVersion(), '2.0.3', '<')) {
+            $entityAttributes = [
+                'customer_address' => [
+                    'region_id' => [
+                        'is_used_in_grid' => false,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => false,
+                        'is_searchable_in_grid' => false,
+                    ],
+                    'firstname' => [
+                        'is_used_in_grid' => true,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => false,
+                        'is_searchable_in_grid' => true,
+                    ],
+                    'lastname' => [
+                        'is_used_in_grid' => true,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => false,
+                        'is_searchable_in_grid' => true,
+                    ],
+                ],
+            ];
+            $this->upgradeAttributes($entityAttributes, $customerSetup);
+        }
+        $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
+        $indexer->reindexAll();
+        $this->eavConfig->clear();
         $setup->endSetup();
+    }
+
+    /**
+     * @param array $entityAttributes
+     * @param CustomerSetup $customerSetup
+     * @return void
+     */
+    protected function upgradeAttributes(array $entityAttributes, CustomerSetup $customerSetup)
+    {
+        foreach ($entityAttributes as $entityType => $attributes) {
+            foreach ($attributes as $attributeCode => $attributeData) {
+                $attribute = $customerSetup->getEavConfig()->getAttribute($entityType, $attributeCode);
+                foreach ($attributeData as $key => $value) {
+                    $attribute->setData($key, $value);
+                }
+                $attribute->save();
+            }
+        }
     }
 }

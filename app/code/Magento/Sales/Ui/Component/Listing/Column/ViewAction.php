@@ -11,15 +11,10 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
 
 /**
- * Class OrderActions
+ * Class ViewAction
  */
-class OrderInvoiceActions extends Column
+class ViewAction extends Column
 {
-    /**
-     * Url path
-     */
-    const URL_PATH_VIEW = 'sales/invoice/view';
-
     /**
      * @var UrlInterface
      */
@@ -56,12 +51,14 @@ class OrderInvoiceActions extends Column
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
                 if (isset($item['entity_id'])) {
+                    $viewUrlPath = $this->getData('config/viewUrlPath') ?: '#';
+                    $urlEntityParamName = $this->getData('config/urlEntityParamName') ?: 'entity_id';
                     $item[$this->getData('name')] = [
                         'view' => [
                             'href' => $this->urlBuilder->getUrl(
-                                static::URL_PATH_VIEW,
+                                $viewUrlPath,
                                 [
-                                    'invoice_id' => $item['entity_id']
+                                    $urlEntityParamName => $item['entity_id']
                                 ]
                             ),
                             'label' => __('View')
