@@ -5,7 +5,7 @@
  */
 namespace Magento\ProductVideo\Block\Adminhtml\Product\Edit;
 
-use Magento\Catalog\Model\Product\Type;
+use Magento\Framework\Data\Form\Element\Fieldset;
 
 /**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
@@ -209,7 +209,7 @@ HTML;
      *
      * @return \Magento\Catalog\Model\Product
      */
-    public function getProduct()
+    protected function getProduct()
     {
         if (!$this->hasData('product')) {
             $this->setData('product', $this->_coreRegistry->registry('product'));
@@ -220,10 +220,10 @@ HTML;
     /**
      * Add media role attributes to fieldset
      *
-     * @param \Magento\Framework\Data\Form\Element\Fieldset $fieldset
+     * @param Fieldset $fieldset
      * @return $this
      */
-    protected function addMediaRoleAttributes($fieldset)
+    protected function addMediaRoleAttributes(Fieldset $fieldset)
     {
         $mediaRoles = $this->getProduct()->getMediaAttributes();
         asort($mediaRoles);
