@@ -23,6 +23,8 @@ use Magento\Framework\Controller\ResultFactory;
 
 /**
  * Class Confirm
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Confirm extends Action implements AccountInterface
 {

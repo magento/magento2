@@ -17,6 +17,9 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\InputException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class EditPost extends Action implements AccountInterface
 {
     /** @var AccountManagementInterface */
