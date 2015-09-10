@@ -45,11 +45,6 @@ require([ "jquery", "jquery/ui", "catalogGallery"], function( $ ) {
   //create AddFotoramaVideoEvents widget
   $.widget('mage.AddFotoramaVideoEvents', {
 
-    options : {
-      VideoData : {}, //Filled on widget call from fotorama.js
-      VideoSettings : {} //Filled on widget call from fotorama.js
-    },
-
     PV : 'product-video', // [CONST]
     VID : 'video', // [CONST]
     VI : 'vimeo', // [CONST]
@@ -97,10 +92,9 @@ require([ "jquery", "jquery/ui", "catalogGallery"], function( $ ) {
     },
 
     _checkForVideoExist : function () { //if there is no video data, we don't want to load anything
-      if (!this.options.VideoData) return false;
-      if (!this.options.VideoSettings) return false;
-      console.log(this.options.VideoSettings);
-      var result = this._createVideoData(this.options.VideoData, false),
+      if (!VidData) return false;
+      if (!VidSetting) return false;
+      var result = this._createVideoData(VidData, false),
       checker = false;
       for (var key in result) {
         if (result[key].mediaType === this.VID) {
@@ -121,7 +115,7 @@ require([ "jquery", "jquery/ui", "catalogGallery"], function( $ ) {
     _isVideoBase : function () { // we check if there is any video with BASE role, if there is any - play it as soon as the page loads, if it desktop
       var AllVideoData = this.options.VideoData;
       for (var VideoItem in AllVideoData) {
-        if (AllVideoData[VideoItem].mediaType === this.VID && AllVideoData[VideoItem].isBase && this.options.VideoSettings.PlayIfBase) this.Base = true;
+        if (AllVideoData[VideoItem].mediaType === this.VID && AllVideoData[VideoItem].isBase && VidSetting.PlayIfBase) this.Base = true;
       }
     },
 
@@ -183,7 +177,7 @@ require([ "jquery", "jquery/ui", "catalogGallery"], function( $ ) {
 
     _createVideoContainer : function (videoData, $image) {
       if ($image.find('.'+this.PV).length === 0) { //dont touch anything if there is already <div> with data in current frame
-        $image.append('<div class="'+this.PV+'" data-related="'+this.options.VideoSettings.showRelatedYT+'" data-loop="'+this.options.VideoSettings.VideoAutoRestart+'" data-type="'+videoData.provider+'" data-code="'+videoData.id+'" data-width="100%" data-height="100%"></div>');
+        $image.append('<div class="'+this.PV+'" data-related="'+VidSetting.showRelatedYT+'" data-loop="'+VidSetting.VideoAutoRestart+'" data-type="'+videoData.provider+'" data-code="'+videoData.id+'" data-width="100%" data-height="100%"></div>');
       }
     },
 
