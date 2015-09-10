@@ -7,26 +7,49 @@ namespace Magento\Framework\Encryption;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Encryption\Helper\Security;
+use Magento\Framework\Math\Random;
 
 /**
- * Provides basic logic for hashing passwords and encrypting/decrypting misc data
+ * Class Encryptor provides basic logic for hashing strings and encrypting/decrypting misc data
  */
 class Encryptor implements EncryptorInterface
 {
+    /**
+     * Key of md5 algorithm
+     */
+    const HASH_VERSION_MD5 = 0;
+
+    /**
+     * Key of sha256 algorithm
+     */
+    const HASH_VERSION_SHA256 = 1;
+
+    /**
+     * Key of latest used algorithm
+     */
+    const HASH_VERSION_LATEST = 1;
+
+    /**
+     * Default length of salt in bytes
+     */
+    const DEFAULT_SALT_LENGTH = 32;
+
+    /**#@+
+     * Exploded password hash keys
+     */
+    const PASSWORD_HASH = 'hash';
+    const PASSWORD_SALT = 'salt';
+    const PASSWORD_VERSION = 'version';
+    /**#@-*/
+
     /**
      * Array key of encryption key in deployment config
      */
     const PARAM_CRYPT_KEY = 'crypt/key';
 
     /**#@+
-     * Hash and Cipher versions
+     * Cipher versions
      */
-    const HASH_VERSION_MD5 = 0;
-
-    const HASH_VERSION_SHA256 = 1;
-
-    const HASH_VERSION_LATEST = 1;
-
     const CIPHER_BLOWFISH = 0;
 
     const CIPHER_RIJNDAEL_128 = 1;
@@ -37,9 +60,35 @@ class Encryptor implements EncryptorInterface
     /**#@-*/
 
     /**
-     * Default length of salt in bytes
+     * Default hash string delimiter
      */
-    const DEFAULT_SALT_LENGTH = 32;
+    const DELIMITER = ':';
+
+    /**
+     * @var array map of hash versions
+     */
+    private $hashVersionMap = [
+        self::HASH_VERSION_MD5 => 'md5',
+        self::HASH_VERSION_SHA256 => 'sha256'
+    ];
+
+    /**
+     * @var array
+     */
+    private $passwordHashMap = [
+        self::PASSWORD_HASH,
+        self::PASSWORD_SALT,
+        self::PASSWORD_VERSION
+    ];
+
+    /**
+     * @var array
+     */
+    private $explodedPasswordHash = [
+        self::PASSWORD_HASH => '',
+        self::PASSWORD_SALT => '',
+        self::PASSWORD_VERSION => self::HASH_VERSION_LATEST
+    ];
 
     /**
      * Indicate cipher
@@ -63,19 +112,15 @@ class Encryptor implements EncryptorInterface
     protected $keys = [];
 
     /**
-     * @var \Magento\Framework\Math\Random
-     */
-    protected $randomGenerator;
-
-    /**
-     * @param \Magento\Framework\Math\Random $randomGenerator
+     * @param Random $random
      * @param DeploymentConfig $deploymentConfig
      */
     public function __construct(
-        \Magento\Framework\Math\Random $randomGenerator,
+        Random $random,
         DeploymentConfig $deploymentConfig
     ) {
-        $this->randomGenerator = $randomGenerator;
+        $this->random = $random;
+
         // load all possible keys
         $this->keys = preg_split('/\s+/s', trim($deploymentConfig->get(self::PARAM_CRYPT_KEY)));
         $this->keyVersion = count($this->keys) - 1;
@@ -102,17 +147,7 @@ class Encryptor implements EncryptorInterface
     }
 
     /**
-     * Generate a [salted] hash.
-     *
-     * $salt can be:
-     * false - salt is not used
-     * true - random salt of the default length will be generated
-     * integer - random salt of specified length will be generated
-     * string - actual salt value to be used
-     *
-     * @param string $password
-     * @param bool|int|string $salt
-     * @return string
+     * @inheritdoc
      */
     public function getHash($password, $salt = false)
     {
@@ -123,33 +158,29 @@ class Encryptor implements EncryptorInterface
             $salt = self::DEFAULT_SALT_LENGTH;
         }
         if (is_integer($salt)) {
-            $salt = $this->randomGenerator->getRandomString($salt);
+            $salt = $this->random->getRandomString($salt);
         }
-        return $this->hash($salt . $password) . ':' . $salt;
+
+        return implode(
+            self::DELIMITER,
+            [
+                $this->hash($salt . $password),
+                $salt,
+                self::HASH_VERSION_LATEST
+            ]
+        );
     }
 
     /**
-     * Hash a string
-     *
-     * @param string $data
-     * @param int $version
-     * @return string
+     * @inheritdoc
      */
     public function hash($data, $version = self::HASH_VERSION_LATEST)
     {
-        if (self::HASH_VERSION_MD5 === $version) {
-            return md5($data);
-        }
-        return hash('sha256', $data);
+        return hash($this->hashVersionMap[(int)$version], $data);
     }
 
     /**
-     * Validate hash against hashing method (with or without salt)
-     *
-     * @param string $password
-     * @param string $hash
-     * @return bool
-     * @deprecated
+     * @inheritdoc
      */
     public function validateHash($password, $hash)
     {
@@ -157,43 +188,67 @@ class Encryptor implements EncryptorInterface
     }
 
     /**
-     * Validate hash against hashing method (with or without salt)
-     *
-     * @param string $password
-     * @param string $hash
-     * @return bool
+     * @inheritdoc
      */
     public function isValidHash($password, $hash)
     {
-        return $this->isValidHashByVersion(
-            $password,
-            $hash,
-            self::HASH_VERSION_SHA256
-        ) || $this->isValidHashByVersion(
-            $password,
-            $hash,
-            self::HASH_VERSION_MD5
+        $this->explodePasswordHash($hash);
+
+        return Security::compareStrings(
+            $this->hash($this->getPasswordSalt() . $password, $this->getPasswordVersion()),
+            $this->getPasswordHash()
         );
     }
 
     /**
-     * Validate hash by specified version
-     *
-     * @param string $password
-     * @param string $hash
-     * @param int $version
-     * @return bool
+     * @inheritdoc
      */
-    public function isValidHashByVersion($password, $hash, $version)
+    public function validateHashVersion($hash)
     {
-        // look for salt
-        $hashArr = explode(':', $hash, 2);
-        if (1 === count($hashArr)) {
-            return Security::compareStrings($this->hash($password, $version), $hash);
-        }
-        list($hash, $salt) = $hashArr;
+        $this->explodePasswordHash($hash);
 
-        return Security::compareStrings($this->hash($salt . $password, $version), $hash);
+        return $this->getPasswordVersion() === self::HASH_VERSION_LATEST;
+    }
+
+    /**
+     * @param string $hash
+     * @return array
+     */
+    private function explodePasswordHash($hash)
+    {
+        $explodedPassword = explode(self::DELIMITER, $hash);
+
+        foreach ($this->passwordHashMap as $key => $hashMapKey) {
+            if (isset($explodedPassword[$key])) {
+                $this->explodedPasswordHash[$hashMapKey] = $explodedPassword[$key];
+            }
+        }
+
+        return $this->explodedPasswordHash;
+    }
+
+    /**
+     * @return string
+     */
+    private function getPasswordHash()
+    {
+        return (string)$this->explodedPasswordHash[self::PASSWORD_HASH];
+    }
+
+    /**
+     * @return string
+     */
+    private function getPasswordSalt()
+    {
+        return (string)$this->explodedPasswordHash[self::PASSWORD_SALT];
+    }
+
+    /**
+     * @return int
+     */
+    private function getPasswordVersion()
+    {
+        return (int)$this->explodedPasswordHash[self::PASSWORD_VERSION];
     }
 
     /**

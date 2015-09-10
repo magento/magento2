@@ -7,7 +7,7 @@ namespace Magento\User\Model\Backend;
 
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Exception\State\UserLockedException;
-use Magento\Framework\Encryption\Encryptor;
+use Magento\User\Model\User;
 
 /**
  * User backend observer model
@@ -134,6 +134,7 @@ class Observer
     public function adminAuthenticate($observer)
     {
         $password = $observer->getEvent()->getPassword();
+        /** @var User $user */
         $user = $observer->getEvent()->getUser();
         $authResult = $observer->getEvent()->getResult();
 
@@ -162,17 +163,9 @@ class Observer
         $latestPassword = $this->userResource->getLatestPassword($user->getId());
         $this->_checkExpiredPassword($latestPassword);
 
-        // upgrade admin password
-        $isValidHash = $this->encryptor->isValidHashByVersion(
-            $password,
-            $user->getPassword(),
-            Encryptor::HASH_VERSION_LATEST
-        );
-        if (!$isValidHash) {
-            $this->userFactory->create()
-                ->load($user->getId())
-                ->setNewPassword($password)
-                ->setForceNewPassword(true)
+        if (!$this->encryptor->validateHashVersion($user->getPassword())) {
+            $user->setPassword($password)
+                ->setData('force_new_password', true)
                 ->save();
         }
     }

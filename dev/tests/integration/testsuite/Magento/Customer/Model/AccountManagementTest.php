@@ -770,7 +770,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         );
         /** @var \Magento\Framework\Encryption\EncryptorInterface $encryptor */
         $encryptor = $this->objectManager->get('Magento\Framework\Encryption\EncryptorInterface');
-        $passwordHash = $encryptor->getHash($password);
+        $passwordHash = $encryptor->getHash($password, true);
         $savedCustomer = $this->accountManagement->createAccountWithPasswordHash(
             $newCustomerEntity,
             $passwordHash

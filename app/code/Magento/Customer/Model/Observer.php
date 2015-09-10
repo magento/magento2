@@ -6,6 +6,7 @@
 
 namespace Magento\Customer\Model;
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Helper\Address as HelperAddress;
 use Magento\Customer\Model\Address\AbstractAddress;
@@ -13,16 +14,17 @@ use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\DataObject;
-use Magento\Framework\Encryption\Encryptor;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Event\Observer as EventObserver;
 
 /**
  * Customer Observer Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class Observer
 {
@@ -84,6 +86,16 @@ class Observer
     protected $encryptor;
 
     /**
+     * @var CustomerRegistry
+     */
+    private $customerRegistry;
+
+    /**
+     * @var CustomerRepositoryInterface
+     */
+    private $customerRepository;
+
+    /**
      * @param Vat $customerVat
      * @param HelperAddress $customerAddress
      * @param Registry $coreRegistry
@@ -93,6 +105,8 @@ class Observer
      * @param Escaper $escaper
      * @param AppState $appState
      * @param EncryptorInterface $encryptor
+     * @param CustomerRegistry $customerRegistry
+     * @param CustomerRepositoryInterface $customerRepository
      */
     public function __construct(
         Vat $customerVat,
@@ -103,7 +117,9 @@ class Observer
         ManagerInterface $messageManager,
         Escaper $escaper,
         AppState $appState,
-        EncryptorInterface $encryptor
+        EncryptorInterface $encryptor,
+        CustomerRegistry $customerRegistry,
+        CustomerRepositoryInterface $customerRepository
     ) {
         $this->_customerVat = $customerVat;
         $this->_customerAddress = $customerAddress;
@@ -114,6 +130,8 @@ class Observer
         $this->escaper = $escaper;
         $this->appState = $appState;
         $this->encryptor = $encryptor;
+        $this->customerRegistry = $customerRegistry;
+        $this->customerRepository = $customerRepository;
     }
 
     /**
@@ -347,16 +365,15 @@ class Observer
      */
     public function upgradeCustomerPassword($observer)
     {
-        $password = $observer->getEvent()->getPassword();
-        /** @var \Magento\Customer\Model\Customer $model */
-        $model = $observer->getEvent()->getModel();
-        $isValidHash = $this->encryptor->isValidHashByVersion(
-            $password,
-            $model->getPasswordHash(),
-            Encryptor::HASH_VERSION_LATEST
-        );
-        if (!$isValidHash) {
-            $model->changePassword($password);
+        $password = $observer->getEvent()->getData('password');
+        /** @var Customer $model */
+        $model = $observer->getEvent()->getData('model');
+        $customer = $this->customerRepository->getById($model->getId());
+        $customerSecure = $this->customerRegistry->retrieveSecureData($model->getId());
+
+        if (!$this->encryptor->validateHashVersion($customerSecure->getPasswordHash())) {
+            $customerSecure->setPasswordHash($this->encryptor->getHash($password, true));
+            $this->customerRepository->save($customer);
         }
     }
 }

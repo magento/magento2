@@ -55,14 +55,12 @@ interface EncryptorInterface
     public function isValidHash($password, $hash);
 
     /**
-     * Validate hash by specified version
+     * Validate hashing algorithm version
      *
-     * @param string $password
      * @param string $hash
-     * @param int $version
      * @return bool
      */
-    public function isValidHashByVersion($password, $hash, $version);
+    public function validateHashVersion($hash);
 
     /**
      * Encrypt a string
