@@ -13,7 +13,7 @@ class NewVideoTest extends \PHPUnit_Framework_TestCase
     protected $contextMock;
 
     /*
-     * @var \Magento\Framework\UrlInterface||\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\UrlInterface
      */
     protected $urlBuilder;
 
@@ -79,8 +79,10 @@ class NewVideoTest extends \PHPUnit_Framework_TestCase
         $this->mathRandom->expects($this->any())->method('getUniqueHash')->with('id_')->willReturn('id_' . $rand);
         $saveVideoUrl = 'http://host/index.php/admin/catalog/product_gallery/upload/key/';
         $saveRemoteVideoUrl = 'http://host/index.php/admin/product_video/product_gallery/retrieveImage/';
-        $this->urlBuilder->expects($this->once())->method('getUrl')->willReturn($saveVideoUrl);
-        $this->urlBuilder->expects($this->once())->method('getUrl')->willReturn($saveRemoteVideoUrl);
+        $this->urlBuilder->expects($this->exactly(2))->method('getUrl')->willReturnOnConsecutiveCalls(
+            $saveVideoUrl,
+            $saveRemoteVideoUrl
+        );
         $value = [
             'saveVideoUrl' => $saveVideoUrl,
             'saveRemoteVideoUrl' => $saveRemoteVideoUrl,
