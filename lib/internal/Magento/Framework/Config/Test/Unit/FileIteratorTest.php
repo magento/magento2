@@ -7,7 +7,6 @@ namespace Magento\Framework\Config\Test\Unit;
 
 use \Magento\Framework\Config\FileIterator;
 
-
 /**
  * Class FileIteratorTest
  */

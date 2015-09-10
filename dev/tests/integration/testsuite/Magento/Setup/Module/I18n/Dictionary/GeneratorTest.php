@@ -42,17 +42,30 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->testDir = realpath(__DIR__ . '/_files');
-        $this->expectedDir = $this->testDir . '/expected';
-        $this->source = $this->testDir . '/source';
-        $this->outputFileName = $this->testDir . '/translate.csv';
-        $this->generator = ServiceLocator::getDictionaryGenerator();
-
         $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
         $paths = $reflection->getProperty('paths');
         $paths->setAccessible(true);
         $this->backupRegistrar = $paths->getValue();
         $paths->setAccessible(false);
+
+        $this->testDir = realpath(__DIR__ . '/_files');
+        $this->expectedDir = $this->testDir . '/expected';
+        $this->source = $this->testDir . '/source';
+        $this->outputFileName = $this->testDir . '/translate.csv';
+
+        ComponentRegistrar::register(
+            ComponentRegistrar::MODULE,
+            'Magento_FirstModule',
+            $this->source . '/app/code/Magento/FirstModule'
+        );
+        ComponentRegistrar::register(
+            ComponentRegistrar::MODULE,
+            'Magento_SecondModule',
+            $this->source . '/app/code/Magento/SecondModule'
+        );
+
+        $this->generator = ServiceLocator::getDictionaryGenerator();
+
     }
 
     protected function tearDown()
@@ -81,16 +94,6 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
 
     public function testGenerationWithContext()
     {
-        ComponentRegistrar::register(
-            ComponentRegistrar::MODULE,
-            'Magento_FirstModule',
-            $this->source . '/app/code/Magento/FirstModule'
-        );
-        ComponentRegistrar::register(
-            ComponentRegistrar::MODULE,
-            'Magento_SecondModule',
-            $this->source . '/app/code/Magento/SecondModule'
-        );
         $this->generator->generate($this->source, $this->outputFileName, true);
 
         $this->assertFileEquals($this->expectedDir . '/with_context.csv', $this->outputFileName);

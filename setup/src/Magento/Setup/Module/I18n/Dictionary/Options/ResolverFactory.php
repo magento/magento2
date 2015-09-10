@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\I18n\Dictionary\Options;
+
 use Magento\Framework\Component\ComponentRegistrar;
 
 /**

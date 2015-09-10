@@ -35,6 +35,7 @@ class FileIterator implements \Iterator, \Countable
     /**
      * Constructor
      *
+     * @param DriverInterface $filesystemDriver
      * @param array $paths
      */
     public function __construct(DriverInterface $filesystemDriver, array $paths)
@@ -45,7 +46,7 @@ class FileIterator implements \Iterator, \Countable
     }
 
     /**
-     *Rewind
+     * Rewind
      *
      * @return void
      */

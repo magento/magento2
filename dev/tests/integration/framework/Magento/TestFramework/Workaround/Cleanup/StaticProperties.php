@@ -50,15 +50,13 @@ class StaticProperties
     {
         $componentRegistrar = new ComponentRegistrar();
         /** @var \Magento\Framework\Filesystem $filesystem */
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Filesystem');
-        $dirRead = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
-            $key = '/' . $dirRead->getRelativePath($moduleDir) . '/';
+            $key = $moduleDir . '/';
             $value = $key . 'Test/Unit/';
             self::$_cleanableFolders[$key] = [$value];
         }
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryDir) {
-            $key = '/' . $dirRead->getRelativePath($libraryDir) . '/';
+            $key = $libraryDir . '/';
             $valueRootFolder = $key . '/Test/Unit/';
             $valueSubFolder = $key . '/*/Test/Unit/';
             self::$_cleanableFolders[$key] = [$valueSubFolder, $valueRootFolder];

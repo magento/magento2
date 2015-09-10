@@ -5,8 +5,6 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-
 class ProductTypesConfigFilesTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -17,8 +15,6 @@ class ProductTypesConfigFilesTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var $filesystem \Magento\Framework\Filesystem */
-        $filesystem = $objectManager->get('Magento\Framework\Filesystem');
         /** @var $moduleDirSearch \Magento\Framework\Module\Dir\Search */
         $moduleDirSearch = $objectManager->get('Magento\Framework\Module\Dir\Search');
         $fileIteratorFactory = $objectManager->get('Magento\Framework\Config\FileIteratorFactory');
