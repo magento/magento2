@@ -4,8 +4,10 @@
  */
 define([
     'Magento_Ui/js/listing/filter/abstract',
-    'underscore'
-], function (AbstractControl, _) {
+    'underscore',
+    'jquery',
+    'mage/translate'
+], function (AbstractControl, _, $) {
     'use strict';
 
     /**
@@ -39,7 +41,7 @@ define([
         initialize: function (data) {
             this.constructor.__super__.initialize.apply(this, arguments);
 
-            this.caption = 'Select...';
+            this.caption = $.mage.__('All Store Views');
 
             this.observe('selected', '');
 
