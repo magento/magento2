@@ -20,7 +20,7 @@
             <input data-bind='attr: {value: getFormKey()}' type="hidden" name="form_key"/>
             <fieldset class="fieldset">
                 <legend class="legend">
-                    <span><?php echo __('Payment Information') ?></span>
+                    <span data-bind="i18n: 'Payment Information'"></span>
                 </legend><br />
                 <!-- ko foreach: getRegion('beforeMethods') -->
                     <!-- ko template: getTemplate() --><!-- /ko -->
