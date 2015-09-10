@@ -97,7 +97,8 @@ class TotalsCollector
         'giftwrapping',
         'tax_subtotal',
         'tax_shipping',
-        'tax'
+        'tax',
+        'discount'
     );
 
     /**
@@ -149,8 +150,7 @@ class TotalsCollector
         $shipping->setAddress($quote->getShippingAddress());
         $shippingAssignment->setShipping($shipping);
         $shippingAssignment->setItems($quote->getAllItems());
-        $total = $this->collectAddressTotals($shippingAssignment, $quote->getStoreId());
-        return $total;
+        return $this->collectAddressTotals($shippingAssignment, $quote->getStoreId());
     }
 
     /**
@@ -161,7 +161,7 @@ class TotalsCollector
     {
 
         /** @var \Magento\Quote\Model\Quote\Address\Total $total */
-        $total = $this->totalFactory->create('Magento\Quote\Model\Quote\Address\Total');
+//        $total = $this->totalFactory->create('Magento\Quote\Model\Quote\Address\Total');
 
         //protected $_eventPrefix = 'sales_quote';
         //protected $_eventObject = 'quote';
@@ -173,14 +173,14 @@ class TotalsCollector
 
         $this->_collectItemsQtys($quote);
 
-        $total->setSubtotal(0);
-        $total->setBaseSubtotal(0);
-
-        $total->setSubtotalWithDiscount(0);
-        $total->setBaseSubtotalWithDiscount(0);
-
-        $total->setGrandTotal(0);
-        $total->setBaseGrandTotal(0);
+//        $total->setSubtotal(0);
+//        $total->setBaseSubtotal(0);
+//
+//        $total->setSubtotalWithDiscount(0);
+//        $total->setBaseSubtotalWithDiscount(0);
+//
+//        $total->setGrandTotal(0);
+//        $total->setBaseGrandTotal(0);
 
         /** @var \Magento\Quote\Model\Quote\Address $address */
         //foreach ($quote->getAllAddresses() as $address) {
@@ -195,18 +195,18 @@ class TotalsCollector
 
             $addressTotal = $this->collectAddressTotals($shippingAssignment, $quote->getStoreId());
 
-            $total->setSubtotal((float)$total->getSubtotal() + $addressTotal->getSubtotal());
-            $total->setBaseSubtotal((float)$total->getBaseSubtotal() + $addressTotal->getBaseSubtotal());
-
-            $total->setSubtotalWithDiscount(
-                (float)$total->getSubtotalWithDiscount() + $addressTotal->getSubtotalWithDiscount()
-            );
-            $total->setBaseSubtotalWithDiscount(
-                (float)$total->getBaseSubtotalWithDiscount() + $addressTotal->getBaseSubtotalWithDiscount()
-            );
-
-            $total->setGrandTotal((float)$total->getGrandTotal() + $addressTotal->getGrandTotal());
-            $total->setBaseGrandTotal((float)$total->getBaseGrandTotal() + $addressTotal->getBaseGrandTotal());
+//            $total->setSubtotal((float)$total->getSubtotal() + $addressTotal->getSubtotal());
+//            $total->setBaseSubtotal((float)$total->getBaseSubtotal() + $addressTotal->getBaseSubtotal());
+//
+//            $total->setSubtotalWithDiscount(
+//                (float)$total->getSubtotalWithDiscount() + $addressTotal->getSubtotalWithDiscount()
+//            );
+//            $total->setBaseSubtotalWithDiscount(
+//                (float)$total->getBaseSubtotalWithDiscount() + $addressTotal->getBaseSubtotalWithDiscount()
+//            );
+//
+//            $total->setGrandTotal((float)$total->getGrandTotal() + $addressTotal->getGrandTotal());
+//            $total->setBaseGrandTotal((float)$total->getBaseGrandTotal() + $addressTotal->getBaseGrandTotal());
         //}
 
         $this->quoteValidator->validateQuoteAmount($quote, $quote->getGrandTotal());
@@ -222,7 +222,7 @@ class TotalsCollector
         );
 
         //$this->setTotalsCollectedFlag(true);
-        return $total;
+        return $addressTotal;
     }
 
     /**

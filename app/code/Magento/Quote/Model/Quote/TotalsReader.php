@@ -79,7 +79,8 @@ class TotalsReader
         'giftwrapping',
         'tax_subtotal',
         'tax_shipping',
-        'tax'
+        'tax',
+        'discount'
     );
 
     /**

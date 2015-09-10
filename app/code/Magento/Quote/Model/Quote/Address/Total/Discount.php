@@ -12,12 +12,12 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $_eventManager = null;
+    protected $eventManager = null;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    protected $_storeManager;
+    protected $storeManager;
 
     /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -27,37 +27,40 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
-        $this->_eventManager = $eventManager;
-        $this->_storeManager = $storeManager;
+        $this->eventManager = $eventManager;
+        $this->storeManager = $storeManager;
     }
 
     /**
-     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface|\Magento\Quote\Model\Quote\Address $shippingAssignment
+     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function collect(\Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment, \Magento\Quote\Model\Quote\Address\Total $total)
-    {
-        $quote = $shippingAssignment->getQuote();
+    public function collect(
+        \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment,
+        \Magento\Quote\Model\Quote\Address\Total $total
+    ) {
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $shippingAssignment->getShipping()->getAddress()->getQuote();
         $eventArgs = [
-            'website_id' => $this->_storeManager->getStore($quote->getStoreId())->getWebsiteId(),
+            'website_id' => $this->storeManager->getStore($quote->getStoreId())->getWebsiteId(),
             'customer_group_id' => $quote->getCustomerGroupId(),
             'coupon_code' => $quote->getCouponCode(),
         ];
 
-        $shippingAssignment->setFreeShipping(0);
+        $shippingAssignment->getShipping()->getAddress()->setFreeShipping(0);
         $totalDiscountAmount = 0;
         $subtotalWithDiscount = 0;
         $baseTotalDiscountAmount = 0;
         $baseSubtotalWithDiscount = 0;
 
-        $items = $shippingAssignment->getAllItems();
+        $items = $shippingAssignment->getItems();
         if (!count($items)) {
-            $shippingAssignment->setDiscountAmount($totalDiscountAmount);
-            $shippingAssignment->setSubtotalWithDiscount($subtotalWithDiscount);
-            $shippingAssignment->setBaseDiscountAmount($baseTotalDiscountAmount);
-            $shippingAssignment->setBaseSubtotalWithDiscount($baseSubtotalWithDiscount);
+            $total->setDiscountAmount($totalDiscountAmount);
+            $total->setSubtotalWithDiscount($subtotalWithDiscount);
+            $total->setBaseDiscountAmount($baseTotalDiscountAmount);
+            $total->setBaseSubtotalWithDiscount($baseSubtotalWithDiscount);
             return $this;
         }
 
@@ -71,25 +74,18 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                 $subtotalWithDiscount += $item->getRowTotal();
                 $baseSubtotalWithDiscount += $item->getBaseRowTotal();
             } else {
-                /**
-                 * Child item discount we calculate for parent
-                 */
+                /** Child item discount we calculate for parent */
                 if ($item->getParentItemId()) {
                     continue;
                 }
 
-                /**
-                 * Composite item discount calculation
-                 */
-
+                /** Composite item discount calculation */
                 if ($item->getHasChildren() && $item->isChildrenCalculated()) {
                     foreach ($item->getChildren() as $child) {
                         $eventArgs['item'] = $child;
-                        $this->_eventManager->dispatch('sales_quote_address_discount_item', $eventArgs);
+                        $this->eventManager->dispatch('sales_quote_address_discount_item', $eventArgs);
 
-                        /**
-                         * Parent free shipping we apply to all children
-                         */
+                        /** Parent free shipping we apply to all children */
                         if ($item->getFreeShipping()) {
                             $child->setFreeShipping($item->getFreeShipping());
                         }
@@ -98,9 +94,7 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                             $child->setDiscountAmount($child->getRowTotal() * $item->getDiscountPercent());
                         }
                         $totalDiscountAmount += $child->getDiscountAmount();
-                        //*$item->getQty();
                         $baseTotalDiscountAmount += $child->getBaseDiscountAmount();
-                        //*$item->getQty();
 
                         $child->setRowTotalWithDiscount($child->getRowTotal() - $child->getDiscountAmount());
                         $child->setBaseRowTotalWithDiscount(
@@ -112,7 +106,7 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                     }
                 } else {
                     $eventArgs['item'] = $item;
-                    $this->_eventManager->dispatch('sales_quote_address_discount_item', $eventArgs);
+                    $this->eventManager->dispatch('sales_quote_address_discount_item', $eventArgs);
 
                     $totalDiscountAmount += $item->getDiscountAmount();
                     $baseTotalDiscountAmount += $item->getBaseDiscountAmount();
@@ -125,31 +119,30 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                 }
             }
         }
-        $shippingAssignment->setDiscountAmount($totalDiscountAmount);
-        $shippingAssignment->setSubtotalWithDiscount($subtotalWithDiscount);
-        $shippingAssignment->setBaseDiscountAmount($baseTotalDiscountAmount);
-        $shippingAssignment->setBaseSubtotalWithDiscount($baseSubtotalWithDiscount);
-
-        $shippingAssignment->setGrandTotal($shippingAssignment->getGrandTotal() - $shippingAssignment->getDiscountAmount());
-        $shippingAssignment->setBaseGrandTotal($shippingAssignment->getBaseGrandTotal() - $shippingAssignment->getBaseDiscountAmount());
+        $total->setDiscountAmount($totalDiscountAmount);
+        $total->setSubtotalWithDiscount($subtotalWithDiscount);
+        $total->setBaseDiscountAmount($baseTotalDiscountAmount);
+        $total->setBaseSubtotalWithDiscount($baseSubtotalWithDiscount);
+        $total->setGrandTotal($total->getGrandTotal() - $total->getDiscountAmount());
+        $total->setBaseGrandTotal($total->getBaseGrandTotal() - $total->getBaseDiscountAmount());
         return $this;
     }
 
     /**
-     * @param \Magento\Quote\Model\Quote\Address|\Magento\Quote\Model\Quote\Address\Total $total
+     * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return $this
      */
     public function fetch(\Magento\Quote\Model\Quote\Address\Total $total)
     {
-        $amount = $total->getDiscountAmount();
-        if ($amount != 0) {
-            $title = __('Discount');
+        $result = [];
+        if ($total->getDiscountAmount() != 0) {
             $code = $total->getCouponCode();
-            if (strlen($code)) {
-                $title = __('Discount (%1)', $code);
-            }
-            $total->addTotal(['code' => $this->getCode(), 'title' => $title, 'value' => -$amount]);
+            $result = [
+                'code' => $this->getCode(),
+                'title' => strlen($code) ? __('Discount (%1)', $code) : __('Discount'),
+                'value' => -$total->getDiscountAmount()
+            ];
         }
-        return $this;
+        return $result;
     }
 }
