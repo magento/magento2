@@ -5,6 +5,8 @@
  */
 namespace Magento\ProductVideo\Block\Adminhtml\Product\Edit;
 
+use Magento\Catalog\Model\Product\Type;
+
 /**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
@@ -14,6 +16,16 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
      * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $_jsonEncoder;
+
+    /**
+     * Product types that support swatch images for video
+     *
+     * @var array
+     */
+    protected $swatchImageProductTypes = [
+        Type::TYPE_SIMPLE,
+        Type::TYPE_VIRTUAL
+    ];
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -99,7 +111,6 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-
         $fieldset->addField(
             'video_title',
             'text',
@@ -142,7 +153,6 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => '_preview',
             ]
         );
-
 
         $fieldset->addField(
             'new_video_get',
@@ -191,17 +201,19 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-        $fieldset->addField(
-            'video_swatch_image',
-            'checkbox',
-            [
-                'class' => 'video_image_role',
-                'label' => 'Swatch Image',
-                'title' => __('Swatch Image'),
-                'data-role' => 'role-type-selector',
-                'value' => 'swatch_image',
-            ]
-        );
+        if (in_array($this->getProduct()->getTypeId(), $this->swatchImageProductTypes)) {
+            $fieldset->addField(
+                'video_swatch_image',
+                'checkbox',
+                [
+                    'class' => 'video_image_role',
+                    'label' => 'Swatch Image',
+                    'title' => __('Swatch Image'),
+                    'data-role' => 'role-type-selector',
+                    'value' => 'swatch_image',
+                ]
+            );
+        }
 
         $fieldset->addField(
             'new_video_disabled',
@@ -248,5 +260,18 @@ require(["jquery","mage/mage"],function($) {  // waiting for dependencies at fir
 });
 </script>
 HTML;
+    }
+
+    /**
+     * Retrieve currently viewed product object
+     *
+     * @return \Magento\Catalog\Model\Product
+     */
+    public function getProduct()
+    {
+        if (!$this->hasData('product')) {
+            $this->setData('product', $this->_coreRegistry->registry('product'));
+        }
+        return $this->getData('product');
     }
 }
