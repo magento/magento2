@@ -22,40 +22,40 @@ use Magento\Setup\Model\UpdatePackagesCache;
 class ComponentGrid extends AbstractActionController
 {
     /**
-     * @var ComposerInformation
+     * @var \Magento\Framework\Composer\ComposerInformation
      */
     private $composerInformation;
 
     /**
      * Module package info
      *
-     * @var PackageInfo
+     * @var \Magento\Framework\Module\PackageInfo
      */
     private $packageInfo;
 
     /**
      * Enabled Module info
      *
-     * @var ModuleList
+     * @var \Magento\Framework\Module\ModuleList
      */
     private $enabledModuleList;
 
     /**
      * Full Module info
      *
-     * @var FullModuleList
+     * @var \Magento\Framework\Module\FullModuleList
      */
     private $fullModuleList;
 
     /**
-     * @var UpdatePackagesCache
+     * @var \Magento\Setup\Model\UpdatePackagesCache
      */
     private $updatePackagesCache;
 
     /**
-     * @param ComposerInformation $composerInformation
-     * @param ObjectManagerProvider $objectManagerProvider
-     * @param UpdatePackagesCache $updatePackagesCache
+     * @param \Magento\Framework\Composer\ComposerInformation $composerInformation
+     * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
+     * @param \Magento\Setup\Model\UpdatePackagesCache $updatePackagesCache
      */
     public function __construct(
         \Magento\Framework\Composer\ComposerInformation $composerInformation,
