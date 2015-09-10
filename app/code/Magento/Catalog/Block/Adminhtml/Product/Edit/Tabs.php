@@ -195,9 +195,7 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
                     [
                         'label' => __('Advanced Inventory'),
                         'content' => $this->_translateHtml(
-                            $this->getLayout()->createBlock(
-                                'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Inventory'
-                            )->toHtml()
+                            $this->getLayout()->getBlock('product_tabs.advanced-inventory')->toHtml()
                         ),
                         'group_code' => self::ADVANCED_TAB_GROUP_CODE
                     ]
