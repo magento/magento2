@@ -5,23 +5,28 @@
  */
 namespace Magento\Catalog\Ui\Component\Listing;
 
-class AttributeRepository extends \Magento\Ui\Component\Listing\Columns
+class AttributeRepository
 {
     /**
      * @var null|\Magento\Catalog\Api\Data\ProductAttributeInterface[]
      */
-    private $attributes;
+    protected $attributes;
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\Collection $attributeCollection
+     * @var \Magento\Catalog\Ui\Component\Listing\Attribute\SearchCriteriaBuilderInterface
+     */
+    protected $searchCriteriaBuilder;
+
+    /**
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository
+     * @param \Magento\Catalog\Ui\Component\Listing\Attribute\SearchCriteriaBuilderInterface $searchCriteriaBuilder
      */
     public function __construct(
-        \Magento\Catalog\Model\Resource\Product\Attribute\Collection $attributeCollection,
-        \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository
+        \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository,
+        \Magento\Catalog\Ui\Component\Listing\Attribute\SearchCriteriaBuilderInterface $searchCriteriaBuilder
     ) {
-        $this->attributeCollection = $attributeCollection;
         $this->productAttributeRepository = $productAttributeRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
@@ -30,12 +35,9 @@ class AttributeRepository extends \Magento\Ui\Component\Listing\Columns
     public function getList()
     {
         if (null == $this->attributes) {
-            $this->attributes = [];
-            $this->attributeCollection->addIsUsedInGridFilter();
-            foreach ($this->attributeCollection as $attribute) {
-                $attribute = $this->productAttributeRepository->get($attribute->getAttributeId());
-                $this->attributes[] = $attribute;
-            }
+            $this->attributes = $this->productAttributeRepository
+                ->getList($this->searchCriteriaBuilder->build())
+                ->getItems();
         }
         return $this->attributes;
     }

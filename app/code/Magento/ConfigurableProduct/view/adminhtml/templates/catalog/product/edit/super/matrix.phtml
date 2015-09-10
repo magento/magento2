@@ -323,7 +323,9 @@ if ($variations) {
                         "associatedProductsFilter": "configurable_associated_product_listing.configurable_associated_product_listing.listing_top.listing_filters",
                         "associatedProductsMassAction": "configurable_associated_product_listing.configurable_associated_product_listing.product_columns.ids",
                         "associatedProductsProvider": "configurable_associated_product_listing.data_source",
-                        "configurableVariations": "configurableVariations"
+                        "configurableVariations": "configurableVariations",
+                        "associatedProductsGridUrl": "<?= $block->getUrl('catalog/product/associated_grid', ['componentJson' => true])?>",
+                        "attributes": <?= $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($attributes) ?>
                     },
                     "configurableVariations": {
                         "component": "Magento_ConfigurableProduct/js/variations/variations",

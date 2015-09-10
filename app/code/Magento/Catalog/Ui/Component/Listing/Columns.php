@@ -12,6 +12,9 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
      */
     const DEFAULT_COLUMNS_MAX_ORDER = 100;
 
+    /** @var AttributeRepository */
+    protected $attributeRepository;
+
     /**
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
      * @param \Magento\Catalog\Ui\Component\ColumnFactory $columnFactory
