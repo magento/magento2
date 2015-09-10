@@ -24,14 +24,19 @@ define([
 
         _images: {},
 
-        _imageTypes: [
-            'image/jpeg',
-            'image/pjpeg',
-            'image/jpeg',
-            'image/pjpeg',
-            'image/png',
-            'image/gif'
-        ],
+        _imageTypes: ['.jpeg', '.pjpeg', '.jpeg', '.jpg', '.pjpeg', '.png', '.gif'],
+
+        _imageWidgetSelector: '#media_gallery_content',
+
+        _videoPreviewInputSelector: '#new_video_screenshot',
+
+        _videoDisableinputSelector: '#new_video_disabled',
+
+        _videoPreviewImagePointer: '#new_video_screenshot_preview',
+
+        _videoFormSelector: '#new_video_form',
+
+        _itemIdSelector: '#item_id',
 
         _bind: function() {
             var events = {
@@ -42,7 +47,7 @@ define([
 
         /**
          * Remove ".tmp"
-         * Evil hack !!
+         *
          * @param name
          * @returns {*}
          * @private
@@ -67,7 +72,7 @@ define([
         _setImage: function(file, imageData) {
             file = this.__prepareFilename(file);
             this._images[file] = imageData;
-            jQuery('#media_gallery_content').trigger('addItem', imageData);
+            jQuery(this._imageWidgetSelector).trigger('addItem', imageData);
             this.element.trigger('setImage', imageData);
             this._addVideoClass(imageData.url);
         },
@@ -84,6 +89,13 @@ define([
             return this._images[file];
         },
 
+        /**
+         * Replace image (update)
+         * @param oldFile
+         * @param newFile
+         * @param imageData
+         * @private
+         */
         _replaceImage: function(oldFile, newFile, imageData) {
             var tmpOldFile = oldFile;
             var tmpNewFile = newFile;
@@ -99,7 +111,7 @@ define([
             if(oldFile && imageData.old_file) {
                 var oldImageId = this.findElementId(tmpOldFile);
                 var newImageId = this.findElementId(tmpNewFile);
-                var fc = jQuery('#item_id').val();
+                var fc = jQuery(this._itemIdSelector).val();
 
                 var suff = 'product[media_gallery][images]' + fc;
 
@@ -127,20 +139,26 @@ define([
             if(!imageData) {
                 return;
             }
-            jQuery('#media_gallery_content').trigger('removeItem', imageData);
+            jQuery(this._imageWidgetSelector).trigger('removeItem', imageData);
             this.element.trigger('removeImage', imageData);
             delete this._images[file];
         },
 
-
+        /**
+         * Fired when preview change
+         *
+         * @param event
+         * @param imageData
+         * @private
+         */
         _onSetImage: function(event, imageData) {
             this.saveImageRoles(imageData);
         },
 
-        _onRemoveImage: function(event, imageData) {
-        },
-
         /**
+         *
+         * Wrap _uploadFile
+         *
          * @param file
          * @param oldFile
          * @param callback
@@ -153,38 +171,38 @@ define([
                 files: file,
                 url: url
             };
-            this._uploadFile('send', data, function(result, textStatus, jqXHR) {
+            this._uploadFile('send', data, $.proxy(function(result, textStatus, jqXHR) {
                 var data = JSON.parse(result);
                 if(data.errorcode) {
                     alert(data.error);
                     return;
                 }
-                $.each($('#new_video_form').serializeArray(), function(i, field) {
+                $.each($(this._videoFormSelector).serializeArray(), function(i, field) {
                     data[field.name] = field.value;
                 });
-                data['disabled'] = $('#new_video_disabled').prop('checked') ? 1 : 0;
+                data['disabled'] = $(this._videoDisableinputSelector).prop('checked') ? 1 : 0;
                 data['media_type'] = 'external-video';
                 data.old_file = oldFile;
                 oldFile  ?
                     self._replaceImage(oldFile, data.file, data):
                     self._setImage(data.file, data);
                 callback.call(0, data);
-            });
+            }, this));
 
         },
 
         /**
-         *
+         * File uploader
          * @returns {*}
          * @private
          */
         _uploadFile: function(method, data, callback) {
-            var fu = jQuery('#new_video_screenshot');
+            var fu = jQuery(this._videoPreviewInputSelector);
             var tmp_input   = document.createElement('input');
             jQuery(tmp_input).attr({
-                name: fu.attr('name'),
-                value: fu.val(),
-                type: 'file',
+                'name': fu.attr('name'),
+                'value': fu.val(),
+                'type': 'file',
                 'data-ui-ud': fu.attr('data-ui-ud')
             }).css('display', 'none');
             fu.parent().append(tmp_input);
@@ -195,28 +213,38 @@ define([
             });
         },
 
-
+        /**
+         * Update style
+         * @param url
+         * @private
+         */
         _addVideoClass: function(url) {
             var class_video = 'video-item';
             jQuery('img[src="' + url + '"]').addClass(class_video);
         },
 
+        /**
+         * Build widget
+         * @private
+         */
         _create: function () {
-            var imgs = jQuery('#media_gallery_content').data('images') || [];
+            var imgs = jQuery(this._imageWidgetSelector).data('images') || [];
             for(var i = 0; i < imgs.length; i++) {
                 var tmp = imgs[i];
-                tmp.subclass = 'video-item';
                 this._images[tmp.file] = tmp;
-                this._addVideoClass(tmp.url);
+                if(tmp.media_type == 'external-video') {
+                    tmp.subclass = 'video-item';
+                    this._addVideoClass(tmp.url);
+                }
             }
 
             this._bind();
             var widget = this;
-            var uploader = jQuery('#new_video_screenshot');
-
+            var uploader = jQuery(this._videoPreviewInputSelector);
             uploader.on('change', this._onImageInputChange.bind(this));
-            this.toggleButtons();
             uploader.attr('accept', this._imageTypes.join(','));
+
+            this.toggleButtons();
             this.element.modal({
                 type: 'slide',
                 modalClass: 'mage-new-video-dialog form-inline',
@@ -224,113 +252,25 @@ define([
                 buttons: [{
                     text: $.mage.__('Save'),
                     class: 'action-primary video-create-button',
-                    click: function (e) {
-                        var nvs = jQuery('#new_video_screenshot');
-                        var file = nvs.get(0);
-                        if(file && file.files && file.files.length) {
-                            file =  file.files[0];
-                        } else {
-                            file = null;
-                        }
-                        var reqClass = 'required-entry _required';
-                        if (!file) {
-                            nvs.addClass(reqClass);
-                        }
-
-                        var newVideoForm = $('#new_video_form');
-                        newVideoForm.mage('validation', {
-                            errorPlacement: function (error, element) {
-                                error.insertAfter(element);
-                            }
-                        }).on('highlight.validate', function (e) {
-                            var options = $(this).validation('option');
-                        });
-                        newVideoForm.validation();
-                        if (!newVideoForm.valid()) {
-                            return;
-                        }
-
-                        widget._uploadImage(file, null, function(code, data) {
-                            //uploader.replaceWith(data.file);
-                            widget._onClose();
-                        });
-                        nvs.removeClass(reqClass);
-                    }
+                    click: $.proxy(widget._onCreate, widget)
                 },
-                    {
-                        text: $.mage.__('Save'),
-                        class: 'action-primary video-edit',
-                        click: function (e) {
-                            var newVideoForm = $('#new_video_form');
-                            newVideoForm.mage('validation', {
-                                errorPlacement: function (error, element) {
-                                    error.insertAfter(element);
-                                }
-                            }).on('highlight.validate', function (e) {
-                                var options = $(this).validation('option');
-                            });
-                            newVideoForm.validation();
-                            if (!newVideoForm.valid()) {
-                                return;
-                            }
-
-                            var inputFile = uploader;
-                            var mediaFields = $('input[name*="' + $('#item_id').val() + '"]');
-
-                            $.each(mediaFields, function(i, el){
-                                var fieldHash = $('#item_id').val();
-                                var start = el.name.indexOf(fieldHash) + $('#item_id').val().length + 1;
-                                var fieldName = el.name.substring(start, el.name.length - 1);
-                                if ($('#' + fieldName).length > 0) {
-                                    $('input[name*="' + $('#item_id').val() + '[' + fieldName + ']"]').val($('#' + fieldName).val());
-                                }
-                            });
-                            var flagChecked = $('#new_video_disabled').prop('checked') ? 1 : 0;
-                            $('input[name*="' + $('#item_id').val() + '[disabled]"]').val(flagChecked);
-
-                            if (flagChecked == true) {
-                                $('[name*="' + $('#item_id').val() + '"]').siblings('.image-fade').css('visibility', 'visible');
-                            } else {
-                                $('[name*="' + $('#item_id').val() + '"]').siblings('.image-fade').css('visibility', 'hidden');
-                            }
-                            var imageData = widget._getImage($('#file_name').val());
-
-                            var fileName = $('#new_video_screenshot').get(0).files[0];
-                            uploader.replaceWith(inputFile);
-
-                            var callback = function(code, data) {
-                                widget._onClose();
-                            };
-
-                            if(!fileName) {
-                                callback.call(0, imageData);
-                                widget._replaceImage(imageData.file, imageData.file, imageData);
-                            } else {
-                                widget._uploadImage(fileName, imageData.file, callback);
-                            }
-                        }
-                    },
-                    {
-                        text: $.mage.__('Delete'),
-                        class: 'action-primary video-delete-button',
-                        click: function (e) {
-                           // $('#new-video').modal('closeModal')
-                            widget._onClose();
-                            var removed = $('[name*="' + $('#new_video_form #item_id').val() + '[removed]"]');
-                            removed.val(1);
-                            removed.parent().hide();
-                        }
-                    },
-                    {
-                        text: $.mage.__('Cancel'),
-                        class: 'video-cancel-button',
-                        click: function (e) {
-                            widget._onClose(e);
-                        }
-                    }],
+                {
+                    text: $.mage.__('Save'),
+                    class: 'action-primary video-edit',
+                    click: $.proxy(widget._onUpdate, widget)
+                },
+                {
+                    text: $.mage.__('Delete'),
+                    class: 'action-primary video-delete-button',
+                    click: $.proxy(widget._onDelete, widget)
+                },
+                {
+                    text: $.mage.__('Cancel'),
+                    class: 'video-cancel-button',
+                    click: $.proxy(widget._onCancel, widget)
+                }],
                 opened: function(e) {
                     $('#video_url').focus();
-                    jQuery('button[data-role="close-panel"]').click();
                     var file = jQuery('#file_name').val();
                     if(!file) {
                         return;
@@ -339,21 +279,120 @@ define([
                     widget._onPreview(null, imageData.url, false);
                 },
                 closed: function(e) {
-                    if(widget._previewImage) {
-                        widget._previewImage.remove();
-                        widget._previewImage = null;
-                    }
-                    var newVideoForm = $('#new_video_form');
-                    jQuery(newVideoForm).trigger('reset');
-                    jQuery(newVideoForm).find('input[type="hidden"][name!="form_key"]').val('');
-                    $('input[name*="' + $('#item_id').val() + '"]').parent().removeClass('active');
-                    try {
-                        newVideoForm.validation('clearError');
-                    } catch(e) {}
+                    widget._onClose();
                 }
             });
         },
 
+        /**
+         * Check form
+         * @returns {*}
+         */
+        isValid: function() {
+            var videoForm = $(this._videoFormSelector);
+            videoForm.mage('validation', {
+                errorPlacement: function (error, element) {
+                    error.insertAfter(element);
+                }
+            }).on('highlight.validate', function (e) {
+                $(this).validation('option');
+            });
+            videoForm.validation();
+            return videoForm.valid();
+        },
+
+        /**
+         * Fired when click on create video
+         * @private
+         */
+        _onCreate: function() {
+            var nvs = jQuery(this._videoPreviewInputSelector);
+            var file = nvs.get(0);
+            if(file && file.files && file.files.length) {
+                file =  file.files[0];
+            } else {
+                file = null;
+            }
+            var reqClass = 'required-entry _required';
+            if (!file) {
+                nvs.addClass(reqClass);
+            }
+
+            if(!this.isValid()) {
+                return;
+            }
+
+            this._uploadImage(file, null, $.proxy(function(code, data) {
+                this.close();
+            }, this));
+            nvs.removeClass(reqClass);
+        },
+
+        /**
+         * Fired when click on update video
+         * @private
+         */
+        _onUpdate: function() {
+
+            if(!this.isValid()) {
+                return;
+            }
+            var inputFile       = jQuery(this._videoPreviewInputSelector);
+            var itemId          = jQuery(this._itemIdSelector).val();
+            itemId              = itemId.slice(1, itemId.length - 1);
+            var mediaFields     = $('input[name*="' + itemId + '"]');
+            var _inputSelector  = '[name*="[' + itemId + ']"';
+            $.each(mediaFields, function(i, el) {
+                var elName      = el.name;
+                var start       = elName.indexOf(itemId) + itemId.length + 2;
+                var fieldName   = elName.substring(start, el.name.length - 1);
+                var _field      = $('#' + fieldName);
+
+                if (_field.length > 0) {
+                    var _tmp = _inputSelector.slice(0, _inputSelector.length - 1) + '[' + fieldName + ']"]';
+                    $(_tmp).val(_field.val());
+                }
+            });
+            var flagChecked     = $(this._videoDisableinputSelector).prop('checked') ? 1 : 0;
+            $('input' + _inputSelector + '[disabled]"]').val(flagChecked);
+            $(_inputSelector).siblings('.image-fade').css('visibility', flagChecked ? 'visible': 'hidden');
+
+            var imageData = this._getImage($('#file_name').val());
+            var fileName = inputFile.get(0).files;
+            if(!fileName || !fileName.length) {
+                fileName = null;
+            }
+            inputFile.replaceWith(inputFile);
+
+            var callback = $.proxy(function() {
+                this.close();
+            }, this);
+
+            if (fileName) {
+                this._uploadImage(fileName, imageData.file, callback);
+            } else {
+                callback(0, imageData);
+                this._replaceImage(imageData.file, imageData.file, imageData);
+            }
+        },
+
+        /**
+         * Fired when clicked on cancel
+         * @private
+         */
+        _onCancel: function() {
+            this.close();
+        },
+
+        /**
+         * Fired when clicked on delete
+         * @private
+         */
+        _onDelete: function() {
+            var filename = this.element.find('#file_name[data-ui-id="new-video-fieldset-element-hidden"]').val();
+            this._removeImage(filename);
+            this.close();
+        },
 
         _readPreviewLocal: function(file, callback) {
             if(!window.FileReader) {
@@ -366,14 +405,43 @@ define([
             fr.readAsDataURL(file);
         },
 
+        /**
+         *  Image file input handler
+         * @private
+         */
         _onImageInputChange: function() {
-            var file = document.getElementById('new_video_screenshot').files[0];
-            if(!file) {
+            var jFile = jQuery(this._videoPreviewInputSelector);
+            var file = jFile[0];
+            var val = jFile.val();
+            var prev = this._getPreviewImage();
+
+            if(!val) {
                 return;
             }
+            var ext = '.' + val.split('.').pop();
+            if(
+                ext.length < 2 ||
+                this._imageTypes.indexOf(ext) == -1 ||
+                !file.files  ||
+                !file.files.length
+
+            ) {
+                prev.remove();
+                this._previewImage = null;
+                jFile.val('');
+                return;
+            } // end if
+            file = file.files[0];
             this._onPreview(null, file, true);
         },
 
+        /**
+         * Change Preview
+         * @param error
+         * @param src
+         * @param local
+         * @private
+         */
         _onPreview: function(error, src, local) {
             var img = this._getPreviewImage();
             if(error) {
@@ -391,6 +459,12 @@ define([
             }
         },
 
+        /**
+         *
+         * Return preview image imstance
+         * @returns {null}
+         * @private
+         */
         _getPreviewImage: function() {
             if(!this._previewImage) {
                 this._previewImage = jQuery(document.createElement('img')).css({
@@ -398,13 +472,34 @@ define([
                     'display': 'none',
                     'src': ''
                 });
-                jQuery(this._previewImage).insertAfter('#new_video_screenshot_preview');
+                jQuery(this._previewImage).insertAfter(this._videoPreviewImagePointer);
             }
             return this._previewImage;
         },
 
+        /**
+         * Close slideout dialog
+         */
+        close: function() {
+            this.element.trigger('closeModal');
+        },
+
+        /**
+         * Close dialog wrap
+         * @private
+         */
         _onClose: function() {
-            $('#new-video').modal('closeModal');
+            if(this._previewImage) {
+                this._previewImage.remove();
+                this._previewImage = null;
+            }
+            var newVideoForm = this.element.find(this._videoFormSelector);
+            jQuery(newVideoForm).find('input[type="hidden"][name!="form_key"]').val('');
+            $('input[name*="' + $(this._itemIdSelector).val() + '"]').parent().removeClass('active');
+            try {
+                newVideoForm.validation('clearError');
+            } catch(e) {}
+            newVideoForm.trigger('reset');
         },
 
         /**
@@ -433,7 +528,7 @@ define([
                     var start = el.name.indexOf('[') + 1;
                     var end = el.name.indexOf(']');
                     var imageType = el.name.substring(start, end);
-                    var imageCheckbox = $('#new_video_form input[value="' + imageType + '"]');
+                    var imageCheckbox = $(self._videoFormSelector + ' input[value="' + imageType + '"]');
                     self._changeRole(imageType, imageCheckbox.attr('checked'), imageData);
                 });
             }
@@ -444,31 +539,30 @@ define([
             if(!isEnabled) {
                 needCheked = jQuery('input[name="product[' + imageType + ']"]').val() == imageData.file;
             }
-
             if(!needCheked) {
                 return;
             }
-            jQuery('#media_gallery_content').trigger('setImageType', {
+
+            jQuery(this._imageWidgetSelector).trigger('setImageType', {
                 type:  imageType,
                 imageData: isEnabled ? imageData: null
             });
         },
 
         toggleButtons: function() {
+            var self = this;
             $('.video-placeholder').click(function() {
                 $('.video-create-button').show();
                 $('.video-delete-button').hide();
                 $('.video-edit').hide();
-                $('.modal-title').html('New video');
             });
             $(document).on('click', '.item.image', function() {
                 $('.video-create-button').hide();
                 $('.video-delete-button').show();
                 $('.video-edit').show();
-                $('.modal-title').html('Edit video');
             });
             $(document).on('click', '.item.image', function() {
-                var formFields = $('#new_video_form').find('.edited-data');
+                var formFields = $(self._videoFormSelector).find('.edited-data');
                 var container = $(this);
 
                 $.each(formFields, function (i, field) {
@@ -476,7 +570,7 @@ define([
                 });
 
                 var flagChecked = (container.find('input[name*="disabled"]').val() == 1) ? true : false;
-                $('#new_video_disabled').prop('checked', flagChecked);
+                $(self._videoDisableinputSelector).prop('checked', flagChecked);
 
                 var file = $('#file_name').val(container.find('input[name*="file"]').val());
 
@@ -489,13 +583,12 @@ define([
                         var start = this.name.indexOf('[') + 1;
                         var end = this.name.length - 1;
                         var imageRole = this.name.substring(start, end);
-                        $('#new_video_form input[value="' + imageRole + '"]').prop('checked', true);
+                        $(self._videoFormSelector + ' input[value="' + imageRole + '"]').prop('checked', true);
                     }
                 });
 
             });
         }
-
     });
     $('#group-fields-image-management > legend > span').text('Images and Videos');
     return $.mage.newVideoDialog;
