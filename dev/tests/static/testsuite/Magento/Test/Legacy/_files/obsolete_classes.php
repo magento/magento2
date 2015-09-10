@@ -3844,4 +3844,6 @@ return [
         'Magento\Checkout\Model\Agreements\AgreementsProviderInterface',
         'Magento\CheckoutAgreements\Model\AgreementsProviderInterface'
     ],
+    ['Magento\Customer\Controller\Account\ResetPassword'],
+    ['Magento\Customer\Controller\Account'],
 ];
