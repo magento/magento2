@@ -13,11 +13,7 @@
 <div class="gallery-placeholder"></div>
 <script>
   var mediaGalleryData = <?php echo $block->getMediaGalleryDataJson(); ?>;
-  var generalVideoSettings = {
-    showRelatedYT : false,
-    VideoAutoRestart : false,
-    PlayIfBase : true
-  };
+  var generalVideoSettings = <?php echo $block->getVideoSettingsJson(); ?>;
 </script>
 <script type="text/x-magento-init">
     {
