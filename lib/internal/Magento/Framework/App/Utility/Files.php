@@ -1065,13 +1065,29 @@ class Files
     }
 
     /**
+     * Get module and library paths
+     *
+     * @return array
+     */
+    private function getPaths()
+    {
+        $directories = [];
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $fullModuleDir) {
+            $directories[] = $fullModuleDir . '/';
+        }
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryDir) {
+            $directories[] = $libraryDir . '/';
+        }
+        return $directories;
+    }
+
+    /**
      * Check if specified class exists
      *
      * @param string $class
      * @param string &$path
      * @return bool
      */
-    /** The method classFileExists() has a Cyclomatic Complexity of 11. The configured cyclomatic complexity threshold is 10.    */
     public function classFileExists($class, &$path = '')
     {
         if ($class[0] == '\\') {
@@ -1097,12 +1113,7 @@ class Files
         foreach ($directories as $key => $dir) {
             $directories[$key] = $this->_path . $dir;
         }
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $fullModuleDir) {
-            $directories[] = $fullModuleDir . '/';
-        }
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryDir) {
-            $directories[] = $libraryDir . '/';
-        }
+        $directories = array_merge($directories, $this->getPaths());
 
         foreach ($directories as $dir) {
             $fullPath = $dir . $path;
