@@ -76,7 +76,9 @@ class TotalsReader
         'msrp',
         'shipping',
         'freeshipping',
+        'pretax_giftwrapping',
         'giftwrapping',
+        'tax_giftwrapping',
         'tax_subtotal',
         'tax_shipping',
         'tax',
@@ -126,7 +128,13 @@ class TotalsReader
             $data = $reader->fetch($total);
             if ($data !== null) {
                 $totalInstance = $this->convert($data);
-                $output[$totalInstance->getCode()] = $totalInstance;
+                if (array_key_exists($totalInstance->getCode(), $output)) {
+                    $output[$totalInstance->getCode()] = $output[$totalInstance->getCode()]->addData(
+                        $totalInstance->getData()
+                    );
+                } else {
+                    $output[$totalInstance->getCode()] = $totalInstance;
+                }
             }
         }
 
