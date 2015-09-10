@@ -5,6 +5,8 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
+use Magento\Framework\Component\ComponentRegistrar;
+
 class ResourcesConfigFilesTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -15,10 +17,12 @@ class ResourcesConfigFilesTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var $moduleDirSearch \Magento\Framework\Module\Dir\Search */
-        $moduleDirSearch = $objectManager->get('Magento\Framework\Module\Dir\Search');
+        /** @var $moduleDirSearch \Magento\Framework\Component\DirSearch */
+        $moduleDirSearch = $objectManager->get('Magento\Framework\Component\DirSearch');
         $fileIteratorFactory = $objectManager->get('Magento\Framework\Config\FileIteratorFactory');
-        $xmlFiles = $fileIteratorFactory->create($moduleDirSearch->collectFiles('etc/{*/resources.xml,resources.xml}'));
+        $xmlFiles = $fileIteratorFactory->create(
+            $moduleDirSearch->collectFiles(ComponentRegistrar::MODULE, 'etc/{*/resources.xml,resources.xml}')
+        );
 
         $fileResolverMock = $this->getMock('Magento\Framework\Config\FileResolverInterface');
         $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($xmlFiles));

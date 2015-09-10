@@ -631,7 +631,6 @@ class Application
             DirectoryList::GENERATION => [$path => "{$var}/generation"],
             DirectoryList::CACHE => [$path => "{$var}/cache"],
             DirectoryList::LOG => [$path => "{$var}/log"],
-            DirectoryList::THEMES => [$path => BP . '/app/design'],
             DirectoryList::SESSION => [$path => "{$var}/session"],
             DirectoryList::TMP => [$path => "{$var}/tmp"],
             DirectoryList::UPLOAD => [$path => "{$var}/upload"],

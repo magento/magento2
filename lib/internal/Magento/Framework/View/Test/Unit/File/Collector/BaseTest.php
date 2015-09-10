@@ -5,115 +5,73 @@
  */
 namespace Magento\Framework\View\Test\Unit\File\Collector;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\View\File;
 
 class BaseTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
-     */
-    protected $objectManagerHelper;
-
-    /**
      * @var \Magento\Framework\View\File\Collector\Base
      */
-    protected $fileCollector;
-
-    /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $directoryMock;
-
-    /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $filesystemMock;
+    private $fileCollector;
 
     /**
      * @var \Magento\Framework\View\File\Factory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $fileFactoryMock;
-
-    /**
-     * @var \Magento\Framework\View\Helper\PathPattern|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $pathPatternHelperMock;
+    private $fileFactoryMock;
 
     /**
      * @var \Magento\Framework\View\Design\ThemeInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $themeMock;
+    private $themeMock;
 
     /**
-     * @var \Magento\Framework\Module\Dir\Search|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Component\DirSearch|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $dirSearch;
+    private $dirSearch;
 
     protected function setUp()
     {
-        $this->filesystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->fileFactoryMock = $this->getMockBuilder('Magento\Framework\View\File\Factory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->pathPatternHelperMock = $this->getMockBuilder('Magento\Framework\View\Helper\PathPattern')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->directoryMock = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadInterface')
-            ->getMockForAbstractClass();
         $this->themeMock = $this->getMockBuilder('Magento\Framework\View\Design\ThemeInterface')
             ->setMethods(['getData'])
             ->getMockForAbstractClass();
 
-        $this->filesystemMock->expects($this->once())
-            ->method('getDirectoryRead')
-            ->with(DirectoryList::ROOT)
-            ->willReturn($this->directoryMock);
+        $this->dirSearch = $this->getMock('Magento\Framework\Component\DirSearch', [], [], '', false);
 
-        $this->dirSearch = $this->getMock('Magento\Framework\Module\Dir\Search', [], [], '', false);
-
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->fileCollector = $this->objectManagerHelper->getObject(
-            'Magento\Framework\View\File\Collector\Base',
-            [
-                'filesystem' => $this->filesystemMock,
-                'fileFactory' => $this->fileFactoryMock,
-                'pathPatternHelper' => $this->pathPatternHelperMock,
-                'subDir' => 'layout',
-                'dirSearch' => $this->dirSearch,
-            ]
+        $this->fileCollector = new \Magento\Framework\View\File\Collector\Base(
+            $this->dirSearch,
+            $this->fileFactoryMock,
+            'layout'
         );
     }
 
     public function testGetFiles()
     {
-        $sharedFiles = [
-            'Namespace/One/view/base/layout/one.xml',
-            'Namespace/Two/view/base/layout/two.xml'
-        ];
-        $themeFiles = [
-            'Namespace/Two/view/frontend/layout/four.txt',
-            'Namespace/Two/view/frontend/layout/three.xml'
-        ];
+        $files = [];
+        foreach (['shared', 'theme'] as $fileType) {
+            for ($i = 0; $i < 2; $i++) {
+                $file = $this->getMock('\Magento\Framework\Component\ComponentFile', [], [], '', false);
+                $file->expects($this->once())
+                    ->method('getFullPath')
+                    ->will($this->returnValue("{$fileType}/module/{$i}/path"));
+                $file->expects($this->once())
+                    ->method('getComponentName')
+                    ->will($this->returnValue('Module_' . $i));
+                $files[$fileType][] = $file;
+            }
+        }
 
         $this->dirSearch->expects($this->any())
-            ->method('collectFiles')
+            ->method('collectFilesWithContext')
             ->willReturnMap(
                 [
-                    ['view/base/layout/*.xml', $sharedFiles],
-                    ['view/frontend/layout/*.xml', $themeFiles]
+                    [ComponentRegistrar::MODULE, 'view/base/layout/*.xml', $files['shared']],
+                    [ComponentRegistrar::MODULE, 'view/frontend/layout/*.xml', $files['theme']]
                 ]
             );
-        $this->pathPatternHelperMock->expects($this->once())
-            ->method('translatePatternFromGlob')
-            ->with('*.xml')
-            ->willReturn('[^/]*\\.xml');
-        $this->directoryMock->expects($this->atLeastOnce())
-            ->method('getAbsolutePath')
-            ->willReturnArgument(0);
         $this->fileFactoryMock->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($this->createFileMock());
@@ -123,10 +81,11 @@ class BaseTest extends \PHPUnit_Framework_TestCase
             ->willReturn('frontend');
 
         $result = $this->fileCollector->getFiles($this->themeMock, '*.xml');
-        $this->assertCount(3, $result);
+        $this->assertCount(4, $result);
         $this->assertInstanceOf('Magento\Framework\View\File', $result[0]);
         $this->assertInstanceOf('Magento\Framework\View\File', $result[1]);
         $this->assertInstanceOf('Magento\Framework\View\File', $result[2]);
+        $this->assertInstanceOf('Magento\Framework\View\File', $result[3]);
     }
 
     /**

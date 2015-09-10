@@ -10,6 +10,8 @@ use Magento\Framework\App\Area;
 use Magento\Framework\App\Cache;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\State\CleanupFiles;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Composer\DependencyChecker;
 use Magento\Framework\Composer\Remove;
@@ -22,8 +24,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Magento\Framework\Setup\BackupRollbackFactory;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Theme\Model\ThemeValidator;
 
 /**
@@ -119,6 +119,16 @@ class ThemeUninstallCommand extends Command
     private $themeValidator;
 
     /**
+     * @var ComponentRegistrarInterface
+     */
+    private $componentRegistrar;
+
+    /**
+     * @var Filesystem\Directory\ReadFactory
+     */
+    private $readDirFactory;
+
+    /**
      * Constructor
      *
      * @param Cache $cache
@@ -132,7 +142,8 @@ class ThemeUninstallCommand extends Command
      * @param Remove $remove
      * @param BackupRollbackFactory $backupRollbackFactory
      * @param ThemeValidator $themeValidator
-     * @throws LocalizedException
+     * @param ComponentRegistrarInterface $componentRegistrar
+     * @param Filesystem\Directory\ReadFactory $readDirFactory
      */
     public function __construct(
         Cache $cache,
@@ -145,7 +156,9 @@ class ThemeUninstallCommand extends Command
         ThemeProvider $themeProvider,
         Remove $remove,
         BackupRollbackFactory $backupRollbackFactory,
-        ThemeValidator $themeValidator
+        ThemeValidator $themeValidator,
+        ComponentRegistrarInterface $componentRegistrar,
+        Filesystem\Directory\ReadFactory $readDirFactory
     ) {
         $this->cache = $cache;
         $this->cleanupFiles = $cleanupFiles;
@@ -158,6 +171,8 @@ class ThemeUninstallCommand extends Command
         $this->themeProvider = $themeProvider;
         $this->backupRollbackFactory = $backupRollbackFactory;
         $this->themeValidator = $themeValidator;
+        $this->componentRegistrar = $componentRegistrar;
+        $this->readDirFactory = $readDirFactory;
         parent::__construct();
     }
 
@@ -359,10 +374,11 @@ class ThemeUninstallCommand extends Command
      */
     private function getPackageName($themePath)
     {
-        $themesDirRead = $this->filesystem->getDirectoryRead(DirectoryList::THEMES);
-        if ($themesDirRead->isExist($themePath . '/composer.json')) {
+        $themePath = $this->componentRegistrar->getPath(ComponentRegistrar::THEME, $themePath);
+        $themeDir = $this->readDirFactory->create($themePath);
+        if ($themeDir->isExist('composer.json')) {
             $rawData = [];
-            $themeFile = $themesDirRead->readFile($themePath . '/composer.json');
+            $themeFile = $themeDir->readFile('composer.json');
             if ($themeFile) {
                 $rawData = \Zend_Json::decode($themeFile);
             }

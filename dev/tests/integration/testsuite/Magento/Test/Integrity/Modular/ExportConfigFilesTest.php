@@ -5,6 +5,8 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
+use Magento\Framework\Component\ComponentRegistrar;
+
 class ExportConfigFilesTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -15,10 +17,12 @@ class ExportConfigFilesTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var $moduleDirSearch \Magento\Framework\Module\Dir\Search */
-        $moduleDirSearch = $objectManager->get('Magento\Framework\Module\Dir\Search');
+        /** @var $moduleDirSearch \Magento\Framework\Component\DirSearch */
+        $moduleDirSearch = $objectManager->get('Magento\Framework\Component\DirSearch');
         $fileIteratorFactory = $objectManager->get('Magento\Framework\Config\FileIteratorFactory');
-        $xmlFiles = $fileIteratorFactory->create($moduleDirSearch->collectFiles('etc/{*/export.xml,export.xml}'));
+        $xmlFiles = $fileIteratorFactory->create(
+            $moduleDirSearch->collectFiles(ComponentRegistrar::MODULE, 'etc/{*/export.xml,export.xml}')
+        );
 
         $validationStateMock = $this->getMock('Magento\Framework\Config\ValidationStateInterface');
         $validationStateMock->expects($this->any())->method('isValidated')->will($this->returnValue(true));

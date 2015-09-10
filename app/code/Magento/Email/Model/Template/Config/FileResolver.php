@@ -7,8 +7,9 @@
  */
 namespace Magento\Email\Model\Template\Config;
 
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\FileIteratorFactory;
-use Magento\Framework\Module\Dir\Search;
+use Magento\Framework\Component\DirSearch;
 
 class FileResolver implements \Magento\Framework\Config\FileResolverInterface
 {
@@ -18,7 +19,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
     protected $iteratorFactory;
 
     /**
-     * @var Search
+     * @var DirSearch
      */
     protected $dirSearch;
 
@@ -26,11 +27,11 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
      * Constructor
      *
      * @param FileIteratorFactory $iteratorFactory
-     * @param Search $dirSearch
+     * @param DirSearch $dirSearch
      */
     public function __construct(
         FileIteratorFactory $iteratorFactory,
-        Search $dirSearch
+        DirSearch $dirSearch
     ) {
         $this->iteratorFactory = $iteratorFactory;
         $this->dirSearch = $dirSearch;
@@ -41,7 +42,9 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
      */
     public function get($filename, $scope)
     {
-        $iterator = $this->iteratorFactory->create($this->dirSearch->collectFiles('etc/' . $filename));
+        $iterator = $this->iteratorFactory->create(
+            $this->dirSearch->collectFiles(ComponentRegistrar::MODULE, 'etc/' . $filename)
+        );
         return $iterator;
     }
 }
