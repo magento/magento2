@@ -12,22 +12,29 @@ define([
 ], function ($) {
 
     $.widget('mage.productGallery',
+
         $.mage.productGallery,
         {
             _create: function() {
                 this._bind();
             },
 
-            _bind: function()
-            {
+            _bind: function() {
                 $(this.element).on('click', this.showModal.bind(this));
+                $('.gallery.ui-sortable').on('openDialog', $.proxy(this._onOpenDialog, this));
             },
 
-            showModal: function(e)
+            _onOpenDialog: function(e, imageData)  {
+                if(imageData.media_type != 'external-video') {
+                    return;
+                }
+                this.showModal();
+            },
+
+            showModal: function(imageData)
             {
                 $('#new-video').modal('openModal');
                 $('.video_image_role').prop('disabled', false);
-                $('#new_video_form')[0].reset();
                 if ($('.image.item').length < 1) {
                     $('.video_image_role').prop('checked', true);
                 }
