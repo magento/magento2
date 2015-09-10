@@ -284,8 +284,8 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     {
         $valueId = 14;
         $entityId = 1;
-        $this->connection->expects($this->at(0))->method('quoteInto')->with('value_id = ?', $valueId);
-        $this->connection->expects($this->at(1))->method('quoteInto')->with('entity_id = ?', $entityId);
+        $this->select->expects($this->at(0))->method('quoteInto')->with('value_id = ?', $valueId);
+        $this->select->expects($this->at(1))->method('quoteInto')->with('entity_id = ?', $entityId);
         $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));
         $this->select->expects($this->at(0))->method('from')->willReturnSelf();
         $this->select->expects($this->at(1))->method('where')->willReturnSelf();
