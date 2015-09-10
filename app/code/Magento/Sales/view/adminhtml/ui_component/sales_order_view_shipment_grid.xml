@@ -565,7 +565,7 @@
                 </item>
             </argument>
         </column>
-        <column name="actions" class="Magento\Sales\Ui\Component\Listing\Column\OrderShipmentActions">
+        <column name="actions" class="Magento\Sales\Ui\Component\Listing\Column\ViewAction">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="draggable" xsi:type="boolean">false</item>
@@ -576,6 +576,8 @@
                     <item name="data_type" xsi:type="string">actions</item>
                     <item name="filterable" xsi:type="boolean">false</item>
                     <item name="sortable" xsi:type="boolean">false</item>
+                    <item name="viewUrlPath" xsi:type="string">adminhtml/order_shipment/view</item>
+                    <item name="urlEntityParamName" xsi:type="string">shipment_id</item>
                 </item>
             </argument>
         </column>
