@@ -74,9 +74,14 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $encryptorMock;
 
     /**
-     * @var \Magento\Customer\Model\Customer|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\CustomerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerMock;
+    protected $customerRegistry;
+
+    /**
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customerRepository;
 
     protected function setUp()
     {
@@ -109,18 +114,17 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->encryptorMock = $this->getMockBuilder('\Magento\Framework\Encryption\Encryptor')
+        $this->encryptorMock = $this->getMockBuilder('Magento\Framework\Encryption\Encryptor')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->encryptorMock->expects($this->any())
-            ->method('isValidHashByVersion')
-            ->will(
-                $this->returnCallback(
-                    function ($arg1, $arg2) {
-                        return $arg1 == $arg2;
-                    }
-                )
-            );
+
+        $this->customerRegistry = $this->getMockBuilder('Magento\Customer\Model\CustomerRegistry')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->customerRepository = $this->getMockBuilder('Magento\Customer\Api\CustomerRepositoryInterface')
+            ->getMockForAbstractClass();
+
         $this->model = new Observer(
             $this->vat,
             $this->helperAddress,
@@ -130,7 +134,9 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             $this->messageManager,
             $this->escaper,
             $this->appState,
-            $this->encryptorMock
+            $this->encryptorMock,
+            $this->customerRegistry,
+            $this->customerRepository
         );
     }
 
@@ -770,44 +776,59 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    /**
-     * Test successfully password change if new password doesn't match old one
-     */
     public function testUpgradeCustomerPassword()
     {
-        $customerMock = $this->getMockBuilder('\Magento\Customer\Model\Customer')
+        $customerId = '1';
+        $password = 'password';
+        $passwordHash = 'hash:salt:999';
+
+        $model = $this->getMockBuilder('Magento\Customer\Model\Customer')
             ->disableOriginalConstructor()
-            ->setMethods(['getPasswordHash', 'changePassword', '__wakeup'])
+            ->setMethods(['getId'])
             ->getMock();
-        $customerMock->expects($this->once())->method('changePassword')->will($this->returnSelf());
-        $customerMock->expects($this->once())->method('getPasswordHash')->will($this->returnValue('old password'));
+        $customer = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+            ->getMockForAbstractClass();
+        $customerSecure = $this->getMockBuilder('Magento\Customer\Model\Data\CustomerSecure')
+            ->disableOriginalConstructor()
+            ->setMethods(['getPasswordHash', 'setPasswordHash'])
+            ->getMock();
+
+
+        $model->expects($this->exactly(2))
+            ->method('getId')
+            ->willReturn($customerId);
+        $this->customerRepository->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($customer);
+        $this->customerRegistry->expects($this->once())
+            ->method('retrieveSecureData')
+            ->with($customerId)
+            ->willReturn($customerSecure);
+        $customerSecure->expects($this->once())
+            ->method('getPasswordHash')
+            ->willReturn($passwordHash);
+        $this->encryptorMock->expects($this->once())
+            ->method('validateHashVersion')
+            ->with($passwordHash)
+            ->willReturn(false);
+        $this->encryptorMock->expects($this->once())
+            ->method('getHash')
+            ->with($password, true)
+            ->willReturn($passwordHash);
+        $customerSecure->expects($this->once())
+            ->method('setPasswordHash')
+            ->with($passwordHash);
+        $this->customerRepository->expects($this->once())
+            ->method('save')
+            ->with($customer);
 
         $event = new \Magento\Framework\DataObject();
-        $event->setData(['password' => 'different password', 'model' => $customerMock]);
+        $event->setData(['password' => 'password', 'model' => $model]);
 
         $observerMock = new \Magento\Framework\DataObject();
         $observerMock->setData('event', $event);
 
-        $this->model->upgradeCustomerPassword($observerMock);
-    }
-
-    /**
-     * Test failure password change if new password matches old one
-     */
-    public function testUpgradeCustomerPasswordNotChanged()
-    {
-        $customerMock = $this->getMockBuilder('\Magento\Customer\Model\Customer')
-            ->disableOriginalConstructor()
-            ->setMethods(['getPasswordHash', 'changePassword', '__wakeup'])
-            ->getMock();
-        $customerMock->expects($this->never())->method('changePassword');
-        $customerMock->expects($this->once())->method('getPasswordHash')->will($this->returnValue('same password'));
-
-        $event = new \Magento\Framework\DataObject();
-        $event->setData(['password' => 'same password', 'model' => $customerMock]);
-
-        $observerMock = new \Magento\Framework\DataObject();
-        $observerMock->setData('event', $event);
         $this->model->upgradeCustomerPassword($observerMock);
     }
 }

@@ -329,7 +329,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->_model->save();
         $this->assertNotContains('123123q', $this->_model->getPassword(), 'Password is expected to be hashed');
         $this->assertRegExp(
-            '/^[0-9a-f]+:[0-9a-zA-Z]{32}$/',
+            '/^[0-9a-f]+:[0-9a-zA-Z]{32}:[0-9]+$/',
             $this->_model->getPassword(),
             'Salt is expected to be saved along with the password'
         );
