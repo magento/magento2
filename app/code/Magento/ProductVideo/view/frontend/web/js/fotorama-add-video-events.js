@@ -5,6 +5,9 @@ require([ "jquery", "jquery/ui", "catalogGallery"], function( $ ) {
     a.href = href;
     return a;
   }
+  $.fn.LoaderVideo = function () {
+    console.log('LoaderVideo');
+  };
 
   function parseURL (href, forceVideo) {
     if (typeof href !== 'string') return href;
@@ -227,5 +230,9 @@ require([ "jquery", "jquery/ui", "catalogGallery"], function( $ ) {
         }
       });
     }
+  });
+
+  $('.gallery-placeholder').on('fotorama:ready', function(){
+    $(this).find('.fotorama').AddFotoramaVideoEvents();
   });
 });

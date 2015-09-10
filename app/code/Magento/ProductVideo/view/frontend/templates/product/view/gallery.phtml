@@ -10,11 +10,7 @@
  * @var $block \Magento\ProductVideo\Block\Product\View\Gallery
  */
 ?>
-<div class="gallery-placeholder"></div>
-<script>
-  var mediaGalleryData = <?php echo $block->getMediaGalleryDataJson(); ?>;
-  var generalVideoSettings = <?php echo $block->getVideoSettingsJson(); ?>;
-</script>
+<div class="gallery-placeholder" data-mage-init='{"fotoramaAddVideoEvents":{ "VideoData":<?php echo $block->getMediaGalleryDataJson(); ?>, "VideoSettings":<?php echo $block->getVideoSettingsJson(); ?>}}'></div>
 <script type="text/x-magento-init">
     {
         ".gallery-placeholder": {
@@ -61,3 +57,4 @@
         }
     }
 </script>
+<div class="wait-for-fotorama" ></div>
