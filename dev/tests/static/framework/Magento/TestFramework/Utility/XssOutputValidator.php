@@ -122,10 +122,8 @@ class XssOutputValidator
         foreach ($echoCommands as $echoCommand) {
             if ($this->isNotEscapeMarkedCommand($echoCommand)) {
                 $echoCommand = preg_replace('/^(.*?)echo/sim', 'echo', $echoCommand);
-                $echoCommandShort = preg_replace('/<[?]=(.*?)[?]>/sim', '\1', $echoCommand);
-
                 $xssUnsafeCommands = array_filter(
-                    explode('.', ltrim($echoCommandShort, 'echo')),
+                    explode('.', $this->prepareEchoCommand($echoCommand)),
                     [$this, 'isXssUnsafeCommand']
                 );
                 if (count($xssUnsafeCommands)) {
@@ -139,6 +137,16 @@ class XssOutputValidator
         }
 
         return $results;
+    }
+
+    /**
+     * @param string $command
+     * @return string
+     */
+    private function prepareEchoCommand($command)
+    {
+        $command = preg_replace('/<[?]=(.*?)[?]>/sim', '\1', $command);
+        return ltrim(explode(';', $command)[0], 'echo');
     }
 
     /**
