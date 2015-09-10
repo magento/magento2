@@ -10,6 +10,8 @@ namespace Magento\ImportExport\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\HTTP\Adapter\FileTransferFactory;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
  * Import model
@@ -55,6 +57,16 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Import images file directory.
      */
     const FIELD_NAME_IMG_FILE_DIR = 'import_images_file_dir';
+
+    /**
+     * Allowed errors count field name
+     */
+    const FIELD_NAME_ALLOWED_ERROR_COUNT = 'allowed_error_count';
+
+    /**
+     * Validation startegt field name
+     */
+    const FIELD_NAME_VALIDATION_STRATEGY = 'validation_strategy';
 
     /**
      * Import field separator.
@@ -199,9 +211,9 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      */
     protected function _getEntityAdapter()
     {
+
         if (!$this->_entityAdapter) {
             $entities = $this->_importConfig->getEntities();
-
             if (isset($entities[$this->getEntity()])) {
                 try {
                     $this->_entityAdapter = $this->_entityFactory->create($entities[$this->getEntity()]['model']);
@@ -255,31 +267,19 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     /**
      * Return operation result messages
      *
-     * @param bool $validationResult
+     * @param ProcessingErrorAggregatorInterface $validationResult
      * @return string[]
      */
-    public function getOperationResultMessages($validationResult)
+    public function getOperationResultMessages(ProcessingErrorAggregatorInterface $validationResult)
     {
         $messages = [];
         if ($this->getProcessedRowsCount()) {
-            if (!$validationResult) {
-                if ($this->getProcessedRowsCount() == $this->getInvalidRowsCount()) {
-                    $messages[] = __('This file is invalid. Please fix errors and re-upload the file.');
-                } elseif ($this->getErrorsCount() >= $this->getErrorsLimit()) {
-                    $messages[] = __(
-                        'You\'ve reached an error limit (%1). Please fix errors and re-upload the file.',
-                        $this->getErrorsLimit()
-                    );
-                } else {
-                    if ($this->isImportAllowed()) {
-                        $messages[] = __('Please fix errors and re-upload the file.');
-                    } else {
-                        $messages[] = __('The file is partially valid, but we can\'t import it for some reason.');
-                    }
-                }
+            if ($validationResult->getErrorsCount()) {
+                $messages[] = __('Data validation is failed. Please fix errors and re-upload the file.');
+
                 // errors info
-                foreach ($this->getErrors() as $errorCode => $rows) {
-                    $error = $errorCode . ' ' . __('in rows') . ': ' . implode(', ', $rows);
+                foreach ($validationResult->getRowsGroupedByErrorCode() as $errorMessage => $rows) {
+                    $error = $errorMessage . ' ' . __('in rows') . ': ' . implode(', ', $rows);
                     $messages[] = $error;
                 }
             } else {
@@ -289,16 +289,18 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                     $messages[] = __('The file is valid, but we can\'t import it for some reason.');
                 }
             }
-            $notices = $this->getNotices();
-            if (is_array($notices)) {
-                $messages = array_merge($messages, $notices);
-            }
+
             $messages[] = __(
                 'Checked rows: %1, checked entities: %2, invalid rows: %3, total errors: %4',
                 $this->getProcessedRowsCount(),
                 $this->getProcessedEntitiesCount(),
-                $this->getInvalidRowsCount(),
-                $this->getErrorsCount()
+                $validationResult->getInvalidRowsCount(),
+                $validationResult->getErrorsCount(
+                    [
+                        ProcessingError::ERROR_LEVEL_CRITICAL,
+                        ProcessingError::ERROR_LEVEL_NOT_CRITICAL
+                    ]
+                )
             );
         } else {
             $messages[] = __('This file does not contain any data.');
@@ -359,56 +361,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     }
 
     /**
-     * Get entity adapter errors.
-     *
-     * @return array
-     */
-    public function getErrors()
-    {
-        return $this->_getEntityAdapter()->getErrorMessages();
-    }
-
-    /**
-     * Returns error counter.
-     *
-     * @return int
-     */
-    public function getErrorsCount()
-    {
-        return $this->_getEntityAdapter()->getErrorsCount();
-    }
-
-    /**
-     * Returns error limit value.
-     *
-     * @return int
-     */
-    public function getErrorsLimit()
-    {
-        return $this->_getEntityAdapter()->getErrorsLimit();
-    }
-
-    /**
-     * Returns invalid rows count.
-     *
-     * @return int
-     */
-    public function getInvalidRowsCount()
-    {
-        return $this->_getEntityAdapter()->getInvalidRowsCount();
-    }
-
-    /**
-     * Returns entity model noticees.
-     *
-     * @return string[]
-     */
-    public function getNotices()
-    {
-        return $this->_getEntityAdapter()->getNotices();
-    }
-
-    /**
      * Returns number of checked entities.
      *
      * @return int
@@ -442,7 +394,6 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
      * Import source file structure to DB.
      *
      * @return bool
-     * @throws \Magento\Framework\Exception\AlreadyExistsException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function importSource()
@@ -453,30 +404,54 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
 
         $this->addLogComment(__('Begin import of "%1" with "%2" behavior', $this->getEntity(), $this->getBehavior()));
 
-        try {
-            $result = $this->_getEntityAdapter()->importData();
-        } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
+        $result = $this->processImport();
+
+        if ($result) {
+            $this->addLogComment(
+                [
+                    __(
+                        'Checked rows: %1, checked entities: %2, invalid rows: %3, total errors: %4',
+                        $this->getProcessedRowsCount(),
+                        $this->getProcessedEntitiesCount(),
+                        $this->getErrorAggregator()->getInvalidRowsCount(),
+                        $this->getErrorAggregator()->getErrorsCount()
+                    ),
+                    __('The import was successful.'),
+                ]
+            );
+            $this->importHistoryModel->updateReport($this, true);
+        } else {
             $this->importHistoryModel->invalidateReport($this);
-            throw new \Magento\Framework\Exception\AlreadyExistsException(
-                __($e->getMessage())
+        }
+
+
+        return $result;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function processImport()
+    {
+        $errorAggregator = $this->_getEntityAdapter()->getErrorAggregator();
+        $errorAggregator->initValidationStrategy(
+            $this->getData(self::FIELD_NAME_VALIDATION_STRATEGY),
+            $this->getData(self::FIELD_NAME_ALLOWED_ERROR_COUNT)
+        );
+        try {
+            $this->_getEntityAdapter()->importData();
+        } catch (\Exception $e) {
+            $errorAggregator->addError(
+                \Magento\ImportExport\Model\Import\Entity\AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION,
+                ProcessingError::ERROR_LEVEL_CRITICAL,
+                null,
+                null,
+                null,
+                $e->getMessage()
             );
         }
 
-        $this->addLogComment(
-            [
-                __(
-                    'Checked rows: %1, checked entities: %2, invalid rows: %3, total errors: %4',
-                    $this->getProcessedRowsCount(),
-                    $this->getProcessedEntitiesCount(),
-                    $this->getInvalidRowsCount(),
-                    $this->getErrorsCount()
-                ),
-                __('The import was successful.'),
-            ]
-        );
-        $this->importHistoryModel->updateReport($this, true);
-
-        return $result;
+        return !$errorAggregator->hasToBeTerminated();
     }
 
     /**
@@ -487,6 +462,15 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     public function isImportAllowed()
     {
         return $this->_getEntityAdapter()->isImportAllowed();
+    }
+
+    /**
+     * @return ProcessingErrorAggregatorInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function getErrorAggregator()
+    {
+        return $this->_getEntityAdapter()->getErrorAggregator();
     }
 
     /**
@@ -577,11 +561,25 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     public function validateSource(\Magento\ImportExport\Model\Import\AbstractSource $source)
     {
         $this->addLogComment(__('Begin data validation'));
-        $adapter = $this->_getEntityAdapter()->setSource($source);
-        $result = $adapter->isDataValid();
+        try {
+            $adapter = $this->_getEntityAdapter()->setSource($source);
+            $errorAggregator = $adapter->validateData();
+        } catch (\Exception $e) {
+            $errorAggregator = $this->getErrorAggregator();
+            $errorAggregator->addError(
+                \Magento\ImportExport\Model\Import\Entity\AbstractEntity::ERROR_CODE_SYSTEM_EXCEPTION,
+                ProcessingError::ERROR_LEVEL_CRITICAL,
+                null,
+                null,
+                null,
+                $e->getMessage()
+            );
+        }
 
-        $messages = $this->getOperationResultMessages($result);
+        $messages = $this->getOperationResultMessages($errorAggregator);
         $this->addLogComment($messages);
+
+        $result = !$errorAggregator->getErrorsCount();
         if ($result) {
             $this->addLogComment(__('Import data validation is complete.'));
         }
@@ -636,6 +634,7 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
                 $behaviourData[$entityCode] = [
                     'token' => $behaviorClassName,
                     'code' => $behavior->getCode() . '_behavior',
+                    'notes' => $behavior->getNotes($entityCode),
                 ];
             } else {
                 throw new \Magento\Framework\Exception\LocalizedException(
@@ -678,12 +677,14 @@ class Import extends \Magento\ImportExport\Model\AbstractModel
     public function isReportEntityType($entity = null)
     {
         $result = false;
+        if (!$entity) {
+            $entity = $this->getEntity();
+        }
         if ($entity !== null && $this->_getEntityAdapter()->getEntityTypeCode() != $entity) {
             $entities = $this->_importConfig->getEntities();
-            if (isset($entities[$this->getEntity()])) {
+            if (isset($entities[$entity])) {
                 try {
-                    $adapter = $this->_entityFactory->create($entities[$entity]['model']);
-                    $result = $adapter->isNeedToLogInHistory();
+                    $result = $this->_getEntityAdapter()->isNeedToLogInHistory();
                 } catch (\Exception $e) {
                     throw new \Magento\Framework\Exception\LocalizedException(__('Please enter a correct entity model'));
                 }
