@@ -78,9 +78,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $connection->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
         $select->expects($this->any())->method('getConnection')->willReturn($connection);
         $this->connection->expects($this->any())->method('select')->will($this->returnValue($select));
-        $this->connection->expects($this->any())->method('fetchPairs')->will($this->returnValue([
-            '1' => '1', '2' => '2'
-        ]));
+        $this->connection->expects($this->any())->method('fetchAll')->will($this->returnValue([]));
         $this->connection->expects($this->any())->method('insertOnDuplicate')->willReturnSelf();
         $this->connection->expects($this->any())->method('delete')->willReturnSelf();
         $this->connection->expects($this->any())->method('quoteInto')->willReturn('');
