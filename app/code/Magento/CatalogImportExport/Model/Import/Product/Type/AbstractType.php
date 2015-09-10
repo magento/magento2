@@ -184,7 +184,7 @@ abstract class AbstractType
     {
         // temporary storage for attributes' parameters to avoid double querying inside the loop
         $entityId = $this->_entityModel->getEntityTypeId();
-        $entityAttributes = $this->_connection->fetchPairs(
+        $entityAttributes = $this->_connection->fetchAll(
             $this->_connection->select()->from(
                 ['attr' => $this->_resource->getTableName('eav_entity_attribute')],
                 ['attr.attribute_id']
@@ -197,7 +197,10 @@ abstract class AbstractType
             )
         );
         $absentKeys = [];
-        foreach ($entityAttributes as $attributeId => $attributeSetName) {
+        foreach ($entityAttributes as $item) {
+            $attributeId = $item['attribute_id'];
+            $attributeSetName = $item['attribute_set_name'];
+
             if (!isset(self::$commonAttributesCache[$attributeId])) {
                 if (!isset($absentKeys[$attributeSetName])) {
                     $absentKeys[$attributeSetName] = [];
@@ -208,7 +211,10 @@ abstract class AbstractType
         foreach ($absentKeys as $attributeSetName => $attributeIds) {
             $this->attachAttributesById($attributeSetName, $attributeIds);
         }
-        foreach ($entityAttributes as $attributeId => $attributeSetName) {
+        foreach ($entityAttributes as $item) {
+            $attributeId = $item['attribute_id'];
+            $attributeSetName = $item['attribute_set_name'];
+
             if (isset(self::$commonAttributesCache[$attributeId])) {
                 $attribute = self::$commonAttributesCache[$attributeId];
                 $this->_addAttributeParams(
