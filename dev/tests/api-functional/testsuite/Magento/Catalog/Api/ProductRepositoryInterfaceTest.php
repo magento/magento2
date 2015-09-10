@@ -389,16 +389,14 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $mediaGalleryEntries = $response['media_gallery_entries'];
         $this->assertEquals(1, count($mediaGalleryEntries));
         unset($mediaGalleryEntries[0]['id']);
-        $expectedValue = [
-            [
-                'label' => 'tiny1_new_label',
-                'media_type' => 'image',
-                'position' => 1,
-                'disabled' => false,
-                'types' => ['image', 'small_image'],
-                'file' => '/t/i/' . $filename1,
-            ]
-        ];
+        $expectedValue = [[
+            'label' => 'tiny1_new_label',
+            'media_type' => 'image',
+            'position' => 1,
+            'disabled' => false,
+            'types' => ['image', 'small_image'],
+            'file' => '/t/i/' . $filename1,
+        ]];
         $this->assertEquals($expectedValue, $mediaGalleryEntries);
         //don't set the media_gallery_entries field, existing entry should not be touched
         unset($response['media_gallery_entries']);

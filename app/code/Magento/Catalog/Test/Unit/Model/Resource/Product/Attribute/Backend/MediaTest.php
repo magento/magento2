@@ -92,26 +92,24 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             'video_metadata_default' => 'metadata',
         ];
         $leftJoinTables = [
-            0 =>
-                [
-                    0 =>
-                        [
-                            'store_value' => 'catalog_product_entity_media_gallery_value_video',
-                        ],
-                    1 => 'main.value_id = store_value.value_id AND store_value.store_id = 0',
-                    2 =>
-                        [
-                            'video_provider' => 'provider',
-                            'video_url' => 'url',
-                            'video_title' => 'title',
-                            'video_description' => 'description',
-                            'video_metadata' => 'metadata',
-                        ],
-                ],
+            0 => [
+                0 =>
+                    [
+                        'store_value' => 'catalog_product_entity_media_gallery_value_video',
+                    ],
+                1 => 'main.value_id = store_value.value_id AND store_value.store_id = 0',
+                2 =>
+                    [
+                        'video_provider' => 'provider',
+                        'video_url' => 'url',
+                        'video_title' => 'title',
+                        'video_description' => 'description',
+                        'video_metadata' => 'metadata',
+                    ],
+            ],
         ];
         $whereCondition = null;
         $getTableReturnValue = 'table';
-
         $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));
         $this->select->expects($this->at(0))->method('from')->with(
             [
@@ -126,17 +124,14 @@ class MediaTest extends \PHPUnit_Framework_TestCase
                 'video_metadata_default' => 'metadata',
             ]
         )->willReturnSelf();
-
         $this->select->expects($this->at(1))->method('where')->with(
             'main.value_id IN(?)',
             $ids
         )->willReturnSelf();
-
         $this->select->expects($this->at(2))->method('where')->with(
             'main.store_id = ?',
             $storeId
         )->willReturnSelf();
-
         $resultRow = [
             [
                 'value_id' => '4',
@@ -167,7 +162,6 @@ class MediaTest extends \PHPUnit_Framework_TestCase
                 'video_metadata' => '',
             ]
         ];
-
         $this->connection->expects($this->once())->method('fetchAll')
                          ->with($this->select)
                          ->willReturn($resultRow);
@@ -180,7 +174,6 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             $leftJoinTables,
             $whereCondition
         );
-
         $this->assertEquals($resultRow, $methodResult);
     }
 

@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 use Magento\Catalog\Model\Product;
+use Magento\MediaStorage\Model\File\Uploader as FileUploader;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\Exception\LocalizedException;
 
@@ -45,6 +46,8 @@ class Media extends Product\Attribute\Backend\AbstractMedia
     /**
      * @param Product $object
      * @return Product
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function beforeSave($object)
     {
@@ -119,6 +122,8 @@ class Media extends Product\Attribute\Backend\AbstractMedia
     /**
      * @param Product $object
      * @return Product
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function afterSave($object)
     {
@@ -281,11 +286,7 @@ class Media extends Product\Attribute\Backend\AbstractMedia
             $destinationFile = $forTmp
                 ? $this->_mediaDirectory->getAbsolutePath($this->_mediaConfig->getTmpMediaPath($file))
                 : $this->_mediaDirectory->getAbsolutePath($this->_mediaConfig->getMediaPath($file));
-            $destFile = dirname(
-                    $file
-                ) . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
-                    $destinationFile
-                );
+            $destFile = dirname($file) . '/' . FileUploader::getNewFileName($destinationFile);
         }
 
         return $destFile;
