@@ -7,6 +7,7 @@ namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Customer\Model\AccountManagement;
 use Magento\Framework\App\Area;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\ScopeInterface;
 
