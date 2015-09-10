@@ -81,13 +81,14 @@ class ImageEntryConverter implements EntryConverterInterface
     public function convertFrom(ProductAttributeMediaGalleryEntryInterface $entry)
     {
         $entryArray = [
-            "value_id" => $entry->getId(),
-            "file" => $entry->getFile(),
-            "label" => $entry->getLabel(),
-            "position" => $entry->getPosition(),
-            "disabled" => $entry->isDisabled(),
-            "types" => $entry->getTypes(),
-            "content" => $this->convertFromMediaGalleryEntryContentInterface($entry->getContent()),
+            'value_id' => $entry->getId(),
+            'file' => $entry->getFile(),
+            'label' => $entry->getLabel(),
+            'position' => $entry->getPosition(),
+            'disabled' => $entry->isDisabled(),
+            'types' => $entry->getTypes(),
+            'media_type' => $entry->getMediaType(),
+            'content' => $this->convertFromMediaGalleryEntryContentInterface($entry->getContent()),
         ];
         return $entryArray;
     }

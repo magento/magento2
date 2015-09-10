@@ -4,17 +4,18 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\ProductVideo\Model\Product\Attribute\Media;
+namespace Magento\ProductVideo\Model\Plugin;
 
-use Magento\Catalog\Model\Product\Attribute\Backend\Media\AbstractEntryProcessor;
 use Magento\Customer\Model\Resource\Form\Attribute;
-use \Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Catalog\Model\Product;
+use Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter;
+use Magento\Catalog\Model\Product\Attribute\Backend\Media as MediaBackendModel;
 
 /**
  * Class ImageEntryProcessor
  */
-class ExternalVideoEntryProcessor extends AbstractEntryProcessor
+class ExternalVideoEntryProcessor
 {
     /**
      * Video Data Table name
@@ -37,49 +38,73 @@ class ExternalVideoEntryProcessor extends AbstractEntryProcessor
     ];
 
     /**
-     * @param Product $product
-     * @param AbstractAttribute $attribute
-     * @return void
+     * @var \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media
      */
-    public function afterLoad(Product $product, AbstractAttribute $attribute)
+    protected $resourceEntryMediaGallery;
+
+    /**
+     * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $resourceEntryMediaGallery
+     */
+    public function __construct(
+        \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $resourceEntryMediaGallery
+    ) {
+        $this->resourceEntryMediaGallery = $resourceEntryMediaGallery;
+    }
+
+    /**
+     * @param MediaBackendModel $mediaBackendModel
+     * @param Product $product
+     * @return Product
+     */
+    public function afterAfterLoad(MediaBackendModel $mediaBackendModel, Product $product)
     {
-        $mediaCollection = $this->getMediaEntriesDataCollection($product, $attribute);
+        $mediaCollection = $this->getMediaEntriesDataCollection($product, $mediaBackendModel->getAttribute());
         if (!empty($mediaCollection)) {
             $ids = $this->collectVideoEntriesIds($mediaCollection);
             $videoDataCollection = $this->loadVideoDataById($ids, $product->getStoreId());
             $mediaEntriesDataCollection = $this->addVideoDataToMediaEntries($mediaCollection, $videoDataCollection);
-            $product->setData($attribute->getAttributeCode(), $mediaEntriesDataCollection);
+            $product->setData($mediaBackendModel->getAttribute()->getAttributeCode(), $mediaEntriesDataCollection);
         }
+
+        return $product;
     }
 
     /**
+     * @param MediaBackendModel $mediaBackendModel
      * @param Product $product
-     * @param AbstractAttribute $attribute
-     * @return void
+     * @return Product
      */
-    public function beforeSave(Product $product, AbstractAttribute $attribute)
+    public function afterBeforeSave(MediaBackendModel $mediaBackendModel, Product $product)
     {
+        $attribute = $mediaBackendModel->getAttribute();
         $mediaCollection = $this->getMediaEntriesDataCollection($product, $attribute);
         if (!empty($mediaCollection)) {
             $storeDataCollection = $this->loadStoreViewVideoData($mediaCollection, $product->getStoreId());
             $mediaCollection = $this->addAdditionalStoreData($mediaCollection, $storeDataCollection);
-            $product->setData($attribute->getAttributeCode(), $mediaCollection);
+            $product->setData(
+                $attribute->getAttributeCode(),
+                $mediaCollection + $product->getData($attribute->getAttributeCode())
+            );
         }
+
+        return $product;
     }
 
     /**
+     * @param MediaBackendModel $mediaBackendModel
      * @param Product $product
-     * @param AbstractAttribute $attribute
-     * @return void
+     * @return Product
      */
-    public function afterSave(Product $product, AbstractAttribute $attribute)
+    public function afterAfterSave(MediaBackendModel $mediaBackendModel, Product $product)
     {
-        $mediaCollection = $this->getMediaEntriesDataCollection($product, $attribute);
+        $mediaCollection = $this->getMediaEntriesDataCollection($product, $mediaBackendModel->getAttribute());
         if (!empty($mediaCollection)) {
             $videoDataCollection = $this->collectVideoData($mediaCollection);
             $this->saveVideoData($videoDataCollection, $product->getStoreId());
             $this->saveAdditionalStoreData($videoDataCollection);
         }
+
+        return $product;
     }
 
     /**
@@ -186,7 +211,7 @@ class ExternalVideoEntryProcessor extends AbstractEntryProcessor
         $videoDataCollection = [];
         foreach ($mediaCollection as $item) {
             if (!empty($item['media_type'])
-                && !$item['removed']
+                && empty($item['removed'])
                 && $item['media_type'] == ExternalVideoEntryConverter::MEDIA_TYPE_CODE
             ) {
                 $videoData = $this->extractVideoDataFromRowData($item);
@@ -248,7 +273,7 @@ class ExternalVideoEntryProcessor extends AbstractEntryProcessor
         $ids = [];
         foreach ($mediaCollection as $item) {
             if (!empty($item['media_type'])
-                && !$item['removed']
+                && empty($item['removed'])
                 && $item['media_type'] == ExternalVideoEntryConverter::MEDIA_TYPE_CODE
                 && isset($item['save_data_from'])
             ) {
