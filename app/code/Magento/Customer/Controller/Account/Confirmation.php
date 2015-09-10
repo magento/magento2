@@ -36,6 +36,7 @@ class Confirmation extends Action implements AccountInterface
     /**
      * @param Context $context
      * @param Session $customerSession
+     * @param PageFactory $resultPageFactory
      * @param StoreManagerInterface $storeManager
      * @param AccountManagementInterface $customerAccountManagement
      */

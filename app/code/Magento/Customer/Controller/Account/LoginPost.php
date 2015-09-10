@@ -16,6 +16,9 @@ use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Data\Form\FormKey\Validator;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class LoginPost extends Action implements AccountInterface
 {
     /** @var AccountManagementInterface */
