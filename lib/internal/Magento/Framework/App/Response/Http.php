@@ -170,6 +170,7 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
         $objectManager = ObjectManager::getInstance();
         $this->cookieManager = $objectManager->create('Magento\Framework\Stdlib\CookieManagerInterface');
         $this->cookieMetadataFactory = $objectManager->get('Magento\Framework\Stdlib\Cookie\CookieMetadataFactory');
+        $this->request = $objectManager->get('Magento\Framework\App\Request\Http');
     }
 
     /**
