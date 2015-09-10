@@ -110,6 +110,7 @@
         "magento/module-dhl": "self.version",
         "magento/module-directory": "self.version",
         "magento/module-downloadable": "self.version",
+        "magento/module-downloadable-import-export": "self.version",
         "magento/module-eav": "self.version",
         "magento/module-email": "self.version",
         "magento/module-encryption-key": "self.version",
