@@ -88,13 +88,17 @@ class XssOutputValidator
         $fileContent = $this->replacePhpQuoteWithPlaceholders($fileContent);
         $fileContent = $this->replacePhpCommentsWithPlaceholders($fileContent);
 
-        $this->addOriginReplacement('\'\'', '-*=single=*-');
-        $this->addOriginReplacement('""', '-*=double=*-');
+        $this->addOriginReplacement('\'\'', "'-*=single=*-'");
+        $this->addOriginReplacement('""', '"-*=double=*-"');
 
-        if (preg_match_all('/<[?]php(.*?)[?]>/sm', $fileContent, $phpBlockMatches)) {
-            foreach ($phpBlockMatches[1] as $phpBlock) {
+        if (preg_match_all('/<[?](php|=)(.*?)[?]>/sm', $fileContent, $phpBlockMatches)) {
+            foreach ($phpBlockMatches[2] as $index => $phpBlock) {
                 $phpCommands = explode(';', $phpBlock);
-                $echoCommands = preg_grep('#( |^|/\*.*?\*/)echo[\s(]+.*#sm', $phpCommands);
+                if ($phpBlockMatches[1][$index] == 'php') {
+                    $echoCommands = preg_grep('#( |^|/\*.*?\*/)echo[\s(]+.*#sm', $phpCommands);
+                } else {
+                    $echoCommands[] = $phpBlockMatches[0][$index];
+                }
                 $results = array_merge(
                     $results,
                     $this->getEchoUnsafeCommands($echoCommands)
@@ -118,8 +122,10 @@ class XssOutputValidator
         foreach ($echoCommands as $echoCommand) {
             if ($this->isNotEscapeMarkedCommand($echoCommand)) {
                 $echoCommand = preg_replace('/^(.*?)echo/sim', 'echo', $echoCommand);
+                $echoCommandShort = preg_replace('/<[?]=(.*?)[?]>/sim', '\1', $echoCommand);
+
                 $xssUnsafeCommands = array_filter(
-                    explode('.', ltrim($echoCommand, 'echo')),
+                    explode('.', ltrim($echoCommandShort, 'echo')),
                     [$this, 'isXssUnsafeCommand']
                 );
                 if (count($xssUnsafeCommands)) {
@@ -184,19 +190,45 @@ class XssOutputValidator
     public function isXssUnsafeCommand($command)
     {
         $command = trim($command);
-        $cutCommand = strpos($command, '(') !== false ? substr($command, 0, strpos($command, '(') + 1) : $command;
 
         switch (true)
         {
-            case preg_match('/->(escapeUrl|escapeQuote|escapeXssInUrl|.*html.*)\(/simU', $cutCommand):
+            case preg_match('/->(escapeUrl|escapeQuote|escapeXssInUrl|.*html.*)\(/simU', $this->getLastMethod($command)):
                 return false;
-            case preg_match('/^\((int|bool)\)/sim', $command):
+            case preg_match('/^\((int|bool|float)\)/sim', $command):
                 return false;
             case preg_match('/^count\(/sim', $command):
                 return false;
+            case preg_match("/^'.*'$/sim", $command):
+                return false;
+            case preg_match('/^".*?"$/sim', $command, $matches):
+                return $this->isContainPhpVariables($this->getOrigin($matches[0]));
             default:
                 return true;
         }
+    }
+
+    /**
+     * @param string $command
+     * @return string
+     */
+    private function getLastMethod($command)
+    {
+        if (preg_match_all('/->.*?\(.*?\)/sim', $command, $matches)) {
+            $command = end($matches[0]);
+            $command = substr($command, 0, strpos($command, '(') + 1);
+        }
+
+        return $command;
+    }
+
+    /**
+     * @param string $content
+     * @return int
+     */
+    private function isContainPhpVariables($content)
+    {
+        return preg_match('/[^\\\\]\$[a-z_\x7f-\xff]/sim', $content);
     }
 
     /**
@@ -207,12 +239,12 @@ class XssOutputValidator
     {
         $origins = [];
         $replacements = [];
-        if (preg_match_all('/<[?]php(.*?)[?]>/sm', $fileContent, $phpBlockMatches)) {
-            foreach ($phpBlockMatches[1] as $phpBlock) {
+        if (preg_match_all('/<[?](php|=)(.*?)[?]>/sm', $fileContent, $phpBlockMatches)) {
+            foreach ($phpBlockMatches[2] as $phpBlock) {
 
                 $phpBlockQuoteReplaced = preg_replace(
                     ['/([^\\\\])\'\'/si', '/([^\\\\])""/si'],
-                    ['\1-*=single=*-', '\1-*=double=*-'],
+                    ["\1'-*=single=*-'", '\1"-*=double=*-"'],
                     $phpBlock
                 );
 
@@ -292,8 +324,8 @@ class XssOutputValidator
      */
     private function addOriginReplacement($origin, $replacement)
     {
-        $this->origins[] = $origin;
-        $this->replacements[] = $replacement;
+        $this->origins[$replacement] = $origin;
+        $this->replacements[$replacement] = $replacement;
     }
 
     /**
@@ -313,6 +345,15 @@ class XssOutputValidator
     private function getOrigins()
     {
         return $this->origins;
+    }
+
+    /**
+     * @param string $key
+     * @return string|null
+     */
+    private function getOrigin($key)
+    {
+        return array_key_exists($key, $this->origins) ? $this->origins[$key] : null;
     }
 
     /**

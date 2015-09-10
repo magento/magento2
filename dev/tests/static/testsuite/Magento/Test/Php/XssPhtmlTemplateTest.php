@@ -27,10 +27,15 @@ class XssPhtmlTemplateTest extends \PHPUnit_Framework_TestCase
              *
              * 1. /\* @noEscape \*\/ before output. Output doesn't require escaping. Test is green.
              * 2. /\* @escapeNotVerified \*\/ before output. Output escaping is not checked and
-             *    should be verified (Additional command should be provided to run report which will
-             *    show list of defects). Test is green.
-             * 3. {object}->{suffix}Html{postfix}(). Output is properly escaped. Test is green.
-             * 4. Any of p.1-3. Output is not escaped. Test is red.
+             *    should be verified. Test is green.
+             * 3. Methods which contains "html" in their names (e.g. echo $object->{suffix}Html{postfix}() ).
+             *    Data is ready for the HTML output. Test is green.
+             * 4. AbstractBlock methods escapeHtml, escapeUrl, escapeQuote, escapeXssInUrl are allowed. Test is green.
+             * 5. Type casting and php function count() are allowed
+             *    (e.g. echo (int)$var, echo (float)$var, echo (bool)$var, echo count($var)). Test is green.
+             * 6. Output in single quotes (e.g. echo 'some text'). Test is green.
+             * 7. Output in double quotes without variables (e.g. echo "some text"). Test is green.
+             * 8. Other of p.1-7. Output is not escaped. Test is red.
              *
              * @param string $file
              */

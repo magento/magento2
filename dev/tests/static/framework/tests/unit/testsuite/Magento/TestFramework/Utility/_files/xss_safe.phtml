@@ -6,6 +6,7 @@
 
 // @codingStandardsIgnoreFile
 ?>
+
 <?php /* @escapeNotVerified */ echo $block->getSomeData();?>
 <?php /* @noEscape */ echo $block->getSomeData();?>
 <input name="form_key" type="hidden" value="<?php echo $block->escapeUrl($var) ?>" />
@@ -14,6 +15,11 @@
 echo $var;
 <?php echo $block->getHtmlId("bla bla") ?>
 <?php echo $block->getIdHtml("bla bla") ?>
+<?= $block->getIdHtml("bla bla"); ?>
+<?php echo "\$var1"; ?>
+<?php echo '$var'; ?>
+<?php echo "bla"; ?>
+<?php echo 'bla'; ?>
 <?php echo (int)$var; ?>
 <?php echo (bool)$var; ?>
 <?php echo count($var); ?>
@@ -24,7 +30,7 @@ echo $var;
     $block->escapeXssInUrl("bla bla");
 ?>
 <?php /* @noEscape */ echo '\'' . $code . '\',\'' . $block->escapeQuote($data['parentSymbol']) . '\''; ?>
-
+<?= $block->getExtendedElement($switchAttributeCode)->toHtml(); ?>
 <?php
 /**
  * echo $someVar;

@@ -7,11 +7,12 @@
 // @codingStandardsIgnoreFile
 ?>
 <?php echo $block->getSomeData();?>
+<?=  $block->getTitle();?>
 <?php echo $object->getSomeMethod($block->getHtmlId());?>
-<?php echo $block->getHtmlId() . "" . "bla";?>
+<?php echo "Title: $title";?>
 <?php echo $block->escapeUrl($var) . $var . 'bla';?>
 <?php echo $var;?>
-<?php echo "bla";?>
+<?= $someVar?>
 <?php echo __("bla");?>
 
 <?php echo $object->methodHtml() .

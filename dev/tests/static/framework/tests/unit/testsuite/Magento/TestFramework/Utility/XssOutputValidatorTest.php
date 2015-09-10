@@ -27,7 +27,7 @@ class XssOutputValidatorTest extends \PHPUnit_Framework_TestCase
         $fixturePath = __DIR__ . '/_files/';
         return [
             'xss_safe' => [$fixturePath . 'xss_safe.phtml', ''],
-            'xss_unsafe' => [$fixturePath . 'xss_unsafe.phtml', '9,10,11,12,13,14,15,17,21,22'],
+            'xss_unsafe' => [$fixturePath . 'xss_unsafe.phtml', '9,10,11,12,13,14,15,16,18,22,23'],
         ];
     }
 }
