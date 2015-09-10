@@ -39,7 +39,7 @@ class Dir
     public function getAreaConfiguration($path)
     {
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $key => $themePath) {
-            if (strpos($themePath, $path) !== FALSE) {
+            if (strpos($themePath, $path) !== false) {
                 $pathPieces = explode('/', $key);
                 $area = array_shift($pathPieces);
                 return ['area' => $area, 'theme_path_pieces' => $pathPieces];
