@@ -178,6 +178,20 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
     }
 
     /**
+     * Get library directories exclude patterns
+     *
+     * @return array
+     */
+    private function getLibraryExcludePatterns()
+    {
+        $libraryExcludePatterns = [];
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryPath) {
+            $libraryExcludePatterns[] = "#^" . $libraryPath . "/[\\w]+/[\\w]+/([\\w]+/)?Test#";
+        }
+        return $libraryExcludePatterns;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -195,10 +209,7 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
             "#^" . $this->directoryList->getPath(DirectoryList::SETUP) . "/[\\w]+/[\\w]+/Test#",
             "#^" . $this->directoryList->getRoot() . "/dev/tools/Magento/Tools/[\\w]+/Test#"
         ];
-        $librariesExcludePatterns = [];
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryPath) {
-            $librariesExcludePatterns[] = "#^" . $libraryPath . "/[\\w]+/[\\w]+/([\\w]+/)?Test#";
-        }
+        $librariesExcludePatterns = $this->getLibraryExcludePatterns();
         $testExcludePatterns = array_merge($testExcludePatterns, $modulesExcludePatterns, $librariesExcludePatterns);
         $fileExcludePatterns = $input->getOption('exclude-pattern') ?
             [$input->getOption(self::INPUT_KEY_EXCLUDE_PATTERN)] : ['#[\\\\/]M1[\\\\/]#i'];
