@@ -21,7 +21,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
     /**
      * @var \Magento\Framework\Json\EncoderInterface
      */
-    private $_jsonEncoder;
+    private $jsonEncoder;
 
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
@@ -43,7 +43,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
             $data
         );
         $this->mediaHelper = $mediaHelper;
-        $this->_jsonEncoder = $jsonEncoder;
+        $this->jsonEncoder = $jsonEncoder;
     }
 
     /**
@@ -61,7 +61,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
                 'isBase' => $this->isMainImage($mediaGalleryImage),
             ];
         }
-        return $this->_jsonEncoder->encode($mediaGalleryData);
+        return $this->jsonEncoder->encode($mediaGalleryData);
     }
 
     /**
@@ -76,6 +76,6 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
             'videoStop' => $this->mediaHelper->getVideoStopAttribute(),
             'videoBackground' => $this->mediaHelper->getVideoBackgroundAttribute(),
         ];
-        return $this->_jsonEncoder->encode($videoSettingData);
+        return $this->jsonEncoder->encode($videoSettingData);
     }
 }
