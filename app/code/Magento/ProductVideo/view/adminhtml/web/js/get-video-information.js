@@ -282,8 +282,7 @@ require([
 
       $.widget('mage.getVideoInformation', {
         options: {
-          youtubeKey: 'AIzaSyDwqDWuw1lra-LnpJL2Mr02DYuFmkuRSns', //sample data, change later!!!!!!!!
-          vimeoKey: '' //nah, we don't really need it
+          youtubeKey: 'AIzaSyDwqDWuw1lra-LnpJL2Mr02DYuFmkuRSns' //sample data, change later!!!!!!!!
         },
 
         _UPDATE_VIDEO_INFORMATION_TRIGGER: 'update_video_information',
@@ -296,7 +295,11 @@ require([
           return this._videoInformation;
         },
 
-        _init: function () {
+        onFocusOut : function (func) {
+
+        },
+
+        _init : function () {
           jQuery(this.element).on("focusout", $.proxy(this._onBlurhandler, this));
         },
 
@@ -309,7 +312,7 @@ require([
             return;
           }
 
-          var videoInfo = self._validateURL(url);
+          var videoInfo = this._validateURL(url);
           if(!videoInfo) {
             this._videoInformation = null;
             this.element.trigger(this._ERROR_UPDATE_INFORMATION_TRIGGER, "Invalid video url");
@@ -325,7 +328,7 @@ require([
               uploaded: tmp.snippet.publishedAt,
               title: tmp.snippet.localized.title,
               description: tmp.snippet.description,
-              thumbnail: tmp.snippet.thumbnails.maxres.url
+              thumbnail: tmp.snippet.thumbnails.high.url
             };
             this._videoInformation  = respData;
             this.element.trigger(this._UPDATE_VIDEO_INFORMATION_TRIGGER, respData);
@@ -348,10 +351,11 @@ require([
 
           var type = videoInfo.type;
           if (type == 'youtube') {
-            $.get('https://www.googleapis.com/youtube/v3/videos?id=' + id + '&part=snippet,contentDetails,statistics,status&key=' + this.options.youtubeKey, $.proxy(_onYouTubeLoaded, this))
+            $.get('https://www.googleapis.com/youtube/v3/videos?id=' + videoInfo.id + '&part=snippet,contentDetails,statistics,status&key=' + this.options.youtubeKey, $.proxy(_onYouTubeLoaded, this))
           } else if (type == 'vimeo') {
-            $.get("http://vimeo.com/api/v2/video/" + id + ".json", $.proxy(_onVimeoLoaded, this));
+            $.get("http://vimeo.com/api/v2/video/" + videoInfo.id + ".json", $.proxy(_onVimeoLoaded, this));
           }
+          this.onFocusOut();
         },
 
         _formatYoutubeDuration: function (duration) {
