@@ -6,52 +6,46 @@
 namespace Magento\Framework\View\File\Collector;
 
 use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Component\ComponentRegistrarInterface;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Module\Dir\Search;
+use Magento\Framework\Component\DirSearch;
 use Magento\Framework\View\Design\ThemeInterface;
-use Magento\Framework\View\File\AbstractCollector;
+use Magento\Framework\View\File\CollectorInterface;
 use Magento\Framework\View\File\Factory as FileFactory;
-use Magento\Framework\View\Helper\PathPattern as PathPatternHelper;
 
 /**
  * Source of base files introduced by modules
  */
-class Base extends AbstractCollector
+class Base implements CollectorInterface
 {
     /**
-     * @var Search
+     * @var DirSearch
      */
-    protected $dirSearch;
+    protected $componentDirSearch;
 
     /**
-     * Module registry
-     *
-     * @var ComponentRegistrarInterface
+     * @var string
      */
-    private $componentRegistrar;
+    private $subDir;
+
+    /**
+     * @var FileFactory
+     */
+    private $fileFactory;
 
     /**
      * Constructor
      *
-     * @param Search $dirSearch
-     * @param Filesystem $filesystem
+     * @param DirSearch $dirSearch
      * @param FileFactory $fileFactory
-     * @param PathPatternHelper $pathPatternHelper
-     * @param ComponentRegistrarInterface $componentRegistrar
      * @param string $subDir
      */
     public function __construct(
-        Search $dirSearch,
-        Filesystem $filesystem,
+        DirSearch $dirSearch,
         FileFactory $fileFactory,
-        PathPatternHelper $pathPatternHelper,
-        ComponentRegistrarInterface $componentRegistrar,
         $subDir = ''
     ) {
-        $this->dirSearch = $dirSearch;
-        $this->componentRegistrar = $componentRegistrar;
-        parent::__construct($filesystem, $fileFactory, $pathPatternHelper, $subDir);
+        $this->componentDirSearch = $dirSearch;
+        $this->fileFactory = $fileFactory;
+        $this->subDir = $subDir ? $subDir . '/' : '';
     }
 
     /**
@@ -64,22 +58,20 @@ class Base extends AbstractCollector
     public function getFiles(ThemeInterface $theme, $filePath)
     {
         $result = [];
-        $sharedFiles = $this->dirSearch->collectFiles("view/base/{$this->subDir}{$filePath}");
+        $sharedFiles = $this->componentDirSearch->collectFilesWithContext(
+            ComponentRegistrar::MODULE,
+            "view/base/{$this->subDir}{$filePath}"
+        );
         foreach ($sharedFiles as $file) {
-            $filename = $this->directory->getAbsolutePath($file);
-            $modulePath = preg_replace('/\/view\/base\/.*/', "", $filename);
-            $paths = $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE);
-            $moduleFull = array_search($modulePath, $paths);
-            $result[] = $this->fileFactory->create($filename, $moduleFull, null, true);
+            $result[] = $this->fileFactory->create($file->getFullPath(), $file->getComponentName(), null, true);
         }
         $area = $theme->getData('area');
-        $themeFiles = $this->dirSearch->collectFiles("view/{$area}/{$this->subDir}{$filePath}");
+        $themeFiles = $this->componentDirSearch->collectFilesWithContext(
+            ComponentRegistrar::MODULE,
+            "view/{$area}/{$this->subDir}{$filePath}"
+        );
         foreach ($themeFiles as $file) {
-            $filename = $this->directory->getAbsolutePath($file);
-            $modulePath = preg_replace('/\/view\/.*/', "", $filename);
-            $paths = $this->componentRegistrar->getPaths(ComponentRegistrar::THEME);
-            $moduleFull = array_search($modulePath, $paths);
-            $result[] = $this->fileFactory->create($filename, $moduleFull);
+            $result[] = $this->fileFactory->create($file->getFullPath(), $file->getComponentName());
         }
         return $result;
     }

@@ -138,7 +138,6 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
             self::PUB => [parent::PATH => 'pub', parent::URL_PATH => 'pub'],
             self::LIB_WEB => [parent::PATH => 'lib/web'],
             self::TMP => [parent::PATH => 'var/tmp'],
-            self::THEMES => [parent::PATH => 'app/design'],
             self::UPLOAD => [parent::PATH => 'pub/media/upload', parent::URL_PATH => 'pub/media/upload'],
             self::TMP_MATERIALIZATION_DIR => [parent::PATH => 'var/view_preprocessed'],
             self::TEMPLATE_MINIFICATION_DIR => [parent::PATH => 'var/view_preprocessed/html'],
