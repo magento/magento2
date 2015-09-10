@@ -26,11 +26,11 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
                     You need to create a simple product for each configuration (Ex: a product for each color).');?>
                     </div>
                 </div>
-                <!--<div class="product-create-configuration-actions">
-                    <a class="action-menu-item" data-action="choose" onclick="jQuery('[data-grid-id=associated-products-container]').trigger('openModal');" href="#">
-                        <?/*= __('Add Products Manually');*/?>
+                <div class="product-create-configuration-actions" data-bind="scope: 'configurableProductGrid'">
+                    <a class="action-menu-item" data-action="choose" data-bind="click: showManuallyGrid">
+                        <?= __('Add Products Manually');?>
                     </a>
-                </div>-->
+                </div>
                 <div class="product-create-configuration-actions">
                     <button data-action="open-steps-wizard" title="Create Product Configurations"
                             class="action-secondary" data-bind="click: open">
@@ -108,4 +108,22 @@ require([
         })
         .collapse("<?php echo($block->getProduct()->getTypeId() === Configurable::TYPE_CODE || $block->getRequest()->has('attributes')) ? 'show' : 'hide' ?>");
 });
+</script>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "configurableProductGrid": {
+                        "component": "Magento_ConfigurableProduct/js/variations/product-grid",
+                        "associatedProductsFilter": "configurable_associated_product_listing.configurable_associated_product_listing.listing_top.listing_filters",
+                        "associatedProductsProvider": "configurable_associated_product_listing.data_source",
+                        "associatedProductsMassAction": "configurable_associated_product_listing.configurable_associated_product_listing.product_columns.ids",
+                        "productsGridUrl": "<?= $block->getUrl('catalog/product/associated_grid', ['componentJson' => true])?>",
+                        "configurableVariations": "configurableVariations"
+                    }
+                }
+            }
+        }
+    }
 </script>

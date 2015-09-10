@@ -13,9 +13,9 @@ define([
 
     return Component.extend({
         defaults: {
-            gridSelector: '#associated-products-container',
-            gridTitle: 'Select Associated Product',
-            gridModal: null,
+            productsGridUrl: null,
+            productAttributes: [],
+            productsModal: null,
             attributes: [],
             gridSelector: '[data-grid-id=associated-products-container]',
             modules: {
@@ -27,61 +27,88 @@ define([
         },
 
         /**
-         * @todo description
+         * Initialize
+         * @param options
          */
         initialize: function (options) {
             this._super(options);
-
-            var gridIsLoaded = false;
             this.productsModal = $(this.gridSelector).modal({
                 title: $.mage.__('Select Associated Product'),
                 type: 'slide',
-                opened: function () {
-                    if (!gridIsLoaded) {
-                        $.ajax({
-                            type: 'GET',
-                            url: this._buildGridUrl(),
-                            context: $('body')
-                        }).success(function (data) {
-                            gridIsLoaded = true;
-                            bootstrap(JSON.parse(data));
-                        }.bind(this));
-                    }
-                }.bind(this)
+                buttons: [{
+                    text: $.mage.__('Ok'),
+                    click: this.close.bind(this)
+                }]
+            });
+            this._getServerData = _.once(this._getServerData);
+        },
+
+        /**
+         * Get server data
+         */
+        _getServerData: function (attributes) {
+            $.ajax({
+                type: 'GET',
+                url: this._buildGridUrl(attributes),
+                context: $('body')
+            }).success(function (data) {
+                bootstrap(JSON.parse(data));
             });
         },
 
         /**
          * Select different product in configurations section
+         * @see configurable_associated_product_listing.xml
          * @param rowIndex
          */
         selectProduct: function (rowIndex) {
-            this.variationsComponent().chooseDifferentProduct(this.getProduct(rowIndex));
+            this.variationsComponent()[this.callbackName](this.getProduct(rowIndex));
             this.close();
         },
 
         /**
-         * @todo description
+         * Open
+         * @param attributes
+         * @param callbackName
+         * @param showMassActionColumn
          */
-        open: function (attributes, showMassActionColumn) {
-            this.attributes = attributes;
-            this.productsMassAction(function(massActionComponent) {
+        open: function (attributes, callbackName, showMassActionColumn) {
+            this.callbackName = callbackName;
+            this.productsMassAction(function (massActionComponent) {
                 massActionComponent.visible(showMassActionColumn);
             });
-            this._setFilter();
+            this._setFilter(attributes);
+            this._getServerData(attributes);
             this._showMessageAssociatedGrid();
-            this.gridModal.trigger('openModal');
+            this.productsModal.trigger('openModal');
         },
 
         /**
-         * @todo description
+         * Close
          */
         close: function () {
-            this.gridModal.trigger('closeModal');
+            if (this.productsMassAction().selected().length) {
+                this.variationsComponent()[this.callbackName](this.productsMassAction()
+                    .selected.map(this.getProductById.bind(this)));
+            }
+            this.productsModal.trigger('closeModal');
         },
 
         /**
-         * @todo description
+         * Get product by id
+         * @param productId
+         * @returns {*}
+         */
+        getProductById: function (productId) {
+            return _.findWhere(this.productsProvider().data.items, {
+                'entity_id': productId
+            });
+        },
+
+        /**
+         * Get product
+         * @param rowIndex
+         * @returns {*}
          */
         getProduct: function (rowIndex) {
             return this.productsProvider().data.items[rowIndex];
@@ -89,30 +116,34 @@ define([
 
         /**
          * Build grid url
-         *
-         * @returns {string}
          * @private
          */
-        _buildGridUrl: function() {
-            var params = this.attributes
-                ? '?' + $.param({filters: this.attributes, attribute_ids: _.keys(this.attributes)})
-                : '';
+        _buildGridUrl: function (attributes) {
+            var params = attributes ? '?' + $.param({
+                filters: attributes,
+                'attribute_ids': _.keys(attributes)
+            }) : '';
+
             return this.productsGridUrl + params;
         },
 
         /**
-         * @todo description
+         * Show message associated grid
+         * @private
          */
         _showMessageAssociatedGrid: function () {
             var messageInited = false;
-            this.productsProvider(function(provider) {
+            this.productsProvider(function (provider) {
                 if (!messageInited) {
                     this.productsModal.notification();
                 }
                 this.productsModal.notification('clear');
+
                 if (provider.data.items.length) {
                     this.productsModal.notification('add', {
-                        message: $.mage.__('Choose a new product to delete and replace the current product configuration.'),
+                        message: $.mage.__(
+                            'Choose a new product to delete and replace the current product configuration.'
+                        ),
                         messageContainer: this.gridSelector
                     });
                 } else {
@@ -125,16 +156,29 @@ define([
         },
 
         /**
-         * @todo description
+         * Show manually grid
          */
-        _setFilter: function () {
-            this.productsProvider(function(provider) {
-                provider.params['attribute_ids'] = _.keys(this.attributes);
-            }.bind(this));
-            this.productsFilter(function(filter) {
-                filter.set('filters', this.attributes)
-                .apply();
-            }.bind(this));
+        showManuallyGrid: function () {
+            var productIds = this.variationsComponent().variations.pluck('productId');
+            this.productsFilter(function (filter) {
+                filter.set('filters', {
+                    'entity_id': productIds
+                }).apply();
+            });
+            this.open(null, 'appendProduct', true);
+        },
+
+        /**
+         * Set filter
+         * @private
+         */
+        _setFilter: function (attributes) {
+            this.productsProvider(function (provider) {
+                provider.params['attribute_ids'] = _.keys(attributes);
+            });
+            this.productsFilter(function (filter) {
+                filter.set('filters', attributes).apply();
+            });
         }
     });
 });
