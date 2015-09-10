@@ -32,22 +32,43 @@ define([
             }
             this.initProductAttributesMap();
         },
+        changeProduct: function (newProduct) {
+            var oldProduct = this.productMatrix()[this.rowIndexToEdit];
+            this.productMatrix.splice(this.rowIndexToEdit, 1, this.makeProduct(_.extend(oldProduct, newProduct)));
+        },
+        appendProduct: function (newProducts) {
+            newProducts = _.isArray(newProducts) ? newProducts : [newProducts];
+            this.productMatrix.push.apply(this.productMatrix, _.map(newProducts, function (newProduct) {
+                return this.makeProduct(newProduct);
+            }.bind(this)));
+        },
+        makeProduct: function (product) {
+            var productId = product['entity_id'] || product.productId || null,
+                attributes = _.pick(product, this.attributes.pluck('code')),
+                options = _.map(attributes, function (option, attribute) {
+                    return this.attributes.findWhere({
+                        code: attribute
+                    }).chosen[option];
+                }.bind(this));
+            this.productAttributesMap[this.getVariationKey(options)] = productId;
 
-        /**
-         * Select different product in configurations section
-         * @param newProduct
-         */
-        chooseDifferentProduct: function (newProduct) {
-            var productToEdit = this.productMatrix.splice(this.rowIndexToEdit, 1)[0];
-            newProduct = _.extend(productToEdit, newProduct);
-            newProduct.productId = productToEdit['entity_id'];
-            newProduct.productUrl = this.buildProductUrl(newProduct['entity_id']);
-            newProduct.editable = false;
-            newProduct.images = {
-                preview: newProduct['thumbnail_src']
+            return {
+                attribute: JSON.stringify(attributes),
+                editable: product.editable === undefined ? !productId : product.editable,
+                images: {
+                    preview: product['thumbnail_src']
+                },
+                name: product.name || product.sku,
+                options: options,
+                price: parseFloat(product.price.replace(/[^\d.]+/g, '')).toFixed(4),
+                productId: productId,
+                productUrl: this.buildProductUrl(productId),
+                quantity: product.quantity || null,
+                sku: product.sku,
+                status: product.status === undefined ? 1 : parseInt(product.status, 10),
+                variationKey: this.getVariationKey(options),
+                weight: product.weight || null
             };
-            this.productAttributesMap[this.getVariationKey(newProduct.options)] = newProduct.productId;
-            this.productMatrix.splice(this.rowIndexToEdit, 0, newProduct);
         },
         initObservable: function () {
             this._super().observe('actions opened attributes productMatrix');
@@ -102,7 +123,7 @@ define([
             _.each(variations, function (variation) {
                 var attributes = _.reduce(variation.options, function (memo, option) {
                     var attribute = {};
-                    attribute[option.attribute_code] = option.value;
+                    attribute[option['attribute_code']] = option.value;
 
                     return _.extend(memo, attribute);
                 }, {});
@@ -134,7 +155,7 @@ define([
         showGrid: function (rowIndex) {
             var attributes = JSON.parse(this.productMatrix()[rowIndex].attribute);
             this.rowIndexToEdit = rowIndex;
-            this.associatedProductGrid().open(attributes, false);
+            this.associatedProductGrid().open(attributes, 'changeProduct', false);
         },
         toggleProduct: function (rowIndex) {
             var product, row, productChanged = {};
@@ -194,7 +215,7 @@ define([
                 _.each(imageFields, function (field) {
                     gallery.push(
                         '<input type="hidden" name="' +
-                        this.getVariationRowName(variation, 'media_gallery/images/' + image.file_id + '/' + field) +
+                        this.getVariationRowName(variation, 'media_gallery/images/' + image['file_id'] + '/' + field) +
                         '" value="' + (image[field] || '') + '" />'
                     );
                 }, this);
