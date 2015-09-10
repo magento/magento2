@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-Magento\Framework\Component\ComponentRegistrar::register(
-    ComponentRegistrar::MODULE,
-    'Magento_TestModuleIntegrationFromConfig',
-    __DIR__
-);
+use Magento\Framework\Component\ComponentRegistrar;
+
+ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Magento_TestModuleIntegrationFromConfig', __DIR__);
