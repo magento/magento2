@@ -181,7 +181,7 @@ class WeeeTax extends Weee
     {
         $itemToCodeMap = [];
         foreach ($weeeCodeToItemMap as $weeeCode => $item) {
-            $key = $item->getItemId();
+            $key = spl_object_hash($item);  // note: $item->getItemId() can be null
             if (!array_key_exists($key, $itemToCodeMap)) {
                 //Create the initial structure for this item
                 $itemToCodeMap[$key] = ['item' => $item, 'weeeCodes' => [$weeeCode]];
