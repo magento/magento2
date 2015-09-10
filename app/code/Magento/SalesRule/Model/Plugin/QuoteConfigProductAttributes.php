@@ -7,18 +7,19 @@ namespace Magento\SalesRule\Model\Plugin;
 
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Model\Session;
+use Magento\SalesRule\Model\Resource\Rule as RuleResource;
 
 class QuoteConfigProductAttributes
 {
     /**
-     * @var Rule
+     * @var RuleResource
      */
     protected $_ruleResource;
 
     /**
-     * @param Rule $ruleResource
+     * @param RuleResource $ruleResource
      */
-    public function __construct(\Magento\SalesRule\Model\Resource\Rule $ruleResource)
+    public function __construct(RuleResource $ruleResource)
     {
         $this->_ruleResource = $ruleResource;
     }
