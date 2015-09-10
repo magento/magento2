@@ -264,8 +264,8 @@ class BackupRollback
         /** @var \Magento\Framework\App\State $appState */
         $appState = $this->objectManager->get('Magento\Framework\App\State');
         $appState->setAreaCode($areaCode);
-        /** @var \Magento\Framework\App\ObjectManager\ConfigLoader $configLoader */
-        $configLoader = $this->objectManager->get('Magento\Framework\App\ObjectManager\ConfigLoader');
+        /** @var \Magento\Framework\ObjectManager\ConfigLoaderInterface $configLoader */
+        $configLoader = $this->objectManager->get('Magento\Framework\ObjectManager\ConfigLoaderInterface');
         $this->objectManager->configure($configLoader->load($areaCode));
     }
 
