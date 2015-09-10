@@ -14,8 +14,8 @@ class FilesTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Framework\App\Utility\Files */
     protected $model;
 
-    /** @var string */
-    protected $moduleTests = '#app/code/[\\w]+/[\\w]+/Test#';
+    /** @var array */
+    protected $moduleTests = [];
 
     /** @var string */
     protected $toolsTests = '#dev/tools/Magento/Tools/[\\w]+/Test#';
@@ -35,6 +35,10 @@ class FilesTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->model = new Files(new ComponentRegistrar, BP);
+        $componentRegistrar = new ComponentRegistrar();
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
+            $this->moduleTests[] = '#' . $moduleDir . '/Test#';
+        }
     }
 
     public function testGetPhpFilesExcludeTests()
@@ -62,7 +66,9 @@ class FilesTest extends \PHPUnit_Framework_TestCase
     {
         $classFiles = $this->model->getClassFiles(false, true, false, false, false);
 
-        $classFiles = preg_grep($this->moduleTests, $classFiles, PREG_GREP_INVERT);
+        foreach ($this->moduleTests as $moduleTest) {
+            $classFiles = preg_grep($moduleTest, $classFiles, PREG_GREP_INVERT);
+        }
         $classFiles = preg_grep($this->libTests, $classFiles, PREG_GREP_INVERT);
         $classFiles = preg_grep($this->frameworkTests, $classFiles, PREG_GREP_INVERT);
         $classFiles = preg_grep($this->toolsTests, $classFiles, PREG_GREP_INVERT);
@@ -79,7 +85,9 @@ class FilesTest extends \PHPUnit_Framework_TestCase
      */
     protected function assertNoTestDirs($files)
     {
-        $this->assertEmpty(preg_grep($this->moduleTests, $files));
+        foreach ($this->moduleTests as $moduleTest) {
+            $this->assertEmpty(preg_grep($moduleTest, $files));
+        }
         $this->assertEmpty(preg_grep($this->frameworkTests, $files));
         $this->assertEmpty(preg_grep($this->libTests, $files));
         $this->assertEmpty(preg_grep($this->toolsTests, $files));

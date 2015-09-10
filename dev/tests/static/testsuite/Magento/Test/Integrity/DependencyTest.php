@@ -8,6 +8,8 @@
  */
 namespace Magento\Test\Integrity;
 
+use Magento\Framework\Component\ComponentRegistrar;
+
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
@@ -240,11 +242,23 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                 $filename = self::_getRelativeFilename($file);
                 $isThemeFile = (bool)preg_match(self::$_defaultThemes, $filename);
 
-                if (strpos($file, 'app/code') === false && !$isThemeFile) {
-                    return;
+                $componentRegistrar = new ComponentRegistrar();
+                $foundModule = false;
+                $foundModuleName = '';
+                if (!$isThemeFile) {
+                    foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
+                        if (strpos($file, $moduleDir) !== false) {
+                            $foundModule = true;
+                            $foundModuleName = $moduleName;
+                            break;
+                        }
+                    }
+                    if (!$foundModule) {
+                        return;
+                    }
                 }
 
-                $module = $this->_getModuleName($file);
+                $module = $foundModuleName;
                 $contents = $this->_getCleanedFileContents($fileType, $file);
 
                 // Apply rules
@@ -376,21 +390,6 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         $pathToSource = \Magento\Framework\App\Utility\Files::init()->getPathToSource();
         $relativeFileName = str_replace($pathToSource, '', $absoluteFilename);
         return trim(str_replace('\\', '/', $relativeFileName), '/');
-    }
-
-    /**
-     * Extract module name from file path
-     *
-     * @param $absoluteFilename
-     * @return string
-     */
-    protected function _getModuleName($absoluteFilename)
-    {
-        $file = self::_getRelativeFilename($absoluteFilename);
-        if (preg_match('/\/(?<namespace>' . self::$_namespaces . ')[\/_\\\\]?(?<module>[^\/]+)\//', $file, $matches)) {
-            return $matches['namespace'] . '\\' . $matches['module'];
-        }
-        return '';
     }
 
     /**
