@@ -21,12 +21,7 @@
     "license": [
         "proprietary"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/Swatches"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ]
     }
 }
