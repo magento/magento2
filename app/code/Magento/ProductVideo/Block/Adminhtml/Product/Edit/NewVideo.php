@@ -162,7 +162,7 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
             'checkbox',
             [
                 'class' => 'edited-data',
-                'label' => 'Hide from Product Page',
+                'label' => __('Hide from Product Page'),
                 'title' => __('Hide from Product Page'),
                 'name' => 'disabled',
             ]
@@ -233,7 +233,7 @@ HTML;
                 'checkbox',
                 [
                     'class' => 'video_image_role',
-                    'label' => $mediaRole->getFrontendLabel(),
+                    'label' => __($mediaRole->getFrontendLabel()),
                     'title' => __($mediaRole->getFrontendLabel()),
                     'data-role' => 'role-type-selector',
                     'value' => $mediaRole->getAttributeCode(),
