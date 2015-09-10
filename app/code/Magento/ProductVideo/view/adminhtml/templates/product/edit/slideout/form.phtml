@@ -5,12 +5,12 @@
  */
 /* @var Magento\ProductVideo\Block\Adminhtml\Product\Edit\NewVideo $block */
 ?>
-<div id="<?=$block->getNameInLayout();?>" style="display:none">
-    <?=$block->getFormHtml();?>
+<div id="<?php echo $block->getNameInLayout();?>" style="display:none">
+    <?php echo $block->getFormHtml();?>
     <script>
         require(["jquery","mage/mage"],function($) {
             $(function(){
-                $('#new-video').mage('newVideoDialog', <?=$block->getWidgetOptions();?>);
+                $('#new-video').mage('newVideoDialog', <?php echo $block->getWidgetOptions();?>);
             });
         });
     </script>
