@@ -36,11 +36,6 @@ class Context
     private $componentRegistrar;
 
     /**
-     * @var array
-     */
-    private $invertedModuleDirsMap;
-
-    /**
      * Constructor
      *
      * @param ComponentRegistrar $componentRegistrar
@@ -48,8 +43,6 @@ class Context
     public function __construct(ComponentRegistrar $componentRegistrar)
     {
         $this->componentRegistrar = $componentRegistrar;
-        $moduleDirs = $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE);
-        $this->invertedModuleDirsMap = array_flip($moduleDirs);
     }
 
     /**
@@ -87,12 +80,9 @@ class Context
      */
     private function getModuleName($path)
     {
-        $parts = explode('/', $path);
-        while (!empty($parts)) {
-            array_pop($parts);
-            $partialPath = implode('/', $parts);
-            if (isset($this->invertedModuleDirsMap[$partialPath])) {
-                return $this->invertedModuleDirsMap[$partialPath];
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
+            if (strpos($path, $moduleDir) !== false) {
+                return $moduleName;
             }
         }
         return false;

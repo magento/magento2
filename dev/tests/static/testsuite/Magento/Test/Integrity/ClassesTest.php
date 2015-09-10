@@ -8,6 +8,7 @@
 namespace Magento\Test\Integrity;
 
 use Magento\Framework\App\Utility\Classes;
+use Magento\Framework\Component\ComponentRegistrar;
 
 class ClassesTest extends \PHPUnit_Framework_TestCase
 {
@@ -448,6 +449,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
      */
     protected function removeSpecialCases($badClasses, $file, $contents, $namespacePath)
     {
+        $componentRegistrar = new ComponentRegistrar();
         foreach ($badClasses as $badClass) {
             // Remove valid usages of Magento modules from the list
             // for example: 'Magento_Sales::actions_edit'

@@ -5,6 +5,7 @@
  */
 namespace Magento\Test\Integrity;
 
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Composer\MagentoComponent;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Shell;
@@ -84,8 +85,9 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
     public function validateComposerJsonDataProvider()
     {
         $root = \Magento\Framework\App\Utility\Files::init()->getPathToSource();
+        $componentRegistrar = new ComponentRegistrar();
         $result = [];
-        foreach (glob("{$root}/app/code/Magento/*", GLOB_ONLYDIR) as $dir) {
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $dir) {
             $result[$dir] = [$dir, 'magento2-module'];
         }
         foreach (glob("{$root}/app/i18n/magento/*", GLOB_ONLYDIR) as $dir) {

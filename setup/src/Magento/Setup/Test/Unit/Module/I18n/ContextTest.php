@@ -23,7 +23,6 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->componentRegistrar = $this->getMock('Magento\Framework\Component\ComponentRegistrar', [], [], '', false);
-        $this->context = new Context($this->componentRegistrar);
     }
 
     /**
@@ -38,6 +37,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             ->method('getPaths')
             ->with(ComponentRegistrar::MODULE)
             ->willReturn($registrar);
+        $this->context = new Context($this->componentRegistrar);
         $this->assertEquals($context, $this->context->getContextByPath($path));
     }
 
@@ -67,6 +67,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             ->method('getPaths')
             ->with(ComponentRegistrar::MODULE)
             ->willReturn(['module' => '/path/to/module']);
+        $this->context = new Context($this->componentRegistrar);
         $this->context->getContextByPath('invalid_path');
     }
 
@@ -78,7 +79,16 @@ class ContextTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuildPathToLocaleDirectoryByContext($path, $context, $registrar)
     {
+        $paths = [];
+        foreach ($registrar as $module) {
+            $paths[$module[1]] = $module[2];
+        }
+        $this->componentRegistrar->expects($this->any())
+            ->method('getPaths')
+            ->with(ComponentRegistrar::MODULE)
+            ->willReturn($paths);
         $this->componentRegistrar->expects($this->any())->method('getPath')->will($this->returnValueMap($registrar));
+        $this->context = new Context($this->componentRegistrar);
         $this->assertEquals($path, $this->context->buildPathToLocaleDirectoryByContext($context[0], $context[1]));
     }
 
@@ -104,6 +114,11 @@ class ContextTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuildPathToLocaleDirectoryByContextWithInvalidType()
     {
+        $this->componentRegistrar->expects($this->any())
+            ->method('getPaths')
+            ->with(ComponentRegistrar::MODULE)
+            ->willReturn(['module' => '/path/to/module']);
+        $this->context = new Context($this->componentRegistrar);
         $this->context->buildPathToLocaleDirectoryByContext('invalid_type', 'Magento_Module');
     }
 }
