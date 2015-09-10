@@ -8,6 +8,16 @@ namespace Magento\Quote\Model\Quote\Address;
 class Total extends \Magento\Framework\DataObject
 {
     /**
+     * @var array
+     */
+    protected $totalAmounts;
+
+    /**
+     * @var array
+     */
+    protected $baseTotalAmounts;
+
+    /**
      * Merge numeric total values
      *
      * @param \Magento\Quote\Model\Quote\Address\Total $total
@@ -24,35 +34,6 @@ class Total extends \Magento\Framework\DataObject
         return $this;
     }
 
-
-    /**
-     * Set shipping amount
-     *
-     * @param float $value
-     * @param bool $alreadyExclTax
-     * @return $this
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function setShippingAmount($value, $alreadyExclTax = false)
-    {
-        return $this->setData('shipping_amount', $value);
-    }
-
-    /**
-     * Set base shipping amount
-     *
-     * @param float $value
-     * @param bool $alreadyExclTax
-     * @return $this
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function setBaseShippingAmount($value, $alreadyExclTax = false)
-    {
-        return $this->setData('base_shipping_amount', $value);
-    }
-
-    protected $_totalAmounts;
-
     /**
      * Set total amount value
      *
@@ -62,7 +43,7 @@ class Total extends \Magento\Framework\DataObject
      */
     public function setTotalAmount($code, $amount)
     {
-        $this->_totalAmounts[$code] = $amount;
+        $this->totalAmounts[$code] = $amount;
         if ($code != 'subtotal') {
             $code = $code . '_amount';
         }
@@ -70,8 +51,6 @@ class Total extends \Magento\Framework\DataObject
 
         return $this;
     }
-
-    protected $_baseTotalAmounts;
 
     /**
      * Set total amount value in base store currency
@@ -82,7 +61,7 @@ class Total extends \Magento\Framework\DataObject
      */
     public function setBaseTotalAmount($code, $amount)
     {
-        $this->_baseTotalAmounts[$code] = $amount;
+        $this->baseTotalAmounts[$code] = $amount;
         if ($code != 'subtotal') {
             $code = $code . '_amount';
         }
@@ -129,8 +108,8 @@ class Total extends \Magento\Framework\DataObject
      */
     public function getTotalAmount($code)
     {
-        if (isset($this->_totalAmounts[$code])) {
-            return $this->_totalAmounts[$code];
+        if (isset($this->totalAmounts[$code])) {
+            return $this->totalAmounts[$code];
         }
 
         return 0;
@@ -144,8 +123,8 @@ class Total extends \Magento\Framework\DataObject
      */
     public function getBaseTotalAmount($code)
     {
-        if (isset($this->_baseTotalAmounts[$code])) {
-            return $this->_baseTotalAmounts[$code];
+        if (isset($this->baseTotalAmounts[$code])) {
+            return $this->baseTotalAmounts[$code];
         }
 
         return 0;
@@ -179,7 +158,7 @@ class Total extends \Magento\Framework\DataObject
      */
     public function getAllTotalAmounts()
     {
-        return $this->_totalAmounts;
+        return $this->totalAmounts;
     }
 
     /**
@@ -189,6 +168,6 @@ class Total extends \Magento\Framework\DataObject
      */
     public function getAllBaseTotalAmounts()
     {
-        return $this->_baseTotalAmounts;
+        return $this->baseTotalAmounts;
     }
 }

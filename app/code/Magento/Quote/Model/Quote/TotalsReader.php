@@ -75,7 +75,11 @@ class TotalsReader
         'giftcardaccount',
         'msrp',
         'shipping',
-        'freeshipping'
+        'freeshipping',
+        'giftwrapping',
+        'tax_subtotal',
+        'tax_shipping',
+        'tax'
     );
 
     /**
