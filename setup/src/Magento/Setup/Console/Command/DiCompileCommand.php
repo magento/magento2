@@ -113,7 +113,7 @@ class DiCompileCommand extends Command
         }
         $excludedLibraryPaths = [];
         foreach ($libraryPaths as $libraryPath) {
-            $excludedLibraryPaths[] = '#^' . $libraryPath . '/[\\w]+/[\\w]+/([\\w]+/)?Test#';
+            $excludedLibraryPaths[] = '#^' . $libraryPath . '/([\\w]+/)?Test#';
         }
         $this->excludedPathsList = [
             'application' => $excludedAppCodePaths,
