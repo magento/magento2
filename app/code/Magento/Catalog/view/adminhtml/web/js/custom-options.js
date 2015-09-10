@@ -7,12 +7,14 @@
 define([
     'jquery',
     'mage/template',
+    'Magento_Ui/js/modal/alert',
     'jquery/ui',
     'useDefault',
     'collapsable',
     'mage/translate',
-    'mage/backend/validation'
-], function ($, mageTemplate) {
+    'mage/backend/validation',
+    'Magento_Ui/js/modal/modal'
+], function ($, mageTemplate, alert) {
     'use strict';
 
     $.widget('mage.customOptions', {
@@ -120,90 +122,63 @@ define([
                     var importContainer = $('#import-container'),
                         widget = this;
 
-                    importContainer.dialog({
+                    importContainer.modal({
                         title: $.mage.__('Select Product'),
-                        autoOpen: false,
-                        minWidth: 980,
-                        width: '75%',
-                        modal: true,
-                        resizable: true,
-                        position: {
-                            my: 'left top',
-                            at: 'center top',
-                            of: 'body'
-                        },
-                        create: function (event, ui) {
-                            $(document).on('click', '#productGrid_massaction-form button', function () {
-                                $('#import-custom-options-apply-button').trigger('click', 'massActionTrigger');
+                        type: 'slide',
+                        opened: function () {
+                            $(document).off().on('click', '#productGrid_massaction-form button', function () {
+                                $('.import-custom-options-apply-button').trigger('click', 'massActionTrigger');
                             });
                         },
-                        open: function () {
-                            $(this).closest('.ui-dialog').addClass('ui-dialog-active');
+                        buttons: [{
+                            text: $.mage.__('Import'),
+                            'class': 'action-primary action-import import-custom-options-apply-button',
+                            click: function (event, massActionTrigger) {
+                                var request = [];
 
-                            var topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 135;
-                            $(this).closest('.ui-dialog').css('margin-top', topMargin);
+                                $(this.element).find('input[name=product]:checked').map(function () {
+                                    request.push(this.value);
+                                });
 
-                            $(this).addClass('admin__scope-old'); // ToDo UI: remove with old styles removal
-                        },
-                        close: function () {
-                            $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
-                        },
-                        buttons: [
-                            {
-                                text: $.mage.__('Import'),
-                                id: 'import-custom-options-apply-button',
-                                'class': 'action-primary action-import',
-                                click: function (event, massActionTrigger) {
-                                    var request = [];
-                                    $(this).find('input[name=product]:checked').map(function () {
-                                        request.push(this.value);
-                                    });
-
-                                    if (request.length === 0) {
-                                        if (!massActionTrigger) {
-                                            alert($.mage.__('Please select items.'));
-                                        }
-
-                                        return;
+                                if (request.length === 0) {
+                                    if (!massActionTrigger) {
+                                        alert({
+                                            content: $.mage.__('Please select items.')
+                                        });
                                     }
 
-                                    $.post(widget.options.customOptionsUrl, {
-                                        'products[]': request,
-                                        form_key: widget.options.formKey
-                                    }, function ($data) {
-                                        $.parseJSON($data).each(function (el) {
-                                            el.id = widget.getFreeOptionId(el.id);
-                                            el.option_id = el.id;
+                                    return;
+                                }
 
-                                            if (typeof el.optionValues !== 'undefined') {
-                                                for (var i = 0; i < el.optionValues.length; i++) {
-                                                    el.optionValues[i].option_id = el.id;
-                                                }
+                                $.post(widget.options.customOptionsUrl, {
+                                    'products[]': request,
+                                    form_key: widget.options.formKey
+                                }, function ($data) {
+                                    $.parseJSON($data).each(function (el) {
+                                        el.id = widget.getFreeOptionId(el.id);
+                                        el.option_id = el.id;
+
+                                        if (typeof el.optionValues !== 'undefined') {
+                                            for (var i = 0; i < el.optionValues.length; i++) {
+                                                el.optionValues[i].option_id = el.id;
                                             }
-                                            //Adding option
-                                            widget.addOption(el);
-                                            //Will save new option on server side
-                                            $('#product_option_' + el.id + '_option_id').val(0);
-                                            $('#option_' + el.id + ' input[name$="option_type_id]"]').val(-1);
-                                        });
-                                        importContainer.dialog('close');
+                                        }
+                                        //Adding option
+                                        widget.addOption(el);
+                                        //Will save new option on server side
+                                        $('#product_option_' + el.id + '_option_id').val(0);
+                                        $('#option_' + el.id + ' input[name$="option_type_id]"]').val(-1);
                                     });
-                                }
-                            },
-                            {
-                                text: $.mage.__('Cancel'),
-                                id: 'import-custom-options-close-button',
-                                'class': 'action-close',
-                                click: function () {
-                                    $(this).dialog('close');
-                                }
-                            }]
+                                    importContainer.modal('closeModal');
+                                });
+                            }
+                        }]
                     });
                     importContainer.load(
                         this.options.productGridUrl,
                         {form_key: this.options.formKey},
                         function () {
-                            importContainer.dialog('open');
+                            importContainer.modal('openModal');
                         }
                     );
                 },
