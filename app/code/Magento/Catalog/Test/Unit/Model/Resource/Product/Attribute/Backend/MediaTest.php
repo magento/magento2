@@ -58,7 +58,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         'metadata' => ['DATA_TYPE' => 'text', 'NULLABLE' => true],
     ];
 
-    protected function setUp()
+    public function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->connection = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
@@ -284,19 +284,6 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     {
         $valueId = 14;
         $entityId = 1;
-        $this->connection->expects($this->at(0))->method('quoteInto')->with('value_id = ?', $valueId);
-        $this->connection->expects($this->at(1))->method('quoteInto')->with('entity_id = ?', $entityId);
-        $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));
-        $this->select->expects($this->at(0))->method('from')->willReturnSelf();
-        $this->select->expects($this->at(1))->method('where')->willReturnSelf();
-        $this->connection->expects($this->once())->method('fetchAll')->willReturn([]);
-        $this->connection->expects($this->once())->method('insert')->with(
-            'table',
-            [
-                'value_id' => $valueId,
-                'entity_id' => $entityId,
-            ]
-        )->willReturnSelf();
         $this->resource->bindValueToEntity($valueId, $entityId);
     }
 
