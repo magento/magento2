@@ -110,7 +110,10 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             false
         );
         $entityAttributes = [
-            'attribute_id' => 'attributeSetName'
+            [
+                'attribute_id' => 'attribute_id',
+                'attribute_set_name' => 'attribute_set_name'
+            ]
         ];
         $this->connection = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
@@ -136,7 +139,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $this->connection->expects($this->any())->method('insertOnDuplicate')->willReturnSelf();
         $this->connection->expects($this->any())->method('delete')->willReturnSelf();
         $this->connection->expects($this->any())->method('quoteInto')->willReturn('');
-        $this->connection->expects($this->any())->method('fetchPairs')->will($this->returnValue($entityAttributes));
+        $this->connection->expects($this->any())->method('fetchAll')->will($this->returnValue($entityAttributes));
         $this->resource = $this->getMock(
             '\Magento\Framework\App\Resource',
             ['getConnection', 'getTableName'],
