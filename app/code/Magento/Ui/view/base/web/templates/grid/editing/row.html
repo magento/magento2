@@ -9,7 +9,7 @@
     class="data-grid-editable-row"
     data-bind="
         visible: active,
-        '_even-row': !($index() % 2),
+        '_odd-row': !!($index() % 2),
         foreach: {
             data: fields,
             as: 'field'

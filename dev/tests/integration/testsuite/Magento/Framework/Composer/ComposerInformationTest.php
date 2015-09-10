@@ -29,11 +29,6 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
      */
     private $composerJsonFinder;
 
-    /**
-     * @var \Magento\Framework\Filesystem
-     */
-    private $filesystem;
-
     public function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
@@ -81,8 +76,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
                 'applicationFactory' => new MagentoComposerApplicationFactory(
                     $this->composerJsonFinder,
                     $this->directoryList
-                ),
-                'filesystem' => $this->filesystem,
+                )
             ]
         );
 
@@ -106,8 +100,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
                 'applicationFactory' => new MagentoComposerApplicationFactory(
                     $this->composerJsonFinder,
                     $this->directoryList
-                ),
-                'filesystem' => $this->filesystem,
+                )
             ]
         );
 
@@ -133,8 +126,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
                 'applicationFactory' => new MagentoComposerApplicationFactory(
                     $this->composerJsonFinder,
                     $this->directoryList
-                ),
-                'filesystem' => $this->filesystem,
+                )
             ]
         );
 
@@ -142,41 +134,6 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('composer/composer', $requiredPackagesAndTypes);
         $this->assertEquals('library', $requiredPackagesAndTypes['composer/composer']);
-    }
-
-    public function testGetPackagesForUpdate()
-    {
-        $packageName = 'magento/language-de_de';
-
-        $this->setupDirectory('testSkeleton');
-
-        /** @var \Magento\Framework\Composer\ComposerInformation $composerInfo */
-        $composerInfo = $this->objectManager->create(
-            'Magento\Framework\Composer\ComposerInformation',
-            [
-                'applicationFactory' => new MagentoComposerApplicationFactory(
-                    $this->composerJsonFinder,
-                    $this->directoryList
-                ),
-                'filesystem' => $this->filesystem,
-            ]
-        );
-
-        $requiredPackages = $composerInfo->getInstalledMagentoPackages();
-        $this->assertArrayHasKey($packageName, $requiredPackages);
-
-        $this->assertTrue($composerInfo->syncPackagesForUpdate());
-
-        $packagesForUpdate = $composerInfo->getPackagesForUpdate();
-        $this->assertArrayHasKey('packages', $packagesForUpdate);
-        $this->assertArrayHasKey($packageName, $packagesForUpdate['packages']);
-        $this->assertTrue(
-            version_compare(
-                $packagesForUpdate['packages'][$packageName]['latestVersion'],
-                $requiredPackages[$packageName]['version'],
-                '>'
-            )
-        );
     }
 
     /**
@@ -206,8 +163,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
                 'applicationFactory' => new MagentoComposerApplicationFactory(
                     $this->composerJsonFinder,
                     $this->directoryList
-                ),
-                'filesystem' => $this->filesystem,
+                )
             ]
         );
     }
@@ -223,8 +179,7 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
                 'applicationFactory' => new MagentoComposerApplicationFactory(
                     $this->composerJsonFinder,
                     $this->directoryList
-                ),
-                'filesystem' => $this->filesystem,
+                )
             ]
         );
 
