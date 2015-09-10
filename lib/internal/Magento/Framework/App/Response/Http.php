@@ -12,6 +12,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\App\Request\Http as HttpRequest;
 
 class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
 {
@@ -40,14 +41,14 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
     protected $dateTime;
 
     /**
-     * @param \Magento\Framework\App\Request\Http $request
+     * @param HttpRequest $request
      * @param CookieManagerInterface $cookieManager
      * @param CookieMetadataFactory $cookieMetadataFactory
      * @param Context $context
      * @param DateTime $dateTime
      */
     public function __construct(
-        \Magento\Framework\App\Request\Http $request,
+        HttpRequest $request,
         CookieManagerInterface $cookieManager,
         CookieMetadataFactory $cookieMetadataFactory,
         Context $context,
