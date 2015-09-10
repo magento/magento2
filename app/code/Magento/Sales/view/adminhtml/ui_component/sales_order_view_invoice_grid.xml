@@ -204,7 +204,7 @@
                 </argument>
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="caption" xsi:type="string" translate="true">Select...</item>
+                        <item name="caption" xsi:type="string" translate="true">All Store Views</item>
                         <item name="dataScope" xsi:type="string">store_id</item>
                         <item name="label" xsi:type="string" translate="true">Purchased From</item>
                     </item>

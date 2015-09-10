@@ -16,7 +16,11 @@
 <div class="field field-store-switcher">
     <label class="label" for="store_switcher"><?php echo __('Show Report For:') ?></label>
     <div class="control">
-        <select name="store_switcher" id="store_switcher" onchange="return switchStore(this);">
+        <select
+            id="store_switcher"
+            class="admin__control-select"
+            name="store_switcher"
+            onchange="return switchStore(this);">
             <option value=""><?php echo __('All Websites') ?></option>
             <?php foreach ($block->getWebsiteCollection() as $_website): ?>
                 <?php $showWebsite = false; ?>

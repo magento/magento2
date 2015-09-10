@@ -12,7 +12,10 @@
 <div class="field field-store-switcher">
     <label class="label" for="store_switcher"><?php echo __('Choose Store View:') ?></label>
     <div class="control">
-        <select name="store_switcher" id="store_switcher">
+        <select
+            id="store_switcher"
+            class="admin__control-select"
+            name="store_switcher">
             <?php foreach ($websites as $website): ?>
                 <?php $showWebsite = false; ?>
                 <?php foreach ($website->getGroups() as $group): ?>

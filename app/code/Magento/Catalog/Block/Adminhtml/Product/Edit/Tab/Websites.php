@@ -131,7 +131,10 @@ class Websites extends \Magento\Backend\Block\Store\Switcher
     public function getChooseFromStoreHtml($storeTo)
     {
         if (!$this->_storeFromHtml) {
-            $this->_storeFromHtml = '<select name="copy_to_stores[__store_identifier__]" disabled="disabled">';
+            $this->_storeFromHtml = '<select ' .
+                                         'class="admin__control-select" ' .
+                                         'name="copy_to_stores[__store_identifier__]" ' .
+                                         'disabled="disabled">';
             $this->_storeFromHtml .= '<option value="0">' . __('Default Values') . '</option>';
             foreach ($this->getWebsiteCollection() as $_website) {
                 if (!$this->hasWebsite($_website->getId())) {
