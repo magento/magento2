@@ -45,9 +45,9 @@ define([
         },
 
         onHiddenChange: function (isHidden) {
+            var self = this;
             // Hide message block if needed
             if (isHidden) {
-                var self = this;
                 setTimeout(function () {
                     $(self.selector).hide('blind', {}, 500)
                 }, 5000);
