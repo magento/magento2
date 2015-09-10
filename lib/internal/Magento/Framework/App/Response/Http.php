@@ -40,6 +40,7 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
     protected $dateTime;
 
     /**
+     * @param \Magento\Framework\App\Request\Http $request
      * @param CookieManagerInterface $cookieManager
      * @param CookieMetadataFactory $cookieMetadataFactory
      * @param Context $context
