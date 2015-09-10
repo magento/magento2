@@ -19,23 +19,31 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
     protected $mediaHelper;
 
     /**
+     * @var \Magento\Framework\Json\EncoderInterface
+     */
+    private $_jsonEncoder;
+
+    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\ProductVideo\Helper\Media $mediaHelper
+     * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param array $data
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
         \Magento\ProductVideo\Helper\Media $mediaHelper,
+        \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         array $data = []
     ) {
-        $this->mediaHelper = $mediaHelper;
         parent::__construct(
             $context,
             $arrayUtils,
             $data
         );
+        $this->mediaHelper = $mediaHelper;
+        $this->_jsonEncoder = $jsonEncoder;
     }
 
     /**
@@ -53,7 +61,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
                 'isBase' => $this->isMainImage($mediaGalleryImage),
             ];
         }
-        return json_encode($mediaGalleryData);
+        return $this->_jsonEncoder->encode($mediaGalleryData);
     }
 
     /**
@@ -68,6 +76,6 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
             'videoStop' => $this->mediaHelper->getVideoStopAttribute(),
             'videoBackground' => $this->mediaHelper->getVideoBackgroundAttribute(),
         ];
-        return json_encode($videoSettingData);
+        return $this->_jsonEncoder->encode($videoSettingData);
     }
 }
