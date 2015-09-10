@@ -119,7 +119,7 @@ class Files
         $exclude = [];
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryDir) {
             $exclude[] = '#' . $libraryDir . '/Test#';
-            $innerLevelDirs = glob($libraryDir . '/*/*/Test/', GLOB_NOSORT);
+            $innerLevelDirs = glob($libraryDir . '/*/Test/', GLOB_NOSORT);
             foreach ($innerLevelDirs as $innerLevelDir) {
                 $exclude[] = '#' . $innerLevelDir;
             }
