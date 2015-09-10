@@ -155,21 +155,7 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-        $mediaRoles = $this->getProduct()->getMediaAttributes();
-        asort($mediaRoles);
-        foreach ($mediaRoles as $mediaRole) {
-            $fieldset->addField(
-                'video_' . $mediaRole->getAttributeCode(),
-                'checkbox',
-                    [
-                        'class' => 'video_image_role',
-                        'label' => $mediaRole->getFrontendLabel(),
-                        'title' => __($mediaRole->getFrontendLabel()),
-                        'data-role' => 'role-type-selector',
-                        'value' => $mediaRole->getAttributeCode(),
-                    ]
-            );
-        }
+        $this->addMediaRoleAttributes($fieldset);
 
         $fieldset->addField(
             'new_video_disabled',
@@ -229,5 +215,31 @@ HTML;
             $this->setData('product', $this->_coreRegistry->registry('product'));
         }
         return $this->getData('product');
+    }
+
+    /**
+     * Add media role attributes to fieldset
+     *
+     * @param \Magento\Framework\Data\Form\Element\Fieldset $fieldset
+     * @return $this
+     */
+    protected function addMediaRoleAttributes($fieldset)
+    {
+        $mediaRoles = $this->getProduct()->getMediaAttributes();
+        asort($mediaRoles);
+        foreach ($mediaRoles as $mediaRole) {
+            $fieldset->addField(
+                'video_' . $mediaRole->getAttributeCode(),
+                'checkbox',
+                [
+                    'class' => 'video_image_role',
+                    'label' => $mediaRole->getFrontendLabel(),
+                    'title' => __($mediaRole->getFrontendLabel()),
+                    'data-role' => 'role-type-selector',
+                    'value' => $mediaRole->getAttributeCode(),
+                ]
+            );
+        }
+        return $this;
     }
 }
