@@ -226,6 +226,7 @@ class DataGrid extends Grid
     public function massaction(array $items, $action, $acceptAlert = false, $massActionSelection = '')
     {
         $this->waitLoader();
+        $this->resetFilter();
         if ($this->_rootElement->find($this->noRecords)->isVisible()) {
             return;
         }
