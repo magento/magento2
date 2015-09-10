@@ -4,9 +4,8 @@
  */
 define(
     [
-        'ko',
         './messages'
-    ], function (ko, Messages) {
+    ], function (Messages) {
         'use strict';
         return new Messages();
     }

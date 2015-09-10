@@ -15,7 +15,7 @@ define(
         'Magento_Checkout/js/model/resource-url-manager',
         'Magento_Checkout/js/model/payment-service',
         'Magento_Checkout/js/model/error-processor',
-        '../model/payment/discount-messages',
+        'Magento_SalesRule/js/model/payment/discount-messages',
         'mage/storage',
         'Magento_Checkout/js/action/get-totals',
         'mage/translate',

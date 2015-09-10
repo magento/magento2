@@ -13,7 +13,7 @@ define(
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/resource-url-manager',
         'Magento_Checkout/js/model/error-processor',
-        '../model/payment/discount-messages',
+        'Magento_SalesRule/js/model/payment/discount-messages',
         'mage/storage',
         'Magento_Checkout/js/action/get-payment-information',
         'Magento_Checkout/js/model/totals',
