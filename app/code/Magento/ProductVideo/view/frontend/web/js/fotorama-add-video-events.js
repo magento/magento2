@@ -96,7 +96,7 @@ require([ "jquery", "jquery/ui", "catalogGallery"], function( $ ) {
     _checkForVideoExist : function () { //if there is no video data, we don't want to load anything
       if (!this.options.VideoData) return false;
       if (!this.options.VideoSettings) return false;
-
+      console.log(this.options.VideoSettings);
       var result = this._createVideoData(this.options.VideoData, false),
       checker = false;
       for (var key in result) {
