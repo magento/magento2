@@ -18,11 +18,6 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     private $model;
 
     /**
-     * @var Read | \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $directory;
-
-    /**
      * @var Factory | \PHPUnit_Framework_MockObject_MockObject
      */
     private $fileFactory;
@@ -32,28 +27,35 @@ class BaseTest extends \PHPUnit_Framework_TestCase
      */
     protected $pathPatternHelperMock;
 
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $readFactoryMock;
+
+    /**
+     * Component registry
+     *
+     * @var \Magento\Framework\Component\ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $componentRegistrarMock;
+
     protected function setUp()
     {
-        $this->directory = $this->getMock(
-            'Magento\Framework\Filesystem\Directory\Read',
-            ['getAbsolutePath', 'search'],
-            [],
-            '',
-            false
-        );
         $this->pathPatternHelperMock = $this->getMockBuilder('Magento\Framework\View\Helper\PathPattern')
             ->disableOriginalConstructor()
             ->getMock();
         $filesystem = $this->getMock('Magento\Framework\Filesystem', ['getDirectoryRead'], [], '', false);
-        $filesystem->expects($this->once())
-            ->method('getDirectoryRead')
-            ->with(DirectoryList::THEMES)
-            ->willReturn($this->directory);
+        $this->readFactoryMock = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadFactory')
+            ->disableOriginalConstructor()->getMock();
+        $this->componentRegistrarMock = $this->getMockBuilder('Magento\Framework\Component\ComponentRegistrarInterface')
+            ->disableOriginalConstructor()->getMock();
         $this->fileFactory = $this->getMock('Magento\Framework\View\File\Factory', [], [], '', false);
         $this->model = new \Magento\Framework\View\File\Collector\Override\Base(
             $filesystem,
             $this->fileFactory,
             $this->pathPatternHelperMock,
+            $this->componentRegistrarMock,
+            $this->readFactoryMock,
             'override'
         );
     }
@@ -75,18 +77,19 @@ class BaseTest extends \PHPUnit_Framework_TestCase
         foreach ($files as $file) {
             $returnKeys[] = sprintf($handlePath, $file['module'], $file['handle']);
         }
-
+        $readerMock = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadInterface')->getMock();
+        $this->readFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($readerMock));
+        $this->componentRegistrarMock->expects($this->once())
+            ->method('getPath');
+        $readerMock->expects($this->once())
+            ->method('search')
+            ->will($this->returnValue($returnKeys));
         $this->pathPatternHelperMock->expects($this->any())
             ->method('translatePatternFromGlob')
             ->with($filePath)
             ->willReturn($pathPattern);
-        $this->directory->expects($this->once())
-            ->method('search')
-            ->willReturn($returnKeys);
-        $this->directory->expects($this->any())
-            ->method('getAbsolutePath')
-            ->willReturnArgument(0);
-
         $checkResult = [];
         foreach ($files as $key => $file) {
             $checkResult[$key] = new \Magento\Framework\View\File($file['handle'], $file['module']);

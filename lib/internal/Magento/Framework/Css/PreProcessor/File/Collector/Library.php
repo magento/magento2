@@ -63,7 +63,9 @@ class Library implements CollectorInterface
         ComponentRegistrarInterface $componentRegistrar
     ) {
         $this->fileListFactory = $fileListFactory;
-        $this->libraryDirectory = $filesystem->getDirectoryRead(DirectoryList::LIB_WEB);
+        $this->libraryDirectory = $filesystem->getDirectoryRead(
+            \Magento\Framework\App\Filesystem\DirectoryList::LIB_WEB
+        );
         $this->fileFactory = $fileFactory;
         $this->readFactory = $readFactory;
         $this->componentRegistrar = $componentRegistrar;
@@ -85,7 +87,9 @@ class Library implements CollectorInterface
         foreach ($theme->getInheritedThemes() as $currentTheme) {
             $themeFullPath = $currentTheme->getFullPath();
             $directoryRead = $this->readFactory->create(
-                $this->componentRegistrar->getPath(ComponentRegistrar::THEME, $themeFullPath)
+                $this->componentRegistrar->getPath(
+                    \Magento\Framework\Component\ComponentRegistrar::THEME, $themeFullPath
+                )
             );
             $foundFiles = $directoryRead->search("web/{$filePath}");
             $files = [];

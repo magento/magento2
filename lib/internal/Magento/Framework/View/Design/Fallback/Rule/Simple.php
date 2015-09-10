@@ -73,10 +73,14 @@ class Simple implements RuleInterface
     {
         $pattern = $this->pattern;
         if (strpos($pattern, '<module_dir>/<namespace>/<module>') !== false) {
+            $this->validateReqParam($params, 'namespace');
+            $this->validateReqParam($params, 'module');
             $path = $this->moduleDirReader->getModuleDir('', $params['namespace'] . '_' . $params['module']);
             $pattern = str_replace('<module_dir>/<namespace>/<module>', $path, $pattern);
         }
         if (strpos($pattern, '<theme_dir>/<area>/<theme_path>') !== false) {
+            $this->validateReqParam($params, 'area');
+            $this->validateReqParam($params, 'theme_path');
             $path = $this->componentRegistrar->getPath(
                 ComponentRegistrar::THEME,
                 $params['area'] . '/' . $params['theme_path']
@@ -96,5 +100,20 @@ class Simple implements RuleInterface
             }
         }
         return [$pattern];
+    }
+
+    /**
+     * Validate required parameter
+     *
+     * @param array $params
+     * @param string $type
+     * @throws \InvalidArgumentException
+     */
+    private function validateReqParam(array $params, $type)
+    {
+        if (!$params[$type]) {
+            throw new \InvalidArgumentException("Required parameter '$type' was not passed");
+        }
+
     }
 }

@@ -9,7 +9,6 @@
 namespace Magento\Framework\View\Test\Unit\Design\Fallback;
 
 use \Magento\Framework\View\Design\Fallback\RulePool;
-
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
@@ -18,6 +17,11 @@ use Magento\Framework\Filesystem;
  */
 class RulePoolTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Magento\Framework\View\Design\Fallback\Rule\Simple|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $simpleObject;
+
     /**
      * @var RulePool
      */
@@ -49,7 +53,11 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
             ->method('getPaths')
             ->willReturn(['Magento_Theme' => '/Magento/Theme', 'namespace_module' => '/namespace/module']);
         $simpleFactory = $this->getMock('Magento\Framework\View\Design\Fallback\Rule\SimpleFactory', [], [], '', false);
-        $this->model = new RulePool($simpleFactory, $filesystemMock, $componentRegistrar);
+        $this->simpleObject = $this->getMock('Magento\Framework\View\Design\Fallback\Rule\Simple', [], [], '', false);
+        $simpleFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->simpleObject);
+        $this->model = new RulePool($filesystemMock, $componentRegistrar, $simpleFactory);
 
         $parentTheme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
         $parentTheme->expects($this->any())->method('getThemePath')->will($this->returnValue('parent_theme_path'));
@@ -117,6 +125,15 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
     public function testGetPatternDirsException($type, array $overriddenParams, $expectedErrorMessage)
     {
         $this->setExpectedException('InvalidArgumentException', $expectedErrorMessage);
+        if (array_key_exists('area', $overriddenParams)) {
+            $this->simpleObject->expects($this->any())
+                ->method('getPatternDirs')
+                ->willThrowException(new \InvalidArgumentException($expectedErrorMessage));
+        } else {
+            $this->simpleObject->expects($this->any())
+                ->method('getPatternDirs')
+                ->willReturn([]);
+        }
         $this->model->getRule($type)->getPatternDirs($overriddenParams + $this->defaultParams);
     }
 

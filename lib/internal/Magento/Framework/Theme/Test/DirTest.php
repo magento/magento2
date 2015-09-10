@@ -19,6 +19,10 @@ class DirTest extends \PHPUnit_Framework_TestCase
      */
     private $componentRegistrarMock;
 
+    /**
+     * Tests getAreaConfiguration()
+     *
+     */
     public function testGetAreaConfiguration()
     {
         $this->componentRegistrarMock = $this->getMockBuilder('Magento\Framework\Component\ComponentRegistrarInterface')
