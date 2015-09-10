@@ -123,7 +123,7 @@ abstract class Action extends AbstractAction
     /**
      * @return ResultInterface
      */
-    abstract protected function execute();
+    abstract public function execute();
 
     /**
      * Throw control to different action (control and module if was specified).
