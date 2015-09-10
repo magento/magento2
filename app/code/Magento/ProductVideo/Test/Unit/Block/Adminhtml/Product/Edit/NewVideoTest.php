@@ -73,14 +73,17 @@ class NewVideoTest extends \PHPUnit_Framework_TestCase
         $this->block->getHtmlId();
     }
 
-    public function testGetAfterElementHtml()
+    public function testGetWidgetOptions()
     {
         $rand = rand();
         $this->mathRandom->expects($this->any())->method('getUniqueHash')->with('id_')->willReturn('id_' . $rand);
-        $url = 'http://host/index.php/admin/catalog/product_gallery/upload/key/';
-        $this->urlBuilder->expects($this->once())->method('getUrl')->willReturn($url);
+        $saveVideoUrl = 'http://host/index.php/admin/catalog/product_gallery/upload/key/';
+        $saveRemoteVideoUrl = 'http://host/index.php/admin/product_video/product_gallery/retrieveImage/';
+        $this->urlBuilder->expects($this->once())->method('getUrl')->willReturn($saveVideoUrl);
+        $this->urlBuilder->expects($this->once())->method('getUrl')->willReturn($saveRemoteVideoUrl);
         $value = [
-            'saveVideoUrl' => $url,
+            'saveVideoUrl' => $saveVideoUrl,
+            'saveRemoteVideoUrl' => $saveRemoteVideoUrl,
             'htmlId' => 'id_' . $rand
         ];
         $this->jsonEncoderMock->expects($this->once())->method('encode')->with(
@@ -88,6 +91,6 @@ class NewVideoTest extends \PHPUnit_Framework_TestCase
         )->willReturn(
             json_encode($value)
         );
-        $this->block->getAfterElementHtml();
+        $this->block->getWidgetOptions();
     }
 }

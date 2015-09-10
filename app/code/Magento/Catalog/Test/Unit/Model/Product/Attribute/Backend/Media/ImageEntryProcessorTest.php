@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Backend\Media;
 
-class ImageMediaGalleryEntryProcessorTest extends \PHPUnit_Framework_TestCase
+class ImageEntryProcessorTest extends \PHPUnit_Framework_TestCase
 {
     /** * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Resource\ProductFactory */
     protected $productFactoryMock;
@@ -72,7 +72,7 @@ class ImageMediaGalleryEntryProcessorTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->modelObject = $objectManager->getObject(
-            '\Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageMediaGalleryEntryProcessor',
+            '\Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryProcessor',
             [
                 'productFactory' => $this->productFactoryMock,
                 'fileStorageDb' => $this->fileStorageDbMock,
@@ -202,7 +202,7 @@ class ImageMediaGalleryEntryProcessorTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->fileStorageDbMock->expects($this->exactly(2))->method('checkDbUsage')->willReturnOnConsecutiveCalls(
+        $this->fileStorageDbMock->expects($this->any())->method('checkDbUsage')->willReturnOnConsecutiveCalls(
             true,
             false
         );
