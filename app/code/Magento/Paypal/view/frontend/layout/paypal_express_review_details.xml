@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/layout_generic.xsd">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:library:framework:View/Layout/etc/layout_generic.xsd">
     <update handle="checkout_onepage_review_item_renderers"/>
     <container name="root">
         <block class="Magento\Paypal\Block\Express\Review\Details" name="page.block" template="express/review/details.phtml">

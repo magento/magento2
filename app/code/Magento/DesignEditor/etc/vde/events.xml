@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:library:framework:Event/etc/events.xsd">
     <event name="layout_generate_blocks_after">
         <observer name="vde_editor" instance="Magento\DesignEditor\Model\Observer" method="clearJs" />
     </event>

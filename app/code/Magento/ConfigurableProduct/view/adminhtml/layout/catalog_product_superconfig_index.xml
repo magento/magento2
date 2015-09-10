@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/layout_generic.xsd">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:library:framework:View/Layout/etc/layout_generic.xsd">
     <update handle="catalog_product_superconfig_config"/>
     <container name="root">
         <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Grid\AssociatedProduct" name="admin.product.edit.tab.super.config.grid.container"  template="Magento_ConfigurableProduct::catalog/product/edit/super/associated-product-grid.phtml"/>

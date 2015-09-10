@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:library:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Eav\Model\Entity\Setup\PropertyMapperInterface" type="Magento\Eav\Model\Entity\Setup\PropertyMapper\Composite" />
     <preference for="Magento\Eav\Api\Data\AttributeInterface" type="Magento\Eav\Model\Entity\Attribute" />
     <preference for="Magento\Eav\Api\AttributeRepositoryInterface" type="Magento\Eav\Model\AttributeRepository" />

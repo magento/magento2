@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../../../../../../../app/code/Magento/Backend/etc/menu.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:backend:etc/menu.xsd">
     <menu>
         <add id="Local_Module::area_config_design_node_email_template" title="Title 1" module="Local_Module" sortOrder="50" parent="Module_Name::area_config_design_node" action="adminhtml/level_one" />
     </menu>

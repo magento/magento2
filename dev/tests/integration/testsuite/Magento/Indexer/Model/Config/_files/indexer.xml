@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/Indexer/etc/indexer.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:library:framework:Indexer/etc/indexer.xsd">
     <indexer id="catalogsearch_fulltext" view_id="catalogsearch_fulltext"
              class="Magento\CatalogSearch\Model\Indexer\Fulltext"
              primary="first">
