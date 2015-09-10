@@ -14,12 +14,7 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/Cron"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ]
     }
 }
