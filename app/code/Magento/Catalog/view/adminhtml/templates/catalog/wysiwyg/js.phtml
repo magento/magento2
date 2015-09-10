@@ -5,15 +5,15 @@
  */
 
 // @codingStandardsIgnoreFile
-
 ?>
 <script>
 require([
     "jquery",
     "tinymce",
+    "Magento_Ui/js/modal/modal",
     "prototype",
     "mage/adminhtml/events"
-], function(jQuery, tinyMCE){
+], function(jQuery, tinyMCE, modal){
 
 //<![CDATA[
 
@@ -21,6 +21,7 @@ Window.keepMultiModalWindow = true;
 var catalogWysiwygEditor = {
     overlayShowEffectOptions : null,
     overlayHideEffectOptions : null,
+    modal: null,
     open : function(editorUrl, elementId) {
         if (editorUrl && elementId) {
            jQuery.ajax({
@@ -32,43 +33,40 @@ var catalogWysiwygEditor = {
                 showLoader: true,
                 dataType: 'html',
                 success: function(data, textStatus, transport) {
-                    try {
-                        this.openDialogWindow(data, elementId);
-                    } catch(e) {
-                        alert(e.message);
-                    }
+                    this.openDialogWindow(data, elementId);
                 }.bind(this)
             });
         }
     },
-    openDialogWindow : function(content, elementId) {
-        this.overlayShowEffectOptions = Windows.overlayShowEffectOptions;
-        this.overlayHideEffectOptions = Windows.overlayHideEffectOptions;
-        Windows.overlayShowEffectOptions = {duration:0};
-        Windows.overlayHideEffectOptions = {duration:0};
-        tinyMCE.editors[elementId].save();
-        Dialog.confirm(content, {
-            draggable:true,
-            resizable:true,
-            closable:true,
-            className:"magento",
-            windowClassName:"popup-window",
-            title:'WYSIWYG Editor',
-            width:950,
-            height:555,
-            recenterAuto:false,
-            hideEffect:Element.hide,
-            showEffect:Element.show,
-            id:"catalog-wysiwyg-editor",
-            buttonClass:"form-button",
-            okLabel:"Submit",
-            ok: this.okDialogWindow.bind(this),
-            cancel: this.closeDialogWindow.bind(this),
-            onClose: this.closeDialogWindow.bind(this),
-            firedElementId: elementId
-        });
+    openDialogWindow : function(data, elementId) {
+        var self = this;
+
+        if (this.modal) {
+            this.modal.html(jQuery(data).html());
+        } else {
+            this.modal = jQuery(data).modal({
+                title: 'WYSIWYG Editor',
+                modalClass: 'magento',
+                type: 'slide',
+                firedElementId: elementId,
+                buttons: [{
+                    text: 'Submit',
+                    click: function () {
+                        self.okDialogWindow(this);
+                    }
+                }, {
+                    text: 'Cancel',
+                    click: function () {
+                        self.closeDialogWindow(this);
+                    }
+                }],
+                close: function () {
+                    self.closeDialogWindow(this);
+                }
+            });
+        }
+        this.modal.modal('openModal');
         $(elementId + '_editor').value = $(elementId).value;
-        content.evalScripts.bind(content).defer();
     },
     okDialogWindow : function(dialogWindow) {
         if (dialogWindow.options.firedElementId) {
@@ -104,7 +102,7 @@ var catalogWysiwygEditor = {
            tinyMCE.execCommand('mceRemoveControl', true, wysiwygObj.id);
         }
 
-        dialogWindow.close();
+        dialogWindow.closeModal();
         Windows.overlayShowEffectOptions = this.overlayShowEffectOptions;
         Windows.overlayHideEffectOptions = this.overlayHideEffectOptions;
     }
