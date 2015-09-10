@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\ProductVideo\Test\Unit\Model\Product\Attribute\Media;
+namespace Magento\ProductVideo\Test\Unit\Model\Plugin;
 
 class ExternalVideoEntryProcessorTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,6 +37,8 @@ class ExternalVideoEntryProcessorTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Eav\Model\Entity\Attribute */
     protected $attributeMock;
 
+    protected $mediaBackendModel;
+
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      * |\Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryProcessor
@@ -59,7 +61,7 @@ class ExternalVideoEntryProcessorTest extends \PHPUnit_Framework_TestCase
 
         $this->filesystemMock = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
         $write = $this->getMock('\Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
-        $this->filesystemMock->expects($this->once())->method('getDirectoryWrite')->with('media')->willReturn($write);
+        $this->filesystemMock->expects($this->any())->method('getDirectoryWrite')->with('media')->willReturn($write);
 
         $this->resourceEntryMediaGalleryMock =
             $this->getMock('\Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media', [], [], '', false);
@@ -67,10 +69,12 @@ class ExternalVideoEntryProcessorTest extends \PHPUnit_Framework_TestCase
         $this->attributeMock = $this->getMock('\Magento\Eav\Model\Entity\Attribute', [], [], '', false);
         $this->attributeMock->expects($this->any())->method('getAttributeCode')->willReturn('media_gallery');
 
+        $this->mediaBackendModel = $this->getMock('Magento\Catalog\Model\Product\Attribute\Backend\Media', [], [], '', false);
+
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->modelObject = $objectManager->getObject(
-            '\Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryProcessor',
+            '\Magento\ProductVideo\Model\Plugin\ExternalVideoEntryProcessor',
             [
                 'productFactory' => $this->productFactoryMock,
                 'fileStorageDb' => $this->fileStorageDbMock,
@@ -82,7 +86,7 @@ class ExternalVideoEntryProcessorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAfterLoad()
+    public function testAfterAfterLoad()
     {
         $mediaData = [
             'images' => [
@@ -162,10 +166,12 @@ class ExternalVideoEntryProcessorTest extends \PHPUnit_Framework_TestCase
             $resourceEntryResult
         );
 
-        $this->modelObject->afterLoad($this->productMock, $this->attributeMock);
+        $this->mediaBackendModel->expects($this->any())->method('getAttribute')->willReturn($this->attributeMock);
+
+        $this->modelObject->afterAfterLoad($this->mediaBackendModel, $this->productMock);
     }
 
-    public function testAfterSave()
+    public function testAfterAfterSave()
     {
         $mediaData = [
             'images' => [
@@ -230,14 +236,16 @@ class ExternalVideoEntryProcessorTest extends \PHPUnit_Framework_TestCase
 
         $this->productMock->expects($this->once())->method('getData')->with('media_gallery')->willReturn($mediaData);
         $this->productMock->expects($this->once())->method('getStoreId')->willReturn(0);
+        $this->mediaBackendModel->expects($this->any())->method('getAttribute')->willReturn($this->attributeMock);
 
-        $this->modelObject->afterSave($this->productMock, $this->attributeMock);
+        $this->modelObject->afterAfterSave($this->mediaBackendModel, $this->productMock);
     }
 
-    public function testAfterSaveEmpty()
+    public function testAfterAfterSaveEmpty()
     {
         $this->productMock->expects($this->once())->method('getData')->with('media_gallery')->willReturn([]);
-        $this->modelObject->afterSave($this->productMock, $this->attributeMock);
+        $this->mediaBackendModel->expects($this->any())->method('getAttribute')->willReturn($this->attributeMock);
+        $this->modelObject->afterAfterSave($this->mediaBackendModel, $this->productMock);
     }
 
     public function testAfterLoadNoVideo()
@@ -267,8 +275,9 @@ class ExternalVideoEntryProcessorTest extends \PHPUnit_Framework_TestCase
         $this->resourceEntryMediaGalleryMock->expects($this->once())->method('loadDataFromTableByValueId')->willReturn(
             $resourceEntryResult
         );
+        $this->mediaBackendModel->expects($this->any())->method('getAttribute')->willReturn($this->attributeMock);
 
-        $this->modelObject->afterLoad($this->productMock, $this->attributeMock);
+        $this->modelObject->afterAfterLoad($this->mediaBackendModel, $this->productMock);
     }
 
     public function testBeforeSave()
@@ -325,8 +334,8 @@ class ExternalVideoEntryProcessorTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->productMock->expects($this->once())->method('getData')->with('media_gallery')->willReturn($mediaData);
-        $this->productMock->expects($this->once())->method('getStoreId')->willReturn(0);
+        $this->productMock->expects($this->any())->method('getData')->with('media_gallery')->willReturn($mediaData);
+        $this->productMock->expects($this->any())->method('getStoreId')->willReturn(0);
 
         $resourceEntryResult = [
             [
@@ -362,7 +371,8 @@ class ExternalVideoEntryProcessorTest extends \PHPUnit_Framework_TestCase
         $this->resourceEntryMediaGalleryMock->expects($this->once())->method('loadDataFromTableByValueId')->willReturn(
             $resourceEntryResult
         );
+        $this->mediaBackendModel->expects($this->any())->method('getAttribute')->willReturn($this->attributeMock);
 
-        $this->modelObject->beforeSave($this->productMock, $this->attributeMock);
+        $this->modelObject->afterBeforeSave($this->mediaBackendModel, $this->productMock);
     }
 }
