@@ -6,7 +6,7 @@
  */
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:module:webapi:etc/webapi.xsd">
     <!-- StoreView -->
     <route url="/V1/store/storeViews" method="GET">
         <service class="Magento\Store\Api\StoreRepositoryInterface" method="getList"/>

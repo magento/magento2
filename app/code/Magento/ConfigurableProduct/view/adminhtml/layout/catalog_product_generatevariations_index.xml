@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/layout_generic.xsd">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:library:framework:View/Layout/etc/layout_generic.xsd">
     <container name="root" label="Root">
         <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config" template="Magento_ConfigurableProduct::catalog/product/edit/super/generator.phtml" name="product-variations-generator" as="generator">
             <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Attribute" template="Magento_ConfigurableProduct::catalog/product/edit/super/attribute-template.phtml" as="attribute-renderer"/>

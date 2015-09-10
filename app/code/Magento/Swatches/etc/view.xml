@@ -5,7 +5,7 @@
 * See COPYING.txt for license details.
 */
 -->
-<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Config/etc/view.xsd">
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:library:framework:Config/etc/view.xsd">
     <images module="Magento_Catalog">
         <image id="swatch_image" type="swatch_image">
             <width>30</width>

@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Cron/etc/crontab.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:cron:etc/crontab.xsd">
     <group id="default">
         <job name="catalog_index_refresh_price" instance="\Magento\Catalog\Model\Indexer\Product\Price\Observer" method="refreshSpecialPrices">
             <schedule>0 * * * *</schedule>

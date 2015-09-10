@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Indexer/etc/indexer.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:library:framework:Indexer/etc/indexer.xsd">
     <indexer id="customer_grid" view_id="dummy" class="Magento\Framework\Indexer\Action\Entity" primary="customer">
         <title translate="true">Customer Grid</title>
         <description translate="true">Rebuild Customer grid index</description>

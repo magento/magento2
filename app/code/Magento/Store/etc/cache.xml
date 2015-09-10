@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Cache/etc/cache.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:library:framework:Cache/etc/cache.xsd">
     <type name="config" translate="label,description" instance="Magento\Framework\App\Cache\Type\Config">
         <label>Configuration</label>
         <description>Various XML configurations that were collected across modules and merged.</description>

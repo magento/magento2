@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:library:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Search\Api\SearchInterface" type="Magento\Search\Model\Search"/>
     <type name="Magento\Framework\Module\Setup\Migration">
         <arguments>

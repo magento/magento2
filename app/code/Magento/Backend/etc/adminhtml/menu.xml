@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/menu.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:backend:etc/menu.xsd">
     <menu>
         <add id="Magento_Backend::system_design_schedule" title="Schedule" module="Magento_Backend" sortOrder="30" parent="Magento_Backend::system_design" action="adminhtml/system_design" resource="Magento_Backend::schedule"/>
         <add id="Magento_Backend::system_currency" title="Currency" module="Magento_Backend" sortOrder="30" parent="Magento_Backend::stores" action="adminhtml/system_currency" resource="Magento_CurrencySymbol::system_currency"/>

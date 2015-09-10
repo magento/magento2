@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Config/etc/system_include.xsd">
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:config:etc/system_include.xsd">
     <group id="express_checkout" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="60">
         <label>Express Checkout</label>
         <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
