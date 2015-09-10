@@ -16,6 +16,8 @@ use Zend\View\Model\JsonModel;
 use Magento\Setup\Model\FilePermissions;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
+use Magento\Setup\Model\ModuleStatusFactory;
+use Magento\Framework\Module\Status;
 
 /**
  * Class Environment
@@ -67,6 +69,13 @@ class Environment extends AbstractActionController
     protected $phpReadinessCheck;
 
     /**
+     * Module/Status Object
+     *
+     * @var Status
+     */
+    protected $moduleStatus;
+
+    /**
      * Constructor
      *
      * @param FilePermissions $permissions
@@ -75,6 +84,7 @@ class Environment extends AbstractActionController
      * @param DependencyReadinessCheck $dependencyReadinessCheck
      * @param UninstallDependencyCheck $uninstallDependencyCheck
      * @param PhpReadinessCheck $phpReadinessCheck
+     * @param ModuleStatusFactory $moduleStatusFactory
      */
     public function __construct(
         FilePermissions $permissions,
@@ -82,7 +92,8 @@ class Environment extends AbstractActionController
         CronScriptReadinessCheck $cronScriptReadinessCheck,
         DependencyReadinessCheck $dependencyReadinessCheck,
         UninstallDependencyCheck $uninstallDependencyCheck,
-        PhpReadinessCheck $phpReadinessCheck
+        PhpReadinessCheck $phpReadinessCheck,
+        ModuleStatusFactory $moduleStatusFactory
     ) {
         $this->permissions = $permissions;
         $this->filesystem = $filesystem;
@@ -90,6 +101,7 @@ class Environment extends AbstractActionController
         $this->dependencyReadinessCheck = $dependencyReadinessCheck;
         $this->uninstallDependencyCheck = $uninstallDependencyCheck;
         $this->phpReadinessCheck = $phpReadinessCheck;
+        $this->moduleStatus = $moduleStatusFactory->create();
     }
 
     /**
@@ -282,6 +294,55 @@ class Environment extends AbstractActionController
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
             $data['errorMessage'] = $dependencyCheck['error'];
         }
+        $data['responseType'] = $responseType;
+        return new JsonModel($data);
+    }
+
+    /**
+     * Verifies component dependency for enable/disable actions
+     *
+     * @return JsonModel
+     */
+    public function enableDisableDependencyCheckAction()
+    {
+        $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
+        $data = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
+
+        try {
+            if (empty($data['packages'])) {
+                throw new \Exception('No packages have been found.');
+            }
+
+            if (empty($data['type'])) {
+                throw new \Exception('Can not determine the flow.');
+            }
+
+            $modules = $data['packages'];
+
+            $isEnable = ($data['type'] !== 'disable');
+
+            $modulesToChange = [];
+            foreach ($modules as $module) {
+                if (!isset($module['name'])) {
+                    throw new \Exception('Can not find module name.');
+                }
+                $modulesToChange[] = $module['name'];
+            }
+
+            $constraints = $this->moduleStatus->checkConstraints($isEnable, $modulesToChange);
+            $data = [];
+
+            if ($constraints) {
+                $data['errorMessage'] = "Unable to change status of modules because of the following constraints: "
+                    . implode("<br>", $constraints);
+                $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
+            }
+
+        } catch (\Exception $e) {
+            $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
+            $data['errorMessage'] = $e->getMessage();
+        }
+
         $data['responseType'] = $responseType;
         return new JsonModel($data);
     }
