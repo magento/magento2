@@ -162,7 +162,7 @@
             </argument>
         </paging>
     </container>
-    <columns name="product_columns" class="Magento\Catalog\Ui\Component\Listing\Columns">
+    <columns name="product_columns" class="Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="storageConfig" xsi:type="array">

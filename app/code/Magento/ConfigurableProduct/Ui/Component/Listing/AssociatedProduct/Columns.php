@@ -5,27 +5,24 @@
  */
 namespace Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct;
 
-class Filters extends \Magento\Ui\Component\Filters
+class Columns extends \Magento\Ui\Component\Listing\Columns
 {
-    /** @var \Magento\Catalog\Ui\Component\Listing\AttributeRepository */
-    protected $attributeRepository;
-
     /**
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
-     * @param \Magento\Catalog\Ui\Component\FilterFactory $filterFactory
+     * @param \Magento\Catalog\Ui\Component\ColumnFactory $columnFactory
      * @param \Magento\Catalog\Ui\Component\Listing\AttributeRepository $attributeRepository
      * @param array $components
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\UiComponent\ContextInterface $context,
-        \Magento\Catalog\Ui\Component\FilterFactory $filterFactory,
+        \Magento\Catalog\Ui\Component\ColumnFactory $columnFactory,
         \Magento\Catalog\Ui\Component\Listing\AttributeRepository $attributeRepository,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $components, $data);
-        $this->filterFactory = $filterFactory;
+        $this->columnFactory = $columnFactory;
         $this->attributeRepository = $attributeRepository;
     }
 
@@ -34,13 +31,10 @@ class Filters extends \Magento\Ui\Component\Filters
      */
     public function prepare()
     {
-        $attributeIds = $this->context->getRequestParam('attribute_ids');
-        if ($attributeIds) {
-            foreach ($this->attributeRepository->getList() as $attribute) {
-                $filter = $this->filterFactory->create($attribute, $this->getContext());
-                $filter->prepare();
-                $this->addComponent($attribute->getAttributeCode(), $filter);
-            }
+        foreach ($this->attributeRepository->getList() as $attribute) {
+            $column = $this->columnFactory->create($attribute, $this->getContext());
+                $column->prepare();
+                $this->addComponent($attribute->getAttributeCode(), $column);
         }
         parent::prepare();
     }

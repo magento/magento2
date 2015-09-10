@@ -27,7 +27,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
                     </div>
                 </div>
                 <!--<div class="product-create-configuration-actions">
-                    <a class="action-menu-item" data-action="choose" onclick="jQuery('#associated-products-container').trigger('openModal');" href="#">
+                    <a class="action-menu-item" data-action="choose" onclick="jQuery('[data-grid-id=associated-products-container]').trigger('openModal');" href="#">
                         <?/*= __('Add Products Manually');*/?>
                     </a>
                 </div>-->
@@ -48,8 +48,16 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
                 <?php echo $block->getChildHtml('generator'); ?>
 
                 <!-- Select Associated Product popup -->
-                <div id="associated-products-container">
-                    <?php echo $block->getGridHtml(); ?>
+                <div data-grid-id="associated-products-container">
+                    <div class="admin__data-grid-outer-wrap" data-bind="scope: 'configurable_associated_product_listing.configurable_associated_product_listing'">
+                        <div data-role="spinner" data-component="configurable_associated_product_listing.configurable_associated_product_listing.product_columns" class="admin__data-grid-loading-mask">
+                            <div class="spinner">
+                                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                            </div>
+                        </div>
+                        <!-- ko template: getTemplate() --><!-- /ko -->
+
+                    </div>
                 </div>
 
                 <input type="hidden" name="affect_configurable_product_attributes" value="1" />

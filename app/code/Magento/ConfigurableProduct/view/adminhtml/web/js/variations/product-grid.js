@@ -5,14 +5,18 @@
 define([
     'uiComponent',
     'jquery',
-    'ko',
-    'underscore'
-], function (Component, $, ko, _) {
+    'Magento_Ui/js/core/app',
+    'underscore',
+    'notification'
+], function (Component, $, bootstrap, _) {
     'use strict';
 
     return Component.extend({
         defaults: {
             associatedProductsModal: null,
+            associatedProductsGridUrl: '${ $.associatedProductsGridUrl }',
+            attributes: [],
+            gridSelector: '[data-grid-id=associated-products-container]',
             modules: {
                 associatedProductsFilter: '${ $.associatedProductsFilter }',
                 associatedProductsProvider: '${ $.associatedProductsProvider }',
@@ -24,12 +28,25 @@ define([
         /**
          * @todo description
          */
-        initialize: function () {
-            this._super();
+        initialize: function (options) {
+            this._super(options);
 
-            this.associatedProductsModal = $('#associated-products-container').modal({
+            var gridIsLoaded = false;
+            this.associatedProductsModal = $(this.gridSelector).modal({
                 title: $.mage.__('Select Associated Product'),
-                type: 'slide'
+                type: 'slide',
+                opened: function () {
+                    if (!gridIsLoaded) {
+                        $.ajax({
+                            type: 'GET',
+                            url: this._buildGridUrl(),
+                            context: $('body')
+                        }).success(function (data) {
+                            gridIsLoaded = true;
+                            bootstrap(JSON.parse(data));
+                        }.bind(this));
+                    }
+                }.bind(this)
             });
         },
 
@@ -37,7 +54,7 @@ define([
          * @todo description
          */
         initObservable: function () {
-            this._super().observe('actions opened attributes productMatrix');
+            this._super().observe('actions opened productMatrix');
 
             return this;
         },
@@ -55,13 +72,13 @@ define([
          * @todo description
          */
         open: function (attributes, showMassActionColumn) {
-            this.associatedProductsMassAction().visible(showMassActionColumn);
-            if (attributes) {
-                this._setFilter(attributes);
-            }
-
+            this.attributes = attributes;
+            this.associatedProductsMassAction(function(massActionComponent) {
+                massActionComponent.visible(showMassActionColumn);
+            });
+            this._setFilter();
             this._showMessageAssociatedGrid();
-            this.associatedProductsModal.trigger('openModal');
+            this.associatedProductsModal.modal('openModal');
         },
 
         /**
@@ -79,26 +96,53 @@ define([
         },
 
         /**
-         * @todo description
+         * Build grid url
+         *
+         * @returns {string}
+         * @private
          */
-        _showMessageAssociatedGrid: function () {
-            if (this.associatedProductsProvider().data.items.length) {
-                this.associatedProductsModal
-                    .find('[data-role="messages"] div div')
-                    .text($.mage.__('Choose a new product to delete and replace the current product configuration.'));
-            } else {
-                this.associatedProductsModal
-                    .find('[data-role="messages"] div div')
-                    .text($.mage.__('For better results, add attributes and attribute values to your products.'));
-            }
+        _buildGridUrl: function() {
+            var params = this.attributes
+                ? '?' + $.param({filters: this.attributes, attribute_ids: _.keys(this.attributes)})
+                : '';
+            return this.associatedProductsGridUrl + params;
         },
 
         /**
          * @todo description
          */
-        _setFilter: function (attributes) {
-            this.associatedProductsProvider().params['attribute_ids'] = _.keys(attributes);
-            this.associatedProductsFilter().set('filters', attributes).apply();
+        _showMessageAssociatedGrid: function () {
+            var messageInited = false;
+            this.associatedProductsProvider(function(provider) {
+                if (!messageInited) {
+                    this.associatedProductsModal.notification();
+                }
+                this.associatedProductsModal.notification('clear');
+                if (provider.data.items.length) {
+                    this.associatedProductsModal.notification('add', {
+                        message: $.mage.__('Choose a new product to delete and replace the current product configuration.'),
+                        messageContainer: this.gridSelector
+                    });
+                } else {
+                    this.associatedProductsModal.notification('add', {
+                        message: $.mage.__('For better results, add attributes and attribute values to your products.'),
+                        messageContainer: this.gridSelector
+                    });
+                }
+            }.bind(this));
+        },
+
+        /**
+         * @todo description
+         */
+        _setFilter: function () {
+            this.associatedProductsProvider(function(provider) {
+                provider.params['attribute_ids'] = _.keys(this.attributes);
+            }.bind(this));
+            this.associatedProductsFilter(function(filter) {
+                filter.set('filters', this.attributes)
+                .apply();
+            }.bind(this));
         }
     });
 });
