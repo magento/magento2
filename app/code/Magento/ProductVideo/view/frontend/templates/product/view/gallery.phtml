@@ -1,0 +1,67 @@
+<?php
+/**
+ * Copyright � 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * Product media data template
+ *
+ * @var $block \Magento\ProductVideo\Block\Product\View\Gallery
+ */
+?>
+<div class="gallery-placeholder"></div>
+<script>
+  var mediaGalleryData = <?php echo $block->getMediaGalleryDataJson(); ?>;
+  var generalVideoSettings = {
+    showRelatedYT : false,
+    VideoAutoRestart : false,
+    PlayIfBase : true
+  };
+</script>
+<script type="text/x-magento-init">
+    {
+        ".gallery-placeholder": {
+            "mage/gallery/gallery": {
+                "mixins":["magnifier/magnify"],
+                "magnifierOpts": {
+                    "enabled": <?php echo $block->getVar("magnifier:enabled", "Magento_Catalog"); ?>,
+                    "eventType": "<?php echo $block->getVar("magnifier:action", "Magento_Catalog"); ?>",
+                    "width": "<?php echo $block->getVar("magnifier:width", "Magento_Catalog"); ?>",
+                    "height": "<?php echo $block->getVar("magnifier:height", "Magento_Catalog"); ?>",
+                    "top": "<?php echo $block->getVar("magnifier:top", "Magento_Catalog"); ?>",
+                    "left": "<?php echo $block->getVar("magnifier:left", "Magento_Catalog"); ?>"
+                },
+                "data": <?php echo $block->getGalleryImagesJson(); ?>,
+                "options": {
+                    "nav": "<?php echo $block->getVar("gallery:navigation", "Magento_Catalog"); ?>",
+                    "loop": <?php echo $block->getVar("gallery:loop", "Magento_Catalog"); ?>,
+                    "keyboard": <?php echo $block->getVar("gallery:keyboard", "Magento_Catalog"); ?>,
+                    "arrows": <?php echo $block->getVar("gallery:arrows", "Magento_Catalog"); ?>,
+                    "showCaption": <?php echo $block->getVar("gallery:show_caption", "Magento_Catalog"); ?>,
+                    "width": <?php echo $block->getImageAttribute('product_page_image_medium', 'width'); ?>,
+                    "thumbwidth": <?php echo $block->getImageAttribute('product_page_image_small', 'width'); ?>,
+                    "thumbheight": <?php echo $block->getImageAttribute('product_page_image_small', 'height')
+        ?: $block->getImageAttribute('product_page_image_small', 'width'); ?>,
+                    "height": <?php echo $block->getImageAttribute('product_page_image_medium', 'height')
+        ?: $block->getImageAttribute('product_page_image_medium', 'width'); ?>
+                },
+                "breakpoints": {
+                    "mobile": {
+                        "conditions": {
+                            "max-width": "767px"
+                        },
+                        "options": {
+                            "options": {
+                                "nav": "dots"
+                            },
+                            "magnifierOpts": {
+                                "enabled": false
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+</script>

@@ -1,4 +1,4 @@
-require([ "jquery", "jquery/ui", "mage/gallery"], function( $ ) {
+require([ "jquery", "jquery/ui", "catalogGallery"], function( $ ) {
   //this section is for helper functions
   function parseHref (href) {
     var a = document.createElement('a');
@@ -42,13 +42,16 @@ require([ "jquery", "jquery/ui", "mage/gallery"], function( $ ) {
   //create AddFotoramaVideoEvents widget
   $.widget('mage.AddFotoramaVideoEvents', {
 
+    options : {
+      VideoData : {}, //Filled on widget call from fotorama.js
+      VideoSettings : {} //Filled on widget call from fotorama.js
+    },
+
     PV : 'product-video', // [CONST]
     VID : 'video', // [CONST]
     VI : 'vimeo', // [CONST]
-    VideoData : {}, //Filled later in checkForVideoExistance()
     Base : 0, //on check for video is base this setting become true if there is any video with base role
     MobileMaxWidth : 767, //max mobile width, currently for playing video if it's base one, we don't need it autoplay if it's on mobile version
-    VideoSettings : {}, //later is filled with external data
     GP : 'gallery-placeholder', //gallery placeholed class is needed to find and erase <script> tag
     //VT : 'video-timing', // [CONST]
     //attachTiming : 0, // [BOOLEAN] turn this on (by setting 1) if you need to display block with video timing BEFORE the player is loaded in fotorama frame
@@ -62,9 +65,9 @@ require([ "jquery", "jquery/ui", "mage/gallery"], function( $ ) {
       }
     },
 
-    _createVideoData : function (inputData) { //create appropriate video data object from backend JSON
+    _createVideoData : function (inputData, isJSON) { //create appropriate video data object from backend JSON
       var videoData = {};
-      inputData = $.parseJSON(inputData);
+      if (isJSON) inputData = $.parseJSON(inputData);
 
       for (var key in inputData) {
         var DataUrl = '';
@@ -91,32 +94,31 @@ require([ "jquery", "jquery/ui", "mage/gallery"], function( $ ) {
     },
 
     _checkForVideoExist : function () { //if there is no video data, we don't want to load anything
-      if (!MediaGalleryData) return false;
-      if (!GeneralVideoSettings) return false;
-      this.VideoSettings = GeneralVideoSettings;
-      var result = this._createVideoData(MediaGalleryData),
-      checker = false;
+      if (!this.options.VideoData) return false;
+      if (!this.options.VideoSettings) return false;
 
+      var result = this._createVideoData(this.options.VideoData, false),
+      checker = false;
       for (var key in result) {
         if (result[key].mediaType === this.VID) {
           checker = true;
         }
       }
-      if (checker) this.VideoData = result;
+      if (checker) this.options.VideoData = result;
       return checker;
     },
 
     _checkForVimeo : function () { //check for any vimeo provider in data, cause we need to load external framework in order for Vimeo player to work
-      var AllVideoData = this.VideoData;
+      var AllVideoData = this.options.VideoData;
       for (var VideoItem in AllVideoData) {
         if (AllVideoData[VideoItem].provider === this.VI) this._loadVimeoJSFramework();
       }
     },
 
     _isVideoBase : function () { // we check if there is any video with BASE role, if there is any - play it as soon as the page loads, if it desktop
-      var AllVideoData = this.VideoData;
+      var AllVideoData = this.options.VideoData;
       for (var VideoItem in AllVideoData) {
-        if (AllVideoData[VideoItem].mediaType === this.VID && AllVideoData[VideoItem].isBase && this.VideoSettings.PlayIfBase) this.Base = true;
+        if (AllVideoData[VideoItem].mediaType === this.VID && AllVideoData[VideoItem].isBase && this.options.VideoSettings.PlayIfBase) this.Base = true;
       }
     },
 
@@ -124,7 +126,7 @@ require([ "jquery", "jquery/ui", "mage/gallery"], function( $ ) {
         var element = document.createElement('script'),
           scriptTag = document.getElementsByTagName('script')[0];
 
-        element.async = false;
+        element.async = true;
         element.src = "https://f.vimeocdn.com/js/froogaloop2.min.js";
         scriptTag.parentNode.insertBefore(element, scriptTag);
     },
@@ -138,7 +140,7 @@ require([ "jquery", "jquery/ui", "mage/gallery"], function( $ ) {
       this._startPrepareForPlayer(e, fotorama);
 
       for (var t = 0; t < $thumbs.length; t++) {
-        if (this.VideoData[t].mediaType === this.VID) {
+        if (this.options.VideoData[t].mediaType === this.VID) {
           $thumbsParent.find('.fotorama__nav__frame:eq('+t+')').addClass('video-thumb-icon');
         }
       }
@@ -161,7 +163,7 @@ require([ "jquery", "jquery/ui", "mage/gallery"], function( $ ) {
 
     _checkForVideo : function (e, fotorama, number) { //number is stands for the element number relatively to current active frame, +1 is to the next frame from the current active one, -1 is to previous
       var FrameNumber = parseInt(fotorama.activeFrame.i),
-          videoData = this.VideoData[FrameNumber - 1 + number],
+          videoData = this.options.VideoData[FrameNumber - 1 + number],
           $image = fotorama.data[FrameNumber - 1 + number];
       if ($image) $image = $image.$stageFrame;
 
@@ -178,13 +180,15 @@ require([ "jquery", "jquery/ui", "mage/gallery"], function( $ ) {
 
     _createVideoContainer : function (videoData, $image) {
       if ($image.find('.'+this.PV).length === 0) { //dont touch anything if there is already <div> with data in current frame
-        $image.append('<div class="'+this.PV+'" data-related="'+this.VideoSettings.showRelatedYT+'" data-loop="'+this.VideoSettings.VideoAutoRestart+'" data-type="'+videoData.provider+'" data-code="'+videoData.id+'" data-width="100%" data-height="100%"></div>');
+        $image.append('<div class="'+this.PV+'" data-related="'+this.options.VideoSettings.showRelatedYT+'" data-loop="'+this.options.VideoSettings.VideoAutoRestart+'" data-type="'+videoData.provider+'" data-code="'+videoData.id+'" data-width="100%" data-height="100%"></div>');
       }
     },
 
     _setVideoEvent : function ($image, PV, fotorama, number) {
+      $image.find('.magnify-lens').remove();
       $image.on('click', function() {
         if ($(this).hasClass('video-unplayed')) {
+
           $(this).find('.video-timing').remove();
           $(this).removeClass('video-unplayed');
           $(this).find('.'+PV).productVideoLoader();
@@ -194,9 +198,9 @@ require([ "jquery", "jquery/ui", "mage/gallery"], function( $ ) {
     },
 
     _handleBaseVideo : function (fotorama, number) {
-      if (this.Base && this.VideoData[fotorama.activeIndex].isBase && number === 0 && $(window).width() > this.MobileMaxWidth) {
+      if (this.Base && this.options.VideoData[fotorama.activeIndex].isBase && number === 0 && $(window).width() > this.MobileMaxWidth) {
         //if we have found Base video, and current active frame is the right one, and called number (index) is 0 and its not a mobile - play it for one time
-        if (this.VideoData[fotorama.activeIndex].provider === this.VI) { //if we have vimeo video as base one, we need to wait for froogaloop for load
+        if (this.options.VideoData[fotorama.activeIndex].provider === this.VI) { //if we have vimeo video as base one, we need to wait for froogaloop for load
           var waitForFroogaloop = setInterval($.proxy(function() {
             if (window.Froogaloop) {
               clearInterval(waitForFroogaloop);

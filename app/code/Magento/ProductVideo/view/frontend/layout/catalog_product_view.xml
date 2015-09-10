@@ -11,4 +11,9 @@
         <link src="Magento_ProductVideo::js/fotorama-add-video-events.js"/>
         <link src="Magento_ProductVideo::js/load-player.js"/>
     </head>
+    <body>
+        <referenceContainer name="product.info.media">
+            <block class="Magento\ProductVideo\Block\Product\View\Gallery" name="product.info.media.image" template="product/view/gallery.phtml"/>
+        </referenceContainer>
+    </body>
 </page>
