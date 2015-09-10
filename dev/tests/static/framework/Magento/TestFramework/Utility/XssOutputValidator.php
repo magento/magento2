@@ -201,7 +201,10 @@ class XssOutputValidator
 
         switch (true)
         {
-            case preg_match('/->(escapeUrl|escapeQuote|escapeXssInUrl|.*html.*)\(/simU', $this->getLastMethod($command)):
+            case preg_match(
+                '/->(escapeUrl|escapeQuote|escapeXssInUrl|.*html.*)\(/simU',
+                $this->getLastMethod($command)
+            ):
                 return false;
             case preg_match('/^\((int|bool|float)\)/sim', $command):
                 return false;
