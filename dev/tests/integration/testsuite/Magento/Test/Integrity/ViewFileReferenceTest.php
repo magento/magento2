@@ -20,8 +20,6 @@
  */
 namespace Magento\Test\Integrity;
 
-use Magento\Framework\Component\ComponentRegistrar;
-
 class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -49,11 +47,6 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
      */
     protected static $_themeCollection;
 
-    /**
-     * @var ComponentRegistrar
-     */
-    protected static $componentRegistrar;
-
     public static function setUpBeforeClass()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -64,7 +57,7 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
         /** @var $fallbackPool \Magento\Framework\View\Design\Fallback\RulePool */
         $fallbackPool = $objectManager->get('Magento\Framework\View\Design\Fallback\RulePool');
         self::$_fallbackRule = $fallbackPool->getRule(
-            \Magento\Framework\View\Design\Fallback\RulePool::TYPE_STATIC_FILE
+            $fallbackPool::TYPE_STATIC_FILE
         );
 
         self::$_viewFilesFallback = $objectManager->get(
@@ -190,7 +183,6 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
      */
     public static function modularFallbackDataProvider()
     {
-        self::$componentRegistrar = new ComponentRegistrar();
         $result = [];
         foreach (self::_getFilesToProcess() as $file) {
             $file = (string)$file;
@@ -227,8 +219,9 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
     {
         $result = [];
         $rootDir = self::_getRootDir();
+        $componentRegistrar = new \Magento\Framework\Component\ComponentRegistrar();
         $dirs = array_merge(
-            self::$componentRegistrar->getPaths(ComponentRegistrar::MODULE),
+            $componentRegistrar->getPaths(\Magento\Framework\Component\ComponentRegistrar::MODULE),
             [$rootDir . '/app/design']
         );
         foreach ($dirs as $dir) {
@@ -263,7 +256,8 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
     {
         $file = str_replace('\\', '/', $file);
         $areaPatterns = ['#app/design/([^/]+)/#S'];
-        foreach (self::$componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
+        $componentRegistrar = new \Magento\Framework\Component\ComponentRegistrar();
+        foreach ($componentRegistrar->getPaths(\Magento\Framework\Component\ComponentRegistrar::MODULE) as $moduleDir) {
             $areaPatterns[] = '#' . $moduleDir . '/view/([^/]+)/#S';
         }
         foreach ($areaPatterns as $pattern) {

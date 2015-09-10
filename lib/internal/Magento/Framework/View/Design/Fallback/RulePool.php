@@ -208,9 +208,11 @@ class RulePool
     {
         return new Composite(
             [
-                new Theme($this->simpleFactory->create(
-                    ['pattern' => "<theme_dir>/<area>/<theme_path>/<namespace>_<module>/email"]
-                )),
+                new Theme(
+                    $this->simpleFactory->create(
+                        ['pattern' => "<theme_dir>/<area>/<theme_path>/<namespace>_<module>/email"]
+                    )
+                ),
                 $this->simpleFactory->create(['pattern' => "<module_dir>/<namespace>/<module>/view/<area>/email"]),
             ]
         );
