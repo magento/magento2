@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:library:framework:Event/etc/events.xsd">
     <event name="catalogsearch_query_save_after">
         <observer name="magento_advancedsearch_recommendations"
                   instance="Magento\AdvancedSearch\Model\Recommendations\Observer"
