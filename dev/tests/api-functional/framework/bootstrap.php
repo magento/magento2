@@ -20,10 +20,10 @@ $logWriter->setFormatter(new \Zend_Log_Formatter_Simple('%message%' . PHP_EOL));
 $logger = new \Zend_Log($logWriter);
 
 // Register the modules under '_files/'
-$path = dirname(__DIR__) . '/_files/*/*/registration.php';
-$files = glob($path, GLOB_NOSORT);
+$pathPattern = dirname(__DIR__) . '/_files/*/*/registration.php';
+$files = glob($pathPattern, GLOB_NOSORT);
 if ( $files === false ) {
-    throw new \RuntimeException('glob() returned error while searching in \'' . $path . '\'');
+    throw new \RuntimeException('glob() returned error while searching in \'' . $pathPattern . '\'');
 }
 foreach ($files as $file) {
     include $file;

@@ -4,5 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-Magento\Framework\Component\ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Magento_TestModuleJoinDirectives', __DIR__);
-?>
+Magento\Framework\Component\ComponentRegistrar::register(
+    ComponentRegistrar::MODULE,
+    'Magento_TestModuleJoinDirectives',
+    __DIR__
+);

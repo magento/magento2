@@ -5,4 +5,3 @@
  */
 
 Magento\Framework\Component\ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Magento_TestModule5', __DIR__);
-?>
