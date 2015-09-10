@@ -39,50 +39,50 @@
 .video-placeholder .image-placeholder-text {
   font-weight: 400;
 }
-.admin__field.field-video_base_image .admin__field-control,
+.admin__field.field-video_image .admin__field-control,
 .admin__field.field-video_small_image .admin__field-control,
-.admin__field.field-video_thumb_image .admin__field-control,
+.admin__field.field-video_thumbnail .admin__field-control,
 .admin__field.field-video_swatch_image .admin__field-control,
 .admin__field.field-new_video_disabled .admin__field-control {
   width: 82px;
   margin-left: calc( (100%) * .33333333 - 30px );
 }
-.admin__field.field-video_base_image .admin__field-control input,
+.admin__field.field-video_image .admin__field-control input,
 .admin__field.field-video_small_image .admin__field-control input,
-.admin__field.field-video_thumb_image .admin__field-control input,
+.admin__field.field-video_thumbnail .admin__field-control input,
 .admin__field.field-video_swatch_image .admin__field-control input,
 .admin__field.field-new_video_disabled .admin__field-control input {
   float: right;
 }
-.admin__field.field-video_base_image .admin__field-label,
+.admin__field.field-video_image .admin__field-label,
 .admin__field.field-video_small_image .admin__field-label,
-.admin__field.field-video_thumb_image .admin__field-label,
+.admin__field.field-video_thumbnail .admin__field-label,
 .admin__field.field-video_swatch_image .admin__field-label,
 .admin__field.field-new_video_disabled .admin__field-label {
   width: 200px;
   position: absolute;
   margin-left: calc( (100%) * .33333333 - 30px + 90px );
 }
-.admin__field.field-video_base_image .admin__field-label span,
+.admin__field.field-video_image .admin__field-label span,
 .admin__field.field-video_small_image .admin__field-label span,
-.admin__field.field-video_thumb_image .admin__field-label span,
+.admin__field.field-video_thumbnail .admin__field-label span,
 .admin__field.field-video_swatch_image .admin__field-label span,
 .admin__field.field-new_video_disabled .admin__field-label span {
   float: left;
 }
-.admin__field.field-video_base_image,
+.admin__field.field-video_image,
 .admin__field.field-video_small_image,
-.admin__field.field-video_thumb_image,
+.admin__field.field-video_thumbnail,
 .admin__field.field-video_swatch_image {
   margin-bottom: 20px !important;
 }
 .admin__field.field-new_video_disabled {
   margin-top: 32px !important;
 }
-.admin__field.field-video_base_image .admin__field-control {
+.admin__field.field-video_image .admin__field-control {
   position: relative;
 }
-.admin__field.field-video_base_image .admin__field-control:after {
+.admin__field.field-video_image .admin__field-control:after {
   content: 'Role';
   position: absolute;
   color: #000;

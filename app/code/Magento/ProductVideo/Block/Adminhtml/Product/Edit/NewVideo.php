@@ -18,16 +18,6 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
     protected $_jsonEncoder;
 
     /**
-     * Product types that support swatch images for video
-     *
-     * @var array
-     */
-    protected $swatchImageProductTypes = [
-        Type::TYPE_SIMPLE,
-        Type::TYPE_VIRTUAL
-    ];
-
-    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\Registry $registry
@@ -165,53 +155,19 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-        $fieldset->addField(
-            'video_base_image',
-            'checkbox',
-            [
-                'class' => 'video_image_role',
-                'label' => 'Base Image',
-                'title' => __('Base Image'),
-                'data-role' => 'role-type-selector',
-                'value' => 'image',
-            ]
-        );
-
-        $fieldset->addField(
-            'video_small_image',
-            'checkbox',
-            [
-                'class' => 'video_image_role',
-                'label' => 'Small Image',
-                'title' => __('Small Image'),
-                'data-role' => 'role-type-selector',
-                'value' => 'small_image',
-            ]
-        );
-
-        $fieldset->addField(
-            'video_thumb_image',
-            'checkbox',
-            [
-                'class' => 'video_image_role',
-                'label' => 'Thumbnail',
-                'title' => __('Thumbnail'),
-                'data-role' => 'role-type-selector',
-                'value' => 'thumbnail',
-            ]
-        );
-
-        if (in_array($this->getProduct()->getTypeId(), $this->swatchImageProductTypes)) {
+        $mediaRoles = $this->getProduct()->getMediaAttributes();
+        asort($mediaRoles);
+        foreach ($mediaRoles as $mediaRole) {
             $fieldset->addField(
-                'video_swatch_image',
+                'video_' . $mediaRole->getAttributeCode(),
                 'checkbox',
-                [
-                    'class' => 'video_image_role',
-                    'label' => 'Swatch Image',
-                    'title' => __('Swatch Image'),
-                    'data-role' => 'role-type-selector',
-                    'value' => 'swatch_image',
-                ]
+                    [
+                        'class' => 'video_image_role',
+                        'label' => $mediaRole->getFrontendLabel(),
+                        'title' => __($mediaRole->getFrontendLabel()),
+                        'data-role' => 'role-type-selector',
+                        'value' => $mediaRole->getAttributeCode(),
+                    ]
             );
         }
 
