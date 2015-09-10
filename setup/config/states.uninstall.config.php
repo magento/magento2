@@ -59,15 +59,15 @@ return [
             'id'          => 'root.data-option',
             'url'         => 'data-option',
             'templateUrl' => "$base/data-option",
-            'title'       => "Data \n Option",
+            'title'       => "Remove or \n Keep Data",
             'controller'  => 'dataOptionController',
-            'header'      => 'Step 3: Data Option',
+            'header'      => 'Step 3: Remove or Keep Data',
             'nav'         => true,
             'order'       => 6,
             'type'        => 'uninstall'
         ],
         [
-            'id'          => 'root.uninstall',
+            'id'          => 'root.start-updater-uninstall',
             'url'         => 'uninstall',
             'templateUrl' => "$base/start-updater",
             'title'       => "Uninstall",
