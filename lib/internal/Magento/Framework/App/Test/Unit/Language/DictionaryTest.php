@@ -47,7 +47,7 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->model = new Dictionary($this->readFactory, $this->componentRegistrar , $this->configFactory);
+        $this->model = new Dictionary($this->readFactory, $this->componentRegistrar, $this->configFactory);
     }
 
     /**

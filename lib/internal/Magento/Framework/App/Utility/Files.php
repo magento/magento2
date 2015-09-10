@@ -891,7 +891,7 @@ class Files
             $themePath = '*/*';
             $result = [];
             $moduleTemplatePaths = [];
-            foreach ($this->getModuleDirs() as $moduleDir) {
+            foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
                 $moduleTemplatePaths[] = $moduleDir . "/view/{$area}/templates";
             }
             $this->_accumulateFilesByPatterns(
@@ -1071,6 +1071,7 @@ class Files
      * @param string &$path
      * @return bool
      */
+    /** The method classFileExists() has a Cyclomatic Complexity of 11. The configured cyclomatic complexity threshold is 10.    */
     public function classFileExists($class, &$path = '')
     {
         if ($class[0] == '\\') {
