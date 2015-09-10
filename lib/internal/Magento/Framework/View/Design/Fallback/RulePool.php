@@ -90,13 +90,13 @@ class RulePool
     protected function createTemplateFileRule()
     {
         return new ModularSwitch(
-            new Theme(
-             $this->simpleFactory->create(['pattern' => "<theme_dir>/<area>/<theme_path>/templates"])
-            ),
+            new Theme($this->simpleFactory->create(['pattern' => "<theme_dir>/<area>/<theme_path>/templates"])),
             new Composite(
                 [
-                    new Theme($this->simpleFactory->create(
-                        ['pattern' => "<theme_dir>/<area>/<theme_path>/<namespace>_<module>/templates"])
+                    new Theme(
+                        $this->simpleFactory->create(
+                            ['pattern' => "<theme_dir>/<area>/<theme_path>/<namespace>_<module>/templates"]
+                        )
                     ),
                     $this->simpleFactory->create(
                         ['pattern' => "<module_dir>/<namespace>/<module>/view/<area>/templates"]
@@ -121,9 +121,11 @@ class RulePool
                 ->create(['pattern' => "<theme_dir>/<area>/<theme_path>"])),
             new Composite(
                 [
-                    new Theme($this->simpleFactory->create(
-                        ['pattern' => "<theme_dir>/<area>/<theme_path>/<namespace>_<module>"]
-                    )),
+                    new Theme(
+                        $this->simpleFactory->create(
+                            ['pattern' => "<theme_dir>/<area>/<theme_path>/<namespace>_<module>"]
+                        )
+                    ),
                     $this->simpleFactory->create(['pattern' => "<module_dir>/<namespace>/<module>/view/<area>"]),
                     $this->simpleFactory->create(['pattern' => "<module_dir>/<namespace>/<module>/view/base"]),
                 ]

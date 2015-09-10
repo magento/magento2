@@ -75,6 +75,8 @@ class Iframe extends \Magento\Payment\Block\Form
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Paypal\Helper\Hss $hssHelper
+     * @param \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
+     * @param \Magento\Framework\Module\Dir\Reader $reader
      * @param array $data
      */
     public function __construct(

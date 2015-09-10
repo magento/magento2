@@ -5,11 +5,9 @@
  */
 namespace Magento\Framework\View\Design\Fallback\Rule;
 
-
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Module\Dir\Reader;
-
 
 /**
  * Class with simple substitution parameters to values
@@ -80,7 +78,8 @@ class Simple implements RuleInterface
         }
         if (strpos($pattern, '<theme_dir>/<area>/<theme_path>') !== false) {
             $path = $this->componentRegistrar->getPath(
-                ComponentRegistrar::THEME, $params['area'] . '/' . $params['theme_path']
+                ComponentRegistrar::THEME,
+                $params['area'] . '/' . $params['theme_path']
             );
             $pattern = str_replace('<theme_dir>/<area>/<theme_path>', $path, $pattern);
         }

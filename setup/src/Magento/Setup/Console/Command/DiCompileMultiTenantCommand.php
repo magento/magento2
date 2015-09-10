@@ -79,7 +79,7 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
      *
      * @var array
      */
-    private $files;
+    private $files = [];
 
     /**
      *

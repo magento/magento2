@@ -5,6 +5,8 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
+use Magento\Framework\Component\ComponentRegistrar;
+
 class RouteConfigFilesTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -42,8 +44,12 @@ class RouteConfigFilesTest extends \PHPUnit_Framework_TestCase
     {
         $invalidFiles = [];
 
-        $mask = BP . '/app/code/*/*/etc/*/routes.xml';
-        $files = glob($mask);
+        $componentRegistrar = new ComponentRegistrar();
+        $files = [];
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
+            $mask = $moduleDir . '/etc/*/routes.xml';
+            $files = array_merge($files, glob($mask));
+        }
         $mergedConfig = new \Magento\Framework\Config\Dom('<config></config>', $this->_idAttributes);
 
         foreach ($files as $file) {

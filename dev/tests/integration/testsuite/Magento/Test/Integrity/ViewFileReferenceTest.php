@@ -20,6 +20,8 @@
  */
 namespace Magento\Test\Integrity;
 
+use Magento\Framework\Component\ComponentRegistrar;
+
 class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -46,6 +48,11 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Theme\Model\Theme\Collection
      */
     protected static $_themeCollection;
+
+    /**
+     * @var ComponentRegistrar
+     */
+    protected static $componentRegistrar;
 
     public static function setUpBeforeClass()
     {
@@ -183,6 +190,7 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
      */
     public static function modularFallbackDataProvider()
     {
+        self::$componentRegistrar = new ComponentRegistrar();
         $result = [];
         foreach (self::_getFilesToProcess() as $file) {
             $file = (string)$file;
@@ -219,9 +227,13 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
     {
         $result = [];
         $rootDir = self::_getRootDir();
-        foreach (['app/code', 'app/design'] as $subDir) {
+        $dirs = array_merge(
+            self::$componentRegistrar->getPaths(ComponentRegistrar::MODULE),
+            [$rootDir . '/app/design']
+        );
+        foreach ($dirs as $dir) {
             $iterator = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($rootDir . "/{$subDir}", \RecursiveDirectoryIterator::SKIP_DOTS)
+                new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS)
             );
             $result = array_merge($result, iterator_to_array($iterator));
         }
@@ -250,7 +262,10 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
     protected static function _getArea($file)
     {
         $file = str_replace('\\', '/', $file);
-        $areaPatterns = ['#app/code/[^/]+/[^/]+/view/([^/]+)/#S', '#app/design/([^/]+)/#S'];
+        $areaPatterns = ['#app/design/([^/]+)/#S'];
+        foreach (self::$componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
+            $areaPatterns[] = '#' . $moduleDir . '/view/([^/]+)/#S';
+        }
         foreach ($areaPatterns as $pattern) {
             if (preg_match($pattern, $file, $matches)) {
                 return $matches[1];

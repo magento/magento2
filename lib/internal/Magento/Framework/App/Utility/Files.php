@@ -441,9 +441,9 @@ class Files
     /**
      * Helper method for getLayoutXmlFiles() to find the layout xml file and cache it
      *
-     * @param $params
-     * @param $location
-     * @param $cacheKey
+     * @param string $params
+     * @param string $location
+     * @param string $cacheKey
      * @return void
      */
     private function populateLayoutXmlCache($params, $location, $cacheKey)

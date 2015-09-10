@@ -38,16 +38,16 @@ class Base extends AbstractCollector
      * @param Filesystem $filesystem
      * @param FileFactory $fileFactory
      * @param PathPatternHelper $pathPatternHelper
-     * @param string $subDir
      * @param ComponentRegistrarInterface $componentRegistrar
+     * @param string $subDir
      */
     public function __construct(
         Search $dirSearch,
         Filesystem $filesystem,
         FileFactory $fileFactory,
         PathPatternHelper $pathPatternHelper,
-        $subDir = '',
-        ComponentRegistrarInterface $componentRegistrar
+        ComponentRegistrarInterface $componentRegistrar,
+        $subDir = ''
     ) {
         $this->dirSearch = $dirSearch;
         $this->componentRegistrar = $componentRegistrar;

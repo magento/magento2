@@ -79,7 +79,7 @@ class ClassesScanner implements ClassesScannerInterface
      * Find out if file should be excluded
      *
      * @param \SplFileInfo $fileItem
-     * @param $patterns
+     * @param string $patterns
      * @return bool
      */
     private function isExclude(\SplFileInfo $fileItem, $patterns)
