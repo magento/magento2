@@ -64,16 +64,15 @@ class AdminPathConfig implements PathConfigInterface
      */
     public function shouldBeSecure($path)
     {
-        return substr(
+
+        return parse_url(
             (string)$this->coreConfig->getValue(Store::XML_PATH_UNSECURE_BASE_URL, 'default'),
-            0,
-            5
+            PHP_URL_SCHEME
         ) === 'https'
         || $this->backendConfig->isSetFlag(Store::XML_PATH_SECURE_IN_ADMINHTML)
-        && substr(
+        && parse_url(
             (string)$this->coreConfig->getValue(Store::XML_PATH_SECURE_BASE_URL, 'default'),
-            0,
-            5
+            PHP_URL_SCHEME
         ) === 'https';
     }
 
