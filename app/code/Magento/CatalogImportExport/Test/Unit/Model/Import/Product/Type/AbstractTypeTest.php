@@ -192,8 +192,15 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $this->connection->expects($this->any())->method('quoteInto')->willReturn('');
         $this->connection
             ->expects($this->any())
-            ->method('fetchPairs')
-            ->will($this->returnValue($entityAttributes));
+            ->method('fetchAll')
+            ->will($this->returnValue(
+                [
+                    [
+                        'attribute_id' => 'attribute_id',
+                        'attribute_set_name' => 'attribute_set_name'
+                    ]
+                ]
+            ));
 
         $this->resource = $this->getMock(
             '\Magento\Framework\App\Resource',
