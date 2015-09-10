@@ -186,7 +186,7 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
     {
         $libraryExcludePatterns = [];
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryPath) {
-            $libraryExcludePatterns[] = "#^" . $libraryPath . "/[\\w]+/[\\w]+/([\\w]+/)?Test#";
+            $libraryExcludePatterns[] = "#^" . $libraryPath . "/([\\w]+/)?Test#";
         }
         return $libraryExcludePatterns;
     }
