@@ -278,6 +278,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testToHtmlCatalogCategoryLinkSimpleProduct()
     {
@@ -398,6 +399,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testToHtmlCmsStaticBlockAllProductTypes()
     {
@@ -538,6 +540,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testToHtmlBannerRotatorAllPages()
     {
