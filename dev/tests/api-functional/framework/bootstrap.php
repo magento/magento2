@@ -22,7 +22,7 @@ $logger = new \Zend_Log($logWriter);
 // Register the modules under '_files/'
 $pathPattern = dirname(__DIR__) . '/_files/*/*/registration.php';
 $files = glob($pathPattern, GLOB_NOSORT);
-if ( $files === false ) {
+if ($files === false) {
     throw new \RuntimeException('glob() returned error while searching in \'' . $pathPattern . '\'');
 }
 foreach ($files as $file) {

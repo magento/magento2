@@ -16,4 +16,3 @@ $autoloadWrapper->addPsr4('Magento\\', "{$testsBaseDir}/testsuite/Magento/");
 
 // registration of classes under '../_files'
 $autoloadWrapper->addPsr4('Magento\\', "{$testsBaseDir}/_files/");
-
