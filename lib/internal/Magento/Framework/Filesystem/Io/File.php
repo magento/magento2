@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Filesystem\Io;
 
+use Magento\Framework\Filesystem\DriverInterface;
+use Symfony\Component\Finder\Tests\Iterator\DateRangeFilterIteratorTest;
+
 /**
  * Filesystem client
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -298,7 +301,7 @@ class File extends AbstractIo
      * @param bool $recursive
      * @return bool
      */
-    public function mkdir($dir, $mode = 0777, $recursive = true)
+    public function mkdir($dir, $mode = DriverInterface::WRITEABLE_DIRECTORY_MODE, $recursive = true)
     {
         $this->_cwd();
         $result = @mkdir($dir, $mode, $recursive);
@@ -550,7 +553,7 @@ class File extends AbstractIo
      * @return true
      * @throws \Exception
      */
-    public function checkAndCreateFolder($folder, $mode = 0777)
+    public function checkAndCreateFolder($folder, $mode = DriverInterface::WRITEABLE_DIRECTORY_MODE)
     {
         if (is_dir($folder)) {
             return true;
