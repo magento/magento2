@@ -18,19 +18,22 @@ class Subtotal extends CommonTaxCollector
      * Calculate tax on product items. The result will be used to determine shipping
      * and discount later.
      *
+     * @param \Magento\Quote\Model\Quote $quote
      * @param ShippingAssignmentInterface $shippingAssignment
      * @param Address\Total $total
      * @return $this
      */
-    public function collect(ShippingAssignmentInterface $shippingAssignment, Address\Total $total)
-    {
+    public function collect(
+        \Magento\Quote\Model\Quote $quote,
+        \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment,
+        \Magento\Quote\Model\Quote\Address\Total $total
+    ) {
         $items = $shippingAssignment->getItems();
         if (!$items) {
             return $this;
         }
 
-        /** @var \Magento\Quote\Model\Quote $quote */
-        $store = $shippingAssignment->getShipping()->getAddress()->getQuote()->getStore();
+        $store = $quote->getStore();
         $priceIncludesTax = $this->_config->priceIncludesTax($store);
 
         //Setup taxable items

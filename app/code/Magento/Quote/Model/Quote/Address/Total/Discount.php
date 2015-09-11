@@ -27,6 +27,7 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
+        die('Class \Magento\Quote\Model\Quote\Address\Total\Discount used.');
         $this->eventManager = $eventManager;
         $this->storeManager = $storeManager;
         $this->setCode('discount');
@@ -34,17 +35,17 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     }
 
     /**
+     * @param \Magento\Quote\Model\Quote $quote
      * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function collect(
+        \Magento\Quote\Model\Quote $quote,
         \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment,
         \Magento\Quote\Model\Quote\Address\Total $total
     ) {
-        /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $shippingAssignment->getShipping()->getAddress()->getQuote();
         $eventArgs = [
             'website_id' => $this->storeManager->getStore($quote->getStoreId())->getWebsiteId(),
             'customer_group_id' => $quote->getCustomerGroupId(),

@@ -27,6 +27,7 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     /**
      * Collect totals information about shipping
      *
+     * @param \Magento\Quote\Model\Quote $quote
      * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface|\Magento\Quote\Model\Quote\Address $shippingAssignment
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return $this
@@ -35,10 +36,11 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function collect(
+        \Magento\Quote\Model\Quote $quote,
         \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment,
         \Magento\Quote\Model\Quote\Address\Total $total
     ) {
-        parent::collect($shippingAssignment, $total);
+        parent::collect($quote, $shippingAssignment, $total);
 
         $shippingAssignment->getShipping()->getAddress()->setWeight(0);
         $shippingAssignment->getShipping()->getAddress()->setFreeMethodWeight(0);
@@ -149,8 +151,7 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         if ($method) {
             foreach ($shippingAssignment->getShipping()->getAddress()->getAllShippingRates() as $rate) {
                 if ($rate->getCode() == $method) {
-                    $address = $shippingAssignment->getShipping()->getAddress();
-                    $store = $address->getQuote()->getStore();
+                    $store = $quote->getStore();
                     $amountPrice = $this->priceCurrency->convert(
                         $rate->getPrice(),
                         $store

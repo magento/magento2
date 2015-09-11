@@ -29,13 +29,17 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     /**
      * Collect address subtotal
      *
+     * @param \Magento\Quote\Model\Quote $quote
      * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment
      * @param Address\Total $total
      * @return $this
      */
-    public function collect(\Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment, \Magento\Quote\Model\Quote\Address\Total $total)
-    {
-        parent::collect($shippingAssignment, $total);
+    public function collect(
+        \Magento\Quote\Model\Quote $quote,
+        \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment,
+        \Magento\Quote\Model\Quote\Address\Total $total
+    ) {
+        parent::collect($quote, $shippingAssignment, $total);
         $total->setTotalQty(0);
 
         $baseVirtualAmount = $virtualAmount = 0;
@@ -66,8 +70,8 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         /**
          * Initialize grand totals
          */
-        $this->quoteValidator->validateQuoteAmount($address->getQuote(), $total->getSubtotal());
-        $this->quoteValidator->validateQuoteAmount($address->getQuote(), $total->getBaseSubtotal());
+        $this->quoteValidator->validateQuoteAmount($quote, $total->getSubtotal());
+        $this->quoteValidator->validateQuoteAmount($quote, $total->getBaseSubtotal());
         return $this;
     }
 

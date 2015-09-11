@@ -84,12 +84,16 @@ class Tax extends CommonTaxCollector
     /**
      * Collect tax totals for quote address
      *
+     * @param \Magento\Quote\Model\Quote $quote
      * @param ShippingAssignmentInterface $shippingAssignment
      * @param Address\Total $total
      * @return $this
      */
-    public function collect(ShippingAssignmentInterface $shippingAssignment, Address\Total $total)
-    {
+    public function collect(
+        \Magento\Quote\Model\Quote $quote,
+        \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment,
+        \Magento\Quote\Model\Quote\Address\Total $total
+    ) {
         $this->clearValues($total);
         if (!$shippingAssignment->getItems()) {
             return $this;

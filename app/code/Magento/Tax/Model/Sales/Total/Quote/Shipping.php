@@ -13,13 +13,17 @@ class Shipping extends CommonTaxCollector
     /**
      * Collect tax totals for shipping. The result can be used to calculate discount on shipping
      *
+     * @param \Magento\Quote\Model\Quote $quote
      * @param ShippingAssignmentInterface $shippingAssignment
      * @param Address\Total $total
      * @return $this
      */
-    public function collect(ShippingAssignmentInterface $shippingAssignment, Address\Total $total)
-    {
-        $storeId = $shippingAssignment->getShipping()->getAddress()->getQuote()->getStore()->getStoreId();
+    public function collect(
+        \Magento\Quote\Model\Quote $quote,
+        \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment,
+        \Magento\Quote\Model\Quote\Address\Total $total
+    ) {
+        $storeId = $quote->getStoreId();
         $items = $shippingAssignment->getItems();
         if (!$items) {
             return $this;

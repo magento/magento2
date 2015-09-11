@@ -27,16 +27,18 @@ class Total extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     /**
      * Collect information about MSRP price enabled
      *
+     * @param \Magento\Quote\Model\Quote $quote
      * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return $this
      * @api
      */
     public function collect(
+        \Magento\Quote\Model\Quote $quote,
         \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment,
         \Magento\Quote\Model\Quote\Address\Total $total
     ) {
-        parent::collect($shippingAssignment, $total);
+        parent::collect($quote, $shippingAssignment, $total);
 
         if (!count($shippingAssignment->getItems())) {
             return $this;

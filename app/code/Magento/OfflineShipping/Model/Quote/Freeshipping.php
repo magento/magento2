@@ -35,17 +35,18 @@ class Freeshipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTota
     /**
      * Collect information about free shipping for all address items
      *
+     * @param \Magento\Quote\Model\Quote $quote
      * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment
      * @param Address\Total $total
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function collect(
+        \Magento\Quote\Model\Quote $quote,
         \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment,
         \Magento\Quote\Model\Quote\Address\Total $total
     ) {
-        parent::collect($shippingAssignment, $total);
-        $quote = $shippingAssignment->getShipping()->getAddress()->getQuote();
+        parent::collect($quote, $shippingAssignment, $total);
         $store = $this->storeManager->getStore($quote->getStoreId());
 
         /** @var \Magento\Quote\Api\Data\AddressInterface $address */
