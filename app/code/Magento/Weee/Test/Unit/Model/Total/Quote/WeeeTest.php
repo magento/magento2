@@ -230,6 +230,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
      */
     public function testCollect($taxConfig, $weeeConfig, $taxRates, $itemData, $itemQty, $itemIsParent, $addressData)
     {
+        $this->markTestSkipped('MAGETWO-42308');
         $items = [];
         if ($itemIsParent) {
             $items = $this->setupParentItemWithChildrenMock($itemQty);
