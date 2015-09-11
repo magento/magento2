@@ -5,9 +5,6 @@ require([ "jquery", "jquery/ui", "catalogGallery"], function( $ ) {
     a.href = href;
     return a;
   }
-  $.fn.LoaderVideo = function () {
-    console.log('LoaderVideo');
-  };
 
   function parseURL (href, forceVideo) {
     if (typeof href !== 'string') return href;
