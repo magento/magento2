@@ -41,11 +41,6 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
     const LIB_WEB = 'lib_web';
 
     /**
-     * Language packages
-     */
-    const LOCALE = 'i18n';
-
-    /**
      * \Directory within document root of a web-server to access static view files publicly
      */
     const PUB = 'pub';
