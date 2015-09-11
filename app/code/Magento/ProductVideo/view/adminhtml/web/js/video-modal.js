@@ -34,10 +34,6 @@ define([
             showModal: function(imageData)
             {
                 $('#new-video').modal('openModal');
-                $('.video_image_role').prop('disabled', false);
-                if ($('.image.item').length < 1) {
-                    $('.video_image_role').prop('checked', true);
-                }
             }
         }
     );
