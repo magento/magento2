@@ -225,10 +225,46 @@ class XssOutputValidator
      */
     private function getLastMethod($command)
     {
-        if (preg_match_all('/->.*?\(.*?\)/sim', $command, $matches)) {
+        if (preg_match_all(
+            '/->.*?\(.*?\)/sim',
+            $this->clearMethodBracketContent($command),
+            $matches
+        )) {
             $command = end($matches[0]);
             $command = substr($command, 0, strpos($command, '(') + 1);
         }
+
+        return $command;
+    }
+
+    /**
+     * @param string $command
+     * @return string
+     */
+    private function clearMethodBracketContent($command)
+    {
+        $bracketInterval = [];
+        $bracketOpenPos = [];
+        $command = str_split($command);
+        foreach ($command as $index => $character) {
+            if ($character == '(') {
+                array_push($bracketOpenPos, $index);
+            }
+            if (count($bracketOpenPos)) {
+                if ($character == ')') {
+                    $lastOpenPos = array_pop($bracketOpenPos);
+                    if (count($bracketOpenPos) == 0) {
+                        $bracketInterval[] = [$lastOpenPos, $index];
+                    }
+                }
+            }
+        }
+        foreach ($bracketInterval as $interval) {
+            for ($i = $interval[0] + 1; $i < $interval[1]; $i++) {
+                unset($command[$i]);
+            }
+        }
+        $command = implode('', $command);
 
         return $command;
     }
