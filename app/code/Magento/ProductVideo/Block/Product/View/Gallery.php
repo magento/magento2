@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright � 2015 Magento. All rights reserved.
+ * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,7 @@ namespace Magento\ProductVideo\Block\Product\View;
 
 class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
 {
-    /*
+    /**
      * @var \Magento\ProductVideo\Helper\Media
      */
     protected $mediaHelper;
@@ -72,9 +72,9 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
     public function getVideoSettingsJson()
     {
         $videoSettingData[] = [
-            'videoPlay' => $this->mediaHelper->getVideoPlayAttribute(),
-            'videoStop' => $this->mediaHelper->getVideoStopAttribute(),
-            'videoBackground' => $this->mediaHelper->getVideoBackgroundAttribute(),
+            'playIfBase' => $this->mediaHelper->getPlayIfBaseAttribute(),
+            'showRelated' => $this->mediaHelper->getShowRelatedAttribute(),
+            'videoAutoRestart' => $this->mediaHelper->getVideoAutoRestartAttribute(),
         ];
         return $this->jsonEncoder->encode($videoSettingData);
     }

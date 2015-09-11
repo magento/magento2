@@ -12,7 +12,6 @@ use Magento\Framework\View\DesignInterface;
 
 /**
  * Helper to get attributes for video
- *
  */
 class Media extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -24,17 +23,17 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Video play attribute
      */
-    const NODE_CONFIG_NAME_VIDEO_PLAY = 'video_play';
+    const NODE_CONFIG_PLAY_IF_BASE = 'play_if_base';
 
     /**
      * Video stop attribute
      */
-    const NODE_CONFIG_NAME_VIDEO_STOP = 'video_stop';
+    const NODE_CONFIG_SHOW_RELATED = 'show_related';
 
     /**
      * Video color attribute
      */
-    const NODE_CONFIG_NAME_VIDEO_BACKGROUND = 'video_background';
+    const NODE_CONFIG_VIDEO_AUTO_RESTART = 'video_auto_restart';
 
     /**
      * @var ConfigInterface
@@ -86,33 +85,42 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Get video play params for player
+     * Get play if base video attribute
      *
      * @return mixed
      */
-    public function getVideoPlayAttribute()
+    public function getPlayIfBaseAttribute()
     {
-        return $this->cachedVideoConfig->getVideoAttributeValue(self::MODULE_NAME, self::NODE_CONFIG_NAME_VIDEO_PLAY);
+        return $this->cachedVideoConfig->getVideoAttributeValue(
+            self::MODULE_NAME,
+            self::NODE_CONFIG_PLAY_IF_BASE
+        );
     }
 
     /**
-     * Get video stop params for player
+     * Get show related youtube attribute
      *
      * @return mixed
      */
-    public function getVideoStopAttribute()
+    public function getShowRelatedAttribute()
     {
-        return $this->cachedVideoConfig->getVideoAttributeValue(self::MODULE_NAME, self::NODE_CONFIG_NAME_VIDEO_STOP);
+        return $this->cachedVideoConfig->getVideoAttributeValue(
+            self::MODULE_NAME,
+            self::NODE_CONFIG_SHOW_RELATED_YOUTUBE
+        );
     }
 
     /**
-     * Get video color params for player
+     * Get video auto restart attribute
      *
      * @return mixed
      */
-    public function getVideoBackgroundAttribute()
+    public function getVideoAutoRestartAttribute()
     {
-        return $this->cachedVideoConfig->getVideoAttributeValue(self::MODULE_NAME, self::NODE_CONFIG_NAME_VIDEO_BACKGROUND);
+        return $this->cachedVideoConfig->getVideoAttributeValue(
+            self::MODULE_NAME,
+            self::NODE_CONFIG_VIDEO_AUTO_RESTART
+        );
     }
 
 }
