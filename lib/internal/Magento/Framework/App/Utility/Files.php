@@ -426,7 +426,7 @@ class Files
         $cacheKey = md5($this->_path . '|' . $location . '|' . implode('|', $params));
 
         if (!isset(self::$_cache[__METHOD__][$cacheKey])) {
-            $this->populateLayoutXmlCache($params, $location, $cacheKey);
+            $this->populateLayoutXmlCache(__METHOD__, $params, $location, $cacheKey);
         }
 
         if ($asDataSet) {
@@ -438,12 +438,13 @@ class Files
     /**
      * Helper method for getLayoutXmlFiles() to find the layout xml file and cache it
      *
+     * @param string $method
      * @param string $params
      * @param string $location
      * @param string $cacheKey
      * @return void
      */
-    private function populateLayoutXmlCache($params, $location, $cacheKey)
+    private function populateLayoutXmlCache($method, $params, $location, $cacheKey)
     {
         $files = [];
         $area = $params['area'];
@@ -469,7 +470,7 @@ class Files
                 $params['with_metainfo'] ? '_parseThemeLayout' : false
             );
         }
-        self::$_cache[__METHOD__][$cacheKey] = $files;
+        self::$_cache[$method][$cacheKey] = $files;
     }
 
     /**
