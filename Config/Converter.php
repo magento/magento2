@@ -186,8 +186,28 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     protected function buildExchangeTopicToQueuesMap($binds)
     {
         $output = [];
+        $plainKeys = [];
+        $wildcardKeys = [];
         foreach ($binds as $bind) {
-            $output[$bind[self::BIND_EXCHANGE] . '--' . $bind[self::BIND_TOPIC]][] = $bind[self::BIND_QUEUE];
+            $key = $bind[self::BIND_EXCHANGE] . '--' . $bind[self::BIND_TOPIC];
+            if (strpos($key, '*') === FALSE) {
+                $plainKeys[] = $key;
+            } else {
+                $wildcardKeys[] = $key;
+            }
+            $output[$key][] = $bind[self::BIND_QUEUE];
+        }
+
+        foreach (array_unique($wildcardKeys) as $wildcardKey) {
+            $pattern = '/^' . str_replace('.', '\.', $wildcardKey) . '/';
+            $pattern = str_replace('*', '.*', $pattern);
+            foreach (array_unique($plainKeys) as $plainKey) {
+                if (preg_match($pattern, $plainKey)) {
+                    // does this need to be array_merge?
+                    $output[$plainKey] = array_merge($output[$plainKey], $output[$wildcardKey]);
+                }
+            }
+            unset($output[$wildcardKey]);
         }
         return $output;
     }

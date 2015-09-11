@@ -16,7 +16,12 @@
     <consumer name="customerCreatedListener" queue="test-queue-1" connection="rabbitmq" class="Data\Type" method="processMessage"/>
     <consumer name="customerDeletedListener" queue="test-queue-2" connection="db" class="Other\Type" method="processMessage2" max_messages="98765"/>
     <consumer name="cartCreatedListener" queue="test-queue-3" connection="rabbitmq" class="Other\Type" method="processMessage3"/>
-    <bind queue="test-queue-1" exchange="magento" topic="customer.created" />
-    <bind queue="test-queue-2" exchange="magento" topic="customer.deleted" />
+    <bind queue="test-queue-1" exchange="magento"         topic="customer.created" />
+    <bind queue="test-queue-1" exchange="magento"         topic="customer.updated" />
+    <bind queue="test-queue-1" exchange="test-exchange-1" topic="cart.created" />
+    <bind queue="test-queue-2" exchange="magento"         topic="customer.created" />
+    <bind queue="test-queue-2" exchange="magento"         topic="customer.deleted" />
+    <bind queue="test-queue-3" exchange="magento"         topic="cart.created" />
     <bind queue="test-queue-3" exchange="test-exchange-1" topic="cart.created" />
+    <bind queue="test-queue-4" exchange="magento"         topic="customer.*" />
 </config>

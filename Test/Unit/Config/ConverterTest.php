@@ -203,9 +203,21 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'binds' => [
-                ['queue' => "test-queue-1", 'exchange' => "magento",  'topic' => "customer.created"],
-                ['queue' => "test-queue-2", 'exchange' => "magento",  'topic' => "customer.deleted"],
-                ['queue' => "test-queue-3", 'exchange' => "test-exchange-1", 'topic' => "cart.created"]
+                ['queue' => "test-queue-1", 'exchange' => "magento", 'topic' => "customer.created"],
+                ['queue' => "test-queue-1", 'exchange' => "magento", 'topic' => "customer.updated"],
+                ['queue' => "test-queue-1", 'exchange' => "test-exchange-1", 'topic' => "cart.created"],
+                ['queue' => "test-queue-2", 'exchange' => "magento", 'topic' => "customer.created"],
+                ['queue' => "test-queue-2", 'exchange' => "magento", 'topic' => "customer.deleted"],
+                ['queue' => "test-queue-3", 'exchange' => "magento", 'topic' => "cart.created"],
+                ['queue' => "test-queue-3", 'exchange' => "test-exchange-1", 'topic' => "cart.created"],
+                ['queue' => "test-queue-4", 'exchange' => "magento", 'topic' => "customer.*"],
+            ],
+            'exchange_topic_to_queues_map' => [
+                'magento--customer.created' => ['test-queue-1', 'test-queue-2', 'test-queue-4'],
+                'magento--customer.updated' => ['test-queue-1', 'test-queue-4'],
+                'test-exchange-1--cart.created' => ['test-queue-1', 'test-queue-3'],
+                'magento--customer.deleted' => ['test-queue-2', 'test-queue-4'],
+                'magento--cart.created' => ['test-queue-3'],
             ]
         ];
     }
