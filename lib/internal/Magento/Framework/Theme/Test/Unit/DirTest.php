@@ -3,13 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Theme\Test;
+namespace Magento\Framework\Theme\Test\Unit;
 
 use Magento\Framework\Theme\Dir;
 
-/**
- * Tests Dir
- */
 class DirTest extends \PHPUnit_Framework_TestCase
 {
     /**

@@ -38,9 +38,7 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
             ->method('getDirectoryRead')
             ->with(DirectoryList::ROOT)
             ->will($this->returnValue($this->directory));
-        $this->rule = $this->getMock(
-            '\Magento\Framework\View\Design\Fallback\Rule\RuleInterface', [], [], '', false
-        );
+        $this->rule = $this->getMock('\Magento\Framework\View\Design\Fallback\Rule\RuleInterface', [], [], '', false);
         $rulePool = $this->getMock('Magento\Framework\View\Design\Fallback\RulePool', [], [], '', false);
         $rulePool->expects($this->any())
             ->method('getRule')
@@ -77,9 +75,7 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
             ->method('isExist')
             ->with($expectedPath)
             ->will($this->returnValue(true));
-       $actualPath = $this->object->resolve(
-            'type', 'file.ext', $area, $theme, $locale, $module
-        );
+        $actualPath = $this->object->resolve('type', 'file.ext', $area, $theme, $locale, $module);
         $this->assertSame($expectedPath, $actualPath);
     }
 
@@ -150,7 +146,12 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse(
             $this->object->resolve(
-                'type', 'file.ext', 'frontend', $this->getMockForTheme('magento_theme'), 'en_US', 'Magento_Module'
+                'type',
+                'file.ext',
+                'frontend',
+                $this->getMockForTheme('magento_theme'),
+                'en_US',
+                'Magento_Module'
             )
         );
     }
@@ -165,7 +166,12 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false));
         $this->assertFalse(
             $this->object->resolve(
-                'type', 'file.ext', 'frontend', $this->getMockForTheme('magento_theme'), 'en_US', 'Magento_Module'
+                'type',
+                'file.ext',
+                'frontend',
+                $this->getMockForTheme('magento_theme'),
+                'en_US',
+                'Magento_Module'
             )
         );
     }
