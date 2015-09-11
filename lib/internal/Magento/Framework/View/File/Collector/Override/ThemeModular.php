@@ -20,26 +20,36 @@ use Magento\Framework\View\File\Factory as FileFactory;
 class ThemeModular implements CollectorInterface
 {
     /**
-     * @var PathPattern
+     * Path pattern helper
+     *
+     * @var \Magento\Framework\View\Helper\PathPattern
      */
     private $pathPatternHelper;
 
     /**
+     * View file factopry
+     *
      * @var FileFactory
      */
     private $fileFactory;
 
     /**
-     * @var ReadFactory
+     * Read directory factory
+     *
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory
      */
     private $readDirFactory;
 
     /**
+     * Component registrar
+     *
      * @var ComponentRegistrarInterface
      */
     private $componentRegistrar;
 
     /**
+     * Sub-directory path
+     *
      * @var string
      */
     private $subDir;
@@ -70,7 +80,7 @@ class ThemeModular implements CollectorInterface
     /**
      * Retrieve files
      *
-     * @param \Magento\Framework\View\Design\ThemeInterface $theme
+     * @param ThemeInterface $theme
      * @param string $filePath
      * @return \Magento\Framework\View\File[]
      * @throws \Magento\Framework\Exception\LocalizedException

@@ -78,6 +78,16 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $tester;
 
+    /**
+     * @var \Magento\Framework\Component\ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $componentRegistrar;
+
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $readDirFactory;
+
     public function setUp()
     {
         $this->maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
@@ -106,6 +116,10 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->themeValidator = $this->getMock('Magento\Theme\Model\ThemeValidator', [], [], '', false);
+        $this->componentRegistrar = $this->getMockForAbstractClass(
+            '\Magento\Framework\Component\ComponentRegistrarInterface'
+        );
+        $this->readDirFactory = $this->getMock('Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
         $this->command = new ThemeUninstallCommand(
             $this->cache,
             $this->cleanupFiles,
@@ -117,7 +131,9 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             $this->themeProvider,
             $this->remove,
             $this->backupRollbackFactory,
-            $this->themeValidator
+            $this->themeValidator,
+            $this->componentRegistrar,
+            $this->readDirFactory
         );
         $this->tester = new CommandTester($this->command);
     }
