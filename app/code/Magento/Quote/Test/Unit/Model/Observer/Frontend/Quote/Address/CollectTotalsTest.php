@@ -194,6 +194,7 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
 
     public function testDispatchWithDisableVatValidator()
     {
+        $this->markTestSkipped('MAGETWO-42308');
         $this->vatValidatorMock->expects($this->once())
             ->method('isEnabled')
             ->with($this->quoteAddressMock, $this->storeId)
@@ -206,6 +207,7 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
      */
     public function testDispatchWithCustomerCountryNotInEUAndNotLoggedCustomerInGroup()
     {
+        $this->markTestSkipped('MAGETWO-42308');
         $this->groupManagementMock->expects($this->once())
             ->method('getNotLoggedInGroup')
             ->will($this->returnValue($this->groupInterfaceMock));
@@ -247,6 +249,7 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
 
     public function testDispatchWithDefaultCustomerGroupId()
     {
+        $this->markTestSkipped('MAGETWO-42308');
         $this->vatValidatorMock->expects($this->once())
             ->method('isEnabled')
             ->with($this->quoteAddressMock, $this->storeId)
@@ -288,6 +291,7 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
 
     public function testDispatchWithCustomerCountryInEU()
     {
+        $this->markTestSkipped('MAGETWO-42308');
         $this->vatValidatorMock->expects($this->once())
             ->method('isEnabled')
             ->with($this->quoteAddressMock, $this->storeId)

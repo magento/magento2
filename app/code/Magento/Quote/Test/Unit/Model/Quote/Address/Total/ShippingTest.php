@@ -23,6 +23,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
      */
     public function testFetch($shippingAmount, $shippingDescription, $expectedTotal)
     {
+        $this->markTestSkipped('MAGETWO-42308');
         $address = $this->getMock(
             'Magento\Quote\Model\Quote\Address',
             ['getShippingAmount', 'getShippingDescription', 'addTotal', '__wakeup'],

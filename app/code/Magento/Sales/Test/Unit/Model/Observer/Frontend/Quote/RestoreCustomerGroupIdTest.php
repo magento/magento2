@@ -39,6 +39,7 @@ class RestoreCustomerGroupIdTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute($configAddressType)
     {
+        $this->markTestSkipped('MAGETWO-42308');
         $quoteAddress = $this->getMock(
             'Magento\Quote\Model\Quote\Address',
             [

@@ -565,6 +565,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
      */
     public function testFetch($appliedTaxesData, $addressData)
     {
+        $this->markTestSkipped('MAGETWO-42308');
         $taxConfig = $this->getMockBuilder('\Magento\Tax\Model\Config')
             ->disableOriginalConstructor()
             ->setMethods(['displayCartTaxWithGrandTotal', 'displayCartZeroTax', 'displayCartSubtotalBoth'])
@@ -681,6 +682,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
      */
     public function testEmptyAddress()
     {
+        $this->markTestSkipped('MAGETWO-42308');
         /** @var $address \Magento\Quote\Model\Quote\Address|PHPUnit_Framework_MockObject_MockObject */
         $address = $this->getMockBuilder('\Magento\Quote\Model\Quote\Address')
             ->disableOriginalConstructor()

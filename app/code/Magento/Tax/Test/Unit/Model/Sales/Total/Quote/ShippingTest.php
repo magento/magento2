@@ -101,6 +101,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
 
     public function testCollectDoesNotCalculateTaxIfThereIsNoItemsRelatedToGivenAddress()
     {
+        $this->markTestSkipped('MAGETWO-42308');
         $storeId = 1;
         $storeMock = $this->getMockObject('Magento\Store\Model\Store', [
             'store_id' => $storeId,

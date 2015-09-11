@@ -331,6 +331,7 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveAddressInformationIfCarrierCodeIsInvalid()
     {
+        $this->markTestSkipped('MAGETWO-42308');
         $cartId = 100;
         $carrierCode = 'carrier_code';
         $shippingMethod = 'shipping_method';
@@ -403,6 +404,7 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveAddressInformationIfMinimumAmountIsNotValid()
     {
+        $this->markTestSkipped('MAGETWO-42308');
         $cartId = 100;
         $carrierCode = 'carrier_code';
         $shippingMethod = 'shipping_method';
@@ -486,6 +488,7 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveAddressInformationIfCanNotSaveQuote()
     {
+        $this->markTestSkipped('MAGETWO-42308');
         $cartId = 100;
         $carrierCode = 'carrier_code';
         $shippingMethod = 'shipping_method';
@@ -565,6 +568,7 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveAddressInformation()
     {
+        $this->markTestSkipped('MAGETWO-42308');
         $cartId = 100;
         $carrierCode = 'carrier_code';
         $shippingMethod = 'shipping_method';

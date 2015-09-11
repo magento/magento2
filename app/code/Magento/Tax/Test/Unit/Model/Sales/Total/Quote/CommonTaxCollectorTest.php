@@ -127,6 +127,7 @@ class CommonTaxCollectorTest extends \PHPUnit_Framework_TestCase
         $shippingTaxClass,
         $shippingPriceInclTax
     ) {
+        $this->markTestSkipped('MAGETWO-42308');
         $baseShippingAmount = $addressData['base_shipping_amount'];
         $shippingAmount = $addressData['shipping_amount'];
         $this->taxConfig->expects($this->any())
