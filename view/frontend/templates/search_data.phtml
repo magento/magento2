@@ -13,13 +13,13 @@
 $data = $block->getItems();
 if (count($data)):?>
     <dl class="block">
-        <dt class="title"><?php echo __($block->getTitle()); ?></dt>
+        <dt class="title"><?php /* @escapeNotVerified */ echo __($block->getTitle()); ?></dt>
         <?php foreach ($data as $additionalInfo) : ?>
             <dd class="item">
-                <a href="<?php echo $block->getLink($additionalInfo->getQueryText()) ?>"
+                <a href="<?php /* @escapeNotVerified */ echo $block->getLink($additionalInfo->getQueryText()) ?>"
                     ><?php echo $block->escapeHtml($additionalInfo->getQueryText()) ?></a>
                 <?php if ($block->isShowResultsCount()): ?>
-                    <span class="count"><?php echo $additionalInfo->getResultsCount() ?></span>
+                    <span class="count"><?php /* @escapeNotVerified */ echo $additionalInfo->getResultsCount() ?></span>
                 <?php endif; ?>
             </dd>
         <?php endforeach; ?>
