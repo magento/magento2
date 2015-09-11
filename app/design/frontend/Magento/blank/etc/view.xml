@@ -6,7 +6,7 @@
  */
 -->
 <view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Config/etc/view.xsd">
-    <images module="Magento_Catalog">
+    <media module="Magento_Catalog">
         <image id="bundled_product_customization_page" type="thumbnail">
             <width>140</width>
             <height>140</height>
@@ -176,7 +176,7 @@
             <width>240</width>
             <height>300</height>
         </image>
-    </images>
+    </media>
     <vars module="Magento_Catalog">
 
         <!-- New gallery and magnifier theme settings -->

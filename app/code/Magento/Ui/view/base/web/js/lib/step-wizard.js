@@ -57,6 +57,9 @@ define([
             newIndex = _.isNumber(newIndex) ? newIndex : this.index + 1;
             try {
                 this.getStep().force(this);
+                if (newIndex >= steps.length) {
+                    return false;
+                }
             } catch (e) {
                 this.setNotificationMessage(e.message, true);
 
@@ -64,6 +67,7 @@ define([
             }
             this.cleanErrorNotificationMessage();
             this.index = newIndex;
+            this.cleanNotificationMessage();
             this.render();
         };
         this._prev = function (newIndex) {
@@ -117,11 +121,13 @@ define([
         };
         this.render = function () {
             this.hideNotificationMessage();
-            if (!_.isEmpty(this.getStep())) {
-                this.getStep().render(this);
-            }
+            this.getStep().render(this);
         };
-        this.render();
+        this.init = function () {
+            this.updateLabels(this.getStep());
+            this.render();
+        };
+        this.init();
     };
 
     return Component.extend({

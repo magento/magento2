@@ -3,9 +3,23 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/* @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\NewCategory */
+/* @var Magento\ProductVideo\Block\Adminhtml\Product\Edit\NewVideo $block */
 ?>
-<div id="<?php echo $block->getNameInLayout() ?>" style="display:none">
+<div id="<?php echo $block->getNameInLayout();?>" style="display:none">
     <?php echo $block->getFormHtml();?>
-    <?php echo $block->getAfterElementHtml();?>
+    <script>
+        require(["jquery","mage/mage"],function($) {
+            $(function(){
+                $('#new-video').mage('newVideoDialog', <?php echo $block->getWidgetOptions();?>);
+            });
+        });
+    </script>
+  <div id="video-player-preview-location">
+    <div class="video-player-container"></div>
+    <div class="video-information title"><label>Title: </label><span></span></div>
+    <div class="video-information uploaded"><label>Uploaded: </label><span></span></div>
+    <div class="video-information uploader"><label>Uploader: </label><span></span></div>
+    <div class="video-information duration"><label>Duration: </label><span></span></div>
+  </div>
 </div>
+

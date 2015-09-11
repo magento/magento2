@@ -5,6 +5,8 @@
  */
 namespace Magento\ProductVideo\Block\Adminhtml\Product\Edit;
 
+use Magento\Framework\Data\Form\Element\Fieldset;
+
 /**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
@@ -13,7 +15,7 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * @var \Magento\Framework\Json\EncoderInterface
      */
-    protected $_jsonEncoder;
+    protected $jsonEncoder;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -29,8 +31,8 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         array $data = []
     ) {
-        $this->_jsonEncoder = $jsonEncoder;
         parent::__construct($context, $registry, $formFactory, $data);
+        $this->jsonEncoder = $jsonEncoder;
         $this->setUseContainer(true);
     }
 
@@ -38,19 +40,18 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
      * Form preparation
      *
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {
         /** @var \Magento\Framework\Data\Form $form */
-        $form = $this->_formFactory->create(
-            [
-                'data' => [
-                    'id' => 'new_video_form',
-                    'class' => 'admin__scope-old',
-                    'enctype' => 'multipart/form-data',
-                ]
+        $form = $this->_formFactory->create([
+            'data' => [
+                'id' => 'new_video_form',
+                'class' => 'admin__scope-old',
+                'enctype' => 'multipart/form-data',
             ]
-        );
+        ]);
         $form->setUseContainer($this->getUseContainer());
 
         $form->addField('new_video_messages', 'note', []);
@@ -99,7 +100,6 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-
         $fieldset->addField(
             'video_title',
             'text',
@@ -143,7 +143,6 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-
         $fieldset->addField(
             'new_video_get',
             'button',
@@ -155,60 +154,14 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-        $fieldset->addField(
-            'video_base_image',
-            'checkbox',
-            [
-                'class' => 'video_image_role',
-                'label' => 'Base Image',
-                'title' => __('Base Image'),
-                'data-role' => 'role-type-selector',
-                'value' => 'image',
-            ]
-        );
-
-        $fieldset->addField(
-            'video_small_image',
-            'checkbox',
-            [
-                'class' => 'video_image_role',
-                'label' => 'Small Image',
-                'title' => __('Small Image'),
-                'data-role' => 'role-type-selector',
-                'value' => 'small_image',
-            ]
-        );
-
-        $fieldset->addField(
-            'video_thumb_image',
-            'checkbox',
-            [
-                'class' => 'video_image_role',
-                'label' => 'Thumbnail',
-                'title' => __('Thumbnail'),
-                'data-role' => 'role-type-selector',
-                'value' => 'thumbnail',
-            ]
-        );
-
-        $fieldset->addField(
-            'video_swatch_image',
-            'checkbox',
-            [
-                'class' => 'video_image_role',
-                'label' => 'Swatch Image',
-                'title' => __('Swatch Image'),
-                'data-role' => 'role-type-selector',
-                'value' => 'swatch_image',
-            ]
-        );
+        $this->addMediaRoleAttributes($fieldset);
 
         $fieldset->addField(
             'new_video_disabled',
             'checkbox',
             [
                 'class' => 'edited-data',
-                'label' => 'Hide from Product Page',
+                'label' => __('Hide from Product Page'),
                 'title' => __('Hide from Product Page'),
                 'name' => 'disabled',
             ]
@@ -226,27 +179,55 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * Attach new video dialog widget initialization
-     *
      * @return string
      */
-    public function getAfterElementHtml()
+    public function getWidgetOptions()
     {
-        $widgetOptions = $this->_jsonEncoder->encode(
+        return $this->jsonEncoder->encode(
             [
                 'saveVideoUrl' => $this->getUrl('catalog/product_gallery/upload'),
+                'saveRemoteVideoUrl' => $this->getUrl('product_video/product_gallery/retrieveImage'),
                 'htmlId' => $this->getHtmlId(),
             ]
         );
-        //TODO: JavaScript logic should be moved to separate file or reviewed
-        return <<<HTML
-<script>
-require(["jquery","mage/mage"],function($) {  // waiting for dependencies at first
-    $(function(){ // waiting for page to load to have '#video_ids-template' available
-        $('#new-video').mage('newVideoDialog', $widgetOptions);
-    });
-});
-</script>
-HTML;
+    }
+
+    /**
+     * Retrieve currently viewed product object
+     *
+     * @return \Magento\Catalog\Model\Product
+     */
+    protected function getProduct()
+    {
+        if (!$this->hasData('product')) {
+            $this->setData('product', $this->_coreRegistry->registry('product'));
+        }
+        return $this->getData('product');
+    }
+
+    /**
+     * Add media role attributes to fieldset
+     *
+     * @param Fieldset $fieldset
+     * @return $this
+     */
+    protected function addMediaRoleAttributes(Fieldset $fieldset)
+    {
+        $mediaRoles = $this->getProduct()->getMediaAttributes();
+        asort($mediaRoles);
+        foreach ($mediaRoles as $mediaRole) {
+            $fieldset->addField(
+                'video_' . $mediaRole->getAttributeCode(),
+                'checkbox',
+                [
+                    'class' => 'video_image_role',
+                    'label' => __($mediaRole->getFrontendLabel()),
+                    'title' => __($mediaRole->getFrontendLabel()),
+                    'data-role' => 'role-type-selector',
+                    'value' => $mediaRole->getAttributeCode(),
+                ]
+            );
+        }
+        return $this;
     }
 }

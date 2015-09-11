@@ -12,8 +12,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Pricing\Object\SaleableInterface;
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
-use Magento\Framework\Api\Data\ImageContentInterface;
-use Magento\Framework\Api\Data\VideoContentInterface;
+use Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool;
+use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory;
 
 /**
  * Catalog product model
@@ -283,11 +283,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $productLinkExtensionFactory;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory
-     */
-    protected $mediaGalleryEntryFactory;
-
-    /**
      * @var \Magento\Framework\Api\DataObjectHelper
      */
     protected $dataObjectHelper;
@@ -324,7 +319,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $joinProcessor;
 
     /**
-     * @var Product\Attribute\Backend\Media\MediaGalleryEntryConverterPool
+     * Media converter pool
+     *
+     * @var Product\Attribute\Backend\Media\EntryConverterPool
      */
     protected $mediaGalleryEntryConverterPool;
 
@@ -356,12 +353,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param Indexer\Product\Eav\Processor $productEavIndexerProcessor
      * @param CategoryRepositoryInterface $categoryRepository
      * @param Product\Image\CacheFactory $imageCacheFactory
-     * @param \Magento\Catalog\Model\ProductLink\CollectionProvider $entityCollectionProvider
-     * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
+     * @param ProductLink\CollectionProvider $entityCollectionProvider
+     * @param Product\LinkTypeProvider $linkTypeProvider
      * @param \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory
      * @param \Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory
-     * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory
-     * @param \Magento\Catalog\Model\Product\Attribute\Backend\Media\MediaGalleryEntryConverterPool $mediaGalleryEntryConverterPool
+     * @param EntryConverterPool $mediaGalleryEntryConverterPool
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      * @param array $data
@@ -400,12 +396,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider,
         \Magento\Catalog\Api\Data\ProductLinkInterfaceFactory $productLinkFactory,
         \Magento\Catalog\Api\Data\ProductLinkExtensionFactory $productLinkExtensionFactory,
-        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory,
-        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory $mediaGalleryEntryExtensionFactory,
-        \Magento\Framework\Api\Data\VideoContentInterfaceFactory $videoEntryFactory,
-        \Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageMediaEntryConverter $imageMediaEntryConverter,
-        \Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoMediaEntryConverter $externalVideoMediaEntryConverter,
-        \Magento\Catalog\Model\Product\Attribute\Backend\Media\MediaGalleryEntryConverterPool $mediaGalleryEntryConverterPool,
+        EntryConverterPool $mediaGalleryEntryConverterPool,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor,
         array $data = []
@@ -434,11 +425,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->linkTypeProvider = $linkTypeProvider;
         $this->productLinkFactory = $productLinkFactory;
         $this->productLinkExtensionFactory = $productLinkExtensionFactory;
-        $this->mediaGalleryEntryFactory = $mediaGalleryEntryFactory;
-        $this->mediaGalleryEntryExtensionFactory        = $mediaGalleryEntryExtensionFactory;
-        $this->videoEntryFactory = $videoEntryFactory;
-        $this->imageMediaEntryConverter = $imageMediaEntryConverter;
-        $this->externalVideoMediaEntryConverter = $externalVideoMediaEntryConverter;
         $this->mediaGalleryEntryConverterPool = $mediaGalleryEntryConverterPool;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->joinProcessor = $joinProcessor;
@@ -2554,7 +2540,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         $entries = [];
         foreach ($mediaGallery as $image) {
-            $entry = $this->mediaGalleryEntryConverterPool->getConverterByMediaType($image['media_type'])->convertTo($this, $image);
+            $entry = $this
+                ->mediaGalleryEntryConverterPool
+                ->getConverterByMediaType($image['media_type'])
+                ->convertTo($this, $image);
             $entries[] = $entry;
         }
         return $entries;
@@ -2583,7 +2572,10 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         if ($mediaGalleryEntries !== null) {
             $images = [];
             foreach ($mediaGalleryEntries as $entry) {
-                $images[] = $this->mediaGalleryEntryConverterPool->getConverterByMediaType($entry->getMediaType())->convertFrom($entry);
+                $images[] = $this
+                    ->mediaGalleryEntryConverterPool
+                    ->getConverterByMediaType($entry->getMediaType())
+                    ->convertFrom($entry);
             }
             $this->setData('media_gallery', ['images' => $images]);
 

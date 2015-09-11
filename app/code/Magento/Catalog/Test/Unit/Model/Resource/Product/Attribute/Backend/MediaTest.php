@@ -58,7 +58,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         'metadata' => ['DATA_TYPE' => 'text', 'NULLABLE' => true],
     ];
 
-    protected function setUp()
+    public function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->connection = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
@@ -92,26 +92,24 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             'video_metadata_default' => 'metadata',
         ];
         $leftJoinTables = [
-            0 =>
-                [
-                    0 =>
-                        [
-                            'store_value' => 'catalog_product_entity_media_gallery_value_video',
-                        ],
-                    1 => 'main.value_id = store_value.value_id AND store_value.store_id = 0',
-                    2 =>
-                        [
-                            'video_provider' => 'provider',
-                            'video_url' => 'url',
-                            'video_title' => 'title',
-                            'video_description' => 'description',
-                            'video_metadata' => 'metadata',
-                        ],
-                ],
+            0 => [
+                0 =>
+                    [
+                        'store_value' => 'catalog_product_entity_media_gallery_value_video',
+                    ],
+                1 => 'main.value_id = store_value.value_id AND store_value.store_id = 0',
+                2 =>
+                    [
+                        'video_provider' => 'provider',
+                        'video_url' => 'url',
+                        'video_title' => 'title',
+                        'video_description' => 'description',
+                        'video_metadata' => 'metadata',
+                    ],
+            ],
         ];
         $whereCondition = null;
         $getTableReturnValue = 'table';
-
         $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));
         $this->select->expects($this->at(0))->method('from')->with(
             [
@@ -126,17 +124,14 @@ class MediaTest extends \PHPUnit_Framework_TestCase
                 'video_metadata_default' => 'metadata',
             ]
         )->willReturnSelf();
-
         $this->select->expects($this->at(1))->method('where')->with(
             'main.value_id IN(?)',
             $ids
         )->willReturnSelf();
-
         $this->select->expects($this->at(2))->method('where')->with(
             'main.store_id = ?',
             $storeId
         )->willReturnSelf();
-
         $resultRow = [
             [
                 'value_id' => '4',
@@ -167,7 +162,6 @@ class MediaTest extends \PHPUnit_Framework_TestCase
                 'video_metadata' => '',
             ]
         ];
-
         $this->connection->expects($this->once())->method('fetchAll')
                          ->with($this->select)
                          ->willReturn($resultRow);
@@ -180,7 +174,6 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             $leftJoinTables,
             $whereCondition
         );
-
         $this->assertEquals($resultRow, $methodResult);
     }
 
@@ -280,95 +273,10 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($resultRow, $methodResult);
     }
 
-    public function testUpdateTableRecordExists()
-    {
-        $tableName = 'catalog_product_entity_media_gallery_value_video';
-        $data = [
-            'value_id' => '8',
-            'store_id' => 0,
-            'provider' => '',
-            'url' => 'https://www.youtube.com/watch?v=abcdfghijk',
-            'title' => 'New Title',
-            'description' => 'New Description',
-            'metadata' => 'New metadata',
-        ];
-
-        $this->connection->expects($this->once())->method('describeTable')->willReturn($this->fields);
-        $this->connection->expects($this->any())->method('prepareColumnValue')->willReturnOnConsecutiveCalls(
-            '8',
-            0,
-            '',
-            'https://www.youtube.com/watch?v=abcdfghijk',
-            'New Title',
-            'New Description',
-            'New metadata'
-        );
-        $this->connection->expects($this->once())->method('quoteInto')->with('value_id = ?', 8)->willReturn(
-            'value_id = 8'
-        );
-
-        $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));
-        $this->select->expects($this->at(0))->method('from')->willReturnSelf();
-        $this->select->expects($this->at(1))->method('where')->willReturnSelf();
-        $this->connection->expects($this->once())->method('fetchAll')->willReturn($data);
-
-        $this->assertNull($this->resource->updateTable($tableName, $data));
-    }
-
-    public function testUpdateTableRecordNotExists()
-    {
-        $tableName = 'catalog_product_entity_media_gallery_value_video';
-        $data = [
-            'value_id' => '14',
-            'store_id' => 0,
-            'provider' => '',
-            'url' => 'https://www.youtube.com/watch?v=abcdfghijk',
-            'title' => 'New Title',
-            'description' => 'New Description',
-            'metadata' => 'New metadata',
-        ];
-
-        $this->connection->expects($this->once())->method('describeTable')->willReturn($this->fields);
-        $this->connection->expects($this->any())->method('prepareColumnValue')->willReturnOnConsecutiveCalls(
-            '14',
-            0,
-            '',
-            'https://www.youtube.com/watch?v=abcdfghijk',
-            'New Title',
-            'New Description',
-            'New metadata'
-        );
-        $this->connection->expects($this->once())->method('quoteInto')->with('value_id = ?', 14)->willReturn(
-            'value_id = 14'
-        );
-
-        $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));
-        $this->select->expects($this->at(0))->method('from')->willReturnSelf();
-        $this->select->expects($this->at(1))->method('where')->willReturnSelf();
-        $this->connection->expects($this->once())->method('fetchAll')->willReturn([]);
-
-        $this->connection->expects($this->once())->method('lastInsertId')->willReturn(14);
-
-        $this->assertEquals(14, $this->resource->updateTable($tableName, $data));
-    }
-
     public function testBindValueToEntityRecordExists()
     {
         $valueId = 14;
         $entityId = 1;
-        $this->connection->expects($this->at(0))->method('quoteInto')->with('value_id = ?', $valueId);
-        $this->connection->expects($this->at(1))->method('quoteInto')->with('entity_id = ?', $entityId);
-        $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));
-        $this->select->expects($this->at(0))->method('from')->willReturnSelf();
-        $this->select->expects($this->at(1))->method('where')->willReturnSelf();
-        $this->connection->expects($this->once())->method('fetchAll')->willReturn([]);
-        $this->connection->expects($this->once())->method('insert')->with(
-            'table',
-            [
-                'value_id' => $valueId,
-                'entity_id' => $entityId,
-            ]
-        )->willReturnSelf();
         $this->resource->bindValueToEntity($valueId, $entityId);
     }
 

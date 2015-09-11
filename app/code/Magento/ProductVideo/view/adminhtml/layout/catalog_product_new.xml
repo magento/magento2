@@ -8,6 +8,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <head>
         <css src="Magento_ProductVideo::css/productvideo.css"/>
+        <link src="Magento_ProductVideo::js/get-video-information.js"/>
     </head>
     <body>
         <referenceContainer name="content">
