@@ -35,14 +35,19 @@ class RestoreCustomerGroupId
      */
     public function execute($observer)
     {
-        $quoteAddress = $observer->getQuoteAddress();
+        /** @var \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment */
+        $shippingAssignment = $observer->getEvent()->getShippingAssignment();
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $observer->getEvent()->getQuote();
+
+        $address = $shippingAssignment->getShipping()->getAddress();
         $configAddressType = $this->customerAddressHelper->getTaxCalculationAddressType();
         // Restore initial customer group ID in quote only if VAT is calculated based on shipping address
-        if ($quoteAddress->hasPrevQuoteCustomerGroupId() &&
+        if ($address->hasPrevQuoteCustomerGroupId() &&
             $configAddressType == \Magento\Customer\Model\Address\AbstractAddress::TYPE_SHIPPING
         ) {
-            $quoteAddress->getQuote()->setCustomerGroupId($quoteAddress->getPrevQuoteCustomerGroupId());
-            $quoteAddress->unsPrevQuoteCustomerGroupId();
+            $quote->setCustomerGroupId($address->getPrevQuoteCustomerGroupId());
+            $address->unsPrevQuoteCustomerGroupId();
         }
     }
 }
