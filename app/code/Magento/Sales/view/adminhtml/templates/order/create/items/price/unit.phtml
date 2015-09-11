@@ -13,5 +13,5 @@
 $_item = $block->getItem();
 ?>
 <div class="price-excl-tax">
-<?php echo $block->formatPrice($_item->getCalculationPrice()) ?>
+<?php /* @escapeNotVerified */ echo $block->formatPrice($_item->getCalculationPrice()) ?>
 </div>
