@@ -6,7 +6,7 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Backend\Media;
 
-class ImageMediaEntryConverterTest extends \PHPUnit_Framework_TestCase
+class ImageEntryConverterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -32,7 +32,7 @@ class ImageMediaEntryConverterTest extends \PHPUnit_Framework_TestCase
     protected $productMock;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageMediaEntryConverter
+     * @var \Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter
      * |\Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $modelObject;
@@ -88,7 +88,7 @@ class ImageMediaEntryConverterTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->modelObject = $objectManager->getObject(
-            '\Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageMediaEntryConverter',
+            '\Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter',
             [
                 'mediaGalleryEntryFactory' => $this->mediaGalleryEntryFactoryMock,
                 'dataObjectHelper' => $this->dataObjectHelperMock

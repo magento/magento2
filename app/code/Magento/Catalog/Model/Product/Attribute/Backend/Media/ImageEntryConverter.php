@@ -13,7 +13,7 @@ use Magento\Framework\Api\Data\ImageContentInterface;
 /**
  * Converter for Image media gallery type
  */
-class ImageMediaEntryConverter implements MediaGalleryEntryConverterInterface
+class ImageEntryConverter implements EntryConverterInterface
 {
     /**
      * Media Entry type code
@@ -37,8 +37,7 @@ class ImageMediaEntryConverter implements MediaGalleryEntryConverterInterface
     public function __construct(
         \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
-    )
-    {
+    ) {
         $this->mediaGalleryEntryFactory = $mediaGalleryEntryFactory;
         $this->dataObjectHelper = $dataObjectHelper;
     }
@@ -82,13 +81,14 @@ class ImageMediaEntryConverter implements MediaGalleryEntryConverterInterface
     public function convertFrom(ProductAttributeMediaGalleryEntryInterface $entry)
     {
         $entryArray = [
-            "value_id" => $entry->getId(),
-            "file" => $entry->getFile(),
-            "label" => $entry->getLabel(),
-            "position" => $entry->getPosition(),
-            "disabled" => $entry->isDisabled(),
-            "types" => $entry->getTypes(),
-            "content" => $this->convertFromMediaGalleryEntryContentInterface($entry->getContent()),
+            'value_id' => $entry->getId(),
+            'file' => $entry->getFile(),
+            'label' => $entry->getLabel(),
+            'position' => $entry->getPosition(),
+            'disabled' => $entry->isDisabled(),
+            'types' => $entry->getTypes(),
+            'media_type' => $entry->getMediaType(),
+            'content' => $this->convertFromMediaGalleryEntryContentInterface($entry->getContent()),
         ];
         return $entryArray;
     }

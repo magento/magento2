@@ -6,7 +6,7 @@
 
 namespace Magento\ProductVideo\Test\Unit\Model\Product\Attribute\Media;
 
-class ExternalVideoMediaGalleryEntryProcessorTest extends \PHPUnit_Framework_TestCase
+class ExternalVideoEntryProcessorTest extends \PHPUnit_Framework_TestCase
 {
     /** * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Resource\ProductFactory */
     protected $productFactoryMock;
@@ -39,7 +39,7 @@ class ExternalVideoMediaGalleryEntryProcessorTest extends \PHPUnit_Framework_Tes
 
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
-     * |\Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoMediaGalleryEntryProcessor
+     * |\Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryProcessor
      */
     protected $modelObject;
 
@@ -70,7 +70,7 @@ class ExternalVideoMediaGalleryEntryProcessorTest extends \PHPUnit_Framework_Tes
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->modelObject = $objectManager->getObject(
-            '\Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoMediaGalleryEntryProcessor',
+            '\Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryProcessor',
             [
                 'productFactory' => $this->productFactoryMock,
                 'fileStorageDb' => $this->fileStorageDbMock,

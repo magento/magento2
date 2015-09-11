@@ -15,7 +15,7 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * @var \Magento\Framework\Json\EncoderInterface
      */
-    protected $_jsonEncoder;
+    protected $jsonEncoder;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -31,8 +31,8 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         array $data = []
     ) {
-        $this->_jsonEncoder = $jsonEncoder;
         parent::__construct($context, $registry, $formFactory, $data);
+        $this->jsonEncoder = $jsonEncoder;
         $this->setUseContainer(true);
     }
 
@@ -40,19 +40,18 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
      * Form preparation
      *
      * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _prepareForm()
     {
         /** @var \Magento\Framework\Data\Form $form */
-        $form = $this->_formFactory->create(
-            [
-                'data' => [
-                    'id' => 'new_video_form',
-                    'class' => 'admin__scope-old',
-                    'enctype' => 'multipart/form-data',
-                ]
+        $form = $this->_formFactory->create([
+            'data' => [
+                'id' => 'new_video_form',
+                'class' => 'admin__scope-old',
+                'enctype' => 'multipart/form-data',
             ]
-        );
+        ]);
         $form->setUseContainer($this->getUseContainer());
 
         $form->addField('new_video_messages', 'note', []);
@@ -180,28 +179,17 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * Attach new video dialog widget initialization
-     *
      * @return string
      */
-    public function getAfterElementHtml()
+    public function getWidgetOptions()
     {
-        $widgetOptions = $this->_jsonEncoder->encode(
+        return $this->jsonEncoder->encode(
             [
                 'saveVideoUrl' => $this->getUrl('catalog/product_gallery/upload'),
+                'saveRemoteVideoUrl' => $this->getUrl('product_video/product_gallery/retrieveImage'),
                 'htmlId' => $this->getHtmlId(),
             ]
         );
-        //TODO: JavaScript logic should be moved to separate file or reviewed
-        return <<<HTML
-<script>
-require(["jquery","mage/mage"],function($) {  // waiting for dependencies at first
-    $(function(){ // waiting for page to load to have '#video_ids-template' available
-        $('#new-video').mage('newVideoDialog', $widgetOptions);
-    });
-});
-</script>
-HTML;
     }
 
     /**

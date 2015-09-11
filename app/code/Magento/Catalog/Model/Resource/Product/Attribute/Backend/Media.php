@@ -38,7 +38,7 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param int $attributeId
      * @return array
      */
-    public function loadProductGalleryByAttributeId(Product $product, $attributeId)
+    public function loadProductGalleryByAttributeId($product, $attributeId)
     {
         $select = $this->createBaseLoadSelect($product->getId(), $product->getStoreId(), $attributeId);
         $result = $this->getConnection()->fetchAll($select);
@@ -72,11 +72,11 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ->from(
                 [$mainTableAlias => $this->getTable($tableNameAlias)], $cols
             )->where(
-                $mainTableAlias.'.value_id IN(?)',
+                $mainTableAlias . '.value_id IN(?)',
                 $ids
             );
         if (null !== $storeId) {
-            $select->where($mainTableAlias.'.store_id = ?', $storeId);
+            $select->where($mainTableAlias . '.store_id = ?', $storeId);
         }
         if (null !== $whereCondition) {
             $select->where($whereCondition);
@@ -90,65 +90,31 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
     }
 
     /**
-     * @param string $tableName
-     * @param array $data
-     * @param array $idKeyNames
-     * @return mixed
-     */
-    public function updateTable($tableName, array $data, array $idKeyNames = ['value_id'])
-    {
-        $tableName = $this->getTable($tableName);
-        $data = $this->_prepareDataForTable(
-            new \Magento\Framework\DataObject($data),
-            $tableName
-        );
-        $selectCondition = [];
-        foreach ($idKeyNames as $key) {
-            if (isset($data[$key])) {
-                $selectCondition[] = $this->getConnection()->quoteInto($key . ' = ?', $data[$key]);
-            }
-        }
-        $selectCondition = implode(' AND ', $selectCondition);
-        $id = null;
-        if (!$this->isRecordsExist($tableName, $selectCondition)) {
-            $this->getConnection()->insert($tableName, $data);
-            $id = $this->getConnection()->lastInsertId($tableName);
-        } else {
-            $this->getConnection()->update($tableName, $data, $selectCondition);
-        }
-
-        return $id;
-    }
-
-    /**
      * @param int $valueId
      * @param int $entityId
+     * @return int
      */
     public function bindValueToEntity($valueId, $entityId)
     {
-        $table = $this->getTable(self::GALLERY_VALUE_TO_ENTITY_TABLE);
-        $conditions = implode(
-            ' AND ',
+        return $this->saveDataRow(
+            self::GALLERY_VALUE_TO_ENTITY_TABLE,
             [
-                $this->getConnection()->quoteInto('value_id = ?', (int)$valueId),
-                $this->getConnection()->quoteInto('entity_id = ?', (int)$entityId)
+                'value_id' => $valueId,
+                'entity_id' => $entityId
             ]
         );
-        if (!$this->isRecordsExist($table, $conditions)) {
-            $this->getConnection()->insert($table, ['value_id' => $valueId, 'entity_id' => $entityId]);
-        }
     }
 
     /**
-     * @param $tableName
-     * @param $condition
-     * @return bool
+     * @param string $table
+     * @param array $data
+     * @param array $fields
+     * @return int
      */
-    protected function isRecordsExist($tableName, $condition)
+    public function saveDataRow($table, array $data, array $fields = [])
     {
-        $select = $this->getConnection()->select()->from($tableName)->where($condition);
-        $result = $this->getConnection()->fetchAll($select);
-        return (bool)$result;
+        $table = $this->getTable($table);
+        return $this->getConnection()->insertOnDuplicate($table, $data, $fields);
     }
 
     /**
@@ -186,14 +152,14 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ]
         )->joinInner(
             ['entity' => $this->getTable(self::GALLERY_VALUE_TO_ENTITY_TABLE)],
-            $mainTableAlias.'.value_id = entity.value_id',
+            $mainTableAlias . '.value_id = entity.value_id',
             ['entity_id' => 'entity_id']
         )->joinLeft(
             ['value' => $this->getTable(self::GALLERY_VALUE_TABLE)],
             implode(
                 ' AND ',
                 [
-                    $mainTableAlias.'.value_id = value.value_id',
+                    $mainTableAlias . '.value_id = value.value_id',
                     $connection->quoteInto('value.store_id = ?', (int)$storeId),
                     $connection->quoteInto('value.entity_id = ?', (int)$entityId)
                 ]
@@ -204,22 +170,21 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
             implode(
                 ' AND ',
                 [
-                    $mainTableAlias.'.value_id = default_value.value_id',
+                    $mainTableAlias . '.value_id = default_value.value_id',
                     'default_value.store_id = 0',
                     $connection->quoteInto('default_value.entity_id = ?', (int)$entityId)
                 ]
             ),
             ['label_default' => 'label', 'position_default' => 'position', 'disabled_default' => 'disabled']
         )->where(
-            $mainTableAlias.'.attribute_id = ?',
+            $mainTableAlias . '.attribute_id = ?',
             $attributeId
         )->where(
-            $mainTableAlias.'.disabled = 0'
+            $mainTableAlias . '.disabled = 0'
         )->where(
             'entity.entity_id = ?',
             $entityId
         )
-//            ->where($positionCheckSql . ' IS NOT NULL')
             ->order($positionCheckSql . ' ' . \Magento\Framework\DB\Select::SQL_ASC);
 
         return $select;
@@ -337,14 +302,20 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function duplicate($attributeId, $newFiles, $originalProductId, $newProductId)
     {
+        $mainTableAlias = $this->getMainTableAlias();
+
         $select = $this->getConnection()->select()->from(
-            $this->getMainTable(),
+            [$mainTableAlias => $this->getMainTable()],
             ['value_id', 'value']
+        )->joinInner(
+            ['entity' => $this->getTable(self::GALLERY_VALUE_TO_ENTITY_TABLE)],
+            $mainTableAlias . '.value_id = entity.value_id',
+            ['entity_id' => 'entity_id']
         )->where(
             'attribute_id = ?',
             $attributeId
         )->where(
-            'entity_id = ?',
+            'entity.entity_id = ?',
             $originalProductId
         );
 
@@ -352,7 +323,7 @@ class Media extends \Magento\Framework\Model\Resource\Db\AbstractDb
         // Duplicate main entries of gallery
         foreach ($this->getConnection()->fetchAll($select) as $row) {
             $data = [
-                'attribute_id' => $attribute->getId(),
+                'attribute_id' => $attributeId,
                 'entity_id' => $newProductId,
                 'value' => isset($newFiles[$row['value_id']]) ? $newFiles[$row['value_id']] : $row['value'],
             ];

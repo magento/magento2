@@ -9,22 +9,22 @@ namespace Magento\Catalog\Model\Product\Attribute\Backend\Media;
 /**
  * Class aggregate all Media Gallery Entry Converters
  */
-class MediaGalleryEntryConverterPool
+class EntryConverterPool
 {
     /**
-     * @var MediaGalleryEntryConverterInterface[]
+     * @var EntryConverterInterface[]
      */
     private $mediaGalleryEntryConvertersCollection;
 
     /**
-     * @param array $mediaGalleryEntryConvertersCollection
+     * @param EntryConverterInterface[] $mediaGalleryEntryConvertersCollection
      */
     public function __construct(array $mediaGalleryEntryConvertersCollection)
     {
         foreach ($mediaGalleryEntryConvertersCollection as $converter) {
-            if (!$converter instanceof MediaGalleryEntryConverterInterface) {
+            if (!$converter instanceof EntryConverterInterface) {
                 throw new \InvalidArgumentException(
-                    __('Media Gallery converter should be an instance of ProductAttributeMediaGalleryEntryInterface.')
+                    __('Media Gallery converter should be an instance of EntryConverterInterface.')
                 );
             }
         }
@@ -35,7 +35,7 @@ class MediaGalleryEntryConverterPool
      * Get specific converter by given media entry type
      *
      * @param string $mediaType
-     * @return MediaGalleryEntryConverterInterface
+     * @return EntryConverterInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getConverterByMediaType($mediaType)

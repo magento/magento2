@@ -7,14 +7,20 @@
 namespace Magento\ProductVideo\Model\Product\Attribute\Media;
 
 use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
-use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageMediaEntryConverter;
+use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory;
 
 /**
  * Converter for External Video media gallery type
  */
-class ExternalVideoMediaEntryConverter extends ImageMediaEntryConverter
+class ExternalVideoEntryConverter extends ImageEntryConverter
 {
+    /**
+     * Media Entry type code
+     */
+    const MEDIA_TYPE_CODE = 'external-video';
+
     /**
      * @var \Magento\Framework\Api\Data\VideoContentInterfaceFactory
      */
@@ -24,28 +30,22 @@ class ExternalVideoMediaEntryConverter extends ImageMediaEntryConverter
      * @var \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory
      */
     protected $mediaGalleryEntryExtensionFactory;
-
     /**
      * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Framework\Api\Data\VideoContentInterfaceFactory $videoEntryFactory
-     * @param \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory $mediaGalleryEntryExtensionFactory
+     * @param ProductAttributeMediaGalleryEntryExtensionFactory $mediaGalleryEntryExtensionFactory
      */
     public function __construct(
         \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory $mediaGalleryEntryFactory,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         \Magento\Framework\Api\Data\VideoContentInterfaceFactory $videoEntryFactory,
-        \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory $mediaGalleryEntryExtensionFactory
-    )
-    {
+        ProductAttributeMediaGalleryEntryExtensionFactory $mediaGalleryEntryExtensionFactory
+    ) {
+        parent::__construct($mediaGalleryEntryFactory, $dataObjectHelper);
         $this->videoEntryFactory = $videoEntryFactory;
         $this->mediaGalleryEntryExtensionFactory = $mediaGalleryEntryExtensionFactory;
-        parent::__construct($mediaGalleryEntryFactory, $dataObjectHelper);
     }
-    /**
-     * Media Entry type code
-     */
-    const MEDIA_TYPE_CODE = 'external-video';
 
     /**
      * @return string
@@ -83,14 +83,13 @@ class ExternalVideoMediaEntryConverter extends ImageMediaEntryConverter
         $dataFromPreviewImageEntry = parent::convertFrom($entry);
         $videoContent = $entry->getExtensionAttributes()->getVideoContent();
         $entryArray = [
-            "video_provider" => $videoContent->getVideoProvider(),
-            "video_url" => $videoContent->getVideoUrl(),
-            "video_title" => $videoContent->getVideoTitle(),
-            "video_description" => $videoContent->getVideoDescription(),
-            "video_metadata" => $videoContent->getVideoMetadata(),
+            'video_provider' => $videoContent->getVideoProvider(),
+            'video_url' => $videoContent->getVideoUrl(),
+            'video_title' => $videoContent->getVideoTitle(),
+            'video_description' => $videoContent->getVideoDescription(),
+            'video_metadata' => $videoContent->getVideoMetadata(),
         ];
         $entryArray = array_merge($dataFromPreviewImageEntry, $entryArray);
         return $entryArray;
     }
-
 }

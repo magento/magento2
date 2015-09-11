@@ -5,6 +5,7 @@
  */
 
 namespace Magento\Framework\Api\Data;
+
 use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
@@ -37,7 +38,7 @@ interface VideoContentInterface extends ExtensibleDataInterface
     public function setMediaType($mimeType);
 
     /**
-     * Get provider YouTube|Vimeo
+     * Get provider
      *
      * @return string
      */

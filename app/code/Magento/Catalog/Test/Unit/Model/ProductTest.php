@@ -319,7 +319,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->mediaGalleryEntryConverterPoolMock =
             $this->getMock(
-                '\Magento\Catalog\Model\Product\Attribute\Backend\Media\MediaGalleryEntryConverterPool',
+                '\Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool',
                 ['getConverterByMediaType'],
                 [],
                 '',
@@ -328,7 +328,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         $this->converterMock =
             $this->getMock(
-                '\Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageMediaEntryConverter',
+                '\Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter',
                 [],
                 [],
                 '',

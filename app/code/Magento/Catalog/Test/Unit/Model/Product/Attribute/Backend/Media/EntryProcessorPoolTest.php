@@ -6,17 +6,17 @@
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Backend\Media;
 
-class MediaGalleryEntryProcessorPoolTest extends \PHPUnit_Framework_TestCase
+class EntryProcessorPoolTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
-     * |\Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageMediaGalleryEntryProcessor
+     * |\Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryProcessor
      */
     protected $imageMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
-     * |\Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoMediaGalleryEntryProcessor
+     * |\Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryProcessor
      */
     protected $videoMock;
 
@@ -28,7 +28,7 @@ class MediaGalleryEntryProcessorPoolTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
-     * |\Magento\Catalog\Model\Product\Attribute\Backend\Media\MediaGalleryEntryProcessorPool
+     * |\Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryProcessorPool
      */
     protected $processorPool;
 
@@ -36,7 +36,7 @@ class MediaGalleryEntryProcessorPoolTest extends \PHPUnit_Framework_TestCase
     {
         $this->imageMock =
             $this->getMock(
-                '\Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageMediaGalleryEntryProcessor',
+                '\Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryProcessor',
                 [],
                 [],
                 '',
@@ -45,7 +45,7 @@ class MediaGalleryEntryProcessorPoolTest extends \PHPUnit_Framework_TestCase
 
         $this->videoMock =
             $this->getMock(
-                '\Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoMediaGalleryEntryProcessor',
+                '\Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryProcessor',
                 [],
                 [],
                 '',
@@ -59,7 +59,7 @@ class MediaGalleryEntryProcessorPoolTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->processorPool = $objectManager->getObject(
-            '\Magento\Catalog\Model\Product\Attribute\Backend\Media\MediaGalleryEntryProcessorPool',
+            '\Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryProcessorPool',
             [
                 'mediaGalleryEntryProcessorsCollection' => [$this->imageMock, $this->videoMock]
             ]
@@ -72,7 +72,7 @@ class MediaGalleryEntryProcessorPoolTest extends \PHPUnit_Framework_TestCase
         $dataObjectMock = $this->getMock('\Magento\Framework\DataObject', [], [], '', false);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $objectManager->getObject(
-            '\Magento\Catalog\Model\Product\Attribute\Backend\Media\MediaGalleryEntryProcessorPool',
+            '\Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryProcessorPool',
             [
                 'mediaGalleryEntryProcessorsCollection' => [$dataObjectMock]
             ]
