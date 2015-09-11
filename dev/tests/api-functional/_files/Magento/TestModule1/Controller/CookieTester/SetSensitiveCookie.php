@@ -5,6 +5,8 @@
  */
 namespace Magento\TestModule1\Controller\CookieTester;
 
+use \Magento\Framework\App\RequestInterface;
+
 /**
  */
 class SetSensitiveCookie extends \Magento\TestModule1\Controller\CookieTester
@@ -14,21 +16,21 @@ class SetSensitiveCookie extends \Magento\TestModule1\Controller\CookieTester
      *
      * @return void
      */
-    public function execute()
+    public function execute(RequestInterface $request)
     {
         $sensitiveCookieMetadata = $this->getCookieMetadataFactory()->createSensitiveCookieMetadata();
 
-        $cookieDomain = $this->getRequest()->getParam('cookie_domain');
+        $cookieDomain = $request->getParam('cookie_domain');
         if ($cookieDomain !== null) {
             $sensitiveCookieMetadata->setDomain($cookieDomain);
         }
-        $cookiePath = $this->getRequest()->getParam('cookie_domain');
+        $cookiePath = $request->getParam('cookie_domain');
         if ($cookiePath !== null) {
             $sensitiveCookieMetadata->setPath($cookiePath);
         }
 
-        $cookieName = $this->getRequest()->getParam('cookie_name');
-        $cookieValue = $this->getRequest()->getParam('cookie_value');
+        $cookieName = $request->getParam('cookie_name');
+        $cookieValue = $request->getParam('cookie_value');
         $this->getCookieManager()->setSensitiveCookie($cookieName, $cookieValue, $sensitiveCookieMetadata);
     }
 }
