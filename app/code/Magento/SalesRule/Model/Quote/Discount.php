@@ -135,8 +135,8 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 
         $this->calculator->prepareDescription($address);
         $total->setDiscountDescription($address->getDiscountDescription());
-        $total->setSubtotalWithDiscount($total->getSubtotalWithDiscount());
-        $total->setBaseSubtotalWithDiscount($total->getBaseSubtotalWithDiscount());
+        $total->setSubtotalWithDiscount($total->getSubtotal() + $total->getDiscountAmount());
+        $total->setBaseSubtotalWithDiscount($total->getBaseSubtotal() + $total->getBaseDiscountAmount());
         return $this;
     }
 
