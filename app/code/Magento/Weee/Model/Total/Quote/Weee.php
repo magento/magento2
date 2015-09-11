@@ -91,16 +91,18 @@ class Weee extends AbstractTotal
     /**
      * Collect Weee amounts for the quote / order
      *
+     * @param \Magento\Quote\Model\Quote $quote
      * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return $this
      */
     public function collect(
+        \Magento\Quote\Model\Quote $quote,
         \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment,
         \Magento\Quote\Model\Quote\Address\Total $total
     ) {
-        AbstractTotal::collect($shippingAssignment, $total);
-        $this->_store = $this->storeManager->getStore();
+        AbstractTotal::collect($quote, $shippingAssignment, $total);
+        $this->_store = $quote->getStore();
         if (!$this->weeeData->isEnabled($this->_store)) {
             return $this;
         }

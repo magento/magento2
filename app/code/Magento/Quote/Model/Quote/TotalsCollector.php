@@ -147,14 +147,7 @@ class TotalsCollector
      */
     public function collectQuoteTotals(\Magento\Quote\Model\Quote $quote)
     {
-        /** Build shipping assignment DTO  */
-        $shippingAssignment = $this->shippingAssignmentFactory->create();
-        $shipping = $this->shippingFactory->create();
-        $shipping->setMethod($quote->getShippingAddress()->getShippingMethod());
-        $shipping->setAddress($quote->getShippingAddress());
-        $shippingAssignment->setShipping($shipping);
-        $shippingAssignment->setItems($quote->getAllItems());
-        return $this->collectAddressTotals($shippingAssignment, $quote->getStoreId());
+        return $this->collectAddressTotals($quote, $quote->getShippingAddress());
     }
 
     /**
@@ -165,7 +158,7 @@ class TotalsCollector
     {
 
         /** @var \Magento\Quote\Model\Quote\Address\Total $total */
-//        $total = $this->totalFactory->create('Magento\Quote\Model\Quote\Address\Total');
+        $total = $this->totalFactory->create('Magento\Quote\Model\Quote\Address\Total');
 
         //protected $_eventPrefix = 'sales_quote';
         //protected $_eventObject = 'quote';
@@ -177,41 +170,32 @@ class TotalsCollector
 
         $this->_collectItemsQtys($quote);
 
-//        $total->setSubtotal(0);
-//        $total->setBaseSubtotal(0);
-//
-//        $total->setSubtotalWithDiscount(0);
-//        $total->setBaseSubtotalWithDiscount(0);
-//
-//        $total->setGrandTotal(0);
-//        $total->setBaseGrandTotal(0);
+        $total->setSubtotal(0);
+        $total->setBaseSubtotal(0);
+
+        $total->setSubtotalWithDiscount(0);
+        $total->setBaseSubtotalWithDiscount(0);
+
+        $total->setGrandTotal(0);
+        $total->setBaseGrandTotal(0);
 
         /** @var \Magento\Quote\Model\Quote\Address $address */
-        //foreach ($quote->getAllAddresses() as $address) {
+        foreach ($quote->getAllAddresses() as $address) {
+            $addressTotal = $this->collectAddressTotals($quote, $address);
 
-            /** Build shipping assignment DTO  */
-            $shippingAssignment = $this->shippingAssignmentFactory->create();
-            $shipping = $this->shippingFactory->create();
-            $shipping->setMethod($quote->getShippingAddress()->getShippingMethod());
-            $shipping->setAddress($quote->getShippingAddress());
-            $shippingAssignment->setShipping($shipping);
-            $shippingAssignment->setItems($quote->getAllItems());
+            $total->setSubtotal((float)$total->getSubtotal() + $addressTotal->getSubtotal());
+            $total->setBaseSubtotal((float)$total->getBaseSubtotal() + $addressTotal->getBaseSubtotal());
 
-            $addressTotal = $this->collectAddressTotals($shippingAssignment, $quote->getStoreId());
+            $total->setSubtotalWithDiscount(
+                (float)$total->getSubtotalWithDiscount() + $addressTotal->getSubtotalWithDiscount()
+            );
+            $total->setBaseSubtotalWithDiscount(
+                (float)$total->getBaseSubtotalWithDiscount() + $addressTotal->getBaseSubtotalWithDiscount()
+            );
 
-//            $total->setSubtotal((float)$total->getSubtotal() + $addressTotal->getSubtotal());
-//            $total->setBaseSubtotal((float)$total->getBaseSubtotal() + $addressTotal->getBaseSubtotal());
-//
-//            $total->setSubtotalWithDiscount(
-//                (float)$total->getSubtotalWithDiscount() + $addressTotal->getSubtotalWithDiscount()
-//            );
-//            $total->setBaseSubtotalWithDiscount(
-//                (float)$total->getBaseSubtotalWithDiscount() + $addressTotal->getBaseSubtotalWithDiscount()
-//            );
-//
-//            $total->setGrandTotal((float)$total->getGrandTotal() + $addressTotal->getGrandTotal());
-//            $total->setBaseGrandTotal((float)$total->getBaseGrandTotal() + $addressTotal->getBaseGrandTotal());
-        //}
+            $total->setGrandTotal((float)$total->getGrandTotal() + $addressTotal->getGrandTotal());
+            $total->setBaseGrandTotal((float)$total->getBaseGrandTotal() + $addressTotal->getBaseGrandTotal());
+        }
 
         $this->quoteValidator->validateQuoteAmount($quote, $quote->getGrandTotal());
         $this->quoteValidator->validateQuoteAmount($quote, $quote->getBaseGrandTotal());
@@ -226,7 +210,7 @@ class TotalsCollector
         );
 
         //$this->setTotalsCollectedFlag(true);
-        return $addressTotal;
+        return $total;
     }
 
     /**
@@ -288,12 +272,25 @@ class TotalsCollector
     }
 
     /**
-     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment
-     * @param $storeId
-     * @return \Magento\Quote\Model\Quote\Address\Total
+     * @param \Magento\Quote\Model\Quote $quote
+     * @param Address $address
+     * @return Address\Total
      */
-    public function collectAddressTotals(\Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment, $storeId)
-    {
+    public function collectAddressTotals(
+        \Magento\Quote\Model\Quote $quote,
+        \Magento\Quote\Model\Quote\Address $address
+    ) {
+        /** Build shipping assignment DTO  */
+        $shippingAssignment = $this->shippingAssignmentFactory->create();
+        $shipping = $this->shippingFactory->create();
+        $shipping->setMethod($quote->getShippingAddress()->getShippingMethod());
+        $shipping->setAddress($quote->getShippingAddress());
+        $shippingAssignment->setShipping($shipping);
+
+        /** TODO: ship items for current address only */
+        $shippingAssignment->setItems($address->getAllItems());
+
+
         /** @todo Refactor this code \Magento\Quote\Model\Observer\Frontend\Quote\Address\CollectTotals::dispatch */
         $this->eventManager->dispatch(
             $this->_eventPrefix . '_collect_totals_before',
@@ -302,12 +299,13 @@ class TotalsCollector
         /** @var CollectorInterface $collector */
         /** @var \Magento\Quote\Model\Quote\Address\Total $total */
         $total = $this->totalFactory->create('Magento\Quote\Model\Quote\Address\Total');
-        foreach ($this->collectorList->getCollectors($storeId) as $key => $collector) {
+        foreach ($this->collectorList->getCollectors($quote->getStoreId()) as $key => $collector) {
             if (!in_array($key, $this->allowedCollectors)) {
                 continue;
             }
-            $collector->collect($shippingAssignment, $total);
+            $collector->collect($quote, $shippingAssignment, $total);
         }
+//        $address->addData($total->getData());
 
         /**
          * @todo Refactor client's code
