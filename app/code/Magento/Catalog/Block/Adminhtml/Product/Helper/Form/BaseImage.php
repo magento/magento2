@@ -11,6 +11,9 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
+/**
+ * Class BaseImage
+ */
 class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
     /**
@@ -23,22 +26,22 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
      *
      * @var \Magento\Backend\Model\UrlInterface
      */
-    protected $_url;
+    protected $url;
 
     /**
      * @var \Magento\Catalog\Helper\Data
      */
-    protected $_catalogHelperData;
+    protected $catalogHelperData;
 
     /**
      * @var \Magento\Framework\File\Size
      */
-    protected $_fileConfig;
+    protected $fileConfig;
 
     /**
      * @var \Magento\Framework\View\Asset\Repository
      */
-    protected $_assetRepo;
+    protected $assetRepo;
 
     /**
      * @var \Magento\Framework\View\LayoutInterface
@@ -68,11 +71,11 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
     ) {
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
 
-        $this->_assetRepo = $assetRepo;
-        $this->_url = $backendUrlFactory->create();
-        $this->_catalogHelperData = $catalogData;
-        $this->_fileConfig = $fileConfig;
-        $this->_maxFileSize = $this->_getFileMaxSize();
+        $this->assetRepo = $assetRepo;
+        $this->url = $backendUrlFactory->create();
+        $this->catalogHelperData = $catalogData;
+        $this->fileConfig = $fileConfig;
+        $this->maxFileSize = $this->getFileMaxSize();
         $this->layout = $context->getLayout();
     }
 
@@ -106,9 +109,9 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
     {
         $block->assign([
             'htmlId' => $this->_escaper->escapeHtml($this->getHtmlId()),
-            'fileMaxSize' => $this->_getFileMaxSize(),
+            'fileMaxSize' => $this->maxFileSize,
             'uploadUrl' => $this->_escaper->escapeHtml($this->_getUploadUrl()),
-            'spacerImage' => $this->_assetRepo->getUrl('images/spacer.gif'),
+            'spacerImage' => $this->assetRepo->getUrl('images/spacer.gif'),
             'imagePlaceholderText' => __('Click here or drag and drop to add images.'),
             'deleteImageText' => __('Delete image'),
             'makeBaseText' => __('Make Base'),
@@ -142,7 +145,7 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
      */
     protected function _getUploadUrl()
     {
-        return $this->_url->getUrl('catalog/product_gallery/upload');
+        return $this->url->getUrl('catalog/product_gallery/upload');
     }
 
     /**
@@ -150,8 +153,8 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
      *
      * @return int
      */
-    protected function _getFileMaxSize()
+    protected function getFileMaxSize()
     {
-        return $this->_fileConfig->getMaxFileSize();
+        return $this->fileConfig->getMaxFileSize();
     }
 }
