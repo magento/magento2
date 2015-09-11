@@ -144,10 +144,6 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         $this->_model->beforeSave($product);
         $this->assertStringStartsWith('./magento_image', $product->getData('media_gallery/duplicate/100'));
         $this->assertEquals($fileLabel, $product->getData('image_label'));
-
-        /* affect of beforeSave */
-        $this->assertNotEquals($fileName, $this->_model->getRenamedImage($fileName));
-        $this->assertEquals('test.jpg', $this->_model->getRenamedImage('test.jpg'));
     }
 
     public function testAfterSaveAndAfterLoad()

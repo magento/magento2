@@ -62,17 +62,10 @@
             <argument name="changelog" xsi:type="object" shared="false">Magento\Framework\Mview\View\ChangelogInterface</argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Product\Attribute\Backend\Media\MediaGalleryEntryProcessorPool">
-        <arguments>
-            <argument name="mediaGalleryEntryProcessorsCollection" xsi:type="array">
-                <item name="10" xsi:type="object">Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageMediaGalleryEntryProcessor</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Catalog\Model\Product\Attribute\Backend\Media\MediaGalleryEntryConverterPool">
+    <type name="Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool">
         <arguments>
             <argument name="mediaGalleryEntryConvertersCollection" xsi:type="array">
-                <item name="image" xsi:type="object">Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageMediaEntryConverter</item>
+                <item name="image" xsi:type="object">Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter</item>
             </argument>
         </arguments>
     </type>

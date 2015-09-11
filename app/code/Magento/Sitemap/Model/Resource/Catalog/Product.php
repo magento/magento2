@@ -391,7 +391,10 @@ class Product extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected function _getAllProductImages($product, $storeId)
     {
         $product->setStoreId($storeId);
-        $gallery = $this->_mediaAttribute->loadGallery($product, $this->_getMediaGalleryModel());
+        $gallery = $this->_mediaAttribute->loadProductGalleryByAttributeId(
+            $product,
+            $this->_getMediaGalleryModel()->getAttribute()->getId()
+        );
 
         $imagesCollection = [];
         if ($gallery) {

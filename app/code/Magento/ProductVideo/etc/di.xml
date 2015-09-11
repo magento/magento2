@@ -7,18 +7,14 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\Api\Data\VideoContentInterface" type="Magento\ProductVideo\Model\Product\Attribute\Media\VideoEntry" />
-    <type name="Magento\Catalog\Model\Product\Attribute\Backend\Media\MediaGalleryEntryProcessorPool">
+    <type name="Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool">
         <arguments>
-            <argument name="mediaGalleryEntryProcessorsCollection" xsi:type="array">
-                <item name="20" xsi:type="object">Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoMediaGalleryEntryProcessor</item>
+            <argument name="mediaGalleryEntryConvertersCollection" xsi:type="array">
+                <item name="external-video" xsi:type="object">Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter</item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Product\Attribute\Backend\Media\MediaGalleryEntryConverterPool">
-        <arguments>
-            <argument name="mediaGalleryEntryConvertersCollection" xsi:type="array">
-                <item name="external-video" xsi:type="object">Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoMediaEntryConverter</item>
-            </argument>
-        </arguments>
+    <type name="Magento\Catalog\Model\Product\Attribute\Backend\Media">
+        <plugin name="external_video_media_entry_processor" type="Magento\ProductVideo\Model\Plugin\ExternalVideoEntryProcessor" />
     </type>
 </config>

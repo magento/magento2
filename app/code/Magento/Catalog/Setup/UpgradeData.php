@@ -40,7 +40,7 @@ class UpgradeData implements UpgradeDataInterface
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
-        if (version_compare($context->getVersion(), '2.0.1', '<=')) {
+        if (version_compare($context->getVersion(), '2.0.0.1') < 0) {
             /** @var \Magento\Catalog\Setup\CategorySetup $categorySetup */
             $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
 
@@ -50,7 +50,13 @@ class UpgradeData implements UpgradeDataInterface
             $attributeGroupId = $categorySetup->getAttributeGroupId($entityTypeId, $attributeSetId, 'Images');
 
             // update General Group
-            $categorySetup->updateAttributeGroup($entityTypeId, $attributeSetId, $attributeGroupId, 'attribute_group_name', 'Images and Videos');
+            $categorySetup->updateAttributeGroup(
+                $entityTypeId,
+                $attributeSetId,
+                $attributeGroupId,
+                'attribute_group_name',
+                'Images and Videos'
+            );
         }
         $setup->endSetup();
     }
