@@ -272,6 +272,9 @@ define([
                 }],
                 opened: function(e) {
                     $('#video_url').focus();
+                    var roles = $('.video_image_role');
+                    roles.prop('disabled', false);
+                    roles.prop('checked', $('.image.item').length < 1);
                     var file = jQuery('#file_name').val();
                     if(!file) {
                         return;
