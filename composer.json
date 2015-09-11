@@ -16,12 +16,7 @@
     "license": [
         "proprietary"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/AdvancedSearch"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ]
     }
 }
