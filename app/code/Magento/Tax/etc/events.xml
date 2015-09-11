@@ -6,9 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
-    <event name="sales_quote_collect_totals_before">
-        <observer name="tax" instance="\Magento\Tax\Observer\QuoteCollectTotalsBefore" method="invoke" />
-    </event>
     <event name="catalog_product_view_config">
         <observer name="tax" instance="\Magento\Tax\Observer\UpdateProductOptions" method="invoke" />
     </event>
