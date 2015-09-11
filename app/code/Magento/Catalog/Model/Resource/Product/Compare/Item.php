@@ -92,7 +92,7 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 ['compare_table' => $this->getMainTable()],
                 ['catalog_compare_item_id']
             )->joinLeft(
-                ['visitor_table' => $this->getTable('log_visitor')],
+                ['visitor_table' => $this->getTable('customer_visitor')],
                 'visitor_table.visitor_id=compare_table.visitor_id AND compare_table.customer_id IS NULL',
                 []
             )->where(

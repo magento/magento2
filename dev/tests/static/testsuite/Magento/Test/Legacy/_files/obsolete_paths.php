@@ -256,4 +256,6 @@ return [
     ['/app/code/Magento/Core/Model/TemplateEngine/Decorator/DebugHints.php'],
     ['/dev/tests/unit/testsuite/Magento/Core/Model/TemplateEngine/Decorator/DebugHints.php'],
     ['/dev/tests/unit/testsuite'],
+    ['/app/code/Magento/Log'],
+    ['/app/code/Magento/DesignEditor'],
 ];

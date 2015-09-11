@@ -16,6 +16,11 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 class PreprocessorTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\CatalogSearch\Model\Search\TableMapper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $tableMapper;
+
+    /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface|MockObject
      */
     private $connection;
@@ -90,7 +95,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->attribute = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
             ->disableOriginalConstructor()
-            ->setMethods(['getBackendTable', 'isStatic', 'getAttributeId'])
+            ->setMethods(['getBackendTable', 'isStatic', 'getAttributeId', 'getAttributeCode'])
             ->getMockForAbstractClass();
         $this->resource = $resource = $this->getMockBuilder('\Magento\Framework\App\Resource')
             ->disableOriginalConstructor()
@@ -104,9 +109,12 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['from', 'where', '__toString', 'joinLeft', 'columns', 'having'])
             ->getMock();
-        $this->connection->expects($this->once())
+        $this->connection->expects($this->any())
             ->method('select')
             ->will($this->returnValue($this->select));
+        $this->connection->expects($this->any())
+            ->method('quoteIdentifier')
+            ->will($this->returnArgument(0));
         $resource->expects($this->atLeastOnce())
             ->method('getConnection')
             ->will($this->returnValue($this->connection));
@@ -126,6 +134,10 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
+        $this->tableMapper = $this->getMockBuilder('\Magento\CatalogSearch\Model\Search\TableMapper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->target = $objectManagerHelper->getObject(
             'Magento\CatalogSearch\Model\Adapter\Mysql\Filter\Preprocessor',
             [
@@ -133,17 +145,18 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
                 'scopeResolver' => $this->scopeResolver,
                 'config' => $this->config,
                 'resource' => $resource,
-                'attributePrefix' => 'attr_'
+                'attributePrefix' => 'attr_',
+                'tableMapper' => $this->tableMapper,
             ]
         );
     }
 
     public function testProcessPrice()
     {
-        $expectedResult = 'search_index.entity_id IN (select entity_id from (TEST QUERY PART) as filter)';
+        $expectedResult = 'price_index.min_price = 23';
         $scopeId = 0;
         $isNegation = false;
-        $query = 'SELECT table.price FROM catalog_product_entity';
+        $query = 'price = 23';
 
         $this->scope->expects($this->once())->method('getId')->will($this->returnValue($scopeId));
         $this->filter->expects($this->exactly(2))
@@ -153,33 +166,14 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->method('getAttribute')
             ->with(\Magento\Catalog\Model\Product::ENTITY, 'price')
             ->will($this->returnValue($this->attribute));
-        $this->resource->expects($this->once())
-            ->method('getTableName')
-            ->with('catalog_product_index_price')
-            ->will($this->returnValue('table_name'));
-        $this->select->expects($this->once())
-            ->method('from')
-            ->with(['main_table' => 'table_name'], 'entity_id')
-            ->will($this->returnSelf());
-        $this->select->expects($this->once())
-            ->method('where')
-            ->with('SELECT table.min_price FROM catalog_product_entity')
-            ->will($this->returnSelf());
-        $this->select->expects($this->once())
-            ->method('__toString')
-            ->will($this->returnValue('TEST QUERY PART'));
 
-        $queryContainer = $this->getMockBuilder('\Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $actualResult = $this->target->process($this->filter, $isNegation, $query, $queryContainer);
+        $actualResult = $this->target->process($this->filter, $isNegation, $query);
         $this->assertSame($expectedResult, $this->removeWhitespaces($actualResult));
     }
 
     public function testProcessCategoryIds()
     {
-        $expectedResult = 'category_index.category_id = FilterValue';
+        $expectedResult = 'category_ids_index.category_id = FilterValue';
         $scopeId = 0;
         $isNegation = false;
         $query = 'SELECT category_ids FROM catalog_product_entity';
@@ -198,21 +192,21 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->with(\Magento\Catalog\Model\Product::ENTITY, 'category_ids')
             ->will($this->returnValue($this->attribute));
 
-        $queryContainer = $this->getMockBuilder('\Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $actualResult = $this->target->process($this->filter, $isNegation, $query, $queryContainer);
+        $actualResult = $this->target->process($this->filter, $isNegation, $query);
         $this->assertSame($expectedResult, $this->removeWhitespaces($actualResult));
     }
 
     public function testProcessStaticAttribute()
     {
-        $expectedResult = 'search_index.entity_id IN (select entity_id from (TEST QUERY PART) as filter)';
+        $expectedResult = 'attr_table_alias.static_attribute LIKE %name%';
         $scopeId = 0;
         $isNegation = false;
-        $query = 'SELECT field FROM table';
+        $query = 'static_attribute LIKE %name%';
 
+        $this->attribute->method('getAttributeCode')
+            ->willReturn('static_attribute');
+        $this->tableMapper->expects($this->once())->method('getMappingAlias')
+            ->willReturn('attr_table_alias');
         $this->scope->expects($this->once())->method('getId')->will($this->returnValue($scopeId));
         $this->filter->expects($this->exactly(3))
             ->method('getField')
@@ -227,23 +221,8 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
         $this->attribute->expects($this->once())
             ->method('getBackendTable')
             ->will($this->returnValue('backend_table'));
-        $this->select->expects($this->once())
-            ->method('from')
-            ->with(['main_table' => 'backend_table'], 'entity_id')
-            ->will($this->returnSelf());
-        $this->select->expects($this->once())
-            ->method('where')
-            ->with('SELECT field FROM table')
-            ->will($this->returnSelf());
-        $this->select->expects($this->once())
-            ->method('__toString')
-            ->will($this->returnValue('TEST QUERY PART'));
 
-        $queryContainer = $this->getMockBuilder('\Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $actualResult = $this->target->process($this->filter, $isNegation, $query, $queryContainer);
+        $actualResult = $this->target->process($this->filter, $isNegation, $query);
         $this->assertSame($expectedResult, $this->removeWhitespaces($actualResult));
     }
 
@@ -295,11 +274,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
             ->method('__toString')
             ->will($this->returnValue('TEST QUERY PART'));
 
-        $queryContainer = $this->getMockBuilder('\Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $actualResult = $this->target->process($this->filter, $isNegation, $query, $queryContainer);
+        $actualResult = $this->target->process($this->filter, $isNegation, $query);
         $this->assertSame($expectedResult, $this->removeWhitespaces($actualResult));
     }
 

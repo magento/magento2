@@ -104,13 +104,22 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $shipment3Qty = 3;
 
         $orderItem1 = new \Magento\Framework\DataObject(
-            ['id' => $orderItem1Id]
+            [
+                'id' => $orderItem1Id,
+                'qty_to_invoice' => $orderItem1Id
+            ]
         );
         $orderItem2 = new \Magento\Framework\DataObject(
-            ['id' => $orderItem2Id]
+            [
+                'id' => $orderItem2Id,
+                'qty_to_invoice' => $orderItem2Id
+            ]
         );
         $orderItem3 = new \Magento\Framework\DataObject(
-            ['id' => $orderItem3Id]
+            [
+                'id' => $orderItem3Id,
+                'qty_to_invoice' => $orderItem3Id
+            ]
         );
         $orderItems = [$orderItem1, $orderItem2, $orderItem3];
         $orderMock->expects($this->any())
@@ -506,5 +515,49 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $containerMock->expects($this->never())
             ->method('getLayout');
         $this->model->addPaypalShortcuts($observer);
+    }
+
+    public function testProcessBraintreeAddressIfPaymentIsBraintree()
+    {
+        $billingAddressMock = $this->getMock(
+            'Magento\Quote\Model\Quote\Address',
+            ['setShouldIgnoreValidation'],
+            [],
+            '',
+            false
+        );
+        $eventMock = $this->getMock('Magento\Framework\Event', ['getQuote'], [], '', false);
+        $observerMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
+        $observerMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
+        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $eventMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
+        $paymentMock = $this->getMock('Magento\Quote\Model\Quote\Payment', [], [], '', false);
+        $quoteMock->expects($this->once())->method('getPayment')->willReturn($paymentMock);
+        $paymentMock
+            ->expects($this->once())
+            ->method('getMethod')
+            ->willReturn(\Magento\Braintree\Model\PaymentMethod\PayPal:: METHOD_CODE);
+        $quoteMock->expects($this->once())->method('getBillingAddress')->willReturn($billingAddressMock);
+        $billingAddressMock->expects($this->once())->method('setShouldIgnoreValidation')->with(true);
+        $this->model->processBraintreeAddress($observerMock);
+
+    }
+
+    public function testProcessBraintreeAddressIfPaymentIsNotBraintree()
+    {
+        $eventMock = $this->getMock('Magento\Framework\Event', ['getQuote'], [], '', false);
+        $observerMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
+        $observerMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
+        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $eventMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
+        $paymentMock = $this->getMock('Magento\Quote\Model\Quote\Payment', [], [], '', false);
+        $quoteMock->expects($this->once())->method('getPayment')->willReturn($paymentMock);
+        $paymentMock
+            ->expects($this->once())
+            ->method('getMethod')
+            ->willReturn('checkmo');
+        $quoteMock->expects($this->never())->method('getBillingAddress');
+        $this->model->processBraintreeAddress($observerMock);
+
     }
 }

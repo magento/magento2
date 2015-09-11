@@ -5,31 +5,26 @@
  */
 -->
 <div class="admin__data-grid-wrap">
-    <table
-        class="data-grid"
-        data-bind="
-            afterRender: dndConfig.enabled ?
-                function (elem) { dnd('setTable', elem); } :
-                false,
-            css: {
-                'data-grid-draggable': dndConfig.enabled
-            }">
-        <thead data-part="head">
-            <tr data-part="head.row">
-                <!-- ko foreach: elems -->
-                    <!-- ko template: getHeader() --><!-- /ko -->
-                <!-- /ko -->
+    <table class="data-grid">
+        <thead>
+            <tr data-bind="foreach: elems">
+                <!-- ko template: getHeader() --><!-- /ko -->
             </tr>
         </thead>
-        <tbody data-part="body">
-            <!-- ko if: hasData() -->
-                <!-- ko foreach: { data: rows, as: 'row' } -->
-                    <tr data-part="body.row">
-                        <!-- ko foreach: { data: $parent.elems, as: 'field' }  -->
-                            <!-- ko template: getBody() --><!-- /ko -->
-                        <!-- /ko -->
-                    </tr>
-                <!-- /ko -->
+        <tbody>
+            <!-- ko foreach: { data: rows, as: 'row' } -->
+                <tr class="data-row"
+                    data-bind="
+                        css: {
+                            '_odd-row': !!($index() % 2)
+                        },
+                        foreach: {
+                            data: $parent.elems,
+                            as: 'field'
+                        }
+                        ">
+                    <!-- ko template: getBody() --><!-- /ko -->
+                </tr>
             <!-- /ko -->
 
             <!-- ko ifnot: hasData() -->
@@ -40,7 +35,4 @@
             <!-- /ko -->
         </tbody>
     </table>
-    <!-- ko if: dndConfig.enabled -->
-        <!-- ko template: dndConfig.containerTmpl --><!-- /ko -->
-    <!-- /ko -->
 </div>

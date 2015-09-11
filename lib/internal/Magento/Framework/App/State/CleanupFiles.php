@@ -52,7 +52,7 @@ class CleanupFiles
      */
     public function clearCodeGeneratedClasses()
     {
-        return $this->emptyDir(DirectoryList::GENERATION);
+        return array_merge($this->emptyDir(DirectoryList::GENERATION), $this->emptyDir(DirectoryList::DI));
     }
 
     /**
@@ -99,7 +99,7 @@ class CleanupFiles
             return $messages;
         }
         foreach ($dir->search('*', $subPath) as $path) {
-            if (false === strpos($path, '.')) {
+            if ($path !== '.' && $path !== '..') {
                 $messages[] = $dirPath . $path;
                 try {
                     $dir->delete($path);

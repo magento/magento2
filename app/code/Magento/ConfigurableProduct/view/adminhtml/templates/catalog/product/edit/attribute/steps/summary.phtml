@@ -8,13 +8,13 @@
 
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Summary */
 ?>
-<div data-bind="scope: '<?= $block->getComponentName()?>'">
-    <h2 class="steps-wizard-title"><?= __('Step 4: Summary') ?></h2>
+<div data-bind="scope: '<?= /* @escapeNotVerified */  $block->getComponentName()?>'">
+    <h2 class="steps-wizard-title"><?= /* @escapeNotVerified */  __('Step 4: Summary') ?></h2>
 
-    <div class="admin__data-grid-wrap">
+    <div class="admin__data-grid-wrap admin__data-grid-wrap-static">
         <!-- ko if: gridNew().length -->
             <!-- ko template: {name: getGridTemplate(), data: {
-                grid: gridNew(),
+                grid: gridNew,
                 id: getGridId(),
                 title: $t('New Product Review'),
                 note: $t('Here are the products you\'re about to create.')
@@ -23,7 +23,7 @@
 
         <!-- ko if: gridExisting().length -->
             <!-- ko template: {name: getGridTemplate(), data: {
-                grid: gridExisting(),
+                grid: gridExisting,
                 id: getGridId(),
                 title: $t('Associated Products'),
                 note: $t('You created these products for this configuration.')
@@ -32,7 +32,7 @@
 
         <!-- ko if: gridDeleted().length -->
             <!-- ko template: {name: getGridTemplate(), data: {
-                grid: gridDeleted(),
+                grid: gridDeleted,
                 id: getGridId(),
                 title: $t('Disassociated Products'),
                 note: $t('These products are not associated.')
@@ -46,9 +46,9 @@
         "*": {
             "Magento_Ui/js/core/app": {
                 "components": {
-                    "<?= $block->getComponentName()?>": {
+                    "<?= /* @escapeNotVerified */  $block->getComponentName()?>": {
                         "component": "Magento_ConfigurableProduct/js/variations/steps/summary",
-                        "appendTo": "<?= $block->getParentComponentName()?>",
+                        "appendTo": "<?= /* @escapeNotVerified */  $block->getParentComponentName()?>",
                         "variationsComponent": "configurableVariations"
                     }
                 }

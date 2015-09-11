@@ -13,6 +13,15 @@ define(
     function(customer, urlBuilder, utils) {
         "use strict";
         return {
+            getUrlForTotalsEstimationForNewAddress: function(quote) {
+                var params = (this.getCheckoutMethod() == 'guest') ? {cartId: quote.getQuoteId()} : {};
+                var urls = {
+                    'guest': '/guest-carts/:cartId/totals-information',
+                    'customer': '/carts/mine/totals-information'
+                };
+                return this.getUrl(urls, params);
+            },
+
             getUrlForEstimationShippingMethodsForNewAddress: function(quote) {
                 var params = (this.getCheckoutMethod() == 'guest') ? {quoteId: quote.getQuoteId()} : {};
                 var urls = {

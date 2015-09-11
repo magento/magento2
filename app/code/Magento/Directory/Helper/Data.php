@@ -138,12 +138,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve country collection
      *
+     * @param null|int|string|\Magento\Store\Model\Store $store
      * @return \Magento\Directory\Model\Resource\Country\Collection
      */
-    public function getCountryCollection()
+    public function getCountryCollection($store = null)
     {
         if (!$this->_countryCollection->isLoaded()) {
-            $this->_countryCollection->loadByStore();
+            $this->_countryCollection->loadByStore($store);
         }
         return $this->_countryCollection;
     }
