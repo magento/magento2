@@ -72,7 +72,6 @@ class AccountTest extends \PHPUnit_Framework_TestCase
         $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
             ->disableOriginalConstructor()
             ->setMethods([
-                'isDispatched',
                 'getActionName',
             ])
             ->getMock();
@@ -96,9 +95,6 @@ class AccountTest extends \PHPUnit_Framework_TestCase
         $isActionAllowed,
         $isAuthenticated
     ) {
-        $this->request->expects($this->once())
-            ->method('isDispatched')
-            ->willReturn(false);
         $this->request->expects($this->once())
             ->method('getActionName')
             ->willReturn($action);
@@ -125,7 +121,7 @@ class AccountTest extends \PHPUnit_Framework_TestCase
 
                 $this->actionFlag->expects($this->once())
                     ->method('set')
-                    ->with('', 'no-dispatch', true)
+                    ->with('', ActionInterface::FLAG_NO_DISPATCH, true)
                     ->willReturnSelf();
             }
         }
