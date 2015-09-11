@@ -274,11 +274,14 @@ define([
                     $('#video_url').focus();
                     var roles = $('.video_image_role');
                     roles.prop('disabled', false);
-                    roles.prop('checked', $('.image.item').length < 1);
                     var file = jQuery('#file_name').val();
+                    var modalTitleElement = $('.modal-title');
                     if(!file) {
+                        roles.prop('checked', $('.image.item').length < 1);
+                        modalTitleElement.text($.mage.__('Create Video'));
                         return;
                     }
+                    modalTitleElement.text($.mage.__('Edit Video'));
                     var imageData = widget._getImage(file);
                     widget._onPreview(null, imageData.url, false);
                 },
