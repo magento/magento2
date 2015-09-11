@@ -17,14 +17,14 @@
             </argument>
         </arguments>
     </type>
-    <!--<type name="Magento\Framework\Amqp\ConsumerFactory">-->
-        <!--<arguments>-->
-            <!--<argument name="consumers" xsi:type="array">-->
-                <!--<item name="mysql" xsi:type="array">-->
-                    <!--<item name="type" xsi:type="string">Magento\MysqlMq\Model\Consumer</item>-->
-                    <!--<item name="connectionName" xsi:type="string">mysql</item>-->
-                <!--</item>-->
-            <!--</argument>-->
-        <!--</arguments>-->
-    <!--</type>-->
+    <type name="Magento\Framework\Amqp\ConsumerFactory">
+        <arguments>
+            <argument name="consumers" xsi:type="array">
+                <item name="mysql" xsi:type="array">
+                    <item name="type" xsi:type="string">Magento\MysqlMq\Model\Consumer</item>
+                    <item name="connectionName" xsi:type="string">mysql</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
