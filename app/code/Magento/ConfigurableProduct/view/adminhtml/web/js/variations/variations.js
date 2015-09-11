@@ -34,11 +34,13 @@ define([
         },
         changeProduct: function (newProduct) {
             var oldProduct = this.productMatrix()[this.rowIndexToEdit];
-            this.productMatrix.splice(this.rowIndexToEdit, 1, this.makeProduct(_.extend(oldProduct, newProduct)));
+            this.productMatrix.splice(this.rowIndexToEdit, 1, this.makeProduct(_.extend(oldProduct, newProduct[0])));
         },
-        appendProduct: function (newProducts) {
-            newProducts = _.isArray(newProducts) ? newProducts : [newProducts];
-            this.productMatrix.push.apply(this.productMatrix, _.map(newProducts, function (newProduct) {
+        appendProduct: function (newProduct) {
+            this.productMatrix.push(this.makeProduct(newProduct));
+        },
+        rewriteProducts: function (newProducts) {
+            this.productMatrix(_.map(newProducts, function (newProduct) {
                 return this.makeProduct(newProduct);
             }.bind(this)));
         },
