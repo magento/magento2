@@ -63,13 +63,6 @@ class ThemeUninstallCommand extends Command
     private $composer;
 
     /**
-     * File operation to read theme directory
-     *
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
      * Code remover
      *
      * @var Remove
@@ -135,7 +128,6 @@ class ThemeUninstallCommand extends Command
      * @param CleanupFiles $cleanupFiles
      * @param ComposerInformation $composer
      * @param MaintenanceMode $maintenanceMode
-     * @param Filesystem $filesystem
      * @param DependencyChecker $dependencyChecker
      * @param Collection $themeCollection
      * @param ThemeProvider $themeProvider
@@ -150,7 +142,6 @@ class ThemeUninstallCommand extends Command
         CleanupFiles $cleanupFiles,
         ComposerInformation $composer,
         MaintenanceMode $maintenanceMode,
-        Filesystem $filesystem,
         DependencyChecker $dependencyChecker,
         Collection $themeCollection,
         ThemeProvider $themeProvider,
@@ -164,7 +155,6 @@ class ThemeUninstallCommand extends Command
         $this->cleanupFiles = $cleanupFiles;
         $this->composer = $composer;
         $this->maintenanceMode = $maintenanceMode;
-        $this->filesystem = $filesystem;
         $this->dependencyChecker = $dependencyChecker;
         $this->remove = $remove;
         $this->themeCollection = $themeCollection;

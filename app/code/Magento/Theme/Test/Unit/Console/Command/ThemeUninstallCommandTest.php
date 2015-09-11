@@ -6,7 +6,8 @@
 
 namespace Magento\Theme\Test\Unit\Console\Command;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Filesystem\DriverPool;
 use Magento\Theme\Console\Command\ThemeUninstallCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Framework\Setup\BackupRollbackFactory;
@@ -95,7 +96,6 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $composerInformation->expects($this->any())
             ->method('getRootRequiredPackages')
             ->willReturn(['magento/theme-a', 'magento/theme-b', 'magento/theme-c']);
-        $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $this->dependencyChecker = $this->getMock(
             'Magento\Framework\Composer\DependencyChecker',
             [],
@@ -125,7 +125,6 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             $this->cleanupFiles,
             $composerInformation,
             $this->maintenanceMode,
-            $this->filesystem,
             $this->dependencyChecker,
             $this->collection,
             $this->themeProvider,
@@ -140,21 +139,30 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteFailedValidationNotPackage()
     {
-        $dirRead = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        // package name "dummy" is not in root composer.json file
-        $dirRead->expects($this->any())
+        $dirReadOne = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
+        $dirReadTwo = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
+        $dirReadOne->expects($this->once())
             ->method('readFile')
-            ->will($this->returnValueMap(
-                [
-                    ['test1/composer.json', null, null, '{"name": "dummy"}'],
-                    ['test2/composer.json', null, null, '{"name": "magento/theme-a"}']
-                ]
-            ));
-        $dirRead->expects($this->any())->method('isExist')->willReturn(true);
-        $this->filesystem->expects($this->any())
-            ->method('getDirectoryRead')
-            ->with(DirectoryList::THEMES)
-            ->willReturn($dirRead);
+            ->with('composer.json')
+            ->will($this->returnValue('{"name": "dummy"}'));
+        $dirReadTwo->expects($this->once())
+            ->method('readFile')
+            ->with('composer.json')
+            ->will($this->returnValue('{"name": "magento/theme-a"}'));
+        $dirReadOne->expects($this->any())->method('isExist')->willReturn(true);
+        $dirReadTwo->expects($this->any())->method('isExist')->willReturn(true);
+        $this->readDirFactory->expects($this->any())
+            ->method('create')
+            ->will($this->returnValueMap([
+                ['theme1', DriverPool::FILE, $dirReadOne],
+                ['theme2', DriverPool::FILE, $dirReadTwo],
+            ]));
+        $this->componentRegistrar->expects($this->any())
+            ->method('getPath')
+            ->will($this->returnValueMap([
+                [ComponentRegistrar::THEME, 'test1', 'theme1'],
+                [ComponentRegistrar::THEME, 'test2', 'theme2'],
+            ]));
         $this->collection->expects($this->any())
             ->method('getThemeByFullPath')
             ->willReturn($this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface', [], '', false));
@@ -174,10 +182,9 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
     {
         $dirRead = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
         $dirRead->expects($this->any())->method('isExist')->willReturn(false);
-        $this->filesystem->expects($this->any())
-            ->method('getDirectoryRead')
-            ->with(DirectoryList::THEMES)
-            ->willReturn($dirRead);
+        $this->readDirFactory->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($dirRead));
         $this->collection->expects($this->any())
             ->method('getThemeByFullPath')
             ->willReturn($this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface', [], '', false));
@@ -191,27 +198,42 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteFailedValidationMixed()
     {
-        $dirRead = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        // package name "dummy" is not in root composer.json file
-        $dirRead->expects($this->any())
+        $dirReadOne = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
+        $dirReadTwo = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
+        $dirReadThree = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
+        $dirReadFour = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
+        $dirReadOne->expects($this->once())
             ->method('readFile')
-            ->will($this->returnValueMap(
-                [
-                    ['test1/composer.json', null, null, '{"name": "dummy1"}'],
-                    ['test2/composer.json', null, null, '{"name": "magento/theme-b"}'],
-                    ['test4/composer.json', null, null, '{"name": "dummy2"}']
-                ]
-            ));
-        $dirRead->expects($this->any())
-            ->method('isExist')
-            ->will($this->returnValueMap(
-                [
-                    ['test1/composer.json', true],
-                    ['test2/composer.json', true],
-                    ['test3/composer.json', false],
-                    ['test4/composer.json', true]
-                ]
-            ));
+            ->with('composer.json')
+            ->will($this->returnValue('{"name": "dummy1"}'));
+        $dirReadTwo->expects($this->once())
+            ->method('readFile')
+            ->with('composer.json')
+            ->will($this->returnValue('{"name": "magento/theme-b"}'));
+        $dirReadFour->expects($this->once())
+            ->method('readFile')
+            ->with('composer.json')
+            ->will($this->returnValue('{"name": "dummy2"}'));
+        $dirReadOne->expects($this->any())->method('isExist')->willReturn(true);
+        $dirReadTwo->expects($this->any())->method('isExist')->willReturn(true);
+        $dirReadThree->expects($this->any())->method('isExist')->willReturn(false);
+        $dirReadFour->expects($this->any())->method('isExist')->willReturn(true);
+        $this->readDirFactory->expects($this->any())
+            ->method('create')
+            ->will($this->returnValueMap([
+                ['theme1', DriverPool::FILE, $dirReadOne],
+                ['theme2', DriverPool::FILE, $dirReadTwo],
+                ['theme3', DriverPool::FILE, $dirReadThree],
+                ['theme4', DriverPool::FILE, $dirReadFour],
+            ]));
+        $this->componentRegistrar->expects($this->any())
+            ->method('getPath')
+            ->will($this->returnValueMap([
+                [ComponentRegistrar::THEME, 'test1', 'theme1'],
+                [ComponentRegistrar::THEME, 'test2', 'theme2'],
+                [ComponentRegistrar::THEME, 'test3', 'theme3'],
+                [ComponentRegistrar::THEME, 'test4', 'theme4'],
+            ]));
         $this->collection->expects($this->any())
             ->method('getThemeByFullPath')
             ->willReturn($this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface', [], '', false));
@@ -219,10 +241,6 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->collection->expects($this->at(3))->method('hasTheme')->willReturn(true);
         $this->collection->expects($this->at(5))->method('hasTheme')->willReturn(false);
         $this->collection->expects($this->at(7))->method('hasTheme')->willReturn(true);
-        $this->filesystem->expects($this->any())
-            ->method('getDirectoryRead')
-            ->with(DirectoryList::THEMES)
-            ->willReturn($dirRead);
         $this->tester->execute(['theme' => ['test1', 'test2', 'test3', 'test4']]);
         $this->assertContains(
             'test1, test4 are not installed Composer packages',
@@ -248,10 +266,9 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $dirRead->expects($this->any())
             ->method('isExist')
             ->willReturn(true);
-        $this->filesystem->expects($this->any())
-            ->method('getDirectoryRead')
-            ->with(DirectoryList::THEMES)
-            ->willReturn($dirRead);
+        $this->readDirFactory->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($dirRead));
         $this->collection->expects($this->any())
             ->method('getThemeByFullPath')
             ->willReturn($this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface', [], '', false));
