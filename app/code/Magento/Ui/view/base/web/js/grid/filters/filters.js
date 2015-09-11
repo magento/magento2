@@ -174,40 +174,6 @@ define([
         },
 
         /**
-         * Returns instance of a filter found by provided index.
-         *
-         * @param {String} index - Index of a filter (e.g. 'title').
-         * @returns {Filter}
-         */
-        getFilter: function (index) {
-            return this.elems.findWhere({
-                index: index
-            });
-        },
-
-        /**
-         * Returns an array of range filters.
-         *
-         * @returns {Array}
-         */
-        getRanges: function () {
-            return this.elems.filter(function (filter) {
-                return filter.isRange;
-            });
-        },
-
-        /**
-         * Returns an array of non-range filters.
-         *
-         * @returns {Array}
-         */
-        getPlain: function () {
-            return this.elems.filter(function (filter) {
-                return !filter.isRange;
-            });
-        },
-
-        /**
          * Clears filters data.
          *
          * @param {Object} [filter] - If provided, then only specified
@@ -288,27 +254,39 @@ define([
                 column: column
             }, true, true);
         },
+    
+        /**
+         * Returns instance of a filter found by provided index.
+         *
+         * @param {String} index - Index of a filter (e.g. 'title').
+         * @returns {Filter}
+         */
+        getFilter: function (index) {
+            return this.elems.findWhere({
+                index: index
+            });
+        },
 
         /**
-         * Sorts filters by associated columns positions.
+         * Returns an array of range filters.
          *
-         * @returns {Filters} Chainable
+         * @returns {Array}
          */
-        resortByColumns: function () {
-            var columns = this.columns().elems(),
-                filters = [];
+        getRanges: function () {
+            return this.elems.filter(function (filter) {
+                return filter.isRange;
+            });
+        },
 
-            columns.forEach(function (column) {
-                var filter = this.getFilter(column.index);
-
-                if (filter) {
-                    filters.push(filter);
-                }
-            }, this);
-
-            this.insertChild(filters);
-
-            return this;
+        /**
+         * Returns an array of non-range filters.
+         *
+         * @returns {Array}
+         */
+        getPlain: function () {
+            return this.elems.filter(function (filter) {
+                return !filter.isRange;
+            });
         },
 
         /**
@@ -382,8 +360,6 @@ define([
          */
         onColumnsUpdate: function (columns) {
             columns.forEach(this.initFilter, this);
-
-            this.resortByColumns();
         }
     });
 });
