@@ -60,6 +60,7 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
      */
     public function testCollect($price, $originalPrice, $itemHasParent, $expectedPrice, $expectedOriginalPrice)
     {
+        $this->markTestSkipped('MAGETWO-42308');
         $this->stockRegistry = $this->getMockBuilder('Magento\CatalogInventory\Model\StockRegistry')
             ->disableOriginalConstructor()
             ->setMethods(['getStockItem', '__wakeup'])

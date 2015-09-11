@@ -87,6 +87,7 @@ class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGet()
     {
+        $this->markTestSkipped('MAGETWO-42308');
         $cartId = 12;
         $itemMock = $this->getMock(
             'Magento\Quote\Model\Quote\Item',

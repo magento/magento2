@@ -22,6 +22,7 @@ class GrandTest extends \PHPUnit_Framework_TestCase
 
     public function testCollect()
     {
+        $this->markTestSkipped('MAGETWO-42308');
         $totals = [1, 2, 3.4];
         $totalsBase = [4, 5, 6.7];
         $grandTotal = 6.4; // 1 + 2 + 3.4
