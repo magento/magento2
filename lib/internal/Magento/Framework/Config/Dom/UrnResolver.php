@@ -9,17 +9,27 @@
  */
 namespace Magento\Framework\Config\Dom;
 
+use Magento\Framework\Component\ComponentRegistrarInterface;
+use Magento\Framework\Component\ComponentRegistrar;
+
 class UrnResolver
 {
     /**
-     * @var \Magento\Framework\Component\ModuleRegistrar
+     * Component registrar
+     *
+     * @var ComponentRegistrarInterface
      */
-    private static $moduleRegistrar;
+    private $componentRegistrar;
 
     /**
-     * @var \Magento\Framework\Component\LibraryRegistrar
+     * Constructor
+     *
+     * @param ComponentRegistrarInterface $componentRegistrar
      */
-    private static $libraryRegistrar;
+    public function __construct(ComponentRegistrarInterface $componentRegistrar)
+    {
+        $this->componentRegistrar = $componentRegistrar;
+    }
 
     /**
      * Get real file path by it's URN reference
@@ -30,25 +40,25 @@ class UrnResolver
     public function getRealPath($schemaFileName)
     {
         if (substr($schemaFileName, 0, 4) == 'urn:') {
-            if (!self::$moduleRegistrar) {
-                self::$moduleRegistrar = new \Magento\Framework\Component\ModuleRegistrar();
-            }
-            if (!self::$libraryRegistrar) {
-                self::$libraryRegistrar = new \Magento\Framework\Component\LibraryRegistrar();
-            }
             // resolve schema location
             // urn:magento:module:catalog:etc/catalog_attributes.xsd
             // 0 : urn, 1: magento, 2: module, 3: catalog, 4: etc/catalog_attributes.xsd
+            // moduleName -> Magento_Catalog
             $urnParts = explode(':', $schemaFileName);
             if ($urnParts[2] == 'module') {
                 $appModulePath = str_replace(' ', '', ucwords(str_replace('-', ' ', $urnParts[3])));
                 $moduleName = ucfirst($urnParts[1]) . '_' . $appModulePath;
-                $appSchemaPath = self::$moduleRegistrar->getPath($moduleName) . '/' . $urnParts[4];
+                $appSchemaPath = $this->componentRegistrar->getPath(
+                        ComponentRegistrar::MODULE, $moduleName
+                    ) . '/' . $urnParts[4];
             } else if ($urnParts[2] == 'library') {
                 // urn:magento:library:framework:Module/etc/module.xsd
                 // 0: urn, 1: magento, 2:library, 3: framework, 4: Module/etc/module.xsd
+                // libaryName -> magento/framework
                 $libraryName = $urnParts[1] . '/' . $urnParts[3];
-                $appSchemaPath = self::$libraryRegistrar->getPath($libraryName) . '/' . $urnParts[4];
+                $appSchemaPath = $this->componentRegistrar->getPath(
+                        ComponentRegistrar::LIBRARY, $libraryName
+                    ) . '/' . $urnParts[4];
             } else {
                 throw new \UnexpectedValueException("Unsupported format of schema location: " . $schemaFileName);
             }
