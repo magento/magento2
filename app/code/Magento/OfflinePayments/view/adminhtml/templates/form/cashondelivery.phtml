@@ -11,10 +11,10 @@
  */
 ?>
 <?php if ($block->getInstructions()): ?>
-    <ul class="form-list checkout-agreements" id="payment_form_<?php echo $block->getMethodCode() ?>" style="display:none;">
+    <ul class="form-list checkout-agreements" id="payment_form_<?php /* @escapeNotVerified */ echo $block->getMethodCode() ?>" style="display:none;">
         <li>
-            <div class="<?php echo $block->getMethodCode() ?>-instructions-content agreement-content">
-                <?php echo nl2br($block->getInstructions()) ?>
+            <div class="<?php /* @escapeNotVerified */ echo $block->getMethodCode() ?>-instructions-content agreement-content">
+                <?php /* @escapeNotVerified */ echo nl2br($block->getInstructions()) ?>
             </div>
         </li>
     </ul>
