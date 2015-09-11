@@ -21,13 +21,6 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
     private $setupCache;
 
     /**
-     * Modules configuration reader
-     *
-     * @var \Magento\Framework\Module\Dir\Reader
-     */
-    private $_modulesReader;
-
-    /**
      * Event manager
      *
      * @var \Magento\Framework\Event\ManagerInterface
@@ -56,13 +49,6 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
     private $filesystem;
 
     /**
-     * Modules list object
-     *
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
-     */
-    private $modulesDir;
-
-    /**
      * Init
      *
      * @param \Magento\Framework\Module\Setup\Context $context
@@ -75,10 +61,8 @@ class DataSetup extends \Magento\Framework\Module\Setup implements ModuleDataSet
         parent::__construct($context->getResourceModel(), $connectionName);
         $this->_eventManager = $context->getEventManager();
         $this->_logger = $context->getLogger();
-        $this->_modulesReader = $context->getModulesReader();
         $this->_migrationFactory = $context->getMigrationFactory();
         $this->filesystem = $context->getFilesystem();
-        $this->modulesDir = $this->filesystem->getDirectoryRead(DirectoryList::MODULES);
         $this->setupCache = new SetupCache();
     }
 

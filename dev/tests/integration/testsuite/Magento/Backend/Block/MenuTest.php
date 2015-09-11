@@ -8,6 +8,7 @@ namespace Magento\Backend\Block;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\State;
+use Magento\Framework\Component\ComponentRegistrar;
 
 /**
  * Test class for \Magento\Backend\Block\Menu
@@ -70,12 +71,10 @@ class MenuTest extends \PHPUnit_Framework_TestCase
     {
         $this->loginAdminUser();
 
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
-            [
-                Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [
-                    DirectoryList::MODULES => ['path' => __DIR__ . '/_files/menu'],
-                ],
-            ]
+        ComponentRegistrar::register(
+            ComponentRegistrar::MODULE,
+            'Magento_Backend',
+            __DIR__ . '/_files/menu/Magento/Backend'
         );
 
         /* @var $validationState \Magento\Framework\App\Arguments\ValidationState */

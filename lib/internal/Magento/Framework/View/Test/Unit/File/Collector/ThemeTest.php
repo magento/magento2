@@ -5,72 +5,93 @@
  */
 namespace Magento\Framework\View\Test\Unit\File\Collector;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\View\File\Collector\Theme;
 use Magento\Framework\View\File\Factory;
 
 class ThemeTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \Magento\Framework\View\File\Collector\Theme
-     */
-    protected $themeFileCollector;
+    private $themePath = 'frontend/Magento/theme';
+    const FULL_THEME_PATH = '/full/theme/path';
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var Theme
      */
-    protected $objectManagerHelper;
-
-    /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $filesystemMock;
+    private $themeFileCollector;
 
     /**
      * @var Factory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $fileFactoryMock;
+    private $fileFactoryMock;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $directoryMock;
+    private $themeDirectoryMock;
 
     /**
      * @var \Magento\Framework\View\Design\ThemeInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $themeMock;
+    private $themeMock;
+
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $readDirFactory;
+
+    /**
+     * @var \Magento\Framework\Component\ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $componentRegistrar;
 
     public function setup()
     {
-        $this->filesystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->directoryMock = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadInterface')
+        $this->themeDirectoryMock = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadInterface')
             ->getMock();
         $this->fileFactoryMock = $this->getMockBuilder('Magento\Framework\View\File\Factory')
             ->disableOriginalConstructor()
             ->getMock();
         $this->themeMock = $this->getMockBuilder('Magento\Framework\View\Design\ThemeInterface')
             ->getMock();
+        $this->themeMock->expects($this->once())
+            ->method('getFullPath')
+            ->will($this->returnValue($this->themePath));
 
-        $this->filesystemMock->expects($this->any())
-            ->method('getDirectoryRead')
-            ->willReturn($this->directoryMock);
-
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->themeFileCollector = $this->objectManagerHelper->getObject(
-            'Magento\Framework\View\File\Collector\Theme',
-            [
-                'filesystem' => $this->filesystemMock,
-                'fileFactory' => $this->fileFactoryMock
-            ]
+        $this->readDirFactory = $this->getMock('Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
+        $this->readDirFactory->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($this->themeDirectoryMock));
+        $this->componentRegistrar = $this->getMockForAbstractClass(
+            'Magento\Framework\Component\ComponentRegistrarInterface'
         );
+        $this->themeFileCollector = new Theme(
+            $this->fileFactoryMock,
+            $this->readDirFactory,
+            $this->componentRegistrar
+        );
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage no such theme registered
+     */
+    public function testGetFilesWrongTheme()
+    {
+        $this->componentRegistrar->expects($this->once())
+            ->method('getPath')
+            ->will($this->returnValue(''));
+        $this->themeFileCollector->getFiles($this->themeMock, '');
     }
 
     public function testGetFilesEmpty()
     {
-        $this->directoryMock->expects($this->any())
+        $this->componentRegistrar->expects($this->once())
+            ->method('getPath')
+            ->with(ComponentRegistrar::THEME, $this->themePath)
+            ->will($this->returnValue(self::FULL_THEME_PATH));
+        $this->themeDirectoryMock->expects($this->any())
             ->method('search')
+            ->with('')
             ->willReturn([]);
 
         // Verify no files were returned
@@ -79,16 +100,22 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFilesSingle()
     {
+        $searchPath = 'css/*.less';
         $filePath = '/opt/magento2/app/design/frontend/Magento/blank/Magento_Customer/css/something.less';
 
+        $this->componentRegistrar->expects($this->once())
+            ->method('getPath')
+            ->with(ComponentRegistrar::THEME, $this->themePath)
+            ->will($this->returnValue(self::FULL_THEME_PATH));
         $fileMock = $this->getMockBuilder('Magento\Framework\View\File')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->directoryMock->expects($this->once())
+        $this->themeDirectoryMock->expects($this->once())
             ->method('search')
+            ->with($searchPath)
             ->willReturn(['file']);
-        $this->directoryMock->expects($this->once())
+        $this->themeDirectoryMock->expects($this->once())
             ->method('getAbsolutePath')
             ->with('file')
             ->willReturn($filePath);
@@ -98,23 +125,23 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             ->willReturn($fileMock);
 
         // One file was returned from search
-        $this->assertEquals([$fileMock], $this->themeFileCollector->getFiles($this->themeMock, 'css/*.less'));
+        $this->assertEquals([$fileMock], $this->themeFileCollector->getFiles($this->themeMock, $searchPath));
     }
 
     public function testGetFilesMultiple()
     {
         $dirPath = '/Magento_Customer/css/';
-        $themePath = '/opt/magento2/app/design/frontend/Magento/blank';
         $searchPath = 'css/*.test';
 
+        $this->componentRegistrar->expects($this->once())
+            ->method('getPath')
+            ->with(ComponentRegistrar::THEME, $this->themePath)
+            ->will($this->returnValue(self::FULL_THEME_PATH));
         $fileMock = $this->getMockBuilder('Magento\Framework\View\File')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->themeMock->expects($this->any())
-            ->method('getFullPath')
-            ->willReturn($themePath);
-        $this->directoryMock->expects($this->any())
+        $this->themeDirectoryMock->expects($this->any())
             ->method('getAbsolutePath')
             ->willReturnMap(
                 [
@@ -124,9 +151,9 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
                 ]
             );
         // Verifies correct files are searched for
-        $this->directoryMock->expects($this->once())
+        $this->themeDirectoryMock->expects($this->once())
             ->method('search')
-            ->with($themePath . '/' . $searchPath)
+            ->with($searchPath)
             ->willReturn(['fileA.test', 'fileC.test']);
         // Verifies Magento_Customer was correctly produced from directory path
         $this->fileFactoryMock->expects($this->any())
@@ -137,7 +164,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         // Only two files should be in array, which were returned from search
         $this->assertEquals(
             [$fileMock, $fileMock],
-            $this->themeFileCollector->getFiles($this->themeMock, 'css/*.test')
+            $this->themeFileCollector->getFiles($this->themeMock, $searchPath)
         );
     }
 }

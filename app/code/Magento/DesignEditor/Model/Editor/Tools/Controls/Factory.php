@@ -47,26 +47,18 @@ class Factory
     protected $fileIteratorFactory;
 
     /**
-     * @var \Magento\Framework\Filesystem
-     */
-    protected $filesystem;
-
-    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Config\FileIteratorFactory $fileIteratorFactory
-     * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Framework\Config\FileIteratorFactory $fileIteratorFactory,
-        \Magento\Framework\Filesystem $filesystem
+        \Magento\Framework\Config\FileIteratorFactory $fileIteratorFactory
     ) {
         $this->_objectManager = $objectManager;
         $this->assetRepo = $assetRepo;
         $this->fileIteratorFactory = $fileIteratorFactory;
-        $this->filesystem = $filesystem;
     }
 
     /**
@@ -120,12 +112,7 @@ class Factory
                     __('Unknown control configuration type: "%1"', $type)
                 );
         }
-        $rootDirectory = $this->filesystem->getDirectoryRead(DirectoryList::ROOT);
-        $paths = [];
-        foreach ($files as $file) {
-            $paths[] = $rootDirectory->getRelativePath($file);
-        }
-        $fileIterator = $this->fileIteratorFactory->create($rootDirectory, $paths);
+        $fileIterator = $this->fileIteratorFactory->create($files);
         /** @var $config \Magento\DesignEditor\Model\Config\Control\AbstractControl */
         $config = $this->_objectManager->create($class, ['configFiles' => $fileIterator]);
 

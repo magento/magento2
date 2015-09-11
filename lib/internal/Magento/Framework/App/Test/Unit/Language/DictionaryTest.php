@@ -20,26 +20,34 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    private $dir;
+    private $readFactory;
+
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $componentRegistrar;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     private $configFactory;
 
+    /**
+     * @var string[]
+     */
+    private $paths = ['path/one', 'path/two', 'path/two'];
+
     protected function setUp()
     {
-        $this->dir = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
-        $filesystem = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
-        $filesystem->expects($this->once())
-            ->method('getDirectoryRead')
-            ->with(DirectoryList::LOCALE)
-            ->will($this->returnValue($this->dir));
+        $this->readFactory = $this->getMock('\Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
+        $this->componentRegistrar = $this->getMock('Magento\Framework\Component\ComponentRegistrar', [], [], '', false);
+        $this->componentRegistrar->expects($this->once())->method('getPaths')->willReturn($this->paths);
         $this->configFactory = $this->getMockBuilder('\Magento\Framework\App\Language\ConfigFactory')
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->model = new Dictionary($filesystem, $this->configFactory);
+        $this->model = new Dictionary($this->readFactory, $this->componentRegistrar, $this->configFactory);
     }
 
     /**
@@ -53,12 +61,15 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
     public function testDictionaryGetter($languagesData, $csvMap, $dictionaryMap, $languageCode, $expectation)
     {
         $languagePaths = array_keys($languagesData);
-        $this->dir->expects($this->any())->method('search')->will($this->returnValueMap(
-            array_merge([['*/*/language.xml', null, $languagePaths]], $csvMap)
-        ));
+        $readMocks = $this->getReadMock($languagePaths, $csvMap);
+
+        $this->readFactory
+            ->expects($this->any())
+            ->method("create")
+            ->will($this->returnValueMap([[$this->paths, $readMocks]]));
 
         // Return first argument to mark content for configuration factory mock
-        $this->dir->expects($this->any())->method('readFile')->will($this->returnArgument(0));
+        $readMock->expects($this->any())->method('readFile')->will($this->returnArgument(0));
         $configCallback = $this->returnCallback(function ($arguments) use ($languagesData) {
             return $this->getLanguageConfigMock($languagesData[$arguments['source']]);
         });
@@ -69,7 +80,7 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
             list($path, $result) = $data;
             return [$path, $this->getCsvMock($result)];
         }, $dictionaryMap);
-        $this->dir->expects($this->any())->method('openFile')->will($this->returnValueMap($dictionaryMap));
+        $readMock->expects($this->any())->method('openFile')->will($this->returnValueMap($dictionaryMap));
 
         $result = $this->model->getDictionary($languageCode);
         $this->assertSame($expectation, $result);
@@ -85,6 +96,23 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
             // Third case with circular inheritance, when two packages depend on each other
             'a case with circular inheritance' => $this->getDataCircularInheritance()
         ];
+    }
+
+    /**
+     * Create mock of Read
+     *
+     * @param $languagePaths
+     * @param $csvMap
+     * @internal param array $languageData
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getReadMock($languagePaths, $csvMap)
+    {
+        $readMock = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
+        $readMock->expects($this->any())->method('search')->will($this->returnValueMap(
+            array_merge([['*/*/language.xml', null, $languagePaths]], $csvMap)
+        ));
+        return $readMock;
     }
 
     /**

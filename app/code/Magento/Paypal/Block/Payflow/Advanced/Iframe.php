@@ -18,6 +18,8 @@ class Iframe extends \Magento\Paypal\Block\Payflow\Link\Iframe
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Paypal\Helper\Hss $hssHelper
      * @param \Magento\Payment\Helper\Data $paymentData
+     * @param \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
+     * @param \Magento\Framework\Module\Dir\Reader $reader
      * @param array $data
      */
     public function __construct(
@@ -26,9 +28,20 @@ class Iframe extends \Magento\Paypal\Block\Payflow\Link\Iframe
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Paypal\Helper\Hss $hssHelper,
         \Magento\Payment\Helper\Data $paymentData,
+        \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory,
+        \Magento\Framework\Module\Dir\Reader $reader,
         array $data = []
     ) {
-        parent::__construct($context, $orderFactory, $checkoutSession, $hssHelper, $paymentData, $data);
+        parent::__construct(
+            $context,
+            $orderFactory,
+            $checkoutSession,
+            $hssHelper,
+            $paymentData,
+            $readFactory,
+            $reader,
+            $data
+        );
         $this->_isScopePrivate = false;
     }
 

@@ -5,41 +5,62 @@
  */
 namespace Magento\Framework\View\File\Collector;
 
-use Magento\Framework\View\File\AbstractCollector;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\View\Design\ThemeInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\View\File\AbstractCollector;
+use Magento\Framework\View\File\CollectorInterface;
+use Magento\Framework\View\File\Factory as FileFactory;
 
 /**
  * Source of view files introduced by a theme
  */
-class Theme extends AbstractCollector
+class Theme implements CollectorInterface
 {
+    /**
+     * Constructor
+     *
+     * @param FileFactory $fileFactory
+     * @param ReadFactory $readDirFactory
+     * @param ComponentRegistrarInterface $componentRegistrar
+     * @param string $subDir
+     */
+    public function __construct(
+        FileFactory $fileFactory,
+        ReadFactory $readDirFactory,
+        ComponentRegistrarInterface $componentRegistrar,
+        $subDir = ''
+    ) {
+        $this->fileFactory = $fileFactory;
+        $this->readDirFactory = $readDirFactory;
+        $this->componentRegistrar = $componentRegistrar;
+        $this->subDir = $subDir ? $subDir . '/' : '';
+    }
+
     /**
      * Retrieve files
      *
-     * @param \Magento\Framework\View\Design\ThemeInterface $theme
+     * @param ThemeInterface $theme
      * @param string $filePath
      * @return \Magento\Framework\View\File[]
+     * @throws \UnexpectedValueException
      */
     public function getFiles(ThemeInterface $theme, $filePath)
     {
         $themePath = $theme->getFullPath();
-        $files = $this->directory->search("{$themePath}/{$this->subDir}{$filePath}");
+        $themeAbsolutePath = $this->componentRegistrar->getPath(ComponentRegistrar::THEME, $themePath);
+        if (!$themeAbsolutePath) {
+            throw new \UnexpectedValueException("Can't get files for theme '$themePath': no such theme registered");
+        }
+        $themeDir = $this->readDirFactory->create($themeAbsolutePath);
+        $files = $themeDir->search($this->subDir . $filePath);
         $result = [];
         foreach ($files as $file) {
-            $filename = $this->directory->getAbsolutePath($file);
+            $filename = $themeDir->getAbsolutePath($file);
             $result[] = $this->fileFactory->create($filename, null, $theme);
         }
         return $result;
-    }
-
-    /**
-     * Get scope directory of this file collector
-     *
-     * @return string
-     */
-    protected function getScopeDirectory()
-    {
-        return DirectoryList::THEMES;
     }
 }

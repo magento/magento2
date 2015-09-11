@@ -5,6 +5,8 @@
  */
 namespace Magento\Email\Test\Unit\Model\Template;
 
+use Magento\Email\Model\Template\Config;
+
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     private $designParams = [
@@ -15,9 +17,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     ];
 
     /**
-     * @var \Magento\Email\Model\Template\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config
      */
-    protected $_model;
+    private $model;
 
     /**
      * @var \Magento\Email\Model\Template\Config\Data|\PHPUnit_Framework_MockObject_MockObject
@@ -35,9 +37,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $viewFileSystem;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Theme\PackageList|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $fileSystem;
+    private $themePackages;
+
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $readDirFactory;
 
     protected function setUp()
     {
@@ -69,35 +76,26 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->fileSystem = $this->getMock(
-            '\Magento\Framework\Filesystem',
-            [],
-            [],
-            '',
-            false
+        $this->themePackages = $this->getMock('\Magento\Framework\Theme\PackageList', [], [], '', false);
+        $this->readDirFactory = $this->getMock('Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
+        $this->model = new Config(
+            $this->_dataStorage,
+            $this->_moduleReader,
+            $this->viewFileSystem,
+            $this->themePackages,
+            $this->readDirFactory
         );
-        $this->_model = $this->getMockBuilder('\Magento\Email\Model\Template\Config')
-            ->setConstructorArgs(
-                [
-                    $this->_dataStorage,
-                    $this->_moduleReader,
-                    $this->fileSystem,
-                    $this->viewFileSystem
-                ]
-            )
-            ->setMethods(['getThemeTemplates'])
-            ->getMock();
     }
 
     public function testGetAvailableTemplates()
     {
-        $this->_model->expects($this->atLeastOnce())
-            ->method('getThemeTemplates')
+        $this->themePackages->expects($this->once())
+            ->method('getThemes')
             ->will($this->returnValue([]));
 
         $expectedTemplates = require __DIR__ . '/Config/_files/email_templates_merged.php';
 
-        foreach ($this->_model->getAvailableTemplates() as $templateOptions) {
+        foreach ($this->model->getAvailableTemplates() as $templateOptions) {
             $this->assertArrayHasKey($templateOptions['value'], $expectedTemplates);
             $expectedOptions = $expectedTemplates[$templateOptions['value']];
 
@@ -108,43 +106,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetThemeTemplates()
     {
-        $themeDirectory = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(['search'])
-            ->getMockForAbstractClass();
-
         $templates = require __DIR__ . '/Config/_files/email_templates_merged.php';
 
         $templateId = 'template_one';
         $template = $templates[$templateId];
 
-        $area = $template['area'];
-        $searchThemePath = '*/*';
         $foundThemePath = 'Vendor/custom_theme';
-        $module = $template['module'];
-        $filename = $template['file'];
-        $themeDirectory->expects($this->once())
-            ->method('search')
-            ->with("{$area}/{$searchThemePath}/{$module}/email/{$filename}")
-            ->will($this->returnValue(["{$area}/{$foundThemePath}/{$module}/email/{$filename}"]));
 
-        $this->fileSystem->expects($this->once())
-            ->method('getDirectoryRead')
-            ->will($this->returnValue($themeDirectory));
-
-        $this->_model = $this->getMockBuilder('\Magento\Email\Model\Template\Config')
-            ->setConstructorArgs(
-                [
-                    $this->_dataStorage,
-                    $this->_moduleReader,
-                    $this->fileSystem,
-                    $this->viewFileSystem
-                ]
-            )
-            ->setMethods(null)
-            ->getMock();
-
-        foreach ($this->_model->getThemeTemplates($templateId) as $templateOptions) {
+        foreach ($this->model->getThemeTemplates($templateId) as $templateOptions) {
             $this->assertEquals(
                 sprintf(
                     '%s (%s)',
@@ -166,7 +135,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testParseTemplateIdParts($input, $expectedOutput)
     {
-        $this->assertEquals($this->_model->parseTemplateIdParts($input), $expectedOutput);
+        $this->assertEquals($this->model->parseTemplateIdParts($input), $expectedOutput);
     }
 
     public function parseTemplateCodePartsDataProvider()
@@ -191,22 +160,22 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTemplateLabel()
     {
-        $this->assertEquals('Template One', $this->_model->getTemplateLabel('template_one'));
+        $this->assertEquals('Template One', $this->model->getTemplateLabel('template_one'));
     }
 
     public function testGetTemplateType()
     {
-        $this->assertEquals('html', $this->_model->getTemplateType('template_one'));
+        $this->assertEquals('html', $this->model->getTemplateType('template_one'));
     }
 
     public function testGetTemplateModule()
     {
-        $this->assertEquals('Fixture_ModuleOne', $this->_model->getTemplateModule('template_one'));
+        $this->assertEquals('Fixture_ModuleOne', $this->model->getTemplateModule('template_one'));
     }
 
     public function testGetTemplateArea()
     {
-        $this->assertEquals('frontend', $this->_model->getTemplateArea('template_one'));
+        $this->assertEquals('frontend', $this->model->getTemplateArea('template_one'));
     }
 
     public function testGetTemplateFilenameWithParams()
@@ -223,7 +192,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('_files/Fixture/ModuleOne/view/frontend/email/one.html')
         );
 
-        $actualResult = $this->_model->getTemplateFilename('template_one', $this->designParams);
+        $actualResult = $this->model->getTemplateFilename('template_one', $this->designParams);
         $this->assertEquals('_files/Fixture/ModuleOne/view/frontend/email/one.html', $actualResult);
     }
 
@@ -247,7 +216,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('_files/Fixture/ModuleOne/view/frontend/email/one.html')
         );
 
-        $actualResult = $this->_model->getTemplateFilename('template_one');
+        $actualResult = $this->model->getTemplateFilename('template_one');
         $this->assertEquals('_files/Fixture/ModuleOne/view/frontend/email/one.html', $actualResult);
     }
 
@@ -261,9 +230,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetterMethodUnknownTemplate($getterMethod, $argument = null)
     {
         if (!$argument) {
-            $this->_model->{$getterMethod}('unknown');
+            $this->model->{$getterMethod}('unknown');
         } else {
-            $this->_model->{$getterMethod}('unknown', $argument);
+            $this->model->{$getterMethod}('unknown', $argument);
         }
     }
 
@@ -299,11 +268,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(['fixture' => $fixtureFields])
         );
-        $model = new \Magento\Email\Model\Template\Config(
+        $model = new Config(
             $dataStorage,
             $this->_moduleReader,
-            $this->fileSystem,
-            $this->viewFileSystem
+            $this->viewFileSystem,
+            $this->themePackages,
+            $this->readDirFactory
         );
         if (!$argument) {
             $model->{$getterMethod}('fixture');
