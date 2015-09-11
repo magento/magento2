@@ -225,7 +225,7 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    /** .................................
+    /**
      * Test the collect function of the weee collector
      *
      * @param array $taxConfig
