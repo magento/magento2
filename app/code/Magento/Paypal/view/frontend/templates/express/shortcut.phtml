@@ -49,4 +49,21 @@ if ($block->isOrPositionBefore()) {
         }
     }
 </script>
+    <form id="myContainer" method="post" action="<?php echo $block->getCheckoutUrl() ?>"></form>
+    <script>
+        window.paypalCheckoutReady = function () {
+            paypal.checkout.setup('HFCTQCHQ3JB8S', {
+                environment: 'sandbox',
+                container: 'myContainer'
+            });
+        };
+    </script>
+    <script>
+        (function (d, t) {
+            "use strict";
+            var s = d.getElementsByTagName(t)[0], n = d.createElement(t);
+            n.src = "//www.paypalobjects.com/api/checkout.js";
+            s.parentNode.insertBefore(n, s);
+        }(document, "script"));
+    </script>
 </div>
