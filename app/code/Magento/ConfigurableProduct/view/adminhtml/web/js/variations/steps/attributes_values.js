@@ -37,13 +37,6 @@ define([
         }
     };
 
-    /**
-     * Memorize results by attributeIds
-     */
-    var saveAttributes = _.memoize(function (attributeIds, attributes) {
-        return _.map(attributes, this.createAttribute, this);
-    });
-
     return Collapsible.extend({
         stepInitialized: false,
         attributes: ko.observableArray([]),
@@ -53,14 +46,24 @@ define([
                 error: null
             }
         },
+        initialize: function () {
+            this._super();
+            this.createAttribute = _.wrap(this.createAttribute.bind(this), function () {
+                var args = Array.prototype.slice.call(arguments);
+                return this.doInitSavedOptions.call(this, args.shift().apply(this, args));
+            });
+            this.createAttribute = _.memoize(this.createAttribute.bind(this), _.property('id'));
+        },
         createOption: function () {
             // this - current attribute
             this.options.push({value: 0, label: '', id: utils.uniqueid(), attribute_id: this.id, is_new: true});
         },
         saveOption: function (option) {
-            this.options.remove(option);
-            this.options.push(option);
-            this.chosenOptions.push(option.id);
+            if (!_.isEmpty(option.label)) {
+                this.options.remove(option);
+                this.options.push(option);
+                this.chosenOptions.push(option.id);
+            }
         },
         removeOption: function (option) {
             this.options.remove(option);
@@ -87,15 +90,19 @@ define([
             return index < 3;
         },
         saveAttribute: function () {
+            var errorMessage = $.mage.__('Select options for all attributes or remove unused attributes.');
             this.attributes.each(function(attribute) {
                 attribute.chosen = [];
                 if (!attribute.chosenOptions.getLength()) {
-                    throw new Error($.mage.__('Select options for all attributes or remove unused attributes.'));
+                    throw new Error(errorMessage);
                 }
                 attribute.chosenOptions.each(function(id) {
                     attribute.chosen.push(attribute.options.findWhere({id:id}));
                 });
             });
+            if (!this.attributes().length) {
+                throw new Error(errorMessage);
+            }
         },
         selectAllAttributes: function (attribute) {
             this.chosenOptions(_.pluck(attribute.options(), 'id'));
@@ -146,25 +153,24 @@ define([
                 data: {attributes: attributeIds},
                 showLoader: true
             }).done(function(attributes){
-                this.attributes(saveAttributes.call(this, attributeIds, attributes));
-                this.doInitSavedOptions();
+                attributes = _.sortBy(attributes, function(attribute) {
+                    return this.wizard.data.attributesIds.indexOf(attribute.id);
+                }.bind(this));
+                this.attributes(_.map(attributes, this.createAttribute));
             }.bind(this));
         },
-        doInitSavedOptions: function() {
-            if (false === this.stepInitialized) {
-                this.stepInitialized = true;
-                _.each(this.attributes(), function(attribute) {
-                    var selectedAttribute = _.findWhere(this.initData.attributes, {id: attribute.id});
+        doInitSavedOptions: function(attribute) {
+            var selectedAttribute = _.findWhere(this.initData.attributes, {id: attribute.id});
 
-                    if (selectedAttribute) {
-                        var selectedOptions = _.pluck(selectedAttribute.chosen, 'value');
-                        var selectedOptionsIds = _.pluck(_.filter(attribute.options(), function (option) {
-                            return _.contains(selectedOptions, option.value)
-                        }), 'id');
-                        attribute.chosenOptions(selectedOptionsIds);
-                    }
-                }.bind(this));
+            if (selectedAttribute) {
+                var selectedOptions = _.pluck(selectedAttribute.chosen, 'value');
+                var selectedOptionsIds = _.pluck(_.filter(attribute.options(), function (option) {
+                    return _.contains(selectedOptions, option.value);
+                }), 'id');
+                attribute.chosenOptions(selectedOptionsIds);
+                this.initData.attributes = _.without(this.initData.attributes, selectedAttribute);
             }
+            return attribute;
         },
         render: function(wizard) {
             this.wizard = wizard;

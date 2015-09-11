@@ -640,8 +640,13 @@ define([
             });
         }
     });
-    //$('.video-create-button').on('click', function(){
-    //   $('#media_gallery_content').find('.video-item').parent().addClass('video-item');
-    //});
+    $('#group-fields-image-management > legend > span').text('Images and Videos');
+    $('#video_url').getVideoInformation();
+    $('#new_video_get').on('click', function(){
+      console.log($('#video_url').getVideoInformation('getVideoInformation'));
+    });
+    $('#video_url').on('focusout', function(){
+
+    });
     return $.mage.newVideoDialog;
 });

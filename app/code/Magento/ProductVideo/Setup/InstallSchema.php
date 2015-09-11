@@ -10,7 +10,7 @@ use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media;
-use Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoMediaGalleryEntryProcessor;
+use Magento\ProductVideo\Model\Plugin\ExternalVideoEntryProcessor;
 
 /**
  * Class InstallSchema adds new table `eav_attribute_option_swatch`
@@ -28,7 +28,7 @@ class InstallSchema implements InstallSchemaInterface
          * Create table 'catalog_product_entity_media_gallery_value_video'
          */
         $table = $setup->getConnection()
-            ->newTable($setup->getTable(ExternalVideoMediaGalleryEntryProcessor::GALLERY_VALUE_VIDEO_TABLE))
+            ->newTable($setup->getTable(ExternalVideoEntryProcessor::GALLERY_VALUE_VIDEO_TABLE))
             ->addColumn(
                 'value_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -80,7 +80,7 @@ class InstallSchema implements InstallSchemaInterface
             )
             ->addIndex(
                 $setup->getIdxName(
-                    ExternalVideoMediaGalleryEntryProcessor::GALLERY_VALUE_VIDEO_TABLE,
+                    ExternalVideoEntryProcessor::GALLERY_VALUE_VIDEO_TABLE,
                     ['value_id', 'store_id'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
                 ),
@@ -89,7 +89,7 @@ class InstallSchema implements InstallSchemaInterface
             )
             ->addForeignKey(
                 $setup->getFkName(
-                    ExternalVideoMediaGalleryEntryProcessor::GALLERY_VALUE_VIDEO_TABLE,
+                    ExternalVideoEntryProcessor::GALLERY_VALUE_VIDEO_TABLE,
                     'value_id',
                     Media::GALLERY_TABLE,
                     'value_id'
@@ -101,7 +101,7 @@ class InstallSchema implements InstallSchemaInterface
             )
             ->addForeignKey(
                 $setup->getFkName(
-                    ExternalVideoMediaGalleryEntryProcessor::GALLERY_VALUE_VIDEO_TABLE,
+                    ExternalVideoEntryProcessor::GALLERY_VALUE_VIDEO_TABLE,
                     'store_id',
                     $setup->getTable('store'),
                     'store_id'

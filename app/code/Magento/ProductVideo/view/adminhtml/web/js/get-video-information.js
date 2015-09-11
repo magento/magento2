@@ -282,21 +282,23 @@ require([
 
       $.widget('mage.videoData', {
         options: {
-          youtubeKey: 'AIzaSyDwqDWuw1lra-LnpJL2Mr02DYuFmkuRSns', //sample data, change later!!!!!!!!
-          vimeoKey: ''
+          youtubeKey: 'AIzaSyDwqDWuw1lra-LnpJL2Mr02DYuFmkuRSns' //sample data, change later!!!!!!!!
         },
 
-
         _REQUEST_VIDEO_INFORMATION_TRIGGER: 'update_video_information',
-
+        
         _UPDATE_VIDEO_INFORMATION_TRIGGER: 'updated_video_information',
 
         _ERROR_UPDATE_INFORMATION_TRIGGER: 'error_updated_information',
 
         _videoInformation: null,
 
+        getVideoInformation: function() {
+          return this._videoInformation;
+        },
+
         _init: function () {
-          jQuery(this.element).on(this._REQUEST_VIDEO_INFORMATION_TRIGGER, $.proxy(this._onRequestHandler, this));
+          jQuery(this.element).on("focusout", $.proxy(this._onBlurhandler, this));
         },
 
 

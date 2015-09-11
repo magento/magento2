@@ -43,18 +43,30 @@ class View extends \Magento\Framework\Config\AbstractXml
                         $result[$childNode->tagName][$moduleName][$varName] = $varValue;
                     }
                     break;
-                case 'images':
+                break;
+                case 'media':
                     $moduleName = $childNode->getAttribute('module');
                     /** @var \DOMElement $node */
                     foreach ($childNode->getElementsByTagName('image') as $node) {
                         $imageId = $node->getAttribute('id');
-                        $result[$childNode->tagName][$moduleName][$imageId]['type'] = $node->getAttribute('type');
+                        $result[$childNode->tagName][$moduleName]['images'][$imageId]['type'] = $node->getAttribute('type');
                         foreach ($node->childNodes as $attribute) {
                             if ($attribute->nodeType != XML_ELEMENT_NODE) {
                                 continue;
                             }
                             $nodeValue = $attribute->nodeValue;
-                            $result[$childNode->tagName][$moduleName][$imageId][$attribute->tagName] = $nodeValue;
+                            $result[$childNode->tagName][$moduleName]['images'][$imageId][$attribute->tagName] = $nodeValue;
+                        }
+                    }
+                    foreach ($childNode->getElementsByTagName('video') as $node) {
+                        $imageId = $node->getAttribute('id');
+                        $result[$childNode->tagName][$moduleName]['videos'][$imageId]['type'] = $node->getAttribute('type');
+                        foreach ($node->childNodes as $attribute) {
+                            if ($attribute->nodeType != XML_ELEMENT_NODE) {
+                                continue;
+                            }
+                            $nodeValue = $attribute->nodeValue;
+                            $result[$childNode->tagName][$moduleName]['videos'][$imageId][$attribute->tagName] = $nodeValue;
                         }
                     }
                     break;
@@ -96,6 +108,18 @@ class View extends \Magento\Framework\Config\AbstractXml
     }
 
     /**
+     * Retrieve a list videos attributes in scope of specified module
+     *
+     * @param $module
+     * @param $var
+     * @return bool
+     */
+    public function getVideoAttributeValue($module, $var)
+    {
+        return isset($this->_data['media'][$module]['videos'][$var][$var]) ? $this->_data['media'][$module]['videos'][$var][$var] : false;
+    }
+
+    /**
      * Retrieve a list images attributes in scope of specified module
      *
      * @param string $module
@@ -103,7 +127,18 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     public function getImages($module)
     {
-        return isset($this->_data['images'][$module]) ? $this->_data['images'][$module] : [];
+        return isset($this->_data['media'][$module]['images']) ? $this->_data['media'][$module]['images'] : [];
+    }
+
+    /**
+     * Retrieve a list media attributes in scope of specified module
+     *
+     * @param string $module
+     * @return array
+     */
+    public function getMedia($module)
+    {
+        return isset($this->_data['media'][$module]) ? $this->_data['media'][$module] : [];
     }
 
     /**
@@ -115,8 +150,8 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     public function getImageAttributes($module, $imageId)
     {
-        return isset($this->_data['images'][$module][$imageId])
-            ? $this->_data['images'][$module][$imageId]
+        return isset($this->_data['media'][$module]['images'][$imageId])
+            ? $this->_data['media'][$module]['images'][$imageId]
             : [];
     }
 
@@ -152,8 +187,9 @@ class View extends \Magento\Framework\Config\AbstractXml
             '/view/vars' => 'module',
             '/view/vars/var' => 'name',
             '/view/exclude/item' => ['type', 'item'],
-            '/view/images' => 'modulle',
-            '/view/images/image' => ['id', 'type'],
+            '/view/media' => 'module',
+            '/view/media/image' => ['id', 'type'],
+            '/view/media/video' => ['id', 'type'],
         ];
     }
 

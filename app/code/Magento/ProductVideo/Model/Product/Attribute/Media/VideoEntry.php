@@ -10,7 +10,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Framework\Api\Data\VideoContentInterface;
 
 /**
- * @codeCoverageIgnore
+ * VideoEntry class
  */
 class VideoEntry extends AbstractExtensibleModel implements VideoContentInterface
 {
