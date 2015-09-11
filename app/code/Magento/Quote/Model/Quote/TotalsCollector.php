@@ -26,20 +26,6 @@ class TotalsCollector
     protected $totalCollectorFactory;
 
     /**
-     * Prefix of model events
-     *
-     * @var string
-     */
-    protected $_eventPrefix = 'sales_quote_address';
-
-    /**
-     * Name of event object
-     *
-     * @var string
-     */
-    protected $_eventObject = 'quote_address';
-
-    /**
      * Application Event Dispatcher
      *
      * @var \Magento\Framework\Event\ManagerInterface
@@ -160,9 +146,6 @@ class TotalsCollector
         /** @var \Magento\Quote\Model\Quote\Address\Total $total */
         $total = $this->totalFactory->create('Magento\Quote\Model\Quote\Address\Total');
 
-        //protected $_eventPrefix = 'sales_quote';
-        //protected $_eventObject = 'quote';
-
         $this->eventManager->dispatch(
             'sales_quote_collect_totals_before',
             ['quote' => $quote]
@@ -203,7 +186,6 @@ class TotalsCollector
         //$this->setData('trigger_recollect', 0);
         $this->_validateCouponCode($quote);
 
-        //@todo modify arguments
         $this->eventManager->dispatch(
             'sales_quote_collect_totals_after',
             ['quote' => $quote]
@@ -280,23 +262,28 @@ class TotalsCollector
         \Magento\Quote\Model\Quote $quote,
         \Magento\Quote\Model\Quote\Address $address
     ) {
-        /** Build shipping assignment DTO  */
+        /** @var \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment */
         $shippingAssignment = $this->shippingAssignmentFactory->create();
+        /** @var \Magento\Quote\Api\Data\ShippingInterface $shipping */
         $shipping = $this->shippingFactory->create();
         $shipping->setMethod($quote->getShippingAddress()->getShippingMethod());
         $shipping->setAddress($quote->getShippingAddress());
         $shippingAssignment->setShipping($shipping);
         $shippingAssignment->setItems($address->getAllItems());
 
-        /** @todo Refactor this code \Magento\Quote\Model\Observer\Frontend\Quote\Address\CollectTotals::dispatch */
-        $this->eventManager->dispatch(
-            $this->_eventPrefix . '_collect_totals_before',
-            [$this->_eventObject => $shippingAssignment->getShipping()->getAddress()] //@todo extend parameters list based on client's code
-        );
-        /** @var CollectorInterface $collector */
         /** @var \Magento\Quote\Model\Quote\Address\Total $total */
         $total = $this->totalFactory->create('Magento\Quote\Model\Quote\Address\Total');
+        $this->eventManager->dispatch(
+            'sales_quote_address_collect_totals_before',
+            [
+                'quote' => $quote,
+                'shipping_assignment' => $shippingAssignment,
+                'total' => $total
+            ]
+        );
+
         foreach ($this->collectorList->getCollectors($quote->getStoreId()) as $key => $collector) {
+            /** @var CollectorInterface $collector */
             if (!in_array($key, $this->allowedCollectors)) {
                 continue;
             }
@@ -304,15 +291,16 @@ class TotalsCollector
         }
         $address->addData($total->getData());
         $address->setAppliedTaxes($total->getAppliedTaxes());
-
-        /**
-         * @todo Refactor client's code
-         * Magento\Sales\Model\Observer\Frontend\Quote\RestoreCustomerGroupId
-         */
+        
         $this->eventManager->dispatch(
-            $this->_eventPrefix . '_collect_totals_after',
-            [$this->_eventObject => $shippingAssignment->getShipping()->getAddress()]//@todo extend parameters list based on client's code
+            'sales_quote_address_collect_totals_after',
+            [
+                'quote' => $quote,
+                'shipping_assignment' => $shippingAssignment,
+                'total' => $total
+            ]
         );
+
         return $total;
     }
 }
