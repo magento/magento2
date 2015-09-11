@@ -60,7 +60,7 @@
     <preference for="Magento\Sales\Api\TransactionRepositoryInterface" type="Magento\Sales\Model\Order\Payment\Transaction\Repository"/>
     <preference for="Magento\Sales\Model\Order\Payment\Transaction\ManagerInterface" type="Magento\Sales\Model\Order\Payment\Transaction\Manager"/>
     <preference for="Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface" type="Magento\Sales\Model\Order\Payment\Transaction\Builder"/>
-    <preference for="Magento\Sales\Api\OrderCustomerManagementInterface" type="Magento\Sales\Model\Order\Customer\Management" />
+    <preference for="Magento\Sales\Api\OrderCustomerManagementInterface" type="Magento\Sales\Model\Order\CustomerManagement" />
     <preference for="Magento\Sales\Model\Spi\CreditmemoCommentResourceInterface" type="Magento\Sales\Model\Resource\Order\Creditmemo\Comment"/>
     <preference for="Magento\Sales\Model\Spi\CreditmemoItemResourceInterface" type="Magento\Sales\Model\Resource\Order\Creditmemo\Item"/>
     <preference for="Magento\Sales\Model\Spi\CreditmemoResourceInterface" type="Magento\Sales\Model\Resource\Order\Creditmemo"/>
@@ -759,6 +759,11 @@
     <type name="Magento\Sales\Model\Order\Payment\Operations\RegisterCaptureNotificationOperation">
         <arguments>
             <argument name="stateCommand" xsi:type="object">Magento\Sales\Model\Order\Payment\State\RegisterCaptureNotificationCommand</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Model\Resource\Order\Tax\Item">
+        <arguments>
+            <argument name="connectionName" xsi:type="string">sales</argument>
         </arguments>
     </type>
 </config>

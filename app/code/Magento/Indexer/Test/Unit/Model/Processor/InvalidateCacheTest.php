@@ -18,14 +18,14 @@ class InvalidateCacheTest extends \PHPUnit_Framework_TestCase
     /**
      * Mock for context
      *
-     * @var \Magento\Indexer\Model\CacheContext|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\CacheContext|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $contextMock;
 
     /**
      * Subject mock
      *
-     * @var \Magento\Indexer\Model\ActionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\ActionInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $subjectMock;
 
@@ -49,7 +49,7 @@ class InvalidateCacheTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->subjectMock = $this->getMock('Magento\Indexer\Model\Processor', [], [], '', false);
-        $this->contextMock = $this->getMock('Magento\Indexer\Model\CacheContext', [], [], '', false);
+        $this->contextMock = $this->getMock('Magento\Framework\Indexer\CacheContext', [], [], '', false);
         $this->eventManagerMock = $this->getMock('Magento\Framework\Event\Manager', [], [], '', false);
         $this->moduleManager = $this->getMock('Magento\Framework\Module\Manager', [], [], '', false);
         $this->plugin = new \Magento\Indexer\Model\Processor\InvalidateCache(

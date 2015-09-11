@@ -5,7 +5,7 @@
 
 //  # Ratings
 //
-//  Ratings styling mixins are based on using font icons as rate symbols. There are two types of ratings: rating which allows user to vote and rating which displays voting results summary. Depending on the rating type mixin <code>.mixin-rating-vote()</code> or <code>.mixin-rating-summary()</code> is used.
+//  Ratings styling mixins are based on using font icons as rate symbols. There are two types of ratings: rating which allows user to vote and rating which displays voting results summary. Depending on the rating type mixin <code>.lib-rating-vote()</code> or <code>.lib-rating-summary()</code> is used.
 //
 //  # Global rating variables
 //
@@ -72,7 +72,7 @@
 
 //  # Rating with vote
 //
-//  To implement rating with vote, use the <code>.mixin-rating-vote()</code> mixin.
+//  To implement rating with vote, use the <code>.lib-rating-vote()</code> mixin.
 //  ``` html
 //  <div class="rating vote example-ratings-1">
 //      <input type="radio" name="rating-price" id="rating-price-1" value="1" />
@@ -99,7 +99,7 @@
 //  ```
 
 .example-ratings-1 {
-    .mixin-rating-vote();
+    .lib-rating-vote();
 }
 
 //  # Rating with vote icons number customization
@@ -144,7 +144,7 @@
 //  ```
 
 .example-ratings-2 {
-    .mixin-rating-vote(
+    .lib-rating-vote(
         @_icon-count: 8
     );
 }
@@ -183,7 +183,7 @@
 //  ```
 
 .example-ratings-3 {
-    .mixin-rating-vote(
+    .lib-rating-vote(
         @_icon-color: #aff5e3,
         @_icon-color-active: #0a6767
     );
@@ -219,7 +219,7 @@
 //  ```
 
 .example-ratings-4 {
-    .mixin-rating-vote(
+    .lib-rating-vote(
         @_icon-content: @icon-wishlist-full
     );
 }
@@ -260,7 +260,7 @@
 
 .exapmle-ratings-5 {
     .control.rating.vote {
-        .mixin-rating-vote();
+        .lib-rating-vote();
     }
 }
 
@@ -277,7 +277,7 @@
 //  ```
 
 .example-rating-summary-1 {
-    .mixin-rating-summary();
+    .lib-rating-summary();
 }
 
 //  # Rating summary icons number customization
@@ -297,7 +297,7 @@
 //  ```
 
 .example-rating-summary-2 {
-    .mixin-rating-summary(
+    .lib-rating-summary(
         @_icon-count: 8
     );
 }
@@ -320,7 +320,7 @@
 //  ```
 
 .example-rating-summary-3 {
-    .mixin-rating-summary(
+    .lib-rating-summary(
         @_icon-color: #aff5e3,
         @_icon-color-active: #0a6767
     );
@@ -343,7 +343,7 @@
 //  ```
 
 .example-rating-summary-4 {
-    .mixin-rating-summary(
+    .lib-rating-summary(
         @_icon-content: @icon-wishlist-full
     );
 }
@@ -365,7 +365,7 @@
 //  ```
 
 .example-rating-summary-5 {
-    .mixin-rating-summary(
+    .lib-rating-summary(
         @_label-hide: true
     );
 }
@@ -404,13 +404,13 @@
 
 .example-rating-summary-6 {
     .rating-summary {
-        .mixin-rating-summary();
+        .lib-rating-summary();
     }
 }
 
 //  # Rating hide label mixin
 //
-//  The <code>.mixin-rating-summary-label-hide()</code> mixin is used to hide rating label in summary rating.
+//  The <code>.lib-rating-summary-label-hide()</code> mixin is used to hide rating label in summary rating.
 //
 //  ``` html
 //  <div class="example-rating-summary-7">
@@ -422,6 +422,6 @@
 //  ```
 
 .example-rating-summary-7 {
-    .mixin-rating-summary();
-    .mixin-rating-summary-label-hide();
+    .lib-rating-summary();
+    .lib-rating-summary-label-hide();
 }
