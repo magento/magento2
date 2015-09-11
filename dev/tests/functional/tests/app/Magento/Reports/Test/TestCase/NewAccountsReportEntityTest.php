@@ -71,7 +71,7 @@ class NewAccountsReportEntityTest extends Injectable
     {
         // Preconditions
         $this->customerIndexPage->open();
-        $this->customerIndexPage->getCustomerGridBlock()->massaction([], 'Delete', true, 'Select all');
+        $this->customerIndexPage->getCustomerGridBlock()->massaction([], 'Delete', true, 'Select All');
         $customer->persist();
 
         // Steps
