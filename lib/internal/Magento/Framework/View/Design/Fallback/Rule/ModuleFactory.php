@@ -7,14 +7,18 @@ namespace Magento\Framework\View\Design\Fallback\Rule;
 
 use Magento\Framework\ObjectManagerInterface;
 
-class SimpleFactory
+class ModuleFactory
 {
     /**
+     * Object manager
+     *
      * @var ObjectManagerInterface
      */
     private $objectManager;
 
     /**
+     * Constructor
+     *
      * @param ObjectManagerInterface $objectManager
      */
     public function __construct(ObjectManagerInterface $objectManager)
@@ -30,6 +34,6 @@ class SimpleFactory
      */
     public function create(array $data = [])
     {
-        return $this->objectManager->create('Magento\Framework\View\Design\Fallback\Rule\Simple', $data);
+        return $this->objectManager->create('Magento\Framework\View\Design\Fallback\Rule\Module', $data);
     }
 }
