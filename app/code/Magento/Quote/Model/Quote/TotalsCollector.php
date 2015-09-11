@@ -100,7 +100,8 @@ class TotalsCollector
         'tax_subtotal',
         'tax_shipping',
         'tax',
-        'discount'
+        'discount',
+        'custbalance'
     );
 
     /**
