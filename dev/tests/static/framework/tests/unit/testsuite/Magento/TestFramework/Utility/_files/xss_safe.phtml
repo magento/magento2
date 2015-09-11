@@ -31,6 +31,7 @@ echo $var;
 ?>
 <?php /* @noEscape */ echo '\'' . $code . '\',\'' . $block->escapeQuote($data['parentSymbol']) . '\''; ?>
 <?= $block->getExtendedElement($switchAttributeCode)->toHtml(); ?>
+<?= $block->escapeHtml($_filter->getFilter()->getClearLinkText()) ?>
 <?php
 /**
  * echo $someVar;
