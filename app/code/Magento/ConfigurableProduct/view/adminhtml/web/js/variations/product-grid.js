@@ -16,7 +16,6 @@ define([
             productsGridUrl: null,
             productAttributes: [],
             productsModal: null,
-            attributes: [],
             gridSelector: '[data-grid-id=associated-products-container]',
             modules: {
                 productsFilter: '${ $.associatedProductsFilter }',
@@ -69,7 +68,7 @@ define([
          * @param rowIndex
          */
         selectProduct: function (rowIndex) {
-            this.variationsComponent()[this.callbackName](this.getProduct(rowIndex));
+            this.productsMassAction().selected(this.getProductByIndex(rowIndex)['entity_id']);
             this.close();
         },
 
@@ -86,8 +85,18 @@ define([
             });
             this._setFilter(attributes);
             this._getServerData(attributes);
+            this._setSelected();
             this._showMessageAssociatedGrid();
             this.productsModal.trigger('openModal');
+        },
+
+        _setSelected: function () {
+            this.variationsComponent(function (variation) {
+                var entityIds = _.values(variation.productAttributesMap);
+                this.productsMassAction(function (massActionComponent) {
+                    massActionComponent.selected(entityIds);
+                });
+            }.bind(this));
         },
 
         /**
@@ -117,7 +126,7 @@ define([
          * @param rowIndex
          * @returns {*}
          */
-        getProduct: function (rowIndex) {
+        getProductByIndex: function (rowIndex) {
             return this.productsProvider().data.items[rowIndex];
         },
 
@@ -166,13 +175,7 @@ define([
          * Show manually grid
          */
         showManuallyGrid: function () {
-            var productIds = this.variationsComponent().variations.pluck('productId');
-            this.productsFilter(function (filter) {
-                filter.set('filters', {
-                    'entity_id': productIds
-                }).apply();
-            });
-            this.open(null, 'appendProduct', true);
+            this.open(null, 'rewriteProducts', true);
         },
 
         /**
@@ -181,8 +184,8 @@ define([
          */
         _setFilter: function (attributes) {
             this.productsProvider(function (provider) {
-                provider.params['attribute_ids'] = _.keys(attributes);
-            });
+                provider.params['attribute_ids'] = this.variationsComponent().attributes.pluck('code');
+            }.bind(this));
             this.productsFilter(function (filter) {
                 filter.set('filters', attributes).apply();
             });
