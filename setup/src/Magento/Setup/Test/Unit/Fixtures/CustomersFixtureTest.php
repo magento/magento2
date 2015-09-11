@@ -52,7 +52,13 @@ class CustomersFixtureTest extends \PHPUnit_Framework_TestCase
         $valueMap = [
             [
                 'Magento\ImportExport\Model\Import',
-                ['data' => ['entity' => 'customer_composite', 'behavior' => 'append']],
+                [
+                    'data' => [
+                        'entity' => 'customer_composite',
+                        'behavior' => 'append',
+                        'validation_strategy' => 'validation-stop-on-errors'
+                    ]
+                ],
                 $importMock
             ],
             ['Magento\Store\Model\StoreManager', [], $storeManagerMock]

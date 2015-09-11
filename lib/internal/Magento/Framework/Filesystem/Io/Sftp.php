@@ -8,6 +8,8 @@
 
 namespace Magento\Framework\Filesystem\Io;
 
+use Magento\Framework\Filesystem\DriverInterface;
+
 /**
  * Sftp client interface
  *
@@ -76,7 +78,7 @@ class Sftp extends AbstractIo
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function mkdir($dir, $mode = 0777, $recursive = true)
+    public function mkdir($dir, $mode = DriverInterface::WRITEABLE_DIRECTORY_MODE, $recursive = true)
     {
         if ($recursive) {
             $no_errors = true;
