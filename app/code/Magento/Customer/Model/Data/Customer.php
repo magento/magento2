@@ -98,6 +98,16 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
     }
 
     /**
+     * Get updated at time
+     *
+     * @return string|null
+     */
+    public function getUpdatedAt()
+    {
+        return $this->_get(self::UPDATED_AT);
+    }
+
+    /**
      * Get date of birth
      *
      * @return string|null
@@ -311,6 +321,17 @@ class Customer extends \Magento\Framework\Api\AbstractExtensibleObject implement
     public function setCreatedAt($createdAt)
     {
         return $this->setData(self::CREATED_AT, $createdAt);
+    }
+
+    /**
+     * Set updated at time
+     *
+     * @param string $updatedAt
+     * @return $this
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        return $this->setData(self::UPDATED_AT, $updatedAt);
     }
 
     /**
