@@ -42,22 +42,30 @@ class QueueManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->assertCount($maxMessagesNumber, $messages);
 
-        $firstMessage = $messages[0];
+        $firstMessage = array_shift($messages);
         $this->assertEquals('topic2', $firstMessage[QueueManagement::MESSAGE_TOPIC]);
         $this->assertEquals('messageBody2', $firstMessage[QueueManagement::MESSAGE_BODY]);
         $this->assertEquals('queue3', $firstMessage[QueueManagement::MESSAGE_QUEUE_NAME]);
-        $this->assertEquals(QueueManagement::MESSAGE_STATUS_NEW, $firstMessage[QueueManagement::MESSAGE_STATUS]);
+        $this->assertEquals(
+            QueueManagement::MESSAGE_STATUS_IN_PROGRESS,
+            $firstMessage[QueueManagement::MESSAGE_STATUS]
+        );
         $this->assertTrue(is_numeric($firstMessage[QueueManagement::MESSAGE_QUEUE_ID]));
         $this->assertTrue(is_numeric($firstMessage[QueueManagement::MESSAGE_ID]));
+        $this->assertTrue(is_numeric($firstMessage[QueueManagement::MESSAGE_QUEUE_RELATION_ID]));
         $this->assertCount(12, date_parse($firstMessage[QueueManagement::MESSAGE_UPDATED_AT]));
 
-        $secondMessage = $messages[1];
+        $secondMessage = array_shift($messages);
         $this->assertEquals('topic3', $secondMessage[QueueManagement::MESSAGE_TOPIC]);
         $this->assertEquals('messageBody3', $secondMessage[QueueManagement::MESSAGE_BODY]);
         $this->assertEquals('queue3', $secondMessage[QueueManagement::MESSAGE_QUEUE_NAME]);
-        $this->assertEquals(QueueManagement::MESSAGE_STATUS_NEW, $secondMessage[QueueManagement::MESSAGE_STATUS]);
+        $this->assertEquals(
+            QueueManagement::MESSAGE_STATUS_IN_PROGRESS,
+            $secondMessage[QueueManagement::MESSAGE_STATUS]
+        );
         $this->assertTrue(is_numeric($secondMessage[QueueManagement::MESSAGE_QUEUE_ID]));
         $this->assertTrue(is_numeric($secondMessage[QueueManagement::MESSAGE_ID]));
+        $this->assertTrue(is_numeric($secondMessage[QueueManagement::MESSAGE_QUEUE_RELATION_ID]));
         $this->assertCount(12, date_parse($secondMessage[QueueManagement::MESSAGE_UPDATED_AT]));
     }
 }
