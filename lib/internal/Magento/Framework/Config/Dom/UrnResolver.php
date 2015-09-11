@@ -34,17 +34,17 @@ class UrnResolver
     /**
      * Get real file path by it's URN reference
      *
-     * @param $schemaFileName
+     * @param string $schema
      * @return string
      */
-    public function getRealPath($schemaFileName)
+    public function getRealPath($schema)
     {
-        if (substr($schemaFileName, 0, 4) == 'urn:') {
+        if (substr($schema, 0, 4) == 'urn:') {
             // resolve schema location
             // urn:magento:module:catalog:etc/catalog_attributes.xsd
             // 0 : urn, 1: magento, 2: module, 3: catalog, 4: etc/catalog_attributes.xsd
             // moduleName -> Magento_Catalog
-            $urnParts = explode(':', $schemaFileName);
+            $urnParts = explode(':', $schema);
             if ($urnParts[2] == 'module') {
                 $appModulePath = str_replace(' ', '', ucwords(str_replace('-', ' ', $urnParts[3])));
                 $moduleName = ucfirst($urnParts[1]) . '_' . $appModulePath;
@@ -60,14 +60,14 @@ class UrnResolver
                         ComponentRegistrar::LIBRARY, $libraryName
                     ) . '/' . $urnParts[4];
             } else {
-                throw new \UnexpectedValueException("Unsupported format of schema location: " . $schemaFileName);
+                throw new \UnexpectedValueException("Unsupported format of schema location: " . $schema);
             }
             if (!empty($appSchemaPath) && file_exists($appSchemaPath)) {
-                $schemaFileName = $appSchemaPath;
+                $schema = $appSchemaPath;
             } else {
-                throw new \UnexpectedValueException("Could not locate schema: " . $schemaFileName);
+                throw new \UnexpectedValueException("Could not locate schema: " . $schema);
             }
         }
-        return $schemaFileName;
+        return $schema;
     }
 }
