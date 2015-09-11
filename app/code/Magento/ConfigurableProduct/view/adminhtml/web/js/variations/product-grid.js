@@ -35,10 +35,17 @@ define([
             this.productsModal = $(this.gridSelector).modal({
                 title: $.mage.__('Select Associated Product'),
                 type: 'slide',
-                buttons: [{
-                    text: $.mage.__('Ok'),
-                    click: this.close.bind(this)
-                }]
+                buttons: [
+                    {
+                        text: $.mage.__('Cancel'),
+                        click: function () {
+                            this.closeModal();
+                        }
+                    }, {
+                        text: $.mage.__('Done'),
+                        click: this.close.bind(this)
+                    }
+                ]
             });
             this._getServerData = _.once(this._getServerData);
         },
