@@ -87,9 +87,7 @@ class Library implements CollectorInterface
         foreach ($theme->getInheritedThemes() as $currentTheme) {
             $themeFullPath = $currentTheme->getFullPath();
             $directoryRead = $this->readFactory->create(
-                $this->componentRegistrar->getPath(
-                    \Magento\Framework\Component\ComponentRegistrar::THEME, $themeFullPath
-                )
+                $this->componentRegistrar->getPath(ComponentRegistrar::THEME, $themeFullPath)
             );
             $foundFiles = $directoryRead->search("web/{$filePath}");
             $files = [];
