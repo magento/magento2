@@ -36,16 +36,10 @@ class GrandTotalDetailsPlugin
     protected $taxConfig;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address\Total\Tax
-     */
-    protected $taxTotal;
-
-    /**
      * @param \Magento\Tax\Api\Data\GrandTotalDetailsInterfaceFactory $detailsFactory
      * @param \Magento\Tax\Api\Data\GrandTotalRatesInterfaceFactory $ratesFactory
      * @param TotalsExtensionFactory $extensionFactory
      * @param \Magento\Tax\Model\Config $taxConfig
-     * @param \Magento\Quote\Model\Quote\Address\Total\Tax $taxTotal
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      */
     public function __construct(
@@ -53,14 +47,12 @@ class GrandTotalDetailsPlugin
         \Magento\Tax\Api\Data\GrandTotalRatesInterfaceFactory $ratesFactory,
         TotalsExtensionFactory $extensionFactory,
         \Magento\Tax\Model\Config $taxConfig,
-        \Magento\Quote\Model\Quote\Address\Total\Tax $taxTotal,
         \Magento\Quote\Model\QuoteRepository $quoteRepository
     ) {
         $this->detailsFactory = $detailsFactory;
         $this->ratesFactory = $ratesFactory;
         $this->extensionFactory = $extensionFactory;
         $this->taxConfig = $taxConfig;
-        $this->taxTotal = $taxTotal;
         $this->quoteRepository = $quoteRepository;
     }
 
