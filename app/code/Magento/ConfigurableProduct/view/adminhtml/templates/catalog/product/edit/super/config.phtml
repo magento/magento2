@@ -10,19 +10,19 @@
 
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 ?>
-<div class="entry-edit form-inline" id="<?php echo $block->getId() ?>">
-    <div class="fieldset-wrapper admin__collapsible-block-wrapper" id="<?php echo $block->getId() ?>-wrapper" data-panel="product-variations">
+<div class="entry-edit form-inline" id="<?php /* @escapeNotVerified */ echo $block->getId() ?>">
+    <div class="fieldset-wrapper admin__collapsible-block-wrapper" id="<?php /* @escapeNotVerified */ echo $block->getId() ?>-wrapper" data-panel="product-variations">
         <div class="fieldset-wrapper-title">
-            <strong class="admin__collapsible-title" data-toggle="collapse" data-target="#<?php echo $block->getId() ?>-content">
-                <span><?= __('Configurations') ?></span>
+            <strong class="admin__collapsible-title" data-toggle="collapse" data-target="#<?php /* @escapeNotVerified */ echo $block->getId() ?>-content">
+                <span><?= /* @escapeNotVerified */  __('Configurations') ?></span>
             </strong>
         </div>
 
-        <div class="fieldset-wrapper-content collapse" data-collapsed="true" id="<?php echo $block->getId() ?>-content">
+        <div class="fieldset-wrapper-content collapse" data-collapsed="true" id="<?php /* @escapeNotVerified */ echo $block->getId() ?>-content">
             <div data-bind="scope: 'variation-steps-wizard'" class="product-create-configuration">
                 <div class="product-create-configuration-info">
                     <div class="note">
-                        <?= __('Configurable products allow customers to choose options (Ex: shirt color).
+                        <?= /* @escapeNotVerified */  __('Configurable products allow customers to choose options (Ex: shirt color).
                     You need to create a simple product for each configuration (Ex: a product for each color).');?>
                     </div>
                 </div>
@@ -34,8 +34,8 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
                 <div class="product-create-configuration-actions">
                     <button data-action="open-steps-wizard" title="Create Product Configurations"
                             class="action-secondary" data-bind="click: open">
-                        <span data-role="button-label" data-edit-label="<?= __('Edit Configurations') ?>">
-                            <?= $block->getProduct()->getId()
+                        <span data-role="button-label" data-edit-label="<?= /* @escapeNotVerified */  __('Edit Configurations') ?>">
+                            <?= /* @escapeNotVerified */  $block->getProduct()->getId()
                                 && $block->getProduct()->getTypeId() === 'configurable'
                                 ? __('Edit Configurations')
                                 : __('Create Configurations')
@@ -71,8 +71,8 @@ require([
 ], function($, mageTemplate){
     'use strict';
 
-    var variationsContainer = $("#<?php echo $block->getId()?>"),
-        collapsableWrapper = $("#<?php echo $block->getId()?>-wrapper"),
+    var variationsContainer = $("#<?php /* @escapeNotVerified */ echo $block->getId()?>"),
+        collapsableWrapper = $("#<?php /* @escapeNotVerified */ echo $block->getId()?>-wrapper"),
         collapsableArea = $('> .collapse', collapsableWrapper),
         stockAvailabilityField = $('#quantity_and_stock_status'),
         qtyField = $('#qty'),
@@ -80,8 +80,8 @@ require([
         inventoryAvailabilityField = $('#inventory_stock_availability'),
         currentProductTemplateControl = $('#product-template-suggest-container .action-dropdown > .action-toggle'),
         attributesInput = $("input[name='attributes[]']", variationsContainer),
-        hasVariations = <?php echo($block->getProduct()->getTypeId() === Configurable::TYPE_CODE || $block->getRequest()->has('attributes')) ? 'true' : 'false' ?>,
-        noImageUrl = '<?= $block->getNoImageUrl() ?>',
+        hasVariations = <?php /* @escapeNotVerified */ echo($block->getProduct()->getTypeId() === Configurable::TYPE_CODE || $block->getRequest()->has('attributes')) ? 'true' : 'false' ?>,
+        noImageUrl = '<?= /* @escapeNotVerified */  $block->getNoImageUrl() ?>',
         isLocked = function (element) {
             return element.is('[data-locked]');
         },

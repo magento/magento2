@@ -240,7 +240,7 @@ function switchDefaultValueField()
 
         <?php foreach ($this->helper('Magento\Catalog\Helper\Data')->getAttributeHiddenFields() as $type => $fields): ?>
         <?php if (in_array($type, array('swatch_visual', 'swatch_text'))) continue ?>
-            case '<?php echo $type; ?>':
+            case '<?php /* @escapeNotVerified */ echo $type; ?>':
                 <?php foreach ($fields as $one): ?>
                     <?php if ($one == '_front_fieldset'): ?>
                         getFrontTab().hide();
@@ -252,7 +252,7 @@ function switchDefaultValueField()
                     <?php elseif ($one == '_scope'): ?>
                         scopeVisibility = false;
                     <?php else: ?>
-                        setRowVisibility('<?php echo $one; ?>', false);
+                        setRowVisibility('<?php /* @escapeNotVerified */ echo $one; ?>', false);
                     <?php endif; ?>
                 <?php endforeach; ?>
             break;
