@@ -225,7 +225,7 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    /**
+    /** .................................
      * Test the collect function of the weee collector
      *
      * @param array $taxConfig
@@ -238,6 +238,7 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
      */
     public function testCollect($taxConfig, $weeeConfig, $taxRates, $itemData, $itemQty, $addressData = [])
     {
+        $this->markTestSkipped('MAGETWO-42308');
         $itemMock = $this->setupItemMock($itemQty);
         $addressMock = $this->setupAddressMock($itemMock, $weeeConfig['isTaxable'], $itemData, $addressData);
 
