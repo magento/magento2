@@ -11,6 +11,15 @@ use Magento\Quote\Model\Quote\Address\Total;
 class Custbalance extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 {
     /**
+     * Added to find implicit usages.
+     */
+    public function __construct()
+    {
+        $this->setCode('custbalance');
+        die('Broken CUSTBALANCE collector called.');
+    }
+
+    /**
      * @param ShippingAssignmentInterface $shippingAssignment
      * @param Total $total
      * @return $this

@@ -29,6 +29,8 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     ) {
         $this->eventManager = $eventManager;
         $this->storeManager = $storeManager;
+        $this->setCode('discount');
+        die('Broken DISCOUNT collector called.');
     }
 
     /**

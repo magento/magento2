@@ -55,6 +55,7 @@ class Tax extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         $this->_calculation = $calculation;
         $this->priceCurrency = $priceCurrency;
         $this->setCode('tax');
+        die('Broken TAX collector called.');
     }
 
     /**
