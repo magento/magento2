@@ -66,6 +66,7 @@ define([
             buttons: [{
                 text: $.mage.__('Ok'),
                 class: '',
+                attr: {},
 
                 /**
                  * Default action on button click
@@ -246,6 +247,9 @@ define([
             _.each(this.options.buttons, function (btn, key) {
                 var button = that.buttons[key];
 
+                if (btn.attr) {
+                    $(button).attr(btn.attr);
+                }
                 $(button).on('click', _.bind(btn.click, that));
             });
         },
