@@ -40,7 +40,7 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
     <?php if ($element->getType() == 'hidden'): ?>
         <?php echo $element->getElementHtml() ?>
     <?php else: ?>
-    <div<?php echo $fieldAttributes ?> data-attribute-code="<?php echo $element->getHtmlId() ?>"
+    <div<?php /* @escapeNotVerified */ echo $fieldAttributes ?> data-attribute-code="<?php echo $element->getHtmlId() ?>"
         data-apply-to="<?php echo $block->escapeHtml($this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode(
             $element->hasEntityAttribute() ? $element->getEntityAttribute()->getApplyTo() : []
         ))?>"
@@ -48,15 +48,15 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
         <?php if ($elementBeforeLabel): ?>
             <?php echo $block->getElementHtml() ?>
             <?php echo $element->getLabelHtml() ?>
-            <?php echo $note ?>
+            <?php /* @escapeNotVerified */ echo $note ?>
         <?php else: ?>
             <?php echo $element->getLabelHtml() ?>
             <div class="control">
-                <?php echo($addOn) ? '<div class="addon">' . $block->getElementHtml() . '</div>' : $block->getElementHtml(); ?>
-                <?php echo $note ?>
+                <?php /* @escapeNotVerified */ echo($addOn) ? '<div class="addon">' . $block->getElementHtml() . '</div>' : $block->getElementHtml(); ?>
+                <?php /* @escapeNotVerified */ echo $note ?>
             </div>
         <?php endif; ?>
-        <div class="field-service" value-scope="<?php echo $block->getScopeLabel()?>">
+        <div class="field-service" value-scope="<?php /* @escapeNotVerified */ echo $block->getScopeLabel()?>">
             <?php if ($block->canDisplayUseDefault()): ?>
                 <label for="<?php echo $element->getHtmlId() ?>_default" class="choice use-default">
                     <input <?php if ($element->getReadonly()):?> disabled="disabled"<?php endif; ?>
@@ -65,9 +65,9 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
                             class="use-default-control"
                             id="<?php echo $element->getHtmlId() ?>_default"
                             <?php if ($block->usedDefault()): ?> checked="checked"<?php endif; ?>
-                            onclick="<?php echo $elementToggleCode; ?>"
-                            value="<?php echo $block->getAttributeCode() ?>"/>
-                    <span class="use-default-label"><?php echo __('Use Default Value') ?></span>
+                            onclick="<?php /* @escapeNotVerified */ echo $elementToggleCode; ?>"
+                            value="<?php /* @escapeNotVerified */ echo $block->getAttributeCode() ?>"/>
+                    <span class="use-default-label"><?php /* @escapeNotVerified */ echo __('Use Default Value') ?></span>
                 </label>
             <?php endif; ?>
         </div>

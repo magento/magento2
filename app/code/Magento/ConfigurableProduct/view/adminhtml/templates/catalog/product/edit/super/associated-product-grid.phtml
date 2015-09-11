@@ -14,9 +14,9 @@
         <div class="message ">
             <div>
                 <?php if ($block->isHasRows()): ?>
-                    <?= __('Choose a new product to delete and replace the current product configuration.') ?>
+                    <?= /* @escapeNotVerified */  __('Choose a new product to delete and replace the current product configuration.') ?>
                 <?php else: ?>
-                    <?=  __('For better results, add attributes and attribute values to your products.') ?>
+                    <?= /* @escapeNotVerified */   __('For better results, add attributes and attribute values to your products.') ?>
                 <?php endif ?>
             </div>
         </div>
