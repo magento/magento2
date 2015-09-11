@@ -280,28 +280,31 @@ require([
         }
       });
 
-      $.widget('mage.getVideoInformation', {
+      $.widget('mage.videoData', {
         options: {
           youtubeKey: 'AIzaSyDwqDWuw1lra-LnpJL2Mr02DYuFmkuRSns', //sample data, change later!!!!!!!!
           vimeoKey: ''
         },
 
-        _UPDATE_VIDEO_INFORMATION_TRIGGER: 'update_video_information',
 
-        _ERROR_UPDATE_INFORMATION_TRIGGER: 'error_update_information',
+        _REQUEST_VIDEO_INFORMATION_TRIGGER: 'update_video_information',
+
+        _UPDATE_VIDEO_INFORMATION_TRIGGER: 'updated_video_information',
+
+        _ERROR_UPDATE_INFORMATION_TRIGGER: 'error_updated_information',
 
         _videoInformation: null,
 
         _init: function () {
-          jQuery(this.element).on("focusout", $.proxy(this._onBlurhandler, this));
+          jQuery(this.element).on(this._REQUEST_VIDEO_INFORMATION_TRIGGER, $.proxy(this._onRequestHandler, this));
         },
 
 
-        _onBlurhandler: function() {
+        _onRequestHandler: function() {
           var url = this.element.val();
           if(!url) {
             this._videoInformation = null;
-            this.element.trigger(this._UPDATE_VIDEO_INFORMATION_TRIGGER, null);
+            this.element.trigger(this._ERROR_UPDATE_INFORMATION_TRIGGER, "Video url is undefined");
             return;
           }
 
@@ -313,8 +316,11 @@ require([
           }
 
           function _onYouTubeLoaded(data) {
+            if(data.items.length < 1) {
+              this.element.trigger(this._ERROR_UPDATE_INFORMATION_TRIGGER, "Video not found");
+              return;
+            }
             var tmp       = data.items[0];
-            console.log(tmp);
             var respData  = {
               duration: tmp.contentDetails.duration,
               channel: tmp.snippet.channelTitle,
@@ -329,6 +335,10 @@ require([
           }
 
           function _onVimeoLoaded(data) {
+            if(data.length < 1) {
+              this.element.trigger(this._ERROR_UPDATE_INFORMATION_TRIGGER, "Video not found");
+              return;
+            }
             var tmp = data[0];
             var respData = {
               duration: tmp.duration,
