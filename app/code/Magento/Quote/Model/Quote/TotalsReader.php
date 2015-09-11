@@ -82,7 +82,8 @@ class TotalsReader
         'tax_subtotal',
         'tax_shipping',
         'tax',
-        'discount'
+        'discount',
+        'custbalance'
     );
 
     /**
