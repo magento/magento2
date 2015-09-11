@@ -39,11 +39,54 @@ define([
 
         _itemIdSelector: '#item_id',
 
+        _videoUrlSelector: '[name="video_url"]',
+
+        _videoUrlWidget: null,
+
+        _videoInformationBtnSelector: '[name="new_video_get"]',
+
+        _videoInformationGetBtn: null,
+
         _bind: function() {
             var events = {
                 'setImage': '_onSetImage'
             };
             this._on(events);
+
+            this._videoUrlWidget = jQuery(this._videoUrlSelector).videoData();
+            this._videoInformationGetBtn = jQuery(this._videoInformationBtnSelector);
+
+            this._videoInformationGetBtn.on('click', $.proxy(this._onGetVideoInformationClick, this));
+            this._videoUrlWidget.on("updated_video_information", $.proxy(this._onGetVideoInformationSuccess, this));
+            this._videoUrlWidget.on("error_updated_information", $.proxy(this._onGetVideoInformationError, this));
+        },
+
+        /**
+         * Fired when user click on button "Get video information"
+          * @private
+         */
+        _onGetVideoInformationClick: function() {
+            this._videoUrlWidget.trigger('update_video_information');
+        },
+
+        /**
+         * Fired when successfully received information about the video.
+         * @param e
+         * @param data
+         * @private
+         */
+        _onGetVideoInformationSuccess: function(e, data) {
+            console.log('SUCCESS', e, data);
+        },
+
+        /**
+         * Fired when receiving information about the video ended with error
+         * @param e
+         * @param data
+         * @private
+         */
+        _onGetVideoInformationError: function(e, data) {
+            console.log('ERROR', e, data);
         },
 
         /**
@@ -238,8 +281,8 @@ define([
                     this._addVideoClass(tmp.url);
                 }
             }
-
             this._bind();
+
             var widget = this;
             var uploader = jQuery(this._videoPreviewInputSelector);
             uploader.on('change', this._onImageInputChange.bind(this));
