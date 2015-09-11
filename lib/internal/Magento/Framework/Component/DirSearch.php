@@ -53,7 +53,7 @@ class DirSearch
     /**
      * Search for files in each component by pattern, returns file objects with absolute file paths
      *
-     * @param $componentType
+     * @param string $componentType
      * @param string $pattern
      * @return ComponentFile[]
      */

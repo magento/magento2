@@ -66,7 +66,6 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-
     /**
      * @expectedException \UnexpectedValueException
      * @expectedExceptionMessage no such theme registered

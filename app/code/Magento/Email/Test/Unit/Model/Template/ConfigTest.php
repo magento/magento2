@@ -77,7 +77,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->themePackages = $this->getMock('\Magento\Framework\Theme\PackageList', [], [], '', false);
-        $this->readDirFactory = $this->getMock('\Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
+        $this->readDirFactory = $this->getMock('Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
         $this->model = new Config(
             $this->_dataStorage,
             $this->_moduleReader,
