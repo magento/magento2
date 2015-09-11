@@ -28,6 +28,7 @@ use Magento\Framework\Api\Data\ImageContentInterface;
  * @method string getUrlKey()
  * @method Product setUrlKey(string $urlKey)
  * @method Product setRequestPath(string $requestPath)
+ * @method Product setWebsiteIds(array $ids)
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
