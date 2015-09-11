@@ -106,7 +106,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->cachedVideoConfig->getVideoAttributeValue(
             self::MODULE_NAME,
-            self::NODE_CONFIG_SHOW_RELATED_YOUTUBE
+            self::NODE_CONFIG_SHOW_RELATED
         );
     }
 
