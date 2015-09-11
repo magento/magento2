@@ -50,14 +50,14 @@ var catalogWysiwygEditor = {
                 type: 'slide',
                 firedElementId: elementId,
                 buttons: [{
-                    text: 'Submit',
-                    click: function () {
-                        self.okDialogWindow(this);
-                    }
-                }, {
                     text: 'Cancel',
                     click: function () {
                         self.closeDialogWindow(this);
+                    }
+                },{
+                    text: 'Submit',
+                    click: function () {
+                        self.okDialogWindow(this);
                     }
                 }],
                 close: function () {
