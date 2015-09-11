@@ -307,6 +307,18 @@
                     </argument>
                 </argument>
             </action>
+            <action name="edit">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">edit</item>
+                        <item name="label" xsi:type="string" translate="true">Edit</item>
+                        <item name="callback" xsi:type="array">
+                            <item name="provider" xsi:type="string">customer_listing.customer_listing.customer_columns_editor</item>
+                            <item name="target" xsi:type="string">editSelected</item>
+                        </item>
+                    </item>
+                </argument>
+            </action>
         </massaction>
         <paging name="listing_paging">
             <argument name="data" xsi:type="array">
@@ -328,13 +340,23 @@
                     <item name="provider" xsi:type="string">customer_listing.customer_listing.listing_top.bookmarks</item>
                     <item name="namespace" xsi:type="string">current</item>
                 </item>
+                <item name="editorConfig" xsi:type="array">
+                    <item name="selectProvider" xsi:type="string">customer_listing.customer_listing.customer_columns.ids</item>
+                    <item name="enabled" xsi:type="boolean">true</item>
+                    <item name="indexField" xsi:type="string">entity_id</item>
+                    <item name="clientConfig" xsi:type="array">
+                        <item name="saveUrl" xsi:type="string">customer/index/inlineEdit</item>
+                        <item name="validateUrl" xsi:type="string">/path/to</item>
+                        <item name="validateBeforeSave" xsi:type="boolean">false</item>
+                    </item>
+                </item>
                 <item name="childDefaults" xsi:type="array">
                     <item name="fieldAction" xsi:type="array">
-                        <item name="provider" xsi:type="string">customer_listing.customer_listing.customer_columns.actions</item>
-                        <item name="target" xsi:type="string">applyAction</item>
+                        <item name="provider" xsi:type="string">customer_listing.customer_listing.customer_columns_editor</item>
+                        <item name="target" xsi:type="string">startEdit</item>
                         <item name="params" xsi:type="array">
-                            <item name="0" xsi:type="string">edit</item>
-                            <item name="1" xsi:type="string">${ $.$data.rowIndex }</item>
+                            <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
+                            <item name="1" xsi:type="boolean">true</item>
                         </item>
                     </item>
                     <item name="controlVisibility" xsi:type="boolean">true</item>
@@ -393,6 +415,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="editor" xsi:type="string">text</item>
                     <item name="sortable" xsi:type="string">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>
@@ -401,14 +424,17 @@
                 </item>
             </argument>
         </column>
-        <column name="group_id" class="Magento\Customer\Ui\Component\Listing\Column\AttributeColumn">
+        <column name="group_id">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="editor" xsi:type="array">
+                        <item name="editorType" xsi:type="string">select</item>
+                    </item>
                     <item name="sortable" xsi:type="string">true</item>
-                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="dataType" xsi:type="string">select</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Group</item>
                     <item name="sortOrder" xsi:type="number">50</item>
@@ -421,6 +447,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="editor" xsi:type="string">text</item>
                     <item name="sortable" xsi:type="string">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>
@@ -435,6 +462,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="editor" xsi:type="string">text</item>
                     <item name="sortable" xsi:type="string">true</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>
@@ -443,13 +471,13 @@
                 </item>
             </argument>
         </column>
-        <column name="billing_country_id" class="Magento\Customer\Ui\Component\Listing\Column\AttributeColumn">
+        <column name="billing_country_id">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                 </item>
                 <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="dataType" xsi:type="string">select</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Country</item>
                     <item name="sortOrder" xsi:type="number">80</item>
@@ -484,13 +512,16 @@
                 </item>
             </argument>
         </column>
-        <column name="website_id" class="Magento\Customer\Ui\Component\Listing\Column\AttributeColumn">
+        <column name="website_id">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                 </item>
                 <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="editor" xsi:type="array">
+                        <item name="editorType" xsi:type="string">select</item>
+                    </item>
+                    <item name="dataType" xsi:type="string">select</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Web Site</item>
                     <item name="sortOrder" xsi:type="number">110</item>
@@ -576,6 +607,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="editor" xsi:type="string">date</item>
                     <item name="sortable" xsi:type="string">true</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">date</item>
@@ -591,6 +623,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="editor" xsi:type="string">text</item>
                     <item name="sortable" xsi:type="string">true</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">text</item>
@@ -600,14 +633,15 @@
                 </item>
             </argument>
         </column>
-        <column name="gender" class="Magento\Customer\Ui\Component\Listing\Column\AttributeColumn">
+        <column name="gender">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="editor" xsi:type="string">select</item>
                     <item name="visible" xsi:type="boolean">false</item>
-                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="dataType" xsi:type="string">select</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Gender</item>
                     <item name="sortOrder" xsi:type="number">190</item>
@@ -634,6 +668,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="editor" xsi:type="string">text</item>
                     <item name="sortable" xsi:type="string">true</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">text</item>
@@ -649,6 +684,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="editor" xsi:type="string">text</item>
                     <item name="sortable" xsi:type="string">true</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">text</item>
@@ -664,6 +700,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="editor" xsi:type="string">text</item>
                     <item name="sortable" xsi:type="string">true</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">text</item>
@@ -679,12 +716,45 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                 </item>
                 <item name="config" xsi:type="array">
+                    <item name="editor" xsi:type="string">text</item>
                     <item name="sortable" xsi:type="string">true</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Company</item>
                     <item name="sortOrder" xsi:type="number">240</item>
+                </item>
+            </argument>
+        </column>
+        <column name="billing_firstname">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="editor" xsi:type="string">text</item>
+                    <item name="sortable" xsi:type="string">true</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Billing Firstname</item>
+                    <item name="sortOrder" xsi:type="number">250</item>
+                </item>
+            </argument>
+        </column>
+        <column name="billing_lastname">
+            <argument name="data" xsi:type="array">
+                <item name="js_config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                </item>
+                <item name="config" xsi:type="array">
+                    <item name="editor" xsi:type="string">text</item>
+                    <item name="sortable" xsi:type="string">true</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Billing Lastname</item>
+                    <item name="sortOrder" xsi:type="number">260</item>
                 </item>
             </argument>
         </column>
