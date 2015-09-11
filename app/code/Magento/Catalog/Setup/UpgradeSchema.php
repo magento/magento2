@@ -80,6 +80,18 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 )
             );
             $setup->getConnection()->dropIndex($setup->getTable(Media::GALLERY_VALUE_TABLE), 'primary');
+            $setup->getConnection()->addColumn(
+                $setup->getTable(Media::GALLERY_VALUE_TABLE),
+                'record_id',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                    'primary' => true,
+                    'auto_increment' => true,
+                    'unsigned' => true,
+                    'nullable' => false,
+                    'comment' => 'Record Id'
+                ]
+            );
 
             /**
              * Add index 'value_id'

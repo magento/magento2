@@ -148,7 +148,7 @@ class Media extends Product\Attribute\Backend\AbstractMedia
         unset($storeIds[$storeId]);
         $storeIds = array_keys($storeIds);
 
-        $images = $this->_productFactory->create()->getAssignedImages($object, $storeIds);
+        $images = $this->productFactory->create()->getAssignedImages($object, $storeIds);
 
         $picturesInOtherStores = [];
         foreach ($images as $image) {
@@ -233,9 +233,9 @@ class Media extends Product\Attribute\Backend\AbstractMedia
      */
     protected function removeDeletedImages(array $files)
     {
-        $catalogPath = $this->_mediaConfig->getBaseMediaPath();
+        $catalogPath = $this->mediaConfig->getBaseMediaPath();
         foreach ($files as $filePath) {
-            $this->_mediaDirectory->delete($catalogPath . '/' . $filePath);
+            $this->mediaDirectory->delete($catalogPath . '/' . $filePath);
         }
     }
 
@@ -250,18 +250,18 @@ class Media extends Product\Attribute\Backend\AbstractMedia
         $file = $this->getFilenameFromTmp($file);
         $destinationFile = $this->getUniqueFileName($file);
 
-        if ($this->_fileStorageDb->checkDbUsage()) {
-            $this->_fileStorageDb->renameFile(
-                $this->_mediaConfig->getTmpMediaShortUrl($file),
-                $this->_mediaConfig->getMediaShortUrl($destinationFile)
+        if ($this->fileStorageDb->checkDbUsage()) {
+            $this->fileStorageDb->renameFile(
+                $this->mediaConfig->getTmpMediaShortUrl($file),
+                $this->mediaConfig->getMediaShortUrl($destinationFile)
             );
 
-            $this->_mediaDirectory->delete($this->_mediaConfig->getTmpMediaPath($file));
-            $this->_mediaDirectory->delete($this->_mediaConfig->getMediaPath($destinationFile));
+            $this->mediaDirectory->delete($this->mediaConfig->getTmpMediaPath($file));
+            $this->mediaDirectory->delete($this->mediaConfig->getMediaPath($destinationFile));
         } else {
-            $this->_mediaDirectory->renameFile(
-                $this->_mediaConfig->getTmpMediaPath($file),
-                $this->_mediaConfig->getMediaPath($destinationFile)
+            $this->mediaDirectory->renameFile(
+                $this->mediaConfig->getTmpMediaPath($file),
+                $this->mediaConfig->getMediaPath($destinationFile)
             );
         }
 
@@ -277,15 +277,15 @@ class Media extends Product\Attribute\Backend\AbstractMedia
      */
     protected function getUniqueFileName($file, $forTmp = false)
     {
-        if ($this->_fileStorageDb->checkDbUsage()) {
-            $destFile = $this->_fileStorageDb->getUniqueFilename(
-                $this->_mediaConfig->getBaseMediaUrlAddition(),
+        if ($this->fileStorageDb->checkDbUsage()) {
+            $destFile = $this->fileStorageDb->getUniqueFilename(
+                $this->mediaConfig->getBaseMediaUrlAddition(),
                 $file
             );
         } else {
             $destinationFile = $forTmp
-                ? $this->_mediaDirectory->getAbsolutePath($this->_mediaConfig->getTmpMediaPath($file))
-                : $this->_mediaDirectory->getAbsolutePath($this->_mediaConfig->getMediaPath($file));
+                ? $this->mediaDirectory->getAbsolutePath($this->mediaConfig->getTmpMediaPath($file))
+                : $this->mediaDirectory->getAbsolutePath($this->mediaConfig->getMediaPath($file));
             $destFile = dirname($file) . '/' . FileUploader::getNewFileName($destinationFile);
         }
 
@@ -314,26 +314,26 @@ class Media extends Product\Attribute\Backend\AbstractMedia
         try {
             $destinationFile = $this->getUniqueFileName($file);
 
-            if (!$this->_mediaDirectory->isFile($this->_mediaConfig->getMediaPath($file))) {
+            if (!$this->mediaDirectory->isFile($this->mediaConfig->getMediaPath($file))) {
                 throw new \Exception();
             }
 
-            if ($this->_fileStorageDb->checkDbUsage()) {
-                $this->_fileStorageDb->copyFile(
-                    $this->_mediaDirectory->getAbsolutePath($this->_mediaConfig->getMediaShortUrl($file)),
-                    $this->_mediaConfig->getMediaShortUrl($destinationFile)
+            if ($this->fileStorageDb->checkDbUsage()) {
+                $this->fileStorageDb->copyFile(
+                    $this->mediaDirectory->getAbsolutePath($this->mediaConfig->getMediaShortUrl($file)),
+                    $this->mediaConfig->getMediaShortUrl($destinationFile)
                 );
-                $this->_mediaDirectory->delete($this->_mediaConfig->getMediaPath($destinationFile));
+                $this->mediaDirectory->delete($this->mediaConfig->getMediaPath($destinationFile));
             } else {
-                $this->_mediaDirectory->copyFile(
-                    $this->_mediaConfig->getMediaPath($file),
-                    $this->_mediaConfig->getMediaPath($destinationFile)
+                $this->mediaDirectory->copyFile(
+                    $this->mediaConfig->getMediaPath($file),
+                    $this->mediaConfig->getMediaPath($destinationFile)
                 );
             }
 
             return str_replace('\\', '/', $destinationFile);
         } catch (\Exception $e) {
-            $file = $this->_mediaConfig->getMediaPath($file);
+            $file = $this->mediaConfig->getMediaPath($file);
             throw new LocalizedException(
                 __('We couldn\'t copy file %1. Please delete media with non-existing images and try again.', $file)
             );
