@@ -119,7 +119,7 @@ class Files
         $exclude = [];
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryDir) {
             $exclude[] = '#' . $libraryDir . '/Test#';
-            $exclude[] = '#' . $libraryDir . '/*/Test#';
+            $exclude[] = '#' . $libraryDir . '/[\\w]+/Test#';
         }
         return $exclude;
     }
