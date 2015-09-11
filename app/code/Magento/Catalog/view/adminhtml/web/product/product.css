@@ -106,7 +106,7 @@
     position: absolute;
     left: 6px;
     bottom: 6px;
-    z-index: 3;
+    z-index: 10;
 }
 
 .admin__scope-old .image .action-delete:before {

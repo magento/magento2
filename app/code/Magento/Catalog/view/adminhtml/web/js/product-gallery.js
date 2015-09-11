@@ -314,7 +314,7 @@ define([
             dialogElement = $($template);
             dialogElement.modal({
                 'type': 'slide',
-                title: $.mage.__('Edit Image'),
+                title: $.mage.__('Image Detail'),
                 buttons: [],
                 opened: function() {
                     dialogElement.trigger('open');

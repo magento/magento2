@@ -10,7 +10,8 @@ define([
     'Magento_Ui/js/modal/modal',
     'mage/translate',
     'mage/backend/tree-suggest',
-    'mage/backend/validation'
+    'mage/backend/validation',
+    'Magento_ProductVideo/js/get-video-information'
 ], function ($) {
     'use strict';
 
@@ -38,11 +39,52 @@ define([
 
         _itemIdSelector: '#item_id',
 
+        _videoUrlSelector: '[name="video_url"]',
+
+        _videoUrlWidget: null,
+
+        _videoInformationBtnSelector: '[name="new_video_get"]',
+
+        _videoInformationGetBtn: null,
+
         _bind: function() {
             var events = {
                 'setImage': '_onSetImage'
             };
             this._on(events);
+
+            this._videoUrlWidget = jQuery(this._videoUrlSelector).videoData();
+            this._videoInformationGetBtn = jQuery(this._videoInformationBtnSelector);
+
+            this._videoInformationGetBtn.on('click', $.proxy(this._onGetVideoInformationClick, this));
+            this._videoUrlWidget.on("updated_video_information", $.proxy(this._onGetVideoInformationSuccess, this));
+            this._videoUrlWidget.on("error_updated_information", $.proxy(this._onGetVideoInformationError, this));
+        },
+
+        /**
+         * Fired when user click on button "Get video information"
+          * @private
+         */
+        _onGetVideoInformationClick: function() {
+            this._videoUrlWidget.trigger('update_video_information');
+        },
+
+        /**
+         * Fired when successfully received information about the video.
+         * @param e
+         * @param data
+         * @private
+         */
+        _onGetVideoInformationSuccess: function(e, data) {
+        },
+
+        /**
+         * Fired when receiving information about the video ended with error
+         * @param e
+         * @param data
+         * @private
+         */
+        _onGetVideoInformationError: function(e, data) {
         },
 
         /**
@@ -237,8 +279,8 @@ define([
                     this._addVideoClass(tmp.url);
                 }
             }
-
             this._bind();
+
             var widget = this;
             var uploader = jQuery(this._videoPreviewInputSelector);
             uploader.on('change', this._onImageInputChange.bind(this));
@@ -271,10 +313,16 @@ define([
                 }],
                 opened: function(e) {
                     $('#video_url').focus();
+                    var roles = $('.video_image_role');
+                    roles.prop('disabled', false);
                     var file = jQuery('#file_name').val();
+                    var modalTitleElement = $('.modal-title');
                     if(!file) {
+                        roles.prop('checked', $('.image.item').length < 1);
+                        modalTitleElement.text($.mage.__('Create Video'));
                         return;
                     }
+                    modalTitleElement.text($.mage.__('Edit Video'));
                     var imageData = widget._getImage(file);
                     widget._onPreview(null, imageData.url, false);
                 },
@@ -591,12 +639,6 @@ define([
         }
     });
     $('#group-fields-image-management > legend > span').text('Images and Videos');
-    $('#video_url').getVideoInformation();
-    $('#new_video_get').on('click', function(){
-      console.log($('#video_url').getVideoInformation('getVideoInformation'));
-    });
-    $('#video_url').on('focusout', function(){
-
-    });
+    
     return $.mage.newVideoDialog;
 });
