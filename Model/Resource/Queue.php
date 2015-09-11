@@ -100,6 +100,7 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 ['queue_message_status' => $this->getMessageStatusTable()],
                 'queue_message.id = queue_message_status.message_id',
                 [
+                    QueueManagement::MESSAGE_QUEUE_RELATION_ID => 'id',
                     QueueManagement::MESSAGE_QUEUE_ID => 'queue_id',
                     QueueManagement::MESSAGE_ID => 'message_id',
                     QueueManagement::MESSAGE_STATUS => 'status',
@@ -109,8 +110,38 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 ['queue' => $this->getQueueTable()],
                 'queue.id = queue_message_status.queue_id',
                 [QueueManagement::MESSAGE_QUEUE_NAME => 'name']
-            )->where('queue.name = ?', $queueName)->limit($limit);
+            )->where('queue.name = ?', $queueName)
+            ->where('queue_message_status.status = ?', QueueManagement::MESSAGE_STATUS_NEW)
+            ->order('queue_message_status.updated_at DESC')
+            ->limit($limit);
         return $connection->fetchAll($select);
+    }
+
+    /**
+     * Mark specified messages with 'in progress' status.
+     *
+     * @param int[] $relationIds
+     * @return int[] IDs of messages which should be taken in progress by current process.
+     */
+    public function takeMessagesInProgress($relationIds)
+    {
+        $takenMessagesRelationIds = [];
+        foreach ($relationIds as $relationId) {
+            $affectedRows = $this->getConnection()->update(
+                $this->getMessageStatusTable(),
+                ['status' => QueueManagement::MESSAGE_STATUS_IN_PROGRESS],
+                ['id = ?' => $relationId]
+            );
+            if ($affectedRows) {
+                /**
+                 * If status was set to 'in progress' by some other process (due to race conditions),
+                 * current process should not process the same message.
+                 * So message will be processed only if current process was able to change its status.
+                 */
+                $takenMessagesRelationIds[] = $relationId;
+            }
+        }
+        return $takenMessagesRelationIds;
     }
 
     /**

@@ -17,6 +17,7 @@ class QueueManagement
     const MESSAGE_UPDATED_AT = 'updated_at';
     const MESSAGE_QUEUE_ID = 'queue_id';
     const MESSAGE_QUEUE_NAME = 'queue_name';
+    const MESSAGE_QUEUE_RELATION_ID = 'relation_id';
 
     const MESSAGE_STATUS_NEW = 2;
     const MESSAGE_STATUS_IN_PROGRESS = 3;
@@ -71,13 +72,24 @@ class QueueManagement
      *          self::MESSAGE_STATUS => $status,
      *          self::MESSAGE_UPDATED_AT => $updatedAt,
      *          self::MESSAGE_QUEUE_NAME => $queueName
+     *          self::MESSAGE_QUEUE_RELATION_ID => $relationId
      *     ],
      *     ...
      * ]</pre>
      */
     public function readMessages($queue, $maxMessagesNumber)
     {
-        // TODO: Change messages status to MESSAGE_STATUS_IN_PROGRESS
-        return $this->messageResource->getMessages($queue, $maxMessagesNumber);
+        $selectedMessages = $this->messageResource->getMessages($queue, $maxMessagesNumber);
+        /* The logic below allows to prevent the same message being processed by several consumers in parallel */
+        foreach ($selectedMessages as $key => $message) {
+            unset($selectedMessages[$key]);
+            /* Set message status here to avoid extra reading from DB after it is updated */
+            $message[self::MESSAGE_STATUS] = self::MESSAGE_STATUS_IN_PROGRESS;
+            $selectedMessages[$message[self::MESSAGE_QUEUE_RELATION_ID]] = $message;
+        }
+        $selectedMessagesRelatedIds = array_keys($selectedMessages);
+        $takenMessagesRelationIds = $this->messageResource->takeMessagesInProgress($selectedMessagesRelatedIds);
+        $takenMessages = array_intersect_key($selectedMessages, array_flip($takenMessagesRelationIds));
+        return $takenMessages;
     }
 }

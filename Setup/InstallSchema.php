@@ -86,6 +86,12 @@ class InstallSchema implements InstallSchemaInterface
         $table = $installer->getConnection()->newTable(
             $installer->getTable('queue_message_status')
         )->addColumn(
+            'id',
+            \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
+            null,
+            ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+            'Relation ID'
+        )->addColumn(
             'queue_id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
