@@ -5,6 +5,10 @@
  */
 namespace Magento\Framework\View\Design\Fallback\Rule;
 
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
+use Magento\Framework\Module\Dir\Reader;
+
 /**
  * Class with simple substitution parameters to values
  */
@@ -25,15 +29,37 @@ class Simple implements RuleInterface
     protected $pattern;
 
     /**
+     * Component registry
+     *
+     * @var ComponentRegistrarInterface
+     */
+    private $componentRegistrar;
+
+    /**
+     * Module directory reader
+     *
+     * @var Reader
+     */
+    protected $moduleDirReader;
+
+    /**
      * Constructor
      *
      * @param string $pattern
+     * @param ComponentRegistrarInterface $componentRegistrar
+     * @param Reader $moduleDirReader
      * @param array $optionalParams
      */
-    public function __construct($pattern, array $optionalParams = [])
-    {
+    public function __construct(
+        $pattern,
+        ComponentRegistrarInterface $componentRegistrar,
+        Reader $moduleDirReader,
+        array $optionalParams = []
+    ) {
         $this->pattern = $pattern;
         $this->optionalParams = $optionalParams;
+        $this->componentRegistrar = $componentRegistrar;
+        $this->moduleDirReader = $moduleDirReader;
     }
 
     /**

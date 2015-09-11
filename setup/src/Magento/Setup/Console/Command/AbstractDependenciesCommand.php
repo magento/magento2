@@ -6,6 +6,7 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Component\ComponentRegistrar;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -33,13 +34,6 @@ abstract class AbstractDependenciesCommand extends Command
     {
         $this->setDefinition(
             [
-                new InputOption(
-                    self::INPUT_KEY_DIRECTORY,
-                    'd',
-                    InputOption::VALUE_REQUIRED,
-                    'Path to base directory for parsing',
-                    BP
-                ),
                 new InputOption(
                     self::INPUT_KEY_OUTPUT,
                     'o',
@@ -73,7 +67,7 @@ abstract class AbstractDependenciesCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            Files::setInstance(new Files($input->getOption(self::INPUT_KEY_DIRECTORY)));
+            Files::setInstance(new Files(new ComponentRegistrar(), BP));
             $this->buildReport($input->getOption(self::INPUT_KEY_OUTPUT));
             $output->writeln('<info>Report successfully processed.</info>');
         } catch (\Exception $e) {

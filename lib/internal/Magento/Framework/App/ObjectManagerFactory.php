@@ -253,7 +253,7 @@ class ObjectManagerFactory
                     new \Magento\Framework\Filesystem\Directory\ReadFactory($driverPool),
                     new \Magento\Framework\Filesystem\Directory\WriteFactory($driverPool)
                 ),
-                new \Magento\Framework\Config\FileIteratorFactory()
+                new \Magento\Framework\Config\FileIteratorFactory(new \Magento\Framework\Filesystem\Driver\File)
             );
             $schemaLocator = new \Magento\Framework\ObjectManager\Config\SchemaLocator();
             $validationState = new \Magento\Framework\App\Arguments\ValidationState($appMode);

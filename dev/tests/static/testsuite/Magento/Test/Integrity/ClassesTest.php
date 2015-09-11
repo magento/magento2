@@ -8,6 +8,7 @@
 namespace Magento\Test\Integrity;
 
 use Magento\Framework\App\Utility\Classes;
+use Magento\Framework\Component\ComponentRegistrar;
 
 class ClassesTest extends \PHPUnit_Framework_TestCase
 {
@@ -441,13 +442,16 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
 
     /**
      * This function is to remove special cases (if any) from the list of found bad classes
+     *
      * @param array $badClasses
      * @param string $file
      * @param string $contents
+     * @param string $namespacePath
      * @return array
      */
     protected function removeSpecialCases($badClasses, $file, $contents, $namespacePath)
     {
+        $componentRegistrar = new ComponentRegistrar();
         foreach ($badClasses as $badClass) {
             // Remove valid usages of Magento modules from the list
             // for example: 'Magento_Sales::actions_edit'
@@ -467,38 +471,49 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 unset($badClasses[array_search($badClass, $badClasses)]);
             }
 
-            // Remove usage of classes that do NOT using fully-qualified class names (possibly under same namespace)
-            $directories = [
-                '/app/code/',
-                '/lib/internal/',
-                '/dev/tools/',
-                '/dev/tests/api-functional/framework/',
-                '/dev/tests/functional/',
-                '/dev/tests/integration/framework/',
-                '/dev/tests/integration/framework/tests/unit/testsuite/',
-                '/dev/tests/integration/testsuite/',
-                '/dev/tests/integration/testsuite/Magento/Test/Integrity/',
-                '/dev/tests/performance/framework/',
-                '/dev/tests/static/framework/',
-                '/dev/tests/static/testsuite/',
-                '/setup/src/',
-            ];
-            // Full list of directories where there may be namespace classes
-            foreach ($directories as $directory) {
-                $fullPath = \Magento\Framework\App\Utility\Files::init()->getPathToSource() .
-                    $directory .
-                    $namespacePath .
-                    '/' .
-                    str_replace(
-                        '\\',
-                        '/',
-                        $badClass
-                    ) . '.php';
+            $namespaceParts = explode('/', $namespacePath, 3);
+            $moduleName = $namespaceParts[0] . '_' . $namespaceParts[1];
+            $moduleDir = $componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
+            if ($moduleDir) {
+                $fullPath = $moduleDir . '/' . $namespaceParts[2] . '/' . str_replace('\\', '/', $badClass) . '.php';
                 if (file_exists($fullPath)) {
                     unset($badClasses[array_search($badClass, $badClasses)]);
                     break;
                 }
+            } else {
+                // Remove usage of classes that do NOT using fully-qualified class names (possibly under same namespace)
+                $directories = [
+                    '/lib/internal/',
+                    '/dev/tools/',
+                    '/dev/tests/api-functional/framework/',
+                    '/dev/tests/functional/',
+                    '/dev/tests/integration/framework/',
+                    '/dev/tests/integration/framework/tests/unit/testsuite/',
+                    '/dev/tests/integration/testsuite/',
+                    '/dev/tests/integration/testsuite/Magento/Test/Integrity/',
+                    '/dev/tests/performance/framework/',
+                    '/dev/tests/static/framework/',
+                    '/dev/tests/static/testsuite/',
+                    '/setup/src/',
+                ];
+                // Full list of directories where there may be namespace classes
+                foreach ($directories as $directory) {
+                    $fullPath = \Magento\Framework\App\Utility\Files::init()->getPathToSource() .
+                        $directory .
+                        $namespacePath .
+                        '/' .
+                        str_replace(
+                            '\\',
+                            '/',
+                            $badClass
+                        ) . '.php';
+                    if (file_exists($fullPath)) {
+                        unset($badClasses[array_search($badClass, $badClasses)]);
+                        break;
+                    }
+                }
             }
+
             $referenceFile = implode('/', $classParts) . '/' . str_replace('\\', '/', $badClass) . '.php';
             if (file_exists($referenceFile)) {
                 unset($badClasses[array_search($badClass, $badClasses)]);

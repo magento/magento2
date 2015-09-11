@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Module\I18n\Dictionary;
 
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Module\I18n\ServiceLocator;
 
 class GeneratorTest extends \PHPUnit_Framework_TestCase
@@ -34,12 +35,35 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
      */
     protected $generator;
 
+    /**
+     * @var array
+     */
+    protected $backupRegistrar;
+
     protected function setUp()
     {
+        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
+        $paths = $reflection->getProperty('paths');
+        $paths->setAccessible(true);
+        $this->backupRegistrar = $paths->getValue();
+        $paths->setAccessible(false);
+
         $this->testDir = realpath(__DIR__ . '/_files');
         $this->expectedDir = $this->testDir . '/expected';
         $this->source = $this->testDir . '/source';
         $this->outputFileName = $this->testDir . '/translate.csv';
+
+        ComponentRegistrar::register(
+            ComponentRegistrar::MODULE,
+            'Magento_FirstModule',
+            $this->source . '/app/code/Magento/FirstModule'
+        );
+        ComponentRegistrar::register(
+            ComponentRegistrar::MODULE,
+            'Magento_SecondModule',
+            $this->source . '/app/code/Magento/SecondModule'
+        );
+
         $this->generator = ServiceLocator::getDictionaryGenerator();
 
     }
@@ -53,6 +77,12 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $property->setAccessible(true);
         $property->setValue(null);
         $property->setAccessible(false);
+
+        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
+        $paths = $reflection->getProperty('paths');
+        $paths->setAccessible(true);
+        $paths->setValue($this->backupRegistrar);
+        $paths->setAccessible(false);
     }
 
     public function testGenerationWithoutContext()

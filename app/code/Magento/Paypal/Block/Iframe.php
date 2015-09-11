@@ -61,10 +61,22 @@ class Iframe extends \Magento\Payment\Block\Form
     protected $_hssHelper;
 
     /**
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory
+     */
+    protected $readFactory;
+
+    /**
+     * @var \Magento\Framework\Module\Dir\Reader
+     */
+    protected $reader;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Paypal\Helper\Hss $hssHelper
+     * @param \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
+     * @param \Magento\Framework\Module\Dir\Reader $reader
      * @param array $data
      */
     public function __construct(
@@ -72,6 +84,8 @@ class Iframe extends \Magento\Payment\Block\Form
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Paypal\Helper\Hss $hssHelper,
+        \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory,
+        \Magento\Framework\Module\Dir\Reader $reader,
         array $data = []
     ) {
         $this->_hssHelper = $hssHelper;
@@ -79,6 +93,8 @@ class Iframe extends \Magento\Payment\Block\Form
         $this->_checkoutSession = $checkoutSession;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
+        $this->readFactory = $readFactory;
+        $this->reader = $reader;
     }
 
     /**
@@ -94,8 +110,7 @@ class Iframe extends \Magento\Payment\Block\Form
             $this->_paymentMethodCode = $paymentCode;
             $templatePath = str_replace('_', '', $paymentCode);
             $templateFile = "{$templatePath}/iframe.phtml";
-
-            $directory = $this->_filesystem->getDirectoryRead(DirectoryList::MODULES);
+            $directory = $this->readFactory->create($this->reader->getModuleDir('', 'Magento_Paypal'));
             $file = $this->resolver->getTemplateFileName($templateFile, ['module' => 'Magento_Paypal']);
             if ($file && $directory->isExist($directory->getRelativePath($file))) {
                 $this->setTemplate($templateFile);

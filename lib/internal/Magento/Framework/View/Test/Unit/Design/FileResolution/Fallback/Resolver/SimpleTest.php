@@ -8,6 +8,7 @@
 
 namespace Magento\Framework\View\Test\Unit\Design\FileResolution\Fallback\Resolver;
 
+use Magento\Framework\Component\ComponentRegistrar;
 use \Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -29,6 +30,11 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
      */
     private $object;
 
+    /**
+     * @var \Magento\Framework\Component\ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $componentRegistrar;
+
     protected function setUp()
     {
         $this->directory = $this->getMock('\Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
@@ -48,8 +54,11 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
             ->method('getRule')
             ->with('type')
             ->will($this->returnValue($this->rule));
+        $this->componentRegistrar = $this->getMockForAbstractClass(
+            '\Magento\Framework\Component\ComponentRegistrarInterface'
+        );
 
-        $this->object = new Simple($filesystem, $rulePool);
+        $this->object = new Simple($filesystem, $rulePool, $this->componentRegistrar);
     }
 
     /**
@@ -57,11 +66,12 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
      * @param string $themePath
      * @param string $locale
      * @param string $module
+     * @param string $moduleDir
      * @param array $expectedParams
      *
      * @dataProvider resolveDataProvider
      */
-    public function testResolve($area, $themePath, $locale, $module, array $expectedParams)
+    public function testResolve($area, $themePath, $locale, $module, $moduleDir, array $expectedParams)
     {
         $expectedPath = '/some/dir/file.ext';
         $theme = $themePath ? $this->getMockForTheme($themePath) : null;
@@ -79,6 +89,15 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
             ->method('isExist')
             ->with($expectedPath)
             ->will($this->returnValue(true));
+        if ($moduleDir == null) {
+            $this->componentRegistrar->expects($this->never())
+                ->method('getPath');
+        } else {
+            $this->componentRegistrar->expects($this->once())
+                ->method('getPath')
+                ->with(ComponentRegistrar::MODULE, $module)
+                ->will($this->returnValue($moduleDir));
+        }
        $actualPath = $this->object->resolve(
             'type', 'file.ext', $area, $theme, $locale, $module
         );
@@ -92,34 +111,34 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'no area' => [
-                null, 'magento_theme', 'en_US', 'Magento_Module',
+                null, 'magento_theme', 'en_US', 'Magento_Module', 'module/dir',
                 [
                     'theme' => 'magento_theme',
                     'locale' => 'en_US',
-                    'namespace' => 'Magento',
-                    'module' => 'Module',
+                    'module_name' => 'Magento_Module',
+                    'module_dir' => 'module/dir',
                 ],
             ],
             'no theme' => [
-                'frontend', null, 'en_US', 'Magento_Module',
+                'frontend', null, 'en_US', 'Magento_Module', 'module/dir',
                 [
                     'area' => 'frontend',
                     'locale' => 'en_US',
-                    'namespace' => 'Magento',
-                    'module' => 'Module',
+                    'module_name' => 'Magento_Module',
+                    'module_dir' => 'module/dir',
                 ],
             ],
             'no locale' => [
-                'frontend', 'magento_theme', null, 'Magento_Module',
+                'frontend', 'magento_theme', null, 'Magento_Module', 'module/dir',
                 [
                     'area' => 'frontend',
                     'theme' => 'magento_theme',
-                    'namespace' => 'Magento',
-                    'module' => 'Module',
+                    'module_name' => 'Magento_Module',
+                    'module_dir' => 'module/dir',
                 ],
             ],
             'no module' => [
-                'frontend', 'magento_theme', 'en_US', null,
+                'frontend', 'magento_theme', 'en_US', null, null,
                 [
                     'area' => 'frontend',
                     'theme' => 'magento_theme',
@@ -127,13 +146,13 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'all params' => [
-                'frontend', 'magento_theme', 'en_US', 'Magento_Module',
+                'frontend', 'magento_theme', 'en_US', 'Magento_Module', 'module/dir',
                 [
                     'area' => 'frontend',
                     'theme' => 'magento_theme',
                     'locale' => 'en_US',
-                    'namespace' => 'Magento',
-                    'module' => 'Module',
+                    'module_name' => 'Magento_Module',
+                    'module_dir' => 'module/dir',
                 ],
             ],
         ];

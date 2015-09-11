@@ -3842,4 +3842,13 @@ return [
         'Magento\Checkout\Model\Agreements\AgreementsProviderInterface',
         'Magento\CheckoutAgreements\Model\AgreementsProviderInterface'
     ],
+    [
+        'Magento\Framework\Module\ModuleRegistryInterface',
+        'Magento\Framework\Component\ComponentRegistrarInterface'
+    ],
+    [
+        'Magento\Framework\Module\ModuleRegistry',
+        'Magento\Framework\Component\ComponentRegistrar'
+    ],
+    ['Magento\Framework\App\Router\ActionList\Reader'],
 ];

@@ -46,6 +46,16 @@ class IframeTest extends \PHPUnit_Framework_TestCase
      */
     protected $paymentMock;
 
+    /**
+     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $reader;
+
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $readFactory;
+
     public function prepare()
     {
         $this->contextMock = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
@@ -55,6 +65,8 @@ class IframeTest extends \PHPUnit_Framework_TestCase
         $this->paymentDataMock = $this->getMock('Magento\Payment\Helper\Data', [], [], '', false);
         $this->quoteMock = $this->getMock('Magento\Quote\Model\Quote', ['getPayment', '__wakeup'], [], '', false);
         $this->paymentMock = $this->getMock('Magento\Quote\Model\Quote\Payment', [], [], '', false);
+        $this->reader = $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false);
+        $this->readFactory = $this->getMock('Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
 
         $this->checkoutSessionMock->expects($this->any())
             ->method('getQuote')
@@ -78,7 +90,9 @@ class IframeTest extends \PHPUnit_Framework_TestCase
             $this->orderFactoryMock,
             $this->checkoutSessionMock,
             $this->hssHelperMock,
-            $this->paymentDataMock
+            $this->paymentDataMock,
+            $this->readFactory,
+            $this->reader
         );
 
         $this->assertFalse($block->isScopePrivate());
@@ -106,7 +120,9 @@ class IframeTest extends \PHPUnit_Framework_TestCase
             $this->orderFactoryMock,
             $this->checkoutSessionMock,
             $this->hssHelperMock,
-            $this->paymentDataMock
+            $this->paymentDataMock,
+            $this->readFactory,
+            $this->reader
         );
         $this->assertEquals($expected, $block->getTransactionUrl());
     }
@@ -133,7 +149,9 @@ class IframeTest extends \PHPUnit_Framework_TestCase
             $this->orderFactoryMock,
             $this->checkoutSessionMock,
             $this->hssHelperMock,
-            $this->paymentDataMock
+            $this->paymentDataMock,
+            $this->readFactory,
+            $this->reader
         );
         $this->assertEquals($expected, $block->getTransactionUrl());
     }

@@ -938,4 +938,18 @@ return [
         'Magento\Setup\Model\ConfigOptionsList',
         'Magento\Framework\Config\ConfigOptionsListConstants::KEY_MODULES'
     ],
+    [
+        'SAMPLE_FILES_DIRECTORY',
+        'Magento\ImportExport\Controller\Adminhtml\Import\Download',
+        'Magento\ImportExport\Controller\Adminhtml\Import\Download::SAMPLE_FILES_MODULE'
+    ],
+    [
+        'MODULES',
+        'Magento\Framework\App\Filesystem\DirectoryList'
+    ],
+
+    [
+        'LOCALE',
+        'Magento\Framework\App\Filesystem\DirectoryList'
+    ],
 ];
