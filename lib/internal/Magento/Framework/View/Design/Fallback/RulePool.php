@@ -58,20 +58,40 @@ class RulePool
     private $themeFactory;
 
     /**
+     * Factory for modular switcher
+     *
+     * @var Rule\ModularSwitchFactory
+     */
+    private $modularSwitchFactory;
+
+    /**
+     * Factory for module rule
+     *
+     * @var Rule\ModuleFactory
+     */
+    private $moduleFactory;
+
+    /**
      * Constructor
      *
      * @param Filesystem $filesystem
      * @param Rule\SimpleFactory $simpleFactory
      * @param Rule\ThemeFactory $themeFactory
+     * @param Rule\ModuleFactory $moduleFactory
+     * @param Rule\ModularSwitchFactory $modularSwitchFactory
      */
     public function __construct(
         Filesystem $filesystem,
         Rule\SimpleFactory $simpleFactory,
-        Rule\ThemeFactory $themeFactory
+        Rule\ThemeFactory $themeFactory,
+        Rule\ModuleFactory $moduleFactory,
+        Rule\ModularSwitchFactory $modularSwitchFactory
     ) {
         $this->filesystem = $filesystem;
         $this->simpleFactory = $simpleFactory;
         $this->themeFactory = $themeFactory;
+        $this->moduleFactory = $moduleFactory;
+        $this->modularSwitchFactory = $modularSwitchFactory;
     }
 
     /**
@@ -93,23 +113,24 @@ class RulePool
      */
     protected function createTemplateFileRule()
     {
-        return new ModularSwitch(
+        return $this->modularSwitchFactory->create(
+            ['ruleNonModular' =>
             $this->themeFactory->create(
                 ['rule' => $this->simpleFactory->create(['pattern' => "<theme_dir>/templates"])]
             ),
-            new Composite(
+            'ruleModular' => new Composite(
                 [
                     $this->themeFactory->create(
                         ['rule' => $this->simpleFactory->create(['pattern' => "<theme_dir>/<module_name>/templates"])]
                     ),
-                    $this->simpleFactory->create(
-                        ['pattern' => "<module_dir>/view/<area>/templates"]
+                    $this->moduleFactory->create(
+                        ['rule' => $this->simpleFactory->create(['pattern' => "<module_dir>/view/<area>/templates"])]
                     ),
-                    $this->simpleFactory->create(
-                        ['pattern' => "<module_dir>/view/base/templates"]
+                    $this->moduleFactory->create(
+                        ['rule' => $this->simpleFactory->create(['pattern' => "<module_dir>/view/base/templates"])]
                     ),
                 ]
-            )
+            )]
         );
     }
 
@@ -120,19 +141,23 @@ class RulePool
      */
     protected function createFileRule()
     {
-        return new ModularSwitch(
-            $this->themeFactory->create(
+        return $this->modularSwitchFactory->create(
+            ['ruleNonModular' => $this->themeFactory->create(
                 ['rule' => $this->simpleFactory->create(['pattern' => "<theme_dir>"])]
             ),
-            new Composite(
+            'ruleModular' => new Composite(
                 [
                     $this->themeFactory->create(
                         ['rule' => $this->simpleFactory->create(['pattern' => "<theme_dir>/<module_name>"])]
                     ),
-                    $this->simpleFactory->create(['pattern' => "<module_dir>/view/<area>"]),
-                    $this->simpleFactory->create(['pattern' => "<module_dir>/view/base"]),
+                    $this->moduleFactory->create(
+                        ['rule' => $this->simpleFactory->create(['pattern' => "<module_dir>/view/<area>"])]
+                    ),
+                    $this->moduleFactory->create(
+                        ['rule' => $this->simpleFactory->create(['pattern' => "<module_dir>/view/base"])]
+                    ),
                 ]
-            )
+            )]
         );
     }
 
@@ -144,8 +169,8 @@ class RulePool
     protected function createViewFileRule()
     {
         $libDir = rtrim($this->filesystem->getDirectoryRead(DirectoryList::LIB_WEB)->getAbsolutePath(), '/');
-        return new ModularSwitch(
-            new Composite(
+        return $this->modularSwitchFactory->create(
+            ['ruleNonModular' => new Composite(
                 [
                     $this->themeFactory->create(
                         ['rule' =>
@@ -164,7 +189,7 @@ class RulePool
                     $this->simpleFactory->create(['pattern' => $libDir]),
                 ]
             ),
-            new Composite(
+            'ruleModular' => new Composite(
                 [
                     $this->themeFactory->create(
                         ['rule' =>
@@ -172,8 +197,7 @@ class RulePool
                             [
                                 $this->simpleFactory->create(
                                     [
-                                        'pattern' =>
-                                            "<theme_dir>/<module_name>/web/i18n/<locale>",
+                                        'pattern' => "<theme_dir>/<module_name>/web/i18n/<locale>",
                                         'optionalParams' => ['locale'],
                                     ]
                                 ),
@@ -183,22 +207,30 @@ class RulePool
                             ]
                         )]
                     ),
-                    $this->simpleFactory->create(
-                        [
-                            'pattern' => "<module_dir>/view/<area>/web/i18n/<locale>",
-                            'optionalParams' => ['locale']
-                        ]
+                    $this->moduleFactory->create(
+                        ['rule' => $this->simpleFactory->create(
+                            [
+                                'pattern' => "<module_dir>/view/<area>/web/i18n/<locale>",
+                                'optionalParams' => ['locale']
+                            ]
+                        )]
                     ),
-                    $this->simpleFactory->create(
-                        [
-                            'pattern' => "<module_dir>/view/base/web/i18n/<locale>",
-                            'optionalParams' => ['locale']
-                        ]
+                    $this->moduleFactory->create(
+                        ['rule' => $this->simpleFactory->create(
+                            [
+                                'pattern' => "<module_dir>/view/base/web/i18n/<locale>",
+                                'optionalParams' => ['locale']
+                            ]
+                        )]
                     ),
-                    $this->simpleFactory->create(['pattern' => "<module_dir>/view/<area>/web"]),
-                    $this->simpleFactory->create(['pattern' => "<module_dir>/view/base/web"]),
+                    $this->moduleFactory->create(
+                        ['rule' => $this->simpleFactory->create(['pattern' => "<module_dir>/view/<area>/web"])]
+                    ),
+                    $this->moduleFactory->create(
+                        ['rule' => $this->simpleFactory->create(['pattern' => "<module_dir>/view/base/web"])]
+                    ),
                 ]
-            )
+            )]
         );
     }
 
@@ -219,7 +251,9 @@ class RulePool
                         ['pattern' => "<theme_dir>/<module_name>/email"]
                     )]
                 ),
-                $this->simpleFactory->create(['pattern' => "<module_dir>/view/<area>/email"]),
+                $this->moduleFactory->create(
+                    ['rule' => $this->simpleFactory->create(['pattern' => "<module_dir>/view/<area>/email"])]
+                ),
             ]
         );
     }
