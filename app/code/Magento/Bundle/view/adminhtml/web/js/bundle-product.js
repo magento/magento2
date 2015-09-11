@@ -8,11 +8,12 @@
 /*global $H*/
 define([
     "jquery",
+    "Magento_Ui/js/modal/modal",
     "jquery/ui",
     "mage/translate",
     "Magento_Theme/js/sortable",
     "prototype"
-], function($){
+], function($, modal){
     'use strict';
 
     $.widget('mage.bundleProduct', {
@@ -113,61 +114,38 @@ define([
                         delete selectedProductList[$(this).val()];
                     }
                 });
-                $selectionGrid.dialog({
-                    title: $optionBox.find('input[name$="[title]"]').val() === '' ?
-                        $.mage.__('Add Products to New Option') :
-                        $.mage.__('Add Products to Option "%1"')
-                            .replace('%1',($('<div>').text($optionBox.find('input[name$="[title]"]').val()).html())),
-                    autoOpen: false,
-                    minWidth: 980,
-                    width: '75%',
-                    dialogClass: 'bundle',
-                    modal: true,
-                    resizable: true,
-                    buttons: [{
-                        text: $.mage.__('Add Selected Products'),
-                        'class': 'action-primary action-add',
-                        click: function() {
-                            $.each(selectedProductList, function() {
-                                window.bSelection.addRow(optionIndex, this);
-                            });
-                            bSelection.gridRemoval.each(
-                                function(pair) {
-                                    $optionBox.find('.col-sku').filter(function () {
-                                        return $.trim($(this).text()) === pair.key; // find row by SKU
-                                    }).closest('tr').find('button.delete').trigger('click');
-                                }
-                            );
-                            widget.refreshSortableElements();
-                            widget._updateSelectionsPositions.apply(widget.element);
-                            $selectionGrid.dialog('close');
-                        }
-                    }, {
-                        text: $.mage.__('Cancel'),
-                        'class': 'action-close',
-                        click: function() {
-                            $selectionGrid.dialog('close');
-                        }
-                    }],
-                    position: {
-                        my: 'left top',
-                        at: 'center top',
-                        of: 'body'
-                    },
-                    open: function () {
-                        $(this).closest('.ui-dialog').addClass('ui-dialog-active');
 
-                        var topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight() + 45;
-                        $(this).closest('.ui-dialog').css('margin-top', topMargin);
-
-                        $(this).addClass('admin__scope-old'); // ToDo UI: remove with old styles removal
-                    },
-                    close: function() {
-                        $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
-                        $(this).dialog('destroy');
-                    }
-                });
-
+                if (this.modal) {
+                    this.modal.html($selectionGrid.html());
+                } else {
+                    this.modal = $selectionGrid.modal({
+                        title: $optionBox.find('input[name$="[title]"]').val() === '' ?
+                            $.mage.__('Add Products to New Option') :
+                            $.mage.__('Add Products to Option "%1"')
+                                .replace('%1',($('<div>').text($optionBox.find('input[name$="[title]"]').val()).html())),
+                        modalClass: 'bundle',
+                        type: 'slide',
+                        buttons: [{
+                            text: $.mage.__('Add Selected Products'),
+                            'class': 'action-primary action-add',
+                            click: function () {
+                                $.each(selectedProductList, function() {
+                                    window.bSelection.addRow(optionIndex, this);
+                                });
+                                bSelection.gridRemoval.each(
+                                    function(pair) {
+                                        $optionBox.find('.col-sku').filter(function () {
+                                            return $.trim($(this).text()) === pair.key; // find row by SKU
+                                        }).closest('tr').find('button.delete').trigger('click');
+                                    }
+                                );
+                                widget.refreshSortableElements();
+                                widget._updateSelectionsPositions.apply(widget.element);
+                                widget.modal.modal('closeModal');
+                            }
+                        }]
+                    });
+                }
                 $.ajax({
                     url: bSelection.selectionSearchUrl,
                     dataType: 'html',
@@ -178,7 +156,7 @@ define([
                         form_key: FORM_KEY
                     },
                     success: function(data) {
-                        $selectionGrid.html(data).dialog('open');
+                        widget.modal.html(data).modal('openModal');
                     },
                     context: $('body'),
                     showLoader: true
