@@ -11,9 +11,10 @@
 <script>
 require([
     "jquery",
+    'Magento_Ui/js/modal/modal',
     "jquery/ui",
 	"Magento_Integration/js/integration"
-], function($){
+], function($, modal){
 
     window.integration = new Integration(
         '<?php echo $block->getUrl('*/*/permissionsDialog', ['id' => ':id', 'reauthorize' => ':isReauthorize']); ?>',
@@ -28,42 +29,61 @@ require([
      */
     $(function () {
         $('div#integrationGrid').on('click', 'button#delete', function (e) {
-            $('#integration-delete-container').dialog({
-                modal: true,
-                autoOpen: true,
-                resizable: false,
-                minHeight: 0,
-                width: '75%',
-                dialogClass: 'no-close ui-popup-message',
-                position: {
-                    my: 'left top',
-                    at: 'center top',
-                    of: 'body'
-                },
-                open: function () {
-                    $(this).closest('.ui-dialog').addClass('ui-dialog-active');
-
-                    var topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight();
-                    $(this).closest('.ui-dialog').css('margin-top', topMargin);
-                },
-                close: function () {
-                    $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
-                },
+            $('#integration-delete-container').modal({
+                type: 'popup',
                 buttons: [{
-                    text: $.mage.__('Delete'),
-                    'class': 'action-primary',
+                    text: 'Cancel',
+                    class: '',
                     click: function () {
-                        $(this).dialog("close");
-                        window.location.href = $(e.target).data('url');
+                        this.closeModal();
                     }
-                }, {
-                    text: $.mage.__('Cancel'),
-                    'class': 'action-close',
-                    click: function () {
-                        $(this).dialog('close');
+                },
+                    {
+                        text: 'Delete',
+                        class: '',
+                        click: function (e) {
+                            window.location.href = $(e.target).data('url');
+                        }
                     }
-                }]
-            });
+                ]
+            }).trigger('openModal');
+
+//            $('#integration-delete-container').dialog({
+//                modal: true,
+//                autoOpen: true,
+//                resizable: false,
+//                minHeight: 0,
+//                width: '75%',
+//                dialogClass: 'no-close ui-popup-message',
+//                position: {
+//                    my: 'left top',
+//                    at: 'center top',
+//                    of: 'body'
+//                },
+//                open: function () {
+//                    $(this).closest('.ui-dialog').addClass('ui-dialog-active');
+//
+//                    var topMargin = $(this).closest('.ui-dialog').children('.ui-dialog-titlebar').outerHeight();
+//                    $(this).closest('.ui-dialog').css('margin-top', topMargin);
+//                },
+//                close: function () {
+//                    $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
+//                },
+//                buttons: [{
+//                    text: $.mage.__('Delete'),
+//                    'class': 'action-primary',
+//                    click: function () {
+//                        $(this).dialog("close");
+//                        window.location.href = $(e.target).data('url');
+//                    }
+//                }, {
+//                    text: $.mage.__('Cancel'),
+//                    'class': 'action-close',
+//                    click: function () {
+//                        $(this).dialog('close');
+//                    }
+//                }]
+//            });
             e.stopPropagation();
         });
     });
