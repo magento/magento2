@@ -39,7 +39,7 @@ class InstallData implements InstallDataInterface
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         /** @var QuoteSetup $quoteSetup */
-        $quoteSetup = $this->quoteSetupFactory->create();
+        $quoteSetup = $this->quoteSetupFactory->create(['setup' => $setup]);
 
         /**
          * Install eav entity types to the eav/entity_type table
