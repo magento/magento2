@@ -280,14 +280,16 @@ require([
         }
       });
 
-      $.widget('mage.getVideoInformation', {
+      $.widget('mage.videoData', {
         options: {
           youtubeKey: 'AIzaSyDwqDWuw1lra-LnpJL2Mr02DYuFmkuRSns' //sample data, change later!!!!!!!!
         },
 
-        _UPDATE_VIDEO_INFORMATION_TRIGGER: 'update_video_information',
+        _REQUEST_VIDEO_INFORMATION_TRIGGER: 'update_video_information',
+        
+        _UPDATE_VIDEO_INFORMATION_TRIGGER: 'updated_video_information',
 
-        _ERROR_UPDATE_INFORMATION_TRIGGER: 'error_update_information',
+        _ERROR_UPDATE_INFORMATION_TRIGGER: 'error_updated_information',
 
         _videoInformation: null,
 
@@ -295,20 +297,16 @@ require([
           return this._videoInformation;
         },
 
-        onFocusOut : function (func) {
-
-        },
-
-        _init : function () {
+        _init: function () {
           jQuery(this.element).on("focusout", $.proxy(this._onBlurhandler, this));
         },
 
 
-        _onBlurhandler: function() {
+        _onRequestHandler: function() {
           var url = this.element.val();
           if(!url) {
             this._videoInformation = null;
-            this.element.trigger(this._UPDATE_VIDEO_INFORMATION_TRIGGER, null);
+            this.element.trigger(this._ERROR_UPDATE_INFORMATION_TRIGGER, "Video url is undefined");
             return;
           }
 
@@ -320,6 +318,10 @@ require([
           }
 
           function _onYouTubeLoaded(data) {
+            if(data.items.length < 1) {
+              this.element.trigger(this._ERROR_UPDATE_INFORMATION_TRIGGER, "Video not found");
+              return;
+            }
             var tmp       = data.items[0];
             var respData  = {
               duration: tmp.contentDetails.duration,
@@ -335,6 +337,10 @@ require([
           }
 
           function _onVimeoLoaded(data) {
+            if(data.length < 1) {
+              this.element.trigger(this._ERROR_UPDATE_INFORMATION_TRIGGER, "Video not found");
+              return;
+            }
             var tmp = data[0];
             var respData = {
               duration: tmp.duration,
@@ -350,12 +356,12 @@ require([
           }
 
           var type = videoInfo.type;
+          var id = videoInfo.id;
           if (type == 'youtube') {
-            $.get('https://www.googleapis.com/youtube/v3/videos?id=' + videoInfo.id + '&part=snippet,contentDetails,statistics,status&key=' + this.options.youtubeKey, $.proxy(_onYouTubeLoaded, this))
+            $.get('https://www.googleapis.com/youtube/v3/videos?id=' + id + '&part=snippet,contentDetails,statistics,status&key=' + this.options.youtubeKey, $.proxy(_onYouTubeLoaded, this))
           } else if (type == 'vimeo') {
-            $.get("http://vimeo.com/api/v2/video/" + videoInfo.id + ".json", $.proxy(_onVimeoLoaded, this));
+            $.get("http://vimeo.com/api/v2/video/" + id + ".json", $.proxy(_onVimeoLoaded, this));
           }
-          this.onFocusOut();
         },
 
         _formatYoutubeDuration: function (duration) {
