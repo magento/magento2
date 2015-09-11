@@ -7,10 +7,11 @@
 namespace Magento\Setup\Controller;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Module\FullModuleList;
 use Magento\Setup\Model\Cron\JobComponentUninstall;
 use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
-use Magento\Setup\Model\Updater as ModelUpdater;
+use Magento\Setup\Model\Updater;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
 
@@ -41,23 +42,31 @@ class StartUpdater extends AbstractActionController
     private $navigation;
 
     /**
-     * @var ModelUpdater
+     * @var \Magento\Setup\Model\Updater
      */
     private $updater;
 
     /**
+     * @var \Magento\Framework\Module\FullModuleList
+     */
+    private $moduleList;
+
+    /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Setup\Model\Navigation $navigation
-     * @param ModelUpdater $updater
+     * @param \Magento\Setup\Model\Updater $updater
+     * @param \Magento\Framework\Module\FullModuleList $moduleList
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Setup\Model\Navigation $navigation,
-        ModelUpdater $updater
+        \Magento\Setup\Model\Updater $updater,
+        \Magento\Framework\Module\FullModuleList $moduleList
     ) {
         $this->filesystem = $filesystem;
         $this->navigation = $navigation;
         $this->updater = $updater;
+        $this->moduleList = $moduleList;
     }
 
     /**
@@ -90,20 +99,26 @@ class StartUpdater extends AbstractActionController
                 $packages = $postPayload[self::KEY_POST_PACKAGES];
                 $jobType = $postPayload[self::KEY_POST_JOB_TYPE];
                 $this->createTypeFlag($jobType, $postPayload[self::KEY_POST_HEADER_TITLE]);
+
                 $additionalOptions = [];
-                if ($jobType == 'uninstall') {
-                    $additionalOptions = [
-                        JobComponentUninstall::DATA_OPTION => $postPayload[self::KEY_POST_DATA_OPTION]
-                    ];
-                    $cronTaskType = \Magento\Setup\Model\Cron\JobFactory::COMPONENT_UNINSTALL;
-                } else {
-                    $cronTaskType = ModelUpdater::TASK_TYPE_UPDATE;
-                }
+                $cronTaskType = '';
+                $this->getCronTaskConfigInfo($jobType, $postPayload, $additionalOptions, $cronTaskType);
+
                 $errorMessage .= $this->updater->createUpdaterTask(
                     $packages,
                     $cronTaskType,
                     $additionalOptions
                 );
+
+                // for module enable job types, we need to follow up with 'setup:upgrade' task to
+                // make sure enabled modules are properly registered
+                if ($jobType == 'enable') {
+                    $errorMessage .= $this->updater->createUpdaterTask(
+                        [],
+                        \Magento\Setup\Model\Cron\JobFactory::JOB_UPGRADE,
+                        []
+                    );
+                }
             }
         } else {
             $errorMessage .= 'Invalid request';
@@ -120,17 +135,72 @@ class StartUpdater extends AbstractActionController
      */
     private function validatePayload(array $postPayload)
     {
+        $jobType = $postPayload[self::KEY_POST_JOB_TYPE];
+        $errorMessage = '';
+        switch($jobType) {
+            case 'uninstall':
+                $errorMessage = $this->validateUninstallPayload($postPayload);
+                break;
+
+            case 'update':
+                $errorMessage = $this->validateUpdatePayload($postPayload);
+                break;
+
+            case 'enable':
+            case 'disable':
+                $errorMessage = $this->validateEnableDisablePayload($postPayload);
+                break;
+        }
+        return $errorMessage;
+    }
+
+    /**
+     * Validate 'uninstall' job type payload
+     *
+     * @param array $postPayload
+     * @return string
+     */
+    private function validateUninstallPayload(array $postPayload)
+    {
+        $errorMessage = '';
+        if (!isset($postPayload[self::KEY_POST_DATA_OPTION])) {
+            $errorMessage = 'Missing dataOption' . PHP_EOL;
+        }
+        return $errorMessage;
+    }
+
+    /**
+     * Validate 'update' job type payload
+     *
+     * @param array $postPayload
+     * @return string
+     */
+    private function validateUpdatePayload(array $postPayload)
+    {
         $errorMessage = '';
         $packages = $postPayload[self::KEY_POST_PACKAGES];
-        $jobType = $postPayload[self::KEY_POST_JOB_TYPE];
-        if ($jobType == 'uninstall' && !isset($postPayload[self::KEY_POST_DATA_OPTION])) {
-            $errorMessage .= 'Missing dataOption' . PHP_EOL;
-        }
         foreach ($packages as $package) {
-            if (!isset($package[self::KEY_POST_PACKAGE_NAME])
-                || ($jobType != 'uninstall' && !isset($package[self::KEY_POST_PACKAGE_VERSION]))
-            ) {
+            if ((!isset($package[self::KEY_POST_PACKAGE_NAME])) || (!isset($package[self::KEY_POST_PACKAGE_VERSION]))) {
                 $errorMessage .= 'Missing package information' . PHP_EOL;
+                break;
+            }
+        }
+        return $errorMessage;
+    }
+
+    /**
+     * Validate 'enable/disable' job type payload
+     *
+     * @param array $postPayload
+     * @return string
+     */
+    private function validateEnableDisablePayload(array $postPayload)
+    {
+        $errorMessage = '';
+        $packages = $postPayload[self::KEY_POST_PACKAGES];
+        foreach ($packages as $package) {
+            if (!$this->moduleList->has($package[self::KEY_POST_PACKAGE_NAME])) {
+                $errorMessage .= 'Invalid Magento module name: ' . $package[self::KEY_POST_PACKAGE_NAME] . PHP_EOL;
                 break;
             }
         }
@@ -160,5 +230,40 @@ class StartUpdater extends AbstractActionController
         $data['titles'] = $titles;
         $directoryWrite = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $directoryWrite->writeFile('.type.json', Json::encode($data));
+    }
+
+    /**
+     * Returns cron config info based on passed in job type
+     *
+     * @param string $jobType
+     * @param array $postPayload
+     * @param array $addtionalOptions
+     * @param string $cronTaskType
+     * @return void
+     */
+    private function getCronTaskConfigInfo($jobType, $postPayload, &$additionalOptions, &$cronTaskType)
+    {
+        $additionalOptions = [];
+        switch($jobType) {
+            case 'uninstall':
+                $additionalOptions = [
+                    JobComponentUninstall::DATA_OPTION => $postPayload[self::KEY_POST_DATA_OPTION]
+                ];
+                $cronTaskType = \Magento\Setup\Model\Cron\JobFactory::JOB_COMPONENT_UNINSTALL;
+                break;
+
+            case 'upgrade':
+            case 'update':
+                $cronTaskType = \Magento\Setup\Model\Updater::TASK_TYPE_UPDATE;
+                break;
+
+            case 'enable':
+                $cronTaskType = \Magento\Setup\Model\Cron\JobFactory::JOB_MODULE_ENABLE;
+                break;
+
+            case 'disable':
+                $cronTaskType = \Magento\Setup\Model\Cron\JobFactory::JOB_MODULE_DISABLE;
+                break;
+        }
     }
 }
