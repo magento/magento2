@@ -10,22 +10,22 @@
 
 <div class="product-addto-links" data-role="add-to-links">
     <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()) : ?>
-        <a href="#" data-post='<?php echo $block->getUpdateParams(); ?>' class="action towishlist updated" data-action="add-to-wishlist">
-            <span><?php echo __('Update Wish List') ?></span>
+        <a href="#" data-post='<?php /* @escapeNotVerified */ echo $block->getUpdateParams(); ?>' class="action towishlist updated" data-action="add-to-wishlist">
+            <span><?php /* @escapeNotVerified */ echo __('Update Wish List') ?></span>
         </a>
     <?php endif; ?>
     <?php $_product = $block->getProduct(); ?>
     <?php $_compareUrl = $this->helper('Magento\Catalog\Helper\Product\Compare')->getAddUrl($_product); ?>
     <?php if ($_compareUrl) : ?>
-        <a href="<?php echo $_compareUrl ?>" class="action tocompare">
-            <span><?php echo __('Add to Compare') ?></span>
+        <a href="<?php /* @escapeNotVerified */ echo $_compareUrl ?>" class="action tocompare">
+            <span><?php /* @escapeNotVerified */ echo __('Add to Compare') ?></span>
         </a>
     <?php endif; ?>
 </div>
 <script type="text/x-magento-init">
     {
         "body": {
-            "addToWishlist": <?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getWishlistOptions())?>
+            "addToWishlist": <?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getWishlistOptions())?>
         }
     }
 </script>
