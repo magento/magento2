@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Module\Dir;
 
-use Magento\Framework\Module\Dir as ModuleDir;
+use Magento\Framework\Module\Dir;
 use Magento\Framework\Module\ModuleListInterface;
 
 class ReverseResolver
@@ -18,15 +18,15 @@ class ReverseResolver
     protected $_moduleList;
 
     /**
-     * @var ModuleDir
+     * @var Dir
      */
     protected $_moduleDirs;
 
     /**
      * @param ModuleListInterface $moduleList
-     * @param ModuleDir $moduleDirs
+     * @param Dir $moduleDirs
      */
-    public function __construct(ModuleListInterface $moduleList, ModuleDir $moduleDirs)
+    public function __construct(ModuleListInterface $moduleList, Dir $moduleDirs)
     {
         $this->_moduleList = $moduleList;
         $this->_moduleDirs = $moduleDirs;

@@ -7,11 +7,9 @@
  */
 namespace Magento\Framework\Module\Dir;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\FileIterator;
 use Magento\Framework\Config\FileIteratorFactory;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\Module\Dir;
 use Magento\Framework\Module\ModuleListInterface;
 
@@ -39,31 +37,31 @@ class Reader
     protected $modulesList;
 
     /**
-     * @var Read
-     */
-    protected $modulesDirectory;
-
-    /**
      * @var FileIteratorFactory
      */
     protected $fileIteratorFactory;
 
     /**
+     * @var Filesystem\Directory\ReadFactory
+     */
+    protected $readFactory;
+
+    /**
      * @param Dir $moduleDirs
      * @param ModuleListInterface $moduleList
-     * @param Filesystem $filesystem
      * @param FileIteratorFactory $fileIteratorFactory
+     * @param Filesystem\Directory\ReadFactory $readFactory
      */
     public function __construct(
         Dir $moduleDirs,
         ModuleListInterface $moduleList,
-        Filesystem $filesystem,
-        FileIteratorFactory $fileIteratorFactory
+        FileIteratorFactory $fileIteratorFactory,
+        Filesystem\Directory\ReadFactory $readFactory
     ) {
         $this->moduleDirs = $moduleDirs;
         $this->modulesList = $moduleList;
         $this->fileIteratorFactory = $fileIteratorFactory;
-        $this->modulesDirectory = $filesystem->getDirectoryRead(DirectoryList::MODULES);
+        $this->readFactory = $readFactory;
     }
 
     /**
@@ -76,13 +74,15 @@ class Reader
     {
         $result = [];
         foreach ($this->modulesList->getNames() as $moduleName) {
-            $file = $this->getModuleDir('etc', $moduleName) . '/' . $filename;
-            $path = $this->modulesDirectory->getRelativePath($file);
-            if ($this->modulesDirectory->isExist($path)) {
-                $result[] = $path;
+            $moduleEtcDir = $this->getModuleDir('etc', $moduleName);
+            $file = $moduleEtcDir . '/' . $filename;
+            $directoryRead = $this->readFactory->create($moduleEtcDir);
+            $path = $directoryRead->getRelativePath($file);
+            if ($directoryRead->isExist($path)) {
+                $result[] = $file;
             }
         }
-        return $this->fileIteratorFactory->create($this->modulesDirectory, $result);
+        return $this->fileIteratorFactory->create($result);
     }
 
     /**
@@ -94,13 +94,15 @@ class Reader
     {
         $result = [];
         foreach ($this->modulesList->getNames() as $moduleName) {
-            $file = $this->getModuleDir('', $moduleName) . '/composer.json';
-            $path = $this->modulesDirectory->getRelativePath($file);
-            if ($this->modulesDirectory->isExist($path)) {
-                $result[] = $path;
+            $moduleDir = $this->getModuleDir('', $moduleName);
+            $file = $moduleDir . '/composer.json';
+            $directoryRead = $this->readFactory->create($moduleDir);
+            $path = $directoryRead->getRelativePath($file);
+            if ($directoryRead->isExist($path)) {
+                $result[] = $file;
             }
         }
-        return $this->fileIteratorFactory->create($this->modulesDirectory, $result);
+        return $this->fileIteratorFactory->create($result);
     }
 
     /**
@@ -112,15 +114,18 @@ class Reader
     {
         $actions = [];
         foreach ($this->modulesList->getNames() as $moduleName) {
-            $actionDir = $this->getModuleDir('Controller', $moduleName);
+            $actionDir = $this->getModuleDir(Dir::MODULE_CONTROLLER_DIR, $moduleName);
             if (!file_exists($actionDir)) {
                 continue;
             }
             $dirIterator = new \RecursiveDirectoryIterator($actionDir, \RecursiveDirectoryIterator::SKIP_DOTS);
             $recursiveIterator = new \RecursiveIteratorIterator($dirIterator, \RecursiveIteratorIterator::LEAVES_ONLY);
+            $namespace = str_replace('_', '\\', $moduleName);
             /** @var \SplFileInfo $actionFile */
             foreach ($recursiveIterator as $actionFile) {
-                $actions[] = $this->modulesDirectory->getRelativePath($actionFile->getPathname());
+                $actionName = str_replace('/', '\\', str_replace($actionDir, '', $actionFile->getPathname()));
+                $action = $namespace . "\\" . Dir::MODULE_CONTROLLER_DIR . substr($actionName, 0, -4);
+                $actions[strtolower($action)] = $action;
             }
         }
         return $actions;

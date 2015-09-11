@@ -7,6 +7,8 @@
 namespace Magento\Framework\View\Design\FileResolution\Fallback\Resolver;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
@@ -20,6 +22,8 @@ use Magento\Framework\View\Design\ThemeInterface;
 class Simple implements Fallback\ResolverInterface
 {
     /**
+     * Root directory
+     *
      * @var ReadInterface
      */
     protected $rootDirectory;
@@ -32,15 +36,27 @@ class Simple implements Fallback\ResolverInterface
     protected $rulePool;
 
     /**
+     * Component registrar
+     *
+     * @var ComponentRegistrarInterface
+     */
+    private $componentRegistrar;
+
+    /**
      * Constructor
      *
      * @param Filesystem $filesystem
      * @param RulePool $rulePool
+     * @param ComponentRegistrarInterface $componentRegistrar
      */
-    public function __construct(Filesystem $filesystem, RulePool $rulePool)
-    {
+    public function __construct(
+        Filesystem $filesystem,
+        RulePool $rulePool,
+        ComponentRegistrarInterface $componentRegistrar
+    ) {
         $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->rulePool = $rulePool;
+        $this->componentRegistrar = $componentRegistrar;
     }
 
     /**
@@ -57,7 +73,8 @@ class Simple implements Fallback\ResolverInterface
             }
         }
         if (!empty($module)) {
-            list($params['namespace'], $params['module']) = explode('_', $module, 2);
+            $params['module_name'] = $module;
+            $params['module_dir'] = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $module);
         }
         $path = $this->resolveFile($this->rulePool->getRule($type), $file, $params);
 

@@ -6,6 +6,7 @@
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Autoload\AutoloaderRegistry;
+use Magento\Framework\Component\ComponentRegistrar;
 
 require_once __DIR__ . '/../../../../app/bootstrap.php';
 require_once __DIR__ . '/autoload.php';
@@ -18,24 +19,15 @@ $logWriter = new \Zend_Log_Writer_Stream('php://output');
 $logWriter->setFormatter(new \Zend_Log_Formatter_Simple('%message%' . PHP_EOL));
 $logger = new \Zend_Log($logWriter);
 
-/** Copy test modules to app/code/Magento to make them visible for Magento instance */
-$pathToCommittedTestModules = __DIR__ . '/../_files/Magento';
-$pathToInstalledMagentoInstanceModules = __DIR__ . '/../../../../app/code/Magento';
-$iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($pathToCommittedTestModules));
-/** @var SplFileInfo $file */
-foreach ($iterator as $file) {
-    if (!$file->isDir()) {
-        $source = $file->getPathname();
-        $relativePath = substr($source, strlen($pathToCommittedTestModules));
-        $destination = $pathToInstalledMagentoInstanceModules . $relativePath;
-        $targetDir = dirname($destination);
-        if (!is_dir($targetDir)) {
-            mkdir($targetDir, 0755, true);
-        }
-        copy($source, $destination);
-    }
+// Register the modules under '_files/'
+$pathPattern = dirname(__DIR__) . '/_files/*/*/registration.php';
+$files = glob($pathPattern, GLOB_NOSORT);
+if ($files === false) {
+    throw new \RuntimeException('glob() returned error while searching in \'' . $pathPattern . '\'');
 }
-unset($iterator, $file);
+foreach ($files as $file) {
+    include $file;
+}
 
 /* Bootstrap the application */
 $settings = new \Magento\TestFramework\Bootstrap\Settings($testsBaseDir, get_defined_constants());
@@ -80,5 +72,7 @@ $bootstrap->runBootstrap();
 $application->initialize();
 
 \Magento\TestFramework\Helper\Bootstrap::setInstance(new \Magento\TestFramework\Helper\Bootstrap($bootstrap));
-\Magento\Framework\App\Utility\Files::setInstance(new \Magento\Framework\App\Utility\Files(BP));
+\Magento\Framework\App\Utility\Files::setInstance(
+    new \Magento\Framework\App\Utility\Files(new \Magento\Framework\Component\ComponentRegistrar(), BP)
+);
 unset($bootstrap, $application, $settings, $shell);

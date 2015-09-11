@@ -3,13 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-/**
- * Theme Customization Path
- */
 namespace Magento\Framework\View\Design\Theme\Customization;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 
 /**
  * Theme Customization Path
@@ -43,26 +41,28 @@ class Path
     protected $mediaDirectoryRead;
 
     /**
-     * Theme directory read
+     * Component registrar
      *
-     * @var \Magento\Framework\Filesystem\Directory\Read
+     * @var ComponentRegistrarInterface
      */
-    protected $themeDirectoryRead;
+    private $componentRegistrar;
 
     /**
      * Constructor
      *
      * @param \Magento\Framework\Filesystem $filesystem
+     * @param ComponentRegistrarInterface $componentRegistrar
      * @param string $filename
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
+        ComponentRegistrarInterface $componentRegistrar,
         $filename = \Magento\Framework\View\ConfigInterface::CONFIG_FILE_NAME
     ) {
         $this->filesystem = $filesystem;
         $this->filename = $filename;
         $this->mediaDirectoryRead = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
-        $this->themeDirectoryRead = $this->filesystem->getDirectoryRead(DirectoryList::THEMES);
+        $this->componentRegistrar = $componentRegistrar;
     }
 
     /**
@@ -90,7 +90,7 @@ class Path
     {
         $path = null;
         if ($theme->getFullPath()) {
-            $path = $this->themeDirectoryRead->getAbsolutePath($theme->getFullPath());
+            $path = $this->componentRegistrar->getPath(ComponentRegistrar::THEME, $theme->getFullPath());
         }
         return $path;
     }

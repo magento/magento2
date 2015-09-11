@@ -10,10 +10,10 @@
         <system>
             <full_page_cache>
                 <varnish3>
-                    <path>Magento/PageCache/etc/varnish3.vcl</path>
+                    <path>varnish3.vcl</path>
                 </varnish3>
                 <varnish4>
-                    <path>Magento/PageCache/etc/varnish4.vcl</path>
+                    <path>varnish4.vcl</path>
                 </varnish4>
                 <ttl>86400</ttl>
                 <caching_application>1</caching_application>

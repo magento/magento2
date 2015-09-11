@@ -57,7 +57,7 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
         /** @var $fallbackPool \Magento\Framework\View\Design\Fallback\RulePool */
         $fallbackPool = $objectManager->get('Magento\Framework\View\Design\Fallback\RulePool');
         self::$_fallbackRule = $fallbackPool->getRule(
-            \Magento\Framework\View\Design\Fallback\RulePool::TYPE_STATIC_FILE
+            $fallbackPool::TYPE_STATIC_FILE
         );
 
         self::$_viewFilesFallback = $objectManager->get(
@@ -219,9 +219,14 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
     {
         $result = [];
         $rootDir = self::_getRootDir();
-        foreach (['app/code', 'app/design'] as $subDir) {
+        $componentRegistrar = new \Magento\Framework\Component\ComponentRegistrar();
+        $dirs = array_merge(
+            $componentRegistrar->getPaths(\Magento\Framework\Component\ComponentRegistrar::MODULE),
+            [$rootDir . '/app/design']
+        );
+        foreach ($dirs as $dir) {
             $iterator = new \RecursiveIteratorIterator(
-                new \RecursiveDirectoryIterator($rootDir . "/{$subDir}", \RecursiveDirectoryIterator::SKIP_DOTS)
+                new \RecursiveDirectoryIterator($dir, \RecursiveDirectoryIterator::SKIP_DOTS)
             );
             $result = array_merge($result, iterator_to_array($iterator));
         }
@@ -250,7 +255,11 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
     protected static function _getArea($file)
     {
         $file = str_replace('\\', '/', $file);
-        $areaPatterns = ['#app/code/[^/]+/[^/]+/view/([^/]+)/#S', '#app/design/([^/]+)/#S'];
+        $areaPatterns = ['#app/design/([^/]+)/#S'];
+        $componentRegistrar = new \Magento\Framework\Component\ComponentRegistrar();
+        foreach ($componentRegistrar->getPaths(\Magento\Framework\Component\ComponentRegistrar::MODULE) as $moduleDir) {
+            $areaPatterns[] = '#' . $moduleDir . '/view/([^/]+)/#S';
+        }
         foreach ($areaPatterns as $pattern) {
             if (preg_match($pattern, $file, $matches)) {
                 return $matches[1];

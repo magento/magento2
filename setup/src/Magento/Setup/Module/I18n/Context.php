@@ -5,6 +5,10 @@
  */
 namespace Magento\Setup\Module\I18n;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Filesystem;
+
 /**
  *  Context
  */
@@ -27,6 +31,21 @@ class Context
     /**#@-*/
 
     /**
+     * @var ComponentRegistrar
+     */
+    private $componentRegistrar;
+
+    /**
+     * Constructor
+     *
+     * @param ComponentRegistrar $componentRegistrar
+     */
+    public function __construct(ComponentRegistrar $componentRegistrar)
+    {
+        $this->componentRegistrar = $componentRegistrar;
+    }
+
+    /**
      * Get context from file path in array(<context type>, <context value>) format
      * - for module: <Namespace>_<module name>
      * - for theme: <area>/<theme name>
@@ -38,10 +57,8 @@ class Context
      */
     public function getContextByPath($path)
     {
-        if ($value = strstr($path, '/app/code/')) {
+        if ($value = $this->getModuleName($path)) {
             $type = self::CONTEXT_TYPE_MODULE;
-            $value = explode('/', $value);
-            $value = $value[3] . '_' . $value[4];
         } elseif ($value = strstr($path, '/app/design/')) {
             $type = self::CONTEXT_TYPE_THEME;
             $value = explode('/', $value);
@@ -56,6 +73,22 @@ class Context
     }
 
     /**
+     * Try to get module name by path, return false if not a module
+     *
+     * @param string $path
+     * @return bool|string
+     */
+    private function getModuleName($path)
+    {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
+            if (strpos($path, $moduleDir) !== false) {
+                return $moduleName;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Get paths by context
      *
      * @param string $type
@@ -67,7 +100,8 @@ class Context
     {
         switch ($type) {
             case self::CONTEXT_TYPE_MODULE:
-                $path = 'app/code/' . str_replace('_', '/', $value);
+                $absolutePath = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $value);
+                $path = str_replace(BP . '/', '', $absolutePath);
                 break;
             case self::CONTEXT_TYPE_THEME:
                 $path = 'app/design/' . $value;

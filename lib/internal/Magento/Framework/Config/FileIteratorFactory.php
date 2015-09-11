@@ -9,14 +9,28 @@ namespace Magento\Framework\Config;
 class FileIteratorFactory
 {
     /**
+     * @var \Magento\Framework\Filesystem\DriverInterface
+     */
+    private $filesystemDriver;
+
+    /**
+     * Constructor
+     *
+     * @param \Magento\Framework\Filesystem\DriverInterface $filesystemDriver
+     */
+    public function __construct(\Magento\Framework\Filesystem\DriverInterface $filesystemDriver)
+    {
+        $this->filesystemDriver = $filesystemDriver;
+    }
+
+    /**
      * Create file iterator
      *
-     * @param \Magento\Framework\Filesystem\Directory\ReadInterface $readDirectory
-     * @param array $paths
+     * @param array $paths List of absolute paths
      * @return FileIterator
      */
-    public function create(\Magento\Framework\Filesystem\Directory\ReadInterface $readDirectory, $paths)
+    public function create($paths)
     {
-        return new \Magento\Framework\Config\FileIterator($readDirectory, $paths);
+        return new FileIterator($this->filesystemDriver, $paths);
     }
 }

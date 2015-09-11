@@ -29,12 +29,7 @@
     "license": [
         "proprietary"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/Paypal"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ]
     }
 }

@@ -6,7 +6,10 @@
 namespace Magento\Framework\Css\PreProcessor\File\Collector;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\File\CollectorInterface;
@@ -29,29 +32,43 @@ class Library implements CollectorInterface
     protected $libraryDirectory;
 
     /**
-     * @var ReadInterface
-     */
-    protected $themesDirectory;
-
-    /**
      * @var FileListFactory
      */
     protected $fileListFactory;
 
     /**
+     * @var ReadFactory
+     */
+    private $readFactory;
+
+    /**
+     * Component registry
+     *
+     * @var ComponentRegistrarInterface
+     */
+    private $componentRegistrar;
+
+    /**
      * @param FileListFactory $fileListFactory
      * @param Filesystem $filesystem
      * @param Factory $fileFactory
+     * @param ReadFactory $readFactory
+     * @param ComponentRegistrarInterface $componentRegistrar
      */
     public function __construct(
         FileListFactory $fileListFactory,
         Filesystem $filesystem,
-        Factory $fileFactory
+        Factory $fileFactory,
+        ReadFactory $readFactory,
+        ComponentRegistrarInterface $componentRegistrar
     ) {
         $this->fileListFactory = $fileListFactory;
-        $this->libraryDirectory = $filesystem->getDirectoryRead(DirectoryList::LIB_WEB);
-        $this->themesDirectory = $filesystem->getDirectoryRead(DirectoryList::THEMES);
+        $this->libraryDirectory = $filesystem->getDirectoryRead(
+            \Magento\Framework\App\Filesystem\DirectoryList::LIB_WEB
+        );
         $this->fileFactory = $fileFactory;
+        $this->readFactory = $readFactory;
+        $this->componentRegistrar = $componentRegistrar;
     }
 
     /**
@@ -69,8 +86,18 @@ class Library implements CollectorInterface
 
         foreach ($theme->getInheritedThemes() as $currentTheme) {
             $themeFullPath = $currentTheme->getFullPath();
-            $files = $this->themesDirectory->search("{$themeFullPath}/web/{$filePath}");
-            $list->replace($this->createFiles($this->themesDirectory, $theme, $files));
+            $directoryRead = $this->readFactory->create(
+                $this->componentRegistrar->getPath(
+                    \Magento\Framework\Component\ComponentRegistrar::THEME, $themeFullPath
+                )
+            );
+            $foundFiles = $directoryRead->search("web/{$filePath}");
+            $files = [];
+            foreach ($foundFiles as $foundFile) {
+                $foundFile = $directoryRead->getAbsolutePath($foundFile);
+                $files[] = $foundFile;
+            }
+            $list->replace($this->createFiles($directoryRead, $theme, $files));
         }
         return $list->getAll();
     }

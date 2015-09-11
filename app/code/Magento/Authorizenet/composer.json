@@ -18,12 +18,7 @@
     "license": [
         "proprietary"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/Authorizenet"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ]
     }
 }
