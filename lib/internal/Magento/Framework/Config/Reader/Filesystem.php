@@ -70,11 +70,6 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
     protected $_isValidated;
 
     /**
-     * @var \Magento\Framework\Config\DomFactory
-     */
-    protected $domFactory;
-
-    /**
      * Constructor
      *
      * @param \Magento\Framework\Config\FileResolverInterface $fileResolver
@@ -91,7 +86,6 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
         \Magento\Framework\Config\ConverterInterface $converter,
         \Magento\Framework\Config\SchemaLocatorInterface $schemaLocator,
         \Magento\Framework\Config\ValidationStateInterface $validationState,
-        \Magento\Framework\Config\DomFactory $domFactory,
         $fileName,
         $idAttributes = [],
         $domDocumentClass = 'Magento\Framework\Config\Dom',
@@ -107,7 +101,6 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
             $this->_isValidated ? $schemaLocator->getPerFileSchema() : null;
         $this->_domDocumentClass = $domDocumentClass;
         $this->_defaultScope = $defaultScope;
-        $this->domFactory = $domFactory;
     }
 
     /**
@@ -179,14 +172,7 @@ class Filesystem implements \Magento\Framework\Config\ReaderInterface
      */
     protected function _createConfigMerger($mergerClass, $initialContents)
     {
-        $result = $this->domFactory->createDom(
-            [
-                'xml' => $initialContents,
-                'idAttributes' => $this->_idAttributes,
-                'typeAttributeName' => null,
-                'schemaFile' => $this->_perFileSchema,
-            ]
-        );
+        $result = new $mergerClass($initialContents, $this->_idAttributes, null, $this->_perFileSchema);
         if (!$result instanceof \Magento\Framework\Config\Dom) {
             throw new \UnexpectedValueException(
                 "Instance of the DOM config merger is expected, got {$mergerClass} instead."
