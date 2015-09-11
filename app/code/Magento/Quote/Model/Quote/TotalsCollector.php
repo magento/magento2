@@ -101,7 +101,8 @@ class TotalsCollector
         'tax_shipping',
         'tax',
         'discount',
-        'custbalance'
+        'custbalance',
+        'weee',
     );
 
     /**

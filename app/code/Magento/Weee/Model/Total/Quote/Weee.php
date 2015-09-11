@@ -68,14 +68,21 @@ class Weee extends AbstractTotal
     protected $priceCurrency;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
      * @param \Magento\Weee\Helper\Data $weeeData
      * @param PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
         \Magento\Weee\Helper\Data $weeeData,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         PriceCurrencyInterface $priceCurrency
     ) {
         $this->priceCurrency = $priceCurrency;
+        $this->storeManager = $storeManager;
         $this->weeeData = $weeeData;
         $this->setCode('weee');
         $this->weeeCodeToItemMap = [];
@@ -84,19 +91,22 @@ class Weee extends AbstractTotal
     /**
      * Collect Weee amounts for the quote / order
      *
-     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface|\Magento\Quote\Model\Quote\Address $shippingAssignment
+     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return $this
      */
-    public function collect(\Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment, \Magento\Quote\Model\Quote\Address\Total $total)
-    {
+    public function collect(
+        \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment,
+        \Magento\Quote\Model\Quote\Address\Total $total
+    ) {
         AbstractTotal::collect($shippingAssignment, $total);
-        $this->_store = $shippingAssignment->getQuote()->getStore();
+        $this->_store = $this->storeManager->getStore();
         if (!$this->weeeData->isEnabled($this->_store)) {
             return $this;
         }
 
-        $items = $this->_getAddressItems($shippingAssignment);
+        $address = $shippingAssignment->getShipping()->getAddress();
+        $items = $this->_getAddressItems($address);
         if (!count($items)) {
             return $this;
         }
@@ -111,16 +121,16 @@ class Weee extends AbstractTotal
             if ($item->getHasChildren() && $item->isChildrenCalculated()) {
                 foreach ($item->getChildren() as $child) {
                     $this->_resetItemData($child);
-                    $this->_process($shippingAssignment, $child);
+                    $this->_process($address, $child);
                 }
                 $this->_recalculateParent($item);
             } else {
-                $this->_process($shippingAssignment, $item);
+                $this->_process($address, $item);
             }
         }
-        $shippingAssignment->setWeeeCodeToItemMap($this->weeeCodeToItemMap);
-        $shippingAssignment->setWeeeTotalExclTax($this->weeeTotalExclTax);
-        $shippingAssignment->setWeeeBaseTotalExclTax($this->weeeBaseTotalExclTax);
+        $total->setWeeeCodeToItemMap($this->weeeCodeToItemMap);
+        $total->setBaseTotalAmount($this->getCode(), $this->weeeBaseTotalExclTax);
+        $total->setTotalAmount($this->getCode(), $this->weeeTotalExclTax);
         return $this;
     }
 
@@ -322,12 +332,17 @@ class Weee extends AbstractTotal
      * Delegate this to WeeeTax collector
      *
      * @param \Magento\Quote\Model\Quote\Address|\Magento\Quote\Model\Quote\Address\Total $total
-     * @return $this
+     * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fetch(\Magento\Quote\Model\Quote\Address\Total $total)
     {
-        return $this;
+        return [
+            'code' => $this->getCode(),
+            'title' => __('FPT'),
+            'value' => $total->getTotalAmount($this->getCode()),
+            'area' => null,
+        ];
     }
 
     /**
