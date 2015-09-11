@@ -46,16 +46,12 @@ class Account
         \Closure $proceed,
         RequestInterface $request
     ) {
-        if (!$request->isDispatched()) {
-            $proceed($request);
-        }
-
         $action = strtolower($request->getActionName());
         $pattern = '/^(' . implode('|', $this->allowedActions) . ')$/i';
 
         if (!preg_match($pattern, $action)) {
             if (!$this->session->authenticate($subject)) {
-                $subject->getActionFlag()->set('', 'no-dispatch', true);
+                $subject->getActionFlag()->set('', ActionInterface::FLAG_NO_DISPATCH, true);
             }
         } else {
             $this->session->setNoReferer(true);
