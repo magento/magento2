@@ -115,7 +115,7 @@ require([ "jquery", "jquery/ui", "catalogGallery"], function( $ ) {
     _isVideoBase : function () { // we check if there is any video with BASE role, if there is any - play it as soon as the page loads, if it desktop
       var AllVideoData = this.options.VideoData;
       for (var VideoItem in AllVideoData) {
-        if (AllVideoData[VideoItem].mediaType === this.VID && AllVideoData[VideoItem].isBase && VidSetting.PlayIfBase) this.Base = true;
+        if (AllVideoData[VideoItem].mediaType === this.VID && AllVideoData[VideoItem].isBase && VidSetting.playIfBase) this.Base = true;
       }
     },
 
@@ -177,7 +177,7 @@ require([ "jquery", "jquery/ui", "catalogGallery"], function( $ ) {
 
     _createVideoContainer : function (videoData, $image) {
       if ($image.find('.'+this.PV).length === 0) { //dont touch anything if there is already <div> with data in current frame
-        $image.append('<div class="'+this.PV+'" data-related="'+VidSetting.showRelatedYT+'" data-loop="'+VidSetting.VideoAutoRestart+'" data-type="'+videoData.provider+'" data-code="'+videoData.id+'" data-width="100%" data-height="100%"></div>');
+        $image.append('<div class="'+this.PV+'" data-related="'+VidSetting.showRelated+'" data-loop="'+VidSetting.videoAutoRestart+'" data-type="'+videoData.provider+'" data-code="'+videoData.id+'" data-width="100%" data-height="100%"></div>');
       }
     },
 
