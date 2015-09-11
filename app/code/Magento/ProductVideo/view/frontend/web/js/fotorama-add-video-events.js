@@ -225,7 +225,6 @@ require([ "jquery", "jquery/ui", "catalogGallery"], function( $ ) {
       });
     }
   });
-
   $('.gallery-placeholder').on('fotorama:ready', function(){
     $(this).find('.fotorama').AddFotoramaVideoEvents();
   });
