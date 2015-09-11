@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content */
 $elementName = $block->getElement()->getName() . '[images]';
 ?>
@@ -28,7 +26,7 @@ $elementName = $block->getElement()->getName() . '[images]';
         </div>
         <?php echo $block->getChildHtml('additional_buttons'); ?>
         <div class="image video-placeholder">
-            <button id="add_video_button" title="New Video" type="button" class="action-default scalable" data-mage-init='{"openVideoModal" : {}}' data-ui-id="widget-button-1">
+            <button id="add_video_button" title="<?php echo __('New Video');?>" type="button" class="action-default scalable" data-mage-init='{"openVideoModal" : {}}' data-ui-id="widget-button-1">
                 <img class="spacer" src="<?php echo $block->getViewFileUrl('images/spacer.gif')?>"/>
                 <p class="image-placeholder-text"><?php echo __('Click here to add videos.'); ?></p>
             </button>

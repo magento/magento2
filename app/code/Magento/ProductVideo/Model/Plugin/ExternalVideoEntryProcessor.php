@@ -11,17 +11,16 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Catalog\Model\Product;
 use Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter;
 use Magento\Catalog\Model\Product\Attribute\Backend\Media as MediaBackendModel;
+use Magento\ProductVideo\Setup\InstallSchema;
 
 /**
- * Class ImageEntryProcessor
+ * Class External video entry processor
  */
 class ExternalVideoEntryProcessor
 {
     /**
-     * Video Data Table name
+     * Key to store additional data from other stores
      */
-    const GALLERY_VALUE_VIDEO_TABLE = 'catalog_product_entity_media_gallery_value_video';
-
     const ADDITIONAL_STORE_DATA_KEY = 'additional_store_data';
 
     /**
@@ -143,7 +142,7 @@ class ExternalVideoEntryProcessor
     protected function saveVideoValuesItem(array $item)
     {
         $this->resourceEntryMediaGallery->saveDataRow(
-            self::GALLERY_VALUE_VIDEO_TABLE,
+            InstallSchema::GALLERY_VALUE_VIDEO_TABLE,
             $this->prepareVideoRowDataForSave($item)
         );
     }
@@ -191,7 +190,7 @@ class ExternalVideoEntryProcessor
         $result = [];
         if (!empty($ids)) {
             $result = $this->resourceEntryMediaGallery->loadDataFromTableByValueId(
-                self::GALLERY_VALUE_VIDEO_TABLE,
+                InstallSchema::GALLERY_VALUE_VIDEO_TABLE,
                 $ids,
                 null,
                 $this->videoPropertiesDbMapping
@@ -303,13 +302,13 @@ class ExternalVideoEntryProcessor
         }
         $joinTable = [
             [
-                ['store_value' => $this->resourceEntryMediaGallery->getTable(self::GALLERY_VALUE_VIDEO_TABLE)],
+                ['store_value' => $this->resourceEntryMediaGallery->getTable(InstallSchema::GALLERY_VALUE_VIDEO_TABLE)],
                 $joinConditions,
                 $this->getVideoProperties()
             ]
         ];
         $result = $this->resourceEntryMediaGallery->loadDataFromTableByValueId(
-            self::GALLERY_VALUE_VIDEO_TABLE,
+            InstallSchema::GALLERY_VALUE_VIDEO_TABLE,
             $ids,
             \Magento\Store\Model\Store::DEFAULT_STORE_ID,
             [
