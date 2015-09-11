@@ -14,6 +14,7 @@ namespace Magento\Catalog\Model\Product\Attribute\Backend;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use \Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryProcessorPool;
+use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -172,7 +173,7 @@ class AbstractMedia extends \Magento\Eav\Model\Entity\Attribute\Backend\Abstract
                 $this->_mediaDirectory->copyFile($file, $destinationFile);
 
                 $storageHelper->saveFile($this->_mediaConfig->getTmpMediaShortUrl($fileName));
-                $this->_mediaDirectory->changePermissions($destinationFile, 0777);
+                $this->_mediaDirectory->changePermissions($destinationFile, DriverInterface::WRITEABLE_FILE_MODE);
             }
         } catch (\Exception $e) {
             throw new LocalizedException(__('We couldn\'t move this file: %1.', $e->getMessage()));
