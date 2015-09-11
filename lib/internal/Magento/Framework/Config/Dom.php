@@ -11,6 +11,8 @@
  */
 namespace Magento\Framework\Config;
 
+use Magento\Framework\Config\Dom\UrnResolver;
+
 /**
  * Class Dom
  *
@@ -33,45 +35,45 @@ class Dom
      *
      * @var \DOMDocument
      */
-    protected $_dom;
+    protected $dom;
 
     /**
      * @var Dom\NodeMergingConfig
      */
-    protected $_nodeMergingConfig;
+    protected $nodeMergingConfig;
 
     /**
      * Name of attribute that specifies type of argument node
      *
      * @var string|null
      */
-    protected $_typeAttributeName;
+    protected $typeAttributeName;
 
     /**
      * Schema validation file
      *
      * @var string
      */
-    protected $_schemaFile;
+    protected $schema;
 
     /**
      * Format of error messages
      *
      * @var string
      */
-    protected $_errorFormat;
+    protected $errorFormat;
 
     /**
      * Default namespace for xml elements
      *
      * @var string
      */
-    protected $_rootNamespace;
+    protected $rootNamespace;
 
     /**
-    Magento\Framework\Config\Dom\UrnResolver
+     * Magento\Framework\Config\Dom\UrnResolver
      */
-    private static $urnResolver;
+    private $urnResolver;
 
     /**
      * Build DOM with initial XML contents and specifying identifier attributes for merging
@@ -80,6 +82,7 @@ class Dom
      * The path to ID attribute name should not include any attribute notations or modifiers -- only node names
      *
      * @param string $xml
+     * @param UrnResolver $urnResolver
      * @param array $idAttributes
      * @param string $typeAttributeName
      * @param string $schemaFile
@@ -87,17 +90,19 @@ class Dom
      */
     public function __construct(
         $xml,
+        UrnResolver $urnResolver,
         array $idAttributes = [],
         $typeAttributeName = null,
         $schemaFile = null,
         $errorFormat = self::ERROR_FORMAT_DEFAULT
     ) {
-        $this->_schemaFile = $schemaFile;
-        $this->_nodeMergingConfig = new Dom\NodeMergingConfig(new Dom\NodePathMatcher(), $idAttributes);
-        $this->_typeAttributeName = $typeAttributeName;
-        $this->_errorFormat = $errorFormat;
-        $this->_dom = $this->_initDom($xml);
-        $this->_rootNamespace = $this->_dom->lookupNamespaceUri($this->_dom->namespaceURI);
+        $this->schema = $schemaFile;
+        $this->urnResolver = $urnResolver;
+        $this->nodeMergingConfig = new Dom\NodeMergingConfig(new Dom\NodePathMatcher(), $idAttributes);
+        $this->typeAttributeName = $typeAttributeName;
+        $this->errorFormat = $errorFormat;
+        $this->dom = $this->_initDom($xml);
+        $this->rootNamespace = $this->dom->lookupNamespaceUri($this->dom->namespaceURI);
     }
 
     /**
@@ -134,18 +139,18 @@ class Dom
         /* Update matched node attributes and value */
         if ($matchedNode) {
             //different node type
-            if ($this->_typeAttributeName && $node->hasAttribute(
-                $this->_typeAttributeName
+            if ($this->typeAttributeName && $node->hasAttribute(
+                $this->typeAttributeName
             ) && $matchedNode->hasAttribute(
-                $this->_typeAttributeName
+                $this->typeAttributeName
             ) && $node->getAttribute(
-                $this->_typeAttributeName
+                $this->typeAttributeName
             ) !== $matchedNode->getAttribute(
-                $this->_typeAttributeName
+                $this->typeAttributeName
             )
             ) {
                 $parentMatchedNode = $this->_getMatchedNode($parentPath);
-                $newNode = $this->_dom->importNode($node, true);
+                $newNode = $this->dom->importNode($node, true);
                 $parentMatchedNode->replaceChild($newNode, $matchedNode);
                 return;
             }
@@ -171,7 +176,7 @@ class Dom
         } else {
             /* Add node as is to the document under the same parent element */
             $parentMatchedNode = $this->_getMatchedNode($parentPath);
-            $newNode = $this->_dom->importNode($node, true);
+            $newNode = $this->dom->importNode($node, true);
             $parentMatchedNode->appendChild($newNode);
         }
     }
@@ -210,9 +215,9 @@ class Dom
      */
     protected function _getNodePathByParent(\DOMElement $node, $parentPath)
     {
-        $prefix = is_null($this->_rootNamespace) ? '' : self::ROOT_NAMESPACE_PREFIX . ':';
+        $prefix = is_null($this->rootNamespace) ? '' : self::ROOT_NAMESPACE_PREFIX . ':';
         $path = $parentPath . '/' . $prefix . $node->tagName;
-        $idAttribute = $this->_nodeMergingConfig->getIdAttribute($path);
+        $idAttribute = $this->nodeMergingConfig->getIdAttribute($path);
         if (is_array($idAttribute)) {
             $constraints = [];
             foreach ($idAttribute as $attribute) {
@@ -235,9 +240,9 @@ class Dom
      */
     protected function _getMatchedNode($nodePath)
     {
-        $xPath = new \DOMXPath($this->_dom);
-        if ($this->_rootNamespace) {
-            $xPath->registerNamespace(self::ROOT_NAMESPACE_PREFIX, $this->_rootNamespace);
+        $xPath = new \DOMXPath($this->dom);
+        if ($this->rootNamespace) {
+            $xPath->registerNamespace(self::ROOT_NAMESPACE_PREFIX, $this->rootNamespace);
         }
         $matchedNodes = $xPath->query($nodePath);
         $node = null;
@@ -260,15 +265,12 @@ class Dom
      * @return array of errors
      * @throws \Exception
      */
-    public static function validateDomDocument(
+    public function validateDomDocument(
         \DOMDocument $dom,
         $schema,
         $errorFormat = self::ERROR_FORMAT_DEFAULT
     ) {
-        if (!self::$urnResolver) {
-            self::$urnResolver = new Dom\UrnResolver();
-        }
-        $schema = self::$urnResolver->getRealPath($schema);
+        $schema = $this->urnResolver->getRealPath($schema);
         libxml_use_internal_errors(true);
         try {
             $result = $dom->schemaValidate($schema);
@@ -332,7 +334,7 @@ class Dom
      */
     public function getDom()
     {
-        return $this->_dom;
+        return $this->dom;
     }
 
     /**
@@ -346,8 +348,8 @@ class Dom
     {
         $dom = new \DOMDocument();
         $dom->loadXML($xml);
-        if ($this->_schemaFile) {
-            $errors = self::validateDomDocument($dom, $this->_schemaFile, $this->_errorFormat);
+        if ($this->schema) {
+            $errors = $this->validateDomDocument($dom, $this->schema, $this->errorFormat);
             if (count($errors)) {
                 throw new \Magento\Framework\Config\Dom\ValidationException(implode("\n", $errors));
             }
@@ -364,7 +366,7 @@ class Dom
      */
     public function validate($schemaFileName, &$errors = [])
     {
-        $errors = self::validateDomDocument($this->_dom, $schemaFileName, $this->_errorFormat);
+        $errors = $this->validateDomDocument($this->dom, $schemaFileName, $this->errorFormat);
         return !count($errors);
     }
 
@@ -376,7 +378,7 @@ class Dom
      */
     public function setSchemaFile($schemaFile)
     {
-        $this->_schemaFile = $schemaFile;
+        $this->schema = $schemaFile;
         return $this;
     }
 
