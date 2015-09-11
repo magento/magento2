@@ -283,7 +283,7 @@ require([
       $.widget('mage.getVideoInformation', {
         options: {
           youtubeKey: 'AIzaSyDwqDWuw1lra-LnpJL2Mr02DYuFmkuRSns', //sample data, change later!!!!!!!!
-          vimeoKey: '' //nah, we don't really need it
+          vimeoKey: ''
         },
 
         _UPDATE_VIDEO_INFORMATION_TRIGGER: 'update_video_information',
@@ -291,10 +291,6 @@ require([
         _ERROR_UPDATE_INFORMATION_TRIGGER: 'error_update_information',
 
         _videoInformation: null,
-
-        getVideoInformation: function() {
-          return this._videoInformation;
-        },
 
         _init: function () {
           jQuery(this.element).on("focusout", $.proxy(this._onBlurhandler, this));
@@ -309,7 +305,7 @@ require([
             return;
           }
 
-          var videoInfo = self._validateURL(url);
+          var videoInfo = this._validateURL(url);
           if(!videoInfo) {
             this._videoInformation = null;
             this.element.trigger(this._ERROR_UPDATE_INFORMATION_TRIGGER, "Invalid video url");
@@ -318,6 +314,7 @@ require([
 
           function _onYouTubeLoaded(data) {
             var tmp       = data.items[0];
+            console.log(tmp);
             var respData  = {
               duration: tmp.contentDetails.duration,
               channel: tmp.snippet.channelTitle,
@@ -325,7 +322,7 @@ require([
               uploaded: tmp.snippet.publishedAt,
               title: tmp.snippet.localized.title,
               description: tmp.snippet.description,
-              thumbnail: tmp.snippet.thumbnails.maxres.url
+              thumbnail: tmp.snippet.thumbnails.high.url
             };
             this._videoInformation  = respData;
             this.element.trigger(this._UPDATE_VIDEO_INFORMATION_TRIGGER, respData);
@@ -347,6 +344,7 @@ require([
           }
 
           var type = videoInfo.type;
+          var id = videoInfo.id;
           if (type == 'youtube') {
             $.get('https://www.googleapis.com/youtube/v3/videos?id=' + id + '&part=snippet,contentDetails,statistics,status&key=' + this.options.youtubeKey, $.proxy(_onYouTubeLoaded, this))
           } else if (type == 'vimeo') {

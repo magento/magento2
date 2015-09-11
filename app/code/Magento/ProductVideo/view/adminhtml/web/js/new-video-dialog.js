@@ -10,7 +10,8 @@ define([
     'Magento_Ui/js/modal/modal',
     'mage/translate',
     'mage/backend/tree-suggest',
-    'mage/backend/validation'
+    'mage/backend/validation',
+    'Magento_ProductVideo/js/get-video-information'
 ], function ($) {
     'use strict';
 
