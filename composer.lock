@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f3c15513605e0f2cdeed82b908d075d4",
+    "hash": "9ee56c3f84c250548f659b636198613e",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -2480,16 +2480,16 @@
         },
         {
             "name": "lusitanian/oauth",
-            "version": "v0.4.1",
+            "version": "v0.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Lusitanian/PHPoAuthLib.git",
-                "reference": "b617831ffe58564c3ae06772a8b20310929af2ea"
+                "reference": "26fdd6bc844afe6fb47854a8a50cf8062aaedefc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Lusitanian/PHPoAuthLib/zipball/b617831ffe58564c3ae06772a8b20310929af2ea",
-                "reference": "b617831ffe58564c3ae06772a8b20310929af2ea",
+                "url": "https://api.github.com/repos/Lusitanian/PHPoAuthLib/zipball/26fdd6bc844afe6fb47854a8a50cf8062aaedefc",
+                "reference": "26fdd6bc844afe6fb47854a8a50cf8062aaedefc",
                 "shasum": ""
             },
             "require": {
@@ -2543,7 +2543,7 @@
                 "oauth",
                 "security"
             ],
-            "time": "2015-09-09 23:42:55"
+            "time": "2015-09-11 02:30:20"
         },
         {
             "name": "pdepend/pdepend",
