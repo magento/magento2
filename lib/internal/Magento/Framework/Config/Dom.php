@@ -255,24 +255,23 @@ class Dom
      * Validate dom document
      *
      * @param \DOMDocument $dom
-     * @param string $schemaFileName
+     * @param string $schema Absolute schema file path or URN
      * @param string $errorFormat
      * @return array of errors
      * @throws \Exception
      */
     public static function validateDomDocument(
         \DOMDocument $dom,
-        $schemaFileName,
+        $schema,
         $errorFormat = self::ERROR_FORMAT_DEFAULT
     ) {
-        echo "schema: " . $schemaFileName . "\n";
         if (!self::$urnResolver) {
             self::$urnResolver = new Dom\UrnResolver();
         }
-        $schemaFileName = self::$urnResolver->getRealPath($schemaFileName);
+        $schema = self::$urnResolver->getRealPath($schema);
         libxml_use_internal_errors(true);
         try {
-            $result = $dom->schemaValidate($schemaFileName);
+            $result = $dom->schemaValidate($schema);
             $errors = [];
             if (!$result) {
                 $validationErrors = libxml_get_errors();
