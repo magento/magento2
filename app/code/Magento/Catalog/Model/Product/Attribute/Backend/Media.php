@@ -29,7 +29,7 @@ class Media extends Product\Attribute\Backend\AbstractMedia
         $value['values'] = [];
         $localAttributes = ['label', 'position', 'disabled'];
 
-        $mediaEntries = $this->_getResource()->loadProductGalleryByAttributeId($object, $attribute->getId());
+        $mediaEntries = $this->getResource()->loadProductGalleryByAttributeId($object, $attribute->getId());
         foreach ($mediaEntries as $mediaEntry) {
             foreach ($localAttributes as $localAttribute) {
                 if ($mediaEntry[$localAttribute] === null) {
@@ -173,11 +173,11 @@ class Media extends Product\Attribute\Backend\AbstractMedia
                 if (!empty($image['media_type'])) {
                     $data['media_type'] = $image['media_type'];
                 }
-                $image['value_id'] = $this->_getResource()->insertGallery($data);
-                $this->_getResource()->bindValueToEntity($image['value_id'], $object->getId());
+                $image['value_id'] = $this->getResource()->insertGallery($data);
+                $this->getResource()->bindValueToEntity($image['value_id'], $object->getId());
             }
 
-            $this->_getResource()->deleteGalleryValueInStore(
+            $this->getResource()->deleteGalleryValueInStore(
                 $image['value_id'],
                 $object->getId(),
                 $object->getStoreId()
@@ -194,10 +194,10 @@ class Media extends Product\Attribute\Backend\AbstractMedia
             $data['store_id'] = (int)$object->getStoreId();
             $data['entity_id'] = (int)$object->getId();
 
-            $this->_getResource()->insertGalleryValueInStore($data);
+            $this->getResource()->insertGalleryValueInStore($data);
         }
 
-        $this->_getResource()->deleteGallery($recordsToDelete);
+        $this->getResource()->deleteGallery($recordsToDelete);
         $this->removeDeletedImages($filesToDelete);
         $object->setData($attrCode, $value);
 
@@ -217,7 +217,7 @@ class Media extends Product\Attribute\Backend\AbstractMedia
             return $this;
         }
 
-        $this->_getResource()->duplicate(
+        $this->getResource()->duplicate(
             $attribute->getId(),
             isset($mediaGalleryData['duplicate']) ? $mediaGalleryData['duplicate'] : [],
             $product->getOriginalId(),
