@@ -7,6 +7,8 @@
  */
 namespace Magento\Store\App\Response;
 
+use Magento\Store\Api\StoreResolverInterface;
+
 class Redirect implements \Magento\Framework\App\Response\RedirectInterface
 {
     /**
@@ -214,7 +216,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
     }
 
     /**
-     * Normalizing path to avoid wrong store change
+     * Normalize path to avoid wrong store change
      *
      * @param string $refererUrl
      * @return string
@@ -246,7 +248,7 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
     }
 
     /**
-     * Normalizing special parts of referer query
+     * Normalize special parts of referer query
      *
      * @param array $refererQuery
      * @return array
@@ -256,11 +258,11 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
         $store = $this->_storeManager->getStore();
 
         if (
-            $store &&
-            !empty($refererQuery['___store']) &&
-            $refererQuery['___store'] !== $store->getCode()
+            $store
+            && !empty($refererQuery[StoreResolverInterface::PARAM_NAME])
+            && ($refererQuery[StoreResolverInterface::PARAM_NAME] !== $store->getCode())
         ) {
-            $refererQuery['___store'] = $store->getCode();
+            $refererQuery[StoreResolverInterface::PARAM_NAME] = $store->getCode();
         }
 
         return $refererQuery;
