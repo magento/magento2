@@ -10,7 +10,6 @@ use Magento\Catalog\Model\Product;
 use Magento\MediaStorage\Model\File\Uploader as FileUploader;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Class Media backend model
@@ -105,7 +104,6 @@ class Media extends Product\Attribute\Backend\AbstractMedia
                 $object->setData($mediaAttrCode, 'no_selection');
             }
 
-                $this->_mediaDirectory->changePermissions($destinationFile, DriverInterface::WRITEABLE_FILE_MODE);
             if (in_array($attrData, array_keys($newImages))) {
                 $object->setData($mediaAttrCode, $newImages[$attrData]['new_file']);
                 $object->setData($mediaAttrCode . '_label', $newImages[$attrData]['label']);
