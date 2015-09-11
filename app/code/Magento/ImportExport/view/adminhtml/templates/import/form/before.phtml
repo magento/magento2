@@ -32,6 +32,12 @@ require(['jquery', 'prototype'], function(jQuery){
         entityBehaviors: <?php echo $block->getEntityBehaviors() ?>,
 
         /**
+         * Behaviour notes for import entities
+         * @type {Array}
+         */
+        entityBehaviorsNotes: <?php echo $block->getEntityBehaviorsNotes() ?>,
+
+        /**
          * Base url
          * @type {string}
          */
@@ -128,6 +134,25 @@ require(['jquery', 'prototype'], function(jQuery){
                 this.showBehavior(false);
                 this.showUploadFile(false);
                 this.showSampleFile(false);
+            }
+            this.handleImportBehaviorSelector();
+        },
+
+        /**
+         * Handle value change in behavior selector
+         */
+        handleImportBehaviorSelector: function() {
+            var entity = jQuery('#entity');
+            if (entity && entity.val()) {
+                var notes = this.entityBehaviorsNotes[entity.val()];
+                var requiredBehavior = this.entityBehaviors[entity.val()];
+                var behaviorInput = jQuery('#' + requiredBehavior);
+                var behavior = behaviorInput && behaviorInput.val();
+                if (behavior && notes[behavior]) {
+                    jQuery('#' + requiredBehavior + '-note').html(notes[behavior]);
+                } else {
+                    jQuery('#' + requiredBehavior + '-note').html('');
+                }
             }
         },
 
