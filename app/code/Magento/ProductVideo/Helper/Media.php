@@ -28,7 +28,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Video stop attribute
      */
-    const NODE_CONFIG_SHOW_RELATED_YOUTUBE = 'show_related_yt';
+    const NODE_CONFIG_SHOW_RELATED = 'show_related';
 
     /**
      * Video color attribute
@@ -102,7 +102,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return mixed
      */
-    public function getShowRelatedYtAttribute()
+    public function getShowRelatedAttribute()
     {
         return $this->cachedVideoConfig->getVideoAttributeValue(
             self::MODULE_NAME,

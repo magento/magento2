@@ -177,7 +177,7 @@ require([ "jquery", "jquery/ui", "catalogGallery"], function( $ ) {
 
     _createVideoContainer : function (videoData, $image) {
       if ($image.find('.'+this.PV).length === 0) { //dont touch anything if there is already <div> with data in current frame
-        $image.append('<div class="'+this.PV+'" data-related="'+VidSetting.showRelatedYT+'" data-loop="'+VidSetting.videoAutoRestart+'" data-type="'+videoData.provider+'" data-code="'+videoData.id+'" data-width="100%" data-height="100%"></div>');
+        $image.append('<div class="'+this.PV+'" data-related="'+VidSetting.showRelated+'" data-loop="'+VidSetting.videoAutoRestart+'" data-type="'+videoData.provider+'" data-code="'+videoData.id+'" data-width="100%" data-height="100%"></div>');
       }
     },
 

@@ -73,7 +73,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
     {
         $videoSettingData[] = [
             'playIfBase' => $this->mediaHelper->getPlayIfBaseAttribute(),
-            'showRelatedYT' => $this->mediaHelper->getShowRelatedYtAttribute(),
+            'showRelated' => $this->mediaHelper->getShowRelatedAttribute(),
             'videoAutoRestart' => $this->mediaHelper->getVideoAutoRestartAttribute(),
         ];
         return $this->jsonEncoder->encode($videoSettingData);

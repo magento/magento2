@@ -75,7 +75,7 @@
                 <xs:complexType>
                     <xs:sequence>
                         <xs:element name="play_if_base" type="xs:boolean" minOccurs="0"/>
-                        <xs:element name="show_related_yt" type="xs:boolean" minOccurs="0"/>
+                        <xs:element name="show_related" type="xs:boolean" minOccurs="0"/>
                         <xs:element name="video_auto_restart" type="xs:boolean" minOccurs="0"/>
                     </xs:sequence>
                     <xs:attribute name="id" type="xs:string" use="required"/>
@@ -83,7 +83,7 @@
                         <xs:simpleType>
                             <xs:restriction base="xs:string">
                                 <xs:enumeration value="play_if_base"/>
-                                <xs:enumeration value="show_related_yt"/>
+                                <xs:enumeration value="show_related"/>
                                 <xs:enumeration value="video_auto_restart"/>
                             </xs:restriction>
                         </xs:simpleType>
