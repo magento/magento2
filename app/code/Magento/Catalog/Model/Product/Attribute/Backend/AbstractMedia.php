@@ -13,7 +13,6 @@ namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
-use \Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryProcessorPool;
 use Magento\Framework\Filesystem\DriverInterface;
 
 /**
@@ -157,7 +156,7 @@ class AbstractMedia extends \Magento\Eav\Model\Entity\Attribute\Backend\Abstract
         $dispretionPath = \Magento\MediaStorage\Model\File\Uploader::getDispretionPath($fileName);
         $fileName = $dispretionPath . '/' . $fileName;
 
-        $fileName = $this->_getNotDuplicatedFilename($fileName, $dispretionPath);
+        $fileName = $this->getNotDuplicatedFilename($fileName, $dispretionPath);
 
         $destinationFile = $this->mediaConfig->getTmpMediaPath($fileName);
 
@@ -172,7 +171,7 @@ class AbstractMedia extends \Magento\Eav\Model\Entity\Attribute\Backend\Abstract
             } else {
                 $this->mediaDirectory->copyFile($file, $destinationFile);
 
-                $storageHelper->saveFile($this->_mediaConfig->getTmpMediaShortUrl($fileName));
+                $storageHelper->saveFile($this->mediaConfig->getTmpMediaShortUrl($fileName));
                 $this->mediaDirectory->changePermissions($destinationFile, DriverInterface::WRITEABLE_FILE_MODE);
             }
         } catch (\Exception $e) {
@@ -315,9 +314,9 @@ class AbstractMedia extends \Magento\Eav\Model\Entity\Attribute\Backend\Abstract
         $mediaAttributeCodes = array_keys($product->getMediaAttributes());
 
         if (is_array($mediaAttribute)) {
-            foreach ($mediaAttribute as $atttribute) {
-                if (in_array($atttribute, $mediaAttributeCodes)) {
-                    $product->setData($atttribute, null);
+            foreach ($mediaAttribute as $attribute) {
+                if (in_array($attribute, $mediaAttributeCodes)) {
+                    $product->setData($attribute, null);
                 }
             }
         } elseif (in_array($mediaAttribute, $mediaAttributeCodes)) {
@@ -357,7 +356,7 @@ class AbstractMedia extends \Magento\Eav\Model\Entity\Attribute\Backend\Abstract
      *
      * @return \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media
      */
-    protected function _getResource()
+    protected function getResource()
     {
         return $this->resourceModel;
     }
@@ -381,7 +380,7 @@ class AbstractMedia extends \Magento\Eav\Model\Entity\Attribute\Backend\Abstract
     {
         $file = $this->getFilenameFromTmp($file);
 
-        $destinationFile = $this->_getUniqueFileName($file, true);
+        $destinationFile = $this->getUniqueFileName($file, true);
         if ($this->fileStorageDb->checkDbUsage()) {
             $this->fileStorageDb->copyFile(
                 $this->mediaDirectory->getAbsolutePath($this->mediaConfig->getTmpMediaShortUrl($file)),
@@ -404,7 +403,7 @@ class AbstractMedia extends \Magento\Eav\Model\Entity\Attribute\Backend\Abstract
      * @param bool $forTmp
      * @return string
      */
-    protected function _getUniqueFileName($file, $forTmp = false)
+    protected function getUniqueFileName($file, $forTmp = false)
     {
         if ($this->fileStorageDb->checkDbUsage()) {
             $destFile = $this->fileStorageDb->getUniqueFilename(
@@ -432,7 +431,7 @@ class AbstractMedia extends \Magento\Eav\Model\Entity\Attribute\Backend\Abstract
      * @param string $dispretionPath
      * @return string
      */
-    protected function _getNotDuplicatedFilename($fileName, $dispretionPath)
+    protected function getNotDuplicatedFilename($fileName, $dispretionPath)
     {
         $fileMediaName = $dispretionPath . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
             $this->mediaConfig->getMediaPath($fileName)
@@ -443,9 +442,9 @@ class AbstractMedia extends \Magento\Eav\Model\Entity\Attribute\Backend\Abstract
 
         if ($fileMediaName != $fileTmpMediaName) {
             if ($fileMediaName != $fileName) {
-                return $this->_getNotDuplicatedFileName($fileMediaName, $dispretionPath);
+                return $this->getNotDuplicatedFilename($fileMediaName, $dispretionPath);
             } elseif ($fileTmpMediaName != $fileName) {
-                return $this->_getNotDuplicatedFilename($fileTmpMediaName, $dispretionPath);
+                return $this->getNotDuplicatedFilename($fileTmpMediaName, $dispretionPath);
             }
         }
 
@@ -462,7 +461,7 @@ class AbstractMedia extends \Magento\Eav\Model\Entity\Attribute\Backend\Abstract
     {
         $data = [];
         $images = (array)$object->getData($this->getAttribute()->getName());
-        $tableName = $this->_getResource()->getMainTable();
+        $tableName = $this->getResource()->getMainTable();
         foreach ($images['images'] as $value) {
             if (empty($value['value_id'])) {
                 continue;
