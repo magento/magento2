@@ -222,7 +222,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             $file = str_replace('/', '\\', $file);
             $filePath = preg_replace($patterns, $replacements, $file);
             $className = substr($filePath, 0, -4);
-            if (class_exists($className)) {
+            if (class_exists($className, false)) {
                 $file = str_replace('\\', DIRECTORY_SEPARATOR, $file);
                 $classes[$file] = $className;
             }
