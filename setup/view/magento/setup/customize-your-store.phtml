@@ -38,7 +38,7 @@
                     class="form-el-checkbox"
                     type="checkbox"
                     ng-model="store.useSampleData"
-                    <?php echo $this->isSampledataEnabled ? '' : 'disabled' ?>
+                    ng-disabled="<?php echo $this->isSampledataEnabled ? 'false' : 'true' ?> || !store.sampleDataModuleSelected"
                     >
                 <label class="form-label" for="useSampleData">
                     Use Sample Data
