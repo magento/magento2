@@ -286,10 +286,7 @@ class TotalsCollector
         $shipping->setMethod($quote->getShippingAddress()->getShippingMethod());
         $shipping->setAddress($quote->getShippingAddress());
         $shippingAssignment->setShipping($shipping);
-
-        /** TODO: ship items for current address only */
         $shippingAssignment->setItems($address->getAllItems());
-
 
         /** @todo Refactor this code \Magento\Quote\Model\Observer\Frontend\Quote\Address\CollectTotals::dispatch */
         $this->eventManager->dispatch(
@@ -305,7 +302,8 @@ class TotalsCollector
             }
             $collector->collect($quote, $shippingAssignment, $total);
         }
-//        $address->addData($total->getData());
+        $address->addData($total->getData());
+        $address->setAppliedTaxes($total->getAppliedTaxes());
 
         /**
          * @todo Refactor client's code
