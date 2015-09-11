@@ -20,19 +20,19 @@
 <?php if ($_count): ?>
     <div class="block filter">
         <div class="title">
-            <strong><?php echo __('Shop By') ?></strong>
+            <strong><?php /* @escapeNotVerified */ echo __('Shop By') ?></strong>
         </div>
         <div class="content">
-            <strong class="subtitle"><?php echo __('Shopping Options') ?></strong>
+            <strong class="subtitle"><?php /* @escapeNotVerified */ echo __('Shopping Options') ?></strong>
             <dl class="options" id="narrow-by-list2">
-                <dt><?php echo __('Category') ?></dt>
+                <dt><?php /* @escapeNotVerified */ echo __('Category') ?></dt>
                 <dd>
                     <ol class="items">
                         <?php foreach ($_categories as $_category): ?>
                             <?php if ($_category->getIsActive()): ?>
                                 <li class="item">
-                                    <a href="<?php echo $block->getCategoryUrl($_category) ?>"<?php if ($block->isCategoryActive($_category)): ?> class="current"<?php endif; ?>><?php echo $block->escapeHtml($_category->getName()) ?></a>
-                                    <span class="count"><?php echo $_category->getProductCount() ?></span>
+                                    <a href="<?php /* @escapeNotVerified */ echo $block->getCategoryUrl($_category) ?>"<?php if ($block->isCategoryActive($_category)): ?> class="current"<?php endif; ?>><?php echo $block->escapeHtml($_category->getName()) ?></a>
+                                    <span class="count"><?php /* @escapeNotVerified */ echo $_category->getProductCount() ?></span>
                                 </li>
                             <?php endif; ?>
                         <?php endforeach ?>

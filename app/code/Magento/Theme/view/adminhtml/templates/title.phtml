@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * @var $block \Magento\Theme\Block\Html\Title
  */
@@ -12,7 +14,7 @@ $titleClass = ($block->getTitleClass()) ? ' ' . $block->getTitleClass() : '';
 $title = $block->escapeHtml($block->getPageTitle());
 ?>
 
-<div class="page-title-wrapper<?php echo $titleClass; ?>">
-    <h1 class="page-title"<?php echo $titleId?>><?php echo $title ?></h1>
+<div class="page-title-wrapper<?php /* @escapeNotVerified */ echo $titleClass; ?>">
+    <h1 class="page-title"<?php /* @escapeNotVerified */ echo $titleId?>><?php /* @escapeNotVerified */ echo $title ?></h1>
     <?php echo $block->getChildHtml(); ?>
 </div>
