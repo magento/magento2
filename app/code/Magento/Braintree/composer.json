@@ -27,12 +27,7 @@
   "license": [
     "proprietary"
   ],
-  "extra": {
-    "map": [
-      [
-        "*",
-        "Magento/Braintree"
-      ]
-    ]
+  "autoload": {
+    "files": [ "registration.php" ]
   }
 }

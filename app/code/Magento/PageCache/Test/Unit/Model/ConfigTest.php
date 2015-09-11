@@ -26,12 +26,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $_cacheState;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Module\Dir\Reader
+     */
+    protected $moduleReader;
+
+    /**
      * setUp all mocks and data function
      */
     public function setUp()
     {
-        $filesystemMock =
-            $this->getMock('Magento\Framework\Filesystem', ['getDirectoryRead'], [], '', false);
+        $readFactoryMock = $this->getMock('Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
         $this->_coreConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_cacheState = $this->getMockForAbstractClass('Magento\Framework\App\Cache\StateInterface');
 
@@ -42,12 +46,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $filesystemMock->expects(
-            $this->once()
+        $readFactoryMock->expects(
+            $this->any()
         )->method(
-            'getDirectoryRead'
-        )->with(
-            DirectoryList::MODULES
+            'create'
         )->will(
             $this->returnValue($modulesDirectoryMock)
         );
@@ -93,10 +95,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             )
         );
 
+        $this->moduleReader = $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false);
         $this->_model = new \Magento\PageCache\Model\Config(
-            $filesystemMock,
+            $readFactoryMock,
             $this->_coreConfigMock,
-            $this->_cacheState
+            $this->_cacheState,
+            $this->moduleReader
         );
     }
 
@@ -105,6 +109,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetVcl()
     {
+        $this->moduleReader->expects($this->once())
+            ->method('getModuleDir')
+            ->willReturn('/magento/app/code/Magento/PageCache');
         $test = $this->_model->getVclFile(Config::VARNISH_3_CONFIGURATION_PATH);
         $this->assertEquals(file_get_contents(__DIR__ . '/_files/result.vcl'), $test);
     }

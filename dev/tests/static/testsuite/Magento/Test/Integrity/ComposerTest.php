@@ -5,6 +5,7 @@
  */
 namespace Magento\Test\Integrity;
 
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Composer\MagentoComponent;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Shell;
@@ -66,10 +67,9 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
          * @param string $packageType
          */
             function ($dir, $packageType) {
-                $this->assertComposerAvailable();
                 $file = $dir . '/composer.json';
                 $this->assertFileExists($file);
-                self::$shell->execute(self::$composerPath . ' validate --working-dir=%s', [$dir]);
+                $this->validateComposerJsonFile($dir);
                 $contents = file_get_contents($file);
                 $json = json_decode($contents);
                 $this->assertCodingStyle($contents);
@@ -85,8 +85,9 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
     public function validateComposerJsonDataProvider()
     {
         $root = \Magento\Framework\App\Utility\Files::init()->getPathToSource();
+        $componentRegistrar = new ComponentRegistrar();
         $result = [];
-        foreach (glob("{$root}/app/code/Magento/*", GLOB_ONLYDIR) as $dir) {
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $dir) {
             $result[$dir] = [$dir, 'magento2-module'];
         }
         foreach (glob("{$root}/app/i18n/magento/*", GLOB_ONLYDIR) as $dir) {
@@ -104,6 +105,18 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
         $result[$root] = [$root, 'project'];
 
         return $result;
+    }
+
+    /**
+     * Validate a composer.json under the given path
+     *
+     * @param string $path path to composer.json
+     */
+    private function validateComposerJsonFile($path)
+    {
+        if (self::$isComposerAvailable) {
+            self::$shell->execute(self::$composerPath . ' validate --working-dir=%s', [$path]);
+        }
     }
 
     /**
@@ -136,8 +149,8 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($packageType, $json->type);
         if ($packageType !== 'project') {
             self::$dependencies[] = $json->name;
-            $this->assertHasMap($json);
-            $this->assertMapConsistent($dir, $json);
+            $this->assertAutoloadRegistrar($json, $dir);
+            $this->assertNoMap($json);
         }
         switch ($packageType) {
             case 'magento2-module':
@@ -195,36 +208,29 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Assert that component registrar is autoloaded in composer json
+     *
+     * @param \StdClass $json
+     * @param string $dir
+     */
+    private function assertAutoloadRegistrar(\StdClass $json, $dir)
+    {
+        $error = 'There must be an "autoload->files" node in composer.json of each Magento component.';
+        $this->assertObjectHasAttribute('autoload', $json, $error);
+        $this->assertObjectHasAttribute('files', $json->autoload, $error);
+        $this->assertEquals([ "registration.php" ], $json->autoload->files, $error);
+        $this->assertFileExists("$dir/registration.php");
+    }
+
+    /**
      * Assert that there is map in specified composer json
      *
      * @param \StdClass $json
      */
-    private function assertHasMap(\StdClass $json)
+    private function assertNoMap(\StdClass $json)
     {
-        $error = 'There must be an "extra->map" node in composer.json of each Magento component.';
-        $this->assertObjectHasAttribute('extra', $json, $error);
-        $this->assertObjectHasAttribute('map', $json->extra, $error);
-        $this->assertInternalType('array', $json->extra->map, $error);
-    }
-
-    /**
-     * Assert that component directory name and mapping information are consistent
-     *
-     * @param string $dir
-     * @param \StdClass $json
-     */
-    private function assertMapConsistent($dir, $json)
-    {
-        preg_match('/^.+\/(.+)\/(.+)$/', $dir, $matches);
-        list(, $vendor, $name) = $matches;
-        $map = $json->extra->map;
-        $this->assertArrayHasKey(0, $map);
-        $this->assertArrayHasKey(1, $map[0]);
-        $this->assertRegExp(
-            "/{$vendor}\\/{$name}$/",
-            $map[0][1],
-            'Mapping info is inconsistent with the directory structure'
-        );
+        $error = 'There is no "extra->map" node in composer.json of each Magento component.';
+        $this->assertObjectNotHasAttribute('extra', $json, $error);
     }
 
     /**
@@ -369,16 +375,6 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
             return false;
         }
         return true;
-    }
-
-    /**
-     * Skip the test if composer is unavailable
-     */
-    private function assertComposerAvailable()
-    {
-        if (!self::$isComposerAvailable) {
-            $this->markTestSkipped();
-        }
     }
 
     public function testComponentPathsInRoot()

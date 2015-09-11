@@ -10,6 +10,7 @@
  */
 namespace Magento\Test\Integrity\Phrase;
 
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer;
 
 class ArgumentsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
@@ -33,10 +34,11 @@ class ArgumentsTest extends \Magento\Test\Integrity\Phrase\AbstractTestCase
             new \Magento\Setup\Module\I18n\Parser\Adapter\Php\Tokenizer()
         );
 
-        $rootDir = \Magento\Framework\App\Utility\Files::init()->getPathToSource();
+        $componentRegistrar = new ComponentRegistrar();
         $this->blackList = [
             // the file below is the only file where strings are translated without corresponding arguments
-            $rootDir . '/app/code/Magento/Translation/Model/Js/DataProvider.php',
+            $componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_Translation')
+                . '/Model/Js/DataProvider.php',
         ];
     }
 

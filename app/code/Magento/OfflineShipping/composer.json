@@ -22,12 +22,7 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/OfflineShipping"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ]
     }
 }

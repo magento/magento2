@@ -5,6 +5,9 @@
  */
 namespace Magento\Setup\Module\I18n\Dictionary\Options;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
+
 /**
  * Dictionary generator options resolver
  */
@@ -26,13 +29,23 @@ class Resolver implements ResolverInterface
     protected $withContext;
 
     /**
+     * @var ComponentRegistrar
+     */
+    protected $componentRegistrar;
+
+    /**
      * Resolver construct
      *
+     * @param ComponentRegistrar $componentRegistrar
      * @param string $directory
      * @param bool $withContext
      */
-    public function __construct($directory, $withContext)
-    {
+    public function __construct(
+        ComponentRegistrar $componentRegistrar,
+        $directory,
+        $withContext
+    ) {
+        $this->componentRegistrar = $componentRegistrar;
         $this->directory = $directory;
         $this->withContext = $withContext;
     }
@@ -45,30 +58,38 @@ class Resolver implements ResolverInterface
         if (null === $this->options) {
             if ($this->withContext) {
                 $this->directory = rtrim($this->directory, '\\/');
+                $moduleDirs = [];
+                foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
+                    if (strstr($moduleDir, $this->directory)) {
+                        $moduleDirs[] = $moduleDir . '/';
+                    }
+                }
                 $this->options = [
                     [
                         'type' => 'php',
-                        'paths' => [$this->directory . '/app/code/', $this->directory . '/app/design/'],
+                        'paths' => array_merge($moduleDirs, [$this->directory . '/app/design/']),
                         'fileMask' => '/\.(php|phtml)$/',
                     ],
                     [
                         'type' => 'html',
-                        'paths' => [$this->directory . '/app/code/', $this->directory . '/app/design/'],
+                        'paths' => array_merge($moduleDirs, [$this->directory . '/app/design/']),
                         'fileMask' => '/\.html$/',
                     ],
                     [
                         'type' => 'js',
-                        'paths' => [
-                            $this->directory . '/app/code/',
-                            $this->directory . '/app/design/',
-                            $this->directory . '/lib/web/mage/',
-                            $this->directory . '/lib/web/varien/',
-                        ],
+                        'paths' => array_merge(
+                            $moduleDirs,
+                            [
+                                $this->directory . '/app/design/',
+                                $this->directory . '/lib/web/mage/',
+                                $this->directory . '/lib/web/varien/',
+                            ]
+                        ),
                         'fileMask' => '/\.(js|phtml)$/'
                     ],
                     [
                         'type' => 'xml',
-                        'paths' => [$this->directory . '/app/code/', $this->directory . '/app/design/'],
+                        'paths' => array_merge($moduleDirs, [$this->directory . '/app/design/']),
                         'fileMask' => '/\.xml$/'
                     ],
                 ];

@@ -549,11 +549,11 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
     {
         $adapter = $this->_getAdapter($adapterType);
         /** @var \Magento\Framework\Filesystem $filesystem */
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Filesystem'
+        $readFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\Filesystem\Directory\ReadFactory'
         );
-        $path = $filesystem->getDirectoryRead(DirectoryList::LIB_INTERNAL)
-            ->getAbsolutePath('LinLibertineFont/LinLibertine_Re-4.4.1.ttf');
+        $reader = $readFactory->create(DirectoryList::LIB_INTERNAL);
+        $path = $reader->getAbsolutePath('LinLibertineFont/LinLibertine_Re-4.4.1.ttf');
         $adapter->createPngFromString('T', $path);
         $adapter->refreshImageDimensions();
 

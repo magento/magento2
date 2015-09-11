@@ -39,12 +39,7 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/Catalog"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ]
     }
 }

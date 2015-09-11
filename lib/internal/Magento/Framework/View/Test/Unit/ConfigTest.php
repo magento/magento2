@@ -46,7 +46,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->directoryReadMock));
         $this->repositoryMock = $this->getMock('Magento\Framework\View\Asset\Repository', [], [], '', false);
         $this->fileSystemMock = $this->getMock('Magento\Framework\View\FileSystem', [], [], '', false);
-        $this->fileIteratorFactoryMock = $this->getMock('Magento\Framework\Config\FileIteratorFactory');
+        $this->fileIteratorFactoryMock = $this->getMock(
+            'Magento\Framework\Config\FileIteratorFactory',
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->config = $this->objectManagerHelper->getObject(

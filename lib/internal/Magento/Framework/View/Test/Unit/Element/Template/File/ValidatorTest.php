@@ -6,6 +6,7 @@
 namespace Magento\Framework\View\Test\Unit\Element\Template\File;
 
 use \Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
 use \Magento\Framework\Filesystem\DriverPool;
 
 /**
@@ -64,6 +65,11 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     protected $compiledDirectoryMock;
 
     /**
+     * @var ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $componentRegistrar;
+
+    /**
      * Test Setup
      *
      * @return void
@@ -100,9 +106,21 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('getAbsolutePath')
             ->will($this->returnValue('/magento/themes'));
 
+        $this->componentRegistrar = $this->getMock('Magento\Framework\Component\ComponentRegistrar', [], [], '', false);
+        $this->componentRegistrar->expects($this->any())
+            ->method('getPaths')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        [ComponentRegistrar::MODULE, ['/magento/app/code/Some/Module']],
+                        [ComponentRegistrar::THEME, ['/magento/themes/default']]
+                    ]
+                )
+            );
         $this->_validator = new \Magento\Framework\View\Element\Template\File\Validator(
             $this->_fileSystemMock,
-            $this->_scopeConfigMock
+            $this->_scopeConfigMock,
+            $this->componentRegistrar
         );
     }
 
@@ -118,7 +136,6 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsValid($file, $expectedResult)
     {
-
         $this->rootDirectoryMock->expects($this->any())->method('isFile')->will($this->returnValue(true));
         $this->assertEquals($expectedResult, $this->_validator->isValid($file));
     }

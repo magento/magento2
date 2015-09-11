@@ -46,9 +46,11 @@ class Primary implements \Magento\Framework\Config\FileResolverInterface
      */
     public function get($filename, $scope)
     {
-        return $this->iteratorFactory->create(
-            $this->configDirectory,
-            $this->configDirectory->search('{*' . $filename . ',*/*' . $filename . '}')
-        );
+        $configPaths = $this->configDirectory->search('{*' . $filename . ',*/*' . $filename . '}');
+        $configAbsolutePaths = [];
+        foreach ($configPaths as $configPath) {
+            $configAbsolutePaths[] = $this->configDirectory->getAbsolutePath($configPath);
+        }
+        return $this->iteratorFactory->create($configAbsolutePaths);
     }
 }
