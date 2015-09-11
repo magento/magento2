@@ -73,7 +73,7 @@ class Dom
     /**
      * Magento\Framework\Config\Dom\UrnResolver
      */
-    private $urnResolver;
+    private static $urnResolver;
 
     /**
      * Build DOM with initial XML contents and specifying identifier attributes for merging
@@ -82,7 +82,6 @@ class Dom
      * The path to ID attribute name should not include any attribute notations or modifiers -- only node names
      *
      * @param string $xml
-     * @param UrnResolver $urnResolver
      * @param array $idAttributes
      * @param string $typeAttributeName
      * @param string $schemaFile
@@ -90,14 +89,12 @@ class Dom
      */
     public function __construct(
         $xml,
-        UrnResolver $urnResolver,
         array $idAttributes = [],
         $typeAttributeName = null,
         $schemaFile = null,
         $errorFormat = self::ERROR_FORMAT_DEFAULT
     ) {
         $this->schema = $schemaFile;
-        $this->urnResolver = $urnResolver;
         $this->nodeMergingConfig = new Dom\NodeMergingConfig(new Dom\NodePathMatcher(), $idAttributes);
         $this->typeAttributeName = $typeAttributeName;
         $this->errorFormat = $errorFormat;
@@ -265,12 +262,16 @@ class Dom
      * @return array of errors
      * @throws \Exception
      */
-    public function validateDomDocument(
+    public static function validateDomDocument(
         \DOMDocument $dom,
         $schema,
         $errorFormat = self::ERROR_FORMAT_DEFAULT
     ) {
-        $schema = $this->urnResolver->getRealPath($schema);
+        if (!self::$urnResolver) {
+            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+            self::$urnResolver = $objectManager->get('Magento\Framework\Config\Dom\UrnResolver');
+        }
+        $schema = self::$urnResolver->getRealPath($schema);
         libxml_use_internal_errors(true);
         try {
             $result = $dom->schemaValidate($schema);
