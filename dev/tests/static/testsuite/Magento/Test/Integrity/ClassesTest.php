@@ -490,7 +490,6 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
             } else {
                 // Remove usage of classes that do NOT using fully-qualified class names (possibly under same namespace)
                 $directories = [
-                    '/lib/internal/',
                     '/dev/tools/',
                     '/dev/tests/api-functional/framework/',
                     '/dev/tests/functional/',
@@ -503,13 +502,19 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                     '/dev/tests/static/testsuite/',
                     '/setup/src/',
                 ];
+                $pathToSource = \Magento\Framework\App\Utility\Files::init()->getPathToSource();
+                $libraryPaths = $componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
+                foreach ($libraryPaths as $key => $libraryPath) {
+                    $libraryPath = str_replace($pathToSource, '', $libraryPath);
+                    $partsOfLibraryPath = explode('/', $libraryPath);
+                    $libraryPaths[$key] = implode('/', array_slice($partsOfLibraryPath, 2));
+                    $libraryPaths[$key] .= '/';
+                }
+                $directories = array_merge($directories, $libraryPaths);
                 // Full list of directories where there may be namespace classes
-                foreach ($directories as $directory) {
-                    $fullPath = \Magento\Framework\App\Utility\Files::init()->getPathToSource() .
-                        $directory .
-                        $namespacePath .
-                        '/' .
-                        str_replace(
+                    foreach ($directories as $directory) {
+                    $fullPath = $pathToSource . $directory . $namespacePath . '/'
+                        . str_replace(
                             '\\',
                             '/',
                             $badClass

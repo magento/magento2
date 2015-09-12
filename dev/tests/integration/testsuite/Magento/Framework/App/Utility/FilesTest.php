@@ -20,11 +20,11 @@ class FilesTest extends \PHPUnit_Framework_TestCase
     /** @var string */
     protected $toolsTests = '#dev/tools/Magento/Tools/[\\w]+/Test#';
 
-    /** @var string */
-    protected $frameworkTests = '#lib/internal/Magento/Framework/[\\w]+/Test#';
+    /** @var array */
+    protected $frameworkTests = [];
 
-    /** @var string */
-    protected $libTests = '#lib/internal/[\\w]+/[\\w]+/Test#';
+    /** @var array */
+    protected $libTests = [];
 
     /** @var string */
     protected $rootTestsDir = '#dev/tests/#';
@@ -38,6 +38,10 @@ class FilesTest extends \PHPUnit_Framework_TestCase
         $componentRegistrar = new ComponentRegistrar();
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
             $this->moduleTests[] = '#' . $moduleDir . '/Test#';
+        }
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryDir) {
+            $this->libTests[] = '#' . $libraryDir . '/Test#';
+            $this->frameworkTests[] = '#' . $libraryDir . '/[\\w]+/Test#';
         }
     }
 
@@ -69,8 +73,13 @@ class FilesTest extends \PHPUnit_Framework_TestCase
         foreach ($this->moduleTests as $moduleTest) {
             $classFiles = preg_grep($moduleTest, $classFiles, PREG_GREP_INVERT);
         }
-        $classFiles = preg_grep($this->libTests, $classFiles, PREG_GREP_INVERT);
-        $classFiles = preg_grep($this->frameworkTests, $classFiles, PREG_GREP_INVERT);
+        foreach ($this->libTests as $libraryTest) {
+            $classFiles = preg_grep($libraryTest, $classFiles, PREG_GREP_INVERT);
+        }
+        foreach ($this->frameworkTests as $frameworkTest) {
+            $classFiles = preg_grep($frameworkTest, $classFiles, PREG_GREP_INVERT);
+        }
+
         $classFiles = preg_grep($this->toolsTests, $classFiles, PREG_GREP_INVERT);
         $classFiles = preg_grep($this->rootTestsDir, $classFiles, PREG_GREP_INVERT);
         $classFiles = preg_grep($this->setupTestsDir, $classFiles, PREG_GREP_INVERT);
