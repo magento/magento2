@@ -12,6 +12,8 @@ use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Backend Data Grid with advanced functionality for managing entities.
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class DataGrid extends Grid
 {

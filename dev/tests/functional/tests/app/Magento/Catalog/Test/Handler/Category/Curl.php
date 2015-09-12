@@ -198,7 +198,7 @@ class Curl extends AbstractCurl implements CategoryInterface
 
         $diff = array_diff($this->dataUseConfig, array_keys($this->fields['general']));
         if (!empty($diff)) {
-            $data['use_config'] = $diff;
+            $this->fields['use_config'] = $diff;
         }
     }
 
