@@ -7,13 +7,13 @@
 <?php /** @var $block \Magento\Catalog\Block\Product\Image */ ?>
 
 <span class="product-image-container"
-      style="width:<?php echo $block->getWidth()?>px;">
+      style="width:<?php /* @escapeNotVerified */ echo $block->getWidth()?>px;">
     <span class="product-image-wrapper"
-          style="padding-bottom: <?php echo ($block->getRatio() * 100); ?>%;">
+          style="padding-bottom: <?php /* @escapeNotVerified */ echo ($block->getRatio() * 100); ?>%;">
         <img class="product-image-photo"
-             <?php echo $block->getCustomAttributes(); ?>
-             src="<?php echo $block->getImageUrl(); ?>"
-             width="<?php echo $block->getResizedImageWidth(); ?>"
-             height="<?php echo $block->getResizedImageHeight(); ?>"
-             alt="<?php echo $block->stripTags($block->getLabel(), null, true); ?>"/></span>
+             <?php /* @escapeNotVerified */ echo $block->getCustomAttributes(); ?>
+             src="<?php /* @escapeNotVerified */ echo $block->getImageUrl(); ?>"
+             width="<?php /* @escapeNotVerified */ echo $block->getResizedImageWidth(); ?>"
+             height="<?php /* @escapeNotVerified */ echo $block->getResizedImageHeight(); ?>"
+             alt="<?php /* @escapeNotVerified */ echo $block->stripTags($block->getLabel(), null, true); ?>"/></span>
 </span>

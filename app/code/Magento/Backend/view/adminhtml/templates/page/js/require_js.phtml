@@ -5,6 +5,6 @@
  */
 ?>
 <script>
-    var BASE_URL = '<?php echo $block->getUrl('*') ?>';
-    var FORM_KEY = '<?php echo $block->getFormKey() ?>';
+    var BASE_URL = '<?php /* @escapeNotVerified */ echo $block->getUrl('*') ?>';
+    var FORM_KEY = '<?php /* @escapeNotVerified */ echo $block->getFormKey() ?>';
 </script>

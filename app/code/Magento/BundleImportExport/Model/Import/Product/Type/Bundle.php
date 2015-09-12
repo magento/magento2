@@ -609,6 +609,23 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     }
 
     /**
+     * Initialize attributes parameters for all attributes' sets.
+     *
+     * @return $this
+     */
+    protected function _initAttributes()
+    {
+        parent::_initAttributes();
+        if (isset(self::$attributeCodeToId['price_type']) && $id = self::$attributeCodeToId['price_type']) {
+            self::$commonAttributesCache[$id]['type'] = 'select';
+            self::$commonAttributesCache[$id]['options'] = [
+                self::VALUE_DYNAMIC => BundlePrice::PRICE_TYPE_DYNAMIC,
+                self::VALUE_FIXED => BundlePrice::PRICE_TYPE_FIXED,
+            ];
+        }
+    }
+
+    /**
      * Delete options and selections.
      *
      * @param array $productIds
