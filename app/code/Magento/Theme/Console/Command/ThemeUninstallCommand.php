@@ -345,7 +345,6 @@ class ThemeUninstallCommand extends Command
     private function getParentChildThemeMap()
     {
         $map = [];
-        $this->themeCollection->addDefaultPattern('*');
         /** @var \Magento\Theme\Model\Theme\Data $theme */
         foreach ($this->themeCollection as $theme) {
             if ($theme->getParentTheme()) {

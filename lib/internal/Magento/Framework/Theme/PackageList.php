@@ -21,13 +21,6 @@ class PackageList
     private $componentRegistrar;
 
     /**
-     * Themes
-     *
-     * @var Package[]
-     */
-    private $themes = [];
-
-    /**
      * Constructor
      *
      * @param ComponentRegistrarInterface $componentRegistrar
@@ -35,9 +28,6 @@ class PackageList
     public function __construct(ComponentRegistrarInterface $componentRegistrar)
     {
         $this->componentRegistrar = $componentRegistrar;
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $key => $path) {
-            $this->themes[$key] = new Package($key, $path);
-        }
     }
 
     /**
@@ -49,10 +39,11 @@ class PackageList
      */
     public function getTheme($key)
     {
-        if (!isset($this->themes[$key])) {
+        $themePath = $this->componentRegistrar->getPath(ComponentRegistrar::THEME, $key);
+        if (empty($themePath)) {
             throw new \Exception("No theme registered for '$key'");
         }
-        return $this->themes[$key];
+        return new Package($key, $themePath);
     }
 
     /**
@@ -62,6 +53,10 @@ class PackageList
      */
     public function getThemes()
     {
-        return $this->themes;
+        $themes = [];
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $key => $path) {
+            $themes[$key] = new Package($key, $path);
+        }
+        return $themes;
     }
 }

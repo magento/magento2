@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Theme;
 
+use Magento\Framework\Config\Theme;
+
 /**
  * Value-object for a theme package
  */
@@ -53,7 +55,7 @@ class Package
      */
     public function __construct($key, $path)
     {
-        $keyParts = explode('/', $key);
+        $keyParts = explode(Theme::THEME_PATH_SEPARATOR, $key);
         if (count($keyParts) != 3) {
             throw new \UnexpectedValueException(
                 "Theme's key does not correspond to required format: '<area>/<vendor>/<name>'"

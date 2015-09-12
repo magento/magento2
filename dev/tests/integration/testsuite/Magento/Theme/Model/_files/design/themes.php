@@ -21,4 +21,4 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 $registration = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     'Magento\Theme\Model\Theme\Registration'
 );
-$registration->register(implode('/', ['*', '*', '*', 'theme.xml']));
+$registration->register();

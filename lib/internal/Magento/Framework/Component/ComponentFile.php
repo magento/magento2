@@ -41,8 +41,8 @@ class ComponentFile
     public function __construct($componentType, $componentName, $fullPath)
     {
         $this->componentType = $componentType;
-        $this->module = $componentName;
-        $this->file = $fullPath;
+        $this->componentName = $componentName;
+        $this->path = $fullPath;
     }
 
     /**
