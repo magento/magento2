@@ -119,7 +119,7 @@ class ConfigModel
 
         }
 
-        $this->writer->saveConfig($fileConfigStorage);
+        $this->writer->saveConfig($fileConfigStorage, true);
     }
 
     /**
