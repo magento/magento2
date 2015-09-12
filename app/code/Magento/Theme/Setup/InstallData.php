@@ -48,8 +48,6 @@ class InstallData implements InstallDataInterface
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        $setup->startSetup();
-
         /*
          * Register themes
          */
@@ -59,7 +57,6 @@ class InstallData implements InstallDataInterface
          * Update theme's data
          */
         $fileCollection = $this->createTheme();
-        $fileCollection->addDefaultPattern('*');
         $fileCollection->setItemObjectClass('Magento\Theme\Model\Theme\Data');
 
         $resourceCollection = $this->createThemeResource();
@@ -74,7 +71,6 @@ class InstallData implements InstallDataInterface
         }
 
         $fileCollection = $this->createTheme();
-        $fileCollection->addDefaultPattern('*');
         $fileCollection->setItemObjectClass('Magento\Theme\Model\Theme\Data');
 
         $themeDbCollection = $this->createThemeResource();
@@ -95,8 +91,6 @@ class InstallData implements InstallDataInterface
             ['area' => 'frontend'],
             ['area = ?' => '']
         );
-
-        $setup->endSetup();
     }
 
     /**

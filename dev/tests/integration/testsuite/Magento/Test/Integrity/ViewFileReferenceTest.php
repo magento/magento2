@@ -67,7 +67,6 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
 
         // Themes to be checked
         self::$_themeCollection = $objectManager->get('Magento\Theme\Model\Theme\Collection');
-        self::$_themeCollection->addDefaultPattern('*');
 
         // Compose list of locales, needed to be checked for themes
         self::$_checkThemeLocales = [];

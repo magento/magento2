@@ -267,19 +267,16 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
     public function testThemeRegistration()
     {
-        $pattern = 'some pattern';
         $eventMock = $this->getMockBuilder('Magento\Framework\Event')
             ->setMethods(['getPathPattern'])
             ->disableOriginalConstructor()
             ->getMock();
-        $eventMock->expects($this->any())->method('getPathPattern')->willReturn($pattern);
         $observerMock = $this->getMockBuilder('Magento\Framework\Event\Observer')
             ->disableOriginalConstructor()
             ->getMock();
         $observerMock->expects($this->any())->method('getEvent')->willReturn($eventMock);
         $this->registration->expects($this->once())
             ->method('register')
-            ->with($pattern)
             ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('exception')));
         $this->logger->expects($this->once())
             ->method('critical');
