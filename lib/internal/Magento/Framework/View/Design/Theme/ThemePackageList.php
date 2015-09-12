@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Theme;
+namespace Magento\Framework\View\Design\Theme;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
@@ -11,7 +11,7 @@ use Magento\Framework\Component\ComponentRegistrarInterface;
 /**
  * List of theme package value objects
  */
-class PackageList
+class ThemePackageList
 {
     /**
      * Component registrar
@@ -34,7 +34,7 @@ class PackageList
      * Get theme by path key
      *
      * @param string $key
-     * @return Package
+     * @return ThemePackage
      * @throws \Exception
      */
     public function getTheme($key)
@@ -43,19 +43,19 @@ class PackageList
         if (empty($themePath)) {
             throw new \Exception("No theme registered for '$key'");
         }
-        return new Package($key, $themePath);
+        return new ThemePackage($key, $themePath);
     }
 
     /**
      * Get all themes
      *
-     * @return Package[]
+     * @return ThemePackage[]
      */
     public function getThemes()
     {
         $themes = [];
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $key => $path) {
-            $themes[$key] = new Package($key, $path);
+            $themes[$key] = new ThemePackage($key, $path);
         }
         return $themes;
     }

@@ -31,7 +31,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     private $entityFactory;
 
     /**
-     * @var \Magento\Framework\Theme\PackageList|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\Theme\ThemePackageList|\PHPUnit_Framework_MockObject_MockObject
      */
     private $themePackageList;
 
@@ -54,7 +54,13 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->themePackageList = $this->getMock('\Magento\Framework\Theme\PackageList', [], [], '', false);
+        $this->themePackageList = $this->getMock(
+            '\Magento\Framework\View\Design\Theme\ThemePackageList',
+            [],
+            [],
+            '',
+            false
+        );
         $this->readDirFactory = $this->getMock('Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
         $this->readDirFactory->expects($this->any())
             ->method('create')
@@ -83,7 +89,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $parentTheme = ['parentThemeCode'];
         $parentThemePath = 'frontend/parent/theme';
 
-        $themePackage = $this->getMock('\Magento\Framework\Theme\Package', [], [], '', false);
+        $themePackage = $this->getMock('\Magento\Framework\View\Design\Theme\ThemePackage', [], [], '', false);
         $themePackage->expects($this->any())
             ->method('getArea')
             ->will($this->returnValue('frontend'));

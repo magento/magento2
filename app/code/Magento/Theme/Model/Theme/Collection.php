@@ -6,8 +6,8 @@
 namespace Magento\Theme\Model\Theme;
 
 use Magento\Framework\Filesystem\Directory\ReadFactory;
-use Magento\Framework\Theme\Package;
-use Magento\Framework\Theme\PackageList;
+use Magento\Framework\View\Design\Theme\ThemePackage;
+use Magento\Framework\View\Design\Theme\ThemePackageList;
 use Magento\Framework\View\Design\Theme\ListInterface;
 use Magento\Framework\View\Design\ThemeInterface;
 
@@ -61,7 +61,7 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
     /**
      * Theme package list
      *
-     * @var PackageList
+     * @var ThemePackageList
      */
     private $themePackageList;
 
@@ -77,13 +77,13 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
      *
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Magento\Framework\Config\ThemeFactory $themeConfigFactory
-     * @param PackageList $themePackageList
+     * @param ThemePackageList $themePackageList
      * @param ReadFactory $dirReadFactory
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
         \Magento\Framework\Config\ThemeFactory $themeConfigFactory,
-        PackageList $themePackageList,
+        ThemePackageList $themePackageList,
         ReadFactory $dirReadFactory
     ) {
         parent::__construct($entityFactory);
@@ -194,7 +194,7 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
     /**
      * Load themes collection from file system
      *
-     * @param Package[] $themes
+     * @param ThemePackage[] $themes
      * @return $this
      */
     protected function _loadFromFilesystem(array $themes)
@@ -211,7 +211,7 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
     /**
      * Return default path related data
      *
-     * @param Package $themePackage
+     * @param ThemePackage $themePackage
      * @return array
      */
     protected function _preparePathData($themePackage)
@@ -227,7 +227,7 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
     /**
      * Return default configuration data
      *
-     * @param Package $themePackage
+     * @param ThemePackage $themePackage
      * @return array
      */
     protected function _prepareConfigurationData($themePackage)
@@ -296,7 +296,7 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
     /**
      * Return configuration model for the theme
      *
-     * @param Package $themePackage
+     * @param ThemePackage $themePackage
      * @return \Magento\Framework\Config\Theme
      */
     protected function _getConfigModel($themePackage)
