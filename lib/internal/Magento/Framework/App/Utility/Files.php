@@ -1251,6 +1251,13 @@ class Files
                         $this->getModuleTestDirs()
                     );
                     break;
+                case 'language':
+                    $files = $this->getFilesSubset(
+                        $this->componentRegistrar->getPaths(ComponentRegistrar::LANGUAGE),
+                        'composer.json',
+                        []
+                    );
+                    break;
                 default:
                     // TODO: implement for other component type
                     $files = $this->getFilesSubset(
