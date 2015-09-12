@@ -475,8 +475,11 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
             }
 
             $namespaceParts = explode('/', $namespacePath, 3);
-            $moduleName = $namespaceParts[0] . '_' . $namespaceParts[1];
-            $moduleDir = $componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
+            $moduleDir = null;
+            if (isset($namespaceParts[1])) {
+                $moduleName = $namespaceParts[0] . '_' . $namespaceParts[1];
+                $moduleDir = $componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
+            }
             if ($moduleDir) {
                 $fullPath = $moduleDir . '/' . (isset($namespaceParts[2]) ? $namespaceParts[2] . '/' : '') .
                     str_replace('\\', '/', $badClass) . '.php';
