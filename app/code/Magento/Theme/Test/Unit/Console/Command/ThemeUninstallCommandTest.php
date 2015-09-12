@@ -23,11 +23,6 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
     private $maintenanceMode;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $filesystem;
-
-    /**
      * @var \Magento\Framework\Composer\DependencyChecker|\PHPUnit_Framework_MockObject_MockObject
      */
     private $dependencyChecker;
