@@ -457,11 +457,13 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
             // for example: 'Magento_Sales::actions_edit'
             if (preg_match('/Magento_[A-Z0-9][a-z0-9]*/', $badClass)) {
                 unset($badClasses[array_search($badClass, $badClasses)]);
+                continue;
             }
 
             // Remove usage of key words such as "Array", "String", and "Boolean"
             if (in_array($badClass, self::$_keywordsBlacklist)) {
                 unset($badClasses[array_search($badClass, $badClasses)]);
+                continue;
             }
 
             $classParts = explode('/', $file);
@@ -469,6 +471,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
             // Remove usage of the class itself from the list
             if ($badClass . '.php' == $className) {
                 unset($badClasses[array_search($badClass, $badClasses)]);
+                continue;
             }
 
             $namespaceParts = explode('/', $namespacePath, 3);
@@ -479,7 +482,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                     str_replace('\\', '/', $badClass) . '.php';
                 if (file_exists($fullPath)) {
                     unset($badClasses[array_search($badClass, $badClasses)]);
-                    break;
+                    continue;
                 }
             } else {
                 // Remove usage of classes that do NOT using fully-qualified class names (possibly under same namespace)
@@ -510,7 +513,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                         ) . '.php';
                     if (file_exists($fullPath)) {
                         unset($badClasses[array_search($badClass, $badClasses)]);
-                        break;
+                        continue 2;
                     }
                 }
             }
@@ -518,6 +521,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
             $referenceFile = implode('/', $classParts) . '/' . str_replace('\\', '/', $badClass) . '.php';
             if (file_exists($referenceFile)) {
                 unset($badClasses[array_search($badClass, $badClasses)]);
+                continue;
             }
 
             // Remove usage of classes that have been declared as "use" or "include"
@@ -525,6 +529,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
             // (continued) where there is a comma separating two different classes.
             if (preg_match('/use\s.*[\\n]?.*' . str_replace('\\', '\\\\', $badClass) . '[\,\;]/', $contents)) {
                 unset($badClasses[array_search($badClass, $badClasses)]);
+                continue;
             }
         }
         return $badClasses;
