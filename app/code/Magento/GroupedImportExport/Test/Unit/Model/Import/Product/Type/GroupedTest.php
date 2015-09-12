@@ -6,16 +6,12 @@
 
 namespace Magento\GroupedImportExport\Test\Unit\Model\Import\Product\Type;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use \Magento\GroupedImportExport;
 
-class GroupedTest extends \PHPUnit_Framework_TestCase
+class GroupedTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
     /** @var GroupedImportExport\Model\Import\Product\Type\Grouped */
     protected $grouped;
-
-    /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
 
     /**
      * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -64,6 +60,8 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        parent::setUp();
+
         $this->setCollectionFactory = $this->getMock(
             'Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory',
             ['create'],
@@ -93,11 +91,12 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $this->attrCollectionFactory->expects($this->any())->method('addFieldToFilter')->willReturn([]);
         $this->entityModel = $this->getMock(
             'Magento\CatalogImportExport\Model\Import\Product',
-            ['getNewSku', 'getOldSku', 'getNextBunch', 'isRowAllowedToImport', 'getRowScope'],
+            ['getErrorAggregator', 'getNewSku', 'getOldSku', 'getNextBunch', 'isRowAllowedToImport', 'getRowScope'],
             [],
             '',
             false
         );
+        $this->entityModel->method('getErrorAggregator')->willReturn($this->getErrorAggregatorObject());
         $this->params = [
             0 => $this->entityModel,
             1 => 'grouped'
@@ -109,12 +108,10 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $entityAttributes = [
-            [
-                'attribute_id' => 'attribute_id',
-                'attribute_set_name' => 'attribute_set_name'
-            ]
-        ];
+        $entityAttributes = [[
+            'attribute_set_name' => 'attribute_id',
+            'attribute_id' => 'attributeSetName',
+        ]];
         $this->connection = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
             ['select', 'fetchAll', 'fetchPairs', 'joinLeft', 'insertOnDuplicate', 'delete', 'quoteInto'],
@@ -149,7 +146,6 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         );
         $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($this->connection));
         $this->resource->expects($this->any())->method('getTableName')->will($this->returnValue('tableName'));
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->grouped = $this->objectManagerHelper->getObject(
             'Magento\GroupedImportExport\Model\Import\Product\Type\Grouped',
             [

@@ -10,10 +10,10 @@
 ?>
 <?php if ($block->isProductVisibleInSiteVisibility()): ?>
     <a class="action action-edit"
-       href="<?php echo $block->getConfigureUrl() ?>"
+       href="<?php /* @escapeNotVerified */ echo $block->getConfigureUrl() ?>"
        title="<?php echo $block->escapeHtml(__('Edit item parameters')); ?>">
         <span>
-            <?php echo __('Edit') ?>
+            <?php /* @escapeNotVerified */ echo __('Edit') ?>
         </span>
    </a>
 <?php endif ?>
