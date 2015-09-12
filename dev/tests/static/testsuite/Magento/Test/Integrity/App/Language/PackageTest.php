@@ -31,7 +31,7 @@ class PackageTest extends \PHPUnit_Framework_TestCase
     {
         $result = [];
         $root = \Magento\Framework\App\Utility\Files::init()->getPathToSource();
-        foreach (Package::readDeclarationFiles($root) as $row) {
+        foreach (Package::readDeclarationFiles() as $row) {
             $result[] = $row;
         }
         return $result;
