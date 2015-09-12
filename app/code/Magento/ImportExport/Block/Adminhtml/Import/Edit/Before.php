@@ -57,6 +57,20 @@ class Before extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Returns json-encoded entity behaviors notes array
+     *
+     * @return string
+     */
+    public function getEntityBehaviorsNotes()
+    {
+        $behaviors = $this->_importModel->getEntityBehaviors();
+        foreach ($behaviors as $entityCode => $behavior) {
+            $behaviors[$entityCode] = $behavior['notes'];
+        }
+        return $this->_jsonEncoder->encode($behaviors);
+    }
+
+    /**
      * Return json-encoded list of existing behaviors
      *
      * @return string

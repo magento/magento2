@@ -16,4 +16,4 @@ $_item = $block->getItem();
 $_order = $_item->getOrder();
 ?>
 
-<?= $_order->formatPrice($_item->getRowTotal()) ?>
+<?= /* @escapeNotVerified */  $_order->formatPrice($_item->getRowTotal()) ?>
