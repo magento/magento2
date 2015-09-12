@@ -12,5 +12,5 @@
  */
 ?>
 <?php if (!$block->getQuote()->isVirtual()): ?>
-    <?php echo $this->helper('Magento\GiftMessage\Helper\Message')->getInline('onepage_checkout', $block->getQuote(), $block->getDontDisplayContainer()) ?>
+    <?php /* @escapeNotVerified */ echo $this->helper('Magento\GiftMessage\Helper\Message')->getInline('onepage_checkout', $block->getQuote(), $block->getDontDisplayContainer()) ?>
 <?php endif; ?>
