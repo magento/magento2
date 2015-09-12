@@ -92,7 +92,8 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
      */
     protected function createObject($type, $args)
     {
-        switch (count($args)) {
+        return new $type(... $args); // will work in PHP >= 5.6
+        /* switch (count($args)) {
             case 1:
                 return new $type($args[0]);
             case 2:
@@ -200,7 +201,7 @@ abstract class AbstractFactory implements \Magento\Framework\ObjectManager\Facto
             default:
                 $reflection = new \ReflectionClass($type);
                 return $reflection->newInstanceArgs($args);
-        }
+        } */
     }
 
     /**
