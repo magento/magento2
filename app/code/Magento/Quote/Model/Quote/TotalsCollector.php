@@ -133,6 +133,9 @@ class TotalsCollector
      */
     public function collectQuoteTotals(\Magento\Quote\Model\Quote $quote)
     {
+        if ($quote->isVirtual()) {
+            return $this->collectAddressTotals($quote, $quote->getBillingAddress());
+        }
         return $this->collectAddressTotals($quote, $quote->getShippingAddress());
     }
 
