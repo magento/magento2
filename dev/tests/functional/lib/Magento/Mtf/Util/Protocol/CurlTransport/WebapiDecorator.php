@@ -99,6 +99,7 @@ class WebapiDecorator implements CurlInterface
         $integrationToken = $this->configuration->get(self::CONFIG_TOKEN_PATH);
 
         if (null === $integrationToken || !$this->isValidIntegration()) {
+            $this->disableSecretKey();
             /** @var \Magento\Integration\Test\Fixture\Integration $integration */
             $integration = $this->fixtureFactory->create(
                 'Magento\Integration\Test\Fixture\Integration',
@@ -108,6 +109,20 @@ class WebapiDecorator implements CurlInterface
 
             $this->setConfiguration($integration);
         }
+    }
+
+    /**
+     * Disable secret key before creating and activating integration.
+     *
+     * @return void
+     */
+    protected function disableSecretKey()
+    {
+        $config = $this->fixtureFactory->create(
+            'Magento\Config\Test\Fixture\ConfigData',
+            ['dataset' => 'secret_key_disable']
+        );
+        $config->persist();
     }
 
     /**

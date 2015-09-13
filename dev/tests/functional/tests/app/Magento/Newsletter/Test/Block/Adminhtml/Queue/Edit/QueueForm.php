@@ -14,7 +14,7 @@ use Magento\Mtf\Client\Element\SimpleElement;
 class QueueForm extends \Magento\Mtf\Block\Form
 {
     /**
-     * Get data of specified form data
+     * Get data of specified form data.
      *
      * @param array $fields
      * @param SimpleElement|null $element
