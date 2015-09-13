@@ -112,6 +112,7 @@ class CartTotalRepository implements CartTotalRepositoryInterface
 //        }
 
         $total = $this->totalsCollector->collectQuoteTotals($quote);
+        /** @var \Magento\Quote\Api\Data\TotalsInterface $totals */
         $totals = $this->totalsFactory->create();
         $this->dataObjectHelper->populateWithArray($totals, $total->getData(), '\Magento\Quote\Api\Data\TotalsInterface');
         $items = [];
@@ -127,6 +128,7 @@ class CartTotalRepository implements CartTotalRepositoryInterface
         $totals->setGrandTotal($amount);
         $totals->setTotalSegments($calculatedTotals);
         $totals->setItems($items);
+        $totals->setItemsQty($quote->getItemsQty());
         $totals->setWeeeTaxAppliedAmount($weeeTaxAppliedAmount);
         return $totals;
     }
