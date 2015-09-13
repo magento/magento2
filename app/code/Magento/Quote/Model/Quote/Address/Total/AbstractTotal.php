@@ -83,8 +83,6 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
      * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return $this
-     * @internal param \Magento\Quote\Model\Quote $quoteTest8
-     * @internal param \Magento\Quote\Model\Quote\Address $address
      */
     public function collect(
         \Magento\Quote\Model\Quote $quote,

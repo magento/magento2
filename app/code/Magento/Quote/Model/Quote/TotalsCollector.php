@@ -266,8 +266,8 @@ class TotalsCollector
         $shippingAssignment = $this->shippingAssignmentFactory->create();
         /** @var \Magento\Quote\Api\Data\ShippingInterface $shipping */
         $shipping = $this->shippingFactory->create();
-        $shipping->setMethod($quote->getShippingAddress()->getShippingMethod());
-        $shipping->setAddress($quote->getShippingAddress());
+        $shipping->setMethod($address->getShippingMethod());
+        $shipping->setAddress($address);
         $shippingAssignment->setShipping($shipping);
         $shippingAssignment->setItems($address->getAllItems());
 
@@ -289,8 +289,6 @@ class TotalsCollector
             }
             $collector->collect($quote, $shippingAssignment, $total);
         }
-        $address->addData($total->getData());
-        $address->setAppliedTaxes($total->getAppliedTaxes());
         
         $this->eventManager->dispatch(
             'sales_quote_address_collect_totals_after',
@@ -300,6 +298,9 @@ class TotalsCollector
                 'total' => $total
             ]
         );
+
+        $address->addData($total->getData());
+        $address->setAppliedTaxes($total->getAppliedTaxes());
 
         return $total;
     }
