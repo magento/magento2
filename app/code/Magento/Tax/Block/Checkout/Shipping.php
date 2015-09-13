@@ -72,7 +72,7 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
      */
     public function getShippingIncludeTax()
     {
-        return $this->getTotal()->getAddress()->getShippingInclTax();
+        return $this->getTotal()->getShippingInclTax();
     }
 
     /**
@@ -82,7 +82,7 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
      */
     public function getShippingExcludeTax()
     {
-        return $this->getTotal()->getAddress()->getShippingAmount();
+        return $this->getTotal()->getValue();
     }
 
     /**
@@ -94,7 +94,7 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
     {
         return __(
             'Shipping Incl. Tax (%1)',
-            $this->escapeHtml($this->getTotal()->getAddress()->getShippingDescription())
+            $this->escapeHtml($this->_checkoutSession->getQuote()->getShippingAddress()->getShippingDescription())
         );
     }
 
@@ -107,7 +107,7 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
     {
         return __(
             'Shipping Excl. Tax (%1)',
-            $this->escapeHtml($this->getTotal()->getAddress()->getShippingDescription())
+            $this->escapeHtml($this->_checkoutSession->getQuote()->getShippingAddress()->getShippingDescription())
         );
     }
 }

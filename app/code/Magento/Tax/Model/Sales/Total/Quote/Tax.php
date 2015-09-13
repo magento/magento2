@@ -126,6 +126,16 @@ class Tax extends CommonTaxCollector
             $total->addBaseTotalAmount('extra_tax', $total->getBaseExtraTaxAmount());
         }
 
+        // Saving tax configuration to total since quote is unavailable on fetch.
+        $store = $quote->getStore();
+        $taxConfiguration = [
+            'displayCartSubtotalBoth' => $this->_config->displayCartSubtotalBoth($store),
+            'displayCartSubtotalInclTax' => $this->_config->displayCartSubtotalInclTax($store),
+            'displayCartZeroTax' => $this->_config->displayCartZeroTax($store),
+            'displayCartTaxWithGrandTotal' => $this->_config->displayCartTaxWithGrandTotal($store)
+        ];
+        $total->setTaxConfiguration($taxConfiguration);
+
         return $this;
     }
 
@@ -288,23 +298,55 @@ class Tax extends CommonTaxCollector
      * Add tax totals information to address object
      *
      * @param Address\Total $total
-     * @return array
+     * @return array|null
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function fetch(Address\Total $total)
     {
+        $totals = [];
         $applied = $total->getAppliedTaxes();
         $amount = $total->getTaxAmount();
+        $taxConfiguration = $total->getTaxConfiguration();
+        $taxAmount = $amount + $total->getTotalAmount('discount_tax_compensation');
 
-        if ($amount != 0) {
-            return [
+        $area = null;
+        if ($taxConfiguration['displayCartTaxWithGrandTotal'] && $total->getGrandTotal()) {
+            $area = 'taxes';
+        }
+
+        if ($amount != 0 || $taxConfiguration['displayCartZeroTax']) {
+            $totals[] = [
                 'code' => $this->getCode(),
                 'title' => __('Tax'),
                 'full_info' => $applied ? $applied : [],
                 'value' => $amount,
+                'area' => $area,
             ];
         }
 
-        return null;
+        /**
+         * Modify subtotal
+         */
+        if ($taxConfiguration['displayCartSubtotalBoth'] || $taxConfiguration['displayCartSubtotalInclTax']) {
+            if ($total->getSubtotalInclTax() > 0) {
+                $subtotalInclTax = $total->getSubtotalInclTax();
+            } else {
+                $subtotalInclTax = $total->getSubtotal() + $taxAmount - $total->getShippingTaxAmount();
+            }
+
+            $totals[] = [
+                'code' => 'subtotal',
+                'title' => __('Subtotal'),
+                'value' => $subtotalInclTax,
+                'value_incl_tax' => $subtotalInclTax,
+                'value_excl_tax' => $total->getSubtotal(),
+            ];
+        }
+
+        if (empty($totals)) {
+            return null;
+        }
+        return $totals;
     }
 
     /**

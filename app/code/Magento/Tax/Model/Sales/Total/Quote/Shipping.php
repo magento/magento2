@@ -54,8 +54,18 @@ class Shipping extends CommonTaxCollector
         return $this;
     }
 
+    /**
+     * @param Address\Total $total
+     * @return array|null
+     */
     public function fetch(Address\Total $total)
     {
+        if ($total->getShippingInclTax()) {
+            return [
+                'code' => 'shipping',
+                'shipping_incl_tax' => $total->getShippingInclTax()
+            ];
+        }
         return null;
     }
 }
