@@ -334,17 +334,20 @@ class Weee extends AbstractTotal
      * Delegate this to WeeeTax collector
      *
      * @param \Magento\Quote\Model\Quote\Address|\Magento\Quote\Model\Quote\Address\Total $total
-     * @return array
+     * @return array|null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fetch(\Magento\Quote\Model\Quote\Address\Total $total)
     {
-        return [
-            'code' => $this->getCode(),
-            'title' => __('FPT'),
-            'value' => $total->getTotalAmount($this->getCode()),
-            'area' => null,
-        ];
+        if ($total->getTotalAmount($this->getCode())) {
+            return [
+                'code' => $this->getCode(),
+                'title' => __('FPT'),
+                'value' => $total->getTotalAmount($this->getCode()),
+                'area' => null,
+            ];
+        }
+        return null;
     }
 
     /**

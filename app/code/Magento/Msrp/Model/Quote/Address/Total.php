@@ -65,10 +65,13 @@ class Total extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      */
     public function fetch(\Magento\Quote\Model\Quote\Address\Total $total)
     {
-        return [
-            'code' => $this->getCode(),
-            'title' => __('MSRP'),
-            'can_apply_msrp' => (bool)$total->getCanApplyMsrp()
-        ];
+        if ($total->getCanApplyMsrp()) {
+            return [
+                'code' => $this->getCode(),
+                'title' => __('MSRP'),
+                'can_apply_msrp' => (bool)$total->getCanApplyMsrp()
+            ];
+        }
+        return null;
     }
 }

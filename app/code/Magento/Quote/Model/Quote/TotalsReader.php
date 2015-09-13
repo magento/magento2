@@ -6,6 +6,7 @@
  */
 namespace Magento\Quote\Model\Quote;
 
+use Magento\Quote\Model\Quote\Address\Total;
 use Magento\Quote\Model\Quote\Address\Total\Collector;
 use Magento\Quote\Model\Quote\Address\Total\CollectorFactory;
 use Magento\Quote\Model\Quote\Address\Total\CollectorInterface;
@@ -128,32 +129,60 @@ class TotalsReader
                 continue;
             }
             $data = $reader->fetch($total);
-            if ($data !== null) {
-                $totalInstance = $this->convert($data);
-                if (array_key_exists($totalInstance->getCode(), $output)) {
-                    $output[$totalInstance->getCode()] = $output[$totalInstance->getCode()]->addData(
-                        $totalInstance->getData()
-                    );
-                } else {
-                    $output[$totalInstance->getCode()] = $totalInstance;
-                }
+            if ($data === null) {
+                continue;
             }
+
+            $totalInstance = $this->convert($data);
+            if (is_array($totalInstance)) {
+                foreach($totalInstance as $item) {
+                    $output = $this->merge($item, $output);
+                }
+            } else {
+                $output = $this->merge($totalInstance, $output);
+            }
+
         }
 
         return $output;
     }
 
     /**
-     * @param $total
-     * @return \Magento\Quote\Model\Quote\Address\Total
+     * @param array $total
+     * @return Total|array
      */
     protected function convert($total)
     {
-        if ($total instanceof \Magento\Quote\Model\Quote\Address\Total) {
-            $totalInstance = $total;
-        } else {
-            $totalInstance = $this->totalFactory->create('Magento\Quote\Model\Quote\Address\Total')->setData($total);
+        if ($total instanceof Total) {
+            return $total;
         }
-        return $totalInstance;
+
+        if (count(array_column($total, 'code')) > 0) {
+            $totals = [];
+            foreach($total as $item) {
+                $totals[] = $this->totalFactory->create('Magento\Quote\Model\Quote\Address\Total')->setData($item);
+            }
+
+            return $totals;
+        }
+
+        return $this->totalFactory->create('Magento\Quote\Model\Quote\Address\Total')->setData($total);
+    }
+
+    /**
+     * @param Total $totalInstance
+     * @param array $output
+     * @return array
+     */
+    protected function merge($totalInstance, $output)
+    {
+        if (array_key_exists($totalInstance->getCode(), $output)) {
+            $output[$totalInstance->getCode()] = $output[$totalInstance->getCode()]->addData(
+                $totalInstance->getData()
+            );
+        } else {
+            $output[$totalInstance->getCode()] = $totalInstance;
+        }
+        return $output;
     }
 }
