@@ -445,12 +445,6 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
         $order->setCustomerFirstname($quote->getCustomerFirstname());
         $order->setCustomerMiddlename($quote->getCustomerMiddlename());
         $order->setCustomerLastname($quote->getCustomerLastname());
-
-        // Totals are not available at address level anymore, copying directly from the quote.
-        $order->setGrandTotal($quote->getGrandTotal());
-        $order->setBaseGrandTotal($quote->getBaseGrandTotal());
-        $order->setSubtotal($quote->getSubtotal());
-        $order->setBaseSubtotal($quote->getBaseSubtotal());
         
         $this->eventManager->dispatch(
             'sales_model_service_quote_submit_before',
