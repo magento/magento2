@@ -6,13 +6,11 @@
 
 namespace Magento\Newsletter\Test\Block\Adminhtml\Subscriber;
 
-use Magento\Backend\Test\Block\Widget\Grid as AbstractGrid;
-
 /**
  * Newsletter subscribers grid
  *
  */
-class Grid extends AbstractGrid
+class Grid extends \Magento\Ui\Test\Block\Adminhtml\DataGrid
 {
     /**
      * Filters array mapping
