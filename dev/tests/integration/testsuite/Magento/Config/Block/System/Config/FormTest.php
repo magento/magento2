@@ -254,8 +254,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Config\FileIteratorFactory'
         );
         $fileIterator = $fileIteratorFactory->create(
-            $directory,
-            [$directory->getRelativePath(__DIR__ . '/_files/test_section_config.xml')]
+            [$directory->getAbsolutePath(__DIR__ . '/_files/test_section_config.xml')]
         );
         $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($fileIterator));
 

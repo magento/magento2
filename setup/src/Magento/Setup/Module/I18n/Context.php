@@ -79,6 +79,7 @@ class Context
     private function getModuleName($path)
     {
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
+            $moduleDir .= '/';
             if (strpos($path, $moduleDir) !== false) {
                 return $moduleName;
             }
@@ -95,6 +96,7 @@ class Context
     private function getThemeName($path)
     {
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeName => $themeDir) {
+            $themeDir .= '/';
             if (strpos($path, $themeDir) !== false) {
                 return $themeName;
             }

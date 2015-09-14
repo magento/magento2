@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\Component\ComponentRegistrar;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class DependenciesShowModulesCommandTest extends \PHPUnit_Framework_TestCase
@@ -19,10 +20,28 @@ class DependenciesShowModulesCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $commandTester;
 
+    /**
+     * @var array
+     */
+    private $backupRegistrar;
+
     public function setUp()
     {
         $this->command = new DependenciesShowModulesCommand();
         $this->commandTester = new CommandTester($this->command);
+        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
+        $paths = $reflection->getProperty('paths');
+        $paths->setAccessible(true);
+        $this->backupRegistrar = $paths->getValue();
+        $paths->setValue(
+            [
+                ComponentRegistrar::MODULE => [
+                    'Magento_A' => __DIR__ . '/_files/root/app/code/Magento/A',
+                    'Magento_B' => __DIR__ . '/_files/root/app/code/Magento/B'
+                ]
+            ]
+        );
+        $paths->setAccessible(false);
     }
 
     public function tearDown()
@@ -30,12 +49,17 @@ class DependenciesShowModulesCommandTest extends \PHPUnit_Framework_TestCase
         if (file_exists(__DIR__ . '/_files/output/modules.csv')) {
             unlink(__DIR__ . '/_files/output/modules.csv');
         }
+        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
+        $paths = $reflection->getProperty('paths');
+        $paths->setAccessible(true);
+        $paths->setValue($this->backupRegistrar);
+        $paths->setAccessible(false);
     }
 
     public function testExecute()
     {
         $this->commandTester->execute(
-            ['--directory' => __DIR__ . '/_files/root', '--output' => __DIR__ . '/_files/output/modules.csv']
+            ['--output' => __DIR__ . '/_files/output/modules.csv']
         );
         $this->assertEquals('Report successfully processed.' . PHP_EOL, $this->commandTester->getDisplay());
         $fileContents = file_get_contents(__DIR__ . '/_files/output/modules.csv');
@@ -51,15 +75,6 @@ class DependenciesShowModulesCommandTest extends \PHPUnit_Framework_TestCase
         $this->assertContains(
             'magento/module-b,1,1,0' . PHP_EOL . '" -- magento/module-a",,1,0' . PHP_EOL,
             $fileContents
-        );
-    }
-
-    public function testExecuteInvalidDirectory()
-    {
-        $this->commandTester->execute(['--directory' => '/invalid/path']);
-        $this->assertContains(
-            'Please check the path you provided. Dependencies report generator failed with error:',
-            $this->commandTester->getDisplay()
         );
     }
 }
