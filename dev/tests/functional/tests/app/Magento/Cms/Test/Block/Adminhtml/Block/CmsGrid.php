@@ -6,6 +6,7 @@
 
 namespace Magento\Cms\Test\Block\Adminhtml\Block;
 
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 
 /**
@@ -13,6 +14,13 @@ use Magento\Ui\Test\Block\Adminhtml\DataGrid;
  */
 class CmsGrid extends DataGrid
 {
+    /**
+     * Select action toggle.
+     *
+     * @var string
+     */
+    protected $selectAction = '.action-select';
+
     /**
      * Filters array mapping.
      *
@@ -33,7 +41,7 @@ class CmsGrid extends DataGrid
         ],
         'store_id' => [
             'selector' => '[name="filters[store_id]"]',
-            'input' => 'selectstore'
+            'input' => 'simplifiedselect'
         ],
         'is_active' => [
             'selector' => '[name="filters[is_active]"]',
@@ -52,4 +60,16 @@ class CmsGrid extends DataGrid
             'selector' => '[name="filters[update_time][to]"]',
         ],
     ];
+
+    /**
+     * Click on "Edit" link.
+     *
+     * @param SimpleElement $rowItem
+     * @return void
+     */
+    protected function clickEditLink(SimpleElement $rowItem)
+    {
+        $rowItem->find($this->selectAction)->click();
+        $rowItem->find($this->editLink)->click();
+    }
 }

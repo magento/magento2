@@ -6,6 +6,7 @@
 
 namespace Magento\GroupedImportExport\Test\Unit\Model\Import\Product\Type\Grouped;
 
+use Magento\Framework\App\Resource;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class LinksTest extends \PHPUnit_Framework_TestCase
@@ -36,9 +37,10 @@ class LinksTest extends \PHPUnit_Framework_TestCase
         $this->link = $this->getMock('Magento\Catalog\Model\Resource\Product\Link', [], [], '', false);
         $this->connection = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
         $this->resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
-        $this->resource->expects($this->once())->method('getConnection')->with('write')->will(
-            $this->returnValue($this->connection)
-        );
+        $this->resource
+            ->expects($this->once())
+            ->method('getConnection')
+            ->will($this->returnValue($this->connection));
 
         $this->import = $this->getMock('Magento\ImportExport\Model\Import', [], [], '', false);
         $this->importFactory = $this->getMock('Magento\ImportExport\Model\ImportFactory', ['create'], [], '', false);

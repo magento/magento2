@@ -7,15 +7,13 @@
 ?>
 <?php /** @var $block \Magento\Translation\Block\Js */ ?>
 <?php if ($block->dictionaryEnabled()): ?>
-<script>
-require([
-    "jquery",
-    "mage/translate",
-    "text!<?php echo Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME?>"
-], function($, translate, data) {
-    if (data.length) {
-        $.mage.translate.add(JSON.parse(data));
-    }
-});
-</script>
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                "Magento_Translation/js/add-to-translate": {
+                    "config": "text!<?php /* @escapeNotVerified */ echo Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME?>"
+                }
+            }
+        }
+    </script>
 <?php endif; ?>

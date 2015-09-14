@@ -13,6 +13,6 @@
         <observer name="catalog" instance="Magento\Catalog\Model\Product\Compare\Item" method="bindCustomerLogout" shared="false" />
     </event>
     <event name="page_block_html_topmenu_gethtml_before">
-        <observer name="catalog_add_topmenu_items" instance="Magento\Catalog\Model\Observer" method="addCatalogToTopmenuItems" />
+        <observer name="catalog_add_topmenu_items" instance="Magento\Catalog\Observer\AddCatalogToTopmenuItems" method="invoke" />
     </event>
 </config>

@@ -103,14 +103,23 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $shipment1Qty = 2;
         $shipment3Qty = 3;
 
-        $orderItem1 = new \Magento\Framework\Object(
-            ['id' => $orderItem1Id]
+        $orderItem1 = new \Magento\Framework\DataObject(
+            [
+                'id' => $orderItem1Id,
+                'qty_to_invoice' => $orderItem1Id
+            ]
         );
-        $orderItem2 = new \Magento\Framework\Object(
-            ['id' => $orderItem2Id]
+        $orderItem2 = new \Magento\Framework\DataObject(
+            [
+                'id' => $orderItem2Id,
+                'qty_to_invoice' => $orderItem2Id
+            ]
         );
-        $orderItem3 = new \Magento\Framework\Object(
-            ['id' => $orderItem3Id]
+        $orderItem3 = new \Magento\Framework\DataObject(
+            [
+                'id' => $orderItem3Id,
+                'qty_to_invoice' => $orderItem3Id
+            ]
         );
         $orderItems = [$orderItem1, $orderItem2, $orderItem3];
         $orderMock->expects($this->any())
@@ -119,13 +128,13 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         //two items shipped
         $shipmentItems = [
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 [
                     'qty' => $shipment1Qty,
                     'order_item' => $orderItem1,
                 ]
             ),
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 [
                     'qty' => $shipment3Qty,
                     'order_item' => $orderItem3,
@@ -150,7 +159,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $orderMock->expects($this->once())
             ->method('getPayment')
-            ->willReturn(new \Magento\Framework\Object(['method' => PaymentMethod::METHOD_CODE]));
+            ->willReturn(new \Magento\Framework\DataObject(['method' => PaymentMethod::METHOD_CODE]));
         $orderMock->expects($this->once())
             ->method('canInvoice')
             ->willReturn(true);
@@ -207,9 +216,9 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $transactionMock->expects($this->once())
             ->method('save');
 
-        $observer = new \Magento\Framework\Object(
+        $observer = new \Magento\Framework\DataObject(
             [
-                'event' => new \Magento\Framework\Object(
+                'event' => new \Magento\Framework\DataObject(
                     [
                         'shipment' => $shipmentMock,
                     ]
@@ -235,7 +244,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             $index++;
         }
 
-        $paymentObj = new \Magento\Framework\Object(
+        $paymentObj = new \Magento\Framework\DataObject(
             [
                 'method' => PaymentMethod::METHOD_CODE,
             ]
@@ -250,11 +259,11 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->method('canInvoice')
             ->willReturn(true);
 
-        $observer = new \Magento\Framework\Object(
+        $observer = new \Magento\Framework\DataObject(
             [
-                'event' => new \Magento\Framework\Object(
+                'event' => new \Magento\Framework\DataObject(
                     [
-                        'shipment' => new \Magento\Framework\Object(
+                        'shipment' => new \Magento\Framework\DataObject(
                             [
                                 'order' => $orderMock,
                             ]
@@ -302,7 +311,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->method('isActive')
             ->willReturn($isActive);
 
-        $customer = new \Magento\Framework\Object(
+        $customer = new \Magento\Framework\DataObject(
             [
                 'id' => $customerId,
                 'email' => $customerEmail,
@@ -314,9 +323,9 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->with($customerId, $customerEmail)
             ->willReturn($braintreeCustoemrId);
 
-        $observer = new \Magento\Framework\Object(
+        $observer = new \Magento\Framework\DataObject(
             [
-                'event' => new \Magento\Framework\Object(
+                'event' => new \Magento\Framework\DataObject(
                     [
                         'customer' => $customer,
                     ]
@@ -370,7 +379,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $event = new \Magento\Framework\Object(
+        $event = new \Magento\Framework\DataObject(
             [
                 'is_catalog_product' => false,
                 'container' => $containerMock,
@@ -450,7 +459,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $event = new \Magento\Framework\Object(
+        $event = new \Magento\Framework\DataObject(
             [
                 'is_catalog_product' => false,
                 'container' => $containerMock,
@@ -483,7 +492,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $event = new \Magento\Framework\Object(
+        $event = new \Magento\Framework\DataObject(
             [
                 'is_catalog_product' => true,
                 'container' => $containerMock,
@@ -506,5 +515,49 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $containerMock->expects($this->never())
             ->method('getLayout');
         $this->model->addPaypalShortcuts($observer);
+    }
+
+    public function testProcessBraintreeAddressIfPaymentIsBraintree()
+    {
+        $billingAddressMock = $this->getMock(
+            'Magento\Quote\Model\Quote\Address',
+            ['setShouldIgnoreValidation'],
+            [],
+            '',
+            false
+        );
+        $eventMock = $this->getMock('Magento\Framework\Event', ['getQuote'], [], '', false);
+        $observerMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
+        $observerMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
+        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $eventMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
+        $paymentMock = $this->getMock('Magento\Quote\Model\Quote\Payment', [], [], '', false);
+        $quoteMock->expects($this->once())->method('getPayment')->willReturn($paymentMock);
+        $paymentMock
+            ->expects($this->once())
+            ->method('getMethod')
+            ->willReturn(\Magento\Braintree\Model\PaymentMethod\PayPal:: METHOD_CODE);
+        $quoteMock->expects($this->once())->method('getBillingAddress')->willReturn($billingAddressMock);
+        $billingAddressMock->expects($this->once())->method('setShouldIgnoreValidation')->with(true);
+        $this->model->processBraintreeAddress($observerMock);
+
+    }
+
+    public function testProcessBraintreeAddressIfPaymentIsNotBraintree()
+    {
+        $eventMock = $this->getMock('Magento\Framework\Event', ['getQuote'], [], '', false);
+        $observerMock = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
+        $observerMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
+        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $eventMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
+        $paymentMock = $this->getMock('Magento\Quote\Model\Quote\Payment', [], [], '', false);
+        $quoteMock->expects($this->once())->method('getPayment')->willReturn($paymentMock);
+        $paymentMock
+            ->expects($this->once())
+            ->method('getMethod')
+            ->willReturn('checkmo');
+        $quoteMock->expects($this->never())->method('getBillingAddress');
+        $this->model->processBraintreeAddress($observerMock);
+
     }
 }

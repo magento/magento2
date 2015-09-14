@@ -10,7 +10,7 @@ use Magento\Framework\App\RequestInterface;
 /**
  * Billing agreements controller
  */
-class Agreement extends \Magento\Framework\App\Action\Action
+abstract class Agreement extends \Magento\Framework\App\Action\Action
 {
     /**
      * Core registry
@@ -67,7 +67,9 @@ class Agreement extends \Magento\Framework\App\Action\Action
                 return $billingAgreement;
             }
         }
-        $this->messageManager->addError(__('Please specify the correct billing agreement ID and try again.'));
+        $this->messageManager->addErrorMessage(
+            __('Please specify the correct billing agreement ID and try again.')
+        );
         $this->_redirect('*/*/');
         return false;
     }

@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Reports\Test\TestCase\ProductReviewReportEntityTest">
+    <testCase name="Magento\Reports\Test\TestCase\ProductReviewReportEntityTest" summary="Product Review Report" ticketId="MAGETWO-27223">
         <variation name="ProductReviewReportEntityTestVariation1">
             <data name="review/dataset" xsi:type="string">frontend_review</data>
             <constraint name="Magento\Reports\Test\Constraint\AssertProductReviewReportIsVisibleInGrid" />

@@ -7,21 +7,23 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<?php if ($block->getProductData()->getId()): ?>
-<?php $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image'); ?>
+<?php
+$product = $block->getProductData();
+?>
+<?php if ($product->getId()): ?>
 <div class="customer-review view">
     <div class="product-details">
         <div class="product-media">
-            <a class="product-photo" href="<?php echo $block->getProductData()->getProductUrl() ?>">
+            <a class="product-photo" href="<?php /* @escapeNotVerified */ echo $product->getProductUrl() ?>">
                 <?php /* customer_account_product_review_page */ ?>
-                <?php echo $imageBlock->init($block->getProductData(), 'customer_account_product_review_page')->toHtml() ?>
+                <?php echo $block->getImage($block->getProductData(), 'customer_account_product_review_page')->toHtml() ?>
             </a>
         </div>
         <div class="product-info">
-            <h2 class="product-name"><?php echo $block->escapeHtml($block->getProductData()->getName()) ?></h2>
+            <h2 class="product-name"><?php echo $block->escapeHtml($product->getName()) ?></h2>
             <?php if ($block->getRating() && $block->getRating()->getSize()): ?>
-                <span class="rating-average-label"><?php echo __('Average Customer Rating:') ?></span>
-                <?php echo $block->getReviewsSummaryHtml($block->getProductData()) ?>
+                <span class="rating-average-label"><?php /* @escapeNotVerified */ echo __('Average Customer Rating:') ?></span>
+                <?php echo $block->getReviewsSummaryHtml($product) ?>
             <?php endif; ?>
         </div>
     </div>
@@ -29,7 +31,7 @@
     <div class="review-details">
         <?php if ($block->getRating() && $block->getRating()->getSize()): ?>
             <div class="title">
-                <strong><?php echo __('Your Review'); ?></strong>
+                <strong><?php /* @escapeNotVerified */ echo __('Your Review'); ?></strong>
             </div>
             <div class="customer-review-rating">
                 <?php foreach ($block->getRating() as $_rating): ?>
@@ -37,9 +39,9 @@
                     <?php $rating = ceil($_rating->getPercent()) ?>
                     <div class="rating-summary item">
                         <span class="rating-label"><span><?php echo $block->escapeHtml($_rating->getRatingCode()) ?></span></span>
-                        <div class="rating-result" title="<?php echo $rating; ?>%">
-                            <span style="width:<?php echo $rating; ?>%">
-                                <span><?php echo $rating; ?>%</span>
+                        <div class="rating-result" title="<?php /* @escapeNotVerified */ echo $rating; ?>%">
+                            <span style="width:<?php /* @escapeNotVerified */ echo $rating; ?>%">
+                                <span><?php /* @escapeNotVerified */ echo $rating; ?>%</span>
                             </span>
                         </div>
                     </div>
@@ -51,13 +53,13 @@
         <div class="review-title"><?php echo $block->escapeHtml($block->getReviewData()->getTitle()) ?></div>
         <div class="review-content"><?php echo nl2br($block->escapeHtml($block->getReviewData()->getDetail())) ?></div>
         <div class="review-date">
-            <?php echo __('Submitted on %1', '<time class="date">' . $block->dateFormat($block->getReviewData()->getCreatedAt()) . '</time>') ?>
+            <?php /* @escapeNotVerified */ echo __('Submitted on %1', '<time class="date">' . $block->dateFormat($block->getReviewData()->getCreatedAt()) . '</time>') ?>
         </div>
     </div>
 </div>
 <div class="actions-toolbar">
     <div class="secondary">
-        <a class="action back" href="<?php echo $block->getBackUrl() ?>"><span><?php echo __('Back to My Reviews') ?></span></a>
+        <a class="action back" href="<?php /* @escapeNotVerified */ echo $block->getBackUrl() ?>"><span><?php /* @escapeNotVerified */ echo __('Back to My Reviews') ?></span></a>
     </div>
 </div>
 <?php endif; ?>

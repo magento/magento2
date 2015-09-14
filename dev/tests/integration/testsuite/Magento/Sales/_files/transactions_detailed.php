@@ -19,6 +19,8 @@ $payment->setIsTransactionClosed(true);
 $payment->setTransactionAdditionalInfo('auth_key', 'data');
 $payment->addTransaction(\Magento\Sales\Model\Order\Payment\Transaction::TYPE_AUTH);
 
+$payment->resetTransactionAdditionalInfo();
+
 $payment->setTransactionId('trx_capture');
 $payment->setIsTransactionClosed(false);
 $payment->setTransactionAdditionalInfo('capture_key', 'data');

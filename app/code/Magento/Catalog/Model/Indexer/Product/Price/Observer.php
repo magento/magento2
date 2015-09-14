@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Price;
 
+use Magento\Framework\App\Resource;
+
 class Observer
 {
     /**
@@ -13,7 +15,7 @@ class Observer
     protected $_storeManager;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var Resource
      */
     protected $_resource;
 
@@ -44,7 +46,7 @@ class Observer
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\Resource $resource
+     * @param Resource $resource
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -52,7 +54,7 @@ class Observer
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\Resource $resource,
+        Resource $resource,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Eav\Model\Config $eavConfig,
@@ -71,10 +73,10 @@ class Observer
      *
      * @return bool|\Magento\Framework\DB\Adapter\AdapterInterface
      */
-    protected function _getWriteConnection()
+    protected function _getConnection()
     {
         if (null === $this->_connection) {
-            $this->_connection = $this->_resource->getConnection('write');
+            $this->_connection = $this->_resource->getConnection();
         }
         return $this->_connection;
     }
@@ -86,7 +88,7 @@ class Observer
      */
     public function refreshSpecialPrices()
     {
-        $connection = $this->_getWriteConnection();
+        $connection = $this->_getConnection();
 
         foreach ($this->_storeManager->getStores(true) as $store) {
             $timestamp = $this->_localeDate->scopeTimeStamp($store);
@@ -129,7 +131,7 @@ class Observer
         $attribute = $this->_eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attrCode);
         $attributeId = $attribute->getAttributeId();
 
-        $connection = $this->_getWriteConnection();
+        $connection = $this->_getConnection();
 
         $select = $connection->select()->from(
             $this->_resource->getTableName(['catalog_product_entity', 'datetime']),

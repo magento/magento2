@@ -85,7 +85,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
         $order->loadByIncrementId('100000001');
 
         $this->_httpClientMock->expects($this->any())->method('request')
-            ->will($this->returnValue(new \Magento\Framework\Object(['body' => 'RESULTval=12&val2=34'])));
+            ->will($this->returnValue(new \Magento\Framework\DataObject(['body' => 'RESULTval=12&val2=34'])));
         $expectedResult = ['resultval' => '12', 'val2' => '34', 'result_code' => null];
 
         $this->assertEquals($expectedResult, $this->_model->acceptPayment($order->getPayment()));

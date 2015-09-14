@@ -43,13 +43,13 @@ class Config extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _loadTypes()
     {
-        $adapter = $this->_getReadAdapter();
-        if (!$adapter) {
+        $connection = $this->getConnection();
+        if (!$connection) {
             return $this;
         }
         if (empty(self::$_entityTypes)) {
-            $select = $adapter->select()->from($this->getMainTable());
-            $data = $adapter->fetchAll($select);
+            $select = $connection->select()->from($this->getMainTable());
+            $data = $connection->fetchAll($select);
             foreach ($data as $row) {
                 self::$_entityTypes['by_id'][$row['entity_type_id']] = $row;
                 self::$_entityTypes['by_code'][$row['entity_type_code']] = $row;
@@ -68,15 +68,15 @@ class Config extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected function _loadTypeAttributes($typeId)
     {
         if (!isset(self::$_attributes[$typeId])) {
-            $adapter = $this->_getReadAdapter();
+            $connection = $this->getConnection();
             $bind = ['entity_type_id' => $typeId];
-            $select = $adapter->select()->from(
+            $select = $connection->select()->from(
                 $this->getTable('eav_attribute')
             )->where(
                 'entity_type_id = :entity_type_id'
             );
 
-            self::$_attributes[$typeId] = $adapter->fetchAll($select, $bind);
+            self::$_attributes[$typeId] = $connection->fetchAll($select, $bind);
         }
 
         return self::$_attributes[$typeId];

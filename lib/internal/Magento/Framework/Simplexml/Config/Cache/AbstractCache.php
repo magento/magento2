@@ -12,7 +12,7 @@ namespace Magento\Framework\Simplexml\Config\Cache;
  * @method void setIsAllowedToSave(bool $isAllowedToSave)
  * @method array getComponents()
  */
-abstract class AbstractCache extends \Magento\Framework\Object
+abstract class AbstractCache extends \Magento\Framework\DataObject
 {
     /**
      * Constructor

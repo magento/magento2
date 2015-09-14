@@ -15,9 +15,9 @@
     </argument>
     <dataSource name="sales_order_creditmemo_grid_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">CreditmemoGridDataProvider</argument>
+            <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument>
             <argument name="name" xsi:type="string">sales_order_creditmemo_grid_data_source</argument>
-            <argument name="primaryFieldName" xsi:type="string">increment_id</argument>
+            <argument name="primaryFieldName" xsi:type="string">entity_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -64,19 +64,7 @@
         <exportButton name="export_button">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="displayArea" xsi:type="string">dataGridActions</item>
-                    <item name="options" xsi:type="array">
-                        <item name="cvs" xsi:type="array">
-                            <item name="value" xsi:type="string">csv</item>
-                            <item name="label" xsi:type="string" translate="true">CSV</item>
-                            <item name="url" xsi:type="string">sales/creditmemo/exportCsv</item>
-                        </item>
-                        <item name="xml" xsi:type="array">
-                            <item name="value" xsi:type="string">xml</item>
-                            <item name="label" xsi:type="string" translate="true">Excel XML</item>
-                            <item name="url" xsi:type="string">sales/creditmemo/exportExcel</item>
-                        </item>
-                    </item>
+                    <item name="selectProvider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.sales_order_creditmemo_columns.ids</item>
                 </item>
             </argument>
         </exportButton>
@@ -475,16 +463,18 @@
                 <item name="config" xsi:type="array">
                     <item name="selectProvider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.sales_order_creditmemo_columns.ids</item>
                     <item name="displayArea" xsi:type="string">bottom</item>
-                    <item name="actions" xsi:type="array">
-                        <item name="pdfcreditmemos_order" xsi:type="array">
-                            <item name="type" xsi:type="string">pdfcreditmemos_order</item>
-                            <item name="label" xsi:type="string" translate="true">PDF Credit Memos</item>
-                            <item name="url" xsi:type="string">sales/creditmemo/pdfcreditmemos</item>
-                        </item>
-                    </item>
                     <item name="indexField" xsi:type="string">entity_id</item>
                 </item>
             </argument>
+            <action name="pdfcreditmemos_order">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="type" xsi:type="string">pdfcreditmemos_order</item>
+                        <item name="label" xsi:type="string" translate="true">PDF Credit Memos</item>
+                        <item name="url" xsi:type="url" path="sales/creditmemo/pdfcreditmemos"/>
+                    </item>
+                </argument>
+            </action>
         </massaction>
         <paging name="listing_paging">
             <argument name="data" xsi:type="array">
@@ -495,28 +485,6 @@
                     </item>
                     <item name="selectProvider" xsi:type="string">sales_order_creditmemo_grid.sales_order_creditmemo_grid.sales_order_creditmemo_columns.ids</item>
                     <item name="displayArea" xsi:type="string">bottom</item>
-                    <item name="options" xsi:type="array">
-                        <item name="20" xsi:type="array">
-                            <item name="value" xsi:type="number">20</item>
-                            <item name="label" xsi:type="string" translate="true">20</item>
-                        </item>
-                        <item name="30" xsi:type="array">
-                            <item name="value" xsi:type="number">30</item>
-                            <item name="label" xsi:type="string" translate="true">30</item>
-                        </item>
-                        <item name="50" xsi:type="array">
-                            <item name="value" xsi:type="number">50</item>
-                            <item name="label" xsi:type="string" translate="true">50</item>
-                        </item>
-                        <item name="100" xsi:type="array">
-                            <item name="value" xsi:type="number">100</item>
-                            <item name="label" xsi:type="string" translate="true">100</item>
-                        </item>
-                        <item name="200" xsi:type="array">
-                            <item name="value" xsi:type="number">200</item>
-                            <item name="label" xsi:type="string" translate="true">200</item>
-                        </item>
-                    </item>
                 </item>
             </argument>
         </paging>
@@ -822,7 +790,7 @@
                 </item>
             </argument>
         </column>
-        <column name="actions" class="Magento\Sales\Ui\Component\Listing\Column\OrderCreditmemoActions">
+        <column name="actions" class="Magento\Sales\Ui\Component\Listing\Column\ViewAction">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="draggable" xsi:type="boolean">false</item>
@@ -833,6 +801,8 @@
                     <item name="data_type" xsi:type="string">actions</item>
                     <item name="filterable" xsi:type="boolean">false</item>
                     <item name="sortable" xsi:type="boolean">false</item>
+                    <item name="viewUrlPath" xsi:type="string">sales/creditmemo/view</item>
+                    <item name="urlEntityParamName" xsi:type="string">creditmemo_id</item>
                 </item>
             </argument>
         </column>

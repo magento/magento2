@@ -16,11 +16,12 @@ define(
         "use strict";
         return {
             getRates: function(address) {
+                shippingService.isLoading(true);
                 var cache = rateRegistry.get(address.getKey());
                 if (cache) {
                     shippingService.setShippingRates(cache);
+                    shippingService.isLoading(false);
                 } else {
-                    shippingService.isLoading(true);
                     storage.post(
                         resourceUrlManager.getUrlForEstimationShippingMethodsByAddressId(),
                         JSON.stringify({

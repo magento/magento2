@@ -9,6 +9,7 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 use Magento\Backend\App\Action;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Sales\Model\Service\InvoiceService;
 
 class NewAction extends \Magento\Backend\App\Action
 {
@@ -23,18 +24,26 @@ class NewAction extends \Magento\Backend\App\Action
     protected $resultPageFactory;
 
     /**
+     * @var InvoiceService
+     */
+    private $invoiceService;
+
+    /**
      * @param Action\Context $context
      * @param Registry $registry
      * @param PageFactory $resultPageFactory
+     * @param InvoiceService $invoiceService
      */
     public function __construct(
         Action\Context $context,
         Registry $registry,
-        PageFactory $resultPageFactory
+        PageFactory $resultPageFactory,
+        InvoiceService $invoiceService
     ) {
         $this->registry = $registry;
         $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context);
+        $this->invoiceService = $invoiceService;
     }
 
     /**
@@ -82,10 +91,7 @@ class NewAction extends \Magento\Backend\App\Action
                     __('The order does not allow an invoice to be created.')
                 );
             }
-
-            /** @var \Magento\Sales\Model\Order\Invoice $invoice */
-            $invoice = $this->_objectManager->create('Magento\Sales\Model\Service\Order', ['order' => $order])
-                ->prepareInvoice($invoiceItems);
+            $invoice = $this->invoiceService->prepareInvoice($order, $invoiceItems);
 
             if (!$invoice->getTotalQty()) {
                 throw new \Magento\Framework\Exception\LocalizedException(

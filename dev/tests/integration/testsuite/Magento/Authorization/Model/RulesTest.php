@@ -65,8 +65,8 @@ class RulesTest extends \PHPUnit_Framework_TestCase
      */
     protected function _checkExistingPermissions($expectedDefaultPermissions)
     {
-        $adapter = $this->_model->getResource()->getReadConnection();
-        $ruleSelect = $adapter->select()->from($this->_model->getResource()->getMainTable());
+        $connection = $this->_model->getResource()->getConnection();
+        $ruleSelect = $connection->select()->from($this->_model->getResource()->getMainTable());
 
         $rules = $ruleSelect->query()->fetchAll();
         $this->assertEquals(1, count($rules));

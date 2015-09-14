@@ -32,7 +32,7 @@ class NorouteTest extends \PHPUnit_Framework_TestCase
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->_viewMock = $this->getMock('\Magento\Framework\App\ViewInterface');
-        $this->_statusMock = $this->getMock('Magento\Framework\Object', ['getLoaded'], [], '', false);
+        $this->_statusMock = $this->getMock('Magento\Framework\DataObject', ['getLoaded'], [], '', false);
         $this->_controller = $helper->getObject(
             'Magento\Framework\Controller\Noroute\Index',
             ['request' => $this->_requestMock, 'view' => $this->_viewMock]

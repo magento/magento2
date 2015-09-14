@@ -48,6 +48,12 @@
                                         <item name="sortOrder" xsi:type="string">0</item>
                                         <item name="component" xsi:type="string">Magento_Checkout/js/view/progress-bar</item>
                                         <item name="displayArea" xsi:type="string">progressBar</item>
+                                        <item name="config" xsi:type="array">
+                                            <item name="deps" xsi:type="array">
+                                                <item name="0" xsi:type="string">checkout.steps.shipping-step.shippingAddress</item>
+                                                <item name="1" xsi:type="string">checkout.steps.billing-step.payment</item>
+                                            </item>
+                                        </item>
                                     </item>
                                     <item name="estimation" xsi:type="array">
                                         <item name="sortOrder" xsi:type="string">10</item>
@@ -110,7 +116,7 @@
                                                         <item name="sortOrder" xsi:type="string">1</item>
                                                         <item name="children" xsi:type="array">
                                                             <item name="customer-email" xsi:type="array">
-                                                                <item name="component" xsi:type="string">Magento_Customer/js/view/customer-email</item>
+                                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/form/element/email</item>
                                                                 <item name="displayArea" xsi:type="string">customer-email</item>
                                                                 <item name="tooltip" xsi:type="array">
                                                                     <item name="description" xsi:type="string">We'll send your order confirmation here.</item>
@@ -243,11 +249,17 @@
                                                                     <!-- merge payment method renders here -->
                                                                 </item>
                                                             </item>
+                                                            <item name="additional-payment-validators" xsi:type="array">
+                                                                <item name="component" xsi:type="string">uiComponent</item>
+                                                                <item name="children" xsi:type="array">
+                                                                    <!-- merge payment validators here -->
+                                                                </item>
+                                                            </item>
                                                             <item name="customer-email" xsi:type="array">
-                                                                <item name="component" xsi:type="string">Magento_Customer/js/view/customer-email</item>
+                                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/form/element/email</item>
                                                                 <item name="displayArea" xsi:type="string">customer-email</item>
                                                                 <item name="tooltip" xsi:type="array">
-                                                                    <item name="description" xsi:type="string">(You can create an account to track your order after checkout)</item>
+                                                                    <item name="description" xsi:type="string">We'll send your order confirmation here.</item>
                                                                 </item>
                                                                 <item name="children" xsi:type="array">
                                                                     <item name="before-login-form" xsi:type="array">
@@ -285,7 +297,10 @@
                                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/payment/list</item>
                                                                 <item name="displayArea" xsi:type="string">payment-methods-list</item>
                                                                 <item name="config" xsi:type="array">
-                                                                    <item name="deps" xsi:type="string">checkout.steps.billing-step.payment.renders</item>
+                                                                    <item name="deps" xsi:type="array">
+                                                                        <item name="0" xsi:type="string">checkout.steps.billing-step.payment.renders</item>
+                                                                        <item name="1" xsi:type="string">checkout.steps.billing-step.payment.additional-payment-validators</item>
+                                                                    </item>
                                                                 </item>
                                                             </item>
                                                             <!-- merge your payment methods here -->
@@ -405,6 +420,6 @@
                 </arguments>
             </block>
         </referenceContainer>
-        <remove name="page.messages" />
+        <referenceContainer name="page.messages" remove="true"/>
     </body>
 </page>

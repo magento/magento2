@@ -8,6 +8,7 @@ namespace Magento\Framework\View\Asset;
 
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\State;
 
 /**
  * View asset configuration interface
@@ -23,16 +24,6 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
      * XML path for JavaScript files merge configuration
      */
     const XML_PATH_MERGE_JS_FILES = 'dev/js/merge_files';
-
-    /**
-     * XML path for asset minification configuration
-     */
-    const XML_PATH_MINIFICATION_ENABLED = 'dev/%s/minify_files';
-
-    /**
-     * XML path for asset minification adapter configuration
-     */
-    const XML_PATH_MINIFICATION_ADAPTER = 'dev/%s/minify_adapter';
 
     /**
      * XML path for asset minification adapter configuration
@@ -92,34 +83,6 @@ class Config implements \Magento\Framework\View\Asset\ConfigInterface
     {
         return (bool)$this->scopeConfig->isSetFlag(
             self::XML_PATH_MERGE_JS_FILES,
-            ScopeInterface::SCOPE_STORE
-        );
-    }
-
-    /**
-     * Check whether asset minification is on for specified content type
-     *
-     * @param string $contentType
-     * @return bool
-     */
-    public function isAssetMinification($contentType)
-    {
-        return (bool)$this->scopeConfig->isSetFlag(
-            sprintf(self::XML_PATH_MINIFICATION_ENABLED, $contentType),
-            ScopeInterface::SCOPE_STORE
-        );
-    }
-
-    /**
-     * Get asset minification adapter for specified content type
-     *
-     * @param string $contentType
-     * @return string
-     */
-    public function getAssetMinificationAdapter($contentType)
-    {
-        return (string)$this->scopeConfig->getValue(
-            sprintf(self::XML_PATH_MINIFICATION_ADAPTER, $contentType),
             ScopeInterface::SCOPE_STORE
         );
     }

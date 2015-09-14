@@ -18,6 +18,7 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
     {
         if ($this->getRequest()->getPostValue()) {
             try {
+                /** @var \Magento\CatalogRule\Model\Rule $model */
                 $model = $this->_objectManager->create('Magento\CatalogRule\Model\Rule');
                 $this->_eventManager->dispatch(
                     'adminhtml_controller_catalogrule_prepare_save',
@@ -38,7 +39,7 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                     }
                 }
 
-                $validateResult = $model->validateData(new \Magento\Framework\Object($data));
+                $validateResult = $model->validateData(new \Magento\Framework\DataObject($data));
                 if ($validateResult !== true) {
                     foreach ($validateResult as $errorMessage) {
                         $this->messageManager->addError($errorMessage);
@@ -63,7 +64,13 @@ class Save extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
                     $this->getRequest()->setParam('rule_id', $model->getId());
                     $this->_forward('applyRules');
                 } else {
-                    $this->_objectManager->create('Magento\CatalogRule\Model\Flag')->loadSelf()->setState(1)->save();
+                    if ($model->isRuleBehaviorChanged()) {
+                        $this->_objectManager
+                            ->create('Magento\CatalogRule\Model\Flag')
+                            ->loadSelf()
+                            ->setState(1)
+                            ->save();
+                    }
                     if ($this->getRequest()->getParam('back')) {
                         $this->_redirect('catalog_rule/*/edit', ['id' => $model->getId()]);
                         return;

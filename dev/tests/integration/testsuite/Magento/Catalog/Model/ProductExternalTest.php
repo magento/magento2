@@ -49,7 +49,7 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
     public function testGetCategoryId()
     {
         $this->assertFalse($this->_model->getCategoryId());
-        $category = new \Magento\Framework\Object(['id' => 5]);
+        $category = new \Magento\Framework\DataObject(['id' => 5]);
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get('Magento\Framework\Registry')->register('current_category', $category);
@@ -69,7 +69,7 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get('Magento\Framework\Registry')
-            ->register('current_category', new \Magento\Framework\Object(['id' => 3]));
+            ->register('current_category', new \Magento\Framework\DataObject(['id' => 3]));
         // fixture
         try {
             $category = $this->_model->getCategory();
@@ -284,7 +284,7 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
         $this->_model->setId(99);
         $this->_model->addCustomOption('one', 'value1');
         $option = $this->_model->getCustomOption('one');
-        $this->assertInstanceOf('Magento\Framework\Object', $option);
+        $this->assertInstanceOf('Magento\Framework\DataObject', $option);
         $this->assertEquals($this->_model->getId(), $option->getProductId());
         $this->assertSame($option->getProduct(), $this->_model);
         $this->assertEquals('one', $option->getCode());

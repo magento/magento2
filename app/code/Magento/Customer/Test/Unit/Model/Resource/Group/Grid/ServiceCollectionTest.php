@@ -8,6 +8,7 @@ namespace Magento\Customer\Test\Unit\Model\Resource\Group\Grid;
 
 use Magento\Framework\Api\SearchCriteria;
 use Magento\Customer\Model\Resource\Group\Grid\ServiceCollection;
+use Magento\Framework\Api\SortOrder;
 
 /**
  * Unit test for \Magento\Customer\Model\Resource\Group\Grid\ServiceCollection
@@ -81,7 +82,7 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
     {
         $sortOrder = $this->sortOrderBuilder
             ->setField('name')
-            ->setDirection(SearchCriteria::SORT_ASC)
+            ->setDirection(SortOrder::SORT_ASC)
             ->create();
         /** @var SearchCriteria $expectedSearchCriteria */
         $expectedSearchCriteria = $this->searchCriteriaBuilder
@@ -111,7 +112,7 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
         $value = '35';
         $sortOrder = $this->sortOrderBuilder
             ->setField('name')
-            ->setDirection(SearchCriteria::SORT_ASC)
+            ->setDirection(SortOrder::SORT_ASC)
             ->create();
         /** @var SearchCriteria $expectedSearchCriteria */
         $filter = $this->filterBuilder->setField($field)->setConditionType($conditionType)->setValue($value)->create();
@@ -143,7 +144,7 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
 
         $sortOrder = $this->sortOrderBuilder
             ->setField('name')
-            ->setDirection(SearchCriteria::SORT_ASC)
+            ->setDirection(SortOrder::SORT_ASC)
             ->create();
         /** @var SearchCriteria $expectedSearchCriteria */
         $expectedSearchCriteria = $this->searchCriteriaBuilder
@@ -179,7 +180,7 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
 
         $sortOrder = $this->sortOrderBuilder
             ->setField('name')
-            ->setDirection(SearchCriteria::SORT_ASC)
+            ->setDirection(SortOrder::SORT_ASC)
             ->create();
         /** @var SearchCriteria $expectedSearchCriteria */
         $expectedSearchCriteria = $this->searchCriteriaBuilder
@@ -238,5 +239,15 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
                 [['eq' => 'A'], ['eq' => 'B']],
             ],
         ];
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage When passing an array of fields there must be at least one field in the array.
+     * @dataProvider addFieldToFilterInconsistentArraysDataProvider
+     */
+    public function testAddFieldToFilterEmptyArrays()
+    {
+        $this->serviceCollection->addFieldToFilter([], []);
     }
 }

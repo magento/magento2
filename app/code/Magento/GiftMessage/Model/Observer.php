@@ -10,7 +10,7 @@ namespace Magento\GiftMessage\Model;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Observer extends \Magento\Framework\Object
+class Observer extends \Magento\Framework\DataObject
 {
     /**
      * Gift message message

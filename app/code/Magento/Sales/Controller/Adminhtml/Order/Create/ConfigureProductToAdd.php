@@ -17,7 +17,7 @@ class ConfigureProductToAdd extends \Magento\Sales\Controller\Adminhtml\Order\Cr
         // Prepare data
         $productId = (int)$this->getRequest()->getParam('id');
 
-        $configureResult = new \Magento\Framework\Object();
+        $configureResult = new \Magento\Framework\DataObject();
         $configureResult->setOk(true);
         $configureResult->setProductId($productId);
         $sessionQuote = $this->_objectManager->get('Magento\Backend\Model\Session\Quote');

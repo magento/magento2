@@ -116,7 +116,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->collection->setInterval($fromDate, $toDate);
         $reports = $this->collection->getReports();
         foreach ($reports as $report) {
-            $this->assertInstanceOf('\Magento\Framework\Object', $report);
+            $this->assertInstanceOf('\Magento\Framework\DataObject', $report);
             $reportData = $report->getData();
             $this->assertTrue(empty($reportData['children']));
             $this->assertTrue($reportData['is_empty']);

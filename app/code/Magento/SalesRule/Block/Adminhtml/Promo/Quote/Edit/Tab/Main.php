@@ -13,7 +13,7 @@ use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Convert\Object as ObjectConverter;
+use Magento\Framework\Convert\DataObject as ObjectConverter;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
 use Magento\SalesRule\Model\RuleFactory;
@@ -33,7 +33,7 @@ class Main extends Generic implements TabInterface
     protected $_systemStore;
 
     /**
-     * @var \Magento\Framework\Convert\Object
+     * @var \Magento\Framework\Convert\DataObject
      */
     protected $_objectConverter;
 

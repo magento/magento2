@@ -121,7 +121,7 @@ class PayflowlinkTest extends \PHPUnit_Framework_TestCase
             ->method('getBuildNotationCode')
             ->will($this->returnValue('build notation code'));
 
-        $response = new \Magento\Framework\Object(
+        $response = new \Magento\Framework\DataObject(
             [
                 'result' => '0',
                 'pnref' => 'V19A3D27B61E',
@@ -155,7 +155,7 @@ class PayflowlinkTest extends \PHPUnit_Framework_TestCase
                 ['USER2', 'a20d3dc6824c1f7780c5529dc37ae5e', $this->returnSelf()]
             );
 
-        $stateObject = new \Magento\Framework\Object();
+        $stateObject = new \Magento\Framework\DataObject();
         $this->model->initialize(\Magento\Paypal\Model\Config::PAYMENT_ACTION_AUTH, $stateObject);
     }
 

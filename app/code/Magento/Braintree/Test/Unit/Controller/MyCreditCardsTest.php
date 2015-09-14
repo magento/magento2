@@ -114,7 +114,7 @@ class MyCreditCardsTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $notification = $objectManager->getObject(
-            'Magento\Braintree\Controller\MyCreditCards',
+            'Magento\Braintree\Test\Unit\Controller\Stub\MyCreditCardsStub',
             [
                 'customerSession' => $this->customerSession,
                 'resultRedirectFactory' => $this->resultRedirectFactory,
@@ -157,7 +157,7 @@ class MyCreditCardsTest extends \PHPUnit_Framework_TestCase
 
 
         $notification = $objectManager->getObject(
-            'Magento\Braintree\Controller\MyCreditCards',
+            'Magento\Braintree\Test\Unit\Controller\Stub\MyCreditCardsStub',
             [
                 'customerSession' => $this->customerSession,
                 'resultRedirectFactory' => $this->resultRedirectFactory,

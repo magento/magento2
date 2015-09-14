@@ -6,17 +6,19 @@
 
 namespace Magento\Eav\Test\Unit\Helper;
 
+use Magento\Store\Model\ScopeInterface;
+
 class DataTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Eav\Helper\Data
      */
-    protected $_helper;
+    protected $helper;
 
     /**
-     * @var \Magento\Eav\Model\Config
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_eavConfig;
+    protected $eavConfig;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -24,31 +26,52 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected $attributeConfig;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $context;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $scopeConfigMock;
+
+    /**
      * Initialize helper
      */
     protected function setUp()
     {
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $className = '\Magento\Eav\Helper\Data';
-        $arguments = $objectManagerHelper->getConstructArguments($className);
-        $this->attributeConfig = $arguments['attributeConfig'];
-        $this->_eavConfig = $arguments['eavConfig'];
-        $this->_helper = $objectManagerHelper->getObject($className, $arguments);
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
+        $this->attributeConfig = $this->getMock('\Magento\Eav\Model\Entity\Attribute\Config', [], [], '', false);
+        $this->eavConfig = $this->getMock('\Magento\Eav\Model\Config', [], [], '', false);
+        $this->context = $this->getMock('\Magento\Framework\App\Helper\Context', ['getScopeConfig'], [], '', false);
+
+        $this->scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->context->expects($this->once())->method('getScopeConfig')->willReturn($this->scopeConfigMock);
+
+        $this->helper = $objectManager->getObject(
+            '\Magento\Eav\Helper\Data',
+            [
+                'attributeConfig' => $this->attributeConfig,
+                'eavConfig' => $this->eavConfig,
+                'context' => $this->context,
+            ]
+        );
     }
 
     public function testGetAttributeMetadata()
     {
-        $attribute = new \Magento\Framework\Object([
+        $attribute = new \Magento\Framework\DataObject([
             'entity_type_id' => '1',
             'attribute_id'   => '2',
-            'backend'        => new \Magento\Framework\Object(['table' => 'customer_entity_varchar']),
+            'backend'        => new \Magento\Framework\DataObject(['table' => 'customer_entity_varchar']),
             'backend_type'   => 'varchar',
         ]);
-        $this->_eavConfig->expects($this->once())
+        $this->eavConfig->expects($this->once())
             ->method('getAttribute')
             ->will($this->returnValue($attribute));
 
-        $result = $this->_helper->getAttributeMetadata('customer', 'lastname');
+        $result = $this->helper->getAttributeMetadata('customer', 'lastname');
         $expected = [
             'entity_type_id' => '1',
             'attribute_id' => '2',
@@ -72,7 +95,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFrontendClasses()
     {
-        $result = $this->_helper->getFrontendClasses('someNonExistedClass');
+        $result = $this->helper->getFrontendClasses('someNonExistedClass');
         $this->assertTrue(count($result) > 1);
         $this->assertContains(['value' => '', 'label' => 'None'], $result);
         $this->assertContains(['value' => 'validate-number', 'label' => 'Decimal Number'], $result);
@@ -84,7 +107,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testGetAttributeLockedFieldsNoEntityCode()
     {
         $this->attributeConfig->expects($this->never())->method('getEntityAttributesLockedFields');
-        $this->assertEquals([], $this->_helper->getAttributeLockedFields(''));
+        $this->assertEquals([], $this->helper->getAttributeLockedFields(''));
     }
 
     /**
@@ -96,7 +119,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $this->attributeConfig->expects($this->once())->method('getEntityAttributesLockedFields')
             ->with('entityTypeCode')->will($this->returnValue($lockedFields));
-        $this->assertEquals($lockedFields, $this->_helper->getAttributeLockedFields('entityTypeCode'));
+        $this->assertEquals($lockedFields, $this->helper->getAttributeLockedFields('entityTypeCode'));
     }
 
     /**
@@ -109,8 +132,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->attributeConfig->expects($this->once())->method('getEntityAttributesLockedFields')
             ->with('entityTypeCode')->will($this->returnValue($lockedFields));
 
-        $this->_helper->getAttributeLockedFields('entityTypeCode');
-        $this->assertEquals($lockedFields, $this->_helper->getAttributeLockedFields('entityTypeCode'));
+        $this->helper->getAttributeLockedFields('entityTypeCode');
+        $this->assertEquals($lockedFields, $this->helper->getAttributeLockedFields('entityTypeCode'));
     }
 
     /**
@@ -121,6 +144,17 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->attributeConfig->expects($this->once())->method('getEntityAttributesLockedFields')
             ->with('entityTypeCode')->will($this->returnValue([]));
 
-        $this->assertEquals([], $this->_helper->getAttributeLockedFields('entityTypeCode'));
+        $this->assertEquals([], $this->helper->getAttributeLockedFields('entityTypeCode'));
+    }
+
+    public function testGetInputTypesValidatorData()
+    {
+        $configValue = 'config_value';
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with(\Magento\Eav\Helper\Data::XML_PATH_VALIDATOR_DATA_INPUT_TYPES, ScopeInterface::SCOPE_STORE)
+            ->willReturn($configValue);
+
+        $this->assertEquals($configValue, $this->helper->getInputTypesValidatorData());
     }
 }

@@ -36,8 +36,8 @@ class OrderCreateTest extends WebapiAbstract
         $orderItemFactory = $this->objectManager->get('Magento\Sales\Model\Order\ItemFactory');
         /** @var \Magento\Sales\Api\Data\OrderPaymentFactory $orderPaymentFactory */
         $orderPaymentFactory = $this->objectManager->get('Magento\Sales\Model\Order\PaymentFactory');
-        /** @var \Magento\Sales\Api\Data\OrderAddressFactory $orderAddressFactory */
-        $orderAddressFactory = $this->objectManager->get('Magento\Sales\Model\Order\AddressFactory');
+        /** @var \Magento\Sales\Model\Order\AddressRepository $orderAddressRepository */
+        $orderAddressRepository = $this->objectManager->get('Magento\Sales\Model\Order\AddressRepository');
 
         $order = $orderFactory->create(
             ['data' => $this->getDataStructure('Magento\Sales\Api\Data\OrderInterface')]
@@ -47,9 +47,6 @@ class OrderCreateTest extends WebapiAbstract
         );
         $orderPayment = $orderPaymentFactory->create(
             ['data' => $this->getDataStructure('Magento\Sales\Api\Data\OrderPaymentInterface')]
-        );
-        $orderAddressBilling = $orderAddressFactory->create(
-            ['data' => $this->getDataStructure('Magento\Sales\Api\Data\OrderAddressInterface')]
         );
 
         $email = uniqid() . 'email@example.com';
@@ -69,6 +66,9 @@ class OrderCreateTest extends WebapiAbstract
         $order->setGrandTotal(100);
         $order->setItems([$orderItem->getData()]);
         $order->setPayments([$orderPayment->getData()]);
+
+        $orderAddressBilling = $orderAddressRepository->create();
+
         $orderAddressBilling->setCity('City');
         $orderAddressBilling->setPostcode('12345');
         $orderAddressBilling->setLastname('Last Name');
@@ -78,9 +78,8 @@ class OrderCreateTest extends WebapiAbstract
         $orderAddressBilling->setCountryId(1);
         $orderAddressBilling->setAddressType('billing');
 
-        $orderAddressShipping = $orderAddressFactory->create(
-            ['data' => $this->getDataStructure('Magento\Sales\Api\Data\OrderAddressInterface')]
-        );
+        $orderAddressShipping = $orderAddressRepository->create();
+
         $orderAddressShipping->setCity('City');
         $orderAddressShipping->setPostcode('12345');
         $orderAddressShipping->setLastname('Last Name');

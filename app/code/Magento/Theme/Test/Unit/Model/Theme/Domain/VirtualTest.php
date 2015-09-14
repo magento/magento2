@@ -70,7 +70,7 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
         $appState->expects($this->any())->method('getAreaCode')->will($this->returnValue('fixture_area'));
         $appStateProperty = new \ReflectionProperty('Magento\Theme\Model\Theme', '_appState');
         $appStateProperty->setAccessible(true);
-        /** @var $theme \Magento\Framework\Object */
+        /** @var $theme \Magento\Framework\DataObject */
         $theme->setData(
             [
                 'id' => 'fixture_theme_id',

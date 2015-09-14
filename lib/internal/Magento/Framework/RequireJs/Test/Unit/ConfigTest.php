@@ -37,6 +37,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     private $object;
 
+    /**
+     * @var \Magento\Framework\View\Asset\Minification|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $minificationMock;
+
+    /**
+     * @var \Magento\Framework\Code\Minifier\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $minifyAdapterMock;
+
     protected function setUp()
     {
         $this->fileSource = $this->getMock(
@@ -64,7 +74,21 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             )
             ->getMock();
         $repo->expects($this->once())->method('getStaticViewFileContext')->will($this->returnValue($this->context));
-        $this->object = new \Magento\Framework\RequireJs\Config($this->fileSource, $this->design, $filesystem, $repo);
+        $this->minificationMock = $this->getMockBuilder('Magento\Framework\View\Asset\Minification')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->minifyAdapterMock = $this->getMockBuilder('Magento\Framework\Code\Minifier\AdapterInterface')
+            ->getMockForAbstractClass();
+
+        $this->object = new Config(
+            $this->fileSource,
+            $this->design,
+            $filesystem,
+            $repo,
+            $this->minifyAdapterMock,
+            $this->minificationMock
+        );
     }
 
     public function testGetConfig()
@@ -98,6 +122,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('getFiles')
             ->with($theme, Config::CONFIG_FILE_NAME)
             ->will($this->returnValue([$fileOne, $fileTwo]));
+        $this->minificationMock
+            ->expects($this->atLeastOnce())
+            ->method('isEnabled')
+            ->with('js')
+            ->willReturn(true);
 
         $expected = <<<expected
 (function(require){
@@ -116,15 +145,79 @@ require.config(config);
 })(require);
 expected;
 
+        $this->minifyAdapterMock
+            ->expects($this->once())
+            ->method('minify')
+            ->with($expected)
+            ->willReturnArgument(0);
+
         $actual = $this->object->getConfig();
-        $this->assertStringMatchesFormat($expected, $actual);
+        $this->assertEquals($actual, $expected);
+    }
+
+    public function testGetMinResolverCode()
+    {
+        $this->minificationMock
+            ->expects($this->once())
+            ->method('getExcludes')
+            ->with('js')
+            ->willReturn(['\.min\.']);
+        $this->minificationMock
+            ->expects($this->once())
+            ->method('isEnabled')
+            ->with('js')
+            ->willReturn(true);
+        $this->minifyAdapterMock
+            ->expects($this->once())
+            ->method('minify')
+            ->willReturnArgument(0);
+
+        $expected = <<<code
+    if (!require.s.contexts._.__load) {
+        require.s.contexts._.__load = require.s.contexts._.load;
+        require.s.contexts._.load = function(id, url) {
+            if (!url.match(/\.min\./)) {
+                url = url.replace(/(\.min)?\.js$/, '.min.js');
+            }
+            return require.s.contexts._.__load.apply(require.s.contexts._, [id, url]);
+        }
+    }
+
+code;
+        $this->assertEquals($expected, $this->object->getMinResolverCode());
     }
 
     public function testGetConfigFileRelativePath()
     {
+        $this->minificationMock
+            ->expects($this->any())
+            ->method('addMinifiedSign')
+            ->willReturnArgument(0);
         $this->context->expects($this->once())->method('getConfigPath')->will($this->returnValue('path'));
         $actual = $this->object->getConfigFileRelativePath();
         $this->assertSame('_requirejs/path/requirejs-config.js', $actual);
+    }
+
+    public function testGetMixinsFileRelativePath()
+    {
+        $this->minificationMock
+            ->expects($this->any())
+            ->method('addMinifiedSign')
+            ->willReturnArgument(0);
+        $this->context->expects($this->once())->method('getPath')->will($this->returnValue('path'));
+        $actual = $this->object->getMixinsFileRelativePath();
+        $this->assertSame('path/mage/requirejs/mixins.js', $actual);
+    }
+
+    public function testGetMinResolverRelativePath()
+    {
+        $this->minificationMock
+            ->expects($this->any())
+            ->method('addMinifiedSign')
+            ->willReturnArgument(0);
+        $this->context->expects($this->once())->method('getConfigPath')->will($this->returnValue('path'));
+        $actual = $this->object->getMinResolverRelativePath();
+        $this->assertSame('path/requirejs-min-resolver.js', $actual);
     }
 
     public function testGetBaseConfig()

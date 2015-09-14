@@ -7,12 +7,12 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
     <event name="catalog_product_upsell">
-        <observer name="bundle_observer" instance="Magento\Bundle\Model\Observer" method="appendUpsellProducts" />
+        <observer name="bundle_observer" instance="Magento\Bundle\Observer\AppendUpsellProducts" method="invoke"/>
     </event>
     <event name="catalog_product_collection_load_after">
-        <observer name="bundle_observer" instance="Magento\Bundle\Model\Observer" method="loadProductOptions" />
+        <observer name="bundle_observer" instance="Magento\Bundle\Observer\LoadProductOptions" method="invoke"/>
     </event>
     <event name="product_option_renderer_init">
-        <observer name="bundle_observer" instance="Magento\Bundle\Model\Observer" method="initOptionRenderer" />
+        <observer name="bundle_observer" instance="Magento\Bundle\Observer\InitOptionRenderer" method="invoke"/>
     </event>
 </config>

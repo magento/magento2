@@ -9,90 +9,79 @@
 namespace Magento\Framework\Model\Resource\Type\Db\Pdo;
 
 use Magento\Framework\App\Resource\ConnectionAdapterInterface;
-use Magento\Framework\DB\LoggerInterface;
-use Magento\Framework\Model\Resource\Type\Db;
+use Magento\Framework\DB;
+use Magento\Framework\Stdlib;
 
-class Mysql extends Db implements ConnectionAdapterInterface
+class Mysql extends \Magento\Framework\Model\Resource\Type\Db implements ConnectionAdapterInterface
 {
     /**
-     * @var \Magento\Framework\Stdlib\String
+     * @var Stdlib\StringUtils
      */
     protected $string;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
+     * @var Stdlib\DateTime
      */
     protected $dateTime;
 
     /**
      * @var array
      */
-    protected $_connectionConfig;
+    protected $connectionConfig;
 
     /**
-     * @param \Magento\Framework\Stdlib\String $string
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param Stdlib\StringUtils $string
+     * @param Stdlib\DateTime $dateTime
      * @param array $config
      */
     public function __construct(
-        \Magento\Framework\Stdlib\String $string,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
+        Stdlib\StringUtils $string,
+        Stdlib\DateTime $dateTime,
         array $config
     ) {
         $this->string = $string;
         $this->dateTime = $dateTime;
-        $this->_connectionConfig = $this->getValidConfig($config);
+        $this->connectionConfig = $this->getValidConfig($config);
 
         parent::__construct();
     }
 
     /**
-     * Get connection
-     *
-     * @param LoggerInterface|null $logger
-     * @return \Magento\Framework\DB\Adapter\Pdo\Mysql
+     * {@inheritdoc}
      */
-    public function getConnection(LoggerInterface $logger)
+    public function getConnection(DB\LoggerInterface $logger)
     {
-        if (!$this->_connectionConfig['active']) {
-            return null;
-        }
-
-        $connection = $this->_getDbAdapterInstance($logger);
-        if (!empty($this->_connectionConfig['initStatements']) && $connection) {
-            $connection->query($this->_connectionConfig['initStatements']);
-        }
+        $connection = $this->getDbConnectionInstance($logger);
 
         $profiler = $connection->getProfiler();
-        if ($profiler instanceof \Magento\Framework\DB\Profiler) {
-            $profiler->setType($this->_connectionConfig['type']);
-            $profiler->setHost($this->_connectionConfig['host']);
+        if ($profiler instanceof DB\Profiler) {
+            $profiler->setType($this->connectionConfig['type']);
+            $profiler->setHost($this->connectionConfig['host']);
         }
 
         return $connection;
     }
 
     /**
-     * Create and return DB adapter object instance
+     * Create and return DB connection object instance
      *
-     * @param LoggerInterface $logger
+     * @param DB\LoggerInterface $logger
      * @return \Magento\Framework\DB\Adapter\Pdo\Mysql
      */
-    protected function _getDbAdapterInstance(LoggerInterface $logger)
+    protected function getDbConnectionInstance(DB\LoggerInterface $logger)
     {
-        $className = $this->_getDbAdapterClassName();
-        $adapter = new $className($this->string, $this->dateTime, $logger, $this->_connectionConfig);
-        return $adapter;
+        $className = $this->getDbConnectionClassName();
+        return new $className($this->string, $this->dateTime, $logger, $this->connectionConfig);
     }
 
     /**
-     * Retrieve DB adapter class name
+     * Retrieve DB connection class name
      *
      * @return string
      */
-    protected function _getDbAdapterClassName()
+    protected function getDbConnectionClassName()
     {
-        return 'Magento\Framework\DB\Adapter\Pdo\Mysql';
+        return DB\Adapter\Pdo\Mysql::class;
     }
 
     /**

@@ -53,7 +53,7 @@ class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCo
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
@@ -103,8 +103,12 @@ class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCo
                     ),
                     ['code']
                 );
-                $select->where('main_table.coupon_type = ? ', \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON);
+
                 $orWhereConditions = [
+                    $connection->quoteInto(
+                        'main_table.coupon_type = ? ',
+                        \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON
+                    ),
                     $connection->quoteInto(
                         '(main_table.coupon_type = ? AND rule_coupons.type = 0)',
                         \Magento\SalesRule\Model\Rule::COUPON_TYPE_AUTO
@@ -118,8 +122,22 @@ class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCo
                         \Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC
                     ),
                 ];
+
+                $andWhereConditions = [
+                    $connection->quoteInto(
+                        'rule_coupons.code = ?',
+                        $couponCode
+                    ),
+                    $connection->quoteInto(
+                        '(rule_coupons.expiration_date IS NULL OR rule_coupons.expiration_date >= ?)',
+                        $this->_date->date('Y-m-d')
+                    ),
+                ];
+
                 $orWhereCondition = implode(' OR ', $orWhereConditions);
-                $select->orWhere('(' . $orWhereCondition . ') AND rule_coupons.code = ?', $couponCode);
+                $andWhereCondition = implode(' AND ', $andWhereConditions);
+
+                $select->where('(' . $orWhereCondition . ') AND ' . $andWhereCondition);
             } else {
                 $this->addFieldToFilter(
                     'main_table.coupon_type',

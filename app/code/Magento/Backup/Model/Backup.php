@@ -16,7 +16,7 @@ use Magento\Framework\Filesystem\DriverPool;
  * @method string getTime()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Backup extends \Magento\Framework\Object implements \Magento\Framework\Backup\Db\BackupInterface
+class Backup extends \Magento\Framework\DataObject implements \Magento\Framework\Backup\Db\BackupInterface
 {
     /**
      * Compress rate

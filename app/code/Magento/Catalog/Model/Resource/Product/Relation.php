@@ -31,14 +31,14 @@ class Relation extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function processRelations($parentId, $childIds)
     {
-        $select = $this->_getReadAdapter()->select()->from(
+        $select = $this->getConnection()->select()->from(
             $this->getMainTable(),
             ['child_id']
         )->where(
             'parent_id = ?',
             $parentId
         );
-        $old = $this->_getReadAdapter()->fetchCol($select);
+        $old = $this->getConnection()->fetchCol($select);
         $new = $childIds;
 
         $insert = array_diff($new, $old);
@@ -49,17 +49,17 @@ class Relation extends \Magento\Framework\Model\Resource\Db\AbstractDb
             foreach ($insert as $childId) {
                 $insertData[] = ['parent_id' => $parentId, 'child_id' => $childId];
             }
-            $this->_getWriteAdapter()->insertMultiple($this->getMainTable(), $insertData);
+            $this->getConnection()->insertMultiple($this->getMainTable(), $insertData);
         }
         if (!empty($delete)) {
             $where = join(
                 ' AND ',
                 [
-                    $this->_getWriteAdapter()->quoteInto('parent_id = ?', $parentId),
-                    $this->_getWriteAdapter()->quoteInto('child_id IN(?)', $delete)
+                    $this->getConnection()->quoteInto('parent_id = ?', $parentId),
+                    $this->getConnection()->quoteInto('child_id IN(?)', $delete)
                 ]
             );
-            $this->_getWriteAdapter()->delete($this->getMainTable(), $where);
+            $this->getConnection()->delete($this->getMainTable(), $where);
         }
 
         return $this;

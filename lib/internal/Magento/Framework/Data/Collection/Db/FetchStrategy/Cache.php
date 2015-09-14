@@ -9,6 +9,8 @@
  */
 namespace Magento\Framework\Data\Collection\Db\FetchStrategy;
 
+use Magento\Framework\DB\Select;
+
 class Cache implements \Magento\Framework\Data\Collection\Db\FetchStrategyInterface
 {
     /**
@@ -62,7 +64,7 @@ class Cache implements \Magento\Framework\Data\Collection\Db\FetchStrategyInterf
     /**
      * {@inheritdoc}
      */
-    public function fetchAll(\Zend_Db_Select $select, array $bindParams = [])
+    public function fetchAll(Select $select, array $bindParams = [])
     {
         $cacheId = $this->_getSelectCacheId($select);
         $result = $this->_cache->load($cacheId);

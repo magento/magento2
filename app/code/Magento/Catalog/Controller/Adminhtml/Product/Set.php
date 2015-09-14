@@ -10,7 +10,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Set extends \Magento\Backend\App\Action
+abstract class Set extends \Magento\Backend\App\Action
 {
     /**
      * Core registry

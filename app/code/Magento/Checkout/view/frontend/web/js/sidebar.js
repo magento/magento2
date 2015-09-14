@@ -55,7 +55,7 @@ define([
             };
             events['click ' + this.options.item.button] = function(event) {
                 event.stopPropagation();
-                self._updateItemQty($(event.target));
+                self._updateItemQty($(event.currentTarget));
             };
 
             this._on(this.element, events);

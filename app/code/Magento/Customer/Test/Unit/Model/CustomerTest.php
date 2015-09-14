@@ -92,7 +92,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->resourceMock = $this->getMock(
-            '\Magento\Customer\Model\Resource\Customer', //'\Magento\Framework\Object',
+            '\Magento\Customer\Model\Resource\Customer', //'\Magento\Framework\DataObject',
             ['getIdFieldName'],
             [],
             '',

@@ -125,7 +125,7 @@
             padding-bottom: 1.9rem;
             padding-top: @action__padding-top + .2rem;
             position: relative;
-            z-index: 4;
+            z-index: @data-grid-header__z-index - 19;
             &:after {
                 background-color: @data-grid-filters-action__active__color;
                 bottom: 100%;
@@ -156,18 +156,16 @@
     .appearing__off();
     clear: both;
     font-size: @data-grid-filters__font-size;
-    max-height: 0;
     transition: opacity .3s ease;
     &._show {
         .appearing__on();
         border-bottom: 1px solid @data-grid-filters-action__active__border-color;
         border-top: 1px solid @data-grid-filters-action__active__border-color;
         margin-bottom: .7rem;
-        max-height: 50rem;
         padding: 3.6rem 0 3rem;
         position: relative;
         top: -1px;
-        z-index: 3;
+        z-index: @data-grid-header__z-index - 20;
         .admin__data-grid-filters-footer,
         .admin__data-grid-filters {
             display: block;
@@ -183,17 +181,16 @@
     }
     //  First level field
     .admin__form-field {
-        float: left;
+        display: inline-block;
         margin-bottom: 2em;
         margin-left: 0;
         padding-left: @data-grid-filters-fieldset__inner-side / 2;
         padding-right: @data-grid-filters-fieldset__inner-side / 2;
-        width: 100% / @data-grid-filters-fieldset__columns;
-        &:nth-child(5n + 1) {
-            clear: both;
-        }
+        vertical-align: top;
+        width: ~'calc(100% / @{data-grid-filters-fieldset__columns} - 4px)';
         //  Inner fields
         .admin__form-field {
+            display: block;
             float: none;
             margin-bottom: 1.5rem;
             padding-left: 0;
@@ -219,14 +216,16 @@
             }
         }
     }
+
     .admin__form-field-label,
     .admin__control-text,
-    .admin__control-select {
+    .admin__control-select,
+    .admin__action-multiselect {
         font-size: @data-grid-filters__font-size;
     }
     .admin__control-select {
         padding-top: @action__padding-top - .1rem;
-        height: @action__height - .1rem;
+        height: @action__height;
     }
     //  Date control
     .admin__control-text.hasDatepicker,

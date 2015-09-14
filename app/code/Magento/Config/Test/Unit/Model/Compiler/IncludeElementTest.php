@@ -59,7 +59,7 @@ class IncludeElementTest extends \PHPUnit_Framework_TestCase
 
         $compilerMock = $this->getMockBuilder('Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface')
             ->getMockForAbstractClass();
-        $processedObjectMock = $this->getMockBuilder('Magento\Framework\Object')
+        $processedObjectMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -95,7 +95,7 @@ class IncludeElementTest extends \PHPUnit_Framework_TestCase
 
         $compilerMock = $this->getMockBuilder('Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface')
             ->getMockForAbstractClass();
-        $processedObjectMock = $this->getMockBuilder('Magento\Framework\Object')
+        $processedObjectMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -148,7 +148,9 @@ class OrderService implements OrderManagementInterface
      */
     public function hold($id)
     {
-        return (bool)$this->orderRepository->get($id)->hold();
+        $order = $this->orderRepository->get($id);
+        $order->hold();
+        return (bool)$this->orderRepository->save($order);
     }
 
     /**
@@ -159,7 +161,9 @@ class OrderService implements OrderManagementInterface
      */
     public function unHold($id)
     {
-        return (bool)$this->orderRepository->get($id)->unhold();
+        $object = $this->orderRepository->get($id);
+        $object->unhold();
+        return (bool)$this->orderRepository->save($object);
     }
 
     /**
@@ -215,7 +219,7 @@ class OrderService implements OrderManagementInterface
             }
         }
 
-        $transport = new \Magento\Framework\Object(
+        $transport = new \Magento\Framework\DataObject(
             [
                 'state'     => $state,
                 'status'    => $status,

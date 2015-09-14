@@ -89,7 +89,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
 
         $this->resourceMock = $this->getMock(
             'Magento\Framework\Model\Resource\AbstractResource',
-            ['_construct', '_getReadAdapter', '_getWriteAdapter', 'getIdFieldName',
+            ['_construct', 'getConnection', 'getIdFieldName',
                 'save', 'saveInSetIncluding', 'isUsedBySuperProducts', 'delete'],
             [], '', false
         );
@@ -100,7 +100,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->resourceMock->expects($this->any())
-            ->method('_getWriteAdapter')
+            ->method('getConnection')
             ->will($this->returnValue($dbAdapterMock));
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

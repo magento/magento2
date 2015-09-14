@@ -13,7 +13,7 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
     /**
      * Customer validation
      *
-     * @param \Magento\Framework\Object $response
+     * @param \Magento\Framework\DataObject $response
      * @return CustomerInterface|null
      */
     protected function _validateCustomer($response)
@@ -71,7 +71,7 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
     /**
      * Customer address validation.
      *
-     * @param \Magento\Framework\Object $response
+     * @param \Magento\Framework\DataObject $response
      * @return void
      */
     protected function _validateCustomerAddress($response)
@@ -109,7 +109,7 @@ class Validate extends \Magento\Customer\Controller\Adminhtml\Index
      */
     public function execute()
     {
-        $response = new \Magento\Framework\Object();
+        $response = new \Magento\Framework\DataObject();
         $response->setError(0);
 
         $customer = $this->_validateCustomer($response);

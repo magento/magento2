@@ -44,7 +44,7 @@ class Image extends AbstractBackend
     /**
      * After save
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this|void
      */
     public function afterSave($object)

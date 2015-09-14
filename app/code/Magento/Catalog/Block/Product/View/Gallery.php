@@ -16,19 +16,71 @@ use Magento\Framework\Data\Collection;
 class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
 {
     /**
-     * Retrieve list of gallery images
+     * @var \Magento\Framework\Config\View
+     */
+    protected $configView;
+
+    /**
+     * Retrieve collection of gallery images
      *
-     * @return array|Collection
+     * @return Collection
      */
     public function getGalleryImages()
     {
-        return $this->getProduct()->getMediaGalleryImages();
+        $product = $this->getProduct();
+        $images = $product->getMediaGalleryImages();
+        if ($images instanceof \Magento\Framework\Data\Collection) {
+            foreach ($images as $image) {
+                /* @var \Magento\Framework\DataObject $image */
+                $image->setData(
+                    'small_image_url',
+                    $this->_imageHelper->init($product, 'product_page_image_small')
+                        ->setImageFile($image->getFile())
+                        ->getUrl()
+                );
+                $image->setData(
+                    'medium_image_url',
+                    $this->_imageHelper->init($product, 'product_page_image_medium')
+                        ->setImageFile($image->getFile())
+                        ->getUrl()
+                );
+                $image->setData(
+                    'large_image_url',
+                    $this->_imageHelper->init($product, 'product_page_image_large')
+                        ->setImageFile($image->getFile())
+                        ->getUrl()
+                );
+            }
+        }
+
+        return $images;
+    }
+
+    /**
+     * Retrieve product images in JSON format
+     *
+     * @return string
+     */
+    public function getGalleryImagesJson()
+    {
+        $imagesItems = [];
+        foreach ($this->getGalleryImages() as $image) {
+            $imagesItems[] = [
+                'thumb' => $image->getData('small_image_url'),
+                'img' => $image->getData('medium_image_url'),
+                'original' => $image->getData('large_image_url'),
+                'caption' => $image->getLabel(),
+                'position' => $image->getPosition(),
+                'isMain' => $this->isMainImage($image),
+            ];
+        }
+        return json_encode($imagesItems);
     }
 
     /**
      * Retrieve gallery url
      *
-     * @param null|\Magento\Framework\Object $image
+     * @param null|\Magento\Framework\DataObject $image
      * @return string
      */
     public function getGalleryUrl($image = null)
@@ -41,35 +93,39 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     }
 
     /**
-     * Get gallery image url
-     *
-     * @param \Magento\Framework\Object $image
-     * @param string $type
-     * @param boolean $whiteBorders
-     * @param null|number $width
-     * @param null|number $height
-     * @return string
-     */
-    public function getImageUrl($image, $type, $whiteBorders = false, $width = null, $height = null)
-    {
-        $product = $this->getProduct();
-        $img = $this->_imageHelper->init($product, $type, $image->getFile());
-        $img->constrainOnly(true)->keepAspectRatio(true)->keepFrame($whiteBorders);
-        if ($width || $height) {
-            $img->resize($width, $height);
-        }
-        return (string)$img;
-    }
-
-    /**
      * Is product main image
      *
-     * @param \Magento\Framework\Object $image
+     * @param \Magento\Framework\DataObject $image
      * @return bool
      */
     public function isMainImage($image)
     {
         $product = $this->getProduct();
         return $product->getImage() == $image->getFile();
+    }
+
+    /**
+     * @param string $imageId
+     * @param string $attributeName
+     * @param string $default
+     * @return string
+     */
+    public function getImageAttribute($imageId, $attributeName, $default = null)
+    {
+        $attributes = $this->getConfigView()->getImageAttributes('Magento_Catalog', $imageId);
+        return isset($attributes[$attributeName]) ? $attributes[$attributeName] : $default;
+    }
+
+    /**
+     * Retrieve config view
+     *
+     * @return \Magento\Framework\Config\View
+     */
+    private function getConfigView()
+    {
+        if (!$this->configView) {
+            $this->configView = $this->_viewConfig->getViewConfig();
+        }
+        return $this->configView;
     }
 }

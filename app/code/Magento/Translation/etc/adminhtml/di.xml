@@ -12,7 +12,7 @@
             <argument name="scope" xsi:type="string">admin</argument>
         </arguments>
     </type>
-    <type name="Magento\Translation\Model\Resource\String">
+    <type name="Magento\Translation\Model\Resource\StringUtils">
         <arguments>
             <argument name="scope" xsi:type="string">admin</argument>
         </arguments>

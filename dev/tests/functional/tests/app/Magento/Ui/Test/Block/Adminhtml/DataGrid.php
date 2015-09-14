@@ -6,7 +6,9 @@
 
 namespace Magento\Ui\Test\Block\Adminhtml;
 
+use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Widget\Grid;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Backend Data Grid with advanced functionality for managing entities.
@@ -14,18 +16,11 @@ use Magento\Backend\Test\Block\Widget\Grid;
 class DataGrid extends Grid
 {
     /**
-     * Filters array mapping.
-     *
-     * @var array
-     */
-    protected $filters = [];
-
-    /**
      * Locator value for "Edit" link inside action column.
      *
      * @var string
      */
-    protected $editLink = '[data-action="grid-row-edit"]';
+    protected $editLink = '.action-menu-item[href*="edit"]';
 
     /**
      * Locator value for container of applied Filters.
@@ -40,6 +35,82 @@ class DataGrid extends Grid
      * @var string
      */
     protected $filterButton = '[data-action="grid-filter-expand"]';
+
+    /**
+     * An element locator which allows to select entities in grid.
+     *
+     * @var string
+     */
+    protected $selectItem = 'tbody tr [data-action="select-row"]';
+
+    /**
+     * Secondary part of row locator template for getRow() method
+     *
+     * @var string
+     */
+    protected $rowTemplate = 'td[*[contains(.,normalize-space("%s"))]]';
+
+    /**
+     * Secondary part of row locator template for getRow() method with strict option
+     *
+     * @var string
+     */
+    protected $rowTemplateStrict = 'td[*[text()[normalize-space()="%s"]]]';
+
+    /**
+     * Mass action toggle list.
+     *
+     * @var string
+     */
+    protected $massActionToggleList = '//span[contains(@class, "action-menu-item") and .= "%s"]';
+
+    /**
+     * Mass action toggle button.
+     *
+     * @var string
+     */
+    protected $massActionToggleButton = '.action-multicheck-toggle';
+
+    /**
+     * Mass action button.
+     *
+     * @var string
+     */
+    protected $massActionButton = '.action-select';
+
+    /**
+     * Locator fo action button.
+     *
+     * @var string
+     */
+    protected $actionButton = '.modal-inner-wrap .action-secondary';
+
+    /**
+     * Column header locator
+     *
+     * @var string
+     */
+    protected $columnHeader = "//th/span[.='%s']";
+
+    /**
+     * @var string
+     */
+    protected $rowById = "//tr[//input[@data-action='select-row' and @value='%s']]";
+
+    /**
+     * @var string
+     */
+    protected $cellByHeader = "//td[count(//th[span[.='%s']]/preceding-sibling::th)+1]";
+
+    /**
+     * @var string
+     */
+    protected $fullTextSearchField = '.data-grid-search-control-wrap .data-grid-search-control';
+
+    /**
+     * @var string
+     */
+    protected $fullTextSearchButton = '.data-grid-search-control-wrap .action-submit';
 
     /**
      * Clear all applied Filters.
@@ -95,6 +166,17 @@ class DataGrid extends Grid
     }
 
     /**
+     * Click on "Edit" link.
+     *
+     * @param SimpleElement $rowItem
+     * @return void
+     */
+    protected function clickEditLink(SimpleElement $rowItem)
+    {
+        $rowItem->find($this->editLink)->click();
+    }
+
+    /**
      * Search item using Data Grid Filter.
      *
      * @param array $filter
@@ -104,6 +186,8 @@ class DataGrid extends Grid
     {
         $this->openFilterBlock();
         parent::search($filter);
+        $this->waitForElementNotVisible($this->searchButton);
+        $this->waitLoader();
     }
 
     /**
@@ -114,12 +198,109 @@ class DataGrid extends Grid
      */
     public function searchAndOpen(array $filter)
     {
-        $this->waitLoader();
+        $this->search($filter);
         $rowItem = $this->getRow($filter);
         if ($rowItem->isVisible()) {
-            $rowItem->find($this->editLink)->click();
+            $this->clickEditLink($rowItem);
         } else {
             throw new \Exception('Searched item was not found.');
         }
+    }
+
+    /**
+     * Perform selected massaction over checked items.
+     *
+     * @param array $items
+     * @param array|string $action [array -> key = value from first select; value => value from subselect]
+     * @param bool $acceptAlert [optional]
+     * @param string $massActionSelection [optional]
+     * @return void
+     */
+    public function massaction(array $items, $action, $acceptAlert = false, $massActionSelection = '')
+    {
+        if ($this->_rootElement->find($this->noRecords)->isVisible()) {
+            return;
+        }
+        if (!is_array($action)) {
+            $action = [$action => '-'];
+        }
+        foreach ($items as $item) {
+            $this->searchAndSelect($item);
+        }
+        if ($massActionSelection) {
+            $this->_rootElement->find($this->massActionToggleButton)->click();
+            $this->_rootElement
+                ->find(sprintf($this->massActionToggleList, $massActionSelection), Locator::SELECTOR_XPATH)
+                ->click();
+        }
+        $actionType = key($action);
+        $this->_rootElement->find($this->massActionButton)->click();
+        $this->_rootElement
+            ->find(sprintf($this->massActionToggleList, $actionType), Locator::SELECTOR_XPATH)
+            ->click();
+        if ($acceptAlert) {
+            $this->browser->find($this->actionButton)->click();
+        }
+    }
+
+    /**
+     * @param string $columnLabel
+     */
+    public function sortByColumn($columnLabel)
+    {
+        $this->waitLoader();
+        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
+        $this->_rootElement->find(sprintf($this->columnHeader, $columnLabel), Locator::SELECTOR_XPATH)->click();
+    }
+
+    /**
+     * @return array|string
+     */
+    public function getFirstItemId()
+    {
+        $this->waitLoader();
+        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
+        return $this->_rootElement->find($this->selectItem)->getValue();
+    }
+
+    /**
+     * Return ids of all items currently displayed in grid
+     *
+     * @return string[]
+     */
+    public function getAllIds()
+    {
+        $this->waitLoader();
+        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
+        $rowsCheckboxes = $this->_rootElement->getElements($this->selectItem);
+        $ids = [];
+        foreach ($rowsCheckboxes as $checkbox) {
+            $ids[] = $checkbox->getValue();
+        }
+        return $ids;
+    }
+
+    /**
+     * @param string $id
+     * @param string $headerLabel
+     * @return array|string
+     */
+    public function getColumnValue($id, $headerLabel)
+    {
+        $this->waitLoader();
+        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
+        $selector = sprintf($this->rowById, $id) . sprintf($this->cellByHeader, $headerLabel);
+        return $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->getText();
+    }
+
+    /**
+     * @param string $text
+     */
+    public function fullTextSearch($text)
+    {
+        $this->waitLoader();
+        $this->getTemplateBlock()->waitForElementNotVisible($this->loader);
+        $this->_rootElement->find($this->fullTextSearchField)->setValue($text);
+        $this->_rootElement->find($this->fullTextSearchButton)->click();
     }
 }

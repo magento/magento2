@@ -145,7 +145,7 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
      */
     public function importData(array $data)
     {
-        $data = new \Magento\Framework\Object($data);
+        $data = new \Magento\Framework\DataObject($data);
         $this->_eventManager->dispatch(
             $this->_eventPrefix . '_import_data_before',
             [$this->_eventObject => $this, 'input' => $data]
@@ -273,6 +273,27 @@ class Payment extends \Magento\Payment\Model\Info implements \Magento\Quote\Api\
     public function setMethod($method)
     {
         return $this->setData(self::KEY_METHOD, $method);
+    }
+
+    /**
+     * Get payment title
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->getData(self::KEY_TITLE);
+    }
+
+    /**
+     * Set payment title
+     *
+     * @param string $title
+     * @return $this
+     */
+    public function setTitle($title)
+    {
+        return $this->setData(self::KEY_TITLE, $title);
     }
 
     /**

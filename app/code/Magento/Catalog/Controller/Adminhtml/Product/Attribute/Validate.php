@@ -46,7 +46,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      */
     public function execute()
     {
-        $response = new \Magento\Framework\Object();
+        $response = new \Magento\Framework\DataObject();
         $response->setError(false);
 
         $attributeCode = $this->getRequest()->getParam('attribute_code');
@@ -62,10 +62,12 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 
         if ($attribute->getId() && !$attributeId) {
             if (strlen($this->getRequest()->getParam('attribute_code'))) {
-                $response->setAttributes(['attribute_code' => __('An attribute with this code already exists.')]);
+                $response->setMessage(
+                    __('An attribute with this code already exists.')
+                );
             } else {
-                $response->setAttributes(
-                    ['attribute_label' => __('An attribute with the same code (%1) already exists.', $attributeCode)]
+                $response->setMessage(
+                    __('An attribute with the same code (%1) already exists.', $attributeCode)
                 );
             }
             $response->setError(true);

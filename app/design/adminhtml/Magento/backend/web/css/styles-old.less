@@ -803,7 +803,7 @@ input.no-display,
 
     select {
         &:not([multiple]) {
-            .css(appearance, none, 1);
+            .lib-css(appearance, none, 1);
 
             display: inline-block;
             line-height: normal;
@@ -1071,8 +1071,8 @@ input.no-display,
     .control {
         .hasDatepicker {
             & + .ui-datepicker-trigger {
-                .button-reset();
-                .icon-font(
+                .lib-button-reset();
+                .lib-icon-font(
                 @icon-calendar,
                 @_icon-font-size: 42px,
                 @_icon-font-line-height: 30px,
@@ -2668,14 +2668,6 @@ input.no-display,
 
     // Content
 
-    .field-store_default_content .buttons-set {
-        margin-bottom: 9px;
-    }
-
-    .field-store_default_content .buttons-set button {
-        margin-right: 4px;
-    }
-
     .field-store_0_content_use input[type="checkbox"] {
         margin-right: 8px;
         position: relative;
@@ -2699,10 +2691,6 @@ input.no-display,
         margin-top: 25px;
         overflow: auto;
         padding-bottom: 10px;
-    }
-
-    .cms-hierarchy .buttons-set {
-        margin-bottom: 10px;
     }
 
     .cms-hierarchy .cms-hierarchy-tree {
@@ -2749,32 +2737,10 @@ input.no-display,
     }
 
     //
-    //  CMS -> Static Blocks
-    //  --------------------------------------
-
-
-    #buttonsblock_content.buttons-set {
-        margin-bottom: 9px;
-    }
-
-    #buttonsblock_content.buttons-set button {
-        margin-right: 4px;
-    }
-
-    //
     //  CMS -> Manage Content
     //  --------------------------------------
 
-
     // Content
-
-    .cms-manage-content-actions .buttons-set {
-        margin-bottom: 9px;
-    }
-
-    .cms-manage-content-actions .buttons-set button {
-        margin-right: 4px;
-    }
 
     .cms-manage-content-actions textarea {
         width: 100%;
@@ -4090,7 +4056,7 @@ input.no-display,
     }
 
     .rule-chooser .field-row {
-        .clearfix();
+        .lib-clearfix();
         display: block;
         margin-bottom: 17px;
         .input-text {
@@ -4394,13 +4360,11 @@ input.no-display,
     }
 }
 
-[class^=' newsletter-'] {
-    .admin__scope-old {
-        .buttons-set {
-            margin: 0 0 15px;
-            button {
-                margin-right: 4px;
-            }
+.admin__scope-old {
+    .buttons-set {
+        margin: 0 0 15px;
+        button {
+            margin-right: 4px;
         }
     }
 }
@@ -4787,7 +4751,6 @@ input.no-display,
         }
     }
 }
-
 
 //
 //  Products

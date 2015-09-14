@@ -18,7 +18,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $readAdapter;
+    protected $connection;
 
     /**
      * @var \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media | \PHPUnit_Framework_MockObject_MockObject
@@ -48,13 +48,13 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->readAdapter = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
+        $this->connection = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
         $resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
         $resource->expects($this->any())
             ->method('getConnection')
-            ->willReturn($this->readAdapter);
+            ->willReturn($this->connection);
         $resource->expects($this->any())->method('getTableName')->willReturn('table');
-        $this->readAdapter->expects($this->any())->method('setCacheAdapter');
+        $this->connection->expects($this->any())->method('setCacheAdapter');
         $this->resource = $objectManager->getObject(
             'Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media',
             ['resource' => $resource]
@@ -86,12 +86,12 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             ],
         ];
 
-        $this->readAdapter->expects($this->once())->method('getCheckSql')->with(
+        $this->connection->expects($this->once())->method('getCheckSql')->with(
             'value.position IS NULL',
             'default_value.position',
             'value.position'
         )->will($this->returnValue($positionCheckSql));
-        $this->readAdapter->expects($this->once())->method('select')->will($this->returnValue($this->select));
+        $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));
         $this->select->expects($this->at(0))->method('from')->with(
             [
                 'main' => $getTableReturnValue,
@@ -103,7 +103,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         )->willReturnSelf();
 
         $this->product->expects($this->at(0))->method('getStoreId')->will($this->returnValue($storeId));
-        $this->readAdapter->expects($this->once())->method('quoteInto')
+        $this->connection->expects($this->once())->method('quoteInto')
             ->with('main.value_id = value.value_id AND value.store_id = ?', $storeId)
             ->will($this->returnValue($quoteInfoReturnValue));
         $this->select->expects($this->at(1))->method('joinLeft')->with(
@@ -136,7 +136,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         $this->select->expects($this->once())->method('order')
             ->with($positionCheckSql . ' ' . \Magento\Framework\DB\Select::SQL_ASC)
             ->willReturnSelf();
-        $this->readAdapter->expects($this->once())->method('fetchAll')
+        $this->connection->expects($this->once())->method('fetchAll')
             ->with($this->select)
             ->willReturn($resultRow);
 
