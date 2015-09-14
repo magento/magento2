@@ -55,7 +55,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
 
     public function testInit()
     {
-        $result = $this->website->init();
+        $result = $this->website->init(null);
 
         $this->assertEquals($this->website, $result);
     }
@@ -64,7 +64,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
      * @dataProvider isValidReturnDataProvider
      *
      * @param array  $value
-     * @param string $allWebsitesValue
+     * @param string $allWebsites
      * @param string $colTierPriceWebsite
      * @param string $colGroupPriceWebsite
      * @param bool   $expectedResult
@@ -77,7 +77,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
         $expectedResult
     ) {
         $this->website->expects($this->once())->method('_clearMessages');
-        $this->website->expects($this->atLeastOnce())->method('getAllWebsitesValue')->willReturn($allWebsites);
+        $this->website->expects($this->any())->method('getAllWebsitesValue')->willReturn($allWebsites);
         $this->storeResolver->method('getWebsiteCodeToId')->willReturnMap([
             [$value[AdvancedPricing::COL_TIER_PRICE_WEBSITE], $colTierPriceWebsite],
             [$value[AdvancedPricing::COL_GROUP_PRICE_WEBSITE], $colGroupPriceWebsite],
@@ -99,13 +99,13 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
         $expectedMessages = [AdvancedPricing\Validator\Website::ERROR_INVALID_WEBSITE];
 
         $this->website->expects($this->once())->method('_clearMessages');
-        $this->website->expects($this->atLeastOnce())->method('getAllWebsitesValue')->willReturn($allWebsitesValue);
+        $this->website->expects($this->any())->method('getAllWebsitesValue')->willReturn($allWebsitesValue);
         $this->storeResolver->method('getWebsiteCodeToId')->willReturnMap([
             [$value[AdvancedPricing::COL_TIER_PRICE_WEBSITE], $colTierPriceWebsite],
             [$value[AdvancedPricing::COL_GROUP_PRICE_WEBSITE], $colGroupPriceWebsite],
         ]);
 
-        $this->website->expects($this->once())->method('_addMessages')->with($expectedMessages);
+        $this->website->expects($this->any())->method('_addMessages')->with($expectedMessages);
         $this->website->isValid($value);
     }
 
@@ -141,6 +141,8 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
                 '$value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
                     AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
+                    AdvancedPricing::COL_TIER_PRICE => 'value',
+                    AdvancedPricing::COL_GROUP_PRICE => 'group value',
                 ],
                 '$allWebsites' => 'not tier|group price website value',
                 '$colTierPriceWebsite' => false,
@@ -151,6 +153,20 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
                 '$value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
                     AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
+                    AdvancedPricing::COL_TIER_PRICE => 'tier value',
+                    AdvancedPricing::COL_GROUP_PRICE => 'value',
+                ],
+                '$allWebsites' => 'not tier|group price website value',
+                '$colTierPriceWebsite' => false,
+                '$colGroupPriceWebsite' => 'value',
+                '$expectedResult' => false,
+            ],
+            [
+                '$value' => [
+                    AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
+                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
+                    AdvancedPricing::COL_TIER_PRICE => 'value',
+                    AdvancedPricing::COL_GROUP_PRICE => ' group value',
                 ],
                 '$allWebsites' => 'not tier|group price website value',
                 '$colTierPriceWebsite' => 'value',
@@ -161,16 +177,8 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
                 '$value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
                     AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
-                ],
-                '$allWebsites' => 'not tier|group price website value',
-                '$colTierPriceWebsite' => 'value',
-                '$colGroupPriceWebsite' => false,
-                '$expectedResult' => false,
-            ],
-            [
-                '$value' => [
-                    AdvancedPricing::COL_TIER_PRICE_WEBSITE => false,
-                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
+                    AdvancedPricing::COL_TIER_PRICE => 'tier value',
+                    AdvancedPricing::COL_GROUP_PRICE => 'value',
                 ],
                 '$allWebsites' => 'not tier|group price website value',
                 '$colTierPriceWebsite' => 'value',

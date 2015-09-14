@@ -3844,4 +3844,5 @@ return [
         'Magento\Checkout\Model\Agreements\AgreementsProviderInterface',
         'Magento\CheckoutAgreements\Model\AgreementsProviderInterface'
     ],
+    ['Magento\Setup\Model\SampleData', 'Magento\SampleData\Model\SampleData'],
 ];

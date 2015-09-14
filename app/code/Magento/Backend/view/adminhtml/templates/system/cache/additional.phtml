@@ -3,31 +3,33 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 ?>
 <div class="additional-cache-management">
     <h2>
-        <span><?php echo __('Additional Cache Management') ?></span>
+        <span><?php /* @escapeNotVerified */ echo __('Additional Cache Management') ?></span>
     </h2>
     <p>
-        <button onclick="setLocation('<?php echo $block->getCleanImagesUrl() ?>')" type="button">
-            <?php echo __('Flush Catalog Images Cache') ?>
+        <button onclick="setLocation('<?php /* @escapeNotVerified */ echo $block->getCleanImagesUrl() ?>')" type="button">
+            <?php /* @escapeNotVerified */ echo __('Flush Catalog Images Cache') ?>
         </button>
-        <span><?php echo __('Pregenerated product images files') ?></span>
+        <span><?php /* @escapeNotVerified */ echo __('Pregenerated product images files') ?></span>
     </p>
     <p>
-        <button onclick="setLocation('<?php echo $block->getCleanMediaUrl() ?>')" type="button">
-            <?php echo __('Flush JavaScript/CSS Cache') ?>
+        <button onclick="setLocation('<?php /* @escapeNotVerified */ echo $block->getCleanMediaUrl() ?>')" type="button">
+            <?php /* @escapeNotVerified */ echo __('Flush JavaScript/CSS Cache') ?>
         </button>
-        <span><?php echo __('Themes JavaScript and CSS files combined to one file.') ?></span>
+        <span><?php /* @escapeNotVerified */ echo __('Themes JavaScript and CSS files combined to one file.') ?></span>
     </p>
     <?php
     if (!$block->isInProductionMode()):
         ?>
         <p>
-            <button onclick="setLocation('<?php echo $block->getCleanStaticFilesUrl() ?>')" type="button">
-                <?php echo __('Flush Static Files Cache') ?>
+            <button onclick="setLocation('<?php /* @escapeNotVerified */ echo $block->getCleanStaticFilesUrl() ?>')" type="button">
+                <?php /* @escapeNotVerified */ echo __('Flush Static Files Cache') ?>
             </button>
-            <span><?php echo __('Preprocessed view files and static files') ?></span>
+            <span><?php /* @escapeNotVerified */ echo __('Preprocessed view files and static files') ?></span>
         </p>
     <?php
     endif;

@@ -11,7 +11,7 @@
  */
 ?>
 <?php if ($block->getInstructions()): ?>
-    <div class="items <?php echo $block->getMethodCode() ?> instructions agreement" id="payment_form_<?php echo $block->getMethodCode() ?>" style="display: none;">
-        <?php echo nl2br($block->getInstructions()) ?>
+    <div class="items <?php /* @escapeNotVerified */ echo $block->getMethodCode() ?> instructions agreement" id="payment_form_<?php /* @escapeNotVerified */ echo $block->getMethodCode() ?>" style="display: none;">
+        <?php /* @escapeNotVerified */ echo nl2br($block->getInstructions()) ?>
     </div>
 <?php endif; ?>
