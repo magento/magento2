@@ -46,6 +46,7 @@ class UrnResolver
      *
      * @param string $schema
      * @return string
+     * @throws \UnexpectedValueException
      */
     public function getRealPath($schema)
     {
