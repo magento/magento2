@@ -6,11 +6,12 @@
  */
 namespace Magento\Customer\Controller\Account;
 
+use Magento\Customer\Controller\AccountInterface;
 use Magento\Customer\Model\Url;
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -25,7 +26,7 @@ use Magento\Framework\Controller\ResultFactory;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Confirm extends \Magento\Customer\Controller\Account
+class Confirm extends Action implements AccountInterface
 {
     /** @var ScopeConfigInterface */
     protected $scopeConfig;
@@ -46,22 +47,23 @@ class Confirm extends \Magento\Customer\Controller\Account
     protected $urlModel;
 
     /**
+     * @var Session
+     */
+    protected $session;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
-     * @param PageFactory $resultPageFactory
      * @param ScopeConfigInterface $scopeConfig
      * @param StoreManagerInterface $storeManager
      * @param AccountManagementInterface $customerAccountManagement
      * @param CustomerRepositoryInterface $customerRepository
      * @param Address $addressHelper
      * @param UrlFactory $urlFactory
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
         Session $customerSession,
-        PageFactory $resultPageFactory,
         ScopeConfigInterface $scopeConfig,
         StoreManagerInterface $storeManager,
         AccountManagementInterface $customerAccountManagement,
@@ -69,13 +71,14 @@ class Confirm extends \Magento\Customer\Controller\Account
         Address $addressHelper,
         UrlFactory $urlFactory
     ) {
+        $this->session = $customerSession;
         $this->scopeConfig = $scopeConfig;
         $this->storeManager = $storeManager;
         $this->customerAccountManagement = $customerAccountManagement;
         $this->customerRepository = $customerRepository;
         $this->addressHelper = $addressHelper;
         $this->urlModel = $urlFactory->create();
-        parent::__construct($context, $customerSession, $resultPageFactory);
+        parent::__construct($context);
     }
 
     /**
@@ -88,7 +91,7 @@ class Confirm extends \Magento\Customer\Controller\Account
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
-        if ($this->_getSession()->isLoggedIn()) {
+        if ($this->session->isLoggedIn()) {
             $resultRedirect->setPath('*/*/');
             return $resultRedirect;
         }
@@ -102,7 +105,7 @@ class Confirm extends \Magento\Customer\Controller\Account
             // log in and send greeting email
             $customerEmail = $this->customerRepository->getById($customerId)->getEmail();
             $customer = $this->customerAccountManagement->activate($customerEmail, $key);
-            $this->_getSession()->setCustomerDataAsLoggedIn($customer);
+            $this->session->setCustomerDataAsLoggedIn($customer);
 
             $this->messageManager->addSuccess($this->getSuccessMessage());
             $resultRedirect->setUrl($this->getSuccessRedirect());
@@ -158,8 +161,8 @@ class Confirm extends \Magento\Customer\Controller\Account
             Url::XML_PATH_CUSTOMER_STARTUP_REDIRECT_TO_DASHBOARD,
             ScopeInterface::SCOPE_STORE
         );
-        if (!$redirectToDashboard && $this->_getSession()->getBeforeAuthUrl()) {
-            $successUrl = $this->_getSession()->getBeforeAuthUrl(true);
+        if (!$redirectToDashboard && $this->session->getBeforeAuthUrl()) {
+            $successUrl = $this->session->getBeforeAuthUrl(true);
         } else {
             $successUrl = $this->urlModel->getUrl('*/*/index', ['_secure' => true]);
         }
