@@ -10,7 +10,10 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Quote\Api\ShippingAddressManagementInterface;
 
-/** Quote shipping address write service object. */
+/**
+ * Quote shipping address write service object.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ShippingAddressManagement implements ShippingAddressManagementInterface
 {
     /**
@@ -56,6 +59,7 @@ class ShippingAddressManagement implements ShippingAddressManagementInterface
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param Quote\TotalsCollector $totalsCollector
+     *
      */
     public function __construct(
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
