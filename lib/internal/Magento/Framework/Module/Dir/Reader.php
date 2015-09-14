@@ -92,7 +92,7 @@ class Reader
      * @param string $subDir
      * @return array
      */
-    public function getFiles($filename, $subDir = '')
+    private function getFiles($filename, $subDir = '')
     {
         $result = [];
         foreach ($this->modulesList->getNames() as $moduleName) {
