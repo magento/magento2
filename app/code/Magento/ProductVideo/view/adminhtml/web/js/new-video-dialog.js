@@ -787,7 +787,7 @@ define([
 
         toggleButtons: function() {
             var self = this;
-            $('.video-placeholder').click(function() {
+            $('.video-placeholder, .add-video-button-container').click(function() {
                 $('.video-create-button').show();
                 $('.video-delete-button').hide();
                 $('.video-edit').hide();
