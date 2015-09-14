@@ -9,6 +9,7 @@ namespace Magento\Setup\Test\Unit\Module;
 use Magento\Setup\Model\ConfigGenerator;
 use Magento\Setup\Model\ConfigOptionsList;
 use Magento\Setup\Validator\DbValidator;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 
 class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
 {
