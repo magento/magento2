@@ -9,16 +9,14 @@ namespace Magento\Widget\Test\TestCase;
 use Magento\Widget\Test\Fixture\Widget;
 
 /**
- * Test Flow:
- *
  * Steps:
- * 1. Login to the backend
- * 2. Open Content > Frontend Apps
- * 3. Click Add Frontend App
- * 4. Fill settings data according dataset
- * 5. Click button Continue
- * 6. Fill widget data according dataset
- * 7. Perform all assertions
+ * 1. Login to the backend.
+ * 2. Open Content > Frontend Apps.
+ * 3. Click Add Frontend App.
+ * 4. Fill settings data according dataset.
+ * 5. Click button Continue.
+ * 6. Fill widget data according dataset.
+ * 7. Perform all assertions.
  *
  * @group Widget_(PS)
  * @ZephyrId MAGETWO-27916
@@ -31,7 +29,7 @@ class CreateWidgetEntityTest extends AbstractCreateWidgetEntityTest
     /* end tags */
 
     /**
-     * Creation for New Instance of WidgetEntity
+     * Create for New Frontend App.
      *
      * @param Widget $widget
      * @return void
