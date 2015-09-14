@@ -5,10 +5,12 @@
  */
 namespace Magento\Catalog\Ui\Component\Listing\Attribute;
 
-interface SearchCriteriaBuilderInterface
+interface RepositoryInterface
 {
     /**
-     * @return \Magento\Framework\Api\SearchCriteria
+     * Get attributes
+     *
+     * @return \Magento\Catalog\Api\Data\ProductAttributeInterface[]
      */
-    public function build();
+    public function getList();
 }
