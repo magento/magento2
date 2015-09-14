@@ -32,7 +32,8 @@ class WeeeTax extends Weee
             return $this;
         }
 
-        $items = $this->_getAddressItems($shippingAssignment);
+        $address = $shippingAssignment->getShipping()->getAddress();
+        $items = $this->_getAddressItems($address);
         if (!count($items)) {
             return $this;
         }
@@ -40,16 +41,16 @@ class WeeeTax extends Weee
         //If Weee is not taxable, then the 'weee' collector has accumulated the non-taxable total values
         if (!$this->weeeData->isTaxable($this->_store)) {
             //Because Weee is not taxable:  Weee excluding tax == Weee including tax
-            $weeeTotal = $shippingAssignment->getWeeeTotalExclTax();
-            $weeeBaseTotal = $shippingAssignment->getWeeeBaseTotalExclTax();
+            $weeeTotal = $total->getWeeeTotalExclTax();
+            $weeeBaseTotal = $total->getWeeeBaseTotalExclTax();
 
             //Add to appropriate 'subtotal' or 'weee' accumulators
-            $this->processTotalAmount($shippingAssignment, $weeeTotal, $weeeBaseTotal, $weeeTotal, $weeeBaseTotal);
+            $this->processTotalAmount($address, $total, $weeeTotal, $weeeBaseTotal, $weeeTotal, $weeeBaseTotal);
             return $this;
         }
 
-        $weeeCodeToItemMap = $shippingAssignment->getWeeeCodeToItemMap();
-        $extraTaxableDetails = $shippingAssignment->getExtraTaxableDetails();
+        $weeeCodeToItemMap = $total->getWeeeCodeToItemMap();
+        $extraTaxableDetails = $total->getExtraTaxableDetails();
 
         if (isset($extraTaxableDetails[self::ITEM_TYPE])) {
             foreach ($extraTaxableDetails[self::ITEM_TYPE] as $itemCode => $weeeAttributesTaxDetails) {
@@ -117,7 +118,8 @@ class WeeeTax extends Weee
                     ->setBaseWeeeTaxAppliedRowAmntInclTax($baseTotalRowValueInclTax);
 
                 $this->processTotalAmount(
-                    $shippingAssignment,
+                    $address,
+                    $total,
                     $totalRowValueExclTax,
                     $baseTotalRowValueExclTax,
                     $totalRowValueInclTax,
@@ -127,7 +129,6 @@ class WeeeTax extends Weee
                 $this->weeeData->setApplied($item, array_merge($this->weeeData->getApplied($item), $productTaxes));
             }
         }
-
         return $this;
     }
 
@@ -143,18 +144,17 @@ class WeeeTax extends Weee
      */
     protected function processTotalAmount(
         $address,
+        $total,
         $rowValueExclTax,
         $baseRowValueExclTax,
         $rowValueInclTax,
         $baseRowValueInclTax
     ) {
-        if ($this->weeeData->includeInSubtotal($this->_store)) {
-            $address->addTotalAmount('subtotal', $rowValueExclTax);
-            $address->addBaseTotalAmount('subtotal', $baseRowValueExclTax);
-        } else {
-            $address->addTotalAmount('weee', $rowValueExclTax);
-            $address->addBaseTotalAmount('weee', $baseRowValueExclTax);
-        }
+        $totalCode = $this->weeeData->includeInSubtotal($this->_store) ? 'subtotal' : $this->getCode();
+        $address->addTotalAmount($totalCode, $rowValueExclTax);
+        $address->addBaseTotalAmount($totalCode, $baseRowValueExclTax);
+        $total->addTotalAmount($totalCode, $rowValueInclTax);
+        $total->addBaseTotalAmount($totalCode, $baseRowValueInclTax);
 
         $address->setSubtotalInclTax($address->getSubtotalInclTax() + $rowValueInclTax);
         $address->setBaseSubtotalInclTax($address->getBaseSubtotalInclTax() + $baseRowValueInclTax);
@@ -164,26 +164,20 @@ class WeeeTax extends Weee
     /**
      * Fetch the Weee total amount for display in totals block when building the initial quote
      *
-     * @param \Magento\Quote\Model\Quote\Address|\Magento\Quote\Model\Quote\Address\Total $total
-     * @return $this
+     * @param \Magento\Quote\Model\Quote\Address\Total $total
+     * @return array
      */
     public function fetch(\Magento\Quote\Model\Quote\Address\Total $total)
     {
-        /** @var $items \Magento\Sales\Model\Order\Item[] */
-        $items = $this->_getAddressItems($total);
-        $store = $total->getQuote()->getStore();
-
-        $weeeTotal = $this->weeeData->getTotalAmounts($items, $store);
+        $weeeTotal = $total->getTotalAmount($this->getCode());
         if ($weeeTotal) {
-            $total->addTotal(
-                [
+            return [
                     'code' => $this->getCode(),
                     'title' => __('FPT'),
                     'value' => $weeeTotal,
                     'area' => null,
-                ]
-            );
+                ];
         }
-        return $this;
+        return [];
     }
 }

@@ -116,10 +116,8 @@ class CartTotalRepository implements CartTotalRepositoryInterface
         $totals = $this->totalsFactory->create();
         $this->dataObjectHelper->populateWithArray($totals, $total->getData(), '\Magento\Quote\Api\Data\TotalsInterface');
         $items = [];
-        $weeeTaxAppliedAmount = 0;
         foreach ($quote->getAllVisibleItems() as $index => $item) {
             $items[$index] = $this->itemConverter->modelToDataObject($item);
-            $weeeTaxAppliedAmount += $item->getWeeeTaxAppliedRowAmount();
         }
         $totals->setCouponCode($this->couponService->get($cartId));
         $calculatedTotals = $this->totalsConverter->process($this->reader->fetch($total, $quote->getStoreId()));
@@ -129,7 +127,6 @@ class CartTotalRepository implements CartTotalRepositoryInterface
         $totals->setTotalSegments($calculatedTotals);
         $totals->setItems($items);
         $totals->setItemsQty($quote->getItemsQty());
-        $totals->setWeeeTaxAppliedAmount($weeeTaxAppliedAmount);
         return $totals;
     }
 }

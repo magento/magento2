@@ -23,7 +23,7 @@ define(
              * @returns {Number}
              */
             getWeeeTaxSegment: function () {
-                var weee = totals.getSegment('weee');
+                var weee = totals.getSegment('weee_tax') || totals.getSegment('weee');
 
                 if (weee !== null && weee.hasOwnProperty('value')) {
                     return weee.value;

@@ -123,16 +123,14 @@ class Weee extends AbstractTotal
             if ($item->getHasChildren() && $item->isChildrenCalculated()) {
                 foreach ($item->getChildren() as $child) {
                     $this->_resetItemData($child);
-                    $this->_process($address, $child);
+                    $this->_process($address, $total, $child);
                 }
                 $this->_recalculateParent($item);
             } else {
-                $this->_process($address, $item);
+                $this->_process($address, $total, $item);
             }
         }
         $total->setWeeeCodeToItemMap($this->weeeCodeToItemMap);
-        $total->setBaseTotalAmount($this->getCode(), $this->weeeBaseTotalExclTax);
-        $total->setTotalAmount($this->getCode(), $this->weeeTotalExclTax);
         return $this;
     }
 
@@ -140,13 +138,17 @@ class Weee extends AbstractTotal
      * Calculate item fixed tax and prepare information for discount and regular taxation
      *
      * @param   \Magento\Quote\Model\Quote\Address $address
+     * @param   \Magento\Quote\Model\Quote\Address\Total $total
      * @param   \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return  void|$this
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    protected function _process(\Magento\Quote\Model\Quote\Address $address, $item)
-    {
+    protected function _process(
+        \Magento\Quote\Model\Quote\Address $address,
+        \Magento\Quote\Model\Quote\Address\Total $total,
+        $item
+    ) {
         $attributes = $this->weeeData->getProductWeeeAttributes(
             $item->getProduct(),
             $address,
@@ -241,6 +243,7 @@ class Weee extends AbstractTotal
 
         $this->processTotalAmount(
             $address,
+            $total,
             $totalRowValueExclTax,
             $baseTotalRowValueExclTax,
             $totalRowValueInclTax,
@@ -254,14 +257,21 @@ class Weee extends AbstractTotal
      * Process row amount based on FPT total amount configuration setting
      *
      * @param   \Magento\Quote\Model\Quote\Address $address
+     * @param   \Magento\Quote\Model\Quote\Address\Total $total
      * @param   float $rowValueExclTax
      * @param   float $baseRowValueExclTax
      * @param   float $rowValueInclTax
      * @param   float $baseRowValueInclTax
      * @return  $this
      */
-    protected function processTotalAmount($address, $rowValueExclTax, $baseRowValueExclTax, $rowValueInclTax, $baseRowValueInclTax)
-    {
+    protected function processTotalAmount(
+        $address,
+        $total,
+        $rowValueExclTax,
+        $baseRowValueExclTax,
+        $rowValueInclTax,
+        $baseRowValueInclTax
+    ) {
         if (!$this->weeeData->isTaxable($this->_store)) {
             //Accumulate the values.  Will be used later in the 'weee tax' collector
             $this->weeeTotalExclTax += $this->priceCurrency->round($rowValueExclTax);
@@ -275,6 +285,8 @@ class Weee extends AbstractTotal
         $address->setBaseSubtotalInclTax(
             $address->getBaseSubtotalInclTax() + $this->priceCurrency->round($baseRowValueInclTax)
         );
+        $total->setBaseTotalAmount($this->getCode(), $this->weeeBaseTotalExclTax);
+        $total->setTotalAmount($this->getCode(), $this->weeeTotalExclTax);
         return $this;
     }
 
@@ -331,9 +343,7 @@ class Weee extends AbstractTotal
     }
 
     /**
-     * Delegate this to WeeeTax collector
-     *
-     * @param \Magento\Quote\Model\Quote\Address|\Magento\Quote\Model\Quote\Address\Total $total
+     * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return array|null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
