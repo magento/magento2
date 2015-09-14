@@ -93,6 +93,9 @@ require([ "jquery", "jquery/ui", "catalogGallery"], function( $ ) {
       if (!VidSetting) return false;
       var result = this._createVideoData(VidData, false),
       checker = false;
+      VidSetting[0].playIfBase = parseInt(VidSetting[0].playIfBase);
+      VidSetting[0].showRelated = parseInt(VidSetting[0].showRelated);
+      VidSetting[0].videoAutoRestart = parseInt(VidSetting[0].videoAutoRestart);
       for (var key in result) {
         if (result[key].mediaType === this.VID) {
           checker = true;
