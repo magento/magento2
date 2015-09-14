@@ -16,6 +16,7 @@ use Magento\Quote\Api\ShippingMethodManagementInterface;
 
 /**
  * Shipping method read service.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShippingMethodManagement implements ShippingMethodManagementInterface
 {

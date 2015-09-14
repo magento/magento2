@@ -6,8 +6,12 @@
 
 namespace Magento\Quote\Model;
 
-class Shipping extends \Magento\Framework\Model\AbstractExtensibleModel
-    implements \Magento\Quote\Api\Data\ShippingInterface
+use Magento\Quote\Api\Data\ShippingInterface;
+
+/**
+ * Class Shipping
+ */
+class Shipping extends \Magento\Framework\Model\AbstractExtensibleModel implements ShippingInterface
 {
     const ADDRESS = 'address';
     const METHOD = 'method';
