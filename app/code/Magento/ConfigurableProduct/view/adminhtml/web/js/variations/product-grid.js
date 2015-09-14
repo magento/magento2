@@ -46,6 +46,11 @@ define([
                     }
                 ]
             });
+            this.productsProvider(function (provider) {
+                this.variationsComponent(function (variation) {
+                    provider.params['attribute_ids'] = variation.attributes.pluck('code');
+                });
+            }.bind(this));
             this._getServerData = _.once(this._getServerData);
         },
 
@@ -135,10 +140,10 @@ define([
          * @private
          */
         _buildGridUrl: function (attributes) {
-            var params = attributes ? '?' + $.param({
+            var params = '?' + $.param({
                 filters: attributes,
-                'attribute_ids': _.keys(attributes)
-            }) : '';
+                attribute_ids: this.variationsComponent().attributes.pluck('code')
+            });
 
             return this.productsGridUrl + params;
         },
@@ -183,9 +188,6 @@ define([
          * @private
          */
         _setFilter: function (attributes) {
-            this.productsProvider(function (provider) {
-                provider.params['attribute_ids'] = this.variationsComponent().attributes.pluck('code');
-            }.bind(this));
             this.productsFilter(function (filter) {
                 filter.set('filters', attributes).apply();
             });
