@@ -1,14 +1,14 @@
 .video-container.video-unplayed:after {
   content: '';
   position: absolute;
-  margin: auto;
-  left: 0;
-  top: 0;
   bottom: 0;
   right: 0;
   background: url(../img/gallery-sprite.png) bottom right;
   width: 100px;
   height: 100px;
+  left: 0;
+  top: 12px;
+  margin: auto;
 }
 .video-container .magnify-lens {
   display: none !important;
@@ -23,10 +23,13 @@
   content: '';
   position: absolute;
   bottom: 0;
-  right: 9px;
+  right: 0;
   background: url(../img/gallery-sprite.png) bottom left;
   width: 49px;
   height: 40px;
+  left: 0;
+  top: 10px;
+  margin: auto;
 }
 .video-timing {
   width: auto;

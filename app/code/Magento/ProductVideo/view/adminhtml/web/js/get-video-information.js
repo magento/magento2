@@ -282,7 +282,7 @@ require([
 
       $.widget('mage.videoData', {
         options: {
-          youtubeKey: 'AIzaSyDwqDWuw1lra-LnpJL2Mr02DYuFmkuRSns' //sample data, change later!!!!!!!!
+          youtubeKey: 'AIzaSyDwqDWuw1lra-LnpJL2Mr02DYuFmkuRSns' //sample data, change later!
         },
 
         _REQUEST_VIDEO_INFORMATION_TRIGGER: 'update_video_information',
@@ -298,9 +298,8 @@ require([
         },
 
         _init: function () {
-          jQuery(this.element).on("focusout", $.proxy(this._onBlurhandler, this));
+          this._onRequestHandler();
         },
-
 
         _onRequestHandler: function() {
           var url = this.element.val();
@@ -323,14 +322,17 @@ require([
               return;
             }
             var tmp       = data.items[0];
+            var uploadedFormatted = tmp.snippet.publishedAt.replace("T"," ").replace(/\..+/g,"");
             var respData  = {
-              duration: tmp.contentDetails.duration,
+              duration: this._formatYoutubeDuration(tmp.contentDetails.duration),
               channel: tmp.snippet.channelTitle,
               channelId:  tmp.snippet.channelId,
-              uploaded: tmp.snippet.publishedAt,
+              uploaded: uploadedFormatted,
               title: tmp.snippet.localized.title,
               description: tmp.snippet.description,
-              thumbnail: tmp.snippet.thumbnails.high.url
+              thumbnail: tmp.snippet.thumbnails.high.url,
+              videoId : videoInfo.id,
+              videoProvider : videoInfo.type
             };
             this._videoInformation  = respData;
             this.element.trigger(this._UPDATE_VIDEO_INFORMATION_TRIGGER, respData);
@@ -343,13 +345,15 @@ require([
             }
             var tmp = data[0];
             var respData = {
-              duration: tmp.duration,
-              user: tmp.user_name,
-              user_url: tmp.user_url,
+              duration: this._formatVimeoDuration(tmp.duration),
+              channel: tmp.user_name,
+              channelId: tmp.user_url,
               uploaded: tmp.upload_date,
               title: tmp.title,
               description: tmp.description,
-              thumbnail: tmp.thumbnail_large
+              thumbnail: tmp.thumbnail_large,
+              videoId : videoInfo.id,
+              videoProvider : videoInfo.type
             };
             this._videoInformation  = respData;
             this.element.trigger(this._UPDATE_VIDEO_INFORMATION_TRIGGER, respData);
@@ -365,85 +369,17 @@ require([
         },
 
         _formatYoutubeDuration: function (duration) {
-          var hours = duration.match("PT(.*)H");
-          var video_timing;
-          if (hours === null) {
-            hours = '00';
-          } else {
-            hours = duration.match("PT(.*)H")[1];
-          }
+          var match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/)
 
-          var minutes = duration.match("H(.*)M");
-          if (minutes === null) {
-            minutes = duration.match("PT(.*)M");
-            if (minutes === null) {
-              minutes = '00';
-            } else {
-              minutes = duration.match("PT(.*)M")[1];
-            }
-          } else {
-            minutes = duration.match("H(.*)M")[1];
-          }
+          var hours = (parseInt(match[1]) || 0);
+          var minutes = (parseInt(match[2]) || 0);
+          var seconds = (parseInt(match[3]) || 0);
 
-          var seconds = duration.match("M(.*)S");
-          if (seconds === null) {
-            seconds = duration.match("PT(.*)S")[1];
-          } else {
-            seconds = duration.match("M(.*)S")[1];
-          }
-
-          if (hours === '00') {
-            if (parseInt(seconds) < 10) {
-              video_timing = minutes + ':0' + seconds;
-            } else {
-              video_timing = minutes + ':' + seconds;
-            }
-          } else {
-            if (parseInt(minutes) < 10) {
-              minutes = '0' + minutes;
-            }
-            if (parseInt(seconds) < 10) {
-              video_timing = hours + ':' + minutes + ':0' + seconds;
-            } else {
-              video_timing = hours + ':' + minutes + ':' + seconds;
-            }
-          }
-
-          if (hours === '00' && minutes === '00') {
-            if (parseInt(seconds) < 10) {
-              video_timing = '00:0' + seconds;
-            } else {
-              video_timing = '00:' + seconds;
-            }
-          }
-          return video_timing;
+          return this._formatVimeoDuration(hours * 3600 + minutes * 60 + seconds);
         },
 
         _formatVimeoDuration: function (seconds) {
-          var MainSeconds = parseInt(seconds);
-          var MainMinutes = parseInt(MainSeconds / 60);
-          var MainHours = parseInt(MainMinutes / 60);
-          var ResultMinutes = MainMinutes - (MainHours * 60);
-          var ResultSeconds = MainSeconds - ((MainHours * 3600) + (ResultMinutes * 60));
-
-          if (ResultMinutes.toString().length == 1) {
-            ResultMinutes = '0' + ResultMinutes;
-          }
-          if (ResultSeconds.toString().length == 1) {
-            ResultSeconds = '0' + ResultSeconds;
-          }
-          if (MainMinutes > 0 && MainHours > 0) {
-            return MainHours + ':' + ResultMinutes + ':' + ResultSeconds;
-          }
-          if (MainMinutes > 0 && MainHours <= 0) {
-            return ResultMinutes + ':' + ResultSeconds;
-          }
-          if (MainMinutes <= 0 && MainHours > 0) {
-            return MainHours + ':' + '00' + ':' + ResultSeconds;
-          }
-          if (MainMinutes <= 0 && MainHours <= 0) {
-            return '00' + ':' + ResultSeconds;
-          }
+          return (new Date(seconds * 1000)).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
         },
 
         _loadVimeoAPI: function () {

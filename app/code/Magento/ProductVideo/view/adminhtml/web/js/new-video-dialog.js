@@ -14,6 +14,95 @@ define([
     'Magento_ProductVideo/js/get-video-information'
 ], function ($) {
     'use strict';
+    $.widget('mage.createVideoPlayer', {
+      options : {
+        video_id : '',
+        video_provider : '',
+        container : '.video-player-container',
+        video_class : 'product-video',
+        reset : false,
+        meta_data : {
+          DOM : {
+            title : '.video-information.title span',
+            uploaded : '.video-information.uploaded span',
+            uploader : '.video-information.uploader span',
+            duration : '.video-information.duration span',
+            all : '.video-information span',
+            wrapper : '.video-information'
+          },
+          data : {
+            title : '',
+            uploaded : '',
+            uploader : '',
+            uploader_url : '',
+            duration : ''
+          }
+        }
+      },
+      _init : function () {
+        if (this.options.reset) {
+          this.reset();
+        } else {
+          this.update();
+        }
+      },
+      update : function () {
+        this.reset();
+        $(this.options.container).append('<div class="'+this.options.video_class+'" data-type="'+this.options.video_provider+'" data-code="'+this.options.video_id+'" data-width="100%" data-height="100%"></div>');
+        $(this.options.meta_data.DOM.wrapper).show();
+        $(this.options.meta_data.DOM.title).text(this.options.meta_data.data.title);
+        $(this.options.meta_data.DOM.uploaded).text(this.options.meta_data.data.uploaded);
+        $(this.options.meta_data.DOM.duration).text(this.options.meta_data.data.duration);
+        if (this.options.video_provider === 'youtube') {
+          $(this.options.meta_data.DOM.uploader).html('<a href="https://youtube.com/channel/'+this.options.meta_data.data.uploader_url+'">'+this.options.meta_data.data.uploader+'</a>');
+        } else
+        if (this.options.video_provider === 'vimeo') {
+          $(this.options.meta_data.DOM.uploader).html('<a href="'+this.options.meta_data.data.uploader_url+'">'+this.options.meta_data.data.uploader+'</a>');
+        }
+        $('.'+this.options.video_class).productVideoLoader();
+      },
+      reset : function () {
+        $(this.options.container).find('.'+this.options.video_class).remove();
+        $(this.options.meta_data.DOM.wrapper).hide();
+        $(this.options.meta_data.DOM.all).text('');
+      }
+    });
+
+    $.widget('mage.updateInputFields', {
+      options : {
+        reset: false,
+        DOM : {
+          url_field : '',
+          title_field : 'input[name="video_title"]',
+          description_field : 'textarea[name="video_description"]',
+          thumbnail_location : '.field-new_video_screenshot_preview .admin__field-control'
+        },
+        data : {
+          url : '',
+          title : '',
+          description : '',
+          thumbnail : ''
+        }
+      },
+      _init : function () {
+        if (this.options.reset) {
+          this.reset();
+        } else {
+          this.update();
+        }
+      },
+      update : function () {
+        this.reset();
+        $(this.options.DOM.title_field).val(this.options.data.title);
+        $(this.options.DOM.description_field).val(this.options.data.description);
+        $(this.options.DOM.thumbnail_location).append('<img src="'+this.options.data.thumbnail+'" />');
+      },
+      reset : function () {
+        $(this.options.DOM.title_field).val('');
+        $(this.options.DOM.description_field).val('');
+        $(this.options.DOM.thumbnail_location).find('img').remove();
+      }
+    });
 
     /**
      */
@@ -45,7 +134,17 @@ define([
 
         _videoInformationBtnSelector: '[name="new_video_get"]',
 
+        _editVideoBtnSelector : '.image.item',
+
         _videoInformationGetBtn: null,
+
+        _videoInformationGetUrlField: null,
+
+        _videoInformationGetEditBtn: null,
+
+        _isEditPage : false,
+
+        _onlyVideoPlayer : false, //if onlyVideoPlayer - in modal we create on focus out only VideoPlayer and not filling input fields
 
         _bind: function() {
             var events = {
@@ -55,8 +154,11 @@ define([
 
             this._videoUrlWidget = jQuery(this._videoUrlSelector).videoData();
             this._videoInformationGetBtn = jQuery(this._videoInformationBtnSelector);
+            this._videoInformationGetUrlField = jQuery(this._videoUrlSelector);
+            this._videoInformationGetEditBtn = jQuery(this._editVideoBtnSelector);
 
             this._videoInformationGetBtn.on('click', $.proxy(this._onGetVideoInformationClick, this));
+            this._videoInformationGetUrlField.on('focusout', $.proxy(this._onGetVideoInformationFocusOut, this));
             this._videoUrlWidget.on("updated_video_information", $.proxy(this._onGetVideoInformationSuccess, this));
             this._videoUrlWidget.on("error_updated_information", $.proxy(this._onGetVideoInformationError, this));
         },
@@ -66,9 +168,34 @@ define([
           * @private
          */
         _onGetVideoInformationClick: function() {
+            this._onlyVideoPlayer = false;
+            this._isEditPage = false;
+            this._videoInformationGetUrlField.videoData();
             this._videoUrlWidget.trigger('update_video_information');
         },
-
+        /**
+         * Fired when user do focus out from url field
+         * @private
+         */
+        _onGetVideoInformationFocusOut : function () {
+            if ($('.mage-new-video-dialog .modal-title').text() === 'Edit Video') {
+              this._isEditPage = true;
+            } else {
+              this._isEditPage = false;
+            }
+            this._videoInformationGetUrlField.videoData();
+            this._videoUrlWidget.trigger('update_video_information');
+        },
+        /**
+         * Fired when user click Edit Video button
+         * @private
+         */
+        _onGetVideoInformationEditClick : function () {
+          this._onlyVideoPlayer = true;
+          this._isEditPage = true;
+          this._videoInformationGetUrlField.videoData();
+          this._videoUrlWidget.trigger('update_video_information');
+        },
         /**
          * Fired when successfully received information about the video.
          * @param e
@@ -76,6 +203,61 @@ define([
          * @private
          */
         _onGetVideoInformationSuccess: function(e, data) {
+          if (!this._isEditPage) {
+            $('.mage-new-video-dialog').createVideoPlayer({
+              video_id : data.videoId,
+              video_provider : data.videoProvider,
+              reset: false,
+              meta_data : {
+                DOM : {
+                  title : '.video-information.title span',
+                  uploaded : '.video-information.uploaded span',
+                  uploader : '.video-information.uploader span',
+                  duration : '.video-information.duration span',
+                  all : '.video-information span',
+                  wrapper : '.video-information'
+                },
+                data : {
+                  title : data.title,
+                  uploaded : data.uploaded,
+                  uploader : data.channel,
+                  duration : data.duration,
+                  uploader_url : data.channelId
+                }
+              }
+            }).updateInputFields({
+              reset: false,
+              data : {
+                title : data.title,
+                description : data.description,
+                thumbnail : data.thumbnail
+              }
+            });
+          }
+          if (this._onlyVideoPlayer) {
+            $('.mage-new-video-dialog').createVideoPlayer({
+              video_id : data.videoId,
+              video_provider : data.videoProvider,
+              reset: false,
+              meta_data : {
+                DOM : {
+                  title : '.video-information.title span',
+                  uploaded : '.video-information.uploaded span',
+                  uploader : '.video-information.uploader span',
+                  duration : '.video-information.duration span',
+                  all : '.video-information span',
+                  wrapper : '.video-information'
+                },
+                data : {
+                  title : data.title,
+                  uploaded : data.uploaded,
+                  uploader : data.channel,
+                  duration : data.duration,
+                  uploader_url : data.channelId
+                }
+              }
+            });
+          }
         },
 
         /**
@@ -280,7 +462,7 @@ define([
                 }
             }
             this._bind();
-
+            this.createVideoItemIcons();
             var widget = this;
             var uploader = jQuery(this._videoPreviewInputSelector);
             uploader.on('change', this._onImageInputChange.bind(this));
@@ -316,6 +498,7 @@ define([
                     var roles = $('.video_image_role');
                     roles.prop('disabled', false);
                     var file = jQuery('#file_name').val();
+                    widget._onGetVideoInformationEditClick();
                     var modalTitleElement = $('.modal-title');
                     if(!file) {
                         roles.prop('checked', $('.image.item').length < 1);
@@ -328,6 +511,7 @@ define([
                 },
                 closed: function(e) {
                     widget._onClose();
+                    widget.createVideoItemIcons();
                 }
             });
         },
@@ -347,6 +531,10 @@ define([
             });
             videoForm.validation();
             return videoForm.valid();
+        },
+
+        createVideoItemIcons : function () {
+          $('#image-container, #media_gallery_content').find('.video-item').parent().addClass('video-item');
         },
 
         /**
@@ -603,11 +791,13 @@ define([
                 $('.video-create-button').show();
                 $('.video-delete-button').hide();
                 $('.video-edit').hide();
+                $('.mage-new-video-dialog').createVideoPlayer({reset : true}).createVideoPlayer('reset').updateInputFields({reset : true}).updateInputFields('reset');
             });
             $(document).on('click', '.item.image', function() {
                 $('.video-create-button').hide();
                 $('.video-delete-button').show();
                 $('.video-edit').show();
+                $('.mage-new-video-dialog').createVideoPlayer({reset : true}).createVideoPlayer('reset');
             });
             $(document).on('click', '.item.image', function() {
                 var formFields = $(self._videoFormSelector).find('.edited-data');
