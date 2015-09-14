@@ -15,13 +15,14 @@ namespace Magento\Widget\Block\Adminhtml\Widget\Instance\Edit\Chooser;
  */
 class Container extends \Magento\Framework\View\Element\Html\Select
 {
-    /**
+    /**#@+
      * Frontend page layouts
      */
     const PAGE_LAYOUT_1COLUMN = '1column-center';
     const PAGE_LAYOUT_2COLUMNS_LEFT = '2columns-left';
     const PAGE_LAYOUT_2COLUMNS_RIGHT = '2columns-right';
     const PAGE_LAYOUT_3COLUMNS = '3columns';
+    /**#@-*/
 
     /**
      * @var \Magento\Framework\View\Layout\ProcessorFactory

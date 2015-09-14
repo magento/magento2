@@ -71,11 +71,11 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->eventManagerMock = $this->getMockBuilder('\Magento\Framework\Event\Manager')
+        $this->eventManagerMock = $this->getMockBuilder('Magento\Framework\Event\Manager')
             ->setMethods(['dispatch'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->scopeConfigMock = $this->getMockBuilder('\Magento\Framework\App\Config')
+        $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config')
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -164,7 +164,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             . '<option value="content.top" >Main Content Top</option></select>';
 
         $this->eventManagerMock->expects($this->once())->method('dispatch')->willReturn(true);
-        $this->scopeConfigMock->expects($this->once())->method('getValue')->withAnyParameters()->willReturn(false);
+        $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(false);
 
         $this->themeCollectionFactoryMock->expects($this->once())
             ->method('create')
@@ -239,7 +239,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             . '<option value="sidebar.main" >Sidebar Main</option></select>';
 
         $this->eventManagerMock->expects($this->once())->method('dispatch')->willReturn(true);
-        $this->scopeConfigMock->expects($this->once())->method('getValue')->withAnyParameters()->willReturn(false);
+        $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(false);
 
         $this->themeCollectionFactoryMock->expects($this->once())
             ->method('create')
@@ -326,7 +326,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             . '<option value="sidebar.main" >Sidebar Main</option></select>';
 
         $this->eventManagerMock->expects($this->once())->method('dispatch')->willReturn(true);
-        $this->scopeConfigMock->expects($this->once())->method('getValue')->withAnyParameters()->willReturn(false);
+        $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(false);
 
         $this->themeCollectionFactoryMock->expects($this->once())
             ->method('create')
@@ -457,7 +457,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             . '<option value="sidebar.main" >Sidebar Main</option></select>';
 
         $this->eventManagerMock->expects($this->once())->method('dispatch')->willReturn(true);
-        $this->scopeConfigMock->expects($this->once())->method('getValue')->withAnyParameters()->willReturn(false);
+        $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(false);
 
         $this->themeCollectionFactoryMock->expects($this->once())
             ->method('create')
@@ -586,7 +586,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             . 'Sidebar Main</option></select>';
 
         $this->eventManagerMock->expects($this->once())->method('dispatch')->willReturn(true);
-        $this->scopeConfigMock->expects($this->once())->method('getValue')->withAnyParameters()->willReturn(false);
+        $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(false);
 
         $this->themeCollectionFactoryMock->expects($this->once())
             ->method('create')
@@ -692,7 +692,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
             . 'Sidebar Main</option></select>';
 
         $this->eventManagerMock->expects($this->once())->method('dispatch')->willReturn(true);
-        $this->scopeConfigMock->expects($this->once())->method('getValue')->withAnyParameters()->willReturn(false);
+        $this->scopeConfigMock->expects($this->once())->method('getValue')->willReturn(false);
 
         $this->themeCollectionFactoryMock->expects($this->once())
             ->method('create')
