@@ -4,10 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Quote\Model;
 
-class ShippingAssignment extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\Quote\Api\Data\ShippingAssignmentInterface
+class ShippingAssignment extends \Magento\Framework\Model\AbstractExtensibleModel
+    implements \Magento\Quote\Api\Data\ShippingAssignmentInterface
 {
     const SHIPPING = 'shipping';
     const ITEMS = 'items';
@@ -44,5 +44,4 @@ class ShippingAssignment extends \Magento\Framework\Model\AbstractExtensibleMode
         $this->setData(self::ITEMS, $value);
         return $this;
     }
-
 }

@@ -6,6 +6,9 @@
 
 namespace Magento\Quote\Api\Data;
 
+/**
+ * Interface ShippingAssignmentInterface
+ */
 interface ShippingAssignmentInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
@@ -14,6 +17,7 @@ interface ShippingAssignmentInterface extends \Magento\Framework\Api\ExtensibleD
     public function getShipping();
 
     /**
+     * @param ShippingInterface $value
      * @return \Magento\Quote\Api\Data\ShippingInterface
      */
     public function setShipping(\Magento\Quote\Api\Data\ShippingInterface $value);

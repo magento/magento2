@@ -62,10 +62,10 @@ class TotalsCollectorList
      */
     protected $totalFactory;
 
-    protected $allowedCollectors = array(
+    protected $allowedCollectors = [
         'subtotal',
         'grand_total'
-    );
+    ];
 
     /**
      * @param Collector $totalCollector
@@ -92,7 +92,7 @@ class TotalsCollectorList
     }
 
     /**
-     * @param $storeId
+     * @param int $storeId
      * @return Collector
      */
     private function getTotalCollector($storeId)
@@ -108,7 +108,7 @@ class TotalsCollectorList
     }
 
     /**
-     * @param $storeId
+     * @param int $storeId
      * @return \Magento\Quote\Model\Quote\Address\Total\AbstractTotal[]
      */
     public function getCollectors($storeId)

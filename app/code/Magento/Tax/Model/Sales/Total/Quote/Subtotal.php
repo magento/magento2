@@ -56,6 +56,10 @@ class Subtotal extends CommonTaxCollector
         return $this;
     }
 
+    /**
+     * @param Address\Total $total
+     * @return null
+     */
     public function fetch(Address\Total $total)
     {
         return null;

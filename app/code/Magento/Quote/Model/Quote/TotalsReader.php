@@ -69,7 +69,7 @@ class TotalsReader
     /**
      * @var array
      */
-    protected $allowedCollectors = array(
+    protected $allowedCollectors = [
         'subtotal',
         'grand_total',
         'customerbalance',
@@ -87,7 +87,7 @@ class TotalsReader
         'custbalance',
         'weee',
         'weee_tax',
-    );
+    ];
 
     /**
      * @param Collector $totalCollector
@@ -118,7 +118,7 @@ class TotalsReader
 
     /**
      * @param \Magento\Quote\Model\Quote\Address\Total $total
-     * @param $storeId
+     * @param int $storeId
      * @return array
      */
     public function fetch(\Magento\Quote\Model\Quote\Address\Total $total, $storeId)
@@ -136,13 +136,12 @@ class TotalsReader
 
             $totalInstance = $this->convert($data);
             if (is_array($totalInstance)) {
-                foreach($totalInstance as $item) {
+                foreach ($totalInstance as $item) {
                     $output = $this->merge($item, $output);
                 }
             } else {
                 $output = $this->merge($totalInstance, $output);
             }
-
         }
 
         return $output;
@@ -160,10 +159,9 @@ class TotalsReader
 
         if (count(array_column($total, 'code')) > 0) {
             $totals = [];
-            foreach($total as $item) {
+            foreach ($total as $item) {
                 $totals[] = $this->totalFactory->create('Magento\Quote\Model\Quote\Address\Total')->setData($item);
             }
-
             return $totals;
         }
 
