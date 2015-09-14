@@ -11,7 +11,7 @@ class Grand extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * Collect grand total address amount
      *
      * @param \Magento\Quote\Model\Quote $quote
-     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface|\Magento\Quote\Model\Quote\Address $shippingAssignment
+     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return $this
      */

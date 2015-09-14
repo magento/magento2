@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -67,29 +66,6 @@ class TotalsReader
     protected $collectorList;
 
     /**
-     * @var array
-     */
-    protected $allowedCollectors = [
-        'subtotal',
-        'grand_total',
-        'customerbalance',
-        'giftcardaccount',
-        'msrp',
-        'shipping',
-        'freeshipping',
-        'pretax_giftwrapping',
-        'giftwrapping',
-        'tax_giftwrapping',
-        'tax_subtotal',
-        'tax_shipping',
-        'tax',
-        'discount',
-        'custbalance',
-        'weee',
-        'weee_tax',
-    ];
-
-    /**
      * @param Collector $totalCollector
      * @param CollectorFactory $totalCollectorFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -126,9 +102,6 @@ class TotalsReader
         $output = [];
         /** @var ReaderInterface $reader */
         foreach ($this->collectorList->getCollectors($storeId) as $key => $reader) {
-            if (!in_array($key, $this->allowedCollectors)) {
-                continue;
-            }
             $data = $reader->fetch($total);
             if ($data === null) {
                 continue;
@@ -143,7 +116,6 @@ class TotalsReader
                 $output = $this->merge($totalInstance, $output);
             }
         }
-
         return $output;
     }
 

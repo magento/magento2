@@ -224,6 +224,11 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     protected $attributeList;
 
     /**
+     * @var TotalsCollector
+     */
+    protected $totalsCollector;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -244,16 +249,18 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      * @param Address\RateCollectorInterfaceFactory $rateCollector
      * @param \Magento\Quote\Model\Resource\Quote\Address\Rate\CollectionFactory $rateCollectionFactory
      * @param Address\RateRequestFactory $rateRequestFactory
-     * @param \Magento\Quote\Model\Quote\Address\Total\CollectorFactory $totalCollectorFactory
+     * @param Address\Total\CollectorFactory $totalCollectorFactory
      * @param Address\TotalFactory $addressTotalFactory
      * @param \Magento\Framework\DataObject\Copy $objectCopyService
      * @param \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory
      * @param Address\Validator $validator
      * @param \Magento\Customer\Model\Address\Mapper $addressMapper
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param Address\CustomAttributeListInterface $attributeList
+     * @param TotalsCollector $totalsCollector
+     * @param \Magento\Framework\Model\Resource\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -284,6 +291,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         Address\Validator $validator,
         \Magento\Customer\Model\Address\Mapper $addressMapper,
         Address\CustomAttributeListInterface $attributeList,
+        \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -303,6 +311,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         $this->validator = $validator;
         $this->addressMapper = $addressMapper;
         $this->attributeList = $attributeList;
+        $this->totalsCollector = $totalsCollector;
         parent::__construct(
             $context,
             $registry,
@@ -1013,49 +1022,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /******************************* Total Collector Interface *******************************************/
-
-    /**
-     * Get totals collector model
-     *
-     * @return \Magento\Quote\Model\Quote\Address\Total\Collector
-     */
-    public function getTotalCollector()
-    {
-        die(__CLASS__ . " :: " . __METHOD__);
-//        if ($this->_totalCollector === null) {
-//            $this->_totalCollector = $this->_totalCollectorFactory->create(
-//                ['store' => $this->getQuote()->getStore()]
-//            );
-//        }
-//
-//        return $this->_totalCollector;
-
-    }
-
-    /**
-     * Collect address totals
-     *
-     * @return $this
-     */
-    public function collectTotals()
-    {
-        die(__CLASS__ . " :: " . __METHOD__);
-//        $this->_eventManager->dispatch(
-//            $this->_eventPrefix . '_collect_totals_before',
-//            [$this->_eventObject => $this]
-//        );
-//        foreach ($this->getTotalCollector()->getCollectors() as $model) {
-//            $model->collect($this);
-//        }
-//        $this->_eventManager->dispatch(
-//            $this->_eventPrefix . '_collect_totals_after',
-//            [$this->_eventObject => $this]
-//        );
-//
-//        return $this;
-        //@todo remove this method
-    }
-
     /**
      * Get address totals as array
      *
@@ -1063,10 +1029,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     public function getTotals()
     {
-        foreach ($this->getTotalCollector()->getRetrievers() as $model) {
-            $model->fetch($this);
-        }
-
+        $this->_totals = $this->totalsCollector->collectAddressTotals($this->getQuote(), $this)->toArray();
         return $this->_totals;
     }
 

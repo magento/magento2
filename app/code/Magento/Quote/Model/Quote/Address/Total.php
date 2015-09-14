@@ -130,26 +130,6 @@ class Total extends \Magento\Framework\DataObject
         return 0;
     }
 
-//    /**
-//     * Get subtotal amount with applied discount in base currency
-//     *
-//     * @return float
-//     */
-//    public function getBaseSubtotalWithDiscount()
-//    {
-//        return $this->getBaseSubtotal() + $this->getBaseDiscountAmount();
-//    }
-//
-//    /**
-//     * Get subtotal amount with applied discount
-//     *
-//     * @return float
-//     */
-//    public function getSubtotalWithDiscount()
-//    {
-//        return $this->getSubtotal() + $this->getDiscountAmount();
-//    }
-
     //@codeCoverageIgnoreStart
     /**
      * Get all total amount values

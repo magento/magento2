@@ -236,6 +236,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     {
         /** @var  \Magento\Framework\ObjectManagerInterface $objectManager */
         $objectManager = Bootstrap::getObjectManager();
+        $totalsCollector = $objectManager->create('Magento\Quote\Model\Quote\TotalsCollector');
 
         //Setup tax configurations
         $this->setupUtil = new SetupUtil($objectManager);
@@ -243,8 +244,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
 
         $quote = $this->setupUtil->setupQuote($quoteData);
         $quoteAddress = $quote->getShippingAddress();
-
-        $quoteAddress->collectTotals();
+        $totalsCollector->collectAddressTotals($quote, $quoteAddress);
         $this->verifyResult($quoteAddress, $expectedResults);
     }
 

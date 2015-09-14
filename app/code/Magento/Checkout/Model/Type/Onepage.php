@@ -166,6 +166,11 @@ class Onepage
     protected $dataObjectHelper;
 
     /**
+     * @var \Magento\Quote\Model\Quote\TotalsCollector
+     */
+    protected $totalsCollector;
+
+    /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Checkout\Helper\Data $helper
      * @param \Magento\Customer\Model\Url $customerUrl
@@ -192,6 +197,7 @@ class Onepage
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param \Magento\Quote\Model\QuoteManagement $quoteManagement
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -220,7 +226,8 @@ class Onepage
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
         \Magento\Quote\Model\QuoteManagement $quoteManagement,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
     ) {
         $this->_eventManager = $eventManager;
         $this->_customerUrl = $customerUrl;
@@ -248,6 +255,7 @@ class Onepage
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
         $this->quoteManagement = $quoteManagement;
         $this->dataObjectHelper = $dataObjectHelper;
+        $this->totalsCollector = $totalsCollector;
     }
 
     /**
@@ -486,8 +494,8 @@ class Onepage
                         ->setSameAsBilling(1)
                         ->setSaveInAddressBook(0)
                         ->setShippingMethod($shippingMethod)
-                        ->setCollectShippingRates(true)
-                        ->collectTotals();
+                        ->setCollectShippingRates(true);
+                    $this->totalsCollector->collectAddressTotals($this->getQuote(), $shipping);
 
                     if (!$this->isCheckoutMethodRegister()) {
                         $shipping->save();
@@ -686,7 +694,8 @@ class Onepage
             return ['error' => 1, 'message' => $validateRes];
         }
 
-        $address->collectTotals()->save();
+        $this->totalsCollector->collectAddressTotals($this->getQuote(), $address);
+        $address->save();
 
         $this->getCheckout()->setStepData('shipping', 'complete', true)->setStepData('shipping_method', 'allow', true);
 

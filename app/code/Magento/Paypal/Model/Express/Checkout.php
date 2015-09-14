@@ -269,6 +269,11 @@ class Checkout
     protected $quoteManagement;
 
     /**
+     * @var \Magento\Quote\Model\Quote\TotalsCollector
+     */
+    protected $totalsCollector;
+
+    /**
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Customer\Model\Url $customerUrl
      * @param \Magento\Tax\Helper\Data $taxData
@@ -284,7 +289,7 @@ class Checkout
      * @param \Magento\Quote\Model\QuoteManagement $quoteManagement
      * @param \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory
      * @param \Magento\Paypal\Model\Api\Type\Factory $apiTypeFactory
-     * @param \Magento\Framework\DataObject\Copy $objectCopyService
+     * @param DataObject\Copy $objectCopyService
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
@@ -293,6 +298,7 @@ class Checkout
      * @param PaypalQuote $paypalQuote
      * @param OrderSender $orderSender
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
      * @param array $params
      * @throws \Exception
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -322,6 +328,7 @@ class Checkout
         PaypalQuote $paypalQuote,
         OrderSender $orderSender,
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
         $params = []
     ) {
         $this->quoteManagement = $quoteManagement;
@@ -347,6 +354,7 @@ class Checkout
         $this->_accountManagement = $accountManagement;
         $this->paypalQuote = $paypalQuote;
         $this->quoteRepository = $quoteRepository;
+        $this->totalsCollector = $totalsCollector;
         $this->_customerSession = isset($params['session'])
             && $params['session'] instanceof \Magento\Customer\Model\Session ? $params['session'] : $customerSession;
 
@@ -742,7 +750,8 @@ class Checkout
                 foreach ($address->getExportedKeys() as $key) {
                     $quoteAddress->setDataUsingMethod($key, $address->getData($key));
                 }
-                $quoteAddress->setCollectShippingRates(true)->collectTotals();
+                $quoteAddress->setCollectShippingRates(true);
+                $this->totalsCollector->collectAddressTotals($this->_quote, $quoteAddress);
                 $options = $this->_prepareShippingOptions($quoteAddress, false, true);
             }
             $response = $this->_api->setShippingOptions($options)->formatShippingOptionsCallback();

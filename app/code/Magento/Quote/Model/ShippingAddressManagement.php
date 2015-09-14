@@ -45,24 +45,32 @@ class ShippingAddressManagement implements ShippingAddressManagementInterface
     protected $scopeConfig;
 
     /**
+     * @var Quote\TotalsCollector
+     */
+    protected $totalsCollector;
+
+    /**
      * @param QuoteRepository $quoteRepository
      * @param QuoteAddressValidator $addressValidator
      * @param Logger $logger
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param Quote\TotalsCollector $totalsCollector
      */
     public function __construct(
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
         QuoteAddressValidator $addressValidator,
         Logger $logger,
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->addressValidator = $addressValidator;
         $this->logger = $logger;
         $this->addressRepository = $addressRepository;
         $this->scopeConfig = $scopeConfig;
+        $this->totalsCollector = $totalsCollector;
     }
 
     /**
@@ -96,7 +104,8 @@ class ShippingAddressManagement implements ShippingAddressManagementInterface
         $address->setSaveInAddressBook($saveInAddressBook);
         $address->setCollectShippingRates(true);
         try {
-            $address->collectTotals()->save();
+            $this->totalsCollector->collectAddressTotals($quote, $address);
+            $address->save();
         } catch (\Exception $e) {
             $this->logger->critical($e);
             throw new InputException(__('Unable to save address. Please, check input data.'));

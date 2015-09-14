@@ -3,9 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Quote\Model;
 
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -381,10 +378,13 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param Cart\CurrencyFactory $currencyFactory
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param Quote\TotalsCollector $totalsCollector
+     * @param Quote\TotalsReader $totalsReader
+     * @param ShippingFactory $shippingFactory
+     * @param ShippingAssignmentFactory $shippingAssignmentFactory
+     * @param \Magento\Framework\Model\Resource\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -1060,7 +1060,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
          */
         //if (!$this->getData('customer_group_id') && !$this->getData('customer_tax_class_id')) {
         $groupId = $this->getCustomerGroupId();
-        if (!is_null($groupId)) {
+        if ($groupId !== null) {
             $taxClassId = $this->groupRepository->getById($this->getCustomerGroupId())->getTaxClassId();
             $this->setCustomerTaxClassId($taxClassId);
         }
@@ -1507,7 +1507,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     public function removeAllItems()
     {
         foreach ($this->getItemsCollection() as $itemId => $item) {
-            if (is_null($item->getId())) {
+            if ($item->getId() === null) {
                 $this->getItemsCollection()->removeItemByKey($itemId);
             } else {
                 $item->isDeleted(true);
@@ -1925,142 +1925,19 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $total = $this->totalsCollector->collect($this);
         $this->addData($total->getData());
         return $this;
-//        /**
-//         * Protect double totals collection
-//         */
-//        if ($this->getTotalsCollectedFlag()) {
-//            return $this;
-//        }
-//        $this->_eventManager->dispatch(
-//            $this->_eventPrefix . '_collect_totals_before',
-//            [$this->_eventObject => $this]
-//        );
-//
-//        $this->_collectItemsQtys();
-//
-//        $this->setSubtotal(0);
-//        $this->setBaseSubtotal(0);
-//
-//        $this->setSubtotalWithDiscount(0);
-//        $this->setBaseSubtotalWithDiscount(0);
-//
-//        $this->setGrandTotal(0);
-//        $this->setBaseGrandTotal(0);
-//
-//        /** @var \Magento\Quote\Model\Quote\Address $address */
-//        foreach ($this->getAllAddresses() as $address) {
-//            $address->setSubtotal(0);
-//            $address->setBaseSubtotal(0);
-//
-//            $address->setGrandTotal(0);
-//            $address->setBaseGrandTotal(0);
-//
-//            //$address->collectTotals();
-//
-//
-//            /** Build shipping assignment DTO  */
-//            $shippingAssignment = $this->shippingAssignmentFactory->create();
-//            $shipping = $this->shippingFactory->create();
-//            $shipping->setMethod($this->getShippingAddress()->getShippingMethod());
-//            $shipping->setAddress($this->getShippingAddress());
-//            $shippingAssignment->setShipping($shipping);
-//            $shippingAssignment->setItems($this->getAllItems());
-//
-//            $total = $this->totalsCollector->collectAddressTotals($shippingAssignment, $this->getStoreId());
-//
-//            $this->setSubtotal((float)$this->getSubtotal() + $total->getSubtotal());
-//            $this->setBaseSubtotal((float)$this->getBaseSubtotal() + $total->getBaseSubtotal());
-//
-//            $this->setSubtotalWithDiscount(
-//                (float)$this->getSubtotalWithDiscount() + $total->getSubtotalWithDiscount()
-//            );
-//            $this->setBaseSubtotalWithDiscount(
-//                (float)$this->getBaseSubtotalWithDiscount() + $total->getBaseSubtotalWithDiscount()
-//            );
-//
-//            $this->setGrandTotal((float)$this->getGrandTotal() + $total->getGrandTotal());
-//            $this->setBaseGrandTotal((float)$this->getBaseGrandTotal() + $total->getBaseGrandTotal());
-//        }
-//
-//        $this->quoteValidator->validateQuoteAmount($this, $this->getGrandTotal());
-//        $this->quoteValidator->validateQuoteAmount($this, $this->getBaseGrandTotal());
-//
-//        $this->setData('trigger_recollect', 0);
-//        $this->_validateCouponCode();
-//
-//        $this->_eventManager->dispatch(
-//            $this->_eventPrefix . '_collect_totals_after',
-//            [$this->_eventObject => $this]
-//        );
-//
-//        $this->setTotalsCollectedFlag(true);
-//        return $this;
     }
-
-//    /**
-//     * Collect items qty
-//     *
-//     * @return $this
-//     */
-//    protected function _collectItemsQtys()
-//    {
-//        $this->setItemsCount(0);
-//        $this->setItemsQty(0);
-//        $this->setVirtualItemsQty(0);
-//
-//        foreach ($this->getAllVisibleItems() as $item) {
-//            if ($item->getParentItem()) {
-//                continue;
-//            }
-//
-//            $children = $item->getChildren();
-//            if ($children && $item->isShipSeparately()) {
-//                foreach ($children as $child) {
-//                    if ($child->getProduct()->getIsVirtual()) {
-//                        $this->setVirtualItemsQty($this->getVirtualItemsQty() + $child->getQty() * $item->getQty());
-//                    }
-//                }
-//            }
-//
-//            if ($item->getProduct()->getIsVirtual()) {
-//                $this->setVirtualItemsQty($this->getVirtualItemsQty() + $item->getQty());
-//            }
-//            $this->setItemsCount($this->getItemsCount() + 1);
-//            $this->setItemsQty((float)$this->getItemsQty() + $item->getQty());
-//        }
-//
-//        return $this;
-//    }
 
     /**
      * Get all quote totals (sorted by priority)
-     * Method process quote states isVirtual and isMultiShipping
      *
      * @return array
      */
     public function getTotals()
     {
-        /**
-         * If quote is virtual we are using totals of billing address because
-         * all items assigned to it
-         */
-
-        /** @TODO verify virtual quote support MAGETWO-38595*/
-//        if ($this->isVirtual()) {
-//            return $this->getBillingAddress()->getTotals();
-//        }
-
-        $total = $this->totalsCollector->collectQuoteTotals($this);
-
-        $sortedTotals = [];
-//        /** @todo remfactor this code $this->getBillingAddress()->getTotalCollector()->getRetrievers() */
-//        foreach ($this->getBillingAddress()->getTotalCollector()->getRetrievers() as $total) {
-//            /* @var $total \Magento\Quote\Model\Quote\Address\Total\AbstractTotal */
-//            if (isset($totals[$total->getCode()])) {
-//                $sortedTotals[$total->getCode()] = $totals[$total->getCode()];
-//            }
-//        }
-        return $this->totalsReader->fetch($total, $this->getStoreId());
+        return $this->totalsReader->fetch(
+            $this->totalsCollector->collectQuoteTotals($this),
+            $this->getStoreId()
+        );
     }
 
     /**
@@ -2463,29 +2340,6 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
 
         return $this;
     }
-
-//    /**
-//     * @return $this
-//     */
-//    protected function _validateCouponCode()
-//    {
-//        $code = $this->_getData('coupon_code');
-//        if (strlen($code)) {
-//            $addressHasCoupon = false;
-//            $addresses = $this->getAllAddresses();
-//            if (count($addresses) > 0) {
-//                foreach ($addresses as $address) {
-//                    if ($address->hasCouponCode()) {
-//                        $addressHasCoupon = true;
-//                    }
-//                }
-//                if (!$addressHasCoupon) {
-//                    $this->setCouponCode('');
-//                }
-//            }
-//        }
-//        return $this;
-//    }
 
     /**
      * Trigger collect totals after loading, if required
