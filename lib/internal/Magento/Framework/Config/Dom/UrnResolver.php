@@ -11,6 +11,7 @@ namespace Magento\Framework\Config\Dom;
 
 use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Module\PackageInfo;
 
 class UrnResolver
 {
@@ -22,13 +23,22 @@ class UrnResolver
     private $componentRegistrar;
 
     /**
+     * Package info
+     *
+     * @var PackageInfo
+     */
+    private $packageInfo;
+
+    /**
      * Constructor
      *
      * @param ComponentRegistrarInterface $componentRegistrar
+     * @param PackageInfo $packageInfo
      */
-    public function __construct(ComponentRegistrarInterface $componentRegistrar)
+    public function __construct(ComponentRegistrarInterface $componentRegistrar, PackageInfo $packageInfo)
     {
         $this->componentRegistrar = $componentRegistrar;
+        $this->packageInfo = $packageInfo;
     }
 
     /**
@@ -46,8 +56,7 @@ class UrnResolver
             // moduleName -> Magento_Catalog
             $urnParts = explode(':', $schema);
             if ($urnParts[2] == 'module') {
-                $appModulePath = str_replace(' ', '', ucwords(str_replace('-', ' ', $urnParts[3])));
-                $moduleName = ucfirst($urnParts[1]) . '_' . $appModulePath;
+                $moduleName = $this->packageInfo->getModuleName($urnParts[1] . '/' . $urnParts[3]);
                 $appSchemaPath = $this->componentRegistrar->getPath(
                         ComponentRegistrar::MODULE, $moduleName
                     ) . '/' . $urnParts[4];
