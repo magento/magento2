@@ -97,8 +97,12 @@ class FilesTest extends \PHPUnit_Framework_TestCase
         foreach ($this->moduleTests as $moduleTest) {
             $this->assertEmpty(preg_grep($moduleTest, $files));
         }
-        $this->assertEmpty(preg_grep($this->frameworkTests, $files));
-        $this->assertEmpty(preg_grep($this->libTests, $files));
+        foreach ($this->frameworkTests as $frameworkTest) {
+            $this->assertEmpty(preg_grep($frameworkTest, $files));
+        }
+        foreach ($this->libTests as $libTest) {
+            $this->assertEmpty(preg_grep($libTest, $files));
+        }
         $this->assertEmpty(preg_grep($this->toolsTests, $files));
     }
 }
