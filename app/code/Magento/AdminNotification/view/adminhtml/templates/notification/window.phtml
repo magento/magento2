@@ -13,19 +13,19 @@
  */
 ?>
 <div data-mage-init='{"modalPopup": {}}' class="fade critical-notification">
-    <div class="popup popup-<?php echo preg_replace('#[^a-z0-9]+#', '-', strtolower($block->getSeverityText())) ?>">
+    <div class="popup popup-<?php /* @escapeNotVerified */ echo preg_replace('#[^a-z0-9]+#', '-', strtolower($block->getSeverityText())) ?>">
         <div class="popup-inner">
             <div class="popup-header">
-                <div class="popup-title"><?php echo $block->getHeaderText(); ?></div>
+                <div class="popup-title"><?php /* @escapeNotVerified */ echo $block->getHeaderText(); ?></div>
             </div>
             <div class="popup-content">
-                <span><?php echo $block->getSeverityText();?></span>
+                <span><?php /* @escapeNotVerified */ echo $block->getSeverityText();?></span>
 
-                <p class="message-text"><?php echo $block->getNoticeMessageText(); ?></p>
+                <p class="message-text"><?php /* @escapeNotVerified */ echo $block->getNoticeMessageText(); ?></p>
 
-                <a href="<?php echo $block->getNoticeMessageUrl(); ?>"><?php echo $block->getReadDetailsText(); ?></a>
+                <a href="<?php /* @escapeNotVerified */ echo $block->getNoticeMessageUrl(); ?>"><?php /* @escapeNotVerified */ echo $block->getReadDetailsText(); ?></a>
             </div>
-            <span class="action close" data-dismiss="popup" title="<?php echo $block->escapeHtml(__('Close popup'));?>"><?php echo __('Close'); ?></span>
+            <span class="action close" data-dismiss="popup" title="<?php echo $block->escapeHtml(__('Close popup'));?>"><?php /* @escapeNotVerified */ echo __('Close'); ?></span>
         </div>
     </div>
 </div>
