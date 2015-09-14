@@ -9,12 +9,12 @@
     <xs:include schemaLocation="queue_base.xsd" />
     <xs:element name="config">
         <xs:complexType>
-            <xs:sequence>
-                <xs:element name="publisher" type="publisherType" maxOccurs="unbounded" minOccurs="0"/>
-                <xs:element name="topic" type="topicType" maxOccurs="unbounded" minOccurs="0"/>
-                <xs:element name="consumer" type="consumerType" maxOccurs="unbounded" minOccurs="0"/>
-                <xs:element name="bind" type="bindType" maxOccurs="unbounded" minOccurs="0"/>
-            </xs:sequence>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="publisher" type="publisherType"/>
+                <xs:element name="topic" type="topicType"/>
+                <xs:element name="consumer" type="consumerType"/>
+                <xs:element name="bind" type="bindType"/>
+            </xs:choice>
         </xs:complexType>
         <xs:unique name="consumer-unique-name">
             <xs:selector xpath="consumer"/>
