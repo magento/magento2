@@ -131,6 +131,8 @@ class Weee extends AbstractTotal
             }
         }
         $total->setWeeeCodeToItemMap($this->weeeCodeToItemMap);
+        $shippingAssignment->setWeeeTotalExclTax($this->weeeTotalExclTax);
+        $shippingAssignment->setWeeeBaseTotalExclTax($this->weeeBaseTotalExclTax);
         return $this;
     }
 
