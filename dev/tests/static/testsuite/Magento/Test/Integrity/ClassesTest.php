@@ -548,8 +548,8 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
         foreach ($libraryPaths as $key => $libraryPath) {
             $libraryPath = str_replace($pathToSource, '', $libraryPath);
             $partsOfLibraryPath = explode('/', $libraryPath);
-            $libraryPaths[$key] = implode('/', array_slice($partsOfLibraryPath, 2));
-            $libraryPaths[$key] .= '/';
+            $libraryPaths[$key] = implode('/', array_slice($partsOfLibraryPath, 0, sizeof($partsOfLibraryPath)-2));
+            $libraryPaths[$key] .=  '/';
         }
         return $libraryPaths;
     }
