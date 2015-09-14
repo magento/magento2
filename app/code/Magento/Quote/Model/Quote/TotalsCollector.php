@@ -89,6 +89,7 @@ class TotalsCollector
         'discount',
         'custbalance',
         'weee',
+        'weee_tax',
     );
 
     /**

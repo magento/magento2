@@ -86,6 +86,7 @@ class TotalsReader
         'discount',
         'custbalance',
         'weee',
+        'weee_tax',
     );
 
     /**
