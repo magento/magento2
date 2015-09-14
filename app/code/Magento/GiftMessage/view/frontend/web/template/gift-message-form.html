@@ -4,14 +4,12 @@
  * See COPYING.txt for license details.
  */
 -->
+<!-- ko if: isActive() -->
 <div class="gift-message">
-    <!-- ko if: isActive() -->
     <div class="gift-options-title">
         <span data-bind="text: $t('Gift Message (optional)')"></span>
     </div>
-    <!-- /ko -->
     <div class="gift-options-content">
-        <!-- ko if: isActive() -->
         <fieldset class="fieldset">
             <div class="field field-to">
                 <label for="gift-message-whole-to" class="label">
@@ -48,20 +46,23 @@
                 </div>
             </div>
         </fieldset>
-        <!-- /ko -->
-        <div class="actions-toolbar">
-            <div class="secondary">
-                <button type="submit" class="action secondary action-update" data-bind="
+
+    </div>
+</div>
+<!-- /ko -->
+<div class="actions-toolbar">
+    <div class="secondary">
+        <button type="submit" class="action secondary action-update" data-bind="
                     attr: {title: $t('Update')},
                     click: $data.submitOptions.bind($data)">
                     <span data-bind="text: $t('Update')"></span>
-                </button>
-                <button class="action action-cancel" data-bind="
+            <span data-bind="i18n: 'Update'"></span>
+        </button>
+        <button class="action action-cancel" data-bind="
                     attr: {title: $t('Cancel')},
                     click: $data.hideFormBlock.bind($data)">
                     <span data-bind="text: $t('Cancel')"></span>
-                </button>
-            </div>
-        </div>
+            <span data-bind="i18n: 'Cancel'"></span>
+        </button>
     </div>
 </div>
