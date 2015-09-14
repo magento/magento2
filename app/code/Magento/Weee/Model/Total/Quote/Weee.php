@@ -108,7 +108,7 @@ class Weee extends AbstractTotal
         }
 
         $address = $shippingAssignment->getShipping()->getAddress();
-        $items = $this->_getAddressItems($address);
+        $items = $shippingAssignment->getItems();
         if (!count($items)) {
             return $this;
         }
