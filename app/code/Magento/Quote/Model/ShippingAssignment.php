@@ -45,4 +45,21 @@ class ShippingAssignment extends \Magento\Framework\Model\AbstractExtensibleMode
         $this->setData(self::ITEMS, $value);
         return $this;
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setExtensionAttributes(
+        \Magento\Quote\Api\Data\ShippingAssignmentExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
 }
