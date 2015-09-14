@@ -16,7 +16,7 @@ use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 class LoginTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Customer\Controller\Account
+     * @var \Magento\Customer\Controller\Ajax\Login
      */
     protected $object;
 

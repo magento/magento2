@@ -12,6 +12,8 @@ use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Backend Data Grid with advanced functionality for managing entities.
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class DataGrid extends Grid
 {
@@ -69,7 +71,7 @@ class DataGrid extends Grid
      *
      * @var string
      */
-    protected $massActionToggleButton = '.action-multicheck-toggle';
+    protected $massActionToggleButton = 'th [data-toggle="dropdown"]';
 
     /**
      * Mass action button.
@@ -111,6 +113,13 @@ class DataGrid extends Grid
      * @var string
      */
     protected $fullTextSearchButton = '.data-grid-search-control-wrap .action-submit';
+
+    /**
+     * Selector for no records row.
+     *
+     * @var string
+     */
+    protected $noRecords = '[class$=no-data]';
 
     /**
      * Clear all applied Filters.
@@ -218,6 +227,8 @@ class DataGrid extends Grid
      */
     public function massaction(array $items, $action, $acceptAlert = false, $massActionSelection = '')
     {
+        $this->waitLoader();
+        $this->resetFilter();
         if ($this->_rootElement->find($this->noRecords)->isVisible()) {
             return;
         }
