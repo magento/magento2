@@ -1146,7 +1146,7 @@ class Files
             $fullPath = $dir . $path;
             $trimmedFullPath = $dir . explode('/', $path, 3)[2];
             if ($this->classFileExistsCheckContent($fullPath, $namespace, $className)
-                || $this->classFileExistsCheckContent($trimmedFullPath, $namespace, $class)
+                || $this->classFileExistsCheckContent($trimmedFullPath, $namespace, $className)
             ) {
                 return true;
             }
@@ -1159,7 +1159,7 @@ class Files
      *
      * @param string $fullPath
      * @param string $namespace
-     * @param $className
+     * @param string $className
      * @return bool
      */
     private function classFileExistsCheckContent($fullPath, $namespace, $className)
