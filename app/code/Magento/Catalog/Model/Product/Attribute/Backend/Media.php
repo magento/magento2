@@ -341,7 +341,9 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     {
         $catalogPath = $this->_mediaConfig->getBaseMediaPath();
         foreach ($files as $filePath) {
-            $this->_mediaDirectory->delete($catalogPath . '/' . $filePath);
+            if (!empty($filePath)) {
+                $this->_mediaDirectory->delete($catalogPath . '/' . $filePath);
+            }
         }
     }
 
