@@ -21,7 +21,7 @@ require([
 ], function($){
 
     $('#edit_form').form()
-        .validation({validationUrl: '<?php echo $block->getValidationUrl() ?>'});
+        .validation({validationUrl: '<?php /* @escapeNotVerified */ echo $block->getValidationUrl() ?>'});
 
 });
 </script>

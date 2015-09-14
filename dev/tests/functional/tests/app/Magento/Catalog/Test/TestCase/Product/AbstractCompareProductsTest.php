@@ -122,10 +122,10 @@ abstract class AbstractCompareProductsTest extends Injectable
      */
     protected function loginCustomer()
     {
-        if (!$this->cmsIndex->getLinksBlock()->isLinkVisible('Sign Out')) {
-            $this->cmsIndex->getLinksBlock()->openLink("Sign In");
-            $this->customerAccountLogin->getLoginBlock()->login($this->customer);
-        }
+        $this->objectManager->create(
+            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            ['customer' => $this->customer]
+        )->run();
     }
 
     /**
