@@ -60,7 +60,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
         $this->roleFactoryMock = $this->getMockBuilder('Magento\Authorization\Model\RoleFactory')
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(['create'])
             ->getMock();
 
         $this->roleMock = $this->getMockBuilder('Magento\Authorization\Model\Role')
@@ -130,14 +130,43 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testHasAssigned2Role()
     {
+        $returnData = [1, 2, 3];
+        $uid = 1234;
         $this->resourceMock->expects($this->once())->method('getConnection')->willReturn($this->dbAdapterMock);
         $this->selectMock->expects($this->once())->method('from')->willReturn($this->selectMock);
         $this->dbAdapterMock->expects($this->once())->method('select')->willReturn($this->selectMock);
         $this->selectMock->expects($this->atLeastOnce())->method('where')->willReturn($this->selectMock);
-        $this->dbAdapterMock->expects($this->once())->method('fetchAll')->willReturn([1, 2, 3]);
+        $this->dbAdapterMock->expects($this->once())->method('fetchAll')->willReturn($returnData);
 
-        $this->assertEquals([1, 2, 3], $this->model->hasAssigned2Role(12345));
+        $this->assertEquals($returnData, $this->model->hasAssigned2Role($uid));
         $this->assertNull($this->model->hasAssigned2Role(0));
+    }
+
+    public function testHasAssigned2RolePassAnObject()
+    {
+        $methodUserMock = $this->getMockBuilder('\Magento\Framework\Model\AbstractModel')
+            ->disableOriginalConstructor()
+            ->setMethods(['getUserId'])
+            ->getMock();
+        $returnData = [1, 2, 3];
+        $uid = 1234;
+        $methodUserMock->expects($this->once())->method('getUserId')->willReturn($uid);
+        $this->resourceMock->expects($this->once())->method('getConnection')->willReturn($this->dbAdapterMock);
+        $this->dbAdapterMock->expects($this->once())->method('select')->willReturn($this->selectMock);
+        $this->selectMock->expects($this->once())->method('from')->willReturn($this->selectMock);
+        $this->selectMock->expects($this->atLeastOnce())->method('where')->willReturn($this->selectMock);
+        $this->dbAdapterMock->expects($this->once())->method('fetchAll')->willReturn($returnData);
+
+        $this->assertEquals($returnData, $this->model->hasAssigned2Role($methodUserMock));
+    }
+
+    public function test_clearUserRoles()
+    {
+        $uid = 123;
+        $this->userMock->expects($this->once())->method('getId')->willReturn($uid);
+        $this->resourceMock->expects($this->once())->method('getConnection')->willReturn($this->dbAdapterMock);
+        $this->dbAdapterMock->expects($this->once())->method('delete');
+        $this->model->_clearUserRoles($this->userMock);
     }
 
     public function testDeleteSucess()
@@ -238,18 +267,38 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
     public function testUnlock()
     {
+        $inputData = [1, 2, 3];
         $returnData = 5;
         $this->resourceMock->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->dbAdapterMock);
         $this->dbAdapterMock->expects($this->once())->method('update')->willReturn($returnData);
-        $this->assertEquals($returnData, $this->model->unlock(['user1', 'user2']));
+        $this->assertEquals($returnData, $this->model->unlock($inputData));
+    }
+
+    public function testUnlockWithInteger()
+    {
+        $inputData = 123;
+        $returnData = 5;
+        $this->resourceMock->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->dbAdapterMock);
+        $this->dbAdapterMock->expects($this->once())->method('update')->willReturn($returnData);
+        $this->assertEquals($returnData, $this->model->unlock($inputData));
     }
 
     public function testLock()
     {
+        $inputData = [1, 2, 3];
         $returnData = 5;
         $this->resourceMock->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->dbAdapterMock);
         $this->dbAdapterMock->expects($this->once())->method('update')->willReturn($returnData);
-        $this->assertEquals($returnData, $this->model->lock(['user1', 'user2'], 1, 1));
+        $this->assertEquals($returnData, $this->model->lock($inputData, 1, 1));
+    }
+
+    public function testLockWithInteger()
+    {
+        $inputData = 123;
+        $returnData = 5;
+        $this->resourceMock->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->dbAdapterMock);
+        $this->dbAdapterMock->expects($this->once())->method('update')->willReturn($returnData);
+        $this->assertEquals($returnData, $this->model->lock($inputData, 1, 1));
     }
 
     public function testGetOldPassword()
@@ -262,5 +311,132 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->selectMock->expects($this->atLeastOnce())->method('where')->willReturn($this->selectMock);
         $this->dbAdapterMock->expects($this->atLeastOnce())->method('fetchCol')->willReturn($returnData);
         $this->assertEquals($returnData, $this->model->getOldPasswords($this->userMock));
+    }
+
+    public function testDeleteFromRole()
+    {
+        $methodUserMock = $this->getMockBuilder('\Magento\Framework\Model\AbstractModel')
+            ->disableOriginalConstructor()
+            ->setMethods(['getUserId', 'getRoleId'])
+            ->getMock();
+        $uid = 1234;
+        $roleId = 44;
+        $methodUserMock->expects($this->once())->method('getUserId')->willReturn($uid);
+        $this->resourceMock->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->dbAdapterMock);
+        $methodUserMock->expects($this->atleastOnce())->method('getRoleId')->willReturn($roleId);
+        $this->dbAdapterMock->expects($this->once())->method('delete');
+
+        $this->assertInstanceOf('\Magento\User\Model\Resource\User', $this->model->deleteFromRole($methodUserMock));
+    }
+
+    public function testRoleUserExists()
+    {
+        $methodUserMock = $this->getMockBuilder('\Magento\Framework\Model\AbstractModel')
+            ->disableOriginalConstructor()
+            ->setMethods(['getUserId', 'getRoleId'])
+            ->getMock();
+        $uid = 1234;
+        $roleId = 44;
+        $returnData = [1, 2, 3];
+        $methodUserMock->expects($this->atLeastOnce())->method('getUserId')->willReturn($uid);
+        $this->resourceMock->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->dbAdapterMock);
+        $methodUserMock->expects($this->once())->method('getRoleId')->willReturn($roleId);
+        $this->dbAdapterMock->expects($this->once())->method('select')->willReturn($this->selectMock);
+        $this->selectMock->expects($this->atLeastOnce())->method('from')->willReturn($this->selectMock);
+        $this->selectMock->expects($this->atLeastOnce())->method('where')->willReturn($this->selectMock);
+        $this->dbAdapterMock->expects($this->once())->method('fetchCol')->willReturn($returnData);
+
+        $this->assertEquals($returnData, $this->model->roleUserExists($methodUserMock));
+        $this->assertEquals([], $this->model->roleUserExists($this->userMock));
+    }
+
+    public function testGetValidationBeforeSave()
+    {
+        $this->assertInstanceOf('\Zend_Validate_Callback', $this->model->getValidationRulesBeforeSave());
+    }
+
+    public function testUpdateFailure()
+    {
+        $this->resourceMock->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->dbAdapterMock);
+        $this->dbAdapterMock->expects($this->once())->method('update')->willReturn($this->selectMock);
+        $this->dbAdapterMock->expects($this->once())->method('quoteInto')->willReturn($this->selectMock);
+        $this->model->updateFailure($this->userMock, 1, 1);
+    }
+
+    public function testTrackPassword()
+    {
+        $this->resourceMock->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->dbAdapterMock);
+        $this->dbAdapterMock->expects($this->once())->method('insert')->willReturn($this->selectMock);
+        $this->model->trackPassword($this->userMock, "myPas#w0rd", 1);
+    }
+
+    public function testGetLatestPassword()
+    {
+        $uid = 123;
+        $returnData = ['password1', 'password2'];
+        $this->resourceMock->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->dbAdapterMock);
+        $this->dbAdapterMock->expects($this->once())->method('fetchRow')->willReturn($returnData);
+        $this->dbAdapterMock->expects($this->once())->method('select')->willReturn($this->selectMock);
+        $this->selectMock->expects($this->atLeastOnce())->method('from')->willReturn($this->selectMock);
+        $this->selectMock->expects($this->atLeastOnce())->method('where')->willReturn($this->selectMock);
+        $this->selectMock->expects($this->atLeastOnce())->method('order')->willReturn($this->selectMock);
+        $this->selectMock->expects($this->atLeastOnce())->method('limit')->willReturn($this->selectMock);
+        $this->assertEquals($returnData, $this->model->getLatestPassword($uid));
+    }
+
+    public function test_initUniqueFields()
+    {
+        $this->assertInstanceOf(
+            '\Magento\User\Model\Resource\User',
+            $this->invokeMethod($this->model, '_initUniqueFields', [])
+        );
+    }
+
+    public function test_beforeSave()
+    {
+        $this->userMock->expects($this->once())->method('isObjectNew')->willReturn(true);
+
+        $this->assertInstanceOf(
+            '\Magento\User\Model\Resource\User',
+            $this->invokeMethod($this->model, '_beforeSave', [$this->userMock])
+        );
+    }
+
+    public function test_afterSave()
+    {
+        $roleId = 123;
+        $methodUserMock = $this->getMockBuilder('\Magento\User\Model\User')
+            ->disableOriginalConstructor()
+            ->setMethods(['hasRoleId', 'getRoleId'])
+            ->getMock();
+        $methodUserMock->expects($this->once())->method('hasRoleId')->willReturn(true);
+        $methodUserMock->expects($this->once())->method('getRoleId')->willReturn($roleId);
+        $this->resourceMock->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->dbAdapterMock);
+        $this->roleFactoryMock->expects($this->once())->method('create')->willReturn($this->roleMock);
+        $this->roleMock->expects($this->once())->method('load')->willReturn($this->roleMock);
+        $this->roleMock->expects($this->atLeastOnce())->method('getId')->willReturn($roleId);
+        $this->dbAdapterMock->expects($this->once())->method('describeTable')->willReturn([1, 2, 3]);
+
+        $this->assertInstanceOf(
+            '\Magento\User\Model\Resource\User',
+            $this->invokeMethod($this->model, '_afterSave', [$methodUserMock])
+        );
+    }
+
+    /**
+     * Call protected/private method of a class.
+     *
+     * @param $object
+     * @param $methodName
+     * @param array $parameters
+     * @return mixed
+     */
+    public function invokeMethod(&$object, $methodName, array $parameters = array())
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
+
+        return $method->invokeArgs($object, $parameters);
     }
 }
