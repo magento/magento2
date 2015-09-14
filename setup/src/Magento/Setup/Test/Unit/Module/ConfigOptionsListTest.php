@@ -100,4 +100,36 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
         $configData = $this->object->createConfig([], $this->deploymentConfig);
         $this->assertEquals(7, count($configData));
     }
+
+    /**
+     * @param string $hosts
+     * @param bool $expectedError
+     * @dataProvider validateCacheHostsDataProvider
+     */
+    public function testValidateCacheHosts($hosts, $expectedError)
+    {
+        $options = [
+            ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION => true,
+            ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS => $hosts
+        ];
+        $result = $this->object->validate($options, $this->deploymentConfig);
+        if ($expectedError) {
+            $this->assertCount(1, $result);
+            $this->assertEquals("Invalid http cache hosts '$hosts'", $result[0]);
+        } else {
+            $this->assertCount(0, $result);
+        }
+    }
+
+    public function validateCacheHostsDataProvider()
+    {
+        return [
+            ['localhost', false],
+            ['122.11.2.34:800', false],
+            ['122.11.2.34:800,localhost', false],
+            ['website.com:9000', false],
+            ['website.com/m2ce:9000', true],
+            ['website.com+:9000', true],
+        ];
+    }
 }

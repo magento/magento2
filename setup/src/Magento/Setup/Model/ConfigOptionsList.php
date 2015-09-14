@@ -318,8 +318,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     private function validateHttpCacheHosts($option)
     {
         $errors = [];
-        if (!preg_match('/^[a-zA-Z0-9_:,.\/ ]+$/', $option)
-        ) {
+        if (!preg_match('/^[a-zA-Z0-9_:,.]+$/', $option)) {
             $errors[] = "Invalid http cache hosts '{$option}'";
         }
         return $errors;
