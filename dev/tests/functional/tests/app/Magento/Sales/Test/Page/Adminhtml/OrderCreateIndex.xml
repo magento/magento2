@@ -13,6 +13,6 @@
     <block name="actionsBlock" class="Magento\Backend\Test\Block\GridPageActions" locator=".page-main-actions" strategy="css selector"/>
     <block name="couponsBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\Create\Coupons" locator="#order-coupons" strategy="css selector"/>
     <block name="customerActivitiesBlock" class="Magento\Sales\Test\Block\Adminhtml\Order\Create\CustomerActivities" locator=".customer-current-activity" strategy="css selector"/>
-    <block name="configureProductBlock" class="Magento\Catalog\Test\Block\Adminhtml\Product\Composite\Configure" locator="//*[@role='dialog' and ./*[@id='product_composite_configure'] and contains(@style,'display: block')]" strategy="xpath"/>
+    <block name="configureProductBlock" class="Magento\Catalog\Test\Block\Adminhtml\Product\Composite\Configure" locator="//*[@data-role='modal' and .//*[@id='product_composite_configure'] and contains(@class,'_show')]" strategy="xpath"/>
   </page>
 </config>
