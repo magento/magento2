@@ -139,6 +139,20 @@ class Files
     }
 
     /**
+     * Get registration file in libraries
+     *
+     * @return array
+     */
+    private function getLibraryRegistrationFiles()
+    {
+        $exclude = [];
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryDir) {
+            $exclude[] = '#' . $libraryDir . '/registration.php#';
+        }
+        return $exclude;
+    }
+
+    /**
      * Getter for _path
      *
      * @return string
@@ -258,7 +272,7 @@ class Files
                     $this->getFilesSubset(
                         $this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY),
                         '*.php',
-                        $this->getLibraryTestDirs()
+                        array_merge($this->getLibraryTestDirs(), $this->getLibraryRegistrationFiles())
                     )
                 );
             }
@@ -1125,29 +1139,46 @@ class Files
         foreach ($directories as $key => $dir) {
             $directories[$key] = $this->_path . $dir;
         }
+
         $directories = array_merge($directories, $this->getPaths());
 
         foreach ($directories as $dir) {
             $fullPath = $dir . $path;
             $trimmedFullPath = $dir . explode('/', $path, 3)[2];
-            foreach ([$fullPath, $trimmedFullPath] as $possiblePath) {
-                /**
-                 * Use realpath() instead of file_exists() to avoid incorrect work on Windows
-                 * because of case insensitivity of file names
-                 * Note that realpath() automatically changes directory separator to the OS-native
-                 * Since realpath won't work with symlinks we also check file_exists if realpath failed
-                 */
-                if (realpath($possiblePath) == str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $possiblePath)
-                    || file_exists($possiblePath)
-                ) {
-                    $fileContent = file_get_contents($possiblePath);
-                    if (strpos($fileContent, 'namespace ' . $namespace) !== false
-                        && (strpos($fileContent, 'class ' . $className) !== false
-                            || strpos($fileContent, 'interface ' . $className) !== false)
-                    ) {
-                        return true;
-                    }
-                }
+            if ($this->classFileExistsCheckContent($fullPath, $namespace, $className)
+                || $this->classFileExistsCheckContent($trimmedFullPath, $namespace, $class)
+            ) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Helper function for classFileExists to check file content
+     *
+     * @param string $fullPath
+     * @param string $namespace
+     * @param $className
+     * @return bool
+     */
+    private function classFileExistsCheckContent($fullPath, $namespace, $className)
+    {
+        /**
+         * Use realpath() instead of file_exists() to avoid incorrect work on Windows
+         * because of case insensitivity of file names
+         * Note that realpath() automatically changes directory separator to the OS-native
+         * Since realpath won't work with symlinks we also check file_exists if realpath failed
+         */
+        if (realpath($fullPath) == str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $fullPath)
+            || file_exists($fullPath)
+        ) {
+            $fileContent = file_get_contents($fullPath);
+            if (strpos($fileContent, 'namespace ' . $namespace) !== false
+                && (strpos($fileContent, 'class ' . $className) !== false
+                    || strpos($fileContent, 'interface ' . $className) !== false)
+            ) {
+                return true;
             }
         }
         return false;
