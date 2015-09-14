@@ -33,7 +33,7 @@ class WeeeTax extends Weee
         }
 
         $address = $shippingAssignment->getShipping()->getAddress();
-        $items = $this->_getAddressItems($address);
+        $items = $shippingAssignment->getItems();
         if (!count($items)) {
             return $this;
         }
@@ -126,6 +126,7 @@ class WeeeTax extends Weee
                     $baseTotalRowValueInclTax
                 );
 
+                $total->setTotalAmount($this->getCode(), $this->weeeData->getTotalAmounts($items, $quote->getStore()));
                 $this->weeeData->setApplied($item, array_merge($this->weeeData->getApplied($item), $productTaxes));
             }
         }
@@ -136,11 +137,13 @@ class WeeeTax extends Weee
      * Process row amount based on FPT total amount configuration setting
      *
      * @param   \Magento\Quote\Model\Quote\Address $address
+     * @param   \Magento\Quote\Model\Quote\Address\Total $total
      * @param   float $rowValueExclTax
      * @param   float $baseRowValueExclTax
      * @param   float $rowValueInclTax
      * @param   float $baseRowValueInclTax
      * @return  $this
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function processTotalAmount(
         $address,
@@ -153,8 +156,6 @@ class WeeeTax extends Weee
         $totalCode = $this->weeeData->includeInSubtotal($this->_store) ? 'subtotal' : $this->getCode();
         $address->addTotalAmount($totalCode, $rowValueExclTax);
         $address->addBaseTotalAmount($totalCode, $baseRowValueExclTax);
-        $total->addTotalAmount($totalCode, $rowValueInclTax);
-        $total->addBaseTotalAmount($totalCode, $baseRowValueInclTax);
 
         $address->setSubtotalInclTax($address->getSubtotalInclTax() + $rowValueInclTax);
         $address->setBaseSubtotalInclTax($address->getBaseSubtotalInclTax() + $baseRowValueInclTax);
