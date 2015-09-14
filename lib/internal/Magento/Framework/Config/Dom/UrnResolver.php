@@ -57,7 +57,7 @@ class UrnResolver
             // moduleName -> Magento_Catalog
             $urnParts = explode(':', $schema);
             if ($urnParts[2] == 'module') {
-                $moduleName = $this->packageInfo->getModuleName($urnParts[1] . '/' . $urnParts[3]);
+                $moduleName = $this->packageInfo->getModuleName($urnParts[1] . '/' . $urnParts[2] . '-' . $urnParts[3]);
                 $appSchemaPath = $this->componentRegistrar->getPath(
                         ComponentRegistrar::MODULE, $moduleName
                     ) . '/' . $urnParts[4];
