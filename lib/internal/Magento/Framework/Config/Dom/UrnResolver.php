@@ -75,7 +75,8 @@ class UrnResolver
             if (!empty($appSchemaPath) && file_exists($appSchemaPath)) {
                 $schema = $appSchemaPath;
             } else {
-                throw new \UnexpectedValueException("Could not locate schema: " . $schema);
+                throw new \UnexpectedValueException(
+                    "Could not locate schema: '" . $schema . "' at '" . $appSchemaPath . "'");
             }
         }
         return $schema;
