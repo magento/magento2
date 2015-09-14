@@ -24,19 +24,14 @@
     <type name="Magento\Catalog\Model\Resource\Product">
         <plugin name="reload_attributes" type="Magento\ConfigurableProduct\Plugin\Model\Resource\Product" />
     </type>
-    <virtualType name="AttributeRepositoryForAssociatedProduct" type="Magento\Catalog\Ui\Component\Listing\AttributeRepository">
-        <arguments>
-            <argument name="searchCriteriaBuilder" xsi:type="object">Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Attribute\SearchCriteriaBuilder</argument>
-        </arguments>
-    </virtualType>
     <type name="Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns">
         <arguments>
-            <argument name="attributeRepository" xsi:type="object">AttributeRepositoryForAssociatedProduct</argument>
+            <argument name="attributeRepository" xsi:type="object">Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Attribute\Repository</argument>
         </arguments>
     </type>
     <type name="Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Filters">
         <arguments>
-            <argument name="attributeRepository" xsi:type="object">AttributeRepositoryForAssociatedProduct</argument>
+            <argument name="attributeRepository" xsi:type="object">Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Attribute\Repository</argument>
         </arguments>
     </type>
 </config>

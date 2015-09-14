@@ -5,13 +5,8 @@
  */
 namespace Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Attribute;
 
-class SearchCriteriaBuilder implements \Magento\Catalog\Ui\Component\Listing\Attribute\SearchCriteriaBuilderInterface
+class Repository extends \Magento\Catalog\Ui\Component\Listing\Attribute\AbstractRepository
 {
-    /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     */
-    protected $searchCriteriaBuilder;
-
     /** @var \Magento\Framework\App\RequestInterface */
     protected $request;
 
@@ -19,17 +14,18 @@ class SearchCriteriaBuilder implements \Magento\Catalog\Ui\Component\Listing\Att
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
+        \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Framework\App\RequestInterface $request
     ) {
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        parent::__construct($productAttributeRepository, $searchCriteriaBuilder);
         $this->request = $request;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function build()
+    protected function buildSearchCriteria()
     {
         return $this->searchCriteriaBuilder
             ->addFilter('attribute_code', $this->request->getParam('attributes_codes', []), 'in')

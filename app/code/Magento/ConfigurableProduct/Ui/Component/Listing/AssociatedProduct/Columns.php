@@ -7,17 +7,20 @@ namespace Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct;
 
 class Columns extends \Magento\Ui\Component\Listing\Columns
 {
+    /** @var \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface */
+    protected $attributeRepository;
+
     /**
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
      * @param \Magento\Catalog\Ui\Component\ColumnFactory $columnFactory
-     * @param \Magento\Catalog\Ui\Component\Listing\AttributeRepository $attributeRepository
+     * @param \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface $attributeRepository
      * @param array $components
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\UiComponent\ContextInterface $context,
         \Magento\Catalog\Ui\Component\ColumnFactory $columnFactory,
-        \Magento\Catalog\Ui\Component\Listing\AttributeRepository $attributeRepository,
+        \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface $attributeRepository,
         array $components = [],
         array $data = []
     ) {
