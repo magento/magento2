@@ -40,23 +40,29 @@ define([
     };
 
     return Collapsible.extend({
-        stepInitialized: false,
-        attributes: ko.observableArray([]),
         defaults: {
             notificationMessage: {
                 text: null,
                 error: null
             },
-            createOptionsUrl: null
+            createOptionsUrl: null,
+            attributes: [],
+            stepInitialized: false
         },
         initialize: function () {
             this._super();
-            this.createAttribute = _.wrap(this.createAttribute.bind(this), function () {
-                var args = Array.prototype.slice.call(arguments);
+            this.createAttribute = _.wrap(this.createAttribute, function () {
+                var args = _.toArray(arguments),
+                    createAttribute = args.shift();
 
-                return this.doInitSavedOptions.call(this, args.shift().apply(this, args));
+                return this.doInitSavedOptions(createAttribute.apply(this, args));
             });
             this.createAttribute = _.memoize(this.createAttribute.bind(this), _.property('id'));
+        },
+        initObservable: function () {
+            this._super().observe(['attributes']);
+
+            return this;
         },
         createOption: function () {
             // this - current attribute
