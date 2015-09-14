@@ -105,10 +105,14 @@
   content: '';
   position: absolute;
   bottom: 0;
-  right: 9px;
+  right: 0px;
   background: url(../images/gallery-sprite.png) bottom left;
   width: 49px;
   height: 40px;
+  z-index: 1;
+  left: 0;
+  top: 10px;
+  margin: auto;
 }
 .mage-new-video-dialog #new_video_form {
   width: 65%;
