@@ -142,6 +142,11 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
      * @var \Magento\Quote\Model\Quote\Address\Total
      */
     protected $total;
+
+    /**
+     * @param \Magento\Quote\Model\Quote\Address\Total $total
+     * @return $this
+     */
     public function _setTotal(\Magento\Quote\Model\Quote\Address\Total $total)
     {
         $this->total = $total;

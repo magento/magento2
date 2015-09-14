@@ -72,7 +72,7 @@ class TotalsCollector
     /**
      * @var array
      */
-    protected $allowedCollectors = array(
+    protected $allowedCollectors = [
         'subtotal',
         'grand_total',
         'customerbalance',
@@ -90,7 +90,7 @@ class TotalsCollector
         'custbalance',
         'weee',
         'weee_tax',
-    );
+    ];
 
     /**
      * @param Collector $totalCollector
@@ -200,6 +200,7 @@ class TotalsCollector
     }
 
     /**
+     * @param \Magento\Quote\Model\Quote $quote
      * @return $this
      */
     protected function _validateCouponCode(\Magento\Quote\Model\Quote $quote)
@@ -225,6 +226,7 @@ class TotalsCollector
     /**
      * Collect items qty
      *
+     * @param \Magento\Quote\Model\Quote $quote
      * @return $this
      */
     protected function _collectItemsQtys(\Magento\Quote\Model\Quote $quote)

@@ -121,14 +121,16 @@ class Tax extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                             $shippingAssignment->getDiscountAmount() + ($item->getDiscountAmount() - $discountBefore)
                         );
                         $shippingAssignment->setBaseDiscountAmount(
-                            $shippingAssignment->getBaseDiscountAmount() + ($item->getBaseDiscountAmount() - $baseDiscountBefore)
+                            $shippingAssignment->getBaseDiscountAmount()
+                            + ($item->getBaseDiscountAmount() - $baseDiscountBefore)
                         );
 
                         $shippingAssignment->setGrandTotal(
                             $shippingAssignment->getGrandTotal() - ($item->getDiscountAmount() - $discountBefore)
                         );
                         $shippingAssignment->setBaseGrandTotal(
-                            $shippingAssignment->getBaseGrandTotal() - ($item->getBaseDiscountAmount() - $baseDiscountBefore)
+                            $shippingAssignment->getBaseGrandTotal()
+                            - ($item->getBaseDiscountAmount() - $baseDiscountBefore)
                         );
                     }
 
@@ -160,7 +162,8 @@ class Tax extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                         $shippingAssignment->getDiscountAmount() + ($item->getDiscountAmount() - $discountBefore)
                     );
                     $shippingAssignment->setBaseDiscountAmount(
-                        $shippingAssignment->getBaseDiscountAmount() + ($item->getBaseDiscountAmount() - $baseDiscountBefore)
+                        $shippingAssignment->getBaseDiscountAmount()
+                        + ($item->getBaseDiscountAmount() - $baseDiscountBefore)
                     );
 
                     $shippingAssignment->setGrandTotal(
@@ -177,7 +180,13 @@ class Tax extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                 $shippingAssignment->setBaseTaxAmount($shippingAssignment->getBaseTaxAmount() + $itemBaseTaxAmount);
 
                 $applied = $taxCalculationModel->getAppliedRates($request);
-                $this->_saveAppliedTaxes($shippingAssignment, $applied, $item->getTaxAmount(), $item->getBaseTaxAmount(), $rate);
+                $this->_saveAppliedTaxes(
+                    $shippingAssignment,
+                    $applied,
+                    $item->getTaxAmount(),
+                    $item->getBaseTaxAmount(),
+                    $rate
+                );
             }
         }
 
@@ -223,7 +232,9 @@ class Tax extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         }
 
         $shippingAssignment->setGrandTotal($shippingAssignment->getGrandTotal() + $shippingAssignment->getTaxAmount());
-        $shippingAssignment->setBaseGrandTotal($shippingAssignment->getBaseGrandTotal() + $shippingAssignment->getBaseTaxAmount());
+        $shippingAssignment->setBaseGrandTotal(
+            $shippingAssignment->getBaseGrandTotal() + $shippingAssignment->getBaseTaxAmount()
+        );
         return $this;
     }
 

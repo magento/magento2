@@ -136,13 +136,13 @@ class WeeeTax extends Weee
     /**
      * Process row amount based on FPT total amount configuration setting
      *
-     * @param   \Magento\Quote\Model\Quote\Address $address
-     * @param   \Magento\Quote\Model\Quote\Address\Total $total
-     * @param   float $rowValueExclTax
-     * @param   float $baseRowValueExclTax
-     * @param   float $rowValueInclTax
-     * @param   float $baseRowValueInclTax
-     * @return  $this
+     * @param \Magento\Quote\Model\Quote\Address $address
+     * @param \Magento\Quote\Model\Quote\Address\Total $total
+     * @param float $rowValueExclTax
+     * @param float $baseRowValueExclTax
+     * @param float $rowValueInclTax
+     * @param float $baseRowValueInclTax
+     * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function processTotalAmount(

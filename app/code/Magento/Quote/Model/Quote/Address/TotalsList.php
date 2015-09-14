@@ -44,6 +44,7 @@ class TotalsList
      * Add total data or model
      *
      * @param \Magento\Quote\Model\Quote\Address\Total|array $total
+     * @param array $data
      * @return $this
      */
     public function add($total, $data)
@@ -81,5 +82,4 @@ class TotalsList
         }
         return $total;
     }
-
 }

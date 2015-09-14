@@ -4,13 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-
 namespace Magento\Quote\Model;
 
-
-use Magento\Quote\Api\Data\ShippingInterface;
-
-class Shipping extends \Magento\Framework\Model\AbstractExtensibleModel implements \Magento\Quote\Api\Data\ShippingInterface
+class Shipping extends \Magento\Framework\Model\AbstractExtensibleModel
+    implements \Magento\Quote\Api\Data\ShippingInterface
 {
     const ADDRESS = 'address';
     const METHOD = 'method';
