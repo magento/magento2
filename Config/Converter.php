@@ -86,7 +86,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             self::TOPICS => $topics,
             self::CONSUMERS => $consumers,
             self::BINDS => $binds,
-            self::EXCHANGE_TOPIC_TO_QUEUES_MAP => $this->buildExchangeTopicToQueuesMap($binds)
+            self::EXCHANGE_TOPIC_TO_QUEUES_MAP => $this->buildExchangeTopicToQueuesMap($binds, $topics)
         ];
     }
 
@@ -181,35 +181,49 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      * Build map which allows optimized search of queues corresponding to the specified exchange and topic pair.
      *
      * @param array $binds
+     * @param array $topics
      * @return array
      */
-    protected function buildExchangeTopicToQueuesMap($binds)
+    protected function buildExchangeTopicToQueuesMap($binds, $topics)
     {
         $output = [];
-        $plainKeys = [];
         $wildcardKeys = [];
         foreach ($binds as $bind) {
             $key = $bind[self::BIND_EXCHANGE] . '--' . $bind[self::BIND_TOPIC];
-            if (strpos($key, '*') === FALSE) {
-                $plainKeys[] = $key;
-            } else {
+            if (strpos($key, '*') !== FALSE || strpos($key, '#') !== FALSE) {
                 $wildcardKeys[] = $key;
             }
             $output[$key][] = $bind[self::BIND_QUEUE];
         }
 
         foreach (array_unique($wildcardKeys) as $wildcardKey) {
-            $pattern = '/^' . str_replace('.', '\.', $wildcardKey) . '/';
-            $pattern = str_replace('*', '.*', $pattern);
-            foreach (array_unique($plainKeys) as $plainKey) {
-                if (preg_match($pattern, $plainKey)) {
-                    // does this need to be array_merge?
-                    $output[$plainKey] = array_merge($output[$plainKey], $output[$wildcardKey]);
+            $keySplit = explode('--', $wildcardKey);
+            $exchangePrefix = $keySplit[0];
+            $key = $keySplit[1];
+            $pattern = $this->buildWildcardPattern($key);
+            foreach (array_keys($topics) as $topic) {
+                if (preg_match($pattern, $topic)) {
+                    $fullTopic = $exchangePrefix . '--' . $topic;
+                    $output[$fullTopic] = array_merge($output[$fullTopic], $output[$wildcardKey]);
                 }
             }
             unset($output[$wildcardKey]);
         }
         return $output;
+    }
+
+    protected function buildWildcardPattern($wildcardKey)
+    {
+        $pattern = '/^' . str_replace('.', '\.', $wildcardKey);
+        $pattern = str_replace('#', '.+', $pattern);
+        $pattern = str_replace('*', '[^\.]+', $pattern);
+        if (strpos($wildcardKey, '#') == strlen($wildcardKey)) {
+            $pattern .= '/';
+        } else {
+            $pattern .= '$/';
+        }
+
+        return $pattern;
     }
 
     /**
