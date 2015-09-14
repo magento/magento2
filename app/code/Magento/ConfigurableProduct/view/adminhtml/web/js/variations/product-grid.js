@@ -49,6 +49,11 @@ define([
                     }
                 ]
             });
+
+            this.productsProvider(function () {
+                this.productsModal.notification();
+            }.bind(this));
+
             this._initGrid = _.once(this._initGrid);
         },
 
