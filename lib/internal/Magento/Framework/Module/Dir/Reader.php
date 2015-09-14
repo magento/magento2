@@ -104,7 +104,7 @@ class Reader
                 $result[] = $file;
             }
         }
-        return $this->fileIteratorFactory->create($result);
+        return $result;
     }
 
     /**
