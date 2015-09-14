@@ -5,11 +5,12 @@
 define([
     'jquery',
     'mage/template',
-    'jquery/ui'
+    'jquery/ui',
+    'Magento_Ui/js/modal/modal'
 ], function ($, mageTemplate) {
     'use strict';
 
-    $.widget('mage.systemMessageDialog', $.ui.dialog, {
+    $.widget('mage.systemMessageDialog', $.mage.modal, {
         options: {
             systemMessageTemplate:
                 '<% _.each(data.items, function(item) { %>' +
@@ -19,7 +20,7 @@ define([
                 '<% }); %>'
         },
 
-        open: function (severity) {
+        openModal: function (severity) {
             var superMethod = $.proxy(this._super, this);
 
             $.ajax({
@@ -47,16 +48,19 @@ define([
             }, this));
 
             return this;
+        },
+        closeModal: function () {
+            this._super();
         }
     });
 
     $(document).ready(function () {
         $('#system_messages .message-system-short .error').on('click', function () {
-            $('#message-system-all').systemMessageDialog('open', 1);
+            $('#message-system-all').systemMessageDialog('openModal', 1);
         });
 
         $('#system_messages .message-system-short .warning').on('click', function () {
-            $('#message-system-all').systemMessageDialog('open', 2);
+            $('#message-system-all').systemMessageDialog('openModal', 2);
         });
     });
 
