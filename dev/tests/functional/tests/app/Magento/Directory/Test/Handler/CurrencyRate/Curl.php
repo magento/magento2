@@ -30,7 +30,7 @@ class Curl extends AbstractCurl implements CurrencyRateInterface
 
         $url = $_ENV['app_backend_url'] . 'admin/system_currency/saveRates/';
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
-        $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
+        $curl->write($url, $data);
         $response = $curl->read();
         $curl->close();
 
