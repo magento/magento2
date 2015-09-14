@@ -5,23 +5,31 @@
  */
 namespace Magento\Setup\Controller;
 
+use Magento\Framework\Module\ModuleList;
+use Magento\Setup\Model\ObjectManagerProvider;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Magento\Setup\Model\SampleData;
 
 class Success extends AbstractActionController
 {
     /**
-     * @var SampleData
+     * @var ModuleList
      */
-    protected $sampleData;
+    protected $moduleList;
 
     /**
-     * @param SampleData $sampleData
+     * @var ObjectManagerProvider
      */
-    public function __construct(SampleData $sampleData)
+    protected $objectManagerProvider;
+
+    /**
+     * @param ModuleList $moduleList
+     * @param ObjectManagerProvider $objectManagerProvider
+     */
+    public function __construct(ModuleList $moduleList, ObjectManagerProvider $objectManagerProvider)
     {
-        $this->sampleData = $sampleData;
+        $this->moduleList = $moduleList;
+        $this->objectManagerProvider = $objectManagerProvider;
     }
 
     /**
@@ -29,8 +37,15 @@ class Success extends AbstractActionController
      */
     public function indexAction()
     {
+        if ($this->moduleList->has('Magento_SampleData')) {
+            /** @var \Magento\SampleData\Model\SampleData $sampleData */
+            $sampleData = $this->objectManagerProvider->get()->get('Magento\SampleData\Model\SampleData');
+            $isSampleDataErrorInstallation = $sampleData->isInstallationError();
+        } else {
+            $isSampleDataErrorInstallation = false;
+        }
         $view = new ViewModel([
-            'isSampleDataErrorInstallation' => $this->sampleData->isInstallationError()
+            'isSampleDataErrorInstallation' => $isSampleDataErrorInstallation
         ]);
         $view->setTerminal(true);
         return $view;

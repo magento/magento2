@@ -12,10 +12,10 @@
         <table class="data-table admin__table-primary">
             <thead>
             <tr>
-                <th class="col-product no-link"><?php echo __('Product Name') ?></th>
-                <th class="col-weight no-link"><?php echo __('Weight') ?></th>
+                <th class="col-product no-link"><?php /* @escapeNotVerified */ echo __('Product Name') ?></th>
+                <th class="col-weight no-link"><?php /* @escapeNotVerified */ echo __('Weight') ?></th>
                 <th class="col-custom no-link" <?php echo $block->displayCustomsValue() ? '' : 'style="display: none;"' ?>>
-                    <?php echo __('Customs Value') ?>
+                    <?php /* @escapeNotVerified */ echo __('Customs Value') ?>
                 </th>
                 <th class="col-select no-link">
                     <div class="admin__field admin__field-option">
@@ -23,12 +23,12 @@
                                name=""
                                onclick="packaging.checkAllItems(this);"
                                class="checkbox admin__control-checkbox"
-                               title="<?php echo __('Select All') ?>">
+                               title="<?php /* @escapeNotVerified */ echo __('Select All') ?>">
                         <label class="admin__field-label"></label>
                     </div>
                 </th>
-                <th class="col-qty no-link"><?php echo __('Qty Ordered') ?></th>
-                <th class="col-qty-edit no-link last"><?php echo __('Qty') ?></th>
+                <th class="col-qty no-link"><?php /* @escapeNotVerified */ echo __('Qty Ordered') ?></th>
+                <th class="col-qty-edit no-link last"><?php /* @escapeNotVerified */ echo __('Qty') ?></th>
             </tr>
             </thead>
 
@@ -43,10 +43,10 @@
                 <?php endif; ?>
                 <tr title="#" id="" class="">
                     <td class="col-product name">
-                        <?php echo $item->getName(); ?>
+                        <?php /* @escapeNotVerified */ echo $item->getName(); ?>
                     </td>
                     <td class="col-weight weight ">
-                        <?php echo $item->getWeight(); ?>
+                        <?php /* @escapeNotVerified */ echo $item->getWeight(); ?>
                     </td>
                     <?php
                     if ($block->displayCustomsValue()) {
@@ -57,11 +57,11 @@
                         $customsValueValidation = '';
                     }
                     ?>
-                    <td <?php echo $customsValueDisplay ?>>
+                    <td <?php /* @escapeNotVerified */ echo $customsValueDisplay ?>>
                         <input type="text"
                                name="customs_value"
-                               class="input-text admin__control-text <?php echo $customsValueValidation ?>"
-                               value="<?php echo $block->formatPrice($item->getPrice()); ?>"
+                               class="input-text admin__control-text <?php /* @escapeNotVerified */ echo $customsValueValidation ?>"
+                               value="<?php /* @escapeNotVerified */ echo $block->formatPrice($item->getPrice()); ?>"
                                size="10"
                                onblur="packaging.recalcContainerWeightAndCustomsValue(this);">
                     </td>
@@ -69,22 +69,22 @@
                         <div class="admin__field admin__field-option">
                             <input type="checkbox"
                                    name=""
-                                   value="<?php echo $item->getId() ? $item->getId() : $item->getOrderItemId(); ?>"
+                                   value="<?php /* @escapeNotVerified */ echo $item->getId() ? $item->getId() : $item->getOrderItemId(); ?>"
                                    class="checkbox admin__control-checkbox">
                             <label class="admin__field-label"></label>
                         </div>
                     </td>
                     <td class="col-qty">
-                        <?php echo $item->getOrderItem()->getQtyOrdered()*1; ?>
+                        <?php /* @escapeNotVerified */ echo $item->getOrderItem()->getQtyOrdered()*1; ?>
                     </td>
                     <td class="col-qty-edit last">
-                        <input type="hidden" name="price" value="<?php echo $item->getPrice(); ?>">
+                        <input type="hidden" name="price" value="<?php /* @escapeNotVerified */ echo $item->getPrice(); ?>">
                         <input type="text"
                                name="qty"
-                               value="<?php echo $item->getQty()*1; ?>"
+                               value="<?php /* @escapeNotVerified */ echo $item->getQty()*1; ?>"
                                class="input-text admin__control-text qty<?php if ($item->getOrderItem()->getIsQtyDecimal()): ?> qty-decimal<?php endif ?>">&nbsp;
                         <button type="button" class="action-delete delete icon-btn" onclick="packaging.deleteItem(this);" style="display:none;">
-                            <span><?php echo __('Delete') ?></span>
+                            <span><?php /* @escapeNotVerified */ echo __('Delete') ?></span>
                         </button>
                     </td>
                 </tr>

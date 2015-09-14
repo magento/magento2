@@ -58,6 +58,31 @@
     }
 }
 
+.data-grid-cell-content {
+  overflow: hidden;
+  width: 100%;
+  display: inline-block;
+}
+
+body._in-resize {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: col-resize;
+  .data-grid-th,
+  .data-grid-th._sortable,
+  .data-grid-th._draggable {
+    cursor: col-resize !important;
+  }
+  * {
+      cursor: col-resize !important;
+  }
+}
+
+._layout-fixed {
+    table-layout: fixed;
+}
 
 .data-grid {
     border: none;
@@ -65,8 +90,9 @@
     margin-bottom: 0;
     max-width: 100%;
     width: 100%;
+
     &:not(._dragging-copy) {
-        ._even-row {
+        ._odd-row {
             td {
                 &._dragging {
                     background-color: @data-grid-td__even__dragging__background-color;
@@ -93,7 +119,7 @@
         }
     }
     tr {
-        &._even-row {
+        &._odd-row {
             td {
                 background-color: @data-grid-td__even__background-color;
             }
@@ -136,6 +162,10 @@
         line-height: @line-height__base;
         transition: @smooth__background-color;
         vertical-align: top;
+        &._resizing {
+            border-left: 1px solid @color-blue-pure;
+            border-right: 1px solid @color-blue-pure;
+        }
     }
     td {
         background-color: @data-grid-td__odd__background-color;
@@ -158,6 +188,7 @@
             background-color: transparent;
             border: none;
             font-size: @data-grid__font-size;
+            position: relative;
             .link-pattern();
             padding: 0 3rem 0 0;
             &:hover {
@@ -197,25 +228,41 @@
         }
         &._dragover-left {
             box-shadow: inset 3px 0 0 0 @color-white;
+            z-index: 2;
         }
         &._dragover-right {
             box-shadow: inset -3px 0 0 0 @color-white;
         }
     }
+    .shadow-div {
+        cursor: col-resize;
+        height: 100%;
+        margin-right: -5px;
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 10px;
+    }
+
     .data-grid-th {
+        background-clip: padding-box; // Fix for border overlay in Firefox
         color: @data-grid-th__color;
         padding: @data-grid-th__padding-vertical @data-grid-th__padding-horizontal;
+        position: relative;
         vertical-align: middle;
+        &._resize-visible {
+            .shadow-div {
+                cursor: auto;
+                display: none;
+            }
+        }
         &._draggable {
             cursor: -webkit-grab;
             cursor:    -moz-grab;
             cursor:         grab;
         }
         &._sortable {
-            background-clip: padding-box; // Fix for border overlay in Firefox
             cursor: pointer;
-            padding-right: @data-grid-th__padding-horizontal * 2 + @data-grid-th-marker__width;
-            position: relative;
             transition: @smooth__background-color;
             z-index: 1;
             &:focus,
@@ -240,7 +287,7 @@
     }
     .data-grid-checkbox-cell {
         padding: 0;
-        vertical-align: middle;
+        vertical-align: top;
         width: @control-checkbox-radio__size + @data-grid-checkbox-cell-inner__padding-horizontal * 2;
         &:hover {
             cursor: default;
@@ -275,7 +322,7 @@
         opacity: .95;
         position: fixed;
         top: 0;
-        z-index: @data-grid-overlay__z-index;
+        z-index: @data-grid-dargging-copy__z-index;
         .data-grid-th {
             border: @data-grid-dragging-copy__border;
             border-bottom: none;
@@ -349,7 +396,7 @@
                 }
             }
         }
-        ._even-row {
+        ._odd-row {
             &.data-grid-editable-row {
                 &:hover {
                     td {
@@ -513,8 +560,9 @@
     &._sortable {
         &._ascend,
         &._descend {
+            padding-right: @data-grid-th__padding-horizontal * 2 + @data-grid-th-marker__width;
             &:before {
-                margin-top: -.75em;
+                margin-top: -1em;
                 position: absolute;
                 right: @data-grid-th__padding-horizontal;
                 top: 50%;

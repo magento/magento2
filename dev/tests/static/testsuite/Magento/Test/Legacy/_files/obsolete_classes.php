@@ -856,8 +856,6 @@ return [
         'Mage_Eav_Model_Entity_Attribute_Backend_Default',
     ],
     ['Magento\Customer\Exception'],
-    ['Mage_DesignEditor_Block_Page_Html_Head_Vde'],
-    ['Mage_DesignEditor_Block_Page_Html_Head'],
     ['Mage_Directory_Model_Resource_Currency_Collection'],
     ['Magento\Directory\Exception'],
     ['Mage_Downloadable_FileController', 'Magento\Downloadable\Controller\Adminhtml\Downloadable\File'],
@@ -2241,7 +2239,6 @@ return [
     ['Magento\Translation\Helper\Data'],
     ['Magento\Framework\Translate\Factory'],
     ['Magento\Backend\Model\Translate'],
-    ['Magento\DesignEditor\Model\Translate\InlineVde', 'Magento\DesignEditor\Model\Translate\Inline'],
     ['Magento\Backend\Model\Translate\Inline\ConfigFactory'],
     ['Magento\Framework\Translate\Inline\ConfigFactory'],
     ['Magento\Bundle\Model\Price\Index'],
@@ -2601,10 +2598,6 @@ return [
     ['Magento\Framework\View\Layout\File\SourceInterface', 'Magento\Framework\View\File\CollectorInterface'],
     ['Magento\Framework\View\Layout\File', 'Magento\Framework\View\File'],
     ['Magento\Framework\View\Url\Resolver', 'Magento\Framework\View\Asset\Repository'],
-    [
-        'Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Css\Group',
-        'Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Css',
-    ],
     ['Magento\Framework\Filter\GridArray\Grid'],
     ['Magento\Css\PreProcessor\Composite'],
     ['Magento\Css\PreProcessor\UrlResolver', 'Magento\Framework\View\Asset\PreProcessor\ModuleNotation'],
@@ -3808,6 +3801,15 @@ return [
         'Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\ProductType'
         . '\Configurable'
     ],
+    ['Magento\Setup\Model\Deployer', 'Magento\Deploy\Model\Deployer'],
+    [
+        'Magento\Setup\Console\Command\DeployStaticContentCommand',
+        'Magento\Deploy\Console\Command\DeployStaticContentCommand'
+    ],
+    [
+        'Magento\Setup\Test\Unit\Console\Command\DeployStaticContentCommandTest',
+        'Magento\Deploy\Test\Unit\Console\Command\DeployStaticContentCommandTest'
+    ],
     ['Magento\Store\Model\Storage\Db', 'Magento\Store\Model\StoreManagerInterface'],
     ['Magento\Store\Model\Storage\DefaultStorage', 'Magento\Store\Model\StoreManagerInterface'],
     ['Magento\Store\Model\StorageFactory'],
@@ -3842,4 +3844,5 @@ return [
         'Magento\Checkout\Model\Agreements\AgreementsProviderInterface',
         'Magento\CheckoutAgreements\Model\AgreementsProviderInterface'
     ],
+    ['Magento\Setup\Model\SampleData', 'Magento\SampleData\Model\SampleData'],
 ];
