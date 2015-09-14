@@ -23,11 +23,11 @@ require([
     </div>
     <div class="attribute-set-col fieldset-wrapper">
         <div class="fieldset-wrapper-title">
-            <span class="title"><?php echo __('Groups') ?></span>
+            <span class="title"><?php /* @escapeNotVerified */ echo __('Groups') ?></span>
         </div>
         <?php if (!$block->getIsReadOnly()): ?>
-        <?php echo $block->getAddGroupButton() ?>&nbsp;<?php echo $block->getDeleteGroupButton() ?>
-        <p class="note-block"><?php echo __('Double click on a group to rename it.') ?></p>
+        <?php /* @escapeNotVerified */ echo $block->getAddGroupButton() ?>&nbsp;<?php /* @escapeNotVerified */ echo $block->getDeleteGroupButton() ?>
+        <p class="note-block"><?php /* @escapeNotVerified */ echo __('Double click on a group to rename it.') ?></p>
         <?php endif; ?>
 
         <?php echo $block->getSetsFilterHtml() ?>
@@ -35,7 +35,7 @@ require([
     </div>
     <div class="attribute-set-col fieldset-wrapper">
         <div class="fieldset-wrapper-title">
-            <span class="title"><?php echo __('Unassigned Attributes') ?></span>
+            <span class="title"><?php /* @escapeNotVerified */ echo __('Unassigned Attributes') ?></span>
         </div>
         <div id="tree-div2" class="attribute-set-tree"></div>
         <!--[if IE]>
@@ -45,8 +45,8 @@ require([
 define("tree-panel", ["jquery", "extjs/ext-tree-checkbox", "prototype"], function(jQuery){
 
             //<![CDATA[
-            var allowDragAndDrop = <?php echo($block->getIsReadOnly() ? 'false' : 'true'); ?>;
-            var canEditGroups = <?php echo($block->getIsReadOnly() ? 'false' : 'true'); ?>;
+            var allowDragAndDrop = <?php /* @escapeNotVerified */ echo($block->getIsReadOnly() ? 'false' : 'true'); ?>;
+            var canEditGroups = <?php /* @escapeNotVerified */ echo($block->getIsReadOnly() ? 'false' : 'true'); ?>;
 
             var TreePanels = function() {
                 // shorthand
@@ -73,7 +73,7 @@ define("tree-panel", ["jquery", "extjs/ext-tree-checkbox", "prototype"], functio
                         });
 
                         tree.setRootNode(this.root);
-                        buildCategoryTree(this.root, <?php echo $block->getGroupTreeJson() ?>);
+                        buildCategoryTree(this.root, <?php /* @escapeNotVerified */ echo $block->getGroupTreeJson() ?>);
                         // render the tree
                         tree.render();
                         this.root.expand(false, false);
@@ -81,7 +81,7 @@ define("tree-panel", ["jquery", "extjs/ext-tree-checkbox", "prototype"], functio
 
                         this.ge = new Ext.tree.TreeEditor(tree, {
                             allowBlank:false,
-                            blankText:'<?php echo __('A name is required.') ?>',
+                            blankText:'<?php /* @escapeNotVerified */ echo __('A name is required.') ?>',
                             selectOnFocus:true,
                             cls:'folder'
                         });
@@ -112,7 +112,7 @@ define("tree-panel", ["jquery", "extjs/ext-tree-checkbox", "prototype"], functio
                             id:'free'
                         });
                         tree2.setRootNode(this.root2);
-                        buildCategoryTree(this.root2, <?php echo $block->getAttributeTreeJson() ?>);
+                        buildCategoryTree(this.root2, <?php /* @escapeNotVerified */ echo $block->getAttributeTreeJson() ?>);
 
                         this.root2.addListener('beforeinsert', editSet.rightBeforeInsert);
                         this.root2.addListener('beforeappend', editSet.rightBeforeAppend);
@@ -200,7 +200,7 @@ define("tree-panel", ["jquery", "extjs/ext-tree-checkbox", "prototype"], functio
                         }
 
                         if( editSet.SystemNodesExists(editSet.currentNode) ) {
-                            alert('<?php echo $block->escapeJsQuote(__('This group contains system attributes. Please move system attributes to another group and try again.')) ?>');
+                            alert('<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('This group contains system attributes. Please move system attributes to another group and try again.')) ?>');
                             return;
                         }
 
@@ -238,7 +238,7 @@ define("tree-panel", ["jquery", "extjs/ext-tree-checkbox", "prototype"], functio
                     },
 
                     addGroup : function() {
-                        var group_name = prompt("<?php echo __('Please enter a new group name.') ?>","");
+                        var group_name = prompt("<?php /* @escapeNotVerified */ echo __('Please enter a new group name.') ?>","");
                         if (!group_name) {
                             return;
                         }
@@ -284,7 +284,7 @@ define("tree-panel", ["jquery", "extjs/ext-tree-checkbox", "prototype"], functio
                         }
                         for (var i=0; i < TreePanels.root.childNodes.length; i++) {
                             if (TreePanels.root.childNodes[i].text.toLowerCase() == name.toLowerCase() && TreePanels.root.childNodes[i].id != exceptNodeId) {
-                                errorText = '<?php echo __('An attribute group named "/name/" already exists".') ?>';
+                                errorText = '<?php /* @escapeNotVerified */ echo __('An attribute group named "/name/" already exists".') ?>';
                                 alert(errorText.replace("/name/",name));
                                 result =  false;
                             }
@@ -305,7 +305,7 @@ define("tree-panel", ["jquery", "extjs/ext-tree-checkbox", "prototype"], functio
                             editSet.req.form_key = FORM_KEY;
                         }
                         var req = {data : Ext.util.JSON.encode(editSet.req)};
-                        var con = new Ext.lib.Ajax.request('POST', '<?php echo $block->getMoveUrl() ?>', {success:editSet.success,failure:editSet.failure}, req);
+                        var con = new Ext.lib.Ajax.request('POST', '<?php /* @escapeNotVerified */ echo $block->getMoveUrl() ?>', {success:editSet.success,failure:editSet.failure}, req);
                     },
 
                     success : function(o) {
@@ -322,7 +322,7 @@ define("tree-panel", ["jquery", "extjs/ext-tree-checkbox", "prototype"], functio
                     },
 
                     failure : function(o) {
-                        alert('<?php echo $block->escapeJsQuote(__('Sorry, we\'re unable to complete this request.')) ?>');
+                        alert('<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('Sorry, we\'re unable to complete this request.')) ?>');
                     },
 
                     groupBeforeMove : function(tree, nodeThis, oldParent, newParent) {
@@ -337,7 +337,7 @@ define("tree-panel", ["jquery", "extjs/ext-tree-checkbox", "prototype"], functio
 
                     rightBeforeAppend : function(tree, nodeThis, node, newParent) {
                         if (node.attributes.is_user_defined == 0) {
-                            alert('<?php echo $block->escapeJsQuote(__('You can\'t remove attributes from this product template.')) ?>');
+                            alert('<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('You can\'t remove attributes from this product template.')) ?>');
                             return false;
                         } else {
                             return true;
@@ -351,7 +351,7 @@ define("tree-panel", ["jquery", "extjs/ext-tree-checkbox", "prototype"], functio
                         }
 
                         if (node.attributes.is_unassignable == 0) {
-                            alert('<?php echo $block->escapeJsQuote(__('You can\'t remove attributes from this product template.')) ?>');
+                            alert('<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__('You can\'t remove attributes from this product template.')) ?>');
                             return false;
                         } else {
                             return true;
@@ -374,7 +374,7 @@ define("tree-panel", ["jquery", "extjs/ext-tree-checkbox", "prototype"], functio
                     rightRemove : function(tree, nodeThis, node) {
                         if( nodeThis.firstChild == null && node.id != 'empty' ) {
                             var newNode = new Ext.tree.TreeNode({
-                                    text : '<?php echo __('Empty') ?>',
+                                    text : '<?php /* @escapeNotVerified */ echo __('Empty') ?>',
                                     id : 'empty',
                                     cls : 'folder',
                                     is_user_defined : 1,

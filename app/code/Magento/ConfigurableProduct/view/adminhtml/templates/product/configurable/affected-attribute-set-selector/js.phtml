@@ -33,16 +33,16 @@
         }));
 
         $form.modal({
-            title: '<?php echo __('Choose Affected Product Template'); ?>',
+            title: '<?php /* @escapeNotVerified */ echo __('Choose Affected Product Template'); ?>',
             type: 'popup',
             closed: function () {
                 resetValidation();
             },
             buttons: [{
-                text: '<?php echo __('Confirm'); ?>',
+                text: '<?php /* @escapeNotVerified */ echo __('Confirm'); ?>',
                 'class': 'action-primary',
                 attr: {
-                    'id': '<?php echo $block->getJsId('confirm-button') ?>'
+                    'id': '<?php /* @escapeNotVerified */ echo $block->getJsId('confirm-button') ?>'
                 },
                 click: function() {
                     if ($form.find('input[name=affected-attribute-set]:checked').val() == 'current') {
@@ -60,12 +60,12 @@
 
                     $.ajax({
                         type: 'POST',
-                        url: '<?php echo $block->getAttributeSetCreationUrl()?>',
+                        url: '<?php /* @escapeNotVerified */  echo $block->getAttributeSetCreationUrl()?>',
                         data: {
                             gotoEdit: 1,
                             attribute_set_name: $form.find('input[name=new-attribute-set-name]').val(),
                             skeleton_set: $('#attribute_set_id').val(),
-                            form_key: '<?php echo $block->getFormKey()?>',
+                            form_key: '<?php /* @escapeNotVerified */ echo $block->getFormKey()?>',
                             return_session_messages_only: 1
                         },
                         dataType: 'json',
@@ -85,10 +85,10 @@
                     return false;
                 }
             },{
-                text: '<?php echo __('Cancel'); ?>',
+                text: '<?php /* @escapeNotVerified */  echo __('Cancel'); ?>',
                 'class': 'action-close',
                 attr: {
-                    'id': '<?php echo $block->getJsId('close-button') ?>'
+                    'id': '<?php /* @escapeNotVerified */  echo $block->getJsId('close-button') ?>'
                 },
                 click: function() {
                     this.closeModal();

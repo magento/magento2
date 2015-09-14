@@ -17,7 +17,6 @@
              class="Magento\Widget\Test\Fixture\Widget">
         <field name="code" group="settings" />
         <field name="theme_id" group="settings" />
-        <field name="anchor_text" />
         <field name="title" group="frontend_properties" />
         <field name="template" />
         <field name="chosen_option" source="Magento\Widget\Test\Fixture\Widget\ChosenOption" />
@@ -27,11 +26,8 @@
         <field name="cache_lifetime" />
         <field name="page_size" />
         <field name="store_ids" source="Magento\Widget\Test\Fixture\Widget\StoreIds" group="frontend_properties" />
-        <field name="widget_instance" />
-        <field name="parameters" />
         <field name="id" />
-        <field name="page_id" source="Magento\Widget\Test\Fixture\Widget\PageIds" />
-        <field name="layout" source="Magento\Widget\Test\Fixture\Widget\LayoutUpdates" repository="Magento\Widget\Test\Repository\Widget\LayoutUpdates" group="layout_updates" />
-        <field name="widgetOptions" source="Magento\Widget\Test\Fixture\Widget\WidgetOptions" repository="Magento\Widget\Test\Repository\Widget\WidgetOptions" group="widget_options" />
+        <field name="widget_instance" source="Magento\Widget\Test\Fixture\Widget\WidgetInstance" repository="Magento\Widget\Test\Repository\Widget\WidgetInstance" group="widget_instance" />
+        <field name="parameters" source="Magento\Widget\Test\Fixture\Widget\Parameters" repository="Magento\Widget\Test\Repository\Widget\Parameters" group="widget_options" />
     </fixture>
 </config>
