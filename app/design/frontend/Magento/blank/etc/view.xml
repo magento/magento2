@@ -186,13 +186,14 @@
         <var name="gallery:arrows">true</var> <!-- Turn on/off arrows on the sides preview (true/false) -->
         <var name="gallery:caption">false</var> <!-- Display alt text as image title (true/false) -->
         <var name="gallery:allowfullscreen">true</var> <!-- Turn on/off fullscreen (true/false) -->
+        <var name="gallery:navdir">vertical</var> <!-- Sliding direction of thumbnails (horizontal/vertical) -->
         <var name="gallery:transition:effect">slide</var> <!-- Sets transition effect for slides changing (slide/crossfade/dissolve) -->
         <var name="gallery:transition:duration">500</var> <!-- Sets transition duration in ms -->
 
         <var name="gallery:fullscreen:navigation">thumbs</var> <!-- Fullscreen navigation style (false/thumbs/dots) -->
         <var name="gallery:fullscreen:loop">false</var> <!-- Fullscreen navigation loop (true/false) -->
         <var name="gallery:fullscreen:arrows">null</var> <!-- Turn on/off arrows on the sides preview (true/false/null) -->
-        <var name="gallery:fullscreen:show_caption">null</var> <!-- Display alt text as image title (true/false/null) -->
+        <var name="gallery:fullscreen:caption">null</var> <!-- Display alt text as image title (true/false/null) -->
         <var name="gallery:fullscreen:transition:effect">crossfade</var> <!-- Sets transition effect for slides changing (slide/crossfade/dissolve) -->
         <var name="gallery:fullscreen:transition:duration">500</var> <!-- Sets transition duration in ms -->
 
