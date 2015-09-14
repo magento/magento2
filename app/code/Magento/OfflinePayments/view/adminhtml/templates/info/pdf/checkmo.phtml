@@ -16,7 +16,7 @@
         {{pdf_row_separator}}
     <?php endif; ?>
     <?php if ($block->getMailingAddress()): ?>
-        <?php echo __('Send Check to:') ?>
+        <?php /* @escapeNotVerified */ echo __('Send Check to:') ?>
         {{pdf_row_separator}}
         <?php echo nl2br($block->escapeHtml($block->getMailingAddress())) ?>
         {{pdf_row_separator}}

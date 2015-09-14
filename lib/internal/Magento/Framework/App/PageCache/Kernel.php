@@ -64,7 +64,9 @@ class Kernel
         if (preg_match('/public.*s-maxage=(\d+)/', $response->getHeader('Cache-Control')->getFieldValue(), $matches)) {
             $maxAge = $matches[1];
             $response->setNoCacheHeaders();
-            if ($response->getHttpResponseCode() == 200 && ($this->request->isGet() || $this->request->isHead())) {
+            if (($response->getHttpResponseCode() == 200 || $response->getHttpResponseCode() == 404)
+                && ($this->request->isGet() || $this->request->isHead())
+            ) {
                 $tagsHeader = $response->getHeader('X-Magento-Tags');
                 $tags = $tagsHeader ? explode(',', $tagsHeader->getFieldValue()) : [];
 
