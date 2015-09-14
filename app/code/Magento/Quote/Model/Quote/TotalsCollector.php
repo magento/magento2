@@ -84,6 +84,7 @@ class TotalsCollector
      * @param \Magento\Quote\Model\ShippingFactory $shippingFactory
      * @param \Magento\Quote\Model\ShippingAssignmentFactory $shippingAssignmentFactory
      * @param \Magento\Quote\Model\QuoteValidator $quoteValidator
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Collector $totalCollector,
@@ -263,7 +264,7 @@ class TotalsCollector
             ]
         );
 
-        foreach ($this->collectorList->getCollectors($quote->getStoreId()) as $key => $collector) {
+        foreach ($this->collectorList->getCollectors($quote->getStoreId()) as $collector) {
             /** @var CollectorInterface $collector */
             $collector->collect($quote, $shippingAssignment, $total);
         }

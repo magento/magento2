@@ -385,6 +385,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param \Magento\Framework\Model\Resource\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -763,7 +764,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     public function getSharedStoreIds()
     {
         $ids = $this->_getData('shared_store_ids');
-        if (is_null($ids) || !is_array($ids)) {
+        if ($ids === null || !is_array($ids)) {
             $website = $this->getWebsite();
             if ($website) {
                 return $website->getStoreIds();
@@ -1672,8 +1673,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * It's passed to \Magento\Catalog\Helper\Product->addParamsToBuyRequest() to compose resulting buyRequest.
      *
      * Basically it can hold
-     * - 'current_config', \Magento\Framework\DataObject or array - current buyRequest that configures product in this item,
-     *   used to restore currently attached files
+     * - 'current_config', \Magento\Framework\DataObject or array - current buyRequest that configures product in this
+     * item, used to restore currently attached files
      * - 'files_prefix': string[a-z0-9_] - prefix that was added at frontend to names of file options (file inputs),
      *   so they won't intersect with other submitted options
      *
