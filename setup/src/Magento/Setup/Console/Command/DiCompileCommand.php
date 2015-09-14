@@ -21,6 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Command to run compile in single-tenant mode
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DiCompileCommand extends Command
 {
