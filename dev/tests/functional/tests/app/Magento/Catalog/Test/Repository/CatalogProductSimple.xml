@@ -102,7 +102,7 @@
                 <item name="value" xsi:type="string">560</item>
             </field>
             <field name="website_ids" xsi:type="array">
-                <item name="key" xsi:type="string">Main Website</item>
+                <item name="0" xsi:type="string">Main Website</item>
             </field>
             <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="checkout_data" xsi:type="array">
@@ -167,7 +167,6 @@
         <dataset name="product_100_dollar">
             <field name="sku" xsi:type="string">product_100_dollar%isolation%</field>
             <field name="name" xsi:type="string">product_100_dollar%isolation%</field>
-            <field name="type_id" xsi:type="string">simple</field>
             <field name="quantity_and_stock_status" xsi:type="array">
                 <item name="qty" xsi:type="number">666.0000</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
@@ -216,7 +215,6 @@
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
-            <field name="type_id" xsi:type="string">simple</field>
             <field name="quantity_and_stock_status" xsi:type="array">
                 <item name="qty" xsi:type="string">666</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
@@ -282,7 +280,6 @@
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
-            <field name="type_id" xsi:type="string">simple</field>
             <field name="quantity_and_stock_status" xsi:type="array">
                 <item name="qty" xsi:type="string">666</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
@@ -320,7 +317,7 @@
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
             <field name="weight" xsi:type="string">1</field>
-            <field name="status" xsi:type="string">1</field>
+            <field name="status" xsi:type="string">Product online</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
@@ -492,7 +489,6 @@
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
-            <field name="type_id" xsi:type="string">simple</field>
             <field name="quantity_and_stock_status" xsi:type="array">
                 <item name="qty" xsi:type="string">25</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
@@ -508,7 +504,6 @@
         </dataset>
 
         <dataset name="withSpecialPrice">
-            <field name="type_id" xsi:type="string">simple</field>
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
@@ -523,7 +518,6 @@
         </dataset>
 
         <dataset name="simple_with_group_price">
-            <field name="type_id" xsi:type="string">simple</field>
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
@@ -540,7 +534,6 @@
         </dataset>
 
         <dataset name="simple_with_group_price_and_category">
-            <field name="type_id" xsi:type="string">simple</field>
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
@@ -563,7 +556,6 @@
         </dataset>
 
         <dataset name="simple_with_tier_price">
-            <field name="type_id" xsi:type="string">simple</field>
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
@@ -580,7 +572,6 @@
         </dataset>
 
         <dataset name="simple_with_tier_price_and_category">
-            <field name="type_id" xsi:type="string">simple</field>
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
@@ -603,7 +594,6 @@
         </dataset>
 
         <dataset name="with_two_custom_option">
-            <field name="type_id" xsi:type="string">simple</field>
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
@@ -626,7 +616,6 @@
         </dataset>
 
         <dataset name="with_one_custom_option_and_category">
-            <field name="type_id" xsi:type="string">simple</field>
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
@@ -652,7 +641,6 @@
         </dataset>
 
         <dataset name="with_all_custom_option">
-            <field name="type_id" xsi:type="string">simple</field>
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
@@ -671,7 +659,6 @@
         <dataset name="low_stock_product">
             <field name="sku" xsi:type="string">low_stock_product%isolation%</field>
             <field name="name" xsi:type="string">low_stock_product%isolation%</field>
-            <field name="type_id" xsi:type="string">simple</field>
             <field name="quantity_and_stock_status" xsi:type="array">
                 <item name="qty" xsi:type="string">1</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
@@ -807,7 +794,6 @@
         </dataset>
 
         <dataset name="with_one_custom_option">
-            <field name="type_id" xsi:type="string">simple</field>
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
@@ -861,7 +847,6 @@
         </dataset>
 
         <dataset name="simple_with_tier_price_and_qty">
-            <field name="type_id" xsi:type="string">simple</field>
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
@@ -910,7 +895,6 @@
         </dataset>
 
         <dataset name="with_custom_option_and_fpt">
-            <field name="type_id" xsi:type="string">simple</field>
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
@@ -942,7 +926,6 @@
         </dataset>
 
         <dataset name="with_special_price_and_fpt">
-            <field name="type_id" xsi:type="string">simple</field>
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
