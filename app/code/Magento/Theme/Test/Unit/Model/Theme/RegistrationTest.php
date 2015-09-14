@@ -49,7 +49,7 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
     public function testRegister()
     {
         $image = 'preview.jpg';
-        $themeFilePath = 'app/design';
+        $themeFilePath = 'any/path';
         $parentId = 1;
         $fullPath = '/full/path';
         $theme = $this->getMockBuilder('Magento\Framework\View\Design\ThemeInterface')

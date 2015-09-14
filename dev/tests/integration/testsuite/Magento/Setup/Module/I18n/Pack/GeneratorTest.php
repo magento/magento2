@@ -99,6 +99,11 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             'Magento_SecondModule',
             BP. '/app/code/Magento/SecondModule'
         );
+        ComponentRegistrar::register(
+            ComponentRegistrar::THEME,
+            'adminhtml/default',
+            BP. '/app/design/adminhtml/default'
+        );
         $this->_generator->generate($this->_dictionaryPath, $this->_packPath, $this->_locale);
 
         foreach ($this->_expectedFiles as $file) {

@@ -31,7 +31,7 @@ class TranslationFiles extends \PHPUnit_Framework_TestCase
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $modulePath) {
             $places[basename($modulePath)] = ['placePath' => $modulePath];
         }
-        foreach (glob("{$pathToSource}/app/design/*/*/*", GLOB_ONLYDIR) as $themePath) {
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::THEME)  as $themePath) {
             $placeName = basename(dirname(dirname($themePath))) . '_' . basename($themePath);
             $places[$placeName] = ['placePath' => $themePath];
         }

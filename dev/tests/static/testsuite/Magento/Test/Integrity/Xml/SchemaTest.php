@@ -6,6 +6,8 @@
 
 namespace Magento\Test\Integrity\Xml;
 
+use Magento\Framework\Component\ComponentRegistrar;
+
 class SchemaTest extends \PHPUnit_Framework_TestCase
 {
     public function testXmlFiles()
@@ -56,9 +58,13 @@ class SchemaTest extends \PHPUnit_Framework_TestCase
 
     public function getXmlFiles()
     {
+        $componentRegistrar = new ComponentRegistrar();
         $codeXml = $this->_getFiles(BP . '/app', '*.xml', '/.\/Test\/Unit\/./');
         $this->_filterSpecialCases($codeXml);
-        $designXml = $this->_getFiles(BP . '/app/design', '*.xml');
+        $designXml = [];
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themePath) {
+            $designXml = array_merge($designXml, $this->_getFiles($themePath, '*.xml'));
+        }
         $libXml = $this->_getFiles(BP . '/lib/Magento', '*.xml');
         return $this->_dataSet(array_merge($codeXml, $designXml, $libXml));
     }

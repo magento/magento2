@@ -93,10 +93,7 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::LANGUAGE) as $dir) {
             $result[$dir] = [$dir, 'magento2-language'];
         }
-        foreach (glob("{$root}/app/design/adminhtml/Magento/*", GLOB_ONLYDIR) as $dir) {
-            $result[$dir] = [$dir, 'magento2-theme'];
-        }
-        foreach (glob("{$root}/app/design/frontend/Magento/*", GLOB_ONLYDIR) as $dir) {
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::THEME) as $dir) {
             $result[$dir] = [$dir, 'magento2-theme'];
         }
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $dir) {
