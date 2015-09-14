@@ -16,20 +16,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class JobUpgrade extends AbstractJob
 {
-    /**
-     * @var \Magento\Framework\App\Cache
-     */
-    private $cache;
-
-    /**
-     * @var \Magento\Framework\App\State\CleanupFiles
-     */
-    private $cleanupFiles;
-
-    /**
-     * @var Status
-     */
-    protected $status;
 
     /**
      * Constructor
@@ -49,13 +35,10 @@ class JobUpgrade extends AbstractJob
         $name,
         $params = []
     ) {
-        $objectManager = $objectManagerProvider->get();
-        $this->cleanupFiles = $objectManager->get('Magento\Framework\App\State\CleanupFiles');
-        $this->cache = $objectManager->get('Magento\Framework\App\Cache');
         $this->command = $command;
         $this->output = $output;
         $this->status = $status;
-        parent::__construct($output, $status, $name, $params);
+        parent::__construct($output, $status, $objectManagerProvider, $name, $params);
     }
 
     /**
@@ -69,10 +52,7 @@ class JobUpgrade extends AbstractJob
         try {
             $this->params['command'] = 'setup:upgrade';
             $this->command->run(new ArrayInput($this->params), $this->output);
-            $this->status->add('Cleaning generated files...');
-            $this->cleanupFiles->clearCodeGeneratedFiles();
-            $this->status->add('Clearing cache...');
-            $this->cache->clean();
+            $this->performCleanup();
         } catch (\Exception $e) {
             $this->status->toggleUpdateError(true);
             throw new \RuntimeException(sprintf('Could not complete %s successfully: %s', $this, $e->getMessage()));

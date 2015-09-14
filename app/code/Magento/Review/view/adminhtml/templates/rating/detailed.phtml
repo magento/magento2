@@ -16,8 +16,8 @@
             <?php $_options = ($_rating->getRatingOptions()) ? $_rating->getRatingOptions() : $_rating->getOptions() ?>
             <div class="control" data-widget="ratingControl">
             <?php foreach (array_reverse($_options) as $_option): ?>
-                <input type="radio" name="ratings[<?php echo($_rating->getVoteId()) ? $_rating->getVoteId() : $_rating->getId() ?>]" id="<?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_<?php echo $_option->getValue() ?>" value="<?php echo $_option->getId() ?>" <?php if ($block->isSelected($_option, $_rating)): ?>checked="checked"<?php endif; ?> />
-                <label for="<?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_<?php echo $_option->getValue() ?>">&#9733;</label>
+                <input type="radio" name="ratings[<?php /* @escapeNotVerified */ echo($_rating->getVoteId()) ? $_rating->getVoteId() : $_rating->getId() ?>]" id="<?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_<?php /* @escapeNotVerified */ echo $_option->getValue() ?>" value="<?php /* @escapeNotVerified */ echo $_option->getId() ?>" <?php if ($block->isSelected($_option, $_rating)): ?>checked="checked"<?php endif; ?> />
+                <label for="<?php echo $block->escapeHtml($_rating->getRatingCode()) ?>_<?php /* @escapeNotVerified */ echo $_option->getValue() ?>">&#9733;</label>
             <?php $_iterator++ ?>
             <?php endforeach; ?>
             </div>
@@ -37,5 +37,5 @@ require([
 });
 </script>
 <?php else: ?>
-    <?php echo __("Rating isn't Available") ?>
+    <?php /* @escapeNotVerified */ echo __("Rating isn't Available") ?>
 <?php endif; ?>
