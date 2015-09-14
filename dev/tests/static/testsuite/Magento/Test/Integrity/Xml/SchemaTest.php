@@ -9,8 +9,6 @@ namespace Magento\Test\Integrity\Xml;
 use \Magento\Framework\App\Bootstrap;
 use Zend\Soap\Exception\UnexpectedValueException;
 
-;
-
 class SchemaTest extends \PHPUnit_Framework_TestCase
 {
     public function testXmlFiles()
