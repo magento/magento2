@@ -89,12 +89,10 @@ class UrnResolverTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRealPathWithModuleUrn()
     {
-        $xsdUrn = 'urn:magento:module:customer:etc/address_formats.xsd';
-        $xsdPath = realpath(dirname(dirname(dirname(dirname(dirname(dirname(dirname(dirname(__DIR__)))))))))
-            . '/app/code/Magento/Customer/etc/address_formats.xsd';
+        $xsdUrn = 'urn:magento:module:framework:Config/Test/Unit/_files/sample.xsd';
+        $xsdPath = realpath(dirname(__DIR__)) . '/_files/sample.xsd';
         $this->packageInfoMock->expects($this->once())->method('getModuleName')->willReturn('Magento_Customer');
-        $registrarResult = realpath(dirname(dirname(dirname(dirname(dirname(dirname(dirname(dirname(__DIR__)))))))))
-            . '/app/code/Magento/Customer';
+        $registrarResult = realpath(dirname(dirname(dirname(dirname(__DIR__)))));
         $this->registrarMock->expects($this->once())
             ->method('getPath')
             ->with(ComponentRegistrar::MODULE, 'Magento_Customer')
@@ -106,11 +104,11 @@ class UrnResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Unsupported format of schema location: urn:magento:test:test:etc/address_formats.xsd
+     * @expectedExceptionMessage Unsupported format of schema location: urn:magento:test:test:etc/test_test.xsd
      */
     public function testGetRealPathWrongSection()
     {
-        $xsdUrn = 'urn:magento:test:test:etc/address_formats.xsd';
+        $xsdUrn = 'urn:magento:test:test:etc/test_test.xsd';
         $this->urnResolver->getRealPath($xsdUrn);
     }
 
