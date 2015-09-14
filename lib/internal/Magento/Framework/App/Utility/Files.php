@@ -1159,12 +1159,10 @@ class Files
         }
 
         $result = [];
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
-            $iterator = new \DirectoryIterator($moduleDir . '/');
-            foreach ($iterator as $file) {
-                if (!$file->isDot() && !in_array($file->getFilename(), ['Zend']) && $file->isDir()) {
-                    $result[] = $file->getFilename();
-                }
+        foreach (array_keys($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE)) as $moduleName) {
+            $namespace = explode('_', $moduleName)[0];
+            if (!in_array($namespace, $result) && $namespace !== 'Zend') {
+                $result[] = $namespace;
             }
         }
         self::$_cache[$key] = $result;
