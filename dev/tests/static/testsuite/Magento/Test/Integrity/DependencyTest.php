@@ -243,17 +243,15 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                 $isThemeFile = (bool)preg_match(self::$_defaultThemes, $filename);
 
                 $componentRegistrar = new ComponentRegistrar();
-                $foundModule = false;
                 $foundModuleName = '';
                 if (!$isThemeFile) {
                     foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
-                        if (strpos($file, $moduleDir) !== false) {
-                            $foundModule = true;
-                            $foundModuleName = $moduleName;
+                        if (strpos($file, $moduleDir . '/') !== false) {
+                            $foundModuleName = str_replace('_', '\\', $moduleName);
                             break;
                         }
                     }
-                    if (!$foundModule) {
+                    if (empty($foundModuleName)) {
                         return;
                     }
                 }
