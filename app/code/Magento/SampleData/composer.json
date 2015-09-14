@@ -17,5 +17,8 @@
                 "Magento/SampleData"
             ]
         ]
+    },
+    "autoload": {
+        "files" : ["cli_commands.php"]
     }
 }
