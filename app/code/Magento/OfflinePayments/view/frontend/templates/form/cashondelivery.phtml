@@ -7,11 +7,13 @@
 // @codingStandardsIgnoreFile
 
 /**
- * @see \Magento\OfflinePayments\Block\Form\Cashondelivery
+ * @var $block \Magento\OfflinePayments\Block\Form\Cashondelivery
  */
+$instructions = $block->getInstructions();
 ?>
-<?php if ($block->getInstructions()): ?>
-    <div class="items <?php /* @escapeNotVerified */ echo $block->getMethodCode() ?> instructions agreement" id="payment_form_<?php /* @escapeNotVerified */ echo $block->getMethodCode() ?>" style="display: none;">
-        <?php /* @escapeNotVerified */ echo nl2br($block->getInstructions()) ?>
+<?php if ($instructions): ?>
+    <?php $methodCode = $block->getMethodCode();?>
+    <div class="items <?php echo $methodCode ?> instructions agreement" id="payment_form_<?php echo $methodCode ?>" style="display: none;">
+        <?php /* @noEscape */ echo nl2br($instructions) ?>
     </div>
 <?php endif; ?>
