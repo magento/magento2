@@ -23,11 +23,11 @@
         Event.observe(window, "load", function(){
             var serializeInput  = document.createElement('input');
             serializeInput.type = 'hidden';
-            serializeInput.name = '<?php echo $block->getInputElementName()?>';
-            serializeInput.id   = '<?php echo $_id?>';
+            serializeInput.name = '<?php /* @escapeNotVerified */ echo $block->getInputElementName()?>';
+            serializeInput.id   = '<?php /* @escapeNotVerified */ echo $_id?>';
             try {
-                document.getElementById('<?php echo $formId?>').appendChild(serializeInput);
-                new serializerController('<?php echo $_id?>', <?php echo $block->getDataAsJSON() ?>, <?php echo $block->getColumnInputNames(true) ?>, <?php echo $block->getGridBlock()->getJsObjectName() ?>, '<?php echo $block->getReloadParamName()?>');
+                document.getElementById('<?php /* @escapeNotVerified */ echo $formId?>').appendChild(serializeInput);
+                new serializerController('<?php /* @escapeNotVerified */ echo $_id?>', <?php /* @escapeNotVerified */ echo $block->getDataAsJSON() ?>, <?php /* @escapeNotVerified */ echo $block->getColumnInputNames(true) ?>, <?php /* @escapeNotVerified */ echo $block->getGridBlock()->getJsObjectName() ?>, '<?php /* @escapeNotVerified */ echo $block->getReloadParamName()?>');
             } catch(e) {
                 //Error add serializer
             }
@@ -35,12 +35,12 @@
     });
 </script>
 <?php else :?>
-<input type="hidden" name="<?php echo $block->getInputElementName()?>"  value="" id="<?php echo $_id?>" />
+<input type="hidden" name="<?php /* @escapeNotVerified */ echo $block->getInputElementName()?>"  value="" id="<?php /* @escapeNotVerified */ echo $_id?>" />
 <script>
     require([
         'mage/adminhtml/grid'
     ], function(){
-        new serializerController('<?php echo $_id?>', <?php echo $block->getDataAsJSON() ?>, <?php echo $block->getColumnInputNames(true) ?>, <?php echo $block->getGridBlock()->getJsObjectName() ?>, '<?php echo $block->getReloadParamName()?>');
+        new serializerController('<?php /* @escapeNotVerified */ echo $_id?>', <?php /* @escapeNotVerified */ echo $block->getDataAsJSON() ?>, <?php /* @escapeNotVerified */ echo $block->getColumnInputNames(true) ?>, <?php /* @escapeNotVerified */ echo $block->getGridBlock()->getJsObjectName() ?>, '<?php /* @escapeNotVerified */ echo $block->getReloadParamName()?>');
     });
 </script>
 <?php endif;?>
