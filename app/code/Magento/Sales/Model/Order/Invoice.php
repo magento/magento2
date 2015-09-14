@@ -357,12 +357,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
         }
         $this->_wasPayCalled = true;
 
-        $invoiceState = self::STATE_PAID;
-        if ($this->getOrder()->getPayment()->hasForcedState()) {
-            $invoiceState = $this->getOrder()->getPayment()->getForcedState();
-        }
-
-        $this->setState($invoiceState);
+        $this->setState(self::STATE_PAID);
 
         $this->getOrder()->getPayment()->pay($this);
         $this->getOrder()->setTotalPaid($this->getOrder()->getTotalPaid() + $this->getGrandTotal());

@@ -51,7 +51,7 @@ class UpdateCustomerCookies
         }
 
         $customerCookies = $observer->getEvent()->getCustomerCookies();
-        if ($customerCookies instanceof \Magento\Framework\Object) {
+        if ($customerCookies instanceof \Magento\Framework\DataObject) {
             $persistentCustomer = $this->customerRepository->getById(
                 $this->_persistentSession->getSession()->getCustomerId()
             );

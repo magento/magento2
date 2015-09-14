@@ -43,8 +43,8 @@ class Rule extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function fetchRuleCodes($rateId, $customerTaxClassIds, $productTaxClassIds)
     {
-        $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()
+        $connection = $this->getConnection();
+        $select = $connection->select()
             ->from(['main' => $this->getTable('tax_calculation')], null)
             ->joinLeft(
                 ['d' => $this->getTable('tax_calculation_rule')],
@@ -56,6 +56,6 @@ class Rule extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ->where('main.product_tax_class_id in (?)', $productTaxClassIds)
             ->distinct(true);
 
-        return $adapter->fetchCol($select);
+        return $connection->fetchCol($select);
     }
 }

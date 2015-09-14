@@ -35,9 +35,8 @@ class DatabaseCheck extends AbstractActionController
      */
     public function indexAction()
     {
-        $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
-
         try {
+            $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
             $password = isset($params['password']) ? $params['password'] : '';
             $this->dbValidator->checkDatabaseConnection($params['name'], $params['host'], $params['user'], $password);
             $tablePrefix = isset($params['tablePrefix']) ? $params['tablePrefix'] : '';

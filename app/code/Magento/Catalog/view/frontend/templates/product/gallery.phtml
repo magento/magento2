@@ -6,32 +6,39 @@
 
 // @codingStandardsIgnoreFile
 
+/** @var \Magento\Catalog\Block\Product\Gallery $block */
 ?>
 <?php $_width = $block->getImageWidth(); ?>
-<div class="product-image-popup" style="width:<?php echo $_width; ?>px;">
-    <div class="buttons-set"><a href="#" class="button" role="close-window"><span><?php echo __('Close Window') ?></span></a></div>
+<div class="product-image-popup" style="width:<?php /* @escapeNotVerified */ echo $_width; ?>px;">
+    <div class="buttons-set"><a href="#" class="button" role="close-window"><span><?php /* @escapeNotVerified */ echo __('Close Window') ?></span></a></div>
     <?php if ($block->getPreviousImageUrl() || $block->getNextImageUrl()): ?>
         <div class="nav">
           <?php if ($_prevUrl = $block->getPreviousImageUrl()): ?>
-              <a href="<?php echo $_prevUrl ?>" class="prev">&laquo; <?php echo __('Prev') ?></a>
+              <a href="<?php /* @escapeNotVerified */ echo $_prevUrl ?>" class="prev">&laquo; <?php /* @escapeNotVerified */ echo __('Prev') ?></a>
           <?php endif; ?>
           <?php if ($_nextUrl = $block->getNextImageUrl()): ?>
-              <a href="<?php echo $_nextUrl ?>" class="next"><?php echo __('Next') ?> &raquo;</a>
+              <a href="<?php /* @escapeNotVerified */ echo $_nextUrl ?>" class="next"><?php /* @escapeNotVerified */ echo __('Next') ?> &raquo;</a>
           <?php endif; ?>
         </div>
     <?php endif; ?>
     <?php if ($_imageTitle = $block->escapeHtml($block->getCurrentImage()->getLabel())): ?>
-        <h1 class="image-label"><?php echo $_imageTitle ?></h1>
+        <h1 class="image-label"><?php /* @escapeNotVerified */ echo $_imageTitle ?></h1>
     <?php endif; ?>
-    <img src="<?php echo $this->helper('Magento\Catalog\Helper\Image')->init($block->getProduct(), 'image', $block->getImageFile()); ?>"<?php if ($_width): ?> width="<?php echo $_width ?>"<?php endif; ?> alt="<?php echo $block->escapeHtml($block->getCurrentImage()->getLabel()) ?>" title="<?php echo $block->escapeHtml($block->getCurrentImage()->getLabel()) ?>" id="product-gallery-image" class="image" data-mage-init='{"catalogGallery":{}}'/>
-    <div class="buttons-set"><a href="#" class="button" role="close-window"><span><?php echo __('Close Window') ?></span></a></div>
+    <?php
+        $imageUrl = $this->helper('Magento\Catalog\Helper\Image')
+            ->init($block->getProduct(), 'product_page_image_large')
+            ->setImageFile($block->getImageFile())
+            ->getUrl();
+    ?>
+    <img src="<?php /* @escapeNotVerified */ echo $imageUrl; ?>"<?php if ($_width): ?> width="<?php /* @escapeNotVerified */ echo $_width ?>"<?php endif; ?> alt="<?php echo $block->escapeHtml($block->getCurrentImage()->getLabel()) ?>" title="<?php echo $block->escapeHtml($block->getCurrentImage()->getLabel()) ?>" id="product-gallery-image" class="image" data-mage-init='{"catalogGallery":{}}'/>
+    <div class="buttons-set"><a href="#" class="button" role="close-window"><span><?php /* @escapeNotVerified */ echo __('Close Window') ?></span></a></div>
     <?php if ($block->getPreviousImageUrl() || $block->getNextImageUrl()): ?>
         <div class="nav">
           <?php if ($_prevUrl = $block->getPreviousImageUrl()): ?>
-              <a href="<?php echo $_prevUrl ?>" class="prev">&laquo; <?php echo __('Prev') ?></a>
+              <a href="<?php /* @escapeNotVerified */ echo $_prevUrl ?>" class="prev">&laquo; <?php /* @escapeNotVerified */ echo __('Prev') ?></a>
           <?php endif; ?>
           <?php if ($_nextUrl = $block->getNextImageUrl()): ?>
-              <a href="<?php echo $_nextUrl ?>" class="next"><?php echo __('Next') ?> &raquo;</a>
+              <a href="<?php /* @escapeNotVerified */ echo $_nextUrl ?>" class="next"><?php /* @escapeNotVerified */ echo __('Next') ?> &raquo;</a>
           <?php endif; ?>
         </div>
     <?php endif; ?>

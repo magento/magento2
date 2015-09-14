@@ -6,7 +6,6 @@
 
 namespace Magento\ConfigurableImportExport\Test\Unit\Model\Import\Product\Type;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use \Magento\ConfigurableImportExport;
 
 /**
@@ -14,13 +13,10 @@ use \Magento\ConfigurableImportExport;
  * @package Magento\ConfigurableImportExport\Test\Unit\Model\Import\Product\Type
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ConfigurableTest extends \PHPUnit_Framework_TestCase
+class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
     /** @var ConfigurableImportExport\Model\Import\Product\Type\Configurable */
     protected $configurable;
-
-    /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
 
     /**
      * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -81,6 +77,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        parent::setUp();
+
         $this->setCollectionFactory = $this->getMock(
             'Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory',
             ['create'],
@@ -100,7 +98,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->setCollection)
         );
 
-        $item = new \Magento\Framework\Object([
+        $item = new \Magento\Framework\DataObject([
             'id' => 1,
             'attribute_set_name' => 'Default',
             '_attribute_set' => 'Default'
@@ -158,18 +156,20 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'isRowAllowedToImport',
                 'getConnection',
                 'getAttrSetIdToName',
+                'getErrorAggregator',
                 'getAttributeOptions'
             ],
             [],
             '',
             false
         );
+        $this->_entityModel->method('getErrorAggregator')->willReturn($this->getErrorAggregatorObject());
+
         $this->params = [
             0 => $this->_entityModel,
             1 => 'configurable'
         ];
 
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->_connection = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
@@ -192,7 +192,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'from',
                 'where',
                 'joinLeft',
-                'getAdapter',
+                'getConnection',
             ],
             [],
             '',
@@ -202,13 +202,13 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->select->expects($this->any())->method('where')->will($this->returnSelf());
         $this->select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
         $this->_connection->expects($this->any())->method('select')->will($this->returnValue($this->select));
-        $adapter = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
-        $adapter->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
-        $this->select->expects($this->any())->method('getAdapter')->willReturn($adapter);
+        $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $connectionMock->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
+        $this->select->expects($this->any())->method('getConnection')->willReturn($connectionMock);
         $this->_connection->expects($this->any())->method('insertOnDuplicate')->willReturnSelf();
         $this->_connection->expects($this->any())->method('delete')->willReturnSelf();
         $this->_connection->expects($this->any())->method('quoteInto')->willReturn('');
-        $this->_connection->expects($this->any())->method('fetchPairs')->will($this->returnValue([]));
+        $this->_connection->expects($this->any())->method('fetchAll')->will($this->returnValue([]));
 
         $this->resource = $this->getMock(
             '\Magento\Framework\App\Resource',
@@ -254,7 +254,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         ];
         foreach ($testProducts as $product) {
             $item = $this->getMock(
-                '\Magento\Framework\Object',
+                '\Magento\Framework\DataObject',
                 ['getAttributeSetId'],
                 [],
                 '',
@@ -524,7 +524,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ['attribute_id' => 132, 'product_id' => 4, 'option_id' => 4, 'product_super_attribute_id' => 132],
             ['attribute_id' => 132, 'product_id' => 5, 'option_id' => 5, 'product_super_attribute_id' => 132],
         ]));
-        $this->_connection->expects($this->any())->method('fetchPairs')->with($this->select)->will(
+        $this->_connection->expects($this->any())->method('fetchAll')->with($this->select)->will(
             $this->returnValue([])
         );
 

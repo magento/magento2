@@ -11,7 +11,7 @@ use \Magento\Framework\Model\Resource\Type\Db\Pdo\Mysql;
 class MysqlTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Stdlib\String|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject
      */
     private $string;
 
@@ -22,7 +22,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->string = $this->getMock('\Magento\Framework\Stdlib\String');
+        $this->string = $this->getMock('\Magento\Framework\Stdlib\StringUtils');
         $this->dateTime = $this->getMock('\Magento\Framework\Stdlib\DateTime');
     }
 
@@ -35,7 +35,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
     public function testConstructor(array $inputConfig, array $expectedConfig)
     {
         $object = new Mysql($this->string, $this->dateTime, $inputConfig);
-        $this->assertAttributeEquals($expectedConfig, '_connectionConfig', $object);
+        $this->assertAttributeEquals($expectedConfig, 'connectionConfig', $object);
     }
 
     /**
@@ -80,6 +80,10 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
         new Mysql($this->string, $this->dateTime, []);
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Configuration array must have a key for 'dbname' that names the database instance
+     */
     public function testGetConnectionInactive()
     {
         $config = ['host' => 'localhost', 'active' => false];

@@ -11,7 +11,7 @@
  */
 namespace Magento\Backend\Controller\Adminhtml;
 
-class Dashboard extends \Magento\Backend\App\Action
+abstract class Dashboard extends \Magento\Backend\App\Action
 {
     /**
      * @return bool

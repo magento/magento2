@@ -16,7 +16,7 @@ use Magento\Framework\View\Element\AbstractBlock;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements \Magento\Framework\Object\IdentityInterface
+class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var Collection
@@ -130,5 +130,20 @@ class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements 
             $identities = array_merge($identities, $item->getIdentities());
         }
         return $identities;
+    }
+
+    /**
+     * Find out if some products can be easy added to cart
+     *
+     * @return bool
+     */
+    public function canItemsAddToCart()
+    {
+        foreach ($this->getItems() as $item) {
+            if (!$item->isComposite() && $item->isSaleable() && !$item->getRequiredOptions()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -7,7 +7,7 @@
 namespace Magento\Tax\Model\Rate;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Convert\Object as Converter;
+use Magento\Framework\Convert\DataObject as Converter;
 use Magento\Tax\Api\TaxRateRepositoryInterface;
 use Magento\Tax\Model\Calculation\Rate;
 

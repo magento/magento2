@@ -39,7 +39,7 @@
 
     .ui-dialog-titlebar-close {
         cursor: pointer;
-        .icon-font(
+        .lib-icon-font(
         @_icon-font-content: @popup-close-icon__content,
         @_icon-font: @popup-close-icon__font,
         @_icon-font-size: @popup-close-icon__font-size,
@@ -463,6 +463,12 @@
 
     .magento_content {
         height: auto !important;
+        .buttons-set {
+            margin: 0 0 15px;
+            button {
+                margin-right: 4px;
+            }
+        }
     }
 
     .magento_buttons {

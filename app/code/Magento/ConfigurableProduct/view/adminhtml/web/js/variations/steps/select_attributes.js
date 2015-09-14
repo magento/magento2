@@ -3,9 +3,10 @@
  * See COPYING.txt for license details.
  */
 define([
-    "uiComponent",
-    "jquery",
-    "underscore"
+    'uiComponent',
+    'jquery',
+    'underscore',
+    'mage/translate'
 ], function (Component, $, _) {
     "use strict";
 
@@ -14,14 +15,22 @@ define([
             provider().reload();
         });
     };
+
     return Component.extend({
+        attributesLabels: {},
+        stepInitialized: false,
         defaults: {
             modules: {
                 multiselect: '${ $.multiselectName }',
                 attributeProvider: '${ $.providerName }'
             },
             listens: {
-                '${ $.multiselectName }:selected': 'doSelectedAttributesLabels'
+                '${ $.multiselectName }:selected': 'doSelectedAttributesLabels',
+                '${ $.multiselectName }:rows': 'doSelectSavedAttributes'
+            },
+            notificationMessage: {
+                text: null,
+                error: null
             }
         },
         initialize: function () {
@@ -35,15 +44,38 @@ define([
             return this;
         },
         render: function (wizard) {
+            this.wizard = wizard;
+            this.setNotificationMessage();
+        },
+        setNotificationMessage: function () {
+            if (this.mode == 'edit') {
+                this.wizard.setNotificationMessage($.mage.__('When you remove or add an attribute, we automatically ' +
+                'update all configurations and you will need to manually recreate the current configurations.'));
+            }
+        },
+        doSelectSavedAttributes: function() {
+            if (false === this.stepInitialized) {
+                this.stepInitialized = true;
+                //cache attributes labels, which can be present on the 2nd page
+                _.each(this.initData.attributes, function(attribute) {
+                    this.attributesLabels[attribute.id] = attribute.label;
+                }.bind(this));
+                this.multiselect().selected(_.pluck(this.initData.attributes, 'id'));
+            }
         },
         doSelectedAttributesLabels: function(selected) {
-            this.selected = selected;
             var labels = [];
-            _.each(this.multiselect().rows(), function(attribute) {
-                if (_.contains(selected, attribute.attribute_id)) {
-                    labels.push(attribute.frontend_label);
+
+            this.selected = selected;
+            _.each(selected, function(attributeId) {
+                if (!this.attributesLabels[attributeId]) {
+                    var attribute = _.findWhere(this.multiselect().rows(), {attribute_id: attributeId});
+                    if (attribute) {
+                        this.attributesLabels[attribute.attribute_id] = attribute.frontend_label;
+                    }
                 }
-            });
+                labels.push(this.attributesLabels[attributeId]);
+            }.bind(this));
             this.selectedAttributes(labels.join(', '));
         },
         force: function (wizard) {
@@ -52,8 +84,9 @@ define([
             if (!wizard.data.attributesIds() || wizard.data.attributesIds().length === 0) {
                 throw new Error($.mage.__('Please, select attribute(s)'));
             }
+            this.setNotificationMessage();
         },
-        back: function (wizard) {
+        back: function () {
         }
     });
 });

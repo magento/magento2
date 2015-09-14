@@ -13,7 +13,7 @@ use Magento\Integration\Api\OauthServiceInterface as IntegrationOauthService;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Integration extends Action
+abstract class Integration extends Action
 {
     /** Param Key for extracting integration id from Request */
     const PARAM_INTEGRATION_ID = 'id';

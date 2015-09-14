@@ -260,9 +260,9 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $itemId = 'Magento_Sales::sales_order';
         $parents = [
-            new \Magento\Framework\Object(['title' => 'title1']),
-            new \Magento\Framework\Object(['title' => 'title2']),
-            new \Magento\Framework\Object(['title' => 'title3']),
+            new \Magento\Framework\DataObject(['title' => 'title1']),
+            new \Magento\Framework\DataObject(['title' => 'title2']),
+            new \Magento\Framework\DataObject(['title' => 'title3']),
         ];
         $menuModel->expects($this->once())
             ->method('getParentItems')

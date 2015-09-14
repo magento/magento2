@@ -6,9 +6,19 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Store\Api\StoreRepositoryInterface" type="Magento\Store\Model\StoreRepository"/>
+    <preference for="Magento\Store\Api\GroupRepositoryInterface" type="Magento\Store\Model\GroupRepository"/>
+    <preference for="Magento\Store\Api\WebsiteRepositoryInterface" type="Magento\Store\Model\WebsiteRepository"/>
+    <preference for="Magento\Store\Api\Data\StoreInterface" type="Magento\Store\Model\Store"/>
+    <preference for="Magento\Store\Api\Data\GroupInterface" type="Magento\Store\Model\Group"/>
+    <preference for="Magento\Store\Api\Data\WebsiteInterface" type="Magento\Store\Model\Website"/>
+    <preference for="Magento\Store\Api\StoreResolverInterface" type="Magento\Store\Model\StoreResolver"/>
     <preference for="Magento\Framework\App\Request\PathInfoProcessorInterface" type="Magento\Store\App\Request\PathInfoProcessor" />
     <preference for="Magento\Store\Model\StoreManagerInterface" type="Magento\Store\Model\StoreManager" />
     <preference for="Magento\Framework\App\Response\RedirectInterface" type="Magento\Store\App\Response\Redirect" />
+    <preference for="Magento\Store\Api\StoreCookieManagerInterface" type="Magento\Store\Model\StoreCookieManager"/>
+    <preference for="Magento\Store\Api\StoreConfigManagerInterface" type="Magento\Store\Model\Service\StoreConfigManager"/>
+    <preference for="Magento\Store\Api\Data\StoreConfigInterface" type="Magento\Store\Model\Data\StoreConfig"/>
     <type name="Magento\Framework\App\Response\Http">
         <plugin name="xFrameOptionsHeader" type="Magento\Framework\App\Response\XFrameOptPlugin"/>
     </type>
@@ -92,12 +102,19 @@
         <arguments>
             <argument name="session" xsi:type="object" shared="false">Magento\Framework\Session\Generic\Proxy</argument>
             <argument name="isCustomEntryPoint" xsi:type="init_parameter">Magento\Store\Model\Store::CUSTOM_ENTRY_POINT_PARAM</argument>
-            <argument name="url" xsi:type="object" shared="false">Magento\Framework\UrlInterface\Proxy</argument>
+            <argument name="url" xsi:type="object" shared="false">Magento\Framework\UrlInterface</argument>
         </arguments>
     </type>
     <type name="Magento\Store\Model\StoreManager">
         <arguments>
-            <argument name="request" xsi:type="object">Magento\Framework\App\Request\Http\Proxy</argument>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Store\Model\StoreResolver">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+            <argument name="runMode" xsi:type="init_parameter">Magento\Store\Model\StoreManager::PARAM_RUN_TYPE</argument>
+            <argument name="scopeCode" xsi:type="init_parameter">Magento\Store\Model\StoreManager::PARAM_RUN_CODE</argument>
         </arguments>
     </type>
     <virtualType name="Magento\Store\Model\Resource\Group\Collection\FetchStrategy" type="Magento\Framework\Data\Collection\Db\FetchStrategy\Cache">
@@ -249,7 +266,7 @@
     </type>
     <type name="Magento\Framework\App\Helper\Context">
         <arguments>
-            <argument name="urlBuilder" xsi:type="object">Magento\Framework\UrlInterface\Proxy</argument>
+            <argument name="urlBuilder" xsi:type="object">Magento\Framework\UrlInterface</argument>
             <argument name="httpRequest" xsi:type="object">Magento\Framework\App\Request\Http\Proxy</argument>
         </arguments>
     </type>
@@ -286,29 +303,6 @@
     <type name="Magento\Framework\DB\Helper">
         <arguments>
             <argument name="modulePrefix" xsi:type="string">store</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\View\Asset\PreProcessor\Pool">
-        <arguments>
-            <argument name="preProcessors" xsi:type="array">
-                <item name="less" xsi:type="array">
-                    <item name="css" xsi:type="array">
-                        <item name="less_css" xsi:type="string">Magento\Framework\Css\PreProcessor\Less</item>
-                        <item name="variable_notation" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\VariableNotation</item>
-                        <item name="module_notation" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\ModuleNotation</item>
-                    </item>
-                    <item name="less" xsi:type="array">
-                        <item name="magento_import" xsi:type="string">Magento\Framework\Less\PreProcessor\Instruction\MagentoImport</item>
-                        <item name="import" xsi:type="string">Magento\Framework\Less\PreProcessor\Instruction\Import</item>
-                    </item>
-                </item>
-                <item name="css" xsi:type="array">
-                    <item name="css" xsi:type="array">
-                        <item name="variable_notation" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\VariableNotation</item>
-                        <item name="module_notation" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\ModuleNotation</item>
-                    </item>
-                </item>
-            </argument>
         </arguments>
     </type>
 </config>

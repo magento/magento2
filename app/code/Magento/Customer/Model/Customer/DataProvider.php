@@ -109,22 +109,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
-     * @return Collection|\Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
-     */
-    protected function getCollection()
-    {
-        return $this->collection;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function addFilter($condition, $field = null, $type = 'regular')
-    {
-        $this->filterPool->registerNewFilter($condition, $field, $type);
-    }
-
-    /**
      * Get data
      *
      * @return array
@@ -134,7 +118,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         if (isset($this->loadedData)) {
             return $this->loadedData;
         }
-        $this->filterPool->applyFilters($this->collection);
         $items = $this->collection->getItems();
         /** @var Customer $customer */
         foreach ($items as $customer) {
@@ -148,25 +131,12 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 $addresses[$addressId] = $address->getData();
                 $this->prepareAddressData($addressId, $addresses, $result['customer']);
             }
-            if (!empty($addresses)) {
-                $result['address'] = $addresses;
-            }
+            $result['address'] = $addresses;
 
             $this->loadedData[$customer->getId()] = $result;
         }
 
         return $this->loadedData;
-    }
-
-    /**
-     * Retrieve count of loaded items
-     *
-     * @return int
-     */
-    public function count()
-    {
-        $this->filterPool->applyFilters($this->collection);
-        return $this->collection->count();
     }
 
     /**

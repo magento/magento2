@@ -11,6 +11,7 @@ use Magento\Customer\Model\Data\CustomerSecure;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ImageProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -183,6 +184,15 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
                 $customerModel->setPasswordHash($passwordHash);
             }
         }
+
+        // If customer email was changed, reset RpToken info
+        if ($prevCustomerData
+            && $prevCustomerData->getEmail() !== $customerModel->getEmail()
+        ) {
+            $customerModel->setRpToken(null);
+            $customerModel->setRpTokenCreatedAt(null);
+        }
+
         $this->customerResourceModel->save($customerModel);
         $this->customerRegistry->push($customerModel);
         $customerId = $customerModel->getId();
@@ -270,10 +280,11 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         $searchResults->setTotalCount($collection->getSize());
         $sortOrders = $searchCriteria->getSortOrders();
         if ($sortOrders) {
+            /** @var SortOrder $sortOrder */
             foreach ($searchCriteria->getSortOrders() as $sortOrder) {
                 $collection->addOrder(
                     $sortOrder->getField(),
-                    ($sortOrder->getDirection() == SearchCriteriaInterface::SORT_ASC) ? 'ASC' : 'DESC'
+                    ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
                 );
             }
         }

@@ -12,7 +12,7 @@ use Magento\Framework\App\RequestInterface;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Address extends \Magento\Framework\App\Action\Action
+abstract class Address extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Customer\Model\Session

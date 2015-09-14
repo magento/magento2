@@ -31,7 +31,7 @@ class ValidatorFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateWithInstanceName()
     {
-        $setName = 'Magento\Framework\Object';
+        $setName = 'Magento\Framework\DataObject';
         $returnMock = $this->getMock($setName);
         $this->objectManagerMock->expects($this->once())->method('create')
             ->willReturn($returnMock);

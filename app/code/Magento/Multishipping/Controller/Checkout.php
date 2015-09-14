@@ -13,7 +13,7 @@ use Magento\Framework\App\RequestInterface;
  * Multishipping checkout controller
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-class Checkout extends \Magento\Checkout\Controller\Action implements
+abstract class Checkout extends \Magento\Checkout\Controller\Action implements
     \Magento\Checkout\Controller\Express\RedirectLoginInterface
 {
     /**

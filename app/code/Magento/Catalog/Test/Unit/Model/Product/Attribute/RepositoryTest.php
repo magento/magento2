@@ -75,7 +75,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Eav\Api\AttributeRepositoryInterface', [], [], '', false);
         $this->eavConfigMock = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
         $this->eavConfigMock->expects($this->any())->method('getEntityType')
-            ->willReturn(new \Magento\Framework\Object(['default_attribute_set_id' => 4]));
+            ->willReturn(new \Magento\Framework\DataObject(['default_attribute_set_id' => 4]));
         $this->validatorFactoryMock = $this->getMock(
             'Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory',
             ['create'],

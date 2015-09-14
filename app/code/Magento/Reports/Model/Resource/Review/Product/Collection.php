@@ -103,10 +103,10 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
 
         /* @var \Magento\Framework\DB\Select $select */
         $select = clone $this->getSelect();
-        $select->reset(\Zend_Db_Select::ORDER);
-        $select->reset(\Zend_Db_Select::LIMIT_COUNT);
-        $select->reset(\Zend_Db_Select::LIMIT_OFFSET);
-        $select->reset(\Zend_Db_Select::COLUMNS);
+        $select->reset(\Magento\Framework\DB\Select::ORDER);
+        $select->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $select->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
+        $select->reset(\Magento\Framework\DB\Select::COLUMNS);
         $select->resetJoinLeft();
         $select->columns(new \Zend_Db_Expr('1'));
 

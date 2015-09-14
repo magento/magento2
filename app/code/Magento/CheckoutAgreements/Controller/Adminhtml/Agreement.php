@@ -5,7 +5,7 @@
  */
 namespace Magento\CheckoutAgreements\Controller\Adminhtml;
 
-class Agreement extends \Magento\Backend\App\Action
+abstract class Agreement extends \Magento\Backend\App\Action
 {
     /**
      * Core registry

@@ -50,7 +50,7 @@ class CreateLabel extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $response = new \Magento\Framework\Object();
+        $response = new \Magento\Framework\DataObject();
         try {
             $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));
             $this->shipmentLoader->setShipmentId($this->getRequest()->getParam('shipment_id'));

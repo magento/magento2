@@ -20,7 +20,7 @@ class Downloadable extends \Magento\Backend\Block\Widget implements \Magento\Bac
     protected $_product = null;
 
     /**
-     * @var \Magento\Framework\Object|null
+     * @var \Magento\Framework\DataObject|null
      */
     protected $_config = null;
 

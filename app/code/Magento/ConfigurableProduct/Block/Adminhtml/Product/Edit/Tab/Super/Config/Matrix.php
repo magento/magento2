@@ -249,4 +249,19 @@ class Matrix extends \Magento\Backend\Block\Template
     {
         return $this->stockRegistry->getStockItem($product->getId(), $product->getStore()->getWebsiteId())->getQty();
     }
+
+    /**
+     * @param array $initData
+     * @return string
+     */
+    public function getVariationWizard($initData)
+    {
+        /** @var \Magento\Ui\Block\Component\StepsWizard $wizardBlock */
+        $wizardBlock = $this->getChildBlock('variation-steps-wizard');
+        if ($wizardBlock) {
+            $wizardBlock->setInitData($initData);
+            return $wizardBlock->toHtml();
+        }
+        return '';
+    }
 }

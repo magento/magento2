@@ -55,9 +55,9 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     protected $storeGroupMock;
     /**
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $adapterMock;
+    protected $connectionMock;
     /**
      * @var \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -101,7 +101,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->adapterMock = $this->getMock(
+        $this->connectionMock = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
             [
                 'describeTable',
@@ -233,15 +233,15 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             ->with($this->orderMock);
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
-            ->willReturn($this->adapterMock);
-        $this->adapterMock->expects($this->any())
+            ->willReturn($this->connectionMock);
+        $this->connectionMock->expects($this->any())
             ->method('quoteInto');
-        $this->adapterMock->expects($this->any())
+        $this->connectionMock->expects($this->any())
             ->method('describeTable')
             ->will($this->returnValue([]));
-        $this->adapterMock->expects($this->any())
+        $this->connectionMock->expects($this->any())
             ->method('update');
-        $this->adapterMock->expects($this->any())
+        $this->connectionMock->expects($this->any())
             ->method('lastInsertId');
         $this->orderMock->expects($this->any())
             ->method('getId')

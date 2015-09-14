@@ -14,7 +14,7 @@ namespace Magento\Catalog\Model\Product;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
-class Url extends \Magento\Framework\Object
+class Url extends \Magento\Framework\DataObject
 {
     /**
      * Static URL instance

@@ -12,13 +12,6 @@
         </arguments>
     </type>
     <type name="Magento\CatalogRule\Model\Resource\Rule\Collection" shared="false" />
-    <type name="Magento\CatalogRule\Model\Observer">
-        <arguments>
-            <argument name="resourceRule" xsi:type="object">Magento\CatalogRule\Model\Resource\Rule\Proxy</argument>
-            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
-            <argument name="backendSession" xsi:type="object">Magento\Backend\Model\Session\Proxy</argument>
-        </arguments>
-    </type>
     <type name="Magento\Catalog\Model\Product\PriceModifier\Composite">
         <arguments>
             <argument name="modifiers" xsi:type="array">

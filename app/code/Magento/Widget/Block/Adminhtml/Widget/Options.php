@@ -132,7 +132,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Add field to Options form based on parameter configuration
      *
-     * @param \Magento\Framework\Object $parameter
+     * @param \Magento\Framework\DataObject $parameter
      * @return \Magento\Framework\Data\Form\Element\AbstractElement
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -200,7 +200,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
                 '',
                 ['data' => $helper->getData()]
             );
-            if ($helperBlock instanceof \Magento\Framework\Object) {
+            if ($helperBlock instanceof \Magento\Framework\DataObject) {
                 $helperBlock->setConfig(
                     $helper->getData()
                 )->setFieldsetId(

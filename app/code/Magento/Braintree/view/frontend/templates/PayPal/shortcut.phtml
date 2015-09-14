@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /** @var \Magento\Braintree\Block\PayPal\Shortcut $block */
 $clientToken = $block->getClientToken();
 $amount = $block->getAmount();
@@ -18,15 +20,16 @@ $paymentMethodNonceId = $block->getPaymentMethodNonceId();
 $paymentDetailsId = $block->getPaymentDetailsId();
 $labelPosition = $block->getShowOrPosition();
 ?>
-<div data-label="or" class="paypal checkout <?php echo $labelPosition ?> paypal-logo">
-
-<fieldset class="fieldset paypal items" id="braintree_paypal_shortcut">
-    <div id="<?php echo $containerId ?>"></div>
-    <form id="<?php echo $submitFormId ?>" action="<?php echo $url ?>" method="post" >
-        <input id="<?php echo $paymentMethodNonceId ?>" type="hidden" name="payment_method_nonce" />
-        <input id="<?php echo $paymentDetailsId ?>" type="hidden" name="details" />
-    </form>
-</fieldset>
+<div data-label="<?php echo $block->escapeHtml(__('or')); ?>"
+     class="paypal checkout <?php /* @escapeNotVerified */ echo $labelPosition ?> paypal-logo"
+    >
+    <fieldset class="fieldset paypal items" id="braintree_paypal_shortcut">
+        <div id="<?php /* @escapeNotVerified */ echo $containerId ?>"></div>
+        <form id="<?php /* @escapeNotVerified */ echo $submitFormId ?>" action="<?php /* @escapeNotVerified */ echo $url ?>" method="post" >
+            <input id="<?php /* @escapeNotVerified */ echo $paymentMethodNonceId ?>" type="hidden" name="payment_method_nonce" />
+            <input id="<?php /* @escapeNotVerified */ echo $paymentDetailsId ?>" type="hidden" name="details" />
+        </form>
+    </fieldset>
 </div>
 
 <?php
@@ -46,8 +49,8 @@ $labelPosition = $block->getShowOrPosition();
 ?>
 <script type="text/x-magento-init">
     {
-        "#<?php echo $containerId ?>": {
-            "braintreePayPalShortcut": <?php echo $serializedFormData ?>
+        "#<?php /* @escapeNotVerified */ echo $containerId ?>": {
+            "braintreePayPalShortcut": <?php /* @escapeNotVerified */ echo $serializedFormData ?>
         }
     }
 </script>

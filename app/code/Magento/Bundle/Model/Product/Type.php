@@ -215,11 +215,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * Return relation info about used products
      *
-     * @return \Magento\Framework\Object Object with information data
+     * @return \Magento\Framework\DataObject Object with information data
      */
     public function getRelationInfo()
     {
-        $info = new \Magento\Framework\Object();
+        $info = new \Magento\Framework\DataObject();
         $info->setTable('catalog_product_bundle_selection')
             ->setParentFieldName('parent_product_id')
             ->setChildFieldName('product_id');
@@ -468,7 +468,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Retrieve bundle options items
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Framework\Object[]
+     * @return \Magento\Framework\DataObject[]
      */
     public function getOptions($product)
     {
@@ -558,12 +558,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * so need to change quote item qty option value too.
      *
      * @param   array $options
-     * @param   \Magento\Framework\Object $option
+     * @param   \Magento\Framework\DataObject $option
      * @param   mixed $value
      * @param   \Magento\Catalog\Model\Product $product
      * @return $this
      */
-    public function updateQtyOption($options, \Magento\Framework\Object $option, $value, $product)
+    public function updateQtyOption($options, \Magento\Framework\DataObject $option, $value, $product)
     {
         $optionProduct = $option->getProduct($product);
         $optionUpdateFlag = $option->getHasQtyOptionUpdate();
@@ -664,7 +664,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Prepare product and its configuration to be added to some products list.
      * Perform standard preparation process and then prepare of bundle selections options.
      *
-     * @param \Magento\Framework\Object $buyRequest
+     * @param \Magento\Framework\DataObject $buyRequest
      * @param \Magento\Catalog\Model\Product $product
      * @param string $processMode
      * @return \Magento\Framework\Phrase|array|string
@@ -672,7 +672,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function _prepareProduct(\Magento\Framework\Object $buyRequest, $product, $processMode)
+    protected function _prepareProduct(\Magento\Framework\DataObject $buyRequest, $product, $processMode)
     {
         $result = parent::_prepareProduct($buyRequest, $product, $processMode);
 
@@ -1095,7 +1095,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         $selectionIds = $product->getCustomOption('bundle_selection_ids');
         $selectionIds = unserialize($selectionIds->getValue());
         $buyRequest = $product->getCustomOption('info_buyRequest');
-        $buyRequest = new \Magento\Framework\Object(unserialize($buyRequest->getValue()));
+        $buyRequest = new \Magento\Framework\DataObject(unserialize($buyRequest->getValue()));
         $bundleOption = $buyRequest->getBundleOption();
 
         if (empty($bundleOption)) {
@@ -1159,7 +1159,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Prepare selected options for bundle product
      *
      * @param  \Magento\Catalog\Model\Product $product
-     * @param  \Magento\Framework\Object $buyRequest
+     * @param  \Magento\Framework\DataObject $buyRequest
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -1223,7 +1223,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
-     * @param \Magento\Framework\Object $selection
+     * @param \Magento\Framework\DataObject $selection
      * @param int[] $qtys
      * @param int $selectionOptionId
      * @return float
@@ -1242,7 +1242,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * @param \Magento\Catalog\Model\Product $product
-     * @param \Magento\Framework\Object $selection
+     * @param \Magento\Framework\DataObject $selection
      * @return float|int
      */
     protected function getBeforeQty($product, $selection)
@@ -1326,8 +1326,8 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
 
     /**
      * @param \Magento\Catalog\Model\Product\Option[] $options
-     * @param \Magento\Framework\Object[] $selections
-     * @return \Magento\Framework\Object[]
+     * @param \Magento\Framework\DataObject[] $selections
+     * @return \Magento\Framework\DataObject[]
      */
     protected function mergeSelectionsWithOptions($options, $selections)
     {

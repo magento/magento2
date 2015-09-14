@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\LayeredNavigation\Test\TestCase\FilterProductListTest">
+    <testCase name="Magento\LayeredNavigation\Test\TestCase\FilterProductListTest" summary="Use Layered Navigation to Filter Products by Price (Navigation Step = Manual, MySQL)" ticketId="MAGETWO-12419">
         <variation name="FilterProductListTestVariation1">
             <data name="configData" xsi:type="string">layered_navigation_manual_range_10</data>
             <data name="category/dataset" xsi:type="string">default_anchor_subcategory</data>

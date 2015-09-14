@@ -19,7 +19,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     private $collection;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $connectionMock;
 
@@ -29,7 +29,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $eventManagerMock;
 
     /**
-     * @var \Zend_Db_Select|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $selectMock;
 
@@ -64,14 +64,14 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
         $this->eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
 
-        $this->selectMock = $this->getMock('Zend_Db_Select', [], [], '', false);
+        $this->selectMock = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
         $this->connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
         $this->connectionMock->expects($this->atLeastOnce())
             ->method('select')
             ->will($this->returnValue($this->selectMock));
 
         $this->resourceMock = $this->getMock('Magento\Framework\Model\Resource\Db\AbstractDb', [], [], '', false);
-        $this->resourceMock->expects($this->any())->method('getReadConnection')->will(
+        $this->resourceMock->expects($this->any())->method('getConnection')->will(
             $this->returnValue($this->connectionMock)
         );
 

@@ -487,7 +487,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $schedule->expects($this->any())->method('getJobCode')->will($this->returnValue('job_code1'));
         $schedule->expects($this->once())->method('getScheduledAt')->will($this->returnValue('* * * * *'));
 
-        $this->_collection->addItem(new \Magento\Framework\Object());
+        $this->_collection->addItem(new \Magento\Framework\DataObject());
         $this->_collection->addItem($schedule);
 
         $this->_cache->expects($this->any())->method('save');
@@ -561,7 +561,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $schedule->expects($this->any())->method('unsScheduleId')->will($this->returnSelf());
         $schedule->expects($this->any())->method('trySchedule')->will($this->returnSelf());
 
-        $this->_collection->addItem(new \Magento\Framework\Object());
+        $this->_collection->addItem(new \Magento\Framework\DataObject());
         $this->_collection->addItem($schedule);
 
         $this->_cache->expects($this->any())->method('save');

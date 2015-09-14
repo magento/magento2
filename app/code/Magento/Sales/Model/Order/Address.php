@@ -176,7 +176,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
      *
      * @param array|string $key
      * @param null $value
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function setData($key, $value = null)
     {

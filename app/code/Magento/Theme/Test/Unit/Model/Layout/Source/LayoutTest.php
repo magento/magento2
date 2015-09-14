@@ -5,7 +5,7 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Layout\Source;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Theme\Model\Layout\Source\Layout;
 
 class LayoutTest extends \PHPUnit_Framework_TestCase
@@ -46,7 +46,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
 
         $this->config->expects($this->once())
             ->method('getPageLayouts')
-            ->willReturn([new Object($data)]);
+            ->willReturn([new DataObject($data)]);
 
         $this->assertEquals($expectedResult, $this->_model->toOptionArray(true));
         $this->assertEquals('testCode', $this->_model->getDefaultValue());

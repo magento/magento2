@@ -11,7 +11,7 @@
  */
 namespace Magento\MediaStorage\Controller\Adminhtml\System\Config\System;
 
-class Storage extends \Magento\Backend\App\Action
+abstract class Storage extends \Magento\Backend\App\Action
 {
     /**
      * Return file storage singleton

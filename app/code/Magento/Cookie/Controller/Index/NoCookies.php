@@ -15,7 +15,7 @@ class NoCookies extends \Magento\Framework\App\Action\Action
      */
     public function execute()
     {
-        $redirect = new \Magento\Framework\Object();
+        $redirect = new \Magento\Framework\DataObject();
         $this->_eventManager->dispatch(
             'controller_action_nocookies',
             ['action' => $this, 'redirect' => $redirect]

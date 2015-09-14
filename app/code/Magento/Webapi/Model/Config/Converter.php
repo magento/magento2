@@ -27,6 +27,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     const KEY_SOURCE = 'source';
     const KEY_METHOD = 'method';
     const KEY_METHODS = 'methods';
+    const KEY_DESCRIPTION = 'description';
     /**#@-*/
 
     /**

@@ -105,7 +105,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
@@ -113,14 +113,14 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->_eventManager = $eventManager;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $connection);
         $this->_construct();
         $this->_resource = $resource;
-        $this->setConnection($this->getResource()->getReadConnection());
+        $this->setConnection($this->getResource()->getConnection());
         $this->_initSelect();
     }
 
@@ -157,11 +157,11 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
     {
         $table = $this->getTable($table);
         if ($this->_mainTable !== null && $table !== $this->_mainTable && $this->getSelect() !== null) {
-            $from = $this->getSelect()->getPart(\Zend_Db_Select::FROM);
+            $from = $this->getSelect()->getPart(\Magento\Framework\DB\Select::FROM);
             if (isset($from['main_table'])) {
                 $from['main_table']['tableName'] = $table;
             }
-            $this->getSelect()->setPart(\Zend_Db_Select::FROM, $from);
+            $this->getSelect()->setPart(\Magento\Framework\DB\Select::FROM, $from);
         }
 
         $this->_mainTable = $table;
@@ -180,7 +180,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
     }
 
     /**
-     * Get \Zend_Db_Select instance and applies fields to select if needed
+     * Get \Magento\Framework\DB\Select instance and applies fields to select if needed
      *
      * @return \Magento\Framework\DB\Select
      */
@@ -202,7 +202,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
      */
     protected function _initSelectFields()
     {
-        $columns = $this->_select->getPart(\Zend_Db_Select::COLUMNS);
+        $columns = $this->_select->getPart(\Magento\Framework\DB\Select::COLUMNS);
         $columnsToSelect = [];
         foreach ($columns as $columnEntry) {
             list($correlationName, $column, $alias) = $columnEntry;
@@ -252,7 +252,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
             array_unshift($columns, ['main_table', '*', null]);
         }
 
-        $this->_select->setPart(\Zend_Db_Select::COLUMNS, $columns);
+        $this->_select->setPart(\Magento\Framework\DB\Select::COLUMNS, $columns);
 
         return $this;
     }
@@ -484,10 +484,10 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
     public function getAllIds()
     {
         $idsSelect = clone $this->getSelect();
-        $idsSelect->reset(\Zend_Db_Select::ORDER);
-        $idsSelect->reset(\Zend_Db_Select::LIMIT_COUNT);
-        $idsSelect->reset(\Zend_Db_Select::LIMIT_OFFSET);
-        $idsSelect->reset(\Zend_Db_Select::COLUMNS);
+        $idsSelect->reset(\Magento\Framework\DB\Select::ORDER);
+        $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
+        $idsSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
 
         $idsSelect->columns($this->getResource()->getIdFieldName(), 'main_table');
         return $this->getConnection()->fetchCol($idsSelect, $this->_bindParams);

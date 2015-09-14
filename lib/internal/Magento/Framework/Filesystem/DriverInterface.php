@@ -15,6 +15,16 @@ use Magento\Framework\Exception\FileSystemException;
 interface DriverInterface
 {
     /**
+     * Permissions to give read/write/execute access to owner and owning group, but not to all users
+     */
+    const WRITEABLE_DIRECTORY_MODE = 0770;
+
+    /**
+     * Permissions to give read/write access to owner and owning group, but not to all users
+     */
+    const WRITEABLE_FILE_MODE = 0660;
+
+    /**
      *
      * @param string $path
      * @return bool
@@ -184,6 +194,17 @@ interface DriverInterface
      * @throws FileSystemException
      */
     public function changePermissions($path, $permissions);
+
+    /**
+     * Recursively hange permissions of given path
+     *
+     * @param string $path
+     * @param int $dirPermissions
+     * @param int $filePermissions
+     * @return bool
+     * @throws FileSystemException
+     */
+    public function changePermissionsRecursively($path, $dirPermissions, $filePermissions);
 
     /**
      * Sets access and modification time of file.

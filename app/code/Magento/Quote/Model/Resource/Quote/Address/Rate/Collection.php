@@ -26,7 +26,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\VersionControl\Col
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot
      * @param \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory
-     * @param \Zend_Db_Adapter_Abstract|null $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
@@ -36,7 +36,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\VersionControl\Col
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
         \Magento\Shipping\Model\CarrierFactoryInterface $carrierFactory,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         parent::__construct(
@@ -96,7 +96,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\VersionControl\Col
      * @param \Magento\Quote\Model\Quote\Address\Rate $rate
      * @return $this
      */
-    public function addItem(\Magento\Framework\Object $rate)
+    public function addItem(\Magento\Framework\DataObject $rate)
     {
         $carrier = $this->_carrierFactory->get($rate->getCarrier());
         if ($this->_allowFixedOnly && (!$carrier || !$carrier->isFixed())) {

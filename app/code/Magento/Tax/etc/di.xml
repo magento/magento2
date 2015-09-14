@@ -69,15 +69,20 @@
     </type>
     <type name="Magento\Tax\Model\Resource\Report\Tax\Createdat">
         <arguments>
-            <argument name="resourcePrefix" xsi:type="string">sales</argument>
+            <argument name="connectionName" xsi:type="string">sales</argument>
         </arguments>
     </type>
     <type name="Magento\Tax\Model\Resource\Report\Tax\Updatedat">
         <arguments>
-            <argument name="resourcePrefix" xsi:type="string">sales</argument>
+            <argument name="connectionName" xsi:type="string">sales</argument>
         </arguments>
     </type>
     <type name="Magento\Sales\Api\OrderRepositoryInterface">
         <plugin name="save_order_tax" type="Magento\Tax\Model\Plugin\OrderSave"/>
+    </type>
+    <type name="Magento\Tax\Model\Resource\Sales\Order\Tax">
+        <arguments>
+            <argument name="connectionName" xsi:type="string">sales</argument>
+        </arguments>
     </type>
 </config>

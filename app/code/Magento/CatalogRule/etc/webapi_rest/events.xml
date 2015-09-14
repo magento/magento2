@@ -7,9 +7,9 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
     <event name="catalog_product_get_final_price">
-        <observer name="catalogrule" instance="Magento\CatalogRule\Model\Observer" method="processFrontFinalPrice" />
+        <observer name="catalogrule" instance="Magento\CatalogRule\Observer\ProcessFrontFinalPrice" method="invoke" />
     </event>
     <event name="prepare_catalog_product_collection_prices">
-        <observer name="catalogrule" instance="Magento\CatalogRule\Model\Observer" method="prepareCatalogProductCollectionPrices" />
+        <observer name="catalogrule" instance="Magento\CatalogRule\Observer\PrepareCatalogProductCollectionPrices" method="invoke" />
     </event>
 </config>
