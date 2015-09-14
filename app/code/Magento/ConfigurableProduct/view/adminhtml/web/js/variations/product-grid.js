@@ -22,6 +22,9 @@ define([
                 productsProvider: '${ $.associatedProductsProvider }',
                 productsMassAction: '${ $.associatedProductsMassAction }',
                 variationsComponent: '${ $.configurableVariations }'
+            },
+            listens: {
+                '${ $.associatedProductsProvider }:data': '_showMessageAssociatedGrid'
             }
         },
 
@@ -87,7 +90,6 @@ define([
             this._setFilter(filterData);
             this._initGrid(filterData);
             this._setSelected();
-            this._showMessageAssociatedGrid();
             this.productsModal.trigger('openModal');
         },
 
@@ -158,27 +160,21 @@ define([
          * @private
          */
         _showMessageAssociatedGrid: function () {
-            var messageInited = false;
-            this.productsProvider(function (provider) {
-                if (!messageInited) {
-                    this.productsModal.notification();
-                }
-                this.productsModal.notification('clear');
+            this.productsModal.notification('clear');
 
-                if (provider.data.items.length) {
-                    this.productsModal.notification('add', {
-                        message: $.mage.__(
-                            'Choose a new product to delete and replace the current product configuration.'
-                        ),
-                        messageContainer: this.gridSelector
-                    });
-                } else {
-                    this.productsModal.notification('add', {
-                        message: $.mage.__('For better results, add attributes and attribute values to your products.'),
-                        messageContainer: this.gridSelector
-                    });
-                }
-            }.bind(this));
+            if (this.productsProvider().data.items.length) {
+                this.productsModal.notification('add', {
+                    message: $.mage.__(
+                        'Choose a new product to delete and replace the current product configuration.'
+                    ),
+                    messageContainer: this.gridSelector
+                });
+            } else {
+                this.productsModal.notification('add', {
+                    message: $.mage.__('For better results, add attributes and attribute values to your products.'),
+                    messageContainer: this.gridSelector
+                });
+            }
         },
 
         /**
