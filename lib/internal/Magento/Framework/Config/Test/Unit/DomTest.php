@@ -8,6 +8,50 @@ namespace Magento\Framework\Config\Test\Unit;
 class DomTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Framework\App\ObjectManager | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $objectManagerMock;
+
+    /**
+     * @var \Magento\Framework\Config\Dom\UrnResolver | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $urnResolver;
+
+    /**
+     * @var \Magento\Framework\App\ObjectManager
+     */
+    protected $objectManagerBackup;
+
+    protected function setUp()
+    {
+        $this->objectManagerMock = $this->getMock('Magento\Framework\App\ObjectManager', [], [], '', false);
+
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->urnResolver = $objectManagerHelper->getObject(
+            'Magento\Framework\Config\Dom\UrnResolver'
+        );
+
+        $this->objectManagerMock->expects($this->any())
+            ->method('get')
+            ->with('Magento\Framework\Config\Dom\UrnResolver')
+            ->willReturn($this->urnResolver);
+
+        try {
+            $this->objectManagerBackup = \Magento\Framework\App\ObjectManager::getInstance();
+        } catch (\RuntimeException $e) {
+            $this->objectManagerBackup = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER)
+                ->create($_SERVER);
+        }
+        \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerMock);
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
+        \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerBackup);
+    }
+
+    /**
      * @param string $xmlFile
      * @param string $newXmlFile
      * @param array $ids

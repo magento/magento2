@@ -71,7 +71,7 @@ class Dom
     protected $rootNamespace;
 
     /**
-     * Magento\Framework\Config\Dom\UrnResolver
+     * \Magento\Framework\Config\Dom\UrnResolver
      */
     private static $urnResolver;
 
@@ -314,8 +314,8 @@ class Dom
             if (preg_match_all('/%.+%/', $format, $matches)) {
                 $unsupported = [];
                 foreach ($matches[0] as $placeholder) {
-                    if (strpos($result, $placeholder)) {
-                        $unsupported[] = $placeholder;
+                    if (strpos($result, $placeholder[0])) {
+                        $unsupported[] = $placeholder[0];
                     }
                 }
                 if (!empty($unsupported)) {
