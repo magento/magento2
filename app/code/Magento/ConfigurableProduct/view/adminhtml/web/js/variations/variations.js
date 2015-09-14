@@ -32,19 +32,24 @@ define([
             }
             this.initProductAttributesMap();
         },
-        changeProduct: function (newProduct) {
-            var oldProduct = this.productMatrix()[this.rowIndexToEdit];
-            this.productMatrix.splice(this.rowIndexToEdit, 1, this.makeProduct(_.extend(oldProduct, newProduct[0])));
+        initObservable: function () {
+            this._super().observe('actions opened attributes productMatrix');
+
+            return this;
         },
-        appendProduct: function (newProduct) {
-            this.productMatrix.push(this.makeProduct(newProduct));
+        showGrid: function (rowIndex) {
+            var attributes = JSON.parse(this.productMatrix()[rowIndex].attribute);
+            this.rowIndexToEdit = rowIndex;
+            this.associatedProductGrid().open(attributes, 'changeProduct', false);
+        },
+        changeProduct: function (newProducts) {
+            var oldProduct = this.productMatrix()[this.rowIndexToEdit];
+            this.productMatrix.splice(this.rowIndexToEdit, 1, this._makeProduct(_.extend(oldProduct, newProducts[0])));
         },
         rewriteProducts: function (newProducts) {
-            this.productMatrix(_.map(newProducts, function (newProduct) {
-                return this.makeProduct(newProduct);
-            }.bind(this)));
+            this.productMatrix(_.map(newProducts, this._makeProduct.bind(this)));
         },
-        makeProduct: function (product) {
+        _makeProduct: function (product) {
             var productId = product['entity_id'] || product.productId || null,
                 attributes = _.pick(product, this.attributes.pluck('code')),
                 options = _.map(attributes, function (option, attribute) {
@@ -71,11 +76,6 @@ define([
                 variationKey: this.getVariationKey(options),
                 weight: product.weight || null
             };
-        },
-        initObservable: function () {
-            this._super().observe('actions opened attributes productMatrix');
-
-            return this;
         },
         getProductValue: function (name) {
             return $('[name="product[' + name.split('/').join('][') + ']"]', this.productForm).val();
@@ -153,11 +153,6 @@ define([
                     $('[data-attribute-code="' + attribute.code + '"] select').removeProp('disabled');
                 });
             }
-        },
-        showGrid: function (rowIndex) {
-            var attributes = JSON.parse(this.productMatrix()[rowIndex].attribute);
-            this.rowIndexToEdit = rowIndex;
-            this.associatedProductGrid().open(attributes, 'changeProduct', false);
         },
         toggleProduct: function (rowIndex) {
             var product, row, productChanged = {};
