@@ -142,7 +142,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     {
         $requestData = [
             'id' => null,
-            'media_type' => 'image',
+            'media_type' => \Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter::MEDIA_TYPE_CODE,
             'label' => 'Image Text',
             'position' => 1,
             'types' => ['image'],
