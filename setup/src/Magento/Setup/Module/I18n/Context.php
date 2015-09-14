@@ -59,10 +59,8 @@ class Context
     {
         if ($value = $this->getModuleName($path)) {
             $type = self::CONTEXT_TYPE_MODULE;
-        } elseif ($value = strstr($path, '/app/design/')) {
+        } elseif ($value = $this->getThemeName($path)) {
             $type = self::CONTEXT_TYPE_THEME;
-            $value = explode('/', $value);
-            $value = $value[3] . '/' . $value[4] . '/' . $value[5];
         } elseif ($value = strstr($path, '/lib/web/')) {
             $type = self::CONTEXT_TYPE_LIB;
             $value = ltrim($value, '/');
@@ -89,6 +87,22 @@ class Context
     }
 
     /**
+     * Try to get theme name by path, return false if not a theme
+     *
+     * @param string $path
+     * @return bool|string
+     */
+    private function getThemeName($path)
+    {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeName => $themeDir) {
+            if (strpos($path, $themeDir) !== false) {
+                return $themeName;
+            }
+        }
+        return false;
+    }
+
+    /**
      * Get paths by context
      *
      * @param string $type
@@ -104,7 +118,8 @@ class Context
                 $path = str_replace(BP . '/', '', $absolutePath);
                 break;
             case self::CONTEXT_TYPE_THEME:
-                $path = 'app/design/' . $value;
+                $absolutePath = $this->componentRegistrar->getPath(ComponentRegistrar::THEME, $value);
+                $path = str_replace(BP . '/', '', $absolutePath);
                 break;
             case self::CONTEXT_TYPE_LIB:
                 $path = 'lib/web';

@@ -20,6 +20,8 @@
  */
 namespace Magento\Test\Integrity;
 
+use Magento\Framework\Component\ComponentRegistrar;
+
 class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -217,11 +219,10 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
     protected static function _getFilesToProcess()
     {
         $result = [];
-        $rootDir = self::_getRootDir();
         $componentRegistrar = new \Magento\Framework\Component\ComponentRegistrar();
         $dirs = array_merge(
             $componentRegistrar->getPaths(\Magento\Framework\Component\ComponentRegistrar::MODULE),
-            [$rootDir . '/app/design']
+            $componentRegistrar->getPaths(\Magento\Framework\Component\ComponentRegistrar::THEME)
         );
         foreach ($dirs as $dir) {
             $iterator = new \RecursiveIteratorIterator(
@@ -231,16 +232,6 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
         }
 
         return $result;
-    }
-
-    /**
-     * Return application root directory
-     *
-     * @return string
-     */
-    protected static function _getRootDir()
-    {
-        return realpath(__DIR__ . '/../../../../../../../');
     }
 
     /**
@@ -254,9 +245,12 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
     protected static function _getArea($file)
     {
         $file = str_replace('\\', '/', $file);
-        $areaPatterns = ['#app/design/([^/]+)/#S'];
-        $componentRegistrar = new \Magento\Framework\Component\ComponentRegistrar();
-        foreach ($componentRegistrar->getPaths(\Magento\Framework\Component\ComponentRegistrar::MODULE) as $moduleDir) {
+        $areaPatterns = [];
+        $componentRegistrar = new ComponentRegistrar();
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
+            $areaPatterns[] = '#' . $themeDir . '/([^/]+)/#S';
+        }
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
             $areaPatterns[] = '#' . $moduleDir . '/view/([^/]+)/#S';
         }
         foreach ($areaPatterns as $pattern) {
