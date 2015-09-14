@@ -72,11 +72,11 @@ class UrnResolver
             } else {
                 throw new \UnexpectedValueException("Unsupported format of schema location: " . $schema);
             }
-            if (!empty($appSchemaPath) && file_exists($appSchemaPath)) {
-                $schema = $appSchemaPath;
+            if (!empty($schemaPath) && file_exists($schemaPath)) {
+                $schema = $schemaPath;
             } else {
                 throw new \UnexpectedValueException(
-                    "Could not locate schema: '" . $schema . "' at '" . $appSchemaPath . "'");
+                    "Could not locate schema: '" . $schema . "' at '" . $schemaPath . "'");
             }
         }
         return $schema;
