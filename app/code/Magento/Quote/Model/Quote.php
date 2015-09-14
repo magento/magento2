@@ -1923,8 +1923,14 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function collectTotals()
     {
+        if ($this->getTotalsCollectedFlag()) {
+            return $this;
+        }
+
         $total = $this->totalsCollector->collect($this);
         $this->addData($total->getData());
+
+        $this->setTotalsCollectedFlag(true);
         return $this;
     }
 
