@@ -110,9 +110,9 @@ class GridStructureTest extends \PHPUnit_Framework_TestCase
             ->method('getIdxName')
             ->with($tableName, ['field'], AdapterInterface::INDEX_TYPE_FULLTEXT)
             ->willReturn($idxName);
-        $this->connection->expects($this->once())
+        $table->expects($this->once())
             ->method('addIndex')
-            ->with($tableName, $idxName, ['field'], AdapterInterface::INDEX_TYPE_FULLTEXT);
+            ->with($idxName, ['field'], ['type' => AdapterInterface::INDEX_TYPE_FULLTEXT]);
         $this->object->create($index, $fields);
     }
 }
