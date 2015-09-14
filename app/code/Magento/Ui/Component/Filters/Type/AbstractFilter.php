@@ -26,6 +26,11 @@ abstract class AbstractFilter extends AbstractComponent
     const FILTER_VAR = 'filters';
 
     /**
+     * Filter modifier variable name
+     */
+    const FILTER_MODIFIER = 'filters_modifier';
+
+    /**
      * Filter data
      *
      * @var array
@@ -70,5 +75,43 @@ abstract class AbstractFilter extends AbstractComponent
     public function getComponentName()
     {
         return static::NAME;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function prepare()
+    {
+        $this->applyFilterModifier();
+        parent::prepare();
+    }
+
+    /**
+     * Apply modifiers for filters
+     */
+    protected function applyFilterModifier()
+    {
+        $filterModifier = $this->getContext()->getRequestParam(self::FILTER_MODIFIER);
+        if (isset($filterModifier[$this->getName()]['condition_type'])) {
+            $conditionType = $filterModifier[$this->getName()]['condition_type'];
+            switch ($conditionType) {
+                case 'notnull':
+                    $filter = $this->filterBuilder->setConditionType($conditionType)
+                        ->setField($this->getName())
+                        ->create();
+                    $this->getContext()->getDataProvider()->addFilter($filter);
+                    break;
+                case 'neq':
+                    $value = isset($filterModifier[$this->getName()]['value'])
+                        ? $filterModifier[$this->getName()]['value']
+                        : null;
+                    $filter = $this->filterBuilder->setConditionType($conditionType)
+                        ->setField($this->getName())
+                        ->setValue($value)
+                        ->create();
+                    $this->getContext()->getDataProvider()->addFilter($filter);
+                    break;
+            }
+        }
     }
 }

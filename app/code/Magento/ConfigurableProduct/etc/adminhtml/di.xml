@@ -34,4 +34,9 @@
             <argument name="attributeRepository" xsi:type="object">AttributeRepositoryForAssociatedProduct</argument>
         </arguments>
     </type>
+    <type name="Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Filters">
+        <arguments>
+            <argument name="attributeRepository" xsi:type="object">AttributeRepositoryForAssociatedProduct</argument>
+        </arguments>
+    </type>
 </config>

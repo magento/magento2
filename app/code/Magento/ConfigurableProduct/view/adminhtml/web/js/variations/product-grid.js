@@ -46,21 +46,17 @@ define([
                     }
                 ]
             });
-            this.productsProvider(function (provider) {
-                this.variationsComponent(function (variation) {
-                    provider.params['attribute_ids'] = variation.attributes.pluck('code');
-                });
-            }.bind(this));
-            this._getServerData = _.once(this._getServerData);
+            this._initGrid = _.once(this._initGrid);
         },
 
         /**
-         * Get server data
+         * init Grid
+         * @private
          */
-        _getServerData: function (attributes) {
+        _initGrid: function (filterData) {
             $.ajax({
                 type: 'GET',
-                url: this._buildGridUrl(attributes),
+                url: this._buildGridUrl(filterData),
                 context: $('body')
             }).success(function (data) {
                 bootstrap(JSON.parse(data));
@@ -79,17 +75,17 @@ define([
 
         /**
          * Open
-         * @param attributes
+         * @param filters
          * @param callbackName
          * @param showMassActionColumn
          */
-        open: function (attributes, callbackName, showMassActionColumn) {
+        open: function (filterData, callbackName, showMassActionColumn) {
             this.callbackName = callbackName;
             this.productsMassAction(function (massActionComponent) {
                 massActionComponent.visible(showMassActionColumn);
             });
-            this._setFilter(attributes);
-            this._getServerData(attributes);
+            this._setFilter(filterData);
+            this._initGrid(filterData);
             this._setSelected();
             this._showMessageAssociatedGrid();
             this.productsModal.trigger('openModal');
@@ -139,13 +135,22 @@ define([
          * Build grid url
          * @private
          */
-        _buildGridUrl: function (attributes) {
+        _buildGridUrl: function (filterData) {
             var params = '?' + $.param({
-                filters: attributes,
-                attribute_ids: this.variationsComponent().attributes.pluck('code')
+                filters: filterData.filters,
+                attributes_codes: this._getAttributesCodes(),
+                filters_modifier: filterData.filters_modifier
             });
 
             return this.productsGridUrl + params;
+        },
+
+        /**
+         * Get attributes codes
+         * @private
+         */
+        _getAttributesCodes: function () {
+            return this.variationsComponent().attributes.pluck('code');
         },
 
         /**
@@ -180,16 +185,25 @@ define([
          * Show manually grid
          */
         showManuallyGrid: function () {
-            this.open(null, 'rewriteProducts', true);
+            var filterModifier = _.mapObject(_.object(this._getAttributesCodes(), []), function () {
+                return {'condition_type': 'notnull'};
+            });
+
+            this.open({filters_modifier: filterModifier}, 'rewriteProducts', true);
         },
 
         /**
          * Set filter
          * @private
          */
-        _setFilter: function (attributes) {
+        _setFilter: function (filterData) {
+            this.productsProvider(function (provider) {
+                provider.params['filters_modifier'] = filterData.filters_modifier;
+                provider.params['attributes_codes'] = this._getAttributesCodes();
+            }.bind(this));
+
             this.productsFilter(function (filter) {
-                filter.set('filters', attributes).apply();
+                filter.set('filters', filterData.filters).apply();
             });
         }
     });
