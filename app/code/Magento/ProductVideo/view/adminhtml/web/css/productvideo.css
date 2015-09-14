@@ -183,3 +183,10 @@
   border: 0;
   background: transparent;
 }
+.add-video-button-container {
+  float: right;
+  margin-bottom: 10px;
+}
+.admin__field.field.field-new_video_screenshot_preview {
+  margin-bottom: 50px;
+}
