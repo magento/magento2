@@ -38,9 +38,20 @@ define([
             return this;
         },
         showGrid: function (rowIndex) {
-            var attributes = JSON.parse(this.productMatrix()[rowIndex].attribute);
+            var product = this.productMatrix()[rowIndex];
+            var attributes = JSON.parse(product.attribute);
             this.rowIndexToEdit = rowIndex;
-            this.associatedProductGrid().open(attributes, 'changeProduct', false);
+
+            this.associatedProductGrid().open(
+                {
+                    filters: attributes,
+                    filters_modifier: product.productId
+                        ? {'entity_id': {'condition_type': 'neq', value: product.productId}}
+                        : {}
+                },
+                'changeProduct',
+                false
+            );
         },
         changeProduct: function (newProducts) {
             var oldProduct = this.productMatrix()[this.rowIndexToEdit];

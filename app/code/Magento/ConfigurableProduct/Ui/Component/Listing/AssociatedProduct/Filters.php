@@ -34,10 +34,10 @@ class Filters extends \Magento\Ui\Component\Filters
      */
     public function prepare()
     {
-        $attributeIds = $this->context->getRequestParam('attribute_ids');
+        $attributeIds = $this->context->getRequestParam('attributes_codes');
         if ($attributeIds) {
             foreach ($this->attributeRepository->getList() as $attribute) {
-                $filter = $this->filterFactory->create($attribute, $this->getContext());
+                $filter = $this->filterFactory->create($attribute, $this->getContext(), ['component' => '']);
                 $filter->prepare();
                 $this->addComponent($attribute->getAttributeCode(), $filter);
             }

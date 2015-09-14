@@ -40,23 +40,25 @@
         <filters name="listing_filters" class="Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="links" xsi:type="array">
-                        <item name="applied" xsi:type="string">not-save-filter</item>
+                    <item name="params" xsi:type="array">
+                        <item name="filters_modifier" xsi:type="array" />
                     </item>
                     <item name="displayArea" xsi:type="string">dataGridFilters</item>
                     <item name="dataScope" xsi:type="string">filters</item>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.listing_top.bookmarks</item>
-                        <item name="namespace" xsi:type="string">current.filters</item>
-                    </item>
                     <item name="childDefaults" xsi:type="array">
                         <item name="provider" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.listing_top.listing_filters</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.listing_top.bookmarks:current.columns.${ $.index }.visible</item>
-                        </item>
                     </item>
                 </item>
             </argument>
+            <filterInput name="entity_id">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="component" xsi:type="string" />
+                        <item name="dataScope" xsi:type="string">entity_id</item>
+                        <item name="label" xsi:type="string" translate="true">Name</item>
+                    </item>
+                </argument>
+            </filterInput>
             <filterInput name="name">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
@@ -65,18 +67,6 @@
                     </item>
                 </argument>
             </filterInput>
-            <filterSelect name="attribute_set_id">
-                <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Catalog\Model\Product\AttributeSet\Options</argument>
-                </argument>
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">attribute_set_id</item>
-                        <item name="caption" xsi:type="string" translate="true">Select...</item>
-                        <item name="label" xsi:type="string" translate="true">Attribute Set</item>
-                    </item>
-                </argument>
-            </filterSelect>
             <filterInput name="sku">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
@@ -131,10 +121,6 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="selectProvider" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.product_columns.ids</item>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.listing_top.bookmarks</item>
-                        <item name="namespace" xsi:type="string">current.paging</item>
-                    </item>
                     <item name="displayArea" xsi:type="string">bottom</item>
                     <item name="options" xsi:type="array">
                         <item name="20" xsi:type="array">
@@ -165,10 +151,6 @@
     <columns name="product_columns" class="Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="storageConfig" xsi:type="array">
-                    <item name="provider" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.listing_top.bookmarks</item>
-                    <item name="namespace" xsi:type="string">current</item>
-                </item>
                 <item name="childDefaults" xsi:type="array">
                     <item name="fieldAction" xsi:type="array">
                         <item name="provider" xsi:type="string">configurableProductGrid</item>
@@ -178,11 +160,6 @@
                         </item>
                     </item>
                     <item name="controlVisibility" xsi:type="boolean">true</item>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.listing_top.bookmarks</item>
-                        <item name="root" xsi:type="string">columns.${ $.index }</item>
-                        <item name="namespace" xsi:type="string">current.${ $.storageConfig.root}</item>
-                    </item>
                 </item>
             </item>
         </argument>

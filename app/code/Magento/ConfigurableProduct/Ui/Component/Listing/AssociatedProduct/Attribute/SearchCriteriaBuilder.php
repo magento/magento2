@@ -32,7 +32,7 @@ class SearchCriteriaBuilder implements \Magento\Catalog\Ui\Component\Listing\Att
     public function build()
     {
         return $this->searchCriteriaBuilder
-            ->addFilter('attribute_code', $this->request->getParam('attribute_ids', []), 'in')
+            ->addFilter('attribute_code', $this->request->getParam('attributes_codes', []), 'in')
             ->create();
     }
 }
