@@ -10,6 +10,7 @@ use Magento\Customer\Api\Data\CustomerInterface as CustomerData;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\Resource\Customer as ResourceCustomer;
+use Magento\Framework\App\ActionInterface;
 
 /**
  * Customer session model
@@ -459,11 +460,11 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * Authenticate controller action by login customer
      *
-     * @param   \Magento\Framework\App\Action\Action $action
+     * @param   ActionInterface $action
      * @param   bool|null $loginUrl
      * @return  bool
      */
-    public function authenticate(\Magento\Framework\App\Action\Action $action, $loginUrl = null)
+    public function authenticate(ActionInterface $action, $loginUrl = null)
     {
         if ($this->isLoggedIn()) {
             return true;
