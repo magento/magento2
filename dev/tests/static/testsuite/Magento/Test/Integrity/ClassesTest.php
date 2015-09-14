@@ -503,16 +503,10 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                     '/setup/src/',
                 ];
                 $pathToSource = \Magento\Framework\App\Utility\Files::init()->getPathToSource();
-                $libraryPaths = $componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
-                foreach ($libraryPaths as $key => $libraryPath) {
-                    $libraryPath = str_replace($pathToSource, '', $libraryPath);
-                    $partsOfLibraryPath = explode('/', $libraryPath);
-                    $libraryPaths[$key] = implode('/', array_slice($partsOfLibraryPath, 2));
-                    $libraryPaths[$key] .= '/';
-                }
+                $libraryPaths = $this->getLibraryPaths($componentRegistrar, $pathToSource);
                 $directories = array_merge($directories, $libraryPaths);
                 // Full list of directories where there may be namespace classes
-                    foreach ($directories as $directory) {
+                foreach ($directories as $directory) {
                     $fullPath = $pathToSource . $directory . $namespacePath . '/'
                         . str_replace(
                             '\\',
@@ -541,6 +535,23 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
             }
         }
         return $badClasses;
+    }
+
+    /**
+     * @param ComponentRegistrar $componentRegistrar
+     * @param string $pathToSource
+     * @return array
+     */
+    private function getLibraryPaths($componentRegistrar, $pathToSource)
+    {
+        $libraryPaths = $componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
+        foreach ($libraryPaths as $key => $libraryPath) {
+            $libraryPath = str_replace($pathToSource, '', $libraryPath);
+            $partsOfLibraryPath = explode('/', $libraryPath);
+            $libraryPaths[$key] = implode('/', array_slice($partsOfLibraryPath, 2));
+            $libraryPaths[$key] .= '/';
+        }
+        return $libraryPaths;
     }
 
     /**
