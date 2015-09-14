@@ -24,7 +24,7 @@ $schemaUrl = rtrim($block->getBaseUrl(), '/') . '/rest/default/schema?services=a
         if (url && url.length > 1) {
             url = decodeURIComponent(url[1]);
         } else {
-            url = '<?php echo $schemaUrl ?>';
+            url = '<?php /* @escapeNotVerified */ echo $schemaUrl ?>';
         }
 
         // Pre load translate...

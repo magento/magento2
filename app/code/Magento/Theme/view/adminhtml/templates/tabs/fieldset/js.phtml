@@ -3,6 +3,8 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 ?>
 <?php /** @var $block \Magento\Backend\Block\Widget\Form\Renderer\Fieldset */ ?>
 
@@ -30,7 +32,7 @@
                 id="remove_js_files_<%- data.id %>"
                 name="js_removed_files[]"
                 value="<%- data.id %>" />
-            <label for="remove_js_files_<%- data.id %>"><?php echo __('Remove') ?></label>
+            <label for="remove_js_files_<%- data.id %>"><?php /* @escapeNotVerified */ echo __('Remove') ?></label>
         </div>
     </div>
 
@@ -58,7 +60,7 @@ jQuery(function($) {
     });
     $('body').trigger(
         'refreshJsList',
-        {jsList: <?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getJsFiles()) ?>}
+        {jsList: <?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getJsFiles()) ?>}
     );
 });
 
