@@ -56,6 +56,7 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
      * @param \Magento\Backend\Model\UrlFactory $backendUrlFactory
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\File\Size $fileConfig
+     * @param \Magento\Framework\View\Element\Context $context
      * @param array $data
      */
     public function __construct(
