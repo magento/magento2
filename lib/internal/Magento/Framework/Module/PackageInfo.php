@@ -90,7 +90,7 @@ class PackageInfo
         if ($this->packageModuleMap === null) {
             $jsonData = $this->reader->getComposerJsonFiles()->toArray();
             foreach (array_keys($this->loader->load()) as $moduleName) {
-                $key =  $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName) . '/composer.json';
+                $key = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName) . '/composer.json';
                 if (isset($jsonData[$key]) && $jsonData[$key]) {
                     $packageData = \Zend_Json::decode($jsonData[$key]);
                     if (isset($packageData['name'])) {
