@@ -74,29 +74,6 @@ class TotalsCollector
     protected $shippingAssignmentFactory;
 
     /**
-     * @var array
-     */
-    protected $allowedCollectors = [
-        'subtotal',
-        'grand_total',
-        'customerbalance',
-        'giftcardaccount',
-        'msrp',
-        'shipping',
-        'freeshipping',
-        'pretax_giftwrapping',
-        'giftwrapping',
-        'tax_giftwrapping',
-        'tax_subtotal',
-        'tax_shipping',
-        'tax',
-        'discount',
-        'custbalance',
-        'weee',
-        'weee_tax',
-    ];
-
-    /**
      * @param Collector $totalCollector
      * @param CollectorFactory $totalCollectorFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -150,7 +127,6 @@ class TotalsCollector
      */
     public function collect(\Magento\Quote\Model\Quote $quote)
     {
-
         /** @var \Magento\Quote\Model\Quote\Address\Total $total */
         $total = $this->totalFactory->create('Magento\Quote\Model\Quote\Address\Total');
 
@@ -190,16 +166,11 @@ class TotalsCollector
 
         $this->quoteValidator->validateQuoteAmount($quote, $quote->getGrandTotal());
         $this->quoteValidator->validateQuoteAmount($quote, $quote->getBaseGrandTotal());
-
-        //$this->setData('trigger_recollect', 0);
         $this->_validateCouponCode($quote);
-
         $this->eventManager->dispatch(
             'sales_quote_collect_totals_after',
             ['quote' => $quote]
         );
-
-        //$this->setTotalsCollectedFlag(true);
         return $total;
     }
 
@@ -259,7 +230,6 @@ class TotalsCollector
             $quote->setItemsCount($quote->getItemsCount() + 1);
             $quote->setItemsQty((float)$quote->getItemsQty() + $item->getQty());
         }
-
         return $this;
     }
 
@@ -274,6 +244,7 @@ class TotalsCollector
     ) {
         /** @var \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment */
         $shippingAssignment = $this->shippingAssignmentFactory->create();
+
         /** @var \Magento\Quote\Api\Data\ShippingInterface $shipping */
         $shipping = $this->shippingFactory->create();
         $shipping->setMethod($address->getShippingMethod());
@@ -294,9 +265,6 @@ class TotalsCollector
 
         foreach ($this->collectorList->getCollectors($quote->getStoreId()) as $key => $collector) {
             /** @var CollectorInterface $collector */
-            if (!in_array($key, $this->allowedCollectors)) {
-                continue;
-            }
             $collector->collect($quote, $shippingAssignment, $total);
         }
         
@@ -311,7 +279,6 @@ class TotalsCollector
 
         $address->addData($total->getData());
         $address->setAppliedTaxes($total->getAppliedTaxes());
-
         return $total;
     }
 }

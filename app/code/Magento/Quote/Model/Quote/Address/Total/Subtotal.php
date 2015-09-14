@@ -121,7 +121,6 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
             $this->_addBaseAmount($item->getBaseRowTotal());
             $address->setTotalQty($address->getTotalQty() + $item->getQty());
         }
-
         return true;
     }
 
@@ -163,7 +162,6 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                 $address->getQuote()->removeItem($item->getQuoteItemId());
             }
         }
-
         return $this;
     }
 
@@ -171,11 +169,15 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * Assign subtotal amount and label to address object
      *
      * @param Address\Total $total
-     * @return \string[]
+     * @return array
      */
     public function fetch(\Magento\Quote\Model\Quote\Address\Total $total)
     {
-        return ['code' => $this->getCode(), 'title' => $this->getLabel(), 'value' => $total->getSubtotal()];
+        return [
+            'code' => $this->getCode(),
+            'title' => $this->getLabel(),
+            'value' => $total->getSubtotal()
+        ];
     }
 
     /**

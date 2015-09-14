@@ -108,7 +108,6 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
      */
     public function fetch(\Magento\Quote\Model\Quote\Address\Total $total)
     {
-        //$this->_setAddress($address);
         return [];
     }
 
@@ -170,7 +169,6 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
     protected function _setAmount($amount)
     {
         if ($this->_canSetAddressAmount) {
-            //$this->_getAddress()->setTotalAmount($this->getCode(), $amount);
             $this->_getTotal()->setTotalAmount($this->getCode(), $amount);
         }
         return $this;
@@ -186,7 +184,6 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
     protected function _setBaseAmount($baseAmount)
     {
         if ($this->_canSetAddressAmount) {
-            //$this->_getAddress()->setBaseTotalAmount($this->getCode(), $baseAmount);
             $this->_getTotal()->setBaseTotalAmount($this->getCode(), $baseAmount);
         }
         return $this;
@@ -201,7 +198,6 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
     protected function _addAmount($amount)
     {
         if ($this->_canAddAmountToAddress) {
-            //$this->_getAddress()->addTotalAmount($this->getCode(), $amount);
             $this->_getTotal()->addTotalAmount($this->getCode(), $amount);
         }
         return $this;
@@ -216,7 +212,6 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
     protected function _addBaseAmount($baseAmount)
     {
         if ($this->_canAddAmountToAddress) {
-            //$this->_getAddress()->addBaseTotalAmount($this->getCode(), $baseAmount);
             $this->_getTotal()->addBaseTotalAmount($this->getCode(), $baseAmount);
         }
         return $this;

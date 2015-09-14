@@ -102,20 +102,10 @@ class CartTotalRepository implements CartTotalRepositoryInterface
      */
     public function get($cartId)
     {
-        /**
-         * Quote.
-         *
-         * @var \Magento\Quote\Model\Quote $quote
-         */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
-//        $shippingAddress = $quote->getShippingAddress();
-//        if ($quote->isVirtual()) {
-//            $totalsData = array_merge($quote->getBillingAddress()->getData(), $quote->getData());
-//        } else {
-//            $totalsData = array_merge($shippingAddress->getData(), $quote->getData());
-//        }
-
         $total = $this->totalsCollector->collectQuoteTotals($quote);
+
         /** @var \Magento\Quote\Api\Data\TotalsInterface $totals */
         $totals = $this->totalsFactory->create();
         $this->dataObjectHelper->populateWithArray(

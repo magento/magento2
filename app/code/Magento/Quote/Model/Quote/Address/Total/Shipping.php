@@ -28,7 +28,7 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
      * Collect totals information about shipping
      *
      * @param \Magento\Quote\Model\Quote $quote
-     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface|\Magento\Quote\Model\Quote\Address $shippingAssignment
+     * @param \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -145,7 +145,6 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 
         $shippingAssignment->getShipping()->getAddress()->setWeight($addressWeight);
         $shippingAssignment->getShipping()->getAddress()->setFreeMethodWeight($freeMethodWeight);
-
         $shippingAssignment->getShipping()->getAddress()->collectShippingRates();
 
         if ($method) {
@@ -166,7 +165,6 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                 }
             }
         }
-
         return $this;
     }
 
@@ -188,7 +186,11 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
             }
         }
 
-        return ['code' => $this->getCode(), 'title' => $title, 'value' => $amount];
+        return [
+            'code' => $this->getCode(),
+            'title' => $title,
+            'value' => $amount
+        ];
     }
 
     /**
