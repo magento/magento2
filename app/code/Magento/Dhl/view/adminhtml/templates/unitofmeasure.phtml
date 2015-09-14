@@ -3,6 +3,8 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 ?>
 <?php
 /**
@@ -15,15 +17,15 @@ require(['prototype'], function(){
     //<![CDATA[
     function changeDimensions()
     {
-        var dimensionUnit = '(<?php echo $block->getInch(); ?>)';
-        var dhlUnitOfMeasureNote = '<?php echo $block->getDivideOrderWeightNoteLbp(); ?>';
+        var dimensionUnit = '(<?php /* @escapeNotVerified */ echo $block->getInch(); ?>)';
+        var dhlUnitOfMeasureNote = '<?php /* @escapeNotVerified */ echo $block->getDivideOrderWeightNoteLbp(); ?>';
         if ($("carriers_dhl_unit_of_measure").value == "K") {
-            dimensionUnit = '(<?php echo $block->getCm(); ?>)';
-            dhlUnitOfMeasureNote = '<?php echo $block->getDivideOrderWeightNoteKg(); ?>';
+            dimensionUnit = '(<?php /* @escapeNotVerified */ echo $block->getCm(); ?>)';
+            dhlUnitOfMeasureNote = '<?php /* @escapeNotVerified */ echo $block->getDivideOrderWeightNoteKg(); ?>';
         }
-        $$('[for="carriers_dhl_height"]')[0].innerHTML = '<?php echo $block->getHeight(); ?> ' + dimensionUnit;
-        $$('[for="carriers_dhl_depth"]')[0].innerHTML = '<?php echo $block->getDepth(); ?> ' + dimensionUnit;
-        $$('[for="carriers_dhl_width"]')[0].innerHTML = '<?php echo $block->getWidth(); ?> ' + dimensionUnit;
+        $$('[for="carriers_dhl_height"]')[0].innerHTML = '<?php /* @escapeNotVerified */ echo $block->getHeight(); ?> ' + dimensionUnit;
+        $$('[for="carriers_dhl_depth"]')[0].innerHTML = '<?php /* @escapeNotVerified */ echo $block->getDepth(); ?> ' + dimensionUnit;
+        $$('[for="carriers_dhl_width"]')[0].innerHTML = '<?php /* @escapeNotVerified */ echo $block->getWidth(); ?> ' + dimensionUnit;
 
         $('carriers_dhl_divide_order_weight').next().down().innerHTML = dhlUnitOfMeasureNote;
     }

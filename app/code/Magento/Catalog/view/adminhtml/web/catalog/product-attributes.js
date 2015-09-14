@@ -16,17 +16,16 @@ define([
             });
         },
 
-        _initModal: function() {
+        _initModal: function () {
             var self = this;
 
             this.modal = $('<div id="create_new_attribute"/>').modal({
                 title: 'New Attribute',
-                modalClass: 'AAAAA',
                 type: 'slide',
                 buttons: [],
                 opened: function () {
                     self.iframe = $('<iframe id="create_new_attribute_container">').attr({
-                        src: self._prepareUrl(event),
+                        src: self._prepareUrl(),
                         frameborder: 0
                     });
                     self.modal.append(self.iframe);
@@ -41,7 +40,7 @@ define([
                         doc.execCommand('stop');
                         self.iframe.remove();
                     }
-                    self.modal.data('modal').modal.remove()
+                    self.modal.data('modal').modal.remove();
                 }
             });
         },

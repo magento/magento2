@@ -81,7 +81,7 @@ define([
             var widget = this;
             this._on({'click .add-selection': function (event) {
                 var $optionBox = $(event.target).closest('.option-box'),
-                    $selectionGrid = $optionBox.find('.selection-search'),
+                    $selectionGrid = $optionBox.find('.selection-search').clone(),
                     optionIndex = $optionBox.attr('id').replace('bundle_option_', ''),
                     productIds = [],
                     productSkus = [],
@@ -115,37 +115,36 @@ define([
                     }
                 });
 
-                if (this.modal) {
-                    this.modal.html($selectionGrid.html());
-                } else {
-                    this.modal = $selectionGrid.modal({
-                        title: $optionBox.find('input[name$="[title]"]').val() === '' ?
-                            $.mage.__('Add Products to New Option') :
-                            $.mage.__('Add Products to Option "%1"')
-                                .replace('%1',($('<div>').text($optionBox.find('input[name$="[title]"]').val()).html())),
-                        modalClass: 'bundle',
-                        type: 'slide',
-                        buttons: [{
-                            text: $.mage.__('Add Selected Products'),
-                            'class': 'action-primary action-add',
-                            click: function () {
-                                $.each(selectedProductList, function() {
-                                    window.bSelection.addRow(optionIndex, this);
-                                });
-                                bSelection.gridRemoval.each(
-                                    function(pair) {
-                                        $optionBox.find('.col-sku').filter(function () {
-                                            return $.trim($(this).text()) === pair.key; // find row by SKU
-                                        }).closest('tr').find('button.delete').trigger('click');
-                                    }
-                                );
-                                widget.refreshSortableElements();
-                                widget._updateSelectionsPositions.apply(widget.element);
-                                widget.modal.modal('closeModal');
-                            }
-                        }]
-                    });
-                }
+                $selectionGrid.modal({
+                    title: $optionBox.find('input[name$="[title]"]').val() === '' ?
+                        $.mage.__('Add Products to New Option') :
+                        $.mage.__('Add Products to Option "%1"')
+                            .replace('%1',($('<div>').text($optionBox.find('input[name$="[title]"]').val()).html())),
+                    modalClass: 'bundle',
+                    type: 'slide',
+                    closed: function(e, modal) {
+                        modal.modal.remove();
+                    },
+                    buttons: [{
+                        text: $.mage.__('Add Selected Products'),
+                        'class': 'action-primary action-add',
+                        click: function () {
+                            $.each(selectedProductList, function() {
+                                window.bSelection.addRow(optionIndex, this);
+                            });
+                            bSelection.gridRemoval.each(
+                                function(pair) {
+                                    $optionBox.find('.col-sku').filter(function () {
+                                        return $.trim($(this).text()) === pair.key; // find row by SKU
+                                    }).closest('tr').find('button.delete').trigger('click');
+                                }
+                            );
+                            widget.refreshSortableElements();
+                            widget._updateSelectionsPositions.apply(widget.element);
+                            $selectionGrid.modal('closeModal');
+                        }
+                    }]
+                });
                 $.ajax({
                     url: bSelection.selectionSearchUrl,
                     dataType: 'html',
@@ -156,7 +155,7 @@ define([
                         form_key: FORM_KEY
                     },
                     success: function(data) {
-                        widget.modal.html(data).modal('openModal');
+                        $selectionGrid.html(data).modal('openModal');
                     },
                     context: $('body'),
                     showLoader: true
