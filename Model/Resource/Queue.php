@@ -104,14 +104,17 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
                     QueueManagement::MESSAGE_QUEUE_ID => 'queue_id',
                     QueueManagement::MESSAGE_ID => 'message_id',
                     QueueManagement::MESSAGE_STATUS => 'status',
-                    QueueManagement::MESSAGE_UPDATED_AT => 'updated_at'
+                    QueueManagement::MESSAGE_UPDATED_AT => 'updated_at',
+                    QueueManagement::MESSAGE_NUMBER_OF_TRIALS => 'number_of_trials'
                 ]
             )->join(
                 ['queue' => $this->getQueueTable()],
                 'queue.id = queue_message_status.queue_id',
                 [QueueManagement::MESSAGE_QUEUE_NAME => 'name']
+            )->where(
+                'queue_message_status.status IN (?)',
+                [QueueManagement::MESSAGE_STATUS_NEW, QueueManagement::MESSAGE_STATUS_RETRY_REQUIRED]
             )->where('queue.name = ?', $queueName)
-            ->where('queue_message_status.status = ?', QueueManagement::MESSAGE_STATUS_NEW)
             ->order('queue_message_status.updated_at DESC')
             ->limit($limit);
         return $connection->fetchAll($select);
@@ -142,6 +145,40 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
             }
         }
         return $takenMessagesRelationIds;
+    }
+
+    /**
+     * Set status of message to 'retry required' and increment number of processing trials.
+     *
+     * @param int $relationId
+     * @return void
+     */
+    public function pushBackForRetry($relationId)
+    {
+        $this->getConnection()->update(
+            $this->getMessageStatusTable(),
+            [
+                'status' => QueueManagement::MESSAGE_STATUS_RETRY_REQUIRED,
+                'number_of_trials' => new \Zend_Db_Expr('number_of_trials+1')
+            ],
+            ['id = ?' => $relationId]
+        );
+    }
+
+    /**
+     * Change message status.
+     *
+     * @param int[] $relationIds
+     * @param int $status
+     * @return void
+     */
+    public function changeStatus($relationIds, $status)
+    {
+        $this->getConnection()->update(
+            $this->getMessageStatusTable(),
+            ['status' => $status],
+            ['id IN (?)' => $relationIds]
+        );
     }
 
     /**

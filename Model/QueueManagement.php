@@ -18,6 +18,7 @@ class QueueManagement
     const MESSAGE_QUEUE_ID = 'queue_id';
     const MESSAGE_QUEUE_NAME = 'queue_name';
     const MESSAGE_QUEUE_RELATION_ID = 'relation_id';
+    const MESSAGE_NUMBER_OF_TRIALS = 'retries';
 
     const MESSAGE_STATUS_NEW = 2;
     const MESSAGE_STATUS_IN_PROGRESS = 3;
@@ -91,5 +92,28 @@ class QueueManagement
         $takenMessagesRelationIds = $this->messageResource->takeMessagesInProgress($selectedMessagesRelatedIds);
         $takenMessages = array_intersect_key($selectedMessages, array_flip($takenMessagesRelationIds));
         return $takenMessages;
+    }
+
+    /**
+     * Push message back to queue for one more processing trial. Affects message in particular queue only.
+     *
+     * @param int $messageRelationId
+     * @return void
+     */
+    public function pushToQueueForRetry($messageRelationId)
+    {
+        $this->messageResource->pushBackForRetry($messageRelationId);
+    }
+
+    /**
+     * Change status of messages.
+     *
+     * @param int[] $messageRelationIds
+     * @param int $status
+     * @return void
+     */
+    public function changeStatus($messageRelationIds, $status)
+    {
+        $this->messageResource->changeStatus($messageRelationIds, $status);
     }
 }

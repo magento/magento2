@@ -115,6 +115,12 @@ class InstallSchema implements InstallSchemaInterface
             null,
             ['unsigned' => true, 'nullable' => false],
             'Message status in particular queue'
+        )->addColumn(
+            'number_of_trials',
+            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+            null,
+            ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+            'Number of trials to processed failed message processing'
         )->addIndex(
             $installer->getIdxName(
                 'queue_message_status',

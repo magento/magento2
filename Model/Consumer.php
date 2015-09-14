@@ -19,6 +19,11 @@ use Magento\MysqlMq\Model\QueueManagement;
 class Consumer implements ConsumerInterface
 {
     /**
+     * Maximum number of trials to process message in case of exceptions during processing.
+     */
+    const MAX_NUMBER_OF_TRIALS = 3;
+
+    /**
      * @var QueueManagement
      */
     private $queueManagement;
@@ -77,26 +82,6 @@ class Consumer implements ConsumerInterface
     }
 
     /**
-     * Decode message and invoke callback method
-     *
-     * @param string $topicName
-     * @param string $messageBody
-     * @return void
-     */
-    public function dispatchMessage($topicName, $messageBody)
-    {
-        $callback = $this->configuration->getCallback();
-        try {
-            $decodedMessage = $this->messageEncoder->decode($topicName, $messageBody);
-            if (isset($decodedMessage)) {
-                call_user_func($callback, $decodedMessage);
-            }
-        } catch (\Exception $e) {
-            // TODO: Push message back to queue with appropriate status
-        }
-    }
-
-    /**
      * Run short running process
      *
      * @param string $queueName
@@ -110,8 +95,41 @@ class Consumer implements ConsumerInterface
             : $this->configuration->getMaxMessages() ?: 1;
 
         $messages = $this->queueManagement->readMessages($queueName, $maxNumberOfMessages);
+        $successfullyProcessedIds = [];
         foreach ($messages as $message) {
-            $this->dispatchMessage($message[QueueManagement::MESSAGE_TOPIC], $message[QueueManagement::MESSAGE_BODY]);
+            if ($this->dispatchMessage($message)) {
+                $successfullyProcessedIds[] = $message[QueueManagement::MESSAGE_QUEUE_RELATION_ID];
+            }
+        }
+        $this->queueManagement->changeStatus($successfullyProcessedIds, QueueManagement::MESSAGE_STATUS_COMPLETE);
+    }
+
+    /**
+     * Decode message and invoke callback method
+     *
+     * @param array $message
+     * @return bool true on successful processing
+     */
+    private function dispatchMessage($message)
+    {
+        $callback = $this->configuration->getCallback();
+        $relationId = $message[QueueManagement::MESSAGE_QUEUE_RELATION_ID];
+        try {
+            $decodedMessage = $this->messageEncoder->decode(
+                $message[QueueManagement::MESSAGE_TOPIC],
+                $message[QueueManagement::MESSAGE_BODY]
+            );
+            if (isset($decodedMessage)) {
+                call_user_func($callback, $decodedMessage);
+            }
+            return true;
+        } catch (\Exception $e) {
+            if ($message[QueueManagement::MESSAGE_NUMBER_OF_TRIALS] < self::MAX_NUMBER_OF_TRIALS) {
+                $this->queueManagement->pushToQueueForRetry($relationId);
+            } else {
+                $this->queueManagement->changeStatus([$relationId], QueueManagement::MESSAGE_STATUS_ERROR);
+            }
+            return false;
         }
     }
 }
