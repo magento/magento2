@@ -14,27 +14,27 @@
         <?php echo $block->getChildHtml('pager'); ?>
         <div class="table-wrapper billing-agreements">
             <table id="billing-agreements" class="data table table-billing-agreements">
-                <caption class="table-caption"><?php echo __('Billing Agreements') ?></caption>
+                <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Billing Agreements') ?></caption>
                 <thead>
                 <tr>
-                    <th scope="col" class="col id"><?php echo __('Reference ID'); ?></th>
-                    <th scope="col" class="col status"><?php echo __('Status'); ?></th>
-                    <th scope="col" class="col created"><?php echo __('Created At'); ?></th>
-                    <th scope="col" class="col updated"><?php echo __('Updated At'); ?></th>
-                    <th scope="col" class="col payment"><?php echo __('Payment Method'); ?></th>
+                    <th scope="col" class="col id"><?php /* @escapeNotVerified */ echo __('Reference ID'); ?></th>
+                    <th scope="col" class="col status"><?php /* @escapeNotVerified */ echo __('Status'); ?></th>
+                    <th scope="col" class="col created"><?php /* @escapeNotVerified */ echo __('Created At'); ?></th>
+                    <th scope="col" class="col updated"><?php /* @escapeNotVerified */ echo __('Updated At'); ?></th>
+                    <th scope="col" class="col payment"><?php /* @escapeNotVerified */ echo __('Payment Method'); ?></th>
                     <th scope="col" class="col actions">&nbsp;</th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php foreach ($billingAgreements as $item): ?>
                     <tr>
-                        <td data-th="<?php echo $block->escapeHtml(__('Reference ID')); ?>" class="col id"><?php echo $block->getItemValue($item, 'reference_id') ?></td>
-                        <td data-th="<?php echo $block->escapeHtml(__('Status')); ?>" class="col status"><?php echo $block->getItemValue($item, 'status') ?></td>
-                        <td data-th="<?php echo $block->escapeHtml(__('Created At')); ?>" class="col created"><?php echo $block->getItemValue($item, 'created_at') ?></td>
-                        <td data-th="<?php echo $block->escapeHtml(__('Updated At')); ?>" class="col updated"><?php echo $block->getItemValue($item, 'updated_at') ?></td>
-                        <td data-th="<?php echo $block->escapeHtml(__('Payment Method')); ?>" class="col payment"><?php echo $block->getItemValue($item, 'payment_method_label') ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Reference ID')); ?>" class="col id"><?php /* @escapeNotVerified */ echo $block->getItemValue($item, 'reference_id') ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Status')); ?>" class="col status"><?php /* @escapeNotVerified */ echo $block->getItemValue($item, 'status') ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Created At')); ?>" class="col created"><?php /* @escapeNotVerified */ echo $block->getItemValue($item, 'created_at') ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Updated At')); ?>" class="col updated"><?php /* @escapeNotVerified */ echo $block->getItemValue($item, 'updated_at') ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Payment Method')); ?>" class="col payment"><?php /* @escapeNotVerified */ echo $block->getItemValue($item, 'payment_method_label') ?></td>
                         <td data-th="" class="col actions">
-                            <a href="<?php echo $block->getItemValue($item, 'edit_url') ?>" class="action view"><span><?php echo __('View') ?></span></a>
+                            <a href="<?php /* @escapeNotVerified */ echo $block->getItemValue($item, 'edit_url') ?>" class="action view"><span><?php /* @escapeNotVerified */ echo __('View') ?></span></a>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -42,23 +42,23 @@
             </table>
         </div>
     <?php else: ?>
-        <div class="message info empty"><span><?php echo __('There are no billing agreements yet.') ?></span></div>
+        <div class="message info empty"><span><?php /* @escapeNotVerified */ echo __('There are no billing agreements yet.') ?></span></div>
     <?php endif; ?>
 
     <?php $paymentMethods = $block->getWizardPaymentMethodOptions() ?>
     <?php if ($paymentMethods): ?>
-        <form action="<?php echo $block->getCreateUrl() ?>" method="post" class="form form-new-agreement">
+        <form action="<?php /* @escapeNotVerified */ echo $block->getCreateUrl() ?>" method="post" class="form form-new-agreement">
             <fieldset class="fieldset">
-                <legend class="legend"><span><?php echo __('New Billing Agreement') ?></span></legend>
+                <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('New Billing Agreement') ?></span></legend>
                 <br />
-                <p class="note"><?php echo __('You will be redirected to the payment system website.') ?></p>
+                <p class="note"><?php /* @escapeNotVerified */ echo __('You will be redirected to the payment system website.') ?></p>
 
                 <div class="field payment method">
                     <div class="control">
                         <select id="payment_method" name="payment_method">
-                            <option value=""><?php echo __('-- Please Select --') ?></option>
+                            <option value=""><?php /* @escapeNotVerified */ echo __('-- Please Select --') ?></option>
                             <?php foreach ($paymentMethods as $code => $title): ?>
-                                <option value="<?php echo $code ?>"><?php echo $title ?></option>
+                                <option value="<?php /* @escapeNotVerified */ echo $code ?>"><?php /* @escapeNotVerified */ echo $title ?></option>
                             <?php endforeach; ?>
                         </select>
                     </div>
@@ -66,12 +66,12 @@
                 <div class="actions-toolbar">
                     <div class="primary">
                         <button type="submit" class="primary action create">
-                            <span><?php echo __('Create...') ?></span>
+                            <span><?php /* @escapeNotVerified */ echo __('Create...') ?></span>
                         </button>
                     </div>
                     <div class="secondary">
                         <a href="<?php echo $block->escapeHtml($block->getBackUrl()) ?>"
-                           class="action back"><span><?php echo __('Back') ?></span></a>
+                           class="action back"><span><?php /* @escapeNotVerified */ echo __('Back') ?></span></a>
                     </div>
                 </div>
             </fieldset>
@@ -80,7 +80,7 @@
     <div class="actions-toolbar">
         <div class="secondary">
             <a href="<?php echo $block->escapeHtml($block->getBackUrl()) ?>"
-               class="action back"><span><?php echo __('Back') ?></span></a>
+               class="action back"><span><?php /* @escapeNotVerified */ echo __('Back') ?></span></a>
         </div>
     </div>
     <?php endif; ?>

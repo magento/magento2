@@ -65,7 +65,7 @@ class Block extends \Magento\Framework\Model\AbstractModel implements BlockInter
      */
     public function getIdentities()
     {
-        return [self::CACHE_TAG . '_' . $this->getId()];
+        return [self::CACHE_TAG . '_' . $this->getId(), self::CACHE_TAG . '_' . $this->getIdentifier()];
     }
 
     /**

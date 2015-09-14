@@ -97,10 +97,19 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage When passing in a field array there must be a matching condition array.
+     * @expectedExceptionMessage When passing an array of fields there must be at least one field in the array.
      */
     public function testAddToFilterException()
     {
         $this->collection->addFieldToFilter([], 'not_array');
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage When passing in a field array there must be a matching condition array.
+     */
+    public function testAddToFilterExceptionArrayNotSymmetric()
+    {
+        $this->collection->addFieldToFilter(['field2', 'field2'], ['condition1']);
     }
 }
