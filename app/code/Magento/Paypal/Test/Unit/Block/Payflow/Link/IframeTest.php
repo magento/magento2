@@ -90,9 +90,9 @@ class IframeTest extends \PHPUnit_Framework_TestCase
             $this->orderFactoryMock,
             $this->checkoutSessionMock,
             $this->hssHelperMock,
-            $this->paymentDataMock,
             $this->readFactory,
-            $this->reader
+            $this->reader,
+            $this->paymentDataMock
         );
 
         $this->assertFalse($block->isScopePrivate());
@@ -120,9 +120,9 @@ class IframeTest extends \PHPUnit_Framework_TestCase
             $this->orderFactoryMock,
             $this->checkoutSessionMock,
             $this->hssHelperMock,
-            $this->paymentDataMock,
             $this->readFactory,
-            $this->reader
+            $this->reader,
+            $this->paymentDataMock
         );
         $this->assertEquals($expected, $block->getTransactionUrl());
     }
@@ -149,9 +149,9 @@ class IframeTest extends \PHPUnit_Framework_TestCase
             $this->orderFactoryMock,
             $this->checkoutSessionMock,
             $this->hssHelperMock,
-            $this->paymentDataMock,
             $this->readFactory,
-            $this->reader
+            $this->reader,
+            $this->paymentDataMock
         );
         $this->assertEquals($expected, $block->getTransactionUrl());
     }
