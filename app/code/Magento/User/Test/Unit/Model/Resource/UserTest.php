@@ -160,7 +160,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($returnData, $this->model->hasAssigned2Role($methodUserMock));
     }
 
-    public function test_clearUserRoles()
+    public function testClearUserRoles()
     {
         $uid = 123;
         $this->userMock->expects($this->once())->method('getId')->willReturn($uid);
@@ -384,7 +384,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($returnData, $this->model->getLatestPassword($uid));
     }
 
-    public function test_initUniqueFields()
+    public function testInitUniqueFields()
     {
         $this->assertInstanceOf(
             '\Magento\User\Model\Resource\User',
@@ -392,7 +392,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function test_beforeSave()
+    public function testBeforeSave()
     {
         $this->userMock->expects($this->once())->method('isObjectNew')->willReturn(true);
 
@@ -402,7 +402,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function test_afterSave()
+    public function testAfterSave()
     {
         $roleId = 123;
         $methodUserMock = $this->getMockBuilder('\Magento\User\Model\User')
@@ -431,7 +431,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
      * @param array $parameters
      * @return mixed
      */
-    public function invokeMethod(&$object, $methodName, array $parameters = array())
+    public function invokeMethod(&$object, $methodName, array $parameters = [])
     {
         $reflection = new \ReflectionClass(get_class($object));
         $method = $reflection->getMethod($methodName);
