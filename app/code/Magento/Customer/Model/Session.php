@@ -10,6 +10,7 @@ use Magento\Customer\Api\Data\CustomerInterface as CustomerData;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Model\Config\Share;
 use Magento\Customer\Model\Resource\Customer as ResourceCustomer;
+use Magento\Framework\App\ActionInterface;
 
 /**
  * Customer session model
