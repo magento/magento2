@@ -178,11 +178,6 @@ define([
          * @private
          */
         _onGetVideoInformationFocusOut : function () {
-            if ($('.mage-new-video-dialog .modal-title').text() === 'Edit Video') {
-              this._isEditPage = true;
-            } else {
-              this._isEditPage = false;
-            }
             this._videoInformationGetUrlField.videoData();
             this._videoUrlWidget.trigger('update_video_information');
         },
@@ -503,9 +498,11 @@ define([
                     if(!file) {
                         roles.prop('checked', $('.image.item').length < 1);
                         modalTitleElement.text($.mage.__('Create Video'));
+                        widget._isEditPage = false;
                         return;
                     }
                     modalTitleElement.text($.mage.__('Edit Video'));
+                    widget._isEditPage = true;
                     var imageData = widget._getImage(file);
                     widget._onPreview(null, imageData.url, false);
                 },
@@ -534,7 +531,7 @@ define([
         },
 
         createVideoItemIcons : function () {
-          $('#image-container, #media_gallery_content').find('.video-item').parent().addClass('video-item');
+          $('#image-container, #media_gallery_content').find('.product-item.video-item').parent().addClass('video-item');
         },
 
         /**
