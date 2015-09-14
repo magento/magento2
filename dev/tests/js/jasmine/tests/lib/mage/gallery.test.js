@@ -138,7 +138,6 @@ define([
             });
         });
 
-
         it('fullscreen exit', function (done) {
             expect($(navWrap).css('display') === 'none').toBeTruthy();
             galleryAPI.fotorama.cancelFullScreen();
@@ -150,5 +149,6 @@ define([
                 done();
             });
         });
+
     });
 });
