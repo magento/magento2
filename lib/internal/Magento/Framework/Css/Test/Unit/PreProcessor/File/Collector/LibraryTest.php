@@ -143,7 +143,8 @@ class LibraryTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($readerMock));
         $this->componentRegistrarMock->expects($this->once())
-            ->method('getPath');
+            ->method('getPath')
+            ->will($this->returnValue(['/path/to/theme']));
         $readerMock->expects($this->once())
             ->method('search')
             ->will($this->returnValue($themeFiles));

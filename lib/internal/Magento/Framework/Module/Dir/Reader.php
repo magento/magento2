@@ -72,17 +72,7 @@ class Reader
      */
     public function getConfigurationFiles($filename)
     {
-        $result = [];
-        foreach ($this->modulesList->getNames() as $moduleName) {
-            $moduleEtcDir = $this->getModuleDir('etc', $moduleName);
-            $file = $moduleEtcDir . '/' . $filename;
-            $directoryRead = $this->readFactory->create($moduleEtcDir);
-            $path = $directoryRead->getRelativePath($file);
-            if ($directoryRead->isExist($path)) {
-                $result[] = $file;
-            }
-        }
-        return $this->fileIteratorFactory->create($result);
+        return $this->fileIteratorFactory->create($this->getFiles($filename, Dir::MODULE_ETC_DIR));
     }
 
     /**
@@ -92,11 +82,23 @@ class Reader
      */
     public function getComposerJsonFiles()
     {
+        return $this->fileIteratorFactory->create($this->getFiles('composer.json'));
+    }
+
+    /**
+     * Go through all modules and find corresponding files of active modules
+     *
+     * @param string $filename
+     * @param string $subDir
+     * @return array
+     */
+    public function getFiles($filename, $subDir = '')
+    {
         $result = [];
         foreach ($this->modulesList->getNames() as $moduleName) {
-            $moduleDir = $this->getModuleDir('', $moduleName);
-            $file = $moduleDir . '/composer.json';
-            $directoryRead = $this->readFactory->create($moduleDir);
+            $moduleEtcDir = $this->getModuleDir($subDir, $moduleName);
+            $file = $moduleEtcDir . '/' . $filename;
+            $directoryRead = $this->readFactory->create($moduleEtcDir);
             $path = $directoryRead->getRelativePath($file);
             if ($directoryRead->isExist($path)) {
                 $result[] = $file;

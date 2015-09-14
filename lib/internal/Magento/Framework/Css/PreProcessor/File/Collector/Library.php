@@ -86,9 +86,11 @@ class Library implements CollectorInterface
 
         foreach ($theme->getInheritedThemes() as $currentTheme) {
             $themeFullPath = $currentTheme->getFullPath();
-            $directoryRead = $this->readFactory->create(
-                $this->componentRegistrar->getPath(ComponentRegistrar::THEME, $themeFullPath)
-            );
+            $path = $this->componentRegistrar->getPath(ComponentRegistrar::THEME, $themeFullPath);
+            if (empty($path)) {
+                continue;
+            }
+            $directoryRead = $this->readFactory->create($path);
             $foundFiles = $directoryRead->search("web/{$filePath}");
             $files = [];
             foreach ($foundFiles as $foundFile) {
