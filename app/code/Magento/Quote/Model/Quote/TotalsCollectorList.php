@@ -62,6 +62,9 @@ class TotalsCollectorList
      */
     protected $totalFactory;
 
+    /**
+     * @var array
+     */
     protected $allowedCollectors = [
         'subtotal',
         'grand_total'

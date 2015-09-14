@@ -170,7 +170,8 @@ class Tax extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                         $shippingAssignment->getGrandTotal() - ($item->getDiscountAmount() - $discountBefore)
                     );
                     $shippingAssignment->setBaseGrandTotal(
-                        $shippingAssignment->getBaseGrandTotal() - ($item->getBaseDiscountAmount() - $baseDiscountBefore)
+                        $shippingAssignment->getBaseGrandTotal()
+                        - ($item->getBaseDiscountAmount() - $baseDiscountBefore)
                     );
                 }
 

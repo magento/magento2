@@ -15,6 +15,7 @@ use Magento\Quote\Api\CouponManagementInterface;
 
 /**
  * Cart totals data object.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CartTotalRepository implements CartTotalRepositoryInterface
 {
@@ -71,6 +72,7 @@ class CartTotalRepository implements CartTotalRepositoryInterface
      * @param ItemConverter $converter
      * @param \Magento\Quote\Model\Quote\TotalsReader $reader
      * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
+     *
      */
     public function __construct(
         Api\Data\TotalsInterfaceFactory $totalsFactory,

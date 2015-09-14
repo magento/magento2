@@ -6,8 +6,9 @@
 
 namespace Magento\Quote\Model;
 
-class ShippingAssignment extends \Magento\Framework\Model\AbstractExtensibleModel
-    implements \Magento\Quote\Api\Data\ShippingAssignmentInterface
+use Magento\Quote\Api\Data\ShippingAssignmentInterface;
+
+class ShippingAssignment extends \Magento\Framework\Model\AbstractExtensibleModel implements ShippingAssignmentInterface
 {
     const SHIPPING = 'shipping';
     const ITEMS = 'items';
