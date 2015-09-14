@@ -128,16 +128,18 @@ require([ "jquery", "jquery/ui", "catalogGallery"], function( $ ) {
     _initFotoramaVideo : function (e) {
       $('.'+this.GP).next('script').remove(); //erase <script> tag
 
-      var fotorama = $(this.element).data('fotorama'),
-          $thumbsParent = fotorama.activeFrame.$navThumbFrame.parent(),
-          $thumbs = $thumbsParent.find('.fotorama__nav__frame');
-      this._startPrepareForPlayer(e, fotorama);
+      var fotorama = $(this.element).data('fotorama');
+          if (fotorama.activeFrame.$navThumbFrame) {
+            var $thumbsParent = fotorama.activeFrame.$navThumbFrame.parent(),
+              $thumbs = $thumbsParent.find('.fotorama__nav__frame');
 
-      for (var t = 0; t < $thumbs.length; t++) {
-        if (this.options.VideoData[t].mediaType === this.VID) {
-          $thumbsParent.find('.fotorama__nav__frame:eq('+t+')').addClass('video-thumb-icon');
-        }
-      }
+            for (var t = 0; t < $thumbs.length; t++) {
+              if (this.options.VideoData[t].mediaType === this.VID) {
+                $thumbsParent.find('.fotorama__nav__frame:eq('+t+')').addClass('video-thumb-icon');
+              }
+            }
+          }
+      this._startPrepareForPlayer(e, fotorama);
     },
 
     _attachFotoramaEvents : function () {
