@@ -52,7 +52,7 @@ class SetModeCommand extends Command
      */
     protected function configure()
     {
-        $description = 'Displays current application mode.';
+        $description = 'Set application mode.';
 
         $this->setName('deploy:mode:set')
             ->setDescription($description)
