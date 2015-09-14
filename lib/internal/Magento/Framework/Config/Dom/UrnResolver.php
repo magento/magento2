@@ -58,7 +58,7 @@ class UrnResolver
             $urnParts = explode(':', $schema);
             if ($urnParts[2] == 'module') {
                 $moduleName = $this->packageInfo->getModuleName($urnParts[1] . '/' . $urnParts[2] . '-' . $urnParts[3]);
-                $appSchemaPath = $this->componentRegistrar->getPath(
+                $schemaPath = $this->componentRegistrar->getPath(
                         ComponentRegistrar::MODULE, $moduleName
                     ) . '/' . $urnParts[4];
             } else if ($urnParts[2] == 'library') {
@@ -66,7 +66,7 @@ class UrnResolver
                 // 0: urn, 1: magento, 2:library, 3: framework, 4: Module/etc/module.xsd
                 // libaryName -> magento/framework
                 $libraryName = $urnParts[1] . '/' . $urnParts[3];
-                $appSchemaPath = $this->componentRegistrar->getPath(
+                $schemaPath = $this->componentRegistrar->getPath(
                         ComponentRegistrar::LIBRARY, $libraryName
                     ) . '/' . $urnParts[4];
             } else {
