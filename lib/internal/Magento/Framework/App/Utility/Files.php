@@ -110,6 +110,20 @@ class Files
     }
 
     /**
+     * Get registration file in modules
+     *
+     * @return array
+     */
+    private function getModuleRegistrationFiles()
+    {
+        $exclude = [];
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
+            $exclude[] = '#' . $moduleDir . '/registration.php#';
+        }
+        return $exclude;
+    }
+
+    /**
      * Get test directories in libraries
      *
      * @return array
@@ -215,7 +229,7 @@ class Files
                     $this->getFilesSubset(
                         $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE),
                         '*.php',
-                        $this->getModuleTestDirs()
+                        array_merge($this->getModuleTestDirs(), $this->getModuleRegistrationFiles())
                     )
                 );
             }
