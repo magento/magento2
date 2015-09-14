@@ -118,9 +118,10 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $entityAttributes = [
-            'attribute_id' => 'attributeSetName'
-        ];
+        $entityAttributes = [[
+            'attribute_id' => 'attribute_id',
+            'attribute_set_name' => 'attributeSetName',
+        ]];
 
         $this->entityModel->expects($this->any())->method('getEntityTypeId')->willReturn(3);
         $this->entityModel->expects($this->any())->method('getAttributeOptions')->willReturn(['option1', 'option2']);
@@ -147,9 +148,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
             ->method('addFieldToFilter')
             ->with(
                 'main_table.attribute_id',
-                ['in' => [
-                    key($entityAttributes)
-                ]]
+                ['in' => ['attribute_id']]
             )
             ->willReturn([$attribute]);
 
@@ -193,14 +192,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $this->connection
             ->expects($this->any())
             ->method('fetchAll')
-            ->will($this->returnValue(
-                [
-                    [
-                        'attribute_id' => 'attribute_id',
-                        'attribute_set_name' => 'attribute_set_name'
-                    ]
-                ]
-            ));
+            ->will($this->returnValue($entityAttributes));
 
         $this->resource = $this->getMock(
             '\Magento\Framework\App\Resource',
@@ -286,6 +278,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
     {
         $rowData = [
             '_attribute_set' => 'attribute_set_name',
+            'sku' => 'sku'
         ];
         $rowNum = 1;
         $this->entityModel->expects($this->any())->method('getRowScope')->willReturn(1);

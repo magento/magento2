@@ -15,9 +15,11 @@ class JobFactory
     /**
      * Name of jobs
      */
-    const NAME_UPGRADE = 'setup:upgrade';
-    const DB_ROLLBACK = 'setup:rollback';
-    const COMPONENT_UNINSTALL = 'setup:component:uninstall';
+    const JOB_UPGRADE = 'setup:upgrade';
+    const JOB_DB_ROLLBACK = 'setup:rollback';
+    const JOB_COMPONENT_UNINSTALL = 'setup:component:uninstall';
+    const JOB_MODULE_ENABLE = 'setup:module:enable';
+    const JOB_MODULE_DISABLE = 'setup:module:disable';
 
     /**
      * @var ServiceLocatorInterface
@@ -52,7 +54,7 @@ class JobFactory
         /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
         $objectManager = $objectManagerProvider->get();
         switch ($name) {
-            case self::NAME_UPGRADE:
+            case self::JOB_UPGRADE:
                 return new JobUpgrade(
                     $this->serviceLocator->get('Magento\Setup\Console\Command\UpgradeCommand'),
                     $objectManagerProvider,
@@ -62,16 +64,17 @@ class JobFactory
                     $params
                 );
                 break;
-            case self::DB_ROLLBACK:
+            case self::JOB_DB_ROLLBACK:
                 return new JobDbRollback(
                     $objectManager->get('Magento\Framework\Setup\BackupRollbackFactory'),
                     $multipleStreamOutput,
                     $cronStatus,
+                    $objectManagerProvider,
                     $name,
                     $params
                 );
                 break;
-            case self::COMPONENT_UNINSTALL:
+            case self::JOB_COMPONENT_UNINSTALL:
                 $moduleUninstall = new Helper\ModuleUninstall(
                     $this->serviceLocator->get('Magento\Setup\Model\ModuleUninstaller'),
                     $this->serviceLocator->get('Magento\Setup\Model\ModuleRegistryUninstaller'),
@@ -92,8 +95,30 @@ class JobFactory
                     $name,
                     $params
                 );
+                break;
+            case self::JOB_MODULE_ENABLE:
+                return new JobModule(
+                    $this->serviceLocator->get('Magento\Setup\Console\Command\ModuleEnableCommand'),
+                    $objectManagerProvider,
+                    $multipleStreamOutput,
+                    $cronStatus,
+                    $name,
+                    $params
+                );
+                break;
+            case self::JOB_MODULE_DISABLE:
+                return new JobModule(
+                    $this->serviceLocator->get('Magento\Setup\Console\Command\ModuleDisableCommand'),
+                    $objectManagerProvider,
+                    $multipleStreamOutput,
+                    $cronStatus,
+                    $name,
+                    $params
+                );
+                break;
             default:
                 throw new \RuntimeException(sprintf('"%s" job is not supported.', $name));
+                break;
         }
     }
 }
