@@ -33,4 +33,25 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Controller\Plugin\Account">
+        <arguments>
+            <argument name="allowedActions" xsi:type="array">
+                <item name="create" xsi:type="string">create</item>
+                <item name="login" xsi:type="string">login</item>
+                <item name="logoutsuccess" xsi:type="string">logoutsuccess</item>
+                <item name="forgotpassword" xsi:type="string">forgotpassword</item>
+                <item name="forgotpasswordpost" xsi:type="string">forgotpasswordpost</item>
+                <item name="resetpassword" xsi:type="string">resetpassword</item>
+                <item name="resetpasswordpost" xsi:type="string">resetpasswordpost</item>
+                <item name="confirm" xsi:type="string">confirm</item>
+                <item name="confirmation" xsi:type="string">confirmation</item>
+                <item name="createpassword" xsi:type="string">createpassword</item>
+                <item name="createpost" xsi:type="string">createpost</item>
+                <item name="loginpost" xsi:type="string">loginpost</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Controller\AccountInterface">
+        <plugin name="customer_account" type="Magento\Customer\Controller\Plugin\Account" />
+    </type>
 </config>
