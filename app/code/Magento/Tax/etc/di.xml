@@ -64,7 +64,7 @@
     <type name="Magento\Quote\Model\Quote\Address\ToOrder">
         <plugin name="add_tax_to_order" type="Magento\Tax\Model\Quote\ToOrderConverter"/>
     </type>
-    <type name="Magento\Quote\Model\Cart\CartTotalRepository">
+    <type name="Magento\Quote\Model\Cart\TotalsConverter">
         <plugin name="add_tax_details" type="Magento\Tax\Model\Quote\GrandTotalDetailsPlugin"/>
     </type>
     <type name="Magento\Tax\Model\Resource\Report\Tax\Createdat">
