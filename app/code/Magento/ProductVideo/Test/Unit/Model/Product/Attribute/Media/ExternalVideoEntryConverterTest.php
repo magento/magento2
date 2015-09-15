@@ -112,7 +112,7 @@ class ExternalVideoEntryConverterTest extends \PHPUnit_Framework_TestCase
 
         $this->mediaGalleryEntryExtensionMock = $this->getMock(
             '\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtension',
-            [],
+            ['setVideoContent', 'getVideoContent'],
             [],
             '',
             false
