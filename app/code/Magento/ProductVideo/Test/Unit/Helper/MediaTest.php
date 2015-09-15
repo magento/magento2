@@ -121,28 +121,28 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider dataForVideoPlay
      */
-    public function testGetVideoPlayAttribute($expectedResult)
+    public function testGetPlayIfBaseAttribute($expectedResult)
     {
         $this->viewConfigMock->expects($this->once())->method('getVideoAttributeValue')->willReturn($expectedResult);
-        $this->mediaHelperObject->getVideoPlayAttribute();
+        $this->mediaHelperObject->getPlayIfBaseAttribute();
     }
 
     /**
      * @dataProvider dataForVideoStop
      */
-    public function testGetVideoStopAttribute($expectedResult)
+    public function testGetShowRelatedAttribute($expectedResult)
     {
         $this->viewConfigMock->expects($this->once())->method('getVideoAttributeValue')->willReturn($expectedResult);
-        $this->mediaHelperObject->getVideoStopAttribute();
+        $this->mediaHelperObject->getShowRelatedAttribute();
     }
 
     /**
      * @dataProvider dataForVideoBackground
      */
-    public function testGetVideoBackgroundAttribute($expectedResult)
+    public function testGetVideoAutoRestartAttribute($expectedResult)
     {
         $this->viewConfigMock->expects($this->once())->method('getVideoAttributeValue')->willReturn($expectedResult);
-        $this->mediaHelperObject->getVideoBackgroundAttribute();
+        $this->mediaHelperObject->getVideoAutoRestartAttribute();
     }
 
 }
