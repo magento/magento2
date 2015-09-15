@@ -22,6 +22,7 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      * @param Converter $converter
      * @param SchemaLocator $schemaLocator
      * @param \Magento\Framework\Config\ValidationStateInterface $validationState
+     * @param string $filename
      * @param array $idAttributes
      * @param string $domDocumentClass
      * @param string $defaultScope
@@ -31,11 +32,12 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
         \Magento\Integration\Model\Config\Converter $converter,
         \Magento\Integration\Model\Config\SchemaLocator $schemaLocator,
         \Magento\Framework\Config\ValidationStateInterface $validationState,
+        $filename = '',
         $idAttributes = [],
         $domDocumentClass = 'Magento\Framework\Config\Dom',
         $defaultScope = 'global'
     ) {
-        $fileName = 'integration' . DIRECTORY_SEPARATOR . 'config.xml';
+        $fileName = empty($filename) ? 'integration' . DIRECTORY_SEPARATOR . 'config.xml' : $filename;
         parent::__construct(
             $fileResolver,
             $converter,
