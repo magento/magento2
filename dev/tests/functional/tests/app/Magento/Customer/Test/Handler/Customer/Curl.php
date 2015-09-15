@@ -37,6 +37,7 @@ class Curl extends AbstractCurl implements CustomerInterface
         'gender' => [
             'Male' => 1,
             'Female' => 2,
+            'Not Specified' => 3
         ],
         'region_id' => [
             'California' => 12,
@@ -226,22 +227,5 @@ class Curl extends AbstractCurl implements CustomerInterface
         $curlData['address'] = $address;
 
         return $curlData;
-    }
-
-    /**
-     * Encoded filter parameters
-     *
-     * @param array $filter
-     * @return string
-     */
-    protected function encodeFilter(array $filter)
-    {
-        $result = [];
-        foreach ($filter as $name => $value) {
-            $result[] = "{$name}={$value}";
-        }
-        $result = implode('&', $result);
-
-        return base64_encode($result);
     }
 }

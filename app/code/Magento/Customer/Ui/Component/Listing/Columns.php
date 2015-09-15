@@ -8,23 +8,26 @@ namespace Magento\Customer\Ui\Component\Listing;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Customer\Ui\Component\ColumnFactory;
 use Magento\Customer\Api\Data\AttributeMetadataInterface as AttributeMetadata;
+use Magento\Framework\View\Element\UiComponentInterface;
+use Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater;
+use Magento\Customer\Api\CustomerMetadataInterface;
 
 class Columns extends \Magento\Ui\Component\Listing\Columns
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $columnSortOrder;
 
-    /**
-     * @var AttributeRepository
-     */
+    /** @var AttributeRepository  */
     protected $attributeRepository;
+
+    /** @var InlineEditUpdater */
+    protected $inlineEditUpdater;
 
     /**
      * @param ContextInterface $context
      * @param ColumnFactory $columnFactory
      * @param AttributeRepository $attributeRepository
+     * @param InlineEditUpdater $inlineEditor
      * @param array $components
      * @param array $data
      */
@@ -32,12 +35,14 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
         ContextInterface $context,
         ColumnFactory $columnFactory,
         AttributeRepository $attributeRepository,
+        InlineEditUpdater $inlineEditor,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $components, $data);
         $this->columnFactory = $columnFactory;
         $this->attributeRepository = $attributeRepository;
+        $this->inlineEditUpdater = $inlineEditor;
     }
 
     /**
@@ -111,6 +116,7 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     public function updateColumn(array $attributeData, $newAttributeCode)
     {
         $component = $this->components[$attributeData[AttributeMetadata::ATTRIBUTE_CODE]];
+        $this->addOptions($component, $attributeData);
 
         if ($attributeData[AttributeMetadata::BACKEND_TYPE] != 'static') {
             if ($attributeData[AttributeMetadata::IS_USED_IN_GRID]) {
@@ -119,18 +125,46 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
                     [
                         'name' => $newAttributeCode,
                         'dataType' => $attributeData[AttributeMetadata::BACKEND_TYPE],
-                        'visible' => $attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID]
+                        'visible' => (bool)$attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID]
                     ]
                 );
                 $component->setData('config', $config);
             }
         } else {
+            if ($attributeData['entity_type_code'] == CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER
+                && !empty($component->getData('config')['editor'])
+            ) {
+                $this->inlineEditUpdater->applyEditing(
+                    $component,
+                    $attributeData[AttributeMetadata::FRONTEND_INPUT],
+                    $attributeData[AttributeMetadata::VALIDATION_RULES],
+                    $attributeData[AttributeMetadata::REQUIRED]
+                );
+            }
             $component->setData(
                 'config',
                 array_merge(
                     $component->getData('config'),
-                    ['visible' => $attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID]]
+                    ['visible' => (bool)$attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID]]
                 )
+            );
+        }
+    }
+
+    /**
+     * Add options to component
+     *
+     * @param UiComponentInterface $component
+     * @param array $attributeData
+     * @return void
+     */
+    public function addOptions(UiComponentInterface $component, array $attributeData)
+    {
+        $config = $component->getData('config');
+        if (count($attributeData[AttributeMetadata::OPTIONS]) && !isset($config[AttributeMetadata::OPTIONS])) {
+            $component->setData(
+                'config',
+                array_merge($config, [AttributeMetadata::OPTIONS => $attributeData[AttributeMetadata::OPTIONS]])
             );
         }
     }

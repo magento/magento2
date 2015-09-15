@@ -8,6 +8,11 @@ namespace Magento\Catalog\Ui\Component\Listing;
 class Filters extends \Magento\Ui\Component\Filters
 {
     /**
+     * @var AttributeRepository
+     */
+    protected $attributeRepository;
+
+    /**
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
      * @param \Magento\Catalog\Ui\Component\FilterFactory $filterFactory
      * @param AttributeRepository $attributeRepository

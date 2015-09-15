@@ -58,11 +58,17 @@ class Module implements
      */
     public function getConfig()
     {
-        $result = array_merge(
+        $result = array_merge_recursive(
             include __DIR__ . '/../../../config/module.config.php',
             include __DIR__ . '/../../../config/router.config.php',
             include __DIR__ . '/../../../config/di.config.php',
-            include __DIR__ . '/../../../config/states.config.php',
+            include __DIR__ . '/../../../config/states.installer.config.php',
+            include __DIR__ . '/../../../config/states.update.config.php',
+            include __DIR__ . '/../../../config/states.home.config.php',
+            include __DIR__ . '/../../../config/states.upgrade.config.php',
+            include __DIR__ . '/../../../config/states.uninstall.config.php',
+            include __DIR__ . '/../../../config/states.enable.config.php',
+            include __DIR__ . '/../../../config/states.disable.config.php',
             include __DIR__ . '/../../../config/languages.config.php'
         );
         return $result;
