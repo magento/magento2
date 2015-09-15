@@ -14,12 +14,10 @@
     "license": [
         "proprietary"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/EncryptionKey"
-            ]
-        ]
+    "autoload": {
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "Magento\\EncryptionKey\\": ""
+        }
     }
 }
