@@ -53,4 +53,16 @@ class InvalidateLogger
         $url = $this->request->getUriString();
         return compact('method', 'url', 'invalidateInfo');
     }
+
+    /**
+     * Log critical
+     *
+     * @param string $message
+     * @param mixed $params
+     * @return void
+     */
+    public function critical($message, $params)
+    {
+        $this->logger->critical($message, $this->makeParams($params));
+    }
 }
