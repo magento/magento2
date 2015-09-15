@@ -11,7 +11,11 @@ define([
 ], function (Component, $, ko, _) {
     'use strict';
 
-    var UserException = Object.create(Error, {name: {value: 'UserException', writable: false}});
+    function UserException (message) {
+        this.message = message;
+        this.name = "UserException";
+    }
+    UserException.prototype = Object.create(Error.prototype);
 
     return Component.extend({
         defaults: {
