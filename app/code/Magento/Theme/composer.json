@@ -16,7 +16,8 @@
         "magento/magento-composer-installer": "*"
     },
     "suggest": {
-        "magento/module-translation": "1.0.0-beta"
+        "magento/module-translation": "1.0.0-beta",
+        "magento/module-theme-sample-data": "Sample Data version:1.0.0-beta"
     },
     "type": "magento2-module",
     "version": "1.0.0-beta",

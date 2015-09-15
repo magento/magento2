@@ -7,10 +7,14 @@
         "magento/module-cms": "1.0.0-beta",
         "magento/module-backend": "1.0.0-beta",
         "magento/module-catalog": "1.0.0-beta",
+        "magento/module-email": "1.0.0-beta",
         "magento/module-theme": "1.0.0-beta",
         "magento/framework": "1.0.0-beta",
         "magento/module-variable": "1.0.0-beta",
         "magento/magento-composer-installer": "*"
+    },
+    "suggest": {
+        "magento/module-widget-sample-data": "Sample Data version:1.0.0-beta"
     },
     "type": "magento2-module",
     "version": "1.0.0-beta",
