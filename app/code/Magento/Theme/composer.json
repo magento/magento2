@@ -25,6 +25,9 @@
         "AFL-3.0"
     ],
     "autoload": {
-        "files": [ "registration.php" ]
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "Magento\\Theme\\": ""
+        }
     }
 }
