@@ -114,6 +114,29 @@ class Deployer
                     $this->output->writeln("=== {$area} -> {$themePath} -> {$locale} ===");
                     $this->count = 0;
                     $this->errorCount = 0;
+
+                    /** @var \Magento\Theme\Model\View\Design $design */
+                    $design = $this->objectManager->create('Magento\Theme\Model\View\Design');
+                    $design->setDesignTheme($themePath, $area);
+                    $fileManager = $this->objectManager->create(
+                        'Magento\RequireJs\Model\FileManager',
+                        [
+                            'config' => $this->objectManager->create(
+                                'Magento\Framework\RequireJs\Config',
+                                [
+                                    'assetRepo' => $this->objectManager->create(
+                                        'Magento\Framework\View\Asset\Repository',
+                                        [
+                                            'design' => $design
+                                        ]
+                                    ),
+                                    'design' => $design
+                                ]
+                            )
+                        ]
+                    );
+                    $fileManager->createRequireJsConfigAsset();
+
                     foreach ($appFiles as $info) {
                         list($fileArea, $fileTheme, , $module, $filePath) = $info;
                         if (($fileArea == $area || $fileArea == 'base') &&
