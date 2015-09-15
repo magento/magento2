@@ -59,6 +59,8 @@ class QueueManagement
     /**
      * @param Resource\Queue $messageResource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\MysqlMq\Model\Resource\MessageStatusCollectionFactory $messageStatusCollectionFactory
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
      */
     public function __construct(
         \Magento\MysqlMq\Model\Resource\Queue $messageResource,
@@ -144,8 +146,10 @@ class QueueManagement
         }
 
         $collection = $this->messageStatusCollectionFactory->create()
-            ->addFieldToFilter('status',
-                ['in' => $statusesToDelete]);
+            ->addFieldToFilter(
+                'status',
+                ['in' => $statusesToDelete]
+            );
 
         /**
          * Update messages if lifetime is expired
