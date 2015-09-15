@@ -48,7 +48,7 @@ class ShareTest extends \PHPUnit_Framework_TestCase
     {
         $resultMock = $this->getMock('\Magento\Framework\Controller\ResultInterface', [], [], '', false);
 
-        $this->customerSessionMock->expects($this->once())->method('authenticate')->with($this->model)
+        $this->customerSessionMock->expects($this->once())->method('authenticate')
             ->willReturn(true);
         $this->resultFactoryMock->expects($this->once())->method('create')->with(ResultFactory::TYPE_PAGE)
             ->willReturn($resultMock);
@@ -58,7 +58,7 @@ class ShareTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteAuthenticationFail()
     {
-        $this->customerSessionMock->expects($this->once())->method('authenticate')->with($this->model)
+        $this->customerSessionMock->expects($this->once())->method('authenticate')
             ->willReturn(false);
 
         $this->assertEmpty($this->model->execute());
