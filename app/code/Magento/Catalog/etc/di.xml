@@ -13,6 +13,7 @@
     <preference for="Magento\Catalog\Api\CategoryAttributeOptionManagementInterface" type="Magento\Catalog\Model\Category\Attribute\OptionManagement" />
     <preference for="Magento\Catalog\Model\ProductTypes\ConfigInterface" type="Magento\Catalog\Model\ProductTypes\Config" />
     <preference for="Magento\Catalog\Model\ProductOptions\ConfigInterface" type="Magento\Catalog\Model\ProductOptions\Config" />
+    <preference for="Magento\Catalog\Model\Product\Media\ConfigInterface" type="Magento\Catalog\Model\Product\Media\Config" />
     <preference for="Magento\Catalog\Model\Product\PriceModifierInterface" type="Magento\Catalog\Model\Product\PriceModifier\Composite" />
     <preference for="Magento\Catalog\Model\Attribute\LockValidatorInterface" type="Magento\Catalog\Model\Attribute\LockValidatorComposite" />
     <preference for="Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface" type="Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapper" />
