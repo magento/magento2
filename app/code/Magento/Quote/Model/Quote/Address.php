@@ -973,9 +973,6 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         /**
          * Store and website identifiers need specify from quote
          */
-        /*$request->setStoreId($this->_storeManager->getStore()->getId());
-          $request->setWebsiteId($this->_storeManager->getStore()->getWebsiteId());*/
-
         $request->setStoreId($this->getQuote()->getStore()->getId());
         $request->setWebsiteId($this->getQuote()->getStore()->getWebsiteId());
         $request->setFreeShipping($this->getFreeShipping());
@@ -985,8 +982,11 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         $request->setBaseCurrency($this->getQuote()->getStore()->getBaseCurrency());
         $request->setPackageCurrency($this->getQuote()->getStore()->getCurrentCurrency());
         $request->setLimitCarrier($this->getLimitCarrier());
-
-        $request->setBaseSubtotalInclTax($this->getBaseSubtotalInclTax());
+        $baseSubtotalInclTax =
+            is_array($this->getTotals()) && array_key_exists('base_subtotal_incl_tax', $this->getTotals())
+                ? $this->getTotals()['base_subtotal_incl_tax']
+                : $this->getBaseSubtotalInclTax();
+        $request->setBaseSubtotalInclTax($baseSubtotalInclTax);
 
         $result = $this->_rateCollector->create()->collectRates($request)->getResult();
 
