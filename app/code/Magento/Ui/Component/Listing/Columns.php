@@ -7,6 +7,8 @@ namespace Magento\Ui\Component\Listing;
 
 use Magento\Ui\Component\AbstractComponent;
 use Magento\Ui\Component\Listing\Columns\Column;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\UrlInterface;
 
 /**
  * Class Columns
@@ -42,6 +44,25 @@ class Columns extends AbstractComponent
                 }
             }
         }
+        $this->buildUrlsForInlineEditing();
         parent::prepare();
+    }
+
+    /**
+     * Build urls for inline editing
+     *
+     * @return void
+     */
+    protected function buildUrlsForInlineEditing()
+    {
+        $config = $this->getConfiguration();
+        if (isset($config['editorConfig']) && isset($config['editorConfig']['clientConfig'])) {
+            foreach ($config['editorConfig']['clientConfig'] as $key => &$value) {
+                if (in_array($key, ['saveUrl', 'validateUrl'])) {
+                    $value = $this->getContext()->getUrl($value);
+                }
+            }
+        }
+        $this->setData('config', $config);
     }
 }
