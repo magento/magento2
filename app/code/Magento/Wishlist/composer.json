@@ -21,7 +21,8 @@
         "magento/module-configurable-product": "1.0.0-beta",
         "magento/module-downloadable": "1.0.0-beta",
         "magento/module-bundle": "1.0.0-beta",
-        "magento/module-cookie": "1.0.0-beta"
+        "magento/module-cookie": "1.0.0-beta",
+        "magento/module-wishlist-sample-data": "Sample Data version:1.0.0-beta"
     },
     "type": "magento2-module",
     "version": "1.0.0-beta",
