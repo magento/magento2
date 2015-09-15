@@ -59,7 +59,7 @@ class PublisherTest extends \PHPUnit_Framework_TestCase
      *
      * @magentoDataFixture Magento/MysqlMq/_files/queues.php
      */
-    public function testPublish()
+    public function testPublishConsumeFlow()
     {
         /** @var \Magento\MysqlMq\Model\DataObjectFactory $objectFactory */
         $objectFactory = $this->objectManager->create('Magento\MysqlMq\Model\DataObjectFactory');
