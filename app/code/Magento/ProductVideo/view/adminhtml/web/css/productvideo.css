@@ -63,6 +63,14 @@
   width: 200px;
   position: absolute;
   margin-left: calc( (100%) * .33333333 - 30px + 90px );
+  left: 0px;
+}
+.admin__field.field-video_image .admin__field-label:before,
+.admin__field.field-video_small_image .admin__field-label:before,
+.admin__field.field-video_thumbnail .admin__field-label:before,
+.admin__field.field-video_swatch_image .admin__field-label:before,
+.admin__field.field-new_video_disabled .admin__field-label:before {
+  content: none;
 }
 .admin__field.field-video_image .admin__field-label span,
 .admin__field.field-video_small_image .admin__field-label span,
