@@ -31,16 +31,15 @@
                 </div>
                 <form action="" method="POST" id="product_addtocart_form_from_popup" class="map-form-addtocart">
                     <input type="hidden" name="product" class="product_id" value="" id="map-popup-product-id"/>
-
-                    <div class="additional-addtocart-box">
-                        <?php echo $block->getChildHtml(); ?>
-                    </div>
                     <button type="button"
                             title="<?php echo $block->escapeHtml(__('Add to Cart')); ?>"
                             class="action tocart primary"
                             id="map-popup-button">
                         <span><?php echo __('Add to Cart'); ?></span>
                     </button>
+                    <div class="additional-addtocart-box">
+                        <?php echo $block->getChildHtml(); ?>
+                    </div>
                 </form>
             </div>
             <div class="map-text" id="map-popup-text">
