@@ -65,11 +65,28 @@ define([
             );
         },
         changeProduct: function (newProducts) {
-            var oldProduct = this.productMatrix()[this.rowIndexToEdit];
-            this.productMatrix.splice(this.rowIndexToEdit, 1, this._makeProduct(_.extend(oldProduct, newProducts[0])));
+            var oldProduct = this.productMatrix()[this.rowIndexToEdit],
+                newProduct = this._makeProduct(_.extend(oldProduct, newProducts[0]));
+            this.productAttributesMap[this.getVariationKey(newProduct.options)] = newProduct.productId;
+            this.productMatrix.splice(this.rowIndexToEdit, 1, newProduct);
         },
         appendProducts: function (newProducts) {
-            this.productMatrix.push.apply(this.productMatrix, _.map(newProducts, this._makeProduct.bind(this)));
+            this.productMatrix.push.apply(
+                this.productMatrix,
+                _.map(
+                    newProducts,
+                    _.wrap(
+                        this._makeProduct.bind(this),
+                        function (func, product) {
+                            var newProduct = func(product);
+                            if (this.productAttributesMap.hasOwnProperty(this.getVariationKey(newProduct.options))) {
+                                throw new UserException($.mage.__('Duplicate product'));
+                            }
+                            this.productAttributesMap[this.getVariationKey(newProduct.options)] = newProduct.productId;
+                        }.bind(this)
+                    )
+                )
+            );
         },
         _makeProduct: function (product) {
             var productId = product['entity_id'] || product.productId || null,
@@ -77,11 +94,6 @@ define([
                 options = _.map(attributes, function (option, attribute) {
                     return _.findWhere(this.attributes(), {code: attribute}).options[option];
                 }.bind(this));
-
-            if (this.productAttributesMap.hasOwnProperty(this.getVariationKey(options))) {
-                throw new UserException($.mage.__('Duplicate product'));
-            }
-            this.productAttributesMap[this.getVariationKey(options)] = productId;
 
             return {
                 attribute: JSON.stringify(attributes),
