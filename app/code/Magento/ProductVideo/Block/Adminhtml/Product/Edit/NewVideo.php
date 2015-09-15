@@ -151,6 +151,7 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
                 'title' => __('Get Video Information'),
                 'name' => 'new_video_get',
                 'value' => 'Get Video Information',
+                'class' => 'action-default'
             ]
         );
 
