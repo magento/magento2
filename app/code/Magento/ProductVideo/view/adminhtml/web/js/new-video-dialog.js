@@ -118,6 +118,8 @@ define([
 
         _imageWidgetSelector: '#media_gallery_content',
 
+        _imageProductGalleryWrapperSelector : '#image-container',
+
         _videoPreviewInputSelector: '#new_video_screenshot',
 
         _videoDisableinputSelector: '#new_video_disabled',
@@ -135,6 +137,10 @@ define([
         _videoInformationBtnSelector: '[name="new_video_get"]',
 
         _editVideoBtnSelector : '.image.item',
+
+        _deleteGalleryVideoSelector : '[data-role=delete-button]',
+
+        _deleteGalleryVideoSelectorBtn : null,
 
         _videoInformationGetBtn: null,
 
@@ -156,13 +162,14 @@ define([
             this._videoInformationGetBtn = jQuery(this._videoInformationBtnSelector);
             this._videoInformationGetUrlField = jQuery(this._videoUrlSelector);
             this._videoInformationGetEditBtn = jQuery(this._editVideoBtnSelector);
+            this._deleteGalleryVideoSelectorBtn = jQuery(this._deleteGalleryVideoSelector);
 
             this._videoInformationGetBtn.on('click', $.proxy(this._onGetVideoInformationClick, this));
             this._videoInformationGetUrlField.on('focusout', $.proxy(this._onGetVideoInformationFocusOut, this));
             this._videoUrlWidget.on("updated_video_information", $.proxy(this._onGetVideoInformationSuccess, this));
             this._videoUrlWidget.on("error_updated_information", $.proxy(this._onGetVideoInformationError, this));
+            this._deleteGalleryVideoSelectorBtn.on('mouseup', $.proxy(function(event){this._onGalleryVideoDeleteClick(event)}, this));
         },
-
         /**
          * Fired when user click on button "Get video information"
          * @private
@@ -241,7 +248,16 @@ define([
          */
         _onGetVideoInformationError: function(e, data) {
         },
-
+        /**
+         * Fired when user click Delete Video button from gallery
+         * @private
+         */
+        _onGalleryVideoDeleteClick : function (event) {
+            event.preventDefault();
+            event.stopImmediatePropagation();
+            var $videoContainer = $(event.currentTarget).closest('[data-role=image]');
+            $(event.target).trigger('removeItem', $videoContainer.data('imageData'));
+        },
         /**
          * Remove ".tmp"
          *
@@ -510,6 +526,7 @@ define([
 
         createVideoItemIcons : function () {
             $(this._imageWidgetSelector).find('.product-image.video-item').parent().addClass('video-item');
+            $(this._imageProductGalleryWrapperSelector).find('.product-image.video-item').parent().addClass('video-item');
         },
 
         /**
