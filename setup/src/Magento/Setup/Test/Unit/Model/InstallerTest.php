@@ -363,7 +363,47 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->logger->expects($this->at(2))->method('log')
             ->with('The directory \'/generation\' doesn\'t exist - skipping cleanup');
         $this->logger->expects($this->at(3))->method('log')->with('Updating modules:');
-        $newObject->updateModulesSequence();
+        $newObject->updateModulesSequence(false);
+    }
+
+    public function testUpdateModulesSequenceKeepGenerated()
+    {
+        $allModules = [
+            'Foo_One' => [],
+            'Bar_Two' => [],
+            'New_Module' => [],
+        ];
+        $this->cleanupFiles->expects($this->never())->method('clearCodeGeneratedClasses');
+
+        $cache = $this->getMock('Magento\Framework\App\Cache', [], [], '', false);
+        $cache->expects($this->once())->method('clean');
+        $this->objectManager->expects($this->once())
+            ->method('create')
+            ->will($this->returnValueMap([
+                ['Magento\Framework\App\Cache', [], $cache],
+            ]));
+
+        $this->moduleLoader->expects($this->once())->method('load')->willReturn($allModules);
+
+        $expectedModules = [
+            ConfigFilePool::APP_CONFIG => [
+                'modules' => [
+                    'Bar_Two' => 0,
+                    'Foo_One' => 1,
+                    'New_Module' => 1
+                ]
+            ]
+        ];
+
+        $this->config->expects($this->atLeastOnce())->method('isAvailable')->willReturn(true);
+
+        $newObject = $this->createObject(false, false);
+        $this->configReader->expects($this->once())->method('load')
+            ->willReturn(['modules' => ['Bar_Two' => 0, 'Foo_One' => 1, 'Old_Module' => 0] ]);
+        $this->configWriter->expects($this->once())->method('saveConfig')->with($expectedModules);
+        $this->logger->expects($this->at(0))->method('log')->with('Cache cleared successfully');
+        $this->logger->expects($this->at(1))->method('log')->with('Updating modules:');
+        $newObject->updateModulesSequence(true);
     }
 
     public function testUninstall()
