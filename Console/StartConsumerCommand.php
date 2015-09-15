@@ -19,7 +19,6 @@ class StartConsumerCommand extends Command
 {
     const ARGUMENT_CONSUMER = 'consumer';
     const OPTION_NUMBER_OF_MESSAGES = 'max-messages';
-    const OPTION_DAEMON_MODE = 'daemon-mode';
     const COMMAND_QUEUE_CONSUMERS_START = 'queue:consumers:start';
 
     /**
@@ -45,9 +44,8 @@ class StartConsumerCommand extends Command
     {
         $consumerName = $input->getArgument(self::ARGUMENT_CONSUMER);
         $numberOfMessages = $input->getOption(self::OPTION_NUMBER_OF_MESSAGES);
-        $daemonMode = $input->getOption(self::OPTION_DAEMON_MODE);
         $consumer = $this->consumerFactory->get($consumerName);
-        $consumer->process($numberOfMessages, $daemonMode);
+        $consumer->process($numberOfMessages);
     }
 
     /**
@@ -67,14 +65,7 @@ class StartConsumerCommand extends Command
             null,
             InputOption::VALUE_REQUIRED,
             'The number of messages to be processed by the consumer before process termination. '
-            . 'If not specify - terminate after processing all queued messages.'
-        );
-        $this->addOption(
-            self::OPTION_DAEMON_MODE,
-            null,
-            InputOption::VALUE_NONE,
-            'This option defines, whether this command will run indefinitely or not. '
-            . 'If number of messages is defined or if this option is not specify - the command is not in daemon mode.'
+            . 'If not specified - terminate after processing all queued messages.'
         );
         $this->setHelp(
             <<<HELP
@@ -87,10 +78,6 @@ To start consumer which will process all queued messages and terminate execution
 To specify the number of messages which should be processed by consumer before its termination:
 
     <comment>%command.full_name% someConsumer --max-messages=50</comment>
-
-To specify the command as daemon-mode:
-
-    <comment>%command.full_name% someConsumer --daemon-mode</comment>
 HELP
         );
         parent::configure();
