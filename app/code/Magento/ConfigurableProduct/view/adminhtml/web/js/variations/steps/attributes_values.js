@@ -152,9 +152,9 @@ define([
                     options: options
                 },
                 showLoader: true
-            }).done(function () {
+            }).done(function (savedOptions) {
                 this.attributes.each(function (attribute) {
-                    _.each(options, function (newOptionId, oldOptionId) {
+                    _.each(savedOptions, function (newOptionId, oldOptionId) {
                         var option = attribute.options.findWhere({
                             id: oldOptionId
                         });
