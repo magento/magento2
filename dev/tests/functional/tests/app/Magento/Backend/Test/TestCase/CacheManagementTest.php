@@ -38,7 +38,7 @@ class CacheManagementTest extends Injectable
          * Skip test for 'Flush Static Files Cache' in production mode.
          */
         if (($flushButtonName === 'Flush Static Files Cache') && $_ENV['mage_mode'] === 'production') {
-            $this->markTestSkipped('Flush static files cache in production mode.');
+            $this->markTestSkipped('Skip flushing static files cache test when in production mode.');
         }
         $adminCache->open();
         $adminCache->getAdditionalBlock()->clickFlushCache($flushButtonName);

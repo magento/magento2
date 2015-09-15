@@ -32,7 +32,7 @@ class CacheFlushStaticFilesInProductionModeTest extends Injectable
     public function __prepare()
     {
         if ($_ENV['mage_mode'] !== 'production') {
-            $this->markTestSkipped('"Flush Static Files Cache" button not visible in production mode.');
+            $this->markTestSkipped('Skip "Flush Static Files Cache" button absence test when not in production mode.');
         }
     }
 
