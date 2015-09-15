@@ -90,30 +90,16 @@ class QueueManagementTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(0, $messages);
 
         /** Ensure that message for retry is still accessible when reading messages from the queue */
-        $messages = $this->queueManagement->readMessages('queue2', $maxMessagesNumber);
-        $this->assertCount(2, $messages);
-        $firstMessage = array_shift($messages);
+        $messages = $this->queueManagement->readMessages('queue2', 1);
+        $message = array_shift($messages);
+        $messageRelationId = $message[QueueManagement::MESSAGE_QUEUE_RELATION_ID];
 
-        $this->queueManagement->pushToQueueForRetry($firstMessage[QueueManagement::MESSAGE_QUEUE_RELATION_ID]);
-        $messages = $this->queueManagement->readMessages('queue2', $maxMessagesNumber);
-        $this->assertCount(2, $messages);
-        $firstMessage = array_shift($messages);
-        $this->assertEquals(1, $firstMessage[QueueManagement::MESSAGE_NUMBER_OF_TRIALS]);
-
-        $this->queueManagement->pushToQueueForRetry($firstMessage[QueueManagement::MESSAGE_QUEUE_RELATION_ID]);
-        $messages = $this->queueManagement->readMessages('queue2', $maxMessagesNumber);
-        $this->assertCount(2, $messages);
-        $firstMessage = array_shift($messages);
-        $this->assertEquals(2, $firstMessage[QueueManagement::MESSAGE_NUMBER_OF_TRIALS]);
-
-        $this->queueManagement->pushToQueueForRetry($firstMessage[QueueManagement::MESSAGE_QUEUE_RELATION_ID]);
-        $messages = $this->queueManagement->readMessages('queue2', $maxMessagesNumber);
-        $this->assertCount(2, $messages);
-        $firstMessage = array_shift($messages);
-        $this->assertEquals(3, $firstMessage[QueueManagement::MESSAGE_NUMBER_OF_TRIALS]);
-
-        $this->queueManagement->pushToQueueForRetry($firstMessage[QueueManagement::MESSAGE_QUEUE_RELATION_ID]);
-        $messages = $this->queueManagement->readMessages('queue2', $maxMessagesNumber);
-        $this->assertCount(1, $messages);
+        for ($i = 0; $i < 2; $i++) {
+            $this->assertEquals($i, $message[QueueManagement::MESSAGE_NUMBER_OF_TRIALS]);
+            $this->queueManagement->pushToQueueForRetry($message[QueueManagement::MESSAGE_QUEUE_RELATION_ID]);
+            $messages = $this->queueManagement->readMessages('queue2', 1);
+            $message = array_shift($messages);
+            $this->assertEquals($messageRelationId, $message[QueueManagement::MESSAGE_QUEUE_RELATION_ID]);
+        }
     }
 }
