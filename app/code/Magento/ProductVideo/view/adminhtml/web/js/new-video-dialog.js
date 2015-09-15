@@ -15,93 +15,93 @@ define([
 ], function ($) {
     'use strict';
     $.widget('mage.createVideoPlayer', {
-      options : {
-        video_id : '',
-        video_provider : '',
-        container : '.video-player-container',
-        video_class : 'product-video',
-        reset : false,
-        meta_data : {
-          DOM : {
-            title : '.video-information.title span',
-            uploaded : '.video-information.uploaded span',
-            uploader : '.video-information.uploader span',
-            duration : '.video-information.duration span',
-            all : '.video-information span',
-            wrapper : '.video-information'
-          },
-          data : {
-            title : '',
-            uploaded : '',
-            uploader : '',
-            uploader_url : '',
-            duration : ''
-          }
+        options : {
+            video_id : '',
+            video_provider : '',
+            container : '.video-player-container',
+            video_class : 'product-video',
+            reset : false,
+            meta_data : {
+                DOM : {
+                    title : '.video-information.title span',
+                    uploaded : '.video-information.uploaded span',
+                    uploader : '.video-information.uploader span',
+                    duration : '.video-information.duration span',
+                    all : '.video-information span',
+                    wrapper : '.video-information'
+                },
+                data : {
+                    title : '',
+                    uploaded : '',
+                    uploader : '',
+                    uploader_url : '',
+                    duration : ''
+                }
+            }
+        },
+        _init : function () {
+            if (this.options.reset) {
+                this.reset();
+            } else {
+                this.update();
+            }
+        },
+        update : function () {
+            this.reset();
+            $(this.options.container).append('<div class="'+this.options.video_class+'" data-type="'+this.options.video_provider+'" data-code="'+this.options.video_id+'" data-width="100%" data-height="100%"></div>');
+            $(this.options.meta_data.DOM.wrapper).show();
+            $(this.options.meta_data.DOM.title).text(this.options.meta_data.data.title);
+            $(this.options.meta_data.DOM.uploaded).text(this.options.meta_data.data.uploaded);
+            $(this.options.meta_data.DOM.duration).text(this.options.meta_data.data.duration);
+            if (this.options.video_provider === 'youtube') {
+                $(this.options.meta_data.DOM.uploader).html('<a href="https://youtube.com/channel/'+this.options.meta_data.data.uploader_url+'">'+this.options.meta_data.data.uploader+'</a>');
+            } else
+            if (this.options.video_provider === 'vimeo') {
+                $(this.options.meta_data.DOM.uploader).html('<a href="'+this.options.meta_data.data.uploader_url+'">'+this.options.meta_data.data.uploader+'</a>');
+            }
+            $('.'+this.options.video_class).productVideoLoader();
+        },
+        reset : function () {
+            $(this.options.container).find('.'+this.options.video_class).remove();
+            $(this.options.meta_data.DOM.wrapper).hide();
+            $(this.options.meta_data.DOM.all).text('');
         }
-      },
-      _init : function () {
-        if (this.options.reset) {
-          this.reset();
-        } else {
-          this.update();
-        }
-      },
-      update : function () {
-        this.reset();
-        $(this.options.container).append('<div class="'+this.options.video_class+'" data-type="'+this.options.video_provider+'" data-code="'+this.options.video_id+'" data-width="100%" data-height="100%"></div>');
-        $(this.options.meta_data.DOM.wrapper).show();
-        $(this.options.meta_data.DOM.title).text(this.options.meta_data.data.title);
-        $(this.options.meta_data.DOM.uploaded).text(this.options.meta_data.data.uploaded);
-        $(this.options.meta_data.DOM.duration).text(this.options.meta_data.data.duration);
-        if (this.options.video_provider === 'youtube') {
-          $(this.options.meta_data.DOM.uploader).html('<a href="https://youtube.com/channel/'+this.options.meta_data.data.uploader_url+'">'+this.options.meta_data.data.uploader+'</a>');
-        } else
-        if (this.options.video_provider === 'vimeo') {
-          $(this.options.meta_data.DOM.uploader).html('<a href="'+this.options.meta_data.data.uploader_url+'">'+this.options.meta_data.data.uploader+'</a>');
-        }
-        $('.'+this.options.video_class).productVideoLoader();
-      },
-      reset : function () {
-        $(this.options.container).find('.'+this.options.video_class).remove();
-        $(this.options.meta_data.DOM.wrapper).hide();
-        $(this.options.meta_data.DOM.all).text('');
-      }
     });
 
     $.widget('mage.updateInputFields', {
-      options : {
-        reset: false,
-        DOM : {
-          url_field : '',
-          title_field : 'input[name="video_title"]',
-          description_field : 'textarea[name="video_description"]',
-          thumbnail_location : '.field-new_video_screenshot_preview .admin__field-control'
+        options : {
+            reset: false,
+            DOM : {
+                url_field : '',
+                title_field : 'input[name="video_title"]',
+                description_field : 'textarea[name="video_description"]',
+                thumbnail_location : '.field-new_video_screenshot_preview .admin__field-control'
+            },
+            data : {
+                url : '',
+                title : '',
+                description : '',
+                thumbnail : ''
+            }
         },
-        data : {
-          url : '',
-          title : '',
-          description : '',
-          thumbnail : ''
+        _init : function () {
+            if (this.options.reset) {
+                this.reset();
+            } else {
+                this.update();
+            }
+        },
+        update : function () {
+            this.reset();
+            $(this.options.DOM.title_field).val(this.options.data.title);
+            $(this.options.DOM.description_field).val(this.options.data.description);
+            $(this.options.DOM.thumbnail_location).append('<img src="'+this.options.data.thumbnail+'" />');
+        },
+        reset : function () {
+            $(this.options.DOM.title_field).val('');
+            $(this.options.DOM.description_field).val('');
+            $(this.options.DOM.thumbnail_location).find('img').remove();
         }
-      },
-      _init : function () {
-        if (this.options.reset) {
-          this.reset();
-        } else {
-          this.update();
-        }
-      },
-      update : function () {
-        this.reset();
-        $(this.options.DOM.title_field).val(this.options.data.title);
-        $(this.options.DOM.description_field).val(this.options.data.description);
-        $(this.options.DOM.thumbnail_location).append('<img src="'+this.options.data.thumbnail+'" />');
-      },
-      reset : function () {
-        $(this.options.DOM.title_field).val('');
-        $(this.options.DOM.description_field).val('');
-        $(this.options.DOM.thumbnail_location).find('img').remove();
-      }
     });
 
     /**
@@ -165,7 +165,7 @@ define([
 
         /**
          * Fired when user click on button "Get video information"
-          * @private
+         * @private
          */
         _onGetVideoInformationClick: function() {
             this._onlyVideoPlayer = false;
@@ -186,10 +186,10 @@ define([
          * @private
          */
         _onGetVideoInformationEditClick : function () {
-          this._onlyVideoPlayer = true;
-          this._isEditPage = true;
-          this._videoInformationGetUrlField.videoData();
-          this._videoUrlWidget.trigger('update_video_information');
+            this._onlyVideoPlayer = true;
+            this._isEditPage = true;
+            this._videoInformationGetUrlField.videoData();
+            this._videoUrlWidget.trigger('update_video_information');
         },
         /**
          * Fired when successfully received information about the video.
@@ -198,61 +198,39 @@ define([
          * @private
          */
         _onGetVideoInformationSuccess: function(e, data) {
-          if (!this._isEditPage) {
-            $('.mage-new-video-dialog').createVideoPlayer({
-              video_id : data.videoId,
-              video_provider : data.videoProvider,
-              reset: false,
-              meta_data : {
-                DOM : {
-                  title : '.video-information.title span',
-                  uploaded : '.video-information.uploaded span',
-                  uploader : '.video-information.uploader span',
-                  duration : '.video-information.duration span',
-                  all : '.video-information span',
-                  wrapper : '.video-information'
-                },
-                data : {
-                  title : data.title,
-                  uploaded : data.uploaded,
-                  uploader : data.channel,
-                  duration : data.duration,
-                  uploader_url : data.channelId
+            var player = $('.mage-new-video-dialog').createVideoPlayer({
+                video_id : data.videoId,
+                video_provider : data.videoProvider,
+                reset: false,
+                meta_data : {
+                    DOM : {
+                        title : '.video-information.title span',
+                        uploaded : '.video-information.uploaded span',
+                        uploader : '.video-information.uploader span',
+                        duration : '.video-information.duration span',
+                        all : '.video-information span',
+                        wrapper : '.video-information'
+                    },
+                    data : {
+                        title : data.title,
+                        uploaded : data.uploaded,
+                        uploader : data.channel,
+                        duration : data.duration,
+                        uploader_url : data.channelId
+                    }
                 }
-              }
-            }).updateInputFields({
-              reset: false,
-              data : {
-                title : data.title,
-                description : data.description,
-                thumbnail : data.thumbnail
-              }
             });
-          }
-          if (this._onlyVideoPlayer) {
-            $('.mage-new-video-dialog').createVideoPlayer({
-              video_id : data.videoId,
-              video_provider : data.videoProvider,
-              reset: false,
-              meta_data : {
-                DOM : {
-                  title : '.video-information.title span',
-                  uploaded : '.video-information.uploaded span',
-                  uploader : '.video-information.uploader span',
-                  duration : '.video-information.duration span',
-                  all : '.video-information span',
-                  wrapper : '.video-information'
-                },
-                data : {
-                  title : data.title,
-                  uploaded : data.uploaded,
-                  uploader : data.channel,
-                  duration : data.duration,
-                  uploader_url : data.channelId
-                }
-              }
-            });
-          }
+
+            if(!this._isEditPage) {
+                player.updateInputFields({
+                    reset: false,
+                    data : {
+                        title : data.title,
+                        description : data.description,
+                        thumbnail : data.thumbnail
+                    }
+                });
+            }
         },
 
         /**
@@ -473,21 +451,21 @@ define([
                     class: 'action-primary video-create-button',
                     click: $.proxy(widget._onCreate, widget)
                 },
-                {
-                    text: $.mage.__('Save'),
-                    class: 'action-primary video-edit',
-                    click: $.proxy(widget._onUpdate, widget)
-                },
-                {
-                    text: $.mage.__('Delete'),
-                    class: 'action-primary video-delete-button',
-                    click: $.proxy(widget._onDelete, widget)
-                },
-                {
-                    text: $.mage.__('Cancel'),
-                    class: 'video-cancel-button',
-                    click: $.proxy(widget._onCancel, widget)
-                }],
+                    {
+                        text: $.mage.__('Save'),
+                        class: 'action-primary video-edit',
+                        click: $.proxy(widget._onUpdate, widget)
+                    },
+                    {
+                        text: $.mage.__('Delete'),
+                        class: 'action-primary video-delete-button',
+                        click: $.proxy(widget._onDelete, widget)
+                    },
+                    {
+                        text: $.mage.__('Cancel'),
+                        class: 'video-cancel-button',
+                        click: $.proxy(widget._onCancel, widget)
+                    }],
                 opened: function(e) {
                     $('#video_url').focus();
                     var roles = $('.video_image_role');
@@ -531,7 +509,7 @@ define([
         },
 
         createVideoItemIcons : function () {
-          $('#image-container, #media_gallery_content').find('.product-item.video-item').parent().addClass('video-item');
+            $(this._imageWidgetSelector).find('.product-image.video-item').parent().addClass('video-item');
         },
 
         /**
@@ -826,6 +804,6 @@ define([
         }
     });
     $('#group-fields-image-management > legend > span').text('Images and Videos');
-    
+
     return $.mage.newVideoDialog;
 });
