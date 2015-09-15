@@ -179,6 +179,6 @@ class WeeeTax extends Weee
                     'area' => null,
                 ];
         }
-        return [];
+        return null;
     }
 }

@@ -95,7 +95,7 @@ class TotalsReader
         /** @var ReaderInterface $reader */
         foreach ($this->collectorList->getCollectors($storeId) as $reader) {
             $data = $reader->fetch($total);
-            if ($data === null) {
+            if ($data === null || empty($data)) {
                 continue;
             }
 
