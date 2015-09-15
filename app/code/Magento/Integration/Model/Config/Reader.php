@@ -32,11 +32,11 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
         \Magento\Integration\Model\Config\Converter $converter,
         \Magento\Integration\Model\Config\SchemaLocator $schemaLocator,
         \Magento\Framework\Config\ValidationStateInterface $validationState,
-        $fileName = 'integration/config.xml',
         $idAttributes = [],
         $domDocumentClass = 'Magento\Framework\Config\Dom',
         $defaultScope = 'global'
     ) {
+        $fileName = 'integration' . DIRECTORY_SEPARATOR . 'config.xml';
         parent::__construct(
             $fileResolver,
             $converter,
