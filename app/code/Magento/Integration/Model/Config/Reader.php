@@ -22,7 +22,6 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      * @param Converter $converter
      * @param SchemaLocator $schemaLocator
      * @param \Magento\Framework\Config\ValidationStateInterface $validationState
-     * @param string $fileName
      * @param array $idAttributes
      * @param string $domDocumentClass
      * @param string $defaultScope
