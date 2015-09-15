@@ -139,4 +139,21 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
     {
         return $this->setData(self::METADATA, $data);
     }
+
+    /**
+     * @return \Magento\Framework\Api\ExtensionAttributesInterface
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * @param \Magento\Catalog\Api\Data\ProductExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Catalog\Api\Data\ProductExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
 }
