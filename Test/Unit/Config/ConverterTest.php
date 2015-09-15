@@ -133,6 +133,8 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
      * Get content of _files/queue.xml converted into array.
      *
      * @return array
+     * 
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function getConvertedQueueConfig()
     {
