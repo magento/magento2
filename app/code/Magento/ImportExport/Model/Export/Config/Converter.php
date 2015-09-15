@@ -15,8 +15,6 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      */
     protected $moduleManager;
 
-    protected $classesUtility;
-
     /**
      * @param Manager $moduleManager
      */
