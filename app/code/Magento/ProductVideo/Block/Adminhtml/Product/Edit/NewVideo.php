@@ -13,12 +13,18 @@ use Magento\Framework\Data\Form\Element\Fieldset;
 class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
 {
     /**
+     * @var \Magento\ProductVideo\Helper\Media
+     */
+    protected $mediaHelper;
+
+    /**
      * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $jsonEncoder;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\ProductVideo\Helper\Media $mediaHelper
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -29,9 +35,11 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
+        \Magento\ProductVideo\Helper\Media $mediaHelper,
         array $data = []
     ) {
         parent::__construct($context, $registry, $formFactory, $data);
+        $this->mediaHelper = $mediaHelper;
         $this->jsonEncoder = $jsonEncoder;
         $this->setUseContainer(true);
     }
@@ -170,6 +178,11 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
         $this->setForm($form);
     }
 
+    /**
+     * Get html id
+     *
+     * @return mixed
+     */
     public function getHtmlId()
     {
         if (null === $this->getData('id')) {
@@ -179,6 +192,8 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
+     * Get widget options
+     *
      * @return string
      */
     public function getWidgetOptions()
@@ -188,6 +203,7 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
                 'saveVideoUrl' => $this->getUrl('catalog/product_gallery/upload'),
                 'saveRemoteVideoUrl' => $this->getUrl('product_video/product_gallery/retrieveImage'),
                 'htmlId' => $this->getHtmlId(),
+                'youTubeApiKey' => $this->mediaHelper->getYouTubeApiKey()
             ]
         );
     }
