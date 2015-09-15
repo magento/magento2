@@ -1,9 +1,16 @@
-<?php
-/**
- * Copyright © 2015 Magento. All rights reserved.
- * See COPYING.txt for license details.
- */
-?>
+<div class="row">
+    <div class="add-video-button-container">
+        <button
+            id="add_video_button"
+            title="<?php echo $addVideoTitle;?>"
+            type="button"
+            class="action-secondary"
+            onclick="jQuery('#new-video').modal('openModal'); jQuery('#new_video_form')[0].reset();"
+            data-ui-id="widget-button-1">
+            <span><?= __('Add video') ?></span>
+        </button>
+    </div>
+</div>
 <div id="<?php echo $htmlId;?>-container" class="images"
      data-mage-init='{"baseImage":{}}'
      data-max-file-size="<?php echo $fileMaxSize;?>"
@@ -12,18 +19,6 @@
         <input type="file" name="image" data-url="<?php echo $uploadUrl;?>" multiple="multiple" />
         <img class="spacer" src="<?php echo $spacerImage;?>"/>
         <p class="image-placeholder-text"><?php echo $imagePlaceholderText;?></p>
-    </div>
-    <div class="image video-placeholder">
-        <button
-            id="add_video_button"
-            title="<?php echo $addVideoTitle;?>"
-            type="button"
-            class="action-default scalable"
-            onclick="jQuery('#new-video').modal('openModal'); jQuery('#new_video_form')[0].reset();"
-            data-ui-id="widget-button-1">
-            <img class="spacer" src="<?php echo $spacerImage;?>"/>
-            <p class="image-placeholder-text"><?php echo $videoPlaceholderText;?></p>
-        </button>
     </div>
     <script id="<?php echo $htmlId;?>-template" data-template="image" type="text/x-magento-template">
         <div class="image">

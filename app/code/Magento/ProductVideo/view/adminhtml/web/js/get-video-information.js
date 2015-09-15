@@ -281,153 +281,146 @@ require([
       });
 
       $.widget('mage.videoData', {
-        options: {
-          youtubeKey: 'AIzaSyDwqDWuw1lra-LnpJL2Mr02DYuFmkuRSns' //sample data, change later!
-        },
+          options: {
+              youtubeKey: 'AIzaSyDwqDWuw1lra-LnpJL2Mr02DYuFmkuRSns' //sample data, change later!
+          },
 
-        _REQUEST_VIDEO_INFORMATION_TRIGGER: 'update_video_information',
-        
-        _UPDATE_VIDEO_INFORMATION_TRIGGER: 'updated_video_information',
+          _REQUEST_VIDEO_INFORMATION_TRIGGER: 'update_video_information',
 
-        _ERROR_UPDATE_INFORMATION_TRIGGER: 'error_updated_information',
+          _UPDATE_VIDEO_INFORMATION_TRIGGER: 'updated_video_information',
 
-        _videoInformation: null,
+          _ERROR_UPDATE_INFORMATION_TRIGGER: 'error_updated_information',
 
-        getVideoInformation: function() {
-          return this._videoInformation;
-        },
+          _videoInformation: null,
 
-        _init: function () {
-          this._onRequestHandler();
-        },
+          _init: function () {
+              this._onRequestHandler();
+          },
 
-        _onRequestHandler: function() {
-          var url = this.element.val();
-          if(!url) {
-            this._videoInformation = null;
-            this.element.trigger(this._ERROR_UPDATE_INFORMATION_TRIGGER, "Video url is undefined");
-            return;
-          }
-
-          var videoInfo = this._validateURL(url);
-          if(!videoInfo) {
-            this._videoInformation = null;
-            this.element.trigger(this._ERROR_UPDATE_INFORMATION_TRIGGER, "Invalid video url");
-            return;
-          }
-
-          function _onYouTubeLoaded(data) {
-            if(data.items.length < 1) {
-              this.element.trigger(this._ERROR_UPDATE_INFORMATION_TRIGGER, "Video not found");
-              return;
-            }
-            var tmp       = data.items[0];
-            var uploadedFormatted = tmp.snippet.publishedAt.replace("T"," ").replace(/\..+/g,"");
-            var respData  = {
-              duration: this._formatYoutubeDuration(tmp.contentDetails.duration),
-              channel: tmp.snippet.channelTitle,
-              channelId:  tmp.snippet.channelId,
-              uploaded: uploadedFormatted,
-              title: tmp.snippet.localized.title,
-              description: tmp.snippet.description,
-              thumbnail: tmp.snippet.thumbnails.high.url,
-              videoId : videoInfo.id,
-              videoProvider : videoInfo.type
-            };
-            this._videoInformation  = respData;
-            this.element.trigger(this._UPDATE_VIDEO_INFORMATION_TRIGGER, respData);
-          }
-
-          function _onVimeoLoaded(data) {
-            if(data.length < 1) {
-              this.element.trigger(this._ERROR_UPDATE_INFORMATION_TRIGGER, "Video not found");
-              return;
-            }
-            var tmp = data[0];
-            var respData = {
-              duration: this._formatVimeoDuration(tmp.duration),
-              channel: tmp.user_name,
-              channelId: tmp.user_url,
-              uploaded: tmp.upload_date,
-              title: tmp.title,
-              description: tmp.description,
-              thumbnail: tmp.thumbnail_large,
-              videoId : videoInfo.id,
-              videoProvider : videoInfo.type
-            };
-            this._videoInformation  = respData;
-            this.element.trigger(this._UPDATE_VIDEO_INFORMATION_TRIGGER, respData);
-          }
-
-          var type = videoInfo.type;
-          var id = videoInfo.id;
-          if (type == 'youtube') {
-            $.get('https://www.googleapis.com/youtube/v3/videos?id=' + id + '&part=snippet,contentDetails,statistics,status&key=' + this.options.youtubeKey, $.proxy(_onYouTubeLoaded, this))
-          } else if (type == 'vimeo') {
-            $.get("http://vimeo.com/api/v2/video/" + id + ".json", $.proxy(_onVimeoLoaded, this));
-          }
-        },
-
-        _formatYoutubeDuration: function (duration) {
-          var match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/)
-
-          var hours = (parseInt(match[1]) || 0);
-          var minutes = (parseInt(match[2]) || 0);
-          var seconds = (parseInt(match[3]) || 0);
-
-          return this._formatVimeoDuration(hours * 3600 + minutes * 60 + seconds);
-        },
-
-        _formatVimeoDuration: function (seconds) {
-          return (new Date(seconds * 1000)).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
-        },
-
-        _loadVimeoAPI: function () {
-          var element = document.createElement('script'),
-              scriptTag = document.getElementsByTagName('script')[0];
-
-          element.async = false;
-          element.src = "https://f.vimeocdn.com/js/froogaloop2.min.js";
-          scriptTag.parentNode.insertBefore(element, scriptTag);
-        },
-
-        _parseHref: function (href) {
-          var a = document.createElement('a');
-          a.href = href;
-          return a;
-        },
-
-        _validateURL: function (href, forceVideo) {
-          if (typeof href !== 'string') return href;
-          href = this._parseHref(href);
-
-          var id,
-              type;
-
-          if (href.host.match(/youtube\.com/) && href.search) {
-            //.log();
-            id = href.search.split('v=')[1];
-            if (id) {
-              var ampersandPosition = id.indexOf('&');
-              if (ampersandPosition !== -1) {
-                id = id.substring(0, ampersandPosition);
+          _onRequestHandler: function() {
+              var url = this.element.val();
+              if(!url) {
+                  //this._onRequestError("Video url is undefined");
+                  return;
               }
+
+              var videoInfo = this._validateURL(url);
+              if(!videoInfo) {
+                  this._onRequestError("Invalid video url");
+                  return;
+              }
+
+              function _onYouTubeLoaded(data) {
+                  if(data.items.length < 1) {
+                      this._onRequestError("Video not found");
+                      return;
+                  }
+                  var tmp       = data.items[0];
+                  var uploadedFormatted = tmp.snippet.publishedAt.replace("T"," ").replace(/\..+/g,"");
+                  var respData  = {
+                      duration: this._formatYoutubeDuration(tmp.contentDetails.duration),
+                      channel: tmp.snippet.channelTitle,
+                      channelId:  tmp.snippet.channelId,
+                      uploaded: uploadedFormatted,
+                      title: tmp.snippet.localized.title,
+                      description: tmp.snippet.description,
+                      thumbnail: tmp.snippet.thumbnails.high.url,
+                      videoId : videoInfo.id,
+                      videoProvider : videoInfo.type
+                  };
+                  this._videoInformation  = respData;
+                  this.element.trigger(this._UPDATE_VIDEO_INFORMATION_TRIGGER, respData);
+              }
+
+              function _onVimeoLoaded(data) {
+                  if(data.length < 1) {
+                      this._onRequestError("Video not found");
+                      return;
+                  }
+                  var tmp = data[0];
+                  var respData = {
+                      duration: this._formatVimeoDuration(tmp.duration),
+                      channel: tmp.user_name,
+                      channelId: tmp.user_url,
+                      uploaded: tmp.upload_date,
+                      title: tmp.title,
+                      description: tmp.description,
+                      thumbnail: tmp.thumbnail_large,
+                      videoId : videoInfo.id,
+                      videoProvider : videoInfo.type
+                  };
+                  this._videoInformation  = respData;
+                  this.element.trigger(this._UPDATE_VIDEO_INFORMATION_TRIGGER, respData);
+              }
+
+              var type = videoInfo.type;
+              var id = videoInfo.id;
+              if (type == 'youtube') {
+                  $.get('https://www.googleapis.com/youtube/v3/videos?id=' + id + '&part=snippet,contentDetails,statistics,status&key=' + this.options.youtubeKey, $.proxy(_onYouTubeLoaded, this))
+              } else if (type == 'vimeo') {
+                  $.get("http://vimeo.com/api/v2/video/" + id + ".json", $.proxy(_onVimeoLoaded, this));
+              }
+          },
+
+
+          _onRequestError: function(error) {
+              this._videoInformation = null;
+              this.element.trigger(this._ERROR_UPDATE_INFORMATION_TRIGGER, error);
+              this.element.val('');
+              alert('Error: "' + error + '"');
+          },
+
+          _formatYoutubeDuration: function (duration) {
+              var match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/)
+
+              var hours = (parseInt(match[1]) || 0);
+              var minutes = (parseInt(match[2]) || 0);
+              var seconds = (parseInt(match[3]) || 0);
+
+              return this._formatVimeoDuration(hours * 3600 + minutes * 60 + seconds);
+          },
+
+          _formatVimeoDuration: function (seconds) {
+              return (new Date(seconds * 1000)).toUTCString().match(/(\d\d:\d\d:\d\d)/)[0];
+          },
+
+          _parseHref: function (href) {
+            var a = document.createElement('a');
+            a.href = href;
+            return a;
+          },
+
+          _validateURL: function (href, forceVideo) {
+            if (typeof href !== 'string') return href;
+            href = this._parseHref(href);
+
+            var id,
+                type;
+
+            if (href.host.match(/youtube\.com/) && href.search) {
+              //.log();
+              id = href.search.split('v=')[1];
+              if (id) {
+                var ampersandPosition = id.indexOf('&');
+                if (ampersandPosition !== -1) {
+                  id = id.substring(0, ampersandPosition);
+                }
+                type = 'youtube';
+              }
+            } else if (href.host.match(/youtube\.com|youtu\.be/)) {
+              id = href.pathname.replace(/^\/(embed\/|v\/)?/, '').replace(/\/.*/, '');
               type = 'youtube';
+            } else if (href.host.match(/vimeo\.com/)) {
+              type = 'vimeo';
+              id = href.pathname.replace(/^\/(video\/)?/, '').replace(/\/.*/, '');
             }
-          } else if (href.host.match(/youtube\.com|youtu\.be/)) {
-            id = href.pathname.replace(/^\/(embed\/|v\/)?/, '').replace(/\/.*/, '');
-            type = 'youtube';
-          } else if (href.host.match(/vimeo\.com/)) {
-            type = 'vimeo';
-            id = href.pathname.replace(/^\/(video\/)?/, '').replace(/\/.*/, '');
-          }
 
-          if ((!id || !type) && forceVideo) {
-            id = href.href;
-            type = 'custom';
-          }
+            if ((!id || !type) && forceVideo) {
+              id = href.href;
+              type = 'custom';
+            }
 
-          return id ? {id: id, type: type, s: href.search.replace(/^\?/, '')} : false;
-        }
-      });
+            return id ? {id: id, type: type, s: href.search.replace(/^\?/, '')} : false;
+          }
+        });
     });
