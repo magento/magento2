@@ -66,7 +66,7 @@ class InstallData implements InstallDataInterface
                 'filterable' => false,
                 'comparable' => false,
                 'visible_on_front' => false,
-                'visible_in_advanced_search' => true,
+                'visible_in_advanced_search' => false,
                 'used_in_product_listing' => true,
                 'unique' => false,
                 'apply_to' => implode(',', $taxSetup->getTaxableItems()),
