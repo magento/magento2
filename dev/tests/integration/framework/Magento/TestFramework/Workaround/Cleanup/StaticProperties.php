@@ -10,7 +10,6 @@
 namespace Magento\TestFramework\Workaround\Cleanup;
 
 use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 class StaticProperties
 {

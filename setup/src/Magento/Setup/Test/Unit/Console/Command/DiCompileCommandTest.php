@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
 
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Console\Command\DiCompileCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -27,6 +28,9 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
 
     /** @var  \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
     private $filesystem;
+
+    /** @var  \Magento\Framework\Component\ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject */
+    private $componentRegistrar;
 
     public function setUp()
     {
@@ -57,13 +61,25 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $directoryList->expects($this->exactly(3))->method('getPath');
+        $directoryList->expects($this->exactly(1))->method('getPath');
+        $this->componentRegistrar = $this->getMock(
+            '\Magento\Framework\Component\ComponentRegistrar',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->componentRegistrar->expects($this->any())->method('getPaths')->willReturnMap([
+            [ComponentRegistrar::MODULE, ['/path/to/module/one', '/path/to/module/two']],
+            [ComponentRegistrar::LIBRARY, ['/path/to/library/one', '/path/to/library/two']],
+        ]);
         $this->command = new DiCompileCommand(
             $this->deploymentConfig,
             $directoryList,
             $this->manager,
             $objectManagerProvider,
-            $this->filesystem
+            $this->filesystem,
+            $this->componentRegistrar
         );
     }
 

@@ -6,6 +6,7 @@
 
 namespace Magento\Test\Integrity\App\Language;
 
+use DOMDocument;
 use Magento\Framework\Component\ComponentRegistrar;
 
 class Package extends \PHPUnit_Framework_TestCase
@@ -21,11 +22,10 @@ class Package extends \PHPUnit_Framework_TestCase
         $componentRegistrar = new ComponentRegistrar();
         $languagePaths = $componentRegistrar->getPaths(ComponentRegistrar::LANGUAGE);
         foreach ($languagePaths as $languagePath) {
-            foreach (glob($languagePath . "/language.xml") as $file) {
-                preg_match('/.+\/(.*)\/(.*)\/language.xml$/', $file, $matches);
-                $matches[0] = $file;
-                $result[] = $matches;
-            }
+            $file = $languagePath . "/language.xml";
+            preg_match('/.+\/(.*)\/(.*)\/language.xml$/', $file, $matches);
+            $matches[0] = $file;
+            $result[] = $matches;
         }
         return $result;
     }
