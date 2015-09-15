@@ -145,7 +145,7 @@ class QueueManagement
      * If queue does not contain enough messages, method is not waiting for more messages.
      *
      * @param string $queue
-     * @param int $maxMessagesNumber
+     * @param int|null $maxMessagesNumber
      * @return array <pre>
      * [
      *     [
@@ -161,20 +161,23 @@ class QueueManagement
      *     ...
      * ]</pre>
      */
-    public function readMessages($queue, $maxMessagesNumber)
+    public function readMessages($queue, $maxMessagesNumber = null)
     {
         $selectedMessages = $this->messageResource->getMessages($queue, $maxMessagesNumber);
         /* The logic below allows to prevent the same message being processed by several consumers in parallel */
-        foreach ($selectedMessages as $key => $message) {
-            unset($selectedMessages[$key]);
+        $selectedMessagesRelatedIds = [];
+        foreach ($selectedMessages as $key => &$message) {
             /* Set message status here to avoid extra reading from DB after it is updated */
             $message[self::MESSAGE_STATUS] = self::MESSAGE_STATUS_IN_PROGRESS;
-            $selectedMessages[$message[self::MESSAGE_QUEUE_RELATION_ID]] = $message;
+            $selectedMessagesRelatedIds[] = $message[self::MESSAGE_QUEUE_RELATION_ID];
         }
-        $selectedMessagesRelatedIds = array_keys($selectedMessages);
         $takenMessagesRelationIds = $this->messageResource->takeMessagesInProgress($selectedMessagesRelatedIds);
-        $takenMessages = array_intersect_key($selectedMessages, array_flip($takenMessagesRelationIds));
-        return $takenMessages;
+        if (count($selectedMessages) == count($takenMessagesRelationIds)) {
+            return $selectedMessages;
+        } else {
+            $selectedMessages = array_combine($selectedMessagesRelatedIds, array_values($selectedMessages));
+            return array_intersect_key($selectedMessages, array_flip($takenMessagesRelationIds));
+        }
     }
 
     /**

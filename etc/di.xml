@@ -12,7 +12,7 @@
             <argument name="publishers" xsi:type="array">
                 <item name="mysql" xsi:type="array">
                     <item name="type" xsi:type="object">Magento\MysqlMq\Model\Publisher</item>
-                    <item name="connectionName" xsi:type="string">mysql</item>
+                    <item name="connectionName" xsi:type="string">db</item>
                 </item>
             </argument>
         </arguments>
@@ -22,7 +22,7 @@
             <argument name="consumers" xsi:type="array">
                 <item name="mysql" xsi:type="array">
                     <item name="type" xsi:type="string">Magento\MysqlMq\Model\Consumer</item>
-                    <item name="connectionName" xsi:type="string">mysql</item>
+                    <item name="connectionName" xsi:type="string">db</item>
                 </item>
             </argument>
         </arguments>

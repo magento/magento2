@@ -71,29 +71,24 @@ class Consumer implements ConsumerInterface
     /**
      * {@inheritdoc}
      */
-    public function process($maxNumberOfMessages = null, $daemonMode = false)
+    public function process($maxNumberOfMessages = null)
     {
         $queueName = $this->configuration->getQueueName();
-        if ($daemonMode && !isset($maxNumberOfMessages)) {
-            throw new LocalizedException(__('Daemon mode is not supported by MySQL queue implementation.'));
-        } else {
-            $this->run($queueName, $maxNumberOfMessages);
-        }
+        $maxNumberOfMessages = $maxNumberOfMessages
+            ? $maxNumberOfMessages
+            : $this->configuration->getMaxMessages() ?: null;
+        $this->run($queueName, $maxNumberOfMessages);
     }
 
     /**
      * Run short running process
      *
      * @param string $queueName
-     * @param int $maxNumberOfMessages
+     * @param int|null $maxNumberOfMessages
      * @return void
      */
     private function run($queueName, $maxNumberOfMessages)
     {
-        $maxNumberOfMessages = $maxNumberOfMessages
-            ? $maxNumberOfMessages
-            : $this->configuration->getMaxMessages() ?: 1;
-
         $messages = $this->queueManagement->readMessages($queueName, $maxNumberOfMessages);
         $successfullyProcessedIds = [];
         foreach ($messages as $message) {
