@@ -3844,4 +3844,9 @@ return [
         'Magento\Checkout\Model\Agreements\AgreementsProviderInterface',
         'Magento\CheckoutAgreements\Model\AgreementsProviderInterface'
     ],
+    ['Magento\ConfigurableProduct\Block\Product\Configurable\AssociatedSelector\Backend\Grid\ColumnSet'],
+    ['Magento\ConfigurableProduct\Model\Resource\Product\Collection\AssociatedProduct'],
+    ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Grid\Renderer\Inventory'],
+    ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Grid\Renderer\Checkbox'],
+    ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Grid\Filter\Inventory'],
 ];

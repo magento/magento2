@@ -7,8 +7,6 @@
 // @codingStandardsIgnoreFile
 
  /** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config */
-
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 ?>
 <div class="entry-edit form-inline" id="<?php echo $block->getId() ?>">
     <div class="fieldset-wrapper admin__collapsible-block-wrapper" id="<?php echo $block->getId() ?>-wrapper" data-panel="product-variations">
@@ -106,7 +104,7 @@ require([
             setElementDisabled($('#quantity_and_stock_status'), true, false);
             setElementDisabled($('#qty'), false, true);
         })
-        .collapse("<?php echo($block->getProduct()->getTypeId() === Configurable::TYPE_CODE || $block->getRequest()->has('attributes')) ? 'show' : 'hide' ?>");
+        .collapse("<?= $block->isConfigurableProduct() ? 'show' : 'hide' ?>");
 });
 </script>
 <script type="text/x-magento-init">
