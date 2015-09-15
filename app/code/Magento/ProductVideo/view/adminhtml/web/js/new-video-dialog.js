@@ -248,7 +248,6 @@ define([
          * @private
          */
         _loadRemotePreview: function(sourceUrl) {
-            console.log(sourceUrl);
             var url = this.options.saveRemoteVideoUrl;
             var self = this;
             jQuery.ajax({
@@ -571,7 +570,6 @@ define([
             }
             var reqClass = 'required-entry _required';
             if (!file && !this._tempPreviewImageData) {
-                console.log(this._tempPreviewImageData, 'AAA');
                 nvs.addClass(reqClass);
             }
 
