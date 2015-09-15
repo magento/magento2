@@ -143,6 +143,7 @@
         "magento/module-sales": "self.version",
         "magento/module-sales-rule": "self.version",
         "magento/module-sales-sequence": "self.version",
+        "magento/module-sample-data": "self.version",
         "magento/module-search": "self.version",
         "magento/module-send-friend": "self.version",
         "magento/module-shipping": "self.version",
@@ -212,7 +213,10 @@
         "psr-4": {
             "Magento\\Framework\\": "lib/internal/Magento/Framework/",
             "Magento\\Setup\\": "setup/src/Magento/Setup/"
-        }
+        },
+        "files": [
+            "app/code/Magento/SampleData/cli_commands.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
