@@ -86,10 +86,10 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Retrieve messages from the specified queue.
      *
      * @param string $queueName
-     * @param int $limit
+     * @param int|null $limit
      * @return array
      */
-    public function getMessages($queueName, $limit)
+    public function getMessages($queueName, $limit = null)
     {
         $connection = $this->getConnection();
         $select = $connection->select()
@@ -115,8 +115,12 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 'queue_message_status.status IN (?)',
                 [QueueManagement::MESSAGE_STATUS_NEW, QueueManagement::MESSAGE_STATUS_RETRY_REQUIRED]
             )->where('queue.name = ?', $queueName)
-            ->order('queue_message_status.updated_at DESC')
-            ->limit($limit);
+            ->order('queue_message_status.updated_at DESC');
+
+        if ($limit) {
+            $select->limit($limit);
+        }
+
         return $connection->fetchAll($select);
     }
 

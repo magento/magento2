@@ -62,7 +62,7 @@ class QueueManagement
      * If queue does not contain enough messages, method is not waiting for more messages.
      *
      * @param string $queue
-     * @param int $maxMessagesNumber
+     * @param int|null $maxMessagesNumber
      * @return array <pre>
      * [
      *     [
@@ -78,7 +78,7 @@ class QueueManagement
      *     ...
      * ]</pre>
      */
-    public function readMessages($queue, $maxMessagesNumber)
+    public function readMessages($queue, $maxMessagesNumber = null)
     {
         $selectedMessages = $this->messageResource->getMessages($queue, $maxMessagesNumber);
         /* The logic below allows to prevent the same message being processed by several consumers in parallel */
