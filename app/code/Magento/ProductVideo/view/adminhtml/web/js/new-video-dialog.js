@@ -352,6 +352,17 @@ define([
             this.saveImageRoles(imageData);
         },
 
+
+        _uploadRemoteImage: function(file) {
+            var url = this.options.saveRemoteVideoUrl;
+            var data = {
+                url: url
+            };
+            jQuery.ajax({
+                url: url,
+                data: data
+            })
+        },
         /**
          *
          * Wrap _uploadFile
@@ -434,6 +445,7 @@ define([
                     this._addVideoClass(tmp.url);
                 }
             }
+
             this._bind();
             this.createVideoItemIcons();
             var widget = this;
@@ -630,6 +642,7 @@ define([
                 return;
             }
             var ext = '.' + val.split('.').pop();
+            ext = ext ? ext.toLowerCase() : '';
             if(
                 ext.length < 2 ||
                 this._imageTypes.indexOf(ext) == -1 ||
@@ -791,7 +804,7 @@ define([
                     $(this).prop('checked', false).prop('disabled', false);
                 });
 
-                $.each($('.video-placeholder').siblings('input:hidden'), function() {
+                $.each($('.image-placeholder').siblings('input:hidden'), function() {
                     if ($(this).val() == file.val()) {
                         var start = this.name.indexOf('[') + 1;
                         var end = this.name.length - 1;
