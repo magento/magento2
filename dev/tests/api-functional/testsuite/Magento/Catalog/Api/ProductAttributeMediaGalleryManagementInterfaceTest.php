@@ -9,6 +9,9 @@ namespace Magento\Catalog\Api;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
+/**
+ * Class ProductAttributeMediaGalleryManagementInterfaceTest
+ */
 class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 {
     /**
@@ -106,7 +109,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     {
         $requestData = [
             'id' => null,
-            'media_type' => 'image',
+            'media_type' => \Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter::MEDIA_TYPE_CODE,
             'label' => 'Image Text',
             'position' => 1,
             'types' => ['image'],
@@ -139,7 +142,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     {
         $requestData = [
             'id' => null,
-            'media_type' => 'image',
+            'media_type' => \Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter::MEDIA_TYPE_CODE,
             'label' => 'Image Text',
             'position' => 1,
             'types' => ['image'],

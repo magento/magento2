@@ -11,29 +11,42 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form;
 
+/**
+ * Class BaseImage
+ */
 class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
+    /**
+     * Element output template
+     */
+    const ELEMENT_OUTPUT_TEMPLATE = 'Magento_Catalog::product/edit/base_image.phtml';
+
     /**
      * Model Url instance
      *
      * @var \Magento\Backend\Model\UrlInterface
      */
-    protected $_url;
+    protected $url;
 
     /**
      * @var \Magento\Catalog\Helper\Data
      */
-    protected $_catalogHelperData;
+    protected $catalogHelperData;
 
     /**
      * @var \Magento\Framework\File\Size
      */
-    protected $_fileConfig;
+    protected $fileConfig;
 
     /**
      * @var \Magento\Framework\View\Asset\Repository
      */
-    protected $_assetRepo;
+    protected $assetRepo;
+
+    /**
+     * @var \Magento\Framework\View\LayoutInterface
+     */
+    protected $layout;
 
     /**
      * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
@@ -43,6 +56,7 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
      * @param \Magento\Backend\Model\UrlFactory $backendUrlFactory
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\File\Size $fileConfig
+     * @param \Magento\Framework\View\Element\Context $context
      * @param array $data
      */
     public function __construct(
@@ -53,15 +67,17 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
         \Magento\Backend\Model\UrlFactory $backendUrlFactory,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Framework\File\Size $fileConfig,
+        \Magento\Framework\View\Element\Context $context,
         array $data = []
     ) {
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
 
-        $this->_assetRepo = $assetRepo;
-        $this->_url = $backendUrlFactory->create();
-        $this->_catalogHelperData = $catalogData;
-        $this->_fileConfig = $fileConfig;
-        $this->_maxFileSize = $this->_getFileMaxSize();
+        $this->assetRepo = $assetRepo;
+        $this->url = $backendUrlFactory->create();
+        $this->catalogHelperData = $catalogData;
+        $this->fileConfig = $fileConfig;
+        $this->maxFileSize = $this->getFileMaxSize();
+        $this->layout = $context->getLayout();
     }
 
     /**
@@ -81,80 +97,46 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
      */
     public function getElementHtml()
     {
-        $htmlId = $this->_escaper->escapeHtml($this->getHtmlId());
-        $uploadUrl = $this->_escaper->escapeHtml($this->_getUploadUrl());
-        $spacerImage = $this->_assetRepo->getUrl('images/spacer.gif');
-        $imagePlaceholderText = __('Click here or drag and drop to add images.');
-        $videoPlaceholderText = __('Click here to add videos.');
-        $deleteImageText = __('Delete image');
-        $makeBaseText = __('Make Base');
-        $hiddenText = __('Hidden');
-        $imageManagementText = __('Images and Videos');
-        $addVideoTitle = __('New Video');
-        /** @var $product \Magento\Catalog\Model\Product */
-        $html = <<<HTML
-<div id="{$htmlId}-container" class="images"
-    data-mage-init='{"baseImage":{}}'
-    data-max-file-size="{$this->_getFileMaxSize()}"
-    >
-    <div class="image image-placeholder">
-        <input type="file" name="image" data-url="{$uploadUrl}" multiple="multiple" />
-        <img class="spacer" src="{$spacerImage}"/>
-        <p class="image-placeholder-text">{$imagePlaceholderText}</p>
-    </div>
-    <div class="image video-placeholder">
-        <button
-             id="add_video_button"
-             title="{$addVideoTitle}"
-             type="button"
-             class="action-default scalable"
-             onclick="jQuery('#new-video').modal('openModal'); jQuery('#new_video_form')[0].reset();"
-             data-ui-id="widget-button-1">
-            <img class="spacer" src="{$spacerImage}"/>
-            <p class="image-placeholder-text">{$videoPlaceholderText}</p>
-        </button>
-    </div>
-    <script id="{$htmlId}-template" data-template="image" type="text/x-magento-template">
-        <div class="image">
-            <img class="spacer" src="{$spacerImage}"/>
-            <img
-                class="product-image"
-                src="<%- data.url %>"
-                data-position="<%- data.position %>"
-                alt="<%- data.label %>" />
-            <div class="actions">
-                <button type="button" class="action-delete" data-role="delete-button" title="{$deleteImageText}">
-                    <span>{$deleteImageText}</span>
-                </button>
-                <button type="button" class="action-make-base" data-role="make-base-button" title="{$makeBaseText}">
-                    <span>{$makeBaseText}</span>
-                </button>
-                <div class="draggable-handle"></div>
-            </div>
-            <div class="image-label"></div>
-            <div class="image-fade"><span>{$hiddenText}</span></div>
-        </div>
-    </script>
-</div>
-<span class="action-manage-images" data-activate-tab="image-management">
-    <span>{$imageManagementText}</span>
-</span>
-<script>
-    require([
-        'jquery'
-    ],function($){
+        $block = $this->createElementHtmlOutputBlock();
+        $this->assignBlockVariables($block);
+        return $block->toHtml();
+    }
 
-        'use strict';
+    /**
+     * @param \Magento\Framework\View\Element\Template $block
+     * @return \Magento\Framework\View\Element\Template
+     */
+    public function assignBlockVariables(\Magento\Framework\View\Element\Template $block)
+    {
+        $block->assign([
+            'htmlId' => $this->_escaper->escapeHtml($this->getHtmlId()),
+            'fileMaxSize' => $this->maxFileSize,
+            'uploadUrl' => $this->_escaper->escapeHtml($this->_getUploadUrl()),
+            'spacerImage' => $this->assetRepo->getUrl('images/spacer.gif'),
+            'imagePlaceholderText' => __('Click here or drag and drop to add images.'),
+            'deleteImageText' => __('Delete image'),
+            'makeBaseText' => __('Make Base'),
+            'hiddenText' => __('Hidden'),
+            'imageManagementText' => __('Images and Videos'),
+        ]);
 
-        $('[data-activate-tab=image-management]')
-            .on('click.toggleImageManagementTab', function() {
-                $('#product_info_tabs_image-management').trigger('click');
-            });
-    });
-</script>
+        return $block;
+    }
 
-HTML;
-        return $html;
+
+    /**
+     * @return \Magento\Framework\View\Element\Template
+     */
+    public function createElementHtmlOutputBlock()
+    {
+        /** @var \Magento\Framework\View\Element\Template $block */
+        $block = $this->layout->createBlock(
+            'Magento\Framework\View\Element\Template',
+            'product.details.form.base.image.element'
+        );
+        $block->setTemplate(self::ELEMENT_OUTPUT_TEMPLATE);
+
+        return $block;
     }
 
     /**
@@ -164,7 +146,7 @@ HTML;
      */
     protected function _getUploadUrl()
     {
-        return $this->_url->getUrl('catalog/product_gallery/upload');
+        return $this->url->getUrl('catalog/product_gallery/upload');
     }
 
     /**
@@ -172,8 +154,8 @@ HTML;
      *
      * @return int
      */
-    protected function _getFileMaxSize()
+    protected function getFileMaxSize()
     {
-        return $this->_fileConfig->getMaxFileSize();
+        return $this->fileConfig->getMaxFileSize();
     }
 }

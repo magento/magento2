@@ -13,7 +13,7 @@ use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 
 /**
- * @codeCoverageIgnore
+ * Upgrade Data script
  */
 class UpgradeData implements UpgradeDataInterface
 {

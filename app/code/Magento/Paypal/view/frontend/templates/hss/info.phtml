@@ -4,10 +4,12 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /**
  * @see \Magento\Paypal\Block\Payflow\Link\Info
  */
 ?>
-<div id="payment_form_<?php echo $block->getMethodCode() ?>" style="display:none" class="hss items">
-    <?php echo __('You will be required to enter your payment details after you place an order.') ?>
+<div id="payment_form_<?php /* @escapeNotVerified */ echo $block->getMethodCode() ?>" style="display:none" class="hss items">
+    <?php /* @escapeNotVerified */ echo __('You will be required to enter your payment details after you place an order.') ?>
 </div>
