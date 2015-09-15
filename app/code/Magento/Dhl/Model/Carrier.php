@@ -1921,7 +1921,11 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $destCountry = (string)$this->getCountryParams($destCountryCode)->getData('name');
         $isDomestic = (string)$this->getCountryParams($destCountryCode)->getData('domestic');
 
-        if ($origCountry == $destCountry && $isDomestic) {
+        if (($origCountry == $destCountry && $isDomestic)
+            || ($this->_carrierHelper->isCountryInEU($origCountryCode)
+                && $this->_carrierHelper->isCountryInEU($destCountryCode)
+            )
+        ) {
             $this->_isDomestic = true;
         }
 
@@ -1964,7 +1968,6 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         return
             self::DHL_CONTENT_TYPE_NON_DOC == $this->getConfigData('content_type')
-            && !$this->_isDomestic
-            && !$this->_carrierHelper->isCountryInEU($destCountryId);
+            && !$this->_isDomestic;
     }
 }
