@@ -146,13 +146,7 @@ define([
          */
         applyAction: function (actionIndex, rowIndex) {
             var action = this.getAction(rowIndex, actionIndex),
-                callback;
-
-            if (!action.href && !action.callback) {
-                return this;
-            }
-
-            callback = this._getCallback(action);
+                callback = this._getCallback(action);
 
             action.confirm ?
                 this._confirm(action, callback) :
@@ -246,6 +240,19 @@ define([
          */
         isActionVisible: function (action) {
             return action.hidden !== true;
+        },
+
+        /**
+         * Checks if specified action requires a handler function.
+         *
+         * @param {String} actionIndex - Actions' identifier.
+         * @param {Number} rowIndex - Index of a row.
+         * @returns {Boolean}
+         */
+        isHandlerRequired: function (actionIndex, rowIndex) {
+            var action = this.getAction(rowIndex, actionIndex);
+
+            return _.isObject(action.callback) || action.confirm || !action.href;
         },
 
         /**
