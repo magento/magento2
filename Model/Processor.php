@@ -17,4 +17,12 @@ class Processor
     {
         echo "Processed {$message->getEntityId()}\n";
     }
+
+    /**
+     * @param \Magento\MysqlMq\Model\DataObject $message
+     */
+    public function processMessageWithException($message)
+    {
+        throw new \LogicException("Exception during message processing happened. Entity: {{$message->getEntityId()}}");
+    }
 }

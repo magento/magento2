@@ -56,7 +56,6 @@ class PublisherTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     *
      * @magentoDataFixture Magento/MysqlMq/_files/queues.php
      */
     public function testPublishConsumeFlow()
@@ -73,10 +72,15 @@ class PublisherTest extends \PHPUnit_Framework_TestCase
             $object->setName('Object name ' . $i)->setEntityId($i);
             $this->publisher->publish('demo.object.updated', $object);
         }
+        for ($i = 0; $i < 3; $i++) {
+            $object->setName('Object name ' . $i)->setEntityId($i);
+            $this->publisher->publish('demo.object.custom.created', $object);
+        }
 
         /** There are total of 10 messages in the first queue, total expected consumption is 7, 3 then 0 */
         $this->consumeMessages('demoConsumerQueueOne', 7, 7);
-        $this->consumeMessages('demoConsumerQueueOne', 7, 3);
+        /** Consumer all messages which left in this queue */
+        $this->consumeMessages('demoConsumerQueueOne', null, 3);
         $this->consumeMessages('demoConsumerQueueOne', 7, 0);
 
         /** Verify that messages were added correctly to second queue for update and create topics */
@@ -85,16 +89,50 @@ class PublisherTest extends \PHPUnit_Framework_TestCase
         /** Verify that messages were NOT added to fourth queue */
         $this->consumeMessages('demoConsumerQueueFour', 11, 0);
 
-        /** Verify that messages were added correctly by pattern in bind config to third queue */
-        // TODO: Check why messages are not added by pattern
-//        $this->consumeMessages('demoConsumerQueueThree', 11, 15);
+        /** Verify that messages were added correctly by '*' pattern in bind config to third queue */
+        $this->consumeMessages('demoConsumerQueueThree', 20, 15);
+
+        /** Verify that messages were added correctly by '#' pattern in bind config to fifth queue */
+        $this->consumeMessages('demoConsumerQueueFive', 20, 18);
+    }
+
+    /**
+     * @magentoDataFixture Magento/MysqlMq/_files/queues.php
+     */
+    public function testPublishAndConsumeWithFailedJobs()
+    {
+        /** @var \Magento\MysqlMq\Model\DataObjectFactory $objectFactory */
+        $objectFactory = $this->objectManager->create('Magento\MysqlMq\Model\DataObjectFactory');
+        /** @var \Magento\MysqlMq\Model\DataObject $object */
+        /** Try consume messages for MAX_NUMBER_OF_TRIALS and then consumer them without exception */
+        $object = $objectFactory->create();
+        for ($i = 0; $i < 5; $i++) {
+            $object->setName('Object name ' . $i)->setEntityId($i);
+            $this->publisher->publish('demo.object.created', $object);
+        }
+        for ($i = 0; $i < \Magento\MysqlMq\Model\Consumer::MAX_NUMBER_OF_TRIALS; $i++) {
+            $this->consumeMessages('demoConsumerQueueOneWithException', null, 0);
+        }
+        $this->consumeMessages('demoConsumerQueueOne', null, 5);
+
+        /** Try consume messages for MAX_NUMBER_OF_TRIALS+1 and then consumer them without exception */
+        for ($i = 0; $i < 5; $i++) {
+            $object->setName('Object name ' . $i)->setEntityId($i);
+            $this->publisher->publish('demo.object.created', $object);
+        }
+        /** Try consume messages for MAX_NUMBER_OF_TRIALS and then consumer them without exception */
+        for ($i = 0; $i < \Magento\MysqlMq\Model\Consumer::MAX_NUMBER_OF_TRIALS + 1; $i++) {
+            $this->consumeMessages('demoConsumerQueueOneWithException', null, 0);
+        }
+        /** Make sure that messages are not accessible anymore after number of trials is exceeded */
+        $this->consumeMessages('demoConsumerQueueOne', null, 0);
     }
 
     /**
      * Make sure that consumers consume correct number of messages.
      *
      * @param string $consumerName
-     * @param int $messagesToProcess
+     * @param int|null $messagesToProcess
      * @param int $expectedNumberOfProcessedMessages
      */
     protected function consumeMessages($consumerName, $messagesToProcess, $expectedNumberOfProcessedMessages)

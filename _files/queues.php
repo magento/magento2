@@ -5,7 +5,18 @@
  */
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-foreach (['queue1', 'queue2', 'queue3', 'queue4', 'demo-queue-1', 'demo-queue-2', 'demo-queue-3', 'demo-queue-4'] as $queueName) {
+$queues = [
+    'queue1',
+    'queue2',
+    'queue3',
+    'queue4',
+    'demo-queue-1',
+    'demo-queue-2',
+    'demo-queue-3',
+    'demo-queue-4',
+    'demo-queue-5'
+];
+foreach ($queues as $queueName) {
     /** @var \Magento\MysqlMq\Model\Queue $queue */
     $queue = $objectManager->create('Magento\MysqlMq\Model\Queue');
     try {

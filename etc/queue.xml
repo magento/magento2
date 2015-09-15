@@ -9,29 +9,32 @@
     <publisher name="demo-publisher-1" connection="db" exchange="magento"/>
     <publisher name="demo-publisher-2" connection="db" exchange="magento"/>
     <publisher name="test-publisher-1" connection="rabbitmq" exchange="magento"/>
-    <publisher name="test-publisher-2" connection="db" exchange="magento"/>
     <publisher name="test-publisher-3" connection="rabbitmq" exchange="test-exchange-1"/>
     <topic name="demo.object.created" schema="Magento\MysqlMq\Model\DataObject" publisher="demo-publisher-1"/>
     <topic name="demo.object.updated" schema="Magento\MysqlMq\Model\DataObject" publisher="demo-publisher-2"/>
+    <topic name="demo.object.custom.created" schema="Magento\MysqlMq\Model\DataObject" publisher="demo-publisher-2"/>
     <topic name="customer.created" schema="Magento\Customer\Api\Data\CustomerInterface" publisher="test-publisher-1"/>
     <topic name="customer.created.one" schema="Magento\Customer\Api\Data\CustomerInterface" publisher="test-publisher-1"/>
     <topic name="customer.created.one.two" schema="Magento\Customer\Api\Data\CustomerInterface" publisher="test-publisher-1"/>
     <topic name="customer.created.two" schema="Magento\Customer\Api\Data\CustomerInterface" publisher="test-publisher-1"/>
-    <topic name="customer.updated" schema="Magento\Customer\Api\Data\CustomerInterface" publisher="test-publisher-2"/>
-    <topic name="customer.deleted" schema="Magento\Customer\Api\Data\CustomerInterface" publisher="test-publisher-2"/>
+    <topic name="customer.updated" schema="Magento\Customer\Api\Data\CustomerInterface" publisher="demo-publisher-2"/>
+    <topic name="customer.deleted" schema="Magento\Customer\Api\Data\CustomerInterface" publisher="demo-publisher-2"/>
     <topic name="cart.created" schema="Magento\Quote\Api\Data\CartInterface" publisher="test-publisher-3"/>
     <topic name="cart.created.one" schema="Magento\Quote\Api\Data\CartInterface" publisher="test-publisher-3"/>
     <consumer name="demoConsumerQueueOne" queue="demo-queue-1" connection="db" class="\Magento\MysqlMq\Model\Processor" method="processMessage"/>
+    <consumer name="demoConsumerQueueOneWithException" queue="demo-queue-1" connection="db" class="\Magento\MysqlMq\Model\Processor" method="processMessageWithException"/>
     <consumer name="demoConsumerQueueTwo" queue="demo-queue-2" connection="db" class="\Magento\MysqlMq\Model\Processor" method="processMessage"/>
     <consumer name="demoConsumerQueueThree" queue="demo-queue-3" connection="db" class="\Magento\MysqlMq\Model\Processor" method="processMessage"/>
     <consumer name="demoConsumerQueueFour" queue="demo-queue-4" connection="db" class="\Magento\MysqlMq\Model\Processor" method="processMessage"/>
+    <consumer name="demoConsumerQueueFive" queue="demo-queue-5" connection="db" class="\Magento\MysqlMq\Model\Processor" method="processMessage"/>
     <consumer name="customerCreatedListener" queue="test-queue-1" connection="rabbitmq" class="Data\Type" method="processMessage"/>
     <consumer name="customerDeletedListener" queue="test-queue-2" connection="db" class="Other\Type" method="processMessage2" max_messages="98765"/>
     <consumer name="cartCreatedListener" queue="test-queue-3" connection="rabbitmq" class="Other\Type" method="processMessage3"/>
     <bind queue="demo-queue-1" exchange="magento" topic="demo.object.created"/>
     <bind queue="demo-queue-2" exchange="magento" topic="demo.object.created"/>
     <bind queue="demo-queue-2" exchange="magento" topic="demo.object.updated"/>
-    <bind queue="demo-queue-3" exchange="magento" topic="demo.*"/>
+    <bind queue="demo-queue-3" exchange="magento" topic="demo.object.*"/>
+    <bind queue="demo-queue-5" exchange="magento" topic="demo.object.#"/>
     <bind queue="test-queue-1" exchange="magento" topic="customer.created"/>
     <bind queue="test-queue-1" exchange="magento" topic="customer.created.one"/>
     <bind queue="test-queue-1" exchange="magento" topic="customer.created.one.two"/>
