@@ -83,7 +83,7 @@ define([
 
         /**
          * Open
-         * @param filters
+         * @param filterData
          * @param callbackName
          * @param showMassActionColumn
          */
@@ -94,17 +94,7 @@ define([
             });
             this._setFilter(filterData);
             this._initGrid(filterData);
-            this._setSelected();
             this.productsModal.trigger('openModal');
-        },
-
-        _setSelected: function () {
-            this.variationsComponent(function (variation) {
-                var entityIds = _.values(variation.productAttributesMap);
-                this.productsMassAction(function (massActionComponent) {
-                    massActionComponent.selected(entityIds);
-                });
-            }.bind(this));
         },
 
         /**
@@ -187,10 +177,17 @@ define([
          */
         showManuallyGrid: function () {
             var filterModifier = _.mapObject(_.object(this._getAttributesCodes(), []), function () {
-                return {'condition_type': 'notnull'};
-            });
+                    return {'condition_type': 'notnull'};
+                }),
+                usedProductIds = _.values(this.variationsComponent().productAttributesMap);
 
-            this.open({filters_modifier: filterModifier}, 'rewriteProducts', true);
+            if (usedProductIds) {
+                filterModifier['entity_id'] = {
+                    'condition_type': 'nin', value: usedProductIds
+                };
+            }
+
+            this.open({'filters_modifier': filterModifier}, 'rewriteProducts', true);
         },
 
         /**
@@ -204,7 +201,8 @@ define([
             }.bind(this));
 
             this.productsFilter(function (filter) {
-                filter.set('filters', filterData.filters).apply();
+                filter.set('filters', _.extend({'filters_modifier': filterData.filters_modifier}, filterData.filters))
+                    .apply();
             });
         }
     });

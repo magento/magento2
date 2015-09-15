@@ -94,24 +94,20 @@ abstract class AbstractFilter extends AbstractComponent
         $filterModifier = $this->getContext()->getRequestParam(self::FILTER_MODIFIER);
         if (isset($filterModifier[$this->getName()]['condition_type'])) {
             $conditionType = $filterModifier[$this->getName()]['condition_type'];
-            switch ($conditionType) {
-                case 'notnull':
-                    $filter = $this->filterBuilder->setConditionType($conditionType)
-                        ->setField($this->getName())
-                        ->create();
-                    $this->getContext()->getDataProvider()->addFilter($filter);
-                    break;
-                case 'neq':
-                    $value = isset($filterModifier[$this->getName()]['value'])
-                        ? $filterModifier[$this->getName()]['value']
-                        : null;
-                    $filter = $this->filterBuilder->setConditionType($conditionType)
-                        ->setField($this->getName())
-                        ->setValue($value)
-                        ->create();
-                    $this->getContext()->getDataProvider()->addFilter($filter);
-                    break;
+            $allowedConditionTypes = ['eq', 'neq', 'in', 'nin', 'null', 'notnull'];
+            if (!in_array($conditionType, $allowedConditionTypes)) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Condition type "%1" is not allowed', $conditionType)
+                );
             }
+            $value = isset($filterModifier[$this->getName()]['value'])
+                ? $filterModifier[$this->getName()]['value']
+                : null;
+            $filter = $this->filterBuilder->setConditionType($conditionType)
+                ->setField($this->getName())
+                ->setValue($value)
+                ->create();
+            $this->getContext()->getDataProvider()->addFilter($filter);
         }
     }
 }
