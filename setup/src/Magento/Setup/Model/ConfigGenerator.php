@@ -224,4 +224,30 @@ class ConfigGenerator
         }
         return $configData;
     }
+
+    /**
+     * Creates cache hosts config data
+     *
+     * @param array $data
+     * @return ConfigData
+     */
+    public function createCacheHostsConfig(array $data)
+    {
+        $configData = new ConfigData(ConfigFilePool::APP_ENV);
+        if (isset($data[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS])) {
+            $hostData = explode(',', $data[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS]);
+            $hosts = [];
+            foreach ($hostData as $data) {
+                $dataArray = explode(':', trim($data));
+                $host = [];
+                $host['host'] = $dataArray[0];
+                if (isset($dataArray[1])) {
+                    $host['port'] = $dataArray[1];
+                }
+                $hosts[] = $host;
+            }
+            $configData->set(ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS, $hosts);
+        }
+        return $configData;
+    }
 }
