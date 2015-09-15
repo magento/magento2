@@ -1036,23 +1036,24 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     /**
      * Add total data or model
      *
-     * @param \Magento\Quote\Model\Quote\Total|array $total
+     * @param \Magento\Quote\Model\Quote\Address\Total|array $total
      * @return $this
      */
     public function addTotal($total)
     {
+        $addressTotal = null;
         if (is_array($total)) {
-            $totalInstance = $this->_addressTotalFactory->create(
-                'Magento\Quote\Model\Quote\Address\Total'
-            )->setData(
-                $total
-            );
-        } elseif ($total instanceof \Magento\Quote\Model\Quote\Total) {
-            $totalInstance = $total;
+            /** @var \Magento\Quote\Model\Quote\Address\Total $addressTotal */
+            $addressTotal = $this->_addressTotalFactory->create('Magento\Quote\Model\Quote\Address\Total');
+            $addressTotal->setData($total);
+        } elseif ($total instanceof \Magento\Quote\Model\Quote\Address\Total) {
+            $addressTotal = $total;
         }
-        $totalInstance->setAddress($this);
-        $this->_totals[$totalInstance->getCode()] = $totalInstance;
 
+        if ($addressTotal !== null) {
+            $addressTotal->setAddress($this);
+            $this->_totals[$addressTotal->getCode()] = $addressTotal;
+        }
         return $this;
     }
 
