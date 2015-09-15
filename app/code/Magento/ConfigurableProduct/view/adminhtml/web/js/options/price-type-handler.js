@@ -14,10 +14,10 @@ define([
         isConfigurable: false,
         messageInited: false,
         messageSelector: '[data-role=product-custom-options-content]',
-        checkPercentPriceTypeDomExist: function () {
-            if ($('#product_options_container_top').length !== 0) {
-                $('.opt-type > select').trigger('change');
-            }
+        isPercentPriceTypeExist: function () {
+            var productOptionsContainer = $('#product_options_container_top');
+
+            return !!productOptionsContainer.length;
         },
         showWarning: function () {
             if (!this.messageInited) {
@@ -39,22 +39,41 @@ define([
             $('[data-form=edit-product]')
                 .on('change_configurable_type', function (event, isConfigurable) {
                     this.isConfigurable = isConfigurable;
-                    this.checkPercentPriceTypeDomExist();
+                    if (this.isPercentPriceTypeExist()) {
+                        this.percentPriceTypeHandler();
+                    }
                 }.bind(this));
 
             $('#product-edit-form-tabs').on('change', '.opt-type > select', function () {
-                var priceType = $('[data-attr="price-type"]'),
-                    optionPercentPriceType = priceType.find('option[value="percent"]');
+                var selected = $('.opt-type > select :selected'),
+                    optGroup = selected.parent().attr('label');
 
-                if (this.isConfigurable) {
-                    this.showWarning();
-                    optionPercentPriceType.hide();
-                    optionPercentPriceType.parent().val() === 'percent' ? optionPercentPriceType.parent().val('fixed') : '';
+                if (optGroup === 'Select') {
+                    $('#product-edit-form-tabs').on(
+                        'click',
+                        '[data-ui-id="admin-product-options-options-box-select-option-type-add-select-row-button"]',
+                        function () {
+                            this.percentPriceTypeHandler();
+                        }.bind(this)
+                    );
                 } else {
-                    optionPercentPriceType.show();
-                    this.hideWarning();
+                    this.percentPriceTypeHandler();
                 }
             }.bind(this));
+        },
+        percentPriceTypeHandler: function () {
+            var priceType = $('[data-attr="price-type"]'),
+                optionPercentPriceType = priceType.find('option[value="percent"]');
+
+            if (this.isConfigurable) {
+                this.showWarning();
+                optionPercentPriceType.hide();
+                optionPercentPriceType.parent().val() === 'percent' ? optionPercentPriceType.parent().val('fixed') : '';
+            } else {
+                $(this.messageSelector).notification();
+                optionPercentPriceType.show();
+                this.hideWarning();
+            }
         }
     };
 });
