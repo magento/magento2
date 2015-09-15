@@ -7,6 +7,7 @@
 namespace Magento\ProductVideo\Helper;
 
 use Magento\Framework\App\Area;
+use Magento\Framework\App\Helper\Context;
 use Magento\Framework\View\ConfigInterface;
 use Magento\Framework\View\DesignInterface;
 
@@ -36,6 +37,11 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     const NODE_CONFIG_VIDEO_AUTO_RESTART = 'video_auto_restart';
 
     /**
+     * Configuration path
+     */
+    const XML_PATH_YOUTUBE_API_KEY = 'catalog/product_video/youtube_api_key';
+
+    /**
      * @var ConfigInterface
      */
     protected $viewConfig;
@@ -55,14 +61,17 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param ConfigInterface $configInterface
      * @param DesignInterface $designInterface
+     * @param Context $context
      */
     public function __construct(
         ConfigInterface $configInterface,
-        DesignInterface $designInterface
+        DesignInterface $designInterface,
+        Context $context
     ) {
         $this->viewConfig = $configInterface;
         $this->currentTheme = $designInterface->getDesignTheme();
         $this->initConfig();
+        parent::__construct($context);
     }
 
     /**
@@ -123,4 +132,13 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         );
     }
 
+    /**
+     * Retrieve YouTube API key
+     *
+     * @return string
+     */
+    public function getYouTubeApiKey()
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_YOUTUBE_API_KEY);
+    }
 }
