@@ -6,6 +6,6 @@
 
 \Magento\Framework\Component\ComponentRegistrar::register(
     \Magento\Framework\Component\ComponentRegistrar::MODULE,
-    'Magento_DesignEditor',
+    'Magento_DownloadableImportExport',
     __DIR__
 );
