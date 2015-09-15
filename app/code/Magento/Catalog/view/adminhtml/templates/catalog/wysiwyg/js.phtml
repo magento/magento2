@@ -27,7 +27,7 @@ var catalogWysiwygEditor = {
                 url: editorUrl,
                 data: {
                     element_id: elementId + '_editor',
-                    store_id: '<?php echo $block->getStoreId() ?>'
+                    store_id: '<?php /* @escapeNotVerified */ echo $block->getStoreId() ?>'
                 },
                 showLoader: true,
                 dataType: 'html',

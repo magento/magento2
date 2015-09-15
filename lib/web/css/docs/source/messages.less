@@ -12,11 +12,11 @@
 //  error
 //  success
 //  ```
-//  To configure styles of each type of message, global variables from variables.less are used. To apply the <code>.message()</code> mixin you need to specify the type of message you want to apply styles to.
+//  To configure styles of each type of message, global variables from variables.less are used. To apply the <code>.lib-message()</code> mixin you need to specify the type of message you want to apply styles to.
 //
 //  # Information message
 //
-//  This is an informational message. To apply appropriate style you need to specify the <code>info</code> type to the <code>.message()</code> mixin.
+//  This is an informational message. To apply appropriate style you need to specify the <code>info</code> type to the <code>.lib-message()</code> mixin.
 //
 //  If there is no content on the page, for example on a category page with no products, a special system information message with <code>class=”message info empty”</code> is used. It inherits styles from information message by default. It can be styled to get unique appearance using <code>.message.info.empty</code> class.
 //
@@ -29,7 +29,7 @@
 //  ```
 
 .example-message-info {
-    .message(info);
+    .lib-message(info);
 }
 
 //  # Warning message
@@ -45,7 +45,7 @@
 //  ```
 
 .example-message-warning {
-    .message(warning);
+    .lib-message(warning);
 }
 
 //  # Error message
@@ -61,7 +61,7 @@
 //  ```
 
 .example-message-error {
-    .message(error);
+    .lib-message(error);
 }
 
 //  # Success message
@@ -77,7 +77,7 @@
 //  ```
 
 .example-message-success {
-    .message(success);
+    .lib-message(success);
 }
 
 //  # Notice message
@@ -93,12 +93,12 @@
 //  ```
 
 .example-message-notice {
-    .message(notice);
+    .lib-message(notice);
 }
 
 //  # Message with inner icon
 //
-//  To add an inner icon use <code>.message-icon-inner</code> mixin. To apply the <code>.message-icon-inner</code> mixin, you need to specify the type of a message that you want to apply styles to.
+//  To add an inner icon use <code>.lib-message-icon-inner</code> mixin. To apply the <code>.message-icon-inner</code> mixin, you need to specify the type of a message that you want to apply styles to.
 //
 //  ```html
 //  <div class="example-message-1">
@@ -110,12 +110,12 @@
 //
 
 .example-message-1 {
-    .message-icon-inner(notice);
+    .lib-message-icon-inner(notice);
 }
 
 //  # Message with lateral icon
 //
-//  To add a lateral icon to a message, you need to use the <code>.message-icon-lateral</code> mixin. This mixin is configured by the following variables:
+//  To add a lateral icon to a message, you need to use the <code>.lib-message-icon-lateral</code> mixin. This mixin is configured by the following variables:
 //  ```css
 //  @_message-type: error; // info | warning | error | success | notice
 //  @_message-position: right; // left | right
@@ -137,11 +137,11 @@
 //  ```
 
 .example-message-2 {
-    .message-icon-lateral(error, right);
+    .lib-message-icon-lateral(error, right);
 }
 
 .example-message-3 {
-    .message-icon-lateral(success, left);
+    .lib-message-icon-lateral(success, left);
 }
 
 //  # Custom message style
@@ -164,7 +164,7 @@
 //  ```
 //  And then call message mixin with your new message type
 //  ```css
-//  .message-icon-lateral(custom, left);
+//  .lib-message-icon-lateral(custom, left);
 //  ```
 //  &nbsp;
 //  ```html
@@ -193,7 +193,7 @@
 @message-custom-icon__left: 0;
 
 .example-message-4 {
-    .message-icon-lateral(custom, left);
+    .lib-message-icon-lateral(custom, left);
     border-width: 4px;
     border-radius: 10px;
 }
