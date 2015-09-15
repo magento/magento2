@@ -80,7 +80,6 @@
     }
 
     .modal-content {
-        height: auto !important;
         .buttons-set {
             margin: 0 0 15px;
             button {
@@ -107,82 +106,6 @@
         width: 80%;
     }
 
-    //
-    //  Block 'Insert File'
-    //  -----------------------------------------
-
-    .main-col {
-        .insert-title-inner {
-            &:extend(.abs-clearfix all);
-            border-bottom: 1px solid @color-gray68;
-            margin: 0 0 @indent__base;
-            padding-bottom: @indent__xs;
-        }
-        .insert-actions {
-            float: right;
-        }
-        .title {
-            font-size: @font-size__l;
-            padding-top: @indent__xs;
-        }
-    }
-
-    .contents-uploader {
-        margin: 0 0 @indent__base;
-    }
-
-    .fileinput-button {
-        cursor: pointer;
-        display: inline-block;
-        float: none;
-        vertical-align: middle;
-        span {
-            display: none;
-        }
-        input {
-            border: none;
-            -moz-transform: none;
-            opacity: 1;
-            position: static;
-        }
-    }
-
-    .breadcrumbs {
-        list-style: none;
-        padding-left: 0;
-        li {
-            display: inline-block;
-            margin: 0 @indent__xs @indent__xs 0;
-            &:after {
-                content: '';
-                margin: 0 @indent__xs 0 0;
-            }
-        }
-    }
-
-    .file-row {
-        border: 1px solid @color-gray68;
-        margin: @indent__xs 0;
-        padding: 2px;
-    }
-
-    .filecnt {
-        border: 1px solid @color-gray68;
-        display: inline-block;
-        margin: 0 @indent__xs 15px 0;
-        padding: 3px;
-        width: 100px;
-        overflow: hidden;
-        cursor: pointer;
-        &.selected {
-            border-color: @color-blue-dodger;
-        }
-        p {
-            text-align: center;
-        }
-    }
-
-
 }
 
 .modal-title {
@@ -190,3 +113,9 @@
     margin-bottom: 0;
     min-height: 1em;
 }
+
+
+//
+//  Imports
+//  ---------------------------------------------
+@import 'modals_extend/_wysiwyg_images.less';

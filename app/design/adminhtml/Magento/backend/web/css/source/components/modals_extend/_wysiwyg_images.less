@@ -1,0 +1,74 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Wysiwyg images
+//  ---------------------------------------------
+
+.modal-slide {
+
+
+    //
+    //  Block 'Insert File'
+    //  -----------------------------------------
+
+    .main-col {
+        .insert-title-inner {
+            &:extend(.abs-clearfix all);
+            border-bottom: 1px solid @color-gray68;
+            margin: 0 0 @indent__base;
+            padding-bottom: @indent__xs;
+        }
+        .insert-actions {
+            float: right;
+        }
+        .title {
+            font-size: @font-size__l;
+            padding-top: @indent__xs;
+        }
+    }
+
+    .contents-uploader {
+        margin: 0 0 @indent__base;
+    }
+
+    .fileinput-button {
+        cursor: pointer;
+        display: inline-block;
+        float: none;
+        vertical-align: middle;
+        span {
+            display: none;
+        }
+        input {
+            border: none;
+            -moz-transform: none;
+            opacity: 1;
+            position: static;
+        }
+    }
+
+    .file-row {
+        border: 1px solid @color-gray68;
+        margin: @indent__xs 0;
+        padding: 2px;
+    }
+
+    .filecnt {
+        border: 1px solid @color-gray68;
+        display: inline-block;
+        margin: 0 @indent__xs 15px 0;
+        padding: 3px;
+        width: 100px;
+        overflow: hidden;
+        cursor: pointer;
+        &.selected {
+            border-color: @color-blue-dodger;
+        }
+        p {
+            text-align: center;
+        }
+    }
+}
