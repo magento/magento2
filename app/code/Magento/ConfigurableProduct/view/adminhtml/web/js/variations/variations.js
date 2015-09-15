@@ -92,7 +92,14 @@ define([
             var productId = product['entity_id'] || product.productId || null,
                 attributes = _.pick(product, this.attributes.pluck('code')),
                 options = _.map(attributes, function (option, attribute) {
-                    return _.findWhere(this.attributes(), {code: attribute}).options[option];
+                    var oldOptions = _.findWhere(this.attributes(), {code: attribute}).options,
+                        result;
+                    if (_.isFunction(oldOptions)) {
+                        result = oldOptions.findWhere({value: option});
+                    } else {
+                        result = _.findWhere(oldOptions, {value: option});
+                    }
+                    return result;
                 }.bind(this));
 
             return {
