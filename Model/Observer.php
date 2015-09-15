@@ -6,9 +6,7 @@
 namespace Magento\MysqlMq\Model;
 
 /**
- * Class Observer is used for cron processing
- *
- * @package Magento\MysqlMq\Model
+ * Observer class to monitor outdated messages.
  */
 class Observer
 {
@@ -25,6 +23,7 @@ class Observer
 
     /**
      * Clean up old messages from database
+     * @return void
      */
     public function cleanupMessages()
     {
