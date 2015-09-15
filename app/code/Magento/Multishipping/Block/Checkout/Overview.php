@@ -215,10 +215,8 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
         $quote = $this->getQuote();
 
         /** @var  \Magento\Quote\Model\Quote\Address\Total $addressTotals */
-        $addressTotals = $this->totalsCollector->collectAddressTotals(
-            $quote,
-            $address
-        );
+        $addressTotals = $this->totalsCollector->collectAddressTotals($quote, $address);
+
         /** @var array $totals */
         $totals = $this->totalsReader->fetch($addressTotals, $quote->getStoreId());
 
@@ -344,8 +342,8 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getBillinAddressTotals()
     {
-        $_address = $this->getQuote()->getBillingAddress();
-        return $this->getShippingAddressTotals($_address);
+        $address = $this->getQuote()->getBillingAddress();
+        return $this->getShippingAddressTotals($address);
     }
 
     /**

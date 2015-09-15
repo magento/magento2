@@ -52,7 +52,7 @@ class Grandtotal extends \Magento\Checkout\Block\Total\DefaultTotal
      */
     public function includeTax()
     {
-        if ($this->getTotal()->getGrandTotal()) {
+        if ($this->getTotal()->getValue()) {
             return $this->_taxConfig->displayCartTaxWithGrandTotal($this->getStore());
         }
         return false;
@@ -65,7 +65,7 @@ class Grandtotal extends \Magento\Checkout\Block\Total\DefaultTotal
      */
     public function getTotalExclTax()
     {
-        $excl = $this->getTotal()->getGrandTotal() - $this->getTotal()->getTaxAmount();
+        $excl = $this->getTotal()->getValue() - $this->_totals['tax']->getValue();
         $excl = max($excl, 0);
         return $excl;
     }
