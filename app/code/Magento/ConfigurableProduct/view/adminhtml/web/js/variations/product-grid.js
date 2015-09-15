@@ -45,7 +45,7 @@ define([
                         }
                     }, {
                         text: $.mage.__('Done'),
-                        click: this.close.bind(this)
+                        click: this.close.bind(this, null)
                     }
                 ]
             });
@@ -77,8 +77,7 @@ define([
          * @param rowIndex
          */
         selectProduct: function (rowIndex) {
-            this.productsMassAction().selected(this.getProductByIndex(rowIndex)['entity_id']);
-            this.close();
+            this.close(rowIndex);
         },
 
         /**
@@ -100,12 +99,23 @@ define([
         /**
          * Close
          */
-        close: function () {
-            if (this.productsMassAction().selected().length) {
-                this.variationsComponent()[this.callbackName](this.productsMassAction()
-                    .selected.map(this.getProductById.bind(this)));
+        close: function (rowIndex) {
+            try {
+                if (this.productsMassAction().selected().length) {
+                    this.variationsComponent()[this.callbackName](this.productsMassAction()
+                        .selected.map(this.getProductById.bind(this)));
+                    this.productsMassAction().selected(null);
+                } else if (!_.isNull(rowIndex)) {
+                    this.variationsComponent()[this.callbackName]([this.getProductByIndex(rowIndex)]);
+                }
+                this.productsModal.trigger('closeModal');
+            } catch (e) {
+                this.productsModal.notification('clear');
+                this.productsModal.notification('add', {
+                    message: e.message,
+                    messageContainer: this.gridSelector
+                });
             }
-            this.productsModal.trigger('closeModal');
         },
 
         /**
@@ -151,13 +161,13 @@ define([
         },
 
         /**
-         * Show message associated grid
+         * Show data associated grid
          * @private
          */
-        _showMessageAssociatedGrid: function () {
+        _showMessageAssociatedGrid: function (data) {
             this.productsModal.notification('clear');
 
-            if (this.productsProvider().data.items.length) {
+            if (data.items.length) {
                 this.productsModal.notification('add', {
                     message: $.mage.__(
                         'Choose a new product to delete and replace the current product configuration.'
@@ -187,7 +197,7 @@ define([
                 };
             }
 
-            this.open({'filters_modifier': filterModifier}, 'rewriteProducts', true);
+            this.open({'filters_modifier': filterModifier}, 'appendProducts', true);
         },
 
         /**
@@ -196,7 +206,7 @@ define([
          */
         _setFilter: function (filterData) {
             this.productsProvider(function (provider) {
-                provider.params['filters_modifier'] = filterData.filters_modifier;
+                provider.params['filters_modifier'] = filterData['filters_modifier'];
                 provider.params['attributes_codes'] = this._getAttributesCodes();
             }.bind(this));
 

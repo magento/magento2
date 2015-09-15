@@ -61,8 +61,8 @@ define([
             var oldProduct = this.productMatrix()[this.rowIndexToEdit];
             this.productMatrix.splice(this.rowIndexToEdit, 1, this._makeProduct(_.extend(oldProduct, newProducts[0])));
         },
-        rewriteProducts: function (newProducts) {
-            this.productMatrix(_.map(newProducts, this._makeProduct.bind(this)));
+        appendProducts: function (newProducts) {
+            this.productMatrix.push.apply(this.productMatrix, _.map(newProducts, this._makeProduct.bind(this)));
         },
         _makeProduct: function (product) {
             var productId = product['entity_id'] || product.productId || null,
@@ -72,6 +72,10 @@ define([
                         code: attribute
                     }).chosen[option];
                 }.bind(this));
+
+            if (this.productAttributesMap.hasOwnProperty(this.getVariationKey(options))) {
+                throw new Error($.mage.__('Duplicate product'));
+            }
             this.productAttributesMap[this.getVariationKey(options)] = productId;
 
             return {
