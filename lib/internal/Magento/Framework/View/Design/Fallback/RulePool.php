@@ -7,9 +7,7 @@
 namespace Magento\Framework\View\Design\Fallback;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
 use Magento\Framework\View\Design\Fallback\Rule\Composite;
-use Magento\Framework\View\Design\Fallback\Rule\ModularSwitch;
 use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
 
 /**
@@ -32,7 +30,7 @@ class RulePool
     /**
      * File system
      *
-     * @var Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     protected $filesystem;
 
@@ -74,14 +72,14 @@ class RulePool
     /**
      * Constructor
      *
-     * @param Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param Rule\SimpleFactory $simpleFactory
      * @param Rule\ThemeFactory $themeFactory
      * @param Rule\ModuleFactory $moduleFactory
      * @param Rule\ModularSwitchFactory $modularSwitchFactory
      */
     public function __construct(
-        Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         Rule\SimpleFactory $simpleFactory,
         Rule\ThemeFactory $themeFactory,
         Rule\ModuleFactory $moduleFactory,
