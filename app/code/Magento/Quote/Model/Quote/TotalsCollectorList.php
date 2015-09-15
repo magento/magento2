@@ -53,29 +53,15 @@ class TotalsCollectorList
     protected $storeManager;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address\TotalsListFactory
-     */
-    protected $totalListFactory;
-
-    /**
      * @var \Magento\Quote\Model\Quote\Address\TotalFactory
      */
     protected $totalFactory;
-
-    /**
-     * @var array
-     */
-    protected $allowedCollectors = [
-        'subtotal',
-        'grand_total'
-    ];
 
     /**
      * @param Collector $totalCollector
      * @param CollectorFactory $totalCollectorFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param Address\TotalsListFactory $totalListFactory
      * @param Address\TotalFactory $totalFactory
      */
     public function __construct(
@@ -83,14 +69,12 @@ class TotalsCollectorList
         CollectorFactory $totalCollectorFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Quote\Model\Quote\Address\TotalsListFactory $totalListFactory,
         \Magento\Quote\Model\Quote\Address\TotalFactory $totalFactory
     ) {
         $this->totalCollector = $totalCollector;
         $this->totalCollectorFactory = $totalCollectorFactory;
         $this->eventManager = $eventManager;
         $this->storeManager = $storeManager;
-        $this->totalListFactory = $totalListFactory;
         $this->totalFactory = $totalFactory;
     }
 

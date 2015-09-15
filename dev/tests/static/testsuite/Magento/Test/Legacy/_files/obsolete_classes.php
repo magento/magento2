@@ -3847,4 +3847,7 @@ return [
     ['Magento\Setup\Model\SampleData', 'Magento\SampleData\Model\SampleData'],
     ['Magento\Customer\Controller\Account\ResetPassword'],
     ['Magento\Customer\Controller\Account'],
+    ['Magento\Quote\Model\Quote\Address\Total\Discount'],
+    ['Magento\Quote\Model\Quote\Address\Total\Custbalance'],
+    ['Magento\Quote\Model\Quote\Address\Total\Tax'],
 ];
