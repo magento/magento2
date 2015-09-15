@@ -13,9 +13,9 @@
     "AFL-3.0"
   ],
   "autoload": {
-    "files": [ "registration.php",
-        "psr-4": {
-            "Magento\\SalesSequence\\": ""
-        }
+    "files": [ "registration.php" ],
+    "psr-4": {
+      "Magento\\SalesSequence\\": ""
     }
+  }
 }

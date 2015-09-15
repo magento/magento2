@@ -28,9 +28,9 @@
     "proprietary"
   ],
   "autoload": {
-    "files": [ "registration.php",
-        "psr-4": {
-            "Magento\\Braintree\\": ""
-        }
+    "files": [ "registration.php" ],
+    "psr-4": {
+      "Magento\\Braintree\\": ""
     }
+  }
 }
