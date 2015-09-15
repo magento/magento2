@@ -5,6 +5,11 @@
  */
 namespace Magento\MysqlMq\Model;
 
+/**
+ * Class Observer is used for cron processing
+ *
+ * @package Magento\MysqlMq\Model
+ */
 class Observer
 {
     /**

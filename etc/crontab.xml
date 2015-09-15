@@ -7,8 +7,8 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Cron/etc/crontab.xsd">
     <group id="default">
-        <job name="mysqlmq_clean_messages" instance="Magento\MysqlMq\Model\Observer" method="cleanMessages">
-            <schedule>30 2 * * *</schedule>
+        <job name="mysqlmq_clean_messages" instance="Magento\MysqlMq\Model\Observer" method="cleanupMessages">
+            <schedule>30 6,15 * * *</schedule>
         </job>
     </group>
 </config>
