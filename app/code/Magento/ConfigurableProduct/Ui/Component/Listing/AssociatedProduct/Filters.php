@@ -34,7 +34,7 @@ class Filters extends \Magento\Ui\Component\Filters
      */
     public function prepare()
     {
-        $attributeIds = $this->context->getRequestParam('attributes_codes');
+        $attributeIds = $this->getContext()->getRequestParam('attributes_codes');
         if ($attributeIds) {
             foreach ($this->attributeRepository->getList() as $attribute) {
                 $filter = $this->filterFactory->create($attribute, $this->getContext(), ['component' => '']);
