@@ -12,20 +12,16 @@ use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Cover DeleteProductEntity with functional tests designed for automation
- *
- * Test Flow:
- *
  * Preconditions:
- * 1. Create product according to dataset
+ * 1. Create product according to dataSet.
  *
  * Steps:
- * 1. Login to backend
- * 2. Navigate Products->Catalog
- * 3. Select products created in preconditions
- * 4. Select delete from mass-action
- * 5. Submit form
- * 6. Perform asserts
+ * 1. Login to backend.
+ * 2. Navigate Products->Catalog.
+ * 3. Select products created in preconditions.
+ * 4. Select delete from mass-action.
+ * 5. Submit form.
+ * 6. Perform asserts.
  *
  * @group Products_(MX)
  * @ZephyrId MAGETWO-23272
@@ -38,14 +34,14 @@ class DeleteProductEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Product page with a grid
+     * Product page with a grid.
      *
      * @var CatalogProductIndex
      */
     protected $catalogProductIndex;
 
     /**
-     * Prepare data
+     * Prepare data.
      *
      * @param Category $category
      * @return array
@@ -59,7 +55,7 @@ class DeleteProductEntityTest extends Injectable
     }
 
     /**
-     * Injection data
+     * Injection data.
      *
      * @param CatalogProductIndex $catalogProductIndexPage
      * @return void
@@ -70,7 +66,7 @@ class DeleteProductEntityTest extends Injectable
     }
 
     /**
-     * Run delete product test
+     * Run delete product test.
      *
      * @param string $products
      * @param FixtureFactory $fixtureFactory
