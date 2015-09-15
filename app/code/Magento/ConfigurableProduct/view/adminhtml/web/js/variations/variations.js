@@ -83,6 +83,7 @@ define([
                                 throw new UserException($.mage.__('Duplicate product'));
                             }
                             this.productAttributesMap[this.getVariationKey(newProduct.options)] = newProduct.productId;
+                            return newProduct;
                         }.bind(this)
                     )
                 )
