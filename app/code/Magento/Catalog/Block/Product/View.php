@@ -201,7 +201,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
             $additional['wishlist_next'] = 1;
         }
 
-        $addUrlKey = \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED;
+        $addUrlKey = \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED;
         $addUrlValue = $this->_urlBuilder->getUrl('*/*/*', ['_use_rewrite' => true, '_current' => true]);
         $additional[$addUrlKey] = $this->urlEncoder->encode($addUrlValue);
 
