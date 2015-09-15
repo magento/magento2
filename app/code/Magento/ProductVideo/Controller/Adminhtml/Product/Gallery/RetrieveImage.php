@@ -127,7 +127,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
      */
     protected function retrieveRemoteImage($fileUrl, $localFilePath)
     {
-        $this->curl->setConfig(['header' => 0]);
+        $this->curl->setConfig(['header' => false]);
         $this->curl->write('GET', $fileUrl);
         $image = $this->curl->read();
         $this->fileUtility->saveFile($localFilePath, $image);
