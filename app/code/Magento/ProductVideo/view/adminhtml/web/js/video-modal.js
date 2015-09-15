@@ -20,6 +20,14 @@ define([
             },
 
             _bind: function() {
+                var events = {
+                    'mouseup [data-role=delete-button]': function (event) {
+                        event.preventDefault();
+                        var $imageContainer = $(event.currentTarget).closest(this.options.imageSelector);
+                        this.element.find('[data-role=dialog]').trigger('close');
+                        this.element.trigger('removeItem', $imageContainer.data('imageData'));
+                    },
+                }
                 $(this.element).on('click', this.showModal.bind(this));
                 $('.gallery.ui-sortable').on('openDialog', $.proxy(this._onOpenDialog, this));
             },
