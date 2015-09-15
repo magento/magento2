@@ -104,7 +104,7 @@ define([
                 if (this.productsMassAction().selected().length) {
                     this.variationsComponent()[this.callbackName](this.productsMassAction()
                         .selected.map(this.getProductById.bind(this)));
-                    this.productsMassAction().selected(null);
+                    this.productsMassAction().selected([]);
                 } else if (!_.isNull(rowIndex)) {
                     this.variationsComponent()[this.callbackName]([this.getProductByIndex(rowIndex)]);
                 }
