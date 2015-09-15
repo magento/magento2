@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Store/etc/config.xsd">
+    <default>
+        <system>
+            <mysqlmq>
+                <retry_inprogress_after>1440</retry_inprogress_after>
+                <successful_messages_lifetime>10080</successful_messages_lifetime>
+                <failed_messages_lifetime>10080</failed_messages_lifetime>
+            </mysqlmq>
+        </system>
+    </default>
+</config>

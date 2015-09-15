@@ -121,6 +121,22 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
     }
 
     /**
+     * Delete messages if there is no queue whrere the message is not in status TO BE DELETED
+     *
+     * @return void
+     */
+    public function deleteMarkedMessages()
+    {
+        $connection = $this->getConnection();
+        $select = $connection->select()
+            ->from(['queue_message_status' => $this->getMessageStatusTable()], ['message_id'])
+            ->where('status <> ?', QueueManagement::MESSAGE_STATUS_TO_BE_DELETED);
+        $messageIds = $connection->fetchCol($select);
+
+        $connection->delete('queue_message', ['id NOT IN (?)' => $messageIds]);
+    }
+
+    /**
      * Mark specified messages with 'in progress' status.
      *
      * @param int[] $relationIds

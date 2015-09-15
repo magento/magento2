@@ -25,20 +25,50 @@ class QueueManagement
     const MESSAGE_STATUS_COMPLETE= 4;
     const MESSAGE_STATUS_RETRY_REQUIRED = 5;
     const MESSAGE_STATUS_ERROR = 6;
+    const MESSAGE_STATUS_TO_BE_DELETED = 7;
+
+    /**#@+
+     * Cleanup configuration XML nodes
+     */
+    const XML_PATH_SUCCESSFUL_MESSAGES_LIFETIME = 'system/mysqlmq/successful_messages_lifetime';
+    const XML_PATH_FAILED_MESSAGES_LIFETIME = 'system/mysqlmq/failed_messages_lifetime';
+    const XML_PATH_RETRY_IN_PROGRESS_AFTER = 'system/mysqlmq/retry_inprogress_after';
+    /**#@-*/
 
     /**
      * @var \Magento\MysqlMq\Model\Resource\Queue
      */
-    protected $messageResource;
+    private $messageResource;
 
     /**
-     * Initialize dependencies.
-     *
-     * @param \Magento\MysqlMq\Model\Resource\Queue $messageResource
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    public function __construct(\Magento\MysqlMq\Model\Resource\Queue $messageResource)
-    {
+    private $scopeConfig;
+
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     */
+    private $timezone;
+
+    /**
+     * @var \Magento\MysqlMq\Model\Resource\MessageStatusCollectionFactory
+     */
+    private $messageStatusCollectionFactory;
+
+    /**
+     * @param Resource\Queue $messageResource
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     */
+    public function __construct(
+        \Magento\MysqlMq\Model\Resource\Queue $messageResource,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\MysqlMq\Model\Resource\MessageStatusCollectionFactory $messageStatusCollectionFactory,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
+    ) {
         $this->messageResource = $messageResource;
+        $this->scopeConfig = $scopeConfig;
+        $this->timezone = $timezone;
+        $this->messageStatusCollectionFactory = $messageStatusCollectionFactory;
     }
 
     /**
@@ -54,6 +84,59 @@ class QueueManagement
         $messageId = $this->messageResource->saveMessage($topic, $message);
         $this->messageResource->linkQueues($messageId, $queueNames);
         return $this;
+    }
+
+    /**
+     * Mark messages to be deleted if sufficient amount of time passed since last update
+     * Delete marked messages
+     *
+     * @return void
+     */
+    public function markMessagesForDelete()
+    {
+        $now = $this->timezone->scopeTimeStamp();
+
+        $successfulLifetime = (int)$this->scopeConfig->getValue(
+            self::XML_PATH_SUCCESSFUL_MESSAGES_LIFETIME,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+
+        $failureLifetime = (int)$this->scopeConfig->getValue(
+            self::XML_PATH_SUCCESSFUL_MESSAGES_LIFETIME,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+
+        $retryInProgressAfter = (int)$this->scopeConfig->getValue(
+            self::XML_PATH_RETRY_IN_PROGRESS_AFTER,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+
+        $collection = $this->messageStatusCollectionFactory->create()
+            ->addFieldToFilter('status',
+                ['in' => [
+                    self::MESSAGE_STATUS_COMPLETE,
+                    self::MESSAGE_STATUS_ERROR,
+                    self::MESSAGE_STATUS_IN_PROGRESS
+                ]]);
+
+        foreach ($collection as $messageStatus) {
+            if ($messageStatus->getStatus() == self::MESSAGE_STATUS_COMPLETE
+                && strtotime($messageStatus->getUpdatedAt()) < ($now - $successfulLifetime)) {
+                $messageStatus->setStatus(self::MESSAGE_STATUS_TO_BE_DELETED)
+                    ->save();
+            } else if ($messageStatus->getStatus() == self::MESSAGE_STATUS_ERROR
+                && strtotime($messageStatus->getUpdatedAt()) < ($now - $failureLifetime)) {
+                $messageStatus->setStatus(self::MESSAGE_STATUS_TO_BE_DELETED)
+                    ->save();
+            } else if ($messageStatus->getStatus() == self::MESSAGE_STATUS_IN_PROGRESS
+                && strtotime($messageStatus->getUpdatedAt()) < ($now - $retryInProgressAfter)
+                && $messageStatus->getRetries() < Consumer::MAX_NUMBER_OF_TRIALS
+            ) {
+                $this->pushToQueueForRetry($messageStatus->getId());
+            }
+        }
+
+        $this->messageResource->deleteMarkedMessages();
     }
 
     /**
