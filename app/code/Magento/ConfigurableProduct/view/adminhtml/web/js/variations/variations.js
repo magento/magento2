@@ -11,6 +11,8 @@ define([
 ], function (Component, $, ko, _) {
     'use strict';
 
+    var UserException = Object.create(Error, {name: {value: 'UserException', writable: false}});
+
     return Component.extend({
         defaults: {
             opened: false,
@@ -74,7 +76,7 @@ define([
                 }.bind(this));
 
             if (this.productAttributesMap.hasOwnProperty(this.getVariationKey(options))) {
-                throw new Error($.mage.__('Duplicate product'));
+                throw new UserException($.mage.__('Duplicate product'));
             }
             this.productAttributesMap[this.getVariationKey(options)] = productId;
 

@@ -110,11 +110,15 @@ define([
                 }
                 this.productsModal.trigger('closeModal');
             } catch (e) {
-                this.productsModal.notification('clear');
-                this.productsModal.notification('add', {
-                    message: e.message,
-                    messageContainer: this.gridSelector
-                });
+                if (e.name === 'UserException') {
+                    this.productsModal.notification('clear');
+                    this.productsModal.notification('add', {
+                        message: e.message,
+                        messageContainer: this.gridSelector
+                    });
+                } else {
+                    throw e;
+                }
             }
         },
 
