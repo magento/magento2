@@ -25,6 +25,7 @@
                     "height": "<?php /* @escapeNotVerified */ echo $block->getVar("magnifier:height"); ?>",
                     "top": "<?php /* @escapeNotVerified */ echo $block->getVar("magnifier:top"); ?>",
                     "left": "<?php /* @escapeNotVerified */ echo $block->getVar("magnifier:left"); ?>"
+                    "inc": "<?php echo $block->getVar("magnifier:fullscreenzoom"); ?>"
                 },
                 "data": <?php /* @escapeNotVerified */ echo $block->getGalleryImagesJson(); ?>,
                 "options": {
@@ -46,6 +47,7 @@
                 "fullscreen": {
                     "nav": "<?php echo $block->getVar("gallery:fullscreen:navigation"); ?>",
                     "loop": <?php echo $block->getVar("gallery:fullscreen:loop"); ?>,
+                    "navdir": "<?php echo $block->getVar("gallery:fullscreen:navdir"); ?>",
                     "arrows": <?php echo $block->getVar("gallery:fullscreen:arrows"); ?>,
                     "showCaption": <?php echo $block->getVar("gallery:fullscreen:caption"); ?>,
                     "transitionduration": <?php echo $block->getVar("gallery:fullscreen:transition:duration"); ?>,
