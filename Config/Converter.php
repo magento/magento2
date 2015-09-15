@@ -190,7 +190,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         $wildcardKeys = [];
         foreach ($binds as $bind) {
             $key = $bind[self::BIND_EXCHANGE] . '--' . $bind[self::BIND_TOPIC];
-            if (strpos($key, '*') !== FALSE || strpos($key, '#') !== FALSE) {
+            if (strpos($key, '*') !== false || strpos($key, '#') !== false) {
                 $wildcardKeys[] = $key;
             }
             $output[$key][] = $bind[self::BIND_QUEUE];
