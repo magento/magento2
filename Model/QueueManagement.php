@@ -33,6 +33,7 @@ class QueueManagement
     const XML_PATH_SUCCESSFUL_MESSAGES_LIFETIME = 'system/mysqlmq/successful_messages_lifetime';
     const XML_PATH_FAILED_MESSAGES_LIFETIME = 'system/mysqlmq/failed_messages_lifetime';
     const XML_PATH_RETRY_IN_PROGRESS_AFTER = 'system/mysqlmq/retry_inprogress_after';
+    const XML_PATH_NEW_MESSAGES_LIFETIME = 'system/mysqlmq/new_messages_lifetime';
     /**#@-*/
 
     /**
@@ -94,8 +95,14 @@ class QueueManagement
      */
     public function markMessagesForDelete()
     {
+        /**
+         * Get timestamp related to current timezone
+         */
         $now = $this->timezone->scopeTimeStamp();
 
+        /**
+         * Read configuration
+         */
         $successfulLifetime = (int)$this->scopeConfig->getValue(
             self::XML_PATH_SUCCESSFUL_MESSAGES_LIFETIME,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -106,19 +113,43 @@ class QueueManagement
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
+        $newLifetime = (int)$this->scopeConfig->getValue(
+            self::XML_PATH_NEW_MESSAGES_LIFETIME,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+
         $retryInProgressAfter = (int)$this->scopeConfig->getValue(
             self::XML_PATH_RETRY_IN_PROGRESS_AFTER,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
+        /**
+         * Do not make messages for deletion if configuration have 0 lifetime configured.
+         */
+        $statusesToDelete = [];
+        if ($successfulLifetime > 0) {
+            $statusesToDelete[] = self::MESSAGE_STATUS_COMPLETE;
+        }
+
+        if ($failureLifetime > 0) {
+            $statusesToDelete[] = self::MESSAGE_STATUS_ERROR;
+        }
+
+        if ($newLifetime > 0) {
+            $statusesToDelete[] = self::MESSAGE_STATUS_NEW;
+        }
+
+        if ($retryInProgressAfter > 0) {
+            $statusesToDelete[] = self::MESSAGE_STATUS_IN_PROGRESS;
+        }
+
         $collection = $this->messageStatusCollectionFactory->create()
             ->addFieldToFilter('status',
-                ['in' => [
-                    self::MESSAGE_STATUS_COMPLETE,
-                    self::MESSAGE_STATUS_ERROR,
-                    self::MESSAGE_STATUS_IN_PROGRESS
-                ]]);
+                ['in' => $statusesToDelete]);
 
+        /**
+         * Update messages if lifetime is expired
+         */
         foreach ($collection as $messageStatus) {
             if ($messageStatus->getStatus() == self::MESSAGE_STATUS_COMPLETE
                 && strtotime($messageStatus->getUpdatedAt()) < ($now - $successfulLifetime)) {
@@ -130,12 +161,23 @@ class QueueManagement
                     ->save();
             } else if ($messageStatus->getStatus() == self::MESSAGE_STATUS_IN_PROGRESS
                 && strtotime($messageStatus->getUpdatedAt()) < ($now - $retryInProgressAfter)
-                && $messageStatus->getRetries() < Consumer::MAX_NUMBER_OF_TRIALS
             ) {
-                $this->pushToQueueForRetry($messageStatus->getId());
+                if ($messageStatus->getRetries() < Consumer::MAX_NUMBER_OF_TRIALS) {
+                    $this->pushToQueueForRetry($messageStatus->getId());
+                } else {
+                    $this->changeStatus($messageStatus->getId(), QueueManagement::MESSAGE_STATUS_ERROR);
+                }
+            } else if ($messageStatus->getStatus() == self::MESSAGE_STATUS_NEW
+                && strtotime($messageStatus->getUpdatedAt()) < ($now - $newLifetime)
+            ) {
+                $messageStatus->setStatus(self::MESSAGE_STATUS_TO_BE_DELETED)
+                    ->save();
             }
         }
 
+        /**
+         * Delete all messages which has To BE DELETED status in all the queues
+         */
         $this->messageResource->deleteMarkedMessages();
     }
 

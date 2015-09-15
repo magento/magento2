@@ -19,6 +19,9 @@
                 <field id="failed_messages_lifetime" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Failed Messages Lifetime</label>
                 </field>
+                <field id="new_messages_lifetime" translate="label" type="text" sortOrder="60" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>New Messages Lifetime</label>
+                </field>
             </group>
         </section>
     </system>

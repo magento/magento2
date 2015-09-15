@@ -10,6 +10,7 @@
         <system>
             <mysqlmq>
                 <retry_inprogress_after>1440</retry_inprogress_after>
+                <new_messages_lifetime>10080</new_messages_lifetime>
                 <successful_messages_lifetime>10080</successful_messages_lifetime>
                 <failed_messages_lifetime>10080</failed_messages_lifetime>
             </mysqlmq>
