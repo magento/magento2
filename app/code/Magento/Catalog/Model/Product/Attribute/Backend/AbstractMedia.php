@@ -13,7 +13,6 @@ namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
-use \Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryProcessorPool;
 use Magento\Framework\Filesystem\DriverInterface;
 
 /**
@@ -27,17 +26,17 @@ class AbstractMedia extends \Magento\Eav\Model\Entity\Attribute\Backend\Abstract
      *
      * @var \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media
      */
-    protected $_resourceModel;
+    protected $resourceModel;
 
     /**
      * @var \Magento\Catalog\Model\Product\Media\Config
      */
-    protected $_mediaConfig;
+    protected $mediaConfig;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
      */
-    protected $_mediaDirectory;
+    protected $mediaDirectory;
 
     /**
      * Json Helper
@@ -51,21 +50,21 @@ class AbstractMedia extends \Magento\Eav\Model\Entity\Attribute\Backend\Abstract
      *
      * @var \Magento\MediaStorage\Helper\File\Storage\Database
      */
-    protected $_fileStorageDb = null;
+    protected $fileStorageDb = null;
 
     /**
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $_eventManager = null;
+    protected $eventManager = null;
 
     /**
      * Product factory
      *
      * @var \Magento\Catalog\Model\Resource\ProductFactory
      */
-    protected $_productFactory;
+    protected $productFactory;
 
     /**
      * Construct
@@ -87,13 +86,13 @@ class AbstractMedia extends \Magento\Eav\Model\Entity\Attribute\Backend\Abstract
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $resourceProductAttribute
     ) {
-        $this->_productFactory = $productFactory;
-        $this->_eventManager = $eventManager;
-        $this->_fileStorageDb = $fileStorageDb;
+        $this->productFactory = $productFactory;
+        $this->eventManager = $eventManager;
+        $this->fileStorageDb = $fileStorageDb;
         $this->jsonHelper = $jsonHelper;
-        $this->_resourceModel = $resourceProductAttribute;
-        $this->_mediaConfig = $mediaConfig;
-        $this->_mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->resourceModel = $resourceProductAttribute;
+        $this->mediaConfig = $mediaConfig;
+        $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
     }
 
     /**
@@ -142,8 +141,8 @@ class AbstractMedia extends \Magento\Eav\Model\Entity\Attribute\Backend\Abstract
         $move = false,
         $exclude = true
     ) {
-        $file = $this->_mediaDirectory->getRelativePath($file);
-        if (!$this->_mediaDirectory->isFile($file)) {
+        $file = $this->mediaDirectory->getRelativePath($file);
+        if (!$this->mediaDirectory->isFile($file)) {
             throw new LocalizedException(__('The image does not exist.'));
         }
 
@@ -157,23 +156,23 @@ class AbstractMedia extends \Magento\Eav\Model\Entity\Attribute\Backend\Abstract
         $dispretionPath = \Magento\MediaStorage\Model\File\Uploader::getDispretionPath($fileName);
         $fileName = $dispretionPath . '/' . $fileName;
 
-        $fileName = $this->_getNotDuplicatedFilename($fileName, $dispretionPath);
+        $fileName = $this->getNotDuplicatedFilename($fileName, $dispretionPath);
 
-        $destinationFile = $this->_mediaConfig->getTmpMediaPath($fileName);
+        $destinationFile = $this->mediaConfig->getTmpMediaPath($fileName);
 
         try {
             /** @var $storageHelper \Magento\MediaStorage\Helper\File\Storage\Database */
-            $storageHelper = $this->_fileStorageDb;
+            $storageHelper = $this->fileStorageDb;
             if ($move) {
-                $this->_mediaDirectory->renameFile($file, $destinationFile);
+                $this->mediaDirectory->renameFile($file, $destinationFile);
 
                 //If this is used, filesystem should be configured properly
-                $storageHelper->saveFile($this->_mediaConfig->getTmpMediaShortUrl($fileName));
+                $storageHelper->saveFile($this->mediaConfig->getTmpMediaShortUrl($fileName));
             } else {
-                $this->_mediaDirectory->copyFile($file, $destinationFile);
+                $this->mediaDirectory->copyFile($file, $destinationFile);
 
-                $storageHelper->saveFile($this->_mediaConfig->getTmpMediaShortUrl($fileName));
-                $this->_mediaDirectory->changePermissions($destinationFile, DriverInterface::WRITEABLE_FILE_MODE);
+                $storageHelper->saveFile($this->mediaConfig->getTmpMediaShortUrl($fileName));
+                $this->mediaDirectory->changePermissions($destinationFile, DriverInterface::WRITEABLE_FILE_MODE);
             }
         } catch (\Exception $e) {
             throw new LocalizedException(__('We couldn\'t move this file: %1.', $e->getMessage()));
@@ -315,9 +314,9 @@ class AbstractMedia extends \Magento\Eav\Model\Entity\Attribute\Backend\Abstract
         $mediaAttributeCodes = array_keys($product->getMediaAttributes());
 
         if (is_array($mediaAttribute)) {
-            foreach ($mediaAttribute as $atttribute) {
-                if (in_array($atttribute, $mediaAttributeCodes)) {
-                    $product->setData($atttribute, null);
+            foreach ($mediaAttribute as $attribute) {
+                if (in_array($attribute, $mediaAttributeCodes)) {
+                    $product->setData($attribute, null);
                 }
             }
         } elseif (in_array($mediaAttribute, $mediaAttributeCodes)) {
@@ -357,9 +356,9 @@ class AbstractMedia extends \Magento\Eav\Model\Entity\Attribute\Backend\Abstract
      *
      * @return \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media
      */
-    protected function _getResource()
+    protected function getResource()
     {
-        return $this->_resourceModel;
+        return $this->resourceModel;
     }
 
     /**
@@ -381,16 +380,16 @@ class AbstractMedia extends \Magento\Eav\Model\Entity\Attribute\Backend\Abstract
     {
         $file = $this->getFilenameFromTmp($file);
 
-        $destinationFile = $this->_getUniqueFileName($file, true);
-        if ($this->_fileStorageDb->checkDbUsage()) {
-            $this->_fileStorageDb->copyFile(
-                $this->_mediaDirectory->getAbsolutePath($this->_mediaConfig->getTmpMediaShortUrl($file)),
-                $this->_mediaConfig->getTmpMediaShortUrl($destinationFile)
+        $destinationFile = $this->getUniqueFileName($file, true);
+        if ($this->fileStorageDb->checkDbUsage()) {
+            $this->fileStorageDb->copyFile(
+                $this->mediaDirectory->getAbsolutePath($this->mediaConfig->getTmpMediaShortUrl($file)),
+                $this->mediaConfig->getTmpMediaShortUrl($destinationFile)
             );
         } else {
-            $this->_mediaDirectory->copyFile(
-                $this->_mediaConfig->getTmpMediaPath($file),
-                $this->_mediaConfig->getTmpMediaPath($destinationFile)
+            $this->mediaDirectory->copyFile(
+                $this->mediaConfig->getTmpMediaPath($file),
+                $this->mediaConfig->getTmpMediaPath($destinationFile)
             );
         }
         return str_replace('\\', '/', $destinationFile);
@@ -404,17 +403,17 @@ class AbstractMedia extends \Magento\Eav\Model\Entity\Attribute\Backend\Abstract
      * @param bool $forTmp
      * @return string
      */
-    protected function _getUniqueFileName($file, $forTmp = false)
+    protected function getUniqueFileName($file, $forTmp = false)
     {
-        if ($this->_fileStorageDb->checkDbUsage()) {
-            $destFile = $this->_fileStorageDb->getUniqueFilename(
-                $this->_mediaConfig->getBaseMediaUrlAddition(),
+        if ($this->fileStorageDb->checkDbUsage()) {
+            $destFile = $this->fileStorageDb->getUniqueFilename(
+                $this->mediaConfig->getBaseMediaUrlAddition(),
                 $file
             );
         } else {
             $destinationFile = $forTmp
-                ? $this->_mediaDirectory->getAbsolutePath($this->_mediaConfig->getTmpMediaPath($file))
-                : $this->_mediaDirectory->getAbsolutePath($this->_mediaConfig->getMediaPath($file));
+                ? $this->mediaDirectory->getAbsolutePath($this->mediaConfig->getTmpMediaPath($file))
+                : $this->mediaDirectory->getAbsolutePath($this->mediaConfig->getMediaPath($file));
             $destFile = dirname(
                 $file
             ) . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
@@ -432,20 +431,20 @@ class AbstractMedia extends \Magento\Eav\Model\Entity\Attribute\Backend\Abstract
      * @param string $dispretionPath
      * @return string
      */
-    protected function _getNotDuplicatedFilename($fileName, $dispretionPath)
+    protected function getNotDuplicatedFilename($fileName, $dispretionPath)
     {
         $fileMediaName = $dispretionPath . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
-            $this->_mediaConfig->getMediaPath($fileName)
+            $this->mediaConfig->getMediaPath($fileName)
         );
         $fileTmpMediaName = $dispretionPath . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
-            $this->_mediaConfig->getTmpMediaPath($fileName)
+            $this->mediaConfig->getTmpMediaPath($fileName)
         );
 
         if ($fileMediaName != $fileTmpMediaName) {
             if ($fileMediaName != $fileName) {
-                return $this->_getNotDuplicatedFileName($fileMediaName, $dispretionPath);
+                return $this->getNotDuplicatedFilename($fileMediaName, $dispretionPath);
             } elseif ($fileTmpMediaName != $fileName) {
-                return $this->_getNotDuplicatedFilename($fileTmpMediaName, $dispretionPath);
+                return $this->getNotDuplicatedFilename($fileTmpMediaName, $dispretionPath);
             }
         }
 
@@ -462,7 +461,7 @@ class AbstractMedia extends \Magento\Eav\Model\Entity\Attribute\Backend\Abstract
     {
         $data = [];
         $images = (array)$object->getData($this->getAttribute()->getName());
-        $tableName = $this->_getResource()->getMainTable();
+        $tableName = $this->getResource()->getMainTable();
         foreach ($images['images'] as $value) {
             if (empty($value['value_id'])) {
                 continue;
