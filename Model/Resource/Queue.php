@@ -137,7 +137,8 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ->where('status <> ?', QueueManagement::MESSAGE_STATUS_TO_BE_DELETED);
         $messageIds = $connection->fetchCol($select);
 
-        $connection->delete('queue_message', ['id NOT IN (?)' => $messageIds]);
+        $condition = count($messageIds) > 0 ? ['id NOT IN (?)' => $messageIds] : null;
+        $connection->delete('queue_message', $condition);
     }
 
     /**
