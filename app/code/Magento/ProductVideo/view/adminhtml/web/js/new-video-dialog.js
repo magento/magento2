@@ -95,12 +95,10 @@ define([
             this.reset();
             $(this.options.DOM.title_field).val(this.options.data.title);
             $(this.options.DOM.description_field).val(this.options.data.description);
-            $(this.options.DOM.thumbnail_location).append('<img src="'+this.options.data.thumbnail+'" />');
         },
         reset : function () {
             $(this.options.DOM.title_field).val('');
             $(this.options.DOM.description_field).val('');
-            $(this.options.DOM.thumbnail_location).find('img').remove();
         }
     });
 
@@ -121,6 +119,8 @@ define([
         _imageProductGalleryWrapperSelector : '#image-container',
 
         _videoPreviewInputSelector: '#new_video_screenshot',
+
+        _videoPreviewRemoteSelector: '',
 
         _videoDisableinputSelector: '#new_video_disabled',
 
@@ -151,6 +151,8 @@ define([
         _isEditPage : false,
 
         _onlyVideoPlayer : false, //if onlyVideoPlayer - in modal we create on focus out only VideoPlayer and not filling input fields
+
+        _tempPreviewImageData: null,
 
         _bind: function() {
             var events = {
@@ -233,11 +235,30 @@ define([
                     reset: false,
                     data : {
                         title : data.title,
-                        description : data.description,
-                        thumbnail : data.thumbnail
+                        description : data.description
                     }
                 });
+                this._loadRemotePreview(data.thumbnail);
             }
+        },
+
+        /**
+         * Load preview from youtube/vimeo
+         * @param sourceUrl
+         * @private
+         */
+        _loadRemotePreview: function(sourceUrl) {
+            var url = this.options.saveRemoteVideoUrl;
+            var self = this;
+            jQuery.ajax({
+                url: url,
+                data: "remote_image=" + sourceUrl,
+                type: 'post',
+                success: $.proxy(function(result) {
+                    this._tempPreviewImageData = result;
+                    this._getPreviewImage().attr('src', sourceUrl).show();
+                }, self)
+            });
         },
 
         /**
@@ -384,24 +405,29 @@ define([
                 files: file,
                 url: url
             };
-            this._uploadFile('send', data, $.proxy(function(result, textStatus, jqXHR) {
-                var data = JSON.parse(result);
-                if(data.errorcode) {
-                    alert(data.error);
-                    return;
-                }
-                $.each($(this._videoFormSelector).serializeArray(), function(i, field) {
-                    data[field.name] = field.value;
-                });
-                data['disabled'] = $(this._videoDisableinputSelector).prop('checked') ? 1 : 0;
-                data['media_type'] = 'external-video';
-                data.old_file = oldFile;
-                oldFile  ?
-                    self._replaceImage(oldFile, data.file, data):
-                    self._setImage(data.file, data);
-                callback.call(0, data);
+
+            this._uploadFile(data, $.proxy(function(result) {
+                this._onImageLoaded(result, file, oldFile, callback);
             }, this));
 
+        },
+
+        _onImageLoaded: function(result, file, oldFile, callback) {
+            var data = JSON.parse(result);
+            if(data.errorcode) {
+                alert(data.error);
+                return;
+            }
+            $.each($(this._videoFormSelector).serializeArray(), function(i, field) {
+                data[field.name] = field.value;
+            });
+            data['disabled'] = $(this._videoDisableinputSelector).prop('checked') ? 1 : 0;
+            data['media_type'] = 'external-video';
+            data.old_file = oldFile;
+            oldFile  ?
+                this._replaceImage(oldFile, data.file, data):
+                this._setImage(data.file, data);
+            callback.call(0, data);
         },
 
         /**
@@ -409,7 +435,7 @@ define([
          * @returns {*}
          * @private
          */
-        _uploadFile: function(method, data, callback) {
+        _uploadFile: function(data, callback) {
             var fu = jQuery(this._videoPreviewInputSelector);
             var tmp_input   = document.createElement('input');
             jQuery(tmp_input).attr({
@@ -420,7 +446,7 @@ define([
             }).css('display', 'none');
             fu.parent().append(tmp_input);
             var fileUploader = jQuery(tmp_input).fileupload();
-            fileUploader.fileupload(method, data).success(function(result, textStatus, jqXHR) {
+            fileUploader.fileupload('send', data).success(function(result, textStatus, jqXHR) {
                 tmp_input.remove();
                 callback.call(null, result, textStatus, jqXHR);
             });
@@ -450,6 +476,7 @@ define([
                     this._addVideoClass(tmp.url);
                 }
             }
+
             this._bind();
             this.createVideoItemIcons();
             var widget = this;
@@ -542,7 +569,7 @@ define([
                 file = null;
             }
             var reqClass = 'required-entry _required';
-            if (!file) {
+            if (!file && !this._tempPreviewImageData) {
                 nvs.addClass(reqClass);
             }
 
@@ -550,9 +577,14 @@ define([
                 return;
             }
 
-            this._uploadImage(file, null, $.proxy(function(code, data) {
-                this.close();
-            }, this));
+            if(this._tempPreviewImageData) {
+                this._onImageLoaded(this._tempPreviewImageData, null, null, $.proxy(this.close, this));
+            } else {
+                this._uploadImage(file, null, $.proxy(function(code, data) {
+                    this.close();
+                }, this));
+            }
+
             nvs.removeClass(reqClass);
         },
 
@@ -586,6 +618,11 @@ define([
             $(_inputSelector).siblings('.image-fade').css('visibility', flagChecked ? 'visible': 'hidden');
 
             var imageData = this._getImage($('#file_name').val());
+
+            if(this._tempPreviewImageData) {
+                this._onImageLoaded(this._tempPreviewImageData, null, imageData.file, $.proxy(this.close, this));
+                return;
+            }
             var fileName = inputFile.get(0).files;
             if(!fileName || !fileName.length) {
                 fileName = null;
@@ -647,6 +684,7 @@ define([
                 return;
             }
             var ext = '.' + val.split('.').pop();
+            ext = ext ? ext.toLowerCase() : '';
             if(
                 ext.length < 2 ||
                 this._imageTypes.indexOf(ext) == -1 ||
@@ -660,6 +698,7 @@ define([
                 return;
             } // end if
             file = file.files[0];
+            this._tempPreviewImageData = null;
             this._onPreview(null, file, true);
         },
 
@@ -696,7 +735,7 @@ define([
         _getPreviewImage: function() {
             if(!this._previewImage) {
                 this._previewImage = jQuery(document.createElement('img')).css({
-                    'width' : '145px',
+                    'width' : '100%',
                     'display': 'none',
                     'src': ''
                 });
@@ -779,7 +818,7 @@ define([
 
         toggleButtons: function() {
             var self = this;
-            $('.video-placeholder').click(function() {
+            $('.video-placeholder, .add-video-button-container').click(function() {
                 $('.video-create-button').show();
                 $('.video-delete-button').hide();
                 $('.video-edit').hide();
@@ -808,7 +847,7 @@ define([
                     $(this).prop('checked', false).prop('disabled', false);
                 });
 
-                $.each($('.video-placeholder').siblings('input:hidden'), function() {
+                $.each($('.image-placeholder').siblings('input:hidden'), function() {
                     if ($(this).val() == file.val()) {
                         var start = this.name.indexOf('[') + 1;
                         var end = this.name.length - 1;
