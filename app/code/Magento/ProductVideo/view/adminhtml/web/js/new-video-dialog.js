@@ -95,12 +95,10 @@ define([
             this.reset();
             $(this.options.DOM.title_field).val(this.options.data.title);
             $(this.options.DOM.description_field).val(this.options.data.description);
-            $(this.options.DOM.thumbnail_location).append('<img src="'+this.options.data.thumbnail+'" />');
         },
         reset : function () {
             $(this.options.DOM.title_field).val('');
             $(this.options.DOM.description_field).val('');
-            $(this.options.DOM.thumbnail_location).find('img').remove();
         }
     });
 
@@ -237,11 +235,9 @@ define([
                     reset: false,
                     data : {
                         title : data.title,
-                        description : data.description,
-                        thumbnail : data.thumbnail
+                        description : data.description
                     }
                 });
-                this._getPreviewImage().attr('src', data.thumbnail);
                 this._loadRemotePreview(data.thumbnail);
             }
         },
@@ -252,6 +248,7 @@ define([
          * @private
          */
         _loadRemotePreview: function(sourceUrl) {
+            console.log(sourceUrl);
             var url = this.options.saveRemoteVideoUrl;
             var self = this;
             jQuery.ajax({
@@ -260,6 +257,7 @@ define([
                 type: 'post',
                 success: $.proxy(function(result) {
                     this._tempPreviewImageData = result;
+                    this._getPreviewImage().attr('src', sourceUrl).show();
                 }, self)
             });
         },
@@ -739,7 +737,7 @@ define([
         _getPreviewImage: function() {
             if(!this._previewImage) {
                 this._previewImage = jQuery(document.createElement('img')).css({
-                    'width' : '145px',
+                    'width' : '100%',
                     'display': 'none',
                     'src': ''
                 });
