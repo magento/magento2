@@ -7,10 +7,11 @@
 /*global integration*/
 define([
     "jquery",
+    "Magento_Ui/js/modal/alert",
     "jquery/ui",
     "mage/translate",
-    'Magento_Ui/js/modal/modal'
-], function($){
+    "Magento_Ui/js/modal/modal"
+], function($, alert){
     "use strict";
 
     $.widget('mage.integration', {
@@ -81,7 +82,9 @@ define([
                     }
                 },
                 error: function (jqXHR, status, error) {
-                    alert($.mage.__('Sorry, something went wrong. Please try again later.'));
+                    alert({
+                        content: $.mage.__('Sorry, something went wrong. Please try again later.')
+                    });
                     window.console && console.log(status + ': ' + error + "\nResponse text:\n" + jqXHR.responseText);
                 },
                 complete: function () {
