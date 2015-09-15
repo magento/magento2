@@ -34,8 +34,8 @@ class FilesTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->model = new Files(new ComponentRegistrar, BP);
         $componentRegistrar = new ComponentRegistrar();
+        $this->model = new Files($componentRegistrar, BP);
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
             $this->moduleTests[] = '#' . $moduleDir . '/Test#';
         }
