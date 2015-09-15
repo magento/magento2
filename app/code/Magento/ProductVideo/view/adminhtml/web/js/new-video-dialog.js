@@ -132,6 +132,8 @@ define([
 
         _videoUrlSelector: '[name="video_url"]',
 
+        _videoImageFilenameselector: '#file_name',
+
         _videoUrlWidget: null,
 
         _videoInformationBtnSelector: '[name="new_video_get"]',
@@ -654,7 +656,7 @@ define([
          * @private
          */
         _onDelete: function() {
-            var filename = this.element.find('#file_name[data-ui-id="new-video-fieldset-element-hidden"]').val();
+            var filename = this.element.find(this._videoImageFilenameselector).val();
             this._removeImage(filename);
             this.close();
         },
