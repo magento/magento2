@@ -5,7 +5,7 @@
  */
 namespace Magento\MysqlMq\Model;
 
-class QueueManagementTest extends \PHPUnit_Framework_TestCase
+class ObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -32,6 +32,44 @@ class QueueManagementTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDataFixture Magento/MysqlMq/_files/queues.php
      * @magentoDataFixture Magento/MysqlMq/_files/messages.php
+     * @magentoDataFixture Magento/MysqlMq/_files/messages_done_old.php
+     */
+    public function testCleanUpOld()
+    {
+        /** @var \Magento\MysqlMq\Model\Resource\MessageStatusCollectionFactory $messageStatusCollectionFactory */
+        $messageStatusCollectionFactory = $this->objectManager
+            ->create('Magento\MysqlMq\Model\Resource\MessageStatusCollectionFactory');
+
+        /** @var \Magento\MysqlMq\Model\Resource\MessageCollectionFactory $messageStatusCollectionFactory */
+        $messageCollectionFactory = $this->objectManager
+            ->create('Magento\MysqlMq\Model\Resource\MessageCollectionFactory');
+
+        //Check how many messages in collection by the beginning of tests
+        $messageCollection = $messageCollectionFactory->create()
+            ->addFieldToFilter('topic_name', 'topic.updated.use.just.in.tests');
+        $this->assertEquals(1, $messageCollection->getSize());
+        $messageId = $messageCollection->getFirstItem()->getId();
+
+        $messageStatusCollection = $messageStatusCollectionFactory->create()
+            ->addFieldToFilter('message_id', $messageId);
+        $this->assertEquals(3, $messageStatusCollection->getSize());
+
+        //Run clean up once. It should move 3 out of 4 statuses to TO BE DELETED status
+        $this->observer->cleanupMessages();
+
+        $messageCollection = $messageCollectionFactory->create()
+            ->addFieldToFilter('topic_name', 'topic.updated.use.just.in.tests');
+        $this->assertEquals(0, $messageCollection->getSize());
+        $messageStatusCollection = $messageStatusCollectionFactory->create()
+            ->addFieldToFilter('message_id', $messageId);
+        $this->assertEquals(0, $messageStatusCollection->getSize());
+    }
+
+    /**
+     * @magentoDataFixture Magento/MysqlMq/_files/queues.php
+     * @magentoDataFixture Magento/MysqlMq/_files/messages.php
+     * @magentoDataFixture Magento/MysqlMq/_files/messages_done_old.php
+     * @magentoDataFixture Magento/MysqlMq/_files/messages_done_recent.php
      */
     public function testCleanupMessages()
     {
@@ -42,6 +80,8 @@ class QueueManagementTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\MysqlMq\Model\Resource\MessageCollectionFactory $messageStatusCollectionFactory */
         $messageCollectionFactory = $this->objectManager
             ->create('Magento\MysqlMq\Model\Resource\MessageCollectionFactory');
+
+        //Check how many messages in collection by the beginning of tests
         $messageCollection = $messageCollectionFactory->create()
             ->addFieldToFilter('topic_name', 'topic.updated.use.just.in.tests');
         $this->assertEquals(1, $messageCollection->getSize());
@@ -51,21 +91,25 @@ class QueueManagementTest extends \PHPUnit_Framework_TestCase
             ->addFieldToFilter('message_id', $messageId);
         $this->assertEquals(4, $messageStatusCollection->getSize());
 
+        //Run clean up once. It should move 3 out of 4 statuses to TO BE DELETED status
         $this->observer->cleanupMessages();
 
         $messageCollection = $messageCollectionFactory->create()
             ->addFieldToFilter('topic_name', 'topic.updated.use.just.in.tests');
         $this->assertEquals(1, $messageCollection->getSize());
+
         $messageStatusCollection = $messageStatusCollectionFactory->create()
             ->addFieldToFilter('message_id', $messageId)
             ->addFieldToFilter('status', \Magento\MysqlMq\Model\QueueManagement::MESSAGE_STATUS_TO_BE_DELETED);
+
         $this->assertEquals(3, $messageStatusCollection->getSize());
 
+        // Change the Updated At in order to make job visible
         $lastMessageStatus = $messageStatusCollectionFactory->create()
             ->addFieldToFilter('message_id', $messageId)
             ->addFieldToFilter('status', \Magento\MysqlMq\Model\QueueManagement::MESSAGE_STATUS_COMPLETE)
             ->getFirstItem();
-        $lastMessageStatus->setUpdatedAt(time() - 24 * 7 * 60 * 60)
+        $lastMessageStatus->setUpdatedAt(time() - 1 - 24 * 7 * 60 * 60)
             ->save();
 
         $this->observer->cleanupMessages();
@@ -76,7 +120,42 @@ class QueueManagementTest extends \PHPUnit_Framework_TestCase
         $messageStatusCollection = $messageStatusCollectionFactory->create()
             ->addFieldToFilter('message_id', $messageId);
         $this->assertEquals(0, $messageStatusCollection->getSize());
+    }
 
-        //add use case when all the messages are in deleted status (NOT IN doesn't work)
+    /**
+     * @magentoDataFixture Magento/MysqlMq/_files/queues.php
+     * @magentoDataFixture Magento/MysqlMq/_files/messages.php
+     * @magentoDataFixture Magento/MysqlMq/_files/messages_in_progress.php
+     */
+    public function testCleanupInProgressMessages()
+    {
+        /** @var \Magento\MysqlMq\Model\Resource\MessageStatusCollectionFactory $messageStatusCollectionFactory */
+        $messageStatusCollectionFactory = $this->objectManager
+            ->create('Magento\MysqlMq\Model\Resource\MessageStatusCollectionFactory');
+
+        /** @var \Magento\MysqlMq\Model\Resource\MessageCollectionFactory $messageStatusCollectionFactory */
+        $messageCollectionFactory = $this->objectManager
+            ->create('Magento\MysqlMq\Model\Resource\MessageCollectionFactory');
+
+        //Check how many messages in collection by the beginning of tests
+        $messageCollection = $messageCollectionFactory->create()
+            ->addFieldToFilter('topic_name', 'topic_second.updated.use.just.in.tests');
+        $this->assertEquals(1, $messageCollection->getSize());
+        $messageId = $messageCollection->getFirstItem()->getId();
+
+        $messageStatusCollection = $messageStatusCollectionFactory->create()
+            ->addFieldToFilter('message_id', $messageId);
+        $this->assertEquals(2, $messageStatusCollection->getSize());
+
+        $this->observer->cleanupMessages();
+
+        $messageCollection = $messageCollectionFactory->create()
+            ->addFieldToFilter('topic_name', 'topic_second.updated.use.just.in.tests');
+        $this->assertEquals(1, $messageCollection->getSize());
+        $messageStatusCollection = $messageStatusCollectionFactory->create()
+            ->addFieldToFilter('message_id', $messageId)
+            ->addFieldToFilter('status', \Magento\MysqlMq\Model\QueueManagement::MESSAGE_STATUS_RETRY_REQUIRED);
+        $this->assertEquals(1, $messageStatusCollection->getSize());
+        $this->assertEquals(1, $messageStatusCollection->getFirstItem()->getNumberOfTrials());
     }
 }
