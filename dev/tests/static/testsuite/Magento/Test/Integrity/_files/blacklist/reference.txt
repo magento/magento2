@@ -36,8 +36,12 @@ Model3
 \Magento\Wonderland\Api\Data\FakeAddressInterface
 \Magento\Wonderland\Api\Data\FakeExtensibleOneInterface
 \Magento\Wonderland\Api\Data\FakeExtensibleTwoInterface
+\Magento\Wonderland\Api\Data\FakeAttributeMetadataInterface
+\Magento\Wonderland\Api\Data\FakeCustomerInterface
 \Magento\Wonderland\Model\Data\FakeRegion
 \Magento\Wonderland\Model\Data\FakeAddress
+\Magento\Wonderland\Model\Data\FakeAttributeMetadata
+\Magento\Wonderland\Model\Data\FakeCustomer
 \Magento\Wonderland\Model\Data\FakeExtensibleOne
 \Magento\Wonderland\Model\Data\FakeExtensibleTwo
 \Magento\Framework\Error\Processor
