@@ -17,26 +17,6 @@ if ($variations) {
     $usedProductAttributes = $block->getUsedAttributes();
     $productByUsedAttributes = $block->getAssociatedProducts();
     $productPrice = (float)$block->getProduct()->getPrice();
-    foreach ($usedProductAttributes as $attribute) {
-        $fullAttributes[$attribute->getAttributeId()] = [
-            'code' => $attribute->getAttributeCode(),
-            'label' => $attribute->getStoreLabel(),
-            'id' => $attribute->getAttributeId(),
-            'position' => $attribute->getPosition(),
-            'options' => []
-        ];
-        foreach ($attribute->getOptions() as $option) {
-            if (!empty($option->getValue())) {
-                $fullAttributes[$attribute->getAttributeId()]['options'][$option->getValue()] = [
-                    'attribute_code' => $attribute->getAttributeCode(),
-                    'attribute_label' => $attribute->getStoreLabel(0),
-                    'id' => $option->getValue(),
-                    'label' => $option->getLabel(),
-                    'value' => $option->getValue(),
-                ];
-            }
-        }
-    }
     foreach ($variations as $variation) {
         $attributeValues = [];
         $price = $productPrice;
@@ -57,6 +37,17 @@ if ($variations) {
                         'position' => $attribute->getPosition(),
                         'chosen' => [],
                     ];
+                    foreach ($attribute->getOptions() as $option) {
+                        if (!empty($option->getValue())) {
+                            $attributes[$attribute->getAttributeId()]['options'][$option->getValue()] = [
+                                'attribute_code' => $attribute->getAttributeCode(),
+                                'attribute_label' => $attribute->getStoreLabel(0),
+                                'id' => $option->getValue(),
+                                'label' => $option->getLabel(),
+                                'value' => $option->getValue(),
+                            ];
+                        }
+                    }
                 }
                 $optionId = $variation[$attribute->getId()]['value'];
                 $variationOption = [
@@ -344,7 +335,6 @@ if ($variations) {
                         "variations": <?= $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($productMatrix) ?>,
                         "productAttributes": <?= $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($attributes) ?>,
                         "productUrl": "<?= $block->getUrl('catalog/product/edit', ['id' => '%id%']) ?>",
-                        "fullAttributes": <?= $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($fullAttributes) ?>,
                         "configurableProductGrid": "configurableProductGrid"
                     }
                 }

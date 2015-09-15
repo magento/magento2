@@ -75,7 +75,7 @@ define([
             var productId = product['entity_id'] || product.productId || null,
                 attributes = _.pick(product, this.attributes.pluck('code')),
                 options = _.map(attributes, function (option, attribute) {
-                    return _.findWhere(this.fullAttributes, {code: attribute}).options[option];
+                    return _.findWhere(this.attributes(), {code: attribute}).options[option];
                 }.bind(this));
 
             if (this.productAttributesMap.hasOwnProperty(this.getVariationKey(options))) {
