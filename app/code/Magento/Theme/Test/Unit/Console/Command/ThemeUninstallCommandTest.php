@@ -6,9 +6,10 @@
 
 namespace Magento\Theme\Test\Unit\Console\Command;
 
-use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Filesystem\DriverPool;
 use Magento\Theme\Console\Command\ThemeUninstallCommand;
+use Magento\Theme\Model\Theme\themePackageInfo;
+use Magento\Theme\Model\Theme\ThemeUninstaller;
+use Magento\Theme\Model\Theme\ThemeDependencyChecker;
 use Symfony\Component\Console\Tester\CommandTester;
 use Magento\Framework\Setup\BackupRollbackFactory;
 
@@ -33,11 +34,6 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
     private $collection;
 
     /**
-     * @var \Magento\Framework\Composer\Remove|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $remove;
-
-    /**
      * @var \Magento\Framework\App\Cache|\PHPUnit_Framework_MockObject_MockObject
      */
     private $cache;
@@ -46,11 +42,6 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\App\State\CleanupFiles|\PHPUnit_Framework_MockObject_MockObject
      */
     private $cleanupFiles;
-
-    /**
-     * @var \Magento\Theme\Model\Theme\ThemeProvider|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $themeProvider;
 
     /**
      * @var ThemeUninstallCommand
@@ -70,19 +61,24 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
     private $themeValidator;
 
     /**
+     * @var ThemeUninstaller|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $themeUninstaller;
+
+    /**
+     * @var ThemeDependencyChecker|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $themeDependencyChecker;
+
+    /**
+     * @var ThemePackageInfo|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $themePackageInfo;
+
+    /**
      * @var CommandTester
      */
     private $tester;
-
-    /**
-     * @var \Magento\Framework\Component\ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $componentRegistrar;
-
-    /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $readDirFactory;
 
     public function setUp()
     {
@@ -99,10 +95,8 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->collection = $this->getMock('Magento\Theme\Model\Theme\Data\Collection', [], [], '', false);
-        $this->remove = $this->getMock('Magento\Framework\Composer\Remove', [], [], '', false);
         $this->cache = $this->getMock('Magento\Framework\App\Cache', [], [], '', false);
         $this->cleanupFiles = $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false);
-        $this->themeProvider = $this->getMock('Magento\Theme\Model\Theme\ThemeProvider', [], [], '', false);
         $this->backupRollbackFactory = $this->getMock(
             'Magento\Framework\Setup\BackupRollbackFactory',
             [],
@@ -111,10 +105,15 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->themeValidator = $this->getMock('Magento\Theme\Model\ThemeValidator', [], [], '', false);
-        $this->componentRegistrar = $this->getMockForAbstractClass(
-            '\Magento\Framework\Component\ComponentRegistrarInterface'
+        $this->themeUninstaller = $this->getMock('Magento\Theme\Model\Theme\ThemeUninstaller', [], [], '', false);
+        $this->themeDependencyChecker = $this->getMock(
+            'Magento\Theme\Model\Theme\ThemeDependencyChecker',
+            [],
+            [],
+            '',
+            false
         );
-        $this->readDirFactory = $this->getMock('Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
+        $this->themePackageInfo = $this->getMock('Magento\Theme\Model\Theme\ThemePackageInfo', [], [], '', false);
         $this->command = new ThemeUninstallCommand(
             $this->cache,
             $this->cleanupFiles,
@@ -122,42 +121,19 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
             $this->maintenanceMode,
             $this->dependencyChecker,
             $this->collection,
-            $this->themeProvider,
-            $this->remove,
             $this->backupRollbackFactory,
             $this->themeValidator,
-            $this->componentRegistrar,
-            $this->readDirFactory
+            $this->themePackageInfo,
+            $this->themeUninstaller,
+            $this->themeDependencyChecker
         );
         $this->tester = new CommandTester($this->command);
     }
 
     public function testExecuteFailedValidationNotPackage()
     {
-        $dirReadOne = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        $dirReadTwo = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        $dirReadOne->expects($this->once())
-            ->method('readFile')
-            ->with('composer.json')
-            ->will($this->returnValue('{"name": "dummy"}'));
-        $dirReadTwo->expects($this->once())
-            ->method('readFile')
-            ->with('composer.json')
-            ->will($this->returnValue('{"name": "magento/theme-a"}'));
-        $dirReadOne->expects($this->any())->method('isExist')->willReturn(true);
-        $dirReadTwo->expects($this->any())->method('isExist')->willReturn(true);
-        $this->readDirFactory->expects($this->any())
-            ->method('create')
-            ->will($this->returnValueMap([
-                ['theme1', DriverPool::FILE, $dirReadOne],
-                ['theme2', DriverPool::FILE, $dirReadTwo],
-            ]));
-        $this->componentRegistrar->expects($this->any())
-            ->method('getPath')
-            ->will($this->returnValueMap([
-                [ComponentRegistrar::THEME, 'test1', 'theme1'],
-                [ComponentRegistrar::THEME, 'test2', 'theme2'],
-            ]));
+        $this->themePackageInfo->expects($this->at(0))->method('getPackageName')->willReturn('dummy');
+        $this->themePackageInfo->expects($this->at(1))->method('getPackageName')->willReturn('magento/theme-a');
         $this->collection->expects($this->any())
             ->method('getThemeByFullPath')
             ->willReturn($this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface', [], '', false));
@@ -175,11 +151,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteFailedValidationNotTheme()
     {
-        $dirRead = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        $dirRead->expects($this->any())->method('isExist')->willReturn(false);
-        $this->readDirFactory->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($dirRead));
+        $this->themePackageInfo->expects($this->exactly(2))->method('getPackageName')->willReturn('');
         $this->collection->expects($this->any())
             ->method('getThemeByFullPath')
             ->willReturn($this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface', [], '', false));
@@ -193,41 +165,10 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteFailedValidationMixed()
     {
-        $dirReadOne = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        $dirReadTwo = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        $dirReadThree = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        $dirReadFour = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        $dirReadOne->expects($this->once())
-            ->method('readFile')
-            ->with('composer.json')
-            ->will($this->returnValue('{"name": "dummy1"}'));
-        $dirReadTwo->expects($this->once())
-            ->method('readFile')
-            ->with('composer.json')
-            ->will($this->returnValue('{"name": "magento/theme-b"}'));
-        $dirReadFour->expects($this->once())
-            ->method('readFile')
-            ->with('composer.json')
-            ->will($this->returnValue('{"name": "dummy2"}'));
-        $dirReadOne->expects($this->any())->method('isExist')->willReturn(true);
-        $dirReadTwo->expects($this->any())->method('isExist')->willReturn(true);
-        $dirReadThree->expects($this->any())->method('isExist')->willReturn(false);
-        $dirReadFour->expects($this->any())->method('isExist')->willReturn(true);
-        $this->readDirFactory->expects($this->any())
-            ->method('create')
+        $this->themePackageInfo->expects($this->exactly(4))
+            ->method('getPackageName')
             ->will($this->returnValueMap([
-                ['theme1', DriverPool::FILE, $dirReadOne],
-                ['theme2', DriverPool::FILE, $dirReadTwo],
-                ['theme3', DriverPool::FILE, $dirReadThree],
-                ['theme4', DriverPool::FILE, $dirReadFour],
-            ]));
-        $this->componentRegistrar->expects($this->any())
-            ->method('getPath')
-            ->will($this->returnValueMap([
-                [ComponentRegistrar::THEME, 'test1', 'theme1'],
-                [ComponentRegistrar::THEME, 'test2', 'theme2'],
-                [ComponentRegistrar::THEME, 'test3', 'theme3'],
-                [ComponentRegistrar::THEME, 'test4', 'theme4'],
+                ['test1', 'dummy1'], ['test2', 'magento/theme-b'], ['test3', ''], ['test4', 'dummy2']
             ]));
         $this->collection->expects($this->any())
             ->method('getThemeByFullPath')
@@ -253,20 +194,11 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUpPassValidation()
     {
-        $dirRead = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        // package name "dummy" is not in root composer.json file
-        $dirRead->expects($this->any())
-            ->method('readFile')
-            ->willReturn('{"name": "magento/theme-a"}');
-        $dirRead->expects($this->any())
-            ->method('isExist')
-            ->willReturn(true);
-        $this->readDirFactory->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($dirRead));
+        $this->themePackageInfo->expects($this->any())->method('getPackageName')->willReturn('magento/theme-a');
         $this->collection->expects($this->any())
             ->method('getThemeByFullPath')
             ->willReturn($this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface', [], '', false));
+        $this->themeDependencyChecker->expects($this->any())->method('checkChildTheme')->willReturn([]);
         $this->collection->expects($this->any())->method('hasTheme')->willReturn(true);
     }
 
@@ -274,7 +206,6 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
     {
         $theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
         $theme->expects($this->any())->method('hasChildThemes')->willReturn(false);
-        $this->themeProvider->expects($this->any())->method('getThemeByFullPath')->willReturn($theme);
         $this->collection->expects($this->any())->method('getIterator')->willReturn(new \ArrayIterator([]));
     }
 
@@ -305,99 +236,6 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @dataProvider executeFailedChildThemeCheckDataProvider
-     * @param bool $hasVirtual
-     * @param bool $hasPhysical
-     * @param array $input
-     * @param string $expected
-     * @return void
-     */
-    public function testExecuteFailedChildThemeCheck($hasVirtual, $hasPhysical, array $input, $expected)
-    {
-        $this->setUpPassValidation();
-        $this->setupPassThemeInUseCheck();
-        $this->setupPassDependencyCheck();
-        $theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
-        $theme->expects($this->any())->method('hasChildThemes')->willReturn($hasVirtual);
-        $parentThemeA = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
-        $parentThemeA->expects($this->any())->method('getFullPath')->willReturn('frontend/Magento/a');
-        $parentThemeB = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
-        $parentThemeB->expects($this->any())->method('getFullPath')->willReturn('frontend/Magento/b');
-        $childThemeC = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
-        $childThemeC->expects($this->any())->method('getFullPath')->willReturn('frontend/Magento/c');
-        $childThemeD = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
-        $childThemeD->expects($this->any())->method('getFullPath')->willReturn('frontend/Magento/d');
-
-        if ($hasPhysical) {
-            $childThemeC->expects($this->any())->method('getParentTheme')->willReturn($parentThemeA);
-            $childThemeD->expects($this->any())->method('getParentTheme')->willReturn($parentThemeB);
-        }
-
-        $this->themeProvider->expects($this->any())->method('getThemeByFullPath')->willReturn($theme);
-        $this->collection->expects($this->any())
-            ->method('getIterator')
-            ->willReturn(new \ArrayIterator([$childThemeC, $childThemeD]));
-        $this->tester->execute($input);
-        $this->assertContains($expected, $this->tester->getDisplay());
-    }
-
-    /**
-     * @return array
-     */
-    public function executeFailedChildThemeCheckDataProvider()
-    {
-        return [
-            [
-                true,
-                false,
-                ['theme' => ['frontend/Magento/a']],
-                'Unable to uninstall. Please resolve the following issues:' . PHP_EOL
-                . 'frontend/Magento/a is a parent of virtual theme. Parent themes cannot be uninstalled.'
-            ],
-            [
-                true,
-                false,
-                ['theme' => ['frontend/Magento/a', 'frontend/Magento/b']],
-                'Unable to uninstall. Please resolve the following issues:' . PHP_EOL .
-                'frontend/Magento/a, frontend/Magento/b are parents of virtual theme.'
-                . ' Parent themes cannot be uninstalled.'
-            ],
-            [
-                false,
-                true,
-                ['theme' => ['frontend/Magento/a']],
-                'Unable to uninstall. Please resolve the following issues:' . PHP_EOL .
-                'frontend/Magento/a is a parent of physical theme. Parent themes cannot be uninstalled.'
-            ],
-            [
-                false,
-                true,
-                ['theme' => ['frontend/Magento/a', 'frontend/Magento/b']],
-                'Unable to uninstall. Please resolve the following issues:' . PHP_EOL .
-                'frontend/Magento/a, frontend/Magento/b are parents of physical theme.'
-                . ' Parent themes cannot be uninstalled.'
-            ],
-            [
-                true,
-                true,
-                ['theme' => ['frontend/Magento/a']],
-                'Unable to uninstall. Please resolve the following issues:' . PHP_EOL .
-                'frontend/Magento/a is a parent of virtual theme. Parent themes cannot be uninstalled.' . PHP_EOL .
-                'frontend/Magento/a is a parent of physical theme. Parent themes cannot be uninstalled.'
-            ],
-            [
-                true,
-                true,
-                ['theme' => ['frontend/Magento/a', 'frontend/Magento/b']],
-                'frontend/Magento/a, frontend/Magento/b are parents of virtual theme.'
-                . ' Parent themes cannot be uninstalled.' . PHP_EOL .
-                'frontend/Magento/a, frontend/Magento/b are parents of physical theme.'
-                . ' Parent themes cannot be uninstalled.'
-            ],
-        ];
-    }
-
     public function testExecuteFailedDependencyCheck()
     {
         $this->setUpPassValidation();
@@ -421,12 +259,14 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
         $this->setupPassThemeInUseCheck();
         $this->setupPassChildThemeCheck();
         $this->setupPassDependencyCheck();
-        $this->remove->expects($this->once())->method('remove');
         $this->cache->expects($this->once())->method('clean');
-        $theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
-        $this->themeProvider->expects($this->any())
-            ->method('getThemeByFullPath')
-            ->willReturn($theme);
+
+        $this->themeUninstaller->expects($this->once())
+            ->method('uninstallRegistry')
+            ->with($this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface'), $this->anything());
+        $this->themeUninstaller->expects($this->once())
+            ->method('uninstallCode')
+            ->with($this->isInstanceOf('Symfony\Component\Console\Output\OutputInterface'), $this->anything());
     }
 
     public function testExecuteWithBackupCode()
