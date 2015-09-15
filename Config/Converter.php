@@ -27,6 +27,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     const CONSUMER_NAME = 'name';
     const CONSUMER_QUEUE = 'queue';
     const CONSUMER_CONNECTION = 'connection';
+    const CONSUMER_EXECUTOR = 'executor';
     const CONSUMER_CLASS = 'class';
     const CONSUMER_METHOD = 'method';
     const CONSUMER_MAX_MESSAGES = 'max_messages';
@@ -145,13 +146,16 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         foreach ($config->getElementsByTagName('consumer') as $consumerNode) {
             $consumerName = $consumerNode->attributes->getNamedItem('name')->nodeValue;
             $maxMessages = $consumerNode->attributes->getNamedItem('max_messages');
+            $connections = $consumerNode->attributes->getNamedItem('connection');
+            $executor = $consumerNode->attributes->getNamedItem('executor');
             $output[$consumerName] = [
                 self::CONSUMER_NAME => $consumerName,
                 self::CONSUMER_QUEUE => $consumerNode->attributes->getNamedItem('queue')->nodeValue,
-                self::CONSUMER_CONNECTION => $consumerNode->attributes->getNamedItem('connection')->nodeValue,
+                self::CONSUMER_CONNECTION => $connections ? $connections->nodeValue : null,
                 self::CONSUMER_CLASS => $consumerNode->attributes->getNamedItem('class')->nodeValue,
                 self::CONSUMER_METHOD => $consumerNode->attributes->getNamedItem('method')->nodeValue,
                 self::CONSUMER_MAX_MESSAGES => $maxMessages ? $maxMessages->nodeValue : null,
+                self::CONSUMER_EXECUTOR => $executor ? $executor->nodeValue : null,
             ];
         }
         return $output;

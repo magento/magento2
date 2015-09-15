@@ -82,7 +82,7 @@ class ConsumerFactory
     public function get($consumerName)
     {
         $consumerConfig = $this->getConsumerConfigForName($consumerName);
-        $consumer = $this->createConsumerForConnectionName($consumerConfig[QueueConfigConverter::CONSUMER_CONNECTION]);
+        $consumer = $this->createConsumer($consumerConfig[QueueConfigConverter::CONSUMER_CONNECTION], $consumerConfig['executor']);
 
         $consumerConfigObject = $this->createConsumerConfiguration($consumerConfig);
         $consumer->configure($consumerConfigObject);
@@ -109,15 +109,19 @@ class ConsumerFactory
      * @return ConsumerInterface
      * @throws LocalizedException
      */
-    private function createConsumerForConnectionName($connectionName)
+    private function createConsumer($connectionName, $executorClass)
     {
-        if (isset($this->consumers[$connectionName])) {
+        if ($executorClass !== null) {
+            $executorObject = $this->objectManager->create($executorClass, []);
+        } elseif (isset($this->consumers[$connectionName])) {
             $typeName =  $this->consumers[$connectionName];
-            return $this->objectManager->create($typeName, []);
+            $executorObject = $this->objectManager->create($typeName, []);
+        } else {
+            throw new LocalizedException(
+                new Phrase('Could not find an implementation type for connection "%name".', ['name' => $connectionName])
+            );
         }
-        throw new LocalizedException(
-            new Phrase('Could not find an implementation type for connection "%name".', ['name' => $connectionName])
-        );
+        return $executorObject;
     }
 
     /**
