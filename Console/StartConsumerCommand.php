@@ -56,7 +56,7 @@ class StartConsumerCommand extends Command
     protected function configure()
     {
         $this->setName(self::COMMAND_QUEUE_CONSUMERS_START);
-        $this->setDescription('Start AMQP consumer.');
+        $this->setDescription('Start AMQP consumer');
         $this->addArgument(
             self::ARGUMENT_CONSUMER,
             InputArgument::REQUIRED,
@@ -82,15 +82,15 @@ This command starts AMQP consumer by its name.
 
 To start consumer which will process all queued messages and terminate execution:
 
-      <comment>%command.full_name% some_consumer</comment>
+      <comment>%command.full_name% someConsumer</comment>
 
 To specify the number of messages which should be processed by consumer before its termination:
 
-    <comment>%command.full_name% some_consumer --max-messages=50</comment>
+    <comment>%command.full_name% someConsumer --max-messages=50</comment>
 
 To specify the command as daemon-mode:
 
-    <comment>%command.full_name% some_consumer --daemon-mode</comment>
+    <comment>%command.full_name% someConsumer --daemon-mode</comment>
 HELP
         );
         parent::configure();
