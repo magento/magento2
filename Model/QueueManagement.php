@@ -126,7 +126,7 @@ class QueueManagement
         );
 
         /**
-         * Do not make messages for deletion if configuration have 0 lifetime configured.
+         * Do not mark messages for deletion if configuration has 0 lifetime configured.
          */
         $statusesToDelete = [];
         if ($successfulLifetime > 0) {
