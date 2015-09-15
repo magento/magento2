@@ -113,7 +113,7 @@ define([
         });
 
         it('breakpoints override configs', function () {
-            expect($('.fotorama__arr').css('display')).toBe('none');
+            expect($('.fotorama__arr').css('display')).toBe('block');
         });
     });
 });
