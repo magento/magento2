@@ -42,11 +42,6 @@ class TotalsCollector
     protected $storeManager;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address\TotalsListFactory
-     */
-    protected $totalListFactory;
-
-    /**
      * @var \Magento\Quote\Model\Quote\Address\TotalFactory
      */
     protected $totalFactory;
@@ -78,7 +73,6 @@ class TotalsCollector
      * @param CollectorFactory $totalCollectorFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param Address\TotalsListFactory $totalListFactory
      * @param Address\TotalFactory $totalFactory
      * @param TotalsCollectorList $collectorList
      * @param \Magento\Quote\Model\ShippingFactory $shippingFactory
@@ -91,7 +85,6 @@ class TotalsCollector
         CollectorFactory $totalCollectorFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Quote\Model\Quote\Address\TotalsListFactory $totalListFactory,
         \Magento\Quote\Model\Quote\Address\TotalFactory $totalFactory,
         \Magento\Quote\Model\Quote\TotalsCollectorList $collectorList,
         \Magento\Quote\Model\ShippingFactory $shippingFactory,
@@ -102,7 +95,6 @@ class TotalsCollector
         $this->totalCollectorFactory = $totalCollectorFactory;
         $this->eventManager = $eventManager;
         $this->storeManager = $storeManager;
-        $this->totalListFactory = $totalListFactory;
         $this->totalFactory = $totalFactory;
         $this->collectorList = $collectorList;
         $this->shippingFactory = $shippingFactory;
