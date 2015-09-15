@@ -204,7 +204,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             foreach (array_keys($topics) as $topic) {
                 if (preg_match($pattern, $topic)) {
                     $fullTopic = $exchangePrefix . '--' . $topic;
-                    $output[$fullTopic] = array_merge($output[$fullTopic], $output[$wildcardKey]);
+                    if (isset($output[$fullTopic])) {
+                        $output[$fullTopic] = array_merge($output[$fullTopic], $output[$wildcardKey]);
+                    } else {
+                        $output[$fullTopic] = $output[$wildcardKey];
+                    }
                 }
             }
             unset($output[$wildcardKey]);
@@ -212,6 +216,12 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         return $output;
     }
 
+    /**
+     * Construct perl regexp pattern for matching topic names from wildcard key.
+     *
+     * @param string $wildcardKey
+     * @return string
+     */
     protected function buildWildcardPattern($wildcardKey)
     {
         $pattern = '/^' . str_replace('.', '\.', $wildcardKey);
