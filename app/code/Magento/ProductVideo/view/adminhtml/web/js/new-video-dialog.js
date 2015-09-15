@@ -120,6 +120,8 @@ define([
 
         _videoPreviewInputSelector: '#new_video_screenshot',
 
+        _videoPreviewRemoteSelector: '',
+
         _videoDisableinputSelector: '#new_video_disabled',
 
         _videoPreviewImagePointer: '#new_video_screenshot_preview',
@@ -145,6 +147,8 @@ define([
         _isEditPage : false,
 
         _onlyVideoPlayer : false, //if onlyVideoPlayer - in modal we create on focus out only VideoPlayer and not filling input fields
+
+        _tempPreviewImageData: null,
 
         _bind: function() {
             var events = {
@@ -230,7 +234,27 @@ define([
                         thumbnail : data.thumbnail
                     }
                 });
+                this._getPreviewImage().attr('src', data.thumbnail);
+                this._loadRemotePreview(data.thumbnail);
             }
+        },
+
+        /**
+         * Load preview from youtube/vimeo
+         * @param sourceUrl
+         * @private
+         */
+        _loadRemotePreview: function(sourceUrl) {
+            var url = this.options.saveRemoteVideoUrl;
+            var self = this;
+            jQuery.ajax({
+                url: url,
+                data: "remote_image=" + sourceUrl,
+                type: 'post',
+                success: $.proxy(function(result) {
+                    this._tempPreviewImageData = result;
+                }, self)
+            });
         },
 
         /**
@@ -352,17 +376,6 @@ define([
             this.saveImageRoles(imageData);
         },
 
-
-        _uploadRemoteImage: function(file) {
-            var url = this.options.saveRemoteVideoUrl;
-            var data = {
-                url: url
-            };
-            jQuery.ajax({
-                url: url,
-                data: data
-            })
-        },
         /**
          *
          * Wrap _uploadFile
@@ -379,24 +392,29 @@ define([
                 files: file,
                 url: url
             };
-            this._uploadFile('send', data, $.proxy(function(result, textStatus, jqXHR) {
-                var data = JSON.parse(result);
-                if(data.errorcode) {
-                    alert(data.error);
-                    return;
-                }
-                $.each($(this._videoFormSelector).serializeArray(), function(i, field) {
-                    data[field.name] = field.value;
-                });
-                data['disabled'] = $(this._videoDisableinputSelector).prop('checked') ? 1 : 0;
-                data['media_type'] = 'external-video';
-                data.old_file = oldFile;
-                oldFile  ?
-                    self._replaceImage(oldFile, data.file, data):
-                    self._setImage(data.file, data);
-                callback.call(0, data);
+
+            this._uploadFile(data, $.proxy(function(result) {
+                this._onImageLoaded(result, file, oldFile, callback);
             }, this));
 
+        },
+
+        _onImageLoaded: function(result, file, oldFile, callback) {
+            var data = JSON.parse(result);
+            if(data.errorcode) {
+                alert(data.error);
+                return;
+            }
+            $.each($(this._videoFormSelector).serializeArray(), function(i, field) {
+                data[field.name] = field.value;
+            });
+            data['disabled'] = $(this._videoDisableinputSelector).prop('checked') ? 1 : 0;
+            data['media_type'] = 'external-video';
+            data.old_file = oldFile;
+            oldFile  ?
+                this._replaceImage(oldFile, data.file, data):
+                this._setImage(data.file, data);
+            callback.call(0, data);
         },
 
         /**
@@ -404,7 +422,7 @@ define([
          * @returns {*}
          * @private
          */
-        _uploadFile: function(method, data, callback) {
+        _uploadFile: function(data, callback) {
             var fu = jQuery(this._videoPreviewInputSelector);
             var tmp_input   = document.createElement('input');
             jQuery(tmp_input).attr({
@@ -415,7 +433,7 @@ define([
             }).css('display', 'none');
             fu.parent().append(tmp_input);
             var fileUploader = jQuery(tmp_input).fileupload();
-            fileUploader.fileupload(method, data).success(function(result, textStatus, jqXHR) {
+            fileUploader.fileupload('send', data).success(function(result, textStatus, jqXHR) {
                 tmp_input.remove();
                 callback.call(null, result, textStatus, jqXHR);
             });
@@ -537,7 +555,8 @@ define([
                 file = null;
             }
             var reqClass = 'required-entry _required';
-            if (!file) {
+            if (!file && !this._tempPreviewImageData) {
+                console.log(this._tempPreviewImageData, 'AAA');
                 nvs.addClass(reqClass);
             }
 
@@ -545,9 +564,14 @@ define([
                 return;
             }
 
-            this._uploadImage(file, null, $.proxy(function(code, data) {
-                this.close();
-            }, this));
+            if(this._tempPreviewImageData) {
+                this._onImageLoaded(this._tempPreviewImageData, null, null, $.proxy(this.close, this));
+            } else {
+                this._uploadImage(file, null, $.proxy(function(code, data) {
+                    this.close();
+                }, this));
+            }
+
             nvs.removeClass(reqClass);
         },
 
@@ -581,6 +605,11 @@ define([
             $(_inputSelector).siblings('.image-fade').css('visibility', flagChecked ? 'visible': 'hidden');
 
             var imageData = this._getImage($('#file_name').val());
+
+            if(this._tempPreviewImageData) {
+                this._onImageLoaded(this._tempPreviewImageData, null, imageData.file, $.proxy(this.close, this));
+                return;
+            }
             var fileName = inputFile.get(0).files;
             if(!fileName || !fileName.length) {
                 fileName = null;
@@ -656,6 +685,7 @@ define([
                 return;
             } // end if
             file = file.files[0];
+            this._tempPreviewImageData = null;
             this._onPreview(null, file, true);
         },
 
