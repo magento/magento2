@@ -29,10 +29,9 @@ define([
             expect(bulkObj.getData).toHaveBeenCalled();
         });
         it('has updateState method', function () {
-            spyOn(bulkObj, 'hasData');
-            temp = bulkObj.updateState();
-            expect(bulkObj.hasData).toHaveBeenCalled();
-            expect(temp).toBeDefined();
+            spyOn(bulkObj, 'updateState');
+            bulkObj.updateState();
+            expect(bulkObj.updateState).toHaveBeenCalled();
         });
     })
 });
