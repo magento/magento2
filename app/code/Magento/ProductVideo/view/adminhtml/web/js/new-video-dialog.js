@@ -443,6 +443,7 @@ define([
             data['disabled'] = $(this._videoDisableinputSelector).prop('checked') ? 1 : 0;
             data['media_type'] = 'external-video';
             data.old_file = oldFile;
+            
             oldFile  ?
                 this._replaceImage(oldFile, data.file, data):
                 this._setImage(data.file, data);
@@ -656,8 +657,8 @@ define([
             if (fileName) {
                 this._uploadImage(fileName, imageData.file, callback);
             } else {
-                callback(0, imageData);
                 this._replaceImage(imageData.file, imageData.file, imageData);
+                callback(0, imageData);
             }
         },
 
@@ -811,7 +812,7 @@ define([
             }
             var self = this;
             if (data.length > 0) {
-                var containers = $('.video-placeholder').siblings('input');
+                var containers = $('.image-placeholder').siblings('input');
                 $.each(containers, function (i, el) {
                     var start = el.name.indexOf('[') + 1;
                     var end = el.name.indexOf(']');
