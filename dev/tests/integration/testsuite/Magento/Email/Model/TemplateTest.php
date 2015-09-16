@@ -476,7 +476,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Setup the theme fallback structure and set the Vendor_EmailTest/custom_theme as the current theme for 'fixturestore' store
+     * Setup the theme fallback structure and set the Vendor_EmailTest/custom_theme as the current theme
+     * for 'fixturestore' store
      *
      * @param $area
      */

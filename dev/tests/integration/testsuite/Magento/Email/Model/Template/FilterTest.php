@@ -106,7 +106,8 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         /** @var $layout \Magento\Framework\View\LayoutInterface */
         $layout = $this->objectManager->create('Magento\Framework\View\Layout');
         $this->objectManager->addSharedInstance($layout, 'Magento\Framework\View\Layout');
-        $this->objectManager->get('Magento\Framework\View\DesignInterface')->setDesignTheme('Magento_EmailTest/default');
+        $this->objectManager->get('Magento\Framework\View\DesignInterface')
+            ->setDesignTheme('Magento_EmailTest/default');
 
         $actualOutput = $this->model->layoutDirective(
             ['{{layout ' . $directiveParams . '}}', 'layout', ' ' . $directiveParams]
