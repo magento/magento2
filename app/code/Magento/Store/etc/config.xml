@@ -134,7 +134,7 @@
                 </public_files_valid_paths>
             </file>
             <single_store_mode>
-                <enabled>0</enabled>
+                <enabled>1</enabled>
             </single_store_mode>
         </general>
         <theme>
