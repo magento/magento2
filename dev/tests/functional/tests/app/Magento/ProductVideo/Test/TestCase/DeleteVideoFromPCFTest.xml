@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\ProductVideo\Test\TestCase\DeleteVideoFromPCFTest" summary="Delete Video from PCF" ticketId="PV-3">
+        <variation name="DeleteVideoFromPCFTestVariation1">
+            <data name="description" xsi:type="string">Delete video youtube</data>
+            <data name="product/dataset" xsi:type="string">product_with_video_youtube</data>
+            <constraint name="Magento\ProductVideo\Test\Constraint\AssertNoVideoAdminhtmlGrid" />
+            <constraint name="Magento\ProductVideo\Test\Constraint\AssertNoVideoAdminhtmlEdit" />
+            <constraint name="Magento\ProductVideo\Test\Constraint\AssertNoVideoCategoryView" />
+            <constraint name="Magento\ProductVideo\Test\Constraint\AssertNoVideoProductView" />
+        </variation>
+        <variation name="DeleteVideoFromPCFTestVariation2">
+            <data name="description" xsi:type="string">Delete video vimeo</data>
+            <data name="product/dataset" xsi:type="string">product_with_video_vimeo</data>
+            <constraint name="Magento\ProductVideo\Test\Constraint\AssertNoVideoAdminhtmlGrid" />
+            <constraint name="Magento\ProductVideo\Test\Constraint\AssertNoVideoAdminhtmlEdit" />
+            <constraint name="Magento\ProductVideo\Test\Constraint\AssertNoVideoCategoryView" />
+            <constraint name="Magento\ProductVideo\Test\Constraint\AssertNoVideoProductView" />
+        </variation>
+    </testCase>
+</config>

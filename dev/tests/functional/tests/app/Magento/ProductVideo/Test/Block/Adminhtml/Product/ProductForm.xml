@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<tabs>
+    <images>
+        <class>\Magento\ProductVideo\Test\Block\Adminhtml\Product\Edit\Tab\Images</class>
+        <selector>#product_info_tabs_image-management</selector>
+        <strategy>css selector</strategy>
+    </images>
+</tabs>
