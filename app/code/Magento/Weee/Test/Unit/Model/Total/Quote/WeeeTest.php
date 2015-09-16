@@ -81,10 +81,10 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
     /**
      * Setup the basics of an item mock
      *
-     * @param float $itemQty
+     * @param float $itemTotalQty
      * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote\Item
      */
-    protected function setupItemMockBasics($itemQty)
+    protected function setupItemMockBasics($itemTotalQty)
     {
         $itemMock = $this->getMock(
             'Magento\Quote\Model\Quote\Item',
@@ -106,7 +106,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
 
         $productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $itemMock->expects($this->any())->method('getProduct')->will($this->returnValue($productMock));
-        $itemMock->expects($this->any())->method('getTotalQty')->will($this->returnValue($itemQty));
+        $itemMock->expects($this->any())->method('getTotalQty')->will($this->returnValue($itemTotalQty));
 
         return $itemMock;
     }
@@ -132,16 +132,17 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
     /**
      * Setup an item mock as a parent of a child item mock.  Return both.
      *
+     * @param float $parentQty
      * @param float $itemQty
      * @return \PHPUnit_Framework_MockObject_MockObject[]|\Magento\Quote\Model\Quote\Item[]
      */
-    protected function setupParentItemWithChildrenMock($itemQty)
+    protected function setupParentItemWithChildrenMock($parentQty, $itemQty)
     {
         $items = [];
 
-        $parentItemMock = $this->setupItemMockBasics(1);
+        $parentItemMock = $this->setupItemMockBasics($parentQty);
 
-        $childItemMock = $this->setupItemMockBasics($itemQty);
+        $childItemMock = $this->setupItemMockBasics($parentQty * $itemQty);
         $childItemMock->expects($this->any())->method('getParentItem')->will($this->returnValue($parentItemMock));
         $childItemMock->expects($this->any())->method('getHasChildren')->will($this->returnValue(false));
         $childItemMock->expects($this->any())->method('getChildren')->will($this->returnValue([]));
@@ -224,16 +225,25 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
      * @param array $taxRates
      * @param array $itemData
      * @param float $itemQty
-     * @param bool $itemIsParent
+     * @param float $parentQty
      * @param array $addressData
+     * @param bool $assertSetApplied
      * @dataProvider collectDataProvider
      */
-    public function testCollect($taxConfig, $weeeConfig, $taxRates, $itemData, $itemQty, $itemIsParent, $addressData)
-    {
+    public function testCollect(
+        $taxConfig,
+        $weeeConfig,
+        $taxRates,
+        $itemData,
+        $itemQty,
+        $parentQty,
+        $addressData,
+        $assertSetApplied = false
+    ) {
         $this->markTestSkipped('MAGETWO-42308');
         $items = [];
-        if ($itemIsParent) {
-            $items = $this->setupParentItemWithChildrenMock($itemQty);
+        if ($parentQty > 0) {
+            $items = $this->setupParentItemWithChildrenMock($parentQty, $itemQty);
         } else {
             $itemMock = $this->setupItemMock($itemQty);
             $items[] = $itemMock;
@@ -243,6 +253,46 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
         $taxHelper = $this->setupTaxHelper($taxConfig);
         $weeeHelper = $this->setupWeeeHelper($weeeConfig);
         $calculator = $this->setupTaxCalculation($taxRates);
+
+        if ($assertSetApplied) {
+            $weeeHelper
+                ->expects($this->at(1))
+                ->method('setApplied')
+                ->with(reset($items), []);
+
+            $weeeHelper
+                ->expects($this->at(2))
+                ->method('setApplied')
+                ->with(end($items), []);
+
+            $weeeHelper
+                ->expects($this->at(8))
+                ->method('setApplied')
+                ->with(end($items), [
+                    [
+                    'title' => 'Recycling Fee',
+                    'base_amount' => '10',
+                    'amount' => '10',
+                    'row_amount' => '20',
+                    'base_row_amount' => '20',
+                    'base_amount_incl_tax' => '10',
+                    'amount_incl_tax' => '10',
+                    'row_amount_incl_tax' => '20',
+                    'base_row_amount_incl_tax' => '20',
+                    ],
+                    [
+                    'title' => 'FPT Fee',
+                    'base_amount' => '5',
+                    'amount' => '5',
+                    'row_amount' => '10',
+                    'base_row_amount' => '10',
+                    'base_amount_incl_tax' => '5',
+                    'amount_incl_tax' => '5',
+                    'row_amount_incl_tax' => '10',
+                    'base_row_amount_incl_tax' => '10',
+                    ]
+                ]);
+        }
 
         $arguments = [
             'taxData' => $taxHelper,
@@ -310,7 +360,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                 'base_weee_tax_applied_row_amnt_incl_tax' => 20,
             ],
             'item_qty' => 2,
-            'item_is_parent' => false,
+            'parent_qty' => 0,
             'address_data' => [
                 'subtotal_incl_tax' => 20,
                 'base_subtotal_incl_tax' => 20,
@@ -351,7 +401,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                 'base_weee_tax_applied_row_amnt_incl_tax' => 20,
             ],
             'item_qty' => 2,
-            'item_is_parent' => false,
+            'parent_qty' => 0,
             'address_data' => [
                 'subtotal_incl_tax' => 20,
                 'base_subtotal_incl_tax' => 20,
@@ -392,7 +442,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                 'base_weee_tax_applied_row_amnt_incl_tax' => 20,
             ],
             'item_qty' => 2,
-            'item_is_parent' => false,
+            'parent_qty' => 0,
             'address_data' => [
                 'subtotal_incl_tax' => 20,
                 'base_subtotal_incl_tax' => 20,
@@ -433,7 +483,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                 'base_weee_tax_applied_row_amnt_incl_tax' => 20,
             ],
             'item_qty' => 2,
-            'item_is_parent' => false,
+            'parent_qty' => 0,
             'address_data' => [
                 'subtotal_incl_tax' => 20,
                 'base_subtotal_incl_tax' => 20,
@@ -476,7 +526,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                 'base_weee_tax_applied_row_amnt_incl_tax' => 20,
             ],
             'item_qty' => 2,
-            'item_is_parent' => false,
+            'parent_qty' => 0,
             'address_data' => [
                 'subtotal_incl_tax' => 20,
                 'base_subtotal_incl_tax' => 20,
@@ -519,7 +569,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                 'base_weee_tax_applied_row_amnt_incl_tax' => 20,
             ],
             'item_qty' => 2,
-            'item_is_parent' => false,
+            'parent_qty' => 0,
             'address_data' => [
                 'subtotal_incl_tax' => 20,
                 'base_subtotal_incl_tax' => 20,
@@ -560,7 +610,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                 'base_weee_tax_applied_row_amnt_incl_tax' => 20,
             ],
             'item_qty' => 2,
-            'item_is_parent' => false,
+            'parent_qty' => 0,
             'address_data' => [
                 'subtotal_incl_tax' => 20,
                 'base_subtotal_incl_tax' => 20,
@@ -601,7 +651,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                 'base_weee_tax_applied_row_amnt_incl_tax' => 20,
             ],
             'item_qty' => 2,
-            'item_is_parent' => false,
+            'parent_qty' => 0,
             'address_data' => [
                 'subtotal_incl_tax' => 20,
                 'base_subtotal_incl_tax' => 20,
@@ -644,7 +694,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                 'base_weee_tax_applied_row_amnt_incl_tax' => 20,
             ],
             'item_qty' => 2,
-            'item_is_parent' => false,
+            'parent_qty' => 0,
             'address_data' => [
                 'subtotal_incl_tax' => 20,
                 'base_subtotal_incl_tax' => 20,
@@ -687,7 +737,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                 'base_weee_tax_applied_row_amnt_incl_tax' => 20,
             ],
             'item_qty' => 2,
-            'item_is_parent' => false,
+            'parent_qty' => 0,
             'address_data' => [
                 'subtotal_incl_tax' => 20,
                 'base_subtotal_incl_tax' => 20,
@@ -720,23 +770,73 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                 'customer_tax_rate' => 8.25,
             ],
             'item' => [
-                'weee_tax_applied_amount' => 0,
-                'base_weee_tax_applied_amount' => 0,
-                'weee_tax_applied_row_amount' => 0,
-                'base_weee_tax_applied_row_amnt' => 0,
+                'weee_tax_applied_amount' => 10,
+                'base_weee_tax_applied_amount' => 10,
+                'weee_tax_applied_row_amount' => 60,
+                'base_weee_tax_applied_row_amnt' => 60,
                 'weee_tax_applied_amount_incl_tax' => 10,
                 'base_weee_tax_applied_amount_incl_tax' => 10,
-                'weee_tax_applied_row_amount_incl_tax' => 20,
-                'base_weee_tax_applied_row_amnt_incl_tax' => 20,
+                'weee_tax_applied_row_amount_incl_tax' => 60,
+                'base_weee_tax_applied_row_amnt_incl_tax' => 60,
+            ],
+            'item_qty' => 2,
+            'parent_qty' => 3,
+            'address_data' => [
+                'subtotal_incl_tax' => 60,
+                'base_subtotal_incl_tax' => 60,
+                'weee_total_excl_tax' => 0,
+                'weee_base_total_excl_tax' => 0,
+            ],
+        ];
+
+        $data['price_excl_tax_weee_non_taxable_row_not_included_in_subtotal_dynamic_multiple_weee'] = [
+            'tax_config' => [
+                'priceIncludesTax' => false,
+                'getCalculationAlgorithm' => Calculation::CALC_ROW_BASE,
+            ],
+            'weee_config' => [
+                'isEnabled' => true,
+                'includeInSubtotal' => false,
+                'isTaxable' => false,
+                'getApplied' => [],
+                'getProductWeeeAttributes' => [
+                    new \Magento\Framework\DataObject(
+                        [
+                            'name' => 'Recycling Fee',
+                            'amount' => 10,
+                        ]
+                    ),
+                    new \Magento\Framework\DataObject(
+                        [
+                            'name' => 'FPT Fee',
+                            'amount' => 5,
+                        ]
+                    ),
+                ],
+            ],
+            'tax_rates' => [
+                'store_tax_rate' => 8.25,
+                'customer_tax_rate' => 8.25,
+            ],
+            'item' => [
+                'weee_tax_applied_amount' => 15,
+                'base_weee_tax_applied_amount' => 15,
+                'weee_tax_applied_row_amount' => 30,
+                'base_weee_tax_applied_row_amnt' => 30,
+                'weee_tax_applied_amount_incl_tax' => 15,
+                'base_weee_tax_applied_amount_incl_tax' => 15,
+                'weee_tax_applied_row_amount_incl_tax' => 30,
+                'base_weee_tax_applied_row_amnt_incl_tax' => 30,
             ],
             'item_qty' => 2,
             'item_is_parent' => true,
             'address_data' => [
-                'subtotal_incl_tax' => 20,
-                'base_subtotal_incl_tax' => 20,
-                'weee_total_excl_tax' => 0,
-                'weee_base_total_excl_tax' => 0,
+                'subtotal_incl_tax' => 30,
+                'base_subtotal_incl_tax' => 30,
+                'weee_total_excl_tax' => 30,
+                'weee_base_total_excl_tax' => 30,
             ],
+            'assertSetApplied' => true,
         ];
 
         return $data;

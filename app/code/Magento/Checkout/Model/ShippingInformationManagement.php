@@ -71,6 +71,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
      * @param Logger $logger
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement,

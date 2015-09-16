@@ -116,23 +116,23 @@ class Weee extends AbstractTotal
         $this->weeeTotalExclTax = 0;
         $this->weeeBaseTotalExclTax = 0;
         foreach ($items as $item) {
-            $this->_resetItemData($item);
             if ($item->getParentItem()) {
                 continue;
             }
+            $this->resetItemData($item);
             if ($item->getHasChildren() && $item->isChildrenCalculated()) {
                 foreach ($item->getChildren() as $child) {
-                    $this->_resetItemData($child);
-                    $this->_process($address, $total, $child);
+                    $this->resetItemData($child);
+                    $this->process($address, $total, $child);
                 }
-                $this->_recalculateParent($item);
+                $this->recalculateParent($item);
             } else {
-                $this->_process($address, $total, $item);
+                $this->process($address, $total, $item);
             }
         }
         $total->setWeeeCodeToItemMap($this->weeeCodeToItemMap);
-        $shippingAssignment->setWeeeTotalExclTax($this->weeeTotalExclTax);
-        $shippingAssignment->setWeeeBaseTotalExclTax($this->weeeBaseTotalExclTax);
+        $total->setWeeeTotalExclTax($this->weeeTotalExclTax);
+        $total->setWeeeBaseTotalExclTax($this->weeeBaseTotalExclTax);
         return $this;
     }
 
@@ -146,7 +146,7 @@ class Weee extends AbstractTotal
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    protected function _process(
+    protected function process(
         \Magento\Quote\Model\Quote\Address $address,
         \Magento\Quote\Model\Quote\Address\Total $total,
         $item
@@ -225,7 +225,7 @@ class Weee extends AbstractTotal
                     CommonTaxCollector::KEY_ASSOCIATED_TAXABLE_CODE => $weeeItemCode,
                     CommonTaxCollector::KEY_ASSOCIATED_TAXABLE_UNIT_PRICE => $valueExclTax,
                     CommonTaxCollector::KEY_ASSOCIATED_TAXABLE_BASE_UNIT_PRICE => $baseValueExclTax,
-                    CommonTaxCollector::KEY_ASSOCIATED_TAXABLE_QUANTITY => $item->getQty(),
+                    CommonTaxCollector::KEY_ASSOCIATED_TAXABLE_QUANTITY => $item->getTotalQty(),
                     CommonTaxCollector::KEY_ASSOCIATED_TAXABLE_TAX_CLASS_ID => $item->getProduct()->getTaxClassId(),
                 ];
                 $this->weeeCodeToItemMap[$weeeItemCode] = $item;
@@ -311,7 +311,7 @@ class Weee extends AbstractTotal
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _recalculateParent(\Magento\Quote\Model\Quote\Item\AbstractItem $item)
+    protected function recalculateParent(\Magento\Quote\Model\Quote\Item\AbstractItem $item)
     {
         $associatedTaxables = [];
         foreach ($item->getChildren() as $child) {
@@ -321,14 +321,15 @@ class Weee extends AbstractTotal
     }
 
     /**
-     * Reset information about FPT for shopping cart item
+     * Reset information about Tax and Wee on FPT for shopping cart item
      *
      * @param   \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @return  void
      */
-    protected function _resetItemData($item)
+    protected function resetItemData($item)
     {
         $this->weeeData->setApplied($item, []);
+
         $item->setAssociatedTaxables([]);
 
         $item->setBaseWeeeTaxDisposition(0);
