@@ -7,7 +7,7 @@
         "magento/magento-composer-installer": "*"
     },
     "type": "magento2-module",
-    "version": "1.0.0-beta",
+    "version": "1.0.0-beta2",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
