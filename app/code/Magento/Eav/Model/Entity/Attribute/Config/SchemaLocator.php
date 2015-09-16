@@ -18,6 +18,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 
     /**
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader
+     * @codeCoverageIgnore
      */
     public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
     {
@@ -28,6 +29,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      * Get path to merged config schema
      *
      * @return string|null
+     * @codeCoverageIgnore
      */
     public function getSchema()
     {
@@ -38,6 +40,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      * Get path to per file validation schema
      *
      * @return string|null
+     * @codeCoverageIgnore
      */
     public function getPerFileSchema()
     {

@@ -17,6 +17,7 @@ class AgreementsValidator implements \Magento\Checkout\Api\AgreementsValidatorIn
      *
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codeCoverageIgnore
      */
     public function isValid($agreementIds = [])
     {

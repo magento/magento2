@@ -14,6 +14,7 @@ class CompositeConfigProvider implements ConfigProviderInterface
 
     /**
      * @param ConfigProviderInterface[] $configProviders
+     * @codeCoverageIgnore
      */
     public function __construct(
         array $configProviders

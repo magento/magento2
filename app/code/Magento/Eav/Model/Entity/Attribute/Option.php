@@ -17,6 +17,7 @@ use Magento\Framework\Model\AbstractModel;
  * @method \Magento\Eav\Model\Entity\Attribute\Option setAttributeId(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @codeCoverageIgnore
  */
 class Option extends AbstractModel implements AttributeOptionInterface
 {
@@ -32,7 +33,6 @@ class Option extends AbstractModel implements AttributeOptionInterface
 
     /**
      * {@inheritdoc}
-     * @codeCoverageIgnoreStart
      */
     public function getLabel()
     {
@@ -124,5 +124,4 @@ class Option extends AbstractModel implements AttributeOptionInterface
     {
         return $this->setData(AttributeOptionInterface::STORE_LABELS, $storeLabels);
     }
-    //@codeCoverageIgnoreEnd
 }
