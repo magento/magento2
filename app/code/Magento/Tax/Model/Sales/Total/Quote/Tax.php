@@ -126,16 +126,6 @@ class Tax extends CommonTaxCollector
             $total->addBaseTotalAmount('extra_tax', $total->getBaseExtraTaxAmount());
         }
 
-        // Saving tax configuration to total since quote is unavailable on fetch.
-        $store = $quote->getStore();
-        $taxConfiguration = [
-            'displayCartSubtotalBoth' => $this->_config->displayCartSubtotalBoth($store),
-            'displayCartSubtotalInclTax' => $this->_config->displayCartSubtotalInclTax($store),
-            'displayCartZeroTax' => $this->_config->displayCartZeroTax($store),
-            'displayCartTaxWithGrandTotal' => $this->_config->displayCartTaxWithGrandTotal($store)
-        ];
-        $total->setTaxConfiguration($taxConfiguration);
-
         return $this;
     }
 
@@ -305,17 +295,17 @@ class Tax extends CommonTaxCollector
     public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {
         $totals = [];
+        $store = $quote->getStore();
         $applied = $total->getAppliedTaxes();
         $amount = $total->getTaxAmount();
-        $taxConfiguration = $total->getTaxConfiguration();
         $taxAmount = $amount + $total->getTotalAmount('discount_tax_compensation');
 
         $area = null;
-        if ($total->getGrandTotal()) {
+        if ($this->_config->displayCartTaxWithGrandTotal($store) && $total->getGrandTotal()) {
             $area = 'taxes';
         }
 
-        if ($amount != 0) {
+        if ($amount != 0 || $this->_config->displayCartZeroTax($store)) {
             $totals[] = [
                 'code' => $this->getCode(),
                 'title' => __('Tax'),
@@ -328,7 +318,7 @@ class Tax extends CommonTaxCollector
         /**
          * Modify subtotal
          */
-        if (true) {
+        if ($this->_config->displayCartSubtotalBoth($store) || $this->_config->displayCartSubtotalInclTax($store)) {
             if ($total->getSubtotalInclTax() > 0) {
                 $subtotalInclTax = $total->getSubtotalInclTax();
             } else {
