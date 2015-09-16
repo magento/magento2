@@ -11,6 +11,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\StoreIsInactiveException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use \InvalidArgumentException;
 
 /**
  * Class StoreCookie
@@ -69,6 +70,8 @@ class StoreCookie
             } catch(StoreIsInactiveException $e) {
                 $this->storeCookieManager->deleteStoreCookie($defaultStore);
             } catch(NoSuchEntityException $e) {
+                $this->storeCookieManager->deleteStoreCookie($defaultStore);
+            } catch(InvalidArgumentException $e) {
                 $this->storeCookieManager->deleteStoreCookie($defaultStore);
             }
         }
