@@ -97,6 +97,7 @@ abstract class Onepage extends Action
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      *
+     * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -214,6 +215,7 @@ abstract class Onepage extends Action
      * Get shipping method step html
      *
      * @return string
+     * @codeCoverageIgnore
      */
     protected function _getShippingMethodsHtml()
     {
@@ -224,6 +226,7 @@ abstract class Onepage extends Action
      * Get payment method step html
      *
      * @return string
+     * @codeCoverageIgnore
      */
     protected function _getPaymentMethodsHtml()
     {
@@ -251,6 +254,7 @@ abstract class Onepage extends Action
      * Get one page checkout model
      *
      * @return \Magento\Checkout\Model\Type\Onepage
+     * @codeCoverageIgnore
      */
     public function getOnepage()
     {

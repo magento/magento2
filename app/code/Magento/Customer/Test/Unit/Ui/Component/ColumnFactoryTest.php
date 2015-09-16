@@ -24,6 +24,9 @@ class ColumnFactoryTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Ui\Component\Listing\Columns\ColumnInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $column;
 
+    /** @var \Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater|\PHPUnit_Framework_MockObject_MockObject */
+    protected $inlineEditUpdater;
+
     /** @var ColumnFactory */
     protected $columnFactory;
 
@@ -61,7 +64,13 @@ class ColumnFactoryTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->columnFactory = new ColumnFactory($this->componentFactory);
+        $this->inlineEditUpdater = $this->getMockBuilder(
+            'Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater'
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->columnFactory = new ColumnFactory($this->componentFactory, $this->inlineEditUpdater);
     }
 
     public function testCreate()
@@ -89,7 +98,7 @@ class ColumnFactoryTest extends \PHPUnit_Framework_TestCase
         ];
         $attributeData = [
             'attribute_code' => 'billing_attribute_code',
-            'frontend_input' => 'frontend-input',
+            'frontend_input' => 'text',
             'frontend_label' => 'Label',
             'backend_type' => 'backend-type',
             'options' => [
@@ -102,8 +111,13 @@ class ColumnFactoryTest extends \PHPUnit_Framework_TestCase
             'is_visible_in_grid' => true,
             'is_filterable_in_grid' => true,
             'is_searchable_in_grid' => true,
+            'entity_type_code' => 'customer',
+            'validation_rules' => [],
+            'required' => false,
         ];
-
+        $this->inlineEditUpdater->expects($this->once())
+            ->method('applyEditing')
+            ->with($this->column, 'text', []);
         $this->componentFactory->expects($this->once())
             ->method('create')
             ->with($columnName, 'column', $config)

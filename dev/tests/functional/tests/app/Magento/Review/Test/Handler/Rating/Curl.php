@@ -9,7 +9,6 @@ namespace Magento\Review\Test\Handler\Rating;
 use Magento\Backend\Test\Handler\Extractor;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
-use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
@@ -55,7 +54,7 @@ class Curl extends AbstractCurl implements RatingInterface
 
         $data['stores'] = is_array($data['stores']) ? $data['stores'] : [$data['stores']];
         $data += $this->getAdditionalData();
-        $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
+        $curl->write($url, $data);
         $response = $curl->read();
         $curl->close();
         if (!strpos($response, 'data-ui-id="messages-message-success"')) {

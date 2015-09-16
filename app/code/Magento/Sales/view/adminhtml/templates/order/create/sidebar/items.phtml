@@ -8,16 +8,16 @@
 
 ?>
 <?php /* @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar */ ?>
-<div class="create-order-sidebar-block" id="sidebar_data_<?php echo $block->getDataId() ?>">
+<div class="create-order-sidebar-block" id="sidebar_data_<?php /* @escapeNotVerified */ echo $block->getDataId() ?>">
     <div class="head sidebar-title-block">
         <a href="#" class="action-refresh"
            title="<?php echo $block->escapeHtml(__('Refresh')); ?>"
-           onclick="order.loadArea('sidebar_<?php echo $block->getDataId() ?>', 'sidebar_data_<?php echo $block->getDataId() ?>');return false;">
-            <span><?php echo __('Refresh'); ?></span>
+           onclick="order.loadArea('sidebar_<?php /* @escapeNotVerified */ echo $block->getDataId() ?>', 'sidebar_data_<?php /* @escapeNotVerified */ echo $block->getDataId() ?>');return false;">
+            <span><?php /* @escapeNotVerified */ echo __('Refresh'); ?></span>
         </a>
         <h5 class="create-order-sidebar-label">
-            <?php echo $block->getHeaderText() ?>
-            <span class="normal">(<?php echo $block->getItemCount() ?>)</span>
+            <?php /* @escapeNotVerified */ echo $block->getHeaderText() ?>
+            <span class="normal">(<?php /* @escapeNotVerified */ echo $block->getItemCount() ?>)</span>
         </h5>
     </div>
     <div class="content">
@@ -26,21 +26,21 @@
         <table class="admin__table-primary">
             <thead>
                 <tr>
-                    <th class="col-item"><?php echo __('Item') ?></th>
+                    <th class="col-item"><?php /* @escapeNotVerified */ echo __('Item') ?></th>
 
                     <?php if ($block->canDisplayItemQty()): ?>
-                        <th class="col-qty"><?php echo __('Qty') ?></th>
+                        <th class="col-qty"><?php /* @escapeNotVerified */ echo __('Qty') ?></th>
                     <?php endif; ?>
 
                     <?php if ($block->canDisplayPrice()): ?>
-                        <th class="col-price"><?php echo __('Price') ?></th>
+                        <th class="col-price"><?php /* @escapeNotVerified */ echo __('Price') ?></th>
                     <?php endif; ?>
 
                     <?php if ($block->canRemoveItems()): ?>
                         <th class="col-remove">
                             <span title="<?php echo $block->escapeHtml(__('Remove')); ?>"
                                   class="icon icon-remove">
-                                <span><?php echo __('Remove') ?></span>
+                                <span><?php /* @escapeNotVerified */ echo __('Remove') ?></span>
                             </span>
                         </th>
                     <?php endif; ?>
@@ -48,7 +48,7 @@
                     <th class="col-add">
                         <span title="<?php echo $block->escapeHtml(__('Add To Order')); ?>"
                               class="icon icon-add">
-                            <span><?php echo __('Add To Order') ?></span>
+                            <span><?php /* @escapeNotVerified */ echo __('Add To Order') ?></span>
                         </span>
                     </th>
                 </tr>
@@ -61,12 +61,12 @@
 
                         <?php if ($block->canDisplayItemQty()): ?>
                             <td class="col-qty">
-                                <?php echo $block->getItemQty($_item); ?>
+                                <?php /* @escapeNotVerified */ echo $block->getItemQty($_item); ?>
                             </td>
                         <?php endif; ?>
 
                         <?php if ($block->canDisplayPrice()): ?>
-                            <td class="col-price"><?php echo $block->convertPrice($_item->getPrice()) ?></td>
+                            <td class="col-price"><?php /* @escapeNotVerified */ echo $block->convertPrice($_item->getPrice()) ?></td>
                         <?php endif; ?>
 
                         <?php if ($block->canRemoveItems()): ?>
@@ -74,8 +74,8 @@
                                 <div class="admin__field-option">
                                     <input type="checkbox"
                                            class="admin__control-checkbox"
-                                           name="sidebar[remove][<?php echo $block->getItemId($_item) ?>]"
-                                           value="<?php echo $block->getDataId() ?>"
+                                           name="sidebar[remove][<?php /* @escapeNotVerified */ echo $block->getItemId($_item) ?>]"
+                                           value="<?php /* @escapeNotVerified */ echo $block->getDataId() ?>"
                                            title="<?php echo $block->escapeHtml(__('Remove')); ?>" />
                                     <label class="admin__field-label"></label>
                                 </div>
@@ -88,21 +88,21 @@
                                     <a href="#"
                                        class="icon icon-configure"
                                        title="<?php echo $block->escapeHtml(__('Configure and Add to Order')); ?>"
-                                       onclick="order.sidebarConfigureProduct('<?php echo 'sidebar_wishlist' ?>', <?php echo $block->getProductId($_item) ?>, <?php echo $block->getItemId($_item) ?>); return false;">
-                                        <span><?php echo __('Configure and Add to Order') ?></span>
+                                       onclick="order.sidebarConfigureProduct('<?php echo 'sidebar_wishlist' ?>', <?php /* @escapeNotVerified */ echo $block->getProductId($_item) ?>, <?php /* @escapeNotVerified */ echo $block->getItemId($_item) ?>); return false;">
+                                        <span><?php /* @escapeNotVerified */ echo __('Configure and Add to Order') ?></span>
                                     </a>
                                 <?php elseif ($block->isConfigurationRequired($_item->getTypeId())): ?>
                                     <a href="#"
                                        class="icon icon-configure"
                                        title="<?php echo $block->escapeHtml(__('Configure and Add to Order')); ?>"
-                                       onclick="order.sidebarConfigureProduct('<?php echo 'sidebar' ?>', <?php echo $block->getProductId($_item) ?>); return false;">
-                                        <span><?php echo __('Configure and Add to Order') ?></span>
+                                       onclick="order.sidebarConfigureProduct('<?php echo 'sidebar' ?>', <?php /* @escapeNotVerified */ echo $block->getProductId($_item) ?>); return false;">
+                                        <span><?php /* @escapeNotVerified */ echo __('Configure and Add to Order') ?></span>
                                     </a>
                                 <?php else: ?>
                                     <input type="checkbox"
                                            class="admin__control-checkbox"
-                                           name="sidebar[<?php echo $block->getSidebarStorageAction() ?>][<?php echo $block->getIdentifierId($_item) ?>]"
-                                           value="<?php echo $block->canDisplayItemQty() ? $_item->getQty()*1 : 1 ?>"
+                                           name="sidebar[<?php /* @escapeNotVerified */ echo $block->getSidebarStorageAction() ?>][<?php /* @escapeNotVerified */ echo $block->getIdentifierId($_item) ?>]"
+                                           value="<?php /* @escapeNotVerified */ echo $block->canDisplayItemQty() ? $_item->getQty()*1 : 1 ?>"
                                            title="<?php echo $block->escapeHtml(__('Add To Order')); ?>"/>
                                     <label class="admin__field-label"></label>
                                 <?php endif; ?>
@@ -113,7 +113,7 @@
             </tbody>
         </table>
         <?php else: ?>
-            <span class="no-items"><?php echo __('No items') ?></span>
+            <span class="no-items"><?php /* @escapeNotVerified */ echo __('No items') ?></span>
         <?php endif ?>
         </div>
         <?php if ($block->getItemCount() && $block->canRemoveItems()): ?>
