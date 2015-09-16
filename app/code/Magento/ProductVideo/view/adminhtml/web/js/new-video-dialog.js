@@ -50,6 +50,18 @@ define([
 
         },
         update : function () {
+            var checkVideoID = $(this.options.container).find('.'+this.options.video_class).data('code');
+            if (checkVideoID && checkVideoID != this.options.video_id) {
+                this._doUpdate();
+            } else
+            if (checkVideoID && checkVideoID == this.options.video_id) {
+                return false;
+            } else
+            if (!checkVideoID) {
+                this._doUpdate();
+            }
+        },
+        _doUpdate : function () {
             this.reset();
             $(this.options.container).append('<div class="'+this.options.video_class+'" data-type="'+this.options.video_provider+'" data-code="'+this.options.video_id+'" data-width="100%" data-height="100%"></div>');
             $(this.options.meta_data.DOM.wrapper).show();
@@ -827,7 +839,7 @@ define([
 
         toggleButtons: function() {
             var self = this;
-            $('.video-placeholder, .add-video-button-container').click(function() {
+            $('.video-placeholder, .add-video-button-container > button').click(function() {
                 $('.video-create-button').show();
                 $('.video-delete-button').hide();
                 $('.video-edit').hide();
