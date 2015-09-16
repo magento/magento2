@@ -11,7 +11,7 @@ class FreeShipping implements \Magento\Quote\Model\Quote\Address\FreeShippingInt
      * {@inheritDoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getFreeShipping(\Magento\Quote\Model\Quote $quote, $items)
+    public function isFreeShipping(\Magento\Quote\Model\Quote $quote, $items)
     {
         return false;
     }

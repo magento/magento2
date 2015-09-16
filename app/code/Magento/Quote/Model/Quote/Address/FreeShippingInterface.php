@@ -12,5 +12,5 @@ interface FreeShippingInterface
      * @param \Magento\Quote\Api\Data\CartItemInterface[] $items
      * @return bool
      */
-    public function getFreeShipping(\Magento\Quote\Model\Quote $quote, $items);
+    public function isFreeShipping(\Magento\Quote\Model\Quote $quote, $items);
 }
