@@ -92,12 +92,7 @@ class Library implements CollectorInterface
             }
             $directoryRead = $this->readFactory->create($path);
             $foundFiles = $directoryRead->search("web/{$filePath}");
-            $files = [];
-            foreach ($foundFiles as $foundFile) {
-                $foundFile = $directoryRead->getAbsolutePath($foundFile);
-                $files[] = $foundFile;
-            }
-            $list->replace($this->createFiles($directoryRead, $theme, $files));
+            $list->replace($this->createFiles($directoryRead, $theme, $foundFiles));
         }
         return $list->getAll();
     }

@@ -5,5 +5,5 @@
  */
 -->
 <theme xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:library:framework:Config/etc/theme.xsd">
-    <title>Frontend - Magento/default</title>
+    <title>Frontend - Magento_EmailTest/default</title>
 </theme>

@@ -945,9 +945,12 @@ return [
         'MODULES',
         'Magento\Framework\App\Filesystem\DirectoryList'
     ],
-
     [
         'LOCALE',
+        'Magento\Framework\App\Filesystem\DirectoryList'
+    ],
+    [
+        'THEMES',
         'Magento\Framework\App\Filesystem\DirectoryList'
     ],
 ];

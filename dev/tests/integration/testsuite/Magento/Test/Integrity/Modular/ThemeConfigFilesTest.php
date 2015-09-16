@@ -22,9 +22,7 @@ class ThemeConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractConfi
     }
 
     /**
-     * Returns a string that represents the path to the config file, starting in the app directory.
-     *
-     * Format is glob, so * is allowed.
+     * Returns a string that represents the path to the config file
      *
      * @return string
      */
@@ -34,7 +32,7 @@ class ThemeConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractConfi
     }
 
     /**
-     * Returns a path to the per file XSD file, relative to the library directory.
+     * Returns an absolute path to the per file XSD file.
      *
      * @return string
      */
