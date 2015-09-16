@@ -100,7 +100,7 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         $address = $quote->getShippingAddress();
         /** @var \Magento\Quote\Model\ShippingAssignment $shippingAssignment */
         $shippingAssignment = $this->objectManager->create('Magento\Quote\Model\ShippingAssignment');
-        $shipping = $this->objectManager->create('\Magento\Quote\Api\Data\ShippingInterface');
+        $shipping = $this->objectManager->create('Magento\Quote\Model\Shipping');
         $shipping->setAddress($address);
         $shippingAssignment->setShipping($shipping);
         /** @var  \Magento\Quote\Model\Quote\Address\Total $total */
@@ -221,7 +221,7 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         $address = $quote->getShippingAddress();
         /** @var \Magento\Quote\Model\ShippingAssignment $shippingAssignment */
         $shippingAssignment = $this->objectManager->create('Magento\Quote\Model\ShippingAssignment');
-        $shipping = $this->objectManager->create('\Magento\Quote\Api\Data\ShippingInterface');
+        $shipping = $this->objectManager->create('Magento\Quote\Model\Shipping');
         $shipping->setAddress($address);
         $shippingAssignment->setShipping($shipping);
         /** @var  \Magento\Quote\Model\Quote\Address\Total $total */

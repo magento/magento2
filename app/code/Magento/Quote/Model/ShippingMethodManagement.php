@@ -32,11 +32,6 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
     protected $converter;
 
     /**
-     * @var \Magento\Quote\Api\CartTotalRepositoryInterface
-     */
-    protected $totalRepository;
-
-    /**
      * Customer Address repository
      *
      * @var \Magento\Customer\Api\AddressRepositoryInterface
@@ -44,23 +39,28 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
     protected $addressRepository;
 
     /**
+     * @var Quote\TotalsCollector
+     */
+    protected $totalsCollector;
+
+    /**
      * Constructs a shipping method read service object.
      *
      * @param QuoteRepository $quoteRepository
      * @param Cart\ShippingMethodConverter $converter
-     * @param \Magento\Quote\Api\CartTotalRepositoryInterface $totalRepository
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
+     * @param Quote\TotalsCollector $totalsCollector
      */
     public function __construct(
         QuoteRepository $quoteRepository,
         Cart\ShippingMethodConverter $converter,
-        \Magento\Quote\Api\CartTotalRepositoryInterface $totalRepository,
-        \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
+        \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
+        \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->converter = $converter;
-        $this->totalRepository = $totalRepository;
         $this->addressRepository = $addressRepository;
+        $this->totalsCollector = $totalsCollector;
     }
 
     /**
@@ -226,7 +226,7 @@ class ShippingMethodManagement implements ShippingMethodManagementInterface
         $shippingAddress->setRegionId($regionId);
         $shippingAddress->setRegion($region);
         $shippingAddress->setCollectShippingRates(true);
-        $shippingAddress->collectShippingRates();
+        $this->totalsCollector->collectAddressTotals($quote, $shippingAddress);
         $shippingRates = $shippingAddress->getGroupedAllShippingRates();
         foreach ($shippingRates as $carrierRates) {
             foreach ($carrierRates as $rate) {
