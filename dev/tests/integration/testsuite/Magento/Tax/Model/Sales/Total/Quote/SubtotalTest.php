@@ -8,7 +8,6 @@
 
 namespace Magento\Tax\Model\Sales\Total\Quote;
 
-use Magento\Tax\Model\ClassModel;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
