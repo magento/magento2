@@ -157,11 +157,11 @@ class OverviewTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('collectAddressTotals')
             ->with($this->quoteMock, $address)->willReturn($totalsAddressMock);
-        $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
+        $totalsAddressMock->expects($this->once())->method('getData')->willReturn([]);
         $this->totalsReaderMock
             ->expects($this->once())
             ->method('fetch')
-            ->with($totalsAddressMock, $storeId)
+            ->with($this->quoteMock, [])
             ->willReturn([$totalMock]);
         return $totalMock;
     }
