@@ -490,16 +490,11 @@ define([
          * @returns {String}
          */
         getPreview: function () {
-            var i = 0,
-                selected = this.getSelected(),
-                length = selected.length,
-                result = [];
+            var selected = this.getSelected();
 
-            for (i; i < length; i++) {
-                result.push(selected[i].label);
-            }
-
-            return result.join(', ');
+            return selected.map(function (option) {
+                return option.label;
+            }).join(', ');
         }
     });
 });

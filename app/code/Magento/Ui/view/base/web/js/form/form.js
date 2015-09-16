@@ -76,7 +76,10 @@ define([
             });
 
             source.save({
-                redirect: redirect
+                redirect: redirect,
+                attributes: {
+                    id: this.namespace
+                }
             });
         },
 

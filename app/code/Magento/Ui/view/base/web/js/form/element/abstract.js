@@ -18,7 +18,6 @@ define([
             focused: false,
             required: false,
             disabled: false,
-            tmpPath: 'ui/form/element/',
             tooltipTpl: 'ui/form/element/helper/tooltip',
             'input_type': 'input',
             placeholder: '',
@@ -78,14 +77,16 @@ define([
          * @returns {Abstract} Chainable.
          */
         initProperties: function () {
-            var uid = utils.uniqueid();
+            var uid     = utils.uniqueid(),
+                scope   = this.dataScope,
+                name    = scope.split('.').slice(1);
 
             this._super();
 
             _.extend(this, {
-                'uid': uid,
-                'noticeId': 'notice-' + uid,
-                'inputName': utils.serializeName(this.dataScope)
+                uid: uid,
+                noticeId: 'notice-' + uid,
+                inputName: utils.serializeName(name.join('.'))
             });
 
             return this;
