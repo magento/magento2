@@ -12,6 +12,9 @@ namespace Magento\Theme\Model\Theme;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * @magentoDataFixture Magento/Theme/Model/_files/design/themes.php
+ */
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -25,11 +28,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\App\Filesystem\DirectoryList',
             [
                 'root' => DirectoryList::ROOT,
-                'config' => [
-                    DirectoryList::THEMES => [
-                        DirectoryList::PATH => dirname(__DIR__) . '/_files/design',
-                    ],
-                ]
             ]
         );
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -49,9 +47,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadThemesFromFileSystem()
     {
-        $pathPattern = implode('/', ['frontend', '*', '*', 'theme.xml']);
-        $this->_model->addTargetPattern($pathPattern);
-        $this->assertEquals(8, count($this->_model));
+        $this->_model->addConstraint(\Magento\Theme\Model\Theme\Collection::CONSTRAINT_AREA, 'frontend');
+        $this->assertNotEmpty($this->_model->getItemById('frontend/Magento_FrameworkThemeTest/default'));
+        $this->assertEmpty($this->_model->getItemById('adminhtml/FrameworkThemeTest/test'));
     }
 
     /**
@@ -59,9 +57,12 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider expectedThemeDataFromConfiguration
      */
-    public function testLoadFromConfiguration($themePath, $expectedData)
+    public function testLoadFromConfiguration($area, $vendor, $themeName, $expectedData)
     {
-        $theme = $this->_model->addTargetPattern($themePath)->getFirstItem();
+        $this->_model->addConstraint(\Magento\Theme\Model\Theme\Collection::CONSTRAINT_AREA, $area);
+        $this->_model->addConstraint(\Magento\Theme\Model\Theme\Collection::CONSTRAINT_VENDOR, $vendor);
+        $this->_model->addConstraint(\Magento\Theme\Model\Theme\Collection::CONSTRAINT_THEME_NAME, $themeName);
+        $theme = $this->_model->getFirstItem();
         $this->assertEquals($expectedData, $theme->getData());
     }
 
@@ -74,14 +75,14 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'themePath' => implode('/', ['frontend', 'Magento', 'default', 'theme.xml']),
-                'expectedData' => [
+                'frontend', 'Magento_FrameworkThemeTest', 'default',
+                [
                     'area' => 'frontend',
                     'theme_title' => 'Default',
                     'parent_id' => null,
                     'parent_theme_path' => null,
-                    'theme_path' => 'Magento/default',
-                    'code' => 'Magento/default',
+                    'theme_path' => 'Magento_FrameworkThemeTest/default',
+                    'code' => 'Magento_FrameworkThemeTest/default',
                     'preview_image' => null,
                     'type' => \Magento\Framework\View\Design\ThemeInterface::TYPE_PHYSICAL,
                 ],

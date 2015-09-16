@@ -5,6 +5,6 @@
  */
 -->
 <theme xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:library:framework:Config/etc/theme.xsd">
-    <title>Frontend - Vendor/custom_theme</title>
-    <parent>Vendor/default</parent>
+    <title>Frontend - Vendor_EmailTest/custom_theme</title>
+    <parent>Vendor_EmailTest/default</parent>
 </theme>

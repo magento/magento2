@@ -81,6 +81,9 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
             ->method('getPath')
             ->will($this->returnValue(''));
         $theme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
+        $theme->expects($this->once())
+            ->method('getFullPath')
+            ->will($this->returnValue('area/Vendor/theme'));
         $this->model->getFiles($theme, '');
     }
 
