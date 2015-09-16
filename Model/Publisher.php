@@ -42,7 +42,7 @@ class Publisher implements PublisherInterface
      */
     public function publish($topicName, $data)
     {
-        $queueNames = $this->amqpConfig->getQueuesForTopic($topicName);
+        $queueNames = $this->amqpConfig->getQueuesByTopic($topicName);
         $this->queueManagement->addMessageToQueues($topicName, $data, $queueNames);
     }
 }
