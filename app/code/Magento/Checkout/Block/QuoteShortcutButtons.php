@@ -18,6 +18,7 @@ class QuoteShortcutButtons extends \Magento\Catalog\Block\ShortcutButtons
      * @param Template\Context $context
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         Template\Context $context,
