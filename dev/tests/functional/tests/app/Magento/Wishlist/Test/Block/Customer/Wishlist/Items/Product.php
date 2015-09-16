@@ -142,4 +142,19 @@ class Product extends Form
     {
         $this->_rootElement->find($this->edit)->click();
     }
+
+    /**
+     * Get wishlist data for the product.
+     *
+     * @param mixed $qty
+     * @return array
+     */
+    public function getWishlistData($qty = null)
+    {
+        $mapping = $this->dataMapping();
+        if (!is_numeric($qty)) {
+            unset($mapping['qty']);
+        }
+        return $this->_getData($mapping);
+    }
 }

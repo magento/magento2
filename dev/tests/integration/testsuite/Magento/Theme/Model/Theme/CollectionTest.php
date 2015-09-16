@@ -9,6 +9,7 @@
  */
 namespace Magento\Theme\Model\Theme;
 
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
@@ -112,7 +113,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->_model->addDefaultPattern();
+        $this->_model->addConstraint(Collection::CONSTRAINT_AREA, Area::AREA_FRONTEND);
         $this->assertFalse($this->_model->hasTheme($themeModel));
     }
 }

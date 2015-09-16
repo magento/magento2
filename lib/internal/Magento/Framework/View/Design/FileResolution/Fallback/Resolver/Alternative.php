@@ -25,13 +25,11 @@ class Alternative extends Simple
      *
      * @param Filesystem $filesystem
      * @param \Magento\Framework\View\Design\Fallback\RulePool $rulePool
-     * @param \Magento\Framework\Component\ComponentRegistrarInterface $componentRegistrar
      * @param array $alternativeExtensions
      */
     public function __construct(
         Filesystem $filesystem,
         \Magento\Framework\View\Design\Fallback\RulePool $rulePool,
-        \Magento\Framework\Component\ComponentRegistrarInterface $componentRegistrar,
         array $alternativeExtensions
     ) {
         foreach ($alternativeExtensions as $extension => $newExtensions) {
@@ -43,7 +41,7 @@ class Alternative extends Simple
             }
         }
         $this->alternativeExtensions = $alternativeExtensions;
-        parent::__construct($filesystem, $rulePool, $componentRegistrar);
+        parent::__construct($filesystem, $rulePool);
     }
 
     /**

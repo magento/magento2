@@ -761,4 +761,9 @@
             <argument name="stateCommand" xsi:type="object">Magento\Sales\Model\Order\Payment\State\RegisterCaptureNotificationCommand</argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Model\Resource\Order\Tax\Item">
+        <arguments>
+            <argument name="connectionName" xsi:type="string">sales</argument>
+        </arguments>
+    </type>
 </config>

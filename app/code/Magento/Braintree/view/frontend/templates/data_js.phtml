@@ -21,7 +21,7 @@ $serializedFormData = $this->helper('Magento\Framework\Json\Helper\Data')->jsonE
 <script type="text/x-magento-init">
     {
         "body": {
-             "braintreeDataJs": <?php echo $serializedFormData ?>
+             "braintreeDataJs": <?php /* @escapeNotVerified */ echo $serializedFormData ?>
         }
     }
 </script>

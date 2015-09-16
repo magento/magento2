@@ -17,7 +17,7 @@
                 <div class="insert-actions">
                     <?php echo $block->getButtonsHtml() ?>
                 </div>
-                <div class="title"><?php echo $block->getHeaderText() ?></div>
+                <div class="title"><?php /* @escapeNotVerified */ echo $block->getHeaderText() ?></div>
             </div>
         </div>
         <div id="contents-uploader"><?php echo $block->getChildHtml('wysiwyg_images.uploader') ?></div>

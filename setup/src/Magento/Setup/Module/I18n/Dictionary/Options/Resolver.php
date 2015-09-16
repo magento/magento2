@@ -64,23 +64,30 @@ class Resolver implements ResolverInterface
                         $moduleDirs[] = $moduleDir . '/';
                     }
                 }
+
+                $themeDirs = [];
+                foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
+                    if (strstr($themeDir, $this->directory)) {
+                        $themeDirs[] = $themeDir . '/';
+                    }
+                }
                 $this->options = [
                     [
                         'type' => 'php',
-                        'paths' => array_merge($moduleDirs, [$this->directory . '/app/design/']),
+                        'paths' => array_merge($moduleDirs, $themeDirs),
                         'fileMask' => '/\.(php|phtml)$/',
                     ],
                     [
                         'type' => 'html',
-                        'paths' => array_merge($moduleDirs, [$this->directory . '/app/design/']),
+                        'paths' => array_merge($moduleDirs, $themeDirs),
                         'fileMask' => '/\.html$/',
                     ],
                     [
                         'type' => 'js',
                         'paths' => array_merge(
                             $moduleDirs,
+                            $themeDirs,
                             [
-                                $this->directory . '/app/design/',
                                 $this->directory . '/lib/web/mage/',
                                 $this->directory . '/lib/web/varien/',
                             ]
@@ -89,7 +96,7 @@ class Resolver implements ResolverInterface
                     ],
                     [
                         'type' => 'xml',
-                        'paths' => array_merge($moduleDirs, [$this->directory . '/app/design/']),
+                        'paths' => array_merge($moduleDirs, $themeDirs),
                         'fileMask' => '/\.xml$/'
                     ],
                 ];

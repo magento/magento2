@@ -29,11 +29,6 @@ class AlternativeTest extends \PHPUnit_Framework_TestCase
      */
     private $object;
 
-    /**
-     * @var \Magento\Framework\Component\ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $componentRegistrar;
-
     protected function setUp()
     {
         $this->directory = $this->getMock('\Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
@@ -53,10 +48,7 @@ class AlternativeTest extends \PHPUnit_Framework_TestCase
             ->method('getRule')
             ->with('type')
             ->will($this->returnValue($this->rule));
-        $this->componentRegistrar = $this->getMockForAbstractClass(
-            '\Magento\Framework\Component\ComponentRegistrarInterface'
-        );
-        $this->object = new Alternative($filesystem, $rulePool, $this->componentRegistrar, ['css' => ['less']]);
+        $this->object = new Alternative($filesystem, $rulePool, ['css' => ['less']]);
     }
 
     /**
@@ -71,7 +63,7 @@ class AlternativeTest extends \PHPUnit_Framework_TestCase
 
         $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $rulePool = $this->getMock('Magento\Framework\View\Design\Fallback\RulePool', [], [], '', false);
-        new Alternative($filesystem, $rulePool, $this->componentRegistrar, $alternativeExtensions);
+        new Alternative($filesystem, $rulePool, $alternativeExtensions);
     }
 
     /**

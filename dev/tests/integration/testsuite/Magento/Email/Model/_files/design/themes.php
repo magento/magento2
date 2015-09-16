@@ -37,4 +37,4 @@ $objectManager->configure([
     ],
 ]);
 
-$registration->register(implode('/', ['*', '*', '*', 'theme.xml']));
+$registration->register();

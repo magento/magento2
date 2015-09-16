@@ -6,18 +6,23 @@
 
 namespace Magento\Test\Integrity\App\Language;
 
+use DOMDocument;
+use Magento\Framework\Component\ComponentRegistrar;
+
 class Package extends \PHPUnit_Framework_TestCase
 {
     /**
      * Read all lamguage.xml files and figure out the vendor and language code according from the file structure
      *
-     * @param string $rootDir
      * @return array
      */
-    public static function readDeclarationFiles($rootDir)
+    public static function readDeclarationFiles()
     {
         $result = [];
-        foreach (glob("{$rootDir}/app/i18n/*/*/language.xml") as $file) {
+        $componentRegistrar = new ComponentRegistrar();
+        $languagePaths = $componentRegistrar->getPaths(ComponentRegistrar::LANGUAGE);
+        foreach ($languagePaths as $languagePath) {
+            $file = $languagePath . "/language.xml";
             preg_match('/.+\/(.*)\/(.*)\/language.xml$/', $file, $matches);
             $matches[0] = $file;
             $result[] = $matches;

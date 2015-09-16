@@ -16,7 +16,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_schemaFile = BP . '/app/code/Magento/Catalog/etc/catalog_attributes.xsd';
+        $this->_schemaFile = realpath(__DIR__ . '/../../../../../etc/catalog_attributes.xsd');
     }
 
     /**

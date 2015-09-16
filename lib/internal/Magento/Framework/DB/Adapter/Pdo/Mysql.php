@@ -404,15 +404,15 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     protected function _checkDdlTransaction($sql)
     {
-        if (is_string($sql) && $this->getTransactionLevel() > 0) {
+        if ($this->getTransactionLevel() > 0) {
+            $sql = ltrim(preg_replace('/\s+/', ' ', $sql));
             $sqlMessage = explode(' ', $sql, 3);
-            $startSql = strtolower(substr(ltrim($sqlMessage[0]), 0, 3));
+            $startSql = strtolower(substr($sqlMessage[0], 0, 3));
             if (in_array($startSql, $this->_ddlRoutines) && strcasecmp($sqlMessage[1], 'temporary') !== 0) {
                 trigger_error(AdapterInterface::ERROR_DDL_MESSAGE, E_USER_ERROR);
             }
         }
     }
-
 
     /**
      * Special handling for PDO query().
@@ -1826,7 +1826,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 $field = $this->quoteIdentifier($v);
             }
 
-            if ($field && $value) {
+            if ($field && is_string($value) && $value !== '') {
                 $updateFields[] = sprintf('%s = %s', $field, $value);
             }
         }
@@ -2112,42 +2112,56 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     protected function _getIndexesDefinition(Table $table)
     {
         $definition = [];
-        $indexes    = $table->getIndexes();
-        if (!empty($indexes)) {
-            foreach ($indexes as $indexData) {
-                if (!empty($indexData['TYPE'])) {
-                    switch ($indexData['TYPE']) {
-                        case 'primary':
-                            $indexType = 'PRIMARY KEY';
-                            unset($indexData['INDEX_NAME']);
-                            break;
-                        default:
-                            $indexType = strtoupper($indexData['TYPE']);
-                            break;
-                    }
-                } else {
-                    $indexType = 'KEY';
+        $indexes = $table->getIndexes();
+        foreach ($indexes as $indexData) {
+            if (!empty($indexData['TYPE'])) {
+                //Skipping not supported fulltext indexes for NDB
+                if (($indexData['TYPE'] == AdapterInterface::INDEX_TYPE_FULLTEXT) && $this->isNdb($table)) {
+                    continue;
                 }
-
-                $columns = [];
-                foreach ($indexData['COLUMNS'] as $columnData) {
-                    $column = $this->quoteIdentifier($columnData['NAME']);
-                    if (!empty($columnData['SIZE'])) {
-                        $column .= sprintf('(%d)', $columnData['SIZE']);
-                    }
-                    $columns[] = $column;
+                switch ($indexData['TYPE']) {
+                    case AdapterInterface::INDEX_TYPE_PRIMARY:
+                        $indexType = 'PRIMARY KEY';
+                        unset($indexData['INDEX_NAME']);
+                        break;
+                    default:
+                        $indexType = strtoupper($indexData['TYPE']);
+                        break;
                 }
-                $indexName = isset($indexData['INDEX_NAME']) ? $this->quoteIdentifier($indexData['INDEX_NAME']) : '';
-                $definition[] = sprintf(
-                    '  %s %s (%s)',
-                    $indexType,
-                    $indexName,
-                    implode(', ', $columns)
-                );
+            } else {
+                $indexType = 'KEY';
             }
+
+            $columns = [];
+            foreach ($indexData['COLUMNS'] as $columnData) {
+                $column = $this->quoteIdentifier($columnData['NAME']);
+                if (!empty($columnData['SIZE'])) {
+                    $column .= sprintf('(%d)', $columnData['SIZE']);
+                }
+                $columns[] = $column;
+            }
+            $indexName = isset($indexData['INDEX_NAME']) ? $this->quoteIdentifier($indexData['INDEX_NAME']) : '';
+            $definition[] = sprintf(
+                '  %s %s (%s)',
+                $indexType,
+                $indexName,
+                implode(', ', $columns)
+            );
         }
 
         return $definition;
+    }
+
+    /**
+     * Check if NDB is used for table
+     *
+     * @param Table $table
+     * @return bool
+     */
+    protected function isNdb(Table $table)
+    {
+        $engineType = strtolower($table->getOption('type'));
+        return $engineType == 'ndb' || $engineType == 'ndbcluster';
     }
 
     /**

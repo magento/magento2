@@ -72,11 +72,11 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $this->_tmpDir = realpath(__DIR__) . '/tmp';
         $this->_generationDir = $this->_tmpDir . '/generation';
         if (!file_exists($this->_generationDir)) {
-            mkdir($this->_generationDir, 0777, true);
+            mkdir($this->_generationDir, 0770, true);
         }
         $this->_compilationDir = $this->_tmpDir . '/di';
         if (!file_exists($this->_compilationDir)) {
-            mkdir($this->_compilationDir, 0777, true);
+            mkdir($this->_compilationDir, 0770, true);
         }
 
         $this->_command = 'php ' . $basePath . '/bin/magento setup:di:compile-multi-tenant --generation=%s --di=%s';
@@ -222,7 +222,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             $file = str_replace('/', '\\', $file);
             $filePath = preg_replace($patterns, $replacements, $file);
             $className = substr($filePath, 0, -4);
-            if (class_exists($className)) {
+            if (class_exists($className, false)) {
                 $file = str_replace('\\', DIRECTORY_SEPARATOR, $file);
                 $classes[$file] = $className;
             }

@@ -4,9 +4,9 @@
     "require": {
         "php": "~5.5.0|~5.6.0",
         "magento/framework": "1.0.0-beta",
-        "magento/magento-composer-installer": "*",
         "magento/module-developer": "1.0.0-beta",
-        "magento/module-store": "1.0.0-beta"
+        "magento/module-store": "1.0.0-beta",
+        "magento/magento-composer-installer": "*"
     },
     "type": "magento2-module",
     "version": "1.0.0-beta",
@@ -15,6 +15,9 @@
         "AFL-3.0"
     ],
     "autoload": {
-        "files": [ "registration.php" ]
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "Magento\\Deploy\\": ""
+        }
     }
 }
