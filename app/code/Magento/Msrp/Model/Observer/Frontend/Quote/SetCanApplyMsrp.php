@@ -5,22 +5,39 @@
  */
 namespace Magento\Msrp\Model\Observer\Frontend\Quote;
 
-use Magento\Msrp\Model\Config;
-
 /**
  * Class SetCanApplyMsrp
  */
 class SetCanApplyMsrp
 {
-    /** @var Config */
+    /**
+     * @var \Magento\Msrp\Model\Config
+     */
     protected $config;
 
     /**
-     * @param Config $config
+     * @var \Magento\Msrp\Model\Quote\Address\CanApplyMsrp
      */
-    public function __construct(Config $config)
-    {
+    protected $canApplyMsrp;
+
+    /**
+     * @var \Magento\Msrp\Model\Quote\Msrp
+     */
+    protected $msrp;
+
+    /**
+     * @param \Magento\Msrp\Model\Config $config
+     * @param \Magento\Msrp\Model\Quote\Address\CanApplyMsrp $canApplyMsrp
+     * @param \Magento\Msrp\Model\Quote\Msrp $msrp
+     */
+    public function __construct(
+        \Magento\Msrp\Model\Config $config,
+        \Magento\Msrp\Model\Quote\Address\CanApplyMsrp $canApplyMsrp,
+        \Magento\Msrp\Model\Quote\Msrp $msrp
+    ) {
         $this->config = $config;
+        $this->canApplyMsrp = $canApplyMsrp;
+        $this->msrp = $msrp;
     }
 
     /**
@@ -37,13 +54,12 @@ class SetCanApplyMsrp
         $canApplyMsrp = false;
         if ($this->config->isEnabled()) {
             foreach ($quote->getAllAddresses() as $address) {
-                if ($address->getCanApplyMsrp()) {
+                if ($this->canApplyMsrp->isCanApplyMsrp($address)) {
                     $canApplyMsrp = true;
                     break;
                 }
             }
         }
-
-        $quote->setCanApplyMsrp($canApplyMsrp);
+        $this->msrp->setCanApplyMsrp($quote->getId(), $canApplyMsrp);
     }
 }
