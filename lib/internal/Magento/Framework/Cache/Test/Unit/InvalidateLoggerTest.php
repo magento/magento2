@@ -66,7 +66,7 @@ class InvalidateLoggerTest extends \PHPUnit_Framework_TestCase
 
     public function testMakeParams()
     {
-        $expected = ['method' => $this->method, 'url' => $this->url, 'invalidateInfo' => $this->params];;
+        $expected = ['method' => $this->method, 'url' => $this->url, 'invalidateInfo' => $this->params];
         $method = new \ReflectionMethod($this->invalidateLogger, 'makeParams');
         $method->setAccessible(true);
         $this->assertEquals(
