@@ -184,6 +184,15 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
                 $customerModel->setPasswordHash($passwordHash);
             }
         }
+
+        // If customer email was changed, reset RpToken info
+        if ($prevCustomerData
+            && $prevCustomerData->getEmail() !== $customerModel->getEmail()
+        ) {
+            $customerModel->setRpToken(null);
+            $customerModel->setRpTokenCreatedAt(null);
+        }
+
         $this->customerResourceModel->save($customerModel);
         $this->customerRegistry->push($customerModel);
         $customerId = $customerModel->getId();

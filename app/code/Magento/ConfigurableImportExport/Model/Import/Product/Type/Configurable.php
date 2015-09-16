@@ -5,6 +5,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\ConfigurableImportExport\Model\Import\Product\Type;
 
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
@@ -26,6 +29,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
     const ERROR_INVALID_WEBSITE = 'invalidSuperAttrWebsite';
 
+    const ERROR_DUPLICATED_VARIATIONS = 'duplicatedVariations';
+
     /**
      * Validation failure message template definitions
      *
@@ -35,6 +40,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         self::ERROR_ATTRIBUTE_CODE_IS_NOT_SUPER => 'Attribute with this code is not super',
         self::ERROR_INVALID_OPTION_VALUE => 'Invalid option value',
         self::ERROR_INVALID_WEBSITE => 'Invalid website code for super attribute',
+        self::ERROR_DUPLICATED_VARIATIONS => 'SKU %s contains duplicated variations',
     ];
 
     /**
@@ -613,7 +619,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             if ($this->_getSuperAttributeId($productId, $attrParams['id'])) {
                 $productSuperAttrId = $this->_getSuperAttributeId($productId, $attrParams['id']);
             } elseif (isset($this->_superAttributesData['attributes'][$productId][$attrParams['id']])) {
-                $productSuperAttrId = $this->_superAttributesData['attributes'][$productId][$attrParams['id']]['product_super_attribute_id'];
+                $attributes = $this->_superAttributesData['attributes'];
+                $productSuperAttrId = $attributes[$productId][$attrParams['id']]['product_super_attribute_id'];
                 $this->_collectSuperDataLabels($data, $productSuperAttrId, $productId, $variationLabels);
             } else {
                 $productSuperAttrId = $this->_getNextAttrId();
@@ -780,13 +787,21 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     {
         $error = false;
         $dataWithExtraVirtualRows = $this->_parseVariations($rowData);
+        $skus = [];
         if (!empty($dataWithExtraVirtualRows)) {
             array_unshift($dataWithExtraVirtualRows, $rowData);
         } else {
             $dataWithExtraVirtualRows[] = $rowData;
         }
-        foreach ($dataWithExtraVirtualRows as $data) {
-            $error |= !parent::isRowValid($data, $rowNum, $isNewProduct);
+        foreach ($dataWithExtraVirtualRows as $option) {
+            if (isset($option['_super_products_sku'])) {
+                if (in_array($option['_super_products_sku'], $skus)) {
+                    $error = true;
+                    $this->_entityModel->addRowError(sprintf($this->_messageTemplates[self::ERROR_DUPLICATED_VARIATIONS], $option['_super_products_sku']), $rowNum);
+                }
+                $skus[] = $option['_super_products_sku'];
+            }
+            $error |= !parent::isRowValid($option, $rowNum, $isNewProduct);
         }
         return !$error;
     }
