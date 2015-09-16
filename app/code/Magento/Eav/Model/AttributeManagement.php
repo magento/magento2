@@ -55,6 +55,7 @@ class AttributeManagement implements \Magento\Eav\Api\AttributeManagementInterfa
      * @param \Magento\Eav\Api\AttributeGroupRepositoryInterface $groupRepository
      * @param \Magento\Eav\Api\AttributeRepositoryInterface $attributeRepository
      * @param Resource\Entity\Attribute $attributeResource
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Eav\Api\AttributeSetRepositoryInterface $setRepository,
