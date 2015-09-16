@@ -25,6 +25,7 @@ abstract class AbstractEntity extends \Magento\Eav\Model\Entity\AbstractEntity
      * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot
      * @param \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
@@ -110,6 +111,7 @@ abstract class AbstractEntity extends \Magento\Eav\Model\Entity\AbstractEntity
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return bool
+     * @codeCoverageIgnore
      */
     protected function isModified(\Magento\Framework\Model\AbstractModel $object)
     {

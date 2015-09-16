@@ -39,6 +39,7 @@ class Fieldset extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -56,6 +57,7 @@ class Fieldset extends \Magento\Framework\Model\AbstractModel
      * Initialize resource model
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -66,6 +68,7 @@ class Fieldset extends \Magento\Framework\Model\AbstractModel
      * Retrieve resource instance wrapper
      *
      * @return \Magento\Eav\Model\Resource\Form\Fieldset
+     * @codeCoverageIgnore
      */
     protected function _getResource()
     {
@@ -76,6 +79,7 @@ class Fieldset extends \Magento\Framework\Model\AbstractModel
      * Retrieve resource collection instance wrapper
      *
      * @return \Magento\Eav\Model\Resource\Form\Fieldset\Collection
+     * @codeCoverageIgnore
      */
     public function getCollection()
     {
@@ -119,6 +123,7 @@ class Fieldset extends \Magento\Framework\Model\AbstractModel
      *
      * @param array $labels
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setLabels(array $labels)
     {
