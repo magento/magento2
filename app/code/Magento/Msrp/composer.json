@@ -10,7 +10,6 @@
         "magento/module-eav": "1.0.0-beta",
         "magento/module-grouped-product": "1.0.0-beta",
         "magento/module-tax": "1.0.0-beta",
-        "magento/module-quote": "1.0.0-beta",
         "magento/framework": "1.0.0-beta",
         "magento/magento-composer-installer": "*"
     },
