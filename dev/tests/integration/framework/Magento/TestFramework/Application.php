@@ -6,7 +6,6 @@
 namespace Magento\TestFramework;
 
 use Magento\Framework\Autoload\AutoloaderInterface;
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
