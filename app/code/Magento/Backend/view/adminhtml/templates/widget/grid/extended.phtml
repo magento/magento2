@@ -263,7 +263,7 @@ $numColumns = sizeof($block->getColumns());
         registry.get('<?php /* @escapeNotVerified */ echo $block->getDependencyJsObject() ?>', function (<?php /* @escapeNotVerified */ echo $block->getDependencyJsObject() ?>) {
     <?php endif; ?>
 
-    <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?> = new varienGrid(<?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getId()) ?>, '<?php /* @escapeNotVerified */ echo $block->getGridUrl() ?>', '<?php /* @escapeNotVerified */ echo $block->getVarNamePage() ?>', '<?php /* @escapeNotVerified */ echo $block->getVarNameSort() ?>', '<?php /* @escapeNotVerified */ echo $block->getVarNameDir() ?>', '<?php /* @escapeNotVerified */ echo $block->getVarNameFilter() ?>');
+    <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?> = new varienGrid(<?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getId()) ?>, '<?php /* @escapeNotVerified */ echo $block->getGridUrl() ?>', '<?php /* @escapeNotVerified */ echo $block->getVarNamePage() ?>', '<?php /* @escapeNotVerified */ echo $block->getVarNameSort() ?>', '<?php /* @escapeNotVerified */ echo $block->getVarNameDir() ?>', '<?php /* @escapeNotVerified */ echo $block->getVarNameFilter() ?>');
     <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.useAjax = '<?php /* @escapeNotVerified */ echo $block->getUseAjax() ?>';
     <?php if ($block->getRowClickCallback()): ?>
     <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.rowClickCallback = <?php /* @escapeNotVerified */ echo $block->getRowClickCallback() ?>;
