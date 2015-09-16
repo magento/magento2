@@ -49,8 +49,11 @@ class PathProcessor
         $pathParts = $this->stripPathBeforeStorecode($pathInfo);
         $storeCode = $pathParts[0];
         $stores = $this->storeManager->getStores(false, true);
-        if (isset($stores[$storeCode])) {
+        if (isset($stores[$storeCode]) || $storeCode === 'all') {
             $this->storeManager->setCurrentStore($storeCode);
+            $path = '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
+        } else if ($storeCode === 'all') {
+            $this->storeManager->setCurrentStore(\Magento\Store\Model\Store::ADMIN_CODE);
             $path = '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
         } else {
             $this->storeManager->setCurrentStore(\Magento\Store\Model\Store::DEFAULT_CODE);
