@@ -20,7 +20,7 @@
                 "mixins":["magnifier/magnify"],
                 "magnifierOpts": {
                     "enabled": <?php /* @escapeNotVerified */ echo $block->getVar("magnifier:enabled"); ?>,
-                    "eventType": "<?php /* @escapeNotVerified */ echo $block->getVar("magnifier:action"); ?>",
+                    "eventType": "<?php /* @escapeNotVerified */ echo $block->getVar("magnifier:eventType"); ?>",
                     "width": "<?php /* @escapeNotVerified */ echo $block->getVar("magnifier:width"); ?>",
                     "height": "<?php /* @escapeNotVerified */ echo $block->getVar("magnifier:height"); ?>",
                     "top": "<?php /* @escapeNotVerified */ echo $block->getVar("magnifier:top"); ?>",
@@ -28,11 +28,11 @@
                 },
                 "data": <?php /* @escapeNotVerified */ echo $block->getGalleryImagesJson(); ?>,
                 "options": {
-                    "nav": "<?php /* @escapeNotVerified */ echo $block->getVar("gallery:navigation"); ?>",
+                    "nav": "<?php /* @escapeNotVerified */ echo $block->getVar("gallery:nav"); ?>",
                     "loop": <?php /* @escapeNotVerified */ echo $block->getVar("gallery:loop"); ?>,
                     "keyboard": <?php /* @escapeNotVerified */ echo $block->getVar("gallery:keyboard"); ?>,
                     "arrows": <?php /* @escapeNotVerified */ echo $block->getVar("gallery:arrows"); ?>,
-                    "showCaption": <?php /* @escapeNotVerified */ echo $block->getVar("gallery:show_caption"); ?>,
+                    "showCaption": <?php /* @escapeNotVerified */ echo $block->getVar("gallery:showCaption"); ?>,
                     "width": <?php /* @escapeNotVerified */ echo $block->getImageAttribute('product_page_image_medium', 'width'); ?>,
                     "thumbwidth": <?php /* @escapeNotVerified */ echo $block->getImageAttribute('product_page_image_small', 'width'); ?>,
                     "thumbheight": <?php /* @escapeNotVerified */ echo $block->getImageAttribute('product_page_image_small', 'height')
