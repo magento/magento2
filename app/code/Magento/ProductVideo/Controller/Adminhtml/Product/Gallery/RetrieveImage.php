@@ -106,7 +106,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
         $result['error'] = 0;
         $result['size'] = filesize($this->appendAbsoluteFileSystemPath($fileName));
         $result['url'] = $this->mediaConfig->getTmpMediaUrl($tmpFileName);
-        $result['file'] = $this->generateFileNameWithPath($tmpFileName);
+        $result['file'] = $tmpFileName;
         return $result;
     }
 
