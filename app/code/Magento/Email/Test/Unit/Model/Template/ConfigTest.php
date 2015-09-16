@@ -83,6 +83,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->themePackages->expects($this->any())
+            ->method('getThemes')
+            ->will($this->returnValue([]));
         $this->readDirFactory = $this->getMock('Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
         $this->model = new Config(
             $this->_dataStorage,
@@ -95,10 +98,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAvailableTemplates()
     {
-        $this->themePackages->expects($this->once())
-            ->method('getThemes')
-            ->will($this->returnValue([]));
-
         $expectedTemplates = require __DIR__ . '/Config/_files/email_templates_merged.php';
 
         foreach ($this->model->getAvailableTemplates() as $templateOptions) {
