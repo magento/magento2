@@ -82,5 +82,6 @@
     </type>
     <preference for="Magento\Quote\Api\Data\AddressAdditionalDataInterface" type="Magento\Quote\Model\AddressAdditionalData" />
     <preference for="Magento\Quote\Api\Data\TotalsAdditionalDataInterface" type="Magento\Quote\Model\Cart\TotalsAdditionalData" />
-    <preference for="\Magento\Quote\Model\Quote\Address\CustomAttributeListInterface" type="\Magento\Quote\Model\Quote\Address\CustomAttributeList" />
+    <preference for="Magento\Quote\Model\Quote\Address\CustomAttributeListInterface" type="Magento\Quote\Model\Quote\Address\CustomAttributeList" />
+    <preference for="Magento\Quote\Model\Quote\Address\FreeShippingInterface" type="Magento\Quote\Model\Quote\Address\FreeShipping" />
 </config>
