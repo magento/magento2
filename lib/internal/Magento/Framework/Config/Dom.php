@@ -268,8 +268,7 @@ class Dom
         $errorFormat = self::ERROR_FORMAT_DEFAULT
     ) {
         if (!self::$urnResolver) {
-            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-            self::$urnResolver = $objectManager->get('Magento\Framework\Config\Dom\UrnResolver');
+            self::$urnResolver = new UrnResolver();
         }
         $schema = self::$urnResolver->getRealPath($schema);
         libxml_use_internal_errors(true);
