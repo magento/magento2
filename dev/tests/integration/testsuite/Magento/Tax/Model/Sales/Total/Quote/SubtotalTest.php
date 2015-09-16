@@ -103,6 +103,7 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         $shipping = $this->objectManager->create('Magento\Quote\Model\Shipping');
         $shipping->setAddress($address);
         $shippingAssignment->setShipping($shipping);
+        $shippingAssignment->setItems($address->getAllItems());
         /** @var  \Magento\Quote\Model\Quote\Address\Total $total */
         $total = $this->objectManager->create('Magento\Quote\Model\Quote\Address\Total');
         /** @var \Magento\Quote\Model\Quote\Address\Total\Subtotal $addressSubtotalCollector */
@@ -112,10 +113,10 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Tax\Model\Sales\Total\Quote\Subtotal $subtotalCollector */
         $subtotalCollector = $this->objectManager->create('Magento\Tax\Model\Sales\Total\Quote\Subtotal');
         $subtotalCollector->collect($quote, $shippingAssignment, $total);
-
-        $this->assertEquals($expected['subtotal'], $address->getSubtotal());
-        $this->assertEquals($expected['subtotal'] + $expected['tax_amount'], $address->getSubtotalInclTax());
-        $this->assertEquals($expected['discount_amount'], $address->getDiscountAmount());
+        $totals = $address->getTotals();
+        $this->assertEquals($expected['subtotal'], $totals['subtotal']);
+        $this->assertEquals($expected['subtotal'] + $expected['tax_amount'], $totals['subtotal_incl_tax']);
+        $this->assertEquals($expected['discount_amount'], $totals['discount_amount']);
         $items = $address->getAllItems();
         /** @var \Magento\Quote\Model\Quote\Address\Item $item */
         $item = $items[0];
@@ -224,6 +225,7 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         $shipping = $this->objectManager->create('Magento\Quote\Model\Shipping');
         $shipping->setAddress($address);
         $shippingAssignment->setShipping($shipping);
+        $shippingAssignment->setItems($quote->getAllItems());
         /** @var  \Magento\Quote\Model\Quote\Address\Total $total */
         $total = $this->objectManager->create('Magento\Quote\Model\Quote\Address\Total');
         /** @var \Magento\Quote\Model\Quote\Address\Total\Subtotal $addressSubtotalCollector */
@@ -234,9 +236,10 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         $subtotalCollector = $this->objectManager->create('Magento\Tax\Model\Sales\Total\Quote\Subtotal');
         $subtotalCollector->collect($quote, $shippingAssignment, $total);
 
-        $this->assertEquals($expected['subtotal'], $address->getSubtotal());
-        $this->assertEquals($expected['subtotal'] + $expected['tax_amount'], $address->getSubtotalInclTax());
-        $this->assertEquals($expected['discount_amount'], $address->getDiscountAmount());
+        $totals = $address->getTotals();
+        $this->assertEquals($expected['subtotal'], $totals['subtotal']);
+        $this->assertEquals($expected['subtotal'] + $expected['tax_amount'], $totals['subtotal_incl_tax']);
+        $this->assertEquals($expected['discount_amount'], $totals['discount_amount']);
         $items = $address->getAllItems();
         /** @var \Magento\Quote\Model\Quote\Address\Item $item */
         $item = $items[0];
