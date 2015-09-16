@@ -7,6 +7,5 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:library:framework:App/etc/resources.xsd">
     <resource name="sales_setup" extends="core_setup" />
-    <resource name="sales_read" extends="sales_setup" />
-    <resource name="sales_write" extends="sales_setup" />
+    <resource name="sales" extends="core" />
 </config>

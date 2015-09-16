@@ -12,13 +12,13 @@
 ?>
 <div id="details-reload" class="table-wrapper order-items cart">
     <table id="details-table" class="cart items data table table-paypal-review-items">
-        <caption class="table-caption"><?php echo __('Items in Your Shopping Cart') ?></caption>
+        <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Items in Your Shopping Cart') ?></caption>
         <thead>
         <tr>
-            <th class="col name" scope="col"><?php echo __('Item') ?></th>
-            <th class="col price" scope="col"><?php echo __('Price') ?></th>
-            <th class="col qty" scope="col"><?php echo __('Qty') ?></th>
-            <th class="col subtotal" scope="col"><?php echo __('Subtotal') ?></th>
+            <th class="col name" scope="col"><?php /* @escapeNotVerified */ echo __('Item') ?></th>
+            <th class="col price" scope="col"><?php /* @escapeNotVerified */ echo __('Price') ?></th>
+            <th class="col qty" scope="col"><?php /* @escapeNotVerified */ echo __('Qty') ?></th>
+            <th class="col subtotal" scope="col"><?php /* @escapeNotVerified */ echo __('Subtotal') ?></th>
         </tr>
         </thead>
         <?php foreach ($block->getItems() as $_item): ?>

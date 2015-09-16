@@ -9,4 +9,4 @@
     ->load(\Magento\Framework\App\Area::PART_CONFIG);
 $registration = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create('Magento\Theme\Model\Theme\Registration');
-$registration->register('*/*/theme.xml');
+$registration->register();

@@ -26,8 +26,23 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
                 'config' => $testArray,
             ]
         );
-        $weeHelper=$this->getMock('Magento\Weee\Helper\Data', [], [], '', false);
-        $weeHelper->expects($this->any())
+
+        $weeeObject1 = new \Magento\Framework\DataObject(
+            [
+                'code' => 'fpt1',
+                'amount' => '15.0000',
+            ]
+        );
+
+        $weeeObject2 = new \Magento\Framework\DataObject(
+            [
+                'code' => 'fpt2',
+                'amount' => '16.0000',
+            ]
+        );
+
+        $weeeHelper=$this->getMock('Magento\Weee\Helper\Data', [], [], '', false);
+        $weeeHelper->expects($this->any())
             ->method('isEnabled')
             ->will($this->returnValue(true));
 
@@ -54,18 +69,27 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->with('current_product')
             ->will($this->returnValue($product));
 
+        $weeeHelper->expects($this->any())
+            ->method('getWeeeAttributesForBundle')
+            ->will($this->returnValue([
+                1=> ['fpt1' => $weeeObject1],
+                2 =>[
+                    'fpt1'=>$weeeObject1,
+                    'fpt2'=> $weeeObject2
+                ]
+            ]));
 
         $objectManager = new ObjectManager($this);
-         $weeeObserverObject = $objectManager->getObject(
-             'Magento\Weee\Model\Observer',
-             [
-                 'weeeData' => $weeHelper,
-                 'registry' => $registry,
-             ]
-         );
-         $weeeObserverObject->getPriceConfiguration($observerObject);
+        $weeeObserverObject = $objectManager->getObject(
+            'Magento\Weee\Model\Observer',
+            [
+                'weeeData' => $weeeHelper,
+                'registry' => $registry,
+            ]
+        );
+        $weeeObserverObject->getPriceConfiguration($observerObject);
 
-         $this->assertEquals($expectedArray, $configObj->getData('config'));
+        $this->assertEquals($expectedArray, $configObj->getData('config'));
     }
 
     /**
@@ -117,7 +141,10 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
                                         'amount' => 33.50,
                                     ],
                                     'weeePrice' => [
-                                        'amount' => 31.50,
+                                        'amount' => 46.5,
+                                    ],
+                                    'weeePricefpt1' => [
+                                        'amount' => 15,
                                     ],
                                 ],
                         ],
@@ -132,7 +159,13 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
                                         'amount' => 333.50,
                                     ],
                                     'weeePrice' => [
-                                        'amount' => 331.50,
+                                        'amount' => 362.5,
+                                    ],
+                                    'weeePricefpt1' => [
+                                        'amount' => 15,
+                                    ],
+                                    'weeePricefpt2' => [
+                                        'amount' => 16,
                                     ],
                                 ],
                         ],
@@ -206,11 +239,11 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
      * Tests the methods that rely on the ScopeConfigInterface object to provide their return values
      * @dataProvider updateProductOptionsProvider
      * @param array $testArray
-     * @param bool $weeDisplay
-     * @param bool $weeEnabled
+     * @param bool $weeeDisplay
+     * @param bool $weeeEnabled
      * @param array $expectedArray
      */
-    public function testUpdateProductOptions($testArray, $weeDisplay, $weeEnabled, $expectedArray)
+    public function testUpdateProductOptions($testArray, $weeeDisplay, $weeeEnabled, $expectedArray)
     {
         $configObj = new \Magento\Framework\DataObject(
             [
@@ -218,25 +251,32 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $weeObject = new \Magento\Framework\DataObject(
+        $weeeObject1 = new \Magento\Framework\DataObject(
             [
-                'code' => 'fpt',
+                'code' => 'fpt1',
                 'amount' => '15.0000',
             ]
         );
 
-        $weeHelper=$this->getMock('Magento\Weee\Helper\Data', [], [], '', false);
-        $weeHelper->expects($this->any())
+        $weeeObject2 = new \Magento\Framework\DataObject(
+            [
+                'code' => 'fpt2',
+                'amount' => '15.0000',
+            ]
+        );
+
+        $weeeHelper=$this->getMock('Magento\Weee\Helper\Data', [], [], '', false);
+        $weeeHelper->expects($this->any())
             ->method('isEnabled')
-            ->will($this->returnValue($weeEnabled));
+            ->will($this->returnValue($weeeEnabled));
 
-        $weeHelper->expects($this->any())
+        $weeeHelper->expects($this->any())
             ->method('geDisplayExlDescIncl')
-            ->will($this->returnValue($weeDisplay));
+            ->will($this->returnValue($weeeDisplay));
 
-        $weeHelper->expects($this->any())
-            ->method('getWeeAttributesForBundle')
-            ->will($this->returnValue([$weeObject]));
+        $weeeHelper->expects($this->any())
+            ->method('getWeeeAttributesForBundle')
+            ->will($this->returnValue([['fpt1' => $weeeObject1], ['fpt1'=>$weeeObject1, 'fpt2'=>$weeeObject2]]));
 
         $responseObject=$this->getMock('Magento\Framework\Event\Observer', ['getResponseObject'], [], '', false);
         $responseObject->expects($this->any())
@@ -248,7 +288,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->method('getEvent')
             ->will($this->returnValue($responseObject));
 
-        $product=$this->getMock(
+        $product = $this->getMock(
             '\Magento\Bundle\Model\Product\Type',
             ['getTypeId', 'getStoreId'],
             [],
@@ -274,7 +314,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $weeeObserverObject = $objectManager->getObject(
             'Magento\Weee\Model\Observer',
             [
-                'weeeData' => $weeHelper,
+                'weeeData' => $weeeHelper,
                 'registry' => $registry,
             ]
         );
@@ -296,8 +336,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
                     'optionTemplate' => '<%= data.label %><% if (data.basePrice.value) '
                         . '{ %> +<%= data.basePrice.formatted %><% } %>',
                 ],
-                'weeDisplay' =>  true,
-                'weeEnabled' =>  false,
+                'weeeDisplay' =>  true,
+                'weeeEnabled' =>  false,
                 'expectedArray' => [
                     'TOTAL_BASE_CALCULATION' => 'TOTAL_BASE_CALCULATION',
                     'optionTemplate' => '<%= data.label %><% if (data.basePrice.value) '
@@ -306,17 +346,18 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'testArray' => [
-                        'TOTAL_BASE_CALCULATION' => 'TOTAL_BASE_CALCULATION',
-                        'optionTemplate' => '<%= data.label %><% if (data.basePrice.value) '
-                . '{ %> +<%= data.basePrice.formatted %><% } %>',
+                    'TOTAL_BASE_CALCULATION' => 'TOTAL_BASE_CALCULATION',
+                    'optionTemplate' => '<%= data.label %><% if (data.basePrice.value) '
+                        . '{ %> +<%= data.basePrice.formatted %><% } %>',
                 ],
-                'weeDisplay' =>  false,
-                'weeEnabled' =>  true,
+                'weeeDisplay' =>  false,
+                'weeeEnabled' =>  true,
                 'expectedArray' => [
-                        'TOTAL_BASE_CALCULATION' => 'TOTAL_BASE_CALCULATION',
-                        'optionTemplate' => '<%= data.label %><% if (data.basePrice.value) '
-                . '{ %> +<%= data.basePrice.formatted %><% } %> <% if (data.weeePricefpt) '
-                . '{ %>  (:<%= data.weeePricefpt.formatted %>)<% } %>',
+                    'TOTAL_BASE_CALCULATION' => 'TOTAL_BASE_CALCULATION',
+                    'optionTemplate' => '<%= data.label %><% if (data.basePrice.value) '
+                        . '{ %> +<%= data.basePrice.formatted %><% } %> <% if (data.weeePricefpt1) '
+                        . '{ %>  (:<%= data.weeePricefpt1.formatted %>)<% } %>'
+                        . ' <% if (data.weeePricefpt2) { %>  (:<%= data.weeePricefpt2.formatted %>)<% } %>',
                 ],
             ],
             [
@@ -325,13 +366,14 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
                     'optionTemplate' => '<%= data.label %><% if (data.basePrice.value) '
                         . '{ %> +<%= data.basePrice.formatted %><% } %>',
                 ],
-                'weeDisplay' =>  true,
-                'weeEnabled' =>  true,
+                'weeeDisplay' =>  true,
+                'weeeEnabled' =>  true,
                 'expectedArray' => [
                     'TOTAL_BASE_CALCULATION' => 'TOTAL_BASE_CALCULATION',
                     'optionTemplate' => '<%= data.label %><% if (data.basePrice.value) '
-                        . '{ %> +<%= data.basePrice.formatted %><% } %> <% if (data.weeePricefpt) '
-                        . '{ %>  (:<%= data.weeePricefpt.formatted %>)<% } %> '
+                        . '{ %> +<%= data.basePrice.formatted %><% } %> <% if (data.weeePricefpt1) '
+                        . '{ %>  (:<%= data.weeePricefpt1.formatted %>)<% } %> '
+                        . '<% if (data.weeePricefpt2) { %>  (:<%= data.weeePricefpt2.formatted %>)<% } %> '
                         . '<% if (data.weeePrice) { %><%= data.weeePrice.formatted %><% } %>',
                 ],
             ],

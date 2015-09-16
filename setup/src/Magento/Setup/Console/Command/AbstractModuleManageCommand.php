@@ -82,7 +82,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
                     $output->writeln(
                         "<error>Unable to change status of modules because of the following constraints:</error>"
                     );
-                    $output->writeln('<error>' . implode("\n", $constraints) . '</error>');
+                    $output->writeln('<error>' . implode("</error>\n<error>", $constraints) . '</error>');
                     return;
                 }
             }

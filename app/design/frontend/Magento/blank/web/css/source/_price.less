@@ -38,7 +38,7 @@
     .price-including-tax,
     .price-excluding-tax {
         display: block;
-        .font-size(18);
+        .lib-font-size(18);
         line-height: 1;
         .price {
             font-weight: @font-weight__bold;
@@ -53,13 +53,13 @@
     .price-including-tax + .price-excluding-tax,
     .weee[data-label] {
         display: block;
-        .font-size(18);
+        .lib-font-size(18);
         &:before {
             content: attr(data-label) ": ";
-            .font-size(11);
+            .lib-font-size(11);
         }
         .price {
-            .font-size(11);
+            .lib-font-size(11);
         }
     }
 }

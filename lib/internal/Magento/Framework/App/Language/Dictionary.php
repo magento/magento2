@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\App\Language;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 
@@ -30,6 +29,13 @@ class Dictionary
     private $directoryReadFactory;
 
     /**
+     * Component Registrar
+     *
+     * @var ReadFactory
+     */
+    private $componentRegistrar;
+
+    /**
      * @var ConfigFactory
      */
     private $configFactory;
@@ -50,7 +56,7 @@ class Dictionary
         ConfigFactory $configFactory
     ) {
         $this->directoryReadFactory = $directoryReadFactory;
-        $this->paths = $componentRegistrar->getPaths(ComponentRegistrar::LANGUAGE);
+        $this->componentRegistrar = $componentRegistrar;
         $this->configFactory = $configFactory;
     }
 
@@ -66,19 +72,17 @@ class Dictionary
     public function getDictionary($languageCode)
     {
         $languages = [];
-        $declarations = [];
+        $this->paths = $this->componentRegistrar->getPaths(ComponentRegistrar::LANGUAGE);
         foreach ($this->paths as $path) {
             $directoryRead = $this->directoryReadFactory->create($path);
-            $declarations = array_merge($declarations, $directoryRead->search('*/*/language.xml'));
-        }
-
-        foreach ($declarations as $file) {
-            $directoryRead = $this->directoryReadFactory->create($file);
-            $xmlSource = $directoryRead->readFile($file);
-            $languageConfig = $this->configFactory->create(['source' => $xmlSource]);
-            $this->packList[$languageConfig->getVendor()][$languageConfig->getPackage()] = $languageConfig;
-            if ($languageConfig->getCode() === $languageCode) {
-                $languages[] = $languageConfig;
+            $languageFile = $directoryRead->search('language.xml')[0];
+            if (isset($languageFile)) {
+                $xmlSource = $directoryRead->readFile($languageFile);
+                $languageConfig = $this->configFactory->create(['source' => $xmlSource]);
+                $this->packList[$languageConfig->getVendor()][$languageConfig->getPackage()] = $languageConfig;
+                if ($languageConfig->getCode() === $languageCode) {
+                    $languages[] = $languageConfig;
+                }
             }
         }
 
@@ -164,16 +168,12 @@ class Dictionary
      */
     private function readPackCsv($vendor, $package)
     {
-        $files = [];
-        foreach ($this->paths as $path) {
-            $directoryRead = $this->directoryReadFactory->create($path);
-            $files = array_merge($files, $directoryRead->search("{$vendor}/{$package}/*.csv"));
-        }
-
+        $path = $this->componentRegistrar->getPath(ComponentRegistrar::LANGUAGE, strtolower($vendor . '_' . $package));
+        $directoryRead = $this->directoryReadFactory->create($path);
+        $foundCsvFiles = $directoryRead->search("*.csv");
         $result = [];
-        foreach ($files as $path) {
-            $directoryRead = $this->directoryReadFactory->create($path);
-            $file = $directoryRead->openFile($path);
+        foreach ($foundCsvFiles as $foundCsvFile) {
+            $file = $directoryRead->openFile($foundCsvFile);
             while (($row = $file->readCsv()) !== false) {
                 $result[$row[0]] = $row[1];
             }

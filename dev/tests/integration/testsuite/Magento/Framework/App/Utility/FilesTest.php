@@ -20,11 +20,11 @@ class FilesTest extends \PHPUnit_Framework_TestCase
     /** @var string */
     protected $toolsTests = '#dev/tools/Magento/Tools/[\\w]+/Test#';
 
-    /** @var string */
-    protected $frameworkTests = '#lib/internal/Magento/Framework/[\\w]+/Test#';
+    /** @var array */
+    protected $frameworkTests = [];
 
-    /** @var string */
-    protected $libTests = '#lib/internal/[\\w]+/[\\w]+/Test#';
+    /** @var array */
+    protected $libTests = [];
 
     /** @var string */
     protected $rootTestsDir = '#dev/tests/#';
@@ -34,10 +34,14 @@ class FilesTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->model = new Files(new ComponentRegistrar, BP);
         $componentRegistrar = new ComponentRegistrar();
+        $this->model = new Files($componentRegistrar, BP);
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
             $this->moduleTests[] = '#' . $moduleDir . '/Test#';
+        }
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryDir) {
+            $this->libTests[] = '#' . $libraryDir . '/Test#';
+            $this->frameworkTests[] = '#' . $libraryDir . '/[\\w]+/Test#';
         }
     }
 
@@ -69,8 +73,13 @@ class FilesTest extends \PHPUnit_Framework_TestCase
         foreach ($this->moduleTests as $moduleTest) {
             $classFiles = preg_grep($moduleTest, $classFiles, PREG_GREP_INVERT);
         }
-        $classFiles = preg_grep($this->libTests, $classFiles, PREG_GREP_INVERT);
-        $classFiles = preg_grep($this->frameworkTests, $classFiles, PREG_GREP_INVERT);
+        foreach ($this->libTests as $libraryTest) {
+            $classFiles = preg_grep($libraryTest, $classFiles, PREG_GREP_INVERT);
+        }
+        foreach ($this->frameworkTests as $frameworkTest) {
+            $classFiles = preg_grep($frameworkTest, $classFiles, PREG_GREP_INVERT);
+        }
+
         $classFiles = preg_grep($this->toolsTests, $classFiles, PREG_GREP_INVERT);
         $classFiles = preg_grep($this->rootTestsDir, $classFiles, PREG_GREP_INVERT);
         $classFiles = preg_grep($this->setupTestsDir, $classFiles, PREG_GREP_INVERT);
@@ -88,8 +97,12 @@ class FilesTest extends \PHPUnit_Framework_TestCase
         foreach ($this->moduleTests as $moduleTest) {
             $this->assertEmpty(preg_grep($moduleTest, $files));
         }
-        $this->assertEmpty(preg_grep($this->frameworkTests, $files));
-        $this->assertEmpty(preg_grep($this->libTests, $files));
+        foreach ($this->frameworkTests as $frameworkTest) {
+            $this->assertEmpty(preg_grep($frameworkTest, $files));
+        }
+        foreach ($this->libTests as $libTest) {
+            $this->assertEmpty(preg_grep($libTest, $files));
+        }
         $this->assertEmpty(preg_grep($this->toolsTests, $files));
     }
 }

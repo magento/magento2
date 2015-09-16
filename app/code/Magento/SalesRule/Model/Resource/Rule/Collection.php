@@ -104,12 +104,11 @@ class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCo
                     ['code']
                 );
 
-                $select->where(
-                    'main_table.coupon_type = ? ',
-                    \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON
-                );
-
                 $orWhereConditions = [
+                    $connection->quoteInto(
+                        'main_table.coupon_type = ? ',
+                        \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON
+                    ),
                     $connection->quoteInto(
                         '(main_table.coupon_type = ? AND rule_coupons.type = 0)',
                         \Magento\SalesRule\Model\Rule::COUPON_TYPE_AUTO
@@ -138,7 +137,7 @@ class Collection extends \Magento\Rule\Model\Resource\Rule\Collection\AbstractCo
                 $orWhereCondition = implode(' OR ', $orWhereConditions);
                 $andWhereCondition = implode(' AND ', $andWhereConditions);
 
-                $select->orWhere('(' . $orWhereCondition . ') AND ' . $andWhereCondition);
+                $select->where('(' . $orWhereCondition . ') AND ' . $andWhereCondition);
             } else {
                 $this->addFieldToFilter(
                     'main_table.coupon_type',

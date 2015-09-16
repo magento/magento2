@@ -5,46 +5,11 @@
  */
 namespace Magento\Framework\Config\Test\Unit;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-
 class ThemeTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
-     */
-    protected $objectManager;
-
-    /**
-     * @var \Magento\Framework\Filesystem | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $filesystemMock;
-
-    /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $dirReadMock;
-
-    public function setUp()
-    {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->filesystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->dirReadMock = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->filesystemMock->expects($this->any())
-            ->method('getDirectoryRead')
-            ->with(DirectoryList::THEMES)
-            ->willReturn($this->dirReadMock);
-    }
-
     public function testGetSchemaFile()
     {
-        /** @var \Magento\Framework\Config\Theme $config */
-        $config = $this->objectManager->getObject(
-            'Magento\Framework\Config\Theme'
-        );
+        $config = new \Magento\Framework\Config\Theme();
         $this->assertFileExists($config->getSchemaFile());
     }
 
@@ -56,12 +21,8 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     public function testDataGetter($themePath, $expected)
     {
         $expected = reset($expected);
-        /** @var \Magento\Framework\Config\Theme $config */
-        $config = $this->objectManager->getObject(
-            'Magento\Framework\Config\Theme',
-            [
-                'configContent' => file_get_contents(__DIR__ . '/_files/area/' . $themePath . '/theme.xml')
-            ]
+        $config = new \Magento\Framework\Config\Theme(
+            file_get_contents(__DIR__ . '/_files/area/' . $themePath . '/theme.xml')
         );
         $this->assertSame($expected['media'], $config->getMedia());
         $this->assertSame($expected['title'], $config->getThemeTitle());
