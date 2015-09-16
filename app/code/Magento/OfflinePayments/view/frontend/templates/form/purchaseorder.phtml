@@ -7,11 +7,11 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<fieldset class="fieldset items <?php echo $block->getMethodCode() ?>" id="payment_form_<?php echo $block->getMethodCode() ?>" style="display: none">
+<fieldset class="fieldset items <?php /* @escapeNotVerified */ echo $block->getMethodCode() ?>" id="payment_form_<?php /* @escapeNotVerified */ echo $block->getMethodCode() ?>" style="display: none">
     <div class="field number required">
-        <label for="po_number" class="label"><span><?php echo __('Purchase Order Number') ?></span></label>
+        <label for="po_number" class="label"><span><?php /* @escapeNotVerified */ echo __('Purchase Order Number') ?></span></label>
         <div class="control">
-            <input type="text" id="po_number" name="payment[po_number]" title="<?php echo __('Purchase Order Number') ?>" class="input-text required-entry" value="<?php echo $block->escapeHtml($block->getInfoData('po_number')) ?>" />
+            <input type="text" id="po_number" name="payment[po_number]" title="<?php /* @escapeNotVerified */ echo __('Purchase Order Number') ?>" class="input-text required-entry" value="<?php echo $block->escapeHtml($block->getInfoData('po_number')) ?>" />
         </div>
     </div>
 </fieldset>

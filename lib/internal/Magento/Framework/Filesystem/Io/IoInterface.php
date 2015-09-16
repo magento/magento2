@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Filesystem\Io;
 
+use Magento\Framework\Filesystem\DriverInterface;
+
 /**
  * Input/output client interface
  */
@@ -33,7 +35,7 @@ interface IoInterface
      * @param bool $recursive
      * @return bool
      */
-    public function mkdir($dir, $mode = 0777, $recursive = true);
+    public function mkdir($dir, $mode = DriverInterface::WRITEABLE_DIRECTORY_MODE, $recursive = true);
 
     /**
      * Delete a directory

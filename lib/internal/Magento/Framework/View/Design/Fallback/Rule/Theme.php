@@ -61,8 +61,7 @@ class Theme implements RuleInterface
         $theme = $params['theme'];
         unset($params['theme']);
         while ($theme) {
-            if ($theme->getThemePath()) {
-                $params['theme_path'] = $theme->getThemePath();
+            if ($theme->getFullPath()) {
                 $params['theme_dir'] = $this->componentRegistrar->getPath(
                     ComponentRegistrar::THEME,
                     $theme->getFullPath()

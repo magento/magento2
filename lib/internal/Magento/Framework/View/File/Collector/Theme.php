@@ -10,7 +10,6 @@ use Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\View\Design\ThemeInterface;
-use Magento\Framework\View\File\AbstractCollector;
 use Magento\Framework\View\File\CollectorInterface;
 use Magento\Framework\View\File\Factory as FileFactory;
 
@@ -50,6 +49,9 @@ class Theme implements CollectorInterface
     public function getFiles(ThemeInterface $theme, $filePath)
     {
         $themePath = $theme->getFullPath();
+        if (empty($themePath)) {
+            return [];
+        }
         $themeAbsolutePath = $this->componentRegistrar->getPath(ComponentRegistrar::THEME, $themePath);
         if (!$themeAbsolutePath) {
             throw new \UnexpectedValueException("Can't get files for theme '$themePath': no such theme registered");

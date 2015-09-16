@@ -8,7 +8,7 @@
 namespace Magento\Email\Model\Template;
 
 use Magento\Framework\Filesystem\Directory\ReadFactory;
-use Magento\Framework\Theme\PackageList;
+use Magento\Framework\View\Design\Theme\ThemePackageList;
 
 class Config implements \Magento\Framework\Mail\Template\ConfigInterface
 {
@@ -38,7 +38,7 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
     private $readDirFactory;
 
     /**
-     * @var PackageList
+     * @var ThemePackageList
      */
     private $themePackages;
 
@@ -46,14 +46,14 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
      * @param \Magento\Email\Model\Template\Config\Data $dataStorage
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
-     * @param PackageList $themePackages
+     * @param ThemePackageList $themePackages
      * @param ReadFactory $readDirFactory
      */
     public function __construct(
         \Magento\Email\Model\Template\Config\Data $dataStorage,
         \Magento\Framework\Module\Dir\Reader $moduleReader,
         \Magento\Framework\View\FileSystem $viewFileSystem,
-        PackageList $themePackages,
+        ThemePackageList $themePackages,
         ReadFactory $readDirFactory
     ) {
         $this->_dataStorage = $dataStorage;

@@ -451,17 +451,18 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
      */
     protected function removeSpecialCases($badClasses, $file, $contents, $namespacePath)
     {
-        $componentRegistrar = new ComponentRegistrar();
         foreach ($badClasses as $badClass) {
             // Remove valid usages of Magento modules from the list
             // for example: 'Magento_Sales::actions_edit'
             if (preg_match('/Magento_[A-Z0-9][a-z0-9]*/', $badClass)) {
                 unset($badClasses[array_search($badClass, $badClasses)]);
+                continue;
             }
 
             // Remove usage of key words such as "Array", "String", and "Boolean"
             if (in_array($badClass, self::$_keywordsBlacklist)) {
                 unset($badClasses[array_search($badClass, $badClasses)]);
+                continue;
             }
 
             $classParts = explode('/', $file);
@@ -469,54 +470,17 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
             // Remove usage of the class itself from the list
             if ($badClass . '.php' == $className) {
                 unset($badClasses[array_search($badClass, $badClasses)]);
+                continue;
             }
 
-            $namespaceParts = explode('/', $namespacePath, 3);
-            $moduleName = $namespaceParts[0] . '_' . $namespaceParts[1];
-            $moduleDir = $componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
-            if ($moduleDir) {
-                $fullPath = $moduleDir . '/' . $namespaceParts[2] . '/' . str_replace('\\', '/', $badClass) . '.php';
-                if (file_exists($fullPath)) {
-                    unset($badClasses[array_search($badClass, $badClasses)]);
-                    break;
-                }
-            } else {
-                // Remove usage of classes that do NOT using fully-qualified class names (possibly under same namespace)
-                $directories = [
-                    '/lib/internal/',
-                    '/dev/tools/',
-                    '/dev/tests/api-functional/framework/',
-                    '/dev/tests/functional/',
-                    '/dev/tests/integration/framework/',
-                    '/dev/tests/integration/framework/tests/unit/testsuite/',
-                    '/dev/tests/integration/testsuite/',
-                    '/dev/tests/integration/testsuite/Magento/Test/Integrity/',
-                    '/dev/tests/performance/framework/',
-                    '/dev/tests/static/framework/',
-                    '/dev/tests/static/testsuite/',
-                    '/setup/src/',
-                ];
-                // Full list of directories where there may be namespace classes
-                foreach ($directories as $directory) {
-                    $fullPath = \Magento\Framework\App\Utility\Files::init()->getPathToSource() .
-                        $directory .
-                        $namespacePath .
-                        '/' .
-                        str_replace(
-                            '\\',
-                            '/',
-                            $badClass
-                        ) . '.php';
-                    if (file_exists($fullPath)) {
-                        unset($badClasses[array_search($badClass, $badClasses)]);
-                        break;
-                    }
-                }
+            if ($this->removeSpecialCasesNonFullyQualifiedClassNames($namespacePath, $badClasses, $badClass)) {
+                continue;
             }
 
             $referenceFile = implode('/', $classParts) . '/' . str_replace('\\', '/', $badClass) . '.php';
             if (file_exists($referenceFile)) {
                 unset($badClasses[array_search($badClass, $badClasses)]);
+                continue;
             }
 
             // Remove usage of classes that have been declared as "use" or "include"
@@ -524,9 +488,86 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
             // (continued) where there is a comma separating two different classes.
             if (preg_match('/use\s.*[\\n]?.*' . str_replace('\\', '\\\\', $badClass) . '[\,\;]/', $contents)) {
                 unset($badClasses[array_search($badClass, $badClasses)]);
+                continue;
             }
         }
         return $badClasses;
+    }
+
+    /**
+     * Helper class for removeSpecialCases to remove classes that do not use fully-qualified class names
+     *
+     * @param string $namespacePath
+     * @param array $badClasses
+     * @param string $badClass
+     * @return bool
+     * @throws \Exception
+     */
+    private function removeSpecialCasesNonFullyQualifiedClassNames($namespacePath, &$badClasses, $badClass)
+    {
+        $componentRegistrar = new ComponentRegistrar();
+        $namespaceParts = explode('/', $namespacePath, 3);
+        $moduleDir = null;
+        if (isset($namespaceParts[1])) {
+            $moduleName = $namespaceParts[0] . '_' . $namespaceParts[1];
+            $moduleDir = $componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
+        }
+        if ($moduleDir) {
+            $fullPath = $moduleDir . '/' . (isset($namespaceParts[2]) ? $namespaceParts[2] . '/' : '') .
+                str_replace('\\', '/', $badClass) . '.php';
+            if (file_exists($fullPath)) {
+                unset($badClasses[array_search($badClass, $badClasses)]);
+                return true;
+            }
+        } else {
+            // Remove usage of classes that do NOT using fully-qualified class names (possibly under same namespace)
+            $directories = [
+                '/dev/tools/',
+                '/dev/tests/api-functional/framework/',
+                '/dev/tests/functional/',
+                '/dev/tests/integration/framework/',
+                '/dev/tests/integration/framework/tests/unit/testsuite/',
+                '/dev/tests/integration/testsuite/',
+                '/dev/tests/integration/testsuite/Magento/Test/Integrity/',
+                '/dev/tests/performance/framework/',
+                '/dev/tests/static/framework/',
+                '/dev/tests/static/testsuite/',
+                '/setup/src/',
+            ];
+            $pathToSource = \Magento\Framework\App\Utility\Files::init()->getPathToSource();
+            $libraryPaths = $this->getLibraryPaths($componentRegistrar, $pathToSource);
+            $directories = array_merge($directories, $libraryPaths);
+            // Full list of directories where there may be namespace classes
+            foreach ($directories as $directory) {
+                $fullPath = $pathToSource . $directory . $namespacePath . '/'
+                    . str_replace(
+                        '\\',
+                        '/',
+                        $badClass
+                    ) . '.php';
+                if (file_exists($fullPath)) {
+                    unset($badClasses[array_search($badClass, $badClasses)]);
+                    return true;
+                }
+            }
+        }
+    }
+
+    /**
+     * @param ComponentRegistrar $componentRegistrar
+     * @param string $pathToSource
+     * @return array
+     */
+    private function getLibraryPaths($componentRegistrar, $pathToSource)
+    {
+        $libraryPaths = $componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
+        foreach ($libraryPaths as $key => $libraryPath) {
+            $libraryPath = str_replace($pathToSource, '', $libraryPath);
+            $partsOfLibraryPath = explode('/', $libraryPath);
+            $libraryPaths[$key] = implode('/', array_slice($partsOfLibraryPath, 0, sizeof($partsOfLibraryPath)-2));
+            $libraryPaths[$key] .=  '/';
+        }
+        return $libraryPaths;
     }
 
     /**

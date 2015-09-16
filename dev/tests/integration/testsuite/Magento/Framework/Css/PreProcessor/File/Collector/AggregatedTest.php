@@ -24,6 +24,11 @@ class AggregatedTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
+    /**
+     * @var array
+     */
+    protected $backupRegistrar;
+
     protected function setUp()
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
@@ -59,18 +64,6 @@ class AggregatedTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        ComponentRegistrar::register(
-            ComponentRegistrar::MODULE,
-            'Magento_Other',
-            dirname(dirname(__DIR__)) . '/_files/code/Magento/Other'
-        );
-
-        ComponentRegistrar::register(
-            ComponentRegistrar::MODULE,
-            'Magento_Third',
-            dirname(dirname(__DIR__)) . '/_files/code/Magento/Third'
-        );
-
         /** @var \Magento\Framework\View\File\Collector\Base $sourceBase */
         $sourceBase = $this->objectManager->create(
             'Magento\Framework\View\File\Collector\Base', ['filesystem' => $filesystem, 'subDir' => 'web']
@@ -83,6 +76,36 @@ class AggregatedTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Css\PreProcessor\File\Collector\Aggregated',
             ['baseFiles' => $sourceBase, 'overriddenBaseFiles' => $overriddenBaseFiles]
         );
+
+        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
+        $paths = $reflection->getProperty('paths');
+        $paths->setAccessible(true);
+        $this->backupRegistrar = $paths->getValue();
+        $paths->setValue(
+            [ComponentRegistrar::MODULE => [], ComponentRegistrar::THEME => [], ComponentRegistrar::LANGUAGE => []]
+        );
+        $paths->setAccessible(false);
+
+        ComponentRegistrar::register(
+            ComponentRegistrar::MODULE,
+            'Magento_Other',
+            dirname(dirname(__DIR__)) . '/_files/code/Magento/Other'
+        );
+
+        ComponentRegistrar::register(
+            ComponentRegistrar::MODULE,
+            'Magento_Third',
+            dirname(dirname(__DIR__)) . '/_files/code/Magento/Third'
+        );
+    }
+
+    protected function tearDown()
+    {
+        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
+        $paths = $reflection->getProperty('paths');
+        $paths->setAccessible(true);
+        $paths->setValue($this->backupRegistrar);
+        $paths->setAccessible(false);
     }
 
     /**

@@ -15,4 +15,4 @@ $objectManger = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
 /** @var $registration \Magento\Theme\Model\Theme\Registration */
 $registration = $objectManger->create('Magento\Theme\Model\Theme\Registration');
-$registration->register('*/*/*/theme.xml');
+$registration->register();

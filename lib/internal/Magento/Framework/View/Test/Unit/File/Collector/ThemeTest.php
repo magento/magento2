@@ -101,7 +101,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     public function testGetFilesSingle()
     {
         $searchPath = 'css/*.less';
-        $filePath = '/opt/magento2/app/design/frontend/Magento/blank/Magento_Customer/css/something.less';
+        $filePath = '/some/absolute/path/css/*.less';
 
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')

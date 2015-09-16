@@ -4,8 +4,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="data-grid-info-panel" data-bind="visible: isMultiEditing() || (hasActive() && hasMessages())">
-    <div class="messages" data-bind="visible: hasMessages()">
+<div class="data-grid-info-panel" data-bind="visible: isMultiEditing() || (hasActive() && (hasMessages() || hasErrors() ))">
+    <div class="messages" data-bind="visible: hasMessages() || hasErrors()">
         <div class="message message-warning" data-bind="visible: hasErrors()">
             <strong>There are <!-- ko text: countErrors() --><!-- /ko --> meesages requires your attention.</strong>
             Please make corrections to the errors in the table below and re-submit.

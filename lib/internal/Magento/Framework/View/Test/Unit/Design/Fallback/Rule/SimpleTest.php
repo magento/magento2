@@ -19,7 +19,6 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
     private $moduelReader;
 
     /**
-     *
      * @var \Magento\Framework\Component\ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $componentRegistrarMock;

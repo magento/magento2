@@ -14,15 +14,8 @@ class FileResolverStub implements \Magento\Framework\Config\FileResolverInterfac
      */
     public function get($filename, $scope)
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $readDirectory = $objectManager->create(
-            'Magento\Framework\Filesystem\Directory\Read',
-            [
-                'driver' => $objectManager->create('Magento\Framework\Filesystem\Driver\File'),
-                'path' => realpath(__DIR__ . '/../../_files/etc'),
-            ]
-        );
-        $paths = ['search_request_1.xml', 'search_request_2.xml'];
-        return new \Magento\Framework\Config\FileIterator($readDirectory, $paths);
+        $path = realpath(__DIR__ . '/../../_files/etc');
+        $paths = [$path . '/search_request_1.xml', $path . '/search_request_2.xml'];
+        return new \Magento\Framework\Config\FileIterator(new \Magento\Framework\Filesystem\Driver\File, $paths);
     }
 }

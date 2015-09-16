@@ -135,11 +135,11 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
                 if (false !== strpos(
                     $layoutFile,
                     $componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_Sales')
-                        . '/view/adminhtml/layout/sales_order'
+                    . '/view/adminhtml/layout/sales_order'
                 ) || false !== strpos(
                     $layoutFile,
                     $componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_Shipping')
-                        . '/view/adminhtml/layout/adminhtml_order'
+                    . '/view/adminhtml/layout/adminhtml_order'
                 )
                 ) {
                     $this->markTestIncomplete(

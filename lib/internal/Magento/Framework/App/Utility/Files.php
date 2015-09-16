@@ -110,6 +110,20 @@ class Files
     }
 
     /**
+     * Get registration file in modules
+     *
+     * @return array
+     */
+    private function getModuleRegistrationFiles()
+    {
+        $exclude = [];
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
+            $exclude[] = '#' . $moduleDir . '/registration.php#';
+        }
+        return $exclude;
+    }
+
+    /**
      * Get test directories in libraries
      *
      * @return array
@@ -119,7 +133,21 @@ class Files
         $exclude = [];
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryDir) {
             $exclude[] = '#' . $libraryDir . '/Test#';
-            $exclude[] = '#' . $libraryDir . '/*/Test#';
+            $exclude[] = '#' . $libraryDir . '/[\\w]+/Test#';
+        }
+        return $exclude;
+    }
+
+    /**
+     * Get registration file in libraries
+     *
+     * @return array
+     */
+    private function getLibraryRegistrationFiles()
+    {
+        $exclude = [];
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryDir) {
+            $exclude[] = '#' . $libraryDir . '/registration.php#';
         }
         return $exclude;
     }
@@ -215,7 +243,7 @@ class Files
                     $this->getFilesSubset(
                         $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE),
                         '*.php',
-                        $this->getModuleTestDirs()
+                        array_merge($this->getModuleTestDirs(), $this->getModuleRegistrationFiles())
                     )
                 );
             }
@@ -244,7 +272,7 @@ class Files
                     $this->getFilesSubset(
                         $this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY),
                         '*.php',
-                        $this->getLibraryTestDirs()
+                        array_merge($this->getLibraryTestDirs(), $this->getLibraryRegistrationFiles())
                     )
                 );
             }
@@ -426,7 +454,7 @@ class Files
         $cacheKey = md5($this->_path . '|' . $location . '|' . implode('|', $params));
 
         if (!isset(self::$_cache[__METHOD__][$cacheKey])) {
-            $this->populateLayoutXmlCache($params, $location, $cacheKey);
+            $this->populateLayoutXmlCache(__METHOD__, $params, $location, $cacheKey);
         }
 
         if ($asDataSet) {
@@ -438,12 +466,13 @@ class Files
     /**
      * Helper method for getLayoutXmlFiles() to find the layout xml file and cache it
      *
+     * @param string $method
      * @param string $params
      * @param string $location
      * @param string $cacheKey
      * @return void
      */
-    private function populateLayoutXmlCache($params, $location, $cacheKey)
+    private function populateLayoutXmlCache($method, $params, $location, $cacheKey)
     {
         $files = [];
         $area = $params['area'];
@@ -469,7 +498,7 @@ class Files
                 $params['with_metainfo'] ? '_parseThemeLayout' : false
             );
         }
-        self::$_cache[__METHOD__][$cacheKey] = $files;
+        self::$_cache[$method][$cacheKey] = $files;
     }
 
     /**
@@ -1110,33 +1139,46 @@ class Files
         foreach ($directories as $key => $dir) {
             $directories[$key] = $this->_path . $dir;
         }
+
         $directories = array_merge($directories, $this->getPaths());
 
         foreach ($directories as $dir) {
             $fullPath = $dir . $path;
-            /**
-             * Use realpath() instead of file_exists() to avoid incorrect work on Windows because of case insensitivity
-             * of file names
-             * Note that realpath() automatically changes directory separator to the OS-native
-             * Since realpath won't work with symlinks we also check file_exists if realpath failed
-             */
-            if (realpath($fullPath) == str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $fullPath)
-                || file_exists($fullPath)
+            $trimmedFullPath = $dir . explode('/', $path, 3)[2];
+            if ($this->classFileExistsCheckContent($fullPath, $namespace, $className)
+                || $this->classFileExistsCheckContent($trimmedFullPath, $namespace, $className)
             ) {
-                $fileContent = file_get_contents($fullPath);
-                if (strpos(
-                    $fileContent,
-                    'namespace ' . $namespace
-                ) !== false && (strpos(
-                    $fileContent,
-                    'class ' . $className
-                ) !== false || strpos(
-                    $fileContent,
-                    'interface ' . $className
-                ) !== false)
-                ) {
-                    return true;
-                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Helper function for classFileExists to check file content
+     *
+     * @param string $fullPath
+     * @param string $namespace
+     * @param string $className
+     * @return bool
+     */
+    private function classFileExistsCheckContent($fullPath, $namespace, $className)
+    {
+        /**
+         * Use realpath() instead of file_exists() to avoid incorrect work on Windows
+         * because of case insensitivity of file names
+         * Note that realpath() automatically changes directory separator to the OS-native
+         * Since realpath won't work with symlinks we also check file_exists if realpath failed
+         */
+        if (realpath($fullPath) == str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $fullPath)
+            || file_exists($fullPath)
+        ) {
+            $fileContent = file_get_contents($fullPath);
+            if (strpos($fileContent, 'namespace ' . $namespace) !== false
+                && (strpos($fileContent, 'class ' . $className) !== false
+                    || strpos($fileContent, 'interface ' . $className) !== false)
+            ) {
+                return true;
             }
         }
         return false;
@@ -1155,12 +1197,10 @@ class Files
         }
 
         $result = [];
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
-            $iterator = new \DirectoryIterator($moduleDir . '/');
-            foreach ($iterator as $file) {
-                if (!$file->isDot() && !in_array($file->getFilename(), ['Zend']) && $file->isDir()) {
-                    $result[] = $file->getFilename();
-                }
+        foreach (array_keys($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE)) as $moduleName) {
+            $namespace = explode('_', $moduleName)[0];
+            if (!in_array($namespace, $result) && $namespace !== 'Zend') {
+                $result[] = $namespace;
             }
         }
         self::$_cache[$key] = $result;
@@ -1245,6 +1285,13 @@ class Files
                         $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE),
                         'composer.json',
                         $this->getModuleTestDirs()
+                    );
+                    break;
+                case 'language':
+                    $files = $this->getFilesSubset(
+                        $this->componentRegistrar->getPaths(ComponentRegistrar::LANGUAGE),
+                        'composer.json',
+                        []
                     );
                     break;
                 default:

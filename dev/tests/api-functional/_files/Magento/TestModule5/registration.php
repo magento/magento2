@@ -6,4 +6,7 @@
 
 use Magento\Framework\Component\ComponentRegistrar;
 
-ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Magento_TestModule5', __DIR__);
+$registrar = new ComponentRegistrar();
+if ($registrar->getPath(ComponentRegistrar::MODULE, 'Magento_TestModule5') === null) {
+    ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Magento_TestModule5', __DIR__);
+}
