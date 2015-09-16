@@ -91,6 +91,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -164,16 +165,6 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     }
 
     /**
-     * Retrieve default attribute frontend model
-     *
-     * @return string
-     */
-    protected function _getDefaultFrontendModel()
-    {
-        return parent::_getDefaultFrontendModel();
-    }
-
-    /**
      * Retrieve default attribute source model
      *
      * @return string
@@ -190,6 +181,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * Delete entity
      *
      * @return \Magento\Eav\Model\Resource\Entity\Attribute
+     * @codeCoverageIgnore
      */
     public function deleteEntity()
     {
@@ -403,6 +395,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      *
      * @param string $type
      * @return array
+     * @codeCoverageIgnore
      */
     public function getAttributeCodesByFrontendType($type)
     {
@@ -464,6 +457,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
      * Get identities
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function getIdentities()
     {
