@@ -33,18 +33,18 @@ class UrnResolver
                 $modulePath = str_replace(' ', '', ucwords(str_replace('-', ' ', $urnParts[3])));
                 $moduleName = ucfirst($urnParts[1]) . '_' . $modulePath;
                 $schemaPath = $componentRegistrar->getPath(
-                        ComponentRegistrar::MODULE,
-                        $moduleName
-                    ) . '/' . $urnParts[4];
+                    ComponentRegistrar::MODULE,
+                    $moduleName
+                ) . '/' . $urnParts[4];
             } else if ($urnParts[2] == 'library') {
                 // urn:magento:library:framework:Module/etc/module.xsd
                 // 0: urn, 1: magento, 2:library, 3: framework, 4: Module/etc/module.xsd
                 // libaryName -> magento/framework
                 $libraryName = $urnParts[1] . '/' . $urnParts[3];
                 $schemaPath = $componentRegistrar->getPath(
-                        ComponentRegistrar::LIBRARY,
-                        $libraryName
-                    ) . '/' . $urnParts[4];
+                    ComponentRegistrar::LIBRARY,
+                    $libraryName
+                ) . '/' . $urnParts[4];
             } else {
                 throw new \UnexpectedValueException("Unsupported format of schema location: " . $schema);
             }
@@ -52,7 +52,8 @@ class UrnResolver
                 $schema = $schemaPath;
             } else {
                 throw new \UnexpectedValueException(
-                    "Could not locate schema: '" . $schema . "' at '" . $schemaPath . "'");
+                    "Could not locate schema: '" . $schema . "' at '" . $schemaPath . "'"
+                );
             }
         }
         return $schema;
