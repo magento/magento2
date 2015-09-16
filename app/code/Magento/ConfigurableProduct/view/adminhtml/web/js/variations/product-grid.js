@@ -1,3 +1,4 @@
+// jscs:disable requireDotNotation
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -16,6 +17,7 @@ define([
             productsGridUrl: null,
             productAttributes: [],
             productsModal: null,
+            button: '',
             gridSelector: '[data-grid-id=associated-products-container]',
             modules: {
                 productsFilter: '${ $.associatedProductsFilter }',
@@ -24,7 +26,8 @@ define([
                 variationsComponent: '${ $.configurableVariations }'
             },
             listens: {
-                '${ $.associatedProductsProvider }:data': '_showMessageAssociatedGrid'
+                '${ $.associatedProductsProvider }:data': '_showMessageAssociatedGrid',
+                '${ $.configurableVariations }:productMatrix': '_showButtonAddManual'
             }
         },
 
@@ -53,8 +56,21 @@ define([
             this.productsProvider(function () {
                 this.productsModal.notification();
             }.bind(this));
+            this.variationsComponent(function (variation) {
+                this._showButtonAddManual(variation.productMatrix());
+            }.bind(this));
 
             this._initGrid = _.once(this._initGrid);
+        },
+
+        /**
+         * Initial observerable
+         * @returns {*}
+         */
+        initObservable: function () {
+            this._super().observe('button');
+
+            return this;
         },
 
         /**
@@ -82,7 +98,7 @@ define([
 
         /**
          * Open
-         * @param filterData
+         * @param function filterData
          * @param callbackName
          * @param showMassActionColumn
          */
@@ -148,12 +164,16 @@ define([
          */
         _buildGridUrl: function (filterData) {
             var params = '?' + $.param({
-                filters: filterData.filters,
-                attributes_codes: this._getAttributesCodes(),
-                filters_modifier: filterData.filters_modifier
+                'filters': filterData.filters,
+                'attributes_codes': this._getAttributesCodes(),
+                'filters_modifier': filterData['filters_modifier']
             });
 
             return this.productsGridUrl + params;
+        },
+
+        _showButtonAddManual: function (variations) {
+            return this.button(variations.length);
         },
 
         /**
@@ -191,7 +211,9 @@ define([
          */
         showManuallyGrid: function () {
             var filterModifier = _.mapObject(_.object(this._getAttributesCodes(), []), function () {
-                    return {'condition_type': 'notnull'};
+                    return {
+                        'condition_type': 'notnull'
+                    };
                 }),
                 usedProductIds = _.values(this.variationsComponent().productAttributesMap);
 
@@ -201,7 +223,9 @@ define([
                 };
             }
 
-            this.open({'filters_modifier': filterModifier}, 'appendProducts', true);
+            this.open({
+                'filters_modifier': filterModifier
+            }, 'appendProducts', true);
         },
 
         /**
@@ -215,7 +239,9 @@ define([
             }.bind(this));
 
             this.productsFilter(function (filter) {
-                filter.set('filters', _.extend({'filters_modifier': filterData.filters_modifier}, filterData.filters))
+                filter.set('filters', _.extend({
+                    'filters_modifier': filterData['filters_modifier']
+                }, filterData.filters))
                     .apply();
             });
         }
