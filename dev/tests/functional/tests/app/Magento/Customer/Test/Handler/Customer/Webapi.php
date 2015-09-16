@@ -149,9 +149,8 @@ class Webapi extends AbstractWebapi implements CustomerInterface
     protected function prepareStreetData(array $addressData)
     {
         if (!is_array($addressData['street'])) {
-            $street = $addressData['street'];
-            $addressData['street'] = [];
-            $addressData['street'][] = $street;
+            $street[] = $addressData['street'];
+            $addressData['street'] = $street;
         }
 
         return $addressData;
@@ -165,13 +164,13 @@ class Webapi extends AbstractWebapi implements CustomerInterface
      */
     protected function prepareDefaultAddressData(array $addressData)
     {
-        if (isset($addressData['default_billing'])) {
-            $addressData['default_billing'] = $addressData['default_billing'] === 'Yes' ? true : false;
+        if (isset($addressData['default_billing']) && $addressData['default_billing'] === 'Yes') {
+            $addressData['default_billing'] = true;
         } else {
             $addressData['default_billing'] = false;
         }
-        if (isset($addressData['default_shipping'])) {
-            $addressData['default_shipping'] = $addressData['default_shipping'] === 'Yes' ? true : false;
+        if (isset($addressData['default_shipping']) && $addressData['default_shipping'] === 'Yes') {
+            $addressData['default_shipping'] = true;
         } else {
             $addressData['default_shipping'] = false;
         }
