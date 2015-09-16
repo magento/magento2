@@ -198,6 +198,7 @@ class Onepage
      * @param \Magento\Quote\Model\QuoteManagement $quoteManagement
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
+     * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -262,6 +263,7 @@ class Onepage
      * Get frontend checkout session object
      *
      * @return \Magento\Checkout\Model\Session
+     * @codeCoverageIgnore
      */
     public function getCheckout()
     {
@@ -286,6 +288,7 @@ class Onepage
      *
      * @param \Magento\Quote\Model\Quote $quote
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setQuote(\Magento\Quote\Model\Quote $quote)
     {
@@ -297,6 +300,7 @@ class Onepage
      * Get customer session object
      *
      * @return \Magento\Customer\Model\Session
+     * @codeCoverageIgnore
      */
     public function getCustomerSession()
     {
@@ -991,6 +995,7 @@ class Onepage
      * @param string $email
      * @param int $websiteId
      * @return false|\Magento\Customer\Model\Customer
+     * @codeCoverageIgnore
      */
     protected function _customerEmailExists($email, $websiteId = null)
     {
