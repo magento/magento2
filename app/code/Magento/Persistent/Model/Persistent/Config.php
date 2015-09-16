@@ -66,7 +66,7 @@ class Config
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Persistent\Model\Factory $persistentFactory
-     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
      */
     public function __construct(
         \Magento\Framework\Config\DomFactory $domFactory,

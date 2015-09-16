@@ -5,7 +5,6 @@
  */
 namespace Magento\Theme\Model\View;
 
-use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Store\Model\ScopeInterface;
 
@@ -65,17 +64,8 @@ class DesignTest extends \PHPUnit_Framework_TestCase
      *
      * @param string $themePath
      */
-    protected function _emulateFixtureTheme($themePath = 'Test/default')
+    protected function _emulateFixtureTheme($themePath = 'Test_FrameworkThemeTest/default')
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
-            [
-                Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [
-                    DirectoryList::THEMES => [
-                        'path' => realpath(__DIR__ . '/../_files/design'),
-                    ],
-                ],
-            ]
-        );
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('frontend');
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get('Magento\Framework\View\DesignInterface')->setDesignTheme($themePath);

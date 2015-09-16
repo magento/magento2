@@ -4,9 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View;
-
-use Magento\Framework\App\Bootstrap;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
 
 /**
  * Tests for the view layer fallback mechanism
@@ -21,15 +19,6 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
-            [
-                Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [
-                    DirectoryList::THEMES => [
-                        'path' => dirname(dirname(__DIR__)) . '/Theme/Model/_files/design',
-                    ],
-                ],
-            ]
-        );
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
             ->setAreaCode('frontend');
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -38,7 +27,7 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\View\DesignInterface'
         )->setDesignTheme(
-            'Test/default'
+            'Test_FrameworkThemeTest/default'
         );
     }
 
@@ -58,8 +47,12 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
 
     public function testGetViewFile()
     {
+        $componentRegistrar = new ComponentRegistrar();
+        if ($componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Fixture_Module') === null) {
+            ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Fixture_Module', __DIR__);
+        }
         $expected = '%s/frontend/Vendor/custom_theme/Fixture_Module/web/fixture_script.js';
-        $params = ['theme' => 'Vendor/custom_theme'];
+        $params = ['theme' => 'Vendor_FrameworkThemeTest/custom_theme'];
         $actual = $this->_model->getStaticFileName('Fixture_Module::fixture_script.js', $params);
         $this->_testExpectedVersusActualFilename($expected, $actual);
     }
