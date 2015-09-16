@@ -347,7 +347,6 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $installer->updateModulesSequence(true);
     }
 
-
     public function testUninstall()
     {
         $this->config->expects($this->once())->method('isAvailable')->willReturn(false);
