@@ -118,7 +118,9 @@ class Attribute extends \Magento\Backend\Helper\Data
     /**
      * Set array of selected product
      *
-     * @return array|null
+     * @param array $productIds
+     *
+     * @return void
      */
     public function setProductIds($productIds)
     {
