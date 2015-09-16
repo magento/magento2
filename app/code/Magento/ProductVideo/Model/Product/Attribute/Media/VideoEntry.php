@@ -141,6 +141,8 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
     }
 
     /**
+     * Get extension attributes
+     *
      * @return \Magento\Framework\Api\ExtensionAttributesInterface
      */
     public function getExtensionAttributes()
@@ -149,6 +151,8 @@ class VideoEntry extends AbstractExtensibleModel implements VideoContentInterfac
     }
 
     /**
+     * Set extension attributes
+     *
      * @param \Magento\Catalog\Api\Data\ProductExtensionInterface $extensionAttributes
      * @return $this
      */
