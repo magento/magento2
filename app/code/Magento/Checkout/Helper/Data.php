@@ -59,6 +59,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      * @param PriceCurrencyInterface $priceCurrency
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -82,6 +83,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve checkout session model
      *
      * @return \Magento\Checkout\Model\Session
+     * @codeCoverageIgnore
      */
     public function getCheckout()
     {
@@ -92,6 +94,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve checkout quote model object
      *
      * @return \Magento\Quote\Model\Quote
+     * @codeCoverageIgnore
      */
     public function getQuote()
     {
@@ -377,6 +380,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Check if context is checkout
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isContextCheckout()
     {
@@ -387,6 +391,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Check if user must be logged during checkout process
      *
      * @return boolean
+     * @codeCoverageIgnore
      */
     public function isCustomerMustBeLogged()
     {
