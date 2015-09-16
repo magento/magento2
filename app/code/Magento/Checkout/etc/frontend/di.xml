@@ -12,6 +12,9 @@
             <argument name="secureUrlList" xsi:type="array">
                 <item name="checkout_index" xsi:type="string">/checkout</item>
             </argument>
+            <argument name="excludedUrlList" xsi:type="array">
+                <item name="checkout_sidebar" xsi:type="string">/checkout/sidebar</item>
+            </argument>
         </arguments>
     </type>
     <type name="Magento\Framework\View\Layout">
