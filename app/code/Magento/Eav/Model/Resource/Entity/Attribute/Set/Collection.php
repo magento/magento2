@@ -16,6 +16,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * Resource initialization
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -27,6 +28,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      *
      * @param int $typeId
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setEntityTypeFilter($typeId)
     {

@@ -3,18 +3,20 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
 ?>
     <div id="checkout" data-bind="scope:'checkout'" class="checkout-container">
         <!-- ko template: getTemplate() --><!-- /ko -->
         <script type="text/x-magento-init">
             {
                 "#checkout": {
-                    "Magento_Ui/js/core/app": <?php echo $block->getJsLayout();?>
+                    "Magento_Ui/js/core/app": <?php /* @escapeNotVerified */ echo $block->getJsLayout();?>
                 }
             }
         </script>
         <script>
-            window.checkoutConfig = <?php echo \Zend_Json::encode($block->getCheckoutConfig()); ?>;
+            window.checkoutConfig = <?php /* @escapeNotVerified */ echo \Zend_Json::encode($block->getCheckoutConfig()); ?>;
             // Create aliases for customer.js model from customer module
             window.isCustomerLoggedIn = window.checkoutConfig.isCustomerLoggedIn;
             window.customerData = window.checkoutConfig.customerData;
@@ -26,8 +28,8 @@
                 'Magento_Ui/js/block-loader'
             ], function(url, loader, blockLoader) {
                 loader.registerLoader();
-                blockLoader("<?php echo $block->getViewFileUrl('images/loader-1.gif'); ?>");
-                return url.setBaseUrl('<?php echo $block->getBaseUrl();?>');
+                blockLoader("<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('images/loader-1.gif'); ?>");
+                return url.setBaseUrl('<?php /* @escapeNotVerified */ echo $block->getBaseUrl();?>');
             })
         </script>
     </div>

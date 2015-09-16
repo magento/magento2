@@ -558,4 +558,17 @@ class Switcher extends \Magento\Backend\Block\Template
         }
         return $html;
     }
+
+    /**
+     * Get whether iframe is being used
+     *
+     * @return bool
+     */
+    public function isUsingIframe()
+    {
+        if ($this->hasData('is_using_iframe')) {
+            return (bool)$this->getData('is_using_iframe');
+        }
+        return false;
+    }
 }

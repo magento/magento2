@@ -17,12 +17,6 @@
 
 & when (@media-common = true) {
     .gift-message {
-        .actions-toolbar {
-            .action-cancel {
-                &:extend(.abs-action-button-as-link all);
-                display: none;
-            }
-        }
         .field {
             .label {
                 .lib-css(color, @gift-message-field-label__color);
@@ -33,6 +27,12 @@
 
     .gift-options {
         &:extend(.abs-add-clearfix all);
+        .actions-toolbar {
+            .action-cancel {
+                &:extend(.abs-action-button-as-link all);
+                display: none;
+            }
+        }
     }
 
     .gift-options-title {
@@ -61,15 +61,16 @@
 
     .cart.table-wrapper {
         .gift-content {
-            display: none;
             clear: left;
+            display: none;
             float: left;
             margin-right: -100%;
-            padding: @indent__base 0;
-            width: 100%;
+            margin: @indent__base 0;
             text-align: left;
+            width: 100%;
             &._active {
-                display: block;
+                display: table;
+                table-layout: fixed;
             }
         }
 
@@ -203,7 +204,7 @@
 //  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
-    .gift-message {
+    .gift-options {
         .actions-toolbar {
             .action-update {
                 .lib-font-size(20);
@@ -238,7 +239,21 @@
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .gift-message {
+        .field {
+            &:extend(.abs-clearfix all);
+            .lib-form-field-type-revert(
+            @_type: inline,
+            @_type-inline-label-align: left
+            );
+        }
+    }
+    .gift-options {
+        position: relative;
+        z-index: 1;
         .actions-toolbar {
+            clear: both;
+            float: right;
+            position: static;
             .secondary {
                 float: right;
                 .action {
@@ -251,13 +266,19 @@
                     margin-top: 6px;
                 }
             }
-        }
-        .field {
-            &:extend(.abs-clearfix all);
-            .lib-form-field-type-revert(
-            @_type: inline,
-            @_type-inline-label-align: left
-            );
+            &:nth-child(3) {
+                &:before {
+                    .lib-css(border-left, 1px solid @gift-item-block__border-color);
+                    bottom: 5rem;
+                    content: "";
+                    display: block;
+                    left: 50%;
+                    overflow: hidden;
+                    position: absolute;
+                    top: 0;
+                    width: 0;
+                }
+            }
         }
     }
     .gift-options-title {
@@ -283,9 +304,6 @@
     .cart.table-wrapper {
         .action-gift {
             float: left;
-        }
-        .gift-content {
-            padding: @indent__base 0;
         }
     }
 }
