@@ -93,7 +93,7 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
         $this->fixture = $fixture;
         $this->fields = $this->handlerCurl->prepareData($this->fixture);
         $this->prepareData();
-        $this->normalizeData();
+        $this->convertData();
 
         /** @var CatalogProductSimple $fixture */
         $url = $_ENV['app_frontend_url'] . 'rest/V1/products';
@@ -127,11 +127,11 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
     }
 
     /**
-     * Normalize data for creating product request.
+     * Convert prepared data to webapi structure request.
      *
      * @return void
      */
-    protected function normalizeData()
+    protected function convertData()
     {
         $fields = [];
 
@@ -191,6 +191,7 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
     protected function prepareAdvancedInventory()
     {
         $stockData = $this->fields['product']['stock_data'];
+        $stockData['website_id'] = 1;
 
         if (!isset($stockData['is_in_stock'])) {
             $stockData['is_in_stock'] = isset($this->fields['product']['quantity_and_stock_status']['is_in_stock'])
