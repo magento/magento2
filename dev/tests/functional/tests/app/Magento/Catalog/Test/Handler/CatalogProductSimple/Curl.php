@@ -274,6 +274,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         $this->prepareAdvancedInventory();
         $this->prepareCustomOptionsData();
         $this->prepareAutosetting();
+        $this->prepareCustomAttributes();
 
         $this->fields['product'] = $this->replaceMappingData($this->fields['product']);
         return $this->fields;
@@ -299,8 +300,6 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         $this->prepareTaxClass();
         $this->prepareQuantityAndStockStatus();
         $this->prepareCategory();
-        $this->prepareCustomAttributes();
-        $this->prepareFpt();
     }
 
     /**
@@ -370,49 +369,6 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             foreach ($this->fixture->getDataFieldConfig('category_ids')['source']->getCategories() as $category) {
                 $this->fields['product']['category_ids'][] = $category->getId();
             }
-        }
-    }
-
-    /**
-     * Preparation of attributes data.
-     *
-     * @return void
-     */
-    protected function prepareCustomAttributes()
-    {
-        if (isset($this->fields['product']['custom_attribute'])) {
-            $attrCode = $this->fields['product']['custom_attribute']['code'];
-            $this->fields['product'][$attrCode] = $this->fields['product']['custom_attribute']['value'];
-            unset($this->fields['product']['custom_attribute']);
-        }
-        if (isset($this->fields['product']['attributes'])) {
-            $this->fields['product'] += $this->fields['product']['attributes'];
-            unset($this->fields['product']['attributes']);
-        }
-    }
-
-    /**
-     * Preparation of fpt attribute data.
-     *
-     * @return void
-     */
-    protected function prepareFpt()
-    {
-        if (isset($this->fields['product']['fpt'])) {
-            $attributeLabel = $this->fixture->getDataFieldConfig('attribute_set_id')['source']
-                ->getAttributeSet()->getDataFieldConfig('assigned_attributes')['source']
-                ->getAttributes()[0]->getFrontendLabel();
-
-            foreach ($this->fields['product']['fpt'] as &$field) {
-                foreach ($this->fptData as $key => $data) {
-                    $field[$data['name']] = $this->fptData[$key]['data'][$field[$key]];
-                    unset($field[$key]);
-                }
-                $field['delete'] = '';
-            }
-
-            $this->fields['product'][$attributeLabel] = $this->fields['product']['fpt'];
-            unset($this->fields['product']['fpt']);
         }
     }
 
@@ -554,5 +510,50 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         $this->fields['product']['visibility'] = isset($this->fields['product']['visibility'])
             ? $this->fields['product']['visibility']
             : 'Catalog, Search';
+    }
+
+    /**
+     * Preparation of attributes data.
+     *
+     * @return void
+     */
+    protected function prepareCustomAttributes()
+    {
+        if (isset($this->fields['product']['custom_attribute'])) {
+            $attrCode = $this->fields['product']['custom_attribute']['code'];
+            $this->fields['product'][$attrCode] = $this->fields['product']['custom_attribute']['value'];
+            unset($this->fields['product']['custom_attribute']);
+        }
+        if (isset($this->fields['product']['attributes'])) {
+            $this->fields['product'] += $this->fields['product']['attributes'];
+            unset($this->fields['product']['attributes']);
+        }
+
+        $this->prepareFpt();
+    }
+
+    /**
+     * Preparation of fpt attribute data.
+     *
+     * @return void
+     */
+    protected function prepareFpt()
+    {
+        if (isset($this->fields['product']['fpt'])) {
+            $attributeLabel = $this->fixture->getDataFieldConfig('attribute_set_id')['source']
+                ->getAttributeSet()->getDataFieldConfig('assigned_attributes')['source']
+                ->getAttributes()[0]->getFrontendLabel();
+
+            foreach ($this->fields['product']['fpt'] as &$field) {
+                foreach ($this->fptData as $key => $data) {
+                    $field[$data['name']] = $this->fptData[$key]['data'][$field[$key]];
+                    unset($field[$key]);
+                }
+                $field['delete'] = '';
+            }
+
+            $this->fields['product'][$attributeLabel] = $this->fields['product']['fpt'];
+            unset($this->fields['product']['fpt']);
+        }
     }
 }
