@@ -10,7 +10,7 @@ use Magento\Framework\Amqp\PublisherInterface;
 /**
  * Test for MySQL publisher class.
  */
-class PublisherTest extends \PHPUnit_Framework_TestCase
+class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var PublisherInterface

@@ -30,9 +30,21 @@ $queueId4 = $queueFactory->create()
 
 
 $plan = [
-    [$messageId1, $queueId1, time() - 1 - 24 * 7 * 60 * 60, Magento\MysqlMq\Model\QueueManagement::MESSAGE_STATUS_COMPLETE],
-    [$messageId1, $queueId2, time() - 1 - 24 * 7 * 60 * 60, Magento\MysqlMq\Model\QueueManagement::MESSAGE_STATUS_ERROR],
-    [$messageId1, $queueId3, time() - 1 - 24 * 7 * 60 * 60, Magento\MysqlMq\Model\QueueManagement::MESSAGE_STATUS_COMPLETE],
+    [
+        $messageId1,
+        $queueId1,
+        time() - 1 - 24 * 7 * 60 * 60, Magento\MysqlMq\Model\QueueManagement::MESSAGE_STATUS_COMPLETE
+    ],
+    [
+        $messageId1,
+        $queueId2,
+        time() - 1 - 24 * 7 * 60 * 60, Magento\MysqlMq\Model\QueueManagement::MESSAGE_STATUS_ERROR
+    ],
+    [
+        $messageId1,
+        $queueId3,
+        time() - 1 - 24 * 7 * 60 * 60, Magento\MysqlMq\Model\QueueManagement::MESSAGE_STATUS_COMPLETE
+    ],
 ];
 
 
