@@ -12,6 +12,7 @@ define([
     'jquery/ui',
     'jquery/jquery.parsequery'
 ], function ($, _, mageTemplate) {
+    'use strict';
 
     $.widget('mage.configurable', {
         options: {
@@ -24,13 +25,17 @@ define([
             '<% if (data.finalPrice.value) { %>' +
             ' <%- data.finalPrice.formatted %>' +
             '<% } %>',
-            mediaGallerySelector: '[data-gallery-role=gallery]'
+            mediaGallerySelector: '[data-gallery-role=gallery-placeholder]',
+            mediaGalleryInitial: null
         },
+
         /**
          * Creates widget
          * @private
          */
         _create: function () {
+            this._setDefaults();
+
             // Initial setting of various option values
             this._initializeOptions();
 
@@ -51,6 +56,21 @@ define([
         },
 
         /**
+         * Prepare Gallery state
+         *
+         * @private
+         */
+        _setDefaults: function () {
+            var options = this.options,
+                gallery = $(options.mediaGallerySelector);
+
+            gallery.on('gallery:loaded', function () {
+                var galleryObject = gallery.data('gallery');
+                options.mediaGalleryInitial = galleryObject.returnCurrentImages();
+            });
+        },
+
+        /**
          * Initialize tax configuration, initial settings, and options values.
          * @private
          */
@@ -66,7 +86,7 @@ define([
             }
             this.options.optionTemplate = mageTemplate(this.options.optionTemplate);
 
-            this.options.settings = (this.options.spConfig.containerId) ?
+            this.options.settings = this.options.spConfig.containerId ?
                 $(this.options.spConfig.containerId).find(this.options.superSelector) :
                 $(this.options.superSelector);
 
@@ -120,8 +140,10 @@ define([
         _setValuesByAttribute: function () {
             this.options.values = {};
             $.each(this.options.settings, $.proxy(function (index, element) {
+                var attributeId;
+
                 if (element.value) {
-                    var attributeId = element.id.replace(/[a-z]*/, '');
+                    attributeId = element.id.replace(/[a-z]*/, '');
                     this.options.values[attributeId] = element.value;
                 }
             }, this));
@@ -191,9 +213,7 @@ define([
             if (this.options.values) {
                 this.options.settings.each($.proxy(function (index, element) {
                     var attributeId = element.attributeId;
-                    element.value = (typeof (this.options.values[attributeId]) === 'undefined') ?
-                        '' :
-                        this.options.values[attributeId];
+                    element.value = this.options.values[attributeId] || '';
                     this._configureElement(element);
                 }, this));
             }
@@ -215,6 +235,8 @@ define([
          * @param {*} element - The element associated with a configurable option.
          */
         _configureElement: function (element) {
+            this.simpleProduct = this._getSimpleProductId(element);
+
             if (element.value) {
                 this.options.state[element.config.id] = element.value;
 
@@ -237,40 +259,14 @@ define([
          * @private
          */
         _changeProductImage: function () {
-            var state = (function () {
-                    var p,
-                        state = JSON.stringify(this.options.state);
-
-                    for (p in this.options.spConfig.index) {
-
-                        if (JSON.stringify(this.options.spConfig.index[p]) === state) {
-                            return p;
-                        }
-                    }
-
-                    return false;
-                }.bind(this)()),
-                option = (function () {
-                    return this.options.state[state] ? this.options.state[state] : false;
-                }.bind(this)()),
-                images,
+            var images = this.options.spConfig.images[this.simpleProduct],
                 galleryObject = $(this.options.mediaGallerySelector).data('gallery');
 
-            if (state && state !== this.options.previousState) {
-                this.options.previousState = state;
-                images = this.options.spConfig.images[state];
-            }
-
             if (galleryObject) {
-
-                if (!this.options.initialState) {
-                    this.options.initialState = galleryObject.returnCurrentImages();
-                }
-
                 if (images) {
                     galleryObject.updateData(images);
-                } else if (!option) {
-                    galleryObject.updateData(this.options.initialState);
+                } else {
+                    galleryObject.updateData(this.options.mediaGalleryInitial);
                 }
             }
         },
@@ -283,13 +279,13 @@ define([
          */
         _resetChildren: function (element) {
             if (element.childSettings) {
-                for (var i = 0; i < element.childSettings.length; i++) {
-                    element.childSettings[i].selectedIndex = 0;
-                    element.childSettings[i].disabled = true;
+                _.each(element.childSettings, function (set) {
+                    set.selectedIndex = 0;
+                    set.disabled = true;
+                });
 
-                    if (element.config) {
-                        this.options.state[element.config.id] = false;
-                    }
+                if (element.config) {
+                    this.options.state[element.config.id] = false;
                 }
             }
         },
@@ -390,6 +386,7 @@ define([
         _reloadPrice: function () {
             $(this.options.priceHolderSelector).trigger('updatePrice', this._getPrices());
         },
+
         /**
          * Get product various prices
          * @returns {{}}
@@ -410,6 +407,7 @@ define([
 
             return prices;
         },
+
         /**
          * Returns pracies for configured products
          *
@@ -423,11 +421,35 @@ define([
 
             _.each(displayPrices, function (price, code) {
                 if (newPrices[code]) {
-                    displayPrices[code].amount = newPrices[code].amount - displayPrices[code].amount
+                    displayPrices[code].amount = newPrices[code].amount - displayPrices[code].amount;
                 }
             });
 
             return displayPrices;
+        },
+
+        /**
+         * _getState
+         *
+         * @private
+         */
+        _getSimpleProductId: function (element) {
+            //element.config
+            //element.value
+
+            var allOptions = element.config.options,
+                value = element.value,
+                config;
+
+            config = _.filter(allOptions, function(option) {
+                return option.id === value;
+            });
+
+            config = _.first(config);
+            console.log(config.allowedProducts);
+
+            return _.first(config.allowedProducts);
+
         }
 
     });
