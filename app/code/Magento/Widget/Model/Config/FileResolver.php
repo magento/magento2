@@ -54,7 +54,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
                 $iterator = $this->_moduleReader->getConfigurationFiles($filename);
                 break;
             case 'design':
-                $themePaths = $this->componentDirSearch->collectFiles(ComponentRegistrar::THEME, '/etc/' . $filename);
+                $themePaths = $this->componentDirSearch->collectFiles(ComponentRegistrar::THEME, 'etc/' . $filename);
                 $iterator = $this->iteratorFactory->create($themePaths);
                 break;
             default:
