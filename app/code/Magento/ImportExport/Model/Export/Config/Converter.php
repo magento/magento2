@@ -5,8 +5,24 @@
  */
 namespace Magento\ImportExport\Model\Export\Config;
 
+use Magento\Framework\Module\Manager;
+use Magento\Framework\App\Utility\Classes;
+
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
+    /**
+     * @var \Magento\Framework\Module\Manager
+     */
+    protected $moduleManager;
+
+    /**
+     * @param Manager $moduleManager
+     */
+    public function __construct(Manager $moduleManager)
+    {
+        $this->moduleManager = $moduleManager;
+    }
+
     /**
      * Convert dom node tree to array
      *
@@ -25,6 +41,9 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $name = $attributes->getNamedItem('name')->nodeValue;
             $label = $attributes->getNamedItem('label')->nodeValue;
             $model = $attributes->getNamedItem('model')->nodeValue;
+            if (!$this->moduleManager->isOutputEnabled(Classes::getClassModuleName($model))) {
+                continue;
+            }
             $entityAttributeFilterType = $attributes->getNamedItem('entityAttributeFilterType')->nodeValue;
 
             $output['entities'][$name] = [
