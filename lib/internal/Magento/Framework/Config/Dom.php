@@ -12,6 +12,7 @@
 namespace Magento\Framework\Config;
 
 use Magento\Framework\Config\Dom\UrnResolver;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Class Dom
@@ -287,7 +288,9 @@ class Dom
             }
         } catch (\Exception $exception) {
             libxml_use_internal_errors(false);
-            throw $exception;
+            throw new LocalizedException(
+                new \Magento\Framework\Phrase($exception->getMessage())
+            );
         }
         libxml_use_internal_errors(false);
         return $errors;
