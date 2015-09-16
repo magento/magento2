@@ -72,7 +72,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
     public function getAddUrl($product, $additional = [])
     {
         $continueUrl = $this->urlEncoder->encode($this->_urlBuilder->getCurrentUrl());
-        $urlParamName = \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED;
+        $urlParamName = \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED;
 
         $routeParams = [
             $urlParamName => $continueUrl,
@@ -108,7 +108,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
     {
         $params = [
             'id' => $item->getId(),
-            \Magento\Framework\App\Action\Action::PARAM_NAME_BASE64_URL => $this->getCurrentBase64Url(),
+            \Magento\Framework\App\ActionInterface::PARAM_NAME_BASE64_URL => $this->getCurrentBase64Url(),
         ];
         return $this->_getUrl(self::DELETE_URL, $params);
     }
@@ -125,7 +125,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
 
         $data = ['id' => $item->getId()];
         if (!$this->_request->isAjax()) {
-            $data[\Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED] = $this->getCurrentBase64Url();
+            $data[\Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED] = $this->getCurrentBase64Url();
         }
         return json_encode(['action' => $url, 'data' => $data]);
     }
