@@ -211,7 +211,7 @@ require([ "jquery", "jquery/ui"], function( $ ) {
         scriptTag = document.getElementsByTagName('script')[0];
 
       element.async = true;
-      element.src = "http://www.youtube.com/iframe_api";
+      element.src = "https://www.youtube.com/iframe_api";
       scriptTag.parentNode.insertBefore(element, scriptTag);
 
       window.onYouTubeIframeAPIReady = function () {
