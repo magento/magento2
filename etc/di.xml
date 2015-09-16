@@ -6,10 +6,34 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\Amqp\PublisherInterface" type="Magento\Framework\Amqp\PublisherProxy"/>
+    <preference for="Magento\Framework\Amqp\EnvelopeInterface" type="Magento\Amqp\Model\Envelope"/>
+
     <type name="Magento\Framework\Console\CommandList">
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="startConsumerCommand" xsi:type="object">Magento\Amqp\Console\StartConsumerCommand</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\Amqp\PublisherFactory">
+        <arguments>
+            <argument name="publishers" xsi:type="array">
+                <item name="rabbitmq" xsi:type="array">
+                    <item name="type" xsi:type="object">Magento\Amqp\Model\Publisher</item>
+                    <item name="connectionName" xsi:type="string">rabbitmq</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Amqp\ConsumerFactory">
+        <arguments>
+            <argument name="consumers" xsi:type="array">
+                <item name="rabbitmq" xsi:type="array">
+                    <item name="type" xsi:type="string">Magento\Amqp\Model\Consumer</item>
+                    <item name="connectionName" xsi:type="string">rabbitmq</item>
+                </item>
             </argument>
         </arguments>
     </type>
