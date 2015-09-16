@@ -35,7 +35,7 @@
             <argument name="isAvailable" xsi:type="boolean">true</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Action\Action">
+    <type name="Magento\Framework\App\ActionInterface">
         <plugin name="catalog-app-action-dispatchController-context-plugin" type="Magento\Catalog\Model\App\Action\ContextPlugin" sortOrder="10"/>
     </type>
     <type name="Magento\Framework\View\Layout">

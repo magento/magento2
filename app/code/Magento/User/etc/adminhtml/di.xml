@@ -7,4 +7,9 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:library:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Backend\Model\Auth\Credential\StorageInterface" type="Magento\User\Model\User" />
+    <type name="Magento\User\Model\Backend\Observer">
+        <arguments>
+            <argument name="authorization" xsi:type="object">Magento\Framework\Authorization</argument>
+        </arguments>
+    </type>
 </config>

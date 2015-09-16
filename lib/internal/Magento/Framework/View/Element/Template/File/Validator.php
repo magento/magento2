@@ -88,7 +88,6 @@ class Validator
         $this->moduleDirs = $componentRegistrar->getPaths(ComponentRegistrar::MODULE);
         $this->_compiledDir = $this->_filesystem->getDirectoryRead(DirectoryList::TEMPLATE_MINIFICATION_DIR)
             ->getAbsolutePath();
-
     }
 
     /**

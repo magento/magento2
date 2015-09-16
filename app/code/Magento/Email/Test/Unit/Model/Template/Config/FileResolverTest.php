@@ -14,7 +14,8 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
         $fileIteratorFactory = $this->getMock('\Magento\Framework\Config\FileIteratorFactory', [], [], '', false);
         $dirSearch = $this->getMock('\Magento\Framework\Component\DirSearch', [], [], '', false);
         $model = new \Magento\Email\Model\Template\Config\FileResolver(
-            $fileIteratorFactory, $dirSearch
+            $fileIteratorFactory,
+            $dirSearch
         );
         $expected = ['found_file'];
         $fileIteratorFactory->expects($this->once())

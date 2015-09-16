@@ -4,11 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\View\Test\Unit\Design\FileResolution\Fallback\Resolver;
 
-use Magento\Framework\Component\ComponentRegistrar;
 use \Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -30,11 +27,6 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
      */
     private $object;
 
-    /**
-     * @var \Magento\Framework\Component\ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $componentRegistrar;
-
     protected function setUp()
     {
         $this->directory = $this->getMock('\Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
@@ -46,19 +38,14 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
             ->method('getDirectoryRead')
             ->with(DirectoryList::ROOT)
             ->will($this->returnValue($this->directory));
-        $this->rule = $this->getMock(
-            '\Magento\Framework\View\Design\Fallback\Rule\RuleInterface', [], [], '', false
-        );
+        $this->rule = $this->getMock('\Magento\Framework\View\Design\Fallback\Rule\RuleInterface', [], [], '', false);
         $rulePool = $this->getMock('Magento\Framework\View\Design\Fallback\RulePool', [], [], '', false);
         $rulePool->expects($this->any())
             ->method('getRule')
             ->with('type')
             ->will($this->returnValue($this->rule));
-        $this->componentRegistrar = $this->getMockForAbstractClass(
-            '\Magento\Framework\Component\ComponentRegistrarInterface'
-        );
 
-        $this->object = new Simple($filesystem, $rulePool, $this->componentRegistrar);
+        $this->object = new Simple($filesystem, $rulePool);
     }
 
     /**
@@ -66,12 +53,11 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
      * @param string $themePath
      * @param string $locale
      * @param string $module
-     * @param string $moduleDir
      * @param array $expectedParams
      *
      * @dataProvider resolveDataProvider
      */
-    public function testResolve($area, $themePath, $locale, $module, $moduleDir, array $expectedParams)
+    public function testResolve($area, $themePath, $locale, $module, array $expectedParams)
     {
         $expectedPath = '/some/dir/file.ext';
         $theme = $themePath ? $this->getMockForTheme($themePath) : null;
@@ -89,18 +75,7 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
             ->method('isExist')
             ->with($expectedPath)
             ->will($this->returnValue(true));
-        if ($moduleDir == null) {
-            $this->componentRegistrar->expects($this->never())
-                ->method('getPath');
-        } else {
-            $this->componentRegistrar->expects($this->once())
-                ->method('getPath')
-                ->with(ComponentRegistrar::MODULE, $module)
-                ->will($this->returnValue($moduleDir));
-        }
-       $actualPath = $this->object->resolve(
-            'type', 'file.ext', $area, $theme, $locale, $module
-        );
+        $actualPath = $this->object->resolve('type', 'file.ext', $area, $theme, $locale, $module);
         $this->assertSame($expectedPath, $actualPath);
     }
 
@@ -111,34 +86,31 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'no area' => [
-                null, 'magento_theme', 'en_US', 'Magento_Module', 'module/dir',
+                null, 'magento_theme', 'en_US', 'Magento_Module',
                 [
                     'theme' => 'magento_theme',
                     'locale' => 'en_US',
                     'module_name' => 'Magento_Module',
-                    'module_dir' => 'module/dir',
                 ],
             ],
             'no theme' => [
-                'frontend', null, 'en_US', 'Magento_Module', 'module/dir',
+                'frontend', null, 'en_US', 'Magento_Module',
                 [
                     'area' => 'frontend',
                     'locale' => 'en_US',
                     'module_name' => 'Magento_Module',
-                    'module_dir' => 'module/dir',
                 ],
             ],
             'no locale' => [
-                'frontend', 'magento_theme', null, 'Magento_Module', 'module/dir',
+                'frontend', 'magento_theme', null, 'Magento_Module',
                 [
                     'area' => 'frontend',
                     'theme' => 'magento_theme',
                     'module_name' => 'Magento_Module',
-                    'module_dir' => 'module/dir',
                 ],
             ],
             'no module' => [
-                'frontend', 'magento_theme', 'en_US', null, null,
+                'frontend', 'magento_theme', 'en_US', null,
                 [
                     'area' => 'frontend',
                     'theme' => 'magento_theme',
@@ -146,13 +118,12 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'all params' => [
-                'frontend', 'magento_theme', 'en_US', 'Magento_Module', 'module/dir',
+                'frontend', 'magento_theme', 'en_US', 'Magento_Module',
                 [
                     'area' => 'frontend',
                     'theme' => 'magento_theme',
                     'locale' => 'en_US',
                     'module_name' => 'Magento_Module',
-                    'module_dir' => 'module/dir',
                 ],
             ],
         ];
@@ -175,7 +146,12 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse(
             $this->object->resolve(
-                'type', 'file.ext', 'frontend', $this->getMockForTheme('magento_theme'), 'en_US', 'Magento_Module'
+                'type',
+                'file.ext',
+                'frontend',
+                $this->getMockForTheme('magento_theme'),
+                'en_US',
+                'Magento_Module'
             )
         );
     }
@@ -190,7 +166,12 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false));
         $this->assertFalse(
             $this->object->resolve(
-                'type', 'file.ext', 'frontend', $this->getMockForTheme('magento_theme'), 'en_US', 'Magento_Module'
+                'type',
+                'file.ext',
+                'frontend',
+                $this->getMockForTheme('magento_theme'),
+                'en_US',
+                'Magento_Module'
             )
         );
     }

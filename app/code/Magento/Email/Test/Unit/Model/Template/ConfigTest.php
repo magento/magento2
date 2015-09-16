@@ -37,7 +37,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $viewFileSystem;
 
     /**
-     * @var \Magento\Framework\Theme\PackageList|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\Theme\ThemePackageList|\PHPUnit_Framework_MockObject_MockObject
      */
     private $themePackages;
 
@@ -76,7 +76,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->themePackages = $this->getMock('\Magento\Framework\Theme\PackageList', [], [], '', false);
+        $this->themePackages = $this->getMock(
+            '\Magento\Framework\View\Design\Theme\ThemePackageList',
+            [],
+            [],
+            '',
+            false
+        );
         $this->readDirFactory = $this->getMock('Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
         $this->model = new Config(
             $this->_dataStorage,

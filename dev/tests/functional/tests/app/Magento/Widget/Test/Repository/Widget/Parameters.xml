@@ -1,0 +1,56 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Widget\Test\Repository\Widget\Parameters">
+        <dataset name="cmsPageLink">
+            <field name="anchor_text" xsi:type="string">CustomText_%isolation%</field>
+            <field name="title" xsi:type="string">CustomTitle_%isolation%</field>
+            <field name="entities" xsi:type="array">
+                <item name="0" xsi:type="string">cmsPage::default</item>
+            </field>
+        </dataset>
+
+        <dataset name="cmsStaticBlock">
+            <field name="chooser_title" xsi:type="string">%title%</field>
+            <field name="chooser_identifier" xsi:type="string">%identifier%</field>
+            <field name="entities" xsi:type="array">
+                <item name="0" xsi:type="string">cmsBlock::default</item>
+            </field>
+        </dataset>
+
+        <dataset name="catalogCategoryLink">
+            <field name="anchor_text" xsi:type="string">CustomText_%isolation%</field>
+            <field name="title" xsi:type="string">CustomTitle_%isolation%</field>
+            <field name="entities" xsi:type="array">
+                <item name="0" xsi:type="string">category::default</item>
+            </field>
+        </dataset>
+
+        <dataset name="catalogNewProductList">
+            <field name="display_type" xsi:type="string">All products</field>
+            <field name="show_pager" xsi:type="string">Yes</field>
+            <field name="products_count" xsi:type="string">4</field>
+        </dataset>
+
+        <dataset name="catalogProductLink">
+            <field name="anchor_text" xsi:type="string">CustomText_%isolation%</field>
+            <field name="title" xsi:type="string">CustomTitle_%isolation%</field>
+            <field name="entities" xsi:type="array">
+                <item name="0" xsi:type="string">catalogProductSimple::default</item>
+            </field>
+        </dataset>
+
+        <dataset name="recentlyComparedProducts">
+            <field name="page_size" xsi:type="string">4</field>
+        </dataset>
+
+        <dataset name="recentlyViewedProducts">
+            <field name="page_size" xsi:type="string">4</field>
+        </dataset>
+    </repository>
+</config>

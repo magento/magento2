@@ -89,6 +89,9 @@ class ThemeModular implements CollectorInterface
     {
         $namespace = $module = '*';
         $themePath = $theme->getFullPath();
+        if (empty($themePath)) {
+            return [];
+        }
         $themeAbsolutePath = $this->componentRegistrar->getPath(ComponentRegistrar::THEME, $themePath);
         if (!$themeAbsolutePath) {
             throw new \UnexpectedValueException("Can't get files for theme '$themePath': no such theme registered");

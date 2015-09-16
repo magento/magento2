@@ -10,9 +10,6 @@ use \Magento\Framework\View\Design\Fallback\RulePool;
 
 use Magento\Framework\Filesystem;
 
-/**
- * Factory Test
- */
 class RulePoolTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -46,7 +43,27 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
         $themeFactory->expects($this->any())
             ->method('create')
             ->will($this->returnValue($rule));
-        $this->model = new RulePool($filesystemMock, $simpleFactory, $themeFactory);
+        $moduleFactory = $this->getMock('Magento\Framework\View\Design\Fallback\Rule\ModuleFactory', [], [], '', false);
+        $moduleFactory->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($rule));
+        $moduleSwitchFactory = $this->getMock(
+            'Magento\Framework\View\Design\Fallback\Rule\ModularSwitchFactory',
+            [],
+            [],
+            '',
+            false
+        );
+        $moduleSwitchFactory->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($rule));
+        $this->model = new RulePool(
+            $filesystemMock,
+            $simpleFactory,
+            $themeFactory,
+            $moduleFactory,
+            $moduleSwitchFactory
+        );
 
         $parentTheme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
         $parentTheme->expects($this->any())->method('getThemePath')->will($this->returnValue('parent_theme_path'));

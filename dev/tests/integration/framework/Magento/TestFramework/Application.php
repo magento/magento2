@@ -8,6 +8,7 @@ namespace Magento\TestFramework;
 use Magento\Framework\Autoload\AutoloaderInterface;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
@@ -571,7 +572,7 @@ class Application
     {
         if (!file_exists($dir)) {
             $old = umask(0);
-            mkdir($dir, 0777);
+            mkdir($dir, DriverInterface::WRITEABLE_DIRECTORY_MODE);
             umask($old);
         } elseif (!is_dir($dir)) {
             throw new \Magento\Framework\Exception\LocalizedException(__("'%1' is not a directory.", $dir));

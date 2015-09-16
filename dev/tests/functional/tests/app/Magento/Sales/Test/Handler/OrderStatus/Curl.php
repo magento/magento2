@@ -8,7 +8,6 @@ namespace Magento\Sales\Test\Handler\OrderStatus;
 
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
-use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
@@ -58,7 +57,7 @@ class Curl extends AbstractCurl implements OrderStatusInterface
         $url = $_ENV['app_backend_url'] . 'sales/order_status/save/';
         $data = array_merge($this->defaultAttributeValues, $fixture->getData());
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
-        $curl->write(CurlInterface::POST, $url, '1.1', [], $data);
+        $curl->write($url, $data);
         $response = $curl->read();
         $curl->close();
 
@@ -70,7 +69,7 @@ class Curl extends AbstractCurl implements OrderStatusInterface
             $url = $_ENV['app_backend_url'] . 'sales/order_status/assignPost/';
             $data = $this->replaceMappingData($data);
             $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
-            $curl->write(CurlInterface::POST, $url, '1.1', [], $data);
+            $curl->write($url, $data);
             $response = $curl->read();
             $curl->close();
 

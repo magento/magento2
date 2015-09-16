@@ -14,6 +14,12 @@
                 <password_reset_link_expiration_period>1</password_reset_link_expiration_period>
                 <reset_password_template>admin_emails_reset_password_template</reset_password_template>
             </emails>
+            <security>
+                <lockout_failures>6</lockout_failures>
+                <lockout_threshold>30</lockout_threshold>
+                <password_lifetime>90</password_lifetime>
+                <password_is_forced>1</password_is_forced>
+            </security>
         </admin>
     </default>
 </config>

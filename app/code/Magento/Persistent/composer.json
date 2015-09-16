@@ -2,7 +2,7 @@
     "name": "magento/module-persistent",
     "description": "N/A",
     "require": {
-        "php": "~5.5.0|~5.6.0",
+        "php": "~5.5.0|~5.6.0|~7.0.0",
         "magento/module-store": "1.0.0-beta",
         "magento/module-checkout": "1.0.0-beta",
         "magento/module-customer": "1.0.0-beta",
@@ -19,6 +19,9 @@
         "AFL-3.0"
     ],
     "autoload": {
-        "files": [ "registration.php" ]
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "Magento\\Persistent\\": ""
+        }
     }
 }

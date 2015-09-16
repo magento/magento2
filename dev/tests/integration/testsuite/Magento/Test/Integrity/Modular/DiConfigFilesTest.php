@@ -35,10 +35,11 @@ class DiConfigFilesTest extends \PHPUnit_Framework_TestCase
         $filesystem = $objectManager->get('Magento\Framework\Filesystem');
         $configDirectory = $filesystem->getDirectoryRead(DirectoryList::CONFIG);
         $fileIteratorFactory = $objectManager->get('Magento\Framework\Config\FileIteratorFactory');
-        self::$_primaryFiles = $fileIteratorFactory->create(
-            $configDirectory,
-            $configDirectory->search('{*/di.xml,di.xml}')
-        );
+        $search = [];
+        foreach ($configDirectory->search('{*/di.xml,di.xml}') as $path) {
+            $search[] = $configDirectory->getAbsolutePath($path);
+        }
+        self::$_primaryFiles = $fileIteratorFactory->create($search);
         //init module global configs
         /** @var $modulesReader \Magento\Framework\Module\Dir\Reader */
         $modulesReader = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

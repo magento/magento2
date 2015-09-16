@@ -13,10 +13,7 @@
 $testCases = include __DIR__ . '/_algorithm_base_data.php';
 
 /** @var $installer \Magento\Catalog\Setup\CategorySetup */
-$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Setup\CategorySetup',
-    ['resourceName' => 'catalog_setup']
-);
+$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Setup\CategorySetup');
 /**
  * After installation system has two categories: root one with ID:1 and Default category with ID:2
  */

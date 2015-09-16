@@ -2,11 +2,12 @@
     "name": "magento/module-widget",
     "description": "N/A",
     "require": {
-        "php": "~5.5.0|~5.6.0",
+        "php": "~5.5.0|~5.6.0|~7.0.0",
         "magento/module-store": "1.0.0-beta",
         "magento/module-cms": "1.0.0-beta",
         "magento/module-backend": "1.0.0-beta",
         "magento/module-catalog": "1.0.0-beta",
+        "magento/module-email": "1.0.0-beta",
         "magento/module-theme": "1.0.0-beta",
         "magento/framework": "1.0.0-beta",
         "magento/module-variable": "1.0.0-beta",
@@ -19,6 +20,9 @@
         "AFL-3.0"
     ],
     "autoload": {
-        "files": [ "registration.php" ]
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "Magento\\Widget\\": ""
+        }
     }
 }

@@ -24,7 +24,7 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSchema()
     {
-        $expected = str_replace('\\', '/', BP . '/lib/internal/Magento/Framework/Event/etc/events.xsd');
+        $expected = str_replace('\\', '/', realpath(__DIR__ . '/../../../etc/events.xsd'));
         $actual = str_replace('\\', '/', $this->_model->getSchema());
         $this->assertEquals($expected, $actual);
     }
@@ -32,7 +32,7 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
     public function testGetPerFileSchema()
     {
         $actual = str_replace('\\', '/', $this->_model->getPerFileSchema());
-        $expected = str_replace('\\', '/', BP . '/lib/internal/Magento/Framework/Event/etc/events.xsd');
+        $expected = str_replace('\\', '/', realpath(__DIR__ . '/../../../etc/events.xsd'));
         $this->assertEquals($expected, $actual);
     }
 }

@@ -22,7 +22,7 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSchema()
     {
-        $expected = str_replace('\\', '/', BP . '/lib/internal/Magento/Framework/Api/etc/extension_attributes.xsd');
+        $expected = str_replace('\\', '/', realpath(__DIR__ . '/../../../../etc/extension_attributes.xsd'));
         $actual = str_replace('\\', '/', $this->_model->getSchema());
         $this->assertEquals($expected, $actual);
     }
@@ -30,7 +30,7 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
     public function testGetPerFileSchema()
     {
         $actual = str_replace('\\', '/', $this->_model->getPerFileSchema());
-        $expected = str_replace('\\', '/', BP . '/lib/internal/Magento/Framework/Api/etc/extension_attributes.xsd');
+        $expected = str_replace('\\', '/', realpath(__DIR__ . '/../../../../etc/extension_attributes.xsd'));
         $this->assertEquals($expected, $actual);
     }
 }

@@ -56,9 +56,12 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
 
                 $pattern = '#^(\\\\|)' . implode('|', $this->getForbiddenNamespaces()) . '\\\\#';
                 foreach ($dependencies as $dependency) {
+                    $dependencyPaths = explode('/', $dependency);
+                    $dependencyPaths = array_slice($dependencyPaths, 2);
+                    $dependency = implode('\\', $dependencyPaths);
                     $libraryPaths = $componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
                     foreach ($libraryPaths as $libraryPath) {
-                        $filePath = $libraryPath . str_replace('\\', '/', $dependency) . '.php';
+                        $filePath = $libraryPath . '/' . $dependency . '.php';
                         if (preg_match($pattern, $dependency) && !file_exists($filePath)) {
                             $this->errors[$fileReflection->getFileName()][] = $dependency;
                         }

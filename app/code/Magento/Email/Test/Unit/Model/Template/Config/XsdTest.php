@@ -21,7 +21,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
      */
     public function testMergedXml($fixtureXml, array $expectedErrors)
     {
-        $schemaFile = BP . '/app/code/Magento/Email/etc/email_templates.xsd';
+        $schemaFile = realpath(__DIR__ . '/../../../../../etc/email_templates.xsd');
         $this->_testXmlAgainstXsd($fixtureXml, $schemaFile, $expectedErrors);
     }
 

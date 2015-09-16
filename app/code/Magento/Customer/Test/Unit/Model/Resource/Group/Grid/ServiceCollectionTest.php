@@ -240,4 +240,14 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
             ],
         ];
     }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\LocalizedException
+     * @expectedExceptionMessage When passing an array of fields there must be at least one field in the array.
+     * @dataProvider addFieldToFilterInconsistentArraysDataProvider
+     */
+    public function testAddFieldToFilterEmptyArrays()
+    {
+        $this->serviceCollection->addFieldToFilter([], []);
+    }
 }

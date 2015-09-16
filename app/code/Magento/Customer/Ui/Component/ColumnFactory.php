@@ -6,41 +6,44 @@
 namespace Magento\Customer\Ui\Component;
 
 use Magento\Customer\Api\Data\AttributeMetadataInterface as AttributeMetadata;
+use Magento\Customer\Ui\Component\Listing\Column\InlineEditUpdater;
+use Magento\Customer\Api\CustomerMetadataInterface;
 
 class ColumnFactory
 {
-    /**
-     * @var \Magento\Framework\View\Element\UiComponentFactory
-     */
+    /** @var \Magento\Framework\View\Element\UiComponentFactory  */
     protected $componentFactory;
 
-    /**
-     * @var array
-     */
+    /** @var InlineEditUpdater */
+    protected $inlineEditUpdater;
+
+    /** @var array  */
     protected $jsComponentMap = [
         'text' => 'Magento_Ui/js/grid/columns/column',
+        'select' => 'Magento_Ui/js/grid/columns/select',
         'date' => 'Magento_Ui/js/grid/columns/date',
     ];
 
-    /**
-     * @var array
-     */
+    /** @var array  */
     protected $dataTypeMap = [
         'default' => 'text',
         'text' => 'text',
-        'boolean' => 'text',
-        'select' => 'text',
+        'boolean' => 'select',
+        'select' => 'select',
         'multiselect' => 'text',
         'date' => 'date',
     ];
 
     /**
      * @param \Magento\Framework\View\Element\UiComponentFactory $componentFactory
+     * @param InlineEditUpdater $inlineEditor
      */
     public function __construct(
-        \Magento\Framework\View\Element\UiComponentFactory $componentFactory
+        \Magento\Framework\View\Element\UiComponentFactory $componentFactory,
+        InlineEditUpdater $inlineEditor
     ) {
         $this->componentFactory = $componentFactory;
+        $this->inlineEditUpdater = $inlineEditor;
     }
 
     /**
@@ -58,6 +61,9 @@ class ColumnFactory
             'align' => 'left',
             'visible' => (bool)$attributeData[AttributeMetadata::IS_VISIBLE_IN_GRID],
         ], $config);
+        if (count($attributeData[AttributeMetadata::OPTIONS]) && !isset($config[AttributeMetadata::OPTIONS])) {
+            $config[AttributeMetadata::OPTIONS] = $attributeData[AttributeMetadata::OPTIONS];
+        }
 
         if ($attributeData[AttributeMetadata::OPTIONS]) {
             $config['options'] = $attributeData[AttributeMetadata::OPTIONS];
@@ -71,7 +77,14 @@ class ColumnFactory
             ],
             'context' => $context,
         ];
-        return $this->componentFactory->create($columnName, 'column', $arguments);
+        $column = $this->componentFactory->create($columnName, 'column', $arguments);
+        $this->inlineEditUpdater->applyEditing(
+            $column,
+            $attributeData[AttributeMetadata::FRONTEND_INPUT],
+            $attributeData[AttributeMetadata::VALIDATION_RULES],
+            $attributeData[AttributeMetadata::REQUIRED]
+        );
+        return $column;
     }
 
     /**
