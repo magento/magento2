@@ -5,6 +5,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute;
+
 use Magento\Ui\Component\MassAction\Filter;
 use Magento\Catalog\Model\Resource\Product\CollectionFactory;
 
