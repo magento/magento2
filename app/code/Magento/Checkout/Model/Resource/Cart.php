@@ -16,6 +16,7 @@ class Cart extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Model initialization
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
