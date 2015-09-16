@@ -71,8 +71,8 @@ class DiCompileCommand extends Command
         $this->objectManager    = $objectManagerProvider->get();
         $this->taskManager      = $taskManager;
         $this->filesystem       = $filesystem;
+        $this->fileDriver       = $fileDriver;
         parent::__construct();
-        $this->fileDriver = $fileDriver;
     }
 
     /**
