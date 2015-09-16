@@ -300,8 +300,10 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
             ->with(true)
             ->willReturnSelf();
         $this->shippingAddressMock->expects($this->once())->method('getCountryId')->willReturn(1);
-        $this->shippingAddressMock->expects($this->once())->method('save')->willThrowException($exception);
-
+        $this->totalsCollectorMock
+            ->expects($this->once())
+            ->method('collectAddressTotals')
+            ->willThrowException($exception);
         $this->addressValidatorMock->expects($this->once())
             ->method('validate')
             ->with($this->shippingAddressMock)
@@ -392,7 +394,6 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
             ->with(true)
             ->willReturnSelf();
         $this->shippingAddressMock->expects($this->once())->method('getCountryId')->willReturn(1);
-        $this->shippingAddressMock->expects($this->once())->method('save')->willReturnSelf();
         $this->totalsCollectorMock
             ->expects($this->once())
             ->method('collectAddressTotals')
@@ -473,7 +474,6 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
             ->with(true)
             ->willReturnSelf();
         $this->shippingAddressMock->expects($this->once())->method('getCountryId')->willReturn(1);
-        $this->shippingAddressMock->expects($this->once())->method('save')->willReturnSelf();
         $this->totalsCollectorMock
             ->expects($this->once())
             ->method('collectAddressTotals')
@@ -518,7 +518,6 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($this->quoteMock)
             ->willThrowException($exception);
-
         $addressInformationMock = $this->getMock('\Magento\Checkout\Api\Data\ShippingInformationInterface');
         $addressInformationMock->expects($this->once())
             ->method('getShippingAddress')
@@ -562,7 +561,7 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
             ->with(true)
             ->willReturnSelf();
         $this->shippingAddressMock->expects($this->once())->method('getCountryId')->willReturn(1);
-        $this->shippingAddressMock->expects($this->exactly(2))->method('save')->willReturnSelf();
+        $this->shippingAddressMock->expects($this->once())->method('save')->willReturnSelf();
         $this->totalsCollectorMock
             ->expects($this->once())
             ->method('collectAddressTotals')
@@ -641,7 +640,6 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
             ->with(true)
             ->willReturnSelf();
         $this->shippingAddressMock->expects($this->once())->method('getCountryId')->willReturn(1);
-        $this->shippingAddressMock->expects($this->exactly(2))->method('save')->willReturnSelf();
         $this->totalsCollectorMock
             ->expects($this->once())
             ->method('collectAddressTotals')

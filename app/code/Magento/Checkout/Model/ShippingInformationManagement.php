@@ -140,8 +140,6 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         $address->setShippingMethod($carrierCode . '_' . $methodCode);
 
         try {
-            /** TODO: refactor this code. Eliminate save operation */
-            $address->save();
             $this->totalsCollector->collectAddressTotals($quote, $address);
         } catch (\Exception $e) {
             $this->logger->critical($e);
