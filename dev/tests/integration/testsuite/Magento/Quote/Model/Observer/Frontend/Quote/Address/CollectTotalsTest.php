@@ -5,6 +5,8 @@
  */
 namespace Magento\Quote\Model\Observer\Frontend\Quote\Address;
 
+use Magento\TestFramework\Helper\Bootstrap;
+
 class CollectTotalsTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -12,9 +14,17 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
+    /**
+     * Object Manager
+     *
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
+
     protected function setUp()
     {
-        $this->model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->model = $this->objectManager->create(
             'Magento\Quote\Model\Observer\Frontend\Quote\Address\CollectTotals'
         );
     }
@@ -49,10 +59,21 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
         $quote->setCustomer($customerData);
 
         $quoteAddress = $quote->getBillingAddress();
+        $shippingAssignment = $this->objectManager->create('Magento\Quote\Model\ShippingAssignment');
+        $shipping = $this->objectManager->create('Magento\Quote\Model\Shipping');
+        $shipping->setAddress($quoteAddress);
+        $shippingAssignment->setShipping($shipping);
+        /** @var  \Magento\Quote\Model\Quote\Address\Total $total */
+        $total = $this->objectManager->create('Magento\Quote\Model\Quote\Address\Total');
 
         $eventObserver = $objectManager->create(
             'Magento\Framework\Event\Observer',
-            ['data' => ['quote_address' => $quoteAddress]]
+            ['data' => [
+                'quote' => $quote,
+                'shipping_assignment' => $shippingAssignment,
+                'total' => $total
+        ]
+            ]
         );
         $this->model->dispatch($eventObserver);
 
@@ -94,6 +115,22 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
 
         $quoteAddress = $quote->getBillingAddress();
 
+        $shippingAssignment = $this->objectManager->create('Magento\Quote\Model\ShippingAssignment');
+        $shipping = $this->objectManager->create('Magento\Quote\Model\Shipping');
+        $shipping->setAddress($quoteAddress);
+        $shippingAssignment->setShipping($shipping);
+        /** @var  \Magento\Quote\Model\Quote\Address\Total $total */
+        $total = $this->objectManager->create('Magento\Quote\Model\Quote\Address\Total');
+
+        $eventObserver = $objectManager->create(
+            'Magento\Framework\Event\Observer',
+            ['data' => [
+                'quote' => $quote,
+                'shipping_assignment' => $shippingAssignment,
+                'total' => $total
+            ]
+            ]
+        );
         $eventObserver = $objectManager->create(
             'Magento\Framework\Event\Observer',
             ['data' => ['quote_address' => $quoteAddress]]
