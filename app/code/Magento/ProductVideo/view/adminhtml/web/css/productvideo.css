@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright Â© 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -116,7 +116,7 @@
 }
 .video-player-container {
   width: 100%;
-  height: 200px;
+  height: 20vw;
   margin-bottom: 30px;
   border: 1px solid #e3e3e3;
   position: relative;
