@@ -27,6 +27,7 @@ class Collection extends \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collec
      * @param \Magento\Framework\Registry $registryManager
      * @param mixed $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,

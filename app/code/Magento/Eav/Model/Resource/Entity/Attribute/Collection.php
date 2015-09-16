@@ -34,6 +34,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
@@ -52,6 +53,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * Resource model initialization
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -62,6 +64,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * Return array of fields to load attribute values
      *
      * @return string[]
+     * @codeCoverageIgnore
      */
     protected function _getLoadDataFields()
     {
@@ -274,6 +277,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * Declare group by attribute id condition for collection select
      *
      * @return $this
+     * @codeCoverageIgnore
      */
     public function addAttributeGrouping()
     {
@@ -285,6 +289,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * Specify "is_unique" filter as true
      *
      * @return $this
+     * @codeCoverageIgnore
      */
     public function addIsUniqueFilter()
     {
@@ -295,6 +300,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * Specify "is_unique" filter as false
      *
      * @return $this
+     * @codeCoverageIgnore
      */
     public function addIsNotUniqueFilter()
     {
@@ -335,6 +341,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      *
      * @param string $frontendInputType
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setFrontendInputTypeFilter($frontendInputType)
     {
@@ -346,6 +353,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      *
      * @param bool $flag
      * @return $this
+     * @codeCoverageIgnore
      */
     public function addSetInfo($flag = true)
     {
@@ -460,7 +468,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getSelectCountSql()
     {
