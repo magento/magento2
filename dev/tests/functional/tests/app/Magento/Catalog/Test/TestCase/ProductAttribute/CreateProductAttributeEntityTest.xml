@@ -54,6 +54,7 @@
             <data name="productAttribute/data/is_comparable" xsi:type="string">No</data>
             <data name="productAttribute/data/is_visible_on_front" xsi:type="string">Yes</data>
             <data name="productAttribute/data/used_in_product_listing" xsi:type="string">Yes</data>
+            <data name="productAttribute/data/is_used_for_promo_rules" xsi:type="string">Yes</data>
             <data name="productAttribute/data/used_for_sort_by" xsi:type="string">Yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
