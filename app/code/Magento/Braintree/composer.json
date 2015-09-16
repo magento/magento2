@@ -3,27 +3,27 @@
   "description": "N/A",
   "require": {
     "php": "~5.5.0|~5.6.0",
-    "magento/module-config": "1.0.0-beta",
-    "magento/module-store": "1.0.0-beta",
-    "magento/module-checkout": "1.0.0-beta",
-    "magento/module-catalog": "1.0.0-beta",
-    "magento/module-sales": "1.0.0-beta",
-    "magento/module-customer": "1.0.0-beta",
-    "magento/module-payment": "1.0.0-beta",
-    "magento/module-paypal": "1.0.0-beta",
-    "magento/module-quote": "1.0.0-beta",
-    "magento/module-backend": "1.0.0-beta",
-    "magento/module-directory": "1.0.0-beta",
-    "magento/module-theme": "1.0.0-beta",
-    "magento/framework": "1.0.0-beta",
+    "magento/module-config": "1.0.0-beta2",
+    "magento/module-store": "1.0.0-beta2",
+    "magento/module-checkout": "1.0.0-beta2",
+    "magento/module-catalog": "1.0.0-beta2",
+    "magento/module-sales": "1.0.0-beta2",
+    "magento/module-customer": "1.0.0-beta2",
+    "magento/module-payment": "1.0.0-beta2",
+    "magento/module-paypal": "1.0.0-beta2",
+    "magento/module-quote": "1.0.0-beta2",
+    "magento/module-backend": "1.0.0-beta2",
+    "magento/module-directory": "1.0.0-beta2",
+    "magento/module-theme": "1.0.0-beta2",
+    "magento/framework": "1.0.0-beta2",
     "braintree/braintree_php": "2.39.0",
     "magento/magento-composer-installer": "*"
   },
   "suggest": {
-    "magento/module-checkout-agreements": "1.0.0-beta"
+    "magento/module-checkout-agreements": "1.0.0-beta2"
   },
   "type": "magento2-module",
-  "version": "1.0.0-beta",
+  "version": "1.0.0-beta2",
   "license": [
     "proprietary"
   ],
