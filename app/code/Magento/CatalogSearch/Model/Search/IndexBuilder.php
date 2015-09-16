@@ -49,24 +49,32 @@ class IndexBuilder implements IndexBuilderInterface
     private $conditionManager;
 
     /**
+     * @var TableMapper
+     */
+    private $tableMapper;
+
+    /**
      * @param \Magento\Framework\App\Resource $resource
      * @param ScopeConfigInterface $config
      * @param StoreManagerInterface $storeManager
      * @param ConditionManager $conditionManager
      * @param IndexScopeResolver $scopeResolver
+     * @param TableMapper $tableMapper
      */
     public function __construct(
         Resource $resource,
         ScopeConfigInterface $config,
         StoreManagerInterface $storeManager,
         ConditionManager $conditionManager,
-        IndexScopeResolver $scopeResolver
+        IndexScopeResolver $scopeResolver,
+        TableMapper $tableMapper
     ) {
         $this->resource = $resource;
         $this->config = $config;
         $this->storeManager = $storeManager;
         $this->conditionManager = $conditionManager;
         $this->scopeResolver = $scopeResolver;
+        $this->tableMapper = $tableMapper;
     }
 
     /**
@@ -89,19 +97,7 @@ class IndexBuilder implements IndexBuilderInterface
                 []
             );
 
-        if ($this->isNeedToAddFilters($request)) {
-            $select
-                ->joinLeft(
-                    ['category_index' => $this->resource->getTableName('catalog_category_product_index')],
-                    'search_index.entity_id = category_index.product_id',
-                    []
-                )
-                ->joinLeft(
-                    ['cpie' => $this->resource->getTableName('catalog_product_index_eav')],
-                    'search_index.entity_id = cpie.entity_id AND search_index.attribute_id = cpie.attribute_id',
-                    []
-                );
-        }
+        $select = $this->tableMapper->addTables($select, $request);
 
         $select = $this->processDimensions($request, $select);
 
