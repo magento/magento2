@@ -66,9 +66,9 @@ class CollectTotals
     public function dispatch(\Magento\Framework\Event\Observer $observer)
     {
         /** @var \Magento\Quote\Api\Data\ShippingAssignmentInterface $shippingAssignment */
-        $shippingAssignment = $observer->getEvent()->getShippingAssignment();
+        $shippingAssignment = $observer->getShippingAssignment();
         /** @var \Magento\Quote\Model\Quote $quote */
-        $quote = $observer->getEvent()->getQuote();
+        $quote = $observer->getQuote();
         /** @var \Magento\Quote\Model\Quote\Address $address */
         $address = $shippingAssignment->getShipping()->getAddress();
 
