@@ -131,10 +131,6 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
             ]
             ]
         );
-        $eventObserver = $objectManager->create(
-            'Magento\Framework\Event\Observer',
-            ['data' => ['quote_address' => $quoteAddress]]
-        );
         $this->model->dispatch($eventObserver);
 
         $this->assertEquals(1, $quote->getCustomer()->getGroupId());
