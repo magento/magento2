@@ -495,22 +495,23 @@ define([
                     text: $.mage.__('Save'),
                     class: 'action-primary video-create-button',
                     click: $.proxy(widget._onCreate, widget)
-                },
-                    {
-                        text: $.mage.__('Save'),
-                        class: 'action-primary video-edit',
-                        click: $.proxy(widget._onUpdate, widget)
-                    },
-                    {
-                        text: $.mage.__('Delete'),
-                        class: 'action-primary video-delete-button',
-                        click: $.proxy(widget._onDelete, widget)
                     },
                     {
                         text: $.mage.__('Cancel'),
                         class: 'video-cancel-button',
                         click: $.proxy(widget._onCancel, widget)
-                    }],
+                    },
+                    {
+                        text: $.mage.__('Delete'),
+                        class: 'video-delete-button',
+                        click: $.proxy(widget._onDelete, widget)
+                    },
+                    {
+                        text: $.mage.__('Save'),
+                        class: 'action-primary video-edit',
+                        click: $.proxy(widget._onUpdate, widget)
+                    }
+                   ],
                 opened: function(e) {
                     $('#video_url').focus();
                     var roles = $('.video_image_role');
