@@ -121,6 +121,8 @@ class CartTotalRepository implements CartTotalRepositoryInterface
         $quoteTotals->setGrandTotal($amount);
         $quoteTotals->setItems($items);
         $quoteTotals->setItemsQty($quote->getItemsQty());
+        $quoteTotals->setBaseCurrencyCode($quote->getBaseCurrencyCode());
+        $quoteTotals->setQuoteCurrencyCode($quote->getQuoteCurrencyCode());
         return $quoteTotals;
     }
 }
