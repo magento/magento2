@@ -47,7 +47,7 @@ class ConsumerFactory
      *     <arguments>
      *         <argument name="consumers" xsi:type="array">
      *             <item name="rabbitmq" xsi:type="array">
-     *                 <item name="type" xsi:type="string">Magento\RabbitMq\Model\Consumer</item>
+     *                 <item name="type" xsi:type="string">Magento\Amqp\Model\Consumer</item>
      *                 <item name="connectionName" xsi:type="string">rabbitmq</item>
      *             </item>
      *         </argument>

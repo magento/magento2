@@ -36,7 +36,7 @@ class Data extends \Magento\Framework\Config\Data
      * @return string
      * @throws LocalizedException
      */
-    public function getExchangeForTopic($topicName)
+    public function getExchangeByTopic($topicName)
     {
         if (isset($this->_data[Converter::TOPICS][$topicName])) {
             $publisherName = $this->_data[Converter::TOPICS][$topicName][Converter::TOPIC_PUBLISHER];
@@ -64,9 +64,9 @@ class Data extends \Magento\Framework\Config\Data
      * @return string[]
      * @throws LocalizedException
      */
-    public function getQueuesForTopic($topic)
+    public function getQueuesByTopic($topic)
     {
-        $exchange = $this->getExchangeForTopic($topic);
+        $exchange = $this->getExchangeByTopic($topic);
         /**
          * Exchange should be taken into account here to avoid retrieving queues, related to another exchange,
          * which is not currently associated with topic, but is configured in binds
@@ -80,6 +80,27 @@ class Data extends \Magento\Framework\Config\Data
                     'No bindings configured for the "%topic" topic at "%exchange" exchange.',
                     ['topic' => $topic, 'exchange' => $exchange]
                 )
+            );
+        }
+    }
+
+    public function getConnectionByTopic($topic)
+    {
+        if (isset($this->_data[Converter::TOPICS][$topic])) {
+            $publisherName = $this->_data[Converter::TOPICS][$topic][Converter::TOPIC_PUBLISHER];
+            if (isset($this->_data[Converter::PUBLISHERS][$publisherName])) {
+                return $this->_data[Converter::PUBLISHERS][$publisherName][Converter::PUBLISHER_CONNECTION];
+            } else {
+                throw new LocalizedException(
+                    new Phrase(
+                        'Message queue publisher "%publisher" is not configured.',
+                        ['publisher' => $publisherName]
+                    )
+                );
+            }
+        } else {
+            throw new LocalizedException(
+                new Phrase('Message queue topic "%topic" is not configured.', ['topic' => $topic])
             );
         }
     }
