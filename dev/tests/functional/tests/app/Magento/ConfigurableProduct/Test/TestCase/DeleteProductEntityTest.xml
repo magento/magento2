@@ -7,7 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Catalog\Test\TestCase\Product\DeleteProductEntityTest">
-        <variation name="DeleteProductEntityTestVariation3" firstConstraint="Magento\Catalog\Test\Constraint\AssertProductSuccessDeleteMessage" method="test">
+        <variation name="DeleteProductEntityTestVariation9">
             <data name="products" xsi:type="string">configurableProduct::default</data>
             <data name="isRequired" xsi:type="string">Yes</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSuccessDeleteMessage" />

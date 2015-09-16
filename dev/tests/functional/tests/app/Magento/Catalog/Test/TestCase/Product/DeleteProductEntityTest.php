@@ -13,7 +13,7 @@ use Magento\Mtf\TestCase\Injectable;
 
 /**
  * Preconditions:
- * 1. Create product according to dataSet.
+ * 1. Create product according to data set.
  *
  * Steps:
  * 1. Login to backend.
