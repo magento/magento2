@@ -28,14 +28,14 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $context
      * @param string $path
-     * @param string $registrar
+     * @param array $pathValues
      * @dataProvider dataProviderContextByPath
      */
-    public function testGetContextByPath($context, $path, $registrar)
+    public function testGetContextByPath($context, $path, $pathValues)
     {
         $this->componentRegistrar->expects($this->any())
             ->method('getPaths')
-            ->willReturn($registrar);
+            ->will($this->returnValueMap($pathValues));
         $this->context = new Context($this->componentRegistrar);
         $this->assertEquals($context, $this->context->getContextByPath($path));
     }
@@ -48,11 +48,28 @@ class ContextTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 [Context::CONTEXT_TYPE_MODULE, 'Magento_Module'],
-                BP . '/app/code/Magento/Module/Block/Test.php',
-                ['Magento_Module' => BP . '/app/code/Magento/Module']
+                '/app/code/Magento/Module/Block/Test.php',
+                [
+                    [Context::CONTEXT_TYPE_MODULE, ['Magento_Module' => '/app/code/Magento/Module']],
+                    [Context::CONTEXT_TYPE_THEME, []],
+                ]
             ],
-            [[Context::CONTEXT_TYPE_THEME, 'area/theme/test.phtml'], '/app/design/area/theme/test.phtml', []],
-            [[Context::CONTEXT_TYPE_LIB, 'lib/web/module/test.phtml'], '/lib/web/module/test.phtml', []],
+            [
+                [Context::CONTEXT_TYPE_THEME, 'frontend/Some/theme'],
+                '/app/design/area/theme/test.phtml',
+                [
+                    [Context::CONTEXT_TYPE_MODULE, []],
+                    [Context::CONTEXT_TYPE_THEME, ['frontend/Some/theme' => '/app/design/area/theme']],
+                ]
+            ],
+            [
+                [Context::CONTEXT_TYPE_LIB, 'lib/web/module/test.phtml'],
+                '/lib/web/module/test.phtml',
+                [
+                    [Context::CONTEXT_TYPE_MODULE, []],
+                    [Context::CONTEXT_TYPE_THEME, []],
+                ]
+            ],
         ];
     }
 
