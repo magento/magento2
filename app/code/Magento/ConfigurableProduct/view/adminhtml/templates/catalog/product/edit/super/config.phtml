@@ -24,11 +24,6 @@
                     You need to create a simple product for each configuration (Ex: a product for each color).');?>
                     </div>
                 </div>
-                <div class="product-create-configuration-actions" data-bind="scope: 'configurableProductGrid'">
-                    <a class="action-menu-item" data-action="choose" data-bind="click: showManuallyGrid">
-                        <?= __('Add Products Manually');?>
-                    </a>
-                </div>
                 <div class="product-create-configuration-actions">
                     <button data-action="open-steps-wizard" title="Create Product Configurations"
                             class="action-secondary" data-bind="click: open">
@@ -40,6 +35,11 @@
                             ?>
                         </span>
                     </button>
+                </div>
+                <div class="product-create-configuration-actions" data-bind="scope: 'configurableProductGrid'">
+                    <a class="action-menu-item" data-action="choose" data-bind="click: showManuallyGrid, visible: button">
+                        <?= __('Add Products Manually');?>
+                    </a>
                 </div>
             </div>
             <fieldset class="fieldset">
