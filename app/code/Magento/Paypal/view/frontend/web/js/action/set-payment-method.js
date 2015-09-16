@@ -14,7 +14,7 @@ define(
     function ($, quote, urlBuilder, storage, errorProcessor, customer) {
         'use strict';
 
-        return function () {
+        return function (messageContainer) {
             var serviceUrl,
                 payload,
                 paymentData = quote.paymentMethod();
@@ -45,7 +45,7 @@ define(
                 }
             ).fail(
                 function (response) {
-                    errorProcessor.process(response);
+                    errorProcessor.process(response, messageContainer);
                 }
             );
         };
