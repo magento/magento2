@@ -141,7 +141,6 @@ class OverviewTest extends \PHPUnit_Framework_TestCase
      */
     protected function getTotalsMock($address)
     {
-        $storeId = 1;
         $totalMock = $this->getMock('\Magento\Sales\Model\Order\Total',
             [
                 'getCode',
