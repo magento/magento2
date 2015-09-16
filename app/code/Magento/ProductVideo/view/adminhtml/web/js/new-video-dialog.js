@@ -45,8 +45,23 @@ define([
             } else {
                 this.update();
             }
+
+            this.element.on('reset', $.proxy(this.reset, this));
+
         },
         update : function () {
+            var checkVideoID = $(this.options.container).find('.'+this.options.video_class).data('code');
+            if (checkVideoID && checkVideoID != this.options.video_id) {
+                this._doUpdate();
+            } else
+            if (checkVideoID && checkVideoID == this.options.video_id) {
+                return false;
+            } else
+            if (!checkVideoID) {
+                this._doUpdate();
+            }
+        },
+        _doUpdate : function () {
             this.reset();
             $(this.options.container).append('<div class="'+this.options.video_class+'" data-type="'+this.options.video_provider+'" data-code="'+this.options.video_id+'" data-width="100%" data-height="100%"></div>');
             $(this.options.meta_data.DOM.wrapper).show();
@@ -156,6 +171,8 @@ define([
 
         _tempPreviewImageData: null,
 
+        _videoPlayerSelector: '.mage-new-video-dialog',
+
         _bind: function() {
             var events = {
                 'setImage': '_onSetImage'
@@ -209,7 +226,7 @@ define([
          * @private
          */
         _onGetVideoInformationSuccess: function(e, data) {
-            var player = $('.mage-new-video-dialog').createVideoPlayer({
+            var player = $(this._videoPlayerSelector).createVideoPlayer({
                 video_id : data.videoId,
                 video_provider : data.videoProvider,
                 reset: false,
@@ -426,6 +443,7 @@ define([
             data['disabled'] = $(this._videoDisableinputSelector).prop('checked') ? 1 : 0;
             data['media_type'] = 'external-video';
             data.old_file = oldFile;
+            
             oldFile  ?
                 this._replaceImage(oldFile, data.file, data):
                 this._setImage(data.file, data);
@@ -495,22 +513,23 @@ define([
                     text: $.mage.__('Save'),
                     class: 'action-primary video-create-button',
                     click: $.proxy(widget._onCreate, widget)
-                },
-                    {
-                        text: $.mage.__('Save'),
-                        class: 'action-primary video-edit',
-                        click: $.proxy(widget._onUpdate, widget)
-                    },
-                    {
-                        text: $.mage.__('Delete'),
-                        class: 'action-primary video-delete-button',
-                        click: $.proxy(widget._onDelete, widget)
                     },
                     {
                         text: $.mage.__('Cancel'),
                         class: 'video-cancel-button',
                         click: $.proxy(widget._onCancel, widget)
-                    }],
+                    },
+                    {
+                        text: $.mage.__('Delete'),
+                        class: 'video-delete-button',
+                        click: $.proxy(widget._onDelete, widget)
+                    },
+                    {
+                        text: $.mage.__('Save'),
+                        class: 'action-primary video-edit',
+                        click: $.proxy(widget._onUpdate, widget)
+                    }
+                   ],
                 opened: function(e) {
                     $('#video_url').focus();
                     var roles = $('.video_image_role');
@@ -638,8 +657,8 @@ define([
             if (fileName) {
                 this._uploadImage(fileName, imageData.file, callback);
             } else {
-                callback(0, imageData);
                 this._replaceImage(imageData.file, imageData.file, imageData);
+                callback(0, imageData);
             }
         },
 
@@ -762,6 +781,7 @@ define([
                 this._previewImage.remove();
                 this._previewImage = null;
             }
+            $(this._videoPlayerSelector).trigger('reset');
             var newVideoForm = this.element.find(this._videoFormSelector);
             jQuery(newVideoForm).find('input[type="hidden"][name!="form_key"]').val('');
             $('input[name*="' + $(this._itemIdSelector).val() + '"]').parent().removeClass('active');
@@ -792,7 +812,7 @@ define([
             }
             var self = this;
             if (data.length > 0) {
-                var containers = $('.video-placeholder').siblings('input');
+                var containers = $('.image-placeholder').siblings('input');
                 $.each(containers, function (i, el) {
                     var start = el.name.indexOf('[') + 1;
                     var end = el.name.indexOf(']');
@@ -820,7 +840,7 @@ define([
 
         toggleButtons: function() {
             var self = this;
-            $('.video-placeholder, .add-video-button-container').click(function() {
+            $('.video-placeholder, .add-video-button-container > button').click(function() {
                 $('.video-create-button').show();
                 $('.video-delete-button').hide();
                 $('.video-edit').hide();
