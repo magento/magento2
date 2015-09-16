@@ -38,14 +38,13 @@ class UpgradeData implements UpgradeDataInterface
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         /** @var TaxSetup $taxSetup */
-        $taxSetup = $this->taxSetupFactory->create(['setup' => $setup]);
-        $catalogSetup = $taxSetup->getCatalogSetup(['resourceName' => 'catalog_setup', 'setup' => $setup]);
+        $taxSetup = $this->taxSetupFactory->create(['resourceName' => 'tax_setup', 'setup' => $setup]);
 
         $setup->startSetup();
 
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
              //Update the tax_class_id attribute in the 'catalog_eav_attribute' table
-            $catalogSetup->updateAttribute(
+            $taxSetup->updateAttribute(
                 \Magento\Catalog\Model\Product::ENTITY,
                 'tax_class_id',
                 'is_visible_in_advanced_search',

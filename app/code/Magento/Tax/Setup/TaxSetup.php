@@ -6,7 +6,6 @@
 namespace Magento\Tax\Setup;
 
 use Magento\Catalog\Model\ProductTypes\ConfigInterface;
-use Magento\Catalog\Setup\CategorySetup;
 use Magento\Catalog\Setup\CategorySetupFactory;
 use Magento\Eav\Model\Entity\Setup\Context;
 use Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory;
@@ -20,13 +19,6 @@ use Magento\Sales\Setup\SalesSetup;
  */
 class TaxSetup extends SalesSetup
 {
-    /**
-     * Category setup factory
-     *
-     * @var CategorySetupFactory
-     */
-    protected $_setupFactory;
-
     /**
      * Product type config
      *
@@ -42,7 +34,6 @@ class TaxSetup extends SalesSetup
      * @param CacheInterface $cache
      * @param CollectionFactory $attrGroupCollectionFactory
      * @param ScopeConfigInterface $config
-     * @param CategorySetupFactory $setupFactory
      * @param ConfigInterface $productTypeConfig
      */
     public function __construct(
@@ -51,22 +42,10 @@ class TaxSetup extends SalesSetup
         CacheInterface $cache,
         CollectionFactory $attrGroupCollectionFactory,
         ScopeConfigInterface $config,
-        CategorySetupFactory $setupFactory,
         ConfigInterface $productTypeConfig
     ) {
-        $this->_setupFactory = $setupFactory;
         $this->productTypeConfig = $productTypeConfig;
-    }
-
-    /**
-     * Gets catalog setup
-     *
-     * @param array $data
-     * @return CategorySetup
-     */
-    public function getCatalogSetup(array $data = [])
-    {
-        return $this->_setupFactory->create($data);
+        parent::__construct($setup, $context, $cache, $attrGroupCollectionFactory, $config);
     }
 
     /**
