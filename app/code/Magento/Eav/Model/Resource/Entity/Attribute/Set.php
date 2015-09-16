@@ -32,6 +32,7 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param GroupFactory $attrGroupFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param string $connectionName
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -48,6 +49,7 @@ class Set extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Initialize connection
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
