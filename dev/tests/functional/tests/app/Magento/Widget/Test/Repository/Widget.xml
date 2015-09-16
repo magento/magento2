@@ -8,55 +8,21 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
     <repository class="Magento\Widget\Test\Repository\Widget">
         <dataset name="default">
-            <field name="title" xsi:type="string">Test Frontend App</field>
-            <field name="store_ids" xsi:type="array">
-                <item name="0" xsi:type="string">All Store Views</item>
-            </field>
-            <field name="widget_instance" xsi:type="array">
-                <item name="0" xsi:type="array">
-                    <item name="page_group" xsi:type="string">all_pages</item>
-                    <item name="all_pages" xsi:type="array">
-                        <item name="layout_handle" xsi:type="string">default</item>
-                        <item name="for" xsi:type="string">all</item>
-                        <item name="block" xsi:type="string">content</item>
-                        <item name="template" xsi:type="string">widget/block.phtml</item>
-                    </item>
-                </item>
-            </field>
-            <field name="parameters" xsi:type="array">
-                <item name="display_mode" xsi:type="string">catalogrule</item>
-            </field>
-            <field name="theme_id" xsi:type="number">2</field>
-        </dataset>
-
-        <dataset name="cms_page_link">
             <field name="code" xsi:type="string">CMS Page Link</field>
             <field name="title" xsi:type="string">Cms Page Link %isolation%</field>
+            <field name="theme_id" xsi:type="string">Magento Luma</field>
             <field name="store_ids" xsi:type="array">
                 <item name="dataset" xsi:type="string">all_store_views</item>
             </field>
             <field name="widget_instance" xsi:type="array">
                 <item name="0" xsi:type="array">
-                    <item name="page_group" xsi:type="string">All Pages</item>
-                    <item name="all_pages" xsi:type="array">
-                        <item name="block" xsi:type="string">Main Content Area</item>
-                        <item name="template" xsi:type="string">CMS Page Link Block Template</item>
-                    </item>
+                    <item name="page_group" xsi:type="string">Generic Pages/All Pages</item>
+                    <item name="block" xsi:type="string">Main Content Area</item>
+                    <item name="template" xsi:type="string">CMS Page Link Block Template</item>
                 </item>
             </field>
             <field name="parameters" xsi:type="array">
-                <item name="display_mode" xsi:type="string">fixed</item>
-                <item name="anchor_text" xsi:type="string">text</item>
-                <item name="title" xsi:type="string">anchor title</item>
-            </field>
-            <field name="page_id" xsi:type="array">
-                <item name="dataset" xsi:type="string">default</item>
-            </field>
-            <field name="theme_id" xsi:type="string">Magento Luma</field>
-            <field name="widgetOptions" xsi:type="array">
-                <item name="0" xsi:type="array">
-                    <item name="type_id" xsi:type="string">cmsPageLink</item>
-                </item>
+                <item name="dataset" xsi:type="string">cmsPageLink</item>
             </field>
         </dataset>
     </repository>

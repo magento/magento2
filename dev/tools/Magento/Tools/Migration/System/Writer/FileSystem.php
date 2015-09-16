@@ -5,6 +5,8 @@
  */
 namespace Magento\Tools\Migration\System\Writer;
 
+use Magento\Framework\Filesystem\DriverInterface;
+
 class FileSystem implements \Magento\Tools\Migration\System\WriterInterface
 {
     /**
@@ -15,7 +17,7 @@ class FileSystem implements \Magento\Tools\Migration\System\WriterInterface
     public function write($fileName, $contents)
     {
         if (false == is_dir(dirname($fileName))) {
-            mkdir(dirname($fileName), 0777, true);
+            mkdir(dirname($fileName), DriverInterface::WRITEABLE_DIRECTORY_MODE, true);
         }
         file_put_contents($fileName, $contents);
     }

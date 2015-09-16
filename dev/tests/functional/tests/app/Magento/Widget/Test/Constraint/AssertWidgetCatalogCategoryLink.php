@@ -14,7 +14,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Check that created widget displayed on frontend on Home page and on Advanced Search and
- * after click on widget link on frontend system redirects you to catalog page
+ * after click on widget link on frontend system redirects you to catalog page.
  */
 class AssertWidgetCatalogCategoryLink extends AbstractConstraint
 {
@@ -24,7 +24,7 @@ class AssertWidgetCatalogCategoryLink extends AbstractConstraint
 
     /**
      * Assert that created widget displayed on frontend on Home page and on Advanced Search and
-     * after click on widget link on frontend system redirects you to catalog page
+     * after click on widget link on frontend system redirects you to catalog page.
      *
      * @param CmsIndex $cmsIndex
      * @param CatalogCategoryView $categoryView
@@ -44,7 +44,7 @@ class AssertWidgetCatalogCategoryLink extends AbstractConstraint
         $adminCache->getMessagesBlock()->waitSuccessMessage();
 
         $cmsIndex->open();
-        $widgetText = $widget->getWidgetOptions()['anchor_text'];
+        $widgetText = $widget->getParameters()['anchor_text'];
 
         \PHPUnit_Framework_Assert::assertTrue(
             $cmsIndex->getWidgetView()->isWidgetVisible($widget, $widgetText),
@@ -54,7 +54,7 @@ class AssertWidgetCatalogCategoryLink extends AbstractConstraint
         $cmsIndex->getWidgetView()->clickToWidget($widget, $widgetText);
         $title = $categoryView->getTitleBlock()->getTitle();
         \PHPUnit_Framework_Assert::assertEquals(
-            $widget->getWidgetOptions()['entities'][0]->getName(),
+            $widget->getParameters()['entities'][0]->getName(),
             $title,
             'Wrong category title.'
         );
@@ -67,7 +67,7 @@ class AssertWidgetCatalogCategoryLink extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object
+     * Returns a string representation of the object.
      *
      * @return string
      */
