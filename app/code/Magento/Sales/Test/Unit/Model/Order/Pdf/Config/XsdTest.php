@@ -21,8 +21,8 @@ class XsdTest extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        self::$_schemaPath = BP . '/app/code/Magento/Sales/etc/pdf.xsd';
-        self::$_schemaFilePath = BP . '/app/code/Magento/Sales/etc/pdf_file.xsd';
+        self::$_schemaPath = realpath(__DIR__ . '/../../../../../../etc/pdf.xsd');
+        self::$_schemaFilePath = realpath(__DIR__ . '/../../../../../../etc/pdf_file.xsd');
     }
 
     /**
