@@ -927,7 +927,6 @@ class Installer
         foreach (spl_autoload_functions() as $autoloader) {
             if ($autoloader[0] instanceof \Magento\Framework\Code\Generator\Autoloader) {
                 spl_autoload_unregister([$autoloader[0], $autoloader[1]]);
-                break;
             }
         }
         // Corrected Magento autoloader will be loaded upon next get() call on $this->objectManagerProvider
