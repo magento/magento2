@@ -36,16 +36,18 @@ class AssertAttributeOptionsOnProductForm extends AbstractConstraint
         $productGrid->getProductGrid()->searchAndOpen(['sku' => $product->getSku()]);
 
         $attributeOptions = $attribute->getOptions();
-        $productAttributeOptions = $productEdit->getProductForm()->getAttributeElement($attribute)->getValue();
-        $optionsVisible = true;
+        $options[] = $attribute->getFrontendLabel();
         foreach ($attributeOptions as $option) {
-            if (array_search($option['admin'], $productAttributeOptions) === false) {
-                $optionsVisible = false;
-                break;
-            }
+            $options[] = $option['admin'];
         }
+        $productAttributeOptions = $productEdit->getProductForm()->getAttributeElement($attribute)->getText();
+        $productOptions = explode("\n", $productAttributeOptions);
+        $diff = array_diff($options, $productOptions);
 
-        \PHPUnit_Framework_Assert::assertTrue($optionsVisible, "Product Attribute is absent on Product form.");
+        \PHPUnit_Framework_Assert::assertTrue(
+            empty($diff),
+            "Products attribute options are absent on product form: " . implode(', ', $diff)
+        );
     }
 
     /**
@@ -55,6 +57,6 @@ class AssertAttributeOptionsOnProductForm extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Product attribute options is visible on product creation form.';
+        return 'All product attribute options are visible on product creation form.';
     }
 }
