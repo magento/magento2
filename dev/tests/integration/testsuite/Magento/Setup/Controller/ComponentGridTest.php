@@ -46,13 +46,13 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
      */
     private $lastSyncData = [];
 
-    public function __construct()
+    public function setUp()
     {
         $this->lastSyncData = [
             "lastSyncDate" => "2015/08/10 21:05:34",
             "packages" => [
-                'magento/sample-module1' => [
-                    'name' => 'magento/sample-module1',
+                'magento/sample-module-one' => [
+                    'name' => 'magento/sample-module-one',
                     'type' => 'magento2-module',
                     'version' => '1.0.0'
                 ]
@@ -60,12 +60,22 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->componentData = [
-            'magento/sample-module1' => [
-                'name' => 'magento/sample-module1',
+            'magento/sample-module-one' => [
+                'name' => 'magento/sample-module-one',
                 'type' => 'magento2-module',
                 'version' => '1.0.0'
             ]
         ];
+
+        $allComponentData = [
+            'magento/sample-module-two' => [
+                'name' => 'magento/sample-module-two',
+                'type' => 'magento2-module',
+                'version' => '1.0.0'
+            ]
+        ];
+
+        $allComponentData = array_merge($allComponentData, $this->componentData);
         $this->composerInformationMock = $this->getMock(
             'Magento\Framework\Composer\ComposerInformation',
             [],
@@ -97,9 +107,29 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $objectManager->expects($this->once())
+        $enabledModuleList = $this->getMock(
+            'Magento\Framework\Module\ModuleList',
+            [],
+            [],
+            '',
+            false
+        );
+        $enabledModuleList->expects($this->any())->method('has')->willReturn(true);
+        $fullModuleList = $this->getMock(
+            'Magento\Framework\Module\FullModuleList',
+            [],
+            [],
+            '',
+            false
+        );
+        $fullModuleList->expects($this->any())->method('getNames')->willReturn($allComponentData);
+        $objectManager->expects($this->exactly(3))
             ->method('get')
-            ->willReturn($packageInfoFactory);
+            ->willReturnMap([
+                ['Magento\Framework\Module\PackageInfoFactory', $packageInfoFactory],
+                ['Magento\Framework\Module\FullModuleList', $fullModuleList],
+                ['Magento\Framework\Module\ModuleList', $enabledModuleList]
+            ]);
         $this->packageInfo = $this->getMock(
             'Magento\Framework\Module\PackageInfo',
             [],
@@ -137,6 +167,12 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
         $this->packageInfo->expects($this->once())
             ->method('getModuleName')
             ->willReturn('Sample_Module');
+        $this->packageInfo->expects($this->exactly(2))
+            ->method('getPackageName')
+            ->willReturn($this->componentData['magento/sample-module-one']['name']);
+        $this->packageInfo->expects($this->exactly(2))
+            ->method('getVersion')
+            ->willReturn($this->componentData['magento/sample-module-one']['version']);
         $this->composerInformationMock->expects($this->once())
             ->method('getInstalledMagentoPackages')
             ->willReturn($this->componentData);
@@ -152,13 +188,15 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $variables);
         $this->assertTrue($variables['success']);
         $expected = [[
-            'name' => 'magento/sample-module1',
+            'name' => 'magento/sample-module-one',
             'type' => 'magento2-module',
             'version' => '1.0.0',
             'update' => false,
             'uninstall' => true,
             'vendor' => 'magento',
-            'moduleName' => 'Sample_Module'
+            'moduleName' => 'Sample_Module',
+            'enable' => true,
+            'disable' => false
         ]];
         $this->assertEquals($expected, $variables['components']);
         $this->assertArrayHasKey('total', $variables);
