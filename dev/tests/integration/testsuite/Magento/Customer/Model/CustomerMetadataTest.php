@@ -93,7 +93,7 @@ class CustomerMetadataTest extends \PHPUnit_Framework_TestCase
     public function testGetCustomerAttributeMetadata()
     {
         // Expect these attributes to exist but do not check the value
-        $expectAttrsWOutVals = ['created_at'];
+        $expectAttrsWOutVals = ['created_at', 'updated_at'];
 
         // Expect these attributes to exist and check the value - values come from _files/customer.php
         $expectAttrsWithVals = [
