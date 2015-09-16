@@ -167,8 +167,7 @@ class Application
         $this->dirList = new \Magento\Framework\App\Filesystem\DirectoryList(BP, $customDirs);
         \Magento\Framework\Autoload\Populator::populateMappings(
             $autoloadWrapper,
-            $this->dirList,
-            new ComponentRegistrar()
+            $this->dirList
         );
         $this->_initParams = [
             \Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => $customDirs,

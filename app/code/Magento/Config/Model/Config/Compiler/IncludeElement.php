@@ -91,7 +91,7 @@ class IncludeElement implements ElementInterface
     }
 
     /**
-     * Get content include file (in adminhtml area)
+     * Get content of include file (in adminhtml area)
      *
      * @param string $includePath
      * @return string
