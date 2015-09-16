@@ -11,12 +11,12 @@ namespace Magento\Amqp\Model;
 use Magento\Framework\Amqp\Config\Data as AmqpConfig;
 use Magento\Framework\Amqp\ConsumerInterface;
 use Magento\Framework\Amqp\EnvelopeInterface;
+use Magento\Framework\Amqp\QueueInterface;
 use Magento\Framework\Amqp\QueueRepository;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
 use Magento\Framework\Amqp\MessageEncoder;
 use Magento\Framework\Amqp\ConsumerConfigurationInterface;
-use Magento\RabbitMq\Model\Config;
 
 /**
  * A RabbitMQ Consumer to handle receiving a message.
@@ -25,11 +25,6 @@ use Magento\RabbitMq\Model\Config;
 class Consumer implements ConsumerInterface
 {
     const CONTENT_TYPE_JSON = 'application/json';
-
-    /**
-     * @var Config
-     */
-    private $rabbitMqConfig;
 
     /**
      * @var AmqpConfig
@@ -59,20 +54,17 @@ class Consumer implements ConsumerInterface
     /**
      * Initialize dependencies.
      *
-     * @param Config $rabbitMqConfig
      * @param AmqpConfig $amqpConfig
      * @param MessageEncoder $messageEncoder
      * @param QueueRepository $queueRepository
      * @param EnvelopeFactory $envelopeFactory
      */
     public function __construct(
-        Config $rabbitMqConfig,
         AmqpConfig $amqpConfig,
         MessageEncoder $messageEncoder,
         QueueRepository $queueRepository,
         EnvelopeFactory $envelopeFactory
     ) {
-        $this->rabbitMqConfig = $rabbitMqConfig;
         $this->amqpConfig = $amqpConfig;
         $this->messageEncoder = $messageEncoder;
         $this->queueRepository = $queueRepository;
@@ -144,7 +136,7 @@ class Consumer implements ConsumerInterface
             ? $maxNumberOfMessages
             : $this->configuration->getMaxMessages() ?: 1;
 
-        /** @var Queue $queue */
+        /** @var QueueInterface $queue */
         $queue = $this->queueRepository->getByQueueName($queueName);
         for ($i = $count; $i > 0; $i--) {
             $message = $queue->dequeue();
@@ -166,7 +158,7 @@ class Consumer implements ConsumerInterface
     {
         $callback = [$this, 'dispatchMessage'];
 
-        /** @var Queue $queue */
+        /** @var QueueInterface $queue */
         $queue = $this->queueRepository->getByQueueName($queueName);
         $queue->subscribe($callback);
     }
