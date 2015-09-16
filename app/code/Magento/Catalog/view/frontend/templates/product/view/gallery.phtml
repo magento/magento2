@@ -10,10 +10,10 @@
  * @var $block \Magento\Catalog\Block\Product\View\Gallery
  */
 ?>
-<div class="gallery-placeholder"></div>
+<div class="gallery-placeholder" data-gallery-role="gallery-placeholder"></div>
 <script type="text/x-magento-init">
     {
-        ".gallery-placeholder": {
+        "[data-gallery-role=gallery-placeholder]": {
             "mage/gallery/gallery": {
                 "mixins":["magnifier/magnify"],
                 "magnifierOpts": <?php echo $block->getMagnifier(); ?>,
