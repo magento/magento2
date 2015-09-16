@@ -252,19 +252,12 @@
                 if (!config) {
                     var config = defaultLoadTreeParams;
                 }
-            });
-        } else {
-            var baseUrl = '<?php /* @escapeNotVerified */ echo $block->getEditUrl() ?>';
-            var urlExt = switcherParams.scopeParams + 'id/' + tree.currentNodeId + '/';
-            url = parseSidUrl(baseUrl, urlExt);
-            setLocation(url);
-        }
-    }
-    // render default tree
-    else {
-        _renderNewTree();
-    }
-}
+
+                if (tree) {
+                    tree.purgeListeners();
+                    tree.el.dom.innerHTML = '';
+                }
+                tree = new Ext.tree.TreePanel.Enhanced('tree-div', newTreeParams);
 
                 tree.loadTree(config, true);
 

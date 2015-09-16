@@ -2,6 +2,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'jquery',
     'underscore',
@@ -42,9 +43,6 @@ define([
         },
         _remove: function() {
             this.modal.remove();
-        },
-        openModal: function() {
-            return this._super();
         },
         closeModal: function(result) {
             var value;

@@ -34,7 +34,7 @@ AdminOrder.prototype = {
         this.isOnlyVirtualProduct = false;
         this.excludedPaymentMethods = [];
         this.summarizePrice = true;
-        Event.observe(window, 'load',  (function(){
+        window.addEventListener('load',  (function(){
             this.dataArea = new OrderFormArea('data', $(this.getAreaId('data')), this);
             this.itemsArea = Object.extend(new OrderFormArea('items', $(this.getAreaId('items')), this), {
                 addControlButton: function(button){
