@@ -63,6 +63,11 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
     protected $scopeConfig;
 
     /**
+     * @var \Magento\Quote\Model\Quote\TotalsCollector
+     */
+    protected $totalsCollector;
+
+    /**
      * @param \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement
      * @param \Magento\Checkout\Model\PaymentDetailsFactory $paymentDetailsFactory
      * @param \Magento\Quote\Api\CartTotalRepositoryInterface $cartTotalsRepository
@@ -71,6 +76,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
      * @param Logger $logger
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -81,7 +87,8 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         QuoteAddressValidator $addressValidator,
         Logger $logger,
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
     ) {
         $this->paymentMethodManagement = $paymentMethodManagement;
         $this->paymentDetailsFactory = $paymentDetailsFactory;
@@ -91,6 +98,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         $this->logger = $logger;
         $this->addressRepository = $addressRepository;
         $this->scopeConfig = $scopeConfig;
+        $this->totalsCollector = $totalsCollector;
     }
 
     /**
@@ -134,7 +142,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         try {
             /** TODO: refactor this code. Eliminate save operation */
             $address->save();
-            $address->collectShippingRates();
+            $this->totalsCollector->collectAddressTotals($quote, $address);
         } catch (\Exception $e) {
             $this->logger->critical($e);
             throw new InputException(__('Unable to save address. Please, check input data.'));
