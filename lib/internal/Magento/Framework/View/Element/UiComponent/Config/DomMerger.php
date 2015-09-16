@@ -344,18 +344,7 @@ class DomMerger implements DomMergerInterface
         $schemaFilePath = $schemaFilePath !== null ? $schemaFilePath : $this->schemaFilePath;
         libxml_use_internal_errors(true);
         try {
-            $result = $domDocument->schemaValidate($schemaFilePath);
-            $errors = [];
-            if (!$result) {
-                $validationErrors = libxml_get_errors();
-                if (count($validationErrors)) {
-                    foreach ($validationErrors as $error) {
-                        $errors[] = $this->renderErrorMessage($error, static::ERROR_FORMAT_DEFAULT);
-                    }
-                } else {
-                    $errors[] = 'Unknown validation error';
-                }
-            }
+            $errors = \Magento\Framework\Config\Dom::validateDomDocument($domDocument, $schemaFilePath);
         } catch (\Exception $exception) {
             libxml_use_internal_errors(false);
             throw $exception;

@@ -67,7 +67,12 @@ class DiConfigFilesTest extends \PHPUnit_Framework_TestCase
 
         $dom = new \DOMDocument();
         $dom->loadXML($xml);
-        if (!@$dom->schemaValidate($schemaLocator->getSchema())) {
+
+        libxml_use_internal_errors(true);
+        $result = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schemaLocator->getSchema());
+        libxml_use_internal_errors(false);
+
+        if (!empty($result)) {
             $this->fail('File ' . $xml . ' has invalid xml structure.');
         }
     }

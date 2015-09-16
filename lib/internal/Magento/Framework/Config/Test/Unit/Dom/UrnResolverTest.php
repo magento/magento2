@@ -19,51 +19,14 @@ class UrnResolverTest extends \PHPUnit_Framework_TestCase
     protected $urnResolver;
 
     /**
-     * @var ComponentRegistrarInterface | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $registrarMock;
-
-    /**
-     * @var PackageInfo | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $packageInfoMock;
-
-    /**
-     * @var PackageInfoFactory | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $packageInfoFactoryMock;
-
-    /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManagerHelper;
 
     public function setUp()
     {
-        $this->registrarMock = $this->getMockBuilder('Magento\Framework\Component\ComponentRegistrarInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(['getPath', 'getPaths'])
-            ->getMock();
-
-        $this->packageInfoMock = $this->getMockBuilder('Magento\Framework\Module\PackageInfo')
-            ->disableOriginalConstructor()
-            ->setMethods(['getModuleName'])
-            ->getMock();
-        $this->packageInfoFactoryMock = $this->getMockBuilder('Magento\Framework\Module\PackageInfoFactory')
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->packageInfoFactoryMock->expects($this->any())->method('create')->willReturn($this->packageInfoMock);
-
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $arguments = [
-            'componentRegistrar' => $this->registrarMock,
-            'packageInfoFactory' => $this->packageInfoFactoryMock,
-        ];
-        $this->urnResolver = $this->objectManagerHelper->getObject(
-            'Magento\Framework\Config\Dom\UrnResolver',
-            $arguments
-        );
+        $this->urnResolver = $this->objectManagerHelper->getObject('Magento\Framework\Config\Dom\UrnResolver');
     }
 
     public function testGetRealPathNoUrn()
@@ -77,26 +40,14 @@ class UrnResolverTest extends \PHPUnit_Framework_TestCase
     {
         $xsdUrn = 'urn:magento:library:framework:Config/Test/Unit/_files/sample.xsd';
         $xsdPath = realpath(dirname(__DIR__)) . '/_files/sample.xsd';
-        $registrarResult = realpath(dirname(dirname(dirname(dirname(__DIR__)))));
-        $this->registrarMock->expects($this->once())
-            ->method('getPath')
-            ->with(ComponentRegistrar::LIBRARY, 'magento/framework')
-            ->willReturn($registrarResult);
-
         $result = $this->urnResolver->getRealPath($xsdUrn);
         $this->assertSame($xsdPath, $result, 'XSD paths does not match.');
     }
 
     public function testGetRealPathWithModuleUrn()
     {
-        $xsdUrn = 'urn:magento:module:framework:Config/Test/Unit/_files/sample.xsd';
-        $xsdPath = realpath(dirname(__DIR__)) . '/_files/sample.xsd';
-        $this->packageInfoMock->expects($this->once())->method('getModuleName')->willReturn('Magento_Customer');
-        $registrarResult = realpath(dirname(dirname(dirname(dirname(__DIR__)))));
-        $this->registrarMock->expects($this->once())
-            ->method('getPath')
-            ->with(ComponentRegistrar::MODULE, 'Magento_Customer')
-            ->willReturn($registrarResult);
+        $xsdUrn = 'urn:magento:module:customer:etc/address_formats.xsd';
+        $xsdPath = BP . '/app/code/Magento/Customer/etc/address_formats.xsd';
 
         $result = $this->urnResolver->getRealPath($xsdUrn);
         $this->assertSame($xsdPath, $result, 'XSD paths does not match.');
@@ -119,12 +70,6 @@ class UrnResolverTest extends \PHPUnit_Framework_TestCase
     public function testGetRealPathWrongModule()
     {
         $xsdUrn = 'urn:magento:module:test:testfile.xsd';
-        $this->packageInfoMock->expects($this->once())->method('getModuleName')->willReturn('Magento_Test');
-        $this->registrarMock->expects($this->once())
-            ->method('getPath')
-            ->with(ComponentRegistrar::MODULE, 'Magento_Test')
-            ->willReturn('');
-
         $this->urnResolver->getRealPath($xsdUrn);
     }
 }
