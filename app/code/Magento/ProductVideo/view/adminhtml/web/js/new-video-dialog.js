@@ -45,6 +45,9 @@ define([
             } else {
                 this.update();
             }
+
+            this.element.on('reset', $.proxy(this.reset, this));
+
         },
         update : function () {
             this.reset();
@@ -156,6 +159,8 @@ define([
 
         _tempPreviewImageData: null,
 
+        _videoPlayerSelector: '.mage-new-video-dialog',
+
         _bind: function() {
             var events = {
                 'setImage': '_onSetImage'
@@ -209,7 +214,7 @@ define([
          * @private
          */
         _onGetVideoInformationSuccess: function(e, data) {
-            var player = $('.mage-new-video-dialog').createVideoPlayer({
+            var player = $(this._videoPlayerSelector).createVideoPlayer({
                 video_id : data.videoId,
                 video_provider : data.videoProvider,
                 reset: false,
@@ -495,22 +500,23 @@ define([
                     text: $.mage.__('Save'),
                     class: 'action-primary video-create-button',
                     click: $.proxy(widget._onCreate, widget)
-                },
-                    {
-                        text: $.mage.__('Save'),
-                        class: 'action-primary video-edit',
-                        click: $.proxy(widget._onUpdate, widget)
-                    },
-                    {
-                        text: $.mage.__('Delete'),
-                        class: 'action-primary video-delete-button',
-                        click: $.proxy(widget._onDelete, widget)
                     },
                     {
                         text: $.mage.__('Cancel'),
                         class: 'video-cancel-button',
                         click: $.proxy(widget._onCancel, widget)
-                    }],
+                    },
+                    {
+                        text: $.mage.__('Delete'),
+                        class: 'video-delete-button',
+                        click: $.proxy(widget._onDelete, widget)
+                    },
+                    {
+                        text: $.mage.__('Save'),
+                        class: 'action-primary video-edit',
+                        click: $.proxy(widget._onUpdate, widget)
+                    }
+                   ],
                 opened: function(e) {
                     $('#video_url').focus();
                     var roles = $('.video_image_role');
@@ -762,6 +768,7 @@ define([
                 this._previewImage.remove();
                 this._previewImage = null;
             }
+            $(this._videoPlayerSelector).trigger('reset');
             var newVideoForm = this.element.find(this._videoFormSelector);
             jQuery(newVideoForm).find('input[type="hidden"][name!="form_key"]').val('');
             $('input[name*="' + $(this._itemIdSelector).val() + '"]').parent().removeClass('active');
