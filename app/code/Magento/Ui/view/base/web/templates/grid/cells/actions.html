@@ -14,7 +14,9 @@
             attr: {
                 href: $data.href
             },
-            click: $parent.applyAction.bind($parent, index, rowIndex),
+            click: $parent.isHandlerRequired(index, rowIndex) ?
+                $parent.applyAction.bind($parent, index, rowIndex) :
+                false,
             text: $data.label"></a>
         <!-- /ko -->
     <!-- /ko -->
@@ -33,8 +35,11 @@
         <ul
             class="action-menu"
             data-bind="
-                css: {'_active': opened() === row._rowIndex}">
-            <!-- ko foreach: getVisibleActions(row._rowIndex) -->
+                css: {
+                    '_active': opened() === row._rowIndex
+                },
+                foreach: getVisibleActions(row._rowIndex)"
+                >
             <li>
                 <a
                     class="action-menu-item"
@@ -42,10 +47,11 @@
                         attr: {
                             href: $data.href
                         },
-                        click: $parent.applyAction.bind($parent, index, rowIndex),
+                        click: $parent.isHandlerRequired(index, rowIndex) ?
+                            $parent.applyAction.bind($parent, index, rowIndex) :
+                            false,
                         text: $data.label"></a>
             </li>
-            <!-- /ko -->
         </ul>
     </div>
     <!-- /ko -->

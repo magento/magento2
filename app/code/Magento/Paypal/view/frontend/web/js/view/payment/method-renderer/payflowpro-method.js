@@ -48,7 +48,7 @@ define(
                 var self = this;
                 if (this.validateHandler() && additionalValidators.validate()) {
                     this.isPlaceOrderActionAllowed(false);
-                    $.when(setPaymentInformationAction()).done(function() {
+                    $.when(setPaymentInformationAction(this.messageContainer)).done(function() {
                         self.placeOrderHandler();
                     }).fail(function() {
                         self.isPlaceOrderActionAllowed(true);
