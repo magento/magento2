@@ -60,10 +60,11 @@ class Total extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     }
 
     /**
+     * @param \Magento\Quote\Model\Quote $quote
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return array
      */
-    public function fetch(\Magento\Quote\Model\Quote\Address\Total $total)
+    public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {
         if ($total->getCanApplyMsrp()) {
             return [

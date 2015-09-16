@@ -102,11 +102,12 @@ abstract class AbstractTotal implements CollectorInterface, ReaderInterface
     /**
      * Fetch (Retrieve data as array)
      *
+     * @param \Magento\Quote\Model\Quote $quote
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return array
      * @internal param \Magento\Quote\Model\Quote\Address $address
      */
-    public function fetch(\Magento\Quote\Model\Quote\Address\Total $total)
+    public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {
         return [];
     }

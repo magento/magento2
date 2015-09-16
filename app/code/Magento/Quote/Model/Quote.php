@@ -345,11 +345,6 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $shippingAssignmentFactory;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Address\TotalFactory
-     */
-    protected $totalFactory;
-
-    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -387,7 +382,6 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param Quote\TotalsReader $totalsReader
      * @param ShippingFactory $shippingFactory
      * @param ShippingAssignmentFactory $shippingAssignmentFactory
-     * @param \Magento\Quote\Model\Quote\Address\TotalFactory $totalFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
@@ -431,7 +425,6 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         Quote\TotalsReader $totalsReader,
         \Magento\Quote\Model\ShippingFactory $shippingFactory,
         \Magento\Quote\Model\ShippingAssignmentFactory $shippingAssignmentFactory,
-        \Magento\Quote\Model\Quote\Address\TotalFactory $totalFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -469,7 +462,6 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $this->totalsReader = $totalsReader;
         $this->shippingFactory = $shippingFactory;
         $this->shippingAssignmentFactory = $shippingAssignmentFactory;
-        $this->totalFactory = $totalFactory;
         parent::__construct(
             $context,
             $registry,
@@ -1949,12 +1941,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function getTotals()
     {
-        $total = $this->totalFactory->create('Magento\Quote\Model\Quote\Address\Total');
-        $total->setData($this->getData());
-        return $this->totalsReader->fetch(
-            $total,
-            $this->getStoreId()
-        );
+        return $this->totalsReader->fetch($this, $this->getData());
     }
 
     /**

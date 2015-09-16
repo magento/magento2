@@ -165,10 +165,11 @@ class WeeeTax extends Weee
     /**
      * Fetch the Weee total amount for display in totals block when building the initial quote
      *
+     * @param \Magento\Quote\Model\Quote $quote
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return array
      */
-    public function fetch(\Magento\Quote\Model\Quote\Address\Total $total)
+    public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {
         $weeeTotal = $total->getTotalAmount($this->getCode());
         if ($weeeTotal) {

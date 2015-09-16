@@ -31,10 +31,11 @@ class Grand extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     /**
      * Add grand total information to address
      *
+     * @param \Magento\Quote\Model\Quote $quote
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return $this
      */
-    public function fetch(\Magento\Quote\Model\Quote\Address\Total $total)
+    public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {
         return [
             'code' => $this->getCode(),
