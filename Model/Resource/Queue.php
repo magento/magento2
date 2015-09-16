@@ -211,7 +211,7 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function getMessageStatusTable()
     {
-        return $this->getConnection()->getTableName('queue_message_status');
+        return $this->getTable('queue_message_status');
     }
 
     /**
@@ -221,7 +221,7 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function getQueueTable()
     {
-        return $this->getConnection()->getTableName('queue');
+        return $this->getTable('queue');
     }
 
     /**
@@ -231,6 +231,6 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function getMessageTable()
     {
-        return $this->getConnection()->getTableName('queue_message');
+        return $this->getTable('queue_message');
     }
 }
