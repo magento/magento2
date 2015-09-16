@@ -10,6 +10,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreIsInactiveException;
+use \InvalidArgumentException;
 
 /**
  * Class StoreCookieTest
@@ -128,6 +129,21 @@ class StoreCookieTest extends \PHPUnit_Framework_TestCase
         $this->storeRepositoryMock->expects($this->once())
             ->method('getActiveStoreByCode')
             ->willThrowException(new StoreIsInactiveException);
+        $this->storeCookieManagerMock->expects($this->once())->method('deleteStoreCookie')->with($this->storeMock);
+        $this->assertEquals(
+            'ExpectedValue',
+            $this->plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
+        );
+    }
+
+    public function testAroundDispatchInvalidArgument()
+    {
+        $storeCode = 'store';
+        $this->storeManagerMock->expects($this->once())->method('getDefaultStoreView')->willReturn($this->storeMock);
+        $this->storeCookieManagerMock->expects($this->once())->method('getStoreCodeFromCookie')->willReturn($storeCode);
+        $this->storeRepositoryMock->expects($this->once())
+            ->method('getActiveStoreByCode')
+            ->willThrowException(new InvalidArgumentException);
         $this->storeCookieManagerMock->expects($this->once())->method('deleteStoreCookie')->with($this->storeMock);
         $this->assertEquals(
             'ExpectedValue',
