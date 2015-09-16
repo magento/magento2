@@ -15,6 +15,10 @@ class Observer
      */
     protected $queueManagement;
 
+    /**
+     * Create Observer
+     * @param QueueManagement $queueManagement
+     */
     public function __construct(
         \Magento\MysqlMq\Model\QueueManagement $queueManagement
     ) {
