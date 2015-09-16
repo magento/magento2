@@ -81,6 +81,7 @@ class Save extends \Magento\Framework\DataObject
     /**
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @codeCoverageIgnore
      */
     public function getSaved()
     {
@@ -353,6 +354,7 @@ class Save extends \Magento\Framework\DataObject
      * Retrieve quote object
      *
      * @return \Magento\Quote\Model\Quote
+     * @codeCoverageIgnore
      */
     protected function _getQuote()
     {
