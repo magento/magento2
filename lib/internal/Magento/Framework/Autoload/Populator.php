@@ -28,11 +28,8 @@ class Populator
 
         $autoloader->addPsr4('Magento\\', [$modulesDir . '/Magento/', $generationDir . '/Magento/'], true);
 
-        $autoloader->addPsr0('Apache_', $frameworkDir, true);
         $autoloader->addPsr0('Cm_', $frameworkDir, true);
         $autoloader->addPsr0('Credis_', $frameworkDir, true);
-        $autoloader->addPsr0('Less_', $frameworkDir, true);
-        $autoloader->addPsr0('Symfony\\', $frameworkDir, true);
 
         /** Required for Zend functionality */
         FileResolver::addIncludePath($frameworkDir);
