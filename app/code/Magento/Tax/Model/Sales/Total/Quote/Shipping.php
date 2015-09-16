@@ -55,10 +55,11 @@ class Shipping extends CommonTaxCollector
     }
 
     /**
+     * @param \Magento\Quote\Model\Quote $quote
      * @param Address\Total $total
      * @return array|null
      */
-    public function fetch(Address\Total $total)
+    public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {
         if ($total->getShippingInclTax()) {
             return [

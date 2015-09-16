@@ -167,10 +167,11 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     /**
      * Assign subtotal amount and label to address object
      *
+     * @param \Magento\Quote\Model\Quote $quote
      * @param Address\Total $total
      * @return array
      */
-    public function fetch(\Magento\Quote\Model\Quote\Address\Total $total)
+    public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {
         return [
             'code' => $this->getCode(),

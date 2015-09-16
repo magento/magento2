@@ -218,7 +218,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
         $addressTotals = $this->totalsCollector->collectAddressTotals($quote, $address);
 
         /** @var array $totals */
-        $totals = $this->totalsReader->fetch($addressTotals, $quote->getStoreId());
+        $totals = $this->totalsReader->fetch($quote, $addressTotals->getData());
 
         foreach ($totals as $total) {
             if ($total->getCode() == 'grand_total') {

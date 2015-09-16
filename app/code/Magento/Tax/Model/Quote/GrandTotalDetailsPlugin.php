@@ -94,7 +94,7 @@ class GrandTotalDetailsPlugin
 
         $detailsId = 1;
         $finalData = [];
-        foreach ($taxes['full_info'] as $info) {
+        foreach (unserialize($taxes['full_info']) as $info) {
             if ((array_key_exists('hidden', $info) && $info['hidden'])
                 || ($info['amount'] == 0 && $this->taxConfig->displayCartZeroTax())
             ) {

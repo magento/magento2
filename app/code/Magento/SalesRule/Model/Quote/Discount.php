@@ -198,10 +198,11 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
     /**
      * Add discount total information to address
      *
+     * @param \Magento\Quote\Model\Quote $quote
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return array|null
      */
-    public function fetch(\Magento\Quote\Model\Quote\Address\Total $total)
+    public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {
         $result = null;
         $amount = $total->getDiscountAmount();

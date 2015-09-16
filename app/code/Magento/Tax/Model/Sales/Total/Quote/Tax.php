@@ -297,11 +297,12 @@ class Tax extends CommonTaxCollector
     /**
      * Add tax totals information to address object
      *
+     * @param \Magento\Quote\Model\Quote $quote
      * @param Address\Total $total
      * @return array|null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function fetch(Address\Total $total)
+    public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {
         $totals = [];
         $applied = $total->getAppliedTaxes();
@@ -310,11 +311,11 @@ class Tax extends CommonTaxCollector
         $taxAmount = $amount + $total->getTotalAmount('discount_tax_compensation');
 
         $area = null;
-        if ($taxConfiguration['displayCartTaxWithGrandTotal'] && $total->getGrandTotal()) {
+        if ($total->getGrandTotal()) {
             $area = 'taxes';
         }
 
-        if ($amount != 0 || $taxConfiguration['displayCartZeroTax']) {
+        if ($amount != 0) {
             $totals[] = [
                 'code' => $this->getCode(),
                 'title' => __('Tax'),
@@ -327,7 +328,7 @@ class Tax extends CommonTaxCollector
         /**
          * Modify subtotal
          */
-        if ($taxConfiguration['displayCartSubtotalBoth'] || $taxConfiguration['displayCartSubtotalInclTax']) {
+        if (true) {
             if ($total->getSubtotalInclTax() > 0) {
                 $subtotalInclTax = $total->getSubtotalInclTax();
             } else {

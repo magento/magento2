@@ -59,11 +59,6 @@ class CartTotalRepository implements CartTotalRepositoryInterface
     protected $reader;
 
     /**
-     * @var \Magento\Quote\Model\Quote\TotalsCollector
-     */
-    protected $totalsCollector;
-
-    /**
      * @param Api\Data\TotalsInterfaceFactory $totalsFactory
      * @param QuoteRepository $quoteRepository
      * @param DataObjectHelper $dataObjectHelper
@@ -71,8 +66,6 @@ class CartTotalRepository implements CartTotalRepositoryInterface
      * @param TotalsConverter $totalsConverter
      * @param ItemConverter $converter
      * @param \Magento\Quote\Model\Quote\TotalsReader $reader
-     * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
-     *
      */
     public function __construct(
         Api\Data\TotalsInterfaceFactory $totalsFactory,
@@ -81,8 +74,7 @@ class CartTotalRepository implements CartTotalRepositoryInterface
         CouponManagementInterface $couponService,
         TotalsConverter $totalsConverter,
         ItemConverter $converter,
-        \Magento\Quote\Model\Quote\TotalsReader $reader,
-        \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
+        \Magento\Quote\Model\Quote\TotalsReader $reader
     ) {
         $this->totalsFactory = $totalsFactory;
         $this->quoteRepository = $quoteRepository;
@@ -91,7 +83,6 @@ class CartTotalRepository implements CartTotalRepositoryInterface
         $this->totalsConverter = $totalsConverter;
         $this->itemConverter = $converter;
         $this->reader = $reader;
-        $this->totalsCollector = $totalsCollector;
     }
 
     /**
@@ -104,27 +95,32 @@ class CartTotalRepository implements CartTotalRepositoryInterface
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
-        $total = $this->totalsCollector->collectQuoteTotals($quote);
+        if ($quote->isVirtual()) {
+            $addressTotals = $quote->getBillingAddress()->getData();
+        } else {
+            $addressTotals = $quote->getShippingAddress()->getData();
+        }
 
-        /** @var \Magento\Quote\Api\Data\TotalsInterface $totals */
-        $totals = $this->totalsFactory->create();
+        /** @var \Magento\Quote\Api\Data\TotalsInterface $quoteTotals */
+        $quoteTotals = $this->totalsFactory->create();
         $this->dataObjectHelper->populateWithArray(
-            $totals,
-            $total->getData(),
+            $quoteTotals,
+            $addressTotals,
             '\Magento\Quote\Api\Data\TotalsInterface'
         );
         $items = [];
         foreach ($quote->getAllVisibleItems() as $index => $item) {
             $items[$index] = $this->itemConverter->modelToDataObject($item);
         }
-        $totals->setCouponCode($this->couponService->get($cartId));
-        $calculatedTotals = $this->totalsConverter->process($this->reader->fetch($total, $quote->getStoreId()));
-        $amount = $totals->getGrandTotal() - $totals->getTaxAmount();
+        $calculatedTotals = $this->totalsConverter->process($this->reader->fetch($quote, $addressTotals));
+        $quoteTotals->setTotalSegments($calculatedTotals);
+
+        $amount = $quoteTotals->getGrandTotal() - $quoteTotals->getTaxAmount();
         $amount = $amount > 0 ? $amount : 0;
-        $totals->setGrandTotal($amount);
-        $totals->setTotalSegments($calculatedTotals);
-        $totals->setItems($items);
-        $totals->setItemsQty($quote->getItemsQty());
-        return $totals;
+        $quoteTotals->setCouponCode($this->couponService->get($cartId));
+        $quoteTotals->setGrandTotal($amount);
+        $quoteTotals->setItems($items);
+        $quoteTotals->setItemsQty($quote->getItemsQty());
+        return $quoteTotals;
     }
 }

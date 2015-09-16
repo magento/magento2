@@ -97,11 +97,12 @@ class Freeshipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTota
      * Add information about free shipping for all address items to address object
      * By default we not present such information
      *
+     * @param \Magento\Quote\Model\Quote $quote
      * @param \Magento\Quote\Model\Quote\Address\Total $total
      * @return null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function fetch(\Magento\Quote\Model\Quote\Address\Total $total)
+    public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {
         return null;
     }
