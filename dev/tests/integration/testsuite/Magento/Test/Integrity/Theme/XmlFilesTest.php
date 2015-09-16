@@ -6,6 +6,7 @@
 namespace Magento\Test\Integrity\Theme;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
 
 class XmlFilesTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,9 +18,6 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testViewConfigFile($file)
     {
-        if ($file === self::NO_VIEW_XML_FILES_MARKER) {
-            $this->markTestSkipped('No view.xml files in themes.');
-        }
         $this->_validateConfigFile(
             $file,
             $this->getPath(DirectoryList::LIB_INTERNAL) . '/Magento/Framework/Config/etc/view.xsd'
@@ -32,11 +30,14 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
     public function viewConfigFileDataProvider()
     {
         $result = [];
-        $files = glob($this->getPath(DirectoryList::THEMES) . '/*/*/view.xml');
+        /** @var \Magento\Framework\Component\DirSearch $componentDirSearch */
+        $componentDirSearch = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Framework\Component\DirSearch');
+        $files = $componentDirSearch->collectFiles(ComponentRegistrar::THEME, 'etc/view.xml');
         foreach ($files as $file) {
-            $result[substr($file, strlen(BP))] = [$file];
+            $result[$file] = [$file];
         }
-        return $result === [] ? [[self::NO_VIEW_XML_FILES_MARKER]] : $result;
+        return $result;
     }
 
     /**
@@ -54,9 +55,11 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
     public function themeConfigFileExistsDataProvider()
     {
         $result = [];
-        $files = glob($this->getPath(DirectoryList::THEMES) . '/*/*/*', GLOB_ONLYDIR);
-        foreach ($files as $themeDir) {
-            $result[substr($themeDir, strlen(BP))] = [$themeDir];
+        /** @var \Magento\Framework\Component\ComponentRegistrar $componentRegistrar */
+        $componentRegistrar = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('\Magento\Framework\Component\ComponentRegistrar');
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
+            $result[$themeDir] = [$themeDir];
         }
         return $result;
     }
@@ -93,9 +96,12 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
     public function themeConfigFileDataProvider()
     {
         $result = [];
-        $files = glob($this->getPath(DirectoryList::THEMES) . '/*/*/*/theme.xml');
+        /** @var \Magento\Framework\Component\DirSearch $componentDirSearch */
+        $componentDirSearch = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Framework\Component\DirSearch');
+        $files = $componentDirSearch->collectFiles(ComponentRegistrar::THEME, 'theme.xml');
         foreach ($files as $file) {
-            $result[substr($file, strlen(BP))] = [$file];
+            $result[$file] = [$file];
         }
         return $result;
     }

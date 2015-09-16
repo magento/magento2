@@ -6,5 +6,5 @@
 -->
 <theme xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:library:framework:Config/etc/theme.xsd">
     <title>Custom Theme 2</title>
-    <parent>Vendor/custom_theme</parent>
+    <parent>Vendor_ViewTest/custom_theme</parent>
 </theme>

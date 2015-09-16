@@ -6,15 +6,10 @@
 namespace Magento\Email\Model\Template;
 
 use Magento\Framework\App\Area;
-use Magento\Framework\App\Bootstrap;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\State;
 use Magento\Framework\App\TemplateTypesInterface;
-use Magento\Framework\Css\PreProcessor\Adapter\Oyejorge;
 use Magento\Framework\Phrase;
-use Magento\Framework\View\DesignInterface;
 use Magento\Setup\Module\I18n\Locale;
-use Magento\Store\Model\ScopeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -106,32 +101,12 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     public function testLayoutDirective($area, $directiveParams, $expectedOutput)
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
-            [
-                Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [
-                    DirectoryList::THEMES => [
-                        'path' => dirname(__DIR__) . '/_files/design',
-                    ],
-                ],
-            ]
-        );
         $this->model = $this->objectManager->create('Magento\Email\Model\Template\Filter');
-
-        $themes = ['frontend' => 'Magento/default', 'adminhtml' => 'Magento/default'];
-        $design = $this->objectManager->create('Magento\Theme\Model\View\Design', ['themes' => $themes]);
-        $this->objectManager->addSharedInstance($design, 'Magento\Theme\Model\View\Design');
-
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea($area);
-
-        $collection = $this->objectManager->create('Magento\Theme\Model\Resource\Theme\Collection');
-        $themeId = $collection->getThemeByFullPath('frontend/Magento/default')->getId();
-        $this->objectManager->get('Magento\Framework\App\Config\MutableScopeConfigInterface')
-            ->setValue(DesignInterface::XML_PATH_THEME_ID, $themeId, ScopeInterface::SCOPE_STORE);
-
         /** @var $layout \Magento\Framework\View\LayoutInterface */
         $layout = $this->objectManager->create('Magento\Framework\View\Layout');
         $this->objectManager->addSharedInstance($layout, 'Magento\Framework\View\Layout');
-        $this->objectManager->get('Magento\Framework\View\DesignInterface')->setDesignTheme('Magento/default');
+        $this->objectManager->get('Magento\Framework\View\DesignInterface')->setDesignTheme('Magento_EmailTest/default');
 
         $actualOutput = $this->model->layoutDirective(
             ['{{layout ' . $directiveParams . '}}', 'layout', ' ' . $directiveParams]
@@ -407,7 +382,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUpDesignParams()
     {
-        $themeCode = 'Vendor/custom_theme';
+        $themeCode = 'Vendor_EmailTest/custom_theme';
         $this->model->setDesignParams([
             'area' => Area::AREA_FRONTEND,
             'theme' => $themeCode,

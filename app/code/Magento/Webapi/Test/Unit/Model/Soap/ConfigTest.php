@@ -34,9 +34,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\App\ObjectManager'
         )->disableOriginalConstructor()->getMock();
 
-        $fileSystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
-            ->disableOriginalConstructor()
-            ->getMock();
         $classReflection = $this->getMock(
             'Magento\Webapi\Model\Config\ClassReflector',
             ['reflectClassMethods'],
@@ -112,7 +109,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'Magento\Webapi\Model\Soap\Config',
             [
                 'objectManager' => $objectManagerMock,
-                'filesystem' => $fileSystemMock,
                 'registry' => $registryMock,
                 'serviceMetadata' => $serviceMetadata,
             ]

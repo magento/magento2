@@ -7,8 +7,6 @@
 namespace Magento\Translation\Model\Js;
 
 use Magento\Framework\Phrase\Renderer\Translate;
-use Magento\Framework\App\Utility\Files;
-use Magento\Framework\App\State;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
@@ -16,14 +14,14 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * DataProvider for js translation
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
  */
 class DataProvider implements DataProviderInterface
 {
     /**
      * Application state
      *
-     * @var State
+     * @var \Magento\Framework\App\State
      */
     protected $appState;
 
@@ -37,7 +35,7 @@ class DataProvider implements DataProviderInterface
     /**
      * Files utility
      *
-     * @var Files
+     * @var \Magento\Framework\App\Utility\Files
      */
     protected $filesUtility;
 
@@ -56,24 +54,25 @@ class DataProvider implements DataProviderInterface
     protected $translate;
 
     /**
-     * @param State $appState
+     * @param \Magento\Framework\App\State $appState
      * @param Config $config
      * @param Filesystem $filesystem
      * @param Translate $translate
-     * @param Files $filesUtility
+     * @param \Magento\Framework\App\Utility\Files $filesUtility
      */
     public function __construct(
-        State $appState,
+        \Magento\Framework\App\State $appState,
         Config $config,
         Filesystem $filesystem,
         Translate $translate,
-        Files $filesUtility = null
+        \Magento\Framework\App\Utility\Files $filesUtility = null
     ) {
         $this->appState = $appState;
         $this->config = $config;
         $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->translate = $translate;
-        $this->filesUtility = (null !== $filesUtility) ? $filesUtility : new Files(new ComponentRegistrar(), BP);
+        $this->filesUtility = (null !== $filesUtility) ?
+            $filesUtility : new \Magento\Framework\App\Utility\Files(new ComponentRegistrar(), BP);
     }
 
     /**
