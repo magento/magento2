@@ -78,9 +78,7 @@
     </virtualType>
     <virtualType name="uiConfigurationDomMerger" type="Magento\Framework\View\Element\UiComponent\Config\DomMerger">
         <arguments>
-            <argument name="schemaFileType" xsi:type="string">etc</argument>
-            <argument name="schemaFileModule" xsi:type="string">Magento_Ui</argument>
-            <argument name="schemaFileName" xsi:type="string">urn:magento:module:ui:etc/ui_configuration.xsd</argument>
+            <argument name="schema" xsi:type="string">urn:magento:module:ui:etc/ui_configuration.xsd</argument>
             <argument name="contextXPath" xsi:type="array">
                 <item name="ui_context" xsi:type="string">/</item>
             </argument>
@@ -96,9 +94,7 @@
     </type>
     <virtualType name="uiTemplateDomMerger" type="Magento\Framework\View\Element\UiComponent\Config\DomMerger">
         <arguments>
-            <argument name="schemaFileType" xsi:type="string">etc</argument>
-            <argument name="schemaFileModule" xsi:type="string">Magento_Ui</argument>
-            <argument name="schemaFileName" xsi:type="string">urn:magento:module:ui:etc/ui_template.xsd</argument>
+            <argument name="schema" xsi:type="string">urn:magento:module:ui:etc/ui_template.xsd</argument>
             <argument name="contextXPath" xsi:type="array">
                 <item name="ui_context" xsi:type="string">/</item>
             </argument>
@@ -115,9 +111,7 @@
     </type>
     <virtualType name="uiDefinitionDomMerger" type="Magento\Framework\View\Element\UiComponent\Config\DomMerger">
         <arguments>
-            <argument name="schemaFileType" xsi:type="string">etc</argument>
-            <argument name="schemaFileModule" xsi:type="string">Magento_Ui</argument>
-            <argument name="schemaFileName" xsi:type="string">urn:magento:module:ui:etc/ui_definition.xsd</argument>
+            <argument name="schema" xsi:type="string">urn:magento:module:ui:etc/ui_definition.xsd</argument>
             <argument name="contextXPath" xsi:type="array">
                 <item name="ui_context" xsi:type="string">/components</item>
             </argument>
