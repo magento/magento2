@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\Model\Layout\Update;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Config\Dom\UrnResolver;
 
 /**
  * Validator for custom layout update
