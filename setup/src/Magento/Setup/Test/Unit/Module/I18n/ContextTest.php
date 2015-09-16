@@ -35,7 +35,6 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     {
         $this->componentRegistrar->expects($this->any())
             ->method('getPaths')
-            ->with(ComponentRegistrar::MODULE)
             ->willReturn($registrar);
         $this->context = new Context($this->componentRegistrar);
         $this->assertEquals($context, $this->context->getContextByPath($path));
