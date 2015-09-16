@@ -34,7 +34,7 @@ class FreeShipping implements \Magento\Quote\Model\Quote\Address\FreeShippingInt
     /**
      * {@inheritDoc}
      */
-    public function getFreeShipping(\Magento\Quote\Model\Quote $quote, $items)
+    public function isFreeShipping(\Magento\Quote\Model\Quote $quote, $items)
     {
         /** @var \Magento\Quote\Api\Data\CartItemInterface[] $items */
         if (!count($items)) {
@@ -67,15 +67,25 @@ class FreeShipping implements \Magento\Quote\Model\Quote\Address\FreeShippingInt
             $addressFreeShipping = $addressFreeShipping && $itemFreeShipping;
 
             /** Parent free shipping we apply to all children*/
-            if ($item->getHasChildren() && $item->isChildrenCalculated()) {
-                foreach ($item->getChildren() as $child) {
-                    $this->calculator->processFreeShipping($child);
-                    if ($itemFreeShipping) {
-                        $child->setFreeShipping($itemFreeShipping);
-                    }
+            $this->applyToChildren($item, $itemFreeShipping);
+        }
+        return $addressFreeShipping;
+    }
+
+    /**
+     * @param \Magento\Quote\Api\Data\CartItemInterface $item
+     * @param bool $isFreeShipping
+     * @return void
+     */
+    protected function applyToChildren(\Magento\Quote\Api\Data\CartItemInterface $item, $isFreeShipping)
+    {
+        if ($item->getHasChildren() && $item->isChildrenCalculated()) {
+            foreach ($item->getChildren() as $child) {
+                $this->calculator->processFreeShipping($child);
+                if ($isFreeShipping) {
+                    $child->setFreeShipping($isFreeShipping);
                 }
             }
         }
-        return $addressFreeShipping;
     }
 }
