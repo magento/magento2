@@ -42,6 +42,9 @@ class PhpRuleTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->model->getDependencyInfo($module, 'php', $file, $content));
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function getDependencyInfoDataProvider()
     {
         return [

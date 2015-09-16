@@ -168,7 +168,7 @@ class PhpRule implements RuleInterface
                 /** @var \DOMElement $type */
                 foreach ($typeNodes as $type) {
                     /** @var \DOMElement $plugin */
-                    foreach($type->getElementsByTagName('plugin') as $plugin) {
+                    foreach ($type->getElementsByTagName('plugin') as $plugin) {
                         $subject = $type->getAttribute('name');
                         $pluginType = $plugin->getAttribute('type');
                         $this->pluginMap[$pluginType] = $subject;
@@ -199,6 +199,8 @@ class PhpRule implements RuleInterface
         } else if ($subject) {
             $subjectModule = substr($subject, 0, strpos($subject, '\\', 9)); // (strlen('Magento\\') + 1) === 9
             return strpos($dependency, $subjectModule) === 0;
+        } else {
+            return false;
         }
     }
 
