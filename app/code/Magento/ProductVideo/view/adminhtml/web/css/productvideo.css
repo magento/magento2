@@ -1,3 +1,8 @@
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
 .image.video-placeholder {
     position: relative;
     display: inline-block;
@@ -172,4 +177,14 @@
   background: transparent;
   z-index: 10;
   position: relative;
+}
+.add-video-button-container {
+  float: right;
+  margin-bottom: 10px;
+}
+.admin__field.field.field-new_video_screenshot {
+  margin-bottom: 5px;
+}
+.admin__field.field.field-new_video_screenshot_preview {
+  margin-bottom: 50px;
 }
