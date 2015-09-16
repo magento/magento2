@@ -10,13 +10,7 @@ class UriFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        /** @var \Magento\Framework\ObjectManagerInterface $objectManagerMock */
-        $objectManagerMock = $this->getMock('\Magento\Framework\ObjectManagerInterface', [], [], '', false);
-        $objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with('Zend\Uri\Uri')
-            ->willReturn(new \Zend\Uri\Uri());
-        $factory = new \Magento\CacheInvalidate\Model\UriFactory($objectManagerMock);
+        $factory = new \Magento\CacheInvalidate\Model\UriFactory();
         $this->assertInstanceOf('\Zend\Uri\Uri', $factory->create());
     }
 }

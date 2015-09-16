@@ -7,22 +7,12 @@ namespace Magento\CacheInvalidate\Model;
 
 class SocketFactory
 {
-    /** @var \Magento\Framework\ObjectManagerInterface */
-    private $objectManager;
-
-    /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     */
-    public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
-    {
-        $this->objectManager = $objectManager;
-    }
 
     /**
      * @return \Zend\Http\Client\Adapter\Socket
      */
     public function create()
     {
-        return $this->objectManager->get('Zend\Http\Client\Adapter\Socket');
+        return new \Zend\Http\Client\Adapter\Socket();
     }
 }

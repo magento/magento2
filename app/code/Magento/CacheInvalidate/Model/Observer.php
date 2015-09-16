@@ -124,11 +124,8 @@ class Observer
      */
     protected function sendPurgeRequest($tagsPattern)
     {
-        /** @var \Zend\Uri\Uri $uri */
         $uri = $this->uriFactory->create();
-        /** @var \Zend\Http\Client\Adapter\Socket $socketAdapter */
         $socketAdapter = $this->socketAdapterFactory->create();
-
         $servers = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS)
             ?: [['host' => $this->request->getHttpHost()]];
         $headers = ['X-Magento-Tags-Pattern' => $tagsPattern];

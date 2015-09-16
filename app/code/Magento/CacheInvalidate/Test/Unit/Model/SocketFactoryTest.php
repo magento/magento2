@@ -10,13 +10,7 @@ class SocketFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        /** @var \Magento\Framework\ObjectManagerInterface $objectManagerMock */
-        $objectManagerMock = $this->getMock('\Magento\Framework\ObjectManagerInterface', [], [], '', false);
-        $objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with('Zend\Http\Client\Adapter\Socket')
-            ->willReturn(new \Zend\Http\Client\Adapter\Socket());
-        $factory = new \Magento\CacheInvalidate\Model\SocketFactory($objectManagerMock);
+        $factory = new \Magento\CacheInvalidate\Model\SocketFactory();
         $this->assertInstanceOf('\Zend\Http\Client\Adapter\Socket', $factory->create());
     }
 }
