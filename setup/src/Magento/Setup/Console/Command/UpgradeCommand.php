@@ -16,7 +16,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class UpgradeCommand extends AbstractSetupCommand
 {
-
     /**
      * Option to skip deletion of var/generation directory
      */
