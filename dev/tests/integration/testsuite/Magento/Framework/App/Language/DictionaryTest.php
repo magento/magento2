@@ -16,55 +16,32 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
      */
     private $model;
 
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory
+     */
+    private $directoryFactory;
+
+    /**
+     * @var \Magento\Framework\App\Language\ConfigFactory
+     */
+    private $configFactory;
+
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        /** @var \Magento\Framework\Filesystem\Directory\ReadFactory $directoryFactory */
-        $directoryFactory = $objectManager->create('Magento\Framework\Filesystem\Directory\ReadFactory');
-        /** @var \Magento\Framework\App\Language\ConfigFactory $configFactory */
-        $configFactory = $objectManager->create('Magento\Framework\App\Language\ConfigFactory');
-
-        $componentRegistrar = new ComponentRegistrar();
-        //register the language modules
-        if ($componentRegistrar->getPath(ComponentRegistrar::LANGUAGE, 'bar_en_gb') === null) {
-            ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'bar_en_gb', __DIR__ . '/_files/bar/en_gb');
-        }
-        if ($componentRegistrar->getPath(ComponentRegistrar::LANGUAGE, 'bar_en_us') === null) {
-            ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'bar_en_us', __DIR__ . '/_files/bar/en_us');
-        }
-        if ($componentRegistrar->getPath(ComponentRegistrar::LANGUAGE, 'baz_en_gb') === null) {
-            ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'baz_en_gb', __DIR__ . '/_files/baz/en_gb');
-        }
-        if ($componentRegistrar->getPath(ComponentRegistrar::LANGUAGE, 'foo_en_au') === null) {
-            ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'foo_en_au', __DIR__ . '/_files/foo/en_au');
-        }
-        if ($componentRegistrar->getPath(ComponentRegistrar::LANGUAGE, 'first_en_us') === null) {
-            ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'first_en_us', __DIR__ . '/_files/first/en_us');
-        }
-        if ($componentRegistrar->getPath(ComponentRegistrar::LANGUAGE, 'second_en_gb') === null) {
-            ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'second_en_gb', __DIR__ . '/_files/second/en_gb');
-        }
-        if ($componentRegistrar->getPath(ComponentRegistrar::LANGUAGE, 'my_ru_ru') === null) {
-            ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'my_ru_ru', __DIR__ . '/_files/my/ru_ru');
-        }
-        if ($componentRegistrar->getPath(ComponentRegistrar::LANGUAGE, 'theirs_ru_ru') === null) {
-            ComponentRegistrar::register(
-                ComponentRegistrar::LANGUAGE,
-                'theirs_ru_ru',
-                __DIR__ . '/_files/theirs/ru_ru'
-            );
-        }
-
-        $this->model = new Dictionary($directoryFactory, $componentRegistrar, $configFactory);
+        $this->directoryFactory = $objectManager->create('Magento\Framework\Filesystem\Directory\ReadFactory');
+        $this->configFactory = $objectManager->create('Magento\Framework\App\Language\ConfigFactory');
     }
 
     /**
+     * @param $componentRegistrar
      * @param $languageCode
      * @param array $expectation
      * @dataProvider dictionaryDataProvider
      */
-    public function testDictionaryGetter($languageCode, $expectation)
+    public function testDictionaryGetter($componentRegistrar, $languageCode, $expectation)
     {
+        $this->model = new Dictionary($this->directoryFactory, $componentRegistrar, $this->configFactory);
         $result = $this->model->getDictionary($languageCode);
         $this->assertSame($expectation, $result);
     }
@@ -86,7 +63,14 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
      */
     private function getDataMultipleInheritance()
     {
+        $componentRegistrar = new ComponentRegistrar();
+        ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'bar_en_gb', __DIR__ . '/_files/bar/en_gb');
+        ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'bar_en_us', __DIR__ . '/_files/bar/en_us');
+        ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'baz_en_gb', __DIR__ . '/_files/baz/en_gb');
+        ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'foo_en_au', __DIR__ . '/_files/foo/en_au');
+
         return [
+            'componentRegistrar' => $componentRegistrar,
             // Dictionary that will be requested
             'language_code' => 'en_AU',
             // Expected merged dictionary data
@@ -108,7 +92,11 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
      */
     private function getDataInheritanceWitSimilarCode()
     {
+        $componentRegistrar = new ComponentRegistrar();
+        ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'first_en_us', __DIR__ . '/_files/first/en_us');
+        ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'second_en_gb', __DIR__ . '/_files/second/en_gb');
         return [
+            'componentRegistrar' => $componentRegistrar,
             // Dictionary that will be requested
             'language_code' => 'ru_RU',
             // Expected merged dictionary data
@@ -125,7 +113,12 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
      */
     private function getDataCircularInheritance()
     {
+        $componentRegistrar = new ComponentRegistrar();
+        ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'my_ru_ru', __DIR__ . '/_files/my/ru_ru');
+        ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'theirs_ru_ru', __DIR__ . '/_files/theirs/ru_ru');
+
         return [
+            'componentRegistrar' => $componentRegistrar,
             // Dictionary that will be requested
             'language_code' => 'en_US',
             // Expected merged dictionary data
