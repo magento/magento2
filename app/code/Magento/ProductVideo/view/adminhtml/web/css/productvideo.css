@@ -9,7 +9,6 @@
 }
 
 .image.video-placeholder {
-    /*background: #fff url(../images/icon-movie.png) center;*/
     background-color: #fff;
     font-size: 4rem;
     line-height: inherit;
@@ -112,7 +111,7 @@
   position: absolute;
   bottom: 0;
   right: 9px;
-  background: url(../img/luma-gallery-sprite.png) bottom left;
+  background: url(../images/gallery-sprite.png) bottom left;
   width: 49px;
   height: 40px;
 }
