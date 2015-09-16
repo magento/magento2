@@ -30,6 +30,7 @@ class Config extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Resource initialization
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {

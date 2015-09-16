@@ -12,6 +12,9 @@
         </span>
     </div>
     <div class="payment-option-content" data-role="content">
+        <!-- ko foreach: getRegion('messages') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
         <form class="form form-discount" id="discount-form" data-bind="blockLoader: isLoading">
             <div class="payment-option-inner">
                 <div class="field">
