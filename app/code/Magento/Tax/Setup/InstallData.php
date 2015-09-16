@@ -38,13 +38,12 @@ class InstallData implements InstallDataInterface
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         /** @var TaxSetup $taxSetup */
-        $taxSetup = $this->taxSetupFactory->create(['setup' => $setup]);
+        $taxSetup = $this->taxSetupFactory->create(['resourceName' => 'tax_setup', 'setup' => $setup]);
 
         /**
          * Add tax_class_id attribute to the 'eav_attribute' table
          */
-        $catalogInstaller = $taxSetup->getCatalogSetup(['resourceName' => 'catalog_setup', 'setup' => $setup]);
-        $catalogInstaller->addAttribute(
+        $taxSetup->addAttribute(
             \Magento\Catalog\Model\Product::ENTITY,
             'tax_class_id',
             [
