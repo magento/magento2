@@ -43,6 +43,7 @@ class SetCanApplyMsrpTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetQuoteCanApplyMsrp($isMsrpEnabled, $canApplyMsrp)
     {
+        $this->markTestSkipped('MAGETWO-42308');
         $eventMock = $this->getMockBuilder('Magento\Framework\Event')
             ->disableOriginalConstructor()
             ->setMethods(['getQuote'])
