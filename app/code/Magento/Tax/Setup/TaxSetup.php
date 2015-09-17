@@ -30,7 +30,7 @@ class TaxSetup
      * Init
      *
      * @param ModuleDataSetupInterface $setup
-     * @param \Magento\Sales\Setup\SalesSetupFactory $salesSetupFactory
+     * @param SalesSetupFactory $salesSetupFactory
      * @param ConfigInterface $productTypeConfig
      */
     public function __construct(
@@ -53,7 +53,7 @@ class TaxSetup
     }
 
     /**
-     * Add entity attribute. Overwritten for flat entities support
+     * Add entity attribute.
      *
      * @param int|string $entityTypeId
      * @param string $code
@@ -67,7 +67,7 @@ class TaxSetup
     }
 
     /**
-     * Update Attribute data and Attribute additional data
+     * Update Attribute data and Attribute additional data.
      *
      * @param int|string $entityTypeId
      * @param int|string $id
