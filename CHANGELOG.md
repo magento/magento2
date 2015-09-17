@@ -1,3 +1,19 @@
+1.0.0-beta3
+=============
+* Fixed bugs:
+    * Fixed an issue with cms block cache if the block was added via layout xml
+    * Fixed an issue with error message after click "Get Payment Update" for order placed within Authorize.net Direct Post with incorrect url in "Transaction Details Url"
+    * Fixed an issue where unable to import images for configurable products
+    * Fixed an issue where product links API does not return the linked product's sku and position with flat tables turned on
+    * Fixed an issue where unable to run the CLI tool after the DI compilation
+    * Fixed an issue where copies of LESS source files are created instead of symlinks in client side less compilation
+* Various improvements:
+    * Stores and stores loading improvements
+    * Created APIs to retrieve store information
+    * Added the ability to send the purge requests for multiple servers
+* GitHub issues and requests:
+    * [#1679](https://github.com/magento/magento2/issues/1679) -- Cannot run php bin/magento setup:di:compile (have to delete contents of var/di) first
+    
 1.0.0-beta2
 =============
 * Fixed bugs:
