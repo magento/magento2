@@ -385,7 +385,7 @@ class Editor extends Textarea
     protected function _wrapIntoContainer($html)
     {
         if (!$this->getConfig('use_container')) {
-            return $html;
+            return '<div class="admin__control-wysiwig">' .$html . '</div>';
         }
 
         $html = '<div id="editor' . $this->getHtmlId() . '"' . ($this->getConfig(

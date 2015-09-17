@@ -8,28 +8,25 @@
 //  Block 'Insert File'
 //  _________________________________________
 
-.modal-slide {
-}
-
 .contents-uploader {
     margin: 0 0 @indent__base;
+    .fileinput-button {
+        cursor: pointer;
+        display: inline-block;
+        float: none;
+        vertical-align: middle;
+        span {
+            display: none;
+        }
+        input {
+            border: none;
+            -moz-transform: none;
+            opacity: 1;
+            position: static;
+        }
+    }
 }
 
-.fileinput-button {
-    cursor: pointer;
-    display: inline-block;
-    float: none;
-    vertical-align: middle;
-    span {
-        display: none;
-    }
-    input {
-        border: none;
-        -moz-transform: none;
-        opacity: 1;
-        position: static;
-    }
-}
 
 .file-row {
     border: 1px solid @color-gray68;
