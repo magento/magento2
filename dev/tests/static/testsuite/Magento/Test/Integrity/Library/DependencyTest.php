@@ -61,7 +61,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                     $dependency = implode('\\', $dependencyPaths);
                     $libraryPaths = $componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
                     foreach ($libraryPaths as $libraryPath) {
-                        $filePath = $libraryPath . '/' . $dependency . '.php';
+                        $filePath = str_replace('\\', '/', $libraryPath .  '/' . $dependency . '.php');
                         if (preg_match($pattern, $dependency) && !file_exists($filePath)) {
                             $this->errors[$fileReflection->getFileName()][] = $dependency;
                         }

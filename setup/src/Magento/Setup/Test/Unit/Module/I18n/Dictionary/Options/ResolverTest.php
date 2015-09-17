@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Module\I18n\Dictionary\Options;
+use Magento\Framework\Component\ComponentRegistrar;
 
 /**
  * Class ResolverTest
@@ -23,7 +24,12 @@ class ResolverTest extends \PHPUnit_Framework_TestCase
         $root = __DIR__ . '/_files/source';
         $componentRegistrar->expects($this->any())
             ->method('getPaths')
-            ->willReturn([$root . '/app/code/module1', $root . '/app/code/module2']);
+            ->will(
+                $this->returnValueMap([
+                    [ComponentRegistrar::MODULE, [$root . '/app/code/module1', $root . '/app/code/module2']],
+                    [ComponentRegistrar::THEME, [$root . '/app/design']],
+                ])
+            );
         $directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
         $directoryList->expects($this->any())->method('getRoot')->willReturn('root');
         /** @var \Magento\Setup\Module\I18n\Dictionary\Options\Resolver $resolver */

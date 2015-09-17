@@ -63,10 +63,8 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
             [$csvFileName, $file],
         ]);
         $readMock->expects($this->any())->method('openFile')->willReturn($file);
-        $readMock->expects($this->any())->method('search')->willReturnMap([
-            ['language.xml', null, ['language.xml']],
-            ['*.csv', null, [$csvFileName]],
-        ]);
+        $readMock->expects($this->any())->method('isExist')->willReturn(true);
+        $readMock->expects($this->any())->method('search')->willReturn([$csvFileName]);
 
         $this->componentRegistrar->expects($this->once())->method('getPaths')->willReturn(['foo/en_us']);
         $this->componentRegistrar->expects($this->once())->method('getPath')->willReturn('foo/en_us');
