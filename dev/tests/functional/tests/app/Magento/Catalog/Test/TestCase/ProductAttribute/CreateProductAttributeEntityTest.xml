@@ -36,7 +36,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsRequired" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeSearchableByLabel" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAttributeSearchableByLabel" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeDisplayingOnSearchForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsComparable" />
         </variation>
@@ -60,7 +60,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsUsedInSortOnFrontend" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsUsedPromoRules" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertProductAttributeIsUsedPromoRules" />
         </variation>
         <variation name="CreateProductAttributeEntityTestVariation4">
             <data name="productTemplate/dataset" xsi:type="string">custom_attribute_set</data>
@@ -100,7 +100,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsComparable" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterable" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterableInSearch" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeSearchableByLabel" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAttributeSearchableByLabel" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeOptionsOnProductForm" />
         </variation>
         <variation name="CreateProductAttributeEntityTestVariation6">
@@ -128,7 +128,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsGlobal" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeDisplayingOnFrontend" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeDisplayingOnSearchForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeSearchableByLabel" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAttributeSearchableByLabel" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsComparable" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsUsedInSortOnFrontend" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterable" />
@@ -152,7 +152,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeInGrid" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertAddedProductAttributeOnProductForm" />
-            <constraint name="Magento\Catalog\Test\Constraint\AssertAttributeSearchableByLabel" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertAttributeSearchableByLabel" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeDisplayingOnSearchForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterable" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeIsFilterableInSearch" />
