@@ -38,9 +38,6 @@ class Files
      */
     protected $_path = '';
 
-    /** @var string regex for test directories in tools */
-    protected $toolsTestDirs = '#dev/tools/Magento/Tools/[\\w]+/Test#';
-
     /**
      * Setter for an instance of self
      *
@@ -104,7 +101,7 @@ class Files
     {
         $exclude = [];
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
-            $exclude[] = '#' . $moduleDir . '/Test#';
+            $exclude[] = str_replace('\\', '/', '#' . $moduleDir . '/Test#');
         }
         return $exclude;
     }
@@ -118,7 +115,7 @@ class Files
     {
         $exclude = [];
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
-            $exclude[] = '#' . $moduleDir . '/registration.php#';
+            $exclude[] = str_replace('\\', '/', '#' . $moduleDir . '/registration.php#');
         }
         return $exclude;
     }
@@ -130,12 +127,12 @@ class Files
      */
     private function getLibraryTestDirs()
     {
-        $exclude = [];
+        $libraryTestDirs = [];
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryDir) {
-            $exclude[] = '#' . $libraryDir . '/Test#';
-            $exclude[] = '#' . $libraryDir . '/[\\w]+/Test#';
+            $libraryTestDirs[] = str_replace('\\', '/', '#' . $libraryDir . '/Test#');
+            $libraryTestDirs[] = str_replace('\\', '/', '#' . $libraryDir) . '/[\\w]+/Test#';
         }
-        return $exclude;
+        return $libraryTestDirs;
     }
 
     /**
@@ -250,7 +247,6 @@ class Files
             if ($tests) {
                 $testDirs = [
                     "{$this->_path}/dev/tests",
-                    "{$this->_path}/dev/tools/Magento/Tools/*/Test",
                     "{$this->_path}/setup/src/Magento/Setup/Test",
                 ];
                 $moduleTestDir = [];
@@ -263,7 +259,7 @@ class Files
             if ($devTools) {
                 $files = array_merge(
                     $files,
-                    $this->getFilesSubset(["{$this->_path}/dev/tools/Magento"], '*.php', $this->toolsTestDirs)
+                    $this->getFilesSubset(["{$this->_path}/dev/tools/Magento"], '*.php', [])
                 );
             }
             if ($lib) {
