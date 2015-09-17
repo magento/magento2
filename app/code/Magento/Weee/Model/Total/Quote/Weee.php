@@ -68,21 +68,14 @@ class Weee extends AbstractTotal
     protected $priceCurrency;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
      * @param \Magento\Weee\Helper\Data $weeeData
      * @param PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
         \Magento\Weee\Helper\Data $weeeData,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
         PriceCurrencyInterface $priceCurrency
     ) {
         $this->priceCurrency = $priceCurrency;
-        $this->storeManager = $storeManager;
         $this->weeeData = $weeeData;
         $this->setCode('weee');
         $this->weeeCodeToItemMap = [];
@@ -281,11 +274,11 @@ class Weee extends AbstractTotal
         }
 
         //This value is used to calculate shipping cost; it will be overridden by tax collector
-        $address->setSubtotalInclTax(
-            $address->getSubtotalInclTax() + $this->priceCurrency->round($rowValueInclTax)
+        $total->setSubtotalInclTax(
+            $total->getSubtotalInclTax() + $this->priceCurrency->round($rowValueInclTax)
         );
-        $address->setBaseSubtotalInclTax(
-            $address->getBaseSubtotalInclTax() + $this->priceCurrency->round($baseRowValueInclTax)
+        $total->setBaseSubtotalInclTax(
+            $total->getBaseSubtotalInclTax() + $this->priceCurrency->round($baseRowValueInclTax)
         );
         $total->setBaseTotalAmount($this->getCode(), $this->weeeBaseTotalExclTax);
         $total->setTotalAmount($this->getCode(), $this->weeeTotalExclTax);

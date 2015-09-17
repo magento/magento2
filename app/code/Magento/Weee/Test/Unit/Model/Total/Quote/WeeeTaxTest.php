@@ -18,6 +18,27 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
     /**#@-*/
 
     /**
+     * @var \Magento\Weee\Model\Total\Quote\WeeeTax
+     */
+    protected $weeeCollector;
+
+    /**
+     * @var \PHPUnit_FrameWork_MockObject_MockObject | \Magento\Quote\Model\Quote
+     */
+    protected $quoteMock;
+
+    /**
+     * \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    protected $objectManagerHelper;
+
+    public function setUp()
+    {
+        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+    }
+
+    /**
      * Setup tax helper with an array of methodName, returnValue
      *
      * @param array $taxConfig
@@ -89,14 +110,12 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
      * @param array   $addressData
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function setupAddressMock($itemMock, $isWeeeTaxable, $itemWeeeTaxDetails, $addressData)
+    protected function setupTotalMock($itemMock, $isWeeeTaxable, $itemWeeeTaxDetails, $addressData)
     {
-        $addressMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Address',
+        $totalMock = $this->getMock(
+            '\Magento\Quote\Model\Quote\Address\Total',
             [
                 '__wakeup',
-                'getAllItems',
-                'getQuote',
                 'getWeeeCodeToItemMap',
                 'getExtraTaxableDetails',
                 'getWeeeTotalExclTax',
@@ -148,35 +167,55 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
             }
         }
 
-        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
-        $storeMock = $this->getMock('Magento\Store\Model\Store', ['__wakeup', 'convertPrice'], [], '', false);
-        $storeMock->expects($this->any())->method('convertPrice')->will($this->returnArgument(0));
-        $quoteMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
-
-        $addressMock->expects($this->any())->method('getAllItems')->will($this->returnValue([$itemMock]));
-        $addressMock->expects($this->any())->method('getQuote')->will($this->returnValue($quoteMock));
-        $addressMock->expects($this->any())->method('getWeeeCodeToItemMap')->will($this->returnValue($map));
-        $addressMock->expects($this->any())->method('getExtraTaxableDetails')->will($this->returnValue($extraDetails));
-        $addressMock
+        $totalMock->expects($this->any())->method('getWeeeCodeToItemMap')->will($this->returnValue($map));
+        $totalMock->expects($this->any())->method('getExtraTaxableDetails')->will($this->returnValue($extraDetails));
+        $totalMock
             ->expects($this->any())
             ->method('getWeeeTotalExclTax')
             ->will($this->returnValue($weeeTotals));
-        $addressMock
+        $totalMock
             ->expects($this->any())
             ->method('getWeeeBaseTotalExclTax')
             ->will($this->returnValue($weeeBaseTotals));
 
-        return $addressMock;
+        return $totalMock;
+    }
+
+    /**
+     * Setup shipping assignment mock.
+     * @param \PHPUnit_Framework_MockObject_MockObject $addressMock
+     * @param \PHPUnit_Framework_MockObject_MockObject $itemMock
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function setupShippingAssignmentMock($addressMock, $itemMock)
+    {
+        $shippingMock = $this->getMock('\Magento\Quote\Api\Data\ShippingInterface', [], [], '', false);
+        $shippingMock->expects($this->any())->method('getAddress')->willReturn($addressMock);
+        $shippingAssignmentMock = $this->getMock(
+            '\Magento\Quote\Api\Data\ShippingAssignmentInterface',
+            [],
+            [],
+            '',
+            false
+        );
+        $itemMock = $itemMock ? [$itemMock] : [];
+        $shippingAssignmentMock->expects($this->any())->method('getItems')->willReturn($itemMock);
+        $shippingAssignmentMock->expects($this->any())->method('getShipping')->willReturn($shippingMock);
+
+        return $shippingAssignmentMock;
     }
 
     /**
      * Verify that correct fields of item has been set
      *
-     * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote\Item $item
+     * @param \PHPUnit_Framework_MockObject_MockObject|null $item
      * @param array $itemData
      */
-    public function verifyItem(\Magento\Quote\Model\Quote\Item $item, $itemData)
+    public function verifyItem($item, $itemData)
     {
+        if (!$item) {
+            return;
+        }
         foreach ($itemData as $key => $value) {
             $this->assertEquals($value, $item->getData($key), 'item ' . $key . ' is incorrect');
         }
@@ -188,7 +227,7 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
      * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote\Address $address
      * @param array $addressData
      */
-    public function verifyAddress(\Magento\Quote\Model\Quote\Address $address, $addressData)
+    public function verifyTotals($address, $addressData)
     {
         foreach ($addressData as $key => $value) {
             if ($key != self::KEY_WEEE_TOTALS && $key != self::KEY_WEEE_BASE_TOTALS) {
@@ -196,6 +235,37 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
                 $this->assertEquals($value, $address->getData($key), 'address ' . $key . ' is incorrect');
             }
         }
+    }
+
+    public function testFetch()
+    {
+        $weeeTotal = 17;
+        $totalMock = new \Magento\Quote\Model\Quote\Address\Total();
+        $taxHelper = $this->setupTaxHelper([]);
+        $weeeHelper = $this->setupWeeeHelper(['getTotalAmounts' => $weeeTotal]);
+        $this->weeeCollector = $this->objectManagerHelper->getObject(
+            'Magento\Weee\Model\Total\Quote\WeeeTax', ['taxData' => $taxHelper, 'weeeData' => $weeeHelper]
+        );
+        $expectedResult = [
+            'code' => 'weee',
+            'title' => __('FPT'),
+            'value' => $weeeTotal,
+            'area' => null,
+        ];
+
+        $this->assertEquals($expectedResult, $this->weeeCollector->fetch($this->quoteMock, $totalMock));
+    }
+
+    public function testFetchWithZeroAmounts()
+    {
+        $totalMock = new \Magento\Quote\Model\Quote\Address\Total();
+        $taxHelper = $this->setupTaxHelper([]);
+        $weeeHelper = $this->setupWeeeHelper(['getTotalAmounts' => null]);
+        $this->weeeCollector = $this->objectManagerHelper->getObject(
+            'Magento\Weee\Model\Total\Quote\WeeeTax', ['taxData' => $taxHelper, 'weeeData' => $weeeHelper]
+        );
+
+        $this->assertNull($this->weeeCollector->fetch($this->quoteMock, $totalMock));
     }
 
     /**
@@ -211,9 +281,14 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
     public function testCollect($taxConfig, $weeeConfig, $itemWeeeTaxDetails, $itemQty, $addressData = [])
     {
         //Setup
-        $this->markTestSkipped('MAGETWO-42308');
-        $itemMock = $this->setupItemMock($itemQty);
-        $addressMock = $this->setupAddressMock($itemMock, $weeeConfig['isTaxable'], $itemWeeeTaxDetails, $addressData);
+        if ($itemQty > 0) {
+            $itemMock = $this->setupItemMock($itemQty);
+        } else {
+            $itemMock = null;
+        }
+        $totalMock = $this->setupTotalMock($itemMock, $weeeConfig['isTaxable'], $itemWeeeTaxDetails, $addressData);
+        $addressMock = $this->getMock('\Magento\Quote\Model\Quote\Address', [], [], '', false);
+        $shippingAssignmentMock = $this->setupShippingAssignmentMock($addressMock, $itemMock);
 
         $taxHelper = $this->setupTaxHelper($taxConfig);
         $weeeHelper = $this->setupWeeeHelper($weeeConfig);
@@ -223,11 +298,12 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
             'weeeData' => $weeeHelper,
         ];
 
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->weeeCollector = $helper->getObject('Magento\Weee\Model\Total\Quote\WeeeTax', $arguments);
+        $this->weeeCollector = $this->objectManagerHelper->getObject(
+            'Magento\Weee\Model\Total\Quote\WeeeTax', $arguments
+        );
 
         //Execute
-        $this->weeeCollector->collect($addressMock);
+        $this->weeeCollector->collect($this->quoteMock, $shippingAssignmentMock, $totalMock);
 
         //Verify
         $summed = [];
@@ -238,7 +314,7 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
         }
         $this->verifyItem($itemMock, $summed);
 
-        $this->verifyAddress($addressMock, $addressData);
+        $this->verifyTotals($totalMock, $addressData);
     }
 
     /**
@@ -572,6 +648,94 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
                 'base_subtotal_incl_tax' => 26.40,
                 'weee_amount' => 24,
                 'base_weee_amount' => 24,
+            ],
+        ];
+
+        $data['weee_disabled'] = [
+            'tax_config' => [
+                'priceIncludesTax' => false,
+                'getCalculationAlgorithm' => Calculation::CALC_UNIT_BASE,
+            ],
+            'weee_config' => [
+                'isEnabled' => false,
+                'includeInSubtotal' => false,
+                'isTaxable' => true,
+                'getApplied' => [],
+            ],
+            'item_weee_tax_details' => [
+                [
+                    'weee_tax_applied_amount' => null,
+                    'base_weee_tax_applied_amount' => null,
+                    'weee_tax_applied_row_amount' => null,
+                    'base_weee_tax_applied_row_amnt' => null,
+                    'weee_tax_applied_amount_incl_tax' => null,
+                    'base_weee_tax_applied_amount_incl_tax' => null,
+                    'weee_tax_applied_row_amount_incl_tax' => null,
+                    'base_weee_tax_applied_row_amnt_incl_tax' => null,
+                ],
+                [
+                    'weee_tax_applied_amount' => null,
+                    'base_weee_tax_applied_amount' => null,
+                    'weee_tax_applied_row_amount' => null,
+                    'base_weee_tax_applied_row_amnt' => null,
+                    'weee_tax_applied_amount_incl_tax' => null,
+                    'base_weee_tax_applied_amount_incl_tax' => null,
+                    'weee_tax_applied_row_amount_incl_tax' => null,
+                    'base_weee_tax_applied_row_amnt_incl_tax' => null,
+                ],
+            ],
+            'item_qty' => 1,
+            'address_data' => [
+                'subtotal' => null,
+                'base_subtotal' => null,
+                'subtotal_incl_tax' => null,
+                'base_subtotal_incl_tax' => null,
+                'weee_amount' => null,
+                'base_weee_amount' => null,
+            ],
+        ];
+
+        $data['zero_items'] = [
+            'tax_config' => [
+                'priceIncludesTax' => false,
+                'getCalculationAlgorithm' => Calculation::CALC_UNIT_BASE,
+            ],
+            'weee_config' => [
+                'isEnabled' => true,
+                'includeInSubtotal' => false,
+                'isTaxable' => true,
+                'getApplied' => [],
+            ],
+            'item_weee_tax_details' => [
+                [
+                    'weee_tax_applied_amount' => null,
+                    'base_weee_tax_applied_amount' => null,
+                    'weee_tax_applied_row_amount' => null,
+                    'base_weee_tax_applied_row_amnt' => null,
+                    'weee_tax_applied_amount_incl_tax' => null,
+                    'base_weee_tax_applied_amount_incl_tax' => null,
+                    'weee_tax_applied_row_amount_incl_tax' => null,
+                    'base_weee_tax_applied_row_amnt_incl_tax' => null,
+                ],
+                [
+                    'weee_tax_applied_amount' => null,
+                    'base_weee_tax_applied_amount' => null,
+                    'weee_tax_applied_row_amount' => null,
+                    'base_weee_tax_applied_row_amnt' => null,
+                    'weee_tax_applied_amount_incl_tax' => null,
+                    'base_weee_tax_applied_amount_incl_tax' => null,
+                    'weee_tax_applied_row_amount_incl_tax' => null,
+                    'base_weee_tax_applied_row_amnt_incl_tax' => null,
+                ],
+            ],
+            'item_qty' => 0,
+            'address_data' => [
+                'subtotal' => null,
+                'base_subtotal' => null,
+                'subtotal_incl_tax' => null,
+                'base_subtotal_incl_tax' => null,
+                'weee_amount' => null,
+                'base_weee_amount' => null,
             ],
         ];
 
