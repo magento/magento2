@@ -21,13 +21,22 @@ class ThemePackageList
     private $componentRegistrar;
 
     /**
+     * Factory for ThemePackage
+     *
+     * @var ThemePackageFactory
+     */
+    private $factory;
+
+    /**
      * Constructor
      *
      * @param ComponentRegistrarInterface $componentRegistrar
+     * @param ThemePackageFactory $factory
      */
-    public function __construct(ComponentRegistrarInterface $componentRegistrar)
+    public function __construct(ComponentRegistrarInterface $componentRegistrar, ThemePackageFactory $factory)
     {
         $this->componentRegistrar = $componentRegistrar;
+        $this->factory = $factory;
     }
 
     /**
@@ -35,15 +44,15 @@ class ThemePackageList
      *
      * @param string $key
      * @return ThemePackage
-     * @throws \Exception
+     * @throws \UnexpectedValueException
      */
     public function getTheme($key)
     {
         $themePath = $this->componentRegistrar->getPath(ComponentRegistrar::THEME, $key);
         if (empty($themePath)) {
-            throw new \Exception("No theme registered for '$key'");
+            throw new \UnexpectedValueException("No theme registered with name '$key'");
         }
-        return new ThemePackage($key, $themePath);
+        return $this->factory->create($key, $themePath);
     }
 
     /**
@@ -55,7 +64,7 @@ class ThemePackageList
     {
         $themes = [];
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $key => $path) {
-            $themes[$key] = new ThemePackage($key, $path);
+            $themes[$key] = $this->factory->create($key, $path);
         }
         return $themes;
     }
