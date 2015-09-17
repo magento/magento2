@@ -28,6 +28,8 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
 
     const KEY_QUOTE_ID = 'quote_id';
 
+    const KEY_PRODUCT_OPTION = 'product_option';
+
     /**#@-*/
 
     /**
