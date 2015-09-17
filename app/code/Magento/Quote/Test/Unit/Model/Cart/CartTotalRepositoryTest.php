@@ -161,7 +161,7 @@ class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->couponServiceMock->expects($this->once())->method('get')->with($cartId)->willReturn($coupon);
 
-        $totalsMock->expects($this->once())->method('setItems')->with([11 => $itemArray,])->willReturnSelf();
+        $totalsMock->expects($this->once())->method('setItems')->with([11 => $itemArray])->willReturnSelf();
         $totalsMock->expects($this->once())->method('setTotalSegments')->with($totalSegmentsMock)->willReturnSelf();
         $totalsMock->expects($this->once())->method('setCouponCode')->with($coupon)->willReturnSelf();
         $totalsMock->expects($this->once())->method('setGrandTotal')->willReturnSelf();
