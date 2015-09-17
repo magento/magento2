@@ -25,19 +25,20 @@ class RouteConfigFilesTest extends \PHPUnit_Framework_TestCase
      *
      * @var string
      */
-    protected $_schemaFile;
+    protected $schemaFile;
 
     /**
      * Path to tough XSD for merged file validation
      *
      * @var string
      */
-    protected $_mergedSchemaFile;
+    protected $mergedSchemaFile;
 
     protected function setUp()
     {
-        $this->_schemaFile = BP . '/lib/internal/Magento/Framework/App/etc/routes.xsd';
-        $this->_mergedSchemaFile = BP . '/lib/internal/Magento/Framework/App/etc/routes_merged.xsd';
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $this->schemaFile = $urnResolver->getRealPath('urn:magento:library:framework:App/etc/routes.xsd');
+        $this->mergedSchemaFile = $urnResolver->getRealPath('urn:magento:library:framework:App/etc/routes_merged.xsd');
     }
 
     public function testRouteConfigsValidation()
@@ -55,7 +56,7 @@ class RouteConfigFilesTest extends \PHPUnit_Framework_TestCase
         foreach ($files as $file) {
             $content = file_get_contents($file);
             try {
-                new \Magento\Framework\Config\Dom($content, $this->_idAttributes, null, $this->_schemaFile);
+                new \Magento\Framework\Config\Dom($content, $this->_idAttributes, null, $this->schemaFile);
 
                 //merge won't be performed if file is invalid because of exception thrown
                 $mergedConfig->merge($content);
@@ -70,7 +71,7 @@ class RouteConfigFilesTest extends \PHPUnit_Framework_TestCase
 
         try {
             $errors = [];
-            $mergedConfig->validate($this->_mergedSchemaFile, $errors);
+            $mergedConfig->validate($this->mergedSchemaFile, $errors);
         } catch (\Exception $e) {
             $this->fail('Merged routes config is invalid: ' . "\n" . implode("\n", $errors));
         }

@@ -9,6 +9,14 @@ namespace Magento\Test\Integrity\Magento\Widget;
 
 class WidgetConfigTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    protected $urnResolver;
+
+    protected function setUp()
+    {
+        $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+    }
+
     public function testXmlFiles()
     {
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
@@ -17,8 +25,7 @@ class WidgetConfigTest extends \PHPUnit_Framework_TestCase
              * @param string $configFile
              */
             function ($configFile) {
-                $schema = \Magento\Framework\App\Utility\Files::init()->getPathToSource() .
-                    '/app/code/Magento/Widget/etc/widget.xsd';
+                $schema = $this->urnResolver->getRealPath('urn:magento:module:widget:etc/widget.xsd');
                 $this->_validateFileExpectSuccess($configFile, $schema);
             },
             array_merge(
@@ -31,32 +38,28 @@ class WidgetConfigTest extends \PHPUnit_Framework_TestCase
     public function testSchemaUsingValidXml()
     {
         $xmlFile = __DIR__ . '/_files/widget.xml';
-        $schema = \Magento\Framework\App\Utility\Files::init()->getPathToSource() .
-            '/app/code/Magento/Widget/etc/widget.xsd';
+        $schema = $this->urnResolver->getRealPath('urn:magento:module:widget:etc/widget.xsd');
         $this->_validateFileExpectSuccess($xmlFile, $schema);
     }
 
     public function testSchemaUsingInvalidXml()
     {
         $xmlFile = __DIR__ . '/_files/invalid_widget.xml';
-        $schema = \Magento\Framework\App\Utility\Files::init()->getPathToSource() .
-            '/app/code/Magento/Widget/etc/widget.xsd';
+        $schema = $this->urnResolver->getRealPath('urn:magento:module:widget:etc/widget.xsd');
         $this->_validateFileExpectFailure($xmlFile, $schema);
     }
 
     public function testFileSchemaUsingXml()
     {
         $xmlFile = __DIR__ . '/_files/widget_file.xml';
-        $schema = \Magento\Framework\App\Utility\Files::init()->getPathToSource() .
-            '/app/code/Magento/Widget/etc/widget_file.xsd';
+        $schema = $this->urnResolver->getRealPath('urn:magento:module:widget:etc/widget_file.xsd');
         $this->_validateFileExpectSuccess($xmlFile, $schema);
     }
 
     public function testFileSchemaUsingInvalidXml()
     {
         $xmlFile = __DIR__ . '/_files/invalid_widget.xml';
-        $schema = \Magento\Framework\App\Utility\Files::init()->getPathToSource() .
-            '/app/code/Magento/Widget/etc/widget_file.xsd';
+        $schema = $this->urnResolver->getRealPath('urn:magento:module:widget:etc/widget_file.xsd');
         $this->_validateFileExpectFailure($xmlFile, $schema);
     }
 
