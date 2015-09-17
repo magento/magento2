@@ -113,10 +113,10 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Tax\Model\Sales\Total\Quote\Subtotal $subtotalCollector */
         $subtotalCollector = $this->objectManager->create('Magento\Tax\Model\Sales\Total\Quote\Subtotal');
         $subtotalCollector->collect($quote, $shippingAssignment, $total);
-        $totals = $address->getTotals();
-        $this->assertEquals($expected['subtotal'], $totals['subtotal']);
-        $this->assertEquals($expected['subtotal'] + $expected['tax_amount'], $totals['subtotal_incl_tax']);
-        $this->assertEquals($expected['discount_amount'], $totals['discount_amount']);
+
+        $this->assertEquals($expected['subtotal'], $total->getSubtotal());
+        $this->assertEquals($expected['subtotal'] + $expected['tax_amount'], $total->getSubtotalInclTax());
+        $this->assertEquals($expected['discount_amount'], $total->getDiscountAmount());
         $items = $address->getAllItems();
         /** @var \Magento\Quote\Model\Quote\Address\Item $item */
         $item = $items[0];
@@ -236,10 +236,9 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         $subtotalCollector = $this->objectManager->create('Magento\Tax\Model\Sales\Total\Quote\Subtotal');
         $subtotalCollector->collect($quote, $shippingAssignment, $total);
 
-        $totals = $address->getTotals();
-        $this->assertEquals($expected['subtotal'], $totals['subtotal']);
-        $this->assertEquals($expected['subtotal'] + $expected['tax_amount'], $totals['subtotal_incl_tax']);
-        $this->assertEquals($expected['discount_amount'], $totals['discount_amount']);
+        $this->assertEquals($expected['subtotal'], $total->getSubtotal());
+        $this->assertEquals($expected['subtotal'] + $expected['tax_amount'], $total->getSubtotalInclTax());
+        $this->assertEquals($expected['discount_amount'], $total->getDiscountAmount());
         $items = $address->getAllItems();
         /** @var \Magento\Quote\Model\Quote\Address\Item $item */
         $item = $items[0];
