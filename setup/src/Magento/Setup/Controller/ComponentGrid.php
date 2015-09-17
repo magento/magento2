@@ -7,11 +7,14 @@
 namespace Magento\Setup\Controller;
 
 use Magento\Framework\Composer\ComposerInformation;
+use Magento\Framework\Module\FullModuleList;
+use Magento\Framework\Module\ModuleList;
 use Magento\Framework\Module\PackageInfo;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
+use Magento\Setup\Model\UpdatePackagesCache;
 
 /**
  * Controller for component grid tasks
@@ -19,28 +22,53 @@ use Zend\View\Model\ViewModel;
 class ComponentGrid extends AbstractActionController
 {
     /**
-     * @var ComposerInformation
+     * @var \Magento\Framework\Composer\ComposerInformation
      */
     private $composerInformation;
 
     /**
      * Module package info
      *
-     * @var PackageInfo
+     * @var \Magento\Framework\Module\PackageInfo
      */
     private $packageInfo;
 
     /**
-     * @param ComposerInformation $composerInformation
-     * @param ObjectManagerProvider $objectManagerProvider
+     * Enabled Module info
+     *
+     * @var \Magento\Framework\Module\ModuleList
+     */
+    private $enabledModuleList;
+
+    /**
+     * Full Module info
+     *
+     * @var \Magento\Framework\Module\FullModuleList
+     */
+    private $fullModuleList;
+
+    /**
+     * @var \Magento\Setup\Model\UpdatePackagesCache
+     */
+    private $updatePackagesCache;
+
+    /**
+     * @param \Magento\Framework\Composer\ComposerInformation $composerInformation
+     * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
+     * @param \Magento\Setup\Model\UpdatePackagesCache $updatePackagesCache
      */
     public function __construct(
-        ComposerInformation $composerInformation,
-        ObjectManagerProvider $objectManagerProvider
+        \Magento\Framework\Composer\ComposerInformation $composerInformation,
+        \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider,
+        \Magento\Setup\Model\UpdatePackagesCache $updatePackagesCache
     ) {
         $this->composerInformation = $composerInformation;
+        $objectManager = $objectManagerProvider->get();
+        $this->enabledModuleList = $objectManager->get('Magento\Framework\Module\ModuleList');
+        $this->fullModuleList = $objectManager->get('Magento\Framework\Module\FullModuleList');
         $this->packageInfo = $objectManagerProvider->get()
             ->get('Magento\Framework\Module\PackageInfoFactory')->create();
+        $this->updatePackagesCache = $updatePackagesCache;
     }
 
     /**
@@ -63,13 +91,17 @@ class ComponentGrid extends AbstractActionController
      */
     public function componentsAction()
     {
-        $lastSyncData = $this->composerInformation->getPackagesForUpdate();
+        $lastSyncData = $this->updatePackagesCache->getPackagesForUpdate();
         $components = $this->composerInformation->getInstalledMagentoPackages();
+        $allModules = $this->getAllModules();
+        $components = array_replace_recursive($components, $allModules);
         foreach ($components as $component) {
             $components[$component['name']]['update'] = false;
             $components[$component['name']]['uninstall'] = false;
+            $components[$component['name']]['moduleName'] = $this->packageInfo->getModuleName($component['name']);
             if ($this->composerInformation->isPackageInComposerJson($component['name'])
                 && ($component['type'] !== ComposerInformation::METAPACKAGE_PACKAGE_TYPE)) {
+                $components[$component['name']]['uninstall'] = true;
                 if (isset($lastSyncData['packages'][$component['name']]['latestVersion'])
                     && version_compare(
                         $lastSyncData['packages'][$component['name']]['latestVersion'],
@@ -77,14 +109,18 @@ class ComponentGrid extends AbstractActionController
                         '>'
                     )) {
                     $components[$component['name']]['update'] = true;
-                    $components[$component['name']]['uninstall'] = true;
-                } else {
-                    $components[$component['name']]['uninstall'] = true;
                 }
+            }
+            if ($component['type'] === ComposerInformation::MODULE_PACKAGE_TYPE) {
+                $components[$component['name']]['enable'] =
+                    $this->enabledModuleList->has($components[$component['name']]['moduleName']);
+                $components[$component['name']]['disable'] = !$components[$component['name']]['enable'];
+            } else {
+                $components[$component['name']]['enable'] = false;
+                $components[$component['name']]['disable'] = false;
             }
             $componentNameParts = explode('/', $component['name']);
             $components[$component['name']]['vendor'] = $componentNameParts[0];
-            $components[$component['name']]['moduleName'] = $this->packageInfo->getModuleName($component['name']);
         }
         return new JsonModel(
             [
@@ -103,13 +139,31 @@ class ComponentGrid extends AbstractActionController
      */
     public function syncAction()
     {
-        $this->composerInformation->syncPackagesForUpdate();
-        $lastSyncData = $this->composerInformation->getPackagesForUpdate();
+        $this->updatePackagesCache->syncPackagesForUpdate();
+        $lastSyncData = $this->updatePackagesCache->getPackagesForUpdate();
         return new JsonModel(
             [
                 'success' => true,
                 'lastSyncData' => $lastSyncData
             ]
         );
+    }
+
+    /**
+     * Get full list of modules as an associative array
+     *
+     * @return array
+     */
+    private function getAllModules()
+    {
+        $modules = [];
+        $allModules = $this->fullModuleList->getNames();
+        foreach ($allModules as $module) {
+            $moduleName = $this->packageInfo->getPackageName($module);
+            $modules[$moduleName]['name'] = $moduleName;
+            $modules[$moduleName]['type'] = ComposerInformation::MODULE_PACKAGE_TYPE;
+            $modules[$moduleName]['version'] = $this->packageInfo->getVersion($module);
+        }
+        return $modules;
     }
 }

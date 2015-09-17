@@ -12,31 +12,31 @@
 
 <?php if (!empty($fraudDetails)): ?>
     <div class="admin__page-section-item-title">
-        <span class="title"><?php echo __('Fraud Detection ') ?></span>
+        <span class="title"><?php /* @escapeNotVerified */ echo __('Fraud Detection ') ?></span>
     </div>
 
     <div class="admin__page-section-item-content">
         <div class="order-payment-additional">
             <?php if(!empty($fraudDetails['fds_filter_action'])): ?>
-                <?php echo __('FDS Filter Action') ?>: <?php echo $fraudDetails['fds_filter_action'] ?></br>
+                <?php /* @escapeNotVerified */ echo __('FDS Filter Action') ?>: <?php /* @escapeNotVerified */ echo $fraudDetails['fds_filter_action'] ?></br>
             <?php endif; ?>
 
             <?php if(!empty($fraudDetails['avs_response'])): ?>
-                <?php echo __('AVS Response') ?>: <?php echo $fraudDetails['avs_response'] ?></br>
+                <?php /* @escapeNotVerified */ echo __('AVS Response') ?>: <?php /* @escapeNotVerified */ echo $fraudDetails['avs_response'] ?></br>
             <?php endif; ?>
 
             <?php if(!empty($fraudDetails['card_code_response'])): ?>
-                <?php echo __('Card Code Response') ?>: <?php echo $fraudDetails['card_code_response'] ?></br>
+                <?php /* @escapeNotVerified */ echo __('Card Code Response') ?>: <?php /* @escapeNotVerified */ echo $fraudDetails['card_code_response'] ?></br>
             <?php endif; ?>
 
             <?php if(!empty($fraudDetails['cavv_response']) || ($fraudDetails['cavv_response'] === 0)): ?>
-                <?php echo __('CAVV Response') ?>: <?php echo $fraudDetails['cavv_response'] ?></br>
+                <?php /* @escapeNotVerified */ echo __('CAVV Response') ?>: <?php /* @escapeNotVerified */ echo $fraudDetails['cavv_response'] ?></br>
             <?php endif; ?>
 
             <?php if(!empty($fraudDetails['fraud_filters'])): ?>
-                <b><?php echo __('Fraud Filters') ?>:</b></br>
+                <b><?php /* @escapeNotVerified */ echo __('Fraud Filters') ?>:</b></br>
                 <?php foreach($fraudDetails['fraud_filters'] as $filter): ?>
-                    <?php echo $filter['name'] ?>: <?php echo $filter['action'] ?></br>
+                    <?php /* @escapeNotVerified */ echo $filter['name'] ?>: <?php /* @escapeNotVerified */ echo $filter['action'] ?></br>
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>
