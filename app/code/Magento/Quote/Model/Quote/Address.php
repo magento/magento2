@@ -229,6 +229,11 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     protected $totalsCollector;
 
     /**
+     * @var \Magento\Quote\Model\Quote\TotalsReader
+     */
+    protected $totalsReader;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -257,6 +262,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      * @param \Magento\Customer\Model\Address\Mapper $addressMapper
      * @param Address\CustomAttributeListInterface $attributeList
      * @param TotalsCollector $totalsCollector
+     * @param \Magento\Quote\Model\Quote\TotalsReader $totalsReader
      * @param \Magento\Framework\Model\Resource\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
@@ -292,6 +298,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         \Magento\Customer\Model\Address\Mapper $addressMapper,
         Address\CustomAttributeListInterface $attributeList,
         \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
+        \Magento\Quote\Model\Quote\TotalsReader $totalsReader,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -312,6 +319,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         $this->addressMapper = $addressMapper;
         $this->attributeList = $attributeList;
         $this->totalsCollector = $totalsCollector;
+        $this->totalsReader = $totalsReader;
         parent::__construct(
             $context,
             $registry,
@@ -1029,7 +1037,12 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      */
     public function getTotals()
     {
-        $this->_totals = $this->totalsCollector->collectAddressTotals($this->getQuote(), $this)->toArray();
+        $totalsData = array_merge($this->getData(), ['address_quote_items' => $this->getAllItems()]);
+        $totals = $this->totalsReader->fetch($this->getQuote(), $totalsData);
+        foreach ($totals as $total) {
+            $this->addTotal($total);
+        }
+
         return $this->_totals;
     }
 

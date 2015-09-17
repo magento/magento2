@@ -353,14 +353,6 @@ class Weee extends AbstractTotal
      */
     public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {
-        if ($total->getTotalAmount($this->getCode())) {
-            return [
-                'code' => $this->getCode(),
-                'title' => __('FPT'),
-                'value' => $total->getTotalAmount($this->getCode()),
-                'area' => null,
-            ];
-        }
         return null;
     }
 
