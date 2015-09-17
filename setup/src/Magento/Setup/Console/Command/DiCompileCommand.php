@@ -94,7 +94,7 @@ class DiCompileCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $appCodePaths = $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE);
+        $modulePaths = $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE);
         $libraryPaths = $this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
         $generationPath = $this->directoryList->getPath(DirectoryList::GENERATION);
         if (!$this->deploymentConfig->isAvailable()) {
@@ -103,20 +103,20 @@ class DiCompileCommand extends Command
         }
         $this->objectManager->get('Magento\Framework\App\Cache')->clean();
         $compiledPathsList = [
-            'application' => $appCodePaths,
+            'application' => $modulePaths,
             'library' => $libraryPaths,
             'generated_helpers' => $generationPath
         ];
-        $excludedAppCodePaths = [];
-        foreach ($appCodePaths as $appCodePath) {
-            $excludedAppCodePaths[] = '#^' . $appCodePath . '/Test#';
+        $excludedModulePaths = [];
+        foreach ($modulePaths as $appCodePath) {
+            $excludedModulePaths[] = '#^' . $appCodePath . '/Test#';
         }
         $excludedLibraryPaths = [];
         foreach ($libraryPaths as $libraryPath) {
             $excludedLibraryPaths[] = '#^' . $libraryPath . '/([\\w]+/)?Test#';
         }
         $this->excludedPathsList = [
-            'application' => $excludedAppCodePaths,
+            'application' => $excludedModulePaths,
             'framework' => $excludedLibraryPaths
         ];
         $dataAttributesIncludePattern = [

@@ -6,7 +6,6 @@
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Autoload\AutoloaderRegistry;
-use Magento\Framework\Component\ComponentRegistrar;
 
 require_once __DIR__ . '/../../../../app/bootstrap.php';
 require_once __DIR__ . '/autoload.php';

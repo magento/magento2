@@ -9,6 +9,7 @@
 namespace Magento\Dhl\Model;
 
 use Magento\Catalog\Model\Product\Type;
+use Magento\Framework\Module\Dir;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
@@ -1245,7 +1246,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     protected function getCountryParams($countryCode)
     {
         if (empty($this->_countryParams)) {
-            $etcPath = $this->_configReader->getModuleDir('etc', 'Magento_Dhl');
+            $etcPath = $this->_configReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Dhl');
             $directoryRead = $this->readFactory->create($etcPath);
             $countriesXml = $directoryRead->readFile('countries.xml');
             $this->_countryParams = $this->_xmlElFactory->create(['data' => $countriesXml]);

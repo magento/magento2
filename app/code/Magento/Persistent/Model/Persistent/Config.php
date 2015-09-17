@@ -5,7 +5,7 @@
  */
 namespace Magento\Persistent\Model\Persistent;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Module\Dir;
 
 /**
  * Persistent Config Model
@@ -123,7 +123,8 @@ class Config
                 [
                     'xml' => $xml,
                     'idAttributes' => ['config/instances/blocks/reference' => 'id'],
-                    'schemaFile' => $this->_moduleReader->getModuleDir('etc', 'Magento_Persistent') . '/persistent.xsd',
+                    'schemaFile' => $this->_moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Persistent')
+                        . '/persistent.xsd',
                 ]
             );
             $this->_configDomXPath = new \DOMXPath($configDom->getDom());
