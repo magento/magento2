@@ -11,10 +11,12 @@
         "magento/module-sales": "1.0.0-beta",
         "magento/module-sales-rule": "1.0.0-beta",
         "magento/module-directory": "1.0.0-beta",
-        "magento/module-checkout": "1.0.0-beta",
         "magento/module-quote": "1.0.0-beta",
         "magento/framework": "1.0.0-beta",
         "magento/magento-composer-installer": "*"
+    },
+    "suggest": {
+        "magento/module-checkout": "1.0.0-beta"
     },
     "type": "magento2-module",
     "version": "1.0.0-beta",
