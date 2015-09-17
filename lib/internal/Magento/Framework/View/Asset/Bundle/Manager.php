@@ -10,6 +10,7 @@ use Magento\Framework\View\Asset;
 use Magento\Framework\Filesystem;
 use Magento\Framework\View\Asset\Bundle;
 use Magento\Framework\View\Asset\LocalInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * BundleService model
@@ -126,7 +127,7 @@ class Manager
         /** @var $asset LocalInterface */
         $filePathInfo = $this->splitPath($filePath);
         if ($filePathInfo && $this->compareModules($filePathInfo, $asset)) {
-            return $asset->getFilePath() == $filePathInfo['excludedPath'];
+            return $asset->getSourceFile() == $filePathInfo['excludedPath'];
         }
         return false;
     }
@@ -190,33 +191,19 @@ class Manager
     protected function isAssetMinification(LocalInterface $asset)
     {
         $sourceFile = $asset->getSourceFile();
-        if (in_array($asset->getFilePath(), $this->excluded)) {
+        $extension = $asset->getContentType();
+        if (in_array($sourceFile, $this->excluded)) {
             return false;
         }
-        if ($this->minification->isEnabled($asset->getContentType())) {
 
-            if (strpos($sourceFile, '.min.') !== false) {
-                $this->excluded[] = str_replace('.min.', '', $sourceFile);
-                return true;
-            }
-
-            $extension = $asset->getContentType();
-            $minAbsolutePath = str_replace($extension, "min.{$extension}", $sourceFile);
-            if (file_exists($minAbsolutePath)) {
-                return false;
-            }
-
-            return true;
-        }
-
-        if (strpos($sourceFile, '.min.') !== false) {
-            $absolutePath = str_replace('.min.', '', $asset->getFilePath());
-            if (file_exists($absolutePath)) {
-                return false;
+        $assetMinifiedPath = str_replace($extension, "min.{$extension}", $asset->getPath());
+        if (strpos($sourceFile, '.min.') === false) {
+            if ($this->filesystem->getDirectoryRead(DirectoryList::APP)->isExist($assetMinifiedPath)) {
+                $this->excluded[] = $sourceFile;
             }
         } else {
-            $extension = $asset->getContentType();
-            $this->excluded[] = str_replace($extension, "min.{$extension}", $asset->getFilePath());
+            $this->excluded[] = $this->filesystem->getDirectoryRead(DirectoryList::APP)
+                ->getAbsolutePath($assetMinifiedPath);
         }
 
         return true;
