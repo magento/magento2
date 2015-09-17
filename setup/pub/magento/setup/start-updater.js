@@ -64,12 +64,10 @@ angular.module('start-updater', ['ngStorage'])
                 });
         }
         $scope.goToPreviousState = function() {
-            if ($state.current.type === 'update') {
-                $state.go('root.create-backup-update');
-            } else if ($state.current.type === 'upgrade') {
-                $state.go('root.create-backup-upgrade');
-            } else if ($state.current.type === 'uninstall') {
+            if ($state.current.type === 'uninstall') {
                 $state.go('root.data-option');
+            } else {
+                $state.go('root.create-backup-' + $state.current.type);
             }
         }
     }]);

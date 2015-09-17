@@ -44,6 +44,7 @@ class CollectQuote
      * @param \Magento\Quote\Api\Data\EstimateAddressInterfaceFactory $estimatedAddressFactory
      * @param \Magento\Quote\Api\ShippingMethodManagementInterface $shippingMethodManager
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Customer\Model\Session $customerSession,
