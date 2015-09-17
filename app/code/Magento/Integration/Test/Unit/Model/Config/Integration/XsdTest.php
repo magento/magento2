@@ -17,7 +17,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_schemaFile = realpath(__DIR__ . '/../../../../../integration/api.xsd');
+        $this->_schemaFile = realpath(__DIR__ . '/../../../../../etc/integration/api.xsd');
     }
 
     /**
