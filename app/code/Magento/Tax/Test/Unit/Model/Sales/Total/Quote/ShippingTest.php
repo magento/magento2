@@ -101,17 +101,10 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
 
     public function testCollectDoesNotCalculateTaxIfThereIsNoItemsRelatedToGivenAddress()
     {
-        $this->markTestSkipped('MAGETWO-42308');
         $storeId = 1;
-        $storeMock = $this->getMockObject('Magento\Store\Model\Store', [
-            'store_id' => $storeId,
-        ]);
-        $quoteMock = $this->getMockObject(
-            'Magento\Quote\Model\Quote',
-            [
-                'store' => $storeMock,
-            ]
-        );
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+        $quoteMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
+
         $addressMock = $this->getMockObject('Magento\Quote\Model\Quote\Address', [
             'all_items' => [],
             'shipping_tax_calculation_amount' => 100,
@@ -121,7 +114,18 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             'quote' => $quoteMock,
         ]);
         $this->taxCalculationMock->expects($this->never())->method('calculateTax');
-        $this->model->collect($addressMock);
+
+        $shippingMock = $this->getMock('\Magento\Quote\Api\Data\ShippingInterface');
+        $shippingMock->expects($this->atLeastOnce())->method('getAddress')->willReturn($addressMock);
+        $shippingAssignmentMock = $this->getMock('\Magento\Quote\Api\Data\ShippingAssignmentInterface');
+        $shippingAssignmentMock->expects($this->atLeastOnce())->method('getShipping')->willReturn($shippingMock);
+        $shippingAssignmentMock->expects($this->once())
+            ->method('getItems')
+            ->willReturn([$this->getMock('\Magento\Quote\Api\Data\CartItemInterface')]);
+
+        $totalMock = $this->getMock('\Magento\Quote\Model\Quote\Address\Total', [], [], '', false);
+
+        $this->model->collect($quoteMock, $shippingAssignmentMock, $totalMock);
     }
 
     public function testCollect()
