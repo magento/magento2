@@ -392,7 +392,7 @@ class Editor extends Textarea
             'no_display'
         ) ? ' style="display:none;"' : '') . ($this->getConfig(
             'container_class'
-        ) ? ' class="' . $this->getConfig(
+        ) ? ' class="admin__control-wysiwig ' . $this->getConfig(
             'container_class'
         ) . '"' : '') . '>' . $html . '</div>';
 
