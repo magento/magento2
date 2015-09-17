@@ -31,4 +31,11 @@ interface QueueInterface
      * @return void
      */
     public function subscribe($callback);
+
+    /**
+     *
+     * @param EnvelopeInterface $envelope
+     * @return void
+     */
+    public function reject(EnvelopeInterface $envelope);
 }
