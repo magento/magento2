@@ -33,7 +33,7 @@ define([
 
         /**
          * Initialize
-         * @param options
+         * @param {Array} options
          */
         initialize: function (options) {
             this._super(options);
@@ -43,6 +43,11 @@ define([
                 buttons: [
                     {
                         text: $.mage.__('Cancel'),
+
+                        /**
+                         * Close modal
+                         * @event
+                         */
                         click: function () {
                             this.closeModal();
                         }
@@ -90,7 +95,7 @@ define([
         /**
          * Select different product in configurations section
          * @see configurable_associated_product_listing.xml
-         * @param rowIndex
+         * @param {Integer} rowIndex
          */
         selectProduct: function (rowIndex) {
             this.close(rowIndex);
@@ -98,9 +103,11 @@ define([
 
         /**
          * Open
-         * @param function filterData
-         * @param callbackName
-         * @param showMassActionColumn
+         * @param {Object} filterData - filter data
+         * @param {Object|*} filterData.filters - attribute name
+         * @param {Object|*} filterData.filters_modifier - modifier value
+         * @param {String} callbackName
+         * @param {Boolean} showMassActionColumn
          */
         open: function (filterData, callbackName, showMassActionColumn) {
             this.callbackName = callbackName;
@@ -140,7 +147,7 @@ define([
 
         /**
          * Get product by id
-         * @param productId
+         * @param {Integer} productId
          * @returns {*}
          */
         getProductById: function (productId) {
@@ -151,7 +158,7 @@ define([
 
         /**
          * Get product
-         * @param rowIndex
+         * @param {Integer} rowIndex
          * @returns {*}
          */
         getProductByIndex: function (rowIndex) {
@@ -172,6 +179,12 @@ define([
             return this.productsGridUrl + params;
         },
 
+        /**
+         * Show button add manual
+         * @param {Array} variations
+         * @returns {*}
+         * @private
+         */
         _showButtonAddManual: function (variations) {
             return this.button(variations.length);
         },
@@ -223,9 +236,13 @@ define([
                 };
             }
 
-            this.open({
-                'filters_modifier': filterModifier
-            }, 'appendProducts', true);
+            this.open(
+                {
+                    'filters_modifier': filterModifier
+                },
+                'appendProducts',
+                true
+            );
         },
 
         /**
