@@ -96,23 +96,25 @@ class CartTotalRepository implements CartTotalRepositoryInterface
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         if ($quote->isVirtual()) {
-            $addressTotals = $quote->getBillingAddress()->getData();
+            $addressTotalsData = $quote->getBillingAddress()->getData();
+            $addressTotals = $quote->getBillingAddress()->getTotals();
         } else {
-            $addressTotals = $quote->getShippingAddress()->getData();
+            $addressTotalsData = $quote->getShippingAddress()->getData();
+            $addressTotals = $quote->getShippingAddress()->getTotals();
         }
 
         /** @var \Magento\Quote\Api\Data\TotalsInterface $quoteTotals */
         $quoteTotals = $this->totalsFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $quoteTotals,
-            $addressTotals,
+            $addressTotalsData,
             '\Magento\Quote\Api\Data\TotalsInterface'
         );
         $items = [];
         foreach ($quote->getAllVisibleItems() as $index => $item) {
             $items[$index] = $this->itemConverter->modelToDataObject($item);
         }
-        $calculatedTotals = $this->totalsConverter->process($this->reader->fetch($quote, $addressTotals));
+        $calculatedTotals = $this->totalsConverter->process($addressTotals);
         $quoteTotals->setTotalSegments($calculatedTotals);
 
         $amount = $quoteTotals->getGrandTotal() - $quoteTotals->getTaxAmount();

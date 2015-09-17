@@ -234,14 +234,17 @@ class WeeeTax extends Weee
      */
     public function fetch(\Magento\Quote\Model\Quote $quote, \Magento\Quote\Model\Quote\Address\Total $total)
     {
-        $weeeTotal = $total->getTotalAmount($this->getCode());
+        /** @var $items \Magento\Sales\Model\Order\Item[] */
+        $items = isset($total['address_quote_items']) ? $total['address_quote_items'] : [];
+
+        $weeeTotal = $this->weeeData->getTotalAmounts($items, $quote->getStore());
         if ($weeeTotal) {
             return [
-                    'code' => $this->getCode(),
-                    'title' => __('FPT'),
-                    'value' => $weeeTotal,
-                    'area' => null,
-                ];
+                'code' => $this->getCode(),
+                'title' => __('FPT'),
+                'value' => $weeeTotal,
+                'area' => null,
+            ];
         }
         return null;
     }
