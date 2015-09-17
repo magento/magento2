@@ -21,6 +21,8 @@ use Magento\Store\Model\Store;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @method \Magento\Eav\Model\Resource\Attribute\DefaultEntityAttributes\ProviderInterface getResource()
  */
 class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractCollection
 {
@@ -561,7 +563,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
             )->columns(
                 ['status' => new \Zend_Db_Expr(ProductStatus::STATUS_ENABLED)]
             );
-            $this->addAttributeToSelect(['entity_id', 'type_id', 'attribute_set_id']);
+            $this->addAttributeToSelect($this->getResource()->getDefaultAttributes());
             if ($this->_catalogProductFlatState->getFlatIndexerHelper()->isAddChildData()) {
                 $this->getSelect()->where('e.is_child=?', 0);
                 $this->addAttributeToSelect(['child_id', 'is_child']);
