@@ -23,14 +23,14 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSchema()
     {
-        $expected = str_replace('\\', '/', BP . '/lib/internal/Magento/Framework/Amqp/etc/queue_merged.xsd');
+        $expected = str_replace('\\', '/', realpath(__DIR__ . '/../../../etc/queue_merged.xsd'));
         $actual = str_replace('\\', '/', $this->model->getSchema());
         $this->assertEquals($expected, $actual);
     }
 
     public function testGetPerFileSchema()
     {
-        $expected = str_replace('\\', '/', BP . '/lib/internal/Magento/Framework/Amqp/etc/queue.xsd');
+        $expected = str_replace('\\', '/', realpath(__DIR__ . '/../../../etc/queue.xsd'));
         $actual = str_replace('\\', '/', $this->model->getPerFileSchema());
         $this->assertEquals($expected, $actual);
     }

@@ -18,7 +18,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_schemaFile = BP . "/lib/internal/Magento/Framework/Amqp/etc/queue_merged.xsd";
+        $this->_schemaFile = realpath(__DIR__ . '/../../../etc/queue_merged.xsd');
     }
 
     /**
