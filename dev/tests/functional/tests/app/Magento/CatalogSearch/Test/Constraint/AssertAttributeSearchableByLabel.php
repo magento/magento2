@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Test\Constraint;
+namespace Magento\CatalogSearch\Test\Constraint;
 
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Mtf\Fixture\InjectableFixture;
@@ -33,7 +33,32 @@ class AssertAttributeSearchableByLabel extends AbstractConstraint
         CatalogsearchResult $catalogSearchResult
     ) {
         $cmsIndex->open();
-        $cmsIndex->getSearchBlock()->search($attribute->getDefaultValueTextarea());
+        $searchValue = '';
+
+        switch ($attribute->getFrontendInput()) {
+            case 'Multiple Select':
+            case 'Dropdown':
+                foreach ($attribute->getOptions() as $option) {
+                    if ($option['is_default'] == 'Yes') {
+                        $searchValue = $option['admin'];
+                    }
+                }
+                break;
+            case 'Text Field':
+                $searchValue = $attribute->getDefaultValueText();
+                break;
+            case 'Text Area':
+                $searchValue = $attribute->getDefaultValueTextarea();
+                break;
+            case 'Date':
+                $searchValue = $attribute->getDefaultValueDate();
+                break;
+            case 'Yes/No':
+                $searchValue = $attribute->getDefaultValueYesno();
+                break;
+        }
+
+        $cmsIndex->getSearchBlock()->search($searchValue);
 
         $isVisible = $catalogSearchResult->getListProductBlock()->getProductItem($product)->isVisible();
         while (!$isVisible && $catalogSearchResult->getBottomToolbar()->nextPage()) {
@@ -50,6 +75,6 @@ class AssertAttributeSearchableByLabel extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Product attribute is searchable on Frontend';
+        return 'Product attribute is searchable on Frontend.';
     }
 }

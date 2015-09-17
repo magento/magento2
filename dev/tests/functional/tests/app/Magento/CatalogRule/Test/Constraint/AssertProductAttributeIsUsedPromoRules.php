@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Test\Constraint;
+namespace Magento\CatalogRule\Test\Constraint;
 
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
