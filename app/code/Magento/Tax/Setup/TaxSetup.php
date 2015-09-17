@@ -6,19 +6,19 @@
 namespace Magento\Tax\Setup;
 
 use Magento\Catalog\Model\ProductTypes\ConfigInterface;
-use Magento\Catalog\Setup\CategorySetupFactory;
-use Magento\Eav\Model\Entity\Setup\Context;
-use Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory;
-use Magento\Framework\App\CacheInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Sales\Setup\SalesSetup;
+use Magento\Sales\Setup\SalesSetupFactory;
 
 /**
  * Tax Setup Resource Model
  */
-class TaxSetup extends SalesSetup
+class TaxSetup
 {
+    /**
+     * @var \Magento\Sales\Setup\SalesSetup
+     */
+    protected $salesSetup;
+
     /**
      * Product type config
      *
@@ -30,22 +30,16 @@ class TaxSetup extends SalesSetup
      * Init
      *
      * @param ModuleDataSetupInterface $setup
-     * @param Context $context
-     * @param CacheInterface $cache
-     * @param CollectionFactory $attrGroupCollectionFactory
-     * @param ScopeConfigInterface $config
+     * @param \Magento\Sales\Setup\SalesSetupFactory $salesSetupFactory
      * @param ConfigInterface $productTypeConfig
      */
     public function __construct(
         ModuleDataSetupInterface $setup,
-        Context $context,
-        CacheInterface $cache,
-        CollectionFactory $attrGroupCollectionFactory,
-        ScopeConfigInterface $config,
+        SalesSetupFactory $salesSetupFactory,
         ConfigInterface $productTypeConfig
     ) {
+        $this->salesSetup = $salesSetupFactory->create(['resourceName' => 'tax_setup', 'setup' => $setup]);
         $this->productTypeConfig = $productTypeConfig;
-        parent::__construct($setup, $context, $cache, $attrGroupCollectionFactory, $config);
     }
 
     /**
@@ -56,5 +50,35 @@ class TaxSetup extends SalesSetup
     public function getTaxableItems()
     {
         return $this->productTypeConfig->filter('taxable');
+    }
+
+    /**
+     * Add entity attribute. Overwritten for flat entities support
+     *
+     * @param int|string $entityTypeId
+     * @param string $code
+     * @param array $attr
+     * @return $this
+     */
+    public function addAttribute($entityTypeId, $code, array $attr)
+    {
+        //Delegate
+        return $this->salesSetup->addAttribute($entityTypeId, $code, $attr);
+    }
+
+    /**
+     * Update Attribute data and Attribute additional data
+     *
+     * @param int|string $entityTypeId
+     * @param int|string $id
+     * @param string $field
+     * @param mixed $value
+     * @param int $sortOrder
+     * @return $this
+     */
+    public function updateAttribute($entityTypeId, $id, $field, $value = null, $sortOrder = null)
+    {
+        //Delegate
+        return $this->salesSetup->updateAttribute($entityTypeId, $id, $field, $value, $sortOrder);
     }
 }
