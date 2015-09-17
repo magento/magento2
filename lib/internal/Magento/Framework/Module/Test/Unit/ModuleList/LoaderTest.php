@@ -8,9 +8,6 @@ namespace Magento\Framework\Module\Test\Unit\ModuleList;
 
 use \Magento\Framework\Module\ModuleList\Loader;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Xml\Parser;
-
 class LoaderTest extends \PHPUnit_Framework_TestCase
 {
     /**

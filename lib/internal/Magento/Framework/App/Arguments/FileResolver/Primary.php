@@ -12,13 +12,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class Primary implements \Magento\Framework\Config\FileResolverInterface
 {
     /**
-     * Module configuration file reader
-     *
-     * @var \Magento\Framework\Module\Dir\Reader
-     */
-    protected $_moduleReader;
-
-    /**
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface
      */
     protected $configDirectory;

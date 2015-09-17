@@ -17,11 +17,6 @@ use Magento\Setup\Module\Dependency\ServiceLocator;
 class DependenciesShowFrameworkCommand extends AbstractDependenciesCommand
 {
     /**
-     * @var DirectoryList
-     */
-    private $directoryList;
-
-    /**
      * @var ComponentRegistrarInterface
      */
     private $registrar;
@@ -29,12 +24,10 @@ class DependenciesShowFrameworkCommand extends AbstractDependenciesCommand
     /**
      * Constructor
      *
-     * @param DirectoryList $directoryList
      * @param ComponentRegistrarInterface $registrar
      */
-    public function __construct(DirectoryList $directoryList, ComponentRegistrarInterface $registrar)
+    public function __construct(ComponentRegistrarInterface $registrar)
     {
-        $this->directoryList = $directoryList;
         $this->registrar = $registrar;
         parent::__construct();
     }

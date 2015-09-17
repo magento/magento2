@@ -5,6 +5,8 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model\Template\Config;
+use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Filesystem\File\ReadFactory;
 
 /**
  * Class FileIterator
@@ -17,16 +19,16 @@ class FileIterator extends \Magento\Framework\Config\FileIterator
     protected $_moduleDirResolver;
 
     /**
-     * @param \Magento\Framework\Filesystem\DriverInterface $filesystemDriver
+     * @param ReadFactory $readFactory
      * @param array $paths
      * @param \Magento\Framework\Module\Dir\ReverseResolver $dirResolver
      */
     public function __construct(
-        \Magento\Framework\Filesystem\DriverInterface $filesystemDriver,
+        ReadFactory $readFactory,
         array $paths,
         \Magento\Framework\Module\Dir\ReverseResolver $dirResolver
     ) {
-        parent::__construct($filesystemDriver, $paths);
+        parent::__construct($readFactory, $paths);
         $this->_moduleDirResolver = $dirResolver;
     }
 
@@ -43,7 +45,10 @@ class FileIterator extends \Magento\Framework\Config\FileIterator
                 sprintf("Unable to determine a module, file '%s' belongs to.", $this->key())
             );
         }
-        $contents = $this->filesystemDriver->fileGetContents($this->key());
+
+        /** @var \Magento\Framework\Filesystem\File\Read $fileRead */
+        $fileRead = $this->fileReadFactory->create($this->key(), DriverPool::FILE);
+        $contents = $fileRead->readAll();
         return str_replace('<template ', '<template module="' . $moduleName . '" ', $contents);
     }
 }
