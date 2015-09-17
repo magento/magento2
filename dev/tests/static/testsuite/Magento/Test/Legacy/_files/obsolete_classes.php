@@ -3856,5 +3856,5 @@ return [
         'Magento\Framework\Component\ComponentRegistrar'
     ],
     ['Magento\Framework\App\Router\ActionList\Reader'],
-    
+    ['Magento\Framework\View\File\AbstractCollector'],
 ];
