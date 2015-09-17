@@ -13,7 +13,6 @@ use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface;
-use Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Store\Model\Store;
 
@@ -56,6 +55,7 @@ class Preprocessor implements PreprocessorInterface
      * @param ConditionManager $conditionManager
      * @param ScopeResolverInterface $scopeResolver
      * @param Config $config
+     * @param Resource $resource
      * @param TableMapper $tableMapper
      * @param string $attributePrefix
      */
@@ -78,19 +78,18 @@ class Preprocessor implements PreprocessorInterface
     /**
      * {@inheritdoc}
      */
-    public function process(FilterInterface $filter, $isNegation, $query, QueryContainer $queryContainer)
+    public function process(FilterInterface $filter, $isNegation, $query)
     {
-        return $this->processQueryWithField($filter, $isNegation, $query, $queryContainer);
+        return $this->processQueryWithField($filter, $isNegation, $query);
     }
 
     /**
      * @param FilterInterface $filter
      * @param bool $isNegation
      * @param string $query
-     * @param QueryContainer $queryContainer
      * @return string
      */
-    private function processQueryWithField(FilterInterface $filter, $isNegation, $query, QueryContainer $queryContainer)
+    private function processQueryWithField(FilterInterface $filter, $isNegation, $query)
     {
         $currentStoreId = $this->scopeResolver->getScope()->getId();
         $select = null;

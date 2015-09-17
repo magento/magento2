@@ -301,7 +301,7 @@ class Mapper
                 $scoreBuilder->endQuery($query->getBoost());
                 break;
             case FilterQuery::REFERENCE_FILTER:
-                $filterCondition = $this->filterBuilder->build($query->getReference(), $conditionType, $queryContainer);
+                $filterCondition = $this->filterBuilder->build($query->getReference(), $conditionType);
                 if ($filterCondition) {
                     $select->where($filterCondition);
                 }

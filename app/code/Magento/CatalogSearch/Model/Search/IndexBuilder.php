@@ -182,15 +182,6 @@ class IndexBuilder implements IndexBuilderInterface
     }
 
     /**
-     * @param RequestInterface $request
-     * @return bool
-     */
-    private function isNeedToAddFilters(RequestInterface $request)
-    {
-        return $this->hasFilters($request->getQuery());
-    }
-
-    /**
      * @param QueryInterface $query
      * @return bool
      */
