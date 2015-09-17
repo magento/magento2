@@ -15,6 +15,11 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
     protected $priceCurrency;
 
     /**
+     * @var \Magento\Weee\Model\Total\Quote\Weee
+     */
+    protected $weeeCollector;
+
+    /**
      * Setup tax helper with an array of methodName, returnValue
      *
      * @param array $taxConfig
@@ -192,6 +197,29 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Setup shipping assignment mock.
+     * @param \PHPUnit_Framework_MockObject_MockObject $addressMock
+     * @param \PHPUnit_Framework_MockObject_MockObject $itemMock
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function setupShippingAssignmentMock($addressMock, $itemMock)
+    {
+        $shippingMock = $this->getMock('\Magento\Quote\Api\Data\ShippingInterface', [], [], '', false);
+        $shippingMock->expects($this->any())->method('getAddress')->willReturn($addressMock);
+        $shippingAssignmentMock = $this->getMock(
+            '\Magento\Quote\Api\Data\ShippingAssignmentInterface',
+            [],
+            [],
+            '',
+            false
+        );
+        $shippingAssignmentMock->expects($this->any())->method('getItems')->willReturn($itemMock);
+        $shippingAssignmentMock->expects($this->any())->method('getShipping')->willReturn($shippingMock);
+
+        return $shippingAssignmentMock;
+    }
+
+    /**
      * Verify that correct fields of item has been set
      *
      * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote\Item $item
@@ -210,7 +238,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
      * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\Quote\Address $address
      * @param $addressData
      */
-    public function verifyAddress(\Magento\Quote\Model\Quote\Address $address, $addressData)
+    public function verifyAddress($address, $addressData)
     {
         foreach ($addressData as $key => $value) {
             $this->assertEquals($value, $address->getData($key), 'address ' . $key . ' is incorrect');
@@ -240,7 +268,6 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
         $addressData,
         $assertSetApplied = false
     ) {
-        $this->markTestSkipped('MAGETWO-42308');
         $items = [];
         if ($parentQty > 0) {
             $items = $this->setupParentItemWithChildrenMock($parentQty, $itemQty);
@@ -248,7 +275,12 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
             $itemMock = $this->setupItemMock($itemQty);
             $items[] = $itemMock;
         }
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+        $storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $quoteMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
         $addressMock = $this->setupAddressMock($items);
+        $totalMock = new \Magento\Quote\Model\Quote\Address\Total();
+        $shippingAssignmentMock = $this->setupShippingAssignmentMock($addressMock, $items);
 
         $taxHelper = $this->setupTaxHelper($taxConfig);
         $weeeHelper = $this->setupWeeeHelper($weeeConfig);
@@ -298,16 +330,16 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
             'taxData' => $taxHelper,
             'calculation' => $calculator,
             'weeeData' => $weeeHelper,
-            'priceCurrency' => $this->priceCurrency,
+            'priceCurrency' => $this->priceCurrency
         ];
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->weeeCollector = $helper->getObject('Magento\Weee\Model\Total\Quote\Weee', $arguments);
 
-        $this->weeeCollector->collect($addressMock);
+        $this->weeeCollector->collect($quoteMock, $shippingAssignmentMock, $totalMock);
 
         $this->verifyItem(end($items), $itemData);          // verify the (child) item
-        $this->verifyAddress($addressMock, $addressData);
+        $this->verifyAddress($totalMock, $addressData);
     }
 
     /**
