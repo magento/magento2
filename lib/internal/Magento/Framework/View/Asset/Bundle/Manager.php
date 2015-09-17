@@ -196,14 +196,16 @@ class Manager
             return false;
         }
 
-        $assetMinifiedPath = str_replace($extension, "min.{$extension}", $asset->getPath());
         if (strpos($sourceFile, '.min.') === false) {
+            $info = pathinfo($asset->getPath());
+            $assetMinifiedPath = $info['dirname'] . '/' . $info['filename'] . '.min.' . $info['extension'];
             if ($this->filesystem->getDirectoryRead(DirectoryList::APP)->isExist($assetMinifiedPath)) {
                 $this->excluded[] = $sourceFile;
+                return false;
             }
         } else {
             $this->excluded[] = $this->filesystem->getDirectoryRead(DirectoryList::APP)
-                ->getAbsolutePath($assetMinifiedPath);
+                ->getAbsolutePath(str_replace(".min.$extension", ".$extension", $asset->getPath()));
         }
 
         return true;
