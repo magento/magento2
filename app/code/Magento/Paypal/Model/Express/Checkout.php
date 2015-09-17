@@ -1159,11 +1159,8 @@ class Checkout
         $customer = $this->_quote->getCustomer();
         $confirmationStatus = $this->_accountManagement->getConfirmationStatus($customer->getId());
         if ($confirmationStatus === AccountManagement::ACCOUNT_CONFIRMATION_REQUIRED) {
-            $url = $this->_customerUrl->getEmailConfirmationUrl($customer->getEmail());
             $this->_messageManager->addSuccess(
-            // @codingStandardsIgnoreStart
-                __('Account confirmation is required. Please check your email for confirmation link. To resend confirmation email please <a href="%1">click here</a>.', $url)
-            // @codingStandardsIgnoreEnd
+                __('Thank you for registering with Main Website Store.')
             );
         } else {
             $this->getCustomerSession()->regenerateId();
