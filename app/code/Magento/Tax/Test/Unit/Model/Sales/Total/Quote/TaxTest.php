@@ -38,6 +38,8 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $addressData, $verifyData
     ) {
         $this->markTestIncomplete('Source code is not testable. Need to be refactored before unit testing');
+        $shippingAssignmentMock = $this->getMock('Magento\Quote\Api\Data\ShippingAssignmentInterface');
+        $totalsMock = $this->getMock('Magento\Quote\Model\Quote\Address\Total', [], [], '', false);
         $objectManager = new ObjectManager($this);
         $taxData = $this->getMock('Magento\Tax\Helper\Data', [], [], '', false);
         $taxConfig = $this->getMockBuilder('\Magento\Tax\Model\Config')
@@ -271,7 +273,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             $address->setData($key, $value);
         }
 
-        $taxTotalsCalcModel->collect($address);
+        $taxTotalsCalcModel->collect($quote, $shippingAssignmentMock, $totalsMock);
         foreach ($verifyData as $key => $value) {
             $this->assertSame($verifyData[$key], $address->getData($key));
         }
@@ -427,7 +429,6 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
         $taxTotalsCalcModel = $objectManager->getObject('Magento\Tax\Model\Sales\Total\Quote\Tax');
-
         $taxClassKeyDataObjectMock = $this->getMock('\Magento\Tax\Api\Data\TaxClassKeyInterface');
         $taxClassKeyDataObjectFactoryMock = $this->getMockBuilder('\Magento\Tax\Api\Data\TaxClassKeyInterfaceFactory')
             ->disableOriginalConstructor()
@@ -565,11 +566,15 @@ class TaxTest extends \PHPUnit_Framework_TestCase
      */
     public function testFetch($appliedTaxesData, $addressData)
     {
-        $this->markTestSkipped('MAGETWO-42308');
+        $methods = ['getAppliedTaxes', 'getTaxAmount', 'getTotalAmount', 'getGrandTotal', 'getSubtotalInclTax'];
+        $totalsMock = $this->getMock('Magento\Quote\Model\Quote\Address\Total', $methods, [], '', false);
         $taxConfig = $this->getMockBuilder('\Magento\Tax\Model\Config')
             ->disableOriginalConstructor()
             ->setMethods(['displayCartTaxWithGrandTotal', 'displayCartZeroTax', 'displayCartSubtotalBoth'])
             ->getMock();
+        $shippingAssignmentMock = $this->getMock('Magento\Quote\Api\Data\ShippingAssignmentInterface');
+        $shippingMock = $this->getMock('Magento\Quote\Api\Data\ShippingInterface');
+        $shippingAssignmentMock->expects($this->any())->method('getShipping')->willReturn($shippingMock);
         $taxConfig
             ->expects($this->once())
             ->method('displayCartTaxWithGrandTotal')
@@ -580,6 +585,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
 
         $objectManager = new ObjectManager($this);
+        /** @var \Magento\Tax\Model\Sales\Total\Quote\Tax $taxTotalsCalcModel */
         $taxTotalsCalcModel = $objectManager->getObject(
             'Magento\Tax\Model\Sales\Total\Quote\Tax',
             ['taxConfig' => $taxConfig]
@@ -596,14 +602,15 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $address = $this->getMock(
             '\Magento\Quote\Model\Quote\Address',
             [
-                'getAppliedTaxes', 'getQuote', 'getAllItems', 'getGrandTotal', '__wakeup',
+                'getQuote', 'getAllItems', 'getGrandTotal', '__wakeup',
                 'addTotal', 'getTaxAmount'
             ],
             [],
             '',
             false
         );
-        $address
+        $shippingMock->expects($this->any())->method('getAddress')->willReturn($address);
+        $totalsMock
             ->expects($this->once())
             ->method('getAppliedTaxes')
             ->will($this->returnValue($appliedTaxes));
@@ -611,11 +618,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getQuote')
             ->will($this->returnValue($quote));
-        $address
-            ->expects($this->once())
-            ->method('getAllItems')
-            ->will($this->returnValue($items));
-        $address
+        $totalsMock
             ->expects($this->any())
             ->method('getGrandTotal')
             ->will($this->returnValue(88));
@@ -633,7 +636,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             $address->setData($key, $value);
         }
 
-        $taxTotalsCalcModel->fetch($address);
+        $taxTotalsCalcModel->fetch($quote, $totalsMock);
     }
 
     /**
@@ -682,7 +685,11 @@ class TaxTest extends \PHPUnit_Framework_TestCase
      */
     public function testEmptyAddress()
     {
-        $this->markTestSkipped('MAGETWO-42308');
+        $totalsMock = $this->getMock('Magento\Quote\Model\Quote\Address\Total', [], [], '', false);
+        $shippingAssignmentMock = $this->getMock('Magento\Quote\Api\Data\ShippingAssignmentInterface');
+        $quote = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+        $shippingMock = $this->getMock('Magento\Quote\Api\Data\ShippingInterface');
+        $shippingAssignmentMock->expects($this->any())->method('getShipping')->willReturn($shippingMock);
         /** @var $address \Magento\Quote\Model\Quote\Address|PHPUnit_Framework_MockObject_MockObject */
         $address = $this->getMockBuilder('\Magento\Quote\Model\Quote\Address')
             ->disableOriginalConstructor()
@@ -692,25 +699,25 @@ class TaxTest extends \PHPUnit_Framework_TestCase
                     '__wakeup',
                 ]
             )->getMock();
+        $shippingMock->expects($this->any())->method('getAddress')->willReturn($address);
+        $totalsMock->setTotalAmount('subtotal', 1);
+        $totalsMock->setBaseTotalAmount('subtotal', 1);
+        $totalsMock->setTotalAmount('tax', 1);
+        $totalsMock->setBaseTotalAmount('tax', 1);
+        $totalsMock->setTotalAmount('discount_tax_compensation', 1);
+        $totalsMock->setBaseTotalAmount('discount_tax_compensation', 1);
+        $totalsMock->setTotalAmount('shipping_discount_tax_compensation', 1);
+        $totalsMock->setBaseTotalAmount('shipping_discount_tax_compensation', 1);
+        $totalsMock->setSubtotalInclTax(1);
+        $totalsMock->setBaseSubtotalInclTax(1);
 
-        $address->setTotalAmount('subtotal', 1);
-        $address->setBaseTotalAmount('subtotal', 1);
-        $address->setTotalAmount('tax', 1);
-        $address->setBaseTotalAmount('tax', 1);
-        $address->setTotalAmount('discount_tax_compensation', 1);
-        $address->setBaseTotalAmount('discount_tax_compensation', 1);
-        $address->setTotalAmount('shipping_discount_tax_compensation', 1);
-        $address->setBaseTotalAmount('shipping_discount_tax_compensation', 1);
-        $address->setSubtotalInclTax(1);
-        $address->setBaseSubtotalInclTax(1);
-
-        $address->expects($this->once())
-            ->method('getAllItems')
+        $shippingAssignmentMock->expects($this->once())
+            ->method('getItems')
             ->will($this->returnValue([]));
 
         $objectManager = new ObjectManager($this);
         $taxCollector = $objectManager->getObject('Magento\Tax\Model\Sales\Total\Quote\Tax');
-        $taxCollector->collect($address);
+        $taxCollector->collect($quote, $shippingAssignmentMock, $totalsMock);
 
         $this->assertEquals(0, $address->getTotalAmount('subtotal'));
         $this->assertEquals(0, $address->getTotalAmount('tax'));
