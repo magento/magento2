@@ -34,6 +34,11 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
+    public static function setUpBeforeClass()
+    {
+        require_once __DIR__ . '/_files/design/themes.php';
+    }
+
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
@@ -476,7 +481,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Setup the theme fallback structure and set the Vendor_EmailTest/custom_theme as the current theme for 'fixturestore' store
+     * Setup the theme fallback structure and set the Vendor_EmailTest/custom_theme as the current theme
+     * for 'fixturestore' store
      *
      * @param $area
      */

@@ -39,7 +39,8 @@ class ComponentRegistrarTest extends \PHPUnit_Framework_TestCase
             'test_module_one' => "some/path/name/one",
             'test_module_two' => "some/path/name/two",
         ];
-        $this->assertSame($expected, $this->object->getPaths(ComponentRegistrar::MODULE));
+        $this->assertContains($expected['test_module_one'], $this->object->getPaths(ComponentRegistrar::MODULE));
+        $this->assertContains($expected['test_module_two'], $this->object->getPaths(ComponentRegistrar::MODULE));
     }
 
     /**
