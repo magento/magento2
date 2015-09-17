@@ -66,23 +66,34 @@
 <script>
 require([
     'jquery',
+    'Magento_ConfigurableProduct/js/advanced-pricing-handler',
+    'Magento_ConfigurableProduct/js/options/price-type-handler',
     'mage/mage',
     'Magento_Ui/js/modal/modal',
     'mage/translate',
     'domReady!'
-], function($){
+], function($, advancedPricingHandler, priceTypeHandler){
     'use strict';
 
-    var blockId = '#<?=$block->getId()?>';
-    var setElementDisabled = function ($element, state, triggerEvent) {
-        if (!$element.is('[data-locked]')) {
-            $element.prop('disabled', state);
+    advancedPricingHandler.init();
+    priceTypeHandler.init();
 
-            if (triggerEvent) {
-                $element.trigger('change');
+    var blockId = '#<?=$block->getId()?>',
+        hasVariations = <?php echo($block->getProduct()->getTypeId() == Configurable::TYPE_CODE || $block->getRequest()->has('attributes')) ? 'true' : 'false' ?>,
+        setElementDisabled = function ($element, state, triggerEvent) {
+            if (!$element.is('[data-locked]')) {
+                $element.prop('disabled', state);
+    
+                if (triggerEvent) {
+                    $element.trigger('change');
+                }
             }
-        }
-    };
+        },
+        configurableTypeHandler = function (isConfigurable) {
+            isConfigurable = hasVariations ? true : isConfigurable;
+            $('[data-form=edit-product]').trigger("change_configurable_type", isConfigurable);
+        };
+
 
     $(blockId + '-wrapper > .collapse')
         .on('show', function() {
@@ -94,6 +105,7 @@ require([
             $('#inventory_stock_availability').removeProp('disabled');
             setElementDisabled($('#qty'), true, true);
             setElementDisabled($('#quantity_and_stock_status'), false, false);
+            configurableTypeHandler(true);
         })
         .on('hide', function() {
             $('#product-template-suggest-container .action-dropdown > .action-toggle')
@@ -103,8 +115,9 @@ require([
             $('#inventory_stock_availability').prop('disabled', true);
             setElementDisabled($('#quantity_and_stock_status'), true, false);
             setElementDisabled($('#qty'), false, true);
+            configurableTypeHandler(false);
         })
-        .collapse("<?= $block->isConfigurableProduct() ? 'show' : 'hide' ?>");
+        .collapse(hasVariations ? 'show' : 'hide');
 });
 </script>
 <script type="text/x-magento-init">
