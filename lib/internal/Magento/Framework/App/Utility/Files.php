@@ -99,11 +99,11 @@ class Files
      */
     private function getModuleTestDirs()
     {
-        $exclude = [];
+        $moduleTestDirs = [];
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
-            $exclude[] = str_replace('\\', '/', '#' . $moduleDir . '/Test#');
+            $moduleTestDirs[] = str_replace('\\', '/', '#' . $moduleDir . '/Test#');
         }
-        return $exclude;
+        return $moduleTestDirs;
     }
 
     /**
@@ -113,11 +113,11 @@ class Files
      */
     private function getModuleRegistrationFiles()
     {
-        $exclude = [];
+        $moduleRegistrationFiles = [];
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
-            $exclude[] = str_replace('\\', '/', '#' . $moduleDir . '/registration.php#');
+            $moduleRegistrationFiles[] = str_replace('\\', '/', '#' . $moduleDir . '/registration.php#');
         }
-        return $exclude;
+        return $moduleRegistrationFiles;
     }
 
     /**
@@ -142,11 +142,11 @@ class Files
      */
     private function getLibraryRegistrationFiles()
     {
-        $exclude = [];
+        $libraryRegistrationFiles = [];
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryDir) {
-            $exclude[] = '#' . $libraryDir . '/registration.php#';
+            $libraryRegistrationFiles[] = str_replace('\\', '/', '#' . $libraryDir . '/registration.php#');
         }
-        return $exclude;
+        return $libraryRegistrationFiles;
     }
 
     /**
@@ -1048,6 +1048,7 @@ class Files
     {
         $result = [];
         foreach ($dirPatterns as $oneDirPattern) {
+            $oneDirPattern  = str_replace('\\', '/', $oneDirPattern);
             $entriesInDir = glob("{$oneDirPattern}/{$fileNamePattern}", GLOB_NOSORT | GLOB_BRACE);
             $subDirs = glob("{$oneDirPattern}/*", GLOB_ONLYDIR | GLOB_NOSORT | GLOB_BRACE);
             $filesInDir = array_diff($entriesInDir, $subDirs);
