@@ -90,7 +90,7 @@ class StockItemTest extends WebapiAbstract
         $arguments = ['productSku' => $productSku];
         $apiResult = $this->_webApiCall($serviceInfo, $arguments);
         $result['item_id'] = $apiResult['item_id'];
-        $this->assertEquals($result, $apiResult, 'The stock data does not match.');
+        $this->assertEquals($result, array_intersect_key($apiResult, $result), 'The stock data does not match.');
         return $apiResult;
     }
 
@@ -140,7 +140,7 @@ class StockItemTest extends WebapiAbstract
         $stockItemResource = $this->objectManager->get('Magento\CatalogInventory\Model\Resource\Stock\Item');
         $stockItemResource->loadByProductId($stockItem, $stockItemOld['product_id'], $stockItemOld['website_id']);
         $expectedResult['item_id'] = $stockItem->getItemId();
-        $this->assertEquals($expectedResult, $stockItem->getData());
+        $this->assertEquals($expectedResult, array_intersect_key($stockItem->getData(), $expectedResult));
     }
 
     /**
@@ -177,8 +177,6 @@ class StockItemTest extends WebapiAbstract
                     'use_config_enable_qty_inc' => 1,
                     'enable_qty_increments' => 0,
                     'is_decimal_divided' => 0,
-                    'deferred_stock_update' => '0',
-                    'use_config_deferred_stock_update' => '1',
                 ],
                 [
                     'item_id' => '1',
@@ -208,8 +206,6 @@ class StockItemTest extends WebapiAbstract
                     'is_decimal_divided' => '0',
                     'website_id' => '1',
                     'type_id' => 'simple',
-                    'deferred_stock_update' => '0',
-                    'use_config_deferred_stock_update' => '1',
                 ],
                 [
                     'item_id' => 1,
@@ -239,8 +235,6 @@ class StockItemTest extends WebapiAbstract
                     'low_stock_date' => '',
                     'is_decimal_divided' => '',
                     'stock_status_changed_auto' => 0,
-                    'deferred_stock_update' => '0',
-                    'use_config_deferred_stock_update' => '1',
                 ],
             ],
         ];
