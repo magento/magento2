@@ -191,7 +191,7 @@ abstract class AbstractType
     {
         // temporary storage for attributes' parameters to avoid double querying inside the loop
         $entityId = $this->_entityModel->getEntityTypeId();
-        $entityAttributes = $this->_connection->fetchPairs(
+        $entityAttributes = $this->_connection->fetchAll(
             $this->_connection->select()->from(
                 ['attr' => $this->_resource->getTableName('eav_entity_attribute')],
                 ['attr.attribute_id']
@@ -204,23 +204,23 @@ abstract class AbstractType
             )
         );
         $absentKeys = [];
-        foreach ($entityAttributes as $attributeId => $attributeSetName) {
-            if (!isset(self::$commonAttributesCache[$attributeId])) {
-                if (!isset($absentKeys[$attributeSetName])) {
-                    $absentKeys[$attributeSetName] = [];
+        foreach ($entityAttributes as $attributeRow) {
+            if (!isset(self::$commonAttributesCache[$attributeRow['attribute_id']])) {
+                if (!isset($absentKeys[$attributeRow['attribute_set_name']])) {
+                    $absentKeys[$attributeRow['attribute_set_name']] = [];
                 }
-                $absentKeys[$attributeSetName][] = $attributeId;
+                $absentKeys[$attributeRow['attribute_set_name']][] = $attributeRow['attribute_id'];
             }
         }
         foreach ($absentKeys as $attributeSetName => $attributeIds) {
             $this->attachAttributesById($attributeSetName, $attributeIds);
         }
-        foreach ($entityAttributes as $attributeId => $attributeSetName) {
-            if (isset(self::$commonAttributesCache[$attributeId])) {
-                $attribute = self::$commonAttributesCache[$attributeId];
+        foreach ($entityAttributes as $attributeRow) {
+            if (isset(self::$commonAttributesCache[$attributeRow['attribute_id']])) {
+                $attribute = self::$commonAttributesCache[$attributeRow['attribute_id']];
                 $this->_addAttributeParams(
-                    $attributeSetName,
-                    self::$commonAttributesCache[$attributeId],
+                    $attributeRow['attribute_set_name'],
+                    self::$commonAttributesCache[$attributeRow['attribute_id']],
                     $attribute
                 );
             }
