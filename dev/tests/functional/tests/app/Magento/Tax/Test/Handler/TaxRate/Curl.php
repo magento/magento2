@@ -40,7 +40,7 @@ class Curl extends AbstractCurl implements TaxRateInterface
      * Post request for creating tax rate.
      *
      * @param FixtureInterface $fixture [optional]
-     * @return mixed|string
+     * @return array
      */
     public function persist(FixtureInterface $fixture = null)
     {

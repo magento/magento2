@@ -31,7 +31,7 @@ class Curl extends AbstractCurl implements TaxRuleInterface
      * Post request for creating tax rule.
      *
      * @param FixtureInterface $fixture
-     * @return mixed|null
+     * @return array
      * @throws \Exception
      */
     public function persist(FixtureInterface $fixture = null)
