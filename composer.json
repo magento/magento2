@@ -136,6 +136,7 @@
         "magento/module-paypal": "self.version",
         "magento/module-persistent": "self.version",
         "magento/module-product-alert": "self.version",
+        "magento/module-product-video": "self.version",
         "magento/module-quote": "self.version",
         "magento/module-reports": "self.version",
         "magento/module-require-js": "self.version",
