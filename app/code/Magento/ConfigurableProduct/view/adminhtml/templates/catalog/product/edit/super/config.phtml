@@ -79,7 +79,7 @@ require([
     priceTypeHandler.init();
 
     var blockId = '#<?=$block->getId()?>',
-        hasVariations = <?php echo($block->getProduct()->getTypeId() == Configurable::TYPE_CODE || $block->getRequest()->has('attributes')) ? 'true' : 'false' ?>,
+        hasVariations = <?= $block->isConfigurableProduct() ? 'true' : 'false' ?>,
         setElementDisabled = function ($element, state, triggerEvent) {
             if (!$element.is('[data-locked]')) {
                 $element.prop('disabled', state);
