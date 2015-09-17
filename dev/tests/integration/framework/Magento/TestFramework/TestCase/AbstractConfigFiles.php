@@ -158,7 +158,7 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
     abstract protected function _getConfigFilePathGlob();
 
     /**
-     * Returns a path to the per file XSD file, relative to the modules directory.
+     * Returns an absolute path to the XSD file corresponding to the XML files specified in _getConfigFilePathGlob
      *
      * @return string
      */
