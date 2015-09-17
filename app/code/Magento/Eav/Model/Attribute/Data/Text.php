@@ -24,6 +24,7 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\Stdlib\StringUtils $stringHelper
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -118,6 +119,7 @@ class Text extends \Magento\Eav\Model\Attribute\Data\AbstractData
      *
      * @param array|string $value
      * @return $this
+     * @codeCoverageIgnore
      */
     public function restoreValue($value)
     {

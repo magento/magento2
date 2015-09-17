@@ -148,7 +148,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
 
         $params = [
             'items' => implode(',', $itemIds),
-            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl()
+            \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl()
         ];
 
         return $this->_getUrl('catalog/product_compare', $params);
@@ -186,7 +186,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
         $beforeCompareUrl = $this->_catalogSession->getBeforeCompareUrl();
 
         $encodedUrl = [
-            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl($beforeCompareUrl)
+            \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl($beforeCompareUrl)
         ];
 
         return $this->_wishlistHelper->getAddParams($product, $encodedUrl);
@@ -203,7 +203,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
         $beforeCompareUrl = $this->_catalogSession->getBeforeCompareUrl();
         $params = [
             'product' => $product->getId(),
-            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl($beforeCompareUrl),
+            \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl($beforeCompareUrl),
             '_secure' => $this->_getRequest()->isSecure()
         ];
 
@@ -230,7 +230,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
     {
         $listCleanUrl = $this->getEncodedUrl($this->_getUrl('catalog/product_compare'));
         $data = [
-            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $listCleanUrl,
+            \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $listCleanUrl,
             'product' => $product->getId()
         ];
         return $this->postHelper->getPostData($this->getRemoveUrl(), $data);
@@ -255,7 +255,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
     {
         $refererUrl = $this->_getRequest()->getServer('HTTP_REFERER');
         $params = [
-            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED => $this->urlEncoder->encode($refererUrl)
+            \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $this->urlEncoder->encode($refererUrl)
         ];
         return $this->postHelper->getPostData($this->getClearListUrl(), $params);
     }
