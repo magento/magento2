@@ -35,20 +35,27 @@ class AssertAttributeSearchableByLabel extends AbstractConstraint
         $cmsIndex->open();
         $searchValue = '';
 
-        if ($attribute->getOptions() !== null) {
-            foreach ($attribute->getOptions() as $option) {
-                if ($option['is_default'] == 'Yes') {
-                    $searchValue = $option['admin'];
+        switch ($attribute->getFrontendInput()) {
+            case 'Multiple Select':
+            case 'Dropdown':
+                foreach ($attribute->getOptions() as $option) {
+                    if ($option['is_default'] == 'Yes') {
+                        $searchValue = $option['admin'];
+                    }
                 }
-            }
-        } elseif ($attribute->getDefaultValueTextarea() !== null) {
-            $searchValue = $attribute->getDefaultValueTextarea();
-        } elseif ($attribute->getDefaultValueYesno() !== null) {
-            $searchValue = $attribute->getDefaultValueYesno();
-        } elseif ($attribute->getDefaultValueText() !== null) {
-            $searchValue = $attribute->getDefaultValueText();
-        } elseif ($attribute->getDefaultValueDate() !== null) {
-            $searchValue = $attribute->getDefaultValueDate();
+                break;
+            case 'Text Field':
+                $searchValue = $attribute->getDefaultValueText();
+                break;
+            case 'Text Area':
+                $searchValue = $attribute->getDefaultValueTextarea();
+                break;
+            case 'Date':
+                $searchValue = $attribute->getDefaultValueDate();
+                break;
+            case 'Yes/No':
+                $searchValue = $attribute->getDefaultValueYesno();
+                break;
         }
 
         $cmsIndex->getSearchBlock()->search($searchValue);
