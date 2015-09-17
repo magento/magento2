@@ -144,7 +144,7 @@ class Files
     {
         $libraryRegistrationFiles = [];
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryDir) {
-            $libraryRegistrationFiles[] = '#' . $libraryDir . '/registration.php#';
+            $libraryRegistrationFiles[] = str_replace('\\', '/', '#' . $libraryDir . '/registration.php#');
         }
         return $libraryRegistrationFiles;
     }
