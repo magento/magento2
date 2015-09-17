@@ -3,17 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\MysqlMq\Model\Driver;
 
-namespace Magento\MysqlMq\Model;
-
+use Magento\Framework\Amqp\EnvelopeInterface;
+use Magento\Framework\Amqp\ExchangeInterface;
 use Magento\Framework\Amqp\Config\Data as AmqpConfig;
-use Magento\Framework\Amqp\PublisherInterface;
 use Magento\MysqlMq\Model\QueueManagement;
 
-/**
- * MySQL publisher implementation for message queue.
- */
-class Publisher implements PublisherInterface
+class Exchange implements ExchangeInterface
 {
     /**
      * @var AmqpConfig
@@ -38,11 +35,14 @@ class Publisher implements PublisherInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Send message
+     *
+     * @param string $topic
+     * @param EnvelopeInterface $envelope
      */
-    public function publish($topicName, $data)
+    public function enqueue($topic, EnvelopeInterface $envelope)
     {
-        $queueNames = $this->amqpConfig->getQueuesByTopic($topicName);
-        $this->queueManagement->addMessageToQueues($topicName, $data, $queueNames);
+        $queueNames = $this->amqpConfig->getQueuesByTopic($topic);
+        $this->queueManagement->addMessageToQueues($topic, $envelope->getBody(), $queueNames);
     }
 }
