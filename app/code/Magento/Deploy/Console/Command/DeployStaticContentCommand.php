@@ -4,15 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Console\Command;
+namespace Magento\Deploy\Console\Command;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\App\DeploymentConfig;
 use Symfony\Component\Console\Input\InputArgument;
-use Magento\Setup\Model\ObjectManagerProvider;
+use Magento\Framework\App\ObjectManagerFactory;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Validator\Locale;
 
 /**
@@ -31,39 +31,40 @@ class DeployStaticContentCommand extends Command
     const LANGUAGE_OPTION = 'languages';
 
     /**
-     * Object manager provider
-     *
-     * @var ObjectManagerProvider
-     */
-    private $objectManagerProvider;
-
-    /**
-     * Deployment configuration
-     *
-     * @var DeploymentConfig
-     */
-    private $deploymentConfig;
-
-    /**
      * @var Locale
      */
     private $validator;
 
     /**
+     * Factory to get object manager
+     *
+     * @var ObjectManagerFactory
+     */
+    private $objectManagerFactory;
+
+    /**
+     * object manager to create various objects
+     *
+     * @var ObjectManagerInterface
+     *
+     */
+    private $objectManager;
+
+    /**
      * Inject dependencies
      *
-     * @param ObjectManagerProvider $objectManagerProvider
-     * @param DeploymentConfig $deploymentConfig
+     * @param ObjectManagerFactory $objectManagerFactory
      * @param Locale $validator
+     * @param ObjectManagerInterface $objectManager
      */
     public function __construct(
-        ObjectManagerProvider $objectManagerProvider,
-        DeploymentConfig $deploymentConfig,
-        Locale $validator
+        ObjectManagerFactory $objectManagerFactory,
+        Locale $validator,
+        ObjectManagerInterface $objectManager
     ) {
-        $this->objectManagerProvider = $objectManagerProvider;
-        $this->deploymentConfig = $deploymentConfig;
+        $this->objectManagerFactory = $objectManagerFactory;
         $this->validator = $validator;
+        $this->objectManager = $objectManager;
         parent::__construct();
     }
 
@@ -96,11 +97,6 @@ class DeployStaticContentCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$this->deploymentConfig->isAvailable()) {
-            $output->writeln("<info>You need to install the Magento application before running this utility.</info>");
-            return;
-        }
-
         $options = $input->getOptions();
 
         $languages = $input->getArgument(self::LANGUAGE_OPTION);
@@ -114,26 +110,21 @@ class DeployStaticContentCommand extends Command
         }
 
         try {
-            $objectManager = $this->objectManagerProvider->get();
-
             // run the deployment logic
-            $filesUtil = $objectManager->create(
+            $filesUtil = $this->objectManager->create(
                 '\Magento\Framework\App\Utility\Files',
                 ['pathToSource' => BP]
             );
 
-            $objectManagerFactory = $this->objectManagerProvider->getObjectManagerFactory();
-
-            /** @var \Magento\Setup\Model\Deployer $deployer */
-            $deployer = $objectManager->create(
-                'Magento\Setup\Model\Deployer',
+            $deployer = $this->objectManager->create(
+                'Magento\Deploy\Model\Deployer',
                 ['filesUtil' => $filesUtil, 'output' => $output, 'isDryRun' => $options[self::DRY_RUN_OPTION]]
             );
-            $deployer->deploy($objectManagerFactory, $languages);
+            $deployer->deploy($this->objectManagerFactory, $languages);
 
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>>');
-            if ($output->isVerbose()) {
+            if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
                 $output->writeln($e->getTraceAsString());
             }
             return;
