@@ -49,7 +49,7 @@
             </arguments>
         </referenceBlock>
         <referenceBlock name="content">
-            <block class="Magento\Braintree\Block\Datajs" name="braintree_data_js2" template="data_js.phtml"/>
+            <block class="Magento\Braintree\Block\Datajs" name="braintree_data_js2" template="Magento_Braintree::data_js.phtml"/>
         </referenceBlock>
     </body>
 </page>

@@ -8,7 +8,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="sales.order.print.renderers">
-            <block class="Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer" as="default" template="order/items/renderer/default.phtml"/>
+            <block class="Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer" as="default" template="Magento_Sales::order/items/renderer/default.phtml"/>
         </referenceBlock>
     </body>
 </page>

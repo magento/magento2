@@ -7,6 +7,6 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/layout_generic.xsd">
     <container name="root">
-        <block class="Magento\Paypal\Block\Payflow\Link\Iframe" name="payflow.link.iframe" template="payflowlink/redirect.phtml" cacheable="false"/>
+        <block class="Magento\Paypal\Block\Payflow\Link\Iframe" name="payflow.link.iframe" template="Magento_Paypal::payflowlink/redirect.phtml" cacheable="false"/>
     </container>
 </layout>

@@ -8,7 +8,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="items">
-            <block class="Magento\Sales\Block\Order\Email\Items\DefaultItems" name="item_price" template="email/items/price/row.phtml"/>
+            <block class="Magento\Sales\Block\Order\Email\Items\DefaultItems" name="item_price" template="Magento_Sales::email/items/price/row.phtml"/>
         </referenceBlock>
     </body>
 </page>

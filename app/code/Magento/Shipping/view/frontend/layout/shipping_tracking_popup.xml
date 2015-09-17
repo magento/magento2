@@ -8,7 +8,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="empty" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Shipping\Block\Tracking\Popup" name="shipping.tracking.popup" template="tracking/popup.phtml"/>
+            <block class="Magento\Shipping\Block\Tracking\Popup" name="shipping.tracking.popup" template="Magento_Shipping::tracking/popup.phtml"/>
         </referenceContainer>
     </body>
 </page>

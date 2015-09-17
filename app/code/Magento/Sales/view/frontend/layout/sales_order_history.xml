@@ -12,7 +12,7 @@
             <block class="Magento\Sales\Block\Order\History" name="sales.order.history" cacheable="false">
                 <container name="sales.order.history.info" as="info" label="Order History Info"/>
             </block>
-            <block class="Magento\Customer\Block\Account\Dashboard" name="customer.account.link.back" template="account/link/back.phtml" cacheable="false"/>
+            <block class="Magento\Customer\Block\Account\Dashboard" name="customer.account.link.back" template="Magento_Customer::account/link/back.phtml" cacheable="false"/>
         </referenceContainer>
     </body>
 </page>

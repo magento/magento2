@@ -9,12 +9,12 @@
     <update handle="customer_account"/>
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Braintree\Block\Creditcard\Management" name="customer_creditcard_management" template="creditcard/edit.phtml" cacheable="false">
+            <block class="Magento\Braintree\Block\Creditcard\Management" name="customer_creditcard_management" template="Magento_Braintree::creditcard/edit.phtml" cacheable="false">
                 <block class="Magento\Braintree\Block\Directory\Data" name="customer_creditcard_management_country"/>
             </block>
         </referenceContainer>
         <referenceContainer name="footer">
-            <block class="Magento\Braintree\Block\Datajs" name="braintree_data_js" template="data_js.phtml" ifconfig="payment/braintree/fraudprotection"/>
+            <block class="Magento\Braintree\Block\Datajs" name="braintree_data_js" template="Magento_Braintree::data_js.phtml" ifconfig="payment/braintree/fraudprotection"/>
         </referenceContainer>
         <referenceBlock name="customer_creditcard_management">
             <action method="setType">

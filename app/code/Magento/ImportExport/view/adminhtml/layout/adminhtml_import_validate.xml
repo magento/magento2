@@ -7,6 +7,6 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/layout_generic.xsd">
     <container name="root">
-        <block class="Magento\ImportExport\Block\Adminhtml\Import\Frame\Result" template="import/frame/result.phtml" name="import.frame.result" as="import_frame_result"/>
+        <block class="Magento\ImportExport\Block\Adminhtml\Import\Frame\Result" template="Magento_ImportExport::import/frame/result.phtml" name="import.frame.result" as="import_frame_result"/>
     </container>
 </layout>

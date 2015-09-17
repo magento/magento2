@@ -45,7 +45,7 @@
             </block>
         </referenceContainer>
         <referenceContainer name="js">
-            <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Js" name="catalog_product_js" template="catalog/product/js.phtml"/>
+            <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Js" name="catalog_product_js" template="Magento_Catalog::catalog/product/js.phtml"/>
             <block class="Magento\Framework\View\Element\Template" template="Magento_Catalog::catalog/wysiwyg/js.phtml"/>
         </referenceContainer>
     </body>

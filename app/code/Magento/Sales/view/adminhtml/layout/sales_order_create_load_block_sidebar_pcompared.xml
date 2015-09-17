@@ -8,7 +8,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Pcompared" template="order/create/sidebar/items.phtml" name="sidebar_pcompared"/>
+            <block class="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Pcompared" template="Magento_Sales::order/create/sidebar/items.phtml" name="sidebar_pcompared"/>
         </referenceContainer>
     </body>
 </page>

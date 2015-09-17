@@ -7,6 +7,6 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/layout_generic.xsd">
     <container name="root">
-        <block class="Magento\Paypal\Block\Hosted\Pro\Iframe" name="hosted.pro.iframe" template="hss/redirect.phtml"/>
+        <block class="Magento\Paypal\Block\Hosted\Pro\Iframe" name="hosted.pro.iframe" template="Magento_Paypal::hss/redirect.phtml"/>
     </container>
 </layout>

@@ -30,7 +30,7 @@
             <block class="Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit" name="promo_catalog_edit"/>
         </referenceContainer>
         <referenceContainer name="js">
-            <block class="Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Js" template="promo/js.phtml"/>
+            <block class="Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Js" template="Magento_CatalogRule::promo/js.phtml"/>
         </referenceContainer>
     </body>
 </page>

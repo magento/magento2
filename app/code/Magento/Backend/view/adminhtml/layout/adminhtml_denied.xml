@@ -8,7 +8,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Backend\Block\Denied" name="content.denied" template="admin/access_denied.phtml"/>
+            <block class="Magento\Backend\Block\Denied" name="content.denied" template="Magento_Backend::admin/access_denied.phtml"/>
         </referenceContainer>
     </body>
 </page>

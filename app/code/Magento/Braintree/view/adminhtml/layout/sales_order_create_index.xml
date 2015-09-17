@@ -8,7 +8,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="footer">
-            <block class="Magento\Braintree\Block\Datajs" name="braintree_data_js" template="data_js.phtml" ifconfig="payment/braintree/fraudprotection"/>
+            <block class="Magento\Braintree\Block\Datajs" name="braintree_data_js" template="Magento_Braintree::data_js.phtml" ifconfig="payment/braintree/fraudprotection"/>
         </referenceContainer>
     </body>
 </page>

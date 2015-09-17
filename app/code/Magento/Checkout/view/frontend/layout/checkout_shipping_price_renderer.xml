@@ -7,6 +7,6 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/layout_generic.xsd">
     <referenceContainer name="root">
-        <block class="Magento\Checkout\Block\Shipping\Price" name="checkout.shipping.price" as="shipping.price" template="shipping/price.phtml"/>
+        <block class="Magento\Checkout\Block\Shipping\Price" name="checkout.shipping.price" as="shipping.price" template="Magento_Checkout::shipping/price.phtml"/>
     </referenceContainer>
 </layout>

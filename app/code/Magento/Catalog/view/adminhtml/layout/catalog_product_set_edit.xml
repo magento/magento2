@@ -8,7 +8,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main" name="adminhtml.catalog.product.set.edit" template="catalog/product/attribute/set/main.phtml"/>
+            <block class="Magento\Catalog\Block\Adminhtml\Product\Attribute\Set\Main" name="adminhtml.catalog.product.set.edit" template="Magento_Catalog::catalog/product/attribute/set/main.phtml"/>
         </referenceContainer>
     </body>
 </page>
