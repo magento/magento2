@@ -53,6 +53,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->source = $this->testDir . '/source';
         $this->outputFileName = $this->testDir . '/translate.csv';
 
+        // Register the test modules
         ComponentRegistrar::register(
             ComponentRegistrar::MODULE,
             'Magento_FirstModule',
@@ -62,6 +63,13 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
             ComponentRegistrar::MODULE,
             'Magento_SecondModule',
             $this->source . '/app/code/Magento/SecondModule'
+        );
+
+        // Register the test theme
+        ComponentRegistrar::register(
+            ComponentRegistrar::THEME,
+            'adminhtml/default/backend',
+            $this->source . '/app/design/adminhtml/default/backend'
         );
 
         $this->generator = ServiceLocator::getDictionaryGenerator();
