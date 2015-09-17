@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Model;
+
 use Magento\Framework\Module\Dir;
 
 /**
@@ -61,8 +62,9 @@ class Config extends \Magento\Framework\DataObject
      */
     public function getLanguage()
     {
-        return file_get_contents($this->_moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Reports')
-            . '/flexLanguage.xml');
+        return file_get_contents(
+            $this->_moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Reports') . '/flexLanguage.xml'
+        );
     }
 
     /**
@@ -72,7 +74,8 @@ class Config extends \Magento\Framework\DataObject
      */
     public function getDashboard()
     {
-        return file_get_contents($this->_moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Reports')
-            . '/flexDashboard.xml');
+        return file_get_contents(
+            $this->_moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Reports') . '/flexDashboard.xml'
+        );
     }
 }

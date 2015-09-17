@@ -29,7 +29,9 @@ class FileIterator implements \Iterator, \Countable
     protected $position;
 
     /**
-     * @var
+     * File read factory
+     *
+     * @var ReadFactory
      */
     protected $fileReadFactory;
 
