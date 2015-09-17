@@ -463,7 +463,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->config->expects($this->atLeastOnce())->method('isAvailable')->willReturn(true);
         $newObject = $this->createObject(false, false);
         $this->configReader->expects($this->once())->method('load')
-            ->willReturn(['modules' => ['Bar_Two' => 0, 'Foo_One' => 1, 'Old_Module' => 0] ]);
+            ->willReturn(['modules' => ['Bar_Two' => 0, 'Foo_One' => 1, 'Old_Module' => 0]]);
         $this->configWriter->expects($this->once())->method('saveConfig')->with($expectedModules);
 
         return $newObject;
