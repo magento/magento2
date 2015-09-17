@@ -114,9 +114,10 @@ require([
                 "components": {
                     "configurableProductGrid": {
                         "component": "Magento_ConfigurableProduct/js/variations/product-grid",
-                        "associatedProductsFilter": "configurable_associated_product_listing.configurable_associated_product_listing.listing_top.listing_filters",
-                        "associatedProductsProvider": "configurable_associated_product_listing.data_source",
-                        "associatedProductsMassAction": "configurable_associated_product_listing.configurable_associated_product_listing.product_columns.ids",
+                        "productsFilter": "configurable_associated_product_listing.configurable_associated_product_listing.listing_top.listing_filters",
+                        "productsProvider": "configurable_associated_product_listing.data_source",
+                        "productsMassAction": "configurable_associated_product_listing.configurable_associated_product_listing.product_columns.ids",
+                        "productsColumns": "configurable_associated_product_listing.configurable_associated_product_listing.product_columns",
                         "productsGridUrl": "<?= $block->getUrl('catalog/product/associated_grid', ['componentJson' => true])?>",
                         "configurableVariations": "configurableVariations"
                     }
