@@ -7,6 +7,7 @@ namespace Magento\Framework\View\Asset;
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\State as AppState;
+use Magento\Framework\Component\ComponentRegistrar;
 
 /**
  * Tests for minifier
@@ -111,9 +112,11 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\App\StaticResource',
             ['response' => $response]
         );
-        $initParams = Bootstrap::getInstance()->getAppInitParams();
-        $designPath = $initParams[\Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS]['design']['path'];
-        $destFile = $designPath . $requestedFilePath;
+
+        $registrar = new ComponentRegistrar();
+        $blankThemePath = $registrar->getPath(ComponentRegistrar::THEME, 'frontend/Magento/blank');
+        $destFile = dirname(dirname(dirname($blankThemePath))) . $requestedFilePath;
+
 
         if (!is_readable(dirname($destFile))) {
             mkdir(dirname($destFile), 777, true);
@@ -193,7 +196,9 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
         $initDirectories = Bootstrap::getInstance()
             ->getAppInitParams()[\Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS];
 
-        $designPath = $initDirectories['design']['path'];
+        $registrar = new ComponentRegistrar();
+        $blankThemePath = $registrar->getPath(ComponentRegistrar::THEME, 'frontend/Magento/blank');
+        $designPath = dirname(dirname(dirname($blankThemePath)));
 
         $staticPath = $initDirectories['static']['path'];
 
