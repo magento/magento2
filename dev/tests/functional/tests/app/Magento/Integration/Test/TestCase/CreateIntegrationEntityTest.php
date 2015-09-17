@@ -21,7 +21,7 @@ use Magento\Mtf\TestCase\Injectable;
  * 6. Perform all assertions.
  *
  * @group Web_API_Framework_(PS)
- * @ZephyrId MAGETWO-26009
+ * @ZephyrId MAGETWO-26009, MAGETWO-16755, MAGETWO-16819, MAGETWO-16820
  */
 class CreateIntegrationEntityTest extends Injectable
 {

@@ -7,8 +7,8 @@
 <?php /** @var $block \Magento\Catalog\Block\Product\Image */ ?>
 
 <img class="photo image"
-     <?php echo $block->getCustomAttributes(); ?>
-     src="<?php echo $block->getImageUrl(); ?>"
-     width="<?php echo $block->getWidth(); ?>"
-     height="<?php echo $block->getHeight(); ?>"
-     alt="<?php echo $block->stripTags($block->getLabel(), null, true); ?>" />
+     <?php /* @escapeNotVerified */ echo $block->getCustomAttributes(); ?>
+     src="<?php /* @escapeNotVerified */ echo $block->getImageUrl(); ?>"
+     width="<?php /* @escapeNotVerified */ echo $block->getWidth(); ?>"
+     height="<?php /* @escapeNotVerified */ echo $block->getHeight(); ?>"
+     alt="<?php /* @escapeNotVerified */ echo $block->stripTags($block->getLabel(), null, true); ?>" />
