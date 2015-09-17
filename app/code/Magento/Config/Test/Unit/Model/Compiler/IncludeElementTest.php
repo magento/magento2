@@ -5,8 +5,6 @@
  */
 namespace Magento\Config\Test\Unit\Model\Compiler;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-
 /**
  * Class IncludeElementTest
  */

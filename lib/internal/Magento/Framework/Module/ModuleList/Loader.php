@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\Module\ModuleList;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Module\Declaration\Converter\Dom;
 use Magento\Framework\Xml\Parser;
 use Magento\Framework\Component\ComponentRegistrarInterface;

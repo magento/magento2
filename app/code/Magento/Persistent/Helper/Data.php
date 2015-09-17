@@ -9,6 +9,7 @@
  */
 namespace Magento\Persistent\Helper;
 
+use Magento\Framework\Module\Dir;
 use Magento\Store\Model\ScopeInterface;
 
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
@@ -168,7 +169,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getPersistentConfigFilePath()
     {
-        return $this->_modulesReader->getModuleDir('etc', $this->_getModuleName()) . '/' . $this->_configFileName;
+        return $this->_modulesReader->getModuleDir(Dir::MODULE_ETC_DIR, $this->_getModuleName())
+        . '/' . $this->_configFileName;
     }
 
     /**

@@ -107,7 +107,7 @@ class Files
     }
 
     /**
-     * Get registration file in modules
+     * Get registration files in modules
      *
      * @return array
      */
@@ -136,7 +136,7 @@ class Files
     }
 
     /**
-     * Get registration file in libraries
+     * Get registration files in libraries
      *
      * @return array
      */

@@ -11,6 +11,7 @@ use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\App\Resource\Config;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Exception\FileSystemException;
@@ -205,6 +206,13 @@ class Installer
     private $dataSetupFactory;
 
     /**
+     * Component Registrar
+     *
+     * @var ComponentRegistrar
+     */
+    private $componentRegistrar;
+
+    /**
      * Constructor
      *
      * @param FilePermissions $filePermissions
@@ -246,7 +254,8 @@ class Installer
         CleanupFiles $cleanupFiles,
         DbValidator $dbValidator,
         SetupFactory $setupFactory,
-        DataSetupFactory $dataSetupFactory
+        DataSetupFactory $dataSetupFactory,
+        ComponentRegistrar $componentRegistrar
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;
@@ -267,6 +276,7 @@ class Installer
         $this->dbValidator = $dbValidator;
         $this->setupFactory = $setupFactory;
         $this->dataSetupFactory = $dataSetupFactory;
+        $this->componentRegistrar = $componentRegistrar;
     }
 
     /**
@@ -297,7 +307,7 @@ class Installer
         $script[] = ['Installing admin user...', 'installAdminUser', [$request]];
         $script[] = ['Enabling caches:', 'enableCaches', []];
         if (!empty($request[InstallCommand::INPUT_KEY_USE_SAMPLE_DATA])
-            && $this->filesystem->getDirectoryRead(DirectoryList::MODULES)->isExist('Magento/SampleData')
+            && $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_SampleData') !== null
         ) {
             $script[] = ['Installing sample data:', 'installSampleData', [$request]];
         }

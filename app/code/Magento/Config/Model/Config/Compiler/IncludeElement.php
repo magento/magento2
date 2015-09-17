@@ -7,6 +7,7 @@ namespace Magento\Config\Model\Config\Compiler;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Module\Dir;
 use Magento\Framework\Module\Dir\Reader;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
@@ -33,7 +34,7 @@ class IncludeElement implements ElementInterface
      * Constructor
      *
      * @param Reader $moduleReader
-     * @param Filesystem\Directory\ReadFactory $readerFactory
+     * @param Filesystem\Directory\ReadFactory $readFactory
      */
     public function __construct(Reader $moduleReader, Filesystem\Directory\ReadFactory $readFactory)
     {
@@ -103,7 +104,9 @@ class IncludeElement implements ElementInterface
         list($moduleName, $filename) = explode('::', $includePath);
 
         $path = 'adminhtml/' . $filename;
-        $directoryRead = $this->readFactory->create($this->moduleReader->getModuleDir('etc', $moduleName));
+        $directoryRead = $this->readFactory->create(
+            $this->moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, $moduleName)
+        );
 
         if ($directoryRead->isExist($path) && $directoryRead->isFile($path)) {
             return $directoryRead->readFile($path);

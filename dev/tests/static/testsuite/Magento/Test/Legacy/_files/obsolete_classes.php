@@ -3856,4 +3856,5 @@ return [
         'Magento\Framework\Component\ComponentRegistrar'
     ],
     ['Magento\Framework\App\Router\ActionList\Reader'],
+    
 ];
