@@ -94,8 +94,7 @@ require([
             }
         },
         configurableTypeHandler = function (isConfigurable) {
-            var productType = '<?= $block->getProduct()->getTypeId() ?>';
-            isConfigurable = productType == 'configurable' ? true : isConfigurable;
+            isConfigurable = hasVariations ? true : isConfigurable;
             $('[data-form=edit-product]').trigger("change_configurable_type", isConfigurable);
         };
 
