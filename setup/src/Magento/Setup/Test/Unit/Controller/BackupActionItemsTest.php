@@ -49,7 +49,7 @@ class BackupActionItemsTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
         $this->backupRollback = $this->getMock(
             'Magento\Setup\Model\BackupRollback',
-            ['getDBDiskSpace','dbBackup'],
+            ['getDBDiskSpace', 'dbBackup'],
             [],
             '',
             false
