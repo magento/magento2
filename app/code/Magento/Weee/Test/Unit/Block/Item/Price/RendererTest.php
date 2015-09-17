@@ -102,7 +102,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $hasWeeeAmount,
         $expectedValue
     ) {
-        $this->markTestSkipped('MAGETWO-42308');
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
             ->will($this->returnValue($isWeeeEnabled));
@@ -199,7 +198,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $includeWeee,
         $expectedValue
     ) {
-        $this->markTestSkipped('MAGETWO-42308');
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
             ->will($this->returnValue($weeeEnabled));
@@ -236,7 +234,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $includeWeee,
         $expectedValue
     ) {
-        $this->markTestSkipped('MAGETWO-42308');
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
             ->will($this->returnValue($weeeEnabled));
@@ -273,7 +270,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $includeWeee,
         $expectedValue
     ) {
-        $this->markTestSkipped('MAGETWO-42308');
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
             ->will($this->returnValue($weeeEnabled));
@@ -309,7 +305,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $includeWeee,
         $expectedValue
     ) {
-        $this->markTestSkipped('MAGETWO-42308');
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
             ->will($this->returnValue($weeeEnabled));
@@ -345,7 +340,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $includeWeee,
         $expectedValue
     ) {
-        $this->markTestSkipped('MAGETWO-42308');
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
             ->will($this->returnValue($weeeEnabled));
@@ -381,7 +375,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $includeWeee,
         $expectedValue
     ) {
-        $this->markTestSkipped('MAGETWO-42308');
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
             ->will($this->returnValue($weeeEnabled));
@@ -417,7 +410,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $includeWeee,
         $expectedValue
     ) {
-        $this->markTestSkipped('MAGETWO-42308');
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
             ->will($this->returnValue($weeeEnabled));
@@ -454,7 +446,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $includeWeee,
         $expectedValue
     ) {
-        $this->markTestSkipped('MAGETWO-42308');
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
             ->will($this->returnValue($weeeEnabled));
@@ -524,7 +515,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $weeeEnabled,
         $expectedValue
     ) {
-        $this->markTestSkipped('MAGETWO-42308');
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
             ->will($this->returnValue($weeeEnabled));
@@ -554,7 +544,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $weeeEnabled,
         $expectedValue
     ) {
-        $this->markTestSkipped('MAGETWO-42308');
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
             ->will($this->returnValue($weeeEnabled));
@@ -584,7 +573,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $weeeEnabled,
         $expectedValue
     ) {
-        $this->markTestSkipped('MAGETWO-42308');
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
             ->will($this->returnValue($weeeEnabled));
@@ -613,7 +601,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $weeeEnabled,
         $expectedValue
     ) {
-        $this->markTestSkipped('MAGETWO-42308');
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
             ->will($this->returnValue($weeeEnabled));
@@ -642,7 +629,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $weeeEnabled,
         $expectedValue
     ) {
-        $this->markTestSkipped('MAGETWO-42308');
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
             ->will($this->returnValue($weeeEnabled));
@@ -671,7 +657,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $weeeEnabled,
         $expectedValue
     ) {
-        $this->markTestSkipped('MAGETWO-42308');
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
             ->will($this->returnValue($weeeEnabled));
@@ -700,7 +685,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $weeeEnabled,
         $expectedValue
     ) {
-        $this->markTestSkipped('MAGETWO-42308');
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
             ->will($this->returnValue($weeeEnabled));
@@ -730,7 +714,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
         $weeeEnabled,
         $expectedValue
     ) {
-        $this->markTestSkipped('MAGETWO-42308');
         $this->weeeHelper->expects($this->once())
             ->method('isEnabled')
             ->will($this->returnValue($weeeEnabled));
@@ -768,7 +751,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTotalAmount()
     {
-        $this->markTestSkipped('MAGETWO-42308');
         $rowTotal = 100;
         $taxAmount = 10;
         $discountTaxCompensationAmount = 2;
@@ -816,7 +798,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
 
     public function testGetBaseTotalAmount()
     {
-        $this->markTestSkipped('MAGETWO-42308');
         $baseRowTotal = 100;
         $baseTaxAmount = 10;
         $baseDiscountTaxCompensationAmount = 2;
