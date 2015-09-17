@@ -20,13 +20,15 @@ define([
             button: '',
             gridSelector: '[data-grid-id=associated-products-container]',
             modules: {
-                productsFilter: '${ $.associatedProductsFilter }',
-                productsProvider: '${ $.associatedProductsProvider }',
-                productsMassAction: '${ $.associatedProductsMassAction }',
+                productsFilter: '${ $.productsFilter }',
+                productsProvider: '${ $.productsProvider }',
+                productsMassAction: '${ $.productsMassAction }',
+                productsColumns: '${ $.productsColumns }',
                 variationsComponent: '${ $.configurableVariations }'
             },
             listens: {
-                '${ $.associatedProductsProvider }:data': '_showMessageAssociatedGrid',
+                '${ $.productsProvider }:data': '_showMessageAssociatedGrid _handleManualGridOpening',
+                '${ $.productsMassAction }:selected': '_handleManualGridSelect',
                 '${ $.configurableVariations }:productMatrix': '_showButtonAddManual'
             }
         },
@@ -112,8 +114,11 @@ define([
         open: function (filterData, callbackName, showMassActionColumn) {
             this.callbackName = callbackName;
             this.productsMassAction(function (massActionComponent) {
+                this.productsColumns().elems().each(function (rowElement) {
+                    rowElement.disableAction(showMassActionColumn);
+                });
                 massActionComponent.visible(showMassActionColumn);
-            });
+            }.bind(this));
             this._setFilter(filterData);
             this._initGrid(filterData);
             this.productsModal.trigger('openModal');
@@ -190,7 +195,7 @@ define([
         },
 
         /**
-         * Get attributes codes
+         * Get attributes codes used for configurable
          * @private
          */
         _getAttributesCodes: function () {
@@ -243,6 +248,79 @@ define([
                 'appendProducts',
                 true
             );
+        },
+
+        /**
+         * Handle manual grid after opening
+         * @private
+         */
+        _handleManualGridOpening: function (data) {
+            if (data.items.length && this.callbackName == 'appendProducts') {
+                this.productsColumns().elems().each(function (rowElement) {
+                    rowElement.disableAction(true);
+                });
+
+                this._disableRows(data.items);
+            }
+        },
+
+        /**
+         * Disable rows in grid for products with the same variation key
+         *
+         * @param {Array} items
+         * @param {Array} selectedVariationKeys
+         * @param {Array} selected
+         * @private
+         */
+        _disableRows: function (items, selectedVariationKeys, selected) {
+            selectedVariationKeys = selectedVariationKeys === undefined ? [] : selectedVariationKeys;
+            selected = selected === undefined ? [] : selected;
+            this.productsMassAction(function (massaction) {
+                var configurableVariationKeys = _.union(
+                        selectedVariationKeys,
+                        _.pluck(this.variationsComponent().productMatrix(), 'variationKey')
+                    ),
+                    variationKeyMap = this._getVariationKeyMap(items),
+                    rowsForDisable = _.keys(_.pick(
+                        variationKeyMap,
+                        function (variationKey) {
+                            return configurableVariationKeys.indexOf(variationKey) != -1;
+                        }
+                    ));
+
+                massaction.disabled(_.difference(rowsForDisable, selected));
+            }.bind(this));
+        },
+
+        /**
+         * @private
+         */
+        _handleManualGridSelect: function (selected) {
+            if (this.callbackName == 'appendProducts') {
+                var selectedRows = _.filter(this.productsProvider().data.items, function (row) {
+                        return selected.indexOf(row['entity_id']) != -1;
+                    }),
+                    selectedVariationKeys = _.values(this._getVariationKeyMap(selectedRows));
+                this._disableRows(this.productsProvider().data.items, selectedVariationKeys, selected);
+            }
+        },
+
+        /**
+         * Get variation key map used in manual grid.
+         *
+         * @param items
+         * @returns {Array} [{entity_id: variation-key}, ...]
+         * @private
+         */
+        _getVariationKeyMap: function (items) {
+            this._variationKeyMap = {};
+            _.each(items, function (row) {
+                this._variationKeyMap[row['entity_id']] = _.values(
+                    _.pick(row, this._getAttributesCodes())
+                ).sort().join('-');
+
+            }.bind(this));
+            return this._variationKeyMap;
         },
 
         /**

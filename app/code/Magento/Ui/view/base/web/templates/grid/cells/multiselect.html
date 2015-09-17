@@ -12,6 +12,7 @@
             type="checkbox"
             data-action="select-row"
             data-bind="
+                disable: disabled.indexOf(row[indexField]) != -1,
                 checked: selected,
                 value: row[indexField],
                 attr: {

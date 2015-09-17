@@ -78,10 +78,6 @@ define([
                         this._makeProduct.bind(this),
                         function (func, product) {
                             var newProduct = func(product);
-
-                            if (this.productAttributesMap.hasOwnProperty(this.getVariationKey(newProduct.options))) {
-                                throw new UserException($.mage.__('Duplicate product'));
-                            }
                             this.productAttributesMap[this.getVariationKey(newProduct.options)] = newProduct.productId;
 
                             return newProduct;
@@ -114,7 +110,7 @@ define([
 
             return {
                 attribute: JSON.stringify(attributes),
-                editable: product.editable === undefined ? !productId : product.editable,
+                editable: false,
                 images: {
                     preview: product['thumbnail_src']
                 },
@@ -195,7 +191,7 @@ define([
                     name: variation.name || variation.sku,
                     weight: variation.weight,
                     attribute: JSON.stringify(attributes),
-                    variationKey: _.values(attributes).join('-'),
+                    variationKey: this.getVariationKey(variation.options),
                     editable: variation.editable === undefined ? !variation.productId : variation.editable,
                     productUrl: this.buildProductUrl(variation.productId),
                     status: variation.status === undefined ? 1 : parseInt(variation.status, 10)
@@ -207,7 +203,8 @@ define([
         },
         removeProduct: function (rowIndex) {
             this.opened(false);
-            this.productMatrix.splice(rowIndex, 1);
+            var removedProduct = this.productMatrix.splice(rowIndex, 1);
+            delete this.productAttributesMap[this.getVariationKey(removedProduct[0].options)];
 
             if (this.productMatrix().length === 0) {
                 this.attributes.each(function (attribute) {
