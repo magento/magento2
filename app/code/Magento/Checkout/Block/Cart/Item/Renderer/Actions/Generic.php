@@ -19,6 +19,7 @@ class Generic extends Template
      * Returns current quote item
      *
      * @return AbstractItem
+     * @codeCoverageIgnore
      */
     public function getItem()
     {
@@ -30,6 +31,7 @@ class Generic extends Template
      *
      * @param AbstractItem $item
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setItem(AbstractItem $item)
     {
@@ -41,6 +43,7 @@ class Generic extends Template
      * Check if product is visible in site visibility
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isProductVisibleInSiteVisibility()
     {
@@ -51,6 +54,7 @@ class Generic extends Template
      * Check if cart item is virtual
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isVirtual()
     {
