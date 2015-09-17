@@ -41,6 +41,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Type $eavEntityType
      * @param string $connectionName
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -57,6 +58,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Define main table
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -67,6 +69,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Initialize unique fields
      *
      * @return $this
+     * @codeCoverageIgnore
      */
     protected function _initUniqueFields()
     {
@@ -555,6 +558,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param string $table
      * @return array
+     * @codeCoverageIgnore
      */
     public function describeTable($table)
     {
@@ -566,6 +570,7 @@ class Attribute extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param int $entityTypeId
      * @return string
+     * @codeCoverageIgnore
      */
     public function getAdditionalAttributeTable($entityTypeId)
     {

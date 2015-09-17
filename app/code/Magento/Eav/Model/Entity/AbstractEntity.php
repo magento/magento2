@@ -227,6 +227,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @deprecated
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|string $connection
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setConnection($connection)
     {
@@ -247,6 +248,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * Get connection
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @codeCoverageIgnore
      */
     public function getConnection()
     {
@@ -257,6 +259,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * For compatibility with AbstractModel
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getIdFieldName()
     {
@@ -268,6 +271,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @param string $alias
      * @return string
+     * @codeCoverageIgnore
      */
     public function getTable($alias)
     {
