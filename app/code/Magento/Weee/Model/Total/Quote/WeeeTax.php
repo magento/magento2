@@ -145,7 +145,6 @@ class WeeeTax extends Weee
                     $baseTotalRowValueInclTax
                 );
 
-                $total->setTotalAmount($this->getCode(), $this->weeeData->getTotalAmounts($items, $quote->getStore()));
                 $this->weeeData->setApplied($item, array_merge($this->weeeData->getApplied($item), $productTaxes));
             }
         }
@@ -216,12 +215,16 @@ class WeeeTax extends Weee
         $rowValueInclTax,
         $baseRowValueInclTax
     ) {
-        $totalCode = $this->weeeData->includeInSubtotal($this->_store) ? 'subtotal' : $this->getCode();
-        $address->addTotalAmount($totalCode, $rowValueExclTax);
-        $address->addBaseTotalAmount($totalCode, $baseRowValueExclTax);
+        if ($this->weeeData->includeInSubtotal($this->_store)) {
+            $total->addTotalAmount('subtotal', $rowValueExclTax);
+            $total->addBaseTotalAmount('subtotal', $baseRowValueExclTax);
+        } else {
+            $total->addTotalAmount('weee', $rowValueExclTax);
+            $total->addBaseTotalAmount('weee', $baseRowValueExclTax);
+        }
 
-        $address->setSubtotalInclTax($address->getSubtotalInclTax() + $rowValueInclTax);
-        $address->setBaseSubtotalInclTax($address->getBaseSubtotalInclTax() + $baseRowValueInclTax);
+        $total->setSubtotalInclTax($total->getSubtotalInclTax() + $rowValueInclTax);
+        $total->setBaseSubtotalInclTax($total->getBaseSubtotalInclTax() + $baseRowValueInclTax);
         return $this;
     }
 

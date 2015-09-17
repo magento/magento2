@@ -211,15 +211,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function getShippingAddressTotals($address)
     {
-        /** @var  \Magento\Quote\Model\Quote $quote */
-        $quote = $this->getQuote();
-
-        /** @var  \Magento\Quote\Model\Quote\Address\Total $addressTotals */
-        $addressTotals = $this->totalsCollector->collectAddressTotals($quote, $address);
-
-        /** @var array $totals */
-        $totals = $this->totalsReader->fetch($quote, $addressTotals->getData());
-
+        $totals = $address->getTotals();
         foreach ($totals as $total) {
             if ($total->getCode() == 'grand_total') {
                 if ($address->getAddressType() == Address::TYPE_BILLING) {
