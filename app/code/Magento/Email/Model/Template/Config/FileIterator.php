@@ -5,6 +5,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Model\Template\Config;
+
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Filesystem\File\ReadFactory;
 

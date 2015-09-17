@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Cron\Model\Config;
+
 use Magento\Framework\Module\Dir;
 
 /**

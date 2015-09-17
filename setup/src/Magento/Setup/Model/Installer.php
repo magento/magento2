@@ -233,6 +233,7 @@ class Installer
      * @param DbValidator $dbValidator
      * @param SetupFactory $setupFactory
      * @param DataSetupFactory $dataSetupFactory
+     * @param ComponentRegistrar $componentRegistrar
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
