@@ -313,8 +313,8 @@ class Dom
             if (preg_match_all('/%.+%/', $result, $matches)) {
                 $unsupported = [];
                 foreach ($matches[0] as $placeholder) {
-                    if (strpos($result, $placeholder[0]) !== false) {
-                        $unsupported[] = $placeholder[0];
+                    if (strpos($result, $placeholder) !== false) {
+                        $unsupported[] = $placeholder;
                     }
                 }
                 if (!empty($unsupported)) {
