@@ -533,7 +533,7 @@ class CommonTaxCollector extends AbstractTotal
         $total->setBaseTotalAmount('discount_tax_compensation', $baseDiscountTaxCompensation);
 
         $total->setSubtotalInclTax($subtotalInclTax);
-        $total->setBaseSubtotalInclTax($baseSubtotalInclTax);
+        $total->setBaseSubtotalTotalInclTax($baseSubtotalInclTax);
 
         return $this;
     }

@@ -990,10 +990,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
         $request->setBaseCurrency($this->getQuote()->getStore()->getBaseCurrency());
         $request->setPackageCurrency($this->getQuote()->getStore()->getCurrentCurrency());
         $request->setLimitCarrier($this->getLimitCarrier());
-        $baseSubtotalInclTax =
-            is_array($this->getTotals()) && array_key_exists('base_subtotal_incl_tax', $this->getTotals())
-                ? $this->getTotals()['base_subtotal_incl_tax']
-                : $this->getBaseSubtotalInclTax();
+        $baseSubtotalInclTax = $this->getBaseSubtotalTotalInclTax();
         $request->setBaseSubtotalInclTax($baseSubtotalInclTax);
 
         $result = $this->_rateCollector->create()->collectRates($request)->getResult();
