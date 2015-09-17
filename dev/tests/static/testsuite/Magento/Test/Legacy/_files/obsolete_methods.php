@@ -2460,4 +2460,12 @@ return [
         'Magento\ConfigurableProduct\Model\Product\VariationHandler::fillSimpleProductData'
     ],
     ['mergeBookmarkConfig', 'Magento\Ui\Model\Manager'],
+    ['addDefaultPattern', 'Magento\Theme\Model\Theme\Collection', 'addConstraint'],
+    ['addTargetPattern', 'Magento\Theme\Model\Theme\Collection', 'addConstraint'],
+    ['clearTargetPatterns', 'Magento\Theme\Model\Theme\Collection', 'resetConstraints'],
+    ['getTargetPatterns', 'Magento\Theme\Model\Theme\Collection'],
+    ['getScopeDirectory', 'Magento\Framework\View\File\Collector\Override\Base'],
+    ['getScopeDirectory', 'Magento\Framework\View\File\Collector\Override\ThemeModular'],
+    ['getScopeDirectory', 'Magento\Framework\View\File\Collector\Theme'],
+    ['getScopeDirectory', 'Magento\Framework\View\File\Collector\ThemeModular'],
 ];
