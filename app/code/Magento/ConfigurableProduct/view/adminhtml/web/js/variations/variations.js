@@ -1,3 +1,4 @@
+// jscs:disable requireDotNotation
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -11,9 +12,9 @@ define([
 ], function (Component, $, ko, _) {
     'use strict';
 
-    function UserException (message) {
+    function UserException(message) {
         this.message = message;
-        this.name = "UserException";
+        this.name = 'UserException';
     }
     UserException.prototype = Object.create(Error.prototype);
 
@@ -51,14 +52,12 @@ define([
 
             this.associatedProductGrid().open(
                 {
-                    filters: attributes,
-                    'filters_modifier': product.productId ?
-                        {
-                            'entity_id': {
-                                'condition_type': 'neq', value: product.productId
-                            }
-                        } :
-                        {}
+                    'filters': attributes,
+                    'filters_modifier': product.productId ? {
+                        'entity_id': {
+                            'condition_type': 'neq', value: product.productId
+                        }
+                    } : {}
                 },
                 'changeProduct',
                 false
@@ -79,10 +78,12 @@ define([
                         this._makeProduct.bind(this),
                         function (func, product) {
                             var newProduct = func(product);
+
                             if (this.productAttributesMap.hasOwnProperty(this.getVariationKey(newProduct.options))) {
                                 throw new UserException($.mage.__('Duplicate product'));
                             }
                             this.productAttributesMap[this.getVariationKey(newProduct.options)] = newProduct.productId;
+
                             return newProduct;
                         }.bind(this)
                     )
@@ -93,13 +94,21 @@ define([
             var productId = product['entity_id'] || product.productId || null,
                 attributes = _.pick(product, this.attributes.pluck('code')),
                 options = _.map(attributes, function (option, attribute) {
-                    var oldOptions = _.findWhere(this.attributes(), {code: attribute}).options,
+                    var oldOptions = _.findWhere(this.attributes(), {
+                            code: attribute
+                        }).options,
                         result;
+
                     if (_.isFunction(oldOptions)) {
-                        result = oldOptions.findWhere({value: option});
+                        result = oldOptions.findWhere({
+                            value: option
+                        });
                     } else {
-                        result = _.findWhere(oldOptions, {value: option});
+                        result = _.findWhere(oldOptions, {
+                            value: option
+                        });
                     }
+
                     return result;
                 }.bind(this));
 
@@ -158,6 +167,14 @@ define([
             var $button = $('[data-action=open-steps-wizard] [data-role=button-label]');
             $button.text($button.attr('data-edit-label'));
         },
+
+        /**
+         * Get attributes options
+         * @see use in matrix.phtml
+         * @function
+         * @event
+         * @returns {array}
+         */
         getAttributesOptions: function () {
             return this.showVariations() ? this.productMatrix()[0].options : [];
         },
@@ -212,7 +229,7 @@ define([
             }
             product = this.productMatrix.splice(rowIndex, 1)[0];
             product = _.extend(product, productChanged);
-            product.status = !product.status * 1;
+            product.status = +!product.status;
             this.productMatrix.splice(rowIndex, 0, product);
         },
         toggleList: function (rowIndex) {
@@ -246,6 +263,15 @@ define([
                 }.bind(this));
             }
         },
+
+        /**
+         * Is show preview image
+         * @see use in matrix.phtml
+         * @function
+         * @event
+         * @param {object} variation
+         * @returns {*|boolean}
+         */
         isShowPreviewImage: function (variation) {
             return variation.images.preview && (!variation.editable || variation.images.file);
         },
@@ -272,66 +298,64 @@ define([
         },
         initImageUpload: function () {
             require([
-                'jquery',
                 'mage/template',
                 'jquery/file-uploader',
                 'mage/mage',
-                'mage/translate'
-            ], function (jQuery, mageTemplate) {
+                'mage/translate',
+                'domReady!'
+            ], function (mageTemplate) {
 
-                jQuery(function ($) {
-                    var matrix = $('[data-role=product-variations-matrix]');
-                    matrix.find('[data-action=upload-image]').find('[name=image]').each(function () {
-                        var imageColumn = $(this).closest('[data-column=image]');
+                var matrix = $('[data-role=product-variations-matrix]');
+                matrix.find('[data-action=upload-image]').find('[name=image]').each(function () {
+                    var imageColumn = $(this).closest('[data-column=image]');
 
-                        if (imageColumn.find('[data-role=image]').length) {
-                            imageColumn.find('[data-toggle=dropdown]').dropdown().show();
-                        }
-                        $(this).fileupload({
-                            dataType: 'json',
-                            dropZone: $(this).closest('[data-role=row]'),
-                            acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-                            done: function (event, data) {
-                                var tmpl, parentElement, uploaderControl, imageElement;
+                    if (imageColumn.find('[data-role=image]').length) {
+                        imageColumn.find('[data-toggle=dropdown]').dropdown().show();
+                    }
+                    $(this).fileupload({
+                        dataType: 'json',
+                        dropZone: $(this).closest('[data-role=row]'),
+                        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+                        done: function (event, data) {
+                            var tmpl, parentElement, uploaderControl, imageElement;
 
-                                if (!data.result) {
-                                    return;
-                                }
-
-                                if (!data.result.error) {
-                                    parentElement = $(event.target).closest('[data-column=image]');
-                                    uploaderControl = parentElement.find('[data-action=upload-image]');
-                                    imageElement = parentElement.find('[data-role=image]');
-
-                                    if (imageElement.length) {
-                                        imageElement.attr('src', data.result.url);
-                                    } else {
-                                        tmpl = mageTemplate(matrix.find('[data-template-for=variation-image]').html());
-
-                                        $(tmpl({
-                                            data: data.result
-                                        })).prependTo(uploaderControl);
-                                    }
-                                    parentElement.find('[name$="[image]"]').val(data.result.file);
-                                    parentElement.find('[data-toggle=dropdown]').dropdown().show();
-                                } else {
-                                    alert($.mage.__('We don\'t recognize or support this file extension type.'));
-                                }
-                            },
-                            start: function (event) {
-                                $(event.target).closest('[data-action=upload-image]').addClass('loading');
-                            },
-                            stop: function (event) {
-                                $(event.target).closest('[data-action=upload-image]').removeClass('loading');
+                            if (!data.result) {
+                                return;
                             }
-                        });
+
+                            if (!data.result.error) {
+                                parentElement = $(event.target).closest('[data-column=image]');
+                                uploaderControl = parentElement.find('[data-action=upload-image]');
+                                imageElement = parentElement.find('[data-role=image]');
+
+                                if (imageElement.length) {
+                                    imageElement.attr('src', data.result.url);
+                                } else {
+                                    tmpl = mageTemplate(matrix.find('[data-template-for=variation-image]').html());
+
+                                    $(tmpl({
+                                        data: data.result
+                                    })).prependTo(uploaderControl);
+                                }
+                                parentElement.find('[name$="[image]"]').val(data.result.file);
+                                parentElement.find('[data-toggle=dropdown]').dropdown().show();
+                            } else {
+                                alert($.mage.__('We don\'t recognize or support this file extension type.'));
+                            }
+                        },
+                        start: function (event) {
+                            $(event.target).closest('[data-action=upload-image]').addClass('loading');
+                        },
+                        stop: function (event) {
+                            $(event.target).closest('[data-action=upload-image]').removeClass('loading');
+                        }
                     });
-                    matrix.find('[data-action=no-image]').click(function (event) {
-                        var parentElement = $(event.target).closest('[data-column=image]');
-                        parentElement.find('[data-role=image]').remove();
-                        parentElement.find('[name$="[image]"]').val('');
-                        parentElement.find('[data-toggle=dropdown]').trigger('close.dropdown').hide();
-                    });
+                });
+                matrix.find('[data-action=no-image]').click(function (event) {
+                    var parentElement = $(event.target).closest('[data-column=image]');
+                    parentElement.find('[data-role=image]').remove();
+                    parentElement.find('[name$="[image]"]').val('');
+                    parentElement.find('[data-toggle=dropdown]').trigger('close.dropdown').hide();
                 });
             });
         },
