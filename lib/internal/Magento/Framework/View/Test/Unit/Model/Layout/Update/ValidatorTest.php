@@ -87,7 +87,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
                 false
             )
         );
-        $this->assertEquals($model->getMessages(), $messages);
+        $this->assertEquals($messages, $model->getMessages());
     }
 
     /**
@@ -102,7 +102,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
                 false,
                 false,
                 [
-                    Validator::XML_INVALID => 'Please correct the XML data and try again. validation exception'
+                    Validator::XML_INVALID => 'Please correct the XML data and try again. '
                 ]
             ]
         ];
