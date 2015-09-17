@@ -23,6 +23,7 @@ class ImageProvider
     /**
      * @param \Magento\Quote\Api\CartItemRepositoryInterface $itemRepository
      * @param \Magento\Checkout\CustomerData\ItemPoolInterface $itemPool
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Quote\Api\CartItemRepositoryInterface $itemRepository,

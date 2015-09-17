@@ -116,16 +116,24 @@ class Attribute extends \Magento\Backend\Helper\Data
     }
 
     /**
+     * Set array of selected product
+     *
+     * @param array $productIds
+     *
+     * @return void
+     */
+    public function setProductIds($productIds)
+    {
+        $this->_session->setProductIds($productIds);
+    }
+
+    /**
      * Return array of selected product ids from post or session
      *
      * @return array|null
      */
     public function getProductIds()
     {
-        if ($this->_getRequest()->isPost() && $this->_getRequest()->getActionName() == 'edit') {
-            $this->_session->setProductIds($this->_getRequest()->getParam('selected', null));
-        }
-
         return $this->_session->getProductIds();
     }
 
