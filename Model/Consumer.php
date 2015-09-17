@@ -24,8 +24,6 @@ use Magento\Framework\Amqp\ConsumerConfigurationInterface;
  */
 class Consumer implements ConsumerInterface
 {
-    const CONTENT_TYPE_JSON = 'application/json';
-
     /**
      * @var AmqpConfig
      */
@@ -85,11 +83,14 @@ class Consumer implements ConsumerInterface
     public function process($maxNumberOfMessages = null)
     {
         $queueName = $this->configuration->getQueueName();
+        $consumerName = $this->configuration->getConsumerName();
+        $connectionName = $this->amqpConfig->getConnectionByConsumer($consumerName);
+        $queue = $this->queueRepository->get($connectionName, $queueName);
 
         if (!isset($maxNumberOfMessages)) {
-            $this->runDaemonMode($queueName);
+            $this->runDaemonMode($queue);
         } else {
-            $this->run($queueName, $maxNumberOfMessages);
+            $this->run($queue, $maxNumberOfMessages);
         }
     }
 
@@ -100,44 +101,32 @@ class Consumer implements ConsumerInterface
      * @return void
      * @throws LocalizedException
      */
-    private function dispatchMessage(EnvelopeInterface $message)
+    public function dispatchMessage(EnvelopeInterface $message)
     {
         $properties = $message->getProperties();
         $topicName = $properties['topic_name'];
         $callback = $this->configuration->getCallback();
-        $decodedMessage = null;
 
-        if (isset($properties['content_type'])) {
-            $contentType = $properties['content_type'];
-            switch ($contentType) {
-                case self::CONTENT_TYPE_JSON:
-                    $decodedMessage = $this->messageEncoder->decode($topicName, $message->getBody());
-                    break;
-            }
-        } else {
-            $decodedMessage = $this->messageEncoder->decode($topicName, $message->getBody());
-        }
+//        $decodedMessage = $this->messageEncoder->decode($topicName, $message->getBody());
 
-        if (isset($decodedMessage)) {
-            call_user_func($callback, $decodedMessage);
-        }
+//        if (isset($decodedMessage)) {
+            call_user_func($callback, 123);
+//        }
     }
 
     /**
      * Run short running process
      *
-     * @param string $queueName
+     * @param QueueInterface $queue
      * @param int $maxNumberOfMessages
      * @return void
      */
-    private function run($queueName, $maxNumberOfMessages)
+    private function run($queue, $maxNumberOfMessages)
     {
         $count = $maxNumberOfMessages
             ? $maxNumberOfMessages
             : $this->configuration->getMaxMessages() ?: 1;
 
-        /** @var QueueInterface $queue */
-        $queue = $this->queueRepository->getByQueueName($queueName);
         for ($i = $count; $i > 0; $i--) {
             $message = $queue->dequeue();
             if ($message === null) {
@@ -151,15 +140,13 @@ class Consumer implements ConsumerInterface
     /**
      * Run process in the daemon mode
      *
-     * @param string $queueName
+     * @param QueueInterface $queue
      * @return void
      */
-    private function runDaemonMode($queueName)
+    private function runDaemonMode($queue)
     {
         $callback = [$this, 'dispatchMessage'];
 
-        /** @var QueueInterface $queue */
-        $queue = $this->queueRepository->getByQueueName($queueName);
         $queue->subscribe($callback);
     }
 }

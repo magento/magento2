@@ -50,7 +50,7 @@ class Publisher implements PublisherInterface
      */
     public function publish($topicName, $data)
     {
-        $envelope = $this->envelopeFactory->create(['body' => $data, 'properties' => []]);
+        $envelope = $this->envelopeFactory->create(['body' => $data]);
         $connectionName = $this->amqpConfig->getConnectionByTopic($topicName);
         $exchange = $this->exchangeRepository->getByConnectionName($connectionName);
         $exchange->enqueue($topicName, $envelope);
