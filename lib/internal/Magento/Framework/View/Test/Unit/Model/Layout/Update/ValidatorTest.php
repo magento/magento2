@@ -26,26 +26,16 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     protected function _createValidator($layoutUpdate, $isSchemaValid = true)
     {
-        $dirList = $this->getMockBuilder('Magento\Framework\App\Filesystem\DirectoryList')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $dirList->expects(
-            $this->exactly(2)
-        )->method(
-            'getPath'
-        )->will(
-            $this->returnValue('dummyDir')
-        );
-
         $domConfigFactory = $this->getMockBuilder(
             'Magento\Framework\Config\DomFactory'
         )->disableOriginalConstructor()->getMock();
 
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         $params = [
             'xml' => '<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' . trim(
-                $layoutUpdate
-            ) . '</layout>',
-            'schemaFile' => 'dummyDir/Magento/Framework/View/Layout/etc/page_layout.xsd',
+                    $layoutUpdate
+                ) . '</layout>',
+            'schemaFile' => $urnResolver->getRealPath('urn:magento:library:framework:View/Layout/etc/page_layout.xsd'),
         ];
 
         $exceptionMessage = 'validation exception';
@@ -60,10 +50,10 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
                 new \Magento\Framework\Config\Dom\ValidationException($exceptionMessage)
             )
         );
-
+        $urnResolver = $this->_objectHelper->getObject('Magento\Framework\Config\Dom\UrnResolver');
         $model = $this->_objectHelper->getObject(
             'Magento\Framework\View\Model\Layout\Update\Validator',
-            ['dirList' => $dirList, 'domConfigFactory' => $domConfigFactory]
+            ['domConfigFactory' => $domConfigFactory, 'urnResolver' => $urnResolver]
         );
 
         return $model;
@@ -102,7 +92,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
                 false,
                 false,
                 [
-                    Validator::XML_INVALID => 'Please correct the XML data and try again. '
+                    Validator::XML_INVALID => 'Please correct the XML data and try again. validation exception'
                 ]
             ]
         ];

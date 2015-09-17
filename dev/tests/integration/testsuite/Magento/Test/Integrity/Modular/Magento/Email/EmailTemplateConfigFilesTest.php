@@ -15,7 +15,8 @@ class EmailTemplateConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testFileFormat($file)
     {
-        $schemaFile = BP . '/app/code/Magento/Email/etc/email_templates.xsd';
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $schemaFile = $urnResolver->getRealPath('urn:magento:module:email:etc/email_templates.xsd');
         $dom = new \Magento\Framework\Config\Dom(file_get_contents($file));
         $result = $dom->validate($schemaFile, $errors);
         $this->assertTrue($result, print_r($errors, true));

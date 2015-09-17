@@ -38,7 +38,7 @@ class WidgetConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractConf
      */
     protected function _getXsdPath()
     {
-        return $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_Widget') .
-            '/etc/widget_file.xsd';
+        return $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_Widget')
+            . '/etc/widget_file.xsd';
     }
 }
