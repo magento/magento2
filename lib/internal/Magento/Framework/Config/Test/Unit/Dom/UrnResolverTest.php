@@ -6,10 +6,7 @@
 namespace Magento\Framework\Config\Test\Unit\Dom;
 
 use \Magento\Framework\Config\Dom\UrnResolver;
-use \Magento\Framework\Component\ComponentRegistrarInterface;
 use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Module\PackageInfoFactory;
-use Magento\Framework\Module\PackageInfo;
 
 class UrnResolverTest extends \PHPUnit_Framework_TestCase
 {
@@ -47,8 +44,9 @@ class UrnResolverTest extends \PHPUnit_Framework_TestCase
     public function testGetRealPathWithModuleUrn()
     {
         $xsdUrn = 'urn:magento:module:customer:etc/address_formats.xsd';
-        $xsdPath = BP . '/app/code/Magento/Customer/etc/address_formats.xsd';
-
+        $componentRegistrar = new ComponentRegistrar();
+        $xsdPath = $componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_Customer')
+            . '/etc/address_formats.xsd';
         $result = $this->urnResolver->getRealPath($xsdUrn);
         $this->assertSame($xsdPath, $result, 'XSD paths does not match.');
     }
