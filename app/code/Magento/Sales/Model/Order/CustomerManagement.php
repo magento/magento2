@@ -6,7 +6,7 @@
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Exception\AlreadyExistsException;
-use Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address as QuoteAddress;
 
 /**
  * Class CustomerManagement
@@ -93,10 +93,10 @@ class CustomerManagement implements \Magento\Sales\Api\OrderCustomerManagementIn
             /** @var \Magento\Customer\Api\Data\AddressInterface $customerAddress */
             $customerAddress = $this->addressFactory->create(['data' => $addressData]);
             switch ($address->getAddressType()) {
-                case Address::ADDRESS_TYPE_BILLING:
+                case QuoteAddress::ADDRESS_TYPE_BILLING:
                     $customerAddress->setIsDefaultBilling(true);
                     break;
-                case Address::ADDRESS_TYPE_SHIPPING:
+                case QuoteAddress::ADDRESS_TYPE_SHIPPING:
                     $customerAddress->setIsDefaultShipping(true);
                     break;
             }
