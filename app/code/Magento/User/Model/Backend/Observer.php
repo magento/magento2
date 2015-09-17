@@ -225,7 +225,7 @@ class Observer
                 $myAccountUrl = $this->url->getUrl('adminhtml/system_account/');
                 $message = __('It\'s time to <a href="%1">change your password</a>.', $myAccountUrl);
             }
-            $this->messageManager->addNotice($message);
+            $this->messageManager->addNoticeMessage($message);
             $message = $this->messageManager->getMessages()->getLastAddedMessage();
             if ($message) {
                 $message->setIdentifier('magento_user_password_expired')->setIsSticky(true);
@@ -368,7 +368,7 @@ class Observer
                      */
                     $this->authSession->clearStorage();
                     $this->session->clearStorage();
-                    $this->messageManager->addError(
+                    $this->messageManager->addErrorMessage(
                         __('Your password has expired; please contact your administrator.')
                     );
                     $controller->getRequest()->setDispatched(false);
