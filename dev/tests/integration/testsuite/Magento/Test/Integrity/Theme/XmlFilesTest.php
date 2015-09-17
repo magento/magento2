@@ -27,7 +27,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
     {
         $this->_validateConfigFile(
             $file,
-            $this->urnResolver->getRealPath('urn:magento:library:framework:Config/etc/view.xsd')
+            $this->urnResolver->getRealPath('urn:magento:framework:Config/etc/view.xsd')
         );
     }
 
@@ -79,7 +79,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
     {
         $this->_validateConfigFile(
             $file,
-            $this->urnResolver->getRealPath('urn:magento:library:framework:Config/etc/theme.xsd')
+            $this->urnResolver->getRealPath('urn:magento:framework:Config/etc/theme.xsd')
         );
     }
 

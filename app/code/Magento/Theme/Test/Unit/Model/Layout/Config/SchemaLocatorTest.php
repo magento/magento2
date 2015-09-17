@@ -28,7 +28,7 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
         $urnResolverMock = $this->getMock('Magento\Framework\Config\Dom\UrnResolver', [], [], '', false);
         $urnResolverMock->expects($this->once())
             ->method('getRealPath')
-            ->with('urn:magento:library:framework:View/PageLayout/etc/layouts.xsd')
+            ->with('urn:magento:framework:View/PageLayout/etc/layouts.xsd')
             ->willReturn($this->schema);
         $this->object = new \Magento\Theme\Model\Layout\Config\SchemaLocator($urnResolverMock);
     }

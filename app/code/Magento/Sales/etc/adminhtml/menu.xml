@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:backend:etc/menu.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
         <add id="Magento_Sales::sales" title="Sales" module="Magento_Sales" sortOrder="15" dependsOnModule="Magento_Sales" resource="Magento_Sales::sales"/>
         <add id="Magento_Sales::sales_operation" title="Operations" module="Magento_Sales" sortOrder="10" parent="Magento_Sales::sales" resource="Magento_Sales::sales_operation" />

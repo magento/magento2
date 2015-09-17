@@ -25,7 +25,7 @@ class WidgetConfigTest extends \PHPUnit_Framework_TestCase
              * @param string $configFile
              */
             function ($configFile) {
-                $schema = $this->urnResolver->getRealPath('urn:magento:module:widget:etc/widget.xsd');
+                $schema = $this->urnResolver->getRealPath('urn:magento:module:Magento_Widget:etc/widget.xsd');
                 $this->_validateFileExpectSuccess($configFile, $schema);
             },
             array_merge(
@@ -38,28 +38,28 @@ class WidgetConfigTest extends \PHPUnit_Framework_TestCase
     public function testSchemaUsingValidXml()
     {
         $xmlFile = __DIR__ . '/_files/widget.xml';
-        $schema = $this->urnResolver->getRealPath('urn:magento:module:widget:etc/widget.xsd');
+        $schema = $this->urnResolver->getRealPath('urn:magento:module:Magento_Widget:etc/widget.xsd');
         $this->_validateFileExpectSuccess($xmlFile, $schema);
     }
 
     public function testSchemaUsingInvalidXml()
     {
         $xmlFile = __DIR__ . '/_files/invalid_widget.xml';
-        $schema = $this->urnResolver->getRealPath('urn:magento:module:widget:etc/widget.xsd');
+        $schema = $this->urnResolver->getRealPath('urn:magento:module:Magento_Widget:etc/widget.xsd');
         $this->_validateFileExpectFailure($xmlFile, $schema);
     }
 
     public function testFileSchemaUsingXml()
     {
         $xmlFile = __DIR__ . '/_files/widget_file.xml';
-        $schema = $this->urnResolver->getRealPath('urn:magento:module:widget:etc/widget_file.xsd');
+        $schema = $this->urnResolver->getRealPath('urn:magento:module:Magento_Widget:etc/widget_file.xsd');
         $this->_validateFileExpectSuccess($xmlFile, $schema);
     }
 
     public function testFileSchemaUsingInvalidXml()
     {
         $xmlFile = __DIR__ . '/_files/invalid_widget.xml';
-        $schema = $this->urnResolver->getRealPath('urn:magento:module:widget:etc/widget_file.xsd');
+        $schema = $this->urnResolver->getRealPath('urn:magento:module:Magento_Widget:etc/widget_file.xsd');
         $this->_validateFileExpectFailure($xmlFile, $schema);
     }
 
