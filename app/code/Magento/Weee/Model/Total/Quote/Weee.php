@@ -237,7 +237,6 @@ class Weee extends AbstractTotal
             ->setBaseWeeeTaxAppliedRowAmntInclTax($baseTotalRowValueInclTax);
 
         $this->processTotalAmount(
-            $address,
             $total,
             $totalRowValueExclTax,
             $baseTotalRowValueExclTax,
@@ -251,7 +250,6 @@ class Weee extends AbstractTotal
     /**
      * Process row amount based on FPT total amount configuration setting
      *
-     * @param   \Magento\Quote\Model\Quote\Address $address
      * @param   \Magento\Quote\Model\Quote\Address\Total $total
      * @param   float $rowValueExclTax
      * @param   float $baseRowValueExclTax
@@ -260,7 +258,6 @@ class Weee extends AbstractTotal
      * @return  $this
      */
     protected function processTotalAmount(
-        $address,
         $total,
         $rowValueExclTax,
         $baseRowValueExclTax,
