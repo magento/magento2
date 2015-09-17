@@ -236,6 +236,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     {
         /** @var  \Magento\Framework\ObjectManagerInterface $objectManager */
         $objectManager = Bootstrap::getObjectManager();
+        /** @var  \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector */
         $totalsCollector = $objectManager->create('Magento\Quote\Model\Quote\TotalsCollector');
 
         //Setup tax configurations
