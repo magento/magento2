@@ -13,6 +13,7 @@
     * Added the ability to send the purge requests for multiple servers
 * GitHub issues and requests:
     * [#1679](https://github.com/magento/magento2/issues/1679) -- Cannot run php bin/magento setup:di:compile (have to delete contents of var/di) first
+    * [#1510](https://github.com/magento/magento2/issues/1510) -- Multisite does not work when Full Page Cache is enabled (FPC ignores MAGE_RUN_CODE)
     
 1.0.0-beta2
 =============
