@@ -27,9 +27,7 @@ class DependenciesShowFrameworkCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $directoryList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\App\Filesystem\DirectoryList', ['root' => BP]);
-        $this->command = new DependenciesShowFrameworkCommand($directoryList, new ComponentRegistrar());
+        $this->command = new DependenciesShowFrameworkCommand(new ComponentRegistrar());
         $this->commandTester = new CommandTester($this->command);
         $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
         $paths = $reflection->getProperty('paths');

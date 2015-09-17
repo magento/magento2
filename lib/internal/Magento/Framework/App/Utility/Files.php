@@ -107,7 +107,7 @@ class Files
     }
 
     /**
-     * Get registration file in modules
+     * Get registration files in modules
      *
      * @return array
      */
@@ -136,7 +136,7 @@ class Files
     }
 
     /**
-     * Get registration file in libraries
+     * Get registration files in libraries
      *
      * @return array
      */
@@ -1048,6 +1048,7 @@ class Files
     {
         $result = [];
         foreach ($dirPatterns as $oneDirPattern) {
+            $oneDirPattern  = str_replace('\\', '/', $oneDirPattern);
             $entriesInDir = glob("{$oneDirPattern}/{$fileNamePattern}", GLOB_NOSORT | GLOB_BRACE);
             $subDirs = glob("{$oneDirPattern}/*", GLOB_ONLYDIR | GLOB_NOSORT | GLOB_BRACE);
             $filesInDir = array_diff($entriesInDir, $subDirs);

@@ -12,6 +12,7 @@ namespace Magento\Framework\Module\Test\Unit\Dir;
 
 use Magento\Framework\Config\FileIteratorFactory;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Module\Dir;
 
 class ReaderTest extends \PHPUnit_Framework_TestCase
 {
@@ -107,7 +108,10 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue('app/code/Test/Module/etc')
         );
-        $this->assertEquals('app/code/Test/Module/etc', $this->_model->getModuleDir('etc', 'Test_Module'));
+        $this->assertEquals(
+            'app/code/Test/Module/etc',
+            $this->_model->getModuleDir(Dir::MODULE_ETC_DIR, 'Test_Module')
+        );
     }
 
     public function testGetModuleDirWhenCustomDirIsSet()
@@ -115,7 +119,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $moduleDir = 'app/code/Test/Module/etc/custom';
         $this->_dirsMock->expects($this->never())->method('getDir');
         $this->_model->setModuleDir('Test_Module', 'etc', $moduleDir);
-        $this->assertEquals($moduleDir, $this->_model->getModuleDir('etc', 'Test_Module'));
+        $this->assertEquals($moduleDir, $this->_model->getModuleDir(Dir::MODULE_ETC_DIR, 'Test_Module'));
     }
 
     public function testGetConfigurationFiles()
@@ -134,7 +138,9 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $model = new \Magento\Framework\Module\Dir\Reader(
             $this->_dirsMock,
             $this->_moduleListMock,
-            new FileIteratorFactory(new \Magento\Framework\Filesystem\Driver\File),
+            new FileIteratorFactory(
+                new \Magento\Framework\Filesystem\File\ReadFactory(new \Magento\Framework\Filesystem\DriverPool())
+            ),
             $this->directoryReadFactoryMock
         );
         $model->setModuleDir('Test_Module', 'etc', 'app/code/Test/Module/etc');
@@ -158,7 +164,9 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $model = new \Magento\Framework\Module\Dir\Reader(
             $this->_dirsMock,
             $this->_moduleListMock,
-            new FileIteratorFactory(new \Magento\Framework\Filesystem\Driver\File),
+            new FileIteratorFactory(
+                new \Magento\Framework\Filesystem\File\ReadFactory(new \Magento\Framework\Filesystem\DriverPool())
+            ),
             $this->directoryReadFactoryMock
         );
         $model->setModuleDir('Test_Module', '', 'app/code/Test/Module');
