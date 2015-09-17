@@ -18,60 +18,27 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
         $this->shippingModel = $objectManager->getObject('Magento\Quote\Model\Quote\Address\Total\Shipping');
     }
 
-    /**
-     * @dataProvider fetchDataProvider
-     */
-    public function testFetch($shippingAmount, $shippingDescription, $expectedTotal)
+    public function testFetch()
     {
-        $this->markTestSkipped('MAGETWO-42308');
-        $address = $this->getMock(
-            'Magento\Quote\Model\Quote\Address',
-            ['getShippingAmount', 'getShippingDescription', 'addTotal', '__wakeup'],
+        $shippingAmount = 100;
+        $shippingDescription = 100;
+        $expectedResult = [
+            'code' => 'shipping',
+            'value' => 100,
+            'title' => __('Shipping & Handling (%1)', $shippingDescription)
+        ];
+
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+        $totalMock = $this->getMock(
+            '\Magento\Quote\Model\Quote\Address\Total',
+            ['getShippingAmount', 'getShippingDescription'],
             [],
             '',
             false
         );
 
-        $address->expects($this->once())->method('getShippingAmount')->will($this->returnValue($shippingAmount));
-
-        $address->expects(
-            $this->once()
-        )->method(
-            'getShippingDescription'
-        )->will(
-            $this->returnValue($shippingDescription)
-        );
-
-        $address->expects(
-            $this->once()
-        )->method(
-            'addTotal'
-        )->with(
-            $this->equalTo($expectedTotal)
-        )->will(
-            $this->returnSelf()
-        );
-
-        $this->assertEquals($this->shippingModel, $this->shippingModel->fetch($address));
-    }
-
-    public function fetchDataProvider()
-    {
-        return [
-            [
-                'shipping_amount' => 1,
-                'shipping_description' => 'Shipping Method',
-                'expected' => [
-                    'code' => 'shipping',
-                    'title' => __('Shipping & Handling (%1)', 'Shipping Method'),
-                    'value' => 1,
-                ],
-            ],
-            [
-                'shipping_amount' => 1,
-                'shipping_description' => '',
-                'expected' => ['code' => 'shipping', 'title' => __('Shipping & Handling'), 'value' => 1]
-            ]
-        ];
+        $totalMock->expects($this->once())->method('getShippingAmount')->willReturn($shippingAmount);
+        $totalMock->expects($this->once())->method('getShippingDescription')->willReturn($shippingDescription);
+        $this->assertEquals($expectedResult, $this->shippingModel->fetch($quoteMock, $totalMock));
     }
 }
