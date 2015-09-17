@@ -40,20 +40,11 @@ class PopulatorTest extends \PHPUnit_Framework_TestCase
             );
         $mockAutoloader->expects($this->at(1))
             ->method('addPsr0')
-            ->with('Apache_', DirectoryList::LIB_INTERNAL, true);
+            ->with('Cm_', DirectoryList::LIB_INTERNAL, true);
         $mockAutoloader->expects($this->at(2))
             ->method('addPsr0')
-            ->with('Cm_', DirectoryList::LIB_INTERNAL, true);
-        $mockAutoloader->expects($this->at(3))
-            ->method('addPsr0')
             ->with('Credis_', DirectoryList::LIB_INTERNAL, true);
-        $mockAutoloader->expects($this->at(4))
-            ->method('addPsr0')
-            ->with('Less_', DirectoryList::LIB_INTERNAL, true);
-        $mockAutoloader->expects($this->at(5))
-            ->method('addPsr0')
-            ->with('Symfony\\', DirectoryList::LIB_INTERNAL, true);
-        $mockAutoloader->expects($this->at(6))
+        $mockAutoloader->expects($this->at(3))
             ->method('addPsr0')
             ->with('', [DirectoryList::GENERATION]);
 

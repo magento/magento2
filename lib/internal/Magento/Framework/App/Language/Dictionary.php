@@ -75,9 +75,8 @@ class Dictionary
         $this->paths = $this->componentRegistrar->getPaths(ComponentRegistrar::LANGUAGE);
         foreach ($this->paths as $path) {
             $directoryRead = $this->directoryReadFactory->create($path);
-            $languageFile = $directoryRead->search('language.xml')[0];
-            if (isset($languageFile)) {
-                $xmlSource = $directoryRead->readFile($languageFile);
+            if ($directoryRead->isExist('language.xml')) {
+                $xmlSource = $directoryRead->readFile('language.xml');
                 $languageConfig = $this->configFactory->create(['source' => $xmlSource]);
                 $this->packList[$languageConfig->getVendor()][$languageConfig->getPackage()] = $languageConfig;
                 if ($languageConfig->getCode() === $languageCode) {
@@ -169,13 +168,15 @@ class Dictionary
     private function readPackCsv($vendor, $package)
     {
         $path = $this->componentRegistrar->getPath(ComponentRegistrar::LANGUAGE, strtolower($vendor . '_' . $package));
-        $directoryRead = $this->directoryReadFactory->create($path);
-        $foundCsvFiles = $directoryRead->search("*.csv");
         $result = [];
-        foreach ($foundCsvFiles as $foundCsvFile) {
-            $file = $directoryRead->openFile($foundCsvFile);
-            while (($row = $file->readCsv()) !== false) {
-                $result[$row[0]] = $row[1];
+        if (isset($path)) {
+            $directoryRead = $this->directoryReadFactory->create($path);
+            $foundCsvFiles = $directoryRead->search("*.csv");
+            foreach ($foundCsvFiles as $foundCsvFile) {
+                $file = $directoryRead->openFile($foundCsvFile);
+                while (($row = $file->readCsv()) !== false) {
+                    $result[$row[0]] = $row[1];
+                }
             }
         }
         return $result;

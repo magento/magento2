@@ -6,7 +6,6 @@
 namespace Magento\Framework\Module;
 
 use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Component\ComponentRegistrarInterface;
 
 /**
  * Provide information of dependencies and conflicts in composer.json files, mapping of package name to module name,
@@ -43,13 +42,6 @@ class PackageInfo
     private $conflictMap;
 
     /**
-     * All modules loader
-     *
-     * @var ModuleList\Loader
-     */
-    private $loader;
-
-    /**
      * Reader of composer.json files
      *
      * @var Dir\Reader
@@ -57,25 +49,18 @@ class PackageInfo
     private $reader;
 
     /**
-     * Module registry
-     *
-     * @var ComponentRegistrarInterface
+     * @var ComponentRegistrar
      */
     private $componentRegistrar;
 
     /**
      * Constructor
      *
-     * @param ModuleList\Loader $loader
      * @param Dir\Reader $reader
-     * @param ComponentRegistrarInterface $componentRegistrar
+     * @param ComponentRegistrar $componentRegistrar
      */
-    public function __construct(
-        ModuleList\Loader $loader,
-        Dir\Reader $reader,
-        ComponentRegistrarInterface $componentRegistrar
-    ) {
-        $this->loader = $loader;
+    public function __construct(Dir\Reader $reader, ComponentRegistrar $componentRegistrar)
+    {
         $this->reader = $reader;
         $this->componentRegistrar = $componentRegistrar;
     }
@@ -89,8 +74,8 @@ class PackageInfo
     {
         if ($this->packageModuleMap === null) {
             $jsonData = $this->reader->getComposerJsonFiles()->toArray();
-            foreach (array_keys($this->loader->load()) as $moduleName) {
-                $key = $this->componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName) . '/composer.json';
+            foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
+                $key = $moduleDir . '/composer.json';
                 if (isset($jsonData[$key]) && $jsonData[$key]) {
                     $packageData = \Zend_Json::decode($jsonData[$key]);
                     if (isset($packageData['name'])) {
