@@ -27,7 +27,9 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
             $product->setSelectedConfigurableOption($product->getCustomOption('simple_product')->getProduct());
         }
         //TODO: MAGETWO-23739 catalogrule price must get from simple product.
-        $finalPrice = $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue();
+        /** @var \Magento\Catalog\Model\Product $selectedProduct */
+        $selectedProduct = $product->getCustomOption('simple_product')->getProduct();
+        $finalPrice = $selectedProduct->getPrice();
         $finalPrice = $this->_applyOptionsPrice($product, $qty, $finalPrice);
         $finalPrice = max(0, $finalPrice);
         $product->setFinalPrice($finalPrice);
