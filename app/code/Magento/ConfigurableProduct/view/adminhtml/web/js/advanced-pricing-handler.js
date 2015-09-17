@@ -21,11 +21,10 @@ define([
                     };
                     if (isConfigurable) {
                         $('[data-ui-id=product-tabs-tab-link-advanced-pricing]').hide();
-                        toggleDisabledAttribute(true);
                     } else {
                         $('[data-ui-id=product-tabs-tab-link-advanced-pricing]').show();
-                        toggleDisabledAttribute(false);
                     }
+                    toggleDisabledAttribute(isConfigurable);
                 });
         }
     };

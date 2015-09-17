@@ -8,10 +8,31 @@ namespace Magento\ConfigurableProduct\Pricing\Price;
 
 class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice
 {
+    /** @var PriceResolverInterface */
+    protected $priceResolver;
+
     /**
      * @var array
      */
     protected $values = [];
+
+    /**
+     * @param \Magento\Framework\Pricing\Object\SaleableInterface $saleableItem
+     * @param float $quantity
+     * @param \Magento\Framework\Pricing\Adjustment\CalculatorInterface $calculator
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param PriceResolverInterface $priceResolver
+     */
+    public function __construct(
+        \Magento\Framework\Pricing\Object\SaleableInterface $saleableItem,
+        $quantity,
+        \Magento\Framework\Pricing\Adjustment\CalculatorInterface $calculator,
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
+        PriceResolverInterface $priceResolver
+    ) {
+        parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
+        $this->priceResolver = $priceResolver;
+    }
 
     /**
      * {@inheritdoc}
@@ -32,31 +53,9 @@ class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice
         $selectedConfigurableOption = $this->product->getSelectedConfigurableOption();
         $productId = $selectedConfigurableOption ? $selectedConfigurableOption->getId() : $this->product->getId();
         if (!isset($this->values[$productId])) {
-            $price = null;
-            if ($selectedConfigurableOption) {
-                $price = $selectedConfigurableOption->getPriceInfo()->getPrice(self::PRICE_CODE)->getAmount()
-                    ->getValue();
-            } else {
-                foreach ($this->getUsedProducts() as $product) {
-                    $productPrice = $product->getPriceInfo()->getPrice(self::PRICE_CODE)->getAmount()->getValue();
-                    $price = $price ? min($price, $productPrice) : $productPrice;
-                }
-            }
-
-            $priceInCurrentCurrency = $this->priceCurrency->convertAndRound($price);
-            $this->values[$productId] = $priceInCurrentCurrency ? floatval($priceInCurrentCurrency) : false;
+            $this->values[$productId] = $this->priceResolver->getPrice($this->product);
         }
 
         return $this->values[$productId];
-    }
-
-    /**
-     * Get children simple products
-     *
-     * @return \Magento\Catalog\Model\Product[]
-     */
-    protected function getUsedProducts()
-    {
-        return $this->product->getTypeInstance()->getUsedProducts($this->product);
     }
 }
