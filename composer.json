@@ -46,6 +46,7 @@
         "magento/magento-composer-installer": "*",
         "braintree/braintree_php": "2.39.0",
         "symfony/console": "~2.3 <2.7",
+        "symfony/event-dispatcher": "~2.1",
         "phpseclib/phpseclib": "~0.3",
         "tedivm/jshrink": "~1.0.1",
         "magento/composer": "~1.0.0"
@@ -109,6 +110,7 @@
         "magento/module-dhl": "self.version",
         "magento/module-directory": "self.version",
         "magento/module-downloadable": "self.version",
+        "magento/module-downloadable-import-export": "self.version",
         "magento/module-eav": "self.version",
         "magento/module-email": "self.version",
         "magento/module-encryption-key": "self.version",
