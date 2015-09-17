@@ -107,11 +107,11 @@ class Consumer implements ConsumerInterface
         $topicName = $properties['topic_name'];
         $callback = $this->configuration->getCallback();
 
-//        $decodedMessage = $this->messageEncoder->decode($topicName, $message->getBody());
+        $decodedMessage = $this->messageEncoder->decode($topicName, $message->getBody());
 
-//        if (isset($decodedMessage)) {
-            call_user_func($callback, 123);
-//        }
+        if (isset($decodedMessage)) {
+            call_user_func($callback, $decodedMessage);
+        }
     }
 
     /**

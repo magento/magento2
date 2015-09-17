@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\RabbitMq\Model;
+namespace Magento\Amqp\Model;
 
 use Magento\Framework\Amqp\ExchangeRepository;
 use Magento\Framework\Amqp\PublisherInterface;
@@ -38,8 +38,11 @@ class Publisher implements PublisherInterface
      * @param AmqpConfig $amqpConfig
      * @internal param ExchangeInterface $exchange
      */
-    public function __construct(ExchangeRepository $exchangeRepository, EnvelopeFactory $envelopeFactory, AmqpConfig $amqpConfig)
-    {
+    public function __construct(
+        ExchangeRepository $exchangeRepository,
+        EnvelopeFactory $envelopeFactory,
+        AmqpConfig $amqpConfig
+    ) {
         $this->exchangeRepository = $exchangeRepository;
         $this->envelopeFactory = $envelopeFactory;
         $this->amqpConfig = $amqpConfig;
