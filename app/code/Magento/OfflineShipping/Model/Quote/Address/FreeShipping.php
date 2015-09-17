@@ -73,11 +73,11 @@ class FreeShipping implements \Magento\Quote\Model\Quote\Address\FreeShippingInt
     }
 
     /**
-     * @param \Magento\Quote\Api\Data\CartItemInterface $item
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
      * @param bool $isFreeShipping
      * @return void
      */
-    protected function applyToChildren(\Magento\Quote\Api\Data\CartItemInterface $item, $isFreeShipping)
+    protected function applyToChildren(\Magento\Quote\Model\Quote\Item\AbstractItem $item, $isFreeShipping)
     {
         if ($item->getHasChildren() && $item->isChildrenCalculated()) {
             foreach ($item->getChildren() as $child) {
