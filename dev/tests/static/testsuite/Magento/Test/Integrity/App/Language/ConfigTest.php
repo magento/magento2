@@ -28,7 +28,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
     protected function _getXsd()
     {
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
-        return $urnResolver->getRealPath('urn:magento:library:framework:App/Language/package.xsd');
+        return $urnResolver->getRealPath('urn:magento:framework:App/Language/package.xsd');
     }
 
     /**

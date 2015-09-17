@@ -14,7 +14,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_xsdFile = "urn:magento:module:sales:etc/sales.xsd";
+        $this->_xsdFile = "urn:magento:module:Magento_Sales:etc/sales.xsd";
     }
 
     /**

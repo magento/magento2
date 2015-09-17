@@ -15,7 +15,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
-        $this->_xsdFile = $urnResolver->getRealPath('urn:magento:module:cron:etc/crontab.xsd');
+        $this->_xsdFile = $urnResolver->getRealPath('urn:magento:module:Magento_Cron:etc/crontab.xsd');
     }
 
     /**

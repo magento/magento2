@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:config:etc/system_include.xsd">
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
     <group id="payments_pro_hosted_solution_with_express_checkout" translate="labelcomment" extends="payment_all_paypal/payments_pro_hosted_solution_without_bml" sortOrder="30">
         <label>Website Payments Pro Hosted Solution (Includes Express Checkout)</label>
         <fieldset_css>pp-general-uk</fieldset_css>

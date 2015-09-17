@@ -104,7 +104,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getXsd()
     {
-        return $this->urnResolver->getRealPath('urn:magento:module:payment:etc/payment.xsd');
+        return $this->urnResolver->getRealPath('urn:magento:module:Magento_Payment:etc/payment.xsd');
     }
 
     /**
@@ -114,6 +114,6 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getFileXsd()
     {
-        return $this->urnResolver->getRealPath('urn:magento:module:payment:etc/payment_file.xsd');
+        return $this->urnResolver->getRealPath('urn:magento:module:Magento_Payment:etc/payment_file.xsd');
     }
 }

@@ -33,8 +33,8 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 
         $this->model = new \Magento\Framework\DataObject\Copy\Config\SchemaLocator(
             $urnResolverMock,
-            'urn:magento:library:framework:DataObject/etc/schema.xsd',
-            'urn:magento:library:framework:DataObject/etc/perFileSchema.xsd'
+            'urn:magento:framework:DataObject/etc/schema.xsd',
+            'urn:magento:framework:DataObject/etc/perFileSchema.xsd'
         );
     }
 

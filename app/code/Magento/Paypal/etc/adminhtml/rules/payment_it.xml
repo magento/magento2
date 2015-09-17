@@ -6,7 +6,7 @@
  */
 -->
 <rules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="urn:magento:module:paypal:etc/rules.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Paypal:etc/rules.xsd">
     <!-- Website Payments Pro Hosted Solution (Includes Express Checkout) -->
     <payment id="payments_pro_hosted_solution_it">
         <events selector="[data-enable='payment']">

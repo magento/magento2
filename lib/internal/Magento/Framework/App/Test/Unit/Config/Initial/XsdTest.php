@@ -22,7 +22,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
-        $this->xsdSchema = $urnResolver->getRealPath('urn:magento:module:store:etc/config.xsd');
+        $this->xsdSchema = $urnResolver->getRealPath('urn:magento:module:Magento_Store:etc/config.xsd');
         $this->xsdValidator = new \Magento\Framework\TestFramework\Unit\Utility\XsdValidator();
     }
 

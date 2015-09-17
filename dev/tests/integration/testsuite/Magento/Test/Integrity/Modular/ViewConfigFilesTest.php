@@ -18,7 +18,7 @@ class ViewConfigFilesTest extends \PHPUnit_Framework_TestCase
         $domConfig = new \Magento\Framework\Config\Dom($file);
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         $result = $domConfig->validate(
-            $urnResolver->getRealPath('urn:magento:library:framework:Config/etc/view.xsd'),
+            $urnResolver->getRealPath('urn:magento:framework:Config/etc/view.xsd'),
             $errors
         );
         $message = "Invalid XML-file: {$file}\n";

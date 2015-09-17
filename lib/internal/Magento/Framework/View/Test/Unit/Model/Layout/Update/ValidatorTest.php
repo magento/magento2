@@ -35,7 +35,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             'xml' => '<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' . trim(
                     $layoutUpdate
                 ) . '</layout>',
-            'schemaFile' => $urnResolver->getRealPath('urn:magento:library:framework:View/Layout/etc/page_layout.xsd'),
+            'schemaFile' => $urnResolver->getRealPath('urn:magento:framework:View/Layout/etc/page_layout.xsd'),
         ];
 
         $exceptionMessage = 'validation exception';

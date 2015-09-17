@@ -85,7 +85,7 @@ class ConfigTest extends AbstractConfig
     protected function _getXsd()
     {
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
-        return $urnResolver->getRealPath('urn:magento:module:webapi:etc/webapi.xsd');
+        return $urnResolver->getRealPath('urn:magento:module:Magento_Webapi:etc/webapi.xsd');
     }
 
     /**
