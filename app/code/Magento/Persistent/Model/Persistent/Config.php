@@ -89,6 +89,7 @@ class Config
      *
      * @param string $path
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setConfigFilePath($path)
     {
@@ -137,6 +138,7 @@ class Config
      *
      * @param string $block
      * @return array
+     * @codeCoverageIgnore
      */
     public function getBlockConfigInfo($block)
     {
@@ -149,6 +151,7 @@ class Config
      * Retrieve instances that should be emulated by persistent data
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function collectInstancesToEmulate()
     {

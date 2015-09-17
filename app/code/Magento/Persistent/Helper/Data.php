@@ -65,6 +65,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int|string|\Magento\Store\Model\Store $store
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isEnabled($store = null)
     {
@@ -80,6 +81,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int|string|\Magento\Store\Model\Store $store
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isRememberMeEnabled($store = null)
     {
@@ -95,6 +97,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int|string|\Magento\Store\Model\Store $store
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isRememberMeCheckedDefault($store = null)
     {
@@ -110,6 +113,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int|string|\Magento\Store\Model\Store $store
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isShoppingCartPersist($store = null)
     {
@@ -143,6 +147,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @codeCoverageIgnore
      */
     public function getClearOnLogout()
     {
@@ -156,6 +161,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Retrieve url for unset long-term cookie
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getUnsetCookieUrl()
     {
@@ -179,6 +185,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Event\Observer $observer
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @codeCoverageIgnore
      */
     public function canProcess($observer)
     {
