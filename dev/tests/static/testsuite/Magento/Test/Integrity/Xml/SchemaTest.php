@@ -36,7 +36,7 @@ class SchemaTest extends \PHPUnit_Framework_TestCase
                     . 'xsi:noNamespaceSchemaLocation="urn:magento:library:framework:etc/something.xsd"'
                 );
 
-                try {
+//                try {
                     $schemaFile = Bootstrap::create(BP, $_SERVER)->getObjectManager()
                         ->get('Magento\Framework\Config\Dom\UrnResolver')
                         ->getRealPath($schemaLocations[1]);
@@ -46,9 +46,9 @@ class SchemaTest extends \PHPUnit_Framework_TestCase
                         $errors,
                         "Error validating $filename against $schemaFile\n" . print_r($errors, true)
                     );
-                } catch (\UnexpectedValueException $e) {
-                    $this->fail($e->getMessage());
-                }
+//                } catch (\UnexpectedValueException $e) {
+//                    $this->fail($e->getMessage());
+//                }
 
             },
             $this->getXmlFiles()
