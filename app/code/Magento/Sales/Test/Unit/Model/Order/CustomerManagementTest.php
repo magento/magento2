@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Test\Unit\Model\Order;
+
 use Magento\Quote\Model\Quote\Address;
 
 /**
