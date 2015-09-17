@@ -75,6 +75,7 @@ class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
             [
                 'isVirtual',
                 'getShippingAddress',
+                'getBillingAddress',
                 'getAllVisibleItems',
                 'getBaseCurrencyCode',
                 'getQuoteCurrencyCode',
@@ -116,7 +117,12 @@ class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGet()
+    /**
+     * @param bool $isVirtual
+     * @param string $getAddressType
+     * @dataProvider getDataProvider
+     */
+    public function testGet($isVirtual, $getAddressType)
     {
         $cartId = 12;
         $itemsQty = 100;
@@ -136,8 +142,8 @@ class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getActive')
             ->with($cartId)
             ->willReturn($this->quoteMock);
-        $this->quoteMock->expects($this->once())->method('isVirtual')->willReturn(false);
-        $this->quoteMock->expects($this->exactly(2))->method('getShippingAddress')->willReturn($this->addressMock);
+        $this->quoteMock->expects($this->once())->method('isVirtual')->willReturn($isVirtual);
+        $this->quoteMock->expects($this->exactly(2))->method($getAddressType)->willReturn($this->addressMock);
         $this->quoteMock->expects($this->once())->method('getAllVisibleItems')->willReturn($visibleItems);
         $this->quoteMock->expects($this->once())->method('getBaseCurrencyCode')->willReturn($currencyCode);
         $this->quoteMock->expects($this->once())->method('getQuoteCurrencyCode')->willReturn($currencyCode);
@@ -170,5 +176,19 @@ class CartTotalRepositoryTest extends \PHPUnit_Framework_TestCase
         $totalsMock->expects($this->once())->method('setQuoteCurrencyCode')->with($currencyCode)->willReturnSelf();
 
         $this->assertEquals($totalsMock, $this->model->get($cartId));
+    }
+
+    public function getDataProvider()
+    {
+        return [
+            'Virtual Quote' => [
+                'isVirtual' => true,
+                'getAddressType' => 'getBillingAddress'
+            ],
+            'Non-virtual Quote' => [
+                'isVirtual' => false,
+                'getAddressType' => 'getShippingAddress'
+            ]
+        ];
     }
 }

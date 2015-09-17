@@ -18,27 +18,10 @@ class Total extends \Magento\Framework\DataObject
     protected $baseTotalAmounts;
 
     /**
-     * Merge numeric total values
-     *
-     * @param \Magento\Quote\Model\Quote\Address\Total $total
-     * @return $this
-     */
-    public function merge(\Magento\Quote\Model\Quote\Address\Total $total)
-    {
-        $newData = $total->getData();
-        foreach ($newData as $key => $value) {
-            if (is_numeric($value)) {
-                $this->setData($key, $this->_getData($key) + $value);
-            }
-        }
-        return $this;
-    }
-
-    /**
      * Set total amount value
      *
-     * @param   string $code
-     * @param   float $amount
+     * @param string $code
+     * @param float $amount
      * @return $this
      */
     public function setTotalAmount($code, $amount)
@@ -55,8 +38,8 @@ class Total extends \Magento\Framework\DataObject
     /**
      * Set total amount value in base store currency
      *
-     * @param   string $code
-     * @param   float $amount
+     * @param string $code
+     * @param float $amount
      * @return $this
      */
     public function setBaseTotalAmount($code, $amount)
@@ -73,8 +56,8 @@ class Total extends \Magento\Framework\DataObject
     /**
      * Add amount total amount value
      *
-     * @param   string $code
-     * @param   float $amount
+     * @param string $code
+     * @param float $amount
      * @return $this
      */
     public function addTotalAmount($code, $amount)
@@ -88,8 +71,8 @@ class Total extends \Magento\Framework\DataObject
     /**
      * Add amount total amount value in base store currency
      *
-     * @param   string $code
-     * @param   float $amount
+     * @param string $code
+     * @param float $amount
      * @return $this
      */
     public function addBaseTotalAmount($code, $amount)
