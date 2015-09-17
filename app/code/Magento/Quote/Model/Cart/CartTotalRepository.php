@@ -54,18 +54,12 @@ class CartTotalRepository implements CartTotalRepositoryInterface
     protected $totalsConverter;
 
     /**
-     * @var \Magento\Quote\Model\Quote\TotalsReader
-     */
-    protected $reader;
-
-    /**
      * @param Api\Data\TotalsInterfaceFactory $totalsFactory
      * @param QuoteRepository $quoteRepository
      * @param DataObjectHelper $dataObjectHelper
      * @param CouponManagementInterface $couponService
      * @param TotalsConverter $totalsConverter
      * @param ItemConverter $converter
-     * @param \Magento\Quote\Model\Quote\TotalsReader $reader
      */
     public function __construct(
         Api\Data\TotalsInterfaceFactory $totalsFactory,
@@ -73,8 +67,7 @@ class CartTotalRepository implements CartTotalRepositoryInterface
         DataObjectHelper $dataObjectHelper,
         CouponManagementInterface $couponService,
         TotalsConverter $totalsConverter,
-        ItemConverter $converter,
-        \Magento\Quote\Model\Quote\TotalsReader $reader
+        ItemConverter $converter
     ) {
         $this->totalsFactory = $totalsFactory;
         $this->quoteRepository = $quoteRepository;
@@ -82,7 +75,6 @@ class CartTotalRepository implements CartTotalRepositoryInterface
         $this->couponService = $couponService;
         $this->totalsConverter = $totalsConverter;
         $this->itemConverter = $converter;
-        $this->reader = $reader;
     }
 
     /**
