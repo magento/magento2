@@ -140,7 +140,7 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $messageIds = $connection->fetchCol($select);
 
         $condition = count($messageIds) > 0 ? ['id NOT IN (?)' => $messageIds] : null;
-        $connection->delete('queue_message', $condition);
+        $connection->delete($this->getMessageTable(), $condition);
     }
 
     /**
