@@ -26,6 +26,8 @@ use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Setup\Model\ConfigModel as SetupConfigModel;
+use Magento\Setup\Module\DataSetupFactory;
+use Magento\Setup\Module\SetupFactory;
 use Magento\Store\Model\Store;
 use Magento\Setup\Module\ConnectionFactory;
 use Magento\Setup\Module\Setup;
@@ -193,6 +195,20 @@ class Installer
     private $dbValidator;
 
     /**
+     * Factory to create \Magento\Setup\Module\Setup
+     *
+     * @var SetupFactory
+     */
+    private $setupFactory;
+
+    /**
+     * Factory to create \Magento\Setup\Module\DataSetup
+     *
+     * @var DataSetupFactory
+     */
+    private $dataSetupFactory;
+
+    /**
      * Constructor
      *
      * @param FilePermissions $filePermissions
@@ -212,6 +228,8 @@ class Installer
      * @param SetupConfigModel $setupConfigModel
      * @param CleanupFiles $cleanupFiles
      * @param DbValidator $dbValidator
+     * @param SetupFactory $setupFactory
+     * @param DataSetupFactory $dataSetupFactory
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -232,7 +250,9 @@ class Installer
         Context $context,
         SetupConfigModel $setupConfigModel,
         CleanupFiles $cleanupFiles,
-        DbValidator $dbValidator
+        DbValidator $dbValidator,
+        SetupFactory $setupFactory,
+        DataSetupFactory $dataSetupFactory
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;
@@ -252,6 +272,8 @@ class Installer
         $this->setupConfigModel = $setupConfigModel;
         $this->cleanupFiles = $cleanupFiles;
         $this->dbValidator = $dbValidator;
+        $this->setupFactory = $setupFactory;
+        $this->dataSetupFactory = $dataSetupFactory;
     }
 
     /**
@@ -685,10 +707,7 @@ class Installer
      */
     public function installSchema()
     {
-        $setup = $this->objectManagerProvider->get()->create(
-            'Magento\Setup\Module\Setup',
-            ['resource' => $this->context->getResources()]
-        );
+        $setup = $this->setupFactory->create($this->context->getResources());
         $this->setupModuleRegistry($setup);
         $this->setupCoreTables($setup);
         $this->log->log('Schema creation/updates:');
@@ -703,7 +722,7 @@ class Installer
      */
     public function installDataFixtures()
     {
-        $setup = $this->objectManagerProvider->get()->create('Magento\Setup\Module\DataSetup');
+        $setup = $this->dataSetupFactory->create();
         $this->checkInstallationFilePermissions();
         $this->log->log('Data install/update:');
         $this->handleDBSchemaData($setup, 'data');
@@ -843,10 +862,7 @@ class Installer
      */
     private function installOrderIncrementPrefix($orderIncrementPrefix)
     {
-        $setup = $this->objectManagerProvider->get()->create(
-            'Magento\Setup\Module\Setup',
-            ['resource' => $this->context->getResources()]
-        );
+        $setup = $this->setupFactory->create($this->context->getResources());
         $dbConnection = $setup->getConnection();
 
         // get entity_type_id for order
@@ -889,10 +905,7 @@ class Installer
     public function installAdminUser($data)
     {
         $this->assertDeploymentConfigExists();
-        $setup = $this->objectManagerProvider->get()->create(
-            'Magento\Setup\Module\Setup',
-            ['resource' => $this->context->getResources()]
-        );
+        $setup = $this->setupFactory->create($this->context->getResources());
         $adminAccount = $this->adminAccountFactory->create($setup, (array)$data);
         $adminAccount->save();
     }
@@ -910,6 +923,14 @@ class Installer
 
         $this->log->log('File system cleanup:');
         $messages = $this->cleanupFiles->clearCodeGeneratedClasses();
+        // unload Magento autoloader because it may be using compiled definition
+        foreach (spl_autoload_functions() as $autoloader) {
+            if ($autoloader[0] instanceof \Magento\Framework\Code\Generator\Autoloader) {
+                spl_autoload_unregister([$autoloader[0], $autoloader[1]]);
+            }
+        }
+        // Corrected Magento autoloader will be loaded upon next get() call on $this->objectManagerProvider
+        $this->objectManagerProvider->reset();
         foreach ($messages as $message) {
             $this->log->log($message);
         }
