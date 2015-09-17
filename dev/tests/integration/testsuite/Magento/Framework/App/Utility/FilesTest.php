@@ -17,9 +17,6 @@ class FilesTest extends \PHPUnit_Framework_TestCase
     /** @var array */
     protected $moduleTests = [];
 
-    /** @var string */
-    protected $toolsTests = '#dev/tools/Magento/Tools/[\\w]+/Test#';
-
     /** @var array */
     protected $frameworkTests = [];
 
@@ -80,7 +77,6 @@ class FilesTest extends \PHPUnit_Framework_TestCase
             $classFiles = preg_grep($frameworkTest, $classFiles, PREG_GREP_INVERT);
         }
 
-        $classFiles = preg_grep($this->toolsTests, $classFiles, PREG_GREP_INVERT);
         $classFiles = preg_grep($this->rootTestsDir, $classFiles, PREG_GREP_INVERT);
         $classFiles = preg_grep($this->setupTestsDir, $classFiles, PREG_GREP_INVERT);
 
@@ -103,6 +99,5 @@ class FilesTest extends \PHPUnit_Framework_TestCase
         foreach ($this->libTests as $libTest) {
             $this->assertEmpty(preg_grep($libTest, $files));
         }
-        $this->assertEmpty(preg_grep($this->toolsTests, $files));
     }
 }
