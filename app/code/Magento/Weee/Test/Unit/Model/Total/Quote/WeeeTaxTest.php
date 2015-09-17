@@ -244,7 +244,8 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
         $taxHelper = $this->setupTaxHelper([]);
         $weeeHelper = $this->setupWeeeHelper(['getTotalAmounts' => $weeeTotal]);
         $this->weeeCollector = $this->objectManagerHelper->getObject(
-            'Magento\Weee\Model\Total\Quote\WeeeTax', ['taxData' => $taxHelper, 'weeeData' => $weeeHelper]
+            'Magento\Weee\Model\Total\Quote\WeeeTax',
+            ['taxData' => $taxHelper, 'weeeData' => $weeeHelper]
         );
         $expectedResult = [
             'code' => 'weee',
@@ -262,7 +263,8 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
         $taxHelper = $this->setupTaxHelper([]);
         $weeeHelper = $this->setupWeeeHelper(['getTotalAmounts' => null]);
         $this->weeeCollector = $this->objectManagerHelper->getObject(
-            'Magento\Weee\Model\Total\Quote\WeeeTax', ['taxData' => $taxHelper, 'weeeData' => $weeeHelper]
+            'Magento\Weee\Model\Total\Quote\WeeeTax',
+            ['taxData' => $taxHelper, 'weeeData' => $weeeHelper]
         );
 
         $this->assertNull($this->weeeCollector->fetch($this->quoteMock, $totalMock));
@@ -299,7 +301,8 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->weeeCollector = $this->objectManagerHelper->getObject(
-            'Magento\Weee\Model\Total\Quote\WeeeTax', $arguments
+            'Magento\Weee\Model\Total\Quote\WeeeTax',
+            $arguments
         );
 
         //Execute

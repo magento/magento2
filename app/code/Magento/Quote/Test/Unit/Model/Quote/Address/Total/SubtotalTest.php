@@ -85,7 +85,10 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject $quoteItem */
         $quoteItem = $this->objectManager->getObject(
             'Magento\Quote\Model\Quote\Item',
-            ['stockRegistry' => $this->stockRegistry, 'priceCurrency' => $priceCurrency,]
+            [
+                'stockRegistry' => $this->stockRegistry,
+                'priceCurrency' => $priceCurrency,
+            ]
         );
         /** @var \Magento\Quote\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject $address */
         $address = $this->getMock(
