@@ -390,15 +390,24 @@
 //  _____________________________________________
 
 
+.catalog-product-attribute-edit {
+    .page-wrapper {
+        width: 100%;
+        .page-content {
+            padding-left: 0;
+        }
+    }
+}
+
 .attribute-popup-actions { // ToDo UI: remove or refactor after New attribute popup refactored to sliding panel
-    background: @color-white;
-    border-top: 1px solid @color-gray68;
-    bottom: 0;
-    left: 0;
-    padding: @popup__padding;
-    position: fixed;
-    right: 0;
-    top: auto !important;
+    &:extend(.abs-clearfix all);
+    background: @page-main-actions__background-color;
+    border-bottom: 1px solid @page-main-actions__border-color;
+    border-top: 1px solid @page-main-actions__border-color;
+    padding: @page-main-actions__padding;
+    &.page-actions {
+        float: none;
+    }
     &.fixed { // ToDo UI: remove or refactor after New attribute popup refactored to sliding panel
         background: @color-white !important;
         border-bottom: 0 !important;
