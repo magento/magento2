@@ -79,11 +79,6 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
     protected $groupInterfaceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $dataObjectHelperMock;
-
-    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -117,7 +112,7 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
         );
         $this->observerMock = $this->getMock(
             '\Magento\Framework\Event\Observer',
-            ['getQuoteAddress'],
+            ['getShippingAssignment', 'getQuote'],
             [],
             '',
             false
@@ -163,38 +158,33 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
             ['getId']
         );
 
-        $this->dataObjectHelperMock = $this->getMockBuilder('Magento\Framework\Api\DataObjectHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $shippingAssignmentMock = $this->getMock('\Magento\Quote\Api\Data\ShippingAssignmentInterface');
+        $shippingMock = $this->getMock('\Magento\Quote\Api\Data\ShippingInterface');
+        $shippingAssignmentMock->expects($this->once())->method('getShipping')->willReturn($shippingMock);
+        $shippingMock->expects($this->once())->method('getAddress')->willReturn($this->quoteAddressMock);
 
-        $this->observerMock->expects($this->any())
-            ->method('getQuoteAddress')
-            ->will($this->returnValue($this->quoteAddressMock));
+        $this->observerMock->expects($this->once())
+            ->method('getShippingAssignment')
+            ->willReturn($shippingAssignmentMock);
 
-        $this->quoteAddressMock->expects($this->any())->method('getQuote')->will($this->returnValue($this->quoteMock));
-
+        $this->observerMock->expects($this->once())->method('getQuote')->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->any())
             ->method('getCustomer')
             ->will($this->returnValue($this->customerMock));
 
         $this->customerMock->expects($this->any())->method('getStoreId')->will($this->returnValue($this->storeId));
 
-        $this->model = $this->objectManager->getObject(
-            'Magento\Quote\Model\Observer\Frontend\Quote\Address\CollectTotals',
-            [
-                'customerAddressHelper' => $this->customerAddressMock,
-                'customerVat' => $this->customerVatMock,
-                'vatValidator' => $this->vatValidatorMock,
-                'customerDataFactory' => $this->customerDataFactoryMock,
-                'groupManagement' => $this->groupManagementMock,
-                'dataObjectHelper' => $this->dataObjectHelperMock,
-            ]
+        $this->model = new \Magento\Quote\Model\Observer\Frontend\Quote\Address\CollectTotals(
+            $this->customerAddressMock,
+            $this->customerVatMock,
+            $this->vatValidatorMock,
+            $this->customerDataFactoryMock,
+            $this->groupManagementMock
         );
     }
 
     public function testDispatchWithDisableVatValidator()
     {
-        $this->markTestSkipped('MAGETWO-42308');
         $this->vatValidatorMock->expects($this->once())
             ->method('isEnabled')
             ->with($this->quoteAddressMock, $this->storeId)
@@ -207,7 +197,6 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
      */
     public function testDispatchWithCustomerCountryNotInEUAndNotLoggedCustomerInGroup()
     {
-        $this->markTestSkipped('MAGETWO-42308');
         $this->groupManagementMock->expects($this->once())
             ->method('getNotLoggedInGroup')
             ->will($this->returnValue($this->groupInterfaceMock));
@@ -249,7 +238,6 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
 
     public function testDispatchWithDefaultCustomerGroupId()
     {
-        $this->markTestSkipped('MAGETWO-42308');
         $this->vatValidatorMock->expects($this->once())
             ->method('isEnabled')
             ->with($this->quoteAddressMock, $this->storeId)
@@ -275,10 +263,6 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
             ->method('setPrevQuoteCustomerGroupId')
             ->with('customerGroupId');
         $this->quoteMock->expects($this->once())->method('setCustomerGroupId')->with('defaultCustomerGroupId');
-        $this->dataObjectHelperMock->expects($this->never())
-            ->method('populateWithArray')
-            ->with($this->customerMock, ['group_id' => 'defaultCustomerGroupId'])
-            ->will($this->returnSelf());
         $this->customerDataFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->customerMock);
@@ -291,7 +275,6 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
 
     public function testDispatchWithCustomerCountryInEU()
     {
-        $this->markTestSkipped('MAGETWO-42308');
         $this->vatValidatorMock->expects($this->once())
             ->method('isEnabled')
             ->with($this->quoteAddressMock, $this->storeId)
@@ -331,10 +314,6 @@ class CollectTotalsTest extends \PHPUnit_Framework_TestCase
 
         $this->quoteMock->expects($this->once())->method('setCustomerGroupId')->with('customerGroupId');
         $this->quoteMock->expects($this->once())->method('setCustomer')->with($this->customerMock);
-        $this->dataObjectHelperMock->expects($this->never())
-            ->method('populateWithArray')
-            ->with($this->customerMock, ['group_id' => 'customerGroupId'])
-            ->will($this->returnSelf());
         $this->customerDataFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->customerMock);

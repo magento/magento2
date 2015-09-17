@@ -6,7 +6,6 @@
 namespace Magento\Msrp\Test\Unit\Model\Observer\Frontend\Quote;
 
 use Magento\Quote\Model\Quote\Address;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Tests Magento\Msrp\Model\Observer\Frontend\Quote\SetCanApplyMsrp
@@ -25,70 +24,77 @@ class SetCanApplyMsrpTest extends \PHPUnit_Framework_TestCase
      */
     protected $configMock;
 
+    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    protected $canApplyMsrpMock;
+
+    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    protected $msrpMock;
+
     protected function setUp()
     {
-        $this->configMock = $this->getMockBuilder('Magento\Msrp\Model\Config')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->observer = (new ObjectManager($this))->getObject(
-            'Magento\Msrp\Model\Observer\Frontend\Quote\SetCanApplyMsrp',
-            ['config' => $this->configMock]
+        $this->configMock = $this->getMock('\Magento\Msrp\Model\Config', [], [], '', false);
+        $this->canApplyMsrpMock = $this->getMock('\Magento\Msrp\Model\Quote\Address\CanApplyMsrp', [], [], '', false);
+        $this->msrpMock = $this->getMock('\Magento\Msrp\Model\Quote\Msrp', [], [], '', false);
+
+        $this->observer = new \Magento\Msrp\Model\Observer\Frontend\Quote\SetCanApplyMsrp(
+            $this->configMock,
+            $this->canApplyMsrpMock,
+            $this->msrpMock
         );
     }
 
-    /**
-     * @param bool $isMsrpEnabled
-     * @param bool $canApplyMsrp
-     * @dataProvider setQuoteCanApplyMsrpDataProvider
-     */
-    public function testSetQuoteCanApplyMsrp($isMsrpEnabled, $canApplyMsrp)
+    public function testSetQuoteCanApplyMsrpIfMsrpCanApply()
     {
-        $this->markTestSkipped('MAGETWO-42308');
-        $eventMock = $this->getMockBuilder('Magento\Framework\Event')
-            ->disableOriginalConstructor()
-            ->setMethods(['getQuote'])
-            ->getMock();
-        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
-            ->disableOriginalConstructor()
-            ->setMethods(['__wakeup', 'setCanApplyMsrp', 'getAllAddresses'])
-            ->getMock();
-        $observerMock = $this->getMockBuilder('Magento\Framework\Event\Observer')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $observerMock->expects($this->once())
-            ->method('getEvent')
-            ->will($this->returnValue($eventMock));
-        $eventMock->expects($this->once())
-            ->method('getQuote')
-            ->will($this->returnValue($quoteMock));
-        $this->configMock->expects($this->once())
-            ->method('isEnabled')
-            ->will($this->returnValue($isMsrpEnabled));
-        $quoteMock->expects($this->once())
-            ->method('setCanApplyMsrp')
-            ->with($canApplyMsrp);
-        $addressMock1 = $this->getMockBuilder('Magento\Customer\Model\Address\AbstractAddress')
-            ->disableOriginalConstructor()
-            ->setMethods(['__wakeup'])
-            ->getMockForAbstractClass();
-        $addressMock1->setCanApplyMsrp($canApplyMsrp);
-        $addressMock2 = $this->getMockBuilder('Magento\Customer\Model\Address\AbstractAddress')
-            ->disableOriginalConstructor()
-            ->setMethods(['__wakeup'])
-            ->getMockForAbstractClass();
-        $addressMock2->setCanApplyMsrp(false);
-        $quoteMock->expects($this->any())
-            ->method('getAllAddresses')
-            ->will($this->returnValue([$addressMock1, $addressMock2]));
+        $quoteId = 100;
+        $eventMock = $this->getMock('\Magento\Framework\Event', ['getQuote'], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', ['getAllAddresses', 'getId'], [], '', false);
+        $observerMock = $this->getMock('\Magento\Framework\Event\Observer', [], [], '', false);
+
+        $observerMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
+        $eventMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
+        $this->configMock->expects($this->once())->method('isEnabled')->willReturn(true);
+        $this->msrpMock->expects($this->once())->method('setCanApplyMsrp')->with($quoteId, true);
+
+        $addressMock = $this->getMock('\Magento\Customer\Model\Address\AbstractAddress', ['__wakeup'], [], '', false);
+        $this->canApplyMsrpMock->expects($this->once())->method('isCanApplyMsrp')->willReturn(true);
+
+        $quoteMock->expects($this->once())->method('getAllAddresses')->willReturn([$addressMock]);
+        $quoteMock->expects($this->once())->method('getId')->willReturn($quoteId);
         $this->observer->execute($observerMock);
     }
 
-    public function setQuoteCanApplyMsrpDataProvider()
+    public function testSetQuoteCanApplyMsrpIfMsrpCanNotApply()
     {
-        return [
-            [false, false],
-            [true, true],
-            [true, false]
-        ];
+        $quoteId = 100;
+        $eventMock = $this->getMock('\Magento\Framework\Event', ['getQuote'], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', ['getAllAddresses', 'getId'], [], '', false);
+        $observerMock = $this->getMock('\Magento\Framework\Event\Observer', [], [], '', false);
+
+        $observerMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
+        $eventMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
+        $this->configMock->expects($this->once())->method('isEnabled')->willReturn(true);
+        $this->msrpMock->expects($this->once())->method('setCanApplyMsrp')->with($quoteId, false);
+
+        $addressMock = $this->getMock('\Magento\Customer\Model\Address\AbstractAddress', ['__wakeup'], [], '', false);
+        $this->canApplyMsrpMock->expects($this->once())->method('isCanApplyMsrp')->willReturn(false);
+
+        $quoteMock->expects($this->once())->method('getAllAddresses')->willReturn([$addressMock]);
+        $quoteMock->expects($this->once())->method('getId')->willReturn($quoteId);
+        $this->observer->execute($observerMock);
+    }
+
+    public function testSetQuoteCanApplyMsrpIfMsrpDisabled()
+    {
+        $quoteId = 100;
+        $eventMock = $this->getMock('\Magento\Framework\Event', ['getQuote'], [], '', false);
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', ['getAllAddresses', 'getId'], [], '', false);
+        $observerMock = $this->getMock('\Magento\Framework\Event\Observer', [], [], '', false);
+
+        $observerMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
+        $eventMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
+        $this->configMock->expects($this->once())->method('isEnabled')->willReturn(false);
+        $this->msrpMock->expects($this->once())->method('setCanApplyMsrp')->with($quoteId, false);
+        $quoteMock->expects($this->once())->method('getId')->willReturn($quoteId);
+        $this->observer->execute($observerMock);
     }
 }

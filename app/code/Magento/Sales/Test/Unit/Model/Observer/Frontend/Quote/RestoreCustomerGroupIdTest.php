@@ -24,13 +24,8 @@ class RestoreCustomerGroupIdTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->customerAddressHelperMock = $this->getMockBuilder('Magento\Customer\Helper\Address')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->quote = new RestoreCustomerGroupId(
-            $this->customerAddressHelperMock
-        );
+        $this->customerAddressHelperMock = $this->getMock('\Magento\Customer\Helper\Address', [], [], '', false);
+        $this->quote = new RestoreCustomerGroupId($this->customerAddressHelperMock);
     }
 
     /**
@@ -39,21 +34,27 @@ class RestoreCustomerGroupIdTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute($configAddressType)
     {
-        $this->markTestSkipped('MAGETWO-42308');
+        $eventMock = $this->getMock('\Magento\Framework\Event', ['getShippingAssignment', 'getQuote'], [], '', false);
+        $observer = $this->getMock('Magento\Framework\Event\Observer', ['getEvent'], [], '', false);
+        $observer->expects($this->exactly(2))->method('getEvent')->willReturn($eventMock);
+
+        $shippingAssignmentMock = $this->getMock('\Magento\Quote\Api\Data\ShippingAssignmentInterface');
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+
+        $eventMock->expects($this->once())->method('getShippingAssignment')->willReturn($shippingAssignmentMock);
+        $eventMock->expects($this->once())->method('getQuote')->willReturn($quoteMock);
+
+        $shippingMock = $this->getMock('\Magento\Quote\Api\Data\ShippingInterface');
+        $shippingAssignmentMock->expects($this->once())->method('getShipping')->willReturn($shippingMock);
+
         $quoteAddress = $this->getMock(
-            'Magento\Quote\Model\Quote\Address',
-            [
-                'getQuote', 'setCustomerGroupId', 'getPrevQuoteCustomerGroupId',
-                'unsPrevQuoteCustomerGroupId', 'hasPrevQuoteCustomerGroupId'
-            ],
+            '\Magento\Quote\Model\Quote\Address',
+            ['getPrevQuoteCustomerGroupId','unsPrevQuoteCustomerGroupId', 'hasPrevQuoteCustomerGroupId'],
             [],
             '',
             false
         );
-        $observer = $this->getMock('Magento\Framework\Event\Observer', ['getQuoteAddress'], [], '', false);
-        $observer->expects($this->once())
-            ->method('getQuoteAddress')
-            ->will($this->returnValue($quoteAddress));
+        $shippingMock->expects($this->once())->method('getAddress')->willReturn($quoteAddress);
 
         $this->customerAddressHelperMock->expects($this->once())
             ->method('getTaxCalculationAddressType')
@@ -65,7 +66,7 @@ class RestoreCustomerGroupIdTest extends \PHPUnit_Framework_TestCase
         $quoteAddress->expects($this->any())->method('getQuote');
         $quoteAddress->expects($this->any())->method('unsPrevQuoteCustomerGroupId');
 
-        $this->assertNull($this->quote->execute($observer));
+        $this->quote->execute($observer);
     }
 
     public function restoreCustomerGroupIdDataProvider()
