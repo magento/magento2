@@ -84,6 +84,11 @@ class Data extends \Magento\Framework\Config\Data
         }
     }
 
+    /**
+     * @param string $topic
+     * @return string
+     * @throws LocalizedException
+     */
     public function getConnectionByTopic($topic)
     {
         if (isset($this->_data[Converter::TOPICS][$topic])) {
@@ -103,5 +108,21 @@ class Data extends \Magento\Framework\Config\Data
                 new Phrase('Message queue topic "%topic" is not configured.', ['topic' => $topic])
             );
         }
+    }
+
+    /**
+     * @param string $consumer
+     * @return string
+     * @throws LocalizedException
+     */
+    public function getConnectionByConsumer($consumer)
+    {
+        if (!isset($this->_data[Converter::CONSUMERS][$consumer][Converter::CONSUMER_CONNECTION])) {
+            throw new LocalizedException(
+                new Phrase('Consumer "%consumer" has not connection.', ['consumer' => $consumer])
+            );
+        }
+
+        return $this->_data[Converter::CONSUMERS][$consumer][Converter::CONSUMER_CONNECTION];
     }
 }

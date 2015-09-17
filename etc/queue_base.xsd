@@ -21,8 +21,8 @@
         <xs:attribute type="xs:string" name="queue" use="required"/>
         <xs:attribute type="xs:string" name="class" use="required"/>
         <xs:attribute type="xs:string" name="method" use="required"/>
+        <xs:attribute type="xs:string" name="connection" use="required"/>
         <xs:attribute type="xs:integer" name="max_messages" use="optional"/>
-        <xs:attribute type="xs:string" name="connection" use="optional"/>
         <xs:attribute type="executorClassType" name="executor" use="optional"/>
     </xs:complexType>
     <xs:simpleType name="consumerNameType">

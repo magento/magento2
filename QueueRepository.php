@@ -23,6 +23,11 @@ class QueueRepository
     private $queues;
 
     /**
+     * @var QueueInterface[]
+     */
+    private $queueInstances;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param string[] $queues
      */
@@ -34,23 +39,28 @@ class QueueRepository
 
     /**
      * @param string $connectionName
+     * @param string $queueName
      * @return QueueInterface
      */
-    public function getByQueueName($connectionName)
+    public function get($connectionName, $queueName)
     {
-        if (!isset($this->queues[$connectionName])) {
-            throw new \LogicException("Not found queue for connection name '{$connectionName}' in config");
+        if (!isset($this->queueInstances[$queueName])) {
+            if (!isset($this->queues[$connectionName])) {
+                throw new \LogicException("Not found queue for connection name '{$connectionName}' in config");
+            }
+
+            $queueClassName = $this->queues[$connectionName];
+            $queue = $this->objectManager->create($queueClassName, ['queueName' => $queueName]);
+
+            if (!$queue instanceof QueueInterface) {
+                $queueInterface = '\Magento\Framework\Amqp\QueueInterface';
+                throw new \LogicException("Queue '{$queueClassName}' for connection name '{$connectionName}' " .
+                    "does not implement interface '{$queueInterface}'");
+            }
+
+            $this->queueInstances[$queueName] = $queue;
         }
 
-        $queueClassName = $this->queues[$connectionName];
-        $queue = $this->objectManager->get($queueClassName);
-
-        if (!$queue instanceof QueueInterface) {
-            $queueInterface = '\Magento\Framework\Amqp\QueueInterface';
-            throw new \LogicException("Queue '{$queueClassName}' for connection name '{$connectionName}' " .
-                "does not implement interface '{$queueInterface}'");
-        }
-
-        return $queue;
+        return $this->queueInstances[$queueName];
     }
 }
