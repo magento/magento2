@@ -34,6 +34,21 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->subtotalModel = $this->objectManager->getObject('Magento\Quote\Model\Quote\Address\Total\Subtotal');
+
+        $this->stockRegistry = $this->getMock(
+            'Magento\CatalogInventory\Model\StockRegistry',
+            ['getStockItem', '__wakeup'],
+            [],
+            '',
+            false
+        );
+        $this->stockItemMock = $this->getMock(
+            'Magento\CatalogInventory\Model\Stock\Item',
+            ['getIsInStock', '__wakeup'],
+            [],
+            '',
+            false
+        );
     }
 
     public function collectDataProvider()
@@ -60,37 +75,17 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
      */
     public function testCollect($price, $originalPrice, $itemHasParent, $expectedPrice, $expectedOriginalPrice)
     {
-        $this->markTestSkipped('MAGETWO-42308');
-        $this->stockRegistry = $this->getMockBuilder('Magento\CatalogInventory\Model\StockRegistry')
-            ->disableOriginalConstructor()
-            ->setMethods(['getStockItem', '__wakeup'])
-            ->getMock();
-
-        $this->stockItemMock = $this->getMock(
-            'Magento\CatalogInventory\Model\Stock\Item',
-            ['getIsInStock', '__wakeup'],
-            [],
-            '',
-            false
-        );
-
-        $this->stockRegistry->expects($this->any())
-            ->method('getStockItem')
-            ->will($this->returnValue($this->stockItemMock));
+        $this->stockRegistry->expects($this->any())->method('getStockItem')->willReturn($this->stockItemMock);
 
         $priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
-        $priceCurrency->expects($this->any())
-            ->method('convert')
-            ->willReturn(1231313);
-            //@todo this is a wrong test and it does not check methods. Any digital value will be correct
+        // @TODO this is a wrong test and it does not check methods. Any digital value will be correct
+        $priceCurrency->expects($this->any())->method('convert')->willReturn(1231313);
+
 
         /** @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject $quoteItem */
         $quoteItem = $this->objectManager->getObject(
             'Magento\Quote\Model\Quote\Item',
-            [
-                'stockRegistry' => $this->stockRegistry,
-                'priceCurrency' => $priceCurrency,
-            ]
+            ['stockRegistry' => $this->stockRegistry, 'priceCurrency' => $priceCurrency,]
         );
         /** @var \Magento\Quote\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject $address */
         $address = $this->getMock(
@@ -100,71 +95,71 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $address->expects($this->any())->method('getAllItems')->will(
-            $this->returnValue([$quoteItem])
-        );
 
         /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
-        $product = $this->getMock(
-            'Magento\Catalog\Model\Product',
-            [],
-            [],
-            '',
-            false
-        );
+        $product = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $product->expects($this->any())->method('getPrice')->will($this->returnValue($originalPrice));
+
         /** @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject $quote */
-        $quote = $this->getMock(
-            'Magento\Quote\Model\Quote',
-            [],
-            [],
-            '',
-            false
-        );
+        $quote = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
         $store = $this->objectManager->getObject('Magento\Store\Model\Store');
         $store->setCurrentCurrency('');
 
         $store = $this->getMock('Magento\Store\Model\Store', ['getWebsiteId'], [], '', false);
-        $store->expects($this->any())
-            ->method('getWebsiteId')
-            ->will($this->returnValue(10));
-
-        $product->expects($this->any())
-            ->method('getStore')
-            ->will($this->returnValue($store));
+        $store->expects($this->any())->method('getWebsiteId')->willReturn(10);
+        $product->expects($this->any())->method('getStore')->willReturn($store);
+        $product->expects($this->any())->method('isVisibleInCatalog')->will($this->returnValue(true));
 
         $quote->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $quoteItem->setProduct($product)->setQuote($quote)->setOriginalCustomPrice($price);
 
-        $address->expects($this->any())->method('getAllItems')->will(
-            $this->returnValue([$quoteItem])
-        );
-        $address->expects($this->any())->method('getQuote')->will($this->returnValue($quote));
-        $product->expects($this->any())->method('isVisibleInCatalog')->will($this->returnValue(true));
-
         $parentQuoteItem = false;
         if ($itemHasParent) {
-            $parentQuoteItem = $this->getMock(
-                'Magento\Quote\Model\Quote\Item',
-                [],
-                [],
-                '',
-                false
-            );
+            $parentQuoteItem = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
             $parentQuoteItem->expects($this->any())->method('getProduct')->will($this->returnValue($product));
         }
         $quoteItem->setParentItem($parentQuoteItem);
 
         $priceModel = $this->getMock('\Magento\Catalog\Model\Product\Type\Price', [], [], '', false);
-        $priceModel->expects($this->any())->method('getChildFinalPrice')->will(
-            $this->returnValue($price)
+        $priceModel->expects($this->any())->method('getChildFinalPrice')->willReturn($price);
+        $product->expects($this->any())->method('getPriceModel')->willReturn($priceModel);
+        $product->expects($this->any())->method('getFinalPrice')->willReturn($price);
+
+        $shipping = $this->getMock('\Magento\Quote\Api\Data\ShippingInterface');
+        $shipping->expects($this->exactly(2))->method('getAddress')->willReturn($address);
+        $shippingAssignmentMock = $this->getMock('\Magento\Quote\Api\Data\ShippingAssignmentInterface');
+        $shippingAssignmentMock->expects($this->exactly(2))->method('getShipping')->willReturn($shipping);
+        $shippingAssignmentMock->expects($this->once())->method('getItems')->willReturn([$quoteItem]);
+
+        $total = $this->getMock(
+            '\Magento\Quote\Model\Quote\Address\Total',
+            ['setBaseVirtualAmount', 'setVirtualAmount', 'setTotalQty'],
+            [],
+            '',
+            false
         );
-        $product->expects($this->any())->method('getPriceModel')->will(
-            $this->returnValue($priceModel)
-        );
-        $product->expects($this->any())->method('getFinalPrice')->will($this->returnValue($price));
-        $this->subtotalModel->collect($address);
+        $total->expects($this->once())->method('setBaseVirtualAmount')->willReturnSelf();
+        $total->expects($this->once())->method('setVirtualAmount')->willReturnSelf();
+        $total->expects($this->once())->method('setTotalQty')->with(0)->willReturnSelf();
+
+        $this->subtotalModel->collect($quote, $shippingAssignmentMock, $total);
+
         $this->assertEquals($expectedPrice, $quoteItem->getPrice());
         $this->assertEquals($expectedOriginalPrice, $quoteItem->getBaseOriginalPrice());
+    }
+
+    public function testFetch()
+    {
+        $expectedResult = [
+            'code' => null,
+            'title' => __('Subtotal'),
+            'value' => 100
+        ];
+
+        $quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
+        $totalMock = $this->getMock('\Magento\Quote\Model\Quote\Address\Total', ['getSubtotal'], [], '', false);
+        $totalMock->expects($this->once())->method('getSubtotal')->willReturn(100);
+
+        $this->assertEquals($expectedResult, $this->subtotalModel->fetch($quoteMock, $totalMock));
     }
 }

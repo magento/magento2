@@ -117,9 +117,15 @@ class OverviewTest extends \PHPUnit_Framework_TestCase
 
     public function testGetShippingAddressTotals()
     {
-        $totalMock = $this->getTotalsMock($this->addressMock);
+        $totalMock = $this->getMock('\Magento\Sales\Model\Order\Total',
+            ['getCode', 'setTitle', '__wakeup'],
+            [],
+            '',
+            false
+        );
         $totalMock->expects($this->once())->method('getCode')->willReturn('grand_total');
         $this->addressMock->expects($this->once())->method('getAddressType')->willReturn(Address::TYPE_BILLING);
+        $this->addressMock->expects($this->once())->method('getTotals')->willReturn([$totalMock]);
         $totalMock->expects($this->once())->method('setTitle')->with('Total');
 
         $this->assertEquals([$totalMock], $this->model->getShippingAddressTotals($this->addressMock));
@@ -127,9 +133,15 @@ class OverviewTest extends \PHPUnit_Framework_TestCase
 
     public function testGetShippingAddressTotalsWithNotBillingAddress()
     {
-        $totalMock = $this->getTotalsMock($this->addressMock);
+        $totalMock = $this->getMock('\Magento\Sales\Model\Order\Total',
+            ['getCode', 'setTitle', '__wakeup'],
+            [],
+            '',
+            false
+        );
         $totalMock->expects($this->once())->method('getCode')->willReturn('grand_total');
         $this->addressMock->expects($this->once())->method('getAddressType')->willReturn('not billing');
+        $this->addressMock->expects($this->once())->method('getTotals')->willReturn([$totalMock]);
         $totalMock->expects($this->once())->method('setTitle')->with('Total for this address');
 
         $this->assertEquals([$totalMock], $this->model->getShippingAddressTotals($this->addressMock));
