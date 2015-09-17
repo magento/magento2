@@ -177,6 +177,8 @@ class StockItemTest extends WebapiAbstract
                     'use_config_enable_qty_inc' => 1,
                     'enable_qty_increments' => 0,
                     'is_decimal_divided' => 0,
+                    'deferred_stock_update' => '0',
+                    'use_config_deferred_stock_update' => '1',
                 ],
                 [
                     'item_id' => '1',
@@ -206,6 +208,8 @@ class StockItemTest extends WebapiAbstract
                     'is_decimal_divided' => '0',
                     'website_id' => '1',
                     'type_id' => 'simple',
+                    'deferred_stock_update' => '0',
+                    'use_config_deferred_stock_update' => '1',
                 ],
                 [
                     'item_id' => 1,
@@ -234,7 +238,9 @@ class StockItemTest extends WebapiAbstract
                     'manage_stock' => 1,
                     'low_stock_date' => '',
                     'is_decimal_divided' => '',
-                    'stock_status_changed_auto' => 0
+                    'stock_status_changed_auto' => 0,
+                    'deferred_stock_update' => '0',
+                    'use_config_deferred_stock_update' => '1',
                 ],
             ],
         ];
