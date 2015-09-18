@@ -33,6 +33,10 @@ class Curl extends AbstractCurl implements TaxRateInterface
             'California' => '12',
             'New York' => '43',
             'Texas' => '57',
+        ],
+        'zip_is_range' => [
+            'Yes' => '1',
+            'No' => '0'
         ]
     ];
 
