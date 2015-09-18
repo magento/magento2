@@ -19,6 +19,7 @@ define([
             superSelector: '.super-attribute-select',
             selectSimpleProduct: '[name="selected_configurable_option"]',
             priceHolderSelector: '.price-box',
+            spConfig: {},
             state: {},
             priceFormat: {},
             optionTemplate: '<%- data.label %>' +
@@ -34,8 +35,6 @@ define([
          * @private
          */
         _create: function () {
-            this._setDefaults();
-
             // Initial setting of various option values
             this._initializeOptions();
 
@@ -56,47 +55,36 @@ define([
         },
 
         /**
-         * Prepare Gallery state
-         *
+         * Initialize tax configuration, initial settings, and options values.
          * @private
          */
-        _setDefaults: function () {
+        _initializeOptions: function () {
             var options = this.options,
-                gallery = $(options.mediaGallerySelector);
+                gallery = $(options.mediaGallerySelector),
+                priceBoxOptions = $(this.options.priceHolderSelector).priceBox('option').priceConfig || null;
+
+            if (priceBoxOptions && priceBoxOptions.optionTemplate) {
+                options.optionTemplate = priceBoxOptions.optionTemplate;
+            }
+
+            if (priceBoxOptions && priceBoxOptions.priceFormat) {
+                options.priceFormat = priceBoxOptions.priceFormat;
+            }
+            options.optionTemplate = mageTemplate(options.optionTemplate);
+
+            options.settings = options.spConfig.containerId ?
+                $(options.spConfig.containerId).find(options.superSelector) :
+                $(options.superSelector);
+
+            options.values = options.spConfig.defaultValues || {};
+            options.parentImage = $('[data-role=base-image-container] img').attr('src');
+
+            this.inputSimpleProduct = this.element.find(options.selectSimpleProduct);
 
             gallery.on('gallery:loaded', function () {
                 var galleryObject = gallery.data('gallery');
                 options.mediaGalleryInitial = galleryObject.returnCurrentImages();
             });
-        },
-
-        /**
-         * Initialize tax configuration, initial settings, and options values.
-         * @private
-         */
-        _initializeOptions: function () {
-            var priceBoxOptions = $(this.options.priceHolderSelector).priceBox('option');
-
-            if (priceBoxOptions.priceConfig && priceBoxOptions.priceConfig.optionTemplate) {
-                this.options.optionTemplate = priceBoxOptions.priceConfig.optionTemplate;
-            }
-
-            if (priceBoxOptions.priceConfig && priceBoxOptions.priceConfig.priceFormat) {
-                this.options.priceFormat = priceBoxOptions.priceConfig.priceFormat;
-            }
-            this.options.optionTemplate = mageTemplate(this.options.optionTemplate);
-
-            this.options.settings = this.options.spConfig.containerId ?
-                $(this.options.spConfig.containerId).find(this.options.superSelector) :
-                $(this.options.superSelector);
-
-            this.options.values = this.options.spConfig.defaultValues || {};
-            this.options.parentImage = $('[data-role=base-image-container] img').attr('src');
-
-            this.initialGalleryImages = $(this.options.mediaGallerySelector).data('mageGallery') ?
-                $(this.options.mediaGallerySelector).gallery('option', 'images')
-                : [];
-            this.inputSimpleProduct = this.element.find(this.options.selectSimpleProduct);
         },
 
         /**
@@ -190,9 +178,11 @@ define([
             while (index--) {
                 option = settings[index];
 
-                !index ?
-                    this._fillSelect(option) :
-                    (option.disabled = true);
+                if (index) {
+                    option.disabled = true;
+                } else {
+                    this._fillSelect(option);
+                }
 
                 _.extend(option, {
                     childSettings: childSettings.slice(),
@@ -362,7 +352,9 @@ define([
          * @param {*} element - The element associated with a configurable option.
          */
         _clearSelect: function (element) {
-            for (var i = element.options.length - 1; i >= 0; i--) {
+            var i;
+
+            for (i = element.options.length - 1; i >= 0; i--) {
                 element.remove(i);
             }
         },
@@ -429,26 +421,26 @@ define([
         },
 
         /**
-         * _getState
+         * Returns Simple product Id
+         *  depending on current selected option.
          *
          * @private
+         * @param {HTMLElement} element
+         * @returns {String|undefined}
          */
         _getSimpleProductId: function (element) {
-            //element.config
-            //element.value
-
             var allOptions = element.config.options,
                 value = element.value,
                 config;
 
-            config = _.filter(allOptions, function(option) {
+            config = _.filter(allOptions, function (option) {
                 return option.id === value;
             });
-
             config = _.first(config);
-            console.log(config.allowedProducts);
 
-            return _.first(config.allowedProducts);
+            return _.isEmpty(config) ?
+                undefined :
+                _.first(config.allowedProducts);
 
         }
 
