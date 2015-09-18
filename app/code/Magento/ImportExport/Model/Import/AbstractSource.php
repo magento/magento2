@@ -5,6 +5,8 @@
  */
 namespace Magento\ImportExport\Model\Import;
 
+use Magento\ImportExport\Model\Import\AbstractEntity;
+
 /**
  * Data source with columns for Magento_ImportExport
  */
@@ -37,6 +39,11 @@ abstract class AbstractSource implements \SeekableIterator
      * @var int
      */
     protected $_key = -1;
+
+    /**
+     * @var bool
+     */
+    protected $_foundWrongQuoteFlag = false;
 
     /**
      * Get and validate column names
@@ -77,7 +84,11 @@ abstract class AbstractSource implements \SeekableIterator
     {
         $row = $this->_row;
         if (count($row) != $this->_colQty) {
-            $row = array_pad($this->_row, $this->_colQty, '');
+            if ($this->_foundWrongQuoteFlag) {
+                throw new \InvalidArgumentException(AbstractEntity::ERROR_CODE_WRONG_QUOTES);
+            } else {
+                throw new \InvalidArgumentException(AbstractEntity::ERROR_CODE_COLUMNS_NUMBER);
+            }
         }
         return array_combine($this->_colNames, $row);
     }

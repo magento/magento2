@@ -33,7 +33,10 @@ class AssertAttributeForm extends AbstractAssertForm
         $filter = ['attribute_code' => $attribute->getAttributeCode()];
         $catalogProductAttributeIndex->open()->getGrid()->searchAndOpen($filter);
 
-        $errors = $this->verifyData($attribute->getData(), $catalogProductAttributeNew->getAttributeForm()->getData());
+        $errors = $this->verifyData(
+            $attribute->getData(),
+            $catalogProductAttributeNew->getAttributeForm()->getData($attribute)
+        );
         \PHPUnit_Framework_Assert::assertEmpty($errors, $errors);
     }
 

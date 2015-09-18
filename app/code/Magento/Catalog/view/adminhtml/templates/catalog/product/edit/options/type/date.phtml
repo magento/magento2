@@ -14,10 +14,10 @@
             <thead>
             <tr class="headings">
                 <?php if ($block->getCanReadPrice() !== false) : ?>
-                <th><?php echo __('Price') ?></th>
-                <th><?php echo __('Price Type') ?></th>
+                <th><?php /* @escapeNotVerified */ echo __('Price') ?></th>
+                <th><?php /* @escapeNotVerified */ echo __('Price Type') ?></th>
                 <?php endif; ?>
-                <th><?php echo __('SKU') ?></th>
+                <th><?php /* @escapeNotVerified */ echo __('SKU') ?></th>
             </tr>
             </thead>
             <tr>

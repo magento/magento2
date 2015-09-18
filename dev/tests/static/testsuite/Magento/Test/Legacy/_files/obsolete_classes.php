@@ -3844,6 +3844,9 @@ return [
         'Magento\Checkout\Model\Agreements\AgreementsProviderInterface',
         'Magento\CheckoutAgreements\Model\AgreementsProviderInterface'
     ],
+    ['Magento\Setup\Model\SampleData', 'Magento\SampleData\Model\SampleData'],
+    ['Magento\Customer\Controller\Account\ResetPassword'],
+    ['Magento\Customer\Controller\Account'],
     ['Magento\ConfigurableProduct\Block\Product\Configurable\AssociatedSelector\Backend\Grid\ColumnSet'],
     ['Magento\ConfigurableProduct\Model\Resource\Product\Collection\AssociatedProduct'],
     ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Grid\Renderer\Inventory'],

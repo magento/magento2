@@ -8,27 +8,27 @@
 
  /** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config */
 ?>
-<div class="entry-edit form-inline" id="<?php echo $block->getId() ?>">
-    <div class="fieldset-wrapper admin__collapsible-block-wrapper" id="<?php echo $block->getId() ?>-wrapper" data-panel="product-variations">
+<div class="entry-edit form-inline" id="<?php /* @escapeNotVerified */ echo $block->getId() ?>">
+    <div class="fieldset-wrapper admin__collapsible-block-wrapper" id="<?php /* @escapeNotVerified */ echo $block->getId() ?>-wrapper" data-panel="product-variations">
         <div class="fieldset-wrapper-title">
-            <strong class="admin__collapsible-title" data-toggle="collapse" data-target="#<?php echo $block->getId() ?>-content">
-                <span><?= __('Configurations') ?></span>
+            <strong class="admin__collapsible-title" data-toggle="collapse" data-target="#<?php /* @escapeNotVerified */ echo $block->getId() ?>-content">
+                <span><?= /* @escapeNotVerified */  __('Configurations') ?></span>
             </strong>
         </div>
 
-        <div class="fieldset-wrapper-content collapse" data-collapsed="true" id="<?php echo $block->getId() ?>-content">
+        <div class="fieldset-wrapper-content collapse" data-collapsed="true" id="<?php /* @escapeNotVerified */ echo $block->getId() ?>-content">
             <div data-bind="scope: 'variation-steps-wizard'" class="product-create-configuration">
                 <div class="product-create-configuration-info">
                     <div class="note">
-                        <?= __('Configurable products allow customers to choose options (Ex: shirt color).
+                        <?= /* @escapeNotVerified */  __('Configurable products allow customers to choose options (Ex: shirt color).
                     You need to create a simple product for each configuration (Ex: a product for each color).');?>
                     </div>
                 </div>
                 <div class="product-create-configuration-actions">
                     <button data-action="open-steps-wizard" title="Create Product Configurations"
                             class="action-secondary" data-bind="click: open">
-                        <span data-role="button-label" data-edit-label="<?= __('Edit Configurations') ?>">
-                            <?= $block->getProduct()->getId()
+                        <span data-role="button-label" data-edit-label="<?= /* @escapeNotVerified */  __('Edit Configurations') ?>">
+                            <?= /* @escapeNotVerified */  $block->getProduct()->getId()
                                 && $block->getProduct()->getTypeId() === 'configurable'
                                 ? __('Edit Configurations')
                                 : __('Create Configurations')
@@ -38,7 +38,7 @@
                 </div>
                 <div class="product-create-configuration-actions" data-bind="scope: 'configurableProductGrid'">
                     <a class="action-menu-item" data-action="choose" data-bind="click: showManuallyGrid, visible: button">
-                        <?= __('Add Products Manually');?>
+                        <?= /* @noEscape */ __('Add Products Manually');?>
                     </a>
                 </div>
             </div>
@@ -78,8 +78,8 @@ require([
     advancedPricingHandler.init();
     priceTypeHandler.init();
 
-    var blockId = '#<?=$block->getId()?>',
-        hasVariations = <?= $block->isConfigurableProduct() ? 'true' : 'false' ?>,
+    var blockId = '#<?= /* @noEscape */ $block->getId()?>',
+        hasVariations = <?= /* @noEscape */ $block->isConfigurableProduct() ? 'true' : 'false' ?>,
         setElementDisabled = function ($element, state, triggerEvent) {
             if (!$element.is('[data-locked]')) {
                 $element.prop('disabled', state);
