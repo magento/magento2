@@ -320,7 +320,7 @@ class Import
         $urls = [];
         foreach ($this->products as $productId => $productsByStores) {
             foreach ($productsByStores as $storeId => $product) {
-                if ($this->productUrlPathGenerator->getUrlPath($product) != '') {
+                if ($this->productUrlPathGenerator->getUrlPath($product)) {
                     $urls[] = $this->urlRewriteFactory->create()
                         ->setEntityType(ProductUrlRewriteGenerator::ENTITY_TYPE)
                         ->setEntityId($productId)
