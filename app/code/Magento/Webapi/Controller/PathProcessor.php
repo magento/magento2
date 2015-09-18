@@ -49,7 +49,7 @@ class PathProcessor
         $pathParts = $this->stripPathBeforeStorecode($pathInfo);
         $storeCode = $pathParts[0];
         $stores = $this->storeManager->getStores(false, true);
-        if (isset($stores[$storeCode]) || $storeCode === 'all') {
+        if (isset($stores[$storeCode])) {
             $this->storeManager->setCurrentStore($storeCode);
             $path = '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
         } else if ($storeCode === 'all') {

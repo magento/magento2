@@ -6,6 +6,8 @@
 
 namespace Magento\Webapi\Controller;
 
+use Magento\Store\Model\Store;
+
 class PathProcessorTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -38,11 +40,23 @@ class PathProcessorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($storeCode, $this->storeManager->getStore()->getCode());
     }
 
+    public function testProcessWithAllStoreCode()
+    {
+        $storeCode = 'all';
+        $path = '/V1/customerAccounts/createCustomer';
+        $uri = 'rest/' . $storeCode . $path;
+        $result = $this->pathProcessor->process($uri);
+        $this->assertEquals($path, $result);
+        $this->assertEquals(Store::ADMIN_CODE, $this->storeManager->getStore()->getCode());
+    }
+
+
     public function testProcessWithoutStoreCode()
     {
-        $path = 'rest/V1/customerAccounts/createCustomer';
-        $result = $this->pathProcessor->process($path);
-        $this->assertEquals('/V1/customerAccounts/createCustomer', $result);
-        $this->assertEquals('default', $this->storeManager->getStore()->getCode());
+        $path = '/V1/customerAccounts/createCustomer';
+        $uri = 'rest' . $path;
+        $result = $this->pathProcessor->process($uri);
+        $this->assertEquals($path, $result);
+        $this->assertEquals(Store::DEFAULT_CODE, $this->storeManager->getStore()->getCode());
     }
 }
