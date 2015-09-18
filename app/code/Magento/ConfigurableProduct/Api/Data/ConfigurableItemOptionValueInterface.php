@@ -7,12 +7,16 @@ namespace Magento\ConfigurableProduct\Api\Data;
 
 interface ConfigurableItemOptionValueInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
+    const OPTION_ID = 'option_id';
+
+    const OPTION_VALUE = 'option_value';
+
     /**
      * Get option SKU
      *
      * @return string
      */
-    public function getSku();
+    public function getOptionId();
 
     /**
      * Set option SKU
@@ -20,14 +24,14 @@ interface ConfigurableItemOptionValueInterface extends \Magento\Framework\Api\Ex
      * @param string $value
      * @return void
      */
-    public function setSku($value);
+    public function setOptionId($value);
 
     /**
      * Get item id
      *
      * @return int|null
      */
-    public function getItemId();
+    public function getOptionValue();
 
     /**
      * Set item id
@@ -35,7 +39,7 @@ interface ConfigurableItemOptionValueInterface extends \Magento\Framework\Api\Ex
      * @param int|null $value
      * @return void
      */
-    public function setItemId($value);
+    public function setOptionValue($value);
 
     /**
      * Retrieve existing extension attributes object or create a new one.

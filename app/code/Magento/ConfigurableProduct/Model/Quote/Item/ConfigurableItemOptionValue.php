@@ -11,33 +11,33 @@ class ConfigurableItemOptionValue extends \Magento\Framework\Model\AbstractExten
     /**
      * {@inheritdoc}
      */
-    public function getSku()
+    public function getOptionId()
     {
-        return $this->getData('sku');
+        return $this->getData(self::OPTION_ID);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setSku($value)
+    public function setOptionId($value)
     {
-        return $this->setData('sku', $value);
+        return $this->setData(self::OPTION_ID, $value);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getItemId()
+    public function getOptionValue()
     {
-        return $this->getData('item_id');
+        return $this->getData(self::OPTION_VALUE);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setItemId($value)
+    public function setOptionValue($value)
     {
-        return $this->setData('item_id', $value);
+        return $this->setData(self::OPTION_VALUE, $value);
     }
 
     /**
