@@ -18,7 +18,8 @@ class XsdTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_schemaFile = realpath(__DIR__ . '/../../../etc/queue_merged.xsd');
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $this->_schemaFile = $urnResolver->getRealPath('urn:magento:framework:Amqp/etc/queue_merged.xsd');
     }
 
     /**
