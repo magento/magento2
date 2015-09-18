@@ -146,7 +146,6 @@ class TotalsReaderTest extends \PHPUnit_Framework_TestCase
         $testedTotalMock =
             $this->getMock('Magento\Quote\Model\Quote\Address\Total', ['setData', 'getCode'], [], '', false);
         $expected = ['my_total_type' => $testedTotalMock];
-        $data = ['code' => 'my_total_type'];
         $this->totalMock->expects($this->once())->method('setData')->with([])->willReturnSelf();
         $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
         $this->totalFactoryMock
