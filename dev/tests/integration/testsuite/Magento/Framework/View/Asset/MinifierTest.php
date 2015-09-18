@@ -5,9 +5,10 @@
  */
 namespace Magento\Framework\View\Asset;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\TestFramework\Component\ThemeRegistration;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\State as AppState;
-use Magento\Framework\Component\ComponentRegistrar;
 
 /**
  * Tests for minifier
@@ -15,9 +16,19 @@ use Magento\Framework\Component\ComponentRegistrar;
 class MinifierTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     */
+    private $staticDir;
+
+    /**
      * @var \Magento\TestFramework\ObjectManager
      */
     protected $objectManager;
+
+    /**
+     * @var string
+     */
+    private $origMode;
 
     /**
      * {@inheritDoc}
@@ -28,7 +39,12 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = Bootstrap::getInstance()->getObjectManager();
         /** @var \Magento\TestFramework\App\State $appState */
         $appState = $this->objectManager->get('Magento\TestFramework\App\State');
+        $this->origMode = $appState->getMode();
         $appState->setMode(AppState::MODE_DEFAULT);
+        ThemeRegistration::registerThemesInDir(__DIR__ . '/../_files/static/theme');
+        /** @var \Magento\Framework\Filesystem $filesystem */
+        $filesystem = Bootstrap::getObjectManager()->get('Magento\Framework\Filesystem');
+        $this->staticDir = $filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
     }
 
     /**
@@ -38,7 +54,10 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\TestFramework\App\State $appState */
         $appState = $this->objectManager->get('Magento\TestFramework\App\State');
-        $appState->setMode(AppState::MODE_DEVELOPER);
+        $appState->setMode($this->origMode);
+        if ($this->staticDir->isExist('frontend/FrameworkViewMinifier')) {
+            $this->staticDir->delete('frontend/FrameworkViewMinifier');
+        }
         parent::tearDown();
     }
 
@@ -57,8 +76,8 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\Code\Minifier\AdapterInterface $adapter */
         $adapter = $this->objectManager->get('cssMinificationAdapter');
         $this->assertEquals(
-            file_get_contents(dirname(__DIR__) . '/_files/static/css/styles.magento.min.css'),
-            $adapter->minify(file_get_contents(dirname(__DIR__) . '/_files/static/css/styles.css')),
+            file_get_contents(dirname(__DIR__) . '/_files/static/expected/styles.magento.min.css'),
+            $adapter->minify(file_get_contents(dirname(__DIR__) . '/_files/static/theme/web/css/styles.css')),
             'Minified CSS differs from initial minified CSS snapshot. '
             . 'Ensure that new CSS is fully valid for all supported browsers '
             . 'and replace old minified snapshot with new one.'
@@ -75,8 +94,8 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\Code\Minifier\AdapterInterface $adapter */
         $adapter = $this->objectManager->get('jsMinificationAdapter');
         $this->assertEquals(
-            file_get_contents(dirname(__DIR__) . '/_files/static/js/test.min.js'),
-            $adapter->minify(file_get_contents(dirname(__DIR__) . '/_files/static/js/test.js')),
+            file_get_contents(dirname(__DIR__) . '/_files/static/expected/test.min.js'),
+            $adapter->minify(file_get_contents(dirname(__DIR__) . '/_files/static/theme/web/js/test.js')),
             'Minified JS differs from initial minified JS snapshot. '
             . 'Ensure that new JS is fully valid for all supported browsers '
             . 'and replace old minified snapshot with new one.'
@@ -87,12 +106,10 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
      * Test CSS minification
      *
      * @param string $requestedUri
-     * @param string $requestedFilePath
-     * @param string $testFile
      * @param callable $assertionCallback
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function _testCssMinification($requestedUri, $requestedFilePath, $testFile, $assertionCallback)
+    protected function _testCssMinification($requestedUri, $assertionCallback)
     {
         /** @var \Magento\Framework\App\Request\Http $request */
         $request = $this->objectManager->get('Magento\Framework\App\Request\Http');
@@ -112,21 +129,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\App\StaticResource',
             ['response' => $response]
         );
-
-        $registrar = new ComponentRegistrar();
-        $blankThemePath = $registrar->getPath(ComponentRegistrar::THEME, 'frontend/Magento/blank');
-        $destFile = dirname(dirname(dirname($blankThemePath))) . $requestedFilePath;
-
-
-        if (!is_readable(dirname($destFile))) {
-            mkdir(dirname($destFile), 777, true);
-        }
-
-        copy($testFile, $destFile);
-
         $staticResourceApp->launch();
-
-        unlink($destFile);
     }
 
     /**
@@ -135,12 +138,13 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
     public function testCssMinification()
     {
         $this->_testCssMinification(
-            '/frontend/Magento/blank/en_US/css/styles.min.css',
-            '/frontend/Magento/blank/web/css/styles.css',
-            dirname(__DIR__) . '/_files/static/css/styles.css',
+            '/frontend/FrameworkViewMinifier/default/en_US/css/styles.min.css',
             function ($path) {
                 $this->assertEquals(
-                    file_get_contents(dirname(__DIR__) . '/_files/static/css/styles.magento.min.css'),
+                    file_get_contents(
+                        dirname(__DIR__)
+                        . '/_files/static/expected/styles.magento.min.css'
+                    ),
                     file_get_contents($path),
                     'Minified files are not equal or minification did not work for requested CSS'
                 );
@@ -154,15 +158,16 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
     public function testCssMinificationOff()
     {
         $this->_testCssMinification(
-            '/frontend/Magento/blank/en_US/css/styles.css',
-            '/frontend/Magento/blank/web/css/styles.css',
-            dirname(__DIR__) . '/_files/static/css/styles.css',
+            '/frontend/FrameworkViewMinifier/default/en_US/css/styles.css',
             function ($path) {
                 $content = file_get_contents($path);
                 $this->assertNotEmpty($content);
-                $this->assertContains('Magento/backend', $content);
+                $this->assertContains('FrameworkViewMinifier/frontend', $content);
                 $this->assertNotEquals(
-                    file_get_contents(dirname(__DIR__) . '/_files/static/css/styles.magento.min.css'),
+                    file_get_contents(
+                        dirname(__DIR__)
+                        . '/_files/static/expected/styles.magento.min.css'
+                    ),
                     $content,
                     'CSS is minified when minification turned off'
                 );
@@ -176,9 +181,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
     public function testCssMinificationForMinifiedFiles()
     {
         $this->_testCssMinification(
-            '/frontend/Magento/blank/en_US/css/preminified-styles.min.css',
-            '/frontend/Magento/blank/web/css/preminified-styles.min.css',
-            dirname(__DIR__) . '/_files/static/css/preminified-styles.min.css',
+            '/frontend/FrameworkViewMinifier/default/en_US/css/preminified-styles.min.css',
             function ($path) {
                 $content = file_get_contents($path);
                 $this->assertNotEmpty($content);
@@ -193,24 +196,10 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeploymentWithMinifierEnabled()
     {
-        $initDirectories = Bootstrap::getInstance()
-            ->getAppInitParams()[\Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS];
+        $staticPath = $this->staticDir->getAbsolutePath();
 
-        $registrar = new ComponentRegistrar();
-        $blankThemePath = $registrar->getPath(ComponentRegistrar::THEME, 'frontend/Magento/blank');
-        $designPath = dirname(dirname(dirname($blankThemePath)));
-
-        $staticPath = $initDirectories['static']['path'];
-
-        $fileToBePublished = $staticPath . '/frontend/Magento/blank/en_US/css/styles.min.css';
-        $destFile = $designPath . '/frontend/Magento/blank/web/css/styles.css';
-        $fileToTestPublishing = dirname(__DIR__) . '/_files/static/css/styles.css';
-
-        if (!is_readable(dirname($destFile))) {
-            mkdir(dirname($destFile), 777, true);
-        }
-
-        copy($fileToTestPublishing, $destFile);
+        $fileToBePublished = $staticPath . '/frontend/FrameworkViewMinifier/default/en_US/css/styles.min.css';
+        $fileToTestPublishing = dirname(__DIR__) . '/_files/static/theme/web/css/styles.css';
 
         $omFactory = $this->getMock('\Magento\Framework\App\ObjectManagerFactory', ['create'], [], '', false);
         $omFactory->expects($this->any())
@@ -234,7 +223,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
             ->method('getStaticPreProcessingFiles')
             ->will($this->returnValue(
                 [
-                    ['frontend', 'Magento/blank', '', '', 'css/styles.css', $destFile]
+                    ['frontend', 'FrameworkViewMinifier/default', '', '', 'css/styles.css', $fileToTestPublishing]
                 ]
             ));
 
@@ -248,12 +237,9 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFileExists($fileToBePublished);
         $this->assertEquals(
-            file_get_contents(dirname(__DIR__) . '/_files/static/css/styles.magento.min.css'),
+            file_get_contents(dirname(__DIR__) . '/_files/static/expected/styles.magento.min.css'),
             file_get_contents($fileToBePublished),
             'Minified file is not equal or minification did not work for deployed CSS'
         );
-
-        unlink($destFile);
-        unlink($fileToBePublished);
     }
 }
