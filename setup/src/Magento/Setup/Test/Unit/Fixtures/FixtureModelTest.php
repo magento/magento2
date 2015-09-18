@@ -30,11 +30,6 @@ class FixtureModelTest extends \PHPUnit_Framework_TestCase
         $this->model = new FixtureModel($reindexCommandMock, $fileParserMock);
     }
 
-    public function testGetObjectManager()
-    {
-        $this->assertInstanceOf('Magento\Framework\ObjectManager\ObjectManager', $this->model->getObjectManager());
-    }
-
     public function testReindex()
     {
         $outputMock = $this->getMock('\Symfony\Component\Console\Output\OutputInterface', [], [], '', false);
@@ -60,13 +55,15 @@ class FixtureModelTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $fileParserMock = $this->getMock('\Magento\Framework\XML\Parser', [], [], '', false);
-        $fileParserMock->expects($this->once())
-            ->method('load')
-            ->willReturnSelf();
+        $fileParserMock = $this->getMock('\Magento\Framework\XML\Parser', ['load', 'xmlToArray'], [], '', false);
+        $fileParserMock->expects($this->once())->method('xmlToArray')->willReturn(
+            ['config' => [ 'profile' => ['some_key' => 'some_value']]]
+        );
+        $fileParserMock->expects($this->once())->method('load')->with('config.file')->willReturn($fileParserMock);
 
         $this->model = new FixtureModel($reindexCommandMock, $fileParserMock);
         $this->model->loadConfig('config.file');
+        $this->assertSame('some_value', $this->model->getValue('some_key'));
     }
 
     public function testGetValue()
