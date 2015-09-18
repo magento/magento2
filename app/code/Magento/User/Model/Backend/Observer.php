@@ -271,7 +271,7 @@ class Observer
         }
 
         if ($password && !$user->getForceNewPassword() && $user->getId()) {
-            if ($this->encryptor->validateHash($password, $user->getOrigData('password'))) {
+            if ($this->encryptor->isValidHash($password, $user->getOrigData('password'))) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Sorry, but this password has already been used. Please create another.')
                 );
@@ -343,8 +343,7 @@ class Observer
         if (!$this->isPasswordChangeForced()) {
             return;
         }
-        $session = $this->authSession;
-        if (!$session->isLoggedIn()) {
+        if (!$this->authSession->isLoggedIn()) {
             return;
         }
         $actionList = [
@@ -352,6 +351,7 @@ class Observer
             'adminhtml_system_account_save',
             'adminhtml_auth_logout',
         ];
+        /** @var \Magento\Framework\App\Action\Action $controller */
         $controller = $observer->getEvent()->getControllerAction();
         /** @var \Magento\Framework\App\RequestInterface $request */
         $request = $observer->getEvent()->getRequest();
