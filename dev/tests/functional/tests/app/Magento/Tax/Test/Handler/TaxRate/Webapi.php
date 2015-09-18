@@ -57,11 +57,11 @@ class Webapi extends AbstractWebapi implements TaxRateInterface
 
         $url = $_ENV['app_frontend_url'] . 'rest/V1/taxRates';
         $this->webapiTransport->write($url, $data);
-        $response = json_decode($this->webapiTransport->read(), true);
+        $response = $this->webapiTransport->read();
         $this->webapiTransport->close();
 
         if (empty($response['id'])) {
-            $this->eventManager->dispatchEvent(['curl_failed'], [$response]);
+            $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
             throw new \Exception('Tax rate creation by Web API handler was not successful!');
         }
 
