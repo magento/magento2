@@ -32,20 +32,26 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
     protected $itemDataFactory;
 
     /**
-     * Constructs a read service object.
-     *
+     * @var \Magento\Quote\Model\Quote\Item\ExtensibleAttributeProcessorInterface[]
+     */
+    protected $extensibleAttributesProcessors;
+
+    /**
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Quote\Api\Data\CartItemInterfaceFactory $itemDataFactory
+     * @param \Magento\Quote\Model\Quote\Item\ExtensibleAttributeProcessorInterface[] $extensibleAttributesProcessors
      */
     public function __construct(
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Quote\Api\Data\CartItemInterfaceFactory $itemDataFactory
+        \Magento\Quote\Api\Data\CartItemInterfaceFactory $itemDataFactory,
+        array $extensibleAttributesProcessors = []
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->productRepository = $productRepository;
         $this->itemDataFactory = $itemDataFactory;
+        $this->extensibleAttributesProcessors = $extensibleAttributesProcessors;
     }
 
     /**
@@ -94,7 +100,8 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
                 $cartItem->setData('qty', $qty);
             } else {
                 $product = $this->productRepository->get($cartItem->getSku());
-                $quote->addProduct($product, $qty);
+                $params = $this->getBuyRequest($product->getTypeId(), $cartItem);
+                $quote->addProduct($product, $params);
             }
             $this->quoteRepository->save($quote->collectTotals());
         } catch (\Exception $e) {
@@ -104,6 +111,26 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
             throw new CouldNotSaveException(__('Could not save quote'));
         }
         return $quote->getItemByProduct($product);
+    }
+
+    /**
+     * @param $productType
+     * @param \Magento\Quote\Api\Data\CartItemInterface $cartItem
+     * @return \Magento\Framework\DataObject|float
+     */
+    protected function getBuyRequest(
+        $productType,
+        \Magento\Quote\Api\Data\CartItemInterface $cartItem
+    ) {
+        $params = null;
+        if ($cartItem->getProductOption()->getExtensionAttributes()
+            && isset($this->extensibleAttributesProcessors[$productType])
+        ) {
+            $params = $this->extensibleAttributesProcessors[$productType]->convertAttributesToBuyRequest(
+                $cartItem->getProductOption()->getExtensionAttributes()
+            );
+        }
+        return $params === null ? $cartItem->getQty() : $params;
     }
 
     /**
