@@ -28,6 +28,7 @@ class Add extends \Magento\Checkout\Controller\Cart
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param CustomerCart $cart
      * @param ProductRepositoryInterface $productRepository
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -114,9 +115,9 @@ class Add extends \Magento\Checkout\Controller\Cart
                 if (!$this->cart->getQuote()->getHasError()) {
                     $message = __(
                         'You added %1 to your shopping cart.',
-                        $this->_objectManager->get('Magento\Framework\Escaper')->escapeHtml($product->getName())
+                        $product->getName()
                     );
-                    $this->messageManager->addSuccess($message);
+                    $this->messageManager->addSuccessMessage($message);
                 }
                 return $this->goBack(null, $product);
             }

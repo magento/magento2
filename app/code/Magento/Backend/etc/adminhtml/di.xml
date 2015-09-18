@@ -126,4 +126,5 @@
             <argument name="xFrameOpt" xsi:type="const">Magento\Framework\App\Response\XFrameOptPlugin::BACKEND_X_FRAME_OPT</argument>
         </arguments>
     </type>
+    <preference for="Magento\Framework\App\Router\PathConfigInterface" type="Magento\Backend\Model\AdminPathConfig" />
 </config>

@@ -151,36 +151,11 @@ class Config extends Widget implements TabInterface
      * Retrieve attributes data
      *
      * @return array
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getAttributes()
     {
         if (!$this->hasData('attributes')) {
             $attributes = (array)$this->_configurableType->getConfigurableAttributesAsArray($this->getProduct());
-            $productData = (array)$this->getRequest()->getParam('product');
-            if (isset($productData['configurable_attributes_data'])) {
-                $configurableData = $productData['configurable_attributes_data'];
-                foreach ($attributes as $key => $attribute) {
-                    if (isset($configurableData[$key])) {
-                        $attributes[$key] = array_replace_recursive($attribute, $configurableData[$key]);
-                        $attributes[$key]['values'] = array_merge(
-                            isset($attribute['values']) ? $attribute['values'] : [],
-                            isset($configurableData[$key]['values'])
-                            ? array_filter($configurableData[$key]['values'])
-                            : []
-                        );
-                    }
-                }
-            }
-
-            foreach ($attributes as &$attribute) {
-                if (isset($attribute['values']) && is_array($attribute['values'])) {
-                    foreach ($attribute['values'] as &$attributeValue) {
-                        $attributeValue['can_edit_price'] = $this->getCanEditPrice();
-                        $attributeValue['can_read_price'] = $this->getCanReadPrice();
-                    }
-                }
-            }
             $this->setData('attributes', $attributes);
         }
         return $this->getData('attributes');

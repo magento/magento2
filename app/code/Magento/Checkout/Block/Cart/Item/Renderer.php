@@ -8,6 +8,7 @@ namespace Magento\Checkout\Block\Cart\Item;
 use Magento\Checkout\Block\Cart\Item\Renderer\Actions;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
 
@@ -85,6 +86,11 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
     public $moduleManager;
 
     /**
+     * @var InterpretationStrategyInterface
+     */
+    private $messageInterpretationStrategy;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Helper\Product\Configuration $productConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -93,7 +99,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Module\Manager $moduleManager
+     * @param InterpretationStrategyInterface $messageInterpretationStrategy
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -104,6 +113,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
         \Magento\Framework\Message\ManagerInterface $messageManager,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Module\Manager $moduleManager,
+        InterpretationStrategyInterface $messageInterpretationStrategy,
         array $data = []
     ) {
         $this->priceCurrency = $priceCurrency;
@@ -115,6 +125,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
         $this->moduleManager = $moduleManager;
+        $this->messageInterpretationStrategy = $messageInterpretationStrategy;
     }
 
     /**
@@ -122,6 +133,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      *
      * @param AbstractItem $item
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setItem(AbstractItem $item)
     {
@@ -133,6 +145,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * Get quote item
      *
      * @return AbstractItem
+     * @codeCoverageIgnore
      */
     public function getItem()
     {
@@ -143,6 +156,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * Get item product
      *
      * @return \Magento\Catalog\Model\Product
+     * @codeCoverageIgnore
      */
     public function getProduct()
     {
@@ -153,6 +167,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * Identify the product from which thumbnail should be taken.
      *
      * @return \Magento\Catalog\Model\Product
+     * @codeCoverageIgnore
      */
     public function getProductForThumbnail()
     {
@@ -162,6 +177,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
     /**
      * @param string $productUrl
      * @return $this
+     * @codeCoverageIgnore
      */
     public function overrideProductUrl($productUrl)
     {
@@ -255,6 +271,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * Get list of all otions for product
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function getOptionList()
     {
@@ -278,6 +295,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * Get checkout session
      *
      * @return \Magento\Checkout\Model\Session
+     * @codeCoverageIgnore
      */
     public function getCheckoutSession()
     {
@@ -312,7 +330,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
             $additionalMessages = $collection->getItems();
             foreach ($additionalMessages as $message) {
                 /* @var $message \Magento\Framework\Message\MessageInterface */
-                $messages[] = ['text' => $message->getText(), 'type' => $message->getType()];
+                $messages[] = [
+                    'text' => $this->messageInterpretationStrategy->interpret($message),
+                    'type' => $message->getType()
+                ];
             }
         }
         $this->messageManager->getMessages('quote_item' . $quoteItem->getId())->clear();
@@ -355,6 +376,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * Check whether Product is visible in site
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isProductVisible()
     {
@@ -365,6 +387,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * Return product additional information block
      *
      * @return AbstractBlock
+     * @codeCoverageIgnore
      */
     public function getProductAdditionalInformationBlock()
     {
@@ -376,6 +399,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      *
      * @param bool $strict
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setQtyMode($strict)
     {
@@ -388,6 +412,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      *
      * @param bool $ignore
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setIgnoreProductUrl($ignore = true)
     {
@@ -438,6 +463,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
 
     /**
      * @return \Magento\Framework\Pricing\Render
+     * @codeCoverageIgnore
      */
     protected function getPriceRender()
     {
