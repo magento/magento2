@@ -159,7 +159,8 @@ return [
         [
             "Element 'module', attribute 'name': [facet 'pattern'] The value '#$%^' is not accepted by " .
             "the pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n",
-            "Element 'module', attribute 'name': '#$%^' is not a valid value of the atomic type 'moduleNameType'.\nLine: 1\n",
+            "Element 'module', attribute 'name': '#$%^' is not a valid value of the atomic type" .
+            " 'moduleNameType'.\nLine: 1\n",
             "Element 'module', attribute 'name': Warning: No precomputed value available, the value was either " .
             "invalid or something strange happend.\nLine: 1\n"
         ],
@@ -170,7 +171,8 @@ return [
         [
             "Element 'module', attribute 'before': [facet 'pattern'] The value '' is not accepted by " .
             "the pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n",
-            "Element 'module', attribute 'before': '' is not a valid value of the atomic type 'beforeAfterType'.\nLine: 1\n"
+            "Element 'module', attribute 'before': '' is not a valid value of the atomic type" .
+            " 'beforeAfterType'.\nLine: 1\n"
         ],
     ],
     'route_module_before_attribute_value_regexp1' => [
@@ -179,7 +181,8 @@ return [
         [
             "Element 'module', attribute 'before': [facet 'pattern'] The value 'qq' is not accepted by the " .
             "pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n",
-            "Element 'module', attribute 'before': 'qq' is not a valid value of the atomic type 'beforeAfterType'.\nLine: 1\n"
+            "Element 'module', attribute 'before': 'qq' is not a valid value of the atomic type" .
+            " 'beforeAfterType'.\nLine: 1\n"
         ],
     ],
     'route_module_before_attribute_value_regexp2' => [
@@ -188,7 +191,8 @@ return [
         [
             "Element 'module', attribute 'before': [facet 'pattern'] The value '!!!!' is not accepted by the " .
             "pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n",
-            "Element 'module', attribute 'before': '!!!!' is not a valid value of the atomic type 'beforeAfterType'.\nLine: 1\n"
+            "Element 'module', attribute 'before': '!!!!' is not a valid value of the atomic type" .
+            " 'beforeAfterType'.\nLine: 1\n"
         ],
     ],
     'route_module_after_attribute_empty_value' => [
@@ -197,7 +201,8 @@ return [
         [
             "Element 'module', attribute 'after': [facet 'pattern'] The value '' is not accepted " .
             "by the pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n",
-            "Element 'module', attribute 'after': '' is not a valid value of the atomic type 'beforeAfterType'.\nLine: 1\n"
+            "Element 'module', attribute 'after': '' is not a valid value of the atomic type" .
+            " 'beforeAfterType'.\nLine: 1\n"
         ],
     ],
     'route_module_after_attribute_value_regexp1' => [
@@ -207,7 +212,8 @@ return [
         [
             "Element 'module', attribute 'after': [facet 'pattern'] The value 'sd' is not accepted by" .
             " the pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n",
-            "Element 'module', attribute 'after': 'sd' is not a valid value of the atomic type 'beforeAfterType'.\nLine: 1\n"
+            "Element 'module', attribute 'after': 'sd' is not a valid value of the atomic type" .
+            " 'beforeAfterType'.\nLine: 1\n"
         ],
     ],
     'route_module_after_attribute_value_regexp2' => [
@@ -216,7 +222,8 @@ return [
         [
             "Element 'module', attribute 'after': [facet 'pattern'] The value '!!!!' is not accepted by the " .
             "pattern '[A-Za-z0-9_]{3,}'.\nLine: 1\n",
-            "Element 'module', attribute 'after': '!!!!' is not a valid value of the atomic type 'beforeAfterType'.\nLine: 1\n"
+            "Element 'module', attribute 'after': '!!!!' is not a valid value of the atomic type" .
+            " 'beforeAfterType'.\nLine: 1\n"
         ],
     ]
 ];
