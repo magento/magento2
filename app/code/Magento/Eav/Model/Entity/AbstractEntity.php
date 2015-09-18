@@ -18,6 +18,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Resource\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\Resource\Db\TransactionManagerInterface;
+use Magento\Eav\Model\Resource\Attribute\DefaultEntityAttributes\ProviderInterface as DefaultAttributesProvider;
+use Magento\Framework\Model\Resource\AbstractResource;
 
 /**
  * Entity/Attribute/Model - entity abstract
@@ -27,7 +29,7 @@ use Magento\Framework\Model\Resource\Db\TransactionManagerInterface;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractEntity extends \Magento\Framework\Model\Resource\AbstractResource implements EntityInterface
+abstract class AbstractEntity extends AbstractResource implements EntityInterface, DefaultAttributesProvider
 {
     /**
      * Connection name
