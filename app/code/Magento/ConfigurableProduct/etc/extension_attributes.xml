@@ -11,6 +11,6 @@
         <attribute code="configurable_product_links" type="int[]" />
     </extension_attributes>
     <extension_attributes for="Magento\Quote\Api\Data\ProductOptionInterface">
-        <attribute code="configurable_item_option" type="Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface" />
+        <attribute code="configurable_item_options" type="Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface[]" />
     </extension_attributes>
 </config>
