@@ -5,12 +5,15 @@
  */
 namespace Magento\ConfigurableProduct\Model\Quote\Item;
 
-class ExtensibleAttributeProcessor implements \Magento\Quote\Model\Quote\Item\ExtensibleAttributeProcessorInterface
+use Magento\Quote\Model\Quote\Item\CartItemProcessorInterface;
+use Magento\Quote\Api\Data\CartItemInterface;
+
+class CartItemProcessor implements CartItemProcessorInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function convertAttributesToBuyRequest(\Magento\Quote\Api\Data\ProductOptionExtensionInterface $attributes)
+    public function convertToBuyRequest(CartItemInterface $cartItem)
     {
         //Processor implementation
         return null;
