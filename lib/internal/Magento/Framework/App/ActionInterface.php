@@ -27,11 +27,4 @@ interface ActionInterface
      * @throws \Magento\Framework\Exception\NotFoundException
      */
     public function dispatch(RequestInterface $request);
-
-    /**
-     * Get Response object
-     *
-     * @return ResponseInterface
-     */
-    public function getResponse();
 }
