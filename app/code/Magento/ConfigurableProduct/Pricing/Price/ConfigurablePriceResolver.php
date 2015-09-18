@@ -40,15 +40,15 @@ class ConfigurablePriceResolver implements PriceResolverInterface
      * @param \Magento\Framework\Pricing\Object\SaleableInterface $product
      * @return float
      */
-    public function getPrice(\Magento\Framework\Pricing\Object\SaleableInterface $product)
+    public function resolvePrice(\Magento\Framework\Pricing\Object\SaleableInterface $product)
     {
         $selectedConfigurableOption = $product->getSelectedConfigurableOption();
         if ($selectedConfigurableOption) {
-            $price = $this->priceResolver->getPrice($selectedConfigurableOption);
+            $price = $this->priceResolver->resolvePrice($selectedConfigurableOption);
         } else {
             $price = null;
             foreach ($this->configurable->getUsedProducts($product) as $subProduct) {
-                $productPrice = $this->priceResolver->getPrice($subProduct);
+                $productPrice = $this->priceResolver->resolvePrice($subProduct);
                 $price = $price ? min($price, $productPrice) : $productPrice;
             }
         }

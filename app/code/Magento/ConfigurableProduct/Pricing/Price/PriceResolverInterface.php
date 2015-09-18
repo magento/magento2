@@ -12,5 +12,5 @@ interface PriceResolverInterface
      * @param \Magento\Framework\Pricing\Object\SaleableInterface $product
      * @return float
      */
-    public function getPrice(\Magento\Framework\Pricing\Object\SaleableInterface $product);
+    public function resolvePrice(\Magento\Framework\Pricing\Object\SaleableInterface $product);
 }

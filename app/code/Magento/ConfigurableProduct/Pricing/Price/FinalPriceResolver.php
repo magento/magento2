@@ -6,16 +6,15 @@
 
 namespace Magento\ConfigurableProduct\Pricing\Price;
 
-use Magento\Catalog\Pricing\Price\FinalPrice;
-
 class FinalPriceResolver implements PriceResolverInterface
 {
     /**
      * @param \Magento\Framework\Pricing\Object\SaleableInterface $product
      * @return float
      */
-    public function getPrice(\Magento\Framework\Pricing\Object\SaleableInterface $product)
+    public function resolvePrice(\Magento\Framework\Pricing\Object\SaleableInterface $product)
     {
-        return $product->getPriceInfo()->getPrice(FinalPrice::PRICE_CODE)->getAmount()->getValue();
+        return $product->getPriceInfo()->getPrice(\Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE)
+            ->getAmount()->getValue();
     }
 }
