@@ -8,7 +8,7 @@
 
 ?>
 <?php if ($instructions = $block->getInstructions()): ?>
-    <div class="items <?php echo $block->getMethodCode() ?> instructions agreement content" id="payment_form_<?php echo $block->getMethodCode() ?>" style="display: none;">
-        <?php echo nl2br($instructions) ?>
+    <div class="items <?php /* @escapeNotVerified */ echo $block->getMethodCode() ?> instructions checkout-agreement-item-content" id="payment_form_<?php /* @escapeNotVerified */ echo $block->getMethodCode() ?>" style="display: none;">
+        <?php /* @escapeNotVerified */ echo nl2br($instructions) ?>
     </div>
 <?php endif; ?>

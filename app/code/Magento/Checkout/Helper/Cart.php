@@ -41,6 +41,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Checkout\Model\Cart $checkoutCart
      * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -56,6 +57,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      * Retrieve cart instance
      *
      * @return \Magento\Checkout\Model\Cart
+     * @codeCoverageIgnore
      */
     public function getCart()
     {
@@ -72,7 +74,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
     public function getAddUrl($product, $additional = [])
     {
         $continueUrl = $this->urlEncoder->encode($this->_urlBuilder->getCurrentUrl());
-        $urlParamName = \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED;
+        $urlParamName = \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED;
 
         $routeParams = [
             $urlParamName => $continueUrl,
@@ -108,7 +110,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
     {
         $params = [
             'id' => $item->getId(),
-            \Magento\Framework\App\Action\Action::PARAM_NAME_BASE64_URL => $this->getCurrentBase64Url(),
+            \Magento\Framework\App\ActionInterface::PARAM_NAME_BASE64_URL => $this->getCurrentBase64Url(),
         ];
         return $this->_getUrl(self::DELETE_URL, $params);
     }
@@ -125,7 +127,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
 
         $data = ['id' => $item->getId()];
         if (!$this->_request->isAjax()) {
-            $data[\Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED] = $this->getCurrentBase64Url();
+            $data[\Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED] = $this->getCurrentBase64Url();
         }
         return json_encode(['action' => $url, 'data' => $data]);
     }
@@ -134,6 +136,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      * Retrieve shopping cart url
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getCartUrl()
     {
@@ -144,6 +147,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      * Retrieve current quote instance
      *
      * @return \Magento\Quote\Model\Quote
+     * @codeCoverageIgnore
      */
     public function getQuote()
     {
@@ -154,6 +158,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      * Get shopping cart items count
      *
      * @return int
+     * @codeCoverageIgnore
      */
     public function getItemsCount()
     {
@@ -164,6 +169,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      * Get shopping cart summary qty
      *
      * @return int|float
+     * @codeCoverageIgnore
      */
     public function getItemsQty()
     {
@@ -174,6 +180,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      * Get shopping cart items summary (include config settings)
      *
      * @return int|float
+     * @codeCoverageIgnore
      */
     public function getSummaryCount()
     {
@@ -185,6 +192,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @codeCoverageIgnore
      */
     public function getIsVirtualQuote()
     {
@@ -197,6 +205,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      * @param int|string|\Magento\Store\Model\Store $store
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @codeCoverageIgnore
      */
     public function getShouldRedirectToCart($store = null)
     {

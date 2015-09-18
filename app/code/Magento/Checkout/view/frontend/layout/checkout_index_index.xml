@@ -42,6 +42,11 @@
                                         <item name="displayArea" xsi:type="string">authentication</item>
                                         <item name="children" xsi:type="array">
                                         <!--Additional authentication fields-->
+                                            <item name="errors" xsi:type="array">
+                                                <item name="sortOrder" xsi:type="string">0</item>
+                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/authentication-messages</item>
+                                                <item name="displayArea" xsi:type="string">messages</item>
+                                            </item>
                                         </item>
                                     </item>
                                     <item name="progressBar" xsi:type="array">

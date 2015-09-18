@@ -23,7 +23,7 @@ class StoreCheck
     }
 
     /**
-     * @param \Magento\Framework\App\Action\Action $subject
+     * @param \Magento\Framework\App\ActionInterface $subject
      * @param callable $proceed
      * @param \Magento\Framework\App\RequestInterface $request
      *
@@ -32,7 +32,7 @@ class StoreCheck
      * @throws \Magento\Framework\Exception\State\InitException
      */
     public function aroundDispatch(
-        \Magento\Framework\App\Action\Action $subject,
+        \Magento\Framework\App\ActionInterface $subject,
         \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request
     ) {

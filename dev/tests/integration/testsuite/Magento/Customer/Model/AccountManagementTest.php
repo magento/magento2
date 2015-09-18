@@ -136,7 +136,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     public function testLogin()
     {
         // Customer email and password are pulled from the fixture customer.php
-        $customer = $this->accountManagement->authenticate('customer@example.com', 'password', true);
+        $customer = $this->accountManagement->authenticate('customer@example.com', 'password');
 
         $this->assertSame('customer@example.com', $customer->getEmail());
     }
@@ -150,7 +150,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     public function testLoginWrongPassword()
     {
         // Customer email and password are pulled from the fixture customer.php
-        $this->accountManagement->authenticate('customer@example.com', 'wrongPassword', true);
+        $this->accountManagement->authenticate('customer@example.com', 'wrongPassword');
     }
 
     /**
@@ -160,7 +160,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     public function testLoginWrongUsername()
     {
         // Customer email and password are pulled from the fixture customer.php
-        $this->accountManagement->authenticate('non_existing_user', 'password', true);
+        $this->accountManagement->authenticate('non_existing_user', 'password');
     }
 
     /**
@@ -606,8 +606,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Admin', $customerAfter->getCreatedIn());
         $this->accountManagement->authenticate(
             $customerAfter->getEmail(),
-            'aPassword',
-            true
+            'aPassword'
         );
         $attributesBefore = $this->extensibleDataObjectConverter->toFlatArray(
             $existingCustomer,
@@ -716,7 +715,6 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         }
         $this->assertEquals($email2, $dataInService['email']);
         $this->assertArrayNotHasKey('is_active', $dataInService);
-        $this->assertArrayNotHasKey('updated_at', $dataInService);
         $this->assertArrayNotHasKey('password_hash', $dataInService);
     }
 
