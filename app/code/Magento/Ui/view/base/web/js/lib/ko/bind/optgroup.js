@@ -4,11 +4,14 @@
  */
 
 define([
-    'ko'
-], function (ko) {
+    'ko',
+    'mageUtils'
+    ], function (ko, utils) {
     'use strict';
 
     var captionPlaceholder = {},
+        optgroupTmpl = '<optgroup label="${ $.label }"></optgroup>',
+        nbspRe = /&nbsp;/g,
         optionsText,
         optionsValue,
         optionTitle;
@@ -190,12 +193,15 @@ define([
                     ko.utils.setTextContent(option, allBindings.get('optionsCaption'));
                     ko.selectExtensions.writeValue(option, undefined);
                 } else if (typeof arrayEntry[optionsValue] === 'undefined') { // empty value === optgroup
-                    option = element.ownerDocument.createElement('optgroup');
-                    option.setAttribute('label', arrayEntry[optionsText]);
-                    option.setAttribute('title', arrayEntry[optionsText + 'title']);
+                    option = utils.template(optgroupTmpl, {
+                        label: arrayEntry[optionsText],
+                        title: arrayEntry[optionsText + 'title']
+                    });
+                    option = ko.utils.parseHtmlFragment(option)[0];
+
                 } else {
                     option = element.ownerDocument.createElement('option');
-                    option.setAttribute('title', arrayEntry[optionsText + 'title']);
+                    option.setAttribute('data-title', arrayEntry[optionsText + 'title']);
                     ko.selectExtensions.writeValue(option, arrayEntry[optionsValue]);
                     ko.utils.setTextContent(option, arrayEntry[optionsText].replace(/^\s+/g, ''));
                 }
@@ -223,6 +229,15 @@ define([
 
             /**
              *
+             * @param {*} string, times
+             * @returns {Array}
+             */
+            function strPad(string, times) {
+                return  (new Array(times + 1)).join(string);
+            }
+
+            /**
+             *
              * @param {*} options
              * @returns {Array}
              */
@@ -230,30 +245,22 @@ define([
                 var res = [];
                 nestedOptionsLevel++;
 
-                if (!nestedOptionsLevel) { // zero level
-                    // If caption is included, add it to the array
-                    if (allBindings.has('optionsCaption')) {
-                        captionValue = ko.utils.unwrapObservable(allBindings.get('optionsCaption'));
-                        // If caption value is null or undefined, don't show a caption
-                        if (captionValue !== null && captionValue !== undefined && captionValue !== false) {
-                            res.push(captionPlaceholder);
-                        }
-                    }
-                }
                 ko.utils.arrayForEach(options, function (option) {
-                    var label, title, value, obj = {};
+                    var value = applyToObject(option, optionsValue, option),
+                        label = applyToObject(option, optionsText, value) || '',
+                        title = applyToObject(option, optionsText, value) || '',
+                        obj = {};
 
-                    value = applyToObject(option, optionsValue, option);
-                    label = applyToObject(option, optionsText, value);
                     obj[optionTitle] = applyToObject(option, optionsText + 'title', value);
 
+                    label = label.replace(nbspRe, '').trim();
+
                     if (Array.isArray(value)) {
-                        obj[optionsText] = label;
-                        obj[optionsValue] = undefined;
+                        obj[optionsText] = strPad('&nbsp;', nestedOptionsLevel * 4) + label;
                         res.push(obj);
                         res = res.concat(formatOptions(value));
                     } else {
-                        obj[optionsText] = label;
+                        obj[optionsText] = strPad('  ', nestedOptionsLevel * 3) + label;
                         obj[optionsValue] = value;
                         res.push(obj);
                     }
