@@ -122,9 +122,9 @@ class Deployer
                             'assetRepo' => $this->objectManager->create(
                                 'Magento\Framework\View\Asset\Repository',
                                 [
-                                    'design' => $design
+                                    'design' => $design,
                                 ]
-                            )
+                            ),
                         ]
                     );
                     foreach ($appFiles as $info) {
