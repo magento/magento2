@@ -83,7 +83,7 @@ class Base implements CollectorInterface
         }
         $themeAbsolutePath = $this->componentRegistrar->getPath(ComponentRegistrar::THEME, $themePath);
         if (!$themeAbsolutePath) {
-            throw new \UnexpectedValueException("Can't get files for theme '$themePath': no such theme registered");
+            return [];
         }
         $themeDir = $this->readDirFactory->create($themeAbsolutePath);
         $searchPattern = "{$namespace}_{$module}/{$this->subDir}{$filePath}";
