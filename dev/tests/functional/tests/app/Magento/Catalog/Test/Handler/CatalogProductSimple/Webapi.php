@@ -106,7 +106,7 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
             throw new \Exception('Product creation by webapi handler was not successful!');
         }
 
-        return ['id' => $response['id']];
+        return $this->parseResponse($response);
     }
 
     /**
@@ -156,6 +156,17 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
     }
 
     /**
+     * Parse data in response.
+     *
+     * @param array $response
+     * @return array
+     */
+    protected function parseResponse(array $response)
+    {
+        return ['id' => $response['id']];
+    }
+
+    /**
      * Preparation of fpt attribute data.
      *
      * @return void
@@ -198,10 +209,8 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
                 ? $this->fields['product']['quantity_and_stock_status']['is_in_stock']
                 : false;
         }
-        if (!isset($stockData['qty'])) {
-            $stockData['qty'] = isset($this->fields['product']['quantity_and_stock_status']['qty'])
-                ? $this->fields['product']['quantity_and_stock_status']['qty']
-                : null;
+        if (!isset($stockData['qty']) && isset($this->fields['product']['quantity_and_stock_status']['qty'])) {
+            $stockData['qty'] = $this->fields['product']['quantity_and_stock_status']['qty'];
         }
 
         if (isset($stockData['use_config_enable_qty_increments'])) {

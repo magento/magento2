@@ -47,6 +47,27 @@ class Webapi extends SimpleProductWebapi implements DownloadableProductInterface
     }
 
     /**
+     * Parse data in response.
+     *
+     * @param array $response
+     * @return array
+     */
+    protected function parseResponse(array $response)
+    {
+        $checkoutData = $this->fixture->hasData('checkout_data') ? $this->fixture->getData('checkout_data') : [];
+        if (!empty($response['extension_attributes']['downloadable_product_links'])) {
+            foreach ($response['extension_attributes']['downloadable_product_links'] as $key => $link) {
+                $checkoutData['options']['links'][$key]['id'] = $link['id'];
+            }
+        }
+
+        return [
+            'id' => $response['id'],
+            'checkout_data' => $checkoutData
+        ];
+    }
+
+    /**
      * Preparation of downloadable samples data.
      *
      * @return void

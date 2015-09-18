@@ -168,7 +168,12 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      * @var array
      */
     protected $manageStock = [
-        'Yes' => [],
+        'Yes' => [
+            'manage_stock' => 'Yes',
+            'use_config_manage_stock' => 'Yes',
+            'enable_qty_increments' => 'No',
+            'use_config_enable_qty_increments' => 'Yes',
+        ],
         'No' => [
             'manage_stock' => 'No',
             'use_config_manage_stock' => 'No',
@@ -176,7 +181,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             'use_config_min_sale_qty' => 1,
             'max_sale_qty' => 10000 ,
             'use_config_max_sale_qty' => 1,
-            'enable_qty_increments' => 0,
+            'enable_qty_increments' => 'No',
             'use_config_enable_qty_increments' => 'No',
         ]
     ];
@@ -343,14 +348,11 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     {
         $quantityAndStockStatus = isset($this->fields['product']['quantity_and_stock_status'])
             ? $this->fields['product']['quantity_and_stock_status']
-            : ['qty' => null, 'is_in_stock' => 'In Stock'];
+            : ['is_in_stock' => 'In Stock'];
 
         if (!isset($quantityAndStockStatus['is_in_stock'])) {
             $qty = isset($quantityAndStockStatus['qty']) ? intval($quantityAndStockStatus['qty']) : null;
             $quantityAndStockStatus['is_in_stock'] = 0 === $qty ? 'Out of Stock' : 'In Stock';
-        }
-        if (!isset($quantityAndStockStatus['qty'])) {
-            $quantityAndStockStatus['qty'] = 'Out of Stock' == $quantityAndStockStatus['is_in_stock'] ? 0 : null;
         }
 
         $this->fields['product']['quantity_and_stock_status'] = $quantityAndStockStatus;
@@ -434,13 +436,11 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     protected function prepareAdvancedInventory()
     {
         if (!isset($this->fields['product']['stock_data']['manage_stock'])) {
-            if (null === $this->fields['product']['quantity_and_stock_status']['qty']) {
-                $this->fields['product']['stock_data']['manage_stock'] = 'No';
-            } else {
-                $this->fields['product']['stock_data']['manage_stock'] = 'Yes';
-            }
+            $this->fields['product']['stock_data']['manage_stock'] = 'Yes';
         }
 
+        $this->fields['product']['stock_data']['is_in_stock'] =
+            $this->fields['product']['quantity_and_stock_status']['is_in_stock'];
         $this->fields['product']['stock_data'] = array_merge(
             $this->manageStock[$this->fields['product']['stock_data']['manage_stock']],
             $this->fields['product']['stock_data']
