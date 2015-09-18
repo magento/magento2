@@ -144,6 +144,23 @@ class videoDialog extends Block
     }
 
     /**
+     * Validates form data
+     *
+     * @param array $data
+     * @return bool
+     */
+    public function validate(array $data)
+    {
+        foreach ($data as $key => $value) {
+            $formValue = $this->_rootElement->find($key, Locator::SELECTOR_NAME)->getValue();
+            if ($value != $formValue) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Fill the video field in form
      * @param string $data
      */

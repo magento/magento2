@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
+    <testCase name="Magento\ProductVideo\Test\TestCase\UpdateVideoInPCFTest" summary="Update video in PCF" ticketId="PV-1">
+        <variation name="UpdateVideoInPCFTestVariation1">
+            <data name="description" xsi:type="string">Edit Youtube URL</data>
+            <data name="product/dataset" xsi:type="string">product_with_video_youtube</data>
+            <data name="video/video_url" xsi:type="string">https://youtu.be/bpOSxM0rNPM</data>
+            <constraint name="Magento\ProductVideo\Test\Constraint\AssertVideoDataIsCorrect" />
+        </variation>
+        <variation name="UpdateVideoInPCFTestVariation2">
+            <data name="description" xsi:type="string">Edit vimeo URL</data>
+            <data name="product/dataset" xsi:type="string">product_with_video_youtube</data>
+            <data name="video/video_url" xsi:type="string">https://vimeo.com/16342611</data>
+            <constraint name="Magento\ProductVideo\Test\Constraint\AssertVideoDataIsCorrect" />
+        </variation>
+        <variation name="UpdateVideoInPCFTestVariation3">
+            <data name="description" xsi:type="string">Edit all available fields except URL</data>
+            <data name="product/dataset" xsi:type="string">product_with_video_youtube</data>
+            <data name="video/video_title" xsi:type="string">Edit Test</data>
+            <data name="video/video_description" xsi:type="string">This is an edit test</data>
+            <constraint name="Magento\ProductVideo\Test\Constraint\AssertVideoDataIsCorrect" />
+        </variation>
+        <variation name="UpdateVideoInPCFTestVariation1">
+            <data name="description" xsi:type="string">Edit all fields</data>
+            <data name="product/dataset" xsi:type="string">product_with_video_youtube</data>
+            <data name="video/video_url" xsi:type="string">https://youtu.be/bpOSxM0rNPM</data>
+            <data name="video/video_title" xsi:type="string">Edit Test</data>
+            <data name="video/video_description" xsi:type="string">This is an edit test</data>
+            <constraint name="Magento\ProductVideo\Test\Constraint\AssertVideoDataIsCorrect" />
+        </variation>
+    </testCase>
+</config>
