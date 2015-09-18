@@ -757,7 +757,6 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     public function testCanonicalUrlRewriteGenerateWithEmptyUrlPath()
     {
         $productId = 'product_id';
-        $requestPath = 'simple-product.html';
         $storeId = 10;
         $product = $this
             ->getMockBuilder('Magento\Catalog\Model\Product')
