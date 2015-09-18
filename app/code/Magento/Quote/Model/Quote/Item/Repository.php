@@ -51,7 +51,7 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
         $this->quoteRepository = $quoteRepository;
         $this->productRepository = $productRepository;
         $this->itemDataFactory = $itemDataFactory;
-        $this->extensibleAttributesProcessors = $extensibleAttributesProcessors;
+        $this->cartItemProcessors = $cartItemProcessors;
     }
 
     /**
