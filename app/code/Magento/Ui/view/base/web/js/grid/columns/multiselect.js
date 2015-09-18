@@ -22,16 +22,16 @@ define([
             excluded: [],
             actions: [{
                 value: 'selectAll',
-                label: $t('Select all')
+                label: $t('Select All')
             }, {
                 value: 'deselectAll',
-                label: $t('Deselect all')
+                label: $t('Deselect All')
             }, {
                 value: 'selectPage',
-                label: $t('Select all on this page')
+                label: $t('Select All on This Page')
             }, {
                 value: 'deselectPage',
-                label: $t('Deselect all on this page')
+                label: $t('Deselect All on This Page')
             }],
 
             imports: {
@@ -43,6 +43,10 @@ define([
                 '${ $.provider }:params.filters': 'deselectAll',
                 selected: 'onSelectedChange',
                 rows: 'onRowsChange'
+            },
+
+            modules: {
+                source: '${ $.provider }'
             }
         },
 
@@ -318,6 +322,19 @@ define([
         },
 
         /**
+         * Returns selected items on a current page.
+         *
+         * @returns {Array}
+         */
+        getPageSelections: function () {
+            var ids = this.getIds();
+
+            return this.selected.filter(function (id) {
+                return _.contains(ids, id);
+            });
+        },
+
+        /**
          * Returns selections data.
          *
          * @returns {Object}
@@ -327,8 +344,25 @@ define([
                 excluded: this.excluded(),
                 selected: this.selected(),
                 total: this.totalSelected(),
-                excludeMode: this.excludeMode()
+                excludeMode: this.excludeMode(),
+                params: this.getFiltering()
             };
+        },
+
+        /**
+         * Extracts filtering data from data provider.
+         *
+         * @returns {Object} Current filters state.
+         */
+        getFiltering: function () {
+            var source = this.source(),
+                keys = ['filters', 'search', 'namespace'];
+
+            if (!source) {
+                return {};
+            }
+
+            return _.pick(source.get('params'), keys);
         },
 
         /**
