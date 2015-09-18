@@ -52,7 +52,7 @@ class FilesTest extends \PHPUnit_Framework_TestCase
     public function testGetComposerExcludeTests()
     {
         $this->assertNoTestDirs(
-            $this->model->getComposerFiles('module', false)
+            $this->model->getComposerFiles(ComponentRegistrar::MODULE, false)
         );
     }
 
