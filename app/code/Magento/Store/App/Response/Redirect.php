@@ -83,11 +83,11 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
         if ($url) {
             $refererUrl = $url;
         }
-        $url = $this->_request->getParam(\Magento\Framework\App\Action\Action::PARAM_NAME_BASE64_URL);
+        $url = $this->_request->getParam(\Magento\Framework\App\ActionInterface::PARAM_NAME_BASE64_URL);
         if ($url) {
             $refererUrl = $this->_urlCoder->decode($url);
         }
-        $url = $this->_request->getParam(\Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED);
+        $url = $this->_request->getParam(\Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED);
         if ($url) {
             $refererUrl = $this->_urlCoder->decode($url);
         }
