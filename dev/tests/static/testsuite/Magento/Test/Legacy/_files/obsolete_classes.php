@@ -3845,4 +3845,6 @@ return [
         'Magento\CheckoutAgreements\Model\AgreementsProviderInterface'
     ],
     ['Magento\Setup\Model\SampleData', 'Magento\SampleData\Model\SampleData'],
+    ['Magento\Customer\Controller\Account\ResetPassword'],
+    ['Magento\Customer\Controller\Account'],
 ];

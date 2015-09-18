@@ -9,6 +9,7 @@ namespace Magento\GiftMessage\Block\Adminhtml\Sales\Order\View;
  * Adminhtml sales order view gift options block
  *
  * @author     Magento Core Team <core@magentocommerce.com>
+ * @codeCoverageIgnore
  */
 class Giftoptions extends \Magento\Backend\Block\Template
 {
