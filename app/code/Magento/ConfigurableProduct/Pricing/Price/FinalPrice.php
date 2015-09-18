@@ -53,7 +53,7 @@ class FinalPrice extends \Magento\Catalog\Pricing\Price\FinalPrice
         $selectedConfigurableOption = $this->product->getSelectedConfigurableOption();
         $productId = $selectedConfigurableOption ? $selectedConfigurableOption->getId() : $this->product->getId();
         if (!isset($this->values[$productId])) {
-            $this->values[$productId] = $this->priceResolver->getPrice($this->product);
+            $this->values[$productId] = $this->priceResolver->resolvePrice($this->product);
         }
 
         return $this->values[$productId];
