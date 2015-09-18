@@ -114,6 +114,19 @@ class Deployer
                     $this->output->writeln("=== {$area} -> {$themePath} -> {$locale} ===");
                     $this->count = 0;
                     $this->errorCount = 0;
+                    $design = $this->objectManager->create('Magento\Framework\View\DesignInterface');
+                    $design->setDesignTheme($themePath, $area);
+                    $fileManager = $this->objectManager->create(
+                        'Magento\RequireJs\Model\FileManager',
+                        [
+                            'assetRepo' => $this->objectManager->create(
+                                'Magento\Framework\View\Asset\Repository',
+                                [
+                                    'design' => $design
+                                ]
+                            )
+                        ]
+                    );
                     foreach ($appFiles as $info) {
                         list($fileArea, $fileTheme, , $module, $filePath) = $info;
                         if (($fileArea == $area || $fileArea == 'base') &&
@@ -138,6 +151,7 @@ class Deployer
                             null
                         );
                     }
+                    $fileManager->clearBundleJsPool();
                     $this->bundleManager->flush();
                     $this->output->writeln("\nSuccessful: {$this->count} files; errors: {$this->errorCount}\n---\n");
                 }
