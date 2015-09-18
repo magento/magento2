@@ -10,12 +10,27 @@ use Magento\Backend\Test\Handler\Conditions;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
+use Magento\SalesRule\Test\Fixture\SalesRule;
 
 /**
  * Curl handler for creating sales rule.
  */
 class Curl extends Conditions implements SalesRuleInterface
 {
+    /**
+     * Sales rule instance.
+     *
+     * @var SalesRule
+     */
+    protected $fixture;
+
+    /**
+     * Prepared data for request to create sales rule.
+     *
+     * @var array
+     */
+    protected $data;
+
     /**
      * Map of type parameter.
      *
@@ -69,7 +84,7 @@ class Curl extends Conditions implements SalesRuleInterface
         ],
         'is_rss' => [
             'Yes' => 1,
-            'No' => 2,
+            'No' => 0,
         ],
         'simple_action' => [
             'Percent of product price discount' => 'by_percent',
@@ -79,11 +94,11 @@ class Curl extends Conditions implements SalesRuleInterface
         ],
         'apply_to_shipping' => [
             'Yes' => 1,
-            'No' => 2,
+            'No' => 0,
         ],
         'stop_rules_processing' => [
             'Yes' => 1,
-            'No' => 2,
+            'No' => 0,
         ],
         'simple_free_shipping' => [
             'No' => 0,
@@ -123,23 +138,9 @@ class Curl extends Conditions implements SalesRuleInterface
     public function persist(FixtureInterface $fixture = null)
     {
         $this->mapTypeParams = array_merge($this->mapTypeParams, $this->additionalMapTypeParams);
+
+        $data = $this->prepareData($fixture);
         $url = $_ENV['app_backend_url'] . 'sales_rule/promo_quote/save/';
-        $data = $this->replaceMappingData($fixture->getData());
-        $data['rule'] = [];
-        if (isset($data['conditions_serialized'])) {
-            $data['rule']['conditions'] = $this->prepareCondition($data['conditions_serialized']);
-            unset($data['conditions_serialized']);
-        }
-
-        $data['website_ids'] = $this->prepareWebsites($data);
-        $data['customer_group_ids'] = $this->prepareCustomerGroup($data);
-
-        if (isset($data['actions_serialized'])) {
-            $this->mapTypeParams['Conditions combination']['type'] =
-                'Magento\SalesRule\Model\Rule\Condition\Product\Combine';
-            $data['rule']['actions'] = $this->prepareCondition($data['actions_serialized']);
-            unset($data['actions_serialized']);
-        }
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->write($url, $data);
         $response = $curl->read();
@@ -157,38 +158,66 @@ class Curl extends Conditions implements SalesRuleInterface
     }
 
     /**
-     * Prepare website data for curl.
+     * Prepare data for creating sales rule request.
      *
-     * @param array $data
+     * @param FixtureInterface $fixture
      * @return array
      */
-    protected function prepareWebsites(array $data)
+    public function prepareData(FixtureInterface $fixture)
+    {
+        $this->fixture = $fixture;
+        $this->data = $this->replaceMappingData($this->fixture->getData());
+
+        $this->data['rule'] = [];
+        if (isset($this->data['conditions_serialized'])) {
+            $this->data['rule']['conditions'] = $this->prepareCondition($this->data['conditions_serialized']);
+            unset($this->data['conditions_serialized']);
+        }
+
+        $this->prepareWebsites();
+        $this->prepareCustomerGroup();
+
+        if (isset($this->data['actions_serialized'])) {
+            $this->mapTypeParams['Conditions combination']['type'] =
+                'Magento\SalesRule\Model\Rule\Condition\Product\Combine';
+            $this->data['rule']['actions'] = $this->prepareCondition($this->data['actions_serialized']);
+            unset($this->data['actions_serialized']);
+        }
+
+        return $this->data;
+    }
+
+    /**
+     * Prepare website data for curl.
+     *
+     * @return array
+     */
+    protected function prepareWebsites()
     {
         $websiteIds = [];
-        if (!empty($data['website_ids'])) {
-            foreach ($data['website_ids'] as $name) {
+        if (!empty($this->data['website_ids'])) {
+            foreach ($this->data['website_ids'] as $name) {
                 $websiteIds[] = isset($this->websiteIds[$name]) ? $this->websiteIds[$name] : $name;
             }
         }
 
-        return $websiteIds;
+        $this->data['website_ids'] = $websiteIds;
     }
 
     /**
      * Prepare customer group data for curl.
      *
-     * @param array $data
      * @return array
      */
-    protected function prepareCustomerGroup(array $data)
+    protected function prepareCustomerGroup()
     {
         $groupIds = [];
-        if (!empty($data['customer_group_ids'])) {
-            foreach ($data['customer_group_ids'] as $name) {
+        if (!empty($this->data['customer_group_ids'])) {
+            foreach ($this->data['customer_group_ids'] as $name) {
                 $groupIds[] = isset($this->customerIds[$name]) ? $this->customerIds[$name] : $name;
             }
         }
 
-        return $groupIds;
+        $this->data['customer_group_ids'] = $groupIds;
     }
 }

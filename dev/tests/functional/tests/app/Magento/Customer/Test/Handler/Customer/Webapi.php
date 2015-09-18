@@ -55,7 +55,7 @@ class Webapi extends AbstractWebapi implements CustomerInterface
         $this->webapiTransport->close();
 
         if (empty($response['id'])) {
-            $this->eventManager->dispatchEvent(['curl_failed'], [$response]);
+            $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
             throw new \Exception('Customer creation by Web API handler was not successful!');
         }
 

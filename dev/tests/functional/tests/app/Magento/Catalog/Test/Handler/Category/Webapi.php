@@ -78,7 +78,7 @@ class Webapi extends AbstractWebapi implements CategoryInterface
         $this->webapiTransport->close();
 
         if (empty($response['id'])) {
-            $this->eventManager->dispatchEvent(['curl_failed'], [$response]);
+            $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
             throw new \Exception('Category creation by webapi handler was not successful!');
         }
 
@@ -147,6 +147,7 @@ class Webapi extends AbstractWebapi implements CategoryInterface
                 $this->webapiTransport->close();
 
                 if ('true' != $response) {
+                    $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
                     throw new \Exception('Assign product to category was not successful!');
                 }
             }
