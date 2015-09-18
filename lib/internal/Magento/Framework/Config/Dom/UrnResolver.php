@@ -30,11 +30,9 @@ class UrnResolver
                 // urn:magento:module:Magento_Catalog:etc/catalog_attributes.xsd
                 // 0 : urn, 1: magento, 2: module, 3: Magento_Catalog, 4: etc/catalog_attributes.xsd
                 // moduleName -> Magento_Catalog
-                $modulePath = str_replace(' ', '', ucwords(str_replace('-', ' ', $urnParts[3])));
-                $moduleName = ucfirst($urnParts[1]) . '_' . $modulePath;
                 $schemaPath = $componentRegistrar->getPath(
                     ComponentRegistrar::MODULE,
-                    $moduleName
+                    $urnParts[3]
                 ) . '/' . $urnParts[4];
             } else if ($urnParts[2] == 'framework') {
                 // urn:magento:framework:Module/etc/module.xsd
