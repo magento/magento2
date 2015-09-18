@@ -116,7 +116,7 @@ class File implements MergeableInterface
         $path = $this->join($path, $this->filePath);
         $minifiedPath = $this->minification->addMinifiedSign($path);
         if ($path !== $minifiedPath
-            &&$this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW)->isExist($minifiedPath)
+            && $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW)->isExist($minifiedPath)
         ) {
             $path = $minifiedPath;
         }
