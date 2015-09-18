@@ -82,10 +82,7 @@ class Consumer implements ConsumerInterface
      */
     public function process($maxNumberOfMessages = null)
     {
-        $queueName = $this->configuration->getQueueName();
-        $consumerName = $this->configuration->getConsumerName();
-        $connectionName = $this->amqpConfig->getConnectionByConsumer($consumerName);
-        $queue = $this->queueRepository->get($connectionName, $queueName);
+        $queue = $this->getQueue();
 
         if (!isset($maxNumberOfMessages)) {
             $this->runDaemonMode($queue);
@@ -152,5 +149,19 @@ class Consumer implements ConsumerInterface
         $callback = [$this, 'dispatchMessage'];
 
         $queue->subscribe($callback);
+    }
+
+    /**
+     * @return QueueInterface
+     * @throws LocalizedException
+     */
+    private function getQueue()
+    {
+        $queueName = $this->configuration->getQueueName();
+        $consumerName = $this->configuration->getConsumerName();
+        $connectionName = $this->amqpConfig->getConnectionByConsumer($consumerName);
+        $queue = $this->queueRepository->get($connectionName, $queueName);
+
+        return $queue;
     }
 }
