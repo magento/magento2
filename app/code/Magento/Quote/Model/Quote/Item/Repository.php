@@ -32,21 +32,21 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
     protected $itemDataFactory;
 
     /**
-     * @var \Magento\Quote\Model\Quote\Item\ExtensibleAttributeProcessorInterface[]
+     * @var \Magento\Quote\Model\Quote\Item\CartItemProcessorInterface[]
      */
-    protected $extensibleAttributesProcessors;
+    protected $cartItemProcessors;
 
     /**
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Quote\Api\Data\CartItemInterfaceFactory $itemDataFactory
-     * @param \Magento\Quote\Model\Quote\Item\ExtensibleAttributeProcessorInterface[] $extensibleAttributesProcessors
+     * @param \Magento\Quote\Model\Quote\Item\CartItemProcessorInterface[] $cartItemProcessors
      */
     public function __construct(
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Quote\Api\Data\CartItemInterfaceFactory $itemDataFactory,
-        array $extensibleAttributesProcessors = []
+        array $cartItemProcessors = []
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->productRepository = $productRepository;
@@ -100,8 +100,7 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
                 $cartItem->setData('qty', $qty);
             } else {
                 $product = $this->productRepository->get($cartItem->getSku());
-                $params = $this->getBuyRequest($product->getTypeId(), $cartItem);
-                $quote->addProduct($product, $params);
+                $quote->addProduct($product, $this->getBuyRequest($product->getTypeId(), $cartItem));
             }
             $this->quoteRepository->save($quote->collectTotals());
         } catch (\Exception $e) {
@@ -122,15 +121,10 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
         $productType,
         \Magento\Quote\Api\Data\CartItemInterface $cartItem
     ) {
-        $params = null;
-        if ($cartItem->getProductOption()->getExtensionAttributes()
-            && isset($this->extensibleAttributesProcessors[$productType])
-        ) {
-            $params = $this->extensibleAttributesProcessors[$productType]->convertAttributesToBuyRequest(
-                $cartItem->getProductOption()->getExtensionAttributes()
-            );
-        }
-        return $params === null ? $cartItem->getQty() : $params;
+        $params = (isset($this->cartItemProcessors[$productType]))
+            ? $this->cartItemProcessors[$productType]->convertToBuyRequest($cartItem)
+            : null;
+        return ($params === null) ? $cartItem->getQty() : $params;
     }
 
     /**
