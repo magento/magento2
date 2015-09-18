@@ -57,6 +57,11 @@ class Product extends AbstractResource
     protected $typeFactory;
 
     /**
+     * @var \Magento\Catalog\Model\Product\Attribute\DefaultAttributes
+     */
+    protected $defaultAttributes;
+
+    /**
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
@@ -65,6 +70,7 @@ class Product extends AbstractResource
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory
      * @param \Magento\Eav\Model\Entity\TypeFactory $typeFactory
+     * @param \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -78,6 +84,7 @@ class Product extends AbstractResource
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory,
         \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
+        \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes,
         $data = []
     ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
@@ -85,6 +92,7 @@ class Product extends AbstractResource
         $this->eventManager = $eventManager;
         $this->setFactory = $setFactory;
         $this->typeFactory = $typeFactory;
+        $this->defaultAttributes = $defaultAttributes;
         parent::__construct(
             $context,
             $storeManager,
@@ -141,7 +149,7 @@ class Product extends AbstractResource
      */
     protected function _getDefaultAttributes()
     {
-        return ['entity_id', 'attribute_set_id', 'type_id', 'created_at', 'updated_at'];
+        return $this->defaultAttributes->getDefaultAttributes();
     }
 
     /**
