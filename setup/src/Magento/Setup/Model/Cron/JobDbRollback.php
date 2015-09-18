@@ -23,22 +23,23 @@ class JobDbRollback extends AbstractJob
 
     /**
      * Constructor
-     *
      * @param BackupRollbackFactory $backupRollbackFactory
      * @param OutputInterface $output
      * @param Status $status
-     * @param string $name
+     * @param ObjectManagerProvider $objectManagerProvider
+     * @param array $name
      * @param array $params
      */
     public function __construct(
         BackupRollbackFactory $backupRollbackFactory,
         OutputInterface $output,
         Status $status,
+        ObjectManagerProvider $objectManagerProvider,
         $name,
         $params = []
     ) {
         $this->backupRollbackFactory = $backupRollbackFactory;
-        parent::__construct($output, $status, $name, $params);
+        parent::__construct($output, $status, $objectManagerProvider, $name, $params);
     }
 
     /**

@@ -25,6 +25,7 @@ class Store extends \Magento\Framework\Model\AbstractModel
      * Resource initialization
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -37,6 +38,7 @@ class Store extends \Magento\Framework\Model\AbstractModel
      * @param int $entityTypeId
      * @param int $storeId
      * @return $this
+     * @codeCoverageIgnore
      */
     public function loadByEntityStore($entityTypeId, $storeId)
     {
