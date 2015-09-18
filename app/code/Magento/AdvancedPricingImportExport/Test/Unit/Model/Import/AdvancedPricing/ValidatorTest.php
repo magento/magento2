@@ -73,7 +73,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->validatorTest->expects($this->once())->method('init');
 
-        $this->validator->init();
+        $this->validator->init(null);
     }
 
     public function isValidDataProvider()

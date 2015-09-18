@@ -1057,7 +1057,7 @@
     </type>
     <type name="Magento\Framework\Url\Decoder">
         <arguments>
-            <argument name="urlBuilder" xsi:type="object">Magento\Framework\UrlInterface\Proxy</argument>
+            <argument name="urlBuilder" xsi:type="object">Magento\Framework\UrlInterface</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Api\Search\SearchCriteriaBuilder" shared="false"/>
