@@ -33,12 +33,10 @@ angular.module('create-backup', ['ngStorage'])
         };
 
         $scope.goToStartUpdater = function () {
-            if ($state.current.type === 'update') {
-                $state.go('root.start-updater-update');
-            } else if ($state.current.type === 'upgrade') {
-                $state.go('root.start-updater-upgrade');
-            } else if ($state.current.type === 'uninstall') {
+            if ($state.current.type === 'uninstall') {
                 $state.go('root.data-option');
+            } else {
+                $state.go('root.start-updater-' + $state.current.type);
             }
         }
 

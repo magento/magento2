@@ -6,34 +6,34 @@
 ?>
 <section class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?php echo __('General Information'); ?></span>
+        <span class="title"><?php /* @escapeNotVerified */ echo __('General Information'); ?></span>
     </div>
     <div class="admin__page-section-content log-details">
         <table class="data-table admin__table-secondary order-billing-agreement-table">
             <tbody>
                 <tr>
-                    <th><?php echo __('Reference ID'); ?></th>
+                    <th><?php /* @escapeNotVerified */ echo __('Reference ID'); ?></th>
                     <td><?php echo $block->escapeHtml($block->getReferenceId()) ?></td>
                 </tr>
                 <tr>
-                    <th><?php echo __('Customer'); ?></th>
+                    <th><?php /* @escapeNotVerified */ echo __('Customer'); ?></th>
                     <td>
-                        <a href="<?php echo $block->getCustomerUrl(); ?>">
-                            <?php echo $block->getCustomerEmail() ?>
+                        <a href="<?php /* @escapeNotVerified */ echo $block->getCustomerUrl(); ?>">
+                            <?php /* @escapeNotVerified */ echo $block->getCustomerEmail() ?>
                         </a>
                     </td>
                 </tr>
                 <tr>
-                    <th><?php echo __('Status'); ?></th>
-                    <td><?php echo $block->getStatus() ?></td>
+                    <th><?php /* @escapeNotVerified */ echo __('Status'); ?></th>
+                    <td><?php /* @escapeNotVerified */ echo $block->getStatus() ?></td>
                 </tr>
                 <tr>
-                    <th><?php echo __('Created At'); ?></th>
-                    <td><?php echo $block->getCreatedAt(); ?></td>
+                    <th><?php /* @escapeNotVerified */ echo __('Created At'); ?></th>
+                    <td><?php /* @escapeNotVerified */ echo $block->getCreatedAt(); ?></td>
                 </tr>
                 <tr>
-                    <th><?php echo __('Updated At'); ?></th>
-                    <td><?php echo $block->getUpdatedAt(); ?></td>
+                    <th><?php /* @escapeNotVerified */ echo __('Updated At'); ?></th>
+                    <td><?php /* @escapeNotVerified */ echo $block->getUpdatedAt(); ?></td>
                 </tr>
             </tbody>
         </table>

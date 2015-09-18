@@ -84,7 +84,13 @@ class SimpleProductsFixture extends Fixture
         /** @var \Magento\ImportExport\Model\Import $import */
         $import = $this->fixtureModel->getObjectManager()->create(
             'Magento\ImportExport\Model\Import',
-            ['data' => ['entity' => 'catalog_product', 'behavior' => 'append']]
+            [
+                'data' => [
+                    'entity' => 'catalog_product',
+                    'behavior' => 'append',
+                    'validation_strategy' => 'validation-stop-on-errors'
+                ]
+            ]
         );
         // it is not obvious, but the validateSource() will actually save import queue data to DB
         $import->validateSource($generator);

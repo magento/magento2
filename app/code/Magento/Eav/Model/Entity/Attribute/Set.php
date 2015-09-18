@@ -85,6 +85,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -118,6 +119,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Initialize resource model
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
