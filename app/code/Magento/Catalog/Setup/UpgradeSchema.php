@@ -64,18 +64,18 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $setup->getConnection()->dropForeignKey(
                 $setup->getTable(Media::GALLERY_VALUE_TABLE),
                 $setup->getFkName(
-                    $setup->getTable(Media::GALLERY_VALUE_TABLE),
+                    Media::GALLERY_VALUE_TABLE,
                     'value_id',
-                    $setup->getTable(Media::GALLERY_TABLE),
+                    Media::GALLERY_TABLE,
                     'value_id'
                 )
             );
             $setup->getConnection()->dropForeignKey(
                 $setup->getTable(Media::GALLERY_VALUE_TABLE),
                 $setup->getFkName(
-                    $setup->getTable(Media::GALLERY_VALUE_TABLE),
+                    Media::GALLERY_VALUE_TABLE,
                     'store_id',
-                    $setup->getTable('store'),
+                    'store',
                     'store_id'
                 )
             );
@@ -186,9 +186,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
          */
         $setup->getConnection()->addForeignKey(
             $setup->getFkName(
-                $setup->getTable(Media::GALLERY_VALUE_TABLE),
+                Media::GALLERY_VALUE_TABLE,
                 'value_id',
-                $setup->getTable(Media::GALLERY_TABLE),
+                Media::GALLERY_TABLE,
                 'value_id'
             ),
             $setup->getTable(Media::GALLERY_VALUE_TABLE),
@@ -200,7 +200,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
         $setup->getConnection()->addForeignKey(
             $setup->getFkName(
-                $setup->getTable(Media::GALLERY_VALUE_TABLE),
+                Media::GALLERY_VALUE_TABLE,
                 'store_id',
                 $setup->getTable('store'),
                 'store_id'

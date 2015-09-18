@@ -91,7 +91,7 @@ class ContextPlugin
     }
 
     /**
-     * @param \Magento\Framework\App\Action\Action $subject
+     * @param \Magento\Framework\App\ActionInterface $subject
      * @param callable $proceed
      * @param \Magento\Framework\App\RequestInterface $request
      * @return mixed
@@ -101,7 +101,7 @@ class ContextPlugin
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function aroundDispatch(
-        \Magento\Framework\App\Action\Action $subject,
+        \Magento\Framework\App\ActionInterface $subject,
         \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request
     ) {

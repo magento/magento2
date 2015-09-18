@@ -112,7 +112,6 @@ class AccountTest extends \PHPUnit_Framework_TestCase
         } else {
             $this->session->expects($this->once())
                 ->method('authenticate')
-                ->with($this->subject)
                 ->willReturn($isAuthenticated);
             if (!$isAuthenticated) {
                 $this->subject->expects($this->once())
