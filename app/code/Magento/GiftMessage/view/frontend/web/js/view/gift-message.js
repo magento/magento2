@@ -62,6 +62,16 @@ define(['uiComponent', '../model/gift-message', '../model/gift-options', '../act
                     this.resultBlockVisibility(true);
                 }
             },
+            hasActiveOptions: function() {
+                var regionData = this.getRegion('additionalOptions');
+                var options = regionData();
+                for (var i in options) {
+                    if (options[i].isActive()) {
+                        return true;
+                    }
+                }
+                return false;
+            },
             isActive: function() {
                 switch (this.itemId) {
                     case 'orderLevel':
