@@ -64,7 +64,7 @@ class UrnResolverTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage Could not locate schema: 'urn:magento:module:Magento_Test:testfile.xsd' at '/test.xsd'
+     * @expectedExceptionMessage Could not locate schema: 'urn:magento:module:Magento_Test:test.xsd' at '/test.xsd'
      */
     public function testGetRealPathWrongModule()
     {
