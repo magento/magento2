@@ -568,7 +568,7 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
         ];
         $requestData = [
             'sku' => $productSku,
-            'imageId' => $imageId,
+            'entryId' => $imageId,
         ];
         $data = $this->_webApiCall($serviceInfo, $requestData);
         $actual = (array)$data;
