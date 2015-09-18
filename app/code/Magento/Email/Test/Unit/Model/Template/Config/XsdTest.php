@@ -21,7 +21,8 @@ class XsdTest extends \PHPUnit_Framework_TestCase
      */
     public function testMergedXml($fixtureXml, array $expectedErrors)
     {
-        $schemaFile = realpath(__DIR__ . '/../../../../../etc/email_templates.xsd');
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $this->$schemaFile = $urnResolver->getRealPath('urn:magento:module:Magento_Email:etc/email_templates.xsd');
         $this->_testXmlAgainstXsd($fixtureXml, $schemaFile, $expectedErrors);
     }
 
