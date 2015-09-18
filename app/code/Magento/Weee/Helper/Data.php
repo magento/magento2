@@ -296,15 +296,38 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Returns applied weee tax amount
      *
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
-     * @return array
+     * @return float
      */
-    public function getAppliedAmount($item)
+    public function getWeeeTaxAppliedAmount($item)
+    {
+        return $this->getRecursiveNumericAmount($item, __FUNCTION__);
+    }
+
+    /**
+     * Returns applied weee tax amount for the row
+     *
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @return float
+     */
+    public function getWeeeTaxAppliedRowAmount($item)
+    {
+        return $this->getRecursiveNumericAmount($item, __FUNCTION__);
+    }
+
+    /**
+     * Returns accumulated amounts for the item
+     *
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @param string $functionName
+     * @return float
+     */
+    protected function getRecursiveNumericAmount($item, $functionName)
     {
         if ($item instanceof \Magento\Quote\Model\Quote\Item\AbstractItem) {
             if ($item->getHasChildren() && $item->isChildrenCalculated()) {
                 $result = 0;
                 foreach ($item->getChildren() as $child) {
-                    $childData = $this->getAppliedAmount($child);
+                    $childData = $this->getRecursiveNumericAmount($child, $functionName);
                     if (!empty($childData)) {
                         $result += $childData;
                     }
@@ -313,8 +336,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             }
         }
 
-        // if order item data is old enough then weee_tax_applied might not be valid
-        $data = $item->getWeeeTaxAppliedAmount();
+        $data = $item->$functionName();
         if (empty($data)) {
             return 0;
         }
