@@ -19,7 +19,6 @@
         "magento/module-directory": "1.0.0-beta",
         "magento/module-catalog-rule": "1.0.0-beta",
         "magento/module-product-alert": "1.0.0-beta",
-        "magento/module-product-video": "1.0.0-beta",
         "magento/module-url-rewrite": "1.0.0-beta",
         "magento/module-catalog-url-rewrite": "1.0.0-beta",
         "magento/module-page-cache": "1.0.0-beta",
