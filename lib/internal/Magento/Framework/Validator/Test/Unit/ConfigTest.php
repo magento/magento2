@@ -19,9 +19,16 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected $_objectManager;
 
+    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    protected $urnResolver;
+
+    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    protected $urnResolverMock;
+
     protected function setUp()
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
     }
 
     /**
@@ -54,9 +61,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $realObjectManager = new \Magento\Framework\ObjectManager\ObjectManager($factory, $config);
         $factory->setObjectManager($realObjectManager);
         $universalFactory = $realObjectManager->get('Magento\Framework\Validator\UniversalFactory');
+        /** @var \Magento\Framework\Config\Dom\UrnResolver $urnResolverMock */
+        $this->urnResolverMock = $this->getMock('Magento\Framework\Config\Dom\UrnResolver', [], [], '', false);
         $this->_config = $this->_objectManager->getObject(
             'Magento\Framework\Validator\Config',
-            ['configFiles' => $configFiles, 'builderFactory' => $universalFactory]
+            [
+                'configFiles' => $configFiles,
+                'builderFactory' => $universalFactory,
+                'urnResolver' => $this->urnResolverMock
+            ]
         );
     }
 
@@ -295,6 +308,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetSchemaFile()
     {
         $this->_initConfig();
+        $path = $this->urnResolver->getRealPath('urn:magento:library:framework:Validator/etc/acvalidationl.xsd');
+        $this->urnResolverMock->expects($this->once())
+            ->method('getRealPath')
+            ->with('urn:magento:library:framework:Validator/etc/acvalidationl.xsd')
+            ->willReturn($path);
+        $this->assertEquals($path, $this->_config->getSchemaFile());
         $this->assertFileExists($this->_config->getSchemaFile());
     }
 }
