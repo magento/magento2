@@ -17,10 +17,17 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $urnResolverMock = $this->getMock('Magento\Framework\Config\Dom\UrnResolver', [], [], '', false);
+        $urnResolverMock->expects($this->once())
+            ->method('getRealPath')
+            ->with('urn:magento:library:framework:View/PageLayout/etc/layouts.xsd')
+            ->willReturn($urnResolver->getRealPath('urn:magento:library:framework:View/PageLayout/etc/layouts.xsd'));
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->config = $objectManagerHelper->getObject(
             'Magento\Framework\View\PageLayout\Config',
             [
+                'urnResolver' => $urnResolverMock,
                 'configFiles' => [
                     'layouts_one.xml' => file_get_contents(__DIR__ . '/_files/layouts_one.xml'),
                     'layouts_two.xml' => file_get_contents(__DIR__ . '/_files/layouts_two.xml'),

@@ -14,14 +14,11 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      *
      * @var string
      */
-    protected $_schema = null;
+    protected $schema;
 
-    /**
-     * Constructor
-     */
-    public function __construct()
+    public function __construct(\Magento\Framework\Config\Dom\UrnResolver $urnResolver)
     {
-        $this->_schema = realpath(__DIR__ . '/../../etc/page_types.xsd');
+        $this->schema = $urnResolver->getRealPath('urn:magento:library:framework:View/Layout/etc/acl.xsd');
     }
 
     /**
@@ -31,7 +28,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function getSchema()
     {
-        return $this->_schema;
+        return $this->schema;
     }
 
     /**
@@ -41,6 +38,6 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function getPerFileSchema()
     {
-        return $this->_schema;
+        return $this->schema;
     }
 }
