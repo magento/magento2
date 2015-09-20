@@ -64,15 +64,10 @@ class AssertProductInCart extends AbstractConstraint
             ? $checkoutData['options']['custom_options']
             : [];
         $fixturePrice = $product->getPrice();
-        $groupPrice = $product->getGroupPrice();
         $specialPrice = $product->getSpecialPrice();
         $cartItem = $checkoutCart->getCartBlock()->getCartItem($product);
         $formPrice = $cartItem->getPrice();
 
-        if ($groupPrice) {
-            $groupPrice = reset($groupPrice);
-            $fixturePrice = $groupPrice['price'];
-        }
         if ($specialPrice) {
             $fixturePrice = $specialPrice;
         }

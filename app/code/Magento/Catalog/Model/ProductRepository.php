@@ -546,7 +546,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $productOptions = $product->getProductOptions();
         }
         $isDeleteOptions = $product->getIsDeleteOptions();
-        $groupPrices = $product->getData('group_price');
         $tierPrices = $product->getData('tier_price');
 
         $productId = $this->resourceModel->getIdBySku($product->getSku());
@@ -583,9 +582,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             if ($saveOptions) {
                 $product->setProductOptions($productOptions);
                 $product->setCanSaveCustomOptions(true);
-            }
-            if ($groupPrices !== null) {
-                $product->setData('group_price', $groupPrices);
             }
             if ($tierPrices !== null) {
                 $product->setData('tier_price', $tierPrices);

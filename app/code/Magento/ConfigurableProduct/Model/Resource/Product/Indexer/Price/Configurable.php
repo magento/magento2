@@ -135,10 +135,9 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
         );
         $priceColumn = $this->_addAttributeToSelect($select, 'price', 'l.product_id', 0, null, true);
         $tierPriceColumn = $connection->getCheckSql("MIN(i.tier_price) IS NOT NULL", "i.tier_price", 'NULL');
-        $groupPriceColumn = $connection->getCheckSql("MIN(i.group_price) IS NOT NULL", "i.group_price", 'NULL');
 
         $select->columns(
-            ['price' => $priceColumn, 'tier_price' => $tierPriceColumn, 'group_price' => $groupPriceColumn]
+            ['price' => $priceColumn, 'tier_price' => $tierPriceColumn]
         );
 
         $query = $select->insertFromSelect($coaTable);

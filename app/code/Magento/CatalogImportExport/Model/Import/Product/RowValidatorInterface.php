@@ -47,12 +47,6 @@ interface RowValidatorInterface extends \Magento\Framework\Validator\ValidatorIn
 
     const ERROR_TIER_DATA_INCOMPLETE = 'tierPriceDataIsIncomplete';
 
-    const ERROR_INVALID_GROUP_PRICE_SITE = 'groupPriceWebsiteInvalid';
-
-    const ERROR_INVALID_GROUP_PRICE_GROUP = 'groupPriceGroupInvalid';
-
-    const ERROR_GROUP_PRICE_DATA_INCOMPLETE = 'groupPriceDataIsIncomplete';
-
     const ERROR_SKU_NOT_FOUND_FOR_DELETE = 'skuNotFoundToDelete';
 
     const ERROR_SUPER_PRODUCTS_SKU_NOT_FOUND = 'superProductsSkuNotFound';

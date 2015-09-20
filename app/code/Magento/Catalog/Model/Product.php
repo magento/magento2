@@ -1060,38 +1060,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * Get product group price for the customer
-     *
-     * @return float
-     */
-    public function getGroupPrice()
-    {
-        return $this->getPriceModel()->getGroupPrice($this);
-    }
-
-    /**
-     * Gets list of product group prices
-     *
-     * @return \Magento\Catalog\Api\Data\ProductGroupPriceInterface[]|null
-     */
-    public function getGroupPrices()
-    {
-        return $this->getPriceModel()->getGroupPrices($this);
-    }
-
-    /**
-     * Sets list of product group prices
-     *
-     * @param \Magento\Catalog\Api\Data\ProductGroupPriceInterface[] $groupPrices
-     * @return $this
-     */
-    public function setGroupPrices(array $groupPrices = null)
-    {
-        $this->getPriceModel()->setGroupPrices($this, $groupPrices);
-        return $this;
-    }
-
-    /**
      * Gets list of product tier prices
      *
      * @return \Magento\Catalog\Api\Data\ProductTierPriceInterface[]|null

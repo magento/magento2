@@ -596,17 +596,6 @@ class IndexBuilder
         }
 
         /**
-         * Join group price to result
-         */
-        $groupPriceAttr = $this->eavConfig->getAttribute(Product::ENTITY, 'group_price');
-        $select->joinLeft(
-            ['gp' => $groupPriceAttr->getBackend()->getResource()->getMainTable()],
-            'gp.entity_id=rp.product_id AND gp.customer_group_id=rp.customer_group_id AND '
-            . $this->connection->getCheckSql('gp.website_id=0', 'TRUE', 'gp.website_id=rp.website_id'),
-            'value'
-        );
-
-        /**
          * Join default price and websites prices to result
          */
         $priceAttr = $this->eavConfig->getAttribute(Product::ENTITY, 'price');

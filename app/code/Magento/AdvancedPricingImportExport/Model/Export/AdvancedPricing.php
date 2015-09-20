@@ -48,11 +48,6 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
     protected $_passTierPrice = 0;
 
     /**
-     * @var int
-     */
-    protected $_passGroupPrice = 0;
-
-    /**
      * List of items websites
      *
      * @var array
@@ -246,14 +241,6 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                     ) {
                         $this->_passTierPrice = 1;
                     }
-                    if ($attribute->getAttributeCode() == ImportAdvancedPricing::COL_GROUP_PRICE
-                        && in_array(
-                            $attribute->getId(),
-                            $this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_SKIP]
-                        )
-                    ) {
-                        $this->_passGroupPrice = 1;
-                    }
                 }
                 $collection->removeItemByKey($attribute->getId());
             }
@@ -277,12 +264,6 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
             $rawData = $this->collectRawData();
             $productIds = array_keys($rawData);
             if (isset($productIds)) {
-                if (!$this->_passGroupPrice) {
-                    $exportData = array_merge(
-                        $exportData,
-                        $this->getTierAndGroupPrices($productIds, ImportAdvancedPricing::TABLE_GROUPED_PRICE)
-                    );
-                }
                 if (!$this->_passTierPrice) {
                     $exportData = array_merge(
                         $exportData,
