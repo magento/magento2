@@ -12,7 +12,6 @@
     <type name="Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator">
         <arguments>
             <argument name="validators" xsi:type="array">
-                <item name="groupPrice" xsi:type="object">Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\GroupPrice</item>
                 <item name="tierPrice" xsi:type="object">Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\TierPrice</item>
                 <item name="website" xsi:type="object">Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\Website</item>
             </argument>

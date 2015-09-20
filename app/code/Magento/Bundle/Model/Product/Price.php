@@ -47,8 +47,6 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param PriceCurrencyInterface $priceCurrency
      * @param GroupManagementInterface $groupManagement
-     * @param \Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory $groupPriceFactory
-     * @param \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Catalog\Helper\Data $catalogData
      *
@@ -62,7 +60,6 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
         \Magento\Framework\Event\ManagerInterface $eventManager,
         PriceCurrencyInterface $priceCurrency,
         GroupManagementInterface $groupManagement,
-        \Magento\Catalog\Api\Data\ProductGroupPriceInterfaceFactory $groupPriceFactory,
         \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Catalog\Helper\Data $catalogData
@@ -76,7 +73,6 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
             $eventManager,
             $priceCurrency,
             $groupManagement,
-            $groupPriceFactory,
             $tierPriceFactory,
             $config
         );
@@ -447,66 +443,9 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
 
         return min(
             $price,
-            $this->_applyGroupPrice($bundleProduct, $price),
             $this->_applyTierPrice($bundleProduct, $bundleQty, $price),
             $this->_applySpecialPrice($bundleProduct, $price)
         );
-    }
-
-    /**
-     * Apply group price for bundle product
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param float $finalPrice
-     * @return float
-     */
-    protected function _applyGroupPrice($product, $finalPrice)
-    {
-        $result = $finalPrice;
-        $groupPrice = $product->getGroupPrice();
-
-        if (is_numeric($groupPrice)) {
-            $groupPrice = $finalPrice - $finalPrice * ($groupPrice / 100);
-            $result = min($finalPrice, $groupPrice);
-        }
-
-        return $result;
-    }
-
-    /**
-     * Get product group price
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return float|null
-     */
-    public function getGroupPrice($product)
-    {
-        $groupPrices = $product->getData('group_price');
-
-        if ($groupPrices === null) {
-            $attribute = $product->getResource()->getAttribute('group_price');
-            if ($attribute) {
-                $attribute->getBackend()->afterLoad($product);
-                $groupPrices = $product->getData('group_price');
-            }
-        }
-
-        if ($groupPrices === null || !is_array($groupPrices)) {
-            return null;
-        }
-
-        $customerGroup = $this->_getCustomerGroupId($product);
-
-        $matchedPrice = 0;
-
-        foreach ($groupPrices as $groupPrice) {
-            if ($groupPrice['cust_group'] == $customerGroup && $groupPrice['website_price'] > $matchedPrice) {
-                $matchedPrice = $groupPrice['website_price'];
-                break;
-            }
-        }
-
-        return $matchedPrice;
     }
 
     /**
@@ -626,16 +565,6 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
     }
 
     /**
-     * Check is group price value fixed or percent of original price
-     *
-     * @return bool
-     */
-    public function isGroupPriceFixed()
-    {
-        return false;
-    }
-
-    /**
      * Calculate and apply special price
      *
      * @param float  $finalPrice
@@ -675,7 +604,6 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
         $price = (float)$price;
         return min(
             $price,
-            $this->_applyGroupPrice($bundleProduct, $price),
             $this->_applyTierPrice($bundleProduct, $bundleQty, $price),
             $this->_applySpecialPrice($bundleProduct, $price)
         );

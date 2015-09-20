@@ -44,7 +44,6 @@
                 <item name="regular_price" xsi:type="string">Magento\Bundle\Pricing\Price\BundleRegularPrice</item>
                 <item name="final_price" xsi:type="string">Magento\Bundle\Pricing\Price\FinalPrice</item>
                 <item name="tier_price" xsi:type="string">Magento\Bundle\Pricing\Price\TierPrice</item>
-                <item name="group_price" xsi:type="string">Magento\Bundle\Pricing\Price\GroupPrice</item>
                 <item name="special_price" xsi:type="string">Magento\Bundle\Pricing\Price\SpecialPrice</item>
                 <item name="custom_option_price" xsi:type="string">Magento\Catalog\Pricing\Price\CustomOptionPrice</item>
                 <item name="base_price" xsi:type="string">Magento\Catalog\Pricing\Price\BasePrice</item>

@@ -145,11 +145,6 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
             'tp.entity_id = e.entity_id AND tp.website_id = cw.website_id' .
             ' AND tp.customer_group_id = cg.customer_group_id',
             []
-        )->joinLeft(
-            ['gp' => $this->_getGroupPriceIndexTable()],
-            'gp.entity_id = e.entity_id AND gp.website_id = cw.website_id' .
-            ' AND gp.customer_group_id = cg.customer_group_id',
-            []
         )->where(
             'e.type_id=?',
             $this->getTypeId()
@@ -198,12 +193,6 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
             '0'
         );
 
-        $groupPriceExpr = $connection->getCheckSql(
-            'gp.price IS NOT NULL AND gp.price > 0 AND gp.price < 100',
-            'gp.price',
-            '0'
-        );
-
         $tierExpr = new \Zend_Db_Expr("tp.min_price");
 
         if ($priceType == \Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED) {
@@ -217,20 +206,15 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
                 'ROUND(' . $price . ' - ' . '(' . $price . ' * (' . $tierExpr . ' / 100)), 4)',
                 'NULL'
             );
-            $groupPrice = $connection->getCheckSql(
-                $groupPriceExpr . ' > 0',
-                'ROUND(' . $price . ' - ' . '(' . $price . ' * (' . $groupPriceExpr . ' / 100)), 4)',
-                'NULL'
-            );
+
             $finalPrice = $connection->getCheckSql(
-                "{$groupPrice} IS NOT NULL AND {$groupPrice} < {$finalPrice}",
-                $groupPrice,
+                "{$tierPrice} < {$finalPrice}",
+                $tierPrice,
                 $finalPrice
             );
         } else {
             $finalPrice = new \Zend_Db_Expr("0");
             $tierPrice = $connection->getCheckSql($tierExpr . ' IS NOT NULL', '0', 'NULL');
-            $groupPrice = $connection->getCheckSql($groupPriceExpr . ' > 0', $groupPriceExpr, 'NULL');
         }
 
         $select->columns(
@@ -244,9 +228,6 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
                 'max_price' => $finalPrice,
                 'tier_price' => $tierPrice,
                 'base_tier' => $tierPrice,
-                'group_price' => $groupPrice,
-                'base_group_price' => $groupPrice,
-                'group_price_percent' => new \Zend_Db_Expr('gp.price'),
             ]
         );
 
@@ -323,15 +304,6 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
             ) . ' + MIN(i.tier_price)',
             'NULL'
         );
-        $groupPrice = $connection->getCheckSql(
-            'MIN(i.group_price_percent) IS NOT NULL',
-            $connection->getCheckSql(
-                'SUM(io.group_price) = 0',
-                'SUM(io.alt_group_price)',
-                'SUM(io.group_price)'
-            ) . ' + MIN(i.group_price)',
-            'NULL'
-        );
 
         $select = $connection->select()->from(
             ['io' => $this->_getBundleOptionTable()],
@@ -352,7 +324,6 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
                 'max_price' => $maxPrice,
                 'tier_price' => $tierPrice,
                 'base_tier' => 'MIN(i.base_tier)',
-                'group_price' => $groupPrice,
                 'base_group_price' => 'MIN(i.base_group_price)',
             ]
         );
@@ -448,21 +419,6 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
                 'ROUND(idx.min_price * (i.base_tier / 100), 4)* bs.selection_qty',
                 'NULL'
             );
-            $groupExpr = $connection->getCheckSql(
-                'i.base_group_price IS NOT NULL',
-                'ROUND(idx.min_price * (i.base_group_price / 100), 4)* bs.selection_qty',
-                'NULL'
-            );
-            $groupPriceExpr = new \Zend_Db_Expr(
-                $connection->getCheckSql(
-                    'i.base_group_price IS NOT NULL AND i.base_group_price > 0 AND i.base_group_price < 100',
-                    'ROUND(idx.min_price - idx.min_price * (i.base_group_price / 100), 4)',
-                    'idx.min_price'
-                ) . ' * bs.selection_qty'
-            );
-            $priceExpr = new \Zend_Db_Expr(
-                $connection->getCheckSql("{$groupPriceExpr} < {$priceExpr}", $groupPriceExpr, $priceExpr)
-            );
         }
 
         $select = $connection->select()->from(
@@ -520,7 +476,6 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
             return $this;
         }
         $this->_prepareTierPriceIndex($entityIds);
-        $this->_prepareGroupPriceIndex($entityIds);
         $this->_prepareBundlePriceTable();
         $this->_prepareBundlePriceByType(\Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED, $entityIds);
         $this->_prepareBundlePriceByType(\Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC, $entityIds);
@@ -589,67 +544,6 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
         }
 
         $query = $select->insertFromSelect($this->_getTierPriceIndexTable());
-        $connection->query($query);
-
-        return $this;
-    }
-
-    /**
-     * Prepare percentage group price for bundle products
-     *
-     * @param int|array $entityIds
-     * @return $this
-     */
-    protected function _prepareGroupPriceIndex($entityIds = null)
-    {
-        $connection = $this->getConnection();
-
-        // remove index by bundle products
-        $select = $connection->select()->from(
-            ['i' => $this->_getGroupPriceIndexTable()],
-            null
-        )->join(
-            ['e' => $this->getTable('catalog_product_entity')],
-            'i.entity_id=e.entity_id',
-            []
-        )->where(
-            'e.type_id=?',
-            $this->getTypeId()
-        );
-        $query = $select->deleteFromSelect('i');
-        $connection->query($query);
-
-        $select = $connection->select()->from(
-            ['gp' => $this->getTable('catalog_product_entity_group_price')],
-            ['entity_id']
-        )->join(
-            ['e' => $this->getTable('catalog_product_entity')],
-            'gp.entity_id=e.entity_id',
-            []
-        )->join(
-            ['cg' => $this->getTable('customer_group')],
-            'gp.all_groups = 1 OR (gp.all_groups = 0 AND gp.customer_group_id = cg.customer_group_id)',
-            ['customer_group_id']
-        )->join(
-            ['cw' => $this->getTable('store_website')],
-            'gp.website_id = 0 OR gp.website_id = cw.website_id',
-            ['website_id']
-        )->where(
-            'cw.website_id != 0'
-        )->where(
-            'e.type_id=?',
-            $this->getTypeId()
-        )->columns(
-            new \Zend_Db_Expr('MIN(gp.value)')
-        )->group(
-            ['gp.entity_id', 'cg.customer_group_id', 'cw.website_id']
-        );
-
-        if (!empty($entityIds)) {
-            $select->where('gp.entity_id IN(?)', $entityIds);
-        }
-
-        $query = $select->insertFromSelect($this->_getGroupPriceIndexTable());
         $connection->query($query);
 
         return $this;

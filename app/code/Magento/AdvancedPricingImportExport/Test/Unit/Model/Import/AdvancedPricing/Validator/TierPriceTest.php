@@ -135,7 +135,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
     public function testIsValidInitCall()
     {
         $tierPrice = $this->tierPrice = $this->getMock(
-            'Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\GroupPrice',
+            'Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\TearPrice',
             ['init', '_clearMessages'],
             [
                 $this->groupRepository,
@@ -161,7 +161,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
     public function testIsValidResultFalse($value, $hasEmptyColumns, $customerGroups)
     {
         $tierPrice = $this->getMock(
-            'Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\GroupPrice',
+            'Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\TearPrice',
             ['init', '_clearMessages', 'isValidValueAndLength', 'hasEmptyColumns'],
             [
                 $this->groupRepository,

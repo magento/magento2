@@ -53,7 +53,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             [
                 'regular_price' => 'RegularPrice',
                 'special_price' => 'SpecialPrice',
-                'group_price' => 'GroupPrice',
             ]
         );
 

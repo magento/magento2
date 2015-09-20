@@ -52,11 +52,6 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
     protected $websiteValidator;
 
     /**
-     * @var AdvancedPricing\Validator\GroupPrice |\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $groupPriceValidator;
-
-    /**
      * @var \Magento\ImportExport\Model\Resource\Helper |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceHelper;
@@ -234,13 +229,6 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
             '',
             false
         );
-        $this->groupPriceValidator = $this->getMock(
-            '\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator\GroupPrice',
-            [],
-            [],
-            '',
-            false
-        );
         $this->stringObject = $this->getMock(
             '\Magento\Framework\Stdlib\StringUtils',
             [],
@@ -406,8 +394,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         $groupCustomerGroupId,
         $tierWebsiteId,
         $groupWebsiteId,
-        $expectedTierPrices,
-        $expectedGroupPrices
+        $expectedTierPrices
     ) {
         $this->advancedPricing
             ->expects($this->any())
@@ -448,7 +435,6 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
             ],
         ];
         $expectedTierPrices = [];
-        $expectedGroupPrices = [];
         $listSku = [
             $skuVal
         ];
@@ -487,10 +473,6 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                 [
                     $expectedTierPrices,
                     AdvancedPricing::TABLE_TIER_PRICE
-                ],
-                [
-                    $expectedGroupPrices,
-                    AdvancedPricing::TABLE_GROUPED_PRICE,
                 ]
             )
             ->will($this->returnSelf());
@@ -595,16 +577,6 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                         ],
                     ],
                 ],
-                '$expectedGroupPrices' => [
-                    'sku value' => [
-                        [
-                            'all_groups' => AdvancedPricing::DEFAULT_ALL_GROUPS_GROUPED_PRICE_VALUE,
-                            'customer_group_id' => 'group customer group id value',//$groupCustomerGroupId
-                            'value' => 'group price value',
-                            'website_id' => 'group website id value',
-                        ],
-                    ],
-                ],
             ],
             [// tier customer group is equal to all group
                  '$data' => [
@@ -636,16 +608,6 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                          ],
                      ],
                  ],
-                 '$expectedGroupPrices' => [
-                     'sku value' => [
-                         [
-                             'all_groups' => AdvancedPricing::DEFAULT_ALL_GROUPS_GROUPED_PRICE_VALUE,
-                             'customer_group_id' => 'group customer group id value',//$groupCustomerGroupId
-                             'value' => 'group price value',
-                             'website_id' => 'group website id value',
-                         ],
-                     ],
-                 ],
             ],
             [
                 '$data' => [
@@ -667,16 +629,6 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                 '$tierWebsiteId' => 'tier website id value',
                 '$groupWebsiteId' => 'group website id value',
                 '$expectedTierPrices' => [],
-                '$expectedGroupPrices' => [
-                    'sku value' => [
-                        [
-                            'all_groups' => AdvancedPricing::DEFAULT_ALL_GROUPS_GROUPED_PRICE_VALUE,
-                            'customer_group_id' => 'group customer group id value',//$groupCustomerGroupId
-                            'value' => 'group price value',
-                            'website_id' => 'group website id value',
-                        ],
-                    ],
-                ],
             ],
             [
                 '$data' => [
@@ -708,7 +660,6 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                         ],
                     ]
                 ],
-                '$expectedGroupPrices' => [],
             ],
         ];
         // @codingStandardsIgnoreEnd
@@ -850,8 +801,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                 $this->storeResolver,
                 $this->importProduct,
                 $this->validator,
-                $this->websiteValidator,
-                $this->groupPriceValidator
+                $this->websiteValidator
             ],
             ''
         );

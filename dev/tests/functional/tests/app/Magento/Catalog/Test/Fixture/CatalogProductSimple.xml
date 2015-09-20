@@ -35,7 +35,6 @@
         <field name="description" is_required="0" group="product-details" />
         <field name="gallery" is_required="0" />
         <field name="gift_message_available" is_required="0" />
-        <field name="group_price" is_required="0" group="advanced-pricing" repository="Magento\Catalog\Test\Repository\Product\GroupPriceOptions" />
         <field name="has_options" is_required="0" />
         <field name="image" is_required="0" />
         <field name="image_label" is_required="0" />

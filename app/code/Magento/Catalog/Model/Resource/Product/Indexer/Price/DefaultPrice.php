@@ -258,11 +258,6 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
             'tp.entity_id = e.entity_id AND tp.website_id = cw.website_id' .
             ' AND tp.customer_group_id = cg.customer_group_id',
             []
-        )->joinLeft(
-            ['gp' => $this->_getGroupPriceIndexTable()],
-            'gp.entity_id = e.entity_id AND gp.website_id = cw.website_id' .
-            ' AND gp.customer_group_id = cg.customer_group_id',
-            []
         )->where(
             'e.type_id = ?',
             $this->getTypeId()
@@ -286,7 +281,6 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
         $specialFrom = $this->_addAttributeToSelect($select, 'special_from_date', 'e.entity_id', 'cs.store_id');
         $specialTo = $this->_addAttributeToSelect($select, 'special_to_date', 'e.entity_id', 'cs.store_id');
         $currentDate = $connection->getDatePartSql('cwd.website_date');
-        $groupPrice = $connection->getCheckSql('gp.price IS NULL', "{$price}", 'gp.price');
 
         $specialFromDate = $connection->getDatePartSql($specialFrom);
         $specialToDate = $connection->getDatePartSql($specialTo);
@@ -300,7 +294,6 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
             $specialPrice,
             $price
         );
-        $finalPrice = $connection->getCheckSql("{$groupPrice} < {$finalPrice}", $groupPrice, $finalPrice);
 
         $select->columns(
             [
@@ -310,8 +303,6 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
                 'max_price' => $finalPrice,
                 'tier_price' => new \Zend_Db_Expr('tp.min_price'),
                 'base_tier' => new \Zend_Db_Expr('tp.min_price'),
-                'group_price' => new \Zend_Db_Expr('gp.price'),
-                'base_group_price' => new \Zend_Db_Expr('gp.price'),
             ]
         );
 
@@ -442,12 +433,6 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
         $tierPriceValue = $connection->getCheckSql("MIN(o.is_require) > 0", $tierPriceMin, 0);
         $tierPrice = $connection->getCheckSql("MIN(i.base_tier) IS NOT NULL", $tierPriceValue, "NULL");
 
-        $groupPriceRound = new \Zend_Db_Expr("ROUND(i.base_group_price * ({$optPriceValue} / 100), 4)");
-        $groupPriceExpr = $connection->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $groupPriceRound);
-        $groupPriceMin = new \Zend_Db_Expr("MIN({$groupPriceExpr})");
-        $groupPriceValue = $connection->getCheckSql("MIN(o.is_require) > 0", $groupPriceMin, 0);
-        $groupPrice = $connection->getCheckSql("MIN(i.base_group_price) IS NOT NULL", $groupPriceValue, "NULL");
-
         $maxPriceRound = new \Zend_Db_Expr("ROUND(i.price * ({$optPriceValue} / 100), 4)");
         $maxPriceExpr = $connection->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $maxPriceRound);
         $maxPrice = $connection->getCheckSql(
@@ -461,7 +446,6 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
                 'min_price' => $minPrice,
                 'max_price' => $maxPrice,
                 'tier_price' => $tierPrice,
-                'group_price' => $groupPrice,
             ]
         );
 
@@ -511,17 +495,11 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
         $tierPriceValue = $connection->getCheckSql("{$tierPriceExpr} > 0 AND o.is_require > 0", $tierPriceExpr, 0);
         $tierPrice = $connection->getCheckSql("i.base_tier IS NOT NULL", $tierPriceValue, "NULL");
 
-        $groupPriceRound = new \Zend_Db_Expr("ROUND(i.base_group_price * ({$optPriceValue} / 100), 4)");
-        $groupPriceExpr = $connection->getCheckSql("{$optPriceType} = 'fixed'", $optPriceValue, $groupPriceRound);
-        $groupPriceValue = $connection->getCheckSql("{$groupPriceExpr} > 0 AND o.is_require > 0", $groupPriceExpr, 0);
-        $groupPrice = $connection->getCheckSql("i.base_group_price IS NOT NULL", $groupPriceValue, "NULL");
-
         $select->columns(
             [
                 'min_price' => $minPrice,
                 'max_price' => $maxPrice,
                 'tier_price' => $tierPrice,
-                'group_price' => $groupPrice,
             ]
         );
 
@@ -617,16 +595,6 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
     protected function _getTierPriceIndexTable()
     {
         return $this->getTable('catalog_product_index_tier_price');
-    }
-
-    /**
-     * Retrieve table name for product group price index
-     *
-     * @return string
-     */
-    protected function _getGroupPriceIndexTable()
-    {
-        return $this->getTable('catalog_product_index_group_price');
     }
 
     /**

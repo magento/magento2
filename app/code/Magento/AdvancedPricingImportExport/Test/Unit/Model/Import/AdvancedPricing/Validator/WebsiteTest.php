@@ -66,21 +66,18 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
      * @param array  $value
      * @param string $allWebsites
      * @param string $colTierPriceWebsite
-     * @param string $colGroupPriceWebsite
      * @param bool   $expectedResult
      */
     public function testIsValidReturn(
         $value,
         $allWebsites,
         $colTierPriceWebsite,
-        $colGroupPriceWebsite,
         $expectedResult
     ) {
         $this->website->expects($this->once())->method('_clearMessages');
         $this->website->expects($this->any())->method('getAllWebsitesValue')->willReturn($allWebsites);
         $this->storeResolver->method('getWebsiteCodeToId')->willReturnMap([
             [$value[AdvancedPricing::COL_TIER_PRICE_WEBSITE], $colTierPriceWebsite],
-            [$value[AdvancedPricing::COL_GROUP_PRICE_WEBSITE], $colGroupPriceWebsite],
         ]);
 
         $result = $this->website->isValid($value);
@@ -95,14 +92,12 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
         ];
         $allWebsitesValue = 'not tier|group price website value';
         $colTierPriceWebsite = false;
-        $colGroupPriceWebsite = 'value';
         $expectedMessages = [AdvancedPricing\Validator\Website::ERROR_INVALID_WEBSITE];
 
         $this->website->expects($this->once())->method('_clearMessages');
         $this->website->expects($this->any())->method('getAllWebsitesValue')->willReturn($allWebsitesValue);
         $this->storeResolver->method('getWebsiteCodeToId')->willReturnMap([
             [$value[AdvancedPricing::COL_TIER_PRICE_WEBSITE], $colTierPriceWebsite],
-            [$value[AdvancedPricing::COL_GROUP_PRICE_WEBSITE], $colGroupPriceWebsite],
         ]);
 
         $this->website->expects($this->any())->method('_addMessages')->with($expectedMessages);
@@ -146,7 +141,6 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
                 ],
                 '$allWebsites' => 'not tier|group price website value',
                 '$colTierPriceWebsite' => false,
-                '$colGroupPriceWebsite' => 'value',
                 '$expectedResult' => false,
             ],
             [
@@ -158,7 +152,6 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
                 ],
                 '$allWebsites' => 'not tier|group price website value',
                 '$colTierPriceWebsite' => false,
-                '$colGroupPriceWebsite' => 'value',
                 '$expectedResult' => false,
             ],
             [
@@ -170,7 +163,6 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
                 ],
                 '$allWebsites' => 'not tier|group price website value',
                 '$colTierPriceWebsite' => 'value',
-                '$colGroupPriceWebsite' => false,
                 '$expectedResult' => false,
             ],
             [
@@ -182,7 +174,6 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
                 ],
                 '$allWebsites' => 'not tier|group price website value',
                 '$colTierPriceWebsite' => 'value',
-                '$colGroupPriceWebsite' => false,
                 '$expectedResult' => false,
             ],
             // True cases.
@@ -193,7 +184,6 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
                 ],
                 '$allWebsites' => 'tier value',
                 '$colTierPriceWebsite' => 'value',
-                '$colGroupPriceWebsite' => 'value',
                 '$expectedResult' => true,
             ],
             [
@@ -203,7 +193,6 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
                 ],
                 '$allWebsites' => 'group value',
                 '$colTierPriceWebsite' => 'value',
-                '$colGroupPriceWebsite' => 'value',
                 '$expectedResult' => true,
             ],
             [
@@ -213,7 +202,6 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
                 ],
                 '$allWebsites' => 'not tier|group price website value',
                 '$colTierPriceWebsite' => 'value',
-                '$colGroupPriceWebsite' => 'value',
                 '$expectedResult' => true,
             ],
             [
@@ -223,7 +211,6 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
                 ],
                 '$allWebsites' => 'not tier|group price website value',
                 '$colTierPriceWebsite' => 'value',
-                '$colGroupPriceWebsite' => 'value',
                 '$expectedResult' => true,
             ],
         ];
