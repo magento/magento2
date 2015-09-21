@@ -123,7 +123,7 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
             throw new CouldNotSaveException(__('Could not save quote'));
         }
         $itemId = $cartItem->getId();
-        return $quote->getItemById($itemId);
+        return $this->addProductOptions($product->getTypeId(), $quote->getItemById($itemId));
     }
 
     /**
