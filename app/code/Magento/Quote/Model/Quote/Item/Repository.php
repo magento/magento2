@@ -138,7 +138,7 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
         $params = (isset($this->cartItemProcessors[$productType]))
             ? $this->cartItemProcessors[$productType]->convertToBuyRequest($cartItem)
             : null;
-        return ($params === null) ? $cartItem->getQty() : $params;
+        return ($params === null) ? $cartItem->getQty() : $params->setQty($cartItem->getQty());
     }
 
     /**
