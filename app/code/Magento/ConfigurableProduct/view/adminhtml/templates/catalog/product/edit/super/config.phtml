@@ -131,7 +131,7 @@ require([
                         "productsProvider": "configurable_associated_product_listing.data_source",
                         "productsMassAction": "configurable_associated_product_listing.configurable_associated_product_listing.product_columns.ids",
                         "productsColumns": "configurable_associated_product_listing.configurable_associated_product_listing.product_columns",
-                        "productsGridUrl": "<?= $block->getUrl('catalog/product/associated_grid', ['componentJson' => true])?>",
+                        "productsGridUrl": "<?= /* @noEscape */ $block->getUrl('catalog/product/associated_grid', ['componentJson' => true])?>",
                         "configurableVariations": "configurableVariations"
                     }
                 }
