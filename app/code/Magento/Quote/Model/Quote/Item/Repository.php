@@ -86,17 +86,17 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
 
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
-
+        $product = $this->productRepository->get($cartItem->getSku());
         $itemId = $cartItem->getItemId();
         try {
-
+            /** update item */
             if (isset($itemId)) {
-                $product = $this->productRepository->get($cartItem->getSku());
                 $buyRequestData = $this->getBuyRequest($product->getTypeId(), $cartItem);
                 if (is_object($buyRequestData)) {
                     /** update item product options */
                     $buyRequestData->setData('qty', $qty);
-                    $quote->updateItem($itemId, $buyRequestData);
+                    /** @var  \Magento\Quote\Model\Quote\Item $item */
+                    $cartItem = $quote->updateItem($itemId, $buyRequestData);
                 } else {
                     /** update item qty */
                     $cartItem = $quote->getItemById($itemId);
@@ -108,10 +108,11 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
                     $cartItem->setData('qty', $qty);
                 }
             } else {
-                $product = $this->productRepository->get($cartItem->getSku());
-                $result = $quote->addProduct($product, $this->getBuyRequest($product->getTypeId(), $cartItem));
-                if (is_string($result)) {
-                    throw new \Magento\Framework\Exception\LocalizedException(__($result));
+                /** add item to shopping cart */
+                /** @var  \Magento\Quote\Model\Quote\Item|string $cartItem */
+                $cartItem = $quote->addProduct($product, $this->getBuyRequest($product->getTypeId(), $cartItem));
+                if (is_string($cartItem)) {
+                    throw new \Magento\Framework\Exception\LocalizedException(__($cartItem));
                 }
             }
             $this->quoteRepository->save($quote->collectTotals());
@@ -121,7 +122,8 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
             }
             throw new CouldNotSaveException(__('Could not save quote'));
         }
-        return $quote->getItemByProduct($product);
+        $itemId = $cartItem->getId();
+        return $quote->getItemById($itemId);
     }
 
     /**
