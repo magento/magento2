@@ -1,0 +1,73 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+namespace Magento\Bundle\Api\Data;
+
+/**
+ * Interface BundleOptionInterface
+ * @api
+ */
+interface BundleOptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+{
+    /**
+     * Getter for bundle option id.
+     *
+     * @return int
+     */
+    public function getOptionId();
+
+    /**
+     * Setter for bundle option id.
+     *
+     * @param int $optionId
+     */
+    public function setOptionId($optionId);
+
+    /**
+     * Get bundle option quantity.
+     *
+     * @return int
+     */
+    public function getOptionQty();
+
+    /**
+     * Set bundle option quantity.
+     *
+     * @param int $optionQty
+     */
+    public function setOptionQty($optionQty);
+
+    /**
+     * Get bundle option selection ids.
+     *
+     * @return int[]
+     */
+    public function getOptionSelections();
+
+    /**
+     * Set bundle option selection ids.
+     *
+     * @param int[] $optionSelections
+     */
+    public function setOptionSelections(array $optionSelections);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Bundle\Api\Data\BundleOptionExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Bundle\Api\Data\BundleOptionExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Bundle\Api\Data\BundleOptionExtensionInterface $extensionAttributes
+    );
+}
