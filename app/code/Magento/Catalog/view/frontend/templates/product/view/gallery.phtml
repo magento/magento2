@@ -42,7 +42,8 @@
                     "height": <?php /* @escapeNotVerified */ echo $block->getImageAttribute('product_page_image_medium', 'height')
                         ?: $block->getImageAttribute('product_page_image_medium', 'width'); ?>
                     "transitionduration": <?php echo $block->getVar("gallery:transition:duration"); ?>,
-                    "transition": "<?php echo $block->getVar("gallery:transition:effect"); ?>"
+                    "transition": "<?php echo $block->getVar("gallery:transition:effect"); ?>",
+                    "carouselNavigation": <?php echo $block->getVar("gallery:navigation:carousel"); ?>
                 },
                 "fullscreen": {
                     "nav": "<?php echo $block->getVar("gallery:fullscreen:navigation"); ?>",
@@ -54,7 +55,8 @@
                     "thumbheight": <?php echo $block->getVar("gallery:fullscreen:thumbheight")
                         ?: $block->getVar("gallery:fullscreen:thumbwidth"); ?>,
                     "transitionduration": <?php echo $block->getVar("gallery:fullscreen:transition:duration"); ?>,
-                    "transition": "<?php echo $block->getVar("gallery:fullscreen:transition:effect"); ?>"
+                    "transition": "<?php echo $block->getVar("gallery:fullscreen:transition:effect"); ?>",
+                    "carouselNavigation": <?php echo $block->getVar("gallery:fullscreen:navigation:carousel"); ?>
                 },
                 "breakpoints": {
                     "mobile": {
