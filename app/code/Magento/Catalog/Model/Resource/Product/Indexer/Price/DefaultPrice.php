@@ -515,7 +515,6 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
                 'min_price' => 'SUM(min_price)',
                 'max_price' => 'SUM(max_price)',
                 'tier_price' => 'SUM(tier_price)',
-                'group_price' => 'SUM(group_price)'
             ]
         )->group(
             ['entity_id', 'customer_group_id', 'website_id']
@@ -537,11 +536,6 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
                 'tier_price' => $connection->getCheckSql(
                     'i.tier_price IS NOT NULL',
                     'i.tier_price + io.tier_price',
-                    'NULL'
-                ),
-                'group_price' => $connection->getCheckSql(
-                    'i.group_price IS NOT NULL',
-                    'i.group_price + io.group_price',
                     'NULL'
                 ),
             ]
@@ -572,7 +566,6 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
             'min_price' => 'min_price',
             'max_price' => 'max_price',
             'tier_price' => 'tier_price',
-            'group_price' => 'group_price',
         ];
 
         $connection = $this->getConnection();

@@ -314,7 +314,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         ProductInterface::STORE_ID,
         'media_gallery',
         'tier_price',
-        'group_price',
     ];
 
     /**

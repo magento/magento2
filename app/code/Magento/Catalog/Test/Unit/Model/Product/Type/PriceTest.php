@@ -16,7 +16,6 @@ use Magento\Customer\Model\GroupManagement;
  */
 class PriceTest extends \PHPUnit_Framework_TestCase
 {
-    const KEY_GROUP_PRICE = 'group_price';
     const KEY_TIER_PRICE = 'tier_price';
     const PRICE_SCOPE_GLOBAL = 0;
     const PRICE_SCOPE_WEBSITE = 1;

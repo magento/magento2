@@ -405,12 +405,10 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
 
         $this->advancedPricing->expects($this->any())->method('getCustomerGroupId')->willReturnMap([
             [$data[0][AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP], $tierCustomerGroupId],
-            [$data[0][AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP], $groupCustomerGroupId]
         ]);
 
         $this->advancedPricing->expects($this->any())->method('getWebSiteId')->willReturnMap([
             [$data[0][AdvancedPricing::COL_TIER_PRICE_WEBSITE], $tierWebsiteId],
-            [$data[0][AdvancedPricing::COL_GROUP_PRICE_WEBSITE], $groupWebsiteId]
         ]);
 
         $this->advancedPricing->expects($this->any())->method('saveProductPrices')->will($this->returnSelf());
@@ -556,10 +554,6 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                         AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'tier price customer group value - not all groups ',
                         AdvancedPricing::COL_TIER_PRICE_QTY => 'tier price qty value',
                         AdvancedPricing::COL_TIER_PRICE => 'tier price value',
-                        //group
-                        AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group price website value',
-                        AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP => 'group price customer group value - not all groups ',
-                        AdvancedPricing::COL_GROUP_PRICE => 'group price value',
                     ],
                 ],
                 '$tierCustomerGroupId' => 'tier customer group id value',
@@ -587,10 +581,6 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                          AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => AdvancedPricing::VALUE_ALL_GROUPS,
                          AdvancedPricing::COL_TIER_PRICE_QTY => 'tier price qty value',
                          AdvancedPricing::COL_TIER_PRICE => 'tier price value',
-                         //group
-                         AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group price website value',
-                         AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP => 'group price customer group value',
-                         AdvancedPricing::COL_GROUP_PRICE => 'group price value',
                      ],
                  ],
                  '$tierCustomerGroupId' => 'tier customer group id value',
@@ -618,10 +608,6 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                         AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'tier price customer group value - not all groups',
                         AdvancedPricing::COL_TIER_PRICE_QTY => 'tier price qty value',
                         AdvancedPricing::COL_TIER_PRICE => 'tier price value',
-                        //group
-                        AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group price website value',
-                        AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP => 'group price customer group value',
-                        AdvancedPricing::COL_GROUP_PRICE => 'group price value',
                     ],
                 ],
                 '$tierCustomerGroupId' => 'tier customer group id value',
@@ -639,10 +625,6 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                         AdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => 'tier price customer group value - not all groups',
                         AdvancedPricing::COL_TIER_PRICE_QTY => 'tier price qty value',
                         AdvancedPricing::COL_TIER_PRICE => 'tier price value',
-                        //group
-                        AdvancedPricing::COL_GROUP_PRICE_WEBSITE => null,
-                        AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP => 'group price customer group value',
-                        AdvancedPricing::COL_GROUP_PRICE => 'group price value',
                     ],
                 ],
                 '$tierCustomerGroupId' => 'tier customer group id value',

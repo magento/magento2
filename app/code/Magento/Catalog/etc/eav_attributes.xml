@@ -26,9 +26,6 @@
             <field code="is_filterable" locked="true" />
             <field code="is_filterable_in_search" locked="true" />
         </attribute>
-        <attribute code="group_price">
-            <field code="is_searchable" locked="true" />
-        </attribute>
         <attribute code="price_type">
             <field code="is_searchable" locked="true" />
         </attribute>

@@ -281,8 +281,6 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
                 'max_price' => $connection->getCheckSql('i.group_type = 1', 'SUM(i.price)', 'MAX(i.price)'),
                 'tier_price' => $connection->getCheckSql('i.is_required = 1', 'MIN(i.tier_price)', '0'),
                 'alt_tier_price' => $connection->getCheckSql('i.is_required = 0', 'MIN(i.tier_price)', '0'),
-                'group_price' => $connection->getCheckSql('i.is_required = 1', 'MIN(i.group_price)', '0'),
-                'alt_group_price' => $connection->getCheckSql('i.is_required = 0', 'MIN(i.group_price)', '0'),
             ]
         );
 
@@ -324,7 +322,6 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
                 'max_price' => $maxPrice,
                 'tier_price' => $tierPrice,
                 'base_tier' => 'MIN(i.base_tier)',
-                'base_group_price' => 'MIN(i.base_group_price)',
             ]
         );
 
@@ -386,25 +383,8 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
                 'NULL'
             );
 
-            $groupExpr = $connection->getCheckSql(
-                'i.base_group_price IS NOT NULL',
-                $connection->getCheckSql(
-                    $selectionPriceType . ' = 1',
-                    $priceExpr,
-                    $connection->getCheckSql(
-                        'i.group_price_percent > 0',
-                        'ROUND(' .
-                        $selectionPriceValue .
-                        ' - (' .
-                        $selectionPriceValue .
-                        ' * (i.group_price_percent / 100)),4)',
-                        $selectionPriceValue
-                    )
-                ) . ' * bs.selection_qty',
-                'NULL'
-            );
             $priceExpr = new \Zend_Db_Expr(
-                $connection->getCheckSql("{$groupExpr} < {$priceExpr}", $groupExpr, $priceExpr)
+                $connection->getCheckSql("{$tierExpr} < {$priceExpr}", $tierExpr, $priceExpr)
             );
         } else {
             $priceExpr = new \Zend_Db_Expr(
@@ -454,7 +434,6 @@ class Price extends \Magento\Catalog\Model\Resource\Product\Indexer\Price\Defaul
                 'is_required' => 'bo.required',
                 'price' => $priceExpr,
                 'tier_price' => $tierExpr,
-                'group_price' => $groupExpr,
             ]
         );
 

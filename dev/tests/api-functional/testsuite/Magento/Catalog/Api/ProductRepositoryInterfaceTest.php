@@ -15,7 +15,6 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     const SERVICE_VERSION = 'V1';
     const RESOURCE_PATH = '/V1/products';
 
-    const KEY_GROUP_PRICES = 'group_prices';
     const KEY_TIER_PRICES = 'tier_prices';
 
     /**

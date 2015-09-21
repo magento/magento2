@@ -78,9 +78,6 @@
         <wrapper>product</wrapper>
         <fields>
             <special_price />
-            <group_price>
-                <input>select</input>
-            </group_price>
             <tier_price>
                 <input>select</input>
             </tier_price>
