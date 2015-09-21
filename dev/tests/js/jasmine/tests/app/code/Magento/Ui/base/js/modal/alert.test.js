@@ -5,23 +5,23 @@
 
 define([
     'jquery',
-    'Magento_Ui/js/modal/modal'
+    'Magento_Ui/js/modal/alert'
 ], function ($) {
     'use strict';
 
-    describe('ui/js/modal/modal', function () {
+    describe('ui/js/modal/alert', function () {
         var element = $('<div>some element</div>'),
-            modal = element.modal({}).data('mage-modal');
+            alert = element.alert({});
 
         it('Check for modal definition', function () {
-            expect(modal).toBeDefined();
+            expect(alert).toBeDefined();
         });
         it('Show/hide function check', function () {
             expect(element.trigger('openModal')).toBe(element);
             expect(element.trigger('closeModal')).toBe(element);
         });
         it('Integration: modal created on page', function(){
-            expect($(modal).length).toEqual(1);
+            expect(alert.length).toEqual(1);
         });
     });
 });
