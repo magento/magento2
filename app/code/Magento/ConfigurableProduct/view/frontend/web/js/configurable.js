@@ -429,6 +429,8 @@ define([
          * @returns {String|undefined}
          */
         _getSimpleProductId: function (element) {
+            // TODO: Rewrite algorithm. It should return ID of
+            //        simple product based on selected options.
             var allOptions = element.config.options,
                 value = element.value,
                 config;
