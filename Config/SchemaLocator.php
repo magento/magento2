@@ -30,8 +30,9 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function __construct()
     {
-        $this->schema = realpath(__DIR__ . '/../etc/queue_merged.xsd');
-        $this->perFileSchema = realpath(__DIR__ . '/../etc/queue.xsd');
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $this->schema = $urnResolver->getRealPath('urn:magento:framework:Amqp/etc/queue_merged.xsd');
+        $this->perFileSchema = $urnResolver->getRealPath('urn:magento:framework:Amqp/etc/queue.xsd');
     }
 
     /**
