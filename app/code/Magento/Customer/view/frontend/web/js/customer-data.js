@@ -42,8 +42,9 @@ define([
             });
             return result;
         },
-        getFromServer: function (sectionNames) {
+        getFromServer: function (sectionNames, updateSectionId) {
             var parameters = _.isArray(sectionNames) ? {sections: sectionNames.join(',')} : [];
+            parameters['update_section_id'] = updateSectionId;
             return $.getJSON(options.sectionLoadUrl, parameters).fail(function(jqXHR) {
                 throw new Error(jqXHR);
             });
@@ -82,11 +83,18 @@ define([
             this.data[sectionName](sectionData);
         },
         update: function (sections) {
+            var maxSectionId = 0, sectionId = 0;
+            var sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
             _.each(sections, function (sectionData, sectionName) {
+                sectionId = sectionData['data_id'];
+                maxSectionId = sectionId > maxSectionId ? sectionId : maxSectionId;
+                sectionDataIds[sectionName] = sectionId;
                 storage.set(sectionName, sectionData);
                 storageInvalidation.remove(sectionName);
                 buffer.notify(sectionName, sectionData);
             });
+            sectionDataIds['max_section_id'] = maxSectionId;
+            $.cookieStorage.set('section_data_ids', sectionDataIds);
         },
         remove: function (sections) {
             _.each(sections, function (sectionName) {
@@ -98,22 +106,28 @@ define([
 
     var customerData = {
         init: function() {
-            if (_.isEmpty(storage.keys())) {
-                this.reload();
+            if (_.isEmpty(storage.keys()) || this.needReload()) {
+                this.reload([], false);
             } else {
                 _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
                     buffer.notify(sectionName, sectionData);
                 });
                 if (!_.isEmpty(storageInvalidation.keys())) {
-                    this.reload(storageInvalidation.keys());
+                    this.reload(storageInvalidation.keys(), false);
                 }
             }
+        },
+        needReload: function () {
+            if (!storage.get('max_section_id') || !$.cookieStorage.get('section_data_ids')) {
+                return true;
+            }
+            return storage.get('max_section_id') < $.cookieStorage.get('section_data_ids')['max_section_id'];
         },
         get: function (sectionName) {
             return buffer.get(sectionName);
         },
-        reload: function (sectionNames) {
-            return dataProvider.getFromServer(sectionNames).done(function (sections) {
+        reload: function (sectionNames, updateSectionId) {
+            return dataProvider.getFromServer(sectionNames, updateSectionId).done(function (sections) {
                 buffer.update(sections);
             });
         },
@@ -138,7 +152,7 @@ define([
                 if (_.isObject(xhr.responseJSON) && !_.isEmpty(_.pick(xhr.responseJSON, redirects))) {
                     return ;
                 }
-                customerData.reload(sections);
+                customerData.reload(sections, true);
             }
         }
     });
