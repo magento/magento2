@@ -17,6 +17,7 @@ abstract class Agreement extends \Magento\Backend\App\Action
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
+     * @codeCoverageIgnore
      */
     public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Framework\Registry $coreRegistry)
     {
@@ -46,6 +47,7 @@ abstract class Agreement extends \Magento\Backend\App\Action
 
     /**
      * @return bool
+     * @codeCoverageIgnore
      */
     protected function _isAllowed()
     {
