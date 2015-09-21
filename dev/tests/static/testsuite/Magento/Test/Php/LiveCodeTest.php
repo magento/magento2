@@ -166,7 +166,6 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         $reportFile = self::$reportDir . '/phpmd_report.xml';
         $codeMessDetector = new CodeMessDetector(realpath(__DIR__ . '/_files/phpmd/ruleset.xml'), $reportFile);
 
-        $this->markTestSkipped(PHP_VERSION);
         if (!$codeMessDetector->canRun()) {
             $this->markTestSkipped('PHP Mess Detector is not available.');
         }
