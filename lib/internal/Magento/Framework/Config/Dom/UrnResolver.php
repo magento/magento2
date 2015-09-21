@@ -25,26 +25,24 @@ class UrnResolver
         $componentRegistrar = new ComponentRegistrar();
         if (substr($schema, 0, 4) == 'urn:') {
             // resolve schema location
-            // urn:magento:module:catalog:etc/catalog_attributes.xsd
-            // 0 : urn, 1: magento, 2: module, 3: catalog, 4: etc/catalog_attributes.xsd
-            // moduleName -> Magento_Catalog
             $urnParts = explode(':', $schema);
             if ($urnParts[2] == 'module') {
-                $modulePath = str_replace(' ', '', ucwords(str_replace('-', ' ', $urnParts[3])));
-                $moduleName = ucfirst($urnParts[1]) . '_' . $modulePath;
+                // urn:magento:module:Magento_Catalog:etc/catalog_attributes.xsd
+                // 0 : urn, 1: magento, 2: module, 3: Magento_Catalog, 4: etc/catalog_attributes.xsd
+                // moduleName -> Magento_Catalog
                 $schemaPath = $componentRegistrar->getPath(
                     ComponentRegistrar::MODULE,
-                    $moduleName
+                    $urnParts[3]
                 ) . '/' . $urnParts[4];
-            } else if ($urnParts[2] == 'library') {
-                // urn:magento:library:framework:Module/etc/module.xsd
-                // 0: urn, 1: magento, 2:library, 3: framework, 4: Module/etc/module.xsd
+            } else if ($urnParts[2] == 'framework') {
+                // urn:magento:framework:Module/etc/module.xsd
+                // 0: urn, 1: magento, 2: framework, 3: Module/etc/module.xsd
                 // libaryName -> magento/framework
-                $libraryName = $urnParts[1] . '/' . $urnParts[3];
+                $libraryName = $urnParts[1] . '/' . $urnParts[2];
                 $schemaPath = $componentRegistrar->getPath(
                     ComponentRegistrar::LIBRARY,
                     $libraryName
-                ) . '/' . $urnParts[4];
+                ) . '/' . $urnParts[3];
             } else {
                 throw new \UnexpectedValueException("Unsupported format of schema location: " . $schema);
             }

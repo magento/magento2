@@ -37,8 +37,8 @@ class RouteConfigFilesTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
-        $this->schemaFile = $urnResolver->getRealPath('urn:magento:library:framework:App/etc/routes.xsd');
-        $this->mergedSchemaFile = $urnResolver->getRealPath('urn:magento:library:framework:App/etc/routes_merged.xsd');
+        $this->schemaFile = $urnResolver->getRealPath('urn:magento:framework:App/etc/routes.xsd');
+        $this->mergedSchemaFile = $urnResolver->getRealPath('urn:magento:framework:App/etc/routes_merged.xsd');
     }
 
     public function testRouteConfigsValidation()

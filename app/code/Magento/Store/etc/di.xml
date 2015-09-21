@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:library:framework:ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Store\Api\StoreRepositoryInterface" type="Magento\Store\Model\StoreRepository"/>
     <preference for="Magento\Store\Api\GroupRepositoryInterface" type="Magento\Store\Model\GroupRepository"/>
     <preference for="Magento\Store\Api\WebsiteRepositoryInterface" type="Magento\Store\Model\WebsiteRepository"/>

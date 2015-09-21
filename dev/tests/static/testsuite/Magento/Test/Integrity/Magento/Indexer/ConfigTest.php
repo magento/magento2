@@ -27,7 +27,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getXsd()
     {
-        return $this->urnResolver->getRealPath('urn:magento:library:framework:Indexer/etc/indexer_merged.xsd');
+        return $this->urnResolver->getRealPath('urn:magento:framework:Indexer/etc/indexer_merged.xsd');
     }
 
     /**
@@ -77,7 +77,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getFileXsd()
     {
-        return $this->urnResolver->getRealPath('urn:magento:library:framework:Indexer/etc/indexer.xsd');
+        return $this->urnResolver->getRealPath('urn:magento:framework:Indexer/etc/indexer.xsd');
 
     }
 
