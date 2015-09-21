@@ -164,11 +164,6 @@ class Installer
     private $deploymentConfig;
 
     /**
-     * @var SampleData
-     */
-    private $sampleData;
-
-    /**
      * @var ObjectManagerProvider
      */
     private $objectManagerProvider;
@@ -207,7 +202,6 @@ class Installer
      * @param ConnectionFactory $connectionFactory
      * @param MaintenanceMode $maintenanceMode
      * @param Filesystem $filesystem
-     * @param SampleData $sampleData
      * @param ObjectManagerProvider $objectManagerProvider
      * @param Context $context
      * @param SetupConfigModel $setupConfigModel
@@ -228,7 +222,6 @@ class Installer
         ConnectionFactory $connectionFactory,
         MaintenanceMode $maintenanceMode,
         Filesystem $filesystem,
-        SampleData $sampleData,
         ObjectManagerProvider $objectManagerProvider,
         Context $context,
         SetupConfigModel $setupConfigModel,
@@ -245,7 +238,6 @@ class Installer
         $this->connectionFactory = $connectionFactory;
         $this->maintenanceMode = $maintenanceMode;
         $this->filesystem = $filesystem;
-        $this->sampleData = $sampleData;
         $this->installInfo[self::INFO_MESSAGE] = [];
         $this->deploymentConfig = $deploymentConfig;
         $this->objectManagerProvider = $objectManagerProvider;
@@ -739,9 +731,6 @@ class Installer
         $moduleNames = $this->moduleList->getNames();
         $moduleContextList = $this->generateListOfModuleContext($resource, $verType);
         foreach ($moduleNames as $moduleName) {
-//            if ($moduleName !== 'Magento_CatalogSampleData') {
-//                continue;
-//            }
             $this->log->log("Module '{$moduleName}':");
             $configVer = $this->moduleList->getOne($moduleName)['setup_version'];
             $currentVersion = $moduleContextList[$moduleName]->getVersion();
@@ -1115,29 +1104,6 @@ class Installer
         );
         if (null !== $prefix) {
             $this->dbValidator->checkDatabaseTablePrefix($prefix);
-        }
-    }
-
-    /**
-     * Run installation process for Sample Data
-     *
-     * @param array $request
-     * @return void
-     * @throws \Magento\Setup\SampleDataException
-     *
-     * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
-     */
-    private function installSampleData($request)
-    {
-        try {
-            $userName = isset($request[AdminAccount::KEY_USER]) ? $request[AdminAccount::KEY_USER] : '';
-            $this->objectManagerProvider->reset();
-            $this->sampleData->install($this->objectManagerProvider->get(), $this->log, $userName);
-        } catch (\Exception $e) {
-            throw new \Magento\Setup\SampleDataException(
-                "Error during sample data installation: {$e->getMessage()}",
-                $e->getCode()
-            );
         }
     }
 
