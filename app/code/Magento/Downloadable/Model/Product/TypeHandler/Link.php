@@ -163,7 +163,7 @@ class Link extends AbstractTypeHandler
                 $model->setSampleUrl($this->sampleItem['url']);
             }
             $model->setSampleType($this->sampleItem['type']);
-            if (isset($this->sampleItem['file'])) {
+            if (isset($this->sampleItem['file']) && $this->sampleItem['file']) {
                 $sampleFile = $this->jsonHelper->jsonDecode($this->sampleItem['file']);
             }
         }

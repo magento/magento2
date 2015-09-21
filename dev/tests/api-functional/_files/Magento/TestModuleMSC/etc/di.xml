@@ -30,7 +30,7 @@
             <argument name="resource" xsi:type="object">Magento\TestModuleMSC\Model\Resource\Item</argument>
         </arguments>
     </type>
-        <virtualType name="CustomAttributeMap" type="Magento\Framework\Object">
+        <virtualType name="CustomAttributeMap" type="Magento\Framework\DataObject">
         <arguments>
             <argument name="data" xsi:type="array">
                 <item name="customAttributeDataObjectInterface" xsi:type="string">Magento\TestModuleMSC\Api\Data\CustomAttributeDataObjectInterface</item>

@@ -110,8 +110,8 @@ class CancelTest extends \PHPUnit_Framework_TestCase
 
         $noticeMessage = 'The billing agreement "r15" has been canceled.';
         $this->_session->expects($this->once())->method('getCustomerId')->will($this->returnValue(871));
-        $this->_messageManager->expects($this->once())->method('addNotice')->with($noticeMessage);
-        $this->_messageManager->expects($this->never())->method('addError');
+        $this->_messageManager->expects($this->once())->method('addNoticeMessage')->with($noticeMessage);
+        $this->_messageManager->expects($this->never())->method('addErrorMessage');
 
         $this->_registry->expects(
             $this->once()
@@ -132,7 +132,7 @@ class CancelTest extends \PHPUnit_Framework_TestCase
 
         $errorMessage = 'Please specify the correct billing agreement ID and try again.';
         $this->_session->expects($this->once())->method('getCustomerId')->will($this->returnValue(938));
-        $this->_messageManager->expects($this->once())->method('addError')->with($errorMessage);
+        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($errorMessage);
 
         $this->_registry->expects($this->never())->method('register');
 
@@ -145,8 +145,8 @@ class CancelTest extends \PHPUnit_Framework_TestCase
         $this->_agreement->expects($this->never())->method('cancel');
 
         $this->_session->expects($this->once())->method('getCustomerId')->will($this->returnValue(871));
-        $this->_messageManager->expects($this->never())->method('addNotice');
-        $this->_messageManager->expects($this->never())->method('addError');
+        $this->_messageManager->expects($this->never())->method('addNoticeMessage');
+        $this->_messageManager->expects($this->never())->method('addErrorMessage');
 
         $this->_registry->expects(
             $this->once()

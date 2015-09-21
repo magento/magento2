@@ -16,6 +16,10 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
+        $inputValue = [
+            ['value' => '30000.4'],
+        ];
+
         $collectionFactory = $this->getMock(
             'Magento\Framework\Data\Form\Element\CollectionFactory',
             ['create'],
@@ -23,22 +27,56 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $localeFormat = $this->getMock(
-            '\Magento\Framework\Locale\Format',
+
+        $storeManager = $this->getMock(
+            '\Magento\Store\Model\StoreManager',
             [],
             [],
             '',
             false
         );
-        $localeFormat->expects(
+
+        $localeCurrency = $this->getMock(
+            '\Magento\Framework\Locale\Currency',
+            [],
+            [],
+            '',
+            false
+        );
+        
+        $currency = $this->getMock(
+            '\Magento\Framework\Currency',
+            [],
+            [],
+            '',
+            false
+        );
+
+        $currency->expects(
             $this->any()
         )->method(
-            'getPriceFormat'
-        )->willReturn([
-            'precision' => 2,
-            'decimalSymbol' => ',',
-            'groupSymbol' => '.',
-        ]);
+            'toCurrency'
+        )->willReturn('30.000,40');
+
+        $localeCurrency->expects(
+            $this->any()
+        )->method(
+            'getCurrency'
+        )->willReturn($currency);
+
+        $store = $this->getMock(
+            '\Magento\Store\Model\Store',
+            [],
+            [],
+            '',
+            false
+        );
+
+        $storeManager->expects(
+            $this->any()
+        )->method(
+            'getStore'
+        )->willReturn($store);
 
         $factory = $this->getMock('Magento\Framework\Data\Form\Element\Factory', [], [], '', false);
 
@@ -47,15 +85,14 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             [
                 'factoryElement' => $factory,
                 'factoryCollection' => $collectionFactory,
-                'localeFormat' => $localeFormat
+                'storeManager' => $storeManager,
+                'localeCurrency' => $localeCurrency
             ]
         );
 
-        $inputValue = [
-            ['value' => '30000.4'],
-        ];
+
         $this->model->setValue($inputValue);
-        $this->model->setEntityAttribute(true);
+        $this->model->setEntityAttribute(new \Magento\Framework\DataObject(['store_id' => 1]));
 
         $return = $this->model->getEscapedValue();
         $this->assertEquals(

@@ -17,14 +17,17 @@
             <span data-bind="text: getTitle()"></span>
             <a data-bind="attr: {href: getPaymentAcceptanceMarkHref()}, click: showAcceptanceWindow"
                class="action action-help">
-                <!-- ko text: $t('What is PayPal?') --><!-- /ko -->
+                <!-- ko i18n: 'What is PayPal?' --><!-- /ko -->
             </a>
         </label>
     </div>
     <div class="payment-method-content">
+        <!-- ko foreach: getRegion('messages') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
         <fieldset class="fieldset" data-bind='attr: {id: "payment_form_" + getCode()}'>
             <div class="payment-method-note">
-                <!-- ko text: $t('You will be redirected to the PayPal website.') --><!-- /ko -->
+                <!-- ko i18n: 'You will be redirected to the PayPal website.' --><!-- /ko -->
             </div>
         </fieldset>
         <div class="checkout-agreements-block">
@@ -38,7 +41,7 @@
                         type="submit"
                         data-bind="click: continueToPayPal, enable: (getCode() == isChecked())"
                         disabled>
-                    <span data-bind="text: $t('Continue to PayPal')"></span>
+                    <span data-bind="i18n: 'Continue to PayPal'"></span>
                 </button>
             </div>
         </div>

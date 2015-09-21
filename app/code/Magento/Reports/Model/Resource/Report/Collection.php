@@ -156,7 +156,7 @@ class Collection extends \Magento\Framework\Data\Collection
                     default:
                         break 2;
                 }
-                $this->_intervals[$interval['period']] = new \Magento\Framework\Object($interval);
+                $this->_intervals[$interval['period']] = new \Magento\Framework\DataObject($interval);
             }
         }
         return $this->_intervals;

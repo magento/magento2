@@ -4,14 +4,16 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /** @var $block \Magento\Customer\Block\Account\AuthorizationLink */
 $dataPostParam = '';
 if ($block->isLoggedIn()) {
     $dataPostParam = sprintf(" data-post='%s'", $block->getPostParams());
 }
 ?>
-<li class="authorization-link">
-    <a <?php echo $block->getLinkAttributes(); ?><?php echo $dataPostParam; ?>>
+<li class="authorization-link" data-label="<?php echo $block->escapeHtml(__('or')); ?>">
+    <a <?php /* @escapeNotVerified */ echo $block->getLinkAttributes(); ?><?php /* @escapeNotVerified */ echo $dataPostParam; ?>>
         <?php echo $block->escapeHtml($block->getLabel()); ?>
     </a>
 </li>

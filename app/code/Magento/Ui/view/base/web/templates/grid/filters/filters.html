@@ -10,7 +10,7 @@
             class="action-default _active"
             data-action="grid-filter-expand"
             data-bind="click: toggleOpened, attr: { disabled: !hasVisible() }, css: { _active: isOpened() }">
-            <span data-bind="text: $t('Filters')"></span>
+            <span data-bind="i18n: 'Filters'"></span>
         </button>
     </div>
 </div>
@@ -26,7 +26,7 @@
 
     <fieldset class="admin__fieldset admin__data-grid-filters">
         <legend class="admin__filters-legend">
-            <span data-bind="text: $t('Advanced filter')"></span>
+            <span data-bind="i18n: 'Advanced filter'"></span>
         </legend>
         <!-- ko foreach: elems -->
             <!-- ko if: $data.isGroup -->
@@ -50,14 +50,14 @@
                 type="button"
                 data-action="grid-filter-cancel"
                 data-bind="click: function(){ $data.close().cancel(); }">
-                <span data-bind="text: $t('Cancel')"></span>
+                <span data-bind="i18n: 'Cancel'"></span>
             </button>
             <button
                 class="action-secondary"
                 type="button"
                 data-action="grid-filter-apply"
                 data-bind="click: function(){ $data.close().apply(); }">
-                <span data-bind="text: $t('Apply Filters')"></span>
+                <span data-bind="i18n: 'Apply Filters'"></span>
             </button>
         </div>
     </div>

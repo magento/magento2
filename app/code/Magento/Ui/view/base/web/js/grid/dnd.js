@@ -4,10 +4,11 @@
  */
 define([
     'ko',
-    'jquery',
+    'Magento_Ui/js/lib/view/utils/async',
     'underscore',
-    'Magento_Ui/js/lib/class'
-], function (ko, $, _, Class) {
+    'uiRegistry',
+    'uiClass'
+], function (ko, $, _, registry, Class) {
     'use strict';
 
     var isTouchDevice = typeof document.ontouchstart !== 'undefined',
@@ -110,6 +111,9 @@ define([
 
     return Class.extend({
         defaults: {
+            rootSelector: '${ $.columnsProvider }:.admin__data-grid-wrap',
+            tableSelector: '${ $.rootSelector } -> table.data-grid',
+            columnSelector: '${ $.tableSelector } thead tr th',
             noSelectClass: '_no-select',
             hiddenClass: '_hidden',
             fixedX: false,
@@ -124,12 +128,23 @@ define([
          * @returns {Dnd} Chainable.
          */
         initialize: function () {
-            _.bindAll(this, 'onMouseMove', 'onMouseUp', 'onMouseDown');
+            _.bindAll(
+                this,
+                'initTable',
+                'initColumn',
+                'removeColumn',
+                'onMouseMove',
+                'onMouseUp',
+                'onMouseDown'
+            );
 
             this.$body = $('body');
 
             this._super()
                 .initListeners();
+
+            $.async(this.tableSelector, this.initTable);
+            $.async(this.columnSelector, this.initColumn);
 
             return this;
         },
@@ -141,29 +156,17 @@ define([
          */
         initListeners: function () {
             if (isTouchDevice) {
-                document.addEventListener('touchmove', this.onMouseMove, false);
-                document.addEventListener('touchend', this.onMouseUp, false);
-                document.addEventListener('touchleave', this.onMouseUp, false);
+                $(document).on({
+                    touchmove: this.onMouseMove,
+                    touchend: this.onMouseUp,
+                    touchleave: this.onMouseUp
+                });
             } else {
-                document.addEventListener('mousemove', this.onMouseMove, false);
-                document.addEventListener('mouseup', this.onMouseUp, false);
+                $(document).on({
+                    mousemove: this.onMouseMove,
+                    mouseup: this.onMouseUp
+                });
             }
-
-            return this;
-        },
-
-        /**
-         * Sets specified column as a draggable element.
-         *
-         * @param {HTMLTableHeaderCellElement} column - Columns header element.
-         * @returns {Dnd} Chainable.
-         */
-        addColumn: function (column) {
-            this.columns.push(column);
-
-            isTouchDevice ?
-                column.addEventListener('touchstart', this.onMouseDown, false) :
-                column.addEventListener('mousedown', this.onMouseDown, false);
 
             return this;
         },
@@ -174,23 +177,76 @@ define([
          * @param {HTMLTableElement} table
          * @returns {Dnd} Chainable.
          */
-        setTable: function (table) {
+        initTable: function (table) {
             this.table = table;
+
+            $(table).addClass('data-grid-draggable');
 
             return this;
         },
 
         /**
-         * Defines specified table element as a draggable table.
-         * Only this element will be moved across the screen.
+         * Sets specified column as a draggable element.
          *
-         * @param {HTMLTableElement} dragTable
+         * @param {HTMLTableHeaderCellElement} column - Columns header element.
          * @returns {Dnd} Chainable.
          */
-        setDragTable: function (dragTable) {
-            this.dragTable = dragTable;
+        initColumn: function (column) {
+            var model = getModel(column),
+                eventName;
+
+            if (!model || !model.draggable) {
+                return this;
+            }
+
+            this.columns.push(column);
+
+            $(column).bindings({
+                css: {
+                    '_dragover-left': ko.computed(function () {
+                        return model.dragover() === 'right';
+                    }),
+                    '_dragover-right': ko.computed(function () {
+                        return model.dragover() === 'left';
+                    })
+                }
+            });
+
+            eventName = isTouchDevice ?
+                'touchstart' :
+                'mousedown';
+
+            $(column).on(eventName, this.onMouseDown);
+            $.async.remove(column, this.removeColumn);
 
             return this;
+        },
+
+        /**
+         * Removes specified column element from the columns array.
+         *
+         * @param {HTMLTableHeaderCellElement} column - Columns header element.
+         * @returns {Dnd} Chainable.
+         */
+        removeColumn: function (column) {
+            var columns = this.columns,
+                index = columns.indexOf(column);
+
+            if (~index) {
+                columns.splice(index, 1);
+            }
+
+            return this;
+        },
+
+        /**
+         * Returns index of column.
+         *
+         * @param {HTMLTableHeaderCellElement} elem
+         * @returns {Number}
+         */
+        _getColumnIndex: function (elem) {
+            return _.toArray(elem.parentNode.cells).indexOf(elem);
         },
 
         /**
@@ -235,55 +291,56 @@ define([
         },
 
         /**
-         * Coppies dimensions of a grabbed column
-         * to a draggable grid.
+         * Creates clone of a target table with only specified column visible.
          *
-         * @param {HTMLTableHeaderCellElement} elem - Grabbed column.
-         * @returns {Dnd} Chainable.
+         * @param {HTMLTableHeaderCellElement} elem - Dragging column.
+         * @returns {Dnd} Chainbale.
          */
-        _copyDimensions: function (elem) {
-            var dragTable   = this.dragTable,
-                dragBody    = dragTable.tBodies[0],
-                dragTrs     = dragBody ? dragBody.children : [],
-                origTrs     = _.toArray(this.table.tBodies[0].children),
-                columnIndex = _.toArray(elem.parentNode.cells).indexOf(elem),
-                origTd,
-                dragTr;
+        _cloneTable: function (elem) {
+            var clone       = this.table.cloneNode(true),
+                columnIndex = this._getColumnIndex(elem),
+                headRow     = clone.tHead.firstElementChild,
+                headCells   = _.toArray(headRow.cells),
+                tableBody   = clone.tBodies[0],
+                bodyRows    = _.toArray(tableBody.children),
+                origTrs     = this.table.tBodies[0].children;
 
-            dragTable.style.width = elem.offsetWidth + 'px';
-            dragTable.tHead.firstElementChild.cells[0].style.height = elem.offsetHeight + 'px';
+            clone.style.width = elem.offsetWidth + 'px';
 
-            origTrs.forEach(function (origTr, rowIndex) {
-                origTd = origTr.cells[columnIndex];
-                dragTr = dragTrs[rowIndex];
-
-                if (origTd && dragTr) {
-                    dragTr.cells[0].style.height = origTd.offsetHeight + 'px';
+            headCells.forEach(function (th, index) {
+                if (index !== columnIndex) {
+                    headRow.removeChild(th);
                 }
             });
 
-            return this;
-        },
+            headRow.cells[0].style.height = elem.offsetHeight + 'px';
 
-        /**
-         * Locates draggable table at the upper left corner.
-         *
-         * @returns {Dnd} Chainable.
-         */
-        _dropPosition: function () {
-            var dragTable = this.dragTable,
-                dragStyles = dragTable.style,
-                coords;
+            bodyRows.forEach(function (row, rowIndex) {
+                var cells = row.cells,
+                    cell;
 
-            dragStyles.left = '0px';
-            dragStyles.top = '0px';
+                if (cells.length !== headCells.length) {
+                    tableBody.removeChild(row);
 
-            locate(dragTable, 0, 0);
+                    return;
+                }
 
-            coords = dragTable.getBoundingClientRect();
+                cell = row.cells[columnIndex].cloneNode(true);
 
-            dragStyles.left = -1 * coords.left + 'px';
-            dragStyles.top = -1 * coords.top + 'px';
+                while (row.firstElementChild) {
+                    row.removeChild(row.firstElementChild);
+                }
+
+                cell.style.height = origTrs[rowIndex].cells[columnIndex].offsetHeight + 'px';
+
+                row.appendChild(cell);
+            });
+
+            this.dragTable = clone;
+
+            $(clone)
+                .addClass('_dragging-copy')
+                .appendTo('body');
 
             return this;
         },
@@ -329,6 +386,7 @@ define([
          */
         grab: function (x, y, elem) {
             this.initDrag = true;
+
             this.grabbed = {
                 x: x,
                 y: y,
@@ -350,11 +408,8 @@ define([
 
             getModel(elem).dragging(true);
 
-            $(this.dragTable).removeClass(this.hiddenClass);
-
             this._cacheCoords()
-                ._copyDimensions(elem)
-                ._dropPosition();
+                ._cloneTable(elem);
         },
 
         /**
@@ -420,7 +475,7 @@ define([
 
             this.dragging = false;
 
-            $(this.dragTable).addClass(this.hiddenClass);
+            document.body.removeChild(this.dragTable);
 
             getModel(dragElem).dragging(false);
 

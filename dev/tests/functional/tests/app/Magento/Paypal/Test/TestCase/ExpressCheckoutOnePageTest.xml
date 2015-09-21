@@ -6,9 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Paypal\Test\TestCase\ExpressCheckoutOnePageTest">
-        <variation name="ExpressCheckoutOnePageTestVariation1">
-            <data name="description" xsi:type="string">MAGETWO-12413 - Check Out as a Guest Using PayPal Express Checkout Method and Offline Shipping Method</data>
+    <testCase name="Magento\Paypal\Test\TestCase\ExpressCheckoutOnePageTest" summary="Guest Checkout Using PayPal Express Checkout Method and Flat Rate" ticketId="MAGETWO-12413">
+        <variation name="ExpressCheckoutOnePageTestVariation1" summary="Check Out as a Guest Using PayPal Express Checkout Method and Offline Shipping Method" ticketId="MAGETWO-12413">
             <data name="products" xsi:type="string">catalogProductSimple::simple_10_dollar, configurableProduct::with_one_option, bundleProduct::fixed_100_dollar_with_required_options</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
             <data name="sandboxCustomer/dataset" xsi:type="string">sandbox_us_default</data>
@@ -34,8 +33,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderCommentsHistory" />
         </variation>
-        <variation name="ExpressCheckoutOnePageTestVariation2">
-            <data name="description" xsi:type="string">MAGETWO-14359 - Check Out as a Guest using Payflow Link - PayPal Express Checkout Payflow Edition and Offline Shipping</data>
+        <variation name="ExpressCheckoutOnePageTestVariation2" summary="Check Out as a Guest using Payflow Link - PayPal Express Checkout Payflow Edition and Offline Shipping" ticketId="MAGETWO-14359">
             <data name="products" xsi:type="string">catalogProductSimple::simple_10_dollar, configurableProduct::with_one_option, bundleProduct::fixed_100_dollar_with_required_options</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
             <data name="sandboxCustomer/dataset" xsi:type="string">sandbox_us_default</data>
@@ -47,7 +45,7 @@
             </data>
             <data name="grandTotal" xsi:type="string">156.81</data>
             <data name="paypalPrices" xsi:type="array">
-                  <item name="total" xsi:type="string">156.81</item>
+                <item name="total" xsi:type="string">156.81</item>
             </data>
             <data name="prices" xsi:type="array">
                 <item name="subTotal" xsi:type="string">131.00</item>
@@ -62,8 +60,7 @@
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderCommentsHistory" />
         </variation>
-        <variation name="ExpressCheckoutOnePageTestVariation3">
-            <data name="description" xsi:type="string">MAGETWO-12996 - Check Out as Guest User using PayPal Express and Offline Shipping Method</data>
+        <variation name="ExpressCheckoutOnePageTestVariation3" summary="Check Out as Guest User using PayPal Express and Offline Shipping Method" ticketId="MAGETWO-12996">
             <data name="products" xsi:type="string">catalogProductSimple::simple_10_dollar, configurableProduct::with_one_option, bundleProduct::fixed_100_dollar_with_required_options</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
             <data name="sandboxCustomer/dataset" xsi:type="string">sandbox_us_default</data>

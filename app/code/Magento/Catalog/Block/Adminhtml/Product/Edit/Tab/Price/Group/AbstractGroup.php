@@ -272,7 +272,7 @@ abstract class AbstractGroup extends Widget implements RendererInterface
                 'currency' => $website->getBaseCurrencyCode()
             ];
         } elseif (!$this->isScopeGlobal()) {
-            $websites = $this->_storeManager->getWebsites(false);
+            $websites = $this->_storeManager->getWebsites();
             $productWebsiteIds = $this->getProduct()->getWebsiteIds();
             foreach ($websites as $website) {
                 /** @var $website \Magento\Store\Model\Website */

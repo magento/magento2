@@ -10,7 +10,9 @@
 namespace Magento\Framework\App\Cache\Frontend;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Resource;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\DriverInterface;
 
 class Factory
 {
@@ -65,7 +67,7 @@ class Factory
      */
     protected $_backendOptions = [
         'hashed_directory_level' => 1,
-        'hashed_directory_umask' => 0777,
+        'hashed_directory_umask' => DriverInterface::WRITEABLE_DIRECTORY_MODE,
         'file_name_prefix' => 'mage',
     ];
 
@@ -300,7 +302,7 @@ class Factory
     protected function _getDbAdapterOptions()
     {
         $options['adapter_callback'] = function () {
-            return $this->_resource->getConnection('core_write');
+            return $this->_resource->getConnection();
         };
         $options['data_table_callback'] = function () {
             return $this->_resource->getTableName('cache');

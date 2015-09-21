@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Catalog\Test\TestCase\ProductAttribute\DeleteProductAttributeEntityTest">
+    <testCase name="Magento\Catalog\Test\TestCase\ProductAttribute\DeleteProductAttributeEntityTest" summary="Delete Product Attribute" ticketId="MAGETWO-24998">
         <variation name="DeleteProductAttributeEntityTestVariation1">
             <data name="attribute/dataset" xsi:type="string">attribute_type_text_field</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductAttributeSuccessDeleteMessage" />

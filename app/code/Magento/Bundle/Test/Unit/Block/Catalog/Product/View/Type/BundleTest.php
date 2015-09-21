@@ -9,7 +9,7 @@
 namespace Magento\Bundle\Test\Unit\Block\Catalog\Product\View\Type;
 
 use Magento\Bundle\Block\Catalog\Product\View\Type\Bundle as BundleBlock;
-use Magento\Framework\Object as MagentoObject;
+use Magento\Framework\DataObject as MagentoObject;
 
 class BundleTest extends \PHPUnit_Framework_TestCase
 {
@@ -205,7 +205,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $this->product->expects($this->once())
             ->method('hasPreconfiguredValues')
             ->will($this->returnValue(true));
-        $preconfiguredValues = new \Magento\Framework\Object(
+        $preconfiguredValues = new \Magento\Framework\DataObject(
             [
                 'bundle_option' => [
                     1 => 123123111

@@ -70,7 +70,7 @@ class Filter extends AbstractSimpleObject
      */
     public function getConditionType()
     {
-        return $this->_get(self::KEY_CONDITION_TYPE);
+        return $this->_get(self::KEY_CONDITION_TYPE) ?: 'eq';
     }
 
     /**

@@ -151,7 +151,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
         $productId = 6;
         $storeId = 4;
         $testSummaryData = ['test' => 'value'];
-        $summary = new \Magento\Framework\Object();
+        $summary = new \Magento\Framework\DataObject();
         $summary->setData($testSummaryData);
 
         $product = $this->getMock(

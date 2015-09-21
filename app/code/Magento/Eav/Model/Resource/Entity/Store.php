@@ -6,7 +6,7 @@
 namespace Magento\Eav\Model\Resource\Entity;
 
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 
 /**
  * Eav Entity store resource model
@@ -19,6 +19,7 @@ class Store extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Resource initialization
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -35,9 +36,9 @@ class Store extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function loadByEntityStore(AbstractModel $object, $entityTypeId, $storeId)
     {
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         $bind = [':entity_type_id' => $entityTypeId, ':store_id' => $storeId];
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getMainTable()
         )->forUpdate(
             true
@@ -46,7 +47,7 @@ class Store extends \Magento\Framework\Model\Resource\Db\AbstractDb
         )->where(
             'store_id = :store_id'
         );
-        $data = $adapter->fetchRow($select, $bind);
+        $data = $connection->fetchRow($select, $bind);
 
         if (!$data) {
             return false;

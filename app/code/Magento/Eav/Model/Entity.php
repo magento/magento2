@@ -28,10 +28,11 @@ class Entity extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * @param Entity\Context $context
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(\Magento\Eav\Model\Entity\Context $context, $data = [])
     {
         parent::__construct($context, $data);
-        $this->setConnection($this->_resource->getConnection('eav_read'));
+        $this->setConnection($this->_resource->getConnection('eav'));
     }
 }

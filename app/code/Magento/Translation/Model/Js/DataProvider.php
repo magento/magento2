@@ -6,6 +6,7 @@
 
 namespace Magento\Translation\Model\Js;
 
+use Magento\Framework\Phrase\Renderer\Translate;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\App\State;
 use Magento\Framework\Filesystem;
@@ -14,6 +15,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * DataProvider for js translation
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProvider implements DataProviderInterface
 {
@@ -46,16 +48,30 @@ class DataProvider implements DataProviderInterface
     protected $rootDirectory;
 
     /**
+     * Basic translate renderer
+     *
+     * @var Translate
+     */
+    protected $translate;
+
+    /**
      * @param State $appState
      * @param Config $config
      * @param Filesystem $filesystem
+     * @param Translate $translate
      * @param Files $filesUtility
      */
-    public function __construct(State $appState, Config $config, Filesystem $filesystem, Files $filesUtility = null)
-    {
+    public function __construct(
+        State $appState,
+        Config $config,
+        Filesystem $filesystem,
+        Translate $translate,
+        Files $filesUtility = null
+    ) {
         $this->appState = $appState;
         $this->config = $config;
         $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
+        $this->translate = $translate;
         $this->filesUtility = (null !== $filesUtility) ? $filesUtility : new Files(BP);
     }
 
@@ -69,22 +85,20 @@ class DataProvider implements DataProviderInterface
      */
     public function getData($themePath)
     {
-        $dictionary = [];
         $areaCode = $this->appState->getAreaCode();
 
-        $files = $this->filesUtility->getJsFiles($areaCode, $themePath);
-        $staticHtmlFiles = $this->filesUtility->getStaticHtmlFiles($areaCode, $themePath);
+        $files = array_merge(
+            $this->filesUtility->getJsFiles('base', $themePath),
+            $this->filesUtility->getJsFiles($areaCode, $themePath),
+            $this->filesUtility->getStaticHtmlFiles('base', $themePath),
+            $this->filesUtility->getStaticHtmlFiles($areaCode, $themePath)
+        );
 
-        if (is_array($staticHtmlFiles)) {
-            foreach ($staticHtmlFiles as $staticFile) {
-                $files[] = $staticFile;
-            }
-        }
-
+        $dictionary = [];
         foreach ($files as $filePath) {
             $content = $this->rootDirectory->readFile($this->rootDirectory->getRelativePath($filePath[0]));
             foreach ($this->getPhrases($content) as $phrase) {
-                $translatedPhrase = (string) __($phrase);
+                $translatedPhrase = $this->translate->render([$phrase], []);
                 if ($phrase != $translatedPhrase) {
                     $dictionary[$phrase] = $translatedPhrase;
                 }
@@ -108,8 +122,8 @@ class DataProvider implements DataProviderInterface
             $result = preg_match_all($pattern, $content, $matches);
 
             if ($result) {
-                if (isset($matches[1])) {
-                    foreach ($matches[1] as $match) {
+                if (isset($matches[2])) {
+                    foreach ($matches[2] as $match) {
                         $phrases[] = $match;
                     }
                 }

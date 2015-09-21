@@ -97,7 +97,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testExecute()
     {
-        $objectMock = $this->getMockBuilder('Magento\Framework\Object')
+        $objectMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
         $this->transactionMock->expects($this->once())
@@ -124,7 +124,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testExecuteWithException()
     {
-        $objectMock = $this->getMockBuilder('Magento\Framework\Object')
+        $objectMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
         $this->transactionMock->expects($this->once())

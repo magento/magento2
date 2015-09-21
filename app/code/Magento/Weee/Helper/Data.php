@@ -71,6 +71,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_storeManager;
 
     /**
+     * @var string
+     */
+    protected $cacheProductWeeeAmount = '_cache_product_weee_amount';
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Weee\Model\Tax $weeeTax
@@ -192,17 +197,22 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getAmount($product, $website = null)
     {
-        /** @var \Magento\Store\Model\Store $store */
-        if ($website) {
-            $store = $this->_storeManager->getWebsite($website)->getDefaultGroup()->getDefaultStore();
-        } else {
-            $store = $product->getStore();
-        }
+        if (!$product->hasData($this->cacheProductWeeeAmount)) {
+            /** @var \Magento\Store\Model\Store $store */
+            if ($website) {
+                $store = $this->_storeManager->getWebsite($website)->getDefaultGroup()->getDefaultStore();
+            } else {
+                $store = $product->getStore();
+            }
 
-        if ($this->isEnabled($store)) {
-            return $this->_weeeTax->getWeeeAmount($product, null, null, $website);
+            $amount = 0;
+            if ($this->isEnabled($store)) {
+                $amount = $this->_weeeTax->getWeeeAmount($product, null, null, $website);
+            }
+
+            $product->setData($this->cacheProductWeeeAmount, $amount);
         }
-        return 0;
+        return $product->getData($this->cacheProductWeeeAmount);
     }
 
     /**
@@ -260,11 +270,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Proxy for \Magento\Weee\Model\Tax::getProductWeeeAttributes()
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @param null|false|\Magento\Framework\Object     $shipping
-     * @param null|false|\Magento\Framework\Object     $billing
+     * @param null|false|\Magento\Framework\DataObject     $shipping
+     * @param null|false|\Magento\Framework\DataObject     $billing
      * @param Website                        $website
      * @param bool                           $calculateTaxes
-     * @return \Magento\Framework\Object[]
+     * @return \Magento\Framework\DataObject[]
      */
     public function getProductWeeeAttributes(
         $product,
@@ -280,6 +290,35 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $website,
             $calculateTaxes
         );
+    }
+
+    /**
+     * Returns applied weee tax amount
+     *
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @return array
+     */
+    public function getAppliedAmount($item)
+    {
+        if ($item instanceof \Magento\Quote\Model\Quote\Item\AbstractItem) {
+            if ($item->getHasChildren() && $item->isChildrenCalculated()) {
+                $result = 0;
+                foreach ($item->getChildren() as $child) {
+                    $childData = $this->getAppliedAmount($child);
+                    if (!empty($childData)) {
+                        $result += $childData;
+                    }
+                }
+                return $result;
+            }
+        }
+
+        // if order item data is old enough then weee_tax_applied might not be valid
+        $data = $item->getWeeeTaxAppliedAmount();
+        if (empty($data)) {
+            return 0;
+        }
+        return $data;
     }
 
     /**
@@ -328,7 +367,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Returns array of weee attributes allowed for display
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Framework\Object[]
+     * @return \Magento\Framework\DataObject[]
      */
     public function getProductWeeeAttributesForDisplay($product)
     {
@@ -345,11 +384,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get Product Weee attributes for price renderer
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @param null|false|\Magento\Framework\Object $shipping Shipping Address
-     * @param null|false|\Magento\Framework\Object $billing Billing Address
+     * @param null|false|\Magento\Framework\DataObject $shipping Shipping Address
+     * @param null|false|\Magento\Framework\DataObject $billing Billing Address
      * @param null|Website $website
      * @param bool $calculateTaxes
-     * @return \Magento\Framework\Object[]
+     * @return \Magento\Framework\DataObject[]
      */
     public function getProductWeeeAttributesForRenderer(
         $product,
@@ -397,7 +436,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Returns all summed WEEE taxes with all local taxes applied
      *
-     * @param \Magento\Framework\Object[] $attributes Result from getProductWeeeAttributes()
+     * @param \Magento\Framework\DataObject[] $attributes Result from getProductWeeeAttributes()
      * @return float
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -409,7 +448,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         $amount = 0;
         foreach ($attributes as $attribute) {
-            /* @var $attribute \Magento\Framework\Object */
+            /* @var $attribute \Magento\Framework\DataObject */
             $amount += $attribute->getAmountInclTax();
         }
 
@@ -728,7 +767,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  \Magento\Catalog\Model\Product $product
      * @return array
      */
-    public function getWeeAttributesForBundle($product)
+    public function getWeeeAttributesForBundle($product)
     {
         if ($product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
             $typeInstance = $product->getTypeInstance();
@@ -747,7 +786,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                     $product->getStore()->getWebsiteId()
                 );
                 foreach ($weeAttributes as $weeAttribute) {
-                    $insertedWeeCodesArray[$weeAttribute->getCode()]=$weeAttribute;
+                    $insertedWeeCodesArray[$selectionItem->getId()][$weeAttribute->getCode()]=$weeAttribute;
                 }
             }
             return $insertedWeeCodesArray;

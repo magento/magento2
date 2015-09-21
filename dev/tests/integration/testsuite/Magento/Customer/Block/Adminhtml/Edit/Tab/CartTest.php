@@ -89,7 +89,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRowUrl()
     {
-        $row = new \Magento\Framework\Object();
+        $row = new \Magento\Framework\DataObject();
         $row->setProductId(1);
         $this->assertContains('/backend/catalog/product/edit/id/1', $this->_block->getRowUrl($row));
     }

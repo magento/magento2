@@ -15,7 +15,7 @@ class Text extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     /**
      * Magento string lib
      *
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
@@ -28,14 +28,14 @@ class Text extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param array $data
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Escaper $escaper,
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         array $data = []
     ) {
         $this->_escaper = $escaper;

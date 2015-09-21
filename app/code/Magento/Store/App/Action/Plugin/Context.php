@@ -7,6 +7,8 @@
 namespace Magento\Store\App\Action\Plugin;
 
 use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Store\Api\StoreCookieManagerInterface;
+use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -35,32 +37,40 @@ class Context
     protected $storeManager;
 
     /**
+     * @var StoreCookieManagerInterface
+     */
+    protected $storeCookieManager;
+
+    /**
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Framework\App\Request\Http $httpRequest
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StoreCookieManagerInterface $storeCookieManager
      */
     public function __construct(
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Framework\App\Request\Http $httpRequest,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        StoreCookieManagerInterface $storeCookieManager
     ) {
         $this->session      = $session;
         $this->httpContext  = $httpContext;
         $this->httpRequest  = $httpRequest;
         $this->storeManager = $storeManager;
+        $this->storeCookieManager = $storeCookieManager;
     }
 
     /**
-     * @param \Magento\Framework\App\Action\Action $subject
+     * @param \Magento\Framework\App\ActionInterface $subject
      * @param callable $proceed
      * @param \Magento\Framework\App\RequestInterface $request
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundDispatch(
-        \Magento\Framework\App\Action\Action $subject,
+        \Magento\Framework\App\ActionInterface $subject,
         \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request
     ) {
@@ -74,10 +84,10 @@ class Context
         $this->httpContext->setValue(
             StoreManagerInterface::CONTEXT_STORE,
             $this->httpRequest->getParam(
-                '___store',
-                $defaultStore->getStoreCodeFromCookie()
-            ),
-            $this->storeManager->getWebsite()->getDefaultStore()->getCode()
+                StoreResolverInterface::PARAM_NAME,
+                $this->storeCookieManager->getStoreCodeFromCookie()
+            ) ?: $defaultStore->getCode(),
+            $this->storeManager->getDefaultStoreView()->getCode()
         );
         return $proceed($request);
     }

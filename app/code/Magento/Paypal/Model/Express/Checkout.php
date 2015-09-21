@@ -11,6 +11,7 @@ use Magento\Paypal\Model\Config as PaypalConfig;
 use Magento\Paypal\Model\Express\Checkout\Quote as PaypalQuote;
 use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 use Magento\Quote\Model\Quote\Address;
+use Magento\Framework\DataObject;
 
 /**
  * Wrapper that performs Paypal Express and Checkout communication
@@ -218,7 +219,7 @@ class Checkout
     protected $_apiTypeFactory;
 
     /**
-     * @var \Magento\Framework\Object\Copy
+     * @var \Magento\Framework\DataObject\Copy
      */
     protected $_objectCopyService;
 
@@ -283,7 +284,7 @@ class Checkout
      * @param \Magento\Quote\Model\QuoteManagement $quoteManagement
      * @param \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory
      * @param \Magento\Paypal\Model\Api\Type\Factory $apiTypeFactory
-     * @param \Magento\Framework\Object\Copy $objectCopyService
+     * @param \Magento\Framework\DataObject\Copy $objectCopyService
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
@@ -312,7 +313,7 @@ class Checkout
         \Magento\Quote\Model\QuoteManagement $quoteManagement,
         \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory,
         \Magento\Paypal\Model\Api\Type\Factory $apiTypeFactory,
-        \Magento\Framework\Object\Copy $objectCopyService,
+        \Magento\Framework\DataObject\Copy $objectCopyService,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\Message\ManagerInterface $messageManager,
@@ -1016,7 +1017,7 @@ class Checkout
                 $amountExclTax = $this->_taxData->getShippingPrice($amount, false, $address);
                 $amountInclTax = $this->_taxData->getShippingPrice($amount, true, $address);
 
-                $options[$i] = new \Magento\Framework\Object(
+                $options[$i] = new \Magento\Framework\DataObject(
                     [
                         'is_default' => $isDefault,
                         'name' => trim("{$rate->getCarrierTitle()} - {$rate->getMethodTitle()}", ' -'),
@@ -1041,7 +1042,7 @@ class Checkout
         }
 
         if ($mayReturnEmpty && $userSelectedOption === null) {
-            $options[] = new \Magento\Framework\Object(
+            $options[] = new \Magento\Framework\DataObject(
                 [
                     'is_default' => true,
                     'name'       => __('N/A'),
@@ -1075,11 +1076,11 @@ class Checkout
      * This function is used as a callback comparison function in shipping options sorting process
      * @see self::_prepareShippingOptions()
      *
-     * @param \Magento\Framework\Object $option1
-     * @param \Magento\Framework\Object $option2
+     * @param \Magento\Framework\DataObject $option1
+     * @param \Magento\Framework\DataObject $option2
      * @return int
      */
-    protected static function cmpShippingOptions(\Magento\Framework\Object $option1, \Magento\Framework\Object $option2)
+    protected static function cmpShippingOptions(DataObject $option1, DataObject $option2)
     {
         if ($option1->getAmount() == $option2->getAmount()) {
             return 0;
@@ -1158,11 +1159,8 @@ class Checkout
         $customer = $this->_quote->getCustomer();
         $confirmationStatus = $this->_accountManagement->getConfirmationStatus($customer->getId());
         if ($confirmationStatus === AccountManagement::ACCOUNT_CONFIRMATION_REQUIRED) {
-            $url = $this->_customerUrl->getEmailConfirmationUrl($customer->getEmail());
             $this->_messageManager->addSuccess(
-            // @codingStandardsIgnoreStart
-                __('Account confirmation is required. Please check your email for confirmation link. To resend confirmation email please <a href="%1">click here</a>.', $url)
-            // @codingStandardsIgnoreEnd
+                __('Thank you for registering with Main Website Store.')
             );
         } else {
             $this->getCustomerSession()->regenerateId();

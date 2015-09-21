@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\SalesRule\Test\TestCase\DeleteSalesRuleEntityTest">
+    <testCase name="Magento\SalesRule\Test\TestCase\DeleteSalesRuleEntityTest" summary="Delete Sales Rule" ticketId="MAGETWO-24985">
         <variation name="DeleteSalesRuleEntityTestVariation1">
             <data name="salesRule/dataset" xsi:type="string">active_sales_rule_with_percent_price_discount_coupon</data>
             <constraint name="Magento\SalesRule\Test\Constraint\AssertCartPriceRuleSuccessDeleteMessage" />

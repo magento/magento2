@@ -22,7 +22,7 @@ abstract class Product extends \Magento\Framework\App\Action\Action implements V
         $categoryId = (int)$this->getRequest()->getParam('category', false);
         $productId = (int)$this->getRequest()->getParam('id');
 
-        $params = new \Magento\Framework\Object();
+        $params = new \Magento\Framework\DataObject();
         $params->setCategoryId($categoryId);
 
         /** @var \Magento\Catalog\Helper\Product $product */

@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\CatalogRule\Test\TestCase\CreateCatalogRuleTest">
+    <testCase name="Magento\CatalogRule\Test\TestCase\CreateCatalogRuleTest" summary="Applying Catalog Rule for Simple Product if Custom options with fixed price" ticketId="MAGETWO-23036">
         <variation name="CreateCatalogRuleTestVariation1">
             <data name="product" xsi:type="string">MAGETWO-23036</data>
             <data name="catalogPriceRule/data/name" xsi:type="string">rule_name%isolation%</data>
@@ -17,18 +17,17 @@
             <data name="catalogPriceRule/data/simple_action" xsi:type="string">Adjust final price to this percentage</data>
             <data name="catalogPriceRule/data/discount_amount" xsi:type="string">90</data>
             <data name="cartPrice/sub_total" xsi:type="string">90</data>
-            <data name="cartPrice/grand_total" xsi:type="string">90</data>
+            <data name="cartPrice/grand_total" xsi:type="string">95</data>
             <data name="productPrice/0/discount_amount" xsi:type="string">10</data>
             <data name="productPrice/0/special" xsi:type="string">90</data>
             <data name="productPrice/0/sub_total" xsi:type="string">90</data>
             <data name="productPrice/0/regular" xsi:type="string">100</data>
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleInGrid"/>
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedCatalogPage"/>
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage"/>
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleInGrid" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedCatalogPage" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart" />
         </variation>
-        <variation name="CreateCatalogRuleTestVariation2">
-            <data name="description" xsi:type="string">MAGETWO-12908: Apply Catalog Price Rules to Specific Customer Group.</data>
+        <variation name="CreateCatalogRuleTestVariation2" summary="Apply Catalog Price Rules to Specific Customer Group" ticketId="MAGETWO-12908">
             <data name="customer/dataset" xsi:type="string">customer_with_new_customer_group</data>
             <data name="product" xsi:type="string">simple_10_dollar</data>
             <data name="catalogPriceRule/data/name" xsi:type="string">rule_name%isolation%</data>
@@ -38,19 +37,19 @@
             <data name="catalogPriceRule/data/simple_action" xsi:type="string">Apply as percentage of original</data>
             <data name="catalogPriceRule/data/discount_amount" xsi:type="string">50</data>
             <data name="cartPrice/sub_total" xsi:type="string">5</data>
-            <data name="cartPrice/grand_total" xsi:type="string">5</data>
+            <data name="cartPrice/grand_total" xsi:type="string">10</data>
             <data name="productPrice/0/discount_amount" xsi:type="string">5</data>
             <data name="productPrice/0/special" xsi:type="string">5</data>
             <data name="productPrice/0/sub_total" xsi:type="string">5</data>
             <data name="productPrice/0/regular" xsi:type="string">10</data>
             <data name="tag" xsi:type="string">test_type:acceptance_test, stable:no</data>
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleInGrid"/>
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedCatalogPage"/>
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedProductPage"/>
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedShoppingCart"/>
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedCatalogPage"/>
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage"/>
-            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart"/>
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleInGrid" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedCatalogPage" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedProductPage" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleNotAppliedShoppingCart" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedCatalogPage" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedProductPage" />
+            <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleAppliedShoppingCart" />
         </variation>
     </testCase>
 </config>

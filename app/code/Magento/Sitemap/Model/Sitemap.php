@@ -230,7 +230,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
         $helper = $this->_sitemapData;
         $storeId = $this->getStoreId();
 
-        $this->_sitemapItems[] = new \Magento\Framework\Object(
+        $this->_sitemapItems[] = new \Magento\Framework\DataObject(
             [
                 'changefreq' => $helper->getCategoryChangefreq($storeId),
                 'priority' => $helper->getCategoryPriority($storeId),
@@ -238,7 +238,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
             ]
         );
 
-        $this->_sitemapItems[] = new \Magento\Framework\Object(
+        $this->_sitemapItems[] = new \Magento\Framework\DataObject(
             [
                 'changefreq' => $helper->getProductChangefreq($storeId),
                 'priority' => $helper->getProductPriority($storeId),
@@ -246,7 +246,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
             ]
         );
 
-        $this->_sitemapItems[] = new \Magento\Framework\Object(
+        $this->_sitemapItems[] = new \Magento\Framework\DataObject(
             [
                 'changefreq' => $helper->getPageChangefreq($storeId),
                 'priority' => $helper->getPagePriority($storeId),
@@ -336,7 +336,7 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel
     public function generateXml()
     {
         $this->_initSitemapItems();
-        /** @var $sitemapItem \Magento\Framework\Object */
+        /** @var $sitemapItem \Magento\Framework\DataObject */
         foreach ($this->_sitemapItems as $sitemapItem) {
             $changefreq = $sitemapItem->getChangefreq();
             $priority = $sitemapItem->getPriority();

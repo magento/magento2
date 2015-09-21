@@ -30,7 +30,7 @@
     <preference for="Magento\Framework\Locale\ListsInterface" type="Magento\Framework\Locale\TranslatedLists" />
     <preference for="Magento\Framework\Api\AttributeTypeResolverInterface" type="Magento\Framework\Reflection\AttributeTypeResolver" />
     <preference for="Magento\Framework\Api\Search\SearchResultInterface" type="Magento\Framework\Api\Search\SearchResult" />
-    <preference for="Magento\Framework\Api\Search\SearchCriteriaInterface" type="Magento\Framework\Api\Search\SearchCriteria" />
+    <preference for="Magento\Framework\Api\Search\SearchCriteriaInterface" type="Magento\Framework\Api\Search\SearchCriteria"/>
     <preference for="Magento\Framework\Api\Search\DocumentInterface" type="Magento\Framework\Api\Search\Document" />
     <preference for="Magento\Framework\Api\Search\AggregationInterface" type="Magento\Framework\Search\Response\Aggregation" />
     <type name="Magento\Store\Model\Store">
@@ -93,7 +93,7 @@
     <preference for="Magento\Framework\Api\MetadataObjectInterface" type="Magento\Framework\Api\AttributeMetadata"/>
     <preference for="Magento\Framework\Api\SearchCriteriaInterface" type="Magento\Framework\Api\SearchCriteria"/>
     <preference for="Magento\Framework\App\Rss\UrlBuilderInterface" type="Magento\Framework\App\Rss\UrlBuilder"/>
-    <preference for="Magento\Framework\DB\LoggerInterface" type="Magento\Framework\DB\Logger\Null"/>
+    <preference for="Magento\Framework\DB\LoggerInterface" type="Magento\Framework\DB\Logger\Quiet"/>
     <preference for="Magento\Framework\App\Resource\ConnectionAdapterInterface" type="Magento\Framework\Model\Resource\Type\Db\Pdo\Mysql"/>
     <preference for="Magento\Framework\DB\QueryInterface" type="Magento\Framework\DB\Query"/>
     <preference for="Magento\Framework\App\ProductMetadataInterface" type="Magento\Framework\App\ProductMetadata"/>
@@ -123,13 +123,12 @@
     <preference for="Magento\Framework\Url\QueryParamsResolverInterface" type="Magento\Framework\Url\QueryParamsResolver" />
     <preference for="Magento\Framework\Url\ScopeResolverInterface" type="Magento\Framework\Url\ScopeResolver" />
     <preference for="Magento\Framework\Url\SecurityInfoInterface" type="Magento\Framework\Url\SecurityInfo\Proxy" />
-    <preference for="Magento\Framework\Css\PreProcessor\AdapterInterface" type="Magento\Framework\Css\PreProcessor\Adapter\Oyejorge" />
     <preference for="Magento\Framework\Locale\CurrencyInterface" type="Magento\Framework\Locale\Currency" />
     <preference for="Magento\Framework\CurrencyInterface" type="Magento\Framework\Currency" />
     <preference for="Magento\Framework\Locale\FormatInterface" type="Magento\Framework\Locale\Format" />
     <preference for="Magento\Framework\Locale\ResolverInterface" type="Magento\Framework\Locale\Resolver" />
     <preference for="Magento\Framework\Stdlib\DateTime\TimezoneInterface" type="Magento\Framework\Stdlib\DateTime\Timezone" />
-    <preference for="Magento\Framework\Less\PreProcessor\ErrorHandlerInterface" type="Magento\Framework\Less\PreProcessor\ErrorHandler" />
+
     <preference for="Magento\Framework\Module\ResourceInterface" type="Magento\Framework\Module\Resource" />
     <preference for="Magento\Framework\Pricing\Amount\AmountInterface" type="Magento\Framework\Pricing\Amount\Base" />
     <preference for="Magento\Framework\Api\SearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
@@ -139,6 +138,7 @@
     <preference for="Magento\Framework\Api\ImageContentValidatorInterface" type="Magento\Framework\Api\ImageContentValidator" />
     <preference for="Magento\Framework\Api\ImageProcessorInterface" type="Magento\Framework\Api\ImageProcessor" />
     <preference for="Magento\Framework\Code\Reader\ClassReaderInterface" type="Magento\Framework\Code\Reader\ClassReader" />
+    <preference for="Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface" type="Magento\Framework\Stdlib\DateTime\DateTimeFormatter"/>
     <type name="Magento\Framework\Model\Resource\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Logger\Handler\Base">
         <arguments>
@@ -262,7 +262,7 @@
     <type name="Magento\Framework\View\Layout\Data\Structure" shared="false" />
     <type name="Magento\Theme\Model\View\Design">
         <arguments>
-            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManager\Proxy</argument>
+            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Acl" shared="false" />
@@ -307,7 +307,7 @@
     </type>
     <type name="Magento\Framework\App\Resource">
         <arguments>
-            <argument name="adapterFactory" xsi:type="object">Magento\Framework\App\Resource\ConnectionFactory</argument>
+            <argument name="connectionFactory" xsi:type="object">Magento\Framework\App\Resource\ConnectionFactory</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\Resource\Config">
@@ -340,7 +340,7 @@
                 <item name="array" xsi:type="object">layoutArrayArgumentReaderInterpreterProxy</item>
                 <item name="boolean" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Boolean</item>
                 <item name="number" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Number</item>
-                <item name="string" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\String</item>
+                <item name="string" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\StringUtils</item>
                 <item name="null" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\NullType</item>
                 <item name="object" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Passthrough</item>
                 <item name="url" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Passthrough</item>
@@ -356,7 +356,7 @@
                 <item name="array" xsi:type="object">layoutArrayArgumentGeneratorInterpreterProxy</item>
                 <item name="boolean" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Boolean</item>
                 <item name="number" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Number</item>
-                <item name="string" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\String</item>
+                <item name="string" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\StringUtils</item>
                 <item name="null" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\NullType</item>
                 <item name="object" xsi:type="object">layoutObjectArgumentInterpreter</item>
                 <item name="url" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Url</item>
@@ -394,14 +394,14 @@
             <argument name="instanceName" xsi:type="string">layoutArrayArgumentGeneratorInterpreter</argument>
         </arguments>
     </virtualType>
-    <virtualType name="layoutObjectArgumentInterpreter" type="Magento\Framework\View\Layout\Argument\Interpreter\Object">
+    <virtualType name="layoutObjectArgumentInterpreter" type="Magento\Framework\View\Layout\Argument\Interpreter\DataObject">
         <arguments>
             <argument name="expectedClass" xsi:type="string">Magento\Framework\Data\CollectionDataSourceInterface</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Framework\View\Layout\Argument\Interpreter\NamedParams">
         <arguments>
-            <argument name="paramInterpreter" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\String</argument>
+            <argument name="paramInterpreter" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\StringUtils</argument>
         </arguments>
     </type>
     <virtualType name="containerRenderPool" type="Magento\Framework\View\Layout\ReaderPool">
@@ -424,7 +424,6 @@
                 <item name="container" xsi:type="string">Magento\Framework\View\Layout\Reader\Container</item>
                 <item name="block" xsi:type="string">Magento\Framework\View\Layout\Reader\Block</item>
                 <item name="move" xsi:type="string">Magento\Framework\View\Layout\Reader\Move</item>
-                <item name="remove" xsi:type="string">Magento\Framework\View\Layout\Reader\Remove</item>
                 <item name="uiComponent" xsi:type="string">Magento\Framework\View\Layout\Reader\UiComponent</item>
             </argument>
         </arguments>
@@ -448,7 +447,6 @@
                 <item name="container" xsi:type="string">Magento\Framework\View\Layout\Reader\Container</item>
                 <item name="block" xsi:type="string">Magento\Framework\View\Layout\Reader\Block</item>
                 <item name="move" xsi:type="string">Magento\Framework\View\Layout\Reader\Move</item>
-                <item name="remove" xsi:type="string">Magento\Framework\View\Layout\Reader\Remove</item>
                 <item name="uiComponent" xsi:type="string">Magento\Framework\View\Layout\Reader\UiComponent</item>
             </argument>
         </arguments>
@@ -467,7 +465,6 @@
                 <item name="container" xsi:type="string">Magento\Framework\View\Layout\Reader\Container</item>
                 <item name="block" xsi:type="string">Magento\Framework\View\Layout\Reader\Block</item>
                 <item name="move" xsi:type="string">Magento\Framework\View\Layout\Reader\Move</item>
-                <item name="remove" xsi:type="string">Magento\Framework\View\Layout\Reader\Remove</item>
                 <item name="uiComponent" xsi:type="string">Magento\Framework\View\Layout\Reader\UiComponent</item>
             </argument>
         </arguments>
@@ -484,7 +481,6 @@
                 <item name="container" xsi:type="string">Magento\Framework\View\Layout\Reader\Container</item>
                 <item name="block" xsi:type="string">Magento\Framework\View\Layout\Reader\Block</item>
                 <item name="move" xsi:type="string">Magento\Framework\View\Layout\Reader\Move</item>
-                <item name="remove" xsi:type="string">Magento\Framework\View\Layout\Reader\Remove</item>
                 <item name="uiComponent" xsi:type="string">Magento\Framework\View\Layout\Reader\UiComponent</item>
             </argument>
         </arguments>
@@ -578,23 +574,6 @@
             </argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Framework\View\Asset\SourceFileGeneratorPool">
-        <arguments>
-            <argument name="fileGeneratorTypes" xsi:type="array">
-                <item name="less" xsi:type="object">fileassemblerFileGenerator</item>
-            </argument>
-        </arguments>
-    </type>
-    <virtualType name="fileassemblerFileGenerator" type="Magento\Framework\Less\FileGenerator">
-        <arguments>
-            <argument name="relatedGenerator" xsi:type="object">fileassemblerRelatedFilesGenerator</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="fileassemblerRelatedFilesGenerator" type="Magento\Developer\Model\Less\FileGenerator\PublicationDecorator">
-        <arguments>
-            <argument name="publisher" xsi:type="object">developerPublisher</argument>
-        </arguments>
-    </virtualType>
     <type name="Magento\Framework\View\Design\FileResolution\Fallback\File">
         <arguments>
             <argument name="resolver" xsi:type="object">Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple</argument>
@@ -610,15 +589,7 @@
             <argument name="resolver" xsi:type="object">Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple</argument>
         </arguments>
     </type>
-    <virtualType name="viewFileFallbackResolver" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Alternative">
-        <arguments>
-            <argument name="alternativeExtensions" xsi:type="array">
-                <item name="css" xsi:type="array">
-                    <item name="less" xsi:type="string">less</item>
-                </item>
-            </argument>
-        </arguments>
-    </virtualType>
+
     <virtualType name="viewFileMinifiedFallbackResolver" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Minification">
         <arguments>
             <argument name="fallback" xsi:type="object">viewFileFallbackResolver</argument>
@@ -926,7 +897,6 @@
             <argument name="readers" xsi:type="array">
                 <item name="container" xsi:type="string">Magento\Framework\View\Layout\Reader\Container</item>
                 <item name="move" xsi:type="string">Magento\Framework\View\Layout\Reader\Move</item>
-                <item name="remove" xsi:type="string">Magento\Framework\View\Layout\Reader\Remove</item>
             </argument>
         </arguments>
     </virtualType>
@@ -978,26 +948,26 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Object\Copy\Config">
+    <type name="Magento\Framework\DataObject\Copy\Config">
         <arguments>
-            <argument name="dataStorage" xsi:type="object">Magento\Framework\Object\Copy\Config\Data\Proxy</argument>
+            <argument name="dataStorage" xsi:type="object">Magento\Framework\DataObject\Copy\Config\Data\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Object\Copy\Config\Reader">
+    <type name="Magento\Framework\DataObject\Copy\Config\Reader">
         <arguments>
             <argument name="fileName" xsi:type="string">fieldset.xml</argument>
-            <argument name="schemaLocator" xsi:type="object">Magento\Framework\Object\Copy\Config\SchemaLocator</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\Framework\DataObject\Copy\Config\SchemaLocator</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Object\Copy\Config\SchemaLocator">
+    <type name="Magento\Framework\DataObject\Copy\Config\SchemaLocator">
         <arguments>
-            <argument name="schema" xsi:type="string">lib/internal/Magento/Framework/Object/etc/fieldset.xsd</argument>
-            <argument name="perFileSchema" xsi:type="string">lib/internal/Magento/Framework/Object/etc/fieldset_file.xsd</argument>
+            <argument name="schema" xsi:type="string">lib/internal/Magento/Framework/DataObject/etc/fieldset.xsd</argument>
+            <argument name="perFileSchema" xsi:type="string">lib/internal/Magento/Framework/DataObject/etc/fieldset_file.xsd</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Object\Copy\Config\Data">
+    <type name="Magento\Framework\DataObject\Copy\Config\Data">
         <arguments>
-            <argument name="reader" xsi:type="object">Magento\Framework\Object\Copy\Config\Reader\Proxy</argument>
+            <argument name="reader" xsi:type="object">Magento\Framework\DataObject\Copy\Config\Reader\Proxy</argument>
             <argument name="cacheId" xsi:type="string">fieldset_config</argument>
         </arguments>
     </type>
@@ -1040,48 +1010,7 @@
             <argument name="areaCode" xsi:type="string">frontend</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Less\PreProcessor\Instruction\MagentoImport">
-        <arguments>
-            <argument name="fileSource" xsi:type="object">Magento\Framework\Less\File\Collector\Aggregated</argument>
-        </arguments>
-    </type>
-    <virtualType name="lessFileSourceBase" type="Magento\Framework\View\File\Collector\Base">
-        <arguments>
-            <argument name="subDir" xsi:type="string">web</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="lessFileSourceBaseFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
-        <arguments>
-            <argument name="subject" xsi:type="object">lessFileSourceBase</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="lessFileSourceBaseSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
-        <arguments>
-            <argument name="subject" xsi:type="object">lessFileSourceBaseFiltered</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="lessFileOverriddenBase" type="Magento\Framework\View\File\Collector\Override\Base">
-        <arguments>
-            <argument name="subDir" xsi:type="string">web</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="lessFileSourceThemeFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
-        <arguments>
-            <argument name="subject" xsi:type="object">lessFileSourceTheme</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="lessFileSourceThemeSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
-        <arguments>
-            <argument name="subject" xsi:type="object">lessFileSourceThemeFiltered</argument>
-        </arguments>
-    </virtualType>
-    <type name="Magento\Framework\Less\File\Collector\Aggregated">
-        <arguments>
-            <argument name="libraryFiles" xsi:type="object">Magento\Framework\Less\File\Collector\Library</argument>
-            <argument name="baseFiles" xsi:type="object">lessFileSourceBaseSorted</argument>
-            <argument name="overriddenBaseFiles" xsi:type="object">lessFileOverriddenBase</argument>
-        </arguments>
-    </type>
+
     <type name="Magento\Framework\Module\ModuleList\Loader">
         <arguments>
             <argument name="filesystemDriver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
@@ -1121,7 +1050,9 @@
     </type>
     <type name="Magento\Framework\Url\Decoder">
         <arguments>
-            <argument name="urlBuilder" xsi:type="object">Magento\Framework\UrlInterface\Proxy</argument>
+            <argument name="urlBuilder" xsi:type="object">Magento\Framework\UrlInterface</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Api\Search\SearchCriteriaBuilder" shared="false"/>
+    <type name="Magento\Framework\Api\Search\FilterGroupBuilder" shared="false"/>
 </config>

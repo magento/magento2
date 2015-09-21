@@ -5,11 +5,11 @@
  */
 namespace Magento\Authorizenet\Model;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 
 /**
  * Request object
  */
-class Request extends Object
+class Request extends DataObject
 {
 }

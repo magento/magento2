@@ -53,7 +53,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $actionMock;
 
     /**
-     * @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultMock;
 
@@ -85,7 +85,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->actionMock = $this->getMockBuilder('Magento\Checkout\Controller\Onepage\SaveOrder')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultMock = $this->getMockBuilder('Magento\Framework\Object')
+        $this->resultMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
 

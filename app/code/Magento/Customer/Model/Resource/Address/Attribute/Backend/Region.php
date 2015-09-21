@@ -28,7 +28,7 @@ class Region extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     /**
      * Prepare object for save
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      */
     public function beforeSave($object)

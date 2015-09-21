@@ -20,12 +20,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $readAdapter;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $writeAdapter;
+    protected $connection;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -36,17 +31,16 @@ class LinkTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
-        $this->readAdapter =
+        $this->connection =
             $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
-        $this->writeAdapter =
-            $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
+
         $this->model = $objectManager->getObject(
             'Magento\Catalog\Model\Resource\Product\Link',
             ['resource' => $this->resource]
         );
     }
 
-    protected function prepareReadAdapter()
+    protected function prepareAdapter()
     {
         $this->dbSelect = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
 
@@ -55,22 +49,12 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             $this->at(0)
         )->method(
             'getConnection'
-        )->with(
-            'core_write'
         )->will(
-            $this->returnValue($this->writeAdapter)
+            $this->returnValue($this->connection)
         );
-        $this->resource->expects(
-            $this->at(1)
-        )->method(
-            'getConnection'
-        )->with(
-            'core_read'
-        )->will(
-            $this->returnValue($this->readAdapter)
-        );
+        
 
-        $this->readAdapter->expects($this->once())->method('select')->will($this->returnValue($this->dbSelect));
+        $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->dbSelect));
     }
 
     public function testGetAttributesByType()
@@ -78,7 +62,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $typeId = 4;
         $result = [100, 200, 300, 400];
 
-        $this->prepareReadAdapter();
+        $this->prepareAdapter();
         $this->dbSelect->expects($this->once())->method('from')->will($this->returnValue($this->dbSelect));
         $this->dbSelect->expects(
             $this->atLeastOnce()
@@ -90,7 +74,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->dbSelect)
         );
-        $this->readAdapter->expects($this->once())->method('fetchAll')->will($this->returnValue($result));
+        $this->connection->expects($this->once())->method('fetchAll')->will($this->returnValue($result));
         $this->assertEquals($result, $this->model->getAttributesByType($typeId));
     }
 
@@ -123,10 +107,10 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $result = [$typeId => [100 => 100, 500 => 500]];
 
         // method flow
-        $this->prepareReadAdapter();
+        $this->prepareAdapter();
         $this->dbSelect->expects($this->once())->method('from')->will($this->returnValue($this->dbSelect));
         $this->dbSelect->expects($this->atLeastOnce())->method('where')->will($this->returnValue($this->dbSelect));
-        $this->readAdapter->expects(
+        $this->connection->expects(
             $this->once()
         )->method(
             'fetchAll'
@@ -148,11 +132,11 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $result = [55, 66];
 
         // method flow
-        $this->prepareReadAdapter();
+        $this->prepareAdapter();
         $this->dbSelect->expects($this->once())->method('from')->will($this->returnValue($this->dbSelect));
         $this->dbSelect->expects($this->any())->method('where')->will($this->returnValue($this->dbSelect));
 
-        $this->readAdapter->expects(
+        $this->connection->expects(
             $this->once()
         )->method(
             'fetchAll'

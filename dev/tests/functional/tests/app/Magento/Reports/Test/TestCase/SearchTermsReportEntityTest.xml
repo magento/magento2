@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Reports\Test\TestCase\SearchTermsReportEntityTest">
+    <testCase name="Magento\Reports\Test\TestCase\SearchTermsReportEntityTest" summary="Search Terms Report" ticketId="MAGETWO-27106">
         <variation name="SearchTermsReportEntityTestVariation1">
             <data name="product" xsi:type="string">product_with_url_key</data>
             <data name="countProducts" xsi:type="string">1</data>

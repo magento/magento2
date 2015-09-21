@@ -1,0 +1,205 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Swatches\Block\Adminhtml\Attribute\Edit\Options\Text */
+?>
+<fieldset class="fieldset">
+    <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Manage Swatch (values of your attribute)') ?></span></legend>
+    <div id="swatch-text-options-panel">
+        <?php //@todo move style to css file ?>
+        <table class="data-table" style="clear: both;" cellspacing="0">
+            <thead>
+            <tr id="swatch-text-options-table">
+                <th class="col-draggable"></th>
+                <th class="col-default"><?php /* @escapeNotVerified */ echo __('Is Default') ?></th>
+                <?php
+                $storelist = $block->getStores();
+                foreach ($storelist as $_store):
+                    ?>
+                    <?php if ($_store->getCode() == 'admin') : ?>
+                        <th class="col-<%- data.id %>" style="width: 50px;">Swatch</th>
+                        <th><?php /* @escapeNotVerified */ echo $_store->getName() ?></th>
+                    <?php else : ?>
+                        <th colspan="2"><?php /* @escapeNotVerified */ echo $_store->getName() ?></th>
+                    <?php endif; ?>
+                <?php endforeach;
+                $storetotal = count($storelist) + 3;
+                ?>
+                <th class="col-delete">&nbsp;</th>
+            </tr>
+            </thead>
+            <tbody data-role="swatch-text-options-container"></tbody>
+            <tfoot>
+            <th colspan="<?php /* @escapeNotVerified */ echo $storetotal; ?>" class="col-actions-add">
+                <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()):?>
+                    <button id="add_new_swatch_text_option_button" title="<?php /* @escapeNotVerified */ echo __('Add Swatch'); ?>"
+                            type="button" class="action- scalable add">
+                        <span><?php /* @escapeNotVerified */ echo __('Add Swatch'); ?></span>
+                    </button>
+                <?php endif; ?>
+            </th>
+            </tfoot>
+        </table>
+        <input type="hidden" id="swatch-text-option-count-check" value="" />
+    </div>
+    <script id="swatch-text-row-template" type="text/x-magento-template">
+        <tr>
+            <td class="col-draggable">
+                <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()): ?>
+                    <div data-role="draggable-handle" class="draggable-handle" title="<?php /* @escapeNotVerified */ echo __('Sort Option'); ?>"></div>
+                <?php endif; ?>
+                <input data-role="order" type="hidden" name="optiontext[order][<%- data.id %>]"  value="<%- data.sort_order %>" <?php if ($block->getReadOnly() || $block->canManageOptionDefaultOnly()): ?> disabled="disabled"<?php endif; ?>/>
+            </td>
+            <td class="col-default">
+                <input class="input-radio" type="<%- data.intype %>" name="defaulttext[]" value="<%- data.id %>" <%- data.checked %><?php if ($block->getReadOnly()):?>disabled="disabled"<?php endif;?>/>
+            </td>
+            <?php foreach ($block->getStores() as $_store): ?>
+                <td class="col-<%- data.id %>" style="width: 50px;">
+                    <input class="input-text swatch-text-field-<?php /* @escapeNotVerified */ echo $_store->getId() ?> <?php if ($_store->getId() == \Magento\Store\Model\Store::DEFAULT_STORE_ID): ?>required-option<?php endif; ?>" name="swatchtext[value][<%- data.id %>][<?php /* @escapeNotVerified */ echo $_store->getId() ?>]" type="text" value="<%- data.swatch<?php /* @escapeNotVerified */ echo $_store->getId() ?> %>" />
+                </td>
+                <td class="swatch-col-<%- data.id %>">
+                    <input name="optiontext[value][<%- data.id %>][<?php /* @escapeNotVerified */ echo $_store->getId() ?>]" value="<%- data.store<?php /* @escapeNotVerified */ echo $_store->getId() ?> %>" class="input-text<?php if ($_store->getId() == \Magento\Store\Model\Store::DEFAULT_STORE_ID): ?> required-option<?php endif; ?>" type="text" <?php if ($block->getReadOnly() || $block->canManageOptionDefaultOnly()):?> disabled="disabled"<?php endif;?>/>
+                </td>
+            <?php endforeach; ?>
+            <td id="delete_button_swatch_container_<%- data.id %>" class="col-delete">
+                <input type="hidden" class="delete-flag" name="optiontext[delete][<%- data.id %>]" value="" />
+                <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()):?>
+                    <button title="<?php /* @escapeNotVerified */ echo __('Delete') ?>" type="button"
+                            class="action- scalable delete delete-option"
+                        >
+                        <span><?php /* @escapeNotVerified */ echo __('Delete') ?></span>
+                    </button>
+                <?php endif;?>
+            </td>
+        </tr>
+    </script>
+    <script>
+        require([
+            'jquery',
+            'mage/template',
+            'jquery/ui',
+            'prototype'
+        ], function(jQuery, mageTemplate){
+
+            var swatchOptionTextDefaultInputType = 'radio';
+
+            var swatchTextOption = {
+                table: $('swatch-text-options-table'),
+                itemCount: 0,
+                totalItems: 0,
+                isReadOnly: <?php echo (int)$block->getReadOnly(); ?>,
+                add: function(data) {
+                    this.template = mageTemplate('#swatch-text-row-template');
+
+                    var isNewOption = false;
+                    if (typeof data.id == 'undefined') {
+                        data = {
+                            'id': 'option_' + this.itemCount,
+                            'sort_order': this.itemCount + 1
+                        };
+                        isNewOption = true;
+                    }
+                    if (!data.intype) {
+                        data.intype = swatchOptionTextDefaultInputType;
+                    }
+
+                    Element.insert($$('[data-role=swatch-text-options-container]')[0], this.template({data: data}));
+                    visibleRadio = $$('#swatch-text-options-panel [name="defaulttext[]"]').findAll(function(el) { return el.up().up().visible(); });
+                    if (visibleRadio.length == 1 && isNewOption == true) {
+                        visibleRadio[0].checked = true;
+                    }
+                    if (isNewOption && !this.isReadOnly) {
+                        this.enableNewOptionDeleteButton(data.id);
+                    }
+                    this.bindRemoveButtons();
+                    this.itemCount++;
+                    this.totalItems++;
+                    this.updateItemsCountField();
+                },
+                remove: function(event) {
+                    var element = $(Event.findElement(event, 'tr')); // !!! Button already have table parent in safari
+                    // Safari workaround
+                    element.ancestors().each(function(parentItem) {
+                        if (parentItem.hasClassName('option-row')) {
+                            element = parentItem;
+                            throw $break;
+                        } else if (parentItem.hasClassName('box')) {
+                            throw $break;
+                        }
+                    });
+
+                    if (element) {
+                        var elementFlags = element.getElementsByClassName('delete-flag');
+                        if (elementFlags[0]) {
+                            elementFlags[0].value = 1;
+                        }
+
+                        element.addClassName('no-display');
+                        element.addClassName('template');
+                        element.hide();
+                        this.totalItems--;
+                        this.updateItemsCountField();
+                    }
+                },
+                updateItemsCountField: function() {
+                    $('swatch-text-option-count-check').value = this.totalItems > 0 ? '1' : '';
+                },
+                enableNewOptionDeleteButton: function(id) {
+                    $$('#delete_button_swatch_container_' + id + ' button').each(function(button) {
+                        button.enable();
+                        button.removeClassName('disabled');
+                    });
+                },
+                bindRemoveButtons: function() {
+                    var buttons = $$('.delete-option');
+                    for (var i = 0; i < buttons.length; i++) {
+                        if (!$(buttons[i]).binded) {
+                            $(buttons[i]).binded = true;
+                            Event.observe(buttons[i], 'click', this.remove.bind(this));
+                        }
+                    }
+                }
+            };
+
+            swatchTextOption.bindRemoveButtons();
+
+            if ($('add_new_swatch_text_option_button')) {
+                Event.observe('add_new_swatch_text_option_button', 'click', swatchTextOption.add.bind(swatchTextOption));
+            }
+            <?php foreach ($block->getOptionValues() as $_value): ?>
+            swatchTextOption.add(<?php /* @escapeNotVerified */ echo $_value->toJson() ?>);
+            <?php endforeach; ?>
+            <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()):?>
+            jQuery(function($) {
+                $('[data-role=swatch-text-options-container]').sortable({
+                    distance: 8,
+                    tolerance: "pointer",
+                    cancel: 'input, button',
+                    axis: 'y',
+                    update: function() {
+                        $('[data-role=swatch-text-options-container] [data-role=order]').each(function(index, element) {
+                            $(element).val(index + 1);
+                        });
+                    }
+                });
+            });
+            <?php endif; ?>
+
+            jQuery(document).ready(function(){
+                if (jQuery('#frontend_input').val() != 'swatch_text') {
+                    jQuery('.swatch-text-field-0').removeClass('required-option');
+                }
+            });
+
+            window.swatchTextOption = swatchTextOption;
+            window.swatchOptionTextDefaultInputType = swatchOptionTextDefaultInputType;
+            //]]>
+
+        });
+    </script>
+</fieldset>

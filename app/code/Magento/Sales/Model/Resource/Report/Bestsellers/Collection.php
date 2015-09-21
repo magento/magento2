@@ -44,7 +44,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Sales\Model\Resource\Report $resource
-     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -52,7 +52,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Sales\Model\Resource\Report $resource,
-        $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $resource->init($this->getTableByAggregationPeriod('daily'));
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $resource, $connection);
@@ -86,23 +86,23 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
      */
     protected function _getSelectedColumns()
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
         if (!$this->_selectedColumns) {
             if ($this->isTotals()) {
                 $this->_selectedColumns = $this->getAggregatedColumns();
             } else {
                 $this->_selectedColumns = [
-                    'period' => sprintf('MAX(%s)', $adapter->getDateFormatSql('period', '%Y-%m-%d')),
+                    'period' => sprintf('MAX(%s)', $connection->getDateFormatSql('period', '%Y-%m-%d')),
                     $this->getOrderedField() => 'SUM(' . $this->getOrderedField() . ')',
                     'product_id' => 'product_id',
                     'product_name' => 'MAX(product_name)',
                     'product_price' => 'MAX(product_price)',
                 ];
                 if ('year' == $this->_period) {
-                    $this->_selectedColumns['period'] = $adapter->getDateFormatSql('period', '%Y');
+                    $this->_selectedColumns['period'] = $connection->getDateFormatSql('period', '%Y');
                 } elseif ('month' == $this->_period) {
-                    $this->_selectedColumns['period'] = $adapter->getDateFormatSql('period', '%Y-%m');
+                    $this->_selectedColumns['period'] = $connection->getDateFormatSql('period', '%Y-%m');
                 }
             }
         }
@@ -114,14 +114,14 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
      *
      * @param string $from
      * @param string $to
-     * @return \Zend_Db_Select
+     * @return \Magento\Framework\DB\Select
      */
     protected function _makeBoundarySelect($from, $to)
     {
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
         $cols = $this->_getSelectedColumns();
         $cols[$this->getOrderedField()] = 'SUM(' . $this->getOrderedField() . ')';
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getResource()->getMainTable(),
             $cols
         )->where(
@@ -203,7 +203,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
     {
         $this->_renderFilters();
         $select = clone $this->getSelect();
-        $select->reset(\Zend_Db_Select::ORDER);
+        $select->reset(\Magento\Framework\DB\Select::ORDER);
         return $this->getConnection()->select()->from($select, 'COUNT(*)');
     }
 
@@ -389,7 +389,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
                 foreach ($selectUnions as $union) {
                     $unionParts[] = '(' . $union . ')';
                 }
-                $this->getSelect()->reset()->union($unionParts, \Zend_Db_Select::SQL_UNION_ALL);
+                $this->getSelect()->reset()->union($unionParts, \Magento\Framework\DB\Select::SQL_UNION_ALL);
             }
 
             if ($this->isTotals()) {

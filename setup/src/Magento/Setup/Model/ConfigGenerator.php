@@ -11,6 +11,8 @@ use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Math\Random;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\App\State;
+use Magento\Framework\App\ObjectManagerFactory;
 
 /**
  * Creates deployment config data based on user input array
@@ -136,7 +138,7 @@ class ConfigGenerator
 
         if (!empty($data[ConfigOptionsListConstants::INPUT_KEY_DEFINITION_FORMAT])) {
             $configData->set(
-                ConfigOptionsListConstants::CONFIG_PATH_DEFINITION_FORMAT,
+                ObjectManagerFactory::CONFIG_PATH_DEFINITION_FORMAT,
                 $data[ConfigOptionsListConstants::INPUT_KEY_DEFINITION_FORMAT]
             );
         }
@@ -221,6 +223,44 @@ class ConfigGenerator
         $configData = new ConfigData(ConfigFilePool::APP_ENV);
         if ($this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_X_FRAME_OPT) === null) {
             $configData->set(ConfigOptionsListConstants::CONFIG_PATH_X_FRAME_OPT, 'SAMEORIGIN');
+        }
+        return $configData;
+    }
+
+    /**
+     * Create default entry for mode config option
+     *
+     * @return ConfigData
+     */
+    public function createModeConfig()
+    {
+        $configData = new ConfigData(ConfigFilePool::APP_ENV);
+        $configData->set(State::PARAM_MODE, State::MODE_DEFAULT);
+        return $configData;
+    }
+
+    /**
+     * Creates cache hosts config data
+     *
+     * @param array $data
+     * @return ConfigData
+     */
+    public function createCacheHostsConfig(array $data)
+    {
+        $configData = new ConfigData(ConfigFilePool::APP_ENV);
+        if (isset($data[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS])) {
+            $hostData = explode(',', $data[ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS]);
+            $hosts = [];
+            foreach ($hostData as $data) {
+                $dataArray = explode(':', trim($data));
+                $host = [];
+                $host['host'] = $dataArray[0];
+                if (isset($dataArray[1])) {
+                    $host['port'] = $dataArray[1];
+                }
+                $hosts[] = $host;
+            }
+            $configData->set(ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS, $hosts);
         }
         return $configData;
     }

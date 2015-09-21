@@ -98,6 +98,7 @@ class Config
      * @param \Magento\Eav\Model\Resource\Entity\Type\CollectionFactory $entityTypeCollectionFactory
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\App\CacheInterface $cache,
@@ -117,6 +118,7 @@ class Config
      * Get cache interface
      *
      * @return \Magento\Framework\App\CacheInterface
+     * @codeCoverageIgnore
      */
     public function getCache()
     {
@@ -161,6 +163,7 @@ class Config
      * @param   mixed $obj
      * @param   mixed $id
      * @return $this
+     * @codeCoverageIgnore
      */
     protected function _save($obj, $id)
     {
@@ -174,6 +177,7 @@ class Config
      * @param   int $id
      * @param   string $code
      * @return $this
+     * @codeCoverageIgnore
      */
     protected function _addEntityTypeReference($id, $code)
     {
@@ -226,6 +230,7 @@ class Config
      *
      * @param   string $code
      * @return  string
+     * @codeCoverageIgnore
      */
     protected function _getEntityKey($code)
     {
@@ -238,6 +243,7 @@ class Config
      * @param   string $entityTypeCode
      * @param   string $attributeCode
      * @return  string
+     * @codeCoverageIgnore
      */
     protected function _getAttributeKey($entityTypeCode, $attributeCode)
     {
@@ -459,7 +465,7 @@ class Config
      * Get codes of all entity type attributes
      *
      * @param  mixed $entityType
-     * @param  \Magento\Framework\Object $object
+     * @param  \Magento\Framework\DataObject $object
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -469,7 +475,7 @@ class Config
         $entityType = $this->getEntityType($entityType);
         $attributeSetId = 0;
         $storeId = 0;
-        if ($object instanceof \Magento\Framework\Object) {
+        if ($object instanceof \Magento\Framework\DataObject) {
             $attributeSetId = $object->getAttributeSetId() ?: $attributeSetId;
             $storeId = $object->getStoreId() ?: $storeId;
         }

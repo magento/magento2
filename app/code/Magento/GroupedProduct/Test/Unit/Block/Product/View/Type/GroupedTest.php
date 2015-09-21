@@ -54,7 +54,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->typeInstanceMock)
         );
         $this->configuredValueMock = $this->getMock(
-            'Magento\Framework\Object',
+            'Magento\Framework\DataObject',
             ['getSuperGroup'],
             [],
             '',

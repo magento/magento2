@@ -32,10 +32,10 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $adapter = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')->getMock();
+        $connectionMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')->getMock();
 
         $this->resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
-        $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($adapter));
+        $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
         $this->relation = $this->getMock('Magento\Catalog\Model\Resource\Product\Relation', [], [], '', false);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -51,7 +51,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testSaveProducts()
     {
         $mainProduct = $this->getMockBuilder('Magento\Catalog\Model\Product')
-            ->setMethods(['getIsDuplicate', '__sleep', '__wakeup', 'getTypeInstance', '_getWriteAdapter'])
+            ->setMethods(['getIsDuplicate', '__sleep', '__wakeup', 'getTypeInstance', 'getConnection'])
             ->disableOriginalConstructor()
             ->getMock();
         $mainProduct->expects($this->once())->method('getIsDuplicate')->will($this->returnValue(false));
@@ -68,7 +68,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testSaveProductsForDuplicate()
     {
         $mainProduct = $this->getMockBuilder('Magento\Catalog\Model\Product')
-            ->setMethods(['getIsDuplicate', '__sleep', '__wakeup', 'getTypeInstance', '_getWriteAdapter'])
+            ->setMethods(['getIsDuplicate', '__sleep', '__wakeup', 'getTypeInstance', 'getConnection'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -87,7 +87,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable',
             [
                 'getTable',
-                '_getReadAdapter',
+                'getConnection',
             ],
             [
                 $this->resource,
@@ -255,7 +255,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->willReturn('fetchAll value');
 
         $configurable->expects($this->exactly(2))
-            ->method('_getReadAdapter')
+            ->method('getConnection')
             ->willReturn($readerAdapter);
         $expectedAttributesOptionsData = [
             'getAttributeId value' => 'fetchAll value',

@@ -81,7 +81,7 @@ class Radios extends AbstractElement
                 '">' .
                 $option['label'] .
                 '</label>';
-        } elseif ($option instanceof \Magento\Framework\Object) {
+        } elseif ($option instanceof \Magento\Framework\DataObject) {
             $html .= 'id="' . $this->getHtmlId() . $option->getValue() . '"' . $option->serialize(
                 ['label', 'title', 'value', 'class', 'style']
             );

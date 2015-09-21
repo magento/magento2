@@ -21,7 +21,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected $_contextMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\String|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_stringMock;
 
@@ -47,7 +47,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_stringMock = $this->getMock('Magento\Framework\Stdlib\String');
+        $this->_stringMock = $this->getMock('Magento\Framework\Stdlib\StringUtils');
         $this->_queryFactoryMock = $this->getMock('Magento\Search\Model\QueryFactory', [], [], '', false);
         $this->_scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_escaperMock = $this->getMock('Magento\Framework\Escaper');

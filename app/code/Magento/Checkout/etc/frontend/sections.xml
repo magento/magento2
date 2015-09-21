@@ -30,6 +30,7 @@
     </action>
     <action name="checkout/onepage/saveOrder">
         <section name="cart"/>
+        <section name="checkout-data"/>
     </action>
     <action name="checkout/sidebar/removeItem">
         <section name="cart"/>
@@ -42,8 +43,18 @@
     </action>
     <action name="rest/*/V1/carts/*/payment-information">
         <section name="cart"/>
+        <section name="checkout-data"/>
     </action>
     <action name="rest/*/V1/guest-carts/*/payment-information">
         <section name="cart"/>
+        <section name="checkout-data"/>
+    </action>
+    <action name="rest/*/V1/guest-carts/*/selected-payment-method">
+        <section name="cart"/>
+        <section name="checkout-data"/>
+    </action>
+    <action name="rest/*/V1/carts/*/selected-payment-method">
+        <section name="cart"/>
+        <section name="checkout-data"/>
     </action>
 </config>

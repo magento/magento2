@@ -83,19 +83,19 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Review\Model\Rating\Option\VoteFactory $ratingOptionVoteF
      * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Review\Model\Rating\Option\VoteFactory $ratingOptionVoteF,
         \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->_customerSession = $customerSession;
         $this->_ratingOptionVoteF = $ratingOptionVoteF;
         $this->_remoteAddress = $remoteAddress;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -123,7 +123,7 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function addVote($option)
     {
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
         $optionData = $this->loadDataById($option->getId());
         $data = [
             'option_id' => $option->getId(),
@@ -140,20 +140,20 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $data['rating_id'] = $option->getRatingId();
         }
 
-        $adapter->beginTransaction();
+        $connection->beginTransaction();
         try {
             if ($option->getDoUpdate()) {
                 $condition = ['vote_id = ?' => $option->getVoteId(), 'review_id = ?' => $option->getReviewId()];
-                $adapter->update($this->_ratingVoteTable, $data, $condition);
+                $connection->update($this->_ratingVoteTable, $data, $condition);
                 $this->aggregate($option);
             } else {
-                $adapter->insert($this->_ratingVoteTable, $data);
-                $option->setVoteId($adapter->lastInsertId($this->_ratingVoteTable));
+                $connection->insert($this->_ratingVoteTable, $data);
+                $option->setVoteId($connection->lastInsertId($this->_ratingVoteTable));
                 $this->aggregate($option);
             }
-            $adapter->commit();
+            $connection->commit();
         } catch (\Exception $e) {
-            $adapter->rollback();
+            $connection->rollback();
             throw new \Exception($e->getMessage());
         }
         return $this;
@@ -180,10 +180,9 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function aggregateEntityByRatingId($ratingId, $entityPkValue)
     {
-        $readAdapter = $this->_getReadAdapter();
-        $writeAdapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
 
-        $select = $readAdapter->select()->from(
+        $select = $connection->select()->from(
             $this->_aggregateTable,
             ['store_id', 'primary_id']
         )->where(
@@ -192,12 +191,12 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'entity_pk_value = :pk_value'
         );
         $bind = [':rating_id' => $ratingId, ':pk_value' => $entityPkValue];
-        $oldData = $readAdapter->fetchPairs($select, $bind);
+        $oldData = $connection->fetchPairs($select, $bind);
 
-        $appVoteCountCond = $readAdapter->getCheckSql('review.status_id=1', 'vote.vote_id', 'NULL');
-        $appVoteValueSumCond = $readAdapter->getCheckSql('review.status_id=1', 'vote.value', '0');
+        $appVoteCountCond = $connection->getCheckSql('review.status_id=1', 'vote.vote_id', 'NULL');
+        $appVoteValueSumCond = $connection->getCheckSql('review.status_id=1', 'vote.value', '0');
 
-        $select = $readAdapter->select()->from(
+        $select = $connection->select()->from(
             ['vote' => $this->_ratingVoteTable],
             [
                 'vote_count' => new \Zend_Db_Expr('COUNT(vote.vote_id)'),
@@ -225,7 +224,7 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
             ['vote.rating_id', 'vote.entity_pk_value', 'store.store_id']
         );
 
-        $perStoreInfo = $readAdapter->fetchAll($select, $bind);
+        $perStoreInfo = $connection->fetchAll($select, $bind);
 
         $usedStores = [];
         foreach ($perStoreInfo as $row) {
@@ -244,9 +243,9 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
             if (isset($oldData[$row['store_id']])) {
                 $condition = ['primary_id = ?' => $oldData[$row['store_id']]];
-                $writeAdapter->update($this->_aggregateTable, $saveData, $condition);
+                $connection->update($this->_aggregateTable, $saveData, $condition);
             } else {
-                $writeAdapter->insert($this->_aggregateTable, $saveData);
+                $connection->insert($this->_aggregateTable, $saveData);
             }
 
             $usedStores[] = $row['store_id'];
@@ -256,7 +255,7 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         foreach ($toDelete as $storeId) {
             $condition = ['primary_id = ?' => $oldData[$storeId]];
-            $writeAdapter->delete($this->_aggregateTable, $condition);
+            $connection->delete($this->_aggregateTable, $condition);
         }
     }
 
@@ -270,11 +269,11 @@ class Option extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function loadDataById($optionId)
     {
         if (!$this->_optionData || $this->_optionId != $optionId) {
-            $adapter = $this->_getReadAdapter();
-            $select = $adapter->select();
+            $connection = $this->getConnection();
+            $select = $connection->select();
             $select->from($this->_ratingOptionTable)->where('option_id = :option_id');
 
-            $data = $adapter->fetchRow($select, [':option_id' => $optionId]);
+            $data = $connection->fetchRow($select, [':option_id' => $optionId]);
 
             $this->_optionData = $data;
             $this->_optionId = $optionId;

@@ -230,9 +230,9 @@ class Migration
      */
     protected function _getRowsCount($tableName, $fieldName, $additionalWhere = '')
     {
-        $adapter = $this->setup->getConnection();
+        $connection = $this->setup->getConnection();
 
-        $query = $adapter->select()->from(
+        $query = $connection->select()->from(
             $this->setup->getTable($tableName),
             ['rows_count' => new \Zend_Db_Expr('COUNT(*)')]
         )->where(
@@ -243,7 +243,7 @@ class Migration
             $query->where($additionalWhere);
         }
 
-        return (int)$adapter->fetchOne($query);
+        return (int)$connection->fetchOne($query);
     }
 
     /**
@@ -304,14 +304,18 @@ class Migration
     protected function _updateRowsData($tableName, $fieldName, array $fieldReplacements)
     {
         if (count($fieldReplacements) > 0) {
-            $adapter = $this->setup->getConnection();
+            $connection = $this->setup->getConnection();
 
             foreach ($fieldReplacements as $fieldReplacement) {
                 $where = [];
                 foreach ($fieldReplacement['where_fields'] as $whereFieldName => $value) {
-                    $where[$adapter->quoteIdentifier($whereFieldName) . ' = ?'] = $value;
+                    $where[$connection->quoteIdentifier($whereFieldName) . ' = ?'] = $value;
                 }
-                $adapter->update($this->setup->getTable($tableName), [$fieldName => $fieldReplacement['to']], $where);
+                $connection->update(
+                    $this->setup->getTable($tableName),
+                    [$fieldName => $fieldReplacement['to']],
+                    $where
+                );
             }
         }
     }
@@ -333,9 +337,9 @@ class Migration
         $additionalWhere = '',
         $currPage = 0
     ) {
-        $adapter = $this->setup->getConnection();
+        $connection = $this->setup->getConnection();
 
-        $query = $adapter->select()->from(
+        $query = $connection->select()->from(
             $this->setup->getTable($tableName),
             $fieldsToSelect
         )->where(
@@ -350,7 +354,7 @@ class Migration
             $query->limitPage($currPage, $this->_rowsPerPage);
         }
 
-        return $adapter->fetchAll($query);
+        return $connection->fetchAll($query);
     }
 
     /**
@@ -606,7 +610,7 @@ class Migration
      */
     protected function _getAliasesMap()
     {
-        if (is_null($this->_aliasesMap)) {
+        if (null === $this->_aliasesMap) {
             $this->_aliasesMap = [];
 
             $map = $this->_loadMap($this->_pathToMapFile);

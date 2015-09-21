@@ -229,13 +229,6 @@
             transition-timing-function: ease-in-out;
             visibility: hidden;
             z-index: @submenu__z-index - 1;
-            &._overlap {
-                overflow-y: auto;
-                height: 100%;
-                &::-webkit-scrollbar {
-                    width: 0;
-                }
-            }
         }
         &._show  {
             > .submenu {

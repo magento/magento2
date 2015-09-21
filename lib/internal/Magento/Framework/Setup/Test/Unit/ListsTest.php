@@ -68,12 +68,6 @@ class ListsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->expectedTimezones, $timezones);
     }
 
-    public function testGetCurrencyList()
-    {
-        $currencies = array_intersect($this->expectedCurrencies, array_keys($this->lists->getCurrencyList()));
-        $this->assertEquals($this->expectedCurrencies, $currencies);
-    }
-
     public function testGetLocaleList()
     {
         $locales = array_intersect($this->expectedLocales, array_keys($this->lists->getLocaleList()));

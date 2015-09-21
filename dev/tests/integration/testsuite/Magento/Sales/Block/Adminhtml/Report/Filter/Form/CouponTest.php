@@ -32,7 +32,7 @@ class CouponTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $block \Magento\Sales\Block\Adminhtml\Report\Filter\Form\Coupon */
         $block = $this->_layout->createBlock('Magento\Sales\Block\Adminhtml\Report\Filter\Form\Coupon');
-        $block->setFilterData(new \Magento\Framework\Object());
+        $block->setFilterData(new \Magento\Framework\DataObject());
         $html = $block->toHtml();
 
         $expectedStrings = [

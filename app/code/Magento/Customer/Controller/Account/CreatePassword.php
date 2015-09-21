@@ -7,29 +7,43 @@
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Controller\AccountInterface;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
 
-class CreatePassword extends \Magento\Customer\Controller\Account
+class CreatePassword extends Action implements AccountInterface
 {
     /** @var AccountManagementInterface */
-    protected $customerAccountManagement;
+    protected $accountManagement;
+
+    /**
+     * @var Session
+     */
+    protected $session;
+
+    /**
+     * @var PageFactory
+     */
+    protected $resultPageFactory;
 
     /**
      * @param Context $context
      * @param Session $customerSession
      * @param PageFactory $resultPageFactory
-     * @param AccountManagementInterface $customerAccountManagement
+     * @param AccountManagementInterface $accountManagement
      */
     public function __construct(
         Context $context,
         Session $customerSession,
         PageFactory $resultPageFactory,
-        AccountManagementInterface $customerAccountManagement
+        AccountManagementInterface $accountManagement
     ) {
-        $this->customerAccountManagement = $customerAccountManagement;
-        parent::__construct($context, $customerSession, $resultPageFactory);
+        $this->session = $customerSession;
+        $this->resultPageFactory = $resultPageFactory;
+        $this->accountManagement = $accountManagement;
+        parent::__construct($context);
     }
 
     /**
@@ -41,14 +55,28 @@ class CreatePassword extends \Magento\Customer\Controller\Account
     {
         $resetPasswordToken = (string)$this->getRequest()->getParam('token');
         $customerId = (int)$this->getRequest()->getParam('id');
-        try {
-            $this->customerAccountManagement->validateResetPasswordLinkToken($customerId, $resetPasswordToken);
+        $isDirectLink = $resetPasswordToken != '' && $customerId != 0;
+        if (!$isDirectLink) {
+            $resetPasswordToken = (string)$this->session->getRpToken();
+            $customerId = (int)$this->session->getRpCustomerId();
+        }
 
-            /** @var \Magento\Framework\View\Result\Page $resultPage */
-            $resultPage = $this->resultPageFactory->create();
-            $resultPage->getLayout()->getBlock('resetPassword')->setCustomerId($customerId)
-                ->setResetPasswordLinkToken($resetPasswordToken);
-            return $resultPage;
+        try {
+            $this->accountManagement->validateResetPasswordLinkToken($customerId, $resetPasswordToken);
+
+            if ($isDirectLink) {
+                $this->session->setRpToken($resetPasswordToken);
+                $this->session->setRpCustomerId($customerId);
+                $resultRedirect = $this->resultRedirectFactory->create();
+                $resultRedirect->setPath('*/*/createpassword');
+                return $resultRedirect;
+            } else {
+                /** @var \Magento\Framework\View\Result\Page $resultPage */
+                $resultPage = $this->resultPageFactory->create();
+                $resultPage->getLayout()->getBlock('resetPassword')->setCustomerId($customerId)
+                    ->setResetPasswordLinkToken($resetPasswordToken);
+                return $resultPage;
+            }
         } catch (\Exception $exception) {
             $this->messageManager->addError(__('Your password reset link has expired.'));
             /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */

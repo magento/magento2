@@ -113,7 +113,7 @@ class RequestSecureTokenTest extends \PHPUnit_Framework_TestCase
         $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
             ->disableOriginalConstructor()
             ->getMock();
-        $tokenMock = $this->getMockBuilder('Magento\Framework\Object')
+        $tokenMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->setMethods(['getData', 'getSecuretoken'])
             ->disableOriginalConstructor()
             ->getMock();

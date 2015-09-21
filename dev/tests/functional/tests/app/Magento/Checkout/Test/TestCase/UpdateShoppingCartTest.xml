@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Checkout\Test\TestCase\UpdateShoppingCartTest">
+    <testCase name="Magento\Checkout\Test\TestCase\UpdateShoppingCartTest" summary="Update Shopping Cart" ticketId="MAGETWO-25081">
         <variation name="UpdateShoppingCartTestVariation1">
             <data name="product/dataset" xsi:type="string">default</data>
             <data name="product/data/price/value" xsi:type="string">100</data>

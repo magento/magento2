@@ -41,24 +41,22 @@ class CatalogPrice implements \Magento\Catalog\Model\Product\CatalogPriceInterfa
     }
 
     /**
-     * Minimal price for "regular" user
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param null|\Magento\Store\Model\Store $store Store view
-     * @param bool $inclTax
-     * @return null|float
+     * {@inheritdoc}
      */
-    public function getCatalogPrice(\Magento\Catalog\Model\Product $product, $store = null, $inclTax = false)
-    {
-        if ($store instanceof \Magento\Store\Model\Store) {
-            $oldStore = $this->storeManager->getStore();
-            $this->storeManager->setCurrentStore($store);
+    public function getCatalogPrice(
+        \Magento\Catalog\Model\Product $product,
+        \Magento\Store\Api\Data\StoreInterface $store = null,
+        $inclTax = false
+    ) {
+        if ($store instanceof \Magento\Store\Api\Data\StoreInterface) {
+            $currentStore = $this->storeManager->getStore();
+            $this->storeManager->setCurrentStore($store->getId());
         }
 
         $this->coreRegistry->unregister('rule_data');
         $this->coreRegistry->register(
             'rule_data',
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 [
                     'store_id' => $product->getStoreId(),
                     'website_id' => $product->getWebsiteId(),
@@ -69,8 +67,8 @@ class CatalogPrice implements \Magento\Catalog\Model\Product\CatalogPriceInterfa
 
         $minPrice = $product->getPriceModel()->getTotalPrices($product, 'min', $inclTax);
 
-        if ($store instanceof \Magento\Store\Model\Store) {
-            $this->storeManager->setCurrentStore($oldStore);
+        if ($store instanceof \Magento\Store\Api\Data\StoreInterface) {
+            $this->storeManager->setCurrentStore($currentStore->getId());
         }
         return $minPrice;
     }

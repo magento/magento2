@@ -3,9 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\CheckoutAgreements\Model\Resource;
 
 /**
@@ -21,21 +18,23 @@ class Agreement extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Filter\FilterManager $filterManager
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Filter\FilterManager $filterManager,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->filterManager = $filterManager;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
      * Model initialization
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -72,13 +71,13 @@ class Agreement extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
         $condition = ['agreement_id = ?' => $object->getId()];
-        $this->_getWriteAdapter()->delete($this->getTable('checkout_agreement_store'), $condition);
+        $this->getConnection()->delete($this->getTable('checkout_agreement_store'), $condition);
 
         foreach ((array)$object->getData('stores') as $store) {
             $storeArray = [];
             $storeArray['agreement_id'] = $object->getId();
             $storeArray['store_id'] = $store;
-            $this->_getWriteAdapter()->insert($this->getTable('checkout_agreement_store'), $storeArray);
+            $this->getConnection()->insert($this->getTable('checkout_agreement_store'), $storeArray);
         }
 
         return parent::_afterSave($object);
@@ -92,14 +91,12 @@ class Agreement extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
     {
-        $select = $this->_getReadAdapter()->select()->from(
-            $this->getTable('checkout_agreement_store'),
-            ['store_id']
-        )->where(
-            'agreement_id = :agreement_id'
-        );
+        $select = $this->getConnection()
+            ->select()
+            ->from($this->getTable('checkout_agreement_store'), ['store_id'])
+            ->where('agreement_id = :agreement_id');
 
-        if ($stores = $this->_getReadAdapter()->fetchCol($select, [':agreement_id' => $object->getId()])) {
+        if ($stores = $this->getConnection()->fetchCol($select, [':agreement_id' => $object->getId()])) {
             $object->setData('store_id', $stores);
         }
 

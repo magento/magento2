@@ -62,7 +62,7 @@ class AssociatedProduct extends \Magento\Catalog\Model\Resource\Product\Collecti
      * @param \Magento\Framework\Registry $registryManager
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable $productType
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
-     * @param \Zend_Db_Adapter_Abstract $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -89,7 +89,7 @@ class AssociatedProduct extends \Magento\Catalog\Model\Resource\Product\Collecti
         \Magento\Framework\Registry $registryManager,
         \Magento\ConfigurableProduct\Model\Product\Type\Configurable $productType,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
-        $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->_registryManager = $registryManager;
         $this->_productType = $productType;

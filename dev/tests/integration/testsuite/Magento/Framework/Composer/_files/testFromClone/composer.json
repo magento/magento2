@@ -8,7 +8,7 @@
         "AFL-3.0"
     ],
     "require": {
-        "php": "~5.5.0|~5.6.0",
+        "php": "~5.5.0|~5.6.0|~7.0.0",
         "zendframework/zend-stdlib": "2.4.0",
         "zendframework/zend-code": "2.4.0",
         "zendframework/zend-server": "2.4.0",
@@ -36,6 +36,7 @@
         "oyejorge/less.php": "1.7.0.3",
         "tubalmartin/cssmin": "2.4.8-p4",
         "magento/magento-composer-installer": "*",
+        "phpseclib/phpseclib": "~0.3",
         "symfony/console": "~2.3"
     },
     "require-dev": {
@@ -87,7 +88,6 @@
         "magento/module-currency-symbol": "self.version",
         "magento/module-customer": "self.version",
         "magento/module-customer-import-export": "self.version",
-        "magento/module-design-editor": "self.version",
         "magento/module-developer": "self.version",
         "magento/module-dhl": "self.version",
         "magento/module-directory": "self.version",
@@ -105,7 +105,6 @@
         "magento/module-indexer": "self.version",
         "magento/module-integration": "self.version",
         "magento/module-layered-navigation": "self.version",
-        "magento/module-log": "self.version",
         "magento/module-media-storage": "self.version",
         "magento/module-msrp": "self.version",
         "magento/module-multishipping": "self.version",
@@ -160,7 +159,6 @@
         "colinmollenhour/cache-backend-redis": "dev-master#193d377b7fb2e88595578b282fa01a62d1185abc",
         "colinmollenhour/credis": "dev-master#f07bbfd4117294f462f0fb19c49221d350bf396f",
         "linkorb/jsmin-php": "1.1.2",
-        "phpseclib/phpseclib": "0.2.1",
         "components/jquery": "1.11.0",
         "blueimp/jquery-file-upload": "5.6.14",
         "components/jqueryui": "1.10.4",
@@ -173,7 +171,6 @@
             "colinmollenhour/cache-backend-redis": "lib/internal/Cm/Cache/Backend/Redis.php",
             "colinmollenhour/credis": "lib/internal/Credis",
             "linkorb/jsmin-php": "lib/internal/JSMin",
-            "phpseclib/phpseclib": "lib/internal/phpseclib",
             "components/jquery": [
                 "lib/web/jquery.js",
                 "lib/web/jquery/jquery.min.js",

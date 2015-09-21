@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Bundle\Test\TestCase\CreateBundleProductEntityTest">
+    <testCase name="Magento\Bundle\Test\TestCase\CreateBundleProductEntityTest" summary="Create Bundle Product" ticketId="MAGETWO-24118">
         <variation name="CreateBundleProductEntityTestVariation1">
             <data name="description" xsi:type="string">Create default bundle with dynamic options</data>
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
@@ -305,8 +305,7 @@
             <data name="product/data/checkout_data/dataset" xsi:type="string">bundle_default</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
         </variation>
-        <variation name="CreateBundleProductEntityTestVariation15">
-            <data name="description" xsi:type="string">MAGETWO-12622: Create Bundle (fixed) Product and Assign it to Category</data>
+        <variation name="CreateBundleProductEntityTestVariation15" summary="Create Bundle (fixed) Product and Assign it to Category" ticketId="MAGETWO-12622">
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Bundle Fixed %isolation%</data>
             <data name="product/data/sku_type" xsi:type="string">Fixed</data>
@@ -326,8 +325,7 @@
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundleInCategory" />
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage" />
         </variation>
-        <variation name="CreateBundleProductEntityTestVariation16">
-            <data name="description" xsi:type="string">MAGETWO-12702: Create Bundle (dynamic) Product and Assign it to the Category</data>
+        <variation name="CreateBundleProductEntityTestVariation16" summary="Create Bundle (dynamic) Product and Assign it to the Category" ticketId="MAGETWO-12702">
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">Bundle Dynamic %isolation%</data>
             <data name="product/data/sku" xsi:type="string">sku_bundle_dynamic_%isolation%</data>

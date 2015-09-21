@@ -5,8 +5,21 @@
  */
 namespace Magento\Payment\Gateway\Http;
 
+/**
+ * Class Transfer
+ */
 class Transfer implements TransferInterface
 {
+    /**
+     * Name of Auth username field
+     */
+    const AUTH_USERNAME = 'username';
+
+    /**
+     * Name of Auth password field
+     */
+    const AUTH_PASSWORD = 'password';
+
     /**
      * @var array
      */
@@ -23,7 +36,7 @@ class Transfer implements TransferInterface
     private $method;
 
     /**
-     * @var array
+     * @var array|string
      */
     private $body;
 
@@ -38,9 +51,15 @@ class Transfer implements TransferInterface
     private $encode;
 
     /**
+     * @var array
+     */
+    private $auth;
+
+    /**
      * @param array $clientConfig
      * @param array $headers
-     * @param array $body
+     * @param array|string $body
+     * @param array $auth
      * @param string $method
      * @param string $uri
      * @param bool $encode
@@ -48,15 +67,17 @@ class Transfer implements TransferInterface
     public function __construct(
         array $clientConfig,
         array $headers,
-        array $body,
+        $body,
+        array $auth,
         $method,
         $uri,
-        $encode = false
+        $encode
     ) {
         $this->clientConfig = $clientConfig;
         $this->headers = $headers;
-        $this->method = $method;
         $this->body = $body;
+        $this->auth = $auth;
+        $this->method = $method;
         $this->uri = $uri;
         $this->encode = $encode;
     }
@@ -92,19 +113,9 @@ class Transfer implements TransferInterface
     }
 
     /**
-     * Whether body should be encoded before place
-     *
-     * @return bool
-     */
-    public function shouldEncode()
-    {
-        return (bool)$this->encode;
-    }
-
-    /**
      * Returns request body
      *
-     * @return array
+     * @return array|string
      */
     public function getBody()
     {
@@ -119,5 +130,33 @@ class Transfer implements TransferInterface
     public function getUri()
     {
         return (string)$this->uri;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function shouldEncode()
+    {
+        return $this->encode;
+    }
+
+    /**
+     * Returns Auth username
+     *
+     * @return string
+     */
+    public function getAuthUsername()
+    {
+        return $this->auth[self::AUTH_USERNAME];
+    }
+
+    /**
+     * Returns Auth password
+     *
+     * @return string
+     */
+    public function getAuthPassword()
+    {
+        return $this->auth[self::AUTH_PASSWORD];
     }
 }

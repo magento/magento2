@@ -101,7 +101,7 @@ class ComparedTest extends \PHPUnit_Framework_TestCase
 
         $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\Resource\AbstractResource')
             ->disableOriginalConstructor()
-            ->setMethods(['getIdFieldName', '_construct', '_getReadAdapter', '_getWriteAdapter'])
+            ->setMethods(['getIdFieldName', '_construct', 'getConnection'])
             ->getMockForAbstractClass();
         $this->dbMock = $this->getMockBuilder('Magento\Framework\Data\Collection\AbstractDb')
             ->disableOriginalConstructor()

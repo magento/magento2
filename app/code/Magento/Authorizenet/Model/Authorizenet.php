@@ -5,6 +5,8 @@
  */
 namespace Magento\Authorizenet\Model;
 
+use Magento\Payment\Model\Method\Logger;
+
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -54,6 +56,8 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
 
     const RESPONSE_REASON_CODE_PENDING_REVIEW_DECLINED = 254;
 
+    const PAYMENT_UPDATE_STATUS_CODE_SUCCESS = 'Ok';
+
     /**
      * Transaction fraud state key
      */
@@ -94,6 +98,11 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * @var array
      */
     protected $transactionDetails = [];
+
+    /**
+     * {@inheritdoc}
+     */
+    protected $_debugReplacePrivateDataKeys = ['merchantAuthentication', 'x_login'];
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -194,13 +203,13 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * Fetch fraud details
      *
      * @param string $transactionId
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function fetchTransactionFraudDetails($transactionId)
     {
         $responseXmlDocument = $this->getTransactionDetails($transactionId);
-        $response = new \Magento\Framework\Object();
+        $response = new \Magento\Framework\DataObject();
 
         if (empty($responseXmlDocument->transaction->FDSFilters->FDSFilter)) {
             return $response;
@@ -257,14 +266,14 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
     /**
      * Prepare request to gateway
      *
-     * @param \Magento\Framework\Object|\Magento\Payment\Model\InfoInterface $payment
+     * @param \Magento\Framework\DataObject|\Magento\Payment\Model\InfoInterface $payment
      * @return \Magento\Authorizenet\Model\Request
      * @link http://www.authorize.net/support/AIM_guide.pdf
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function buildRequest(\Magento\Framework\Object $payment)
+    protected function buildRequest(\Magento\Framework\DataObject $payment)
     {
         /** @var \Magento\Sales\Model\Order $order */
         $order = $payment->getOrder();
@@ -364,11 +373,11 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      */
     protected function postRequest(\Magento\Authorizenet\Model\Request $request)
     {
-        $debugData = ['request' => $request->getData()];
         $result = $this->responseFactory->create();
         $client = new \Magento\Framework\HTTP\ZendClient();
-        $uri = $this->getConfigData('cgi_url');
-        $client->setUri($uri ? $uri : self::CGI_URL);
+        $url = $this->getConfigData('cgi_url') ?: self::CGI_URL;
+        $debugData = ['url' => $url, 'request' => $request->getData()];
+        $client->setUri($url);
         $client->setConfig(['maxredirects' => 0, 'timeout' => 30]);
 
         foreach ($request->getData() as $key => $value) {
@@ -381,21 +390,21 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
 
         try {
             $response = $client->request();
+            $responseBody = $response->getBody();
+            $debugData['response'] = $responseBody;
         } catch (\Exception $e) {
             $result->setXResponseCode(-1)
                 ->setXResponseReasonCode($e->getCode())
                 ->setXResponseReasonText($e->getMessage());
 
-            $debugData['result'] = $result->getData();
-            $this->_debug($debugData);
             throw new \Magento\Framework\Exception\LocalizedException(
                 $this->dataHelper->wrapGatewayError($e->getMessage())
             );
+        } finally {
+            $this->_debug($debugData);
         }
 
-        $responseBody = $response->getBody();
         $r = explode(self::RESPONSE_DELIM_CHAR, $responseBody);
-
         if ($r) {
             $result->setXResponseCode((int)str_replace('"', '', $r[0]))
                 ->setXResponseReasonCode((int)str_replace('"', '', $r[2]))
@@ -413,10 +422,6 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
                 __('Something went wrong in the payment gateway.')
             );
         }
-
-        $debugData['result'] = $result->getData();
-        $this->_debug($debugData);
-
         return $result;
     }
 
@@ -435,7 +440,7 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * This function returns full transaction details for a specified transaction ID.
      *
      * @param string $transactionId
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
      * @link http://www.authorize.net/support/ReportingGuide_XML.pdf
      * @link http://developer.authorize.net/api/transaction_details/
@@ -444,7 +449,7 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
     {
         $responseXmlDocument = $this->getTransactionDetails($transactionId);
 
-        $response = new \Magento\Framework\Object();
+        $response = new \Magento\Framework\DataObject();
         $response->setXResponseCode((string)$responseXmlDocument->transaction->responseCode)
             ->setXResponseReasonCode((string)$responseXmlDocument->transaction->responseReasonCode)
             ->setTransactionStatus((string)$responseXmlDocument->transaction->transactionStatus);
@@ -473,24 +478,35 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
         );
 
         $client = new \Magento\Framework\HTTP\ZendClient();
-        $uri = $this->getConfigData('cgi_url_td');
-        $client->setUri($uri ? $uri : self::CGI_URL_TD);
+        $url = $this->getConfigData('cgi_url_td') ?: self::CGI_URL_TD;
+        $client->setUri($url);
         $client->setConfig(['timeout' => 45]);
         $client->setHeaders(['Content-Type: text/xml']);
         $client->setMethod(\Zend_Http_Client::POST);
         $client->setRawData($requestBody);
 
-        $debugData = ['request' => $requestBody];
+        $debugData = ['url' => $url, 'request' => $this->removePrivateDataFromXml($requestBody)];
 
         try {
             $responseBody = $client->request()->getBody();
-            $debugData['result'] = $responseBody;
-            $this->_debug($debugData);
+            $debugData['response'] = $responseBody;
             libxml_use_internal_errors(true);
             $responseXmlDocument = new \Magento\Framework\Simplexml\Element($responseBody);
             libxml_use_internal_errors(false);
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Payment updating error.'));
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Unable to get transaction details. Try again later.')
+            );
+        } finally {
+            $this->_debug($debugData);
+        }
+
+        if (!isset($responseXmlDocument->messages->resultCode)
+            || $responseXmlDocument->messages->resultCode != static::PAYMENT_UPDATE_STATUS_CODE_SUCCESS
+        ) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Unable to get transaction details. Try again later.')
+            );
         }
 
         $this->transactionDetails[$transactionId] = $responseXmlDocument;
@@ -508,5 +524,21 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
         return isset($this->transactionDetails[$transactionId])
             ? $this->transactionDetails[$transactionId]
             : $this->loadTransactionDetails($transactionId);
+    }
+
+    /**
+     * Remove nodes with private data from XML string
+     *
+     * Uses values from $_debugReplacePrivateDataKeys property
+     *
+     * @param string $xml
+     * @return string
+     */
+    protected function removePrivateDataFromXml($xml)
+    {
+        foreach ($this->getDebugReplacePrivateDataKeys() as $key) {
+            $xml = preg_replace(sprintf('~(?<=<%s>).*?(?=</%s>)~', $key, $key), Logger::DEBUG_KEYS_MASK, $xml);
+        }
+        return $xml;
     }
 }

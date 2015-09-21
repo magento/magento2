@@ -33,6 +33,17 @@
         </attribute>
     </extension_attributes>
 
+    <extension_attributes for="Magento\Wonderland\Api\Data\FakeCustomerInterface">
+        <attribute code="test_group_code" type="string">
+            <join reference_table="customer_group"
+                  join_on_field="group_id"
+                  reference_field="customer_group_id"
+                    >
+                <field>customer_group_code</field>
+            </join>
+        </attribute>
+    </extension_attributes>
+
     <extension_attributes for="Magento\Customer\Api\Data\CustomerInterface">
         <attribute code="test_group_code" type="string">
             <join reference_table="customer_group"

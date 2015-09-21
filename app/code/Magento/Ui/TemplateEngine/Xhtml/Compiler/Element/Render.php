@@ -5,7 +5,7 @@
  */
 namespace Magento\Ui\TemplateEngine\Xhtml\Compiler\Element;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\TemplateEngine\Xhtml\ResultInterface;
 use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
@@ -21,14 +21,18 @@ class Render implements ElementInterface
      *
      * @param CompilerInterface $compiler
      * @param \DOMElement $node
-     * @param Object $processedObject
-     * @param Object $context
+     * @param DataObject $processedObject
+     * @param DataObject $context
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function compile(CompilerInterface $compiler, \DOMElement $node, Object $processedObject, Object $context)
-    {
+    public function compile(
+        CompilerInterface $compiler,
+        \DOMElement $node,
+        DataObject $processedObject,
+        DataObject $context
+    ) {
         /** @var UiComponentInterface $processedObject */
         $result = $processedObject->renderChildComponent($node->getAttribute('name'));
         if ($result instanceof ResultInterface) {

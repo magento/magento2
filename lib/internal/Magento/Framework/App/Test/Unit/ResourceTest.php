@@ -4,28 +4,27 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\App\Test\Unit;
 
-use \Magento\Framework\App\Resource;
+use Magento\Framework\App\Resource;
 use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\Model\Resource\Type\Db\ConnectionFactoryInterface;
 
 class ResourceTest extends \PHPUnit_Framework_TestCase
 {
-    const RESOURCE_NAME = \Magento\Framework\App\Resource::DEFAULT_READ_RESOURCE;
+    const RESOURCE_NAME = \Magento\Framework\App\Resource::DEFAULT_CONNECTION;
     const CONNECTION_NAME = 'connection-name';
     const TABLE_PREFIX = 'prefix_';
 
     /**
      * @var \Magento\Framework\App\Resource\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_config;
+    protected $config;
 
     /**
-     * @var \Magento\Framework\Model\Resource\Type\Db\ConnectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConnectionFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_connectionFactory;
+    protected $connectionFactory;
 
     /**
      * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
@@ -44,36 +43,39 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->_connectionFactory = $this->getMockBuilder('Magento\Framework\Model\Resource\Type\Db\ConnectionFactory')
-            ->disableOriginalConstructor()
+        $this->connectionFactory = $this->getMockBuilder(ConnectionFactoryInterface::class)
             ->setMethods(['create'])
-            ->getMock();
-        $this->_config = $this->getMockBuilder('Magento\Framework\App\Resource\ConfigInterface')
+            ->getMockForAbstractClass();
+        $this->config = $this->getMockBuilder('Magento\Framework\App\Resource\ConfigInterface')
             ->disableOriginalConstructor()
             ->setMethods(['getConnectionName'])
             ->getMock();
-        $this->_config->expects($this->any())
+        $this->config->expects($this->any())
             ->method('getConnectionName')
             ->with(self::RESOURCE_NAME)
             ->will($this->returnValue(self::CONNECTION_NAME));
 
         $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $this->deploymentConfig->expects($this->any())
+        $this->deploymentConfig
+            ->expects($this->any())
             ->method('get')
-            ->will($this->returnValue(
+            ->willReturnMap(
+                [
                     [
-                        'default' => [
+                        ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS . '/connection-name',
+                        null,
+                        [
                             'host' => 'localhost',
                             'dbname' => 'magento',
                             'username' => 'username',
-                        ],
-                        self::CONNECTION_NAME => [
-                            'host' => 'localhost',
-                            'dbname' => 'magento',
-                            'username' => 'username',
-                        ],
+                        ]
+                    ],
+                    [
+                        ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX,
+                        null,
+                        self::TABLE_PREFIX
                     ]
-                )
+                ]
             );
 
         $this->connection = $this->getMockForAbstractClass('Magento\Framework\DB\Adapter\AdapterInterface');
@@ -82,24 +84,24 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnArgument(0));
 
         $this->resource = new Resource(
-            $this->_config,
-            $this->_connectionFactory,
-            $this->deploymentConfig,
-            self::TABLE_PREFIX
+            $this->config,
+            $this->connectionFactory,
+            $this->deploymentConfig
         );
     }
 
+    /**
+     * @expectedException \DomainException
+     * @expectedExceptionMessage Connection "invalid" is not defined
+     */
     public function testGetConnectionFail()
     {
-        $this->_connectionFactory->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue(null));
-        $this->assertFalse($this->resource->getConnection(self::RESOURCE_NAME));
+        $this->resource->getConnectionByName('invalid');
     }
 
     public function testGetConnectionInitConnection()
     {
-        $this->_connectionFactory->expects($this->once())
+        $this->connectionFactory->expects($this->once())
             ->method('create')
             ->will($this->returnValue($this->connection));
         $this->assertSame($this->connection, $this->resource->getConnection(self::RESOURCE_NAME));
@@ -114,7 +116,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTableName($modelEntity, $expected)
     {
-        $this->_connectionFactory->expects($this->once())
+        $this->connectionFactory->expects($this->once())
             ->method('create')
             ->will($this->returnValue($this->connection));
         $this->assertSame($expected, $this->resource->getTableName($modelEntity));
@@ -141,7 +143,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTableNameMapped($modelEntity, $tableName, $mappedName, $expected)
     {
-        $this->_connectionFactory->expects($this->once())
+        $this->connectionFactory->expects($this->once())
             ->method('create')
             ->will($this->returnValue($this->connection));
         $this->resource->setMappedTableName($tableName, $mappedName);
@@ -171,7 +173,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
             ->method('getIndexName')
             ->with($calculatedTableName, $fields, $indexType)
             ->will($this->returnValue($expectedIdxName));
-        $this->_connectionFactory->expects($this->once())
+        $this->connectionFactory->expects($this->once())
             ->method('create')
             ->will($this->returnValue($this->connection));
 
@@ -191,7 +193,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
             ->method('getForeignKeyName')
             ->with($calculatedTableName, $columnName, $calculatedRefTableName, $refColumnName)
             ->will($this->returnValue('fkName'));
-        $this->_connectionFactory->expects($this->once())
+        $this->connectionFactory->expects($this->once())
             ->method('create')
             ->will($this->returnValue($this->connection));
 
@@ -205,7 +207,7 @@ class ResourceTest extends \PHPUnit_Framework_TestCase
         $event = 'insert';
         $triggerName = 'trg_subject_table_before_insert';
 
-        $this->_connectionFactory->expects($this->once())
+        $this->connectionFactory->expects($this->once())
             ->method('create')
             ->will($this->returnValue($this->connection));
         $this->connection->expects($this->once())
