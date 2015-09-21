@@ -38,7 +38,8 @@ class FilterModifier
         $this->request = $request;
         $this->filterBuilder = $filterBuilder;
         $this->allowedConditionTypes = array_merge(
-            ['eq', 'neq', 'in', 'nin', 'null', 'notnull'], $allowedConditionTypes
+            ['eq', 'neq', 'in', 'nin', 'null', 'notnull'],
+            $allowedConditionTypes
         );
     }
 
