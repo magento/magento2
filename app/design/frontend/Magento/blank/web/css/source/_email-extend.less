@@ -13,9 +13,6 @@
 //  Custom fonts are declared here, rather than in _email-base.less, as it allows for custom fonts to be changed/removed
 //  in custom themes.
 
-//  Font stylesheet @import is wrapped in a media query in order to prevent it from causing problems in Outlook
-@media screen {
-    //  Importing fonts from an external CSS file, rather than embedding @font-face declarations inside the <style> tag,
-    //  as the latter will cause font rendering issues if the web fonts are inaccessible.
-    @import url("@{baseUrl}css/email-fonts.css");
-}
+//  Importing fonts from an external CSS file, rather than embedding @font-face declarations inside the <style> tag,
+//  as the latter will cause font rendering issues if the web fonts are inaccessible.
+@import url("@{baseUrl}css/email-fonts.css");

@@ -43,7 +43,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface | \PHPUnit_Framework_MockObject_MockObject
      */
-    private $adapter;
+    private $connectionMock;
 
     /**
      * @var \Magento\Framework\DB\Ddl\Sequence | \PHPUnit_Framework_MockObject_MockObject
@@ -57,7 +57,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->adapter = $this->getMockForAbstractClass(
+        $this->connectionMock = $this->getMockForAbstractClass(
             'Magento\Framework\DB\Adapter\AdapterInterface',
             [],
             '',
@@ -225,12 +225,12 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->method('getTableName');
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
-            ->with('sales_write')
-            ->willReturn($this->adapter);
+            ->with('sales')
+            ->willReturn($this->connectionMock);
         $this->sequence->expects($this->once())
             ->method('getCreateSequenceDdl')
             ->with($sequenceName, $startNumber)
             ->willReturn($sql);
-        $this->adapter->expects($this->once())->method('query')->with($sql);
+        $this->connectionMock->expects($this->once())->method('query')->with($sql);
     }
 }

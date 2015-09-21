@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Review\Test\TestCase\CreateProductReviewBackendEntityTest">
+    <testCase name="Magento\Review\Test\TestCase\CreateProductReviewBackendEntityTest" summary="Create Backend Product Review" ticketId="MAGETWO-26476">
         <variation name="CreateProductReviewBackendEntityTestVariation1">
             <data name="review/data/entity_id/dataset" xsi:type="string">catalogProductSimple::default</data>
             <data name="review/data/status_id" xsi:type="string">Approved</data>

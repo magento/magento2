@@ -15,7 +15,7 @@ class Validate extends \Magento\User\Controller\Adminhtml\User
      */
     public function execute()
     {
-        $response = new \Magento\Framework\Object();
+        $response = new \Magento\Framework\DataObject();
         $response->setError(0);
         $errors = null;
         $userId = (int)$this->getRequest()->getParam('user_id');

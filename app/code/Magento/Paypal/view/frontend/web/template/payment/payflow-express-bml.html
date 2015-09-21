@@ -20,14 +20,17 @@
             <a href="https://www.securecheckout.billmelater.com/paycapture-content/fetch?hash=AU826TU8&content=/bmlweb/ppwpsiw.html"
                data-bind="click: showAcceptanceWindow"
                class="action action-help">
-                <!-- ko text: $t('See terms') --><!-- /ko -->
+                <!-- ko i18n: 'See terms' --><!-- /ko -->
             </a>
         </label>
     </div>
     <div class="payment-method-content">
+        <!-- ko foreach: getRegion('messages') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
         <fieldset class="fieldset" data-bind='attr: {id: "payment_form_" + getCode()}'>
             <div class="payment-method-note">
-                <!-- ko text: $t('You will be redirected to the PayPal website when you place an order.') --><!-- /ko -->
+                <!-- ko i18n: 'You will be redirected to the PayPal website when you place an order.' --><!-- /ko -->
             </div>
             <!-- ko template: 'Magento_Paypal/payment/express/billing-agreement' --><!-- /ko -->
         </fieldset>
@@ -42,7 +45,7 @@
                         type="submit"
                         data-bind="click: continueToPayPal, enable: (getCode() == isChecked())"
                         disabled>
-                    <span data-bind="text: $t('Continue to PayPal')"></span>
+                    <span data-bind="i18n: 'Continue to PayPal'"></span>
                 </button>
             </div>
         </div>

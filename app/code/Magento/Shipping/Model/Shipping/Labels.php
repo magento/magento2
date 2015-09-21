@@ -72,7 +72,7 @@ class Labels extends \Magento\Shipping\Model\Shipping
      * Prepare and do request to shipment
      *
      * @param Shipment $orderShipment
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -112,7 +112,7 @@ class Labels extends \Magento\Shipping\Model\Shipping
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $shipmentStoreId
         );
-        $storeInfo = new \Magento\Framework\Object(
+        $storeInfo = new \Magento\Framework\DataObject(
             (array)$this->_scopeConfig->getValue(
                 'general/store_information',
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,

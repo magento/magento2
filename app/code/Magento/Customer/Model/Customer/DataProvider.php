@@ -109,22 +109,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
-     * @return Collection|\Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
-     */
-    protected function getCollection()
-    {
-        return $this->collection;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function addFilter($condition, $field = null, $type = 'regular')
-    {
-        $this->filterPool->registerNewFilter($condition, $field, $type);
-    }
-
-    /**
      * Get data
      *
      * @return array
@@ -134,39 +118,23 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         if (isset($this->loadedData)) {
             return $this->loadedData;
         }
-        $this->filterPool->applyFilters($this->collection);
         $items = $this->collection->getItems();
         /** @var Customer $customer */
         foreach ($items as $customer) {
             $result['customer'] = $customer->getData();
+            unset($result['address']);
 
-            $addresses = [];
             /** @var Address $address */
             foreach ($customer->getAddresses() as $address) {
                 $addressId = $address->getId();
                 $address->load($addressId);
-                $addresses[$addressId] = $address->getData();
-                $this->prepareAddressData($addressId, $addresses, $result['customer']);
+                $result['address'][$addressId] = $address->getData();
+                $this->prepareAddressData($addressId, $result['address'], $result['customer']);
             }
-            if (!empty($addresses)) {
-                $result['address'] = $addresses;
-            }
-
             $this->loadedData[$customer->getId()] = $result;
         }
 
         return $this->loadedData;
-    }
-
-    /**
-     * Retrieve count of loaded items
-     *
-     * @return int
-     */
-    public function count()
-    {
-        $this->filterPool->applyFilters($this->collection);
-        return $this->collection->count();
     }
 
     /**

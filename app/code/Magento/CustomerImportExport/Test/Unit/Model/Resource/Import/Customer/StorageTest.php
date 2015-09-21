@@ -60,7 +60,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['load', 'removeAttributeToSelect', 'getResource', 'getSelect'])
             ->getMock();
 
-        $resourceStub = new \Magento\Framework\Object();
+        $resourceStub = new \Magento\Framework\DataObject();
         $resourceStub->setEntityTable($this->_entityTable);
         $customerCollection->expects($this->once())->method('getResource')->will($this->returnValue($resourceStub));
 
@@ -134,11 +134,11 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     protected function _addCustomerToStorage()
     {
-        $customer = new \Magento\Framework\Object(['id' => 1, 'website_id' => 1, 'email' => 'test@test.com']);
+        $customer = new \Magento\Framework\DataObject(['id' => 1, 'website_id' => 1, 'email' => 'test@test.com']);
         $this->_model->addCustomer($customer);
 
         return $customer;

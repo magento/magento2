@@ -27,7 +27,7 @@ class ListStatus
      * @param string|null $origin Usually a name of module, that adds this status
      * @param int|null $code Code of status, unique for origin, that sets it
      * @param string|null $message Status message
-     * @param \Magento\Framework\Object|null $additionalData Any additional data, that caller would like to store
+     * @param \Magento\Framework\DataObject|null $additionalData Any additional data, that caller would like to store
      * @return $this
      */
     public function addItem($origin = null, $code = null, $message = null, $additionalData = null)

@@ -5,132 +5,159 @@
  */
 namespace Magento\Cms\Model\Resource;
 
-use Magento\Framework\Data\AbstractSearchResult;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Data\SearchResultProcessorFactory;
-use Magento\Framework\Data\SearchResultProcessor;
-use Magento\Framework\DB\QueryInterface;
-use Magento\Framework\Data\Collection\EntityFactoryInterface;
-use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\Data\SearchResultIteratorFactory;
-
 /**
- * CMS block model
+ * Abstract collection of CMS pages and blocks
  */
-class AbstractCollection extends AbstractSearchResult
+abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
+     * Store manager
+     *
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
     /**
-     * @var SearchResultProcessor
-     */
-    protected $searchResultProcessor;
-
-    /**
-     * Table which links CMS entity to stores
-     *
-     * @var string
-     */
-    protected $storeTableName;
-
-    /**
-     * @var string
-     */
-    protected $linkFieldName;
-
-    /**
-     * @param QueryInterface $query
-     * @param EntityFactoryInterface $entityFactory
-     * @param ManagerInterface $eventManager
-     * @param SearchResultIteratorFactory $resultIteratorFactory
+     * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param SearchResultProcessorFactory $searchResultProcessorFactory
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
+     * @param \Magento\Framework\Model\Resource\Db\AbstractDb|null $resource
      */
     public function __construct(
-        QueryInterface $query,
-        EntityFactoryInterface $entityFactory,
-        ManagerInterface $eventManager,
-        SearchResultIteratorFactory $resultIteratorFactory,
-        StoreManagerInterface $storeManager,
-        SearchResultProcessorFactory $searchResultProcessorFactory
+        \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
+        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->storeManager = $storeManager;
-        $this->searchResultProcessor = $searchResultProcessorFactory->create($this);
-        parent::__construct($query, $entityFactory, $eventManager, $resultIteratorFactory);
-    }
-
-    /**
-     * @return void
-     */
-    protected function init()
-    {
-        $this->query->addCountSqlSkipPart(\Zend_Db_Select::GROUP, true);
-    }
-
-    /**
-     * @return array
-     */
-    public function toOptionIdArray()
-    {
-        $res = [];
-        $existingIdentifiers = [];
-        foreach ($this->getItems() as $item) {
-            /** @var \Magento\Cms\Model\Block|\Magento\Cms\Model\Page $item */
-            $identifier = $item->getIdentifier();
-
-            $data['value'] = $identifier;
-            $data['label'] = $item->getTitle();
-
-            if (in_array($identifier, $existingIdentifiers)) {
-                $data['value'] .= '|' . $item->getId();
-            } else {
-                $existingIdentifiers[] = $identifier;
-            }
-            $res[] = $data;
-        }
-        return $res;
     }
 
     /**
      * Perform operations after collection load
      *
+     * @param string $tableName
+     * @param string $columnName
      * @return void
      */
-    protected function afterLoad()
+    protected function performAfterLoad($tableName, $columnName)
     {
-        if ($this->getSearchCriteria()->getPart('first_store_flag')) {
-            $items = $this->searchResultProcessor->getColumnValues($this->linkFieldName);
-
-            $connection = $this->getQuery()->getConnection();
-            $resource = $this->getQuery()->getResource();
-            if (count($items)) {
-                $select = $connection->select()->from(['cps' => $resource->getTable($this->storeTableName)])
-                    ->where("cps.{$this->linkFieldName} IN (?)", $items);
-                $result = $connection->fetchPairs($select);
-                if ($result) {
-                    foreach ($this->getItems() as $item) {
-                        /** @var BlockInterface $item */
-                        if (!isset($result[$item->getId()])) {
-                            continue;
-                        }
-                        if ($result[$item->getId()] == 0) {
-                            $stores = $this->storeManager->getStores(false, true);
-                            $storeId = current($stores)->getId();
-                            $storeCode = key($stores);
-                        } else {
-                            $storeId = $result[$item->getId()];
-                            $storeCode = $this->storeManager->getStore($storeId)->getCode();
-                        }
-                        $item->setData('_first_store_id', $storeId);
-                        $item->setData('store_code', $storeCode);
-                        $item->setData('store_id', [$result[$item->getId()]]);
+        $items = $this->getColumnValues($columnName);
+        if (count($items)) {
+            $connection = $this->getConnection();
+            $select = $connection->select()->from(['cms_entity_store' => $this->getTable($tableName)])
+                ->where('cms_entity_store.' . $columnName . ' IN (?)', $items);
+            $result = $connection->fetchPairs($select);
+            if ($result) {
+                foreach ($this as $item) {
+                    $entityId = $item->getData($columnName);
+                    if (!isset($result[$entityId])) {
+                        continue;
                     }
+                    if ($result[$entityId] == 0) {
+                        $stores = $this->storeManager->getStores(false, true);
+                        $storeId = current($stores)->getId();
+                        $storeCode = key($stores);
+                    } else {
+                        $storeId = $result[$item->getData($columnName)];
+                        $storeCode = $this->storeManager->getStore($storeId)->getCode();
+                    }
+                    $item->setData('_first_store_id', $storeId);
+                    $item->setData('store_code', $storeCode);
+                    $item->setData('store_id', [$result[$entityId]]);
                 }
             }
         }
-        parent::afterLoad();
+    }
+
+    /**
+     * Add field filter to collection
+     *
+     * @param array|string $field
+     * @param string|int|array|null $condition
+     * @return $this
+     */
+    public function addFieldToFilter($field, $condition = null)
+    {
+        if ($field === 'store_id') {
+            return $this->addStoreFilter($condition, false);
+        }
+
+        return parent::addFieldToFilter($field, $condition);
+    }
+
+    /**
+     * Add filter by store
+     *
+     * @param int|array|\Magento\Store\Model\Store $store
+     * @param bool $withAdmin
+     * @return $this
+     */
+    abstract public function addStoreFilter($store, $withAdmin = true);
+
+    /**
+     * Perform adding filter by store
+     *
+     * @param int|array|\Magento\Store\Model\Store $store
+     * @param bool $withAdmin
+     * @return void
+     */
+    protected function performAddStoreFilter($store, $withAdmin = true)
+    {
+        if ($store instanceof \Magento\Store\Model\Store) {
+            $store = [$store->getId()];
+        }
+
+        if (!is_array($store)) {
+            $store = [$store];
+        }
+
+        if ($withAdmin) {
+            $store[] = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
+        }
+
+        $this->addFilter('store', ['in' => $store], 'public');
+    }
+
+    /**
+     * Join store relation table if there is store filter
+     *
+     * @param string $tableName
+     * @param string $columnName
+     * @return void
+     */
+    protected function joinStoreRelationTable($tableName, $columnName)
+    {
+        if ($this->getFilter('store')) {
+            $this->getSelect()->join(
+                ['store_table' => $this->getTable($tableName)],
+                'main_table.' . $columnName . ' = store_table.' . $columnName,
+                []
+            )->group(
+                'main_table.' . $columnName
+            );
+        }
+        parent::_renderFiltersBefore();
+    }
+
+    /**
+     * Get SQL for get record count
+     *
+     * Extra GROUP BY strip added.
+     *
+     * @return \Magento\Framework\DB\Select
+     */
+    public function getSelectCountSql()
+    {
+        $countSelect = parent::getSelectCountSql();
+        $countSelect->reset(\Magento\Framework\DB\Select::GROUP);
+
+        return $countSelect;
     }
 }

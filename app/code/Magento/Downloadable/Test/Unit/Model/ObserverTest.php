@@ -53,17 +53,17 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     private $itemsFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Object\Copy
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\DataObject\Copy
      */
     private $objectCopyService;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Object
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\DataObject
      */
     private $resultMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Object
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\DataObject
      */
     private $storeMock;
 
@@ -114,16 +114,16 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectCopyService = $this->getMockBuilder('\Magento\Framework\Object\Copy')
+        $this->objectCopyService = $this->getMockBuilder('\Magento\Framework\DataObject\Copy')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resultMock = $this->getMockBuilder('\Magento\Framework\Object')
+        $this->resultMock = $this->getMockBuilder('\Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->setMethods(['setIsAllowed'])
             ->getMock();
 
-        $this->storeMock = $this->getMockBuilder('\Magento\Framework\Object')
+        $this->storeMock = $this->getMockBuilder('\Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -575,12 +575,12 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->purchasedFactory->expects($this->any())
             ->method('create')
             ->willReturn($purchasedLink);
-        $event = new \Magento\Framework\Object(
+        $event = new \Magento\Framework\DataObject(
             [
                 'item' => $itemMock,
             ]
         );
-        $observer = new \Magento\Framework\Object(
+        $observer = new \Magento\Framework\DataObject(
             [
                 'event' => $event
             ]
@@ -602,12 +602,12 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->willReturn('simple');
         $itemMock->expects($this->never())
             ->method('getProduct');
-        $event = new \Magento\Framework\Object(
+        $event = new \Magento\Framework\DataObject(
             [
                 'item' => $itemMock,
             ]
         );
-        $observer = new \Magento\Framework\Object(
+        $observer = new \Magento\Framework\DataObject(
             [
                 'event' => $event
             ]
@@ -623,12 +623,12 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $itemMock->expects($this->any())
             ->method('getId')
             ->willReturn(null);
-        $event = new \Magento\Framework\Object(
+        $event = new \Magento\Framework\DataObject(
             [
                 'item' => $itemMock,
             ]
         );
-        $observer = new \Magento\Framework\Object(
+        $observer = new \Magento\Framework\DataObject(
             [
                 'event' => $event
             ]
@@ -664,12 +664,12 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($purchasedLink);
 
-        $event = new \Magento\Framework\Object(
+        $event = new \Magento\Framework\DataObject(
             [
                 'item' => $itemMock,
             ]
         );
-        $observer = new \Magento\Framework\Object(
+        $observer = new \Magento\Framework\DataObject(
             [
                 'event' => $event
             ]

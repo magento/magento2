@@ -14,6 +14,15 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        // TODO: Remove provided check after PHPMD will support PHP version 7
+        $isSupported = version_compare(
+            '7.0.0',
+            preg_replace('#^([^~+-]+).*$#', '$1', PHP_VERSION),
+            '>'
+        );
+        if (!$isSupported) {
+            $this->markTestSkipped('MAGETWO-40822: PHP7 incompatible');
+        }
         $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Sitemap\Helper\Data'
         );

@@ -21,7 +21,7 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
     private $attributeRepository;
 
     /**
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     private $stringUtility;
 
@@ -38,8 +38,9 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
     /**
      * Initialize EavCustomAttributeTypeLocator
      *
+     * @codeCoverageIgnore
      * @param AttributeRepositoryInterface $attributeRepository Attribute repository service
-     * @param \Magento\Framework\Stdlib\String $stringUtility
+     * @param \Magento\Framework\Stdlib\StringUtils $stringUtility
      * @param array $serviceEntityTypeMap Service Entity Map
      * <pre>
      * [
@@ -60,7 +61,7 @@ class EavCustomAttributeTypeLocator implements CustomAttributeTypeLocatorInterfa
      */
     public function __construct(
         AttributeRepositoryInterface $attributeRepository,
-        \Magento\Framework\Stdlib\String $stringUtility,
+        \Magento\Framework\Stdlib\StringUtils $stringUtility,
         array $serviceEntityTypeMap = [],
         array $serviceBackendModelDataInterfaceMap = []
     ) {

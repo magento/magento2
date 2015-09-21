@@ -132,32 +132,4 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
 
         return true;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getListForCustomer($customerId)
-    {
-        $cart = $this->quoteRepository->getActiveForCustomer($customerId);
-        return $this->getList($cart->getId());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function saveForCustomer($customerId, \Magento\Quote\Api\Data\CartItemInterface $cartItem)
-    {
-        $cart = $this->quoteRepository->getActiveForCustomer($customerId);
-        $cartItem->setQuoteId($cart->getId());
-        return $this->save($cartItem);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function deleteByIdForCustomer($customerId, $itemId)
-    {
-        $cart = $this->quoteRepository->getActiveForCustomer($customerId);
-        return $this->deleteById($cart->getId(), $itemId);
-    }
 }

@@ -32,8 +32,15 @@ class FlagTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($eventManager));
         $registry = $this->getMock('Magento\Framework\Registry', [], [], '', false, false);
 
-        $adapter = $this->getMock('Magento\Framework\DB\Adapter\Adapter', ['beginTransaction'], [], '', false, false);
-        $adapter->expects($this->any())
+        $connection = $this->getMock(
+            'Magento\Framework\DB\Adapter\Adapter',
+            ['beginTransaction'],
+            [],
+            '',
+            false,
+            false
+        );
+        $connection->expects($this->any())
             ->method('beginTransaction')
             ->will($this->returnSelf());
         $appResource = $this->getMock(
@@ -46,7 +53,7 @@ class FlagTest extends \PHPUnit_Framework_TestCase
         );
         $appResource->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($adapter));
+            ->will($this->returnValue($connection));
 
         $dbContextMock = $this->getMock('\Magento\Framework\Model\Resource\Db\Context', [], [], '', false);
         $dbContextMock->expects($this->once())->method('getResources')->willReturn($appResource);

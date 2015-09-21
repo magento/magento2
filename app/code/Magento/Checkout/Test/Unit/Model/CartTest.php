@@ -140,7 +140,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     public function testUpdateItems()
     {
         $data = [['qty' => 5.5, 'before_suggest_qty' => 5.5]];
-        $infoDataObject = $this->objectManagerHelper->getObject('Magento\Framework\Object', ['data' => $data]);
+        $infoDataObject = $this->objectManagerHelper->getObject('Magento\Framework\DataObject', ['data' => $data]);
 
         $this->checkoutSessionMock->expects($this->once())
             ->method('getQuote')

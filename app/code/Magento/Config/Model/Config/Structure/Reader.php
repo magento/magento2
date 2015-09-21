@@ -8,7 +8,7 @@
  */
 namespace Magento\Config\Model\Config\Structure;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
 
@@ -126,7 +126,7 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      */
     protected function processingDocument($content)
     {
-        $object = new Object();
+        $object = new DataObject();
         $document = new \DOMDocument();
 
         $document->loadXML($content);

@@ -13,6 +13,7 @@ namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -166,7 +167,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this|void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -258,7 +259,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -396,7 +397,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
                 $this->_mediaDirectory->copyFile($file, $destinationFile);
 
                 $storageHelper->saveFile($this->_mediaConfig->getTmpMediaShortUrl($fileName));
-                $this->_mediaDirectory->changePermissions($destinationFile, 0777);
+                $this->_mediaDirectory->changePermissions($destinationFile, DriverInterface::WRITEABLE_FILE_MODE);
             }
         } catch (\Exception $e) {
             throw new LocalizedException(__('We couldn\'t move this file: %1.', $e->getMessage()));
@@ -757,7 +758,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     }
 
     /**
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      */
     public function duplicate($object)
@@ -818,6 +819,9 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         $images = (array)$object->getData($this->getAttribute()->getName());
         $tableName = $this->_getResource()->getMainTable();
         foreach ($images['images'] as $value) {
+            if (empty($value['value_id'])) {
+                continue;
+            }
             $data[$tableName][] = [
                 'attribute_id' => $this->getAttribute()->getAttributeId(),
                 'value_id' => $value['value_id'],

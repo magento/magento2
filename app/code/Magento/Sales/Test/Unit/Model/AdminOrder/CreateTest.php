@@ -92,7 +92,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $configMock = $this->getMock('Magento\Sales\Model\Config', [], [], '', false);
         $this->sessionQuoteMock = $this->getMock('Magento\Backend\Model\Session\Quote', [], [], '', false);
         $loggerMock = $this->getMock('Psr\Log\LoggerInterface');
-        $copyMock = $this->getMock('Magento\Framework\Object\Copy', [], [], '', false);
+        $copyMock = $this->getMock('Magento\Framework\DataObject\Copy', [], [], '', false);
         $messageManagerMock = $this->getMock('Magento\Framework\Message\ManagerInterface');
         $this->formFactoryMock = $this->getMock(
             'Magento\Customer\Model\Metadata\FormFactory',
@@ -111,7 +111,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
 
         $this->itemUpdater = $this->getMock('Magento\Quote\Model\Quote\Item\Updater', [], [], '', false);
 
-        $this->objectFactory = $this->getMockBuilder('\Magento\Framework\Object\Factory')
+        $this->objectFactory = $this->getMockBuilder('\Magento\Framework\DataObject\Factory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();

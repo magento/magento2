@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\User\Test\TestCase\UserLoginAfterChangingPermissionsTest">
+    <testCase name="Magento\User\Test\TestCase\UserLoginAfterChangingPermissionsTest" summary="Admin Login to Backend on First Attempt" ticketId="MAGETWO-28828">
         <variation name="UserLoginAfterChangingPermissionsTestVariation1">
             <data name="user/dataset" xsi:type="string">custom_admin_with_default_role</data>
             <data name="role/data/rolename" xsi:type="string">AdminRole%isolation%</data>

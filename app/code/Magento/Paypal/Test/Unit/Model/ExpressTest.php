@@ -49,6 +49,11 @@ class ExpressTest extends \PHPUnit_Framework_TestCase
      */
     protected $_helper;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $transactionBuilder;
+
     protected function setUp()
     {
         $this->_checkoutSession = $this->getMock(
@@ -56,6 +61,13 @@ class ExpressTest extends \PHPUnit_Framework_TestCase
             ['getPaypalTransactionData', 'setPaypalTransactionData'],
             [],
             '',
+            false
+        );
+        $this->transactionBuilder = $this->getMockForAbstractClass(
+            'Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface',
+            [],
+            '',
+            false,
             false
         );
         $this->_nvp = $this->getMock(
@@ -82,7 +94,11 @@ class ExpressTest extends \PHPUnit_Framework_TestCase
         $this->_pro->expects($this->any())->method('getApi')->will($this->returnValue($this->_nvp));
         $this->_model = $this->_helper->getObject(
             'Magento\Paypal\Model\Express',
-            ['proFactory' => $this->_pro, 'checkoutSession' => $this->_checkoutSession]
+            [
+                'proFactory' => $this->_pro,
+                'checkoutSession' => $this->_checkoutSession,
+                'transactionBuilder' => $this->transactionBuilder
+            ]
         );
     }
 
@@ -102,19 +118,40 @@ class ExpressTest extends \PHPUnit_Framework_TestCase
         $currency = $this->getMock('Magento\Directory\Model\Currency', ['__wakeup', 'formatTxt'], [], '', false);
         $paymentModel = $this->getMock(
             'Magento\Sales\Model\Order\Payment',
-            ['__wakeup', 'getBaseCurrency', 'getOrder', 'getIsTransactionPending', 'addStatusHistoryComment'],
+            [
+                '__wakeup',
+                'getBaseCurrency',
+                'getOrder',
+                'getIsTransactionPending',
+                'addStatusHistoryComment',
+                'addTransactionCommentsToOrder'
+            ],
             [],
             '',
             false
         );
-        $paymentModel->expects($this->any())->method('getOrder')->will($this->returnSelf());
-        $paymentModel->expects($this->any())->method('getBaseCurrency')->will($this->returnValue($currency));
+        $order = $this->getMock(
+            'Magento\Sales\Model\Order',
+            ['setState', 'getBaseCurrency', 'getBaseCurrencyCode', 'setStatus'],
+            [],
+            '',
+            false
+        );
+        $paymentModel->expects($this->any())->method('getOrder')->willReturn($order);
+        $order->expects($this->any())->method('getBaseCurrency')->willReturn($currency);
+        $order->expects($this->any())->method('setState')->with('payment_review')->willReturnSelf();
         $paymentModel->expects($this->any())->method('getIsTransactionPending')->will($this->returnSelf());
+        $this->transactionBuilder->expects($this->any())->method('setOrder')->with($order)->will($this->returnSelf());
+        $this->transactionBuilder->expects($this->any())->method('setPayment')->will($this->returnSelf());
+        $this->transactionBuilder->expects($this->any())->method('setTransactionId')->will($this->returnSelf());
         $this->_model = $this->_helper->getObject(
             'Magento\Paypal\Model\Express',
-            ['proFactory' => $this->_pro, 'checkoutSession' => $this->_checkoutSession]
+            [
+                'proFactory' => $this->_pro,
+                'checkoutSession' => $this->_checkoutSession,
+                'transactionBuilder' => $this->transactionBuilder
+            ]
         );
-        $this->_model->order($paymentModel, 12.3);
-        $this->assertEquals('payment_review', $paymentModel->getState());
+        $this->assertEquals($this->_model, $this->_model->order($paymentModel, 12.3));
     }
 }

@@ -192,7 +192,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         $stores = $this->_storeCollectionFactory->create()->setWithoutDefaultFilter()->load()->toOptionHash();
         $this->_items = [];
         foreach ($data as $v) {
-            $storeObject = new \Magento\Framework\Object($v);
+            $storeObject = new \Magento\Framework\DataObject($v);
             $storeId = $v['store_id'];
             $storeName = isset($stores[$storeId]) ? $stores[$storeId] : null;
             $storeObject->setStoreName(
@@ -218,12 +218,12 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     }
 
     /**
-     * Retrieve totals data converted into \Magento\Framework\Object
+     * Retrieve totals data converted into \Magento\Framework\DataObject
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getTotals()
     {
-        return new \Magento\Framework\Object($this->_totals);
+        return new \Magento\Framework\DataObject($this->_totals);
     }
 }

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Data;
 
-class Schema extends \Magento\Framework\Object
+class Schema extends \Magento\Framework\DataObject
 {
     /**
      * @param mixed $schema

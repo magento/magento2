@@ -62,7 +62,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Eav\Helper\Data $customerHelperData
-     * @param null|\Zend_Db_Adapter_Abstract $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
     public function __construct(
@@ -71,7 +71,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Helper\Data $customerHelperData,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->_customerHelperData = $customerHelperData;
@@ -91,7 +91,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         $this->_queueLinkTable = $this->getTable('newsletter_queue_link');
         $this->_storeTable = $this->getTable('store');
 
-        $this->_map['fields']['type'] = $this->getResource()->getReadConnection()->getCheckSql(
+        $this->_map['fields']['type'] = $this->getResource()->getConnection()->getCheckSql(
             'main_table.customer_id = 0',
             1,
             2
@@ -146,11 +146,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
             [
                 'customer' => $this->getTable('customer_entity')
             ],
-            'main_table.customer_id = customer.entity_id',
-            [
-                'customer_lastname' => 'lastname',
-                'customer_firstname' => 'firstname'
-            ]
+            'main_table.customer_id = customer.entity_id'
         );
         return $this;
     }
@@ -192,7 +188,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         $select = parent::getSelectCountSql();
         $countSelect = clone $this->getSelect();
 
-        $countSelect->reset(\Zend_Db_Select::HAVING);
+        $countSelect->reset(\Magento\Framework\DB\Select::HAVING);
 
         return $select;
     }

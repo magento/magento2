@@ -6,6 +6,7 @@
 namespace Magento\Framework\Encryption;
 
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Encryption\Helper\Security;
 
 /**
  * Provides basic logic for hashing passwords and encrypting/decrypting misc data
@@ -148,14 +149,27 @@ class Encryptor implements EncryptorInterface
      * @param string $password
      * @param string $hash
      * @return bool
+     * @deprecated
      */
     public function validateHash($password, $hash)
     {
-        return $this->validateHashByVersion(
+        return $this->isValidHash($password, $hash);
+    }
+
+    /**
+     * Validate hash against hashing method (with or without salt)
+     *
+     * @param string $password
+     * @param string $hash
+     * @return bool
+     */
+    public function isValidHash($password, $hash)
+    {
+        return $this->isValidHashByVersion(
             $password,
             $hash,
             self::HASH_VERSION_SHA256
-        ) || $this->validateHashByVersion(
+        ) || $this->isValidHashByVersion(
             $password,
             $hash,
             self::HASH_VERSION_MD5
@@ -170,15 +184,16 @@ class Encryptor implements EncryptorInterface
      * @param int $version
      * @return bool
      */
-    public function validateHashByVersion($password, $hash, $version = self::HASH_VERSION_LATEST)
+    public function isValidHashByVersion($password, $hash, $version)
     {
         // look for salt
         $hashArr = explode(':', $hash, 2);
         if (1 === count($hashArr)) {
-            return $this->hash($password, $version) === $hash;
+            return Security::compareStrings($this->hash($password, $version), $hash);
         }
         list($hash, $salt) = $hashArr;
-        return $this->hash($salt . $password, $version) === $hash;
+
+        return Security::compareStrings($this->hash($salt . $password, $version), $hash);
     }
 
     /**

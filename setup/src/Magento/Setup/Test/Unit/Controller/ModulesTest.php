@@ -81,15 +81,6 @@ class ModulesTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($variables['success']);
     }
 
-    public function testAllModulesValidAction()
-    {
-        $jsonModel = $this->controller->allModulesValidAction();
-        $this->assertInstanceOf('Zend\View\Model\JsonModel', $jsonModel);
-        $variables = $jsonModel->getVariables();
-        $this->assertArrayHasKey('success', $variables);
-        $this->assertTrue($variables['success']);
-    }
-
     /**
      * @return array
      */

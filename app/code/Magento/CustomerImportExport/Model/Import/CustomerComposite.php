@@ -5,6 +5,8 @@
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+
 /**
  * Import entity customer combined model
  *
@@ -124,35 +126,56 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     protected $_dataSourceModels;
 
     /**
+     * If we should check column names
+     *
+     * @var bool
+     */
+    protected $needColumnCheck = true;
+
+    /**
+     * Valid column names
+     *
+     * @array
+     */
+    protected $validColumnNames = [
+        Customer::COLUMN_DEFAULT_BILLING,
+        Customer::COLUMN_DEFAULT_SHIPPING,
+        Customer::COLUMN_PASSWORD,
+    ];
+
+    /**
      * {@inheritdoc}
      */
     protected $masterAttributeCode = 'email';
 
     /**
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\App\Resource $resource
+     * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param \Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\DataFactory $dataFactory
      * @param \Magento\CustomerImportExport\Model\Import\CustomerFactory $customerFactory
      * @param \Magento\CustomerImportExport\Model\Import\AddressFactory $addressFactory
      * @param array $data
+     * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\App\Resource $resource,
+        ProcessingErrorAggregatorInterface $errorAggregator,
         \Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\DataFactory $dataFactory,
         \Magento\CustomerImportExport\Model\Import\CustomerFactory $customerFactory,
         \Magento\CustomerImportExport\Model\Import\AddressFactory $addressFactory,
         array $data = []
     ) {
-        parent::__construct($string, $scopeConfig, $importFactory, $resourceHelper, $resource, $data);
+        parent::__construct($string, $scopeConfig, $importFactory, $resourceHelper, $resource, $errorAggregator, $data);
 
         $this->addMessageTemplate(
             self::ERROR_ROW_IS_ORPHAN,
@@ -201,6 +224,13 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
         }
         $this->_initAddressAttributes();
 
+        $this->validColumnNames = array_merge(
+            $this->validColumnNames,
+            $this->_customerAttributes,
+            $this->_addressAttributes,
+            $this->_customerEntity->customerFields
+        );
+
         // next customer id
         if (isset($data['next_customer_id'])) {
             $this->_nextCustomerId = $data['next_customer_id'];
@@ -248,7 +278,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     {
         $result = $this->_customerEntity->importData();
         if ($this->getBehavior() != \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE) {
-            return $result && $this->_addressEntity->importData();
+            return $result && $this->_addressEntity->setCustomerAttributes($this->_customerAttributes)->importData();
         }
 
         return $result;
@@ -285,7 +315,7 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
                 // Add new customer data into customer storage for address entity instance
                 $websiteId = $this->_customerEntity->getWebsiteId($this->_currentWebsiteCode);
                 if (!$this->_addressEntity->getCustomerStorage()->getCustomerId($this->_currentEmail, $websiteId)) {
-                    $customerData = new \Magento\Framework\Object(
+                    $customerData = new \Magento\Framework\DataObject(
                         [
                             'id' => $this->_nextCustomerId,
                             'email' => $this->_currentEmail,
@@ -415,53 +445,6 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
         $this->_addressEntity->setSource($source);
 
         return parent::setSource($source);
-    }
-
-    /**
-     * Returns error information grouped by error types and translated (if possible)
-     *
-     * @return array
-     */
-    public function getErrorMessages()
-    {
-        $errors = $this->_customerEntity->getErrorMessages();
-        $addressErrors = $this->_addressEntity->getErrorMessages();
-        foreach ($addressErrors as $message => $rowNumbers) {
-            if (isset($errors[$message])) {
-                foreach ($rowNumbers as $rowNumber) {
-                    $errors[$message][] = $rowNumber;
-                }
-                $errors[$message] = array_unique($errors[$message]);
-            } else {
-                $errors[$message] = $rowNumbers;
-            }
-        }
-
-        return array_merge($errors, parent::getErrorMessages());
-    }
-
-    /**
-     * Returns error counter value
-     *
-     * @return int
-     */
-    public function getErrorsCount()
-    {
-        return $this->_customerEntity->getErrorsCount() +
-            $this->_addressEntity->getErrorsCount() +
-            parent::getErrorsCount();
-    }
-
-    /**
-     * Returns invalid rows count
-     *
-     * @return int
-     */
-    public function getInvalidRowsCount()
-    {
-        return $this->_customerEntity->getInvalidRowsCount() +
-            $this->_addressEntity->getInvalidRowsCount() +
-            parent::getInvalidRowsCount();
     }
 
     /**

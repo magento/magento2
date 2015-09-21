@@ -16,7 +16,7 @@ use Magento\Framework\View\Element\AbstractBlock;
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
-class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements \Magento\Framework\Object\IdentityInterface
+class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var Collection

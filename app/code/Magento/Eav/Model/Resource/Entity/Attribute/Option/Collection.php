@@ -38,6 +38,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param mixed $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -46,7 +47,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\App\Resource $coreResource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        $connection = null,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
         $this->_storeManager = $storeManager;
@@ -73,6 +74,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      *
      * @param int $setId
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setAttributeFilter($setId)
     {
@@ -91,9 +93,9 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         if ($storeId === null) {
             $storeId = $this->_storeManager->getStore()->getId();
         }
-        $adapter = $this->getConnection();
+        $connection = $this->getConnection();
 
-        $joinCondition = $adapter->quoteInto('tsv.option_id = main_table.option_id AND tsv.store_id = ?', $storeId);
+        $joinCondition = $connection->quoteInto('tsv.option_id = main_table.option_id AND tsv.store_id = ?', $storeId);
 
         if ($useDefaultValue) {
             $this->getSelect()->join(
@@ -105,7 +107,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
                 $joinCondition,
                 [
                     'store_default_value' => 'value',
-                    'value' => $adapter->getCheckSql('tsv.value_id > 0', 'tsv.value', 'tdv.value')
+                    'value' => $connection->getCheckSql('tsv.value_id > 0', 'tsv.value', 'tdv.value')
                 ]
             )->where(
                 'tdv.store_id = ?',
@@ -132,6 +134,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      *
      * @param int|array $optionId
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setIdFilter($optionId)
     {

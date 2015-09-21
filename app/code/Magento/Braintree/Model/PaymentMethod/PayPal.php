@@ -144,7 +144,7 @@ class PayPal extends \Magento\Braintree\Model\PaymentMethod
     /**
      * Assign corresponding data
      *
-     * @param \Magento\Framework\Object|mixed $data
+     * @param \Magento\Framework\DataObject|mixed $data
      * @return $this
      */
     public function assignData($data)
@@ -181,7 +181,7 @@ class PayPal extends \Magento\Braintree\Model\PaymentMethod
      * @param \Magento\Quote\Api\Data\CartInterface|null $quote
      * @return bool
      */
-    public function isAvailable($quote = null)
+    public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         return $this->isActive($quote ? $quote->getStoreId() : null);
     }
@@ -217,13 +217,13 @@ class PayPal extends \Magento\Braintree\Model\PaymentMethod
     /**
      * Processes successful authorize/clone result
      *
-     * @param \Magento\Framework\Object $payment
+     * @param \Magento\Framework\DataObject $payment
      * @param \Braintree_Result_Successful $result
      * @param float $amount
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     protected function processSuccessResult(
-        \Magento\Framework\Object $payment,
+        \Magento\Framework\DataObject $payment,
         \Braintree_Result_Successful $result,
         $amount
     ) {

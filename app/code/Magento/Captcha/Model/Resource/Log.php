@@ -38,17 +38,17 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $coreDate
      * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $coreDate,
         \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         $this->_coreDate = $coreDate;
         $this->_remoteAddress = $remoteAddress;
-        parent::__construct($context, $resourcePrefix);
+        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -70,7 +70,7 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function logAttempt($login)
     {
         if ($login != null) {
-            $this->_getWriteAdapter()->insertOnDuplicate(
+            $this->getConnection()->insertOnDuplicate(
                 $this->getMainTable(),
                 [
                     'type' => self::TYPE_LOGIN,
@@ -83,7 +83,7 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
         $ip = $this->_remoteAddress->getRemoteAddress();
         if ($ip != null) {
-            $this->_getWriteAdapter()->insertOnDuplicate(
+            $this->getConnection()->insertOnDuplicate(
                 $this->getMainTable(),
                 [
                     'type' => self::TYPE_REMOTE_ADDRESS,
@@ -106,14 +106,14 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function deleteUserAttempts($login)
     {
         if ($login != null) {
-            $this->_getWriteAdapter()->delete(
+            $this->getConnection()->delete(
                 $this->getMainTable(),
                 ['type = ?' => self::TYPE_LOGIN, 'value = ?' => $login]
             );
         }
         $ip = $this->_remoteAddress->getRemoteAddress();
         if ($ip != null) {
-            $this->_getWriteAdapter()->delete(
+            $this->getConnection()->delete(
                 $this->getMainTable(),
                 ['type = ?' => self::TYPE_REMOTE_ADDRESS, 'value = ?' => $ip]
             );
@@ -133,8 +133,8 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if (!$ip) {
             return 0;
         }
-        $read = $this->_getReadAdapter();
-        $select = $read->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             $this->getMainTable(),
             'count'
         )->where(
@@ -144,7 +144,7 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'value = ?',
             $ip
         );
-        return $read->fetchOne($select);
+        return $connection->fetchOne($select);
     }
 
     /**
@@ -158,8 +158,8 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if (!$login) {
             return 0;
         }
-        $read = $this->_getReadAdapter();
-        $select = $read->select()->from(
+        $connection = $this->getConnection();
+        $select = $connection->select()->from(
             $this->getMainTable(),
             'count'
         )->where(
@@ -169,7 +169,7 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'value = ?',
             $login
         );
-        return $read->fetchOne($select);
+        return $connection->fetchOne($select);
     }
 
     /**
@@ -179,7 +179,7 @@ class Log extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function deleteOldAttempts()
     {
-        $this->_getWriteAdapter()->delete(
+        $this->getConnection()->delete(
             $this->getMainTable(),
             ['updated_at < ?' => $this->_coreDate->gmtDate(null, time() - 60 * 30)]
         );

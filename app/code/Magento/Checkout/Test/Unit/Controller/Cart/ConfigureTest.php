@@ -121,7 +121,7 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
         $pageMock = $this->getMockBuilder('Magento\Framework\View\Result\Page')
             ->disableOriginalConstructor()
             ->getMock();
-        $buyRequestMock = $this->getMockBuilder('Magento\Framework\Object')
+        $buyRequestMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
         //expects

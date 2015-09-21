@@ -120,7 +120,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ['resourceName' => 'mainResourceName', 'connectionName' => 'anotherConnection'],
             [
                 'resourceName' => 'brokenResourceName',
-                'connectionName' => \Magento\Framework\App\Resource\Config::DEFAULT_SETUP_CONNECTION
+                'connectionName' => \Magento\Framework\App\Resource::DEFAULT_CONNECTION
             ],
             ['resourceName' => 'extendedResourceName', 'connectionName' => 'validConnectionName'],
             ['resourceName' => 'validResource', 'connectionName' => 'validConnectionName']

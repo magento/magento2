@@ -16,6 +16,7 @@ class Type extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Resource initialization
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -28,6 +29,7 @@ class Type extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Model\AbstractModel $object
      * @param string $code
      * @return $this
+     * @codeCoverageIgnore
      */
     public function loadByCode($object, $code)
     {
@@ -42,15 +44,15 @@ class Type extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function getAdditionalAttributeTable($entityTypeId)
     {
-        $adapter = $this->_getReadAdapter();
+        $connection = $this->getConnection();
         $bind = ['entity_type_id' => $entityTypeId];
-        $select = $adapter->select()->from(
+        $select = $connection->select()->from(
             $this->getMainTable(),
             ['additional_attribute_table']
         )->where(
             'entity_type_id = :entity_type_id'
         );
 
-        return $adapter->fetchOne($select, $bind);
+        return $connection->fetchOne($select, $bind);
     }
 }

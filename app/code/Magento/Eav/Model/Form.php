@@ -210,6 +210,7 @@ abstract class Form
      *
      * @param \Magento\Store\Model\Store|string|int $store
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setStore($store)
     {

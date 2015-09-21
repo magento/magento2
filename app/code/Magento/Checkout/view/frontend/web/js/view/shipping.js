@@ -6,6 +6,7 @@
 define(
     [
         'jquery',
+        "underscore",
         'Magento_Ui/js/form/form',
         'ko',
         'Magento_Customer/js/model/customer',
@@ -20,13 +21,17 @@ define(
         'Magento_Checkout/js/action/select-shipping-method',
         'Magento_Checkout/js/model/shipping-rate-registry',
         'Magento_Checkout/js/action/set-shipping-information',
-        'Magento_Checkout/js/model/new-customer-address',
         'Magento_Checkout/js/model/step-navigator',
         'Magento_Ui/js/modal/modal',
-        'mage/translate'
+        'Magento_Checkout/js/model/checkout-data-resolver',
+        'Magento_Checkout/js/checkout-data',
+        'uiRegistry',
+        'mage/translate',
+        'Magento_Checkout/js/model/shipping-rate-service'
     ],
     function(
         $,
+        _,
         Component,
         ko,
         customer,
@@ -41,29 +46,15 @@ define(
         selectShippingMethodAction,
         rateRegistry,
         setShippingInformationAction,
-        newAddress,
         stepNavigator,
         modal,
+        checkoutDataResolver,
+        checkoutData,
+        registry,
         $t
     ) {
         'use strict';
-        var rates = window.checkoutConfig.shippingRates.data,
-            rateKey = window.checkoutConfig.shippingRates.key;
         var popUp = null;
-        if (addressList().length == 0) {
-            var address = new newAddress({});
-            rateRegistry.set(address.getCacheKey(), rates);
-            shippingService.setShippingRates(rates);
-            selectShippingAddress(address);
-        }
-
-        if (rateKey) {
-            rateRegistry.set(rateKey, rates);
-        }
-
-        selectShippingMethodAction(window.checkoutConfig.selectedShippingMethod);
-        shippingService.setShippingRates(rates);
-
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/shipping'
@@ -80,26 +71,22 @@ define(
             initialize: function () {
                 var self = this;
                 this._super();
-                var shippingAddress = quote.shippingAddress();
-                if (!shippingAddress) {
-                    var isShippingAddressInitialized = addressList.some(function (address) {
-                        if (address.isDefaultShipping()) {
-                            selectShippingAddress(address);
-                            return true;
-                        }
-                        return false;
-                    });
-                    if (!isShippingAddressInitialized && addressList().length == 1) {
-                        selectShippingAddress(addressList()[0]);
-                    }
-                }
-                if (rates.length == 1) {
-                    selectShippingMethodAction(rates[0])
-                }
-
                 if (!quote.isVirtual()) {
-                    stepNavigator.registerStep('shipping', 'Shipping', this.visible, 10);
+                    stepNavigator.registerStep(
+                        'shipping',
+                        '',
+                        'Shipping',
+                        this.visible, _.bind(this.navigate, this),
+                        10
+                    );
                 }
+                checkoutDataResolver.resolveShippingAddress();
+
+                var hasNewAddress = addressList.some(function (address) {
+                    return address.getType() == 'new-customer-address';
+                });
+
+                this.isNewAddressAdded(hasNewAddress);
 
                 this.isFormPopUpVisible.subscribe(function (value) {
                     if (value) {
@@ -111,12 +98,29 @@ define(
                     self.errorValidationMessage(false);
                 });
 
+                registry.async('checkoutProvider')(function (checkoutProvider) {
+                    var shippingAddressData = checkoutData.getShippingAddressFromData();
+                    if (shippingAddressData) {
+                        checkoutProvider.set(
+                            'shippingAddress',
+                            $.extend({}, checkoutProvider.get('shippingAddress'), shippingAddressData)
+                        );
+                    }
+                    checkoutProvider.on('shippingAddress', function (shippingAddressData) {
+                        checkoutData.setShippingAddressFromData(shippingAddressData);
+                    });
+                });
+
                 return this;
+            },
+
+            navigate: function () {
+                //load data from server for shipping step
             },
 
             initElement: function(element) {
                 if (element.index === 'shipping-address-fieldset') {
-                    shippingRatesValidator.bindChangeHandlers(element.elems());
+                    shippingRatesValidator.bindChangeHandlers(element.elems(), false);
                 }
             },
 
@@ -162,14 +166,17 @@ define(
                     addressData.save_in_address_book = this.saveInAddressBook;
 
                     // New address must be selected as a shipping address
-                    selectShippingAddress(createShippingAddress(addressData));
+                    var newShippingAddress = createShippingAddress(addressData);
+                    selectShippingAddress(newShippingAddress);
+                    checkoutData.setSelectedShippingAddress(newShippingAddress.getKey());
+                    checkoutData.setNewCustomerShippingAddress(addressData);
                     this.getPopUp().closeModal();
                     this.isNewAddressAdded(true);
                 }
             },
 
             /** Shipping Method View **/
-            rates: shippingService.getSippingRates(),
+            rates: shippingService.getShippingRates(),
             isLoading: shippingService.isLoading,
             isSelected: ko.computed(function () {
                     return quote.shippingMethod()
@@ -180,6 +187,7 @@ define(
 
             selectShippingMethod: function(shippingMethod) {
                 selectShippingMethodAction(shippingMethod);
+                checkoutData.setSelectedShippingRate(shippingMethod.carrier_code + '_' + shippingMethod.method_code);
                 return true;
             },
 

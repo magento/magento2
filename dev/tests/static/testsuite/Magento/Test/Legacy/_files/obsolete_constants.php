@@ -54,6 +54,18 @@ return [
         'Mage_Core_Model_Resource',
         'Magento_Core_Model_Config_Resource::DEFAULT_WRITE_CONNECTION',
     ],
+    [
+        'DEFAULT_READ_RESOURCE',
+        'Magento\Framework\App\Resource',
+    ],
+    [
+        'DEFAULT_WRITE_RESOURCE',
+        'Magento\Framework\App\Resource',
+    ],
+    [
+        'DEFAULT_SETUP_CONNECTION',
+        '\Magento\Framework\App\Resource\Config',
+    ],
     ['DEFAULT_READ_CONNECTION', 'Magento\Framework\App\Resource\Config'],
     ['DEFAULT_WRITE_CONNECTION', 'Magento\Framework\App\Resource\Config'],
     ['DEFAULT_ERROR_HANDLER', 'Mage'],
@@ -61,6 +73,7 @@ return [
     ['DEFAULT_THEME_NAME', 'Magento\Core\Model\Design\Package'],
     ['DEFAULT_STORE_ID', 'Magento\Catalog\Model\AbstractModel', 'Magento\Store\Model\Store::DEFAULT_STORE_ID'],
     ['DEFAULT_VALUE_TABLE_PREFIX'],
+    ['DIRECTORY_PERMISSION', 'Magento\Framework\Code\Generator\Io'],
     ['DIVIDE_EPSILON', 'Magento\Core\Helper\Data'],
     ['ENTITY_PRODUCT', 'Magento\Review\Model\Review'],
     ['EXCEPTION_CODE_IS_GROUPED_PRODUCT'],
@@ -307,8 +320,6 @@ return [
     ['CONFIG_KEY_FORMATS', 'Magento\ImportExport\Model\Export'],
     ['CONFIG_KEY_ENTITIES', 'Magento\ImportExport\Model\Import'],
     ['REGEX_RUN_MODEL', 'Magento\Cron\Model\Observer'],
-    ['XML_PATH_FRONT_NAME', 'Magento\DesignEditor\Helper\Data'],
-    ['XML_PATH_DISABLED_CACHE_TYPES', 'Magento\DesignEditor\Helper\Data'],
     ['XML_PATH_ENCRYPTION_MODEL', 'Magento\Core\Helper\Data'],
     ['CONFIG_KEY_PATH_TO_MAP_FILE', 'Magento\Framework\Module\Setup\Migration'],
     ['XML_PATH_SKIP_PROCESS_MODULES_UPDATES', 'Magento\Framework\App\UpdaterInterface'],
@@ -572,7 +583,6 @@ return [
         '\Magento\Framework\App\Filesystem',
         '\Magento\Framework\Filesystem\DirectoryList::SYS_TMP',
     ],
-    ['LAYOUT_NAVIGATION_CLASS_NAME', 'Magento\DesignEditor\Model\State'],
     [
         'TYPE_CONFIGURABLE',
         '\Magento\Catalog\Model\Product\Type',
@@ -740,4 +750,190 @@ return [
     ['ERROR_INVALID_PRICE_CORRECTION', 'Magento\ConfigurableImportExport\Model\Import\Product\Type\Configurable'],
     ['EXCEPTION_CODE_NOT_SALABLE', 'Magento\Wishlist\Model\Item'],
     ['EXCEPTION_CODE_HAS_REQUIRED_OPTIONS', 'Magento\Wishlist\Model\Item'],
+    [
+        'CONFIG_PATH_DEFINITION_FORMAT',
+        'Magento\Framework\Config\ConfigOptionsListConstants',
+        'Magento\Framework\App\ObjectManagerFactory::CONFIG_PATH_DEFINITION_FORMAT'
+    ],
+    [
+        'CONFIG_PATH_INSTALL_DATE',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE',
+    ],
+    [
+        'CONFIG_PATH_CRYPT_KEY',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY',
+    ],
+    [
+        'CONFIG_PATH_SESSION_SAVE',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_SESSION_SAVE',
+    ],
+    [
+        'CONFIG_PATH_DEFINITION_FORMAT',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DEFINITION_FORMAT',
+    ],
+    [
+        'CONFIG_PATH_RESOURCE_DEFAULT_SETUP',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_RESOURCE_DEFAULT_SETUP',
+    ],
+    [
+        'CONFIG_PATH_DB_CONNECTION_DEFAULT',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT',
+    ],
+    [
+        'CONFIG_PATH_DB_CONNECTIONS',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS',
+    ],
+    [
+        'CONFIG_PATH_DB_PREFIX',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX',
+    ],
+    [
+        'INPUT_KEY_ENCRYPTION_KEY',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY',
+    ],
+    [
+        'INPUT_KEY_SESSION_SAVE',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE',
+    ],
+    [
+        'INPUT_KEY_DEFINITION_FORMAT',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::INPUT_KEY_DEFINITION_FORMAT',
+    ],
+    [
+        'INPUT_KEY_DB_HOST',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::INPUT_KEY_DB_HOST',
+    ],
+    [
+        'INPUT_KEY_DB_NAME',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::INPUT_KEY_DB_NAME',
+    ],
+    [
+        'INPUT_KEY_DB_USER',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::INPUT_KEY_DB_USER',
+    ],
+    [
+        'INPUT_KEY_DB_PASSWORD',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD',
+    ],
+    [
+        'INPUT_KEY_DB_PREFIX',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX',
+    ],
+    [
+        'INPUT_KEY_DB_MODEL',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::INPUT_KEY_DB_MODEL',
+    ],
+    [
+        'INPUT_KEY_DB_INIT_STATEMENTS',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::INPUT_KEY_DB_INIT_STATEMENTS',
+    ],
+    [
+        'INPUT_KEY_DB_ENGINE',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::INPUT_KEY_DB_ENGINE',
+    ],
+    [
+        'INPUT_KEY_RESOURCE',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::INPUT_KEY_RESOURCE',
+    ],
+    [
+        'INPUT_KEY_SKIP_DB_VALIDATION',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION',
+    ],
+    [
+        'SESSION_SAVE_FILES',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::SESSION_SAVE_FILES',
+    ],
+    [
+        'SESSION_SAVE_DB',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::SESSION_SAVE_DB'
+    ],
+    [
+        'KEY_SAVE',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::KEY_SAVE'
+    ],
+    [
+        'KEY_HOST',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::KEY_HOST'
+    ],
+    [
+        'KEY_NAME',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::KEY_NAME'
+    ],
+    [
+        'KEY_USER',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::KEY_USER'
+    ],
+    [
+        'KEY_PASSWORD',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::KEY_PASSWORD'
+    ],
+    [
+        'KEY_ENGINE',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::KEY_ENGINE'
+    ],
+    [
+        'KEY_PREFIX',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::KEY_PREFIX'
+    ],
+    [
+        'KEY_MODEL',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::KEY_MODEL'
+    ],
+    [
+        'KEY_INIT_STATEMENTS',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::KEY_INIT_STATEMENTS',
+    ],
+    [
+        'KEY_ACTIVE',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::KEY_ACTIVE'
+    ],
+    ['KEY_DB', 'Magento\Setup\Model\ConfigOptionsList', 'Magento\Framework\Config\ConfigOptionsListConstants::KEY_DB'],
+    [
+        'KEY_ENCRYPTION_KEY',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::KEY_ENCRYPTION_KEY',
+    ],
+    [
+        'KEY_RESOURCE',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::KEY_RESOURCE'
+    ],
+    [
+        'KEY_MODULES',
+        'Magento\Setup\Model\ConfigOptionsList',
+        'Magento\Framework\Config\ConfigOptionsListConstants::KEY_MODULES'
+    ],
 ];

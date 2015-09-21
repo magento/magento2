@@ -7,7 +7,7 @@
 namespace Magento\Reports\Test\Unit\Controller\Adminhtml\Report\Customer;
 
 use Magento\Reports\Controller\Adminhtml\Report\Customer\Orders;
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\Phrase;
 
 class OrdersTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest
@@ -47,8 +47,8 @@ class OrdersTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\
             ->expects($this->any())
             ->method('getPage')
             ->willReturn(
-                new Object(
-                    ['config' => new Object(
+                new DataObject(
+                    ['config' => new DataObject(
                         ['title' => $titleMock]
                     )]
                 )

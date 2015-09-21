@@ -29,7 +29,7 @@ class Agreement extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function addOrderRelation($agreementId, $orderId)
     {
-        $this->_getWriteAdapter()->insert(
+        $this->getConnection()->insert(
             $this->getTable('paypal_billing_agreement_order'),
             ['agreement_id' => $agreementId, 'order_id' => $orderId]
         );

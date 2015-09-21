@@ -51,11 +51,11 @@ class AjaxLogin
 
     /**
      * @param \Magento\Customer\Controller\Ajax\Login $subject
-     * @param callable $proceed
+     * @param \Closure $proceed
      * @return $this
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Zend_Json_Exception
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function aroundExecute(
         \Magento\Customer\Controller\Ajax\Login $subject,
@@ -67,7 +67,11 @@ class AjaxLogin
         /** @var \Magento\Framework\App\RequestInterface $request */
         $request = $subject->getRequest();
 
-        $loginParams = \Zend_Json::decode($request->getContent());
+        $loginParams = [];
+        $content = $request->getContent();
+        if ($content) {
+            $loginParams = \Zend_Json::decode($content);
+        }
         $username = isset($loginParams['username']) ? $loginParams['username'] : null;
         $captchaString = isset($loginParams[$captchaInputName]) ? $loginParams[$captchaInputName] : null;
         $loginFormId = isset($loginParams[$captchaFormIdField]) ? $loginParams[$captchaFormIdField] : null;

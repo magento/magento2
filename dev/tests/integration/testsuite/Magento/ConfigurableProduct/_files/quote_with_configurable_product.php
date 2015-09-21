@@ -17,7 +17,7 @@ $options = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
 );
 $option = $options->setAttributeFilter($attribute->getId())->getFirstItem();
 
-$requestInfo = new \Magento\Framework\Object(
+$requestInfo = new \Magento\Framework\DataObject(
     ['qty' => 1, 'super_attribute' => [$attribute->getId() => $option->getId()]]
 );
 

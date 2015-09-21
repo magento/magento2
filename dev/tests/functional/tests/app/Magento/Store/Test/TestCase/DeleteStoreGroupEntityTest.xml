@@ -6,19 +6,19 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-  <testCase name="Magento\Store\Test\TestCase\DeleteStoreGroupEntityTest">
-    <variation name="DeleteStoreGroupEntityTestVariation1">
-      <data name="storeGroup/dataset" xsi:type="string">custom</data>
-      <data name="createBackup" xsi:type="string">Yes</data>
-      <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupSuccessDeleteAndBackupMessages"/>
-      <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupNotInGrid"/>
-      <constraint name="Magento\Backup\Test\Constraint\AssertBackupInGrid"/>
-    </variation>
-    <variation name="DeleteStoreGroupEntityTestVariation2">
-      <data name="storeGroup/dataset" xsi:type="string">custom</data>
-      <data name="createBackup" xsi:type="string">No</data>
-      <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupSuccessDeleteMessage"/>
-      <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupNotInGrid"/>
-    </variation>
-  </testCase>
+    <testCase name="Magento\Store\Test\TestCase\DeleteStoreGroupEntityTest" summary="Delete Store Group" ticketId="MAGETWO-27596">
+        <variation name="DeleteStoreGroupEntityTestVariation1">
+            <data name="storeGroup/dataset" xsi:type="string">custom</data>
+            <data name="createBackup" xsi:type="string">Yes</data>
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupSuccessDeleteAndBackupMessages" />
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupNotInGrid" />
+            <constraint name="Magento\Backup\Test\Constraint\AssertBackupInGrid" />
+        </variation>
+        <variation name="DeleteStoreGroupEntityTestVariation2">
+            <data name="storeGroup/dataset" xsi:type="string">custom</data>
+            <data name="createBackup" xsi:type="string">No</data>
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupSuccessDeleteMessage" />
+            <constraint name="Magento\Store\Test\Constraint\AssertStoreGroupNotInGrid" />
+        </variation>
+    </testCase>
 </config>

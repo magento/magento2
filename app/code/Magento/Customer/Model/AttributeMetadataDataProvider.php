@@ -70,7 +70,7 @@ class AttributeMetadataDataProvider
         if (null === $storeId) {
             $storeId = $this->storeManager->getStore()->getId();
         }
-        $object = new \Magento\Framework\Object(
+        $object = new \Magento\Framework\DataObject(
             [
                 'store_id' => $storeId,
                 'attribute_set_id' => $attributeSetId,

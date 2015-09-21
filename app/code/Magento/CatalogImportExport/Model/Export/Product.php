@@ -554,8 +554,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         if (empty($productIds)) {
             return [];
         }
-        $adapter = $this->_connection;
-        $select = $adapter->select()->from(
+        $select = $this->_connection->select()->from(
             ['cpl' => $this->_resourceModel->getTableName('catalog_product_link')],
             [
                 'cpl.product_id',
@@ -570,14 +569,14 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             []
         )->joinLeft(
             ['cpla' => $this->_resourceModel->getTableName('catalog_product_link_attribute')],
-            $adapter->quoteInto(
+            $this->_connection->quoteInto(
                 '(cpla.link_type_id = cpl.link_type_id AND cpla.product_link_attribute_code = ?)',
                 'position'
             ),
             []
         )->joinLeft(
             ['cplaq' => $this->_resourceModel->getTableName('catalog_product_link_attribute')],
-            $adapter->quoteInto(
+            $this->_connection->quoteInto(
                 '(cplaq.link_type_id = cpl.link_type_id AND cplaq.product_link_attribute_code = ?)',
                 'qty'
             ),
@@ -598,7 +597,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $productIds
         );
 
-        $stmt = $adapter->query($select);
+        $stmt = $this->_connection->query($select);
         $linksRows = [];
         while ($linksRow = $stmt->fetch()) {
             $linksRows[$linksRow['product_id']][$linksRow['link_type_id']][] = [
@@ -880,8 +879,15 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                                     ImportProduct::PAIR_NAME_VALUE_SEPARATOR . $attrValue;
                             }
                             $data[$itemId][$storeId][$fieldName] = $attrValue;
-                        } else {
-                            $this->collectMultiselectValues($item, $code, $storeId);
+                        }
+                    } else {
+                        $this->collectMultiselectValues($item, $code, $storeId);
+                        if (!empty($this->collectedMultiselectsData[$storeId][$itemId][$code])) {
+                            $additionalAttributes[$code] = $fieldName .
+                                ImportProduct::PAIR_NAME_VALUE_SEPARATOR . implode(
+                                    ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
+                                    $this->collectedMultiselectsData[$storeId][$itemId][$code]
+                                );
                         }
                     }
                 }
@@ -929,13 +935,14 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 array_keys($this->_websiteIdToCode),
                 $item->getWebsites()
             );
-            $rowCategories[$item->getId()] = $item->getCategoryIds();
+            $rowCategories[$item->getId()] = array_combine($item->getCategoryIds(), $item->getCategoryIds());
         }
         $collection->clear();
 
         $allCategoriesIds = array_merge(array_keys($this->_categories), array_keys($this->_rootCategories));
+        $allCategoriesIds = array_combine($allCategoriesIds, $allCategoriesIds);
         foreach ($rowCategories as &$categories) {
-            $categories = array_intersect($categories, $allCategoriesIds);
+            $categories = array_intersect_key($categories, $allCategoriesIds);
         }
 
         $data['rowWebsites'] = $rowWebsites;
@@ -1219,6 +1226,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     public function filterAttributeCollection(\Magento\Eav\Model\Resource\Entity\Attribute\Collection $collection)
     {
         $validTypes = array_keys($this->_productTypeModels);
+        $validTypes = array_combine($validTypes, $validTypes);
 
         foreach (parent::filterAttributeCollection($collection) as $attribute) {
             if (in_array($attribute->getAttributeCode(), $this->_bannedAttributes)) {
@@ -1226,7 +1234,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 continue;
             }
             $attrApplyTo = $attribute->getApplyTo();
-            $attrApplyTo = $attrApplyTo ? array_intersect($attrApplyTo, $validTypes) : $validTypes;
+            $attrApplyTo = array_combine($attrApplyTo, $attrApplyTo);
+            $attrApplyTo = $attrApplyTo ? array_intersect_key($attrApplyTo, $validTypes) : $validTypes;
 
             if ($attrApplyTo) {
                 foreach ($attrApplyTo as $productType) {

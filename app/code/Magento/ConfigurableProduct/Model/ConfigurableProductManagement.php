@@ -69,10 +69,10 @@ class ConfigurableProductManagement implements \Magento\ConfigurableProduct\Api\
     /**
      * Return Data Object data in array format.
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return array
      */
-    private function objectToArray(\Magento\Framework\Object $object)
+    private function objectToArray(\Magento\Framework\DataObject $object)
     {
         $data = $object->getData();
         foreach ($data as $key => $value) {

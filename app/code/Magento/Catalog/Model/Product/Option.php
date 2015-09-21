@@ -104,7 +104,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
     protected $_optionFactory;
 
     /**
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
@@ -120,7 +120,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param Option\Value $productOptionValue
      * @param Option\Type\Factory $optionFactory
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param Option\Validator\Pool $validatorPool
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
@@ -134,7 +134,7 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
         \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         Option\Value $productOptionValue,
         \Magento\Catalog\Model\Product\Option\Type\Factory $optionFactory,
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         Option\Validator\Pool $validatorPool,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,

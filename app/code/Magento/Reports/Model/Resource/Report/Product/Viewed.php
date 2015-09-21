@@ -53,7 +53,7 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
      * @param \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
      * @param \Magento\Catalog\Model\Resource\Product $productResource
      * @param \Magento\Reports\Model\Resource\Helper $resourceHelper
-     * @param string|null $resourcePrefix
+     * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -64,7 +64,7 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
         \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
         \Magento\Catalog\Model\Resource\Product $productResource,
         \Magento\Reports\Model\Resource\Helper $resourceHelper,
-        $resourcePrefix = null
+        $connectionName = null
     ) {
         parent::__construct(
             $context,
@@ -73,7 +73,7 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
             $reportsFlagFactory,
             $dateTime,
             $timezoneValidator,
-            $resourcePrefix
+            $connectionName
         );
         $this->_productResource = $productResource;
         $this->_resourceHelper = $resourceHelper;
@@ -100,7 +100,7 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
     public function aggregate($from = null, $to = null)
     {
         $mainTable = $this->getMainTable();
-        $adapter = $this->_getWriteAdapter();
+        $connection = $this->getConnection();
 
         if ($from !== null || $to !== null) {
             $subSelect = $this->_getTableDateRangeSelect(
@@ -115,7 +115,7 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
         }
         $this->_clearTableByDateRange($mainTable, $from, $to, $subSelect);
         // convert dates to current admin timezone
-        $periodExpr = $adapter->getDatePartSql(
+        $periodExpr = $connection->getDatePartSql(
             $this->getStoreTZOffsetQuery(
                 ['source_table' => $this->getTable('report_event')],
                 'source_table.logged_at',
@@ -123,7 +123,7 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
                 $to
             )
         );
-        $select = $adapter->select();
+        $select = $connection->select();
 
         $select->group([$periodExpr, 'source_table.store_id', 'source_table.object_id']);
 
@@ -134,13 +134,13 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
             'store_id' => 'source_table.store_id',
             'product_id' => 'source_table.object_id',
             'product_name' => new \Zend_Db_Expr(
-                sprintf('MIN(%s)', $adapter->getIfNullSql('product_name.value', 'product_default_name.value'))
+                sprintf('MIN(%s)', $connection->getIfNullSql('product_name.value', 'product_default_name.value'))
             ),
             'product_price' => new \Zend_Db_Expr(
                 sprintf(
                     'MIN(%s)',
-                    $adapter->getIfNullSql(
-                        $adapter->getIfNullSql('product_price.value', 'product_default_price.value'),
+                    $connection->getIfNullSql(
+                        $connection->getIfNullSql('product_price.value', 'product_default_price.value'),
                         0
                     )
                 )
@@ -167,13 +167,13 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
         $joinExprProductName = [
             'product_name.entity_id = product.entity_id',
             'product_name.store_id = source_table.store_id',
-            $adapter->quoteInto('product_name.attribute_id = ?', $nameAttribute->getAttributeId()),
+            $connection->quoteInto('product_name.attribute_id = ?', $nameAttribute->getAttributeId()),
         ];
         $joinExprProductName = implode(' AND ', $joinExprProductName);
         $joinProductName = [
             'product_default_name.entity_id = product.entity_id',
             'product_default_name.store_id = 0',
-            $adapter->quoteInto('product_default_name.attribute_id = ?', $nameAttribute->getAttributeId()),
+            $connection->quoteInto('product_default_name.attribute_id = ?', $nameAttribute->getAttributeId()),
         ];
         $joinProductName = implode(' AND ', $joinProductName);
         $select->joinLeft(
@@ -189,14 +189,14 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
         $joinExprProductPrice = [
             'product_price.entity_id = product.entity_id',
             'product_price.store_id = source_table.store_id',
-            $adapter->quoteInto('product_price.attribute_id = ?', $priceAttribute->getAttributeId()),
+            $connection->quoteInto('product_price.attribute_id = ?', $priceAttribute->getAttributeId()),
         ];
         $joinExprProductPrice = implode(' AND ', $joinExprProductPrice);
 
         $joinProductPrice = [
             'product_default_price.entity_id = product.entity_id',
             'product_default_price.store_id = 0',
-            $adapter->quoteInto('product_default_price.attribute_id = ?', $priceAttribute->getAttributeId()),
+            $connection->quoteInto('product_default_price.attribute_id = ?', $priceAttribute->getAttributeId()),
         ];
         $joinProductPrice = implode(' AND ', $joinProductPrice);
         $select->joinLeft(
@@ -209,7 +209,7 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
             []
         );
 
-        $havingPart = [$adapter->prepareSqlCondition($viewsNumExpr, ['gt' => 0])];
+        $havingPart = [$connection->prepareSqlCondition($viewsNumExpr, ['gt' => 0])];
         if (null !== $subSelect) {
             $subSelectHavingPart = $this->_makeConditionFromDateRangeSelect($subSelect, 'period');
             if ($subSelectHavingPart) {
@@ -220,24 +220,24 @@ class Viewed extends \Magento\Sales\Model\Resource\Report\AbstractReport
 
         $select->useStraightJoin();
         $insertQuery = $select->insertFromSelect($this->getMainTable(), array_keys($columns));
-        $adapter->query($insertQuery);
+        $connection->query($insertQuery);
 
         $this->_resourceHelper->updateReportRatingPos(
-            $adapter,
+            $connection,
             'day',
             'views_num',
             $mainTable,
             $this->getTable(self::AGGREGATION_DAILY)
         );
         $this->_resourceHelper->updateReportRatingPos(
-            $adapter,
+            $connection,
             'month',
             'views_num',
             $mainTable,
             $this->getTable(self::AGGREGATION_MONTHLY)
         );
         $this->_resourceHelper->updateReportRatingPos(
-            $adapter,
+            $connection,
             'year',
             'views_num',
             $mainTable,
