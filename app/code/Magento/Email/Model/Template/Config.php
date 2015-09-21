@@ -59,8 +59,8 @@ class Config implements \Magento\Framework\Mail\Template\ConfigInterface
         $this->_dataStorage = $dataStorage;
         $this->_moduleReader = $moduleReader;
         $this->viewFileSystem = $viewFileSystem;
-        $this->readDirFactory = $readDirFactory;
         $this->themePackages = $themePackages;
+        $this->readDirFactory = $readDirFactory;
     }
 
     /**

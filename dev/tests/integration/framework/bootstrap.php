@@ -77,8 +77,14 @@ try {
 
     \Magento\TestFramework\Helper\Bootstrap::setInstance(new \Magento\TestFramework\Helper\Bootstrap($bootstrap));
 
+    $dirSearch = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        ->create('Magento\Framework\Component\DirSearch');
     \Magento\Framework\App\Utility\Files::setInstance(
-        new Magento\Framework\App\Utility\Files(new \Magento\Framework\Component\ComponentRegistrar(), $magentoBaseDir)
+        new Magento\Framework\App\Utility\Files(
+            new \Magento\Framework\Component\ComponentRegistrar(),
+            $dirSearch,
+            $magentoBaseDir
+        )
     );
 
     /* Unset declared global variables to release the PHPUnit from maintaining their values between tests */

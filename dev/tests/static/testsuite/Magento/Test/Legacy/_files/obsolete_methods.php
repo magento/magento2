@@ -2468,4 +2468,5 @@ return [
     ['getScopeDirectory', 'Magento\Framework\View\File\Collector\Override\ThemeModular'],
     ['getScopeDirectory', 'Magento\Framework\View\File\Collector\Theme'],
     ['getScopeDirectory', 'Magento\Framework\View\File\Collector\ThemeModular'],
+    ['_getConfigFilesList', 'Magento\Framework\App\Utility\Files'],
 ];

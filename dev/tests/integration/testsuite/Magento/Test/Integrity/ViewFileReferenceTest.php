@@ -221,8 +221,8 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
         $result = [];
         $componentRegistrar = new \Magento\Framework\Component\ComponentRegistrar();
         $dirs = array_merge(
-            $componentRegistrar->getPaths(\Magento\Framework\Component\ComponentRegistrar::MODULE),
-            $componentRegistrar->getPaths(\Magento\Framework\Component\ComponentRegistrar::THEME)
+            $componentRegistrar->getPaths(ComponentRegistrar::MODULE),
+            $componentRegistrar->getPaths(ComponentRegistrar::THEME)
         );
         foreach ($dirs as $dir) {
             $iterator = new \RecursiveIteratorIterator(
