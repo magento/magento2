@@ -14,6 +14,7 @@ use Magento\Framework\Amqp\MergerInterface;
 use Magento\Framework\Amqp\MessageEncoder;
 use Magento\Framework\Amqp\QueueInterface;
 use Magento\Framework\Amqp\QueueRepository;
+use Magento\Framework\App\Resource;
 use Magento\Framework\Exception\LocalizedException;
 
 class BatchConsumer implements ConsumerInterface
@@ -52,6 +53,10 @@ class BatchConsumer implements ConsumerInterface
      * @var int
      */
     private $interval;
+    /**
+     * @var Resource
+     */
+    private $resource;
 
     /**
      * @param AmqpConfig $amqpConfig
@@ -59,6 +64,7 @@ class BatchConsumer implements ConsumerInterface
      * @param QueueRepository $queueRepository
      * @param MergerFactory $mergerFactory
      * @param EnvelopeFactory $envelopeFactory
+     * @param Resource $resource
      * @param int $interval
      */
     public function __construct(
@@ -67,6 +73,7 @@ class BatchConsumer implements ConsumerInterface
         QueueRepository $queueRepository,
         MergerFactory $mergerFactory,
         EnvelopeFactory $envelopeFactory,
+        Resource $resource,
         $interval = 5
     ) {
         $this->amqpConfig = $amqpConfig;
@@ -75,6 +82,7 @@ class BatchConsumer implements ConsumerInterface
         $this->envelopeFactory = $envelopeFactory;
         $this->mergerFactory = $mergerFactory;
         $this->interval = $interval;
+        $this->resource = $resource;
     }
 
     /**
@@ -129,9 +137,18 @@ class BatchConsumer implements ConsumerInterface
     private function runDaemonMode($queue, $merger)
     {
         while (true) {
-            $messages = $this->getAllMessages($queue);
-            $this->processMessages($queue, $merger, $messages);
-
+            try {
+                $this->resource->getConnection()->beginTransaction();
+                $messages = $this->getAllMessages($queue);
+                $decodedMessages = $this->decodeMessages($messages);
+                $mergedMessages = $merger->merge($decodedMessages);
+                $this->dispatchMessage($mergedMessages);
+                $this->acknowledgeAll($queue, $messages);
+                $this->resource->getConnection()->commit();
+            } catch (\Exception $e) {
+                $this->resource->getConnection()->rollBack();
+                $this->rejectAll($queue, $messages);
+            }
             sleep($this->interval);
         }
     }
@@ -150,9 +167,18 @@ class BatchConsumer implements ConsumerInterface
             ? $maxNumberOfMessages
             : $this->configuration->getMaxMessages() ?: 1;
 
-        $messages = $this->getMessages($queue, $count);
-
-        $this->processMessages($queue, $merger, $messages);
+        try {
+            $this->resource->getConnection()->beginTransaction();
+            $messages = $this->getMessages($queue, $count);
+            $decodedMessages = $this->decodeMessages($messages);
+            $mergedMessages = $merger->merge($decodedMessages);
+            $this->dispatchMessage($mergedMessages);
+            $this->acknowledgeAll($queue, $messages);
+            $this->resource->getConnection()->commit();
+        } catch (\Exception $e) {
+            $this->resource->getConnection()->rollBack();
+            $this->rejectAll($queue, $messages);
+        }
     }
 
     /**
@@ -212,25 +238,6 @@ class BatchConsumer implements ConsumerInterface
         }
     }
 
-    /**
-     * @param QueueInterface $queue
-     * @param MergerInterface $merger
-     * @param EnvelopeInterface[] $messages
-     * @return void
-     */
-    private function processMessages($queue, $merger, $messages)
-    {
-        if (!empty($messages)) {
-            try {
-                $decodedMessages = $this->decodeMessages($messages);
-                $mergedMessages = $merger->merge($decodedMessages);
-                $this->dispatchMessage($mergedMessages);
-                $this->acknowledgeAll($queue, $messages);
-            } catch (\Exception $e) {
-                $this->rejectAll($queue, $messages);
-            }
-        }
-    }
 
     /**
      * @param EnvelopeInterface[] $messages
