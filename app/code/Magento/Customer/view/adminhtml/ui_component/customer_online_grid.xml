@@ -267,18 +267,18 @@
                 </item>
             </argument>
         </column>
-        <column name="remote_addr">
-            <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
-                </item>
-                <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="align" xsi:type="string">left</item>
-                    <item name="label" xsi:type="string" translate="true">IP Address</item>
-                </item>
-            </argument>
-        </column>
+        <!--<column name="remote_addr">-->
+            <!--<argument name="data" xsi:type="array">-->
+                <!--<item name="js_config" xsi:type="array">-->
+                    <!--<item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>-->
+                <!--</item>-->
+                <!--<item name="config" xsi:type="array">-->
+                    <!--<item name="dataType" xsi:type="string">text</item>-->
+                    <!--<item name="align" xsi:type="string">left</item>-->
+                    <!--<item name="label" xsi:type="string" translate="true">IP Address</item>-->
+                <!--</item>-->
+            <!--</argument>-->
+        <!--</column>-->
         <column name="first_visit_at">
             <argument name="data" xsi:type="array">
                 <item name="js_config" xsi:type="array">
@@ -315,17 +315,17 @@
                 </item>
             </argument>
         </column>
-        <column name="last_url">
-            <argument name="data" xsi:type="array">
-                <item name="js_config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
-                </item>
-                <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="align" xsi:type="string">left</item>
-                    <item name="label" xsi:type="string" translate="true">Last URL</item>
-                </item>
-            </argument>
-        </column>
+        <!--<column name="last_url">-->
+            <!--<argument name="data" xsi:type="array">-->
+                <!--<item name="js_config" xsi:type="array">-->
+                    <!--<item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>-->
+                <!--</item>-->
+                <!--<item name="config" xsi:type="array">-->
+                    <!--<item name="dataType" xsi:type="string">text</item>-->
+                    <!--<item name="align" xsi:type="string">left</item>-->
+                    <!--<item name="label" xsi:type="string" translate="true">Last URL</item>-->
+                <!--</item>-->
+            <!--</argument>-->
+        <!--</column>-->
     </columns>
 </listing>
