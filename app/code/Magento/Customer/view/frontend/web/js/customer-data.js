@@ -93,6 +93,7 @@ define([
                 storageInvalidation.remove(sectionName);
                 buffer.notify(sectionName, sectionData);
             });
+            storage.set('max_section_id', maxSectionId);
             sectionDataIds['max_section_id'] = maxSectionId;
             $.cookieStorage.set('section_data_ids', sectionDataIds);
         },
@@ -106,8 +107,10 @@ define([
 
     var customerData = {
         init: function() {
-            if (_.isEmpty(storage.keys()) || this.needReload()) {
+            if (_.isEmpty(storage.keys())) {
                 this.reload([], false);
+            } else if (this.needReload()) {
+                this.reload(this.getExpiredKeys(), false);
             } else {
                 _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
                     buffer.notify(sectionName, sectionData);
@@ -118,10 +121,26 @@ define([
             }
         },
         needReload: function () {
-            if (!storage.get('max_section_id') || !$.cookieStorage.get('section_data_ids')) {
+            var cookieSections = $.cookieStorage.get('section_data_ids');
+            if (!storage.get('max_section_id') || typeof cookieSections != 'object') {
                 return true;
             }
-            return storage.get('max_section_id') < $.cookieStorage.get('section_data_ids')['max_section_id'];
+            return storage.get('max_section_id') < cookieSections['max_section_id'];
+        },
+        getExpiredKeys: function() {
+            var cookieSections = $.cookieStorage.get('section_data_ids');
+
+            if (!storage.get('max_section_id') || typeof cookieSections != 'object') {
+                return [];
+            }
+            var storageVal, name, expiredKeys = [];
+            for (name in cookieSections) {
+                storageVal = storage.get(name);
+                if (typeof storageVal == 'object' && cookieSections[name] !=  storage.get(name)['data_id']) {
+                    expiredKeys.push(name);
+                }
+            }
+            return expiredKeys;
         },
         get: function (sectionName) {
             return buffer.get(sectionName);
