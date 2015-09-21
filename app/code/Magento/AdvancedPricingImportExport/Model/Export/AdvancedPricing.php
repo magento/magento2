@@ -54,7 +54,6 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      */
     protected $_priceWebsite = [
         ImportAdvancedPricing::COL_TIER_PRICE_WEBSITE,
-        ImportAdvancedPricing::COL_GROUP_PRICE_WEBSITE,
     ];
 
     /**
@@ -64,7 +63,6 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      */
     protected $_priceCustomerGroup = [
         ImportAdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP,
-        ImportAdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP,
     ];
 
     /**
@@ -74,9 +72,6 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      */
     protected $templateExportData = [
         ImportAdvancedPricing::COL_SKU => '',
-        ImportAdvancedPricing::COL_GROUP_PRICE_WEBSITE => '',
-        ImportAdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP => '',
-        ImportAdvancedPricing::COL_GROUP_PRICE => '',
         ImportAdvancedPricing::COL_TIER_PRICE_WEBSITE => '',
         ImportAdvancedPricing::COL_TIER_PRICE_CUSTOMER_GROUP => '',
         ImportAdvancedPricing::COL_TIER_PRICE_QTY => '',
@@ -333,17 +328,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
         if (isset($this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP])) {
             $exportFilter = $this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP];
         }
-        if ($table == ImportAdvancedPricing::TABLE_GROUPED_PRICE) {
-            $selectFields = [
-                ImportAdvancedPricing::COL_SKU => 'cpe.sku',
-                ImportAdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'ap.website_id',
-                ImportAdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP => 'ap.customer_group_id',
-                ImportAdvancedPricing::COL_GROUP_PRICE => 'ap.value'
-            ];
-            if (isset($exportFilter) && !empty($exportFilter)) {
-                $price = $exportFilter['group_price'];
-            }
-        } elseif ($table == ImportAdvancedPricing::TABLE_TIER_PRICE) {
+        if ($table == ImportAdvancedPricing::TABLE_TIER_PRICE) {
             $selectFields = [
                 ImportAdvancedPricing::COL_SKU => 'cpe.sku',
                 ImportAdvancedPricing::COL_TIER_PRICE_WEBSITE => 'ap.website_id',

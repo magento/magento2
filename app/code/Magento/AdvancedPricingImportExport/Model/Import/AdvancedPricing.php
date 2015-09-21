@@ -32,15 +32,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
 
     const COL_TIER_PRICE = 'tier_price';
 
-    const COL_GROUP_PRICE_WEBSITE = 'group_price_website';
-
-    const COL_GROUP_PRICE_CUSTOMER_GROUP = 'group_price_customer_group';
-
-    const COL_GROUP_PRICE = 'group_price';
-
     const TABLE_TIER_PRICE = 'catalog_product_entity_tier_price';
-
-    const TABLE_GROUPED_PRICE = 'catalog_product_entity_group_price';
 
     const DEFAULT_ALL_GROUPS_GROUPED_PRICE_VALUE = '0';
 
@@ -49,8 +41,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     const VALIDATOR_MAIN = 'validator';
 
     const VALIDATOR_WEBSITE = 'validator_website';
-
-    const VALIDATOR_GROUP_PRICE = 'validator_group_price';
 
     /**
      * Validation failure message template definitions
@@ -65,9 +55,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         ValidatorInterface::ERROR_INVALID_TIER_PRICE_SITE => 'Tier Price data website is invalid',
         ValidatorInterface::ERROR_INVALID_TIER_PRICE_GROUP => 'Tier Price customer group is invalid',
         ValidatorInterface::ERROR_TIER_DATA_INCOMPLETE => 'Tier Price data is incomplete',
-        ValidatorInterface::ERROR_INVALID_GROUP_PRICE_SITE => 'Group Price data website is invalid',
-        ValidatorInterface::ERROR_INVALID_GROUP_PRICE_GROUP => 'Group Price customer group is invalid',
-        ValidatorInterface::ERROR_GROUP_PRICE_DATA_INCOMPLETE => 'Group Price data is incomplete',
         ValidatorInterface::ERROR_INVALID_ATTRIBUTE_DECIMAL =>
             'Value for \'%s\' attribute contains incorrect value, acceptable values are in decimal format',
     ];
@@ -90,9 +77,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         self::COL_TIER_PRICE_CUSTOMER_GROUP,
         self::COL_TIER_PRICE_QTY,
         self::COL_TIER_PRICE,
-        self::COL_GROUP_PRICE_WEBSITE,
-        self::COL_GROUP_PRICE_CUSTOMER_GROUP,
-        self::COL_GROUP_PRICE,
     ];
 
     /**

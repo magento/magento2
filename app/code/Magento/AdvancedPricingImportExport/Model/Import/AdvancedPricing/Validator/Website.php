@@ -72,9 +72,6 @@ class Website extends AbstractImportValidator implements RowValidatorInterface
         if (isset($value[AdvancedPricing::COL_TIER_PRICE]) && !empty($value[AdvancedPricing::COL_TIER_PRICE])) {
             $valid *= $this->isWebsiteValid($value, AdvancedPricing::COL_TIER_PRICE_WEBSITE);
         }
-        if (isset($value[AdvancedPricing::COL_GROUP_PRICE]) && !empty($value[AdvancedPricing::COL_GROUP_PRICE])) {
-            $valid *= $this->isWebsiteValid($value, AdvancedPricing::COL_GROUP_PRICE_WEBSITE);
-        }
         if (!$valid) {
             $this->_addMessages([self::ERROR_INVALID_WEBSITE]);
         }

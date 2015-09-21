@@ -68,7 +68,6 @@
             <argument name="catalogSession" xsi:type="object">Magento\Catalog\Model\Session\Proxy</argument>
             <argument name="reindexPriceIndexerData" xsi:type="array">
                 <item name="byDataResult" xsi:type="array">
-                    <item name="group_price_changed" xsi:type="string">group_price_changed</item>
                     <item name="tier_price_changed" xsi:type="string">tier_price_changed</item>
                 </item>
                 <item name="byDataChange" xsi:type="array">

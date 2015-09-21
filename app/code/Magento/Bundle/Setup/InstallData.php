@@ -51,7 +51,6 @@ class InstallData implements InstallDataInterface
             'cost',
             'tier_price',
             'weight',
-            'group_price',
         ];
         foreach ($fieldList as $field) {
             $applyTo = explode(
