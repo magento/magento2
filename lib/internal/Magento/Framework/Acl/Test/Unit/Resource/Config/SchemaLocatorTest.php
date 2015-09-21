@@ -15,11 +15,11 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
         $urnResolverMock = $this->getMock('Magento\Framework\Config\Dom\UrnResolver', [], [], '', false);
         $urnResolverMock->expects($this->once())
             ->method('getRealPath')
-            ->with('urn:magento:library:framework:Acl/etc/acl.xsd')
-            ->willReturn($urnResolver->getRealPath('urn:magento:library:framework:Acl/etc/acl.xsd'));
+            ->with('urn:magento:framework:Acl/etc/acl.xsd')
+            ->willReturn($urnResolver->getRealPath('urn:magento:framework:Acl/etc/acl.xsd'));
         $schemaLocator = new \Magento\Framework\Acl\Resource\Config\SchemaLocator($urnResolverMock);
         $this->assertEquals(
-            $urnResolver->getRealPath('urn:magento:library:framework:Acl/etc/acl.xsd'),
+            $urnResolver->getRealPath('urn:magento:framework:Acl/etc/acl.xsd'),
             $schemaLocator->getSchema()
         );
     }

@@ -308,10 +308,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetSchemaFile()
     {
         $this->_initConfig();
-        $path = $this->urnResolver->getRealPath('urn:magento:library:framework:Validator/etc/acvalidationl.xsd');
+        $path = $this->urnResolver->getRealPath('urn:magento:framework:Validator/etc/acvalidationl.xsd');
         $this->urnResolverMock->expects($this->once())
             ->method('getRealPath')
-            ->with('urn:magento:library:framework:Validator/etc/acvalidationl.xsd')
+            ->with('urn:magento:framework:Validator/etc/acvalidationl.xsd')
             ->willReturn($path);
         $this->assertEquals($path, $this->_config->getSchemaFile());
         $this->assertFileExists($this->_config->getSchemaFile());
