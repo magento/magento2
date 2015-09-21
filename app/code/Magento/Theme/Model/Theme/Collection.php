@@ -305,7 +305,7 @@ class Collection extends \Magento\Framework\Data\Collection implements ListInter
         if ($themeDir->isExist('theme.xml')) {
             $configContent = $themeDir->readFile('theme.xml');
         } else {
-            $configContent = null;
+            $configContent = '';
         }
         return $this->themeConfigFactory->create(['configContent' => $configContent]);
     }

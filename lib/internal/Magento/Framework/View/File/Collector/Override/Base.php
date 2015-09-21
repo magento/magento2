@@ -20,26 +20,36 @@ use Magento\Framework\View\Helper\PathPattern;
 class Base implements CollectorInterface
 {
     /**
+     * Pattern helper
+     *
      * @var PathPattern
      */
     private $pathPatternHelper;
 
     /**
+     * File factory
+     *
      * @var FileFactory
      */
     private $fileFactory;
 
     /**
+     * Directory factory
+     *
      * @var ReadFactory
      */
     private $readDirFactory;
 
     /**
+     * Component registrar
+     *
      * @var ComponentRegistrarInterface
      */
     private $componentRegistrar;
 
     /**
+     * Sub-directory path
+     *
      * @var string
      */
     private $subDir;
@@ -70,7 +80,7 @@ class Base implements CollectorInterface
     /**
      * Retrieve files
      *
-     * @param \Magento\Framework\View\Design\ThemeInterface $theme
+     * @param ThemeInterface $theme
      * @param string $filePath
      * @return \Magento\Framework\View\File[]
      */

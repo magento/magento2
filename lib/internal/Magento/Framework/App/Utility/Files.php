@@ -7,6 +7,7 @@
 namespace Magento\Framework\App\Utility;
 
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\DirSearch;
 
 /**
  * A helper to gather specific kind of files in Magento application
@@ -17,6 +18,8 @@ use Magento\Framework\Component\ComponentRegistrar;
 class Files
 {
     /**
+     * Component registrar
+     *
      * @var ComponentRegistrar
      */
     protected $componentRegistrar;
@@ -37,6 +40,13 @@ class Files
      * @var string
      */
     protected $_path = '';
+
+    /**
+     * Dir search for registered components
+     *
+     * @var DirSearch
+     */
+    private $dirSearch;
 
     /**
      * Setter for an instance of self
@@ -84,11 +94,13 @@ class Files
      * Set path to source code
      *
      * @param ComponentRegistrar $componentRegistrar
+     * @param DirSearch $dirSearch
      * @param string $pathToSource
      */
-    public function __construct(ComponentRegistrar $componentRegistrar, $pathToSource)
+    public function __construct(ComponentRegistrar $componentRegistrar, DirSearch $dirSearch, $pathToSource)
     {
         $this->componentRegistrar = $componentRegistrar;
+        $this->dirSearch = $dirSearch;
         $this->_path = $pathToSource;
     }
 
@@ -344,7 +356,7 @@ class Files
     ) {
         $cacheKey = __METHOD__ . '|' . $this->_path . '|' . serialize(func_get_args());
         if (!isset(self::$_cache[$cacheKey])) {
-            $files = $this->_getConfigFilesList($fileNamePattern, 'module');
+            $files = $this->dirSearch->collectFiles(ComponentRegistrar::MODULE, "/etc/{$fileNamePattern}");
             $files = array_filter(
                 $files,
                 function ($file) use ($excludedFileNames) {
@@ -371,7 +383,10 @@ class Files
     {
         $cacheKey = __METHOD__ . '|' . $this->_path . '|' . serialize(func_get_args());
         if (!isset(self::$_cache[$cacheKey])) {
-            self::$_cache[$cacheKey] = $this->_getConfigFilesList($fileNamePattern, 'theme');
+            self::$_cache[$cacheKey] = $this->dirSearch->collectFiles(
+                ComponentRegistrar::THEME,
+                "/etc/{$fileNamePattern}"
+            );
         }
         if ($asDataSet) {
             return self::composeDataSets(self::$_cache[$cacheKey]);
@@ -667,7 +682,7 @@ class Files
     }
 
     /**
-     * Get list of static view files that are subject of Magento static view files preprocessing system
+     * Get list of static view files that are subject of Magento static view files pre-processing system
      *
      * @param string $filePattern
      * @return array
@@ -1217,30 +1232,6 @@ class Files
     }
 
     /**
-     * Helper function for finding config files in various app directories such as 'code' or 'design'.
-     *
-     * @param string $fileNamePattern can be a glob pattern that represents files to be found.
-     * @param string $componentType directory under app folder in which to search (Ex: 'code' or 'design')
-     * @return array of strings that represent paths to config files
-     */
-    protected function _getConfigFilesList($fileNamePattern, $componentType)
-    {
-        $pathPattern = $componentType == 'theme' ? "/*/*/*/etc/{$fileNamePattern}" : "/etc/{$fileNamePattern}";
-        switch ($componentType) {
-            case 'module':
-                $files = [];
-                foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
-                    $files = array_merge($files, glob($moduleDir . $pathPattern, GLOB_NOSORT | GLOB_BRACE));
-                }
-                return $files;
-            default:
-                // TODO: implement for other component type
-                return glob($this->_path . '/app/' . $componentType . $pathPattern, GLOB_NOSORT | GLOB_BRACE);
-        }
-    }
-
-
-    /**
      * Returns array of PHP-files for specified module
      *
      * @param string $module
@@ -1276,29 +1267,13 @@ class Files
     {
         $key = __METHOD__ . '|' . $this->_path . '|' . serialize(func_get_args());
         if (!isset(self::$_cache[$key])) {
-            switch ($componentType) {
-                case 'module':
-                    $files = $this->getFilesSubset(
-                        $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE),
-                        'composer.json',
-                        $this->getModuleTestDirs()
-                    );
-                    break;
-                case 'language':
-                    $files = $this->getFilesSubset(
-                        $this->componentRegistrar->getPaths(ComponentRegistrar::LANGUAGE),
-                        'composer.json',
-                        []
-                    );
-                    break;
-                default:
-                    // TODO: implement for other component type
-                    $files = $this->getFilesSubset(
-                        ["{$this->_path}/app/{$componentType}"],
-                        'composer.json',
-                        $this->getModuleTestDirs()
-                    );
-            }
+            $excludes = $componentType == ComponentRegistrar::MODULE ? $this->getModuleTestDirs() : [];
+            $files = $this->getFilesSubset(
+                $this->componentRegistrar->getPaths($componentType),
+                'composer.json',
+                $excludes
+            );
+
             self::$_cache[$key] = $files;
         }
 

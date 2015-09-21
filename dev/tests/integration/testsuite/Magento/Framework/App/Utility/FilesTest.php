@@ -32,7 +32,9 @@ class FilesTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $componentRegistrar = new ComponentRegistrar();
-        $this->model = new Files($componentRegistrar, BP);
+        $dirSearch = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Framework\Component\DirSearch');
+        $this->model = new Files($componentRegistrar, $dirSearch, BP);
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
             $this->moduleTests[] = '#' . $moduleDir . '/Test#';
         }
@@ -81,6 +83,24 @@ class FilesTest extends \PHPUnit_Framework_TestCase
         $classFiles = preg_grep($this->setupTestsDir, $classFiles, PREG_GREP_INVERT);
 
         $this->assertEmpty($classFiles);
+    }
+
+    public function testGetConfigFiles()
+    {
+        $actual = $this->model->getConfigFiles('*.xml');
+        $this->assertNotEmpty($actual);
+        foreach ($actual as $file) {
+            $this->assertStringEndsWith('.xml', $file[0]);
+        }
+    }
+
+    public function testGetLayoutConfigFiles()
+    {
+        $actual = $this->model->getLayoutConfigFiles('*.xml');
+        $this->assertNotEmpty($actual);
+        foreach ($actual as $file) {
+            $this->assertStringEndsWith('.xml', $file[0]);
+        }
     }
 
     /**

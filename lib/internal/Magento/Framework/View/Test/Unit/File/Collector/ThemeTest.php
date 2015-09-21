@@ -11,7 +11,16 @@ use Magento\Framework\View\File\Factory;
 
 class ThemeTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Theme path
+     *
+     * @var string
+     */
     private $themePath = 'frontend/Magento/theme';
+
+    /**
+     * Full theme path
+     */
     const FULL_THEME_PATH = '/full/theme/path';
 
     /**

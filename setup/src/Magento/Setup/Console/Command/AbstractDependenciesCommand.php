@@ -7,6 +7,9 @@ namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\DirSearch;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
+use Magento\Framework\Filesystem\DriverPool;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -67,7 +70,8 @@ abstract class AbstractDependenciesCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            Files::setInstance(new Files(new ComponentRegistrar(), BP));
+            $dirSearch = new DirSearch(new ComponentRegistrar(), new ReadFactory(new DriverPool()));
+            Files::setInstance(new Files(new ComponentRegistrar(), $dirSearch, BP));
             $this->buildReport($input->getOption(self::INPUT_KEY_OUTPUT));
             $output->writeln('<info>Report successfully processed.</info>');
         } catch (\Exception $e) {
