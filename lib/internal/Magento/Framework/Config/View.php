@@ -11,6 +11,24 @@ namespace Magento\Framework\Config;
 
 class View extends \Magento\Framework\Config\AbstractXml
 {
+    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    protected $urnResolver;
+
+    /**
+     * Instantiate with the list of files to merge
+     *
+     * @param array $configFiles
+     * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
+     * @throws \InvalidArgumentException
+     */
+    public function __construct(
+        $configFiles,
+        \Magento\Framework\Config\Dom\UrnResolver $urnResolver
+    ) {
+        $this->urnResolver = $urnResolver;
+        parent::__construct($configFiles);
+    }
+
     /**
      * Path to view.xsd
      *
@@ -18,7 +36,7 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     public function getSchemaFile()
     {
-        return __DIR__ . '/etc/view.xsd';
+        return $this->urnResolver->getRealPath('urn:magento:framework:Config/etc/view.xsd');
     }
 
     /**

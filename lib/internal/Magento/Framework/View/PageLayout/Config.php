@@ -11,6 +11,22 @@ namespace Magento\Framework\View\PageLayout;
  */
 class Config extends \Magento\Framework\Config\AbstractXml
 {
+    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    protected $urnResolver;
+
+    /**
+     * Instantiate with the list of files to merge
+     *
+     * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
+     * @param array $configFiles
+     * @throws \InvalidArgumentException
+     */
+    public function __construct(\Magento\Framework\Config\Dom\UrnResolver $urnResolver, $configFiles)
+    {
+        $this->urnResolver = $urnResolver;
+        parent::__construct($configFiles);
+    }
+
     /**
      * Get absolute path to the XML-schema file
      *
@@ -18,7 +34,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
      */
     public function getSchemaFile()
     {
-        return __DIR__ . '/etc/layouts.xsd';
+        return $this->urnResolver->getRealPath('urn:magento:framework:View/PageLayout/etc/layouts.xsd');
     }
 
     /**

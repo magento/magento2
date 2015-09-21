@@ -25,14 +25,21 @@ class Theme
      */
     protected $_data;
 
+    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    protected $urnResolver;
+
     /**
      * Constructor
      *
      * @param string $configContent
+     * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
      */
-    public function __construct($configContent = null)
-    {
+    public function __construct(
+        $configContent = null,
+        \Magento\Framework\Config\Dom\UrnResolver $urnResolver
+    ) {
         $this->_data = $this->_extractData($configContent);
+        $this->urnResolver = $urnResolver;
     }
 
     /**
@@ -42,7 +49,7 @@ class Theme
      */
     public function getSchemaFile()
     {
-        return __DIR__ . '/etc/theme.xsd';
+        return $this->urnResolver->getRealPath('urn:magento:framework:Config/etc/theme.xsd');
     }
 
     /**
