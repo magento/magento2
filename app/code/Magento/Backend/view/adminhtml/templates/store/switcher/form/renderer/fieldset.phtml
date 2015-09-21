@@ -13,13 +13,13 @@
 <?php endif; ?>
 
 <?php if (!$_element->getNoContainer()): ?>
-    <fieldset class="fieldset <?php /* @escapeNotVerified */ echo $_element->getClass() ?>" id="<?php echo $_element->getHtmlId() ?>">
+    <fieldset class="admin__fieldset fieldset <?php /* @escapeNotVerified */ echo $_element->getClass() ?>" id="<?php echo $_element->getHtmlId() ?>">
 <?php endif; ?>
 
     <?php if ($_element->getLegend()): ?>
-        <legend class="legend">
+        <legend class="admin__legend legend">
             <span><?php /* @escapeNotVerified */ echo $_element->getLegend() ?></span>
-        </legend>
+        </legend><br/>
         <?php /* @escapeNotVerified */ echo $_element->getHeaderBar() ?>
     <?php endif; ?>
         <?php echo $block->getHintHtml() ?>
