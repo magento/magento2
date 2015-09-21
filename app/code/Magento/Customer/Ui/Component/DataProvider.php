@@ -66,7 +66,7 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
         $data = parent::getData();
         foreach ($this->attributeRepository->getList() as $attributeCode => $attributeData) {
             foreach ($data['items'] as &$item) {
-                if (isset($item[$attributeCode])) {
+                if (isset($item[$attributeCode]) && !empty($attributeData[AttributeMetadataInterface::OPTIONS])) {
                     $item[$attributeCode] = explode(',', $item[$attributeCode]);
                 }
             }

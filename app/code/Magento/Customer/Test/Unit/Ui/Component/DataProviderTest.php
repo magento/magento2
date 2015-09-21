@@ -94,6 +94,12 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 'attribute-code' => [
                     'frontend_input' => 'input',
                     'visible' => true,
+                    'options' => [
+                        [
+                            'label' => '',
+                            'value' => ''
+                        ]
+                    ]
                 ]
             ]);
         $this->assertEquals(
