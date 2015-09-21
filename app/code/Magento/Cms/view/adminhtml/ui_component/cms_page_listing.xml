@@ -92,6 +92,9 @@
                         </item>
                     </item>
                 </item>
+                <item name="observers" xsi:type="array">
+                    <item name="column" xsi:type="string">column</item>
+                </item>
             </argument>
             <filterSelect name="store_id">
                 <argument name="optionsProvider" xsi:type="configurableObject">

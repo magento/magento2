@@ -197,7 +197,7 @@
                 </item>
                 <item name="editorConfig" xsi:type="array">
                     <item name="selectProvider" xsi:type="string">customer_listing.customer_listing.customer_columns.ids</item>
-                    <item name="enabled" xsi:type="boolean">true</item>
+                    <item name="enabled" xsi:type="boolean">false</item>
                     <item name="indexField" xsi:type="string">entity_id</item>
                     <item name="clientConfig" xsi:type="array">
                         <item name="saveUrl" xsi:type="url" path="customer/index/inlineEdit"/>
