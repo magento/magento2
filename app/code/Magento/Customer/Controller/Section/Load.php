@@ -33,13 +33,13 @@ class Load extends \Magento\Framework\App\Action\Action
     /**
      * @param Context $context
      * @param JsonFactory $resultJsonFactory
-     * @param Identifier $sectionIdentifier
+     * @param \Magento\Customer\CustomerData\Section\Identifier $sectionIdentifier
      * @param SectionPoolInterface $sectionPool
      */
     public function __construct(
         Context $context,
         JsonFactory $resultJsonFactory,
-        \Magento\Customer\Controller\Section\Identifier $sectionIdentifier,
+        \Magento\Customer\CustomerData\Section\Identifier $sectionIdentifier,
         SectionPoolInterface $sectionPool
     ) {
         parent::__construct($context);

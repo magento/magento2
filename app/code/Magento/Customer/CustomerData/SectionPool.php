@@ -28,7 +28,7 @@ class SectionPool implements SectionPoolInterface
     protected $sectionSourceMap;
 
     /**
-     * @var \Magento\Customer\Controller\Section\Identifier
+     * @var \Magento\Customer\CustomerData\Section\Identifier
      */
     protected $identifier;
 
@@ -36,12 +36,12 @@ class SectionPool implements SectionPoolInterface
      * Construct
      *
      * @param ObjectManagerInterface $objectManager
-     * @param \Magento\Customer\Controller\Section\Identifier $identifier
+     * @param \Magento\Customer\CustomerData\Section\Identifier $identifier
      * @param array $sectionSourceMap
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
-        \Magento\Customer\Controller\Section\Identifier $identifier,
+        \Magento\Customer\CustomerData\Section\Identifier $identifier,
         array $sectionSourceMap = []
     ) {
         $this->objectManager = $objectManager;
