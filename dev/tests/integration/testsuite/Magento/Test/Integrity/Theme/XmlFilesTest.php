@@ -5,12 +5,19 @@
  */
 namespace Magento\Test\Integrity\Theme;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Component\ComponentRegistrar;
 
 class XmlFilesTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var \Magento\Framework\Config\Dom\UrnResolver */
+    protected $urnResolver;
+
     const NO_VIEW_XML_FILES_MARKER = 'no-view-xml';
+
+    protected function setUp()
+    {
+        $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+    }
 
     /**
      * @param string $file
@@ -20,7 +27,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
     {
         $this->_validateConfigFile(
             $file,
-            $this->getPath(DirectoryList::LIB_INTERNAL) . '/Magento/Framework/Config/etc/view.xsd'
+            $this->urnResolver->getRealPath('urn:magento:framework:Config/etc/view.xsd')
         );
     }
 
@@ -72,7 +79,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
     {
         $this->_validateConfigFile(
             $file,
-            $this->getPath(DirectoryList::LIB_INTERNAL) . '/Magento/Framework/Config/etc/theme.xsd'
+            $this->urnResolver->getRealPath('urn:magento:framework:Config/etc/theme.xsd')
         );
     }
 
@@ -123,20 +130,5 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
             $message .= "{$error->message} Line: {$error->line}\n";
         }
         $this->assertTrue($result, $message);
-    }
-
-    /**
-     * Get directory path by code
-     *
-     * @param string $code
-     * @return string
-     */
-    protected function getPath($code)
-    {
-        /** @var \Magento\Framework\Filesystem $filesystem */
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Filesystem'
-        );
-        return $filesystem->getDirectoryRead($code)->getAbsolutePath();
     }
 }

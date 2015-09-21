@@ -21,8 +21,9 @@ class XsdTest extends \PHPUnit_Framework_TestCase
 
     public static function setUpBeforeClass()
     {
-        self::$_schemaPath = BP . '/app/code/Magento/Sales/etc/pdf.xsd';
-        self::$_schemaFilePath = BP . '/app/code/Magento/Sales/etc/pdf_file.xsd';
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        self::$_schemaPath = $urnResolver->getRealPath('urn:magento:module:Magento_Sales:etc/pdf.xsd');
+        self::$_schemaFilePath = $urnResolver->getRealPath('urn:magento:module:Magento_Sales:etc/pdf_file.xsd');
     }
 
     /**

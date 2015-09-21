@@ -6,6 +6,7 @@
 namespace Magento\Framework\View\Element\UiComponent\Config;
 
 use Magento\Framework\Config\Dom;
+use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\Module\Dir\Reader as DirectoryReader;
 
 /**
@@ -56,32 +57,25 @@ class DomMerger implements DomMergerInterface
     /**
      * Build DOM with initial XML contents and specifying identifier attributes for merging
      *
-     * Format of $schemaFileType: array('etc', 'sql', 'data', 'i18n', 'view', 'Controller')
-     * Format of $schemaFileModule: 'Magento_XXXXX'
-     * Format of $schemaFileName: 'schema.xsd'
+     * Format of $schema: Absolute schema file path or URN
      * Format of $idAttributes: array('name', 'id')
      * Format of $contextXPath: array('/config/ui')
      * The path to ID attribute name should not include any attribute notations or modifiers -- only node names
      *
-     * @param string $schemaFileType
-     * @param string $schemaFileModule
-     * @param string $schemaFileName
-     * @param DirectoryReader $directoryReader
+     * @param UrnResolver $urnResolver
+     * @param string $schema Absolute schema file path or URN
      * @param bool $isMergeSimpleXMLElement
      * @param array $contextXPath
      * @param array $idAttributes
      */
     public function __construct(
-        DirectoryReader $directoryReader,
-        $schemaFileType,
-        $schemaFileModule,
-        $schemaFileName,
+        UrnResolver $urnResolver,
+        $schema,
         $isMergeSimpleXMLElement = false,
         array $contextXPath = [],
         array $idAttributes = []
     ) {
-        $this->schemaFilePath = $directoryReader->getModuleDir($schemaFileType, $schemaFileModule) . '/'
-            . trim($schemaFileName, '/');
+        $this->schemaFilePath = $urnResolver->getRealPath($schema);
         $this->isMergeSimpleXMLElement = $isMergeSimpleXMLElement;
         $this->contextXPath = $contextXPath;
         $this->idAttributes = $idAttributes;
@@ -344,18 +338,7 @@ class DomMerger implements DomMergerInterface
         $schemaFilePath = $schemaFilePath !== null ? $schemaFilePath : $this->schemaFilePath;
         libxml_use_internal_errors(true);
         try {
-            $result = $domDocument->schemaValidate($schemaFilePath);
-            $errors = [];
-            if (!$result) {
-                $validationErrors = libxml_get_errors();
-                if (count($validationErrors)) {
-                    foreach ($validationErrors as $error) {
-                        $errors[] = $this->renderErrorMessage($error, static::ERROR_FORMAT_DEFAULT);
-                    }
-                } else {
-                    $errors[] = 'Unknown validation error';
-                }
-            }
+            $errors = \Magento\Framework\Config\Dom::validateDomDocument($domDocument, $schemaFilePath);
         } catch (\Exception $exception) {
             libxml_use_internal_errors(false);
             throw $exception;

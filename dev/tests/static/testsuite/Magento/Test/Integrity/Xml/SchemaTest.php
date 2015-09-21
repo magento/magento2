@@ -7,6 +7,7 @@
 namespace Magento\Test\Integrity\Xml;
 
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Config\Dom\UrnResolver;
 
 class SchemaTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,24 +27,27 @@ class SchemaTest extends \PHPUnit_Framework_TestCase
                 $this->assertEmpty($errors, print_r($errors, true));
 
                 $schemaLocations = [];
-                preg_match('/xsi:noNamespaceSchemaLocation=\s*"([^"]+)"/s', $xmlFile, $schemaLocations);
+                preg_match('/xsi:noNamespaceSchemaLocation=\s*"(urn:[^"]+)"/s', $xmlFile, $schemaLocations);
                 $this->assertEquals(
                     2,
                     count($schemaLocations),
                     'The XML file at ' . $filename . ' does not have a schema properly defined.  It should '
-                    . 'have a xsi:noNamespaceSchemaLocation attribute defined with a relative path.  E.g. '
-                    . 'xsi:noNamespaceSchemaLocation="../../../lib/internal/Magento/Framework/etc/something.xsd"'
+                    . 'have a xsi:noNamespaceSchemaLocation attribute defined with a URN path.  E.g. '
+                    . 'xsi:noNamespaceSchemaLocation="urn:magento:framework:etc/something.xsd"'
                 );
 
-                $schemaFile = dirname($filename) . '/' . $schemaLocations[1];
+                try {
+                    $schemaFile = (new UrnResolver())->getRealPath($schemaLocations[1]);
+                    $this->assertFileExists($schemaFile, "$filename refers to an invalid schema $schemaFile.");
+                    $errors = \Magento\TestFramework\Utility\Validator::validateXml($dom, $schemaFile);
+                    $this->assertEmpty(
+                        $errors,
+                        "Error validating $filename against $schemaFile\n" . print_r($errors, true)
+                    );
+                } catch (\UnexpectedValueException $e) {
+                    $this->fail($e->getMessage());
+                }
 
-                $this->assertFileExists($schemaFile, "$filename refers to an invalid schema $schemaFile.");
-
-                $errors = \Magento\TestFramework\Utility\Validator::validateXml($dom, $schemaFile);
-                $this->assertEmpty(
-                    $errors,
-                    "Error validating $filename against $schemaFile\n" . print_r($errors, true)
-                );
             },
             $this->getXmlFiles()
         );

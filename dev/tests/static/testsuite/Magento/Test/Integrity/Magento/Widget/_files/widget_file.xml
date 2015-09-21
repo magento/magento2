@@ -6,7 +6,7 @@
  */
 -->
 <widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="../../../../../../../../../../app/code/Magento/Widget/etc/widget_file.xsd">
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget_file.xsd">
     <widget id="sales_widget_guestform">
         <parameters>
             <parameter name="test" xsi:type="select">

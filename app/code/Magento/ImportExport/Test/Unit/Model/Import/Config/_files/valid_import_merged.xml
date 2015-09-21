@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../app/code/Magento/ImportExport/etc/import_merged.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_ImportExport:etc/import_merged.xsd">
     <entity name="test_name" label="test_label" model="test" behaviorModel="test" />
     <entity name="test_name2" label="test_label" model="test" behaviorModel="test" />
 </config>

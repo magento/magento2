@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../app/code/Magento/ImportExport/etc/export.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_ImportExport:etc/export.xsd">
     <entity name="product" label="Label_One" model="Model_One" entityAttributeFilterType="product"/>
     <entity name="customer" label="Label_One" model="Model_One" entityAttributeFilterType="customer"/>
     <entityType entity="customer" name="type_one" model="Model_Type_One" />
