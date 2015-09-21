@@ -5,8 +5,10 @@
  */
 namespace Magento\Framework\View\Model\Layout;
 
-use Magento\Framework\View\Model\Layout\Update\Validator;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Filesystem\File\ReadFactory;
+use Magento\Framework\View\Model\Layout\Update\Validator;
 
 /**
  * Layout merge model
@@ -152,6 +154,11 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     protected $handleProcessed = 2;
 
     /**
+     * @var ReadFactory
+     */
+    private $readFactory;
+
+    /**
      * Init merge model
      *
      * @param \Magento\Framework\View\DesignInterface $design
@@ -163,6 +170,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @param \Magento\Framework\View\Model\Layout\Update\Validator $validator
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Filesystem $filesystem
+     * @param ReadFactory $readFactory,
      * @param \Magento\Framework\View\Design\ThemeInterface $theme Non-injectable theme instance
      * @param string $cacheSuffix
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -177,6 +185,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         \Magento\Framework\View\Model\Layout\Update\Validator $validator,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Filesystem $filesystem,
+        ReadFactory $readFactory,
         \Magento\Framework\View\Design\ThemeInterface $theme = null,
         $cacheSuffix = ''
     ) {
@@ -189,6 +198,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         $this->layoutValidator = $validator;
         $this->logger = $logger;
         $this->filesystem = $filesystem;
+        $this->readFactory = $readFactory;
         $this->cacheSuffix = $cacheSuffix;
     }
 
@@ -678,11 +688,11 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         $theme = $this->_getPhysicalTheme($this->theme);
         $updateFiles = $this->fileSource->getFiles($theme, '*.xml');
         $updateFiles = array_merge($updateFiles, $this->pageLayoutFileSource->getFiles($theme, '*.xml'));
-        $dir = $this->filesystem->getDirectoryRead(DirectoryList::ROOT);
         $useErrors = libxml_use_internal_errors(true);
         foreach ($updateFiles as $file) {
-            $filename = $dir->getRelativePath($file->getFilename());
-            $fileStr = $dir->readFile($filename);
+            /** @var $fileReader \Magento\Framework\Filesystem\File\Read   */
+            $fileReader = $this->readFactory->create($file->getFilename(), DriverPool::FILE);
+            $fileStr = $fileReader->readAll($file->getName());
             $fileStr = $this->_substitutePlaceholders($fileStr);
             /** @var $fileXml \Magento\Framework\View\Layout\Element */
             $fileXml = $this->_loadXmlString($fileStr);
