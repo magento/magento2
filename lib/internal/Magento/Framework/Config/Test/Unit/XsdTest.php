@@ -17,14 +17,15 @@ class XsdTest extends \PHPUnit_Framework_TestCase
     {
         $dom = new \DOMDocument();
         $dom->load(__DIR__ . "/_files/{$invalidXmlFile}");
-        libxml_use_internal_errors(true);
-        $result = $dom->schemaValidate(BP . "/lib/internal/Magento/Framework/Config/etc/{$xsdFile}");
+        $schema = __DIR__ . "/../../etc/{$xsdFile}";
 
-        $errorsQty = count(libxml_get_errors());
+        libxml_use_internal_errors(true);
+        $result = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schema);
+        $errorsQty = count($result);
         libxml_use_internal_errors(false);
 
         if ($expectedErrorsQty > 0) {
-            $this->assertFalse($result);
+            $this->assertNotEmpty($result);
         }
         $this->assertEquals($expectedErrorsQty, $errorsQty);
     }

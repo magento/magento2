@@ -22,16 +22,12 @@ class IndexerConfigFilesTest extends \PHPUnit_Framework_TestCase
      *
      * @var string
      */
-    protected $schemeFile;
+    protected $schemaFile;
 
     protected function setUp()
     {
-        /** @var Filesystem $filesystem */
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Filesystem'
-        );
-        $this->schemeFile = $filesystem->getDirectoryRead(DirectoryList::ROOT)
-            ->getAbsolutePath('lib/internal/Magento/Framework/Indexer/etc/indexer.xsd');
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $this->schemaFile = $urnResolver->getRealPath('urn:magento:framework:Indexer/etc/indexer.xsd');
     }
 
     /**
@@ -42,7 +38,7 @@ class IndexerConfigFilesTest extends \PHPUnit_Framework_TestCase
     public function testIndexerConfigFile($file)
     {
         $domConfig = new \Magento\Framework\Config\Dom(file_get_contents($file));
-        $result = $domConfig->validate($this->schemeFile, $errors);
+        $result = $domConfig->validate($this->schemaFile, $errors);
         $message = "Invalid XML-file: {$file}\n";
         foreach ($errors as $error) {
             $message .= "{$error}\n";

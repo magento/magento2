@@ -30,9 +30,9 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
     {
-        $this->_schema = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Config') . '/system.xsd';
-
-        $this->_perFileSchema = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Config') . '/system_file.xsd';
+        $etcDir = $moduleReader->getModuleDir('etc', 'Magento_Config');
+        $this->_schema = $etcDir . '/system.xsd';
+        $this->_perFileSchema = $etcDir . '/system_file.xsd';
     }
 
     /**

@@ -6,7 +6,7 @@
 
 return [
     'config' => [
-        'noNamespaceSchemaLocation' => '../../../../../../../../app/code/Magento/Config/etc/system_file.xsd',
+        'noNamespaceSchemaLocation' => 'urn:magento:module:Magento_Config:etc/system_file.xsd',
         'system' => [
             'tabs' => [
                 'tab_1' => [

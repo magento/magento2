@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<components xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../etc/ui_definition.xsd">
+<components xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_definition.xsd">
     <dataSource class="Magento\Ui\Component\DataSource"/>
     <listing sorting="true" class="Magento\Ui\Component\Listing">
         <argument name="data" xsi:type="array">

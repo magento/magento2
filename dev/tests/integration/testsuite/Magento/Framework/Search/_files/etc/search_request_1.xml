@@ -6,7 +6,7 @@
  */
 -->
 <requests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/Search/etc/search_request.xsd">
+          xsi:noNamespaceSchemaLocation="urn:magento:framework:Search/etc/search_request.xsd">
     <request query="bool_query" index="bool_query_index">
         <dimensions>
             <dimension name="scope" value="default"/>
