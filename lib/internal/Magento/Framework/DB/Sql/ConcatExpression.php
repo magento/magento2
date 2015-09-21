@@ -45,7 +45,7 @@ class ConcatExpression extends \Zend_Db_Expr
 
     /**
      * Returns SQL expression
-     *   TRIM(CONCAT_WS(separator, str1, str2, ...))
+     *   TRIM(CONCAT_WS(separator, IF(str1 <> '', str1, NULL), IF(str2 <> '', str2, NULL) ...))
      *
      * @return string
      */
@@ -61,7 +61,7 @@ class ConcatExpression extends \Zend_Db_Expr
                     . (isset($part['columnName']) ? $part['columnName'] : $key)
                 );
             }
-            $columns[] = $column;
+            $columns[] = $this->adapter->getCheckSql($column . " <> ''", $column, 'NULL');
         }
         return sprintf(
             'TRIM(%s)',
