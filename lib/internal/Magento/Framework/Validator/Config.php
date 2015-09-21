@@ -407,7 +407,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
      */
     public function getSchemaFile()
     {
-        return $this->urnResolver->getRealPath('urn:magento:library:framework:Validator/etc/acvalidationl.xsd');
+        return $this->urnResolver->getRealPath('urn:magento:framework:Validator/etc/acvalidationl.xsd');
     }
 
     /**

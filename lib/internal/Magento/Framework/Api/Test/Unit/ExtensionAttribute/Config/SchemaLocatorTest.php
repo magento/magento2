@@ -25,9 +25,9 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
         $urnResolverMock = $this->getMock('Magento\Framework\Config\Dom\UrnResolver', [], [], '', false);
         $urnResolverMock->expects($this->once())
             ->method('getRealPath')
-            ->with('urn:magento:library:framework:Api/etc/extension_attributes.xsd')
+            ->with('urn:magento:framework:Api/etc/extension_attributes.xsd')
             ->willReturn(
-                $this->urnResolver->getRealPath('urn:magento:library:framework:Api/etc/extension_attributes.xsd')
+                $this->urnResolver->getRealPath('urn:magento:framework:Api/etc/extension_attributes.xsd')
             );
         $this->model = new \Magento\Framework\Api\ExtensionAttribute\Config\SchemaLocator($urnResolverMock);
     }
@@ -35,7 +35,7 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
     public function testGetSchema()
     {
         $this->assertEquals(
-            $this->urnResolver->getRealPath('urn:magento:library:framework:Api/etc/extension_attributes.xsd'),
+            $this->urnResolver->getRealPath('urn:magento:framework:Api/etc/extension_attributes.xsd'),
             $this->model->getSchema()
         );
     }
@@ -43,7 +43,7 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
     public function testGetPerFileSchema()
     {
         $this->assertEquals(
-            $this->urnResolver->getRealPath('urn:magento:library:framework:Api/etc/extension_attributes.xsd'),
+            $this->urnResolver->getRealPath('urn:magento:framework:Api/etc/extension_attributes.xsd'),
             $this->model->getPerFileSchema()
         );
     }

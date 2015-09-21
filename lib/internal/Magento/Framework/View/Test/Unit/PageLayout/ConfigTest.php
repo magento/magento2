@@ -21,8 +21,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $urnResolverMock = $this->getMock('Magento\Framework\Config\Dom\UrnResolver', [], [], '', false);
         $urnResolverMock->expects($this->once())
             ->method('getRealPath')
-            ->with('urn:magento:library:framework:View/PageLayout/etc/layouts.xsd')
-            ->willReturn($urnResolver->getRealPath('urn:magento:library:framework:View/PageLayout/etc/layouts.xsd'));
+            ->with('urn:magento:framework:View/PageLayout/etc/layouts.xsd')
+            ->willReturn($urnResolver->getRealPath('urn:magento:framework:View/PageLayout/etc/layouts.xsd'));
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->config = $objectManagerHelper->getObject(
             'Magento\Framework\View\PageLayout\Config',

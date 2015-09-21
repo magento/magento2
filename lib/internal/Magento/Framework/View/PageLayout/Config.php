@@ -34,7 +34,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
      */
     public function getSchemaFile()
     {
-        return $this->urnResolver->getRealPath('urn:magento:library:framework:View/PageLayout/etc/layouts.xsd');
+        return $this->urnResolver->getRealPath('urn:magento:framework:View/PageLayout/etc/layouts.xsd');
     }
 
     /**
