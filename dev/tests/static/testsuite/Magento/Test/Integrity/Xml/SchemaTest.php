@@ -33,7 +33,7 @@ class SchemaTest extends \PHPUnit_Framework_TestCase
                     count($schemaLocations),
                     'The XML file at ' . $filename . ' does not have a schema properly defined.  It should '
                     . 'have a xsi:noNamespaceSchemaLocation attribute defined with a URN path.  E.g. '
-                    . 'xsi:noNamespaceSchemaLocation="urn:magento:framework:etc/something.xsd"'
+                    . 'xsi:noNamespaceSchemaLocation="urn:magento:framework:Relative_Path/something.xsd"'
                 );
 
                 try {
