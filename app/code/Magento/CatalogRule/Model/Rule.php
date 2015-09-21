@@ -42,10 +42,6 @@ use Magento\Catalog\Model\Product;
  */
 class Rule extends \Magento\Rule\Model\AbstractModel
 {
-    const PERCENTAGE_VALIDATION_ERR_MSG = 'Percentage discount should be between 0 and 100.';
-    const NOT_NEGATIVE_VALIDATION_ERR_MSG = 'Discount value should be 0 or greater.';
-    const INCORRECT_ACTION_ERR_MSG = 'Unknown action.';
-
     /**
      * Prefix of model events names
      *
@@ -388,17 +384,17 @@ class Rule extends \Magento\Rule\Model\AbstractModel
             case 'by_percent':
             case 'to_percent':
                 if ($discount < 0 || $discount > 100) {
-                    $result[] = __(self::PERCENTAGE_VALIDATION_ERR_MSG);
+                    $result[] = __('Percentage discount should be between 0 and 100.');
                 };
                 break;
             case 'by_fixed':
             case 'to_fixed':
                 if ($discount < 0) {
-                    $result[] = __(self::NOT_NEGATIVE_VALIDATION_ERR_MSG);
+                    $result[] = __('Discount value should be 0 or greater.');
                 };
                 break;
             default:
-                $result[] = __(self::INCORRECT_ACTION_ERR_MSG);
+                $result[] = __('Unknown action.');
         }
         return $result;
     }
