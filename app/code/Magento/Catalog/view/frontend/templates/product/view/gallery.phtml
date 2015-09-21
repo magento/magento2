@@ -49,6 +49,9 @@
                     "navdir": "<?php echo $block->getVar("gallery:fullscreen:navdir"); ?>",
                     "arrows": <?php echo $block->getVar("gallery:fullscreen:arrows"); ?>,
                     "showCaption": <?php echo $block->getVar("gallery:fullscreen:caption"); ?>,
+                    "thumbwidth": <?php echo $block->getVar("gallery:fullscreen:thumbwidth"); ?>,
+                    "thumbheight": <?php echo $block->getVar("gallery:fullscreen:thumbheight")
+                        ?: $block->getVar("gallery:fullscreen:thumbwidth"); ?>,
                     "transitionduration": <?php echo $block->getVar("gallery:fullscreen:transition:duration"); ?>,
                     "transition": "<?php echo $block->getVar("gallery:fullscreen:transition:effect"); ?>"
                 },
