@@ -23,6 +23,10 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
         $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         $this->urnResolverMock = $this->getMock('Magento\Framework\Config\Dom\UrnResolver', [], [], '', false);
         $this->model = new \Magento\Framework\ObjectManager\Config\SchemaLocator($this->urnResolverMock);
+        $property = new \ReflectionProperty($this->model, 'urnResolver');
+        $property->setAccessible(true);
+        $property->setValue($this->model, $this->urnResolverMock);
+
     }
 
     public function testGetSchema()
