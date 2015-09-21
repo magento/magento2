@@ -3,14 +3,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\App\Test\Unit\Route\Config;
+namespace Magento\Framework\Indexer\Test\Unit\Config;
 
 class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 {
+
     /**
-     * @var \Magento\Framework\App\Route\Config\SchemaLocator
+     * @var \Magento\Framework\App\Resource\Config\SchemaLocator
      */
-    protected $config;
+    protected $model;
 
     /** @var \Magento\Framework\Config\Dom\UrnResolver $urnResolverMock */
     protected $urnResolver;
@@ -21,22 +22,21 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
-        /** @var \Magento\Framework\Config\Dom\UrnResolver $urnResolverMock */
         $this->urnResolverMock = $this->getMock('Magento\Framework\Config\Dom\UrnResolver', [], [], '', false);
-        $this->config = new \Magento\Framework\App\Route\Config\SchemaLocator($this->urnResolverMock);
+        $this->model = new \Magento\Framework\Indexer\Config\SchemaLocator($this->urnResolverMock);
     }
 
     public function testGetSchema()
     {
         $this->urnResolverMock->expects($this->once())
             ->method('getRealPath')
-            ->with('urn:magento:framework:App/etc/routes_merged.xsd')
+            ->with('urn:magento:framework:Indexer/etc/indexer_merged.xsd')
             ->willReturn(
-                $this->urnResolver->getRealPath('urn:magento:framework:App/etc/routes_merged.xsd')
+                $this->urnResolver->getRealPath('urn:magento:framework:Indexer/etc/indexer_merged.xsd')
             );
-        $this->assertContains(
-            $this->urnResolver->getRealPath('urn:magento:framework:App/etc/routes_merged.xsd'),
-            $this->config->getSchema()
+        $this->assertEquals(
+            $this->urnResolver->getRealPath('urn:magento:framework:Indexer/etc/indexer_merged.xsd'),
+            $this->model->getSchema()
         );
     }
 
@@ -44,13 +44,13 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->urnResolverMock->expects($this->once())
             ->method('getRealPath')
-            ->with('urn:magento:framework:App/etc/routes.xsd')
+            ->with('urn:magento:framework:Indexer/etc/indexer.xsd')
             ->willReturn(
-                $this->urnResolver->getRealPath('urn:magento:framework:App/etc/routes.xsd')
+                $this->urnResolver->getRealPath('urn:magento:framework:Indexer/etc/indexer.xsd')
             );
-        $this->assertContains(
-            $this->urnResolver->getRealPath('urn:magento:framework:App/etc/routes.xsd'),
-            $this->config->getPerFileSchema()
+        $this->assertEquals(
+            $this->urnResolver->getRealPath('urn:magento:framework:Indexer/etc/indexer.xsd'),
+            $this->model->getPerFileSchema()
         );
     }
 }

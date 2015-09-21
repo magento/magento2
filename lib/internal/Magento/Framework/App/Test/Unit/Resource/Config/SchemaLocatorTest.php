@@ -7,29 +7,42 @@ namespace Magento\Framework\App\Test\Unit\Resource\Config;
 
 class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var string
-     */
-    protected $_expected;
 
     /**
      * @var \Magento\Framework\App\Resource\Config\SchemaLocator
      */
-    protected $_model;
+    protected $model;
+
+    /** @var \Magento\Framework\Config\Dom\UrnResolver $urnResolverMock */
+    protected $urnResolver;
 
     protected function setUp()
     {
-        $this->_expected = realpath(__DIR__ . '/../../../../etc/resources.xsd');
-        $this->_model = new \Magento\Framework\App\Resource\Config\SchemaLocator();
+        $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        /** @var \Magento\Framework\Config\Dom\UrnResolver $urnResolverMock */
+        $urnResolverMock = $this->getMock('Magento\Framework\Config\Dom\UrnResolver', [], [], '', false);
+        $urnResolverMock->expects($this->once())
+            ->method('getRealPath')
+            ->with('urn:magento:framework:App/etc/resources.xsd')
+            ->willReturn(
+                $this->urnResolver->getRealPath('urn:magento:framework:App/etc/resources.xsd')
+            );
+        $this->model = new \Magento\Framework\App\Resource\Config\SchemaLocator($urnResolverMock);
     }
 
     public function testGetSchema()
     {
-        $this->assertEquals($this->_expected, str_replace('\\', '/', $this->_model->getSchema()));
+        $this->assertEquals(
+            $this->urnResolver->getRealPath('urn:magento:framework:App/etc/resources.xsd'),
+            $this->model->getSchema()
+        );
     }
 
     public function testGetPerFileSchema()
     {
-        $this->assertEquals($this->_expected, str_replace('\\', '/', $this->_model->getPerFileSchema()));
+        $this->assertEquals(
+            $this->urnResolver->getRealPath('urn:magento:framework:App/etc/resources.xsd'),
+            $this->model->getPerFileSchema()
+        );
     }
 }
