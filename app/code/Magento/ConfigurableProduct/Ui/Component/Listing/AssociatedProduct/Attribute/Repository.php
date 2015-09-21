@@ -11,7 +11,9 @@ class Repository extends \Magento\Catalog\Ui\Component\Listing\Attribute\Abstrac
     protected $request;
 
     /**
+     * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param \Magento\Framework\App\RequestInterface $request
      */
     public function __construct(
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository,
