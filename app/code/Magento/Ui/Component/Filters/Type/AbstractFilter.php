@@ -9,6 +9,7 @@ use Magento\Ui\Component\AbstractComponent;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\Api\FilterBuilder;
+use Magento\Ui\Component\Filters\FilterModifier;
 
 /**
  * Abstract class AbstractFilter
@@ -24,11 +25,6 @@ abstract class AbstractFilter extends AbstractComponent
      * Filter variable name
      */
     const FILTER_VAR = 'filters';
-
-    /**
-     * Filter modifier variable name
-     */
-    const FILTER_MODIFIER = 'filters_modifier';
 
     /**
      * Filter data
@@ -48,9 +44,15 @@ abstract class AbstractFilter extends AbstractComponent
     protected $filterBuilder;
 
     /**
+     * @var FilterModifier
+     */
+    protected $filterModifier;
+
+    /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param FilterBuilder $filterBuilder
+     * @param FilterModifier $filterModifier
      * @param array $components
      * @param array $data
      */
@@ -58,6 +60,7 @@ abstract class AbstractFilter extends AbstractComponent
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
         FilterBuilder $filterBuilder,
+        FilterModifier $filterModifier,
         array $components = [],
         array $data = []
     ) {
@@ -65,6 +68,7 @@ abstract class AbstractFilter extends AbstractComponent
         $this->filterBuilder = $filterBuilder;
         parent::__construct($context, $components, $data);
         $this->filterData = $this->getContext()->getFiltersParams();
+        $this->filterModifier = $filterModifier;
     }
 
     /**
@@ -82,32 +86,7 @@ abstract class AbstractFilter extends AbstractComponent
      */
     public function prepare()
     {
-        $this->applyFilterModifier();
+        $this->filterModifier->applyFilterModifier($this->getContext()->getDataProvider(), $this->getName());
         parent::prepare();
-    }
-
-    /**
-     * Apply modifiers for filters
-     */
-    protected function applyFilterModifier()
-    {
-        $filterModifier = $this->getContext()->getRequestParam(self::FILTER_MODIFIER);
-        if (isset($filterModifier[$this->getName()]['condition_type'])) {
-            $conditionType = $filterModifier[$this->getName()]['condition_type'];
-            $allowedConditionTypes = ['eq', 'neq', 'in', 'nin', 'null', 'notnull'];
-            if (!in_array($conditionType, $allowedConditionTypes)) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Condition type "%1" is not allowed', $conditionType)
-                );
-            }
-            $value = isset($filterModifier[$this->getName()]['value'])
-                ? $filterModifier[$this->getName()]['value']
-                : null;
-            $filter = $this->filterBuilder->setConditionType($conditionType)
-                ->setField($this->getName())
-                ->setValue($value)
-                ->create();
-            $this->getContext()->getDataProvider()->addFilter($filter);
-        }
     }
 }
