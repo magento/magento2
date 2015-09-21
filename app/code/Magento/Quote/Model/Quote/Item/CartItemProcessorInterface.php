@@ -16,4 +16,12 @@ interface CartItemProcessorInterface
      * @return \Magento\Framework\DataObject|null
      */
     public function convertToBuyRequest(CartItemInterface $cartItem);
+
+    /**
+     * Process cart item product options
+     *
+     * @param CartItemInterface $cartItem
+     * @return CartItemInterface
+     */
+    public function processProductOptions(CartItemInterface $cartItem);
 }

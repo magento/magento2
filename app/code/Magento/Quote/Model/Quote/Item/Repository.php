@@ -67,7 +67,7 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
         /** @var  \Magento\Quote\Model\Quote\Item  $item */
         foreach ($quote->getAllItems() as $item) {
             if (!$item->isDeleted() && !$item->getParentItemId()) {
-                $output[] = $item;
+                $output[] = $this->addProductOptions($item->getProductType(), $item);
             }
         }
         return $output;
@@ -127,7 +127,7 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
     }
 
     /**
-     * @param $productType
+     * @param string $productType
      * @param \Magento\Quote\Api\Data\CartItemInterface $cartItem
      * @return \Magento\Framework\DataObject|float
      */
@@ -139,6 +139,21 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
             ? $this->cartItemProcessors[$productType]->convertToBuyRequest($cartItem)
             : null;
         return ($params === null) ? $cartItem->getQty() : $params;
+    }
+
+    /**
+     * @param string $productType
+     * @param \Magento\Quote\Api\Data\CartItemInterface $cartItem
+     * @return  \Magento\Quote\Api\Data\CartItemInterface
+     */
+    protected function addProductOptions(
+        $productType,
+        \Magento\Quote\Api\Data\CartItemInterface $cartItem
+    ) {
+        $cartItem = (isset($this->cartItemProcessors[$productType]))
+            ? $this->cartItemProcessors[$productType]->processProductOptions($cartItem)
+            : $cartItem;
+        return $cartItem;
     }
 
     /**
