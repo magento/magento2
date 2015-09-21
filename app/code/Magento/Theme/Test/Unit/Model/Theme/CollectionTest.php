@@ -152,4 +152,13 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(get_class($this->model), $this->model->loadData());
     }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage Constraint 'unsupported_type' is not supported
+     */
+    public function testAddConstraintUnsupportedType()
+    {
+        $this->model->addConstraint('unsupported_type', 'value');
+    }
 }
