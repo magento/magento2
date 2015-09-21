@@ -7,15 +7,15 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
     <event name="admin_user_authenticate_after">
-        <observer name="magento_user" instance="Magento\User\Model\Backend\Observer" method="adminAuthenticate" />
+        <observer name="magento_user" instance="Magento\User\Model\Backend\Observer\AuthObserver" method="adminAuthenticate" />
     </event>
     <event name="controller_action_predispatch">
-        <observer name="magento_user" instance="Magento\User\Model\Backend\Observer" method="forceAdminPasswordChange" />
+        <observer name="magento_user" instance="Magento\User\Model\Backend\Observer\PasswordObserver" method="forceAdminPasswordChange" />
     </event>
     <event name="admin_user_save_before">
-        <observer name="magento_user" instance="Magento\User\Model\Backend\Observer" method="checkAdminPasswordChange" />
+        <observer name="magento_user" instance="Magento\User\Model\Backend\Observer\PasswordObserver" method="checkAdminPasswordChange" />
     </event>
     <event name="admin_user_save_after">
-        <observer name="magento_user" instance="Magento\User\Model\Backend\Observer" method="trackAdminNewPassword" />
+        <observer name="magento_user" instance="Magento\User\Model\Backend\Observer\PasswordObserver" method="trackAdminNewPassword" />
     </event>
 </config>
