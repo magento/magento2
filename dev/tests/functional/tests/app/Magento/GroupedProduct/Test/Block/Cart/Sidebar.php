@@ -3,6 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\GroupedProduct\Test\Block\Cart;
 
 use Magento\Mtf\Fixture\FixtureInterface;
@@ -15,7 +16,7 @@ use Magento\Checkout\Test\Block\Cart\Sidebar as MiniShoppingCart;
 class Sidebar extends MiniShoppingCart
 {
     /**
-     * Get cart item block
+     * Get cart item block.
      *
      * @param FixtureInterface $product
      * @return \Magento\GroupedProduct\Test\Block\Cart\Sidebar\Item
@@ -34,7 +35,7 @@ class Sidebar extends MiniShoppingCart
     }
 
     /**
-     * Find cart item blocks for associated products
+     * Find cart item blocks for associated products.
      *
      * @param FixtureInterface $product
      * @return array
