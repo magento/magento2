@@ -28,13 +28,13 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
             ->method('getRealPath')
             ->will($this->returnCallback(function ($urn) {
                 $urnParts = explode(':', $urn);
-                return 'schema_dir/' . $urnParts[4];
+                return 'schema_dir/' . $urnParts[3];
             }));
 
         $this->model = new \Magento\Framework\DataObject\Copy\Config\SchemaLocator(
             $urnResolverMock,
-            'urn:magento:library:framework:DataObject/etc/schema.xsd',
-            'urn:magento:library:framework:DataObject/etc/perFileSchema.xsd'
+            'urn:magento:framework:DataObject/etc/schema.xsd',
+            'urn:magento:framework:DataObject/etc/perFileSchema.xsd'
         );
     }
 

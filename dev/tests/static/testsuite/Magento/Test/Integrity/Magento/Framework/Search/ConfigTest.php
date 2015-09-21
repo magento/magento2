@@ -24,7 +24,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getXsd()
     {
-        return $this->urnResolver->getRealPath('urn:magento:library:framework:Search/etc/search_request_merged.xsd');
+        return $this->urnResolver->getRealPath('urn:magento:framework:Search/etc/search_request_merged.xsd');
     }
 
     /**
@@ -34,7 +34,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getFileXsd()
     {
-        return $this->urnResolver->getRealPath('urn:magento:library:framework:Search/etc/search_request.xsd');
+        return $this->urnResolver->getRealPath('urn:magento:framework:Search/etc/search_request.xsd');
     }
 
     /**

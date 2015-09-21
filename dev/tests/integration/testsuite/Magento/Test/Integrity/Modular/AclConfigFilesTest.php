@@ -26,7 +26,7 @@ class AclConfigFilesTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
-        $this->_schemeFile = $urnResolver->getRealPath('urn:magento:library:framework:Acl/etc/acl.xsd');
+        $this->_schemeFile = $urnResolver->getRealPath('urn:magento:framework:Acl/etc/acl.xsd');
     }
 
     /**

@@ -28,7 +28,7 @@ class FieldsetConfigTest extends \PHPUnit_Framework_TestCase
                 $dom = new \DOMDocument();
                 $dom->loadXML(file_get_contents($configFile));
                 $schema = $this->urnResolver->getRealPath(
-                    'urn:magento:library:framework:DataObject/etc/fieldset_file.xsd'
+                    'urn:magento:framework:DataObject/etc/fieldset_file.xsd'
                 );
                 $errors = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schema);
                 if ($errors) {
@@ -49,7 +49,7 @@ class FieldsetConfigTest extends \PHPUnit_Framework_TestCase
         $xmlFile = __DIR__ . '/_files/fieldset.xml';
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));
-        $schema = $this->urnResolver->getRealPath('urn:magento:library:framework:DataObject/etc/fieldset.xsd');
+        $schema = $this->urnResolver->getRealPath('urn:magento:framework:DataObject/etc/fieldset.xsd');
         $errors = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schema);
         if ($errors) {
             $this->fail(
@@ -66,7 +66,7 @@ class FieldsetConfigTest extends \PHPUnit_Framework_TestCase
         $xmlFile = __DIR__ . '/_files/invalid_fieldset.xml';
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));
-        $schema = $this->urnResolver->getRealPath('urn:magento:library:framework:DataObject/etc/fieldset.xsd');
+        $schema = $this->urnResolver->getRealPath('urn:magento:framework:DataObject/etc/fieldset.xsd');
         $errors = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schema);
         if (!$errors) {
             $this->fail('There is a problem with the schema.  A known bad XML file passed validation');
@@ -78,7 +78,7 @@ class FieldsetConfigTest extends \PHPUnit_Framework_TestCase
         $xmlFile = __DIR__ . '/_files/fieldset_file.xml';
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));
-        $schema = $this->urnResolver->getRealPath('urn:magento:library:framework:DataObject/etc/fieldset_file.xsd');
+        $schema = $this->urnResolver->getRealPath('urn:magento:framework:DataObject/etc/fieldset_file.xsd');
         $errors = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schema);
         if ($errors) {
             $this->fail(
@@ -95,7 +95,7 @@ class FieldsetConfigTest extends \PHPUnit_Framework_TestCase
         $xmlFile = __DIR__ . '/_files/invalid_fieldset.xml';
         $dom = new \DOMDocument();
         $dom->loadXML(file_get_contents($xmlFile));
-        $schema = $this->urnResolver->getRealPath('urn:magento:library:framework:DataObject/etc/fieldset_file.xsd');
+        $schema = $this->urnResolver->getRealPath('urn:magento:framework:DataObject/etc/fieldset_file.xsd');
         $errors = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schema);
         if (!$errors) {
             $this->fail('There is a problem with the schema.  A known bad XML file passed validation');

@@ -67,10 +67,10 @@ class Validator extends \Zend_Validate_Abstract
         $this->_initMessageTemplates();
         $this->_xsdSchemas = [
             self::LAYOUT_SCHEMA_PAGE_HANDLE => $urnResolver->getRealPath(
-                'urn:magento:library:framework:View/Layout/etc/page_layout.xsd'
+                'urn:magento:framework:View/Layout/etc/page_layout.xsd'
             ),
             self::LAYOUT_SCHEMA_MERGED => $urnResolver->getRealPath(
-                'urn:magento:library:framework:View/Layout/etc/layout_merged.xsd'
+                'urn:magento:framework:View/Layout/etc/layout_merged.xsd'
             ),
         ];
     }
@@ -84,9 +84,15 @@ class Validator extends \Zend_Validate_Abstract
     {
         if (!$this->_messageTemplates) {
             $this->_messageTemplates = [
-                self::HELPER_ARGUMENT_TYPE => (string)new \Magento\Framework\Phrase('Helper arguments should not be used in custom layout updates.'),
-                self::UPDATER_MODEL => (string)new \Magento\Framework\Phrase('Updater model should not be used in custom layout updates.'),
-                self::XML_INVALID => (string)new \Magento\Framework\Phrase('Please correct the XML data and try again. %value%'),
+                self::HELPER_ARGUMENT_TYPE => (string)new \Magento\Framework\Phrase(
+                    'Helper arguments should not be used in custom layout updates.'
+                ),
+                self::UPDATER_MODEL => (string)new \Magento\Framework\Phrase(
+                    'Updater model should not be used in custom layout updates.'
+                ),
+                self::XML_INVALID => (string)new \Magento\Framework\Phrase(
+                    'Please correct the XML data and try again. %value%'
+                ),
             ];
         }
         return $this;

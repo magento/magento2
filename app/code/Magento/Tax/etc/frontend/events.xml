@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:library:framework:Event/etc/events.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="customer_data_object_login">
         <observer name="customer_tax_logged_in" instance="Magento\Tax\Model\Observer\Session" method="customerLoggedIn" />
     </event>
