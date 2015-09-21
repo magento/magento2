@@ -16,6 +16,9 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     protected $schema;
 
+    /**
+     * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
+     */
     public function __construct(\Magento\Framework\Config\Dom\UrnResolver $urnResolver)
     {
         $this->schema = $urnResolver->getRealPath('urn:magento:framework:View/Layout/etc/acl.xsd');
