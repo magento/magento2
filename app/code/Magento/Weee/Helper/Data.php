@@ -300,7 +300,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getWeeeTaxAppliedAmount($item)
     {
-        return $this->getRecursiveNumericAmount($item, __FUNCTION__);
+        return $this->getRecursiveNumericAmount($item, 'getWeeeTaxAppliedAmount');
     }
 
     /**
@@ -311,7 +311,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getWeeeTaxAppliedRowAmount($item)
     {
-        return $this->getRecursiveNumericAmount($item, __FUNCTION__);
+        return $this->getRecursiveNumericAmount($item, 'getWeeeTaxAppliedRowAmount');
     }
 
     /**
