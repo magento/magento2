@@ -9,6 +9,7 @@ namespace Magento\Quote\Model\Quote\Item;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\LocalizedException;
 
 class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
 {
@@ -100,11 +101,14 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
                 $cartItem->setData('qty', $qty);
             } else {
                 $product = $this->productRepository->get($cartItem->getSku());
-                $quote->addProduct($product, $this->getBuyRequest($product->getTypeId(), $cartItem));
+                $result = $quote->addProduct($product, $this->getBuyRequest($product->getTypeId(), $cartItem));
+                if (is_string($result)) {
+                    throw new \Magento\Framework\Exception\LocalizedException(__($result));
+                }
             }
             $this->quoteRepository->save($quote->collectTotals());
         } catch (\Exception $e) {
-            if ($e instanceof NoSuchEntityException) {
+            if ($e instanceof NoSuchEntityException || $e instanceof LocalizedException) {
                 throw $e;
             }
             throw new CouldNotSaveException(__('Could not save quote'));
