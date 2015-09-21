@@ -13,7 +13,7 @@ class Reflection extends \Magento\Framework\Cache\Frontend\Decorator\TagScope
     /**
      * Cache type code unique among all cache types
      */
-    const TYPE_IDENTIFIER = 'reflection_data';
+    const TYPE_IDENTIFIER = 'reflection';
 
     /**
      * Cache tag used to distinguish the cache type from all other cache
