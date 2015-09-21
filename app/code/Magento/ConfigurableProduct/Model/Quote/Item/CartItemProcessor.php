@@ -41,4 +41,12 @@ class CartItemProcessor implements CartItemProcessorInterface
         }
         return null;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function processProductOptions(CartItemInterface $cartItem)
+    {
+        return $cartItem;
+    }
 }
