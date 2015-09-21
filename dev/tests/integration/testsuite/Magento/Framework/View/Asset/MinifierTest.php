@@ -229,9 +229,9 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
                 ]
             ));
 
-        /** @var \Magento\Setup\ModelDeployer $deployer */
+        /** @var \Magento\Deploy\Model\Deployer $deployer */
         $deployer = $this->objectManager->create(
-            'Magento\Setup\Model\Deployer',
+            'Magento\Deploy\Model\Deployer',
             ['filesUtil' => $filesUtil, 'output' => $output, 'isDryRun' => false]
         );
 

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Model;
+namespace Magento\Deploy\Model;
 
 use Magento\Framework\App\ObjectManagerFactory;
 use Magento\Framework\App\View\Deployment\Version;
@@ -153,7 +153,7 @@ class Deployer
         $this->count = 0;
         foreach ($this->filesUtil->getPhtmlFiles(false, false) as $template) {
             $this->htmlMinifier->minify($template);
-            if ($this->output->isVeryVerbose()) {
+            if ($this->output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
                 $this->output->writeln($template . " minified\n");
             } else {
                 $this->output->write('.');
@@ -218,11 +218,7 @@ class Deployer
         /** @var \Magento\Framework\App\State $appState */
         $appState = $this->objectManager->get('Magento\Framework\App\State');
         $appState->setAreaCode($areaCode);
-        /** @var \Magento\Framework\App\ObjectManager\ConfigLoader $configLoader */
-        $configLoader = $this->objectManager->get('Magento\Framework\App\ObjectManager\ConfigLoader');
-        $this->objectManager->configure($configLoader->load($areaCode));
         $this->assetRepo = $this->objectManager->get('Magento\Framework\View\Asset\Repository');
-
         $this->assetPublisher = $this->objectManager->create('Magento\Framework\App\View\Asset\Publisher');
         $this->htmlMinifier = $this->objectManager->get('Magento\Framework\View\Template\Html\MinifierInterface');
         $this->bundleManager = $this->objectManager->get('Magento\Framework\View\Asset\Bundle\Manager');

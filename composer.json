@@ -2,7 +2,7 @@
     "name": "magento/magento2ce",
     "description": "Magento 2 (Community Edition)",
     "type": "project",
-    "version": "1.0.0-beta2",
+    "version": "1.0.0-beta3",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -94,6 +94,7 @@
         "magento/module-currency-symbol": "self.version",
         "magento/module-customer": "self.version",
         "magento/module-customer-import-export": "self.version",
+        "magento/module-deploy": "self.version",
         "magento/module-design-editor": "self.version",
         "magento/module-developer": "self.version",
         "magento/module-dhl": "self.version",

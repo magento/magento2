@@ -43,7 +43,9 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->configMock = $this->getMock('Magento\PageCache\Model\Config', [], [], '', false);
+        $this->uriFactoryMock = $this->getMock('Magento\CacheInvalidate\Model\UriFactory', [], [], '', false);
         $this->uriMock = $this->getMock('\Zend\Uri\Uri', [], [], '', false);
+        $this->socketFactoryMock = $this->getMock('Magento\CacheInvalidate\Model\SocketFactory', [], [], '', false);
         $this->socketAdapterMock = $this->getMock('\Zend\Http\Client\Adapter\Socket', [], [], '', false);
         $this->deploymentConfigMock = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $this->loggerMock = $this->getMock('Magento\Framework\Cache\InvalidateLogger', [], [], '', false);
@@ -55,8 +57,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ['sendPurgeRequest'],
             [
                 $this->configMock,
-                $this->uriMock,
-                $this->socketAdapterMock,
+                $this->uriFactoryMock,
+                $this->socketFactoryMock,
                 $this->loggerMock,
                 $this->deploymentConfigMock,
                 $this->requestMock
@@ -64,8 +66,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         );
         $this->model = new \Magento\CacheInvalidate\Model\Observer(
             $this->configMock,
-            $this->uriMock,
-            $this->socketAdapterMock,
+            $this->uriFactoryMock,
+            $this->socketFactoryMock,
             $this->loggerMock,
             $this->deploymentConfigMock,
             $this->requestMock
@@ -120,6 +122,12 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
     public function testSendPurgeRequestEmptyConfig()
     {
+        $this->uriFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->uriMock);
+        $this->socketFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->socketAdapterMock);
         $this->socketAdapterMock->expects($this->once())
             ->method('write')
             ->with('PURGE', $this->uriMock, '1.1', $this->equalTo(['X-Magento-Tags-Pattern' => 'tags']));
@@ -152,6 +160,12 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
     public function testSendPurgeRequestOneServer()
     {
+        $this->uriFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->uriMock);
+        $this->socketFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->socketAdapterMock);
         $this->socketAdapterMock->expects($this->once())
             ->method('write')
             ->with('PURGE', $this->uriMock, '1.1', $this->equalTo(['X-Magento-Tags-Pattern' => 'tags']));
@@ -181,6 +195,12 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
     public function testSendPurgeRequestMultipleServers()
     {
+        $this->uriFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->uriMock);
+        $this->socketFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->socketAdapterMock);
         $this->socketAdapterMock->expects($this->exactly(2))
             ->method('write')
             ->with('PURGE', $this->uriMock, '1.1', $this->equalTo(['X-Magento-Tags-Pattern' => 'tags']));
