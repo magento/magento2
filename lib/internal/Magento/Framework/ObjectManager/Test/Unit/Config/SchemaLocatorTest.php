@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Event\Test\Unit\Config;
+namespace Magento\Framework\ObjectManager\Test\Unit\Config;
 
 class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,33 +22,27 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
     {
         $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         $this->urnResolverMock = $this->getMock('Magento\Framework\Config\Dom\UrnResolver', [], [], '', false);
-        $this->model = new \Magento\Framework\Event\Config\SchemaLocator($this->urnResolverMock);
+        $this->model = new \Magento\Framework\ObjectManager\Config\SchemaLocator($this->urnResolverMock);
     }
 
     public function testGetSchema()
     {
         $this->urnResolverMock->expects($this->once())
             ->method('getRealPath')
-            ->with('urn:magento:framework:Event/etc/events.xsd')
+            ->with('urn:magento:framework:ObjectManager/etc/config.xsd')
             ->willReturn(
-                $this->urnResolver->getRealPath('urn:magento:framework:Event/etc/events.xsd')
+                $this->urnResolver->getRealPath('urn:magento:framework:ObjectManager/etc/config.xsd')
             );
         $this->assertEquals(
-            $this->urnResolver->getRealPath('urn:magento:framework:Event/etc/events.xsd'),
+            $this->urnResolver->getRealPath('urn:magento:framework:ObjectManager/etc/config.xsd'),
             $this->model->getSchema()
         );
     }
 
     public function testGetPerFileSchema()
     {
-        $this->urnResolverMock->expects($this->once())
-            ->method('getRealPath')
-            ->with('urn:magento:framework:Event/etc/events.xsd')
-            ->willReturn(
-                $this->urnResolver->getRealPath('urn:magento:framework:Event/etc/events.xsd')
-            );
         $this->assertEquals(
-            $this->urnResolver->getRealPath('urn:magento:framework:Event/etc/events.xsd'),
+            null,
             $this->model->getPerFileSchema()
         );
     }

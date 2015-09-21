@@ -7,9 +7,31 @@ namespace Magento\Framework\Config\Test\Unit;
 
 class ThemeTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var \Magento\Framework\Config\Dom\UrnResolver $urnResolverMock */
+    protected $urnResolver;
+
+    /** @var \Magento\Framework\Config\Dom\UrnResolver $urnResolverMock */
+    protected $urnResolverMock;
+
+    protected function setUp()
+    {
+        $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $this->urnResolverMock = $this->getMock('Magento\Framework\Config\Dom\UrnResolver', [], [], '', false);
+    }
+
     public function testGetSchemaFile()
     {
-        $config = new \Magento\Framework\Config\Theme();
+        $config = new \Magento\Framework\Config\Theme(null, $this->urnResolverMock);
+        $this->urnResolverMock->expects($this->exactly(2))
+            ->method('getRealPath')
+            ->with('urn:magento:framework:Config/etc/theme.xsd')
+            ->willReturn(
+                $this->urnResolver->getRealPath('urn:magento:framework:Config/etc/theme.xsd')
+            );
+        $this->assertEquals(
+            $this->urnResolver->getRealPath('urn:magento:framework:Config/etc/theme.xsd'),
+            $config->getSchemaFile()
+        );
         $this->assertFileExists($config->getSchemaFile());
     }
 
@@ -22,7 +44,8 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     {
         $expected = reset($expected);
         $config = new \Magento\Framework\Config\Theme(
-            file_get_contents(__DIR__ . '/_files/area/' . $themePath . '/theme.xml')
+            file_get_contents(__DIR__ . '/_files/area/' . $themePath . '/theme.xml'),
+            $this->urnResolverMock
         );
         $this->assertSame($expected['media'], $config->getMedia());
         $this->assertSame($expected['title'], $config->getThemeTitle());

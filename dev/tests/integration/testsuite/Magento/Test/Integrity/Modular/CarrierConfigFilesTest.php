@@ -18,10 +18,8 @@ class CarrierConfigFilesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $moduleReader = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Module\Dir\Reader'
-        );
-        $schemaFile = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Config') . '/system.xsd';
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $schemaFile = $urnResolver->getRealPath('urn:magento:module:Magento_Config:etc/system.xsd');
         $this->_reader = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Config\Model\Config\Structure\Reader',
             ['perFileSchema' => $schemaFile, 'isValidated' => true]
