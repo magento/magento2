@@ -89,16 +89,24 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
 
         $itemId = $cartItem->getItemId();
         try {
-            /** update item qty */
+
             if (isset($itemId)) {
-                $cartItem = $quote->getItemById($itemId);
-                if (!$cartItem) {
-                    throw new NoSuchEntityException(
-                        __('Cart %1 doesn\'t contain item  %2', $cartId, $itemId)
-                    );
-                }
                 $product = $this->productRepository->get($cartItem->getSku());
-                $cartItem->setData('qty', $qty);
+                $buyRequestData = $this->getBuyRequest($product->getTypeId(), $cartItem);
+                if (is_object($buyRequestData)) {
+                    /** update item product options */
+                    $buyRequestData->setData('qty', $qty);
+                    $quote->updateItem($itemId, $buyRequestData);
+                } else {
+                    /** update item qty */
+                    $cartItem = $quote->getItemById($itemId);
+                    if (!$cartItem) {
+                        throw new NoSuchEntityException(
+                            __('Cart %1 doesn\'t contain item  %2', $cartId, $itemId)
+                        );
+                    }
+                    $cartItem->setData('qty', $qty);
+                }
             } else {
                 $product = $this->productRepository->get($cartItem->getSku());
                 $result = $quote->addProduct($product, $this->getBuyRequest($product->getTypeId(), $cartItem));
