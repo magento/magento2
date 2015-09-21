@@ -132,7 +132,7 @@ define([
             var count = this.element.find(this.options.imageSelector).length;
             imageData = $.extend({
                 file_id: Math.random().toString(33).substr(2, 18),
-                disabled: 0,
+                disabled: imageData.disabled ? imageData.disabled : 0,
                 position: count + 1
             }, imageData);
 
@@ -152,6 +152,7 @@ define([
             ) {
                 this.setBase(imageData);
             }
+
             $.each(this.options.types, $.proxy(function (index, image) {
                 if (imageData.file == image.value) {
                     this.element.trigger('setImageType', {
@@ -268,7 +269,12 @@ define([
                     $(event.currentTarget).addClass('active');
                     var itemId = $(event.currentTarget).find('input')[0].name.match(/\[([^\]]*)\]/g)[2];
                     $('#item_id').val(itemId);
-                    this.element.trigger('openDialog', [$(event.currentTarget).data('imageData')]);
+                    var imageData = $(event.currentTarget).data('imageData');
+                    var $imageContainer = this.findElement(imageData);
+                    if ($imageContainer.is('.removed')) {
+                        return;
+                    }
+                    this.element.trigger('openDialog', [imageData]);
                 }
             };
             this._on(events);
@@ -300,11 +306,6 @@ define([
         _showDialog: function (imageData) {
             var $imageContainer = this.findElement(imageData);
             var dialogElement = $imageContainer.data('dialog');
-
-            if ($imageContainer.is('.removed') || (dialogElement && dialogElement.is(':visible'))) {
-                return;
-            }
-
             if(!this.dialogTmpl) {
                 alert('System problem!');
                 return;
@@ -352,7 +353,10 @@ define([
             var _changeDescription = function(e) {
                 var target = jQuery(e.target);
                 var targetName = target.attr('name');
-                jQuery('input[type="hidden"][name="'+ targetName + '"]').val(target.val());
+                var desc = target.val();
+                jQuery('input[type="hidden"][name="'+ targetName + '"]').val(desc);
+                imageData.label = desc;
+                imageData.label_default = desc;
             };
 
             dialogElement.on('change', '[data-role=type-selector]', function () {
@@ -361,7 +365,9 @@ define([
                 parent.toggleClass(selectedClass, $(this).prop('checked'));
             });
             dialogElement.on('change', '[data-role=type-selector]', $.proxy(this._changeType, this));
-            dialogElement.on('change', '[data-role=visibility-trigger]', $.proxy(this._changeVisibility, this));
+            dialogElement.on('change', '[data-role=visibility-trigger]', $.proxy(function(e) {
+                this._changeVisibility(e, imageData);
+            }, this));
             dialogElement.on('change', '#image-description', _changeDescription);
             dialogElement.modal('openModal');
         },
@@ -372,11 +378,13 @@ define([
          * @param event
          * @private
          */
-        _changeVisibility: function (event) {
+        _changeVisibility: function (event, imageData) {
             var $checkbox = $(event.currentTarget);
             var $imageContainer = $checkbox.closest('[data-role=dialog]').data('imageContainer');
             $imageContainer.toggleClass('hidden-for-front', $checkbox.is(':checked'));
-            $imageContainer.find('[name*="disabled"]').val($checkbox.is(':checked') ? 1 : 0);
+            var checked = $checkbox.is(':checked') ? 1 : 0;
+            $imageContainer.find('[name*="disabled"]').val(checked);
+            imageData.disabled = checked;
         },
 
         /**
