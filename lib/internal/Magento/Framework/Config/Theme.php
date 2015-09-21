@@ -31,15 +31,15 @@ class Theme
     /**
      * Constructor
      *
-     * @param string $configContent
      * @param \Magento\Framework\Config\Dom\UrnResolver $urnResolver
+     * @param string $configContent
      */
     public function __construct(
-        $configContent = null,
-        \Magento\Framework\Config\Dom\UrnResolver $urnResolver
+        \Magento\Framework\Config\Dom\UrnResolver $urnResolver,
+        $configContent = null
     ) {
-        $this->_data = $this->_extractData($configContent);
         $this->urnResolver = $urnResolver;
+        $this->_data = $this->_extractData($configContent);
     }
 
     /**
