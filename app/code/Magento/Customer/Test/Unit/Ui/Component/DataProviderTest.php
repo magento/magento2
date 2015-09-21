@@ -93,7 +93,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn([
                 'attribute-code' => [
                     'frontend_input' => 'input',
-                    'visible' => true
+                    'visible' => true,
                 ]
             ]);
         $this->assertEquals(
@@ -102,8 +102,8 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 'items' => [
                     [
                         'attribute-code' => [12, 13, 14]
-                    ]
-                ]
+                    ],
+                ],
             ],
             $this->dataProvide->getData()
         );
