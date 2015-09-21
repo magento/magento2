@@ -57,7 +57,7 @@ if ($isField) {
     <?php if (!$element->getNoContainer()): ?>
         <fieldset class="<?php /* @escapeNotVerified */ echo $cssClass ?>" id="<?php /* @escapeNotVerified */ echo $id ?>">
         <?php if ($element->getLegend() && !$isWrapped): ?>
-            <legend class="<?php /* @escapeNotVerified */ echo $isField ? 'label' : 'legend'?>">
+            <legend class="<?php /* @escapeNotVerified */ echo $isField ? 'label admin__field-label' : 'admin__legend legend'?>">
                 <span><?php /* @escapeNotVerified */ echo $element->getLegend() ?></span>
             </legend><br />
         <?php endif; ?>
