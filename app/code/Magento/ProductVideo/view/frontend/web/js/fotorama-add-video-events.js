@@ -187,7 +187,6 @@ require([ "jquery", "jquery/ui", "catalogGallery"], function( $ ) {
       $image.find('.magnify-lens').remove();
       $image.on('click', function() {
         if ($(this).hasClass('video-unplayed')) {
-
           $(this).find('.video-timing').remove();
           $(this).removeClass('video-unplayed');
           $(this).find('.'+PV).productVideoLoader();
