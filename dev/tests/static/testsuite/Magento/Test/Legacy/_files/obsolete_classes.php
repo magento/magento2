@@ -3844,4 +3844,9 @@ return [
         'Magento\Checkout\Model\Agreements\AgreementsProviderInterface',
         'Magento\CheckoutAgreements\Model\AgreementsProviderInterface'
     ],
+    ['Magento\Setup\Model\SampleData', 'Magento\SampleData\Model\SampleData'],
+    ['Magento\Customer\Controller\Account\ResetPassword'],
+    ['Magento\Customer\Controller\Account'],
+    ['Magento\Catalog\Ui\Component\Listing\Filters'],
+    ['Magento\Customer\Ui\Component\Listing\Filters'],
 ];
