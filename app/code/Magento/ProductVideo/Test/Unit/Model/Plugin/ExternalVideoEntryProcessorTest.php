@@ -69,7 +69,8 @@ class ExternalVideoEntryProcessorTest extends \PHPUnit_Framework_TestCase
         $this->attributeMock = $this->getMock('\Magento\Eav\Model\Entity\Attribute', [], [], '', false);
         $this->attributeMock->expects($this->any())->method('getAttributeCode')->willReturn('media_gallery');
 
-        $this->mediaBackendModel = $this->getMock('Magento\Catalog\Model\Product\Attribute\Backend\Media', [], [], '', false);
+        $this->mediaBackendModel =
+            $this->getMock('Magento\Catalog\Model\Product\Attribute\Backend\Media', [], [], '', false);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

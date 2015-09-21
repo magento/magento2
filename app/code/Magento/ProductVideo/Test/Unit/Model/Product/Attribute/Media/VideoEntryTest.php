@@ -41,13 +41,13 @@ class VideoEntryTest extends \PHPUnit_Framework_TestCase
     public function testGetVideoProvider()
     {
         $this->modelObject->expects($this->once())->method('getData')->willReturn('youtube');
-        $this->modelObject->getMediaType();
+        $this->modelObject->getVideoProvider();
     }
 
     public function testSetVideoProvider()
     {
         $this->modelObject->expects($this->once())->method('setData')->willReturn($this->modelObject);
-        $this->modelObject->setMediaType('vimeo');
+        $this->modelObject->setVideoProvider('vimeo');
     }
 
     public function testGetVideoUrl()
@@ -55,48 +55,48 @@ class VideoEntryTest extends \PHPUnit_Framework_TestCase
         $this->modelObject->expects($this->once())->method('getData')->willReturn(
             'https://www.youtube.com/watch?v=abcdefghij'
         );
-        $this->modelObject->getMediaType();
+        $this->modelObject->getVideoUrl();
     }
 
     public function testSetVideoUrl()
     {
         $this->modelObject->expects($this->once())->method('setData')->willReturn($this->modelObject);
-        $this->modelObject->setMediaType('https://www.youtube.com/watch?v=abcdefghij');
+        $this->modelObject->setVideoUrl('https://www.youtube.com/watch?v=abcdefghij');
     }
 
     public function testGetVideoTitle()
     {
         $this->modelObject->expects($this->once())->method('getData')->willReturn('Title');
-        $this->modelObject->getMediaType();
+        $this->modelObject->getVideoTitle();
     }
 
     public function testSetVideoTitle()
     {
         $this->modelObject->expects($this->once())->method('setData')->willReturn($this->modelObject);
-        $this->modelObject->setMediaType('Title');
+        $this->modelObject->setVideoTitle('Title');
     }
 
     public function testGetVideoDescription()
     {
         $this->modelObject->expects($this->once())->method('getData')->willReturn('Description');
-        $this->modelObject->getMediaType();
+        $this->modelObject->getVideoDescription();
     }
 
     public function testSetVideoDescription()
     {
         $this->modelObject->expects($this->once())->method('setData')->willReturn($this->modelObject);
-        $this->modelObject->setMediaType('Description');
+        $this->modelObject->setVideoDescription('Description');
     }
 
     public function testGetVideoMetadata()
     {
         $this->modelObject->expects($this->once())->method('getData')->willReturn('Meta data');
-        $this->modelObject->getMediaType();
+        $this->modelObject->getVideoMetadata();
     }
 
     public function testSetVideoMetadata()
     {
         $this->modelObject->expects($this->once())->method('setData')->willReturn($this->modelObject);
-        $this->modelObject->setMediaType('Meta data');
+        $this->modelObject->setVideoMetadata('Meta data');
     }
 }
