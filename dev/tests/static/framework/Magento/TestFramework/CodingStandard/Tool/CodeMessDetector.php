@@ -47,11 +47,7 @@ class CodeMessDetector implements ToolInterface
     public function canRun()
     {
         /** TODO: Remove provided check after PHPMD will support PHP version 7 */
-        $isPhpVersionSupported = version_compare(
-            '6.0.0',
-            PHP_VERSION,
-            '>'
-        );
+        $isPhpVersionSupported = PHP_VERSION_ID < 70000;
         return class_exists('PHPMD\TextUI\Command') && $isPhpVersionSupported;
     }
 
