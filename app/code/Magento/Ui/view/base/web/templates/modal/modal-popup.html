@@ -11,7 +11,9 @@
            <% if(data.innerScroll){ %><%= data.innerScrollClass %><% } %>"
     data-role="modal"
     data-type="<%= data.type %>">
-    <div class="modal-inner-wrap">
+    <div class="modal-inner-wrap"
+         data-role="focusable-scope"
+         tabindex="0">
         <header class="modal-header">
             <% if(data.title){ %>
             <h1 class="modal-title"

@@ -10,9 +10,10 @@ define([
     'text!ui/template/modal/modal-popup.html',
     'text!ui/template/modal/modal-slide.html',
     'text!ui/template/modal/modal-custom.html',
+    'Magento_Ui/js/lib/key-codes',
     'jquery/ui',
     'mage/translate'
-], function ($, _, template, popupTpl, slideTpl, customTpl) {
+], function ($, _, template, popupTpl, slideTpl, customTpl, keyCodes) {
     'use strict';
 
     /**
@@ -44,6 +45,7 @@ define([
             type: 'popup',
             title: '',
             modalClass: '',
+            focus: '',
             popupTpl: popupTpl,
             slideTpl: slideTpl,
             customTpl: customTpl,
@@ -56,6 +58,9 @@ define([
             modalCloseBtn: '[data-role="closeBtn"]',
             modalContent: '[data-role="content"]',
             modalAction: '[data-role="action"]',
+            focusableScope: '[data-role="focusable-scope"]',
+            focusableStart: '[data-role="focusable-start"]',
+            focusableEnd: '[data-role="focusable-end"]',
             appendTo: 'body',
             wrapperClass: 'modals-wrapper',
             overlayClass: 'modals-overlay',
@@ -66,6 +71,7 @@ define([
             buttons: [{
                 text: $.mage.__('Ok'),
                 class: '',
+                attr: {},
 
                 /**
                  * Default action on button click
@@ -75,16 +81,56 @@ define([
                 }
             }]
         },
+        previosFocused: null,
+        keyeventHandlers: {
+
+            /**
+             * Tab key press handler,
+             * set focus to elements
+             */
+            tabKey: function () {
+                if (document.activeElement === this.modal.find(this.options.focusableStart)[0]) {
+                    this._setFocus('start');
+                }
+
+                if (document.activeElement === this.modal.find(this.options.focusableScope)[0] &&
+                    this.previosFocused === this.modal.find(this.options.modalCloseBtn)[0]) {
+                    this._setFocus('start');
+                }
+
+                if (document.activeElement === this.modal.find(this.options.focusableEnd)[0]) {
+                    this._setFocus('end');
+                }
+
+                this.previosFocused = document.activeElement;
+            },
+
+            /**
+             * Escape key press handler,
+             * close modal window
+             */
+            escapeKey: function () {
+                if (this.options.isOpen && this.modal.find(document.activeElement).length ||
+                    this.options.isOpen && this.modal[0] === document.activeElement) {
+                    this.closeModal();
+                }
+            }
+        },
 
         /**
          * Creates modal widget.
          */
         _create: function () {
+            _.bindAll(
+                this,
+                'keyeventSwitcher'
+            );
+
             this.options.transitionEvent = transitionEvent;
             this._createWrapper();
             this._renderModal();
             this._createButtons();
-
+            this._createFocusableElements();
             $(this.options.trigger).on('click', _.bind(this.toggleModal, this));
             this._on(this.modal.find(this.options.modalCloseBtn), {
                 'click': this.closeModal
@@ -93,6 +139,20 @@ define([
                 'openModal': this.openModal,
                 'closeModal': this.closeModal
             });
+        },
+
+        /**
+         * Create focusable scope in modal window.
+         * append to focusable scope element with start
+         * and element with end position
+         */
+        _createFocusableElements: function() {
+            var startFocusableTemplate = '<div data-role="focusable-start" tabindex="0"></div>',
+                endFocusableTemplate = '<div data-role="focusable-end" tabindex="0"></div>',
+                scopeFocusable = this.modal.find(this.options.focusableScope);
+
+            $(startFocusableTemplate).insertBefore(scopeFocusable);
+            $(endFocusableTemplate).insertAfter(scopeFocusable);
         },
 
         /**
@@ -124,6 +184,18 @@ define([
         },
 
         /**
+         * Listener key events.
+         * Call handler function if it exists
+         */
+        keyeventSwitcher: function (event) {
+            var key = keyCodes[event.keyCode];
+
+            if (this.keyeventHandlers.hasOwnProperty(key)) {
+                this.keyeventHandlers[key].apply(this, arguments);
+            }
+        },
+
+        /**
          * Toggle modal.
          * * @return {Element} - current element.
          */
@@ -141,9 +213,12 @@ define([
          */
         openModal: function () {
             this.options.isOpen = true;
+            this.focussedElement = document.activeElement;
             this._createOverlay();
             this._setActive();
+            this._setKeyListener();
             this.modal.one(this.options.transitionEvent, _.bind(this._trigger, this, 'opened'));
+            this.modal.one(this.options.transitionEvent, _.bind(this._setFocus, this, 'end', 'opened'));
             this.modal.addClass(this.options.modalVisibleClass);
 
             if (!this.options.transitionEvent) {
@@ -154,14 +229,67 @@ define([
         },
 
         /**
+         * Set focus to element.
+         * @param {string} position - can be "start" and "end"
+         *      positions.
+         *      If position is "end" - sets focus to first
+         *      focusable element in modal window scope.
+         *      If position is "start" - sets focus to last
+         *      focusable element in modal window scope
+         *
+         *  @param {string} type - can be "opened" or false
+         *      If type is "opened" - looks to "this.options.focus"
+         *      property and sets focus
+         */
+        _setFocus: function (position, type) {
+            var focusableElements,
+                infelicity;
+
+            if (type === 'opened' && this.options.focus) {
+                if (typeof this.options.focus === 'object') {
+                    this.options.focus.focus();
+                } else if (this.options.focus !== 'none') {
+                    this.modal.find(this.options.focus).focus();
+                } else {
+                    this.modal.find(this.options.focusableScope).focus();
+                }
+            } else {
+                if (position === 'end') {
+                    this.modal.find(this.options.modalCloseBtn).focus();
+                } else if (position === 'start') {
+                    infelicity = 2; //Constant for find last focusable element
+                    focusableElements = this.modal.find(':focusable');
+                    focusableElements.eq(focusableElements.length - infelicity).focus();
+                }
+            }
+        },
+
+        /**
+         * Set keyup listener when modal is opened.
+         */
+        _setKeyListener: function () {
+            this.modal.bind('keyup', this.keyeventSwitcher);
+        },
+
+        /**
+         * Remove keyup listener when modal is closed.
+         */
+        _removeKeyListener: function () {
+            this.modal.unbind('keyup', this.keyeventSwitcher);
+        },
+
+        /**
          * Close modal.
          * * @return {Element} - current element.
          */
         closeModal: function () {
             var that = this;
 
+            this._removeKeyListener();
             this.options.isOpen = false;
+            this.previosFocused = null;
             this.modal.one(this.options.transitionEvent, function () {
+                $(that.focussedElement).focus();
                 that._close();
             });
             this.modal.removeClass(this.options.modalVisibleClass);
@@ -246,6 +374,9 @@ define([
             _.each(this.options.buttons, function (btn, key) {
                 var button = that.buttons[key];
 
+                if (btn.attr) {
+                    $(button).attr(btn.attr);
+                }
                 $(button).on('click', _.bind(btn.click, that));
             });
         },
