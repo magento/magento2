@@ -45,9 +45,9 @@ class Config extends \Magento\Framework\Config\AbstractXml
         \Magento\Framework\Validator\UniversalFactory $builderFactory,
         \Magento\Framework\Config\Dom\UrnResolver $urnResolver
     ) {
-        parent::__construct($configFiles);
         $this->_builderFactory = $builderFactory;
         $this->urnResolver = $urnResolver;
+        parent::__construct($configFiles);
     }
 
     /**
@@ -407,7 +407,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
      */
     public function getSchemaFile()
     {
-        return $this->urnResolver->getRealPath('urn:magento:framework:Validator/etc/acvalidationl.xsd');
+        return $this->urnResolver->getRealPath('urn:magento:framework:Validator/etc/validation.xsd');
     }
 
     /**

@@ -35,6 +35,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $directoryReadMock;
 
+    /** @var \Magento\Framework\Config\ViewFactory | \PHPUnit_Framework_MockObject_MockObject */
+    protected $viewConfigFactoryMock;
+
     protected function setUp()
     {
         $this->readerMock = $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false);
@@ -53,7 +56,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
+        $this->viewConfigFactoryMock = $this->getMock('Magento\Framework\Config\ViewFactory', [], [], '', false );
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->config = $this->objectManagerHelper->getObject(
             'Magento\Framework\View\Config',
@@ -62,7 +65,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'filesystem' => $this->filesystemMock,
                 'assetRepo' => $this->repositoryMock,
                 'viewFileSystem' => $this->fileSystemMock,
-                'fileIteratorFactory' => $this->fileIteratorFactoryMock
+                'fileIteratorFactory' => $this->fileIteratorFactoryMock,
+                'viewConfigFactory' => $this->viewConfigFactoryMock
             ]
         );
     }
@@ -116,6 +120,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('readFile')
             ->with($this->equalTo($configFile))
             ->will($this->returnValue($xmlData));
+        $viewConfigFactory = new \Magento\Framework\Config\ViewFactory();
+        $this->viewConfigFactoryMock->expects($this->once())
+            ->method('create')
+            ->with([$configFile => $xmlData])
+            ->willReturn($viewConfigFactory->create([$xmlData]));
         $this->assertInstanceOf('Magento\Framework\Config\View', $this->config->getViewConfig($params));
         // lazy load test
         $this->assertInstanceOf('Magento\Framework\Config\View', $this->config->getViewConfig($params));
