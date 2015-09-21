@@ -17,6 +17,11 @@ use Magento\Framework\Json\EncoderInterface;
 class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
 {
     /**
+     * @var \Magento\Framework\View\Asset\Repository
+     */
+    protected $_assetRepo;
+
+    /**
      * @var \Magento\Framework\Config\View
      */
     protected $configView;
@@ -29,11 +34,13 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
+        \Magento\Framework\View\Asset\Repository $assetRepo,
         EncoderInterface $jsonEncoder,
         array $data = []
     )
     {
         $this->jsonEncoder = $jsonEncoder;
+        $this->_assetRepo = $assetRepo;
         parent::__construct($context, $arrayUtils, $data);
     }
 
@@ -109,6 +116,16 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
                 'caption' => $image->getLabel(),
                 'position' => $image->getPosition(),
                 'isMain' => $this->isMainImage($image),
+            ];
+        }
+        if(empty($imagesItems)) {
+            $imagesItems[] = [
+                'thumb' => $this->_assetRepo->getUrl('Magento_Catalog::images/product/placeholder/small_image.jpg'),
+                'img' => $this->_assetRepo->getUrl('Magento_Catalog::images/product/placeholder/image.jpg'),
+                'original' => $this->_assetRepo->getUrl('Magento_Catalog::images/product/placeholder/image.jpg'),
+                'caption' => '',
+                'position' => '0',
+                'isMain' => true,
             ];
         }
         return json_encode($imagesItems);
