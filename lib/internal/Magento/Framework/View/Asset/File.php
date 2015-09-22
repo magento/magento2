@@ -6,7 +6,8 @@
 
 namespace Magento\Framework\View\Asset;
 
-use Magento\Framework\View\Asset\ConfigInterface as AssetConfigInterface;
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * A locally available static view file asset that can be referred with a file path
@@ -50,13 +51,17 @@ class File implements MergeableInterface
      */
     private $minification;
 
+    /** @var Filesystem */
+    protected $filesystem;
+
     /**
      * @param Source $source
      * @param ContextInterface $context
-     * @param string $filePath
-     * @param string $module
-     * @param string $contentType
+     * @param $filePath
+     * @param $module
+     * @param $contentType
      * @param Minification $minification
+     * @param Filesystem $filesystem
      */
     public function __construct(
         Source $source,
@@ -64,7 +69,8 @@ class File implements MergeableInterface
         $filePath,
         $module,
         $contentType,
-        Minification $minification
+        Minification $minification,
+        Filesystem $filesystem
     ) {
         $this->source = $source;
         $this->context = $context;
@@ -72,6 +78,7 @@ class File implements MergeableInterface
         $this->module = $module;
         $this->contentType = $contentType;
         $this->minification = $minification;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -103,12 +110,17 @@ class File implements MergeableInterface
      */
     public function getPath()
     {
-        $result = '';
-        $result = $this->join($result, $this->context->getPath());
-        $result = $this->join($result, $this->module);
-        $result = $this->join($result, $this->filePath);
-        $result = $this->minification->addMinifiedSign($result);
-        return $result;
+        $path = '';
+        $path = $this->join($path, $this->context->getPath());
+        $path = $this->join($path, $this->module);
+        $path = $this->join($path, $this->filePath);
+        $minifiedPath = $this->minification->addMinifiedSign($path);
+        if ($path !== $minifiedPath
+            && $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW)->isExist($minifiedPath)
+        ) {
+            $path = $minifiedPath;
+        }
+        return $path;
     }
 
     /**
