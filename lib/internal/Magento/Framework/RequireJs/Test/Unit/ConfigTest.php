@@ -8,8 +8,6 @@ namespace Magento\Framework\RequireJs\Test\Unit;
 
 use \Magento\Framework\RequireJs\Config;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
