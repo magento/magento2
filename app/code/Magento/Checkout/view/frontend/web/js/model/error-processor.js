@@ -7,16 +7,17 @@ define(
         'mage/url',
         'Magento_Ui/js/model/messageList'
     ],
-    function (url, messageList) {
+    function (url, globalMessageList) {
         'use strict';
 
         return {
-            process: function (response) {
+            process: function (response, messageContainer) {
+                messageContainer = messageContainer || globalMessageList;
                 if (response.status == 401) {
                     window.location.replace(url.build('customer/account/login/'));
                 } else {
                     var error = JSON.parse(response.responseText);
-                    messageList.addErrorMessage(error);
+                    messageContainer.addErrorMessage(error);
                 }
             }
         };

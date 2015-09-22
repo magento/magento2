@@ -183,13 +183,11 @@ define([
             this._videoInformationGetBtn = jQuery(this._videoInformationBtnSelector);
             this._videoInformationGetUrlField = jQuery(this._videoUrlSelector);
             this._videoInformationGetEditBtn = jQuery(this._editVideoBtnSelector);
-            this._deleteGalleryVideoSelectorBtn = jQuery(this._deleteGalleryVideoSelector);
 
             this._videoInformationGetBtn.on('click', $.proxy(this._onGetVideoInformationClick, this));
             this._videoInformationGetUrlField.on('focusout', $.proxy(this._onGetVideoInformationFocusOut, this));
             this._videoUrlWidget.on("updated_video_information", $.proxy(this._onGetVideoInformationSuccess, this));
             this._videoUrlWidget.on("error_updated_information", $.proxy(this._onGetVideoInformationError, this));
-            this._deleteGalleryVideoSelectorBtn.on('mouseup', $.proxy(function(event){this._onGalleryVideoDeleteClick(event)}, this));
         },
         /**
          * Fired when user click on button "Get video information"
@@ -293,10 +291,12 @@ define([
          * @private
          */
         _onGalleryVideoDeleteClick : function (event) {
+            this.close();
             event.preventDefault();
             event.stopImmediatePropagation();
             var $videoContainer = $(event.currentTarget).closest('[data-role=image]');
             $(event.target).trigger('removeItem', $videoContainer.data('imageData'));
+
         },
         /**
          * Remove ".tmp"
@@ -440,7 +440,7 @@ define([
             $.each($(this._videoFormSelector).serializeArray(), function(i, field) {
                 data[field.name] = field.value;
             });
-            data['disabled'] = $(this._videoDisableinputSelector).prop('checked') ? 1 : 0;
+            data['disabled'] = $(this._videoDisableinputSelector).attr('checked') ? 1 : 0;
             data['media_type'] = 'external-video';
             data.old_file = oldFile;
             
@@ -508,11 +508,12 @@ define([
             this.element.modal({
                 type: 'slide',
                 modalClass: 'mage-new-video-dialog form-inline',
-                title: $.mage.__('Create Video'),
-                buttons: [{
-                    text: $.mage.__('Save'),
-                    class: 'action-primary video-create-button',
-                    click: $.proxy(widget._onCreate, widget)
+                title: $.mage.__('New Video'),
+                buttons: [
+                    {
+                        text: $.mage.__('Save'),
+                        class: 'action-primary video-create-button',
+                        click: $.proxy(widget._onCreate, widget)
                     },
                     {
                         text: $.mage.__('Cancel'),
@@ -538,8 +539,8 @@ define([
                     widget._onGetVideoInformationEditClick();
                     var modalTitleElement = $('.modal-title');
                     if(!file) {
-                        roles.prop('checked', $('.image.item').length < 1);
-                        modalTitleElement.text($.mage.__('Create Video'));
+                        roles.prop('checked', $('.image.item:not(.removed)').length < 1);
+                        modalTitleElement.text($.mage.__('New Video'));
                         widget._isEditPage = false;
                         return;
                     }
@@ -614,7 +615,6 @@ define([
          * @private
          */
         _onUpdate: function() {
-
             if(!this.isValid()) {
                 return;
             }
@@ -634,11 +634,11 @@ define([
                     $(_tmp).val(_field.val());
                 }
             });
-            var flagChecked     = $(this._videoDisableinputSelector).prop('checked') ? 1 : 0;
+            var imageData = this._getImage($('#file_name').val());
+            var flagChecked     = $(this._videoDisableinputSelector).attr('checked') ? 1 : 0;
             $('input' + _inputSelector + '[disabled]"]').val(flagChecked);
             $(_inputSelector).siblings('.image-fade').css('visibility', flagChecked ? 'visible': 'hidden');
-
-            var imageData = this._getImage($('#file_name').val());
+            imageData['disabled'] = flagChecked;
 
             if(this._tempPreviewImageData) {
                 this._onImageLoaded(this._tempPreviewImageData, null, imageData.file, $.proxy(this.close, this));
@@ -708,7 +708,7 @@ define([
             ext = ext ? ext.toLowerCase() : '';
             if(
                 ext.length < 2 ||
-                this._imageTypes.indexOf(ext) == -1 ||
+                this._imageTypes.indexOf(ext.toLowerCase()) == -1 ||
                 !file.files  ||
                 !file.files.length
 
@@ -781,6 +781,7 @@ define([
                 this._previewImage.remove();
                 this._previewImage = null;
             }
+            this._tempPreviewImageData = null;
             $(this._videoPlayerSelector).trigger('reset');
             var newVideoForm = this.element.find(this._videoFormSelector);
             jQuery(newVideoForm).find('input[type="hidden"][name!="form_key"]').val('');
@@ -852,7 +853,7 @@ define([
                 $('.video-edit').show();
                 $('.mage-new-video-dialog').createVideoPlayer({reset : true}).createVideoPlayer('reset');
             });
-            $(document).on('click', '.item.image', function() {
+            $(document).on('click', '.item.image:not(.removed)', function() {
                 var formFields = $(self._videoFormSelector).find('.edited-data');
                 var container = $(this);
 
@@ -860,7 +861,7 @@ define([
                     $(field).val(container.find('input[name*="' + field.name + '"]').val());
                 });
 
-                var flagChecked = (container.find('input[name*="disabled"]').val() == 1) ? true : false;
+                var flagChecked = container.find('input[name*="disabled"]').val() == 'checked';
                 $(self._videoDisableinputSelector).prop('checked', flagChecked);
 
                 var file = $('#file_name').val(container.find('input[name*="file"]').val());
