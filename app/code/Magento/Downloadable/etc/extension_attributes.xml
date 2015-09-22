@@ -10,4 +10,7 @@
         <attribute code="downloadable_product_links" type="Magento\Downloadable\Api\Data\LinkInterface[]" />
         <attribute code="downloadable_product_samples" type="Magento\Downloadable\Api\Data\SampleInterface[]" />
     </extension_attributes>
+    <extension_attributes for="Magento\Quote\Api\Data\ProductOptionInterface">
+        <attribute code="downloadable_option" type="Magento\Downloadable\Api\Data\DownloadableOptionInterface" />
+    </extension_attributes>
 </config>
