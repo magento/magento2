@@ -21,7 +21,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSchemaFile()
     {
-        $config = new \Magento\Framework\Config\Theme(null, $this->urnResolverMock);
+        $config = new \Magento\Framework\Config\Theme($this->urnResolverMock, null);
         $this->urnResolverMock->expects($this->exactly(2))
             ->method('getRealPath')
             ->with('urn:magento:framework:Config/etc/theme.xsd')
@@ -44,8 +44,8 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     {
         $expected = reset($expected);
         $config = new \Magento\Framework\Config\Theme(
-            file_get_contents(__DIR__ . '/_files/area/' . $themePath . '/theme.xml'),
-            $this->urnResolverMock
+            $this->urnResolverMock,
+            file_get_contents(__DIR__ . '/_files/area/' . $themePath . '/theme.xml')
         );
         $this->assertSame($expected['media'], $config->getMedia());
         $this->assertSame($expected['title'], $config->getThemeTitle());
