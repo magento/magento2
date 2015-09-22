@@ -258,6 +258,7 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * @param ModuleDataSetupInterface $setup
+     * @return void
      */
     private function upgradeHash($setup)
     {

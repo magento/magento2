@@ -59,7 +59,7 @@ class UpgradeHashAlgorithmCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->collection->addAttributeToSelect('*');
-        $customerCollection = $items = $this->collection->getItems();
+        $customerCollection = $this->collection->getItems();
         /** @var $customer Customer */
         foreach ($customerCollection as $customer) {
             $customer->load($customer->getId());
