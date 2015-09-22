@@ -164,11 +164,7 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
      */
     public function deleteById($cartId, $itemId)
     {
-        /**
-         * Quote.
-         *
-         * @var \Magento\Quote\Model\Quote $quote
-         */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         $quoteItem = $quote->getItemById($itemId);
         if (!$quoteItem) {

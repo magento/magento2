@@ -16,11 +16,36 @@ class CartItemProcessor implements CartItemProcessorInterface
     protected $objectFactory;
 
     /**
-     * @param \Magento\Framework\DataObject\Factory $objectFactory
+     * @var \Magento\Quote\Model\Quote\ProductOptionFactory
      */
-    public function __construct(\Magento\Framework\DataObject\Factory $objectFactory)
-    {
+    protected $productOptionFactory;
+
+    /**
+     * @var \Magento\Quote\Api\Data\ProductOptionExtensionFactory
+     */
+    protected $extensionFactory;
+
+    /**
+     * @var \Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFactory
+     */
+    protected $itemOptionValueFactory;
+
+    /**
+     * @param \Magento\Framework\DataObject\Factory $objectFactory
+     * @param \Magento\Quote\Model\Quote\ProductOptionFactory $productOptionFactory
+     * @param \Magento\Quote\Api\Data\ProductOptionExtensionFactory $extensionFactory
+     * @param \Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFactory $itemOptionValueFactory
+     */
+    public function __construct(
+        \Magento\Framework\DataObject\Factory $objectFactory,
+        \Magento\Quote\Model\Quote\ProductOptionFactory $productOptionFactory,
+        \Magento\Quote\Api\Data\ProductOptionExtensionFactory $extensionFactory,
+        \Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFactory $itemOptionValueFactory
+    ) {
         $this->objectFactory = $objectFactory;
+        $this->productOptionFactory = $productOptionFactory;
+        $this->extensionFactory = $extensionFactory;
+        $this->itemOptionValueFactory = $itemOptionValueFactory;
     }
 
     /**
@@ -47,6 +72,32 @@ class CartItemProcessor implements CartItemProcessorInterface
      */
     public function processProductOptions(CartItemInterface $cartItem)
     {
+        $attributesOption = $cartItem->getProduct()->getCustomOption('attributes');
+        $selectedConfigurableOptions = unserialize($attributesOption->getValue());
+
+        if (is_array($selectedConfigurableOptions)) {
+            $configurableOptions = [];
+            foreach ($selectedConfigurableOptions as $optionId => $optionValue) {
+                /** @var \Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface $option */
+                $option = $this->itemOptionValueFactory->create();
+                $option->setOptionId($optionId);
+                $option->setOptionValue($optionValue);
+                $configurableOptions[] = $option;
+            }
+
+            $productOption = $cartItem->getProductOption()
+                ? $cartItem->getProductOption()
+                : $this->productOptionFactory->create();
+
+            /** @var  \Magento\Quote\Api\Data\ProductOptionExtensionInterface $extensibleAttribute */
+            $extensibleAttribute =  $productOption->getExtensionAttributes()
+                ? $productOption->getExtensionAttributes()
+                : $this->extensionFactory->create();
+
+            $extensibleAttribute->setConfigurableItemOptions($configurableOptions);
+            $productOption->setExtensionAttributes($extensibleAttribute);
+            $cartItem->setProductOption($productOption);
+        }
         return $cartItem;
     }
 }
