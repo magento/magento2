@@ -350,19 +350,19 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * {@inheritdoc}
      */
-    public function validateData(\Magento\Framework\Object $object)
+    public function validateData(\Magento\Framework\DataObject $dataObject)
     {
-        $result = parent::validateData($object);
+        $result = parent::validateData($dataObject);
         if ($result === true) {
             $result = [];
         }
 
-        $action = $object->getData('simple_action');
-        $discount = $object->getData('discount_amount');
+        $action = $dataObject->getData('simple_action');
+        $discount = $dataObject->getData('discount_amount');
         $result = array_merge($result, $this->validateDiscount($action, $discount));
-        if ($object->getData('sub_is_enable') == 1) {
-            $action = $object->getData('sub_simple_action');
-            $discount = $object->getData('sub_discount_amount');
+        if ($dataObject->getData('sub_is_enable') == 1) {
+            $action = $dataObject->getData('sub_simple_action');
+            $discount = $dataObject->getData('sub_discount_amount');
             $result = array_merge($result, $this->validateDiscount($action, $discount));
         }
 

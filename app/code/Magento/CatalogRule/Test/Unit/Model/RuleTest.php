@@ -216,7 +216,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateData($data, $expected)
     {
-        $result = $this->rule->validateData(new \Magento\Framework\Object($data));
+        $result = $this->rule->validateData(new \Magento\Framework\DataObject($data));
         $this->assertEquals($result, $expected);
     }
 
