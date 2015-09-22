@@ -51,33 +51,31 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
     /**
      * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
-     * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Backend\Model\UrlFactory $backendUrlFactory
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\File\Size $fileConfig
-     * @param \Magento\Framework\View\Element\Context $context
+     * @param \Magento\Framework\View\LayoutInterface $layout
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Data\Form\Element\Factory $factoryElement,
         \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection,
-        \Magento\Framework\Escaper $escaper,
-        \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Backend\Model\UrlFactory $backendUrlFactory,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Framework\File\Size $fileConfig,
-        \Magento\Framework\View\Element\Context $context,
+        \Magento\Framework\View\LayoutInterface $layout,
         array $data = []
     ) {
+        $escaper = $context->getEscaper();
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
 
+        $assetRepo = $context->getAssetRepository();
         $this->assetRepo = $assetRepo;
         $this->url = $backendUrlFactory->create();
         $this->catalogHelperData = $catalogData;
         $this->fileConfig = $fileConfig;
         $this->maxFileSize = $this->getFileMaxSize();
-        $this->layout = $context->getLayout();
+        $this->layout = $layout;
     }
 
     /**
