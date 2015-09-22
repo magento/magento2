@@ -123,7 +123,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->load();
 
         $this->setNotDefaultThemeForFixtureStore();
-        $expectedViewUrl = 'static/frontend/Magento/luma/en_US/Magento_Theme/favicon.ico';
+        $expectedViewUrl = 'static/frontend/Magento/blank/en_US/Magento_Theme/favicon.ico';
         $this->model->setTemplateText('{{view url="Magento_Theme::favicon.ico"}}');
         $this->assertStringEndsNotWith($expectedViewUrl, $this->model->getProcessedTemplate());
         $this->model->setDesignConfig([
@@ -513,15 +513,18 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     protected function setNotDefaultThemeForFixtureStore()
     {
-        $theme = $this->objectManager->create('Magento\Framework\View\Design\ThemeInterface');
-        $theme->load('Magento/luma', 'theme_path');
-        $this->objectManager->get('Magento\Framework\App\Config\MutableScopeConfigInterface')
-            ->setValue(
-                DesignInterface::XML_PATH_THEME_ID,
-                $theme->getId(),
-                ScopeInterface::SCOPE_STORE,
-                'fixturestore'
-            );
+        $theme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Framework\View\Design\ThemeInterface'
+        );
+        $theme->load('Magento/blank', 'theme_path');
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\App\Config\MutableScopeConfigInterface'
+        )->setValue(
+            \Magento\Framework\View\DesignInterface::XML_PATH_THEME_ID,
+            $theme->getId(),
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            'fixturestore'
+        );
     }
 
     /**
@@ -536,7 +539,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->load();
 
         $this->setNotDefaultThemeForFixtureStore();
-        $expectedViewUrl = 'static/frontend/Magento/luma/en_US/Magento_Theme/favicon.ico';
+        $expectedViewUrl = 'static/frontend/Magento/blank/en_US/Magento_Theme/favicon.ico';
         $this->model->setTemplateSubject('{{view url="Magento_Theme::favicon.ico"}}');
         $this->assertStringEndsNotWith($expectedViewUrl, $this->model->getProcessedTemplateSubject([]));
         $this->model->setDesignConfig([
@@ -560,7 +563,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ->load();
 
         $this->assertStringEndsWith(
-            'static/frontend/Magento/blank/en_US/Magento_Email/logo_email.png',
+            'static/frontend/Magento/luma/en_US/Magento_Email/logo_email.png',
             $this->model->getDefaultEmailLogo()
         );
     }
