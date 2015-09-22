@@ -25,19 +25,19 @@ class TaxAdjustment extends \Magento\Tax\Pricing\Render\Adjustment
     /**
      * @param Template\Context $context
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Tax\Helper\Data $taxHelper
+     * @param \Magento\Tax\Helper\Data $helper
      * @param \Magento\Weee\Helper\Data $weeeHelper
      * @param array $data
      */
     public function __construct(
         Template\Context $context,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Tax\Helper\Data $taxHelper,
+        \Magento\Tax\Helper\Data $helper,
         \Magento\Weee\Helper\Data $weeeHelper,
         array $data = []
     ) {
         $this->weeeHelper = $weeeHelper;
-        parent::__construct($context, $priceCurrency, $taxHelper, $data);
+        parent::__construct($context, $priceCurrency, $helper, $data);
     }
 
     /**
