@@ -21,4 +21,12 @@ class ContactForm extends Template
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
     }
+
+    /**
+     * @return string
+     */
+    public function getFormAction()
+    {
+        return $this->getUrl('contact/index/post');
+    }
 }

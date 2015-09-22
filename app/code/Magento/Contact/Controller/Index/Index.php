@@ -16,9 +16,6 @@ class Index extends \Magento\Contact\Controller\Index
     public function execute()
     {
         $this->_view->loadLayout();
-        $this->_view->getLayout()
-            ->getBlock('contactForm')
-            ->setFormAction($this->_url->getUrl('*/*/post', ['_secure' => true]));
         $this->_view->renderLayout();
     }
 }
