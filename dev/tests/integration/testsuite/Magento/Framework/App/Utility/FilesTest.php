@@ -52,7 +52,6 @@ class FilesTest extends \PHPUnit_Framework_TestCase
                 | Files::INCLUDE_PUB_CODE
                 | Files::INCLUDE_LIBS
                 | Files::INCLUDE_TEMPLATES
-                | Files::INCLUDE_TESTS
             )
         );
     }
