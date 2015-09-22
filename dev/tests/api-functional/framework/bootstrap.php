@@ -6,7 +6,6 @@
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Autoload\AutoloaderRegistry;
-use Magento\Framework\Component\ComponentRegistrar;
 
 require_once __DIR__ . '/../../../../app/bootstrap.php';
 require_once __DIR__ . '/autoload.php';
@@ -91,7 +90,9 @@ $bootstrap->runBootstrap();
 $application->initialize();
 
 \Magento\TestFramework\Helper\Bootstrap::setInstance(new \Magento\TestFramework\Helper\Bootstrap($bootstrap));
+$dirSearch = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create('Magento\Framework\Component\DirSearch');
 \Magento\Framework\App\Utility\Files::setInstance(
-    new \Magento\Framework\App\Utility\Files(new \Magento\Framework\Component\ComponentRegistrar(), BP)
+    new \Magento\Framework\App\Utility\Files(new \Magento\Framework\Component\ComponentRegistrar(), $dirSearch)
 );
 unset($bootstrap, $application, $settings, $shell);

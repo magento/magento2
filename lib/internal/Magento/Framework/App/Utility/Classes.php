@@ -191,7 +191,7 @@ class Classes
             '/'
         ) . '\/app\/code\/([A-Za-z]+)\/([A-Za-z]+)\/(' . $subTypePattern . '\/.+)\.php$/';
         $result = [];
-        foreach (Files::init()->getPhpFiles(true, false, false, false, false) as $file) {
+        foreach (Files::init()->getClassFiles(Files::INCLUDE_APP_CODE) as $file) {
             if (preg_match($pattern, $file, $matches)) {
                 $module = "{$matches[1]}_{$matches[2]}";
                 $class = "{$module}" . '\\' . str_replace(

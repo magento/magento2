@@ -18,9 +18,14 @@ class FileIteratorTest extends \PHPUnit_Framework_TestCase
     protected $fileIterator;
 
     /**
-     * @var \Magento\Framework\Filesystem\Driver\File | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\File\ReadFactory | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $filesystemDriver;
+    protected $fileReadFactory;
+
+    /**
+     * @var \Magento\Framework\Filesystem\File\Read | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $fileRead;
 
     /**
      * @var \Magento\Framework\Module\Dir\ReverseResolver | \PHPUnit_Framework_MockObject_MockObject
@@ -37,7 +42,8 @@ class FileIteratorTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->filePaths = ['directory/path/file1', 'directory/path/file2'];
-        $this->filesystemDriver = $this->getMock('Magento\Framework\Filesystem\Driver\File', [], [], '', false);
+        $this->fileReadFactory = $this->getMock('Magento\Framework\Filesystem\File\ReadFactory', [], [], '', false);
+        $this->fileRead = $this->getMock('Magento\Framework\Filesystem\File\Read', [], [], '', false);
         $this->moduleDirResolverMock = $this->getMock(
             'Magento\Framework\Module\Dir\ReverseResolver',
             [],
@@ -47,7 +53,7 @@ class FileIteratorTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->fileIterator = new \Magento\Email\Model\Template\Config\FileIterator(
-            $this->filesystemDriver,
+            $this->fileReadFactory,
             $this->filePaths,
             $this->moduleDirResolverMock
         );
@@ -56,7 +62,6 @@ class FileIteratorTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         $this->fileIterator = null;
-        $this->directoryMock = null;
         $this->filePaths = null;
         $this->moduleDirResolverMock = null;
     }
@@ -76,9 +81,12 @@ class FileIteratorTest extends \PHPUnit_Framework_TestCase
                 ->method('getModuleName')
                 ->with($filePath)
                 ->will($this->returnValue($moduleName));
-            $this->filesystemDriver->expects($this->at($dirIndex++))
-                ->method('fileGetContents')
+            $this->fileReadFactory->expects($this->at($dirIndex))
+                ->method('create')
                 ->with($filePath)
+                ->willReturn($this->fileRead);
+            $this->fileRead->expects($this->at($dirIndex++))
+                ->method('readAll')
                 ->will($this->returnValue($contents[$index++]));
         }
         $index = 0;
@@ -100,8 +108,8 @@ class FileIteratorTest extends \PHPUnit_Framework_TestCase
             ->method('getModuleName')
             ->with($filePath)
             ->will($this->returnValue(false));
-        $this->filesystemDriver->expects($this->never())
-            ->method('fileGetContents');
+        $this->fileReadFactory->expects($this->never())->method('create');
+        $this->fileRead->expects($this->never())->method('readAll');
 
         $this->fileIterator->current();
     }

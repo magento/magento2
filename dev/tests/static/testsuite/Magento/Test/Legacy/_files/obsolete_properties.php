@@ -414,4 +414,10 @@ return [
     ['_origData', 'Magento\Framework\DataObject', 'Moved to Magento\Framework\Model\AbstractModel'],
     ['_idFieldName', 'Magento\Framework\DataObject', 'Moved to Magento\Framework\Model\AbstractModel'],
     ['_isDeleted', 'Magento\Framework\DataObject', 'Moved to Magento\Framework\Model\AbstractModel'],
+    ['themesDirectory', 'Magento\Email\Model\Template\Config'],
+    ['_directory', 'Magento\Theme\Model\Theme\Collection'],
+    ['_targetDirs', 'Magento\Theme\Model\Theme\Collection'],
+    ['directoryRead', 'Magento\Theme\Model\Theme\Registration'],
+    ['themesDirectory', 'Magento\Widget\Model\Config\FileResolver'],
+    ['themeDirectoryRead', 'Magento\Framework\View\Design\Theme\Customization\Path'],
 ];

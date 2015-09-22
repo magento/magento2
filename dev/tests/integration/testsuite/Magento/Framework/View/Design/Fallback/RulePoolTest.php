@@ -16,9 +16,17 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 class RulePoolTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Fake module name
+     */
     const MODULE = 'Test_FrameworkViewFallback';
+
+    /**#@+
+     *  Fake theme paths
+     */
     const THEME_ONE = 'frontend/FrameworkViewFallback/test-theme-one';
     const THEME_TWO = 'frontend/FrameworkViewFallback/test-theme-two';
+    /**#@-*/
 
     /**
      * @var RulePool
@@ -150,7 +158,7 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
         );
         $coreModulePath = $componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_Theme');
         /** @var \Magento\Framework\Filesystem $filesystem */
-        $filesystem = Bootstrap::getObjectManager()->get('\Magento\Framework\Filesystem');
+        $filesystem = $objectManager->get('\Magento\Framework\Filesystem');
         $libPath = rtrim($filesystem->getDirectoryRead(DirectoryList::LIB_WEB)->getAbsolutePath(), '/');
 
         return [

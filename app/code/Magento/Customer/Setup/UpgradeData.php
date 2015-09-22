@@ -210,6 +210,23 @@ class UpgradeData implements UpgradeDataInterface
             ];
             $this->upgradeAttributes($entityAttributes, $customerSetup);
         }
+
+        if (version_compare($context->getVersion(), '2.0.4', '<')) {
+            $customerSetup->addAttribute(
+                Customer::ENTITY,
+                'updated_at',
+                [
+                    'type' => 'static',
+                    'label' => 'Updated At',
+                    'input' => 'date',
+                    'required' => false,
+                    'sort_order' => 87,
+                    'visible' => false,
+                    'system' => false,
+                ]
+            );
+        }
+
         $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
         $indexer->reindexAll();
         $this->eavConfig->clear();

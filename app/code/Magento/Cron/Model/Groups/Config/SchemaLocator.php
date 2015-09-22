@@ -5,6 +5,8 @@
  */
 namespace Magento\Cron\Model\Groups\Config;
 
+use Magento\Framework\Module\Dir;
+
 /**
  * Cron locator
  */
@@ -29,7 +31,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
     {
-        $this->_schema = $moduleReader->getModuleDir('etc', 'Magento_Cron') . '/' . 'cron_groups.xsd';
+        $this->_schema = $moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Cron') . '/' . 'cron_groups.xsd';
         $this->_perFileSchema = $this->_schema;
     }
 

@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\Module\ModuleList;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Module\Declaration\Converter\Dom;
 use Magento\Framework\Xml\Parser;
 use Magento\Framework\Component\ComponentRegistrarInterface;
@@ -131,6 +130,7 @@ class Loader
      */
     private function sortBySequence($origList)
     {
+        ksort($origList);
         $expanded = [];
         foreach ($origList as $moduleName => $value) {
             $expanded[] = [

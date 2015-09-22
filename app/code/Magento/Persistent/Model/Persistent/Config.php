@@ -5,7 +5,7 @@
  */
 namespace Magento\Persistent\Model\Persistent;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Module\Dir;
 
 /**
  * Persistent Config Model
@@ -89,6 +89,7 @@ class Config
      *
      * @param string $path
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setConfigFilePath($path)
     {
@@ -123,7 +124,8 @@ class Config
                 [
                     'xml' => $xml,
                     'idAttributes' => ['config/instances/blocks/reference' => 'id'],
-                    'schemaFile' => $this->_moduleReader->getModuleDir('etc', 'Magento_Persistent') . '/persistent.xsd',
+                    'schemaFile' => $this->_moduleReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Persistent')
+                        . '/persistent.xsd',
                 ]
             );
             $this->_configDomXPath = new \DOMXPath($configDom->getDom());
@@ -136,6 +138,7 @@ class Config
      *
      * @param string $block
      * @return array
+     * @codeCoverageIgnore
      */
     public function getBlockConfigInfo($block)
     {
@@ -148,6 +151,7 @@ class Config
      * Retrieve instances that should be emulated by persistent data
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function collectInstancesToEmulate()
     {

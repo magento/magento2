@@ -5,7 +5,8 @@
  */
 namespace Magento\Framework\RequireJs;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Filesystem\File\ReadFactory;
 use Magento\Framework\View\Asset\Minification;
 
 /**
@@ -82,9 +83,9 @@ config;
     private $design;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @var \Magento\Framework\Filesystem\File\ReadFactory
      */
-    private $baseDir;
+    private $readFactory;
 
     /**
      * @var \Magento\Framework\View\Asset\ContextInterface
@@ -112,14 +113,14 @@ config;
     public function __construct(
         \Magento\Framework\RequireJs\Config\File\Collector\Aggregated $fileSource,
         \Magento\Framework\View\DesignInterface $design,
-        \Magento\Framework\Filesystem $appFilesystem,
+        ReadFactory $readFactory,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\Code\Minifier\AdapterInterface $minifyAdapter,
         Minification $minification
     ) {
         $this->fileSource = $fileSource;
         $this->design = $design;
-        $this->baseDir = $appFilesystem->getDirectoryRead(DirectoryList::ROOT);
+        $this->readFactory = $readFactory;
         $this->staticContext = $assetRepo->getStaticViewFileContext();
         $this->minifyAdapter = $minifyAdapter;
         $this->minification = $minification;
@@ -136,7 +137,9 @@ config;
         $baseConfig = $this->getBaseConfig();
         $customConfigFiles = $this->fileSource->getFiles($this->design->getDesignTheme(), self::CONFIG_FILE_NAME);
         foreach ($customConfigFiles as $file) {
-            $config = $this->baseDir->readFile($this->baseDir->getRelativePath($file->getFilename()));
+            /** @var $fileReader \Magento\Framework\Filesystem\File\Read */
+            $fileReader = $this->readFactory->create($file->getFileName(), DriverPool::FILE);
+            $config = $fileReader->readAll($file->getName());
             $distributedConfig .= str_replace(
                 ['%config%', '%context%'],
                 [$config, $file->getModule()],

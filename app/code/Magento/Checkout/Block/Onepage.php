@@ -56,6 +56,7 @@ class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      * @param \Magento\Checkout\Model\CompositeConfigProvider $configProvider
      * @param LayoutProcessorInterface[] $layoutProcessors
      * @param array $data
+     * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -111,6 +112,7 @@ class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      * Retrieve form key
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getFormKey()
     {
@@ -121,6 +123,7 @@ class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      * Retrieve checkout configuration
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function getCheckoutConfig()
     {
@@ -131,6 +134,7 @@ class Onepage extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      * Get base url for block.
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getBaseUrl()
     {

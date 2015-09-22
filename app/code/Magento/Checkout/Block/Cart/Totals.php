@@ -42,6 +42,7 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param array $layoutProcessors
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -82,6 +83,7 @@ class Totals extends \Magento\Checkout\Block\Cart\AbstractCart
     /**
      * @param array $value
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setTotals($value)
     {

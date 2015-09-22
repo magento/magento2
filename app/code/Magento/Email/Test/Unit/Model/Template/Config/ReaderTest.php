@@ -23,9 +23,9 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
     protected $_moduleDirResolver;
 
     /**
-     * @var \Magento\Framework\Filesystem\Driver\File|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\File\Read|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $filesystemDriverMock;
+    protected $read;
 
     /**
      * Paths to fixtures
@@ -79,16 +79,18 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->filesystemDriverMock = $this->getMock(
-            '\Magento\Framework\Filesystem\Driver\File',
+        $readFactory = $this->getMock(
+            '\Magento\Framework\Filesystem\File\ReadFactory',
             [],
             [],
             '',
             false
         );
+        $this->read = $this->getMock('Magento\Framework\Filesystem\File\Read', [], [], '', false);
+        $readFactory->expects($this->any())->method('create')->willReturn($this->read);
 
         $fileIterator = new \Magento\Email\Model\Template\Config\FileIterator(
-            $this->filesystemDriverMock,
+            $readFactory,
             $this->_paths,
             $this->_moduleDirResolver
         );
@@ -113,17 +115,17 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
     public function testRead()
     {
-        $this->filesystemDriverMock->expects(
+        $this->read->expects(
             $this->at(0)
         )->method(
-            'fileGetContents'
+            'readAll'
         )->will(
             $this->returnValue(file_get_contents($this->_paths[0]))
         );
-        $this->filesystemDriverMock->expects(
+        $this->read->expects(
             $this->at(1)
         )->method(
-            'fileGetContents'
+            'readAll'
         )->will(
             $this->returnValue(file_get_contents($this->_paths[1]))
         );

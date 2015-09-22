@@ -111,6 +111,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
      * @throws \Magento\Framework\Exception\SessionException
+     * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -158,6 +159,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      *
      * @param CustomerInterface|null $customer
      * @return \Magento\Checkout\Model\Session
+     * @codeCoverageIgnore
      */
     public function setCustomerData($customer)
     {
@@ -169,6 +171,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * Check whether current session has quote
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function hasQuote()
     {
@@ -180,6 +183,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      *
      * @param bool $load
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setLoadInactive($load = true)
     {
@@ -275,6 +279,7 @@ class Session extends \Magento\Framework\Session\SessionManager
 
     /**
      * @return string
+     * @codeCoverageIgnore
      */
     protected function _getQuoteIdKey()
     {
@@ -284,6 +289,7 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * @param int $quoteId
      * @return void
+     * @codeCoverageIgnore
      */
     public function setQuoteId($quoteId)
     {
@@ -292,6 +298,7 @@ class Session extends \Magento\Framework\Session\SessionManager
 
     /**
      * @return int
+     * @codeCoverageIgnore
      */
     public function getQuoteId()
     {
@@ -430,6 +437,7 @@ class Session extends \Magento\Framework\Session\SessionManager
 
     /**
      * @return $this
+     * @codeCoverageIgnore
      */
     public function resetCheckout()
     {
@@ -492,6 +500,7 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * @param $isQuoteMasked bool
      * @return void
+     * @codeCoverageIgnore
      */
     protected function setIsQuoteMasked($isQuoteMasked)
     {
@@ -500,6 +509,7 @@ class Session extends \Magento\Framework\Session\SessionManager
 
     /**
      * @return bool|null
+     * @codeCoverageIgnore
      */
     protected function isQuoteMasked()
     {

@@ -8,8 +8,8 @@
 namespace Magento\Email\Model\Template\Config;
 
 use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Config\FileIteratorFactory;
 use Magento\Framework\Component\DirSearch;
+use Magento\Framework\Config\FileIteratorFactory;
 
 class FileResolver implements \Magento\Framework\Config\FileResolverInterface
 {

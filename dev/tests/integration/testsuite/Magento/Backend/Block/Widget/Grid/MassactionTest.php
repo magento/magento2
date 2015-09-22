@@ -7,6 +7,7 @@
 // @codingStandardsIgnoreFile
 
 namespace Magento\Backend\Block\Widget\Grid;
+
 use Magento\TestFramework\Component\ThemeRegistration;
 
 /**

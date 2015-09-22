@@ -5,8 +5,6 @@
  */
 namespace Magento\Paypal\Block;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-
 /**
  * HSS iframe block
  */

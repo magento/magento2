@@ -7,6 +7,8 @@
  */
 namespace Magento\Widget\Model\Config;
 
+use Magento\Framework\Module\Dir;
+
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**
