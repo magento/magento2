@@ -29,7 +29,17 @@ define([
             var paymentDetailsId = this.options.paymentDetailsId;
             var submitFormId = this.options.submitFormId;
             var self = this;
-            $('#'.concat(this.options.container)).empty();
+            var $container = $('#'.concat(this.options.container));
+            $container.empty();
+
+            // braintree setup should be called only once,
+            // but widget._create() called twice (related to minicart observable attributes implementation)
+            if ($container.data('rendered')) {
+                return;
+            }
+            $container.data('rendered', true);
+
+
             braintree.setup(clientToken, "paypal", {
                 container: this.options.container,
                 singleUse: true,

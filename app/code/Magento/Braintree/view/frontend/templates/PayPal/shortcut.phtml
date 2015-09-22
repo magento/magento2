@@ -7,50 +7,36 @@
 // @codingStandardsIgnoreFile
 
 /** @var \Magento\Braintree\Block\PayPal\Shortcut $block */
-$clientToken = $block->getClientToken();
-$amount = $block->getAmount();
-$url = $block->getReviewPageUrl();
-$currency = $block->getCurrency();
-$locale = $block->getLocale();
-$merchantName = $block->getMerchantName();
 $containerId = $block->getContainerId();
 $submitFormId = $block->getSubmitFormId();
-$enableBillingAddress = $block->enableBillingAddress();
 $paymentMethodNonceId = $block->getPaymentMethodNonceId();
 $paymentDetailsId = $block->getPaymentDetailsId();
-$labelPosition = $block->getShowOrPosition();
 ?>
 <div data-label="<?php echo $block->escapeHtml(__('or')); ?>"
-     class="paypal checkout <?php /* @escapeNotVerified */ echo $labelPosition ?> paypal-logo"
+     class="paypal checkout <?php echo $block->escapeHtml($block->getShowOrPosition()) ?> paypal-logo"
     >
     <fieldset class="fieldset paypal items" id="braintree_paypal_shortcut">
-        <div id="<?php /* @escapeNotVerified */ echo $containerId ?>"></div>
-        <form id="<?php /* @escapeNotVerified */ echo $submitFormId ?>" action="<?php /* @escapeNotVerified */ echo $url ?>" method="post" >
-            <input id="<?php /* @escapeNotVerified */ echo $paymentMethodNonceId ?>" type="hidden" name="payment_method_nonce" />
-            <input id="<?php /* @escapeNotVerified */ echo $paymentDetailsId ?>" type="hidden" name="details" />
+        <div
+            id="<?php /* @noEscape */ echo $containerId ?>"
+            data-mage-init='{
+                "braintreePayPalShortcut":{
+                    "clientToken":"<?php echo $block->escapeHtml($block->getClientToken()) ?>",
+                    "amount":"<?php /* @noEscape */ echo $block->getAmount() ?>",
+                    "currency":"<?php /* @noEscape */ echo $block->getCurrency() ?>",
+                    "locale":"<?php /* @noEscape */ echo $block->getLocale() ?>",
+                    "merchantName":"<?php echo $block->escapeHtml($block->getMerchantName()) ?>",
+                    "container":"<?php /* @noEscape */ echo $containerId ?>",
+                    "submitFormId":"<?php /* @noEscape */ echo $submitFormId ?>",
+                    "enableBillingAddress":"<?php /* @noEscape */ echo $block->enableBillingAddress() ?>",
+                    "paymentMethodNonceId":"<?php /* @noEscape */ echo $paymentMethodNonceId ?>",
+                    "paymentDetailsId":"<?php /* @noEscape */ echo $paymentDetailsId ?>"
+                }
+            }'
+            >
+        </div>
+        <form id="<?php /* @noEscape */ echo $submitFormId ?>" action="<?php echo $block->escapeUrl($block->getReviewPageUrl()) ?>" method="post" >
+            <input id="<?php /* @noEscape */ echo $paymentMethodNonceId ?>" type="hidden" name="payment_method_nonce" />
+            <input id="<?php /* @noEscape */ echo $paymentDetailsId ?>" type="hidden" name="details" />
         </form>
     </fieldset>
 </div>
-
-<?php
-    $formData = [
-        "clientToken" => $clientToken,
-        'amount' => $amount,
-        'currency' => $currency,
-        'locale' =>  $locale,
-        'merchantName' => $merchantName,
-        'container' => $containerId,
-        'submitFormId' => $submitFormId,
-        'enableBillingAddress' => $enableBillingAddress,
-        'paymentMethodNonceId' => $paymentMethodNonceId,
-        'paymentDetailsId' => $paymentDetailsId
-    ];
-    $serializedFormData = $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($formData);
-?>
-<script type="text/x-magento-init">
-    {
-        "#<?php /* @escapeNotVerified */ echo $containerId ?>": {
-            "braintreePayPalShortcut": <?php /* @escapeNotVerified */ echo $serializedFormData ?>
-        }
-    }
-</script>
