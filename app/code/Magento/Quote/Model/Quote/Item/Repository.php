@@ -9,6 +9,7 @@ namespace Magento\Quote\Model\Quote\Item;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\LocalizedException;
 
 class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
 {
@@ -32,20 +33,26 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
     protected $itemDataFactory;
 
     /**
-     * Constructs a read service object.
-     *
+     * @var \Magento\Quote\Model\Quote\Item\CartItemProcessorInterface[]
+     */
+    protected $cartItemProcessors;
+
+    /**
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Quote\Api\Data\CartItemInterfaceFactory $itemDataFactory
+     * @param \Magento\Quote\Model\Quote\Item\CartItemProcessorInterface[] $cartItemProcessors
      */
     public function __construct(
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Quote\Api\Data\CartItemInterfaceFactory $itemDataFactory
+        \Magento\Quote\Api\Data\CartItemInterfaceFactory $itemDataFactory,
+        array $cartItemProcessors = []
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->productRepository = $productRepository;
         $this->itemDataFactory = $itemDataFactory;
+        $this->cartItemProcessors = $cartItemProcessors;
     }
 
     /**
@@ -60,7 +67,7 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
         /** @var  \Magento\Quote\Model\Quote\Item  $item */
         foreach ($quote->getAllItems() as $item) {
             if (!$item->isDeleted() && !$item->getParentItemId()) {
-                $output[] = $item;
+                $output[] = $this->addProductOptions($item->getProductType(), $item);
             }
         }
         return $output;
@@ -82,28 +89,74 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
 
         $itemId = $cartItem->getItemId();
         try {
-            /** update item qty */
+            /** update item */
             if (isset($itemId)) {
-                $cartItem = $quote->getItemById($itemId);
-                if (!$cartItem) {
-                    throw new NoSuchEntityException(
-                        __('Cart %1 doesn\'t contain item  %2', $cartId, $itemId)
-                    );
+                $item = $quote->getItemById($itemId);
+                $product = $this->productRepository->get($item->getSku());
+                $buyRequestData = $this->getBuyRequest($product->getTypeId(), $cartItem);
+                if (is_object($buyRequestData)) {
+                    /** update item product options */
+                    $buyRequestData->setData('qty', $qty);
+                    /** @var  \Magento\Quote\Model\Quote\Item $item */
+                    $cartItem = $quote->updateItem($itemId, $buyRequestData);
+                } else {
+                    /** update item qty */
+                    $cartItem = $quote->getItemById($itemId);
+                    if (!$cartItem) {
+                        throw new NoSuchEntityException(
+                            __('Cart %1 doesn\'t contain item  %2', $cartId, $itemId)
+                        );
+                    }
+                    $cartItem->setData('qty', $qty);
                 }
-                $product = $this->productRepository->get($cartItem->getSku());
-                $cartItem->setData('qty', $qty);
             } else {
+                /** add item to shopping cart */
                 $product = $this->productRepository->get($cartItem->getSku());
-                $quote->addProduct($product, $qty);
+                /** @var  \Magento\Quote\Model\Quote\Item|string $cartItem */
+                $cartItem = $quote->addProduct($product, $this->getBuyRequest($product->getTypeId(), $cartItem));
+                if (is_string($cartItem)) {
+                    throw new \Magento\Framework\Exception\LocalizedException(__($cartItem));
+                }
             }
             $this->quoteRepository->save($quote->collectTotals());
         } catch (\Exception $e) {
-            if ($e instanceof NoSuchEntityException) {
+            if ($e instanceof NoSuchEntityException || $e instanceof LocalizedException) {
                 throw $e;
             }
             throw new CouldNotSaveException(__('Could not save quote'));
         }
-        return $quote->getItemByProduct($product);
+        $itemId = $cartItem->getId();
+        return $this->addProductOptions($product->getTypeId(), $quote->getItemById($itemId));
+    }
+
+    /**
+     * @param string $productType
+     * @param \Magento\Quote\Api\Data\CartItemInterface $cartItem
+     * @return \Magento\Framework\DataObject|float
+     */
+    protected function getBuyRequest(
+        $productType,
+        \Magento\Quote\Api\Data\CartItemInterface $cartItem
+    ) {
+        $params = (isset($this->cartItemProcessors[$productType]))
+            ? $this->cartItemProcessors[$productType]->convertToBuyRequest($cartItem)
+            : null;
+        return ($params === null) ? $cartItem->getQty() : $params->setQty($cartItem->getQty());
+    }
+
+    /**
+     * @param string $productType
+     * @param \Magento\Quote\Api\Data\CartItemInterface $cartItem
+     * @return  \Magento\Quote\Api\Data\CartItemInterface
+     */
+    protected function addProductOptions(
+        $productType,
+        \Magento\Quote\Api\Data\CartItemInterface $cartItem
+    ) {
+        $cartItem = (isset($this->cartItemProcessors[$productType]))
+            ? $this->cartItemProcessors[$productType]->processProductOptions($cartItem)
+            : $cartItem;
+        return $cartItem;
     }
 
     /**
@@ -111,11 +164,7 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
      */
     public function deleteById($cartId, $itemId)
     {
-        /**
-         * Quote.
-         *
-         * @var \Magento\Quote\Model\Quote $quote
-         */
+        /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         $quoteItem = $quote->getItemById($itemId);
         if (!$quoteItem) {

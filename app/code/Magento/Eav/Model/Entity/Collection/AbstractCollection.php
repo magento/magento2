@@ -344,7 +344,13 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
         }
 
         if (is_numeric($attribute)) {
-            $attribute = $this->getEntity()->getAttribute($attribute)->getAttributeCode();
+            $attributeModel = $this->getEntity()->getAttribute($attribute);
+            if (!$attributeModel) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('Invalid attribute identifier for filter (%1)', get_class($attribute))
+                );
+            }
+            $attribute = $attributeModel->getAttributeCode();
         } elseif ($attribute instanceof \Magento\Eav\Model\Entity\Attribute\AttributeInterface) {
             $attribute = $attribute->getAttributeCode();
         }

@@ -1594,7 +1594,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
 
         $this->_eventManager->dispatch('sales_quote_product_add_after', ['items' => $items]);
 
-        return $item;
+        return $parentItem;
     }
 
     /**
