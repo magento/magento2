@@ -333,7 +333,7 @@ class Files
     // @codingStandardsIgnoreEnd
 
     /**
-     * Returns a list of configuration files found under the app/design directory.
+     * Returns a list of configuration files found under theme directories.
      *
      * @param string $fileNamePattern
      * @param bool $asDataSet
@@ -462,8 +462,14 @@ class Files
             );
         }
         if ($params['include_design']) {
+            $locationPaths = [];
+            foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
+                if (strpos($themeDir, $area)) {
+                    $locationPaths[] = $themeDir . "/{$namespace}_{$module}/{$location}";
+                }
+            }
             $this->_accumulateFilesByPatterns(
-                [BP . "/app/design/{$area}/{$params['theme_path']}/{$namespace}_{$module}/{$location}"],
+                $locationPaths,
                 '*.xml',
                 $files,
                 $params['with_metainfo'] ? '_parseThemeLayout' : false
@@ -498,24 +504,27 @@ class Files
      * Parse meta-info of a layout file in theme
      *
      * @param string $file
-     * @param string $path
      * @return array
      */
-    protected function _parseThemeLayout($file, $path)
+    protected function _parseThemeLayout($file)
     {
-        $appDesign = preg_quote("{$path}/app/design/", '/');
-        $invariant = '/^' . $appDesign . '([a-z\d]+)\/([a-z\d]+)\/([a-z\d_]+)\/([a-z\d]+_[a-z\d]+)\/layout\/';
-        if (preg_match($invariant . 'override\/base\/(.+)$/i', $file, $matches)) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeName => $themePath) {
+            $appDesign = preg_quote("{$themePath}/", '/');
+            $invariant = '/^' . $appDesign . '([a-z\d]+_[a-z\d]+)\/layout\/';
+
+            if (preg_match($invariant . 'override\/base\/(.+)$/i', $file, $matches)) {
+                list(, $area, $themeNS, $themeCode, $module, $filePath) = $matches;
+                return [$area, $themeNS . '/' . $themeCode, $module, $filePath];
+            }
+            if (preg_match($invariant . 'override\/theme\/[a-z\d_]+\/[a-z\d_]+\/(.+)$/i', $file, $matches)) {
+                list(, $area, $themeNS, $themeCode, $module, $filePath) = $matches;
+                return [$area, $themeNS . '/' . $themeCode, $module, $filePath];
+            }
+            preg_match($invariant . '(.+)$/i', $file, $matches);
             list(, $area, $themeNS, $themeCode, $module, $filePath) = $matches;
-            return [$area, $themeNS . '/' . $themeCode, $module, $filePath];
+            return [$area, $themeNS . '/' . $themeCode, $module, $filePath, $file];
         }
-        if (preg_match($invariant . 'override\/theme\/[a-z\d_]+\/[a-z\d_]+\/(.+)$/i', $file, $matches)) {
-            list(, $area, $themeNS, $themeCode, $module, $filePath) = $matches;
-            return [$area, $themeNS . '/' . $themeCode, $module, $filePath];
-        }
-        preg_match($invariant . '(.+)$/i', $file, $matches);
-        list(, $area, $themeNS, $themeCode, $module, $filePath) = $matches;
-        return [$area, $themeNS . '/' . $themeCode, $module, $filePath, $file];
+        return [];
     }
 
     /**
@@ -586,13 +595,19 @@ class Files
                 }
             }
         }
+        $themePaths = [];
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeName => $themePath) {
+            if (strpos($themePath, $area)) {
+                $themePaths [] = $themePath . "/web";
+                $themePaths [] = $themePath . "/{$module}/web";
+            }
+        }
         $files = self::getFiles(
             array_merge(
                 [
-                    BP . "/app/design/{$area}/{$themePath}/web",
-                    BP . "/app/design/{$area}/{$themePath}/{$module}/web",
                     BP . "/lib/web/{mage,varien}"
                 ],
+                $themePaths,
                 $moduleWebPaths
             ),
             '*.js'
@@ -626,12 +641,16 @@ class Files
                 }
             }
         }
+        $themePaths = [];
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeName => $themePath) {
+            if (strpos($themePath, $area)) {
+                $themePaths [] = $themePath . "/web/template";
+                $themePaths [] = $themePath . "/{$module}/web/template";
+            }
+        }
         $files = self::getFiles(
             array_merge(
-                [
-                    BP . "/app/design/{$area}/{$themePath}/web/template",
-                    BP . "/app/design/{$area}/{$themePath}/{$module}/web/template"
-                ],
+                $themePaths,
                 $moduleTemplatePaths
             ),
             '*.html'
@@ -664,27 +683,23 @@ class Files
             $moduleWebPath[] = $moduleDir . "/view/{$area}/web";
             $moduleLocalePath[] = $moduleDir . "/view/{$area}/web/i18n/{$locale}";
         }
+
+        $themePaths = [];
+        $themeLocalePath = [];
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeName => $themePath) {
+            if (strpos($themePath, $area)) {
+                $themePaths [] = $themePath . "/web";
+                $themePaths [] = $themePath . "/{$module}/web";
+                $themeLocalePath [] = $themePath . "/web/i18n/{$locale}";
+                $themeLocalePath [] = $themePath . "/{$module}/web/i18n/{$locale}";
+            }
+        }
+
         $this->_accumulateFilesByPatterns($moduleWebPath, $filePattern, $result, '_parseModuleStatic');
 
         $this->_accumulateFilesByPatterns($moduleLocalePath, $filePattern, $result, '_parseModuleLocaleStatic');
-        $this->_accumulateFilesByPatterns(
-            [
-                BP . "/app/design/{$area}/{$themePath}/web",
-                BP . "/app/design/{$area}/{$themePath}/{$module}/web",
-            ],
-            $filePattern,
-            $result,
-            '_parseThemeStatic'
-        );
-        $this->_accumulateFilesByPatterns(
-            [
-                BP . "/app/design/{$area}/{$themePath}/web/i18n/{$locale}",
-                BP . "/app/design/{$area}/{$themePath}/{$module}/web/i18n/{$locale}",
-            ],
-            $filePattern,
-            $result,
-            '_parseThemeLocaleStatic'
-        );
+        $this->_accumulateFilesByPatterns($themePaths, $filePattern, $result, '_parseThemeStatic');
+        $this->_accumulateFilesByPatterns($themeLocalePath, $filePattern, $result, '_parseThemeLocaleStatic');
         self::$_cache[$key] = $result;
         return $result;
     }
@@ -783,25 +798,28 @@ class Files
      * @param string $path
      * @return array
      */
-    protected function _parseThemeStatic($file, $path)
+    protected function _parseThemeStatic($file)
     {
-        $appDesign = preg_quote("{$path}/app/design/", '/');
-        if (preg_match(
-            '/^' . $appDesign . '([a-z\d]+)\/([a-z\d]+)\/([a-z\d_]+)\/([a-z\d]+_[a-z\d]+)\/web\/(.+)$/i',
-            $file,
-            $matches
-        )) {
-            list(, $area, $themeNS, $themeCode, $module, $filePath) = $matches;
-            return [$area, $themeNS . '/' . $themeCode, '', $module, $filePath, $file];
-        }
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeName => $themePath) {
+            $appDesign = preg_quote("{$themePath}/", '/');
+            if (preg_match(
+                '/^' . $appDesign . '([a-z\d]+_[a-z\d]+)\/web\/(.+)$/i',
+                $file,
+                $matches
+            )) {
+                list(, $area, $themeNS, $themeCode, $module, $filePath) = $matches;
+                return [$area, $themeNS . '/' . $themeCode, '', $module, $filePath, $file];
+            }
 
-        preg_match(
-            '/^' . $appDesign . '([a-z\d]+)\/([a-z\d]+)\/([a-z\d_]+)\/web\/(.+)$/i',
-            $file,
-            $matches
-        );
-        list(, $area, $themeNS, $themeCode, $filePath) = $matches;
-        return [$area, $themeNS . '/' . $themeCode, '', '', $filePath, $file];
+            preg_match(
+                '/^' . $appDesign . '\/web\/(.+)$/i',
+                $file,
+                $matches
+            );
+            list(, $area, $themeNS, $themeCode, $filePath) = $matches;
+            return [$area, $themeNS . '/' . $themeCode, '', '', $filePath, $file];
+        }
+        return [];
     }
 
     /**
@@ -813,23 +831,26 @@ class Files
      */
     protected function _parseThemeLocaleStatic($file, $path)
     {
-        $design = preg_quote("{$path}/app/design/", '/');
-        if (preg_match(
-            '/^' . $design. '([a-z\d]+)\/([a-z\d]+)\/([a-z\d_]+)\/([a-z\d]+_[a-z\d]+)\/web\/i18n\/([a-z_]+)\/(.+)$/i',
-            $file,
-            $matches
-        )) {
-            list(, $area, $themeNS, $themeCode, $module, $locale, $filePath) = $matches;
-            return [$area, $themeNS . '/' . $themeCode, $locale, $module, $filePath, $file];
-        }
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeName => $themePath) {
+            $design = preg_quote("{$themePath}/", '/');
+            if (preg_match(
+                '/^' . $design . '([a-z\d]+_[a-z\d]+)\/web\/i18n\/([a-z_]+)\/(.+)$/i',
+                $file,
+                $matches
+            )) {
+                list(, $area, $themeNS, $themeCode, $module, $locale, $filePath) = $matches;
+                return [$area, $themeNS . '/' . $themeCode, $locale, $module, $filePath, $file];
+            }
 
-        preg_match(
-            '/^' . $design . '([a-z\d]+)\/([a-z\d]+)\/([a-z\d_]+)\/web\/i18n\/([a-z_]+)\/(.+)$/i',
-            $file,
-            $matches
-        );
-        list(, $area, $themeNS, $themeCode, $locale, $filePath) = $matches;
-        return [$area, $themeNS . '/' . $themeCode, $locale, '', $filePath, $file];
+            preg_match(
+                '/^' . $design . '\/web\/i18n\/([a-z_]+)\/(.+)$/i',
+                $file,
+                $matches
+            );
+            list(, $area, $themeNS, $themeCode, $locale, $filePath) = $matches;
+            return [$area, $themeNS . '/' . $themeCode, $locale, '', $filePath, $file];
+        }
+        return [];
     }
 
     /**
@@ -849,11 +870,16 @@ class Files
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
             $viewAreaPaths[] = $moduleDir . "/view/{$area}";
         }
+        $themePaths = [];
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
+            if (strpos($themeDir, $area)) {
+                $themePaths[] = $themeDir;
+            }
+        }
         $paths = [
-            BP . "/app/design/{$area}/{$themePath}",
             BP . "/lib/web/varien"
         ];
-        $paths = array_merge($paths, $viewAreaPaths);
+        $paths = array_merge($paths, $viewAreaPaths, $themePaths);
         $files = self::getFiles($paths, '*.js');
 
         if ($area == 'adminhtml') {
@@ -897,8 +923,16 @@ class Files
                 $result,
                 $withMetaInfo ? '_parseModuleTemplate' : false
             );
+
+            $themePaths = [];
+            foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
+                if (strpos($themeDir, $area)) {
+                    $themePaths[] = $themeDir . "/{$namespace}_{$module}/templates";
+                }
+            }
+
             $this->_accumulateFilesByPatterns(
-                [BP . "/app/design/{$area}/{$themePath}/{$namespace}_{$module}/templates"],
+                $themePaths,
                 '*.phtml',
                 $result,
                 $withMetaInfo ? '_parseThemeTemplate' : false
@@ -942,14 +976,18 @@ class Files
      */
     protected function _parseThemeTemplate($file, $path)
     {
-        $appDesign = preg_quote("{$path}/app/design/", '/');
-        preg_match(
-            '/^' . $appDesign . '([a-z\d]+)\/([a-z\d]+)\/([a-z\d_]+)\/([a-z\d]+_[a-z\d]+)\/templates\/(.+)$/i',
-            $file,
-            $matches
-        );
-        list(, $area, $themeNS, $themeCode, $module, $filePath) = $matches;
-        return [$area, $themeNS . '/' . $themeCode, $module, $filePath, $file];
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeName => $themePath) {
+            $appDesign = preg_quote("{$themePath}/", '/');
+
+            preg_match(
+                '/^' . $appDesign . '([a-z\d]+_[a-z\d]+)\/templates\/(.+)$/i',
+                $file,
+                $matches
+            );
+            list(, $area, $themeNS, $themeCode, $module, $filePath) = $matches;
+            return [$area, $themeNS . '/' . $themeCode, $module, $filePath, $file];
+        }
+        return [];
     }
 
     /**
