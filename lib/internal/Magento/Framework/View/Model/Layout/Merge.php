@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\View\Model\Layout;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Filesystem\File\ReadFactory;
 use Magento\Framework\View\Model\Layout\Update\Validator;
@@ -118,11 +117,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     protected $logger;
 
     /**
-     * @var \Magento\Framework\Filesystem
-     */
-    protected $filesystem;
-
-    /**
      * @var string
      */
     protected $pageLayout;
@@ -169,7 +163,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param \Magento\Framework\View\Model\Layout\Update\Validator $validator
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Filesystem $filesystem
      * @param ReadFactory $readFactory,
      * @param \Magento\Framework\View\Design\ThemeInterface $theme Non-injectable theme instance
      * @param string $cacheSuffix
@@ -184,7 +177,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         \Magento\Framework\Cache\FrontendInterface $cache,
         \Magento\Framework\View\Model\Layout\Update\Validator $validator,
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Filesystem $filesystem,
         ReadFactory $readFactory,
         \Magento\Framework\View\Design\ThemeInterface $theme = null,
         $cacheSuffix = ''
@@ -197,7 +189,6 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         $this->cache = $cache;
         $this->layoutValidator = $validator;
         $this->logger = $logger;
-        $this->filesystem = $filesystem;
         $this->readFactory = $readFactory;
         $this->cacheSuffix = $cacheSuffix;
     }
