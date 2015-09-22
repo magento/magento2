@@ -8,6 +8,7 @@ namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Module\ModuleRegistryInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Setup\Model\ObjectManagerProvider;
@@ -37,6 +38,9 @@ class DiCompileCommand extends Command
 
     /** @var DirectoryList */
     private $directoryList;
+    
+    /** @var  ModuleRegistryInterface */
+    private $moduleRegistry;
 
     /** @var Filesystem */
     private $filesystem;
@@ -51,6 +55,7 @@ class DiCompileCommand extends Command
      * @param DirectoryList $directoryList
      * @param Manager $taskManager
      * @param ObjectManagerProvider $objectManagerProvider
+     * @param ModuleRegistryInterface $moduleRegistry
      * @param Filesystem $filesystem
      */
     public function __construct(
@@ -58,12 +63,14 @@ class DiCompileCommand extends Command
         DirectoryList $directoryList,
         Manager $taskManager,
         ObjectManagerProvider $objectManagerProvider,
+        ModuleRegistryInterface $moduleRegistry,
         Filesystem $filesystem
     ) {
         $this->deploymentConfig = $deploymentConfig;
         $this->directoryList    = $directoryList;
         $this->objectManager    = $objectManagerProvider->get();
         $this->taskManager      = $taskManager;
+        $this->moduleRegistry   = $moduleRegistry;
         $this->filesystem       = $filesystem;
         parent::__construct();
     }
@@ -111,6 +118,8 @@ class DiCompileCommand extends Command
             $compiledPathsList,
             $dataAttributesIncludePattern
         );
+        
+        $operations = $this->addModulePathsToOperations($operations);
 
         try {
             $this->cleanupFilesystem(
@@ -269,6 +278,35 @@ class DiCompileCommand extends Command
             ]
         ];
 
+        return $operations;
+    }
+
+    /**
+     * adds Paths from module Registry to Operations Array
+     *
+     * @param array $operations
+     *
+     * @return array
+     */
+    private function addModulePathsToOperations(array $operations)
+    {
+        $operationCodes = [
+            OperationFactory::APPLICATION_CODE_GENERATOR,
+            OperationFactory::AREA_CONFIG_GENERATOR,
+            OperationFactory::INTERCEPTION_CACHE,
+        ];
+        
+        $modulePaths = $this->moduleRegistry->getModulePaths();
+        
+        foreach ($operationCodes as $operationCode) {
+            $operations[$operationCode] = array_merge($operations[$operationCode], $modulePaths);
+        }
+        
+        $operations[OperationFactory::INTERCEPTION]['intercepted_paths'] = array_merge(
+            $operations[OperationFactory::INTERCEPTION]['intercepted_paths'],
+            $modulePaths
+        );
+        
         return $operations;
     }
 }
