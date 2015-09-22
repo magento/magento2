@@ -23,8 +23,8 @@ class Adjustment extends AbstractAdjustment
 
     /**
      * @param Template\Context $context
-     * @param \Magento\Tax\Helper\Data $helper
      * @param PriceCurrencyInterface $priceCurrency
+     * @param \Magento\Tax\Helper\Data $helper
      * @param array $data
      */
     public function __construct(
