@@ -6,16 +6,13 @@
 -->
 
 <td class="data-grid-onoff-cell admin__scope-old">
-    <label class="data-grid-onoff-cell-inner">
-        <div class="switcher">
-            <input
-                    class="admin__control-onoff"
-                    type="checkbox"
-                    data-bind="checked: selected,
-                   value: row[indexField],
-                   attr: {id: 'check' + row[indexField]}">
-            <label class="switcher-label" data-bind="attr: {for: 'check' + row[indexField]}"></label>
-            <label data-bind="text: getLabel(row[indexField])" />
-        </div>
-    </label>
+    <div class="switcher">
+        <input
+                class="admin__control-onoff"
+                type="checkbox"
+                data-bind="checked: selected,
+               value: row[indexField],
+               attr: {id: 'check' + row[indexField]}">
+        <label class="switcher-label" data-bind="attr: {for: 'check' + row[indexField]}, text: getLabel(row[indexField])"></label>
+    </div>
 </td>
