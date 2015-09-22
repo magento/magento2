@@ -5,28 +5,66 @@
  */
 namespace Magento\Wishlist\Controller\Index;
 
+use Magento\Checkout\Helper\Cart as CartHelper;
+use Magento\Checkout\Model\Cart;
+use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action;
+use Magento\Framework\Escaper;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Wishlist\Controller\IndexInterface;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Wishlist\Controller\WishlistProviderInterface;
+use Magento\Wishlist\Helper\Data as WishlistHelper;
 
 class Fromcart extends Action\Action implements IndexInterface
 {
     /**
-     * @var \Magento\Wishlist\Controller\WishlistProviderInterface
+     * @var WishlistProviderInterface
      */
     protected $wishlistProvider;
 
     /**
+     * @var WishlistHelper
+     */
+    protected $wishlistHelper;
+
+    /**
+     * @var Cart
+     */
+    protected $cart;
+
+    /**
+     * @var CartHelper
+     */
+    protected $cartHelper;
+
+    /**
+     * @var Escaper
+     */
+    protected $escaper;
+
+    /**
      * @param Action\Context $context
-     * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
+     * @param WishlistProviderInterface $wishlistProvider
+     * @param WishlistHelper $wishlistHelper
+     * @param Cart $cart
+     * @param CartHelper $cartHelper
+     * @param Escaper $escaper
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
+        WishlistProviderInterface $wishlistProvider,
+        WishlistHelper $wishlistHelper,
+        Cart $cart,
+        CartHelper $cartHelper,
+        Escaper $escaper
     ) {
         $this->wishlistProvider = $wishlistProvider;
+        $this->wishlistHelper = $wishlistHelper;
+        $this->cart = $cart;
+        $this->cartHelper = $cartHelper;
+        $this->escaper = $escaper;
         parent::__construct($context);
     }
 
@@ -43,14 +81,10 @@ class Fromcart extends Action\Action implements IndexInterface
         if (!$wishlist) {
             throw new NotFoundException(__('Page not found.'));
         }
-        $itemId = (int)$this->getRequest()->getParam('item');
-
-        /* @var \Magento\Checkout\Model\Cart $cart */
-        $cart = $this->_objectManager->get('Magento\Checkout\Model\Cart');
-        $session = $this->_objectManager->get('Magento\Checkout\Model\Session');
 
         try {
-            $item = $cart->getQuote()->getItemById($itemId);
+            $itemId = (int)$this->getRequest()->getParam('item');
+            $item = $this->cart->getQuote()->getItemById($itemId);
             if (!$item) {
                 throw new LocalizedException(
                     __('The requested cart item doesn\'t exist.')
@@ -59,27 +93,26 @@ class Fromcart extends Action\Action implements IndexInterface
 
             $productId = $item->getProductId();
             $buyRequest = $item->getBuyRequest();
-
             $wishlist->addNewItem($productId, $buyRequest);
 
-            $productIds[] = $productId;
-            $cart->getQuote()->removeItem($itemId);
-            $cart->save();
-            $this->_objectManager->get('Magento\Wishlist\Helper\Data')->calculate();
-            $productName = $this->_objectManager->get('Magento\Framework\Escaper')
-                ->escapeHtml($item->getProduct()->getName());
-            $wishlistName = $this->_objectManager->get('Magento\Framework\Escaper')
-                ->escapeHtml($wishlist->getName());
-            $this->messageManager->addSuccess(__("%1 has been moved to wish list %2", $productName, $wishlistName));
+            $this->cart->getQuote()->removeItem($itemId);
+            $this->cart->save();
+
+            $this->wishlistHelper->calculate();
             $wishlist->save();
+
+            $this->messageManager->addSuccessMessage(__(
+                "%1 has been moved to your wishlist.",
+                $this->escaper->escapeHtml($item->getProduct()->getName())
+            ));
         } catch (LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We can\'t move the item to the wish list.'));
+            $this->messageManager->addExceptionMessage($e, __('We can\'t move the item to the wish list.'));
         }
 
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        return $resultRedirect->setUrl($this->_objectManager->get('Magento\Checkout\Helper\Cart')->getCartUrl());
+        return $resultRedirect->setUrl($this->cartHelper->getCartUrl());
     }
 }
