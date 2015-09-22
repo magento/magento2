@@ -5,58 +5,70 @@
  */
 namespace Magento\ProductVideo\Test\Unit\Controller\Adminhtml\Product\Gallery;
 
+/**
+ * Class RetrieveImageTest
+ */
 class RetrieveImageTest extends \PHPUnit_Framework_TestCase
 {
-    /*
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\App\Action\Context
      */
     protected $contextMock;
 
-    /*
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Controller\Result\RawFactory
      */
     protected $rawFactoryMock;
 
-    /*
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product\Media\Config
      */
     protected $configMock;
 
-    /*
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
      */
     protected $filesystemMock;
 
-    /*
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Image
      */
     protected $adapterMock;
 
-    /*
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Image\AdapterFactory
      */
     protected $adapterFactoryMock;
 
-    /*
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\HTTP\Adapter\Curl
      */
     protected $curlMock;
 
-    /*
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\MediaStorage\Model\Resource\File\Storage\File
      */
     protected $storageFileMock;
 
-    /*
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\RequestInterface
      */
     protected $request;
 
-    /*
+    /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Image\Adapter\AbstractAdapter
      */
     protected $abstractAdapter;
 
+    /**
+     * @var \Magento\ProductVideo\Controller\Adminhtml\Product\Gallery\RetrieveImage
+     * |\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $image;
+
+    /**
+     * Set up
+     */
     public function setUp()
     {
         $this->contextMock = $this->getMock('\Magento\Backend\App\Action\Context', [], [], '', false);
@@ -101,6 +113,9 @@ class RetrieveImageTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Test execute()
+     */
     public function testExecute()
     {
         $this->request->expects($this->any())->method('getParam')->will(

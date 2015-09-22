@@ -5,6 +5,9 @@
  */
 namespace Magento\ProductVideo\Test\Unit\Block\Product\View;
 
+/**
+ * Class GalleryTest
+ */
 class GalleryTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -27,7 +30,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
      */
     protected $jsonEncoderMock;
 
-    /*
+    /**
      * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $coreRegistry;
@@ -38,11 +41,14 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
      */
     protected $gallery;
 
-    /*
-     * @var \Magento\Catalog\Model\Product|\Magento\ProductVideo\Block\Adminhtml\Product\Video\Gallery
+    /**
+     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $productModelMock;
 
+    /**
+     * Set up
+     */
     public function setUp()
     {
         $this->contextMock = $this->getMock('\Magento\Catalog\Block\Product\Context', [], [], '', false);
@@ -67,6 +73,9 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Test getMediaGalleryDataJson()
+     */
     public function testGetMediaGalleryDataJson()
     {
         $mediaGalleryData = new \Magento\Framework\DataObject();
@@ -99,6 +108,9 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         $this->gallery->getMediaGalleryDataJson();
     }
 
+    /**
+     * Test getMediaEmptyGalleryDataJson()
+     */
     public function testGetMediaEmptyGalleryDataJson()
     {
         $mediaGalleryData = [];
@@ -110,6 +122,9 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         $this->gallery->getMediaGalleryDataJson();
     }
 
+    /**
+     * Test getVideoSettingsJson
+     */
     public function testGetVideoSettingsJson()
     {
         $this->mediaHelperMock->expects($this->once())->method('getPlayIfBaseAttribute')->willReturn(1);
