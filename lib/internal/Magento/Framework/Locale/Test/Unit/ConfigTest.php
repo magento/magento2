@@ -18,7 +18,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         'he_IL', 'hi_IN', 'hr_HR', 'hu_HU', 'id_ID', 'is_IS', 'it_CH', 'it_IT', 'ja_JP', 'ka_GE',
         'km_KH', 'ko_KR', 'lo_LA', 'lt_LT', 'lv_LV', 'mk_MK', 'mn_Cyrl_MN', 'ms_Latn_MY', 'nl_NL', 'nb_NO',
         'nn_NO', 'pl_PL', 'pt_BR', 'pt_PT', 'ro_RO', 'ru_RU', 'sk_SK', 'sl_SI', 'sq_AL', 'sr_Cyrl_RS',
-        'sv_SE', 'sw_KE', 'th_TH', 'tr_TR', 'uk_UA', 'vi_VN', 'zh_Hans_CN', 'zh_Hant_HK', 'zh_Hant_TW', 'es_CL',
+        'sv_SE', 'sw_KE', 'th_TH', 'tr_TR', 'uk_UA', 'vi_VN', 'zh_CN', 'zh_Hant_HK', 'zh_Hant_TW', 'es_CL',
         'lo_LA', 'es_VE', 'en_IE',
     ];
 
