@@ -59,7 +59,7 @@ class AssertWidgetCatalogCategoryLink extends AbstractConstraint
             'Wrong category title.'
         );
 
-        $cmsIndex->getSearchBlock()->clickAdvancedSearchButton();
+        $cmsIndex->getFooterBlock()->openAdvancedSearch();
         \PHPUnit_Framework_Assert::assertTrue(
             $cmsIndex->getWidgetView()->isWidgetVisible($widget, $widgetText),
             'Widget with type catalog category link is absent on Advanced Search page.'
