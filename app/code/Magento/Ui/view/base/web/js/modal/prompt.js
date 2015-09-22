@@ -47,8 +47,6 @@ define([
         closeModal: function(result) {
             var value;
 
-            result = result || false;
-
             if (result) {
                 value =  this.modal.find(this.options.promptField).val();
                 this.options.actions.confirm(value);
