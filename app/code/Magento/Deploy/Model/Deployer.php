@@ -133,6 +133,12 @@ class Deployer
                                     'design' => $design,
                                 ]
                             ),
+                            'assetRepo' => $this->objectManager->create(
+                                'Magento\Framework\View\Asset\Repository',
+                                [
+                                    'design' => $design,
+                                ]
+                            ),
                         ]
                     );
                     $fileManager->createRequireJsConfigAsset();
@@ -161,6 +167,7 @@ class Deployer
                             null
                         );
                     }
+                    $fileManager->clearBundleJsPool();
                     $this->bundleManager->flush();
                     $this->output->writeln("\nSuccessful: {$this->count} files; errors: {$this->errorCount}\n---\n");
                 }
