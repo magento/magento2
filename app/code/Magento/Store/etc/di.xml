@@ -225,6 +225,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Reflection\MethodsMap">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Reflection</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Url">
         <arguments>
             <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
