@@ -86,11 +86,13 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
 
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
-        $product = $this->productRepository->get($cartItem->getSku());
+
         $itemId = $cartItem->getItemId();
         try {
             /** update item */
             if (isset($itemId)) {
+                $item = $quote->getItemById($itemId);
+                $product = $this->productRepository->get($item->getSku());
                 $buyRequestData = $this->getBuyRequest($product->getTypeId(), $cartItem);
                 if (is_object($buyRequestData)) {
                     /** update item product options */
@@ -109,6 +111,7 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
                 }
             } else {
                 /** add item to shopping cart */
+                $product = $this->productRepository->get($cartItem->getSku());
                 /** @var  \Magento\Quote\Model\Quote\Item|string $cartItem */
                 $cartItem = $quote->addProduct($product, $this->getBuyRequest($product->getTypeId(), $cartItem));
                 if (is_string($cartItem)) {
