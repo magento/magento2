@@ -47,7 +47,7 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Magento\Framework\Setup\Option\TextConfigOption', $options[0]);
         $this->assertSame('Encryption key', $options[0]->getDescription());
         $this->assertInstanceOf('Magento\Framework\Setup\Option\SelectConfigOption', $options[1]);
-        $this->assertSame('Session save location', $options[1]->getDescription());
+        $this->assertSame('Session save handler', $options[1]->getDescription());
         $this->assertInstanceOf('Magento\Framework\Setup\Option\SelectConfigOption', $options[2]);
         $this->assertSame('Type of definitions used by Object Manager', $options[2]->getDescription());
         $this->assertInstanceOf('Magento\Framework\Setup\Option\TextConfigOption', $options[3]);
@@ -121,6 +121,13 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
         $this->dbValidator->expects($this->once())->method('checkDatabaseConnection')->willReturn($configDataMock);
         $result = $this->object->validate($options, $this->deploymentConfig);
         $this->assertEquals([], $result);
+    }
+
+    public function testDefaultSessionHandler()
+    {
+        $expectedSessionHandler = ini_get('session.save_handler') ?: ConfigOptionsListConstants::SESSION_SAVE_FILES;
+        $options = $this->object->getOptions();
+        $this->assertSame($expectedSessionHandler, $options[1]->getDefault());
     }
 
     /**

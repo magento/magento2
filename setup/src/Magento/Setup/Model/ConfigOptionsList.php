@@ -63,8 +63,8 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 SelectConfigOption::FRONTEND_WIZARD_SELECT,
                 [ConfigOptionsListConstants::SESSION_SAVE_FILES, ConfigOptionsListConstants::SESSION_SAVE_DB],
                 ConfigOptionsListConstants::CONFIG_PATH_SESSION_SAVE,
-                'Session save location',
-                ConfigOptionsListConstants::SESSION_SAVE_FILES
+                'Session save handler',
+                ini_get('session.save_handler') ?: ConfigOptionsListConstants::SESSION_SAVE_FILES
             ),
             new SelectConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_DEFINITION_FORMAT,
@@ -261,14 +261,16 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     {
         $errors = [];
 
-        if (isset($options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE])) {
-            if ($options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE]
-                != ConfigOptionsListConstants::SESSION_SAVE_FILES
-                && $options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE]
-                != ConfigOptionsListConstants::SESSION_SAVE_DB
-            ) {
-                $errors[] = 'Invalid session save location.';
-            }
+        $validSaveHandlers = [
+            ConfigOptionsListConstants::SESSION_SAVE_FILES,
+            ConfigOptionsListConstants::SESSION_SAVE_DB,
+            ConfigOptionsListConstants::SESSION_SAVE_REDIS
+        ];
+        if (
+            isset($options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE])
+            && !in_array($options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE], $validSaveHandlers)
+        ) {
+            $errors[] = 'Invalid session handler.';
         }
 
         return $errors;
