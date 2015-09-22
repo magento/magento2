@@ -30,7 +30,7 @@ class ColumnFactory
         'text' => 'text',
         'boolean' => 'select',
         'select' => 'select',
-        'multiselect' => 'text',
+        'multiselect' => 'select',
         'date' => 'date',
     ];
 

@@ -11,24 +11,24 @@ define([
         /**
          * Retrieves label associated with a provided value.
          *
-         * @param {(String|Number)} value - Value of the option.
+         * @param {Array} values - Values of the option.
          * @returns {String}
          */
-        getLabel: function (value) {
+        getLabel: function (values) {
             var options = this.options || [],
-                label = '';
+                labels = [];
 
-            value = value || '';
+            values = values || [];
 
             /*eslint-disable eqeqeq*/
-            options.some(function (item) {
-                label = item.label;
-
-                return item.value == value;
+            options.forEach(function (item) {
+                if(values.indexOf(item.value) > -1) {
+                    labels.push(item.label);
+                }
             });
             /*eslint-enable eqeqeq*/
 
-            return label;
+            return labels.join(', ');
         }
     });
 });
