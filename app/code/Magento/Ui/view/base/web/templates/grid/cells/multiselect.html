@@ -5,13 +5,14 @@
  */
 -->
 
-<td class="data-grid-checkbox-cell">
+<td class="data-grid-checkbox-cell" data-bind="visible: visible">
     <label class="data-grid-checkbox-cell-inner">
         <input
             class="admin__control-checkbox"
             type="checkbox"
             data-action="select-row"
             data-bind="
+                disable: disabled.indexOf(row[indexField]) != -1,
                 checked: selected,
                 value: row[indexField],
                 attr: {
