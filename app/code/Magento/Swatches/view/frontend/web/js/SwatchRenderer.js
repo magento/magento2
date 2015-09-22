@@ -173,15 +173,15 @@ define(["jquery", "jquery/ui"], function ($) {
                 moreButton: 'swatch-more',
                 loader: 'swatch-option-loading'
             },
-            jsonConfig: {},                                 // option's json config
-            jsonSwatchConfig: {},                           // swatch's json config
-            selectorProduct: '.product-info-main',          // selector of parental block of prices and swatches (need to know where to seek for price block)
-            selectorProductPrice: '.price',                 // selector of price wrapper (need to know where set price)
-            numberToShow: false,                            // number of controls to show (false or zero = show all)
-            onlySwatches: false,                            // show only swatch controls
-            enableControlLabel: true,                       // enable label for control
-            moreButtonText: 'More',                         // text for more button
-            mediaCallback: ''                               // Callback url for media
+            jsonConfig: {},                                    // option's json config
+            jsonSwatchConfig: {},                              // swatch's json config
+            selectorProduct: '.product-info-main',             // selector of parental block of prices and swatches (need to know where to seek for price block)
+            selectorProductPrice: '.price-final-price .price', // selector of price wrapper (need to know where set price)
+            numberToShow: false,                               // number of controls to show (false or zero = show all)
+            onlySwatches: false,                               // show only swatch controls
+            enableControlLabel: true,                          // enable label for control
+            moreButtonText: 'More',                            // text for more button
+            mediaCallback: ''                                  // Callback url for media
         },
 
         /**
