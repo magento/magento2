@@ -1,4 +1,4 @@
-.video-container.video-unplayed:after {
+.fotorama-video-container.video-unplayed:after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -10,13 +10,13 @@
   top: 12px;
   margin: auto;
 }
-.video-container .magnify-lens {
+.fotorama-video-container .magnify-lens {
   display: none !important;
 }
-.video-container.video-unplayed:hover img {
+.fotorama-video-container.video-unplayed:hover img {
   opacity: 0.6;
 }
-.video-container.video-unplayed:hover:after {
+.fotorama-video-container.video-unplayed:hover:after {
   transform: scale(1.25);
 }
 .video-thumb-icon:after {

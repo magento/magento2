@@ -32,6 +32,7 @@ class Validation
      * @param \Magento\CheckoutAgreements\Model\AgreementsValidator $agreementsValidator
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfiguration
      * @param \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface $checkoutAgreementsRepository
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\CheckoutAgreements\Model\AgreementsValidator $agreementsValidator,
