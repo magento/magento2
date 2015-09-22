@@ -18,6 +18,9 @@ use Magento\Wishlist\Controller\Index\Fromcart;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
 use Magento\Wishlist\Helper\Data as WishlistHelper;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FromcartTest extends \PHPUnit_Framework_TestCase
 {
     /**
