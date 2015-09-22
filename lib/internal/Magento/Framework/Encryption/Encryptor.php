@@ -37,9 +37,9 @@ class Encryptor implements EncryptorInterface
     /**#@+
      * Exploded password hash keys
      */
-    const PASSWORD_HASH = 'hash';
-    const PASSWORD_SALT = 'salt';
-    const PASSWORD_VERSION = 'version';
+    const PASSWORD_HASH = 0;
+    const PASSWORD_SALT = 1;
+    const PASSWORD_VERSION = 2;
     /**#@-*/
 
     /**
@@ -73,18 +73,9 @@ class Encryptor implements EncryptorInterface
     ];
 
     /**
-     * @var array
+     * @var array map of password hash
      */
     private $passwordHashMap = [
-        self::PASSWORD_HASH,
-        self::PASSWORD_SALT,
-        self::PASSWORD_VERSION
-    ];
-
-    /**
-     * @var array
-     */
-    private $explodedPasswordHash = [
         self::PASSWORD_HASH => '',
         self::PASSWORD_SALT => '',
         self::PASSWORD_VERSION => self::HASH_VERSION_LATEST
@@ -149,7 +140,7 @@ class Encryptor implements EncryptorInterface
     /**
      * @inheritdoc
      */
-    public function getHash($password, $salt = false)
+    public function getHash($password, $salt = false, $version = self::HASH_VERSION_LATEST)
     {
         if ($salt === false) {
             return $this->hash($password);
@@ -166,7 +157,7 @@ class Encryptor implements EncryptorInterface
             [
                 $this->hash($salt . $password),
                 $salt,
-                self::HASH_VERSION_LATEST
+                $version
             ]
         );
     }
@@ -176,7 +167,7 @@ class Encryptor implements EncryptorInterface
      */
     public function hash($data, $version = self::HASH_VERSION_LATEST)
     {
-        return hash($this->hashVersionMap[(int)$version], $data);
+        return hash($this->hashVersionMap[$version], $data);
     }
 
     /**
@@ -207,11 +198,14 @@ class Encryptor implements EncryptorInterface
     /**
      * @inheritdoc
      */
-    public function validateHashVersion($hash)
+    public function validateHashVersion($hash, $validateCount = false)
     {
         $this->explodePasswordHash($hash);
+        $hashVersions = $this->getPasswordVersion();
 
-        return current($this->getPasswordVersion()) === self::HASH_VERSION_LATEST;
+        return $validateCount
+            ? end($hashVersions) === self::HASH_VERSION_LATEST && count($hashVersions) === 1
+            : end($hashVersions) === self::HASH_VERSION_LATEST;
     }
 
     /**
@@ -222,13 +216,11 @@ class Encryptor implements EncryptorInterface
     {
         $explodedPassword = explode(self::DELIMITER, $hash, 3);
 
-        foreach ($this->passwordHashMap as $key => $hashMapKey) {
-            if (isset($explodedPassword[$key])) {
-                $this->explodedPasswordHash[$hashMapKey] = $explodedPassword[$key];
-            }
+        foreach ($this->passwordHashMap as $key => $defaultValue) {
+            $this->passwordHashMap[$key] = (isset($explodedPassword[$key])) ? $explodedPassword[$key] : $defaultValue;
         }
 
-        return $this->explodedPasswordHash;
+        return $this->passwordHashMap;
     }
 
     /**
@@ -236,7 +228,7 @@ class Encryptor implements EncryptorInterface
      */
     private function getPasswordHash()
     {
-        return (string)$this->explodedPasswordHash[self::PASSWORD_HASH];
+        return (string)$this->passwordHashMap[self::PASSWORD_HASH];
     }
 
     /**
@@ -244,7 +236,7 @@ class Encryptor implements EncryptorInterface
      */
     private function getPasswordSalt()
     {
-        return (string)$this->explodedPasswordHash[self::PASSWORD_SALT];
+        return (string)$this->passwordHashMap[self::PASSWORD_SALT];
     }
 
     /**
@@ -252,7 +244,7 @@ class Encryptor implements EncryptorInterface
      */
     private function getPasswordVersion()
     {
-        return array_map('intval', explode(self::DELIMITER, $this->explodedPasswordHash[self::PASSWORD_VERSION]));
+        return array_map('intval', explode(self::DELIMITER, $this->passwordHashMap[self::PASSWORD_VERSION]));
     }
 
     /**

@@ -163,7 +163,7 @@ class Observer
         $latestPassword = $this->userResource->getLatestPassword($user->getId());
         $this->_checkExpiredPassword($latestPassword);
 
-        if (!$this->encryptor->validateHashVersion($user->getPassword())) {
+        if (!$this->encryptor->validateHashVersion($user->getPassword(), true)) {
             $user->setPassword($password)
                 ->setData('force_new_password', true)
                 ->save();

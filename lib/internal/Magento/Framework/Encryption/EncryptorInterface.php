@@ -58,9 +58,10 @@ interface EncryptorInterface
      * Validate hashing algorithm version
      *
      * @param string $hash
+     * @param bool $validateCount
      * @return bool
      */
-    public function validateHashVersion($hash);
+    public function validateHashVersion($hash, $validateCount = false);
 
     /**
      * Encrypt a string
