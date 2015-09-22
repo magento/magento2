@@ -26,5 +26,6 @@ define([], function () {
             $target.find(data.enableExpress + ' option[value="0"]').prop('selected', true);
             $target.find(data.enableExpress).prop('disabled', true);
         }
+        $target.find('input[id="' + $target.find(data.enableExpress).attr('id') + '_inherit"]').prop('checked', false);
     };
 });
