@@ -54,7 +54,7 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
      * @param \Magento\Backend\Model\UrlFactory $backendUrlFactory
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\File\Size $fileConfig
-     * @param \Magento\Framework\View\Element\Context $context
+     * @param \Magento\Framework\View\LayoutInterface $layout
      * @param array $data
      */
     public function __construct(
@@ -63,7 +63,7 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
         \Magento\Backend\Model\UrlFactory $backendUrlFactory,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Framework\File\Size $fileConfig,
-        \Magento\Framework\View\Element\Context $context,
+        \Magento\Framework\View\LayoutInterface $layout,
         array $data = []
     ) {
         $escaper = $context->getEscaper();
@@ -75,7 +75,7 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
         $this->catalogHelperData = $catalogData;
         $this->fileConfig = $fileConfig;
         $this->maxFileSize = $this->getFileMaxSize();
-        $this->layout = $context->getLayout();
+        $this->layout = $layout;
     }
 
     /**
