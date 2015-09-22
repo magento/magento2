@@ -180,12 +180,14 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
             case 'project':
                 sort(self::$dependencies);
                 $dependenciesListed = [];
-                foreach (array_keys((array)self::$rootJson['replace']) as $key) {
-                    if (MagentoComponent::matchMagentoComponent($key)) {
-                        $dependenciesListed[] = $key;
+                if (isset(self::$rootJson['replace'])) {
+                    foreach (array_keys((array)self::$rootJson['replace']) as $key) {
+                        if (MagentoComponent::matchMagentoComponent($key)) {
+                            $dependenciesListed[] = $key;
+                        }
                     }
+                    sort($dependenciesListed);
                 }
-                sort($dependenciesListed);
                 $nonDeclaredDependencies = array_diff(self::$dependencies, $dependenciesListed);
                 $nonexistentDependencies = array_diff($dependenciesListed, self::$dependencies);
                 $this->assertEmpty(
