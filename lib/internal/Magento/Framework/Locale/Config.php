@@ -89,7 +89,7 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'tr_TR', /*Turkish (Turkey)*/
         'uk_UA', /*Ukrainian (Ukraine)*/
         'vi_VN', /*Vietnamese (Vietnam)*/
-        'zh_Hans_CN', /*Chinese (China)*/
+        'zh_CN', /*Chinese (China)*/
         'zh_Hant_HK', /*Chinese (Hong Kong SAR)*/
         'zh_Hant_TW', /*Chinese (Taiwan)*/
         'es_CL', /*Spanich (Chile)*/
