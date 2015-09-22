@@ -6,8 +6,7 @@
 namespace Magento\Customer\Test\Unit\Console\Command;
 
 use Magento\Customer\Console\Command\UpgradeHashAlgorithmCommand;
-use Magento\Customer\Model\Resource\Customer\CollectionFactory;
-use Magento\Framework\Encryption\Encryptor;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class UpgradeHashAlgorithmCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,25 +16,16 @@ class UpgradeHashAlgorithmCommandTest extends \PHPUnit_Framework_TestCase
     private $command;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManager
      */
-    private $collectionFactory;
-
-    /**
-     * @var Encryptor|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $encryptor;
+    private $objectManager;
 
     public function setUp()
     {
-        $this->collectionFactory = $this->getMockBuilder('Magento\Customer\Model\Resource\Customer\CollectionFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->encryptor = $this->getMockBuilder('Magento\Framework\Encryption\Encryptor')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->command = new UpgradeHashAlgorithmCommand($this->collectionFactory, $this->encryptor);
+        $this->objectManager = new ObjectManager($this);
+        
+        $this->command = $this->objectManager
+            ->getObject('Magento\Customer\Console\Command\UpgradeHashAlgorithmCommand');
     }
 
     public function testConfigure()
