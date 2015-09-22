@@ -25,7 +25,9 @@ class XsdTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_schemaLocator = new \Magento\Framework\Acl\Resource\Config\SchemaLocator();
+        $this->_schemaLocator = new \Magento\Framework\Acl\Resource\Config\SchemaLocator(
+            new \Magento\Framework\Config\Dom\UrnResolver()
+        );
         $this->_xsdSchema = $this->_schemaLocator->getSchema();
         $this->_xsdValidator = new \Magento\Framework\TestFramework\Unit\Utility\XsdValidator();
     }
