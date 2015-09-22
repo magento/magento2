@@ -9,6 +9,7 @@ use Magento\Catalog\Model\ProductFactory;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockManagementInterface;
+use Magento\CatalogInventory\Model\Resource\QtyCounterInterface;
 use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 
@@ -38,26 +39,37 @@ class StockManagement implements StockManagementInterface
     protected $productRepository;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Resource\Stock
+     * @var Resource\Stock
      */
     protected $resource;
 
     /**
+     * @var QtyCounterInterface
+     */
+    private $qtyCounter;
+
+    /**
+     * @param Resource\Stock $stockResource
      * @param StockRegistryProviderInterface $stockRegistryProvider
      * @param StockState $stockState
      * @param StockConfigurationInterface $stockConfiguration
      * @param ProductRepositoryInterface $productRepository
+     * @param Resource\QtyCounterInterface $qtyCounter
      */
     public function __construct(
+        Resource\Stock $stockResource,
         StockRegistryProviderInterface $stockRegistryProvider,
         StockState $stockState,
         StockConfigurationInterface $stockConfiguration,
-        ProductRepositoryInterface $productRepository
+        ProductRepositoryInterface $productRepository,
+        QtyCounterInterface $qtyCounter
     ) {
         $this->stockRegistryProvider = $stockRegistryProvider;
         $this->stockState = $stockState;
         $this->stockConfiguration = $stockConfiguration;
         $this->productRepository = $productRepository;
+        $this->qtyCounter = $qtyCounter;
+        $this->resource = $stockResource;
     }
 
     /**
@@ -108,7 +120,7 @@ class StockManagement implements StockManagementInterface
                 $fullSaveItems[] = $stockItem;
             }
         }
-        $this->getResource()->correctItemsQty($registeredItems, $websiteId, '-');
+        $this->qtyCounter->correctItemsQty($registeredItems, $websiteId, '-');
         $this->getResource()->commit();
         return $fullSaveItems;
     }
@@ -123,7 +135,7 @@ class StockManagement implements StockManagementInterface
         //if (!$websiteId) {
         $websiteId = $this->stockConfiguration->getDefaultWebsiteId();
         //}
-        $this->getResource()->correctItemsQty($items, $websiteId, '+');
+        $this->qtyCounter->correctItemsQty($items, $websiteId, '+');
         return true;
     }
 
@@ -168,15 +180,10 @@ class StockManagement implements StockManagementInterface
     }
 
     /**
-     * @return \Magento\CatalogInventory\Model\Resource\Stock
+     * @return Stock
      */
     protected function getResource()
     {
-        if (empty($this->resource)) {
-            $this->resource = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\CatalogInventory\Model\Resource\Stock'
-            );
-        }
         return $this->resource;
     }
 
