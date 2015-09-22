@@ -39,7 +39,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $urnResolverMock = $this->getMock('Magento\Framework\Config\Dom\UrnResolver', [], [], '', false);
         $urnResolverMock->expects($this->once())
             ->method('getRealPath')
-            ->with('urn:magento:framework:Mview/etc/acl.xsd')
+            ->with('urn:magento:framework:Mview/etc/mview.xsd')
             ->willReturn('test_folder');
         $schemaLocator = new \Magento\Framework\Mview\Config\SchemaLocator($urnResolverMock);
 

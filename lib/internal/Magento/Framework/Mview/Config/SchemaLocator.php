@@ -28,7 +28,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function __construct(\Magento\Framework\Config\Dom\UrnResolver $urnResolver)
     {
-        $this->_schema = $urnResolver->getRealPath('urn:magento:framework:Mview/etc/acl.xsd');
+        $this->_schema = $urnResolver->getRealPath('urn:magento:framework:Mview/etc/mview.xsd');
         $this->_perFileSchema = $this->_schema;
     }
 
