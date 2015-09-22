@@ -47,5 +47,17 @@
             <data name="catalogSearch/data/query_text/value" xsi:type="string">bundleProduct::bundle_fixed_product::bundle</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchResult" />
         </variation>
+        <variation name="SearchEntityResultsTestVariation9">
+            <data name="catalogSearch/data/query_text/value" xsi:type="string">catalogProductSimple::default::name</data>
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductCanBeOpenedFromSearchResult" />
+        </variation>
+        <variation name="SearchEntityResultsTestVariation10">
+            <data name="catalogSearch/data/query_text/value" xsi:type="string">catalogProductSimple::product_with_special_symbols_in_name::name</data>
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductCanBeOpenedFromSearchResult" />
+        </variation>
+        <variation name="SearchEntityResultsTestVariation11">
+            <data name="catalogSearch/data/query_text/value" xsi:type="string">TryToFindMeAndI&#39;llFindYOU</data>
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductNotSearchable" />
+        </variation>
     </testCase>
 </config>
