@@ -93,6 +93,6 @@ $application->initialize();
 $dirSearch = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create('Magento\Framework\Component\DirSearch');
 \Magento\Framework\App\Utility\Files::setInstance(
-    new \Magento\Framework\App\Utility\Files(new \Magento\Framework\Component\ComponentRegistrar(), $dirSearch, BP)
+    new \Magento\Framework\App\Utility\Files(new \Magento\Framework\Component\ComponentRegistrar(), $dirSearch)
 );
 unset($bootstrap, $application, $settings, $shell);
