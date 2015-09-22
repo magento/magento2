@@ -13,16 +13,17 @@ namespace Magento\Bundle\Api\Data;
 interface BundleOptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**
-     * Getter for bundle option id.
+     * Get bundle option id.
      *
      * @return int
      */
     public function getOptionId();
 
     /**
-     * Setter for bundle option id.
+     * Set bundle option id.
      *
      * @param int $optionId
+     * @return int
      */
     public function setOptionId($optionId);
 
@@ -37,6 +38,7 @@ interface BundleOptionInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Set bundle option quantity.
      *
      * @param int $optionQty
+     * @return int
      */
     public function setOptionQty($optionQty);
 
@@ -51,6 +53,7 @@ interface BundleOptionInterface extends \Magento\Framework\Api\ExtensibleDataInt
      * Set bundle option selection ids.
      *
      * @param int[] $optionSelections
+     * @return int[]
      */
     public function setOptionSelections(array $optionSelections);
 
