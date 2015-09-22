@@ -996,6 +996,15 @@ class Files
             '*'
         );
 
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::LANGUAGE) as $fullLanguageDir) {
+            $subFiles[] = $fullLanguageDir . '/';
+        }
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
+            $subFiles[] = $themeDir . '/';
+        }
+
+        $subFiles = array_merge($subFiles, $this->getPaths());
+
         $rootFiles = glob(BP . '/*', GLOB_NOSORT);
         $rootFiles = array_filter(
             $rootFiles,
