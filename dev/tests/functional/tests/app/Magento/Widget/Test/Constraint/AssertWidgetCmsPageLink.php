@@ -54,7 +54,7 @@ class AssertWidgetCmsPageLink extends AbstractConstraint
             'Wrong page title on Cms page.'
         );
 
-        $cmsIndex->getSearchBlock()->clickAdvancedSearchButton();
+        $cmsIndex->getFooterBlock()->openAdvancedSearch();
         \PHPUnit_Framework_Assert::assertTrue(
             $cmsIndex->getWidgetView()->isWidgetVisible($widget, $widgetText),
             'Widget with type CmsPageLink is absent on Advanced Search page.'
