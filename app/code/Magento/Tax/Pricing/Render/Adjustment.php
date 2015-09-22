@@ -69,7 +69,6 @@ class Adjustment extends AbstractAdjustment
      */
     public function getAdjustmentCode()
     {
-        //@TODO We can build two model using DI, not code. What about passing it in constructor?
         return \Magento\Tax\Pricing\Adjustment::ADJUSTMENT_CODE;
     }
 
@@ -86,14 +85,14 @@ class Adjustment extends AbstractAdjustment
     /**
      * Obtain display amount excluding tax
      *
+     * @param array $exclude
      * @param bool $includeContainer
      * @return string
      */
-    public function getDisplayAmountExclTax($includeContainer = false)
+    public function getDisplayAmountExclTax($exclude = null, $includeContainer = false)
     {
-        // todo use 'excludeWith' method instead hard-coded list here
         return $this->formatCurrency(
-            $this->getRawAmount(['tax', 'weee']),
+            $this->getRawAmount($exclude),
             $includeContainer
         );
     }
@@ -104,9 +103,24 @@ class Adjustment extends AbstractAdjustment
      * @param array $exclude
      * @return float
      */
-    public function getRawAmount($exclude = ['tax', 'weee'])
+    public function getRawAmount($exclude = null)
     {
+        //If exclude is not supplied, use the default
+        if ($exclude === null) {
+            $exclude = $this->getDefaultExclusions();
+        }
+
         return $this->amountRender->getAmount()->getValue($exclude);
+    }
+
+    /**
+     * Returns the list of default exclusions
+     *
+     * @return array
+     */
+    public function getDefaultExclusions()
+    {
+        return [$this->getAdjustmentCode()];
     }
 
     /**
