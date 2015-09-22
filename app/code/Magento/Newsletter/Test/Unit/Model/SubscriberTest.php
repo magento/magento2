@@ -279,8 +279,8 @@ class SubscriberTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSubscriberFullName()
     {
-        $this->subscriber->setCustomerFirstname('John');
-        $this->subscriber->setCustomerLastname('Doe');
+        $this->subscriber->setFirstname('John');
+        $this->subscriber->setLastname('Doe');
 
         $this->assertEquals('John Doe', $this->subscriber->getSubscriberFullName());
     }

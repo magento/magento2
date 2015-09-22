@@ -16,6 +16,7 @@ class Type extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Resource initialization
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -28,6 +29,7 @@ class Type extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Model\AbstractModel $object
      * @param string $code
      * @return $this
+     * @codeCoverageIgnore
      */
     public function loadByCode($object, $code)
     {
