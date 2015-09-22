@@ -56,7 +56,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->viewConfigFactoryMock = $this->getMock('Magento\Framework\Config\ViewFactory', [], [], '', false );
+        $this->viewConfigFactoryMock = $this->getMock('Magento\Framework\Config\ViewFactory', [], [], '', false);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->config = $this->objectManagerHelper->getObject(
             'Magento\Framework\View\Config',
