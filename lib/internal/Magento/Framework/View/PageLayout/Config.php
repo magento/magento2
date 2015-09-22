@@ -21,7 +21,7 @@ class Config extends \Magento\Framework\Config\AbstractXml
      * @param array $configFiles
      * @throws \InvalidArgumentException
      */
-    public function __construct(\Magento\Framework\Config\Dom\UrnResolver $urnResolver, $configFiles)
+    public function __construct($configFiles, \Magento\Framework\Config\Dom\UrnResolver $urnResolver)
     {
         $this->urnResolver = $urnResolver;
         parent::__construct($configFiles);
