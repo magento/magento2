@@ -192,7 +192,7 @@ class Files
                 | self::INCLUDE_LIBS
                 | self::INCLUDE_DATA_SET;
         }
-        $key = __METHOD__ . BP . '{$appCode}/{$tests}/{$devTools}/{$lib}';
+        $key = __METHOD__ . BP . $flags;
         if (!isset(self::$_cache[$key])) {
             $files = [];
 
@@ -1278,7 +1278,7 @@ class Files
      */
     public function getComposerFiles($componentType, $asDataSet = true)
     {
-        $key = __METHOD__ . '|' . serialize(func_get_args());
+        $key = __METHOD__ . '|' . BP . '|' . serialize(func_get_args());
         if (!isset(self::$_cache[$key])) {
             $excludes = $componentType == ComponentRegistrar::MODULE ? $this->getModuleTestDirs() : [];
             $files = $this->getFilesSubset(
