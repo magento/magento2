@@ -11,6 +11,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
 use Magento\Framework\Message\Manager as MessageManager;
 use Magento\Wishlist\Controller\Index\Fromcart;
@@ -203,42 +204,7 @@ class FromcartTest extends \PHPUnit_Framework_TestCase
             ->with('item')
             ->willReturn($itemId);
 
-        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $productMock->expects($this->once())
-            ->method('getName')
-            ->willReturn($productName);
-
-        $quoteItemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'getProductId',
-                'getBuyRequest',
-                'getProduct',
-            ])
-            ->getMock();
-        $quoteItemMock->expects($this->once())
-            ->method('getProductId')
-            ->willReturn($productId);
-        $quoteItemMock->expects($this->once())
-            ->method('getBuyRequest')
-            ->willReturn($dataObjectMock);
-        $quoteItemMock->expects($this->once())
-            ->method('getProduct')
-            ->willReturn($productMock);
-
-        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $quoteMock->expects($this->once())
-            ->method('getItemById')
-            ->with($itemId)
-            ->willReturn($quoteItemMock);
-        $quoteMock->expects($this->once())
-            ->method('removeItem')
-            ->with($itemId)
-            ->willReturnSelf();
+        $quoteMock = $this->createQuoteMock($productId, $productName, $dataObjectMock, $itemId);
 
         $this->cart->expects($this->exactly(2))
             ->method('getQuote')
@@ -340,5 +306,54 @@ class FromcartTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->any())
             ->method('getResultFactory')
             ->willReturn($this->resultFactory);
+    }
+
+    /**
+     * @param int $productId
+     * @param string $productName
+     * @param DataObject $dataObjectMock
+     * @param int $itemId
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function createQuoteMock($productId, $productName, $dataObjectMock, $itemId)
+    {
+        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $productMock->expects($this->once())
+            ->method('getName')
+            ->willReturn($productName);
+
+        $quoteItemMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item')
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'getProductId',
+                'getBuyRequest',
+                'getProduct',
+            ])
+            ->getMock();
+        $quoteItemMock->expects($this->once())
+            ->method('getProductId')
+            ->willReturn($productId);
+        $quoteItemMock->expects($this->once())
+            ->method('getBuyRequest')
+            ->willReturn($dataObjectMock);
+        $quoteItemMock->expects($this->once())
+            ->method('getProduct')
+            ->willReturn($productMock);
+
+        $quoteMock = $this->getMockBuilder('Magento\Quote\Model\Quote')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $quoteMock->expects($this->once())
+            ->method('getItemById')
+            ->with($itemId)
+            ->willReturn($quoteItemMock);
+        $quoteMock->expects($this->once())
+            ->method('removeItem')
+            ->with($itemId)
+            ->willReturnSelf();
+
+        return $quoteMock;
     }
 }
