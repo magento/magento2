@@ -10,11 +10,11 @@ namespace Magento\Customer\CustomerData\Section;
  */
 class Identifier
 {
-    CONST COOKIE_KEY = 'storage_data_id';
+    const COOKIE_KEY = 'storage_data_id';
 
-    CONST SECTION_KEY = 'data_id';
+    const SECTION_KEY = 'data_id';
 
-    CONST UPDATE_MARK = 'sections_updated';
+    const UPDATE_MARK = 'sections_updated';
 
     /**
      * @var int
