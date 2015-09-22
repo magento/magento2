@@ -48,6 +48,9 @@ class CartItemRepositoryTest extends WebapiAbstract
             ],
         ];
 
+        // use ID of the first downloadable link
+        $linkId = array_values($product->getDownloadableLinks())[0]->getId();
+
         $requestData = [
             'cartItem' => [
                 'sku' => $productSku,
@@ -56,7 +59,7 @@ class CartItemRepositoryTest extends WebapiAbstract
                 'product_option' => [
                     'extension_attributes' => [
                         'downloadable_option' => [
-                            'downloadable_links' => [0]
+                            'downloadable_links' => [$linkId]
                         ]
                     ]
                 ]
@@ -66,6 +69,14 @@ class CartItemRepositoryTest extends WebapiAbstract
         $this->assertNotEmpty($response);
         $this->assertEquals('downloadable-product', $response['sku']);
         $this->assertEquals(1, $response['qty']);
+        $this->assertCount(
+            1,
+            $response['product_option']['extension_attributes']['downloadable_option']['downloadable_links']
+        );
+        $this->assertContains(
+            $linkId,
+            $response['product_option']['extension_attributes']['downloadable_option']['downloadable_links']
+        );
     }
 
     /**
@@ -79,6 +90,7 @@ class CartItemRepositoryTest extends WebapiAbstract
         $cartId = $quote->getId();
         $product = $this->objectManager->create('Magento\Catalog\Model\Product');
         $product->load($product->getIdBySku('downloadable-product'));
+        // use ID of the first quote item
         $itemId = $quote->getAllItems()[0]->getId();
         $serviceInfo = [
             'rest' => [
@@ -92,6 +104,9 @@ class CartItemRepositoryTest extends WebapiAbstract
             ],
         ];
 
+        // use ID of the first downloadable link
+        $linkId = array_values($product->getDownloadableLinks())[0]->getId();
+
         $requestData = [
             'cartItem' => [
                 'qty' => 2,
@@ -101,7 +116,7 @@ class CartItemRepositoryTest extends WebapiAbstract
                 'product_option' => [
                     'extension_attributes' => [
                         'downloadable_option' => [
-                            'downloadable_links' => [0]
+                            'downloadable_links' => [$linkId]
                         ]
                     ]
                 ]
@@ -111,5 +126,62 @@ class CartItemRepositoryTest extends WebapiAbstract
         $this->assertNotEmpty($response);
         $this->assertEquals('downloadable-product', $response['sku']);
         $this->assertEquals(2, $response['qty']);
+        $this->assertCount(
+            1,
+            $response['product_option']['extension_attributes']['downloadable_option']['downloadable_links']
+        );
+        $this->assertContains(
+            $linkId,
+            $response['product_option']['extension_attributes']['downloadable_option']['downloadable_links']
+        );
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Downloadable/_files/quote_with_downloadable_product.php
+     */
+    public function testGetList()
+    {
+        /** @var \Magento\Quote\Model\Quote  $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote->load('reserved_order_id_1', 'reserved_order_id');
+        $cartId = $quote->getId();
+        $product = $this->objectManager->create('Magento\Catalog\Model\Product');
+        $product->load($product->getIdBySku('downloadable-product'));
+        // use ID of the first downloadable link
+        $linkId = array_values($product->getDownloadableLinks())[0]->getId();
+
+        /** @var  \Magento\Quote\Api\Data\CartItemInterface $item */
+        $item = $quote->getAllItems()[0];
+        $expectedResult = [[
+            'item_id' => $item->getItemId(),
+            'sku' => $item->getSku(),
+            'name' => $item->getName(),
+            'price' => $item->getPrice(),
+            'qty' => $item->getQty(),
+            'product_type' => $item->getProductType(),
+            'quote_id' => $item->getQuoteId(),
+            'product_option' => [
+                'extension_attributes' => [
+                    'downloadable_option' => [
+                        'downloadable_links' => [$linkId]
+                    ]
+                ]
+            ]
+        ]];
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . $cartId . '/items',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'GetList',
+            ],
+        ];
+
+        $requestData = ["cartId" => $cartId];
+        $this->assertEquals($expectedResult, $this->_webApiCall($serviceInfo, $requestData));
     }
 }
