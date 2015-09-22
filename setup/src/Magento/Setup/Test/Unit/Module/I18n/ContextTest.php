@@ -81,8 +81,10 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     {
         $this->componentRegistrar->expects($this->any())
             ->method('getPaths')
-            ->with(ComponentRegistrar::MODULE)
-            ->willReturn(['module' => '/path/to/module']);
+            ->willReturnMap([
+                [ComponentRegistrar::MODULE, ['/path/to/module']],
+                [ComponentRegistrar::THEME, ['/path/to/theme']]
+            ]);
         $this->context = new Context($this->componentRegistrar);
         $this->context->getContextByPath('invalid_path');
     }
@@ -119,7 +121,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
                 [Context::CONTEXT_TYPE_MODULE, 'Magento_Module'],
                 [[ComponentRegistrar::MODULE, 'Magento_Module', BP . '/app/code/Magento/Module']]
             ],
-            ['app/design/theme/test.phtml/i18n/', [Context::CONTEXT_TYPE_THEME, 'theme/test.phtml'], []],
+            ['/i18n/', [Context::CONTEXT_TYPE_THEME, 'theme/test.phtml'], []],
             ['lib/web/i18n/', [Context::CONTEXT_TYPE_LIB, 'lib/web/module/test.phtml'], []],
         ];
     }

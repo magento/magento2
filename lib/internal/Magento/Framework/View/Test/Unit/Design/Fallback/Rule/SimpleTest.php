@@ -14,29 +14,12 @@ use \Magento\Framework\View\Design\Fallback\Rule\Simple;
 class SimpleTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Module\Dir\Reader|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $moduelReader;
-
-    /**
-     * @var \Magento\Framework\Component\ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $componentRegistrarMock;
-
-    public function setup()
-    {
-        $this->moduelReader = $this->getMockBuilder('Magento\Framework\Module\Dir\Reader')
-            ->disableOriginalConstructor()->getMock();
-        $this->componentRegistrarMock = $this->getMockBuilder('Magento\Framework\Component\ComponentRegistrarInterface')
-            ->disableOriginalConstructor()->getMock();
-    }
-    /**
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Required parameter 'required_parameter' was not passed
      */
     public function testGetPatternDirsException()
     {
-        $model = new Simple('<required_parameter> other text', $this->componentRegistrarMock, $this->moduelReader);
+        $model = new Simple('<required_parameter> other text');
         $model->getPatternDirs([]);
     }
 
@@ -46,7 +29,7 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
     public function testGetPatternDirs($pattern, $optionalParameter = null, $expectedResult = null)
     {
         $params = ['optional_parameter' => $optionalParameter, 'required_parameter' => 'required_parameter'];
-        $model = new Simple($pattern, $this->componentRegistrarMock, $this->moduelReader, ['optional_parameter']);
+        $model = new Simple($pattern, ['optional_parameter']);
 
         $this->assertEquals($expectedResult, $model->getPatternDirs($params));
     }

@@ -6,6 +6,7 @@
 
 namespace Magento\Translation\Model\Js;
 
+use Magento\Framework\Component\DirSearch;
 use Magento\Framework\Phrase\Renderer\Translate;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem;
@@ -58,6 +59,7 @@ class DataProvider implements DataProviderInterface
      * @param Config $config
      * @param Filesystem $filesystem
      * @param Translate $translate
+     * @param DirSearch $dirSearch
      * @param \Magento\Framework\App\Utility\Files $filesUtility
      */
     public function __construct(
@@ -65,6 +67,7 @@ class DataProvider implements DataProviderInterface
         Config $config,
         Filesystem $filesystem,
         Translate $translate,
+        DirSearch $dirSearch,
         \Magento\Framework\App\Utility\Files $filesUtility = null
     ) {
         $this->appState = $appState;
@@ -72,7 +75,7 @@ class DataProvider implements DataProviderInterface
         $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->translate = $translate;
         $this->filesUtility = (null !== $filesUtility) ?
-            $filesUtility : new \Magento\Framework\App\Utility\Files(new ComponentRegistrar(), BP);
+            $filesUtility : new \Magento\Framework\App\Utility\Files(new ComponentRegistrar(), $dirSearch);
     }
 
     /**

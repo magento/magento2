@@ -71,10 +71,6 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage no such theme registered
-     */
     public function testGetFilesWrongTheme()
     {
         $this->componentRegistrar->expects($this->once())
@@ -84,7 +80,7 @@ class ThemeModularTest extends \PHPUnit_Framework_TestCase
         $theme->expects($this->once())
             ->method('getFullPath')
             ->will($this->returnValue('area/Vendor/theme'));
-        $this->model->getFiles($theme, '');
+        $this->assertSame([], $this->model->getFiles($theme, ''));
     }
 
     /**

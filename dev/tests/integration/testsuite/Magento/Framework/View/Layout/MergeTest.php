@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\View\Test\Unit\Model\Layout;
+namespace Magento\Framework\View\Layout;
 
 use Magento\Framework\Phrase;
 
@@ -64,7 +64,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $files = [];
-        foreach (glob(__DIR__ . '/_files/layout/*.xml') as $filename) {
+        foreach (glob(__DIR__ . '/_mergeFiles/layout/*.xml') as $filename) {
             $files[] = new \Magento\Framework\View\File($filename, 'Magento_Widget');
         }
         $fileSource = $this->getMockForAbstractClass('Magento\Framework\View\File\CollectorInterface');
@@ -103,23 +103,23 @@ class MergeTest extends \PHPUnit_Framework_TestCase
 
         $objectHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false, false);
-        $directory = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false, false);
-        $directory->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
-
-        $fileDriver = $objectHelper->getObject('Magento\Framework\Filesystem\Driver\File');
-        $directory->expects($this->any())->method('readFile')->will(
-            $this->returnCallback(
-                function ($filename) use ($fileDriver) {
-                    return $fileDriver->fileGetContents($filename);
-                }
-            )
-        );
-        $filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($directory));
-
         $this->pageConfig = $this->getMockBuilder('Magento\Framework\View\Page\Config')
             ->disableOriginalConstructor()
             ->getMock();
+
+        $readFactory = $this->getMock('Magento\Framework\Filesystem\File\ReadFactory', [], [], '', false, false);
+        $fileReader = $this->getMock('Magento\Framework\Filesystem\File\Read', [], [], '', false, false);
+        $readFactory->expects($this->any())->method('create')->willReturn($fileReader);
+
+        $fileDriver = $objectHelper->getObject('Magento\Framework\Filesystem\Driver\File');
+
+        $fileReader->expects($this->any())->method('readAll')->will(
+            $this->returnCallback(
+                function ($filename) use ($fileDriver) {
+                    return $fileDriver->fileGetContents(__DIR__ . '/_mergeFiles/layout/'. $filename);
+                }
+            )
+        );
 
         $this->_model = $objectHelper->getObject(
             'Magento\Framework\View\Model\Layout\Merge',
@@ -134,7 +134,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
                 'theme' => $this->_theme,
                 'validator' => $this->_layoutValidator,
                 'logger' => $this->_logger,
-                'filesystem' => $filesystem,
+                'readFactory' => $readFactory,
                 'pageConfig' => $this->pageConfig
             ]
         );
@@ -301,12 +301,12 @@ class MergeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFileLayoutUpdatesXml()
     {
-        $errorString = "Theme layout update file '" . __DIR__ . "/_files/layout/file_wrong.xml' is not valid.";
+        $errorString = "Theme layout update file '" . __DIR__ . "/_mergeFiles/layout/file_wrong.xml' is not valid.";
         $this->_logger->expects($this->atLeastOnce())->method('info')
             ->with($this->stringStartsWith($errorString));
 
         $actualXml = $this->_model->getFileLayoutUpdatesXml();
-        $this->assertXmlStringEqualsXmlFile(__DIR__ . '/_files/merged.xml', $actualXml->asNiceXml());
+        $this->assertXmlStringEqualsXmlFile(__DIR__ . '/_mergeFiles/merged.xml', $actualXml->asNiceXml());
     }
 
     public function testGetContainers()

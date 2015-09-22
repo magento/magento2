@@ -14,7 +14,6 @@ if (file_exists($updateAppBootstrap)) {
 }
 
 $testsBaseDir = dirname(__DIR__);
-$magentoBaseDir = realpath("{$testsBaseDir}/../../../");
 $fixtureBaseDir = $testsBaseDir. '/testsuite';
 
 if (!defined('TESTS_TEMP_DIR')) {
@@ -77,12 +76,17 @@ try {
 
     \Magento\TestFramework\Helper\Bootstrap::setInstance(new \Magento\TestFramework\Helper\Bootstrap($bootstrap));
 
+    $dirSearch = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        ->create('Magento\Framework\Component\DirSearch');
     \Magento\Framework\App\Utility\Files::setInstance(
-        new Magento\Framework\App\Utility\Files(new \Magento\Framework\Component\ComponentRegistrar(), $magentoBaseDir)
+        new Magento\Framework\App\Utility\Files(
+            new \Magento\Framework\Component\ComponentRegistrar(),
+            $dirSearch
+        )
     );
 
     /* Unset declared global variables to release the PHPUnit from maintaining their values between tests */
-    unset($testsBaseDir, $magentoBaseDir, $logWriter, $settings, $shell, $application, $bootstrap);
+    unset($testsBaseDir, $logWriter, $settings, $shell, $application, $bootstrap);
 } catch (\Exception $e) {
     echo $e . PHP_EOL;
     exit(1);

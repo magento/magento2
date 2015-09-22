@@ -5,7 +5,6 @@
  */
 namespace Magento\PageCache\Test\Unit\Model;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\PageCache\Model\Config;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase

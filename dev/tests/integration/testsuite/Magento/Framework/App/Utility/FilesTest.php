@@ -32,7 +32,9 @@ class FilesTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $componentRegistrar = new ComponentRegistrar();
-        $this->model = new Files($componentRegistrar, BP);
+        $dirSearch = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Framework\Component\DirSearch');
+        $this->model = new Files($componentRegistrar, $dirSearch);
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
             $this->moduleTests[] = '#' . $moduleDir . '/Test#';
         }
@@ -45,27 +47,33 @@ class FilesTest extends \PHPUnit_Framework_TestCase
     public function testGetPhpFilesExcludeTests()
     {
         $this->assertNoTestDirs(
-            $this->model->getPhpFiles(true, true, true, false)
+            $this->model->getClassFiles(
+                Files::INCLUDE_APP_CODE
+                | Files::INCLUDE_PUB_CODE
+                | Files::INCLUDE_LIBS
+                | Files::INCLUDE_TEMPLATES
+                | Files::INCLUDE_TESTS
+            )
         );
     }
 
     public function testGetComposerExcludeTests()
     {
         $this->assertNoTestDirs(
-            $this->model->getComposerFiles('module', false)
+            $this->model->getComposerFiles(ComponentRegistrar::MODULE, false)
         );
     }
 
     public function testGetClassFilesExcludeTests()
     {
         $this->assertNoTestDirs(
-            $this->model->getClassFiles(true, false, true, true, false)
+            $this->model->getClassFiles(Files::INCLUDE_APP_CODE | Files::INCLUDE_DEV_TOOLS | Files::INCLUDE_LIBS)
         );
     }
 
     public function testGetClassFilesOnlyTests()
     {
-        $classFiles = $this->model->getClassFiles(false, true, false, false, false);
+        $classFiles = $this->model->getClassFiles(Files::INCLUDE_TESTS);
 
         foreach ($this->moduleTests as $moduleTest) {
             $classFiles = preg_grep($moduleTest, $classFiles, PREG_GREP_INVERT);
@@ -81,6 +89,24 @@ class FilesTest extends \PHPUnit_Framework_TestCase
         $classFiles = preg_grep($this->setupTestsDir, $classFiles, PREG_GREP_INVERT);
 
         $this->assertEmpty($classFiles);
+    }
+
+    public function testGetConfigFiles()
+    {
+        $actual = $this->model->getConfigFiles('*.xml');
+        $this->assertNotEmpty($actual);
+        foreach ($actual as $file) {
+            $this->assertStringEndsWith('.xml', $file[0]);
+        }
+    }
+
+    public function testGetLayoutConfigFiles()
+    {
+        $actual = $this->model->getLayoutConfigFiles('*.xml');
+        $this->assertNotEmpty($actual);
+        foreach ($actual as $file) {
+            $this->assertStringEndsWith('.xml', $file[0]);
+        }
     }
 
     /**

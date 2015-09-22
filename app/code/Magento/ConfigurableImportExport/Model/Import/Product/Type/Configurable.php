@@ -350,11 +350,23 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     /**
      * Array of SKU to array of super attribute values for all products.
      *
+     * @param array $bunch
      * @return $this
      */
-    protected function _loadSkuSuperData()
+    protected function _loadSkuSuperDataForBunch(array $bunch)
     {
-        if (!$this->_skuSuperData) {
+        $newSku = $this->_entityModel->getNewSku();
+        $oldSku = $this->_entityModel->getOldSku();
+        $productIds = [];
+        foreach ($bunch as $rowData) {
+            $sku = $rowData[ImportProduct::COL_SKU];
+            $productData = isset($newSku[$sku]) ? $newSku[$sku] : $oldSku[$sku];
+            $productIds[] = $productData['entity_id'];
+        }
+
+        $this->_productSuperAttrs = [];
+        $this->_skuSuperData = [];
+        if (!empty($productIds)) {
             $mainTable = $this->_resource->getTableName('catalog_product_super_attribute');
             $optionTable = $this->_resource->getTableName('eav_attribute_option');
             $select = $this->_connection->select()->from(
@@ -368,6 +380,9 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                     'o.attribute_id'
                 ),
                 ['option_id']
+            )->where(
+                'product_id IN ( ? )',
+                $productIds
             );
 
             foreach ($this->_connection->fetchAll($select) as $row) {
@@ -703,11 +718,10 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $this->_productSuperData = [];
         $this->_productData = null;
 
-        if ($this->_entityModel->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND) {
-            $this->_loadSkuSuperData();
-        }
-
         while ($bunch = $this->_entityModel->getNextBunch()) {
+            if ($this->_entityModel->getBehavior() == \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND) {
+                $this->_loadSkuSuperDataForBunch($bunch);
+            }
             if (!$this->configurableInBunch($bunch)) {
                 continue;
             }

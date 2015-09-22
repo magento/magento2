@@ -29,37 +29,17 @@ class Simple implements RuleInterface
     protected $pattern;
 
     /**
-     * Component registry
-     *
-     * @var ComponentRegistrarInterface
-     */
-    private $componentRegistrar;
-
-    /**
-     * Module directory reader
-     *
-     * @var Reader
-     */
-    protected $moduleDirReader;
-
-    /**
      * Constructor
      *
      * @param string $pattern
-     * @param ComponentRegistrarInterface $componentRegistrar
-     * @param Reader $moduleDirReader
      * @param array $optionalParams
      */
     public function __construct(
         $pattern,
-        ComponentRegistrarInterface $componentRegistrar,
-        Reader $moduleDirReader,
         array $optionalParams = []
     ) {
         $this->pattern = $pattern;
         $this->optionalParams = $optionalParams;
-        $this->componentRegistrar = $componentRegistrar;
-        $this->moduleDirReader = $moduleDirReader;
     }
 
     /**

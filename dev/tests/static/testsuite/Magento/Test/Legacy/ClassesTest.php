@@ -9,6 +9,8 @@
  */
 namespace Magento\Test\Legacy;
 
+use Magento\Framework\App\Utility\Files;
+
 class ClassesTest extends \PHPUnit_Framework_TestCase
 {
     public function testPhpCode()
@@ -22,7 +24,13 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 $classes = \Magento\Framework\App\Utility\Classes::collectPhpCodeClasses(file_get_contents($file));
                 $this->_assertNonFactoryName($classes, $file);
             },
-            \Magento\Framework\App\Utility\Files::init()->getPhpFiles(true, true, true, true, false)
+            Files::init()->getClassFiles(
+                Files::INCLUDE_APP_CODE
+                | Files::INCLUDE_PUB_CODE
+                | Files::INCLUDE_LIBS
+                | Files::INCLUDE_TEMPLATES
+                | Files::INCLUDE_DATA_SET
+            )
         );
     }
 
@@ -42,7 +50,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 $modules = \Magento\Framework\App\Utility\Classes::getXmlAttributeValues($xml, '//@module', 'module');
                 $this->_assertNonFactoryName(array_unique($modules), $path, false, true);
             },
-            \Magento\Framework\App\Utility\Files::init()->getConfigFiles()
+            Files::init()->getConfigFiles()
         );
     }
 
@@ -75,7 +83,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 );
                 $this->_assertNonFactoryName(array_unique($tabs), $path, true);
             },
-            \Magento\Framework\App\Utility\Files::init()->getLayoutFiles()
+            Files::init()->getLayoutFiles()
         );
     }
 

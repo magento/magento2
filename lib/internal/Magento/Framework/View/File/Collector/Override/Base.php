@@ -20,26 +20,36 @@ use Magento\Framework\View\Helper\PathPattern;
 class Base implements CollectorInterface
 {
     /**
+     * Pattern helper
+     *
      * @var PathPattern
      */
     private $pathPatternHelper;
 
     /**
+     * File factory
+     *
      * @var FileFactory
      */
     private $fileFactory;
 
     /**
+     * Directory factory
+     *
      * @var ReadFactory
      */
     private $readDirFactory;
 
     /**
+     * Component registrar
+     *
      * @var ComponentRegistrarInterface
      */
     private $componentRegistrar;
 
     /**
+     * Sub-directory path
+     *
      * @var string
      */
     private $subDir;
@@ -70,7 +80,7 @@ class Base implements CollectorInterface
     /**
      * Retrieve files
      *
-     * @param \Magento\Framework\View\Design\ThemeInterface $theme
+     * @param ThemeInterface $theme
      * @param string $filePath
      * @return \Magento\Framework\View\File[]
      */
@@ -83,7 +93,7 @@ class Base implements CollectorInterface
         }
         $themeAbsolutePath = $this->componentRegistrar->getPath(ComponentRegistrar::THEME, $themePath);
         if (!$themeAbsolutePath) {
-            throw new \UnexpectedValueException("Can't get files for theme '$themePath': no such theme registered");
+            return [];
         }
         $themeDir = $this->readDirFactory->create($themeAbsolutePath);
         $searchPattern = "{$namespace}_{$module}/{$this->subDir}{$filePath}";

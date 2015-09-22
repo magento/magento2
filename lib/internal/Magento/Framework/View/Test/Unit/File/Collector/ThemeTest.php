@@ -11,7 +11,16 @@ use Magento\Framework\View\File\Factory;
 
 class ThemeTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Theme path
+     *
+     * @var string
+     */
     private $themePath = 'frontend/Magento/theme';
+
+    /**
+     * Full theme path
+     */
     const FULL_THEME_PATH = '/full/theme/path';
 
     /**
@@ -71,16 +80,12 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @expectedException \UnexpectedValueException
-     * @expectedExceptionMessage no such theme registered
-     */
     public function testGetFilesWrongTheme()
     {
         $this->componentRegistrar->expects($this->once())
             ->method('getPath')
             ->will($this->returnValue(''));
-        $this->themeFileCollector->getFiles($this->themeMock, '');
+        $this->assertSame([], $this->themeFileCollector->getFiles($this->themeMock, ''));
     }
 
     public function testGetFilesEmpty()

@@ -6,7 +6,8 @@
  */
 namespace Magento\Framework\Config;
 
-use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\Filesystem\File\ReadFactory;
 
 /**
  * Class FileIterator
@@ -28,19 +29,21 @@ class FileIterator implements \Iterator, \Countable
     protected $position;
 
     /**
-     * @var DriverInterface
+     * File read factory
+     *
+     * @var ReadFactory
      */
-    protected $filesystemDriver;
+    protected $fileReadFactory;
 
     /**
      * Constructor
      *
-     * @param DriverInterface $filesystemDriver
+     * @param ReadFactory $readFactory
      * @param array $paths
      */
-    public function __construct(DriverInterface $filesystemDriver, array $paths)
+    public function __construct(ReadFactory $readFactory, array $paths)
     {
-        $this->filesystemDriver = $filesystemDriver;
+        $this->fileReadFactory = $readFactory;
         $this->paths = $paths;
         $this->position = 0;
     }
@@ -62,7 +65,9 @@ class FileIterator implements \Iterator, \Countable
      */
     public function current()
     {
-        return $this->filesystemDriver->fileGetContents($this->key());
+        /** @var \Magento\Framework\Filesystem\File\Read $fileRead */
+        $fileRead = $this->fileReadFactory->create($this->key(), DriverPool::FILE);
+        return $fileRead->readAll();
     }
 
     /**

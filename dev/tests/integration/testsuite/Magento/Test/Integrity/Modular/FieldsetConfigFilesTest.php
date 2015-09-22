@@ -32,7 +32,7 @@ class FieldsetConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractCo
     }
 
     /**
-     * Returns an absolute path to the per file XSD file.
+     * Returns an absolute path to the XSD file corresponding to the XML files specified in _getConfigFilePathGlob
      *
      * @return string
      */
