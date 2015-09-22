@@ -17,9 +17,9 @@ $block->getConfigJson();
 ?>
 <fieldset class="admin__fieldset downloadable-form">
     <div class="admin__field"<?php echo !$block->isSingleStoreMode() ? ' data-config-scope="' . __('[STORE VIEW]') . '"' : ''; ?>>
-        <label class="admin__field-label" for="downloadable_samples_title"><span><?php /* @escapeNotVerified */ echo __('Title')?></span></label>
+        <label class="admin__field-label" for="downloadable_samples_title"><span><?php echo __('Title')?></span></label>
         <div class="admin__field-control">
-            <input type="text" class="admin__control-text" id="downloadable_samples_title" name="product[samples_title]" value="<?php /* @escapeNotVerified */ echo $block->getSamplesTitle() ?>" <?php echo($_product->getStoreId() && $block->getUsedDefault()) ? 'disabled="disabled"' : '' ?>>
+            <input type="text" class="admin__control-text" id="downloadable_samples_title" name="product[samples_title]" value="<?php echo $block->getSamplesTitle() ?>" <?php echo($_product->getStoreId() && $block->getUsedDefault()) ? 'disabled="disabled"' : '' ?>>
             <?php if ($_product->getStoreId()): ?>
                 <div class="admin__field admin__field-option">
                     <input id="sample_title_default" class="admin__control-checkbox" type="checkbox" name="use_default[]" value="samples_title" onclick="toggleValueElements(this, this.parentNode.parentNode)" <?php echo $block->getUsedDefault() ? 'checked="checked"' : '' ?> />
@@ -34,9 +34,9 @@ $block->getConfigJson();
                 <table class="admin__control-table">
                     <thead>
                         <tr>
-                            <th class="_required col-title"><span><?php /* @escapeNotVerified */ echo __('Title') ?></span></th>
-                            <th class="col-file"><span><?php /* @escapeNotVerified */ echo __('File') ?></span></th>
-                            <th class="col-sort"><span><?php /* @escapeNotVerified */ echo __('Sort Order') ?></span></th>
+                            <th class="col-sort"><span><?php echo __('Sort Order') ?></span></th>
+                            <th class="_required col-title"><span><?php echo __('Title') ?></span></th>
+                            <th class="col-file"><span><?php echo __('File') ?></span></th>
                             <th class="col-actions">&nbsp;</th>
                         </tr>
                     </thead>
@@ -50,7 +50,7 @@ $block->getConfigJson();
                 </table>
             </div>
             <div class="admin__field-note">
-                <span><?php /* @escapeNotVerified */ echo __('Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with \'_\'.')?></span>
+                <span><?php echo __('Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with \'_\'.')?></span>
             </div>
         </div>
     </div>
@@ -65,6 +65,8 @@ require([
 ], function (jQuery, registry, mageTemplate) {
     registry.get('downloadable', function (Downloadable) {
         var sampleTemplate = '<tr>'+
+                            '<td class="col-sort" data-role="draggable-handle"><input data-container="link-order" type="hidden" name="downloadable[sample][<%- data.id %>][sort_order]" value="<%- data.sort_order %>" ' +
+            'class="input-text sort admin__control-text" />#</td>'+
                             '<td class="col-title">'+
                                 '<input type="hidden" class="__delete__" name="downloadable[sample][<%- data.id %>][is_delete]" value="" />'+
                                 '<input type="hidden" name="downloadable[sample][<%- data.id %>][sample_id]" value="<%- data.sample_id %>" />'+
@@ -80,8 +82,8 @@ require([
                                             '<div id="downloadable_sample_<%- data.id %>_file-old" class="file-row-info"></div>'+
                                             '<div id="downloadable_sample_<%- data.id %>_file-new" class="file-row-info new-file"></div>'+
                                             '<div class="fileinput-button form-buttons">'+
-                                                '<span><?php /* @escapeNotVerified */ echo __('Browse Files...') ?></span>' +
-                                                '<input id="downloadable_sample_<%- data.id %>_file" type="file" name="<?php /* @escapeNotVerified */ echo $block->getConfig()->getFileField() ?>" data-url="<?php /* @escapeNotVerified */ echo $block->getConfig()->getUrl() ?>">' +
+                                                '<span><?php echo __('Browse Files...') ?></span>' +
+                                                '<input id="downloadable_sample_<%- data.id %>_file" type="file" name="<?php echo $block->getConfig()->getFileField() ?>" data-url="<?php echo $block->getConfig()->getUrl() ?>">' +
                                                 '<script>' +
                                                 '/*<![CDATA[*/' +
                                                     'sampleUploader("#downloadable_sample_<%- data.id %>_file"); ' +
@@ -100,7 +102,6 @@ require([
                                 '</div>'+
 
                             '</td>'+
-                            '<td class="col-sort"><input type="text" name="downloadable[sample][<%- data.id %>][sort_order]" value="<%- data.sort_order %>" class="input-text sort admin__control-text" /></td>'+
                             '<td class="col-actions">'+
                                 '<button type="button" class="action-delete"><span>Delete</span></button>'+
                             '</td>'+
@@ -117,6 +118,7 @@ require([
                     data = {};
                     data.sample_type = 'file';
                     data.sample_id  = 0;
+                    data.sort_order = this.itemCount + 1;
                 }
 
                 data.id = this.itemCount;
@@ -162,7 +164,7 @@ require([
                     'downloadable[sample]['+data.id+']',
                     data.file_save,
                     'downloadable_sample_'+data.id+'_file',
-                    <?php /* @escapeNotVerified */ echo $block->getConfigJson() ?>
+                    <?php echo $block->getConfigJson() ?>
                 );
                 sampleUrl.advaiceContainer = 'downloadable_sample_'+data.id+'_container';
                 sampleFile = $('downloadable_sample_'+data.id+'_file_type');
@@ -171,6 +173,20 @@ require([
 
                 this.itemCount++;
                 this.bindRemoveButtons();
+            },
+            sorting: function () {
+                var list = jQuery(this.tbody);
+                list.sortable({
+                    axis: 'y',
+                    handle: '[data-role=draggable-handle]',
+                    items: 'tr',
+                    update: function (event, data) {
+                        list.find('[data-container=link-order]').each(function (i, el) {
+                            jQuery(el).val(i + 1);
+                        });
+                    },
+                    tolerance: 'pointer'
+                });
             },
             remove: function(event) {
                 var element = $(Event.findElement(event, 'tr'));
@@ -191,15 +207,16 @@ require([
                     }
                 }
             }
-        }
+        };
 
+        sampleItems.sorting();
         sampleItems.bindRemoveButtons();
 
         sampleUploader = function (id) {
             (function ($, id) {
                 $(id).fileupload({
                     dataType: 'json',
-                    url: '<?php /* @escapeNotVerified */ echo $block->getConfig()->getUrl() ?>',
+                    url: '<?php echo $block->getConfig()->getUrl() ?>',
                     sequentialUploads: true,
                     maxFileSize: 2000000,
                     add: function (e, data) {
@@ -263,7 +280,7 @@ require([
         }
 
         <?php foreach ($block->getSampleData() as $item): ?>
-            sampleItems.add(<?php /* @escapeNotVerified */ echo $item->toJson() ?>);
+            sampleItems.add(<?php echo $item->toJson() ?>);
         <?php endforeach; ?>
 
     });
