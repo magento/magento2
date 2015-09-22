@@ -56,6 +56,7 @@ class ConfigOptionsListConstants
      */
     const SESSION_SAVE_FILES = 'files';
     const SESSION_SAVE_DB = 'db';
+    const SESSION_SAVE_REDIS = 'redis';
     /**#@-*/
 
     /**

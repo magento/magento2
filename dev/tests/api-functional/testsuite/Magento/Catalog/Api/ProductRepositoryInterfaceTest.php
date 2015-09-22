@@ -130,7 +130,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
     public function testProductLinks()
     {
         // Create simple product
-        $productData =  [
+        $productData = [
             ProductInterface::SKU => "product_simple_500",
             ProductInterface::NAME => "Product Simple 500",
             ProductInterface::VISIBILITY => 4,
