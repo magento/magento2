@@ -105,7 +105,7 @@ config;
     /**
      * @param \Magento\Framework\RequireJs\Config\File\Collector\Aggregated $fileSource
      * @param \Magento\Framework\View\DesignInterface $design
-     * @param \Magento\Framework\Filesystem $appFilesystem
+     * @param ReadFactory $readFactory
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Code\Minifier\AdapterInterface $minifyAdapter
      * @param Minification $minification
