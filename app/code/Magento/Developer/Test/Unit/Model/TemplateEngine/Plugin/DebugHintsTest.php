@@ -115,7 +115,7 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
         $this->setupConfigFixture($showTemplateHints, true);
         $this->objectManagerMock->expects($this->never())
             ->method('create');
-        $engine = $this->getMock('Magento\Framework\View\TemplateEngineInterface', [], [], '', false);
+        $engine = $this->getMock('Magento\Framework\View\TemplateEngineInterface');
 
         $this->assertSame($engine, $this->model->afterCreate($this->subjectMock, $engine));
     }
@@ -141,11 +141,11 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
      */
     protected function setupConfigFixture($showTemplateHints, $showBlockHints)
     {
-        $toreCode = 'default';
+        $storeCode = 'default';
         $storeMock = $this->getMock('Magento\Store\Api\Data\StoreInterface');
         $storeMock->expects($this->once())
             ->method('getCode')
-            ->willReturn($toreCode);
+            ->willReturn($storeCode);
         $this->storeManager->expects($this->once())
             ->method('getStore')
             ->willReturn($storeMock);
@@ -156,13 +156,13 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
                 [
                     DebugHints::XML_PATH_DEBUG_TEMPLATE_HINTS,
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                    $toreCode,
+                    $storeCode,
                     $showTemplateHints,
                 ],
                 [
                     DebugHints::XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS,
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                    $toreCode,
+                    $storeCode,
                     $showBlockHints
                 ]
             ]);
