@@ -13,5 +13,5 @@ require __DIR__ . '/autoload.php';
 
 $dirSearch = new DirSearch(new ComponentRegistrar(), new ReadFactory(new DriverPool()));
 \Magento\Framework\App\Utility\Files::setInstance(
-    new \Magento\Framework\App\Utility\Files(new ComponentRegistrar(), $dirSearch, BP)
+    new \Magento\Framework\App\Utility\Files(new ComponentRegistrar(), $dirSearch)
 );

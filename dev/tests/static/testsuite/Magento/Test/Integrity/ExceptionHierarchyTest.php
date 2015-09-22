@@ -29,7 +29,10 @@ class ExceptionHierarchyTest extends \PHPUnit_Framework_TestCase
      */
     public function isInheritedLocalizedExceptionDataProvider()
     {
-        $files = UtilityFiles::init()->getClassFiles(true, false, false, true, false);
+        $files = UtilityFiles::init()->getClassFiles(
+            UtilityFiles::INCLUDE_APP_CODE
+            | UtilityFiles::INCLUDE_LIBS
+        );
         $blacklistExceptions = $this->getBlacklistExceptions();
 
         $data = [];

@@ -10,6 +10,7 @@
 namespace Magento\TestFramework\Workaround\Cleanup;
 
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\App\Utility\Files;
 
 class StaticProperties
 {
@@ -129,7 +130,11 @@ class StaticProperties
      */
     public static function backupStaticVariables()
     {
-        $classFiles = \Magento\Framework\App\Utility\Files::init()->getClassFiles(true, true, false, true, false);
+        $classFiles = Files::init()->getClassFiles(
+            Files::INCLUDE_APP_CODE
+            | Files::INCLUDE_LIBS
+            | Files::INCLUDE_TESTS
+        );
         $namespacePattern = '/namespace [a-zA-Z0-9\\\\]+;/';
         $classPattern = '/\nclass [a-zA-Z0-9_]+/';
         foreach ($classFiles as $classFile) {
