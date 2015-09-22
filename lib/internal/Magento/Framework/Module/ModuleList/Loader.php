@@ -130,6 +130,7 @@ class Loader
      */
     private function sortBySequence($origList)
     {
+        ksort($origList);
         $expanded = [];
         foreach ($origList as $moduleName => $value) {
             $expanded[] = [
