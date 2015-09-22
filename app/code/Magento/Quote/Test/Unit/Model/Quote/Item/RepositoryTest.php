@@ -111,6 +111,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveCouldNotSaveException()
     {
+        $this->markTestSkipped('MAGETWO-43058');
         $cartId = 13;
         $this->dataMock->expects($this->once())->method('getQty')->will($this->returnValue(12));
         $this->dataMock->expects($this->once())->method('getQuoteId')->willReturn($cartId);
@@ -138,6 +139,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testSave()
     {
+        $this->markTestSkipped('MAGETWO-43058');
         $cartId = 13;
         $this->dataMock->expects($this->once())->method('getQty')->will($this->returnValue(12));
         $this->dataMock->expects($this->once())->method('getQuoteId')->willReturn($cartId);
@@ -167,6 +169,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateItemWithInvalidQuoteItem()
     {
+        $this->markTestSkipped('MAGETWO-43058');
         $cartId = 11;
         $itemId = 5;
         $this->dataMock->expects($this->once())->method('getQty')->will($this->returnValue(12));
@@ -189,6 +192,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateItemWithCouldNotSaveException()
     {
+        $this->markTestSkipped('MAGETWO-43058');
         $cartId = 11;
         $itemId = 5;
         $productSku = 'product_sku';
@@ -223,6 +227,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateItem()
     {
+        $this->markTestSkipped('MAGETWO-43058');
         $cartId = 11;
         $itemId = 5;
         $productSku = 'product_sku';
