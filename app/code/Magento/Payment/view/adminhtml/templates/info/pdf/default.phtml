@@ -16,8 +16,8 @@
 
 <?php if ($_specificInfo = $block->getSpecificInformation()):?>
 <?php foreach ($_specificInfo as $_label => $_value):?>
-<?php echo $_label ?>: <?php echo implode(' ', $block->getValueAsArray($_value))?>{{pdf_row_separator}}
+<?php /* @escapeNotVerified */ echo $_label ?>: <?php /* @escapeNotVerified */ echo implode(' ', $block->getValueAsArray($_value))?>{{pdf_row_separator}}
 <?php endforeach; ?>
 <?php endif;?>
 
-<?php echo implode('{{pdf_row_separator}}', $block->getChildPdfAsArray()) ?>
+<?php /* @escapeNotVerified */ echo implode('{{pdf_row_separator}}', $block->getChildPdfAsArray()) ?>

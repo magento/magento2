@@ -21,7 +21,9 @@ define([
         },
 
         /**
-         * initialize provider
+         * Initializes provider component.
+         *
+         * @returns {Provider} Chainable.
          */
         initialize: function () {
             utils.limit(this, 'reload', 200);
@@ -31,7 +33,9 @@ define([
         },
 
         /**
-         * initialize config
+         * Initializes provider config.
+         *
+         * @returns {Provider} Chainable.
          */
         initConfig: function () {
             this._super();
@@ -45,33 +49,54 @@ define([
         },
 
         /**
-         * reload data from server
+         * Reloads data with current parameters.
          */
         reload: function () {
             this.trigger('reload');
+
             $.ajax({
                 url: this.update_url,
                 method: 'GET',
                 data: this.get('params'),
                 dataType: 'json'
             })
-                .error(this.onError)
-                .done(this.onReload);
+            .error(this.onError)
+            .done(this.onReload);
         },
 
         /**
-         * alert with error message
+         * Processes data before applying it.
+         *
+         * @param {Object} data - Data to be processed.
+         * @returns {Object}
+         */
+        processData: function (data) {
+            var items = data.items;
+
+            _.each(items, function (record, index) {
+                record._rowIndex = index;
+            });
+
+            return data;
+        },
+
+        /**
+         * Handles reload error.
          */
         onError: function () {
             alert({
-                content: $t('Something go wrong')
+                content: $t('Something went wrong.')
             });
         },
 
         /**
-         * set data and triggered reloaded
+         * Handles successful data reload.
+         *
+         * @param {Object} data - Retrieved data object.
          */
         onReload: function (data) {
+            data = this.processData(data);
+
             this.set('data', data)
                 .trigger('reloaded');
         }

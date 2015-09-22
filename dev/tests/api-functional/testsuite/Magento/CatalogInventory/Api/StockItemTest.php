@@ -90,7 +90,7 @@ class StockItemTest extends WebapiAbstract
         $arguments = ['productSku' => $productSku];
         $apiResult = $this->_webApiCall($serviceInfo, $arguments);
         $result['item_id'] = $apiResult['item_id'];
-        $this->assertEquals($result, $apiResult, 'The stock data does not match.');
+        $this->assertEquals($result, array_intersect_key($apiResult, $result), 'The stock data does not match.');
         return $apiResult;
     }
 
@@ -140,7 +140,7 @@ class StockItemTest extends WebapiAbstract
         $stockItemResource = $this->objectManager->get('Magento\CatalogInventory\Model\Resource\Stock\Item');
         $stockItemResource->loadByProductId($stockItem, $stockItemOld['product_id'], $stockItemOld['website_id']);
         $expectedResult['item_id'] = $stockItem->getItemId();
-        $this->assertEquals($expectedResult, $stockItem->getData());
+        $this->assertEquals($expectedResult, array_intersect_key($stockItem->getData(), $expectedResult));
     }
 
     /**
@@ -234,7 +234,7 @@ class StockItemTest extends WebapiAbstract
                     'manage_stock' => 1,
                     'low_stock_date' => '',
                     'is_decimal_divided' => '',
-                    'stock_status_changed_auto' => 0
+                    'stock_status_changed_auto' => 0,
                 ],
             ],
         ];

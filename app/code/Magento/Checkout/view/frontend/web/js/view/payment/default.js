@@ -14,7 +14,10 @@ define(
         'Magento_Checkout/js/model/payment-service',
         'Magento_Checkout/js/checkout-data',
         'Magento_Checkout/js/model/checkout-data-resolver',
-        'uiRegistry'
+        'uiRegistry',
+        'Magento_Checkout/js/model/payment/additional-validators',
+        'Magento_Ui/js/model/messages',
+        'Magento_Ui/js/core/renderer/layout'
     ],
     function (
         ko,
@@ -27,7 +30,10 @@ define(
         paymentService,
         checkoutData,
         checkoutDataResolver,
-        registry
+        registry,
+        additionalValidators,
+        Messages,
+        layout
     ) {
         'use strict';
         return Component.extend({
@@ -79,6 +85,31 @@ define(
              * @returns {Component} Chainable.
              */
             initChildren: function () {
+                this.messageContainer = new Messages();
+                this.createMessagesComponent();
+
+                return this;
+            },
+
+            /**
+             * Create child message renderer component
+             *
+             * @returns {Component} Chainable.
+             */
+            createMessagesComponent: function () {
+
+                var messagesComponent = {
+                    parent: this.name,
+                    name: this.name + '.messages',
+                    displayArea: 'messages',
+                    component: 'Magento_Ui/js/view/messages',
+                    config: {
+                        messageContainer: this.messageContainer
+                    }
+                };
+
+                layout([messagesComponent]);
+
                 return this;
             },
 
@@ -97,13 +128,13 @@ define(
                     $(loginFormSelector).validation();
                     emailValidationResult = Boolean($(loginFormSelector + ' input[name=username]').valid());
                 }
-                if (emailValidationResult && this.validate()) {
+                if (emailValidationResult && this.validate() && additionalValidators.validate()) {
                     this.isPlaceOrderActionAllowed(false);
-                    placeOrder = placeOrderAction(this.getData(), this.redirectAfterPlaceOrder);
+                    placeOrder = placeOrderAction(this.getData(), this.redirectAfterPlaceOrder, this.messageContainer);
 
-                    $.when(placeOrder).fail(function(){
+                    $.when(placeOrder).fail(function () {
                         self.isPlaceOrderActionAllowed(true);
-                    }).done(this.afterPlaceOrder);
+                    }).done(this.afterPlaceOrder.bind(this));
                     return true;
                 }
                 return false;

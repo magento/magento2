@@ -73,7 +73,7 @@
     <preference for="Magento\Framework\App\Config\Scope\ReaderPoolInterface" type="Magento\Store\Model\Config\Reader\ReaderPool"/>
     <preference for="Magento\Framework\App\ScopeResolverInterface" type="Magento\Store\Model\Resolver\Store" />
     <preference for="Magento\Framework\App\Router\PathConfigInterface" type="Magento\Store\Model\PathConfig" />
-    <type name="Magento\Framework\App\Action\Action">
+    <type name="\Magento\Framework\App\ActionInterface">
         <plugin name="storeCheck" type="Magento\Store\App\Action\Plugin\StoreCheck" sortOrder="10"/>
         <plugin name="designLoader" type="Magento\Framework\App\Action\Plugin\Design" sortOrder="30"/>
     </type>
@@ -102,7 +102,7 @@
         <arguments>
             <argument name="session" xsi:type="object" shared="false">Magento\Framework\Session\Generic\Proxy</argument>
             <argument name="isCustomEntryPoint" xsi:type="init_parameter">Magento\Store\Model\Store::CUSTOM_ENTRY_POINT_PARAM</argument>
-            <argument name="url" xsi:type="object" shared="false">Magento\Framework\UrlInterface\Proxy</argument>
+            <argument name="url" xsi:type="object" shared="false">Magento\Framework\UrlInterface</argument>
         </arguments>
     </type>
     <type name="Magento\Store\Model\StoreManager">
@@ -225,6 +225,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Reflection\MethodsMap">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Reflection</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Url">
         <arguments>
             <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
@@ -266,7 +271,7 @@
     </type>
     <type name="Magento\Framework\App\Helper\Context">
         <arguments>
-            <argument name="urlBuilder" xsi:type="object">Magento\Framework\UrlInterface\Proxy</argument>
+            <argument name="urlBuilder" xsi:type="object">Magento\Framework\UrlInterface</argument>
             <argument name="httpRequest" xsi:type="object">Magento\Framework\App\Request\Http\Proxy</argument>
         </arguments>
     </type>
@@ -303,48 +308,6 @@
     <type name="Magento\Framework\DB\Helper">
         <arguments>
             <argument name="modulePrefix" xsi:type="string">store</argument>
-        </arguments>
-    </type>
-    <virtualType name="cssMinificationAdapter" type="Magento\Framework\Code\Minifier\Adapter\Css\CSSmin" />
-    <virtualType name="jsMinificationAdapter" type="Magento\Framework\Code\Minifier\Adapter\Js\JShrink" />
-    <virtualType name="cssMinificationProcessor" type="Magento\Framework\View\Asset\PreProcessor\Minify">
-        <arguments>
-            <argument name="adapter" xsi:type="object">cssMinificationAdapter</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="jsMinificationProcessor" type="Magento\Framework\View\Asset\PreProcessor\Minify">
-        <arguments>
-            <argument name="adapter" xsi:type="object">jsMinificationAdapter</argument>
-        </arguments>
-    </virtualType>
-    <type name="Magento\Framework\View\Asset\PreProcessor\Pool">
-        <arguments>
-            <argument name="preProcessors" xsi:type="array">
-                <item name="less" xsi:type="array">
-                    <item name="css" xsi:type="array">
-                        <item name="less_css" xsi:type="string">Magento\Framework\Css\PreProcessor\Less</item>
-                        <item name="variable_notation" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\VariableNotation</item>
-                        <item name="module_notation" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\ModuleNotation</item>
-                        <item name="css_min" xsi:type="string">cssMinificationProcessor</item>
-                    </item>
-                    <item name="less" xsi:type="array">
-                        <item name="magento_import" xsi:type="string">Magento\Framework\Less\PreProcessor\Instruction\MagentoImport</item>
-                        <item name="import" xsi:type="string">Magento\Framework\Less\PreProcessor\Instruction\Import</item>
-                    </item>
-                </item>
-                <item name="css" xsi:type="array">
-                    <item name="css" xsi:type="array">
-                        <item name="variable_notation" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\VariableNotation</item>
-                        <item name="module_notation" xsi:type="string">Magento\Framework\View\Asset\PreProcessor\ModuleNotation</item>
-                        <item name="css_min" xsi:type="string">cssMinificationProcessor</item>
-                    </item>
-                </item>
-                <item name="js" xsi:type="array">
-                    <item name="js" xsi:type="array">
-                        <item name="js_min" xsi:type="string">jsMinificationProcessor</item>
-                    </item>
-                </item>
-            </argument>
         </arguments>
     </type>
 </config>

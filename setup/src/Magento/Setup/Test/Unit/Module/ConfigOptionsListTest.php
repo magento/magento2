@@ -9,6 +9,7 @@ namespace Magento\Setup\Test\Unit\Module;
 use Magento\Setup\Model\ConfigGenerator;
 use Magento\Setup\Model\ConfigOptionsList;
 use Magento\Setup\Validator\DbValidator;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 
 class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
 {
@@ -70,7 +71,9 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
             'If specified, then db connection validation will be skipped',
             $options[11]->getDescription()
         );
-        $this->assertEquals(12, count($options));
+        $this->assertInstanceOf('Magento\Framework\Setup\Option\TextConfigOption', $options[12]);
+        $this->assertSame('http Cache hosts', $options[12]->getDescription());
+        $this->assertEquals(13, count($options));
     }
 
     public function testCreateOptions()
@@ -83,8 +86,9 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
         $this->generator->expects($this->once())->method('createDbConfig')->willReturn($configDataMock);
         $this->generator->expects($this->once())->method('createResourceConfig')->willReturn($configDataMock);
         $this->generator->expects($this->once())->method('createXFrameConfig')->willReturn($configDataMock);
+        $this->generator->expects($this->once())->method('createCacheHostsConfig')->willReturn($configDataMock);
         $configData = $this->object->createConfig([], $this->deploymentConfig);
-        $this->assertEquals(7, count($configData));
+        $this->assertEquals(9, count($configData));
     }
 
     public function testCreateOptionsWithOptionalNull()
@@ -97,7 +101,58 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
         $this->generator->expects($this->once())->method('createDbConfig')->willReturn($configDataMock);
         $this->generator->expects($this->once())->method('createResourceConfig')->willReturn($configDataMock);
         $this->generator->expects($this->once())->method('createXFrameConfig')->willReturn($configDataMock);
+        $this->generator->expects($this->once())->method('createCacheHostsConfig')->willReturn($configDataMock);
         $configData = $this->object->createConfig([], $this->deploymentConfig);
-        $this->assertEquals(6, count($configData));
+        $this->assertEquals(8, count($configData));
+    }
+
+    public function testValidate()
+    {
+        $options = [
+            ConfigOptionsListConstants::INPUT_KEY_DB_PREFIX => 'prefix',
+            ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION => false,
+            ConfigOptionsListConstants::INPUT_KEY_DB_NAME => 'name',
+            ConfigOptionsListConstants::INPUT_KEY_DB_HOST => 'host',
+            ConfigOptionsListConstants::INPUT_KEY_DB_USER => 'user',
+            ConfigOptionsListConstants::INPUT_KEY_DB_PASSWORD => 'pass'
+        ];
+        $configDataMock = $this->getMock('Magento\Framework\Config\Data\ConfigData', [], [], '', false);
+        $this->dbValidator->expects($this->once())->method('checkDatabaseTablePrefix')->willReturn($configDataMock);
+        $this->dbValidator->expects($this->once())->method('checkDatabaseConnection')->willReturn($configDataMock);
+        $result = $this->object->validate($options, $this->deploymentConfig);
+        $this->assertEquals([], $result);
+    }
+
+    /**
+     * @param string $hosts
+     * @param bool $expectedError
+     * @dataProvider validateCacheHostsDataProvider
+     */
+    public function testValidateCacheHosts($hosts, $expectedError)
+    {
+        $options = [
+            ConfigOptionsListConstants::INPUT_KEY_SKIP_DB_VALIDATION => true,
+            ConfigOptionsListConstants::INPUT_KEY_CACHE_HOSTS => $hosts
+        ];
+        $result = $this->object->validate($options, $this->deploymentConfig);
+        if ($expectedError) {
+            $this->assertCount(1, $result);
+            $this->assertEquals("Invalid http cache hosts '$hosts'", $result[0]);
+        } else {
+            $this->assertCount(0, $result);
+        }
+
+    }
+
+    public function validateCacheHostsDataProvider()
+    {
+        return [
+            ['localhost', false],
+            ['122.11.2.34:800', false],
+            ['122.11.2.34:800,localhost', false],
+            ['website.com:9000', false],
+            ['website.com/m2ce:9000', true],
+            ['website.com+:9000', true],
+        ];
     }
 }

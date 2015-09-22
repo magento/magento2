@@ -184,6 +184,15 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
                 $customerModel->setPasswordHash($passwordHash);
             }
         }
+
+        // If customer email was changed, reset RpToken info
+        if ($prevCustomerData
+            && $prevCustomerData->getEmail() !== $customerModel->getEmail()
+        ) {
+            $customerModel->setRpToken(null);
+            $customerModel->setRpTokenCreatedAt(null);
+        }
+
         $this->customerResourceModel->save($customerModel);
         $this->customerRegistry->push($customerModel);
         $customerId = $customerModel->getId();
@@ -331,8 +340,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
 
         $isEmailAddress = \Zend_Validate::is(
             $customer->getEmail(),
-            'EmailAddress',
-            ['allow' => ['allow' => \Zend_Validate_Hostname::ALLOW_ALL, 'tld' => false]]
+            'EmailAddress'
         );
 
         if (!$isEmailAddress) {
