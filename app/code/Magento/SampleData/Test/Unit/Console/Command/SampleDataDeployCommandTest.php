@@ -9,7 +9,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\SampleData\Console\Command\SampleDataDeployCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class SampleDataInstallCommandTest extends \PHPUnit_Framework_TestCase
+class SampleDataDeployCommandTest extends \PHPUnit_Framework_TestCase
 {
     public function testExecute()
     {
