@@ -189,15 +189,15 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
                 unset($advancedGroups['advanced-pricing']);
             }
 
-            if ($this->_moduleManager->isEnabled('Magento_CatalogInventory')) {
+            if ($this->_moduleManager->isEnabled('Magento_CatalogInventory')
+                && $this->getChildBlock('advanced-inventory')
+            ) {
                 $this->addTab(
                     'advanced-inventory',
                     [
                         'label' => __('Advanced Inventory'),
                         'content' => $this->_translateHtml(
-                            $this->getLayout()->createBlock(
-                                'Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Inventory'
-                            )->toHtml()
+                            $this->getChildHtml('advanced-inventory')
                         ),
                         'group_code' => self::ADVANCED_TAB_GROUP_CODE
                     ]
