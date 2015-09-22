@@ -22,6 +22,12 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         $this->urnResolverMock = $this->getMock('Magento\Framework\Config\Dom\UrnResolver', [], [], '', false);
+        $this->urnResolverMock->expects($this->any())
+            ->method('getRealPath')
+            ->with('urn:magento:framework:Config/etc/view.xsd')
+            ->willReturn(
+                $this->urnResolver->getRealPath('urn:magento:framework:Config/etc/view.xsd')
+            );
         $this->model = new \Magento\Framework\Config\View(
             [
                 file_get_contents(__DIR__ . '/_files/view_one.xml'),
@@ -41,12 +47,6 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSchemaFile()
     {
-        $this->urnResolverMock->expects($this->once())
-            ->method('getRealPath')
-            ->with('urn:magento:framework:Config/etc/view.xsd')
-            ->willReturn(
-                $this->urnResolver->getRealPath('urn:magento:framework:Config/etc/view.xsd')
-            );
         $this->assertEquals(
             $this->urnResolver->getRealPath('urn:magento:framework:Config/etc/view.xsd'),
             $this->model->getSchemaFile()
