@@ -41,12 +41,14 @@ require(["jquery", "jquery/ui", "catalogGallery"], function ($) {
 
     //create AddFotoramaVideoEvents widget
     $.widget('mage.AddFotoramaVideoEvents', {
+        options : {
+            VideoData : '',
+            VideoSettings : ''
+        },
 
         PV: 'product-video', // [CONST]
         VID: 'video', // [CONST]
         VI: 'vimeo', // [CONST]
-        VideoData : '',
-        VideoSettings : '',
         Base: 0, //on check for video is base this setting become true if there is any video with base role
         MobileMaxWidth: 767, //max mobile width, currently for playing video if it's base one, we don't need it autoplay if it's on mobile version
         GP: 'gallery-placeholder', //gallery placeholder class is needed to find and erase <script> tag
