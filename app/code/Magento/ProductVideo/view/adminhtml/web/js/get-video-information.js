@@ -344,7 +344,7 @@ require([
                       channelId: tmp.user_url,
                       uploaded: tmp.upload_date,
                       title: tmp.title,
-                      description: tmp.description,
+                      description: tmp.description.replace(/(&nbsp;|<([^>]+)>)/ig, ""),
                       thumbnail: tmp.thumbnail_large,
                       videoId : videoInfo.id,
                       videoProvider : videoInfo.type

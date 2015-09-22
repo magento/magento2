@@ -10,11 +10,7 @@
  * @var $block \Magento\ProductVideo\Block\Product\View\Gallery
  */
 ?>
-<div class="gallery-placeholder" data-mage-init='{"fotoramaAddVideoEvents":{}}'></div>
-<script>
-  var VidData = <?php echo $block->getMediaGalleryDataJson(); ?>;
-  var VidSetting = <?php echo $block->getVideoSettingsJson(); ?>;
-</script>
+<div class="gallery-placeholder" data-mage-init='{"fotoramaAddVideoEvents":{}}' data-fotorama-video-data='<?php echo $block->getMediaGalleryDataJson(); ?>' data-fotorama-video-settings='<?php echo $block->getVideoSettingsJson(); ?>'></div>
 <script type="text/x-magento-init">
     {
         ".gallery-placeholder": {
@@ -34,7 +30,7 @@
                     "loop": <?php echo $block->getVar("gallery:loop", "Magento_Catalog"); ?>,
                     "keyboard": <?php echo $block->getVar("gallery:keyboard", "Magento_Catalog"); ?>,
                     "arrows": <?php echo $block->getVar("gallery:arrows", "Magento_Catalog"); ?>,
-                    "showCaption": <?php echo $block->getVar("gallery:show_caption", "Magento_Catalog"); ?>,
+                    "showCaption": <?php echo $block->getVar("gallery:showCaption", "Magento_Catalog"); ?>,
                     "width": <?php echo $block->getImageAttribute('product_page_image_medium', 'width'); ?>,
                     "thumbwidth": <?php echo $block->getImageAttribute('product_page_image_small', 'width'); ?>,
                     "thumbheight": <?php echo $block->getImageAttribute('product_page_image_small', 'height')
