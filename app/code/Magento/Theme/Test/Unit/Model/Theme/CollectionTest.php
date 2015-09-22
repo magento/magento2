@@ -152,4 +152,70 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(get_class($this->model), $this->model->loadData());
     }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage Constraint 'unsupported_type' is not supported
+     */
+    public function testAddConstraintUnsupportedType()
+    {
+        $this->model->addConstraint('unsupported_type', 'value');
+    }
+
+    /**
+     * @param array $inputValues
+     * @param array $expected
+     *
+     * @dataProvider addConstraintDataProvider
+     */
+    public function testAddConstraint(array $inputValues, array $expected)
+    {
+        foreach ($inputValues as $data) {
+            $type = $data[0];
+            $value = $data[1];
+            $this->model->addConstraint($type, $value);
+        }
+        $default = [
+            Collection::CONSTRAINT_AREA => [],
+            Collection::CONSTRAINT_VENDOR => [],
+            Collection::CONSTRAINT_THEME_NAME => []
+        ];
+        $expected = array_merge($default, $expected);
+        $this->assertAttributeSame($expected, 'constraints', $this->model);
+    }
+
+    /**
+     * @return array
+     */
+    public function addConstraintDataProvider()
+    {
+        return [
+            'area' => [
+                [[Collection::CONSTRAINT_AREA, 'area']],
+                [Collection::CONSTRAINT_AREA => ['area']]
+            ],
+            'vendor' => [
+                [[Collection::CONSTRAINT_VENDOR, 'Vendor']],
+                [Collection::CONSTRAINT_VENDOR => ['Vendor']]
+            ],
+            'theme name' => [
+                [[Collection::CONSTRAINT_THEME_NAME, 'theme_name']],
+                [Collection::CONSTRAINT_THEME_NAME => ['theme_name']]
+            ],
+            'area, vendor and theme name' => [
+                [
+                    [Collection::CONSTRAINT_AREA, 'area_one'],
+                    [Collection::CONSTRAINT_AREA, 'area_two'],
+                    [Collection::CONSTRAINT_VENDOR, 'Vendor'],
+                    [Collection::CONSTRAINT_VENDOR, 'Vendor'],
+                    [Collection::CONSTRAINT_THEME_NAME, 'theme_name']
+                ],
+                [
+                    Collection::CONSTRAINT_AREA => ['area_one', 'area_two'],
+                    Collection::CONSTRAINT_VENDOR => ['Vendor'],
+                    Collection::CONSTRAINT_THEME_NAME => ['theme_name']
+                ]
+            ],
+        ];
+    }
 }

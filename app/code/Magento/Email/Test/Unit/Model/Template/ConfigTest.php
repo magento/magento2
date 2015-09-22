@@ -83,9 +83,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->themePackages->expects($this->any())
-            ->method('getThemes')
-            ->will($this->returnValue([]));
         $this->readDirFactory = $this->getMock('Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
         $this->model = new Config(
             $this->_dataStorage,
@@ -98,11 +95,56 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAvailableTemplates()
     {
-        $expectedTemplates = require __DIR__ . '/Config/_files/email_templates_merged.php';
+        $templates = require __DIR__ . '/Config/_files/email_templates_merged.php';
 
-        foreach ($this->model->getAvailableTemplates() as $templateOptions) {
-            $this->assertArrayHasKey($templateOptions['value'], $expectedTemplates);
-            $expectedOptions = $expectedTemplates[$templateOptions['value']];
+        $themes = [];
+        $i = 1;
+        foreach ($templates as $templateData) {
+            $theme = $this->getMock('\Magento\Framework\View\Design\Theme\ThemePackage', [], [], '', false);
+            $theme->expects($this->any())
+                ->method('getArea')
+                ->willReturn($templateData['area']);
+            $theme->expects($this->any())
+                ->method('getVendor')
+                ->willReturn('Vendor');
+            $theme->expects($this->any())
+                ->method('getName')
+                ->willReturn('custom_theme');
+            $theme->expects($this->any())
+                ->method('getPath')
+                ->willReturn('/theme/path');
+            $themes[] = $theme;
+            $i++;
+        }
+        $this->themePackages->expects($this->exactly(count($templates)))
+            ->method('getThemes')
+            ->willReturn($themes);
+        $dir = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
+        $this->readDirFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($dir);
+        $dir->expects($this->any())
+            ->method('isExist')
+            ->willReturn(true);
+
+        $expected = [
+            'template_one' => ['label' => 'Template One', 'module' => 'Fixture_ModuleOne'],
+            'template_two' => ['label' => 'Template 2', 'module' => 'Fixture_ModuleTwo'],
+            'template_one/Vendor/custom_theme' => [
+                'label' => 'Template One (Vendor/custom_theme)',
+                'module' => 'Fixture_ModuleOne'
+            ],
+            'template_two/Vendor/custom_theme' => [
+                'label' => 'Template 2 (Vendor/custom_theme)',
+                'module' => 'Fixture_ModuleTwo'
+            ],
+        ];
+
+        $actualTemplates = $this->model->getAvailableTemplates();
+        $this->assertCount(count($expected), $actualTemplates);
+        foreach ($actualTemplates as $templateOptions) {
+            $this->assertArrayHasKey($templateOptions['value'], $expected);
+            $expectedOptions = $expected[$templateOptions['value']];
 
             $this->assertEquals($expectedOptions['label'], (string) $templateOptions['label']);
             $this->assertEquals($expectedOptions['module'], (string) $templateOptions['group']);
@@ -117,8 +159,34 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $template = $templates[$templateId];
 
         $foundThemePath = 'Vendor/custom_theme';
+        $theme = $this->getMock('\Magento\Framework\View\Design\Theme\ThemePackage', [], [], '', false);
+        $theme->expects($this->any())
+            ->method('getArea')
+            ->willReturn('frontend');
+        $theme->expects($this->any())
+            ->method('getVendor')
+            ->willReturn('Vendor');
+        $theme->expects($this->any())
+            ->method('getName')
+            ->willReturn('custom_theme');
+        $theme->expects($this->any())
+            ->method('getPath')
+            ->willReturn('/theme/path');
+        $this->themePackages->expects($this->once())
+            ->method('getThemes')
+            ->willReturn([$theme]);
+        $dir = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
+        $this->readDirFactory->expects($this->once())
+            ->method('create')
+            ->with('/theme/path')
+            ->willReturn($dir);
+        $dir->expects($this->once())
+            ->method('isExist')
+            ->willReturn(true);
 
-        foreach ($this->model->getThemeTemplates($templateId) as $templateOptions) {
+        $actualTemplates = $this->model->getThemeTemplates($templateId);
+        $this->assertNotEmpty($actualTemplates);
+        foreach ($actualTemplates as $templateOptions) {
             $this->assertEquals(
                 sprintf(
                     '%s (%s)',

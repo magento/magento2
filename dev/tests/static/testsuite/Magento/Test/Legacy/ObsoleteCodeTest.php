@@ -10,6 +10,8 @@
  */
 namespace Magento\Test\Legacy;
 
+use Magento\Framework\App\Utility\Files;
+
 class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
 {
     /**@#+
@@ -152,7 +154,11 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
                     "Static Method of 'Mage' class is obsolete."
                 );
             },
-            \Magento\Framework\App\Utility\Files::init()->getPhpFiles(false, false, true)
+            Files::init()->getClassFiles(
+                Files::INCLUDE_TEMPLATES
+                | Files::INCLUDE_TESTS
+                | Files::INCLUDE_DATA_SET
+            )
         );
     }
 
@@ -166,7 +172,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
                 $this->_testObsoleteNamespaces($content);
                 $this->_testObsoletePaths($file);
             },
-            \Magento\Framework\App\Utility\Files::init()->getXmlFiles()
+            Files::init()->getXmlFiles()
         );
     }
 
@@ -178,7 +184,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
                 $content = file_get_contents($file);
                 $this->_testObsoletePropertySkipCalculate($content);
             },
-            \Magento\Framework\App\Utility\Files::init()->getJsFiles()
+            Files::init()->getJsFiles()
         );
     }
 
@@ -294,7 +300,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
     {
         foreach (self::$_paths as $row) {
             list($obsoletePath, , $replacementPath) = $row;
-            $relativePath = str_replace(\Magento\Framework\App\Utility\Files::init()->getPathToSource(), "", $file);
+            $relativePath = str_replace(Files::init()->getPathToSource(), "", $file);
             $message = $this->_suggestReplacement(
                 "Path '{$obsoletePath}' is obsolete.",
                 $replacementPath
@@ -318,7 +324,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
      */
     protected function _testGetChildSpecialCase($content, $file)
     {
-        if (0 === strpos($file, \Magento\Framework\App\Utility\Files::init()->getPathToSource() . '/app/')) {
+        if (0 === strpos($file, Files::init()->getPathToSource() . '/app/')) {
             $this->_assertNotRegexp(
                 '/[^a-z\d_]getChild\s*\(/iS',
                 $content,
@@ -893,11 +899,11 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
     {
         $blackList = include __DIR__ . '/_files/blacklist/obsolete_mage.php';
         $ignored = [];
-        $appPath = \Magento\Framework\App\Utility\Files::init()->getPathToSource();
+        $appPath = Files::init()->getPathToSource();
         foreach ($blackList as $file) {
             $ignored[] = realpath($appPath . '/' . $file);
         }
-        $files = \Magento\Framework\App\Utility\Files::init()->getClassFiles(
+        $files = Files::init()->getClassFiles(
             true,
             true,
             true,
@@ -906,6 +912,6 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
         );
         $files = array_map('realpath', $files);
         $files = array_diff($files, $ignored);
-        return \Magento\Framework\App\Utility\Files::composeDataSets($files);
+        return Files::composeDataSets($files);
     }
 }

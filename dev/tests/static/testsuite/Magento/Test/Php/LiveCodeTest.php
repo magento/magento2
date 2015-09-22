@@ -217,7 +217,15 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         $analyser = new \SebastianBergmann\PHPDCD\Analyser();
         $declared = [];
         $called = [];
-        foreach (Files::init()->getPhpFiles() as $file) {
+        $collectedFiles = Files::init()->getClassFiles(
+            Files::INCLUDE_APP_CODE
+            | Files::INCLUDE_PUB_CODE
+            | Files::INCLUDE_LIBS
+            | Files::INCLUDE_TEMPLATES
+            | Files::INCLUDE_TESTS
+            | Files::INCLUDE_DATA_SET
+        );
+        foreach ($collectedFiles as $file) {
             $file = array_pop($file);
             $analyser->analyseFile($file);
             foreach ($analyser->getFunctionDeclarations() as $function => $declaration) {

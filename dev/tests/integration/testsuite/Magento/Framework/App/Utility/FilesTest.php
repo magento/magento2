@@ -34,7 +34,7 @@ class FilesTest extends \PHPUnit_Framework_TestCase
         $componentRegistrar = new ComponentRegistrar();
         $dirSearch = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Framework\Component\DirSearch');
-        $this->model = new Files($componentRegistrar, $dirSearch, BP);
+        $this->model = new Files($componentRegistrar, $dirSearch);
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
             $this->moduleTests[] = '#' . $moduleDir . '/Test#';
         }
@@ -47,7 +47,13 @@ class FilesTest extends \PHPUnit_Framework_TestCase
     public function testGetPhpFilesExcludeTests()
     {
         $this->assertNoTestDirs(
-            $this->model->getPhpFiles(true, true, true, false)
+            $this->model->getClassFiles(
+                Files::INCLUDE_APP_CODE
+                | Files::INCLUDE_PUB_CODE
+                | Files::INCLUDE_LIBS
+                | Files::INCLUDE_TEMPLATES
+                | Files::INCLUDE_TESTS
+            )
         );
     }
 
@@ -61,13 +67,13 @@ class FilesTest extends \PHPUnit_Framework_TestCase
     public function testGetClassFilesExcludeTests()
     {
         $this->assertNoTestDirs(
-            $this->model->getClassFiles(true, false, true, true, false)
+            $this->model->getClassFiles(Files::INCLUDE_APP_CODE | Files::INCLUDE_DEV_TOOLS | Files::INCLUDE_LIBS)
         );
     }
 
     public function testGetClassFilesOnlyTests()
     {
-        $classFiles = $this->model->getClassFiles(false, true, false, false, false);
+        $classFiles = $this->model->getClassFiles(Files::INCLUDE_TESTS);
 
         foreach ($this->moduleTests as $moduleTest) {
             $classFiles = preg_grep($moduleTest, $classFiles, PREG_GREP_INVERT);

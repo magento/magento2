@@ -9,6 +9,7 @@ namespace Magento\Test\Integrity;
 
 use Magento\Framework\App\Utility\Classes;
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\App\Utility\Files;
 
 class ClassesTest extends \PHPUnit_Framework_TestCase
 {
@@ -72,7 +73,13 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
 
                 $this->_assertClassesExist($classes, $file);
             },
-            \Magento\Framework\App\Utility\Files::init()->getPhpFiles(true, true, true, true, false)
+            Files::init()->getClassFiles(
+                Files::INCLUDE_APP_CODE
+                | Files::INCLUDE_PUB_CODE
+                | Files::INCLUDE_LIBS
+                | Files::INCLUDE_TEMPLATES
+                | Files::INCLUDE_DATA_SET
+            )
         );
     }
 
@@ -102,7 +109,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 $classes = Classes::collectClassesInConfig(simplexml_load_file($path));
                 $this->_assertClassesExist($classes, $path);
             },
-            \Magento\Framework\App\Utility\Files::init()->getMainConfigFiles()
+            Files::init()->getMainConfigFiles()
         );
     }
 
@@ -139,7 +146,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
 
                 $this->_assertClassesExist(array_unique($classes), $path);
             },
-            \Magento\Framework\App\Utility\Files::init()->getLayoutFiles()
+            Files::init()->getLayoutFiles()
         );
     }
 
@@ -169,7 +176,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                     $this->assertTrue(
                         isset(
                             self::$_existingClasses[$class]
-                        ) || \Magento\Framework\App\Utility\Files::init()->classFileExists(
+                        ) || Files::init()->classFileExists(
                             $class
                         ) || Classes::isVirtual(
                             $class
@@ -202,7 +209,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
              */
             function ($file) {
                 $relativePath = str_replace(
-                    \Magento\Framework\App\Utility\Files::init()->getPathToSource() . "/",
+                    Files::init()->getPathToSource() . "/",
                     "",
                     $file
                 );
@@ -228,7 +235,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 $className = array_pop($classParts);
                 $this->_assertClassNamespace($file, $relativePath, $contents, $className);
             },
-            \Magento\Framework\App\Utility\Files::init()->getClassFiles()
+            Files::init()->getClassFiles()
         );
     }
 
@@ -311,7 +318,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
              */
             function ($file) {
                 $relativePath = str_replace(
-                    \Magento\Framework\App\Utility\Files::init()->getPathToSource(),
+                    Files::init()->getPathToSource(),
                     "",
                     $file
                 );
@@ -393,7 +400,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 $badClasses = $this->removeSpecialCases($badClasses, $file, $contents, $namespacePath);
                 $this->_assertClassReferences($badClasses, $file);
             },
-            \Magento\Framework\App\Utility\Files::init()->getClassFiles()
+            Files::init()->getClassFiles()
         );
     }
 
@@ -534,7 +541,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 '/dev/tests/static/testsuite/',
                 '/setup/src/',
             ];
-            $pathToSource = \Magento\Framework\App\Utility\Files::init()->getPathToSource();
+            $pathToSource = Files::init()->getPathToSource();
             $libraryPaths = $this->getLibraryPaths($componentRegistrar, $pathToSource);
             $directories = array_merge($directories, $libraryPaths);
             // Full list of directories where there may be namespace classes
@@ -586,7 +593,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
 
     public function testCoversAnnotation()
     {
-        $files = \Magento\Framework\App\Utility\Files::init();
+        $files = Files::init();
         $errors = [];
         foreach ($files->getFiles([BP . '/dev/tests/{integration,unit}'], '*') as $file) {
             $code = file_get_contents($file);
