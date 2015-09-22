@@ -9,6 +9,7 @@ namespace Magento\Framework\Config;
 class ViewFactory
 {
     /**
+     * @param array $configFiles
      * @return View
      */
     public function create($configFiles)
