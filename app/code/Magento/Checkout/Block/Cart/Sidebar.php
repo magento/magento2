@@ -3,9 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Checkout\Block\Cart;
 
 use Magento\Store\Model\ScopeInterface;
@@ -32,6 +29,7 @@ class Sidebar extends AbstractCart
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Customer\CustomerData\JsLayoutDataProviderPoolInterface $jsLayoutDataProvider
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -82,6 +80,7 @@ class Sidebar extends AbstractCart
     /**
      * Get one page checkout page url
      *
+     * @codeCoverageIgnore
      * @return string
      */
     public function getCheckoutUrl()
@@ -90,9 +89,10 @@ class Sidebar extends AbstractCart
     }
 
     /**
-     * Get shoppinc cart page url
+     * Get shopping cart page url
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getShoppingCartUrl()
     {
@@ -103,6 +103,7 @@ class Sidebar extends AbstractCart
      * Get update cart item url
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getUpdateItemQtyUrl()
     {
@@ -113,6 +114,7 @@ class Sidebar extends AbstractCart
      * Get remove cart item url
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getRemoveItemUrl()
     {
@@ -123,6 +125,7 @@ class Sidebar extends AbstractCart
      * Define if Mini Shopping Cart Pop-Up Menu enabled
      *
      * @return bool
+     * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsNeedToDisplaySideBar()
@@ -150,6 +153,7 @@ class Sidebar extends AbstractCart
     /**
      * Retrieve subtotal block html
      *
+     * @codeCoverageIgnore
      * @return string
      */
     public function getTotalsHtml()
@@ -160,6 +164,7 @@ class Sidebar extends AbstractCart
     /**
      * Return base url.
      *
+     * @codeCoverageIgnore
      * @return string
      */
     public function getBaseUrl()

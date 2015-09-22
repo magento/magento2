@@ -18,6 +18,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Resource\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\Resource\Db\TransactionManagerInterface;
+use Magento\Eav\Model\Resource\Attribute\DefaultEntityAttributes\ProviderInterface as DefaultAttributesProvider;
+use Magento\Framework\Model\Resource\AbstractResource;
 
 /**
  * Entity/Attribute/Model - entity abstract
@@ -27,7 +29,7 @@ use Magento\Framework\Model\Resource\Db\TransactionManagerInterface;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class AbstractEntity extends \Magento\Framework\Model\Resource\AbstractResource implements EntityInterface
+abstract class AbstractEntity extends AbstractResource implements EntityInterface, DefaultAttributesProvider
 {
     /**
      * Connection name
@@ -225,6 +227,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      * @deprecated
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|string $connection
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setConnection($connection)
     {
@@ -245,6 +248,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      * Get connection
      *
      * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     * @codeCoverageIgnore
      */
     public function getConnection()
     {
@@ -255,6 +259,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      * For compatibility with AbstractModel
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getIdFieldName()
     {
@@ -266,6 +271,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
      *
      * @param string $alias
      * @return string
+     * @codeCoverageIgnore
      */
     public function getTable($alias)
     {
@@ -1262,6 +1268,7 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
 
             if (!$attribute->isInSet($newObject->getAttributeSetId()) && !in_array($k, $staticFields)) {
                 $this->_aggregateDeleteData($delete, $attribute, $newObject);
+                continue;
             }
 
             $attrId = $attribute->getAttributeId();

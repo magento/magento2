@@ -114,35 +114,6 @@ class Matrix extends Form
     }
 
     /**
-     * Fill form data.
-     *
-     * @param array $fields
-     * @param SimpleElement|null $element
-     * @return void
-     * @throws \Exception
-     */
-    protected function _fill(array $fields, SimpleElement $element = null)
-    {
-        $context = ($element === null) ? $this->_rootElement : $element;
-        foreach ($fields as $name => $field) {
-            if (!isset($field['value'])) {
-                $this->_fill($field, $context);
-            } else {
-                $element = $this->getElement($context, $field);
-                if (!$element->isVisible()) {
-                    continue;
-                }
-
-                if (!$element->isDisabled()) {
-                    $element->setValue($field['value']);
-                } else {
-                    throw new \Exception("Unable to set value to field '$name' as it's disabled.");
-                }
-            }
-        }
-    }
-
-    /**
      * Assign product to variation matrix
      *
      * @param SimpleElement $variationRow
@@ -172,8 +143,7 @@ class Matrix extends Form
         foreach ($variationRows as $key => $variationRow) {
             /** @var SimpleElement $variationRow */
             if ($variationRow->isVisible()) {
-                $data[$key] = $this->_getData($this->dataMapping(), $variationRow);
-                $data[$key] += $this->getOptionalFields($variationRow, $this->mappingGetFields);
+                $data[$key] = $this->getDataFields($variationRow, $this->mappingGetFields);
             }
         }
 
@@ -181,19 +151,19 @@ class Matrix extends Form
     }
 
     /**
-     * Get optional fields
+     * Get variation fields.
      *
      * @param SimpleElement $context
      * @param array $fields
      * @return array
      */
-    protected function getOptionalFields(SimpleElement $context, array $fields)
+    protected function getDataFields(SimpleElement $context, array $fields)
     {
         $data = [];
 
         foreach ($fields as $name => $params) {
             if (isset($params['composite']) && $params['composite']) {
-                $data[$name] = $this->getOptionalFields($context, $params['fields']);
+                $data[$name] = $this->getDataFields($context, $params['fields']);
             } else {
                 $data[$name] = $context->find($params['selector'], $params['strategy'])->getText();
             }

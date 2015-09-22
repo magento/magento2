@@ -10,8 +10,7 @@ define([
     "priceUtils",
     "priceBox",
     "jquery/ui",
-    "jquery/jquery.parsequery",
-    "mage/gallery"
+    "jquery/jquery.parsequery"
 ], function($, _, mageTemplate, utils){
 
     $.widget('mage.configurable', {

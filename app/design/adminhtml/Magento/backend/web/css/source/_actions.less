@@ -10,6 +10,7 @@
 @import 'actions/_actions-dropdown.less';
 @import 'actions/_actions-split.less';
 @import 'actions/_actions-select.less';
+@import 'actions/_actions-multicheck.less';
 @import 'actions/_actions-multiselect.less';
 
 //
@@ -369,13 +370,12 @@ button {
 
 //  Used in actions split, action select and all other simple (one line) action menu list
 .action-menu {
-    .appearing__off();
     background-color: @page-wrapper__background-color;
     border: 1px solid @action__active__border-color;
     border-radius: 1px;
     box-shadow: @component__box-shadow__base;
     color: @text__color;
-    display: block; // ToDo UI: Should be deleted with old styles
+    display: none;
     font-weight: @font-weight__regular;
     left: 0;
     list-style: none;
@@ -385,15 +385,13 @@ button {
     position: absolute;
     right: 0;
     top: 100%;
-    transition: opacity @appearing__transition-duration @apperaing__transition-timing-function;
     &._active {
-        .appearing__on();
+        display: block;
     }
     > li {
         border: none; // ToDo UI: Should be deleted with old styles
         display: block;
         padding: 0;
-        position: relative;
         transition: background-color .1s linear;
         > a {
             &:hover {
@@ -409,6 +407,15 @@ button {
         &:active {
             background-color: darken(@action-menu__hover__background-color, 10%);
         }
+        &._parent {
+            .lib-vendor-prefix-display(flex);
+            .lib-vendor-prefix-flex-direction(row);
+            display: flex;
+            flex-direction: row;
+            > .action-menu-item {
+                min-width: 100%;
+            }
+        }
     }
     .item,
     .action-menu-item {
@@ -418,11 +425,17 @@ button {
     }
     .action-submenu {
         &:extend(.action-menu all);
-        left: 100%;
+        bottom: auto;
+        left: auto;
+        margin-left: 0;
         margin-top: -1px;
         position: absolute;
         right: auto;
-        top: 0;
+        top: auto;
+        .ie9 & {
+            margin-left: 99%;
+            margin-top: -3.5rem;
+        }
     }
     a {
         &.action-menu-item {

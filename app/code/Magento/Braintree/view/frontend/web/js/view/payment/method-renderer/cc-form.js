@@ -70,6 +70,9 @@ define(
                     this.braintreeClient = null;
                     this.quoteBaseGrandTotals = quote.totals().base_grand_total;
             },
+            canInitialise: function () {
+                return this.clientToken
+            },
             /**
              * @override
              */
@@ -95,9 +98,13 @@ define(
                     });
                 }
 
-                this.braintreeClient = new braintreeClientSDK.api.Client({
-                    clientToken: this.clientToken
-                });
+                if (this.canInitialise()) {
+                    this.braintreeClient = new braintreeClientSDK.api.Client({
+                        clientToken: this.clientToken
+                    });
+                } else {
+                    this.messageContainer.addErrorMessage({'message': $t('Can not initialize PayPal (Braintree)')});
+                }
 
                 return this;
             },
@@ -109,7 +116,7 @@ define(
                     var self = this,
                         cardInfo = null;
 
-                    messageList.clear();
+                    this.messageContainer.clear();
                     this.quoteBaseGrandTotals = quote.totals().base_grand_total;
 
                     this.isPaymentProcessing = $.Deferred();
@@ -187,9 +194,9 @@ define(
                 this.paymentMethodNonce('');
 
                 if (_.isObject(error)) {
-                    messageList.addErrorMessage(error);
+                    this.messageContainer.addErrorMessage(error);
                 } else {
-                    messageList.addErrorMessage({
+                    this.messageContainer.addErrorMessage({
                         message: error
                     });
                 }

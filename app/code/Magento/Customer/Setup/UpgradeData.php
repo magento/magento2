@@ -56,11 +56,10 @@ class UpgradeData implements UpgradeDataInterface
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
+        /** @var CustomerSetup $customerSetup */
+        $customerSetup = $this->customerSetupFactory->create(['setup' => $setup]);
 
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
-            /** @var CustomerSetup $customerSetup */
-            $customerSetup = $this->customerSetupFactory->create(['setup' => $setup]);
-
             $entityAttributes = [
                 'customer' => [
                     'website_id' => [
@@ -175,22 +174,80 @@ class UpgradeData implements UpgradeDataInterface
                     ],
                 ],
             ];
+            $this->upgradeAttributes($entityAttributes, $customerSetup);
+        }
 
-            foreach ($entityAttributes as $entityType => $attributes) {
-                foreach ($attributes as $attributeCode => $attributeData) {
-                    $attribute = $customerSetup->getEavConfig()->getAttribute($entityType, $attributeCode);
-                    foreach ($attributeData as $key => $value) {
-                        $attribute->setData($key, $value);
-                    }
-                    $attribute->save();
-                }
-            }
+        if (version_compare($context->getVersion(), '2.0.2') < 0) {
+            $entityTypeId = $customerSetup->getEntityTypeId(Customer::ENTITY);
+            $attributeId = $customerSetup->getAttributeId($entityTypeId, 'gender');
+
+            $option = ['attribute_id' => $attributeId, 'values' => [3 => 'Not Specified']];
+            $customerSetup->addAttributeOption($option);
+        }
+
+        if (version_compare($context->getVersion(), '2.0.3', '<')) {
+            $entityAttributes = [
+                'customer_address' => [
+                    'region_id' => [
+                        'is_used_in_grid' => false,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => false,
+                        'is_searchable_in_grid' => false,
+                    ],
+                    'firstname' => [
+                        'is_used_in_grid' => true,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => false,
+                        'is_searchable_in_grid' => true,
+                    ],
+                    'lastname' => [
+                        'is_used_in_grid' => true,
+                        'is_visible_in_grid' => false,
+                        'is_filterable_in_grid' => false,
+                        'is_searchable_in_grid' => true,
+                    ],
+                ],
+            ];
+            $this->upgradeAttributes($entityAttributes, $customerSetup);
+        }
+
+        if (version_compare($context->getVersion(), '2.0.4', '<')) {
+            $customerSetup->addAttribute(
+                Customer::ENTITY,
+                'updated_at',
+                [
+                    'type' => 'static',
+                    'label' => 'Updated At',
+                    'input' => 'date',
+                    'required' => false,
+                    'sort_order' => 87,
+                    'visible' => false,
+                    'system' => false,
+                ]
+            );
         }
 
         $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
         $indexer->reindexAll();
         $this->eavConfig->clear();
-
         $setup->endSetup();
+    }
+
+    /**
+     * @param array $entityAttributes
+     * @param CustomerSetup $customerSetup
+     * @return void
+     */
+    protected function upgradeAttributes(array $entityAttributes, CustomerSetup $customerSetup)
+    {
+        foreach ($entityAttributes as $entityType => $attributes) {
+            foreach ($attributes as $attributeCode => $attributeData) {
+                $attribute = $customerSetup->getEavConfig()->getAttribute($entityType, $attributeCode);
+                foreach ($attributeData as $key => $value) {
+                    $attribute->setData($key, $value);
+                }
+                $attribute->save();
+            }
+        }
     }
 }
