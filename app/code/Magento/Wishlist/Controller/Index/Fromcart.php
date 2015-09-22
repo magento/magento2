@@ -17,6 +17,9 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
 use Magento\Wishlist\Helper\Data as WishlistHelper;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Fromcart extends Action\Action implements IndexInterface
 {
     /**
