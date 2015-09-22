@@ -28,10 +28,24 @@ class ChangedFiles
             $phpFiles = Files::readLists($changedFilesList);
             if (!empty($phpFiles)) {
                 $phpFiles = \Magento\Framework\App\Utility\Files::composeDataSets($phpFiles);
-                $phpFiles = array_intersect_key($phpFiles, $fileHelper->getPhpFiles());
+                $phpFiles = array_intersect_key($phpFiles, $fileHelper->getClassFiles(
+                    Files::INCLUDE_APP_CODE
+                    | Files::INCLUDE_PUB_CODE
+                    | Files::INCLUDE_LIBS
+                    | Files::INCLUDE_TEMPLATES
+                    | Files::INCLUDE_TESTS
+                    | Files::INCLUDE_DATA_SET
+                ));
             }
         } else {
-            $phpFiles = $fileHelper->getPhpFiles();
+            $phpFiles = $fileHelper->getClassFiles(
+                Files::INCLUDE_APP_CODE
+                | Files::INCLUDE_PUB_CODE
+                | Files::INCLUDE_LIBS
+                | Files::INCLUDE_TEMPLATES
+                | Files::INCLUDE_TESTS
+                | Files::INCLUDE_DATA_SET
+            );
         }
 
         return $phpFiles;

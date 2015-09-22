@@ -75,7 +75,7 @@ class DataProvider implements DataProviderInterface
         $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->translate = $translate;
         $this->filesUtility = (null !== $filesUtility) ?
-            $filesUtility : new \Magento\Framework\App\Utility\Files(new ComponentRegistrar(), $dirSearch, BP);
+            $filesUtility : new \Magento\Framework\App\Utility\Files(new ComponentRegistrar(), $dirSearch);
     }
 
     /**
