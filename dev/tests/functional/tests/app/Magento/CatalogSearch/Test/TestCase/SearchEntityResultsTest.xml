@@ -57,7 +57,8 @@
         </variation>
         <variation name="SearchEntityResultsTestVariation11">
             <data name="catalogSearch/data/query_text/value" xsi:type="string">TryToFindMeAndI&#39;llFindYOU</data>
-            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductNotSearchable" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchNoResultMessage" />
+            <constraint name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchNoResult" />
         </variation>
     </testCase>
 </config>
