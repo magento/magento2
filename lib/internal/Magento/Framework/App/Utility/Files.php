@@ -195,28 +195,10 @@ class Files
         $key = __METHOD__ . BP . '{$appCode}/{$tests}/{$devTools}/{$lib}';
         if (!isset(self::$_cache[$key])) {
             $files = [];
-            if ($flags & self::INCLUDE_APP_CODE) {
-                $files = array_merge(
-                    $files,
-                    $this->getFilesSubset(
-                        $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE),
-                        '*.php',
-                        array_merge($this->getModuleTestDirs(), $this->getModuleRegistrationFiles())
-                    )
-                );
-            }
-            if ($flags & self::INCLUDE_TESTS) {
-                $testDirs = [
-                    BP . '/dev/tests',
-                    BP . '/setup/src/Magento/Setup/Test',
-                ];
-                $moduleTestDir = [];
-                foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
-                    $moduleTestDir[] = $moduleDir . '/Test';
-                }
-                $testDirs = array_merge($testDirs, $moduleTestDir, $this->getLibraryTestDirs());
-                $files = array_merge($files, self::getFiles($testDirs, '*.php'));
-            }
+
+            $files = array_merge($files, $this->getModuleFiles($flags));
+            $files = array_merge($files, $this->getTestFiles($flags));
+
             if ($flags & self::INCLUDE_DEV_TOOLS) {
                 $files = array_merge(
                     $files,
@@ -251,6 +233,34 @@ class Files
         return self::$_cache[$key];
     }
 
+    private function getModuleFiles($flags)
+    {
+        if ($flags & self::INCLUDE_APP_CODE) {
+            return $this->getFilesSubset(
+                $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE),
+                '*.php',
+                array_merge($this->getModuleTestDirs(), $this->getModuleRegistrationFiles())
+            );
+        }
+        return [];
+    }
+
+    private function getTestFiles($flags)
+    {
+        if ($flags & self::INCLUDE_TESTS) {
+            $testDirs = [
+                BP . '/dev/tests',
+                BP . '/setup/src/Magento/Setup/Test',
+            ];
+            $moduleTestDir = [];
+            foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
+                $moduleTestDir[] = $moduleDir . '/Test';
+            }
+            $testDirs = array_merge($testDirs, $moduleTestDir, $this->getLibraryTestDirs());
+            return self::getFiles($testDirs, '*.php');
+        }
+        return [];
+    }
     /**
      * Returns list of xml files, used by Magento application
      *
@@ -508,7 +518,7 @@ class Files
      */
     protected function _parseThemeLayout($file)
     {
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeName => $themePath) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themePath) {
             $appDesign = preg_quote("{$themePath}/", '/');
             $invariant = '/^' . $appDesign . '([a-z\d]+_[a-z\d]+)\/layout\/';
 
@@ -596,7 +606,7 @@ class Files
             }
         }
         $themePaths = [];
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeName => $themePath) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themePath) {
             if (strpos($themePath, $area)) {
                 $themePaths [] = $themePath . "/web";
                 $themePaths [] = $themePath . "/{$module}/web";
@@ -642,7 +652,7 @@ class Files
             }
         }
         $themePaths = [];
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeName => $themePath) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themePath) {
             if (strpos($themePath, $area)) {
                 $themePaths [] = $themePath . "/web/template";
                 $themePaths [] = $themePath . "/{$module}/web/template";
@@ -686,7 +696,7 @@ class Files
 
         $themePaths = [];
         $themeLocalePath = [];
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeName => $themePath) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themePath) {
             if (strpos($themePath, $area)) {
                 $themePaths [] = $themePath . "/web";
                 $themePaths [] = $themePath . "/{$module}/web";
@@ -800,7 +810,7 @@ class Files
      */
     protected function _parseThemeStatic($file)
     {
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeName => $themePath) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themePath) {
             $appDesign = preg_quote("{$themePath}/", '/');
             if (preg_match(
                 '/^' . $appDesign . '([a-z\d]+_[a-z\d]+)\/web\/(.+)$/i',
@@ -826,12 +836,11 @@ class Files
      * Parse meta-info of a localized (translated) static file in theme
      *
      * @param string $file
-     * @param string $path
      * @return array
      */
-    protected function _parseThemeLocaleStatic($file, $path)
+    protected function _parseThemeLocaleStatic($file)
     {
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeName => $themePath) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themePath) {
             $design = preg_quote("{$themePath}/", '/');
             if (preg_match(
                 '/^' . $design . '([a-z\d]+_[a-z\d]+)\/web\/i18n\/([a-z_]+)\/(.+)$/i',
@@ -865,7 +874,6 @@ class Files
         if (isset(self::$_cache[$key])) {
             return self::$_cache[$key];
         }
-        $themePath = '*/*';
         $viewAreaPaths = [];
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
             $viewAreaPaths[] = $moduleDir . "/view/{$area}";
@@ -911,7 +919,6 @@ class Files
             $namespace = '*';
             $module = '*';
             $area = '*';
-            $themePath = '*/*';
             $result = [];
             $moduleTemplatePaths = [];
             foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
@@ -971,12 +978,11 @@ class Files
      * Parse meta-information from a theme template file
      *
      * @param string $file
-     * @param string $path
      * @return array
      */
-    protected function _parseThemeTemplate($file, $path)
+    protected function _parseThemeTemplate($file)
     {
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeName => $themePath) {
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themePath) {
             $appDesign = preg_quote("{$themePath}/", '/');
 
             preg_match(
