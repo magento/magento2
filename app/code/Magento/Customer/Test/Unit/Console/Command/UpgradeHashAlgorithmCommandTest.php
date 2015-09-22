@@ -7,6 +7,7 @@ namespace Magento\Customer\Test\Unit\Console\Command;
 
 use Magento\Customer\Console\Command\UpgradeHashAlgorithmCommand;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Customer\Model\Resource\Customer\CollectionFactory;
 
 class UpgradeHashAlgorithmCommandTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,12 +21,27 @@ class UpgradeHashAlgorithmCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $objectManager;
 
+    /**
+     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $customerCollectionFactory;
+
     public function setUp()
     {
+        $this->customerCollectionFactory = $this->getMockBuilder(
+            'Magento\Customer\Model\Resource\Customer\CollectionFactory'
+        )->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->objectManager = new ObjectManager($this);
-        
-        $this->command = $this->objectManager
-            ->getObject('Magento\Customer\Console\Command\UpgradeHashAlgorithmCommand');
+
+        $this->command = $this->objectManager->getObject(
+            'Magento\Customer\Console\Command\UpgradeHashAlgorithmCommand',
+            [
+                'customerCollectionFactory' => $this->customerCollectionFactory
+            ]
+        );
     }
 
     public function testConfigure()
