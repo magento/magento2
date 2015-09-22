@@ -21,7 +21,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
-        $this->_xsdSchema = $urnResolver->getRealPath('urn:magento:module:Magento_EAV:etc/eav_attributes.xsd');
+        $this->_xsdSchema = $urnResolver->getRealPath('urn:magento:module:Magento_Eav:etc/eav_attributes.xsd');
         $this->_xsdValidator = new \Magento\Framework\TestFramework\Unit\Utility\XsdValidator();
     }
 
