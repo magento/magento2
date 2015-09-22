@@ -10,9 +10,9 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\CatalogSearch\Test\Page\CatalogsearchResult;
 
 /**
- * Assert that product cannot be found via Quick Search.
+ * Assert that notice message is visible.
  */
-class AssertProductNotSearchable extends AbstractConstraint
+class AssertCatalogSearchNoResultMessage extends AbstractConstraint
 {
     /**
      * Notice message about no results on search.
@@ -20,21 +20,16 @@ class AssertProductNotSearchable extends AbstractConstraint
     const NOTICE_MESSAGE = 'Your search returned no results.';
 
     /**
-     * Assert that product cannot be found via Quick Search.
+     * Assert that 'Your search returned no results.' is visible.
      *
      * @param CatalogsearchResult $catalogSearchResult
      * @return void
      */
     public function processAssert(CatalogsearchResult $catalogSearchResult)
     {
-        $actualMessage = $catalogSearchResult->getMessagesBlock()->getNoticeMessages();
-
-        \PHPUnit_Framework_Assert::assertEquals(
-            self::NOTICE_MESSAGE,
-            $actualMessage,
+        \PHPUnit_Framework_Assert::assertTrue(
+            $catalogSearchResult->getSearchResultBlock()->isVisibleMessages(self::NOTICE_MESSAGE),
             'Wrong message is displayed or no message at all.'
-            . "\nExpected: " . self::NOTICE_MESSAGE
-            . "\nActual: " . $actualMessage
         );
     }
 
@@ -45,6 +40,6 @@ class AssertProductNotSearchable extends AbstractConstraint
      */
     public function toString()
     {
-        return "Product is not searchable.";
+        return 'Notice message is visible.';
     }
 }
