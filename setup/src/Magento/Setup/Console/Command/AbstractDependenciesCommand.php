@@ -71,7 +71,7 @@ abstract class AbstractDependenciesCommand extends Command
     {
         try {
             $dirSearch = new DirSearch(new ComponentRegistrar(), new ReadFactory(new DriverPool()));
-            Files::setInstance(new Files(new ComponentRegistrar(), $dirSearch, BP));
+            Files::setInstance(new Files(new ComponentRegistrar(), $dirSearch));
             $this->buildReport($input->getOption(self::INPUT_KEY_OUTPUT));
             $output->writeln('<info>Report successfully processed.</info>');
         } catch (\Exception $e) {

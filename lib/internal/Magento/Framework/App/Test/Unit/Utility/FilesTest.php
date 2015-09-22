@@ -27,10 +27,11 @@ class FilesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        // TODO: this test should be deleted tescases should be moved to integration test
         $this->baseDir = __DIR__ . '/_files/foo';
         $this->componentRegistrar = new ComponentRegistrar();
         $this->dirSearch = $this->getMock('Magento\Framework\Component\DirSearch', [], [], '', false);
-        Files::setInstance(new Files($this->componentRegistrar, $this->dirSearch, $this->baseDir));
+        Files::setInstance(new Files($this->componentRegistrar, $this->dirSearch));
     }
 
     protected function tearDown()
