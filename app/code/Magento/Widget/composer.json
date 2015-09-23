@@ -10,8 +10,7 @@
         "magento/module-email": "1.0.0-beta",
         "magento/module-theme": "1.0.0-beta",
         "magento/framework": "1.0.0-beta",
-        "magento/module-variable": "1.0.0-beta",
-        "magento/magento-composer-installer": "*"
+        "magento/module-variable": "1.0.0-beta"
     },
     "type": "magento2-module",
     "version": "1.0.0-beta",
