@@ -255,17 +255,19 @@ class Pro
         if (!$authTransactionId) {
             return false;
         }
-        $api = $this->getApi()->setAuthorizationId(
-            $authTransactionId
-        )->setIsCaptureComplete(
-            $payment->getShouldCloseParentTransaction()
-        )->setAmount(
-            $amount
-        )->setCurrencyCode(
-            $payment->getOrder()->getBaseCurrencyCode()
-        )->setInvNum(
-            $payment->getOrder()->getIncrementId()
-        );
+        $api = $this->getApi()
+            ->setAuthorizationId($authTransactionId)
+            ->setIsCaptureComplete($payment->getShouldCloseParentTransaction())
+            ->setAmount($amount);
+
+        $order = $payment->getOrder();
+        if (!empty($order)) {
+            $orderIncrementId = $order->getIncrementId();
+            $api->setCurrencyCode($order->getBaseCurrencyCode())
+                ->setInvNum($orderIncrementId)
+                ->setCustref($orderIncrementId)
+                ->setPonum($order->getId());
+        }
         // TODO: pass 'NOTE' to API
 
         $api->callDoCapture();
