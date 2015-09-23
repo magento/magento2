@@ -60,7 +60,9 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
      */
     public function save(\Magento\Catalog\Api\Data\CategoryInterface $category)
     {
-        $existingData = array_merge($category->toFlatArray(), ['available_sort_by' => $category->getAvailableSortBy()]);
+        $existingData = $category->toFlatArray();
+        /** 'available_sort_by' should be set separately because fields of array type are destroyed by toFlatArray() */
+        $existingData['available_sort_by'] = $category->getAvailableSortBy();
         if ($category->getId()) {
             $existingCategory = $this->get($category->getId());
             if (isset($existingData['image']) && is_array($existingData['image'])) {
