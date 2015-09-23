@@ -7,7 +7,6 @@ namespace Magento\Framework\Search\Test\Unit\Adapter\Mysql\Query;
 
 use Magento\Framework\Search\Adapter\Mysql\Query\MatchContainerFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Search\Adapter\Mysql\Query\QueryContainer;
 use Magento\Framework\Search\Request\Query\Bool;
 
 class QueryContainerTest extends \PHPUnit_Framework_TestCase
@@ -74,16 +73,5 @@ class QueryContainerTest extends \PHPUnit_Framework_TestCase
         $queries = $this->queryContainer->getDerivedQueries();
         $this->assertCount(1, $queries);
         $this->assertEquals('asdf', reset($queries));
-    }
-
-    public function testFilters()
-    {
-        $this->assertEmpty($this->queryContainer->getFilters());
-        $this->queryContainer->addFilter('filter');
-        $this->assertCount(1, $this->queryContainer->getFilters());
-        $this->assertEquals(1, $this->queryContainer->getFiltersCount());
-        $this->queryContainer->clearFilters();
-        $this->assertCount(0, $this->queryContainer->getFilters());
-        $this->assertEquals(1, $this->queryContainer->getFiltersCount());
     }
 }
