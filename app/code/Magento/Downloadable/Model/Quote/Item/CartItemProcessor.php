@@ -74,7 +74,7 @@ class CartItemProcessor implements CartItemProcessorInterface
                 ]);
             }
         }
-        throw new \Exception('Cart item does not contain downloadable links.');
+        return null;
     }
 
     /**
