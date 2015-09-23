@@ -213,7 +213,11 @@
     "autoload": {
         "psr-4": {
             "Magento\\Framework\\": "lib/internal/Magento/Framework/",
-            "Magento\\Setup\\": "setup/src/Magento/Setup/"
+            "Magento\\Setup\\": "setup/src/Magento/Setup/",
+            "Magento\\": "app/code/"
+        },
+        "psr-0": {
+            "": "app/code/"
         },
         "files": ["app/etc/NonComposerComponentRegistration.php"]
     },
