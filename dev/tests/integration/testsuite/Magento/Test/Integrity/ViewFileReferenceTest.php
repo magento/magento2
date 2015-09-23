@@ -49,12 +49,19 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
      */
     protected static $_themeCollection;
 
+    /**
+     * @var \Magento\Framework\Component\ComponentRegistrar
+     */
+    protected static $_componentRegistrar;
+
     public static function setUpBeforeClass()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->configure(
             ['preferences' => ['Magento\Theme\Model\Theme' => 'Magento\Theme\Model\Theme\Data']]
         );
+
+        self::$_componentRegistrar = $objectManager->get('Magento\Framework\Component\ComponentRegistrar');
 
         /** @var $fallbackPool \Magento\Framework\View\Design\Fallback\RulePool */
         $fallbackPool = $objectManager->get('Magento\Framework\View\Design\Fallback\RulePool');
@@ -111,7 +118,10 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
         $localePlaceholder = '<locale_placeholder>';
         $params = ['area' => $theme->getArea(), 'theme' => $theme, 'locale' => $localePlaceholder];
         $patternDirs = self::$_fallbackRule->getPatternDirs($params);
-        $themePath = '/' . $theme->getFullPath() . '/';
+        $themePath =  self::$_componentRegistrar->getPath(
+            \Magento\Framework\Component\ComponentRegistrar::THEME,
+            $theme->getFullPath()
+        );
         foreach ($patternDirs as $patternDir) {
             $patternPath = $patternDir . '/';
             if ((strpos($patternPath, $themePath) !== false) // It is theme's directory
