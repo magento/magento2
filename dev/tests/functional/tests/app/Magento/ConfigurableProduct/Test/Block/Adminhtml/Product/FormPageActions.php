@@ -20,7 +20,7 @@ class FormPageActions extends \Magento\Catalog\Test\Block\Adminhtml\Product\Form
      *
      * @var string
      */
-    protected $affectedAttributeSetForm = '//ancestor::body//div[div[@id="affected-attribute-set-form"]]';
+    protected $affectedAttributeSetForm = '[data-role=affected-attribute-set-selector]';
 
     /**
      * Click on "Save" button
@@ -46,7 +46,7 @@ class FormPageActions extends \Magento\Catalog\Test\Block\Adminhtml\Product\Form
     {
         return $this->blockFactory->create(
             '\Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\AffectedAttributeSet',
-            ['element' => $this->_rootElement->find($this->affectedAttributeSetForm, Locator::SELECTOR_XPATH)]
+            ['element' => $this->_rootElement->find($this->affectedAttributeSetForm, Locator::SELECTOR_CSS)]
         );
     }
 }

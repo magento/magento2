@@ -18,17 +18,25 @@
         "jquery",
         "jquery/ui"
     ], function($){
-        $form = $('#affected-attribute-set-form');
-
+        $form = $('[data-role=affected-attribute-set-selector]');
         var resetValidation = function() {
-            $form.find('.messages .message.error').hide();
-            $form.find('form').validation().data('validator').resetForm();
-        };
+                $form.find('.messages .message.error').hide();
+                $form.find('form').validation().data('validator').resetForm();
+            },
+            setAttributeSetId = function (id) {
+                $('[data-role=new-variations-attribute-set-id]').val(id);
+            },
+            closeDialogAndProcessForm = function (form) {
+                form.dialog('close').data('target').click();
+            },
+            newAttributeSetContainer = $('[data-role=affected-attribute-set-new-name-container]'),
+            existingAttributeSetContainer = $('[data-role=affected-attribute-set-existing-name-container]');
+
 
         $('[data-form=edit-product]').append($('<input>', {
             type: 'hidden',
             name: 'new-variations-attribute-set-id',
-            id: 'new-variations-attribute-set-id'
+            'data-role': 'new-variations-attribute-set-id'
         }));
 
         $form
@@ -59,11 +67,14 @@
                     id: '<?php /* @escapeNotVerified */ echo $block->getJsId('confirm-button') ?>',
                     'class': 'action-primary',
                     click: function() {
-                        if ($form.find('input[name=affected-attribute-set]:checked').val() == 'current') {
-                            $('#new-variations-attribute-set-id').val($('#attribute_set_id').val());
-                            $form.dialog('close')
-                                .data('target').click();
+                        var affectedAttributeSetId = $form.find('input[name=affected-attribute-set]:checked').val();
+                        if (affectedAttributeSetId == 'current') {
+                            setAttributeSetId($('#attribute_set_id').val());
+                            closeDialogAndProcessForm($form);
                             return;
+                        } else if (affectedAttributeSetId == 'existing') {
+                            setAttributeSetId($('select', existingAttributeSetContainer).val());
+                            closeDialogAndProcessForm($form);
                         }
 
                         $form.find('.messages .message.error').hide();
@@ -88,9 +99,8 @@
                         })
                             .success(function (data) {
                                 if (!data.error) {
-                                    $('#new-variations-attribute-set-id').val(data.id);
-                                    $form.dialog('close')
-                                        .data('target').click();
+                                    setAttributeSetId(data.id);
+                                    closeDialogAndProcessForm($form);
                                 } else {
                                     $form.find('.messages .message.error').replaceWith($(data.messages).find('.message.error'));
                                 }
@@ -108,10 +118,12 @@
                 }]
             })
             .find('input[name=affected-attribute-set]').on('change', function() {
-                $('#affected-attribute-set-new-name-container')[$(this).val() == 'new' ? 'show' : 'hide']();
+                var affectedAttributeSet = $(this).val();
+                newAttributeSetContainer[affectedAttributeSet == 'new' ? 'show' : 'hide']();
+                existingAttributeSetContainer[affectedAttributeSet == 'existing' ? 'show' : 'hide']();
                 resetValidation();
-                if ($(this).val() == 'new') {
-                    $form.find('input[name=new-attribute-set-name]').focus();
+                if (affectedAttributeSet == 'new') {
+                    newAttributeSetContainer.find('input[name=new-attribute-set-name]').focus();
                 }
             });
     });
@@ -145,7 +157,7 @@
          * This fix was made in order to properly handle 'stopImmediatePropagation'.
          */
         $('#save-split-button .item').on('click', function(event) {
-            if ($('#new-variations-attribute-set-id').val() != '') {
+            if ($('[data-role=new-variations-attribute-set-id]').val() != '') {
                 return; // affected attribute set was already chosen
             }
 
@@ -157,7 +169,7 @@
                 }
             });
             if (!extendingAttributes.length) {
-                $('#new-variations-attribute-set-id').val($('#attribute_set_id').val());
+                $('[data-role=new-variations-attribute-set-id]').val($('#attribute_set_id').val());
                 return; // all selected configurable attributes belong to current attribute set
             }
             if (!$('[data-role=product-variations-matrix] [data-column=entity_id]')

@@ -241,7 +241,8 @@ abstract class AbstractElement extends AbstractForm
             'placeholder',
             'data-form-part',
             'data-role',
-            'data-action'
+            'data-action',
+            'checked',
         ];
     }
 

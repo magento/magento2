@@ -15,7 +15,9 @@
             <block class="Magento\Framework\View\Element\Template" template="Magento_ConfigurableProduct::product/configurable/stock/disabler.phtml"/>
         </referenceContainer>
         <referenceContainer name="content">
-            <block class="Magento\Framework\View\Element\Template" name="affected-attribute-set-form" template="Magento_ConfigurableProduct::product/configurable/affected-attribute-set-selector/form.phtml"/>
+            <block class="Magento\Framework\View\Element\Template" name="affected-attribute-set-selector" template="Magento_ConfigurableProduct::product/configurable/affected-attribute-set-selector/form.phtml">
+                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\ProductTemplate\Form" name="affected-attribute-set-form" />
+            </block>
         </referenceContainer>
     </body>
 </page>
