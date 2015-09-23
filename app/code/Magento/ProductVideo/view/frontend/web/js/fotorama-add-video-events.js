@@ -226,6 +226,7 @@ require(["jquery", "jquery/ui", "catalogGallery"], function ($) {
 
         _setVideoEvent: function ($image, PV, fotorama, number) {
             var self = this;
+
             $image.find('.magnify-lens').remove();
             $image.on('click', function () {
                 if ($(this).hasClass('video-unplayed') && $(this).find('iframe').length === 0) {
@@ -257,6 +258,7 @@ require(["jquery", "jquery/ui", "catalogGallery"], function ($) {
 
         _unloadVideoPlayer: function ($wrapper, $current, close) {
             var self = this;
+
             $wrapper.find('.' + this.PV).each(function () {
                 var $item = $(this).parent();
                 if (($(this).find('iframe').length > 0 && $current.activeFrame.$stageFrame.index() != $item.index() && !close) || ($(this).find('iframe').length > 0 && $current.activeFrame.$stageFrame.index() == $item.index() && close)) {
