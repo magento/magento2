@@ -18,6 +18,7 @@ class Agreement extends \Magento\Framework\Model\AbstractExtensibleModel impleme
 
     /**
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {

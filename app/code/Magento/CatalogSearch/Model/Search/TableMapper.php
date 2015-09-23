@@ -103,27 +103,25 @@ class TableMapper
         if ($fieldToTableMap) {
             list($alias, $table, $mapOn, $mappedFields) = $fieldToTableMap;
             $table = $this->resource->getTableName($table);
-        } elseif ($filter->getType() === FilterInterface::TYPE_TERM) {
-            $table = $this->resource->getTableName('catalog_product_index_eav');
-            $alias = 'cpie';
-            $mapOn = sprintf(
-                'search_index.entity_id = %1$s.entity_id AND search_index.attribute_id = %1$s.attribute_id',
-                $alias
-            );
-            $mappedFields = [];
-        } else {
-            /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $attribute */
-            $attribute = $this->attributeCollection->getItemByColumnValue('attribute_code', $field);
-            if ($attribute && $attribute->getBackendType() === AbstractAttribute::TYPE_STATIC) {
+        } elseif ($attribute = $this->getAttributeByCode($field)) {
+            if ($filter->getType() === FilterInterface::TYPE_TERM
+                && in_array($attribute->getFrontendInput(), ['select', 'multiselect'], true)
+            ) {
+                $table = $this->resource->getTableName('catalog_product_index_eav');
+                $alias = $field . '_filter';
+                $mapOn = sprintf(
+                    'search_index.entity_id = %1$s.entity_id AND %1$s.attribute_id = %2$d AND %1$s.store_id = %3$d',
+                    $alias,
+                    $attribute->getId(),
+                    $this->getStoreId()
+                );
+                $mappedFields = [];
+            } elseif ($attribute->getBackendType() === AbstractAttribute::TYPE_STATIC) {
                 $table = $attribute->getBackendTable();
-                $alias = $this->getTableAlias($table);
+                $alias = $field . '_filter';
                 $mapOn = 'search_index.entity_id = ' . $alias . '.entity_id';
                 $mappedFields = null;
             }
-        }
-
-        if (!$alias && $table) {
-            $alias = $this->getTableAlias($table);
         }
 
         return [$alias, $table, $mapOn, $mappedFields];
@@ -205,6 +203,14 @@ class TableMapper
     }
 
     /**
+     * @return int
+     */
+    private function getStoreId()
+    {
+        return $this->storeManager->getStore()->getId();
+    }
+
+    /**
      * @param string $field
      * @return array|null
      */
@@ -231,11 +237,12 @@ class TableMapper
     }
 
     /**
-     * @param string $table
-     * @return string
+     * @param string $field
+     * @return \Magento\Catalog\Model\Resource\Eav\Attribute
      */
-    private function getTableAlias($table)
+    private function getAttributeByCode($field)
     {
-        return md5($table);
+        $attribute = $this->attributeCollection->getItemByColumnValue('attribute_code', $field);
+        return $attribute;
     }
 }
