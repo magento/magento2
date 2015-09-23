@@ -135,7 +135,8 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     public function libraryDataProvider()
     {
         // @TODO: remove this code when class Magento\Framework\Data\Collection will fixed
-        include_once BP . '/lib/internal/Magento/Framework/Option/ArrayInterface.php';
+        $componentRegistrar = new ComponentRegistrar();
+        include_once $componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) . '/Option/ArrayInterface.php';
         $blackList = file(__DIR__ . '/_files/blacklist.txt', FILE_IGNORE_NEW_LINES);
         $dataProvider = Files::init()->getClassFiles(
             Files::INCLUDE_LIBS
