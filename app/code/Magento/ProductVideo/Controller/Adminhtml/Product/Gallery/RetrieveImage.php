@@ -45,6 +45,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Catalog\Model\Product\Media\Config $mediaConfig
      * @param \Magento\Framework\Filesystem $fileSystem
+     * @param \Magento\Framework\Image\AdapterFactory $imageAdapterFactory
      * @param \Magento\Framework\HTTP\Adapter\Curl $curl
      * @param \Magento\MediaStorage\Model\Resource\File\Storage\File $fileUtility
      */
@@ -94,7 +95,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
     }
 
     /**
-     * @param $fileName
+     * @param string $fileName
      * @return mixed
      */
     protected function appendResultSaveRemoteImage($fileName)
@@ -111,7 +112,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
     }
 
     /**
-     * @param $fileName
+     * @param string $fileName
      * @return string
      */
     protected function localFileName($fileName)
@@ -134,7 +135,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
     }
 
     /**
-     * @param $localFilePath
+     * @param string $localFilePath
      * @return string
      */
     protected function appendNewFileName($localFilePath)
@@ -183,7 +184,7 @@ class RetrieveImage extends \Magento\Backend\App\Action
     }
 
     /**
-     * @param $localTmpFile
+     * @param string $localTmpFile
      * @return string
      */
     protected function appendAbsoluteFileSystemPath($localTmpFile)

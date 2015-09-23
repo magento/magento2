@@ -122,5 +122,4 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
             self::NODE_CONFIG_VIDEO_AUTO_RESTART
         );
     }
-
 }

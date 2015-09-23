@@ -130,5 +130,4 @@ class RetrieveImageTest extends \PHPUnit_Framework_TestCase
 
         $this->image->execute();
     }
-
 }

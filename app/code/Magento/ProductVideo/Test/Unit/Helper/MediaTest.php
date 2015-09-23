@@ -144,5 +144,4 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         $this->viewConfigMock->expects($this->once())->method('getVideoAttributeValue')->willReturn($expectedResult);
         $this->mediaHelperObject->getVideoAutoRestartAttribute();
     }
-
 }
