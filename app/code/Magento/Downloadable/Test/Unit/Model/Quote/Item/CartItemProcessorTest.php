@@ -93,7 +93,13 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
         $downloadableLinks = [1, 2];
         $itemQty = 1;
 
-        $cartItemMock = $this->getMock('\Magento\Quote\Api\Data\CartItemInterface');
+        $cartItemMock = $this->getMock(
+            '\Magento\Quote\Model\Quote\Item',
+            ['getProductOption', 'setProductOption', 'getOptionByCode', 'getQty'],
+            [],
+            '',
+            false
+        );
         $productOptionMock = $this->getMock('\Magento\Quote\Api\Data\ProductOptionInterface');
 
         $cartItemMock->expects($this->any())->method('getProductOption')->willReturn($productOptionMock);
