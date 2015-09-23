@@ -91,4 +91,9 @@
       <argument name="severity" xsi:type="string">high</argument>
     </arguments>
   </type>
+  <type name="Magento\CatalogSearch\Test\Constraint\AssertCatalogSearchNoResult">
+    <arguments>
+      <argument name="severity" xsi:type="string">high</argument>
+    </arguments>
+  </type>
 </config>
