@@ -22,9 +22,9 @@
             </field>
             <field name="qty" xsi:type="string">3</field>
             <field name="cartItem" xsi:type="array">
-                <item name="price" xsi:type="string">120</item>
+                <item name="price" xsi:type="string">40</item>
                 <item name="qty" xsi:type="string">3</item>
-                <item name="subtotal" xsi:type="string">360</item>
+                <item name="subtotal" xsi:type="string">120</item>
             </field>
         </dataset>
 
@@ -142,9 +142,9 @@
             </field>
             <field name="qty" xsi:type="string">1</field>
             <field name="cartItem" xsi:type="array">
-                <item name="price" xsi:type="string">9</item>
+                <item name="price" xsi:type="string">1</item>
                 <item name="qty" xsi:type="string">1</item>
-                <item name="subtotal" xsi:type="string">9</item>
+                <item name="subtotal" xsi:type="string">1</item>
             </field>
         </dataset>
 
