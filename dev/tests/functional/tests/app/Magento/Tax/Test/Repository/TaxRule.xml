@@ -175,5 +175,16 @@
             <field name="priority" xsi:type="string">0</field>
             <field name="position" xsi:type="string">0</field>
         </dataset>
+
+        <dataset name="us_full_tax_rule">
+            <field name="code" xsi:type="string">TaxIdentifier%isolation%</field>
+            <field name="tax_rate" xsi:type="array">
+                <item name="dataset" xsi:type="array">
+                    <item name="0" xsi:type="string">us_full_tax_rate</item>
+                </item>
+            </field>
+            <field name="priority" xsi:type="string">0</field>
+            <field name="position" xsi:type="string">0</field>
+        </dataset>
     </repository>
 </config>

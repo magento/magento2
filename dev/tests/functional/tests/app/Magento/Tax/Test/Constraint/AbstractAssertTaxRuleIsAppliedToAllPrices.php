@@ -152,7 +152,6 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPrices extends AbstractConstra
      */
     public function getCartPrices(InjectableFixture $product, $actualPrices)
     {
-        $this->checkoutCart->open();
         $actualPrices['cart_item_price_excl_tax'] =
             $this->checkoutCart->getCartBlock()->getCartItem($product)->getPriceExclTax();
         $actualPrices['cart_item_price_incl_tax'] =
