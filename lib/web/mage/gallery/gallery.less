@@ -7,6 +7,7 @@
 @fotorama-arw-size: 95px;
 @fotorama_close_size: 30px;
 @size-fotorama-block: 50px;
+@fotorama-thumb-arrow: 30px;
 
 @import '../../css/source/lib/_lib.less'; // Global lib
 @import '../../css/source/_theme.less'; // Theme overrides
@@ -1127,7 +1128,7 @@
         bottom: 0;
         position: absolute;
         top: 0;
-        width: 30px;
+        width: @fotorama-thumb-arrow;
         z-index: @z-index-10;
         .fotorama__thumb__arr {
             width: 100%;
@@ -1138,14 +1139,14 @@
         .fotorama-arrow-gradient(left);
         left: 0;
         .fotorama__thumb__arr {
-            background-position: -30px -30px;
+            background-position: (-@fotorama-thumb-arrow) (-@fotorama-thumb-arrow);
         }
     }
     .fotorama__thumb__arr--right {
         .fotorama-arrow-gradient(right);
         right: 0;
         .fotorama__thumb__arr {
-            background-position: -60px -30px;
+            background-position: (-@fotorama-thumb-arrow*2) (-@fotorama-thumb-arrow);
         }
     }
 }
@@ -1153,7 +1154,7 @@
 .fotorama__nav-wrap--vertical {
     .fotorama__thumb__arr--left,
     .fotorama__thumb__arr--right {
-        height: 30px;
+        height: @fotorama-thumb-arrow;
         left: 0;
         position: absolute;
         right: 0;
@@ -1161,21 +1162,21 @@
         .fotorama__thumb__arr {
             .fotorama-rotate(90deg);
             margin: auto;
-            width: 30px;
+            width: @fotorama-thumb-arrow;
         }
     }
     .fotorama__thumb__arr--left {
         .fotorama-arrow-gradient(top);
         top: 0;
         .fotorama__thumb__arr {
-            background-position: -30px -30px;
+            background-position: (-@fotorama-thumb-arrow) (-@fotorama-thumb-arrow);
         }
     }
     .fotorama__thumb__arr--right {
         .fotorama-arrow-gradient(bottom);
         bottom: 0;
         .fotorama__thumb__arr {
-            background-position: -60px -30px;
+            background-position: (-@fotorama-thumb-arrow*2) (-@fotorama-thumb-arrow);
         }
     }
 }
@@ -1184,7 +1185,7 @@
     &:extend(.fotorama-sprite);
     background-size: 300%;
     font-size: 0.001px;
-    padding-bottom: 30px;
+    padding-bottom: @fotorama-thumb-arrow;
 }
 
 body.fotorama__fullscreen {
