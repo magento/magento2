@@ -318,7 +318,9 @@ class DomMerger implements DomMergerInterface
         if ($this->schemaFilePath) {
             $errors = $this->validateDomDocument($domDocument);
             if (count($errors)) {
-                throw new \Magento\Framework\Exception\LocalizedException(implode("\n", $errors));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    new \Magento\Framework\Phrase(implode("\n", $errors))
+                );
             }
         }
 
