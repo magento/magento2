@@ -178,26 +178,7 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
                 $this->assertRequireInSync($json);
                 break;
             case 'project':
-                sort(self::$dependencies);
-                $dependenciesListed = [];
-                foreach (array_keys((array)self::$rootJson['replace']) as $key) {
-                    if (MagentoComponent::matchMagentoComponent($key)) {
-                        $dependenciesListed[] = $key;
-                    }
-                }
-                sort($dependenciesListed);
-                $nonDeclaredDependencies = array_diff(self::$dependencies, $dependenciesListed);
-                $nonexistentDependencies = array_diff($dependenciesListed, self::$dependencies);
-                $this->assertEmpty(
-                    $nonDeclaredDependencies,
-                    'Following dependencies are not declared in the root composer.json: '
-                    . join(', ', $nonDeclaredDependencies)
-                );
-                $this->assertEmpty(
-                    $nonexistentDependencies,
-                    'Following dependencies declared in the root composer.json do not exist: '
-                    . join(', ', $nonexistentDependencies)
-                );
+                $this->checkProject();
                 break;
             default:
                 throw new \InvalidArgumentException("Unknown package type {$packageType}");
@@ -308,6 +289,9 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
     private function assertRequireInSync(\StdClass $json)
     {
         $name = $json->name;
+        if (self::$rootJson['name'] === 'magento/project-community-edition') {
+            return;
+        }
         if (isset($json->require)) {
             $errors = [];
             foreach (array_keys((array)$json->require) as $depName) {
@@ -428,5 +412,35 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
         }
 
         return $flat;
+    }
+
+    /**
+     * @return void
+     */
+    private function checkProject()
+    {
+        sort(self::$dependencies);
+        $dependenciesListed = [];
+        if (self::$rootJson['name'] !== 'magento/project-community-edition') {
+
+            foreach (array_keys((array)self::$rootJson['replace']) as $key) {
+                if (MagentoComponent::matchMagentoComponent($key)) {
+                    $dependenciesListed[] = $key;
+                }
+            }
+            sort($dependenciesListed);
+            $nonDeclaredDependencies = array_diff(self::$dependencies, $dependenciesListed);
+            $nonexistentDependencies = array_diff($dependenciesListed, self::$dependencies);
+            $this->assertEmpty(
+                $nonDeclaredDependencies,
+                'Following dependencies are not declared in the root composer.json: '
+                . join(', ', $nonDeclaredDependencies)
+            );
+            $this->assertEmpty(
+                $nonexistentDependencies,
+                'Following dependencies declared in the root composer.json do not exist: '
+                . join(', ', $nonexistentDependencies)
+            );
+        }
     }
 }

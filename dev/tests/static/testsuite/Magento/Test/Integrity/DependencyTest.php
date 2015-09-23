@@ -426,10 +426,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
             $files,
             $this->_prepareFiles(
                 'php',
-                Files::init()->getClassFiles(
-                    Files::INCLUDE_APP_CODE
-                    | Files::INCLUDE_DATA_SET
-                ),
+                Files::init()->getClassFiles(Files::INCLUDE_APP_CODE | Files::INCLUDE_DATA_SET),
                 true
             )
         );
