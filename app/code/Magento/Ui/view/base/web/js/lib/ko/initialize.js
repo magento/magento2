@@ -17,6 +17,7 @@ define([
     './bind/mage-init',
     './bind/after-render',
     './bind/i18n',
+    './bind/collapsible',
     './extender/observable_array',
     './extender/bound-nodes',
     './extender/observable_array'

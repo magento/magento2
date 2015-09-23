@@ -16,7 +16,7 @@ module.exports = {
         options: {
             config: 'dev/tests/static/testsuite/Magento/Test/Js/_files/jscs/.jscsrc',
             reporterOutput: 'dev/tests/static/jscs-error-report.xml',
-            reporter: 'checkstyle'
+            reporter: 'junit'
         },
         src: ''
     }

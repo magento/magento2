@@ -8,6 +8,13 @@
 //  _____________________________________________
 
 //
+//  Variables
+//  ---------------------------------------------
+
+@data-grid-sticky-header__z-index: @page-actions__fixed__z-index;
+@data-grid-overlay__z-index: @data-grid-sticky-header__z-index + 1;
+
+//
 //  Components
 //  ---------------------------------------------
 
@@ -32,9 +39,9 @@
 .admin__data-grid-loading-mask {
     background: rgba(255, 255, 255, .5);
     bottom: 0;
-    left: 0;
+    left: -@page-content__padding-horizontal;
     position: absolute;
-    right: 0;
+    right: -@page-content__padding-horizontal;
     top: 0;
     z-index: @data-grid-overlay__z-index;
     .spinner {

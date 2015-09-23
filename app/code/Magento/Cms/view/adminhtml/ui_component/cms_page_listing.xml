@@ -43,6 +43,7 @@
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="template" xsi:type="string">ui/grid/toolbar</item>
+                <item name="stickyTmpl" xsi:type="string">ui/grid/sticky/toolbar</item>
             </item>
         </argument>
         <bookmark name="bookmarks">
@@ -692,4 +693,13 @@
             </argument>
         </column>
     </columns>
+    <container name="sticky">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/sticky/sticky</item>
+                <item name="toolbarProvider" xsi:type="string">cms_page_listing.cms_page_listing.listing_top</item>
+                <item name="listingProvider" xsi:type="string">cms_page_listing.cms_page_listing.cms_page_columns</item>
+            </item>
+        </argument>
+    </container>
 </listing>
