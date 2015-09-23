@@ -25,7 +25,7 @@ class AssertLanguageSelected extends AbstractConstraint
     {
         $indexPage->open();
         \PHPUnit_Framework_Assert::assertTrue(
-            $indexPage->getLinksBlock()->isLinkVisible($languageTemplate),
+            $indexPage->getFooterBlock()->isLinkVisible($languageTemplate),
             'Selected language not displays on frontend.'
         );
     }

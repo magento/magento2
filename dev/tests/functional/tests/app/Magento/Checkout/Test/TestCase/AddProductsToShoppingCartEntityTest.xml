@@ -45,7 +45,7 @@
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation5">
             <data name="productsData" xsi:type="string">configurableProduct::default</data>
-            <data name="cart/data/grand_total" xsi:type="string">360</data>
+            <data name="cart/data/grand_total" xsi:type="string">120</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertPriceInShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart" />
@@ -72,7 +72,7 @@
         </variation>
         <variation name="AddProductsToShoppingCartEntityTestVariation8">
             <data name="productsData" xsi:type="string">catalogProductSimple::with_two_custom_option, catalogProductVirtual::product_50_dollar, downloadableProduct::with_two_separately_links, groupedProduct::three_simple_products, configurableProduct::default, bundleProduct::bundle_dynamic_product, bundleProduct::bundle_dynamic_product</data>
-            <data name="cart/data/grand_total" xsi:type="string">3092.43</data>
+            <data name="cart/data/grand_total" xsi:type="string">2852.43</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertPriceInShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertProductQtyInShoppingCart" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertSubtotalInShoppingCart" />
