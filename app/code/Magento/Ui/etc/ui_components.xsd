@@ -7,7 +7,7 @@
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
     <!-- Include section -->
-    <xs:include schemaLocation="../../../../../lib/internal/Magento/Framework/Data/etc/argument/types.xsd"/>
+    <xs:include schemaLocation="urn:magento:framework:Data/etc/argument/types.xsd"/>
     <!-- Defined the types of components -->
     <xs:complexType name="layout" xml:base="ui_element">
         <xs:complexContent>
