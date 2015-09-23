@@ -92,8 +92,13 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
             /** update item */
             if (isset($itemId)) {
                 $item = $quote->getItemById($itemId);
-                $product = $this->productRepository->get($item->getSku());
-                $buyRequestData = $this->getBuyRequest($product->getTypeId(), $cartItem);
+                if (!$item) {
+                    throw new NoSuchEntityException(
+                        __('Cart %1 doesn\'t contain item  %2', $cartId, $itemId)
+                    );
+                }
+                $productType = $item->getProduct()->getTypeId();
+                $buyRequestData = $this->getBuyRequest($item->getProduct()->getTypeId(), $cartItem);
                 if (is_object($buyRequestData)) {
                     /** update item product options */
                     $buyRequestData->setData('qty', $qty);
@@ -112,6 +117,7 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
             } else {
                 /** add item to shopping cart */
                 $product = $this->productRepository->get($cartItem->getSku());
+                $productType = $product->getTypeId();
                 /** @var  \Magento\Quote\Model\Quote\Item|string $cartItem */
                 $cartItem = $quote->addProduct($product, $this->getBuyRequest($product->getTypeId(), $cartItem));
                 if (is_string($cartItem)) {
@@ -126,7 +132,7 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
             throw new CouldNotSaveException(__('Could not save quote'));
         }
         $itemId = $cartItem->getId();
-        return $this->addProductOptions($product->getTypeId(), $quote->getItemById($itemId));
+        return $this->addProductOptions($productType, $quote->getItemById($itemId));
     }
 
     /**
