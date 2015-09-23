@@ -82,7 +82,7 @@ define([
             }]
         },
         previosFocused: null,
-        keyeventHandlers: {
+        keyEventHandlers: {
 
             /**
              * Tab key press handler,
@@ -123,14 +123,13 @@ define([
         _create: function () {
             _.bindAll(
                 this,
-                'keyeventSwitcher'
+                'keyEventSwitcher'
             );
 
             this.options.transitionEvent = transitionEvent;
             this._createWrapper();
             this._renderModal();
             this._createButtons();
-            this._createFocusableElements();
             $(this.options.trigger).on('click', _.bind(this.toggleModal, this));
             this._on(this.modal.find(this.options.modalCloseBtn), {
                 'click': this.closeModal
@@ -139,20 +138,6 @@ define([
                 'openModal': this.openModal,
                 'closeModal': this.closeModal
             });
-        },
-
-        /**
-         * Create focusable scope in modal window.
-         * append to focusable scope element with start
-         * and element with end position
-         */
-        _createFocusableElements: function() {
-            var startFocusableTemplate = '<div data-role="focusable-start" tabindex="0"></div>',
-                endFocusableTemplate = '<div data-role="focusable-end" tabindex="0"></div>',
-                scopeFocusable = this.modal.find(this.options.focusableScope);
-
-            $(startFocusableTemplate).insertBefore(scopeFocusable);
-            $(endFocusableTemplate).insertAfter(scopeFocusable);
         },
 
         /**
@@ -187,11 +172,11 @@ define([
          * Listener key events.
          * Call handler function if it exists
          */
-        keyeventSwitcher: function (event) {
+        keyEventSwitcher: function (event) {
             var key = keyCodes[event.keyCode];
 
-            if (this.keyeventHandlers.hasOwnProperty(key)) {
-                this.keyeventHandlers[key].apply(this, arguments);
+            if (this.keyEventHandlers.hasOwnProperty(key)) {
+                this.keyEventHandlers[key].apply(this, arguments);
             }
         },
 
@@ -268,14 +253,14 @@ define([
          * Set keyup listener when modal is opened.
          */
         _setKeyListener: function () {
-            this.modal.bind('keyup', this.keyeventSwitcher);
+            this.modal.bind('keyup', this.keyEventSwitcher);
         },
 
         /**
          * Remove keyup listener when modal is closed.
          */
         _removeKeyListener: function () {
-            this.modal.unbind('keyup', this.keyeventSwitcher);
+            this.modal.unbind('keyup', this.keyEventSwitcher);
         },
 
         /**
@@ -289,7 +274,6 @@ define([
             this.options.isOpen = false;
             this.previosFocused = null;
             this.modal.one(this.options.transitionEvent, function () {
-                $(that.focussedElement).focus();
                 that._close();
             });
             this.modal.removeClass(this.options.modalVisibleClass);
@@ -307,6 +291,7 @@ define([
         _close: function () {
             var trigger = _.bind(this._trigger, this, 'closed', this.modal);
 
+            $(that.focussedElement).focus();
             this._destroyOverlay();
             this._unsetActive();
             _.defer(trigger, this);
