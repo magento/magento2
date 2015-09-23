@@ -22,7 +22,8 @@ $fieldClass .= ($note) ? ' with-note' : '';
 $fieldClass .= (!$element->getLabelHtml()) ? ' no-label' : '';
 
 $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
-    . $block->getUiId('form-field', $element->getId());
+    . $block->getUiId('form-field', $element->getId())
+    . ($element->getFieldExtraAttributes() ? ' ' . $element->getFieldExtraAttributes() : '');
 ?>
 
 <?php if (!$element->getNoDisplay()): ?>
