@@ -11,7 +11,7 @@
     </type>
     <type name="Magento\Developer\Model\TemplateEngine\Plugin\DebugHints">
         <arguments>
-            <argument name="debugHintsPath" xsi:type="string">dev/debug/template_hints_storefront</argument>
+            <argument name="debugHintsPath" xsi:type="string">dev/debug/template_hints_admin</argument>
         </arguments>
     </type>
 </config>
