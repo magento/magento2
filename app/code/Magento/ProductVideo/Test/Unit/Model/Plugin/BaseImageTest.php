@@ -62,5 +62,4 @@ class BaseImageTest extends \PHPUnit_Framework_TestCase
         );
         $this->pluginObject->afterCreateElementHtmlOutputBlock($this->baseImageMock, $this->templateMock);
     }
-
 }
