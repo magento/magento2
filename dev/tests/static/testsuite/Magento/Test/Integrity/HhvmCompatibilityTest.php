@@ -69,7 +69,7 @@ class HhvmCompatibilityTest extends \PHPUnit_Framework_TestCase
                 | Files::INCLUDE_TEMPLATES
             ),
             Files::init()->getPhtmlFiles(false, false),
-            Files::init()->getFiles([BP . '/dev/'], '*.php')
+            Files::init()->getFiles([Files::init()->getPathToSource() . '/dev/'], '*.php')
         );
     }
 

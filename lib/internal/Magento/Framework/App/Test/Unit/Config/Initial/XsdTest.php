@@ -15,7 +15,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
     protected $xsdSchema;
 
     /**
-     * @var \Magento\TestFramework\Utility\XsdValidator
+     * @var \Magento\Framework\TestFramework\Unit\Utility\XsdValidator
      */
     protected $xsdValidator;
 
