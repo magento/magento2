@@ -55,7 +55,7 @@ class FixtureModelTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $fileParserMock = $this->getMock('\Magento\Framework\XML\Parser', [], [], '', false);
+        $fileParserMock = $this->getMock('\Magento\Framework\XML\Parser', ['load', 'xmlToArray'], [], '', false);
         $fileParserMock->expects($this->once())
             ->method('load')
             ->willReturnSelf();
