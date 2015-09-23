@@ -14,7 +14,7 @@
 <script>
 require(['jquery', "mage/mage"], function(jQuery){
 
-    jQuery('#<?php echo $block->getRenameFormId() ?>').mage('form').mage('validation');
+    jQuery('#<?php /* @escapeNotVerified */ echo $block->getRenameFormId() ?>').mage('form').mage('validation');
 
 });
 </script>

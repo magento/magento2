@@ -69,25 +69,33 @@ class OrderAdapter implements OrderAdapterInterface
     /**
      * Returns billing address
      *
-     * @return AddressAdapterInterface
+     * @return AddressAdapterInterface|null
      */
     public function getBillingAddress()
     {
-        return $this->addressAdapterFactory->create(
-            ['address' => $this->order->getBillingAddress()]
-        );
+        if ($this->order->getBillingAddress()) {
+            return $this->addressAdapterFactory->create(
+                ['address' => $this->order->getBillingAddress()]
+            );
+        }
+
+        return null;
     }
 
     /**
      * Returns shipping address
      *
-     * @return AddressAdapterInterface
+     * @return AddressAdapterInterface|null
      */
     public function getShippingAddress()
     {
-        return $this->addressAdapterFactory->create(
-            ['address' => $this->order->getShippingAddress()]
-        );
+        if ($this->order->getShippingAddress()) {
+            return $this->addressAdapterFactory->create(
+                ['address' => $this->order->getShippingAddress()]
+            );
+        }
+
+        return null;
     }
 
     /**

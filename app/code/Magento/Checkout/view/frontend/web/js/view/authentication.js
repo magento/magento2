@@ -10,9 +10,10 @@ define(
         'Magento_Ui/js/form/form',
         'Magento_Customer/js/action/login',
         'Magento_Customer/js/model/customer',
-        'mage/validation'
+        'mage/validation',
+        'Magento_Checkout/js/model/authentication-messages'
     ],
-    function($, Component, loginAction, customer) {
+    function($, Component, loginAction, customer, validation, messageContainer) {
         'use strict';
         var checkoutConfig = window.checkoutConfig;
 
@@ -43,7 +44,7 @@ define(
                 if($(loginForm).validation()
                     && $(loginForm).validation('isValid')
                 ) {
-                    loginAction(loginData, checkoutConfig.checkoutUrl);
+                    loginAction(loginData, checkoutConfig.checkoutUrl, undefined, messageContainer);
                 }
             }
         });

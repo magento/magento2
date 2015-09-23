@@ -11,7 +11,7 @@
 ?>
 <div class="page-title title-buttons">
     <?php if ($block->getUsesVault()): ?>
-        <button type="button" title="<?php echo __('Add Credit Card') ?>" class="action subscribe primary" onclick="window.location='<?php echo $block->getAddUrl() ?>';"><span><span><?php echo __('Add Credit Card') ?></span></span></button>
+        <button type="button" title="<?php /* @escapeNotVerified */ echo __('Add Credit Card') ?>" class="action subscribe primary" onclick="window.location='<?php /* @escapeNotVerified */ echo $block->getAddUrl() ?>';"><span><span><?php /* @escapeNotVerified */ echo __('Add Credit Card') ?></span></span></button>
     <?php endif ?>
 </div>
 <?php echo $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
@@ -24,23 +24,23 @@
         <col width="1" />
         <thead>
             <tr>
-                <th><?php echo __('Type') ?></th>
-                <th><?php echo __('Card Number') ?></th>
-                <th><?php echo __('Is Default') ?></th>
-                <th colspan="2"><?php echo __('Actions') ?></th>
+                <th><?php /* @escapeNotVerified */ echo __('Type') ?></th>
+                <th><?php /* @escapeNotVerified */ echo __('Card Number') ?></th>
+                <th><?php /* @escapeNotVerified */ echo __('Is Default') ?></th>
+                <th colspan="2"><?php /* @escapeNotVerified */ echo __('Actions') ?></th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($_storedCards as $card):?>
                 <tr>
-                    <td><?php echo $card->cardType ?></td>
-                    <td><?php echo $card->maskedNumber ?></td>
-                    <td><?php echo ($card->default) ? __('Yes') : __('No') ?></td>
+                    <td><?php /* @escapeNotVerified */ echo $card->cardType ?></td>
+                    <td><?php /* @escapeNotVerified */ echo $card->maskedNumber ?></td>
+                    <td><?php /* @escapeNotVerified */ echo ($card->default) ? __('Yes') : __('No') ?></td>
                     <td>
-                        <a href="<?php echo $block->getEditUrl($card->token) ?>"><?php echo __('Edit')?></a>
+                        <a href="<?php /* @escapeNotVerified */ echo $block->getEditUrl($card->token) ?>"><?php /* @escapeNotVerified */ echo __('Edit')?></a>
                     </td>
                     <td>
-                        <a href="<?php echo $block->getDeleteUrl($card->token) ?>"><?php echo __('Delete')?></a>
+                        <a href="<?php /* @escapeNotVerified */ echo $block->getDeleteUrl($card->token) ?>"><?php /* @escapeNotVerified */ echo __('Delete')?></a>
                     </td>
                 </tr>
             <?php endforeach; ?>

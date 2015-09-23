@@ -22,11 +22,11 @@ if ($block->isOrPositionBefore()) {
 ?>
 <?php $shortcutHtmlId = $block->getShortcutHtmlId() ?>
 <div data-label="<?php echo $block->escapeHtml(__('or')); ?>"
-     class="paypal checkout <?php echo $labelPosition ?> paypal-logo <?php echo $shortcutHtmlId ?>">
-    <input type="image" data-action="checkout-form-submit" data-checkout-url="<?php echo $block->getCheckoutUrl() ?>"
-           src="<?php echo $block->getImageUrl() ?>"
-           alt="<?php echo __('Checkout with PayPal'); ?>"
-           title="<?php echo __('Checkout with PayPal'); ?>"/>
+     class="paypal checkout <?php /* @escapeNotVerified */ echo $labelPosition ?> paypal-logo <?php /* @escapeNotVerified */ echo $shortcutHtmlId ?>">
+    <input type="image" data-action="checkout-form-submit" data-checkout-url="<?php /* @escapeNotVerified */ echo $block->getCheckoutUrl() ?>"
+           src="<?php /* @escapeNotVerified */ echo $block->getImageUrl() ?>"
+           alt="<?php /* @escapeNotVerified */ echo __('Checkout with PayPal'); ?>"
+           title="<?php /* @escapeNotVerified */ echo __('Checkout with PayPal'); ?>"/>
     <?php if ($block->getConfirmationUrl() || $block->getIsInCatalogProduct()): ?>
         <?php
         $confirmationUrl = $block->getConfirmationUrl();
@@ -34,17 +34,17 @@ if ($block->isOrPositionBefore()) {
     endif; ?>
     <?php if ($block->getAdditionalLinkImage()): ?>
         <?php $linkImage = $block->getAdditionalLinkImage() ?>
-        <a href="<?php echo $linkImage['href']?>"><img src="<?php echo $linkImage['src']?>" /></a>
+        <a href="<?php /* @escapeNotVerified */ echo $linkImage['href']?>"><img src="<?php /* @escapeNotVerified */ echo $linkImage['src']?>" /></a>
     <?php endif; ?>
 <script type="text/x-magento-init">
     {
-        ".paypal-logo.<?php echo $shortcutHtmlId ?>": {
+        ".paypal-logo.<?php /* @escapeNotVerified */ echo $shortcutHtmlId ?>": {
             "paypalCheckout": {
-                "confirmMessage": "<?php echo $block->escapeJsQuote($block->getConfirmationMessage())?>",
-                "confirmUrl": "<?php echo !empty($confirmationUrl) ? $confirmationUrl : false ?>",
-                "isCatalogProduct": "<?php echo !empty($isInCatalogProduct) ? $isInCatalogProduct : false ?>",
+                "confirmMessage": "<?php /* @escapeNotVerified */ echo $block->escapeJsQuote($block->getConfirmationMessage())?>",
+                "confirmUrl": "<?php /* @escapeNotVerified */ echo !empty($confirmationUrl) ? $confirmationUrl : false ?>",
+                "isCatalogProduct": "<?php /* @escapeNotVerified */ echo !empty($isInCatalogProduct) ? $isInCatalogProduct : false ?>",
                 "paypalCheckoutSelector": "#pp-checkout-url",
-                "shortcutContainerClass": "<?php echo "." . $shortcutHtmlId ?>"
+                "shortcutContainerClass": "<?php /* @escapeNotVerified */ echo "." . $shortcutHtmlId ?>"
             }
         }
     }

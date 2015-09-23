@@ -7,30 +7,28 @@
 // @codingStandardsIgnoreFile
 
  /** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config */
-
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 ?>
-<div class="entry-edit form-inline" id="<?php echo $block->getId() ?>">
-    <div class="fieldset-wrapper admin__collapsible-block-wrapper" id="<?php echo $block->getId() ?>-wrapper" data-panel="product-variations">
+<div class="entry-edit form-inline" id="<?php /* @escapeNotVerified */ echo $block->getId() ?>">
+    <div class="fieldset-wrapper admin__collapsible-block-wrapper" id="<?php /* @escapeNotVerified */ echo $block->getId() ?>-wrapper" data-panel="product-variations">
         <div class="fieldset-wrapper-title">
-            <strong class="admin__collapsible-title" data-toggle="collapse" data-target="#<?php echo $block->getId() ?>-content">
-                <span><?= __('Configurations') ?></span>
+            <strong class="admin__collapsible-title" data-toggle="collapse" data-target="#<?php /* @escapeNotVerified */ echo $block->getId() ?>-content">
+                <span><?= /* @escapeNotVerified */  __('Configurations') ?></span>
             </strong>
         </div>
 
-        <div class="fieldset-wrapper-content collapse" data-collapsed="true" id="<?php echo $block->getId() ?>-content">
+        <div class="fieldset-wrapper-content collapse" data-collapsed="true" id="<?php /* @escapeNotVerified */ echo $block->getId() ?>-content">
             <div data-bind="scope: 'variation-steps-wizard'" class="product-create-configuration">
                 <div class="product-create-configuration-info">
                     <div class="note">
-                        <?= __('Configurable products allow customers to choose options (Ex: shirt color).
+                        <?= /* @escapeNotVerified */  __('Configurable products allow customers to choose options (Ex: shirt color).
                     You need to create a simple product for each configuration (Ex: a product for each color).');?>
                     </div>
                 </div>
                 <div class="product-create-configuration-actions">
                     <button data-action="open-steps-wizard" title="Create Product Configurations"
                             class="action-secondary" data-bind="click: open">
-                        <span data-role="button-label" data-edit-label="<?= __('Edit Configurations') ?>">
-                            <?= $block->getProduct()->getId()
+                        <span data-role="button-label" data-edit-label="<?= /* @escapeNotVerified */  __('Edit Configurations') ?>">
+                            <?= /* @escapeNotVerified */  $block->getProduct()->getId()
                                 && $block->getProduct()->getTypeId() === 'configurable'
                                 ? __('Edit Configurations')
                                 : __('Create Configurations')
@@ -38,13 +36,26 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
                         </span>
                     </button>
                 </div>
+                <div class="product-create-configuration-actions" data-bind="scope: 'configurableProductGrid'">
+                    <a class="action-menu-item" data-action="choose" data-bind="click: showManuallyGrid, visible: button">
+                        <?= /* @noEscape */ __('Add Products Manually');?>
+                    </a>
+                </div>
             </div>
             <fieldset class="fieldset">
                 <?php echo $block->getChildHtml('generator'); ?>
 
                 <!-- Select Associated Product popup -->
-                <div id="associated-products-container">
-                    <?php echo $block->getGridHtml(); ?>
+                <div data-grid-id="associated-products-container">
+                    <div class="admin__data-grid-outer-wrap" data-bind="scope: 'configurable_associated_product_listing.configurable_associated_product_listing'">
+                        <div data-role="spinner" data-component="configurable_associated_product_listing.configurable_associated_product_listing.product_columns" class="admin__data-grid-loading-mask">
+                            <div class="spinner">
+                                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                            </div>
+                        </div>
+                        <!-- ko template: getTemplate() --><!-- /ko -->
+
+                    </div>
                 </div>
 
                 <input type="hidden" name="affect_configurable_product_attributes" value="1" />
@@ -55,138 +66,76 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 <script>
 require([
     'jquery',
-    'mage/template',
-    'jquery/ui',
-    'jquery/jquery.tabs',
+    'Magento_ConfigurableProduct/js/advanced-pricing-handler',
+    'Magento_ConfigurableProduct/js/options/price-type-handler',
     'mage/mage',
-    'mage/backend/menu',
     'Magento_Ui/js/modal/modal',
     'mage/translate',
     'domReady!'
-], function($, mageTemplate){
+], function($, advancedPricingHandler, priceTypeHandler){
     'use strict';
 
-    var variationsContainer = $("#<?php echo $block->getId()?>"),
-        collapsableWrapper = $("#<?php echo $block->getId()?>-wrapper"),
-        collapsableArea = $('> .collapse', collapsableWrapper),
-        stockAvailabilityField = $('#quantity_and_stock_status'),
-        qtyField = $('#qty'),
-        inventoryQty = $('#inventory_qty'),
-        inventoryAvailabilityField = $('#inventory_stock_availability'),
-        currentProductTemplateControl = $('#product-template-suggest-container .action-dropdown > .action-toggle'),
-        attributesInput = $("input[name='attributes[]']", variationsContainer),
-        hasVariations = <?php echo($block->getProduct()->getTypeId() == Configurable::TYPE_CODE || $block->getRequest()->has('attributes')) ? 'true' : 'false' ?>,
-        noImageUrl = '<?= $block->getNoImageUrl() ?>',
-        isLocked = function (element) {
-            return element.is('[data-locked]');
-        },
-        setElementDisabled = function (element, state, triggerEvent) {
-            if (!isLocked(element)) {
-                element.prop('disabled', state);
+    advancedPricingHandler.init();
+    priceTypeHandler.init();
+
+    var blockId = '#<?= /* @noEscape */ $block->getId()?>',
+        hasVariations = <?= /* @noEscape */ $block->isConfigurableProduct() ? 'true' : 'false' ?>,
+        setElementDisabled = function ($element, state, triggerEvent) {
+            if (!$element.is('[data-locked]')) {
+                $element.prop('disabled', state);
+    
                 if (triggerEvent) {
-                    element.trigger('change')
+                    $element.trigger('change');
                 }
             }
+        },
+        configurableTypeHandler = function (isConfigurable) {
+            isConfigurable = hasVariations ? true : isConfigurable;
+            $('[data-form=edit-product]').trigger("change_configurable_type", isConfigurable);
         };
 
-    collapsableArea
+
+    $(blockId + '-wrapper > .collapse')
         .on('show', function() {
-            currentProductTemplateControl
+            $('#product-template-suggest-container .action-dropdown > .action-toggle')
                 .addClass('disabled')
                 .prop('disabled', true);
-
-            attributesInput.prop('disabled', false);
-
-            inventoryQty.prop('disabled', true);
-            inventoryAvailabilityField.removeProp('disabled');
-            setElementDisabled(qtyField, true, true);
-            setElementDisabled(stockAvailabilityField, false, false);
+            $(blockId + ' input[name="attributes[]"]').prop('disabled', false);
+            $('#inventory_qty').prop('disabled', true);
+            $('#inventory_stock_availability').removeProp('disabled');
+            setElementDisabled($('#qty'), true, true);
+            setElementDisabled($('#quantity_and_stock_status'), false, false);
+            configurableTypeHandler(true);
         })
         .on('hide', function() {
-            currentProductTemplateControl
+            $('#product-template-suggest-container .action-dropdown > .action-toggle')
                 .removeClass('disabled')
                 .removeProp('disabled');
-            inventoryQty.removeProp('disabled');
-            inventoryAvailabilityField.prop('disabled', true);
-            setElementDisabled(stockAvailabilityField, true, false);
-            setElementDisabled(qtyField, false, true);
+            $('#inventory_qty').removeProp('disabled');
+            $('#inventory_stock_availability').prop('disabled', true);
+            setElementDisabled($('#quantity_and_stock_status'), true, false);
+            setElementDisabled($('#qty'), false, true);
+            configurableTypeHandler(false);
         })
         .collapse(hasVariations ? 'show' : 'hide');
-
-    var $gridDialog = $('#associated-products-container').modal({
-        title: $.mage.__('Select Associated Product'),
-        type: 'popup'
-    });
-
-    $('[data-panel=product-variations]')
-        .on('disable', '[data-role=product-variations-matrix]', function() {
-            $(this).html('');
-        })
-        .on('click', '[data-action=choose]', function(event) {
-            event.preventDefault();
-            var grid = window.<?php echo $block->getGridJsObject() ?>;
-            var $button = $(this);
-            var attributeIds = [];
-            variationsContainer.find("input[name='attributes[]']").each(function () {
-                attributeIds.push($(this).val());
-            });
-
-            grid.reloadParams = {
-                filter: $button.data('attributes'),
-                'attributes[]': attributeIds
-            };
-            grid.reload(null, function() {
-                $gridDialog.trigger('openModal');
-            });
-
-            grid.rowClickCallback = function(grid, event) {
-                if (!this.rows || !this.rows.length) {
-                    return;
-                }
-                var $gridRow = $(event.target).closest('tr'),
-                    columnSelectorTemplate = '[data-column="%s"]';
-
-                if ($gridRow.find(columnSelectorTemplate.replace('%s', 'entity_id')).length) {
-                    var $matrixRow = $button.parents('[data-role=row]');
-
-                    $.each('name,sku,qty,weight,entity_id,price'.split(','), function () {
-                        var columnSelector = columnSelectorTemplate.replace('%s', this),
-                            target = $matrixRow.find(columnSelector),
-                            value = $.trim($gridRow.find(columnSelector).text());
-
-                        target[target.is('input') ? 'val' : 'text'](value);//.append(button);
-                    });
-
-                    var parentElement = $matrixRow.find('[data-column=image]'),
-                        uploaderControl = parentElement.find('[data-action=upload-image]', parentElement),
-                        imageElement = $matrixRow.find('[data-role=image]'),
-                        selectedImageSrc = $gridRow.find('[data-role=image-url]').val();
-
-                    if (imageElement.length) {
-                        selectedImageSrc = selectedImageSrc || noImageUrl;
-                        imageElement.attr('src', selectedImageSrc);
-                    } else {
-                        var tmpl = $('[data-role=product-variations-matrix]').find('[data-template-for=variation-image]').html();
-
-                        tmpl = mageTemplate(tmpl, {
-                            data: {
-                                url: selectedImageSrc
-                            }
-                        });
-
-                        $(tmpl).prependTo(uploaderControl);
-                    }
-                    $matrixRow.find('[name=image]')
-                        .attr('src', selectedImageSrc)
-                        .attr('data-locked', '1')
-                        .trigger('click')
-                        .prop({disabled: true});
-
-                    $matrixRow.find('[name$="[image]"]').remove();
-                    $matrixRow.find('[data-block="variation-images"]').remove();
-                }
-                $gridDialog.trigger('closeModal');
-            };
-        });
 });
+</script>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "configurableProductGrid": {
+                        "component": "Magento_ConfigurableProduct/js/variations/product-grid",
+                        "productsFilter": "configurable_associated_product_listing.configurable_associated_product_listing.listing_top.listing_filters",
+                        "productsProvider": "configurable_associated_product_listing.data_source",
+                        "productsMassAction": "configurable_associated_product_listing.configurable_associated_product_listing.product_columns.ids",
+                        "productsColumns": "configurable_associated_product_listing.configurable_associated_product_listing.product_columns",
+                        "productsGridUrl": "<?= /* @noEscape */ $block->getUrl('catalog/product/associated_grid', ['componentJson' => true])?>",
+                        "configurableVariations": "configurableVariations"
+                    }
+                }
+            }
+        }
+    }
 </script>
