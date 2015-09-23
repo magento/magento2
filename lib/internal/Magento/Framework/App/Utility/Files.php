@@ -1058,6 +1058,12 @@ class Files
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
             $subFiles[] = $themeDir . '/';
         }
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
+            $subFiles[] = $moduleDir . '/';
+        }
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libDir) {
+            $subFiles[] = $libDir . '/';
+        }
 
         $subFiles = array_merge($subFiles, $this->getPaths());
 
