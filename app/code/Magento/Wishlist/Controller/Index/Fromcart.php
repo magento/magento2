@@ -6,7 +6,7 @@
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Checkout\Helper\Cart as CartHelper;
-use Magento\Checkout\Model\Cart;
+use Magento\Checkout\Model\Cart as CheckoutCart;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action;
 use Magento\Framework\Escaper;
@@ -33,7 +33,7 @@ class Fromcart extends Action\Action implements IndexInterface
     protected $wishlistHelper;
 
     /**
-     * @var Cart
+     * @var CheckoutCart
      */
     protected $cart;
 
@@ -51,7 +51,7 @@ class Fromcart extends Action\Action implements IndexInterface
      * @param Action\Context $context
      * @param WishlistProviderInterface $wishlistProvider
      * @param WishlistHelper $wishlistHelper
-     * @param Cart $cart
+     * @param CheckoutCart $cart
      * @param CartHelper $cartHelper
      * @param Escaper $escaper
      */
@@ -59,7 +59,7 @@ class Fromcart extends Action\Action implements IndexInterface
         Action\Context $context,
         WishlistProviderInterface $wishlistProvider,
         WishlistHelper $wishlistHelper,
-        Cart $cart,
+        CheckoutCart $cart,
         CartHelper $cartHelper,
         Escaper $escaper
     ) {

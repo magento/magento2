@@ -6,7 +6,7 @@
 namespace Magento\Wishlist\Test\Unit\Controller\Index;
 
 use Magento\Checkout\Helper\Cart as CartHelper;
-use Magento\Checkout\Model\Cart;
+use Magento\Checkout\Model\Cart as CheckoutCart;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
@@ -44,7 +44,7 @@ class FromcartTest extends \PHPUnit_Framework_TestCase
     protected $wishlistHelper;
 
     /**
-     * @var Cart | \PHPUnit_Framework_MockObject_MockObject
+     * @var CheckoutCart | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $cart;
 
