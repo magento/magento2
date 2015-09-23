@@ -236,7 +236,7 @@ class Files
     /**
      * Return array with all php files related to modules
      *
-     * @param $flags
+     * @param int $flags
      * @return array
      */
     private function getModuleFiles($flags)
@@ -254,7 +254,7 @@ class Files
     /**
      * Return array with all test files
      *
-     * @param $flags
+     * @param int $flags
      * @return array
      */
     private function getTestFiles($flags)
