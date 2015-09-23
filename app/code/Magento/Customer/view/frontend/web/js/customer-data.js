@@ -83,18 +83,15 @@ define([
             this.data[sectionName](sectionData);
         },
         update: function (sections) {
-            var maxSectionId = 0, sectionId = 0;
+            var sectionId = 0;
             var sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
             _.each(sections, function (sectionData, sectionName) {
                 sectionId = sectionData['data_id'];
-                maxSectionId = sectionId > maxSectionId ? sectionId : maxSectionId;
                 sectionDataIds[sectionName] = sectionId;
                 storage.set(sectionName, sectionData);
                 storageInvalidation.remove(sectionName);
                 buffer.notify(sectionName, sectionData);
             });
-            storage.set('max_section_id', maxSectionId);
-            sectionDataIds['max_section_id'] = maxSectionId;
             $.cookieStorage.set('section_data_ids', sectionDataIds);
         },
         remove: function (sections) {
@@ -122,15 +119,24 @@ define([
         },
         needReload: function () {
             var cookieSections = $.cookieStorage.get('section_data_ids');
-            if (!storage.get('max_section_id') || typeof cookieSections != 'object') {
+            if (typeof cookieSections != 'object') {
                 return true;
             }
-            return storage.get('max_section_id') < cookieSections['max_section_id'];
+            var storageVal, name;
+            for (name in cookieSections) {
+                if (undefined !== name) {
+                    storageVal = storage.get(name);
+                    if (typeof storageVal == 'object' && cookieSections[name] > storageVal['data_id']) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         },
         getExpiredKeys: function() {
             var cookieSections = $.cookieStorage.get('section_data_ids');
 
-            if (!storage.get('max_section_id') || typeof cookieSections != 'object') {
+            if (typeof cookieSections != 'object') {
                 return [];
             }
             var storageVal, name, expiredKeys = [];
