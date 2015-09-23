@@ -904,11 +904,11 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
             $ignored[] = realpath($appPath . '/' . $file);
         }
         $files = Files::init()->getClassFiles(
-            true,
-            true,
-            true,
-            true,
-            false
+            Files::INCLUDE_APP_CODE
+            | Files::INCLUDE_TESTS
+            | Files::INCLUDE_DEV_TOOLS
+            | Files::INCLUDE_LIBS
+            | Files::INCLUDE_DATA_SET
         );
         $files = array_map('realpath', $files);
         $files = array_diff($files, $ignored);
