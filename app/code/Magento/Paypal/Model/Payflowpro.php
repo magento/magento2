@@ -595,8 +595,8 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
             $request->setCurrency($order->getBaseCurrencyCode());
 
             $orderIncrementId = $order->getIncrementId();
-
             $request->setCurrency($order->getBaseCurrencyCode())
+                ->setCustref($orderIncrementId)
                 ->setInvnum($orderIncrementId)
                 ->setPonum($order->getId())
                 ->setComment1($orderIncrementId);
@@ -828,10 +828,6 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc implements GatewayInte
      */
     public function fillCustomerContacts(DataObject $order, DataObject $request)
     {
-        $customerId = $order->getCustomerId();
-        if ($customerId) {
-            $request->setCustref($customerId);
-        }
         $billing = $order->getBillingAddress();
         if (!empty($billing)) {
             $request = $this->setBilling($request, $billing);
