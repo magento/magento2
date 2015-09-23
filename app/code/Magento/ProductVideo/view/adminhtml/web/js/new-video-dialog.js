@@ -157,7 +157,7 @@ define([
 
         _videoInformationBtnSelector: '[name="new_video_get"]',
 
-        _editVideoBtnSelector : '.image.item',
+        _editVideoBtnSelector : '#media_gallery_content .image',
 
         _deleteGalleryVideoSelector : '[data-role=delete-button]',
 
@@ -509,7 +509,6 @@ define([
             uploader.on('change', this._onImageInputChange.bind(this));
             uploader.attr('accept', this._imageTypes.join(','));
 
-            this.toggleButtons();
             this.element.modal({
                 type: 'slide',
                 modalClass: 'mage-new-video-dialog form-inline',
@@ -559,6 +558,7 @@ define([
                     widget.createVideoItemIcons();
                 }
             });
+            this.toggleButtons();
         },
 
         /**
@@ -852,13 +852,13 @@ define([
                 $('.video-edit').hide();
                 $('.mage-new-video-dialog').createVideoPlayer({reset : true}).createVideoPlayer('reset').updateInputFields({reset : true}).updateInputFields('reset');
             });
-            $(document).on('click', '.item.image', function() {
+            $(document).on('click', '#media_gallery_content .image', function() {
                 $('.video-create-button').hide();
                 $('.video-delete-button').show();
                 $('.video-edit').show();
                 $('.mage-new-video-dialog').createVideoPlayer({reset : true}).createVideoPlayer('reset');
             });
-            $(document).on('click', '.item.image:not(.removed)', function() {
+            $(document).on('click', '#media_gallery_content .image:not(.removed)', function() {
                 var formFields = $(self._videoFormSelector).find('.edited-data');
                 var container = $(this);
 
