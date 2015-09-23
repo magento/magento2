@@ -6,6 +6,8 @@
 
 namespace Magento\Webapi\Test\Unit\Controller;
 
+use Magento\Store\Model\Store;
+
 class PathProcessorTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Store\Model\StoreManagerInterface */
@@ -15,50 +17,44 @@ class PathProcessorTest extends \PHPUnit_Framework_TestCase
     private $model;
 
     /** @var string */
-    private $storeCode = 'myStoreCode';
+    private $arbitraryStoreCode = 'myStoreCode';
+
+    private $endpointPath = '/V1/path/of/endpoint';
 
     public function setUp()
     {
         $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManagerMock->
-        expects($this->once())
+        $this->storeManagerMock->expects($this->once())
             ->method('getStores')
-            ->willReturn([$this->storeCode => 'store object']);
+            ->willReturn([$this->arbitraryStoreCode => 'store object']);
         $this->model = new \Magento\Webapi\Controller\PathProcessor($this->storeManagerMock);
     }
 
-    public function testAllStoreCode()
+    /**
+     * @dataProvider processPathDataProvider
+     *
+     * @param $storeCodeInPath
+     * @param $storeCodeSet
+     */
+    public function testAllStoreCode($storeCodeInPath, $storeCodeSet)
     {
-        $endpointPath = '/V1/path/of/endpoint';
-        $inPath = 'rest/all' . $endpointPath;
+        $storeCodeInPath = !$storeCodeInPath ?: '/' . $storeCodeInPath; // add leading slash if store code not empty
+        $inPath = 'rest' . $storeCodeInPath . $this->endpointPath;
         $this->storeManagerMock->expects($this->once())
             ->method('setCurrentStore')
-            ->with(\Magento\Store\Model\Store::ADMIN_CODE);
+            ->with($storeCodeSet);
         $result = $this->model->process($inPath);
-        $this->assertSame($endpointPath, $result);
+        $this->assertSame($this->endpointPath, $result);
     }
 
-    public function testDefaultStoreCode()
+    public function processPathDataProvider()
     {
-        $endpointPath = '/V1/path/of/endpoint';
-        $inPath = 'rest' . $endpointPath;
-        $this->storeManagerMock->expects($this->once())
-            ->method('setCurrentStore')
-            ->with(\Magento\Store\Model\Store::DEFAULT_CODE);
-        $result = $this->model->process($inPath);
-        $this->assertSame($endpointPath, $result);
-    }
-
-    public function testArbitraryStoreCode()
-    {
-        $endpointPath = '/V1/path/of/endpoint';
-        $inPath = 'rest/' . $this->storeCode . $endpointPath;
-        $this->storeManagerMock->expects($this->once())
-            ->method('setCurrentStore')
-            ->with($this->storeCode);
-        $result = $this->model->process($inPath);
-        $this->assertSame($endpointPath, $result);
+        return [
+            'All store code' => ['all', Store::ADMIN_CODE],
+            'Default store code' => ['', Store::DEFAULT_CODE],
+            'Arbitrary store code' => [$this->arbitraryStoreCode, $this->arbitraryStoreCode],
+        ];
     }
 }
