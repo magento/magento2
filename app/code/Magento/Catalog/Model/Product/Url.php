@@ -72,7 +72,7 @@ class Url extends \Magento\Framework\DataObject
      *
      * @return \Magento\Framework\UrlInterface
      */
-    public function getUrlInstance()
+    private function getUrlInstance()
     {
         return $this->urlFactory->create();
     }
@@ -137,12 +137,11 @@ class Url extends \Magento\Framework\DataObject
         $routeParams = $params;
 
         $storeId = $product->getStoreId();
-        if (isset($params['_ignore_category'])) {
-            unset($params['_ignore_category']);
-            $categoryId = null;
-        } else {
-            $categoryId = $product->getCategoryId() &&
-                !$product->getDoNotUseCategoryId() ? $product->getCategoryId() : null;
+
+        $categoryId = null;
+
+        if (!isset($params['_ignore_category']) && $product->getCategoryId() && !$product->getDoNotUseCategoryId()) {
+            $categoryId = $product->getCategoryId();
         }
 
         if ($product->hasUrlDataObject()) {
