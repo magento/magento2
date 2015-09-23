@@ -47,7 +47,7 @@ class ConsumerFactory
      *     <arguments>
      *         <argument name="consumers" xsi:type="array">
      *             <item name="rabbitmq" xsi:type="array">
-     *                 <item name="type" xsi:type="string">Magento\Amqp\Model\Consumer</item>
+     *                 <item name="type" xsi:type="string">Magento\Framework\Amqp\Consumer</item>
      *                 <item name="connectionName" xsi:type="string">rabbitmq</item>
      *             </item>
      *         </argument>
@@ -82,7 +82,10 @@ class ConsumerFactory
     public function get($consumerName)
     {
         $consumerConfig = $this->getConsumerConfigForName($consumerName);
-        $consumer = $this->createConsumer($consumerConfig[QueueConfigConverter::CONSUMER_CONNECTION], $consumerConfig['executor']);
+        $consumer = $this->createConsumer(
+            $consumerConfig[QueueConfigConverter::CONSUMER_CONNECTION],
+            isset($consumerConfig['executor']) ? $consumerConfig['executor'] : null
+        );
 
         $consumerConfigObject = $this->createConsumerConfiguration($consumerConfig);
         $consumer->configure($consumerConfigObject);
@@ -106,6 +109,7 @@ class ConsumerFactory
      * Return an instance of a consumer for a connection name.
      *
      * @param string $connectionName
+     * @param string|null $executorClass
      * @return ConsumerInterface
      * @throws LocalizedException
      */

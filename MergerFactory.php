@@ -19,6 +19,11 @@ class MergerFactory
      */
     private $mergers;
 
+    /**
+     * MergerFactory constructor.
+     * @param ObjectManagerInterface $objectManager
+     * @param $mergers
+     */
     public function __construct(ObjectManagerInterface $objectManager, $mergers)
     {
         $this->objectManager = $objectManager;
@@ -40,8 +45,10 @@ class MergerFactory
 
         if (!$merger instanceof MergerInterface) {
             $mergerInterfaceName = '\Magento\Framework\Amqp\MergerInterface';
-            throw new \LogicException("Merger '{$mergerClassName}' for consumer name '{$consumerName}' " .
-                "does not implement interface '{$mergerInterfaceName}'");
+            throw new \LogicException(
+                "Merger '{$mergerClassName}' for consumer name '{$consumerName}' " .
+                "does not implement interface '{$mergerInterfaceName}'"
+            );
         }
 
         return $merger;

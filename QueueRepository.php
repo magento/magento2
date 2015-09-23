@@ -54,8 +54,10 @@ class QueueRepository
 
             if (!$queue instanceof QueueInterface) {
                 $queueInterface = '\Magento\Framework\Amqp\QueueInterface';
-                throw new \LogicException("Queue '{$queueClassName}' for connection name '{$connectionName}' " .
-                    "does not implement interface '{$queueInterface}'");
+                throw new \LogicException(
+                    "Queue '{$queueClassName}' for connection name '{$connectionName}' " .
+                    "does not implement interface '{$queueInterface}'"
+                );
             }
 
             $this->queueInstances[$queueName] = $queue;

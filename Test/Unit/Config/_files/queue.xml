@@ -17,7 +17,7 @@
     <topic name="customer.deleted" schema="Magento\Customer\Api\Data\CustomerInterface" publisher="test-publisher-2"/>
     <topic name="cart.created" schema="Magento\Quote\Api\Data\CartInterface" publisher="test-publisher-3"/>
     <topic name="cart.created.one" schema="Magento\Quote\Api\Data\CartInterface" publisher="test-publisher-3"/>
-    <consumer name="customerCreatedListener" queue="test-queue-1" connection="rabbitmq" class="Data\Type" method="processMessage"/>
+    <consumer name="customerCreatedListener" queue="test-queue-1" connection="rabbitmq" class="Data\Type" method="processMessage" executor="Test\Executor"/>
     <consumer name="customerDeletedListener" queue="test-queue-2" connection="db" class="Other\Type" method="processMessage2" max_messages="98765"/>
     <consumer name="cartCreatedListener" queue="test-queue-3" connection="rabbitmq" class="Other\Type" method="processMessage3"/>
     <bind queue="test-queue-1" exchange="magento"         topic="customer.created" />

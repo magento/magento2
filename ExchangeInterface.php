@@ -5,6 +5,9 @@
  */
 namespace Magento\Framework\Amqp;
 
+/**
+ * Interface message Exchange
+ */
 interface ExchangeInterface
 {
     /**
@@ -12,6 +15,7 @@ interface ExchangeInterface
      *
      * @param string $topic
      * @param EnvelopeInterface $envelope
+     * @return void
      */
     public function enqueue($topic, EnvelopeInterface $envelope);
 }

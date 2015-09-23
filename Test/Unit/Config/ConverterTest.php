@@ -205,7 +205,8 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                     'connection' => 'rabbitmq',
                     'class' => 'Data\Type',
                     'method' => 'processMessage',
-                    'max_messages' => null
+                    'max_messages' => null,
+                    'executor' => 'Test\Executor',
                 ],
                 'customerDeletedListener' => [
                     'name' => 'customerDeletedListener',
@@ -213,7 +214,8 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                     'connection' => 'db',
                     'class' => 'Other\Type',
                     'method' => 'processMessage2',
-                    'max_messages' => '98765'
+                    'max_messages' => '98765',
+                    'executor' => null,
                 ],
                 'cartCreatedListener' => [
                     'name' => 'cartCreatedListener',
@@ -221,7 +223,8 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                     'connection' => 'rabbitmq',
                     'class' => 'Other\Type',
                     'method' => 'processMessage3',
-                    'max_messages' => null
+                    'max_messages' => null,
+                    'executor' => null,
                 ],
             ],
             'binds' => [

@@ -42,8 +42,10 @@ class ExchangeRepository
 
         if (!$exchange instanceof ExchangeInterface) {
             $exchangeInterface = '\Magento\Framework\Amqp\ExchangeInterface';
-            throw new \LogicException("Queue '{$exchangeClassName}' for connection name '{$connectionName}' " .
-                "does not implement interface '{$exchangeInterface}'");
+            throw new \LogicException(
+                "Queue '{$exchangeClassName}' for connection name '{$connectionName}' " .
+                "does not implement interface '{$exchangeInterface}'"
+            );
         }
 
         return $exchange;
