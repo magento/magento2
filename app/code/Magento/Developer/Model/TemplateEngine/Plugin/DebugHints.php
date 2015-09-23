@@ -34,6 +34,11 @@ class DebugHints
     private $scopeConfig;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @var \Magento\Developer\Helper\Data
      */
     private $devHelper;
@@ -41,15 +46,18 @@ class DebugHints
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Developer\Helper\Data $devHelper
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Developer\Helper\Data $devHelper
     ) {
         $this->objectManager = $objectManager;
         $this->scopeConfig = $scopeConfig;
+        $this->storeManager = $storeManager;
         $this->devHelper = $devHelper;
     }
 
@@ -66,11 +74,13 @@ class DebugHints
         \Magento\Framework\View\TemplateEngineFactory $subject,
         \Magento\Framework\View\TemplateEngineInterface $invocationResult
     ) {
-        if ($this->scopeConfig->getValue(self::XML_PATH_DEBUG_TEMPLATE_HINTS, ScopeInterface::SCOPE_STORE) &&
-            $this->devHelper->isDevAllowed()) {
+        $storeCode = $this->storeManager->getStore()->getCode();
+        if ($this->scopeConfig->getValue(self::XML_PATH_DEBUG_TEMPLATE_HINTS, ScopeInterface::SCOPE_STORE, $storeCode)
+            && $this->devHelper->isDevAllowed()) {
             $showBlockHints = $this->scopeConfig->getValue(
                 self::XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS,
-                ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE,
+                $storeCode
             );
             return $this->objectManager->create(
                 'Magento\Developer\Model\TemplateEngine\Decorator\DebugHints',
