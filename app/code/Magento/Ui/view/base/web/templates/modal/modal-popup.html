@@ -11,6 +11,7 @@
            <% if(data.innerScroll){ %><%= data.innerScrollClass %><% } %>"
     data-role="modal"
     data-type="<%= data.type %>">
+    <div data-role="focusable-start" tabindex="0"></div>
     <div class="modal-inner-wrap"
          data-role="focusable-scope"
          tabindex="0">
@@ -40,4 +41,5 @@
         </footer>
         <% } %>
     </div>
+    <div data-role="focusable-end" tabindex="0"></div>
 </aside>
