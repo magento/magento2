@@ -64,7 +64,7 @@ define([
                     _.each(events, function (elementEvent, name) {
                         var predicate = elementEvent.predicate,
                             result = true;
-                        if ($(this).val() === elementEvent.value) {
+                        if (solution.getValue($(this)) === elementEvent.value) {
                             if (predicate.name) {
                                 require([
                                     'Magento_Paypal/js/predicate/' + predicate.name
@@ -84,6 +84,13 @@ define([
                     });
             }, this);
             return this;
+        },
+
+        getValue: function ($element) {
+            if ($element.is(':checkbox')) {
+                return $element.prop('checked') ? '1' : '0';
+            }
+            return $element.val();
         },
         /**
          * Adding event listeners
