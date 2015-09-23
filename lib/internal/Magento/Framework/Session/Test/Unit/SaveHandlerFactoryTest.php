@@ -59,9 +59,8 @@ class SaveHandlerFactoryTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $objectManager->expects($this->once())
             ->method('create')
-            ->with($this->equalTo('Magento\Framework\Session\SaveHandler\Native'), $this->equalTo([]))
             ->willReturn($invalidSaveHandler);
         $model = new SaveHandlerFactory($objectManager, []);
-        $result = $model->create('files');
+        $model->create('files');
     }
 }

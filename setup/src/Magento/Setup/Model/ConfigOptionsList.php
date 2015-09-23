@@ -24,14 +24,19 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     /**
      * Generate config data for individual segments
      *
-     * @var ConfigGenerator
+     * @var  ConfigGenerator
      */
     private $configGenerator;
 
-    /**
-     * @var DbValidator
-     */
+    /** @var  DbValidator */
     private $dbValidator;
+
+    /** @var  array */
+    private $validSaveHandlers = [
+        ConfigOptionsListConstants::SESSION_SAVE_FILES,
+        ConfigOptionsListConstants::SESSION_SAVE_DB,
+        ConfigOptionsListConstants::SESSION_SAVE_REDIS
+    ];
 
     /**
      * Constructor
@@ -61,7 +66,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
             new SelectConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE,
                 SelectConfigOption::FRONTEND_WIZARD_SELECT,
-                [ConfigOptionsListConstants::SESSION_SAVE_FILES, ConfigOptionsListConstants::SESSION_SAVE_DB],
+                $this->validSaveHandlers,
                 ConfigOptionsListConstants::CONFIG_PATH_SESSION_SAVE,
                 'Session save handler',
                 ini_get('session.save_handler') ?: ConfigOptionsListConstants::SESSION_SAVE_FILES
@@ -260,17 +265,10 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     private function validateSessionSave(array $options)
     {
         $errors = [];
-
-        $validSaveHandlers = [
-            ConfigOptionsListConstants::SESSION_SAVE_FILES,
-            ConfigOptionsListConstants::SESSION_SAVE_DB,
-            ConfigOptionsListConstants::SESSION_SAVE_REDIS
-        ];
-        if (
-            isset($options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE])
-            && !in_array($options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE], $validSaveHandlers)
+        if (isset($options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE])
+            && !in_array($options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE], $this->validSaveHandlers)
         ) {
-            $errors[] = 'Invalid session handler.';
+            $errors[] = "Invalid session handler '{$options[ConfigOptionsListConstants::INPUT_KEY_SESSION_SAVE]}'";
         }
 
         return $errors;
@@ -288,7 +286,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
 
         if (isset($options[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY])
             && !$options[ConfigOptionsListConstants::INPUT_KEY_ENCRYPTION_KEY]) {
-            $errors[] = 'Invalid encryption key.';
+            $errors[] = 'Invalid encryption key';
         }
 
         return $errors;
