@@ -81,15 +81,20 @@ class CartItemProcessor implements CartItemProcessorInterface
             return $cartItem;
         }
         $productOptions = [];
-        $savedBundleOptions = $cartItem->getBuyRequest()->getBundleOption();
-        $savedBundleOptionsQty = $cartItem->getBuyRequest()->getBundleOptionQty();
-        foreach ($savedBundleOptions as $optionId => $optionSelections) {
+        $bundleOptions = $cartItem->getBuyRequest()->getBundleOption();
+        $bundleOptionsQty = $cartItem->getBuyRequest()->getBundleOptionQty();
+        foreach ($bundleOptions as $optionId => $optionSelections) {
+            if (empty($optionSelections)) {
+                continue;
+            }
+            $optionSelections = is_array($optionSelections) ? $optionSelections : [$optionSelections];
+            $optionQty = isset($bundleOptionsQty[$optionId]) ? $bundleOptionsQty[$optionId] : 1;
+
             /** @var \Magento\Bundle\Api\Data\BundleOptionInterface $productOption */
             $productOption = $this->bundleOptionFactory->create();
             $productOption->setOptionId($optionId);
             $productOption->setOptionSelections($optionSelections);
-            $productOption->setOptionQty($savedBundleOptionsQty[$optionId]);
-
+            $productOption->setOptionQty($optionQty);
             $productOptions[] = $productOption;
         }
 

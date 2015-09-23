@@ -30,4 +30,26 @@ class DownloadableOption extends AbstractExtensibleModel implements Downloadable
     {
         return $this->setData(self::DOWNLOADABLE_LINKS, $downloadableLinks);
     }
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Downloadable\Api\Data\DownloadableOptionExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Downloadable\Api\Data\DownloadableOptionExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Downloadable\Api\Data\DownloadableOptionExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
 }
