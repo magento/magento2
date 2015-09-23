@@ -6,8 +6,7 @@
 
 namespace Magento\Framework\View\Test\Unit\Asset;
 
-use Magento\Framework\View\Asset\File;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use \Magento\Framework\View\Asset\File;
 
 class FileTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,17 +30,11 @@ class FileTest extends \PHPUnit_Framework_TestCase
      */
     private $object;
 
-    /** @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
-    private $filesystem;
-
     public function setUp()
     {
         $this->source = $this->getMock('Magento\Framework\View\Asset\Source', [], [], '', false);
         $this->context = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\ContextInterface');
         $this->minificationMock = $this->getMockBuilder('Magento\Framework\View\Asset\Minification')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -56,8 +49,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
             'dir/file.css',
             'Magento_Module',
             'css',
-            $this->minificationMock,
-            $this->filesystem
+            $this->minificationMock
         );
     }
 
@@ -71,7 +63,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     public function testGetContentType()
     {
         $this->assertEquals('css', $this->object->getContentType());
-        $object = new File($this->source, $this->context, '', '', 'type', $this->minificationMock, $this->filesystem);
+        $object = new File($this->source, $this->context, '', '', 'type', $this->minificationMock);
         $this->assertEquals('type', $object->getContentType());
     }
 
@@ -84,57 +76,8 @@ class FileTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPath($contextPath, $module, $filePath, $expected)
     {
-        $this->context->expects($this->atLeastOnce())
-            ->method('getPath')
-            ->willReturn($contextPath);
-        $object = new File(
-            $this->source,
-            $this->context,
-            $filePath,
-            $module,
-            '',
-            $this->minificationMock,
-            $this->filesystem
-        );
-        $this->assertEquals($expected, $object->getPath());
-    }
-
-    public function testGetPathWithMinification()
-    {
-        $expected = 'path/to/directory/Module/path/to/file.min.js';
-        /**
-         * @var \Magento\Framework\View\Asset\Minification|\PHPUnit_Framework_MockObject_MockObject $minificationMock
-         */
-        $minificationMock = $this->getMockBuilder('Magento\Framework\View\Asset\Minification')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $minificationMock->expects($this->once())
-            ->method('addMinifiedSign')
-            ->with('path/to/directory/Module/path/to/file')
-            ->willReturn($expected);
-        $directoryRead = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->context->expects($this->atLeastOnce())
-            ->method('getPath')
-            ->willReturn('/path/to/directory');
-        $this->filesystem->expects($this->once())
-            ->method('getDirectoryRead')
-            ->with(DirectoryList::STATIC_VIEW)
-            ->willReturn($directoryRead);
-        $directoryRead->expects($this->once())
-            ->method('isExist')
-            ->with($expected)
-            ->willReturn(true);
-        $object = new File(
-            $this->source,
-            $this->context,
-            'path/to/file',
-            'Module',
-            '',
-            $minificationMock,
-            $this->filesystem
-        );
+        $this->context->expects($this->once())->method('getPath')->will($this->returnValue($contextPath));
+        $object = new File($this->source, $this->context, $filePath, $module, '', $this->minificationMock);
         $this->assertEquals($expected, $object->getPath());
     }
 
