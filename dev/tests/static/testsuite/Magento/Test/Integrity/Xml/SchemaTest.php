@@ -55,21 +55,34 @@ class SchemaTest extends \PHPUnit_Framework_TestCase
 
     public function getSchemas()
     {
-        $codeSchemas = $this->_getFiles(BP . '/app/code/Magento', '*.xsd');
-        $libSchemas = $this->_getFiles(BP . '/lib/Magento', '*.xsd');
+        $componentRegistrar = new ComponentRegistrar();
+        $codeSchemas = [];
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $modulePath) {
+            $codeSchemas = array_merge($codeSchemas, $this->_getFiles($modulePath, '*.xsd'));
+        }
+        $libSchemas = [];
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryPath) {
+            $libSchemas = array_merge($libSchemas, $this->_getFiles($libraryPath, '*.xsd'));
+        }
         return $this->_dataSet(array_merge($codeSchemas, $libSchemas));
     }
 
     public function getXmlFiles()
     {
         $componentRegistrar = new ComponentRegistrar();
-        $codeXml = $this->_getFiles(BP . '/app', '*.xml', '/.\/Test\/Unit\/./');
+        $codeXml = [];
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $modulePath) {
+            $codeXml = array_merge($codeXml, $this->_getFiles($modulePath, '*.xml', '/.\/Test\/Unit\/./'));
+        }
         $this->_filterSpecialCases($codeXml);
         $designXml = [];
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themePath) {
             $designXml = array_merge($designXml, $this->_getFiles($themePath, '*.xml'));
         }
-        $libXml = $this->_getFiles(BP . '/lib/Magento', '*.xml');
+        $libXml = [];
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryPath) {
+            $libXml = array_merge($libXml, $this->_getFiles($libraryPath, '*.xml', '/.\/Test\/./'));
+        }
         return $this->_dataSet(array_merge($codeXml, $designXml, $libXml));
     }
 
