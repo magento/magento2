@@ -1164,7 +1164,7 @@
                         <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                         <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\Payment</frontend_model>
                         <requires>
-                            <group id="pphs_required_settings"/>
+                            <group id="pphs_required_settings_pphs"/>
                         </requires>
                         <frontend_class>paypal-enabler paypal-ec-separate</frontend_class>
                     </field>
@@ -1967,6 +1967,9 @@
                             <label>Website Payments Pro Hosted Solution and Express Checkout</label>
                         </group>
                         <field id="pphs_enable">
+                            <requires>
+                                <group id="pphs_required_settings_pphs"/>
+                            </requires>
                             <frontend_class>paypal-enabler</frontend_class>
                         </field>
                     </group>

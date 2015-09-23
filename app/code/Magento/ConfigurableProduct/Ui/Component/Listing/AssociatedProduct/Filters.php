@@ -7,28 +7,26 @@ namespace Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct;
 
 class Filters extends \Magento\Ui\Component\Filters
 {
-    /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\CollectionFactory
-     */
-    protected $attributeCollectionFactory;
+    /** @var \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface */
+    protected $attributeRepository;
 
     /**
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
      * @param \Magento\Catalog\Ui\Component\FilterFactory $filterFactory
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\CollectionFactory $attributeCollectionFactory
+     * @param \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface $attributeRepository
      * @param array $components
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\UiComponent\ContextInterface $context,
         \Magento\Catalog\Ui\Component\FilterFactory $filterFactory,
-        \Magento\Eav\Model\Resource\Entity\Attribute\CollectionFactory $attributeCollectionFactory,
+        \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface $attributeRepository,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $components, $data);
         $this->filterFactory = $filterFactory;
-        $this->attributeCollectionFactory = $attributeCollectionFactory;
+        $this->attributeRepository = $attributeRepository;
     }
 
     /**
@@ -36,24 +34,14 @@ class Filters extends \Magento\Ui\Component\Filters
      */
     public function prepare()
     {
-        $attributeIds = $this->context->getRequestParam('attribute_ids');
+        $attributeIds = $this->getContext()->getRequestParam('attributes_codes');
         if ($attributeIds) {
-            foreach ($this->getAttributes($attributeIds) as $attribute) {
-                $filter = $this->filterFactory->create($attribute, $this->getContext());
+            foreach ($this->attributeRepository->getList() as $attribute) {
+                $filter = $this->filterFactory->create($attribute, $this->getContext(), ['component' => '']);
                 $filter->prepare();
                 $this->addComponent($attribute->getAttributeCode(), $filter);
             }
         }
         parent::prepare();
-    }
-
-    /**
-     * @param array $attributeIds
-     * @return mixed
-     */
-    protected function getAttributes($attributeIds)
-    {
-        $attributeCollection = $this->attributeCollectionFactory->create();
-        return $attributeCollection->addFieldToFilter('attribute_code', ['in' => $attributeIds]);
     }
 }

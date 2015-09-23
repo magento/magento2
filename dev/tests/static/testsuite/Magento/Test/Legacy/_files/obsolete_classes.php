@@ -3850,4 +3850,9 @@ return [
     ['Magento\Quote\Model\Quote\Address\Total\Discount'],
     ['Magento\Quote\Model\Quote\Address\Total\Custbalance'],
     ['Magento\Quote\Model\Quote\Address\Total\Tax'],
+    ['Magento\ConfigurableProduct\Block\Product\Configurable\AssociatedSelector\Backend\Grid\ColumnSet'],
+    ['Magento\ConfigurableProduct\Model\Resource\Product\Collection\AssociatedProduct'],
+    ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Grid\Renderer\Inventory'],
+    ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Grid\Renderer\Checkbox'],
+    ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Grid\Filter\Inventory'],
 ];

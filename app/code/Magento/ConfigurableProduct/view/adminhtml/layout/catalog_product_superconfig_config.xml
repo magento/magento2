@@ -7,11 +7,6 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
-        <referenceBlock name="admin.product.edit.tab.super.config.grid.container">
-            <block class="Magento\Backend\Block\Template" name="manual.product.grid" template="Magento_ConfigurableProduct::catalog/product/edit/super/manual-product-grid.phtml" as="grid">
-                <uiComponent name="configurable_associated_product_listing"/>
-            </block>
-        </referenceBlock>
         <referenceBlock name="product_tabs">
             <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config" name="admin.product.edit.tab.super.config.grid.container">
                 <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config" template="Magento_ConfigurableProduct::catalog/product/edit/super/generator.phtml" name="product-variations-generator" as="generator">
