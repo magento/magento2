@@ -14,10 +14,6 @@ use Magento\CatalogSearch\Test\Page\CatalogsearchResult;
  */
 class AssertCatalogSearchNoResult extends AbstractConstraint
 {
-    /* tags */
-    const SEVERITY = 'high';
-    /* end tags */
-
     /**
      * Assert search has no results and product list in absent.
      *
