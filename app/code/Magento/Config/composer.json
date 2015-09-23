@@ -9,8 +9,7 @@
         "magento/module-email": "1.0.0-beta",
         "magento/module-directory": "1.0.0-beta",
         "magento/module-backend": "1.0.0-beta",
-        "magento/module-media-storage": "1.0.0-beta",
-        "magento/magento-composer-installer": "*"
+        "magento/module-media-storage": "1.0.0-beta"
     },
     "type": "magento2-module",
     "version": "1.0.0-beta",
