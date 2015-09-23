@@ -327,7 +327,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
         self::COL_MEDIA_IMAGE,
         '_media_label',
         '_media_position',
-        '_media_is_disabled',
+        '_media_is_disabled'
     ];
 
     /**
@@ -1395,10 +1395,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
                     } else {
                         $mediaGalleryLabels = [];
                     }
-                    if (isset($rowData['_media_is_disabled'])){
-                        $additionalImageIsDesabled = array_flip(explode($this->getMultipleValueSeparator(), $rowData['_media_is_disabled']));
+                    if (isset($rowData['_media_is_disabled'])) {
+                        $additionalImageIsDesabled =
+                            array_flip(explode($this->getMultipleValueSeparator(), $rowData['_media_is_disabled']));
                     }
-
                     if (count($mediaGalleryLabels) > count($mediaGalleryImages)) {
                         $mediaGalleryLabels = array_slice($mediaGalleryLabels, 0, count($mediaGalleryImages));
                     } elseif (count($mediaGalleryLabels) < count($mediaGalleryImages)) {

@@ -502,7 +502,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 '_media_image' => $mediaRow['filename'],
                 '_media_label' => $mediaRow['label'],
                 '_media_position' => $mediaRow['position'],
-                '_media_is_disabled' => $mediaRow['disabled'],
+                '_media_is_disabled' => $mediaRow['disabled']
             ];
         }
 
@@ -677,7 +677,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     'crosssell_skus',
                     'upsell_skus',
                 ],
-                ['additional_images', 'additional_image_labels','hide_from_product_page']
+                ['additional_images', 'additional_image_labels', 'hide_from_product_page']
             );
             // have we merge custom options columns
             if ($customOptionsData) {
