@@ -6,11 +6,11 @@ define([
     'ko',
     'underscore',
     'mageUtils',
-    'Magento_Ui/js/lib/collapsible'
-], function (ko, _, utils, Collapsible) {
+    'uiComponent'
+], function (ko, _, utils, Component) {
     'use strict';
 
-    return Collapsible.extend({
+    return Component.extend({
         defaults: {
             template: 'ui/grid/paging/sizes',
             value: 20,
@@ -392,8 +392,8 @@ define([
          * Listener of the 'value' property changes.
          */
         onValueChange: function () {
-            this.close()
-                .discardAll();
+            this.discardAll()
+                .trigger('close');
         },
 
         /**

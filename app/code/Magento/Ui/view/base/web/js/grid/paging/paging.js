@@ -2,6 +2,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'ko',
     'underscore',
@@ -14,9 +15,11 @@ define([
     return Component.extend({
         defaults: {
             template: 'ui/grid/paging/paging',
+            totalTmpl: 'ui/grid/paging-total',
             pageSize: 20,
             current: 1,
             selectProvider: '',
+            componentType: 'paging',
 
             sizesConfig: {
                 component: 'Magento_Ui/js/grid/paging/sizes',

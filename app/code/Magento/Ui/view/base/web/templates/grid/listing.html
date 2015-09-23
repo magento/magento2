@@ -4,8 +4,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="admin__data-grid-wrap">
-    <table class="data-grid">
+<div class="admin__data-grid-wrap" data-role="grid-wrapper">
+    <table class="data-grid" data-role="grid">
         <thead>
             <tr data-bind="foreach: elems">
                 <!-- ko template: getHeader() --><!-- /ko -->
@@ -14,6 +14,7 @@
         <tbody>
             <!-- ko foreach: { data: rows, as: 'row' } -->
                 <tr class="data-row"
+                    data-role="row"
                     data-bind="
                         css: {
                             '_odd-row': !!($index() % 2)

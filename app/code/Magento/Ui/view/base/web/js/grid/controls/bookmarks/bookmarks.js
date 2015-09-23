@@ -5,10 +5,9 @@
 define([
     'underscore',
     'mageUtils',
-    'uiRegistry',
     'uiLayout',
-    'Magento_Ui/js/lib/collapsible'
-], function (_, utils, registry, layout, Collapsible) {
+    'uiComponent'
+], function (_, utils, layout, Component) {
     'use strict';
 
     /**
@@ -27,7 +26,7 @@ define([
         return path.join('.');
     }
 
-    return Collapsible.extend({
+    return Component.extend({
         defaults: {
             template: 'ui/grid/controls/bookmarks/bookmarks',
             defaultIndex: 'default',

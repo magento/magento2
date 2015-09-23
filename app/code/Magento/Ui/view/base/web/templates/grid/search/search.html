@@ -5,7 +5,11 @@
  */
 -->
 <div class="data-grid-search-control-wrap">
+    <label class="data-grid-search-label" for="data-grid-search" data-bind="attr: {title: $t('Search')}">
+        <span data-bind="text: $t('Search')"></span>
+    </label>
     <input
+            id="data-grid-search"
             class="admin__control-text data-grid-search-control"
             data-bind="
                 attr: {
