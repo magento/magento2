@@ -78,14 +78,10 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Cart item does not contain downloadable links.
-     */
-    public function testConvertToBuyRequestThrowsExceptionIfProductDoesNotContainProductOption()
+    public function testConvertToBuyRequestReturnsNullIfItemDoesNotContainProductOption()
     {
         $cartItemMock = $this->getMock('\Magento\Quote\Api\Data\CartItemInterface');
-        $this->model->convertToBuyRequest($cartItemMock);
+        $this->assertNull($this->model->convertToBuyRequest($cartItemMock));
     }
 
     public function testConvertToBuyRequest()
