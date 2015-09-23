@@ -17,8 +17,7 @@
         "magento/module-gift-message": "1.0.0-beta",
         "magento/framework": "1.0.0-beta",
         "magento/module-quote": "1.0.0-beta",
-        "magento/module-media-storage": "1.0.0-beta",
-        "magento/magento-composer-installer": "*"
+        "magento/module-media-storage": "1.0.0-beta"
     },
     "suggest": {
         "magento/module-webapi": "1.0.0-beta"

@@ -10,8 +10,7 @@
         "magento/module-import-export": "1.0.0-beta",
         "magento/module-store": "1.0.0-beta",
         "magento/module-url-rewrite": "1.0.0-beta",
-        "magento/framework": "1.0.0-beta",
-        "magento/magento-composer-installer": "*"
+        "magento/framework": "1.0.0-beta"
     },
     "type": "magento2-module",
     "version": "1.0.0-beta",
