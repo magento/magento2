@@ -1383,8 +1383,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
                 }
 
                 // 5. Media gallery phase
-                $mediaGalleryImages = array();
-                $mediaGalleryLabels = array();
+                $mediaGalleryImages = [];
+                $mediaGalleryLabels = [];
                 $additionalImageIsDesabled = [];
                 if (!empty($rowData[self::COL_MEDIA_IMAGE])) {
                     $mediaGalleryImages =
