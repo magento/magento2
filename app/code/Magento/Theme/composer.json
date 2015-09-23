@@ -12,8 +12,7 @@
         "magento/module-config": "1.0.0-beta",
         "magento/module-media-storage": "1.0.0-beta",
         "magento/framework": "1.0.0-beta",
-        "magento/module-require-js": "1.0.0-beta",
-        "magento/magento-composer-installer": "*"
+        "magento/module-require-js": "1.0.0-beta"
     },
     "suggest": {
         "magento/module-translation": "1.0.0-beta"

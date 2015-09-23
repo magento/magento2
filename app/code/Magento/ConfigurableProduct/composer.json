@@ -16,8 +16,7 @@
         "magento/framework": "1.0.0-beta",
         "magento/module-media-storage": "1.0.0-beta",
         "magento/module-quote": "1.0.0-beta",
-        "magento/module-ui": "self.version",
-        "magento/magento-composer-installer": "*"
+        "magento/module-ui": "self.version"
     },
     "suggest": {
       "magento/module-webapi": "1.0.0-beta"
