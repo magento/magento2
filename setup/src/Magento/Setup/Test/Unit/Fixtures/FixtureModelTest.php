@@ -30,11 +30,6 @@ class FixtureModelTest extends \PHPUnit_Framework_TestCase
         $this->model = new FixtureModel($reindexCommandMock, $fileParserMock);
     }
 
-    public function testGetObjectManager()
-    {
-        $this->assertInstanceOf('Magento\Framework\ObjectManager\ObjectManager', $this->model->getObjectManager());
-    }
-
     public function testReindex()
     {
         $outputMock = $this->getMock('\Symfony\Component\Console\Output\OutputInterface', [], [], '', false);
