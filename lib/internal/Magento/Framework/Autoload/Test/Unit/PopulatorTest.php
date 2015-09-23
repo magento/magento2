@@ -35,7 +35,7 @@ class PopulatorTest extends \PHPUnit_Framework_TestCase
             ->method('addPsr4')
             ->with(
                 'Magento\\',
-                [DirectoryList::ROOT . '/app/code/Magento/', DirectoryList::GENERATION . '/Magento/'],
+                [DirectoryList::GENERATION . '/Magento/'],
                 true
             );
         $mockAutoloader->expects($this->at(1))
