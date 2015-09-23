@@ -142,6 +142,7 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
         $this->assertObjectHasAttribute('type', $json);
         $this->assertObjectHasAttribute('version', $json);
         $this->assertVersionInSync($json->name, $json->version);
+        $this->assertObjectHasAttribute('require', $json);
         $this->assertEquals($packageType, $json->type);
         if ($packageType !== 'project') {
             self::$dependencies[] = $json->name;
@@ -179,7 +180,8 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
             case 'project':
                 sort(self::$dependencies);
                 $dependenciesListed = [];
-                if (isset(self::$rootJson['replace'])) {
+                if (self::$rootJson['name'] !== 'magento/project-community-edition') {
+
                     foreach (array_keys((array)self::$rootJson['replace']) as $key) {
                         if (MagentoComponent::matchMagentoComponent($key)) {
                             $dependenciesListed[] = $key;
@@ -309,6 +311,9 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
     private function assertRequireInSync(\StdClass $json)
     {
         $name = $json->name;
+        if (self::$rootJson['name'] === 'magento/project-community-edition') {
+            return;
+        }
         if (isset($json->require)) {
             $errors = [];
             foreach (array_keys((array)$json->require) as $depName) {
