@@ -155,26 +155,22 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
                 $this->assertConsistentModuleName($xml, $json->name);
                 $this->assertDependsOnPhp($json->require);
                 $this->assertDependsOnFramework($json->require);
-                $this->assertDependsOnInstaller($json->require);
                 $this->assertRequireInSync($json);
                 break;
             case 'magento2-language':
                 $this->assertRegExp('/^magento\/language\-[a-z]{2}_[a-z]{2}$/', $json->name);
                 $this->assertDependsOnFramework($json->require);
-                $this->assertDependsOnInstaller($json->require);
                 $this->assertRequireInSync($json);
                 break;
             case 'magento2-theme':
                 $this->assertRegExp('/^magento\/theme-(?:adminhtml|frontend)(\-[a-z0-9_]+)+$/', $json->name);
                 $this->assertDependsOnPhp($json->require);
                 $this->assertDependsOnFramework($json->require);
-                $this->assertDependsOnInstaller($json->require);
                 $this->assertRequireInSync($json);
                 break;
             case 'magento2-library':
                 $this->assertDependsOnPhp($json->require);
                 $this->assertRegExp('/^magento\/framework$/', $json->name);
-                $this->assertDependsOnInstaller($json->require);
                 $this->assertRequireInSync($json);
                 break;
             case 'project':
@@ -248,20 +244,6 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
             'magento/framework',
             $json,
             'This component is expected to depend on magento/framework'
-        );
-    }
-
-    /**
-     * Make sure a component depends on Magento Composer Installer component
-     *
-     * @param \StdClass $json
-     */
-    private function assertDependsOnInstaller(\StdClass $json)
-    {
-        $this->assertObjectHasAttribute(
-            'magento/magento-composer-installer',
-            $json,
-            'This component is expected to depend on magento/magento-composer-installer'
         );
     }
 
