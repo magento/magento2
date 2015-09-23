@@ -383,7 +383,7 @@
                         store_id: <?php /* @escapeNotVerified */ echo (int)$block->getStore()->getId() ?>,
                         category_id: <?php /* @escapeNotVerified */ echo (int)$block->getCategoryId() ?>
                     },
-                    data: <?php echo $block->getTreeJson() ?>
+                    data: <?php  /* @escapeNotVerified */ echo $block->getTreeJson() ?>
                 };
 
                 reRenderTree();
