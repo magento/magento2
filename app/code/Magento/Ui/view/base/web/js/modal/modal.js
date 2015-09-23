@@ -291,7 +291,7 @@ define([
         _close: function () {
             var trigger = _.bind(this._trigger, this, 'closed', this.modal);
 
-            $(that.focussedElement).focus();
+            $(this.focussedElement).focus();
             this._destroyOverlay();
             this._unsetActive();
             _.defer(trigger, this);
