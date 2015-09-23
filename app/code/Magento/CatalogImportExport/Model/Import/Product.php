@@ -244,6 +244,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
         'thumbnail_label' => 'thumbnail_image_label',
         self::COL_MEDIA_IMAGE => 'additional_images',
         '_media_image_label' => 'additional_image_labels',
+        '_media_is_disabled' => 'hide_from_product_page',
         Product::COL_STORE => 'store_view_code',
         Product::COL_ATTR_SET => 'attribute_set_code',
         Product::COL_TYPE => 'product_type',
@@ -1202,12 +1203,18 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
                 if (empty($rowData[$image])) {
                     continue;
                 }
-                $dispersionPath =
-                    \Magento\Framework\File\Uploader::getDispretionPath($rowData[$image]);
+
                 $importImages = explode($this->getMultipleValueSeparator(), $rowData[$image]);
                 foreach ($importImages as $importImage) {
+                    $imageTmp = str_replace('\\', '/', $importImage);
+                    $imageTmp = explode('/', $imageTmp);
+                    $importImageFileName = array_pop($imageTmp);
+
+                    $dispersionPath =
+                        \Magento\Framework\File\Uploader::getDispretionPath($importImageFileName);
+
                     $imageSting = mb_strtolower(
-                        $dispersionPath . '/' . preg_replace('/[^a-z0-9\._-]+/i', '', $importImage)
+                        $dispersionPath . '/' . preg_replace('/[^a-z0-9\._-]+/i', '', $importImageFileName)
                     );
                     $allImagesFromBunch[$importImage] = $imageSting;
                 }
@@ -1378,6 +1385,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
                 // 5. Media gallery phase
                 $mediaGalleryImages = array();
                 $mediaGalleryLabels = array();
+                $additionalImageIsDesabled = [];
                 if (!empty($rowData[self::COL_MEDIA_IMAGE])) {
                     $mediaGalleryImages =
                         explode($this->getMultipleValueSeparator(), $rowData[self::COL_MEDIA_IMAGE]);
@@ -1387,6 +1395,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
                     } else {
                         $mediaGalleryLabels = [];
                     }
+                    if (isset($rowData['_media_is_disabled'])){
+                        $additionalImageIsDesabled = array_flip(explode($this->getMultipleValueSeparator(), $rowData['_media_is_disabled']));
+                    }
+
                     if (count($mediaGalleryLabels) > count($mediaGalleryImages)) {
                         $mediaGalleryLabels = array_slice($mediaGalleryLabels, 0, count($mediaGalleryImages));
                     } elseif (count($mediaGalleryLabels) < count($mediaGalleryImages)) {
@@ -1437,7 +1449,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
                                         'attribute_id' => $this->getMediaGalleryAttributeId(),
                                         'label' => isset($mediaGalleryLabels[$position]) ? $mediaGalleryLabels[$position] : '',
                                         'position' => $position,
-                                        'disabled' => '',
+                                        'disabled' => isset($additionalImageIsDesabled[$mediaImage]) ? '1' : '0',
                                         'value' => $mediaImage,
                                     ];
                                 }
