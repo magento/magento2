@@ -57,9 +57,9 @@ class File implements MergeableInterface
     /**
      * @param Source $source
      * @param ContextInterface $context
-     * @param $filePath
-     * @param $module
-     * @param $contentType
+     * @param string $filePath
+     * @param string $module
+     * @param string $contentType
      * @param Minification $minification
      * @param Filesystem $filesystem
      */
