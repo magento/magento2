@@ -97,7 +97,8 @@ class SchemaTest extends \PHPUnit_Framework_TestCase
             '#Dhl/etc/countries.xml$#',
             '#conf/schema.xml$#',
             '#conf/solrconfig.xml$#',
-            '#layout/swagger_index_index.xml$#'
+            '#layout/swagger_index_index.xml$#',
+            '#Doc/etc/doc/vars.xml$#'
         ];
         foreach ($list as $pattern) {
             foreach ($files as $key => $value) {
