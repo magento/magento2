@@ -8,8 +8,11 @@ namespace Magento\MysqlMq\Model\Driver;
 use Magento\Framework\Amqp\EnvelopeInterface;
 use Magento\Framework\Amqp\QueueInterface;
 use Magento\MysqlMq\Model\QueueManagement;
-use Magento\Amqp\Model\EnvelopeFactory;
+use Magento\Framework\Amqp\EnvelopeFactory;
 
+/**
+ * Queue based on Amqp protocol
+ */
 class Queue implements QueueInterface
 {
     /**
@@ -37,6 +40,15 @@ class Queue implements QueueInterface
      */
     private $maxNumberOfTrials;
 
+    /**
+     * Queue constructor.
+     *
+     * @param QueueManagement $queueManagement
+     * @param EnvelopeFactory $envelopeFactory
+     * @param $queueName
+     * @param int $interval
+     * @param int $maxNumberOfTrials
+     */
     public function __construct(
         QueueManagement $queueManagement,
         EnvelopeFactory $envelopeFactory,
@@ -88,7 +100,7 @@ class Queue implements QueueInterface
     {
         while (true) {
             while ($envelope = $this->dequeue()) {
-                try{
+                try {
                     call_user_func($callback, $envelope);
                     $this->acknowledge($envelope);
                 } catch (\Exception $e) {
