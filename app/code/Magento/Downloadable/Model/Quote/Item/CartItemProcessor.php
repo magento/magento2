@@ -38,6 +38,10 @@ class CartItemProcessor implements CartItemProcessorInterface
 
     /**
      * @param DataObjectFactory $objectFactory
+     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param \Magento\Downloadable\Model\DownloadableOptionFactory $downloadableOptionFactory
+     * @param \Magento\Quote\Model\Quote\ProductOptionFactory $productOptionFactory
+     * @param \Magento\Quote\Api\Data\ProductOptionExtensionFactory $extensionFactory
      */
     public function __construct(
         DataObjectFactory $objectFactory,
