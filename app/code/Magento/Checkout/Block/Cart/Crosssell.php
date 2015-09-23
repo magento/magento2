@@ -199,8 +199,6 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
         );
         $this->_addProductAttributesAndPrices($collection);
 
-        $this->stockHelper->addInStockFilterToCollection($collection);
-
         return $collection;
     }
 }
