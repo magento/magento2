@@ -124,7 +124,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             ->willReturn($configView);
         $configView->expects($this->once())
             ->method('getExcludedFiles')
-            ->willReturn(['Lib::source/file.min.js']);
+            ->willReturn(['Lib:' . ':source/file.min.js']);
 
         $this->assertFalse($this->manager->addAsset($this->asset));
     }
