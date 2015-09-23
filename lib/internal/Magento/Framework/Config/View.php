@@ -49,24 +49,28 @@ class View extends \Magento\Framework\Config\AbstractXml
                     /** @var \DOMElement $node */
                     foreach ($childNode->getElementsByTagName('image') as $node) {
                         $imageId = $node->getAttribute('id');
-                        $result[$childNode->tagName][$moduleName]['images'][$imageId]['type'] = $node->getAttribute('type');
+                        $result[$childNode->tagName][$moduleName]['images'][$imageId]['type']
+                            = $node->getAttribute('type');
                         foreach ($node->childNodes as $attribute) {
                             if ($attribute->nodeType != XML_ELEMENT_NODE) {
                                 continue;
                             }
                             $nodeValue = $attribute->nodeValue;
-                            $result[$childNode->tagName][$moduleName]['images'][$imageId][$attribute->tagName] = $nodeValue;
+                            $result[$childNode->tagName][$moduleName]['images'][$imageId][$attribute->tagName]
+                                = $nodeValue;
                         }
                     }
                     foreach ($childNode->getElementsByTagName('video') as $node) {
                         $imageId = $node->getAttribute('id');
-                        $result[$childNode->tagName][$moduleName]['videos'][$imageId]['type'] = $node->getAttribute('type');
+                        $result[$childNode->tagName][$moduleName]['videos'][$imageId]['type']
+                            = $node->getAttribute('type');
                         foreach ($node->childNodes as $attribute) {
                             if ($attribute->nodeType != XML_ELEMENT_NODE) {
                                 continue;
                             }
                             $nodeValue = $attribute->nodeValue;
-                            $result[$childNode->tagName][$moduleName]['videos'][$imageId][$attribute->tagName] = $nodeValue;
+                            $result[$childNode->tagName][$moduleName]['videos'][$imageId][$attribute->tagName]
+                                = $nodeValue;
                         }
                     }
                     break;
@@ -110,13 +114,15 @@ class View extends \Magento\Framework\Config\AbstractXml
     /**
      * Retrieve a list videos attributes in scope of specified module
      *
-     * @param $module
-     * @param $var
-     * @return bool
+     * @param string $module
+     * @param string $var
+     * @return mixed
      */
     public function getVideoAttributeValue($module, $var)
     {
-        return isset($this->_data['media'][$module]['videos'][$var][$var]) ? $this->_data['media'][$module]['videos'][$var][$var] : false;
+        return isset($this->_data['media'][$module]['videos'][$var][$var])
+            ? $this->_data['media'][$module]['videos'][$var][$var]
+            : false;
     }
 
     /**

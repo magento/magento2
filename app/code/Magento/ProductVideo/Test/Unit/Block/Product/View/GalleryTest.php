@@ -132,5 +132,4 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         $this->mediaHelperMock->expects($this->once())->method('getVideoAutoRestartAttribute')->willReturn(0);
         $this->gallery->getVideoSettingsJson();
     }
-
 }
