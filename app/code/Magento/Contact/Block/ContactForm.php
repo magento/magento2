@@ -27,6 +27,6 @@ class ContactForm extends Template
      */
     public function getFormAction()
     {
-        return $this->getUrl('contact/index/post');
+        return $this->getUrl('contact/index/post', ['_secure' => true]);
     }
 }
