@@ -74,20 +74,26 @@ class Context
         \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request
     ) {
+        /** @var \Magento\Store\Model\Store $defaultStore */
         $defaultStore = $this->storeManager->getWebsite()->getDefaultStore();
-        $this->httpContext->setValue(
-            HttpContext::CONTEXT_CURRENCY,
-            $this->session->getCurrencyCode(),
-            $defaultStore->getDefaultCurrency()->getCode()
+
+        $requestedStoreCode = $this->httpRequest->getParam(
+            StoreResolverInterface::PARAM_NAME,
+            $this->storeCookieManager->getStoreCodeFromCookie()
         );
+        /** @var \Magento\Store\Model\Store $currentStore */
+        $currentStore = $requestedStoreCode ? $this->storeManager->getStore($requestedStoreCode) : $defaultStore;
 
         $this->httpContext->setValue(
             StoreManagerInterface::CONTEXT_STORE,
-            $this->httpRequest->getParam(
-                StoreResolverInterface::PARAM_NAME,
-                $this->storeCookieManager->getStoreCodeFromCookie()
-            ) ?: $defaultStore->getCode(),
+            $currentStore->getCode(),
             $this->storeManager->getDefaultStoreView()->getCode()
+        );
+
+        $this->httpContext->setValue(
+            HttpContext::CONTEXT_CURRENCY,
+            $this->session->getCurrencyCode() ?: $currentStore->getDefaultCurrencyCode(),
+            $defaultStore->getDefaultCurrencyCode()
         );
         return $proceed($request);
     }
