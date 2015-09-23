@@ -233,6 +233,12 @@ class Files
         return self::$_cache[$key];
     }
 
+    /**
+     * Return array with all php files related to modules
+     *
+     * @param $flags
+     * @return array
+     */
     private function getModuleFiles($flags)
     {
         if ($flags & self::INCLUDE_APP_CODE) {
@@ -245,6 +251,12 @@ class Files
         return [];
     }
 
+    /**
+     * Return array with all test files
+     *
+     * @param $flags
+     * @return array
+     */
     private function getTestFiles($flags)
     {
         if ($flags & self::INCLUDE_TESTS) {
