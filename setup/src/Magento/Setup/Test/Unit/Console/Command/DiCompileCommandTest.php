@@ -28,6 +28,12 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
     private $filesystem;
 
+    /** @var  \Magento\Framework\Filesystem\Driver\File | \PHPUnit_Framework_MockObject_MockObject*/
+    private $fileDriver;
+
+    /** @var  \Magento\Framework\App\Filesystem\DirectoryList | \PHPUnit_Framework_MockObject_MockObject*/
+    private $directoryList;
+
     public function setUp()
     {
         $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
@@ -52,23 +58,39 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->willReturn($this->objectManager);
         $this->manager = $this->getMock('Magento\Setup\Module\Di\App\Task\Manager', [], [], '', false);
-        $directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
+        $this->directoryList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
         $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $directoryList->expects($this->exactly(3))->method('getPath');
+        $this->fileDriver = $this->getMockBuilder('Magento\Framework\Filesystem\Driver\File')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->command = new DiCompileCommand(
             $this->deploymentConfig,
-            $directoryList,
+            $this->directoryList,
             $this->manager,
             $objectManagerProvider,
-            $this->filesystem
+            $this->filesystem,
+            $this->fileDriver
         );
+    }
+
+    public function testExecuteDiExists()
+    {
+        $diPath = '/root/magento/var/di';
+        $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(true);
+        $this->fileDriver->expects($this->atLeastOnce())->method('isExists')->with($diPath)->willReturn(true);
+        $this->directoryList->expects($this->atLeastOnce())->method('getPath')->willReturn($diPath);
+        $tester = new CommandTester($this->command);
+        $tester->execute([]);
+        $this->assertContains("delete '/root/magento/var/di'", $tester->getDisplay());
     }
 
     public function testExecuteNotInstalled()
     {
+        $this->directoryList->expects($this->atLeastOnce())->method('getPath')->willReturn(null);
         $this->deploymentConfig->expects($this->once())->method('isAvailable')->willReturn(false);
         $tester = new CommandTester($this->command);
         $tester->execute([]);
@@ -80,6 +102,7 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
 
     public function testExecute()
     {
+        $this->directoryList->expects($this->atLeastOnce())->method('getPath')->willReturn(null);
         $this->objectManager->expects($this->once())
             ->method('get')
             ->with('Magento\Framework\App\Cache')
