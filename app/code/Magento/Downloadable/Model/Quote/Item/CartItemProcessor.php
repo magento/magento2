@@ -81,16 +81,10 @@ class CartItemProcessor implements CartItemProcessorInterface
      */
     public function processProductOptions(CartItemInterface $cartItem)
     {
-        $options = $cartItem->getOptions();
         $downloadableLinkIds = [];
-        if (is_array($options)) {
-            /** @var \Magento\Quote\Model\Quote\Item\Option $option */
-            foreach ($options as $option) {
-                if ($option->getCode() == 'downloadable_link_ids') {
-                    $downloadableLinkIds = explode(',', $option->getValue());
-                    break;
-                }
-            }
+        $option = $cartItem->getOptionByCode('downloadable_link_ids');
+        if (!empty($option)) {
+            $downloadableLinkIds = explode(',', $option->getValue());
         }
 
         $downloadableOption = $this->downloadableOptionFactory->create();
