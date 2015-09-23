@@ -142,7 +142,6 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
         $this->assertObjectHasAttribute('type', $json);
         $this->assertObjectHasAttribute('version', $json);
         $this->assertVersionInSync($json->name, $json->version);
-        $this->assertObjectHasAttribute('require', $json);
         $this->assertEquals($packageType, $json->type);
         if ($packageType !== 'project') {
             self::$dependencies[] = $json->name;
@@ -187,19 +186,19 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
                         }
                     }
                     sort($dependenciesListed);
+                    $nonDeclaredDependencies = array_diff(self::$dependencies, $dependenciesListed);
+                    $nonexistentDependencies = array_diff($dependenciesListed, self::$dependencies);
+                    $this->assertEmpty(
+                        $nonDeclaredDependencies,
+                        'Following dependencies are not declared in the root composer.json: '
+                        . join(', ', $nonDeclaredDependencies)
+                    );
+                    $this->assertEmpty(
+                        $nonexistentDependencies,
+                        'Following dependencies declared in the root composer.json do not exist: '
+                        . join(', ', $nonexistentDependencies)
+                    );
                 }
-                $nonDeclaredDependencies = array_diff(self::$dependencies, $dependenciesListed);
-                $nonexistentDependencies = array_diff($dependenciesListed, self::$dependencies);
-                $this->assertEmpty(
-                    $nonDeclaredDependencies,
-                    'Following dependencies are not declared in the root composer.json: '
-                    . join(', ', $nonDeclaredDependencies)
-                );
-                $this->assertEmpty(
-                    $nonexistentDependencies,
-                    'Following dependencies declared in the root composer.json do not exist: '
-                    . join(', ', $nonexistentDependencies)
-                );
                 break;
             default:
                 throw new \InvalidArgumentException("Unknown package type {$packageType}");
