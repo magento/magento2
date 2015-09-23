@@ -24,7 +24,7 @@ class AssertProductCompareItemsLink extends AbstractConstraint
     public function processAssert(array $products, CmsIndex $cmsIndex)
     {
         $productQty = count($products);
-        $qtyOnPage = $cmsIndex->getLinksBlock()->getQtyInCompareList();
+        $qtyOnPage = $cmsIndex->getCompareLinkBlock()->getQtyInCompareList();
 
         \PHPUnit_Framework_Assert::assertEquals(
             $productQty,
