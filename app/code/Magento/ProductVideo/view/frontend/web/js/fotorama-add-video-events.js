@@ -94,7 +94,9 @@ require(["jquery", "jquery/ui", "catalogGallery"], function ($) {
             $(this.element).find('.fotorama__video-close').remove();
             $(this.element).append('<div class="fotorama__video-close"></div>');
             $(this.element).css('position','relative');
+
             var $closeVideo = $(this.element).find('.fotorama__video-close');
+
             this._closeVideoSetEvents($closeVideo, fotorama);
             if (isBase && this.options.VideoData[fotorama.activeIndex].isBase && $(window).width() > this.MobileMaxWidth) {
                 this._showCloseVideo();
