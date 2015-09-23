@@ -9,7 +9,7 @@ use Magento\Framework\View\Asset\Bundle\Manager;
 
 class ManagerTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var  \Magento\Framework\View\Asset\Bundle\Manager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Manager|\PHPUnit_Framework_MockObject_MockObject */
     protected $manager;
 
     /** @var  \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
