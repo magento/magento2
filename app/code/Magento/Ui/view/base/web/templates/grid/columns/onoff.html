@@ -20,7 +20,9 @@
                        event: { change: toggleSelectAll },
                        css: { '_indeterminate': indetermine },
                        enable: totalRecords">
-        <label for="mass-select-checkbox"></label>
+        <label for="mass-select-checkbox" class="data-grid-onoff-label">
+            <span data-bind="i18n: 'Select all'"></span>
+        </label>
         <button
                 class="action-multicheck-toggle"
                 data-toggle="dropdown"
