@@ -9,59 +9,49 @@
  /** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config */
 ?>
 <div class="entry-edit form-inline" id="<?php /* @escapeNotVerified */ echo $block->getId() ?>">
-    <div class="fieldset-wrapper admin__collapsible-block-wrapper" id="<?php /* @escapeNotVerified */ echo $block->getId() ?>-wrapper" data-panel="product-variations">
-        <div class="fieldset-wrapper-title">
-            <strong class="admin__collapsible-title" data-toggle="collapse" data-target="#<?php /* @escapeNotVerified */ echo $block->getId() ?>-content">
-                <span><?= /* @escapeNotVerified */  __('Configurations') ?></span>
-            </strong>
-        </div>
-
-        <div class="fieldset-wrapper-content collapse" data-collapsed="true" id="<?php /* @escapeNotVerified */ echo $block->getId() ?>-content">
-            <div data-bind="scope: 'variation-steps-wizard'" class="product-create-configuration">
-                <div class="product-create-configuration-info">
-                    <div class="note">
-                        <?= /* @escapeNotVerified */  __('Configurable products allow customers to choose options (Ex: shirt color).
-                    You need to create a simple product for each configuration (Ex: a product for each color).');?>
-                    </div>
-                </div>
-                <div class="product-create-configuration-actions">
-                    <button data-action="open-steps-wizard" title="Create Product Configurations"
-                            class="action-secondary" data-bind="click: open">
-                        <span data-role="button-label" data-edit-label="<?= /* @escapeNotVerified */  __('Edit Configurations') ?>">
-                            <?= /* @escapeNotVerified */  $block->getProduct()->getId()
-                                && $block->getProduct()->getTypeId() === 'configurable'
-                                ? __('Edit Configurations')
-                                : __('Create Configurations')
-                            ?>
-                        </span>
-                    </button>
-                </div>
-                <div class="product-create-configuration-actions" data-bind="scope: 'configurableProductGrid'">
-                    <a class="action-menu-item" data-action="choose" data-bind="click: showManuallyGrid, visible: button">
-                        <?= /* @noEscape */ __('Add Products Manually');?>
-                    </a>
-                </div>
+    <div data-bind="scope: 'variation-steps-wizard'" class="product-create-configuration">
+        <div class="product-create-configuration-info">
+            <div class="note">
+                <?= /* @escapeNotVerified */  __('Configurable products allow customers to choose options (Ex: shirt color).
+            You need to create a simple product for each configuration (Ex: a product for each color).');?>
             </div>
-            <fieldset class="fieldset">
-                <?php echo $block->getChildHtml('generator'); ?>
-
-                <!-- Select Associated Product popup -->
-                <div data-grid-id="associated-products-container">
-                    <div class="admin__data-grid-outer-wrap" data-bind="scope: 'configurable_associated_product_listing.configurable_associated_product_listing'">
-                        <div data-role="spinner" data-component="configurable_associated_product_listing.configurable_associated_product_listing.product_columns" class="admin__data-grid-loading-mask">
-                            <div class="spinner">
-                                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-                            </div>
-                        </div>
-                        <!-- ko template: getTemplate() --><!-- /ko -->
-
-                    </div>
-                </div>
-
-                <input type="hidden" name="affect_configurable_product_attributes" value="1" />
-            </fieldset>
+        </div>
+        <div class="product-create-configuration-actions">
+            <button data-action="open-steps-wizard" title="Create Product Configurations"
+                    class="action-secondary" data-bind="click: open">
+                <span data-role="button-label" data-edit-label="<?= /* @escapeNotVerified */  __('Edit Configurations') ?>">
+                    <?= /* @escapeNotVerified */  $block->getProduct()->getId()
+                        && $block->getProduct()->getTypeId() === 'configurable'
+                        ? __('Edit Configurations')
+                        : __('Create Configurations')
+                    ?>
+                </span>
+            </button>
+        </div>
+        <div class="product-create-configuration-actions" data-bind="scope: 'configurableProductGrid'">
+            <a class="action-menu-item" data-action="choose" data-bind="click: showManuallyGrid, visible: button">
+                <?= /* @noEscape */ __('Add Products Manually');?>
+            </a>
         </div>
     </div>
+    <fieldset class="fieldset">
+        <?php echo $block->getChildHtml('generator'); ?>
+
+        <!-- Select Associated Product popup -->
+        <div data-grid-id="associated-products-container">
+            <div class="admin__data-grid-outer-wrap" data-bind="scope: 'configurable_associated_product_listing.configurable_associated_product_listing'">
+                <div data-role="spinner" data-component="configurable_associated_product_listing.configurable_associated_product_listing.product_columns" class="admin__data-grid-loading-mask">
+                    <div class="spinner">
+                        <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                </div>
+                <!-- ko template: getTemplate() --><!-- /ko -->
+
+            </div>
+        </div>
+
+        <input type="hidden" name="affect_configurable_product_attributes" value="1" />
+    </fieldset>
 </div>
 <script>
 require([
