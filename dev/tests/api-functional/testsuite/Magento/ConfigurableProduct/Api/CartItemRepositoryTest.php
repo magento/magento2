@@ -210,7 +210,7 @@ class CartItemRepositoryTest extends WebapiAbstract
 
         /** @var \Magento\CatalogInventory\Model\Stock\Item $stockItem */
         $stockItem = $this->objectManager->create('Magento\CatalogInventory\Model\Stock\Item');
-        $stockItem->load(20, 'product_id');
+        $stockItem->load($itemId, 'product_id');
 
         if (!$stockItem->getProductId()) {
             $stockItem->setProductId($itemId);
