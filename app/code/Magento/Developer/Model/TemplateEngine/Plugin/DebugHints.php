@@ -44,7 +44,7 @@ class DebugHints
 
     /**
      * XPath of configuration of the debug hints
-
+     *
      * Allowed values:
      *     dev/debug/template_hints_storefront
      *     dev/debug/template_hints_admin
