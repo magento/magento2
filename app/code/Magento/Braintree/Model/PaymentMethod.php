@@ -95,7 +95,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
      * @var bool
      */
     protected $_canRefundInvoicePartial = true;
-  
+
     /**
      * @var string
      */
@@ -289,7 +289,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
                 throw new LocalizedException($error);
             }
         }
-        
+
         return $this;
     }
 
@@ -920,7 +920,7 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
         }
         if (!is_array($debugData)) {
             if (is_object($debugData)) {
-                $debugData = var_export($debugData, true);
+                $debugData = $this->convertObjToArray($debugData);
             } else {
                 $debugData = [$debugData];
             }
@@ -956,5 +956,15 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
             return $this->getOrderPlaceRedirectUrl();
         }
         return $this->config->getConfigData($field, $storeId);
+    }
+
+    /**
+     * Convert response from Braintree to array
+     * @param \Braintree_Result_Successful|\Braintree_Result_Error|\Braintree_Transaction $data
+     * @return array
+     */
+    private function convertObjToArray($data)
+    {
+        return json_decode(json_encode($data), true);
     }
 }
