@@ -35,11 +35,21 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $childProduct = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->disableOriginalConstructor()
-            ->setMethods(['getPrice', '__wakeUp'])
+            ->setMethods(['getPriceInfo', '__wakeUp'])
             ->getMock();
         $customOption = $this->getMockBuilder('Magento\Catalog\Model\Product\Configuration\Item\Option')
             ->disableOriginalConstructor()
             ->setMethods(['getProduct'])
+            ->getMock();
+        $priceInfo = $this->getMockBuilder('Magento\Framework\Pricing\PriceInfo\Base')
+            ->disableOriginalConstructor()
+            ->setMethods(['getPrice'])
+            ->getMock();
+        $price = $this->getMockBuilder('Magento\Framework\Pricing\Price\PriceInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $amount = $this->getMockBuilder('Magento\Framework\Pricing\Amount\AmountInterface')
+            ->disableOriginalConstructor()
             ->getMock();
 
         $configurableProduct->expects($this->at(0))
@@ -55,7 +65,10 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             ->method('setSelectedConfigurableOption')
             ->with($childProduct)
             ->willReturnSelf();
-        $childProduct->expects($this->once())->method('getPrice')->willReturn($finalPrice);
+        $childProduct->expects($this->once())->method('getPriceInfo')->willReturn($priceInfo);
+        $priceInfo->expects($this->once())->method('getPrice')->with('final_price')->willReturn($price);
+        $price->expects($this->once())->method('getAmount')->willReturn($amount);
+        $amount->expects($this->once())->method('getValue')->willReturn($finalPrice);
         $configurableProduct->expects($this->at(3))->method('getCustomOption')->with('option_ids')->willReturn(false);
         $configurableProduct->expects($this->once())->method('setFinalPrice')->with($finalPrice)->willReturnSelf();
 
