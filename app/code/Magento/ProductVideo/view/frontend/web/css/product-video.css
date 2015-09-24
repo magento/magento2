@@ -50,7 +50,8 @@
   position: absolute;
   top: 0;
   width: 100%;
-  height: 100%;
+  height: 85%;
+  margin-top: 15%;
 }
 .product-video iframe {
   position: Absolute;
@@ -62,4 +63,8 @@
 .fotorama__arr {
   height: 40%;
   margin-top: 22%;
+}
+.fotorama__video-close {
+  bottom: 89%;
+  top: auto;
 }
