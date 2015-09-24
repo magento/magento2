@@ -322,4 +322,21 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
         $this->_translateInline->processResponseBody($html);
         return $html;
     }
+
+    public function decorateTab($tab)
+    {
+        $accordion = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Accordion')
+            ->setId($tab->getId());
+
+        $accordion->addItem(
+            $tab->getUiId(),
+            [
+                'title' => $tab->getTabTitle(),
+                'content' => $this->getTabContent($tab),
+                'open' => false
+            ]
+        );
+
+        return $accordion->toHtml();
+    }
 }

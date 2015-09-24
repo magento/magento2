@@ -58,6 +58,16 @@ class Downloadable extends \Magento\Backend\Block\Widget implements \Magento\Bac
     }
 
     /**
+     * Get parent tab code
+     *
+     * @return string
+     */
+    public function getParentTab()
+    {
+        return 'product-details';
+    }
+
+    /**
      * Check is readonly block
      *
      * @return boolean
@@ -133,42 +143,5 @@ class Downloadable extends \Magento\Backend\Block\Widget implements \Magento\Bac
     public function getContentTabId()
     {
         return 'tab_content_' . $this->accordionBlockId;
-    }
-
-    /**
-     * Render block HTML
-     *
-     * @return string
-     */
-    protected function _toHtml()
-    {
-        $accordion = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Accordion')
-            ->setId($this->accordionBlockId);
-        $accordion->addItem(
-            'samples',
-            [
-                'title' => __('Samples'),
-                'content' => $this->getLayout()->createBlock(
-                    'Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Samples'
-                )->toHtml(),
-                'open' => false
-            ]
-        );
-
-        $accordion->addItem(
-            'links',
-            [
-                'title' => __('Links'),
-                'content' => $this->getLayout()->createBlock(
-                    'Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Links',
-                    'catalog.product.edit.tab.downloadable.links'
-                )->toHtml(),
-                'open' => true
-            ]
-        );
-
-        $this->setChild('accordion', $accordion);
-
-        return parent::_toHtml();
     }
 }
