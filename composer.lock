@@ -2664,16 +2664,16 @@
         },
         {
             "name": "lusitanian/oauth",
-            "version": "v0.6.0",
+            "version": "v0.5.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Lusitanian/PHPoAuthLib.git",
-                "reference": "74a5a62457568176d9c1af41a900dd3389b70414"
+                "reference": "916cff8e02df5d52e67aaddd57aa618205dd93c2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Lusitanian/PHPoAuthLib/zipball/74a5a62457568176d9c1af41a900dd3389b70414",
-                "reference": "74a5a62457568176d9c1af41a900dd3389b70414",
+                "url": "https://api.github.com/repos/Lusitanian/PHPoAuthLib/zipball/916cff8e02df5d52e67aaddd57aa618205dd93c2",
+                "reference": "916cff8e02df5d52e67aaddd57aa618205dd93c2",
                 "shasum": ""
             },
             "require": {
@@ -2727,7 +2727,7 @@
                 "oauth",
                 "security"
             ],
-            "time": "2015-09-24 00:18:45"
+            "time": "2015-09-20 00:14:11"
         },
         {
             "name": "pdepend/pdepend",
@@ -2770,16 +2770,16 @@
         },
         {
             "name": "phpmd/phpmd",
-            "version": "2.3.1",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpmd/phpmd.git",
-                "reference": "241bc5f8d140419a8d981ec11063e009b05fd4c5"
+                "reference": "246b254505951508bea08db5dde44322264f75fe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/241bc5f8d140419a8d981ec11063e009b05fd4c5",
-                "reference": "241bc5f8d140419a8d981ec11063e009b05fd4c5",
+                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/246b254505951508bea08db5dde44322264f75fe",
+                "reference": "246b254505951508bea08db5dde44322264f75fe",
                 "shasum": ""
             },
             "require": {
@@ -2834,7 +2834,7 @@
                 "phpmd",
                 "pmd"
             ],
-            "time": "2015-09-22 09:31:11"
+            "time": "2015-09-22 05:16:44"
         },
         {
             "name": "phpunit/php-code-coverage",
