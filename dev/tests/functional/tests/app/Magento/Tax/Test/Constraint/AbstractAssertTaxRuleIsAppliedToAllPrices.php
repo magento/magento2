@@ -18,6 +18,8 @@ use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Checks that prices excl tax on category, product and cart pages are equal to specified in dataset.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractAssertTaxRuleIsAppliedToAllPrices extends AbstractConstraint
 {
