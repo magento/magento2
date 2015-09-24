@@ -93,7 +93,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                     );
                 }
             },
-            $files->getClassFiles(Files::INCLUDE_PUB_CODE | Files::INCLUDE_LIBS | Files::INCLUDE_DATA_SET)
+            $files->getClassFiles(Files::INCLUDE_PUB_CODE | Files::INCLUDE_LIBS | Files::AS_DATA_SET)
         );
     }
 
@@ -135,7 +135,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         include_once $componentRegistrar->getPath(ComponentRegistrar::LIBRARY, 'magento/framework')
             . '/Option/ArrayInterface.php';
         $blackList = file(__DIR__ . '/_files/blacklist.txt', FILE_IGNORE_NEW_LINES);
-        $dataProvider = Files::init()->getClassFiles(Files::INCLUDE_LIBS | Files::INCLUDE_DATA_SET);
+        $dataProvider = Files::init()->getClassFiles(Files::INCLUDE_LIBS | Files::AS_DATA_SET);
 
         foreach ($dataProvider as $key => $data) {
             $file = str_replace(BP . '/', '', $data[0]);
