@@ -5,12 +5,18 @@
  */
 namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget;
+use Magento\Backend\Block\Widget\Tab\TabInterface;
+use Magento\Catalog\Block\Adminhtml\Product\Edit\Tabs;
+use Magento\Framework\Registry;
+
 /**
  * Adminhtml catalog product downloadable items tab and form
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Downloadable extends \Magento\Backend\Block\Widget implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Downloadable extends Widget implements TabInterface
 {
     /**
      * Reference to product objects that is being edited
@@ -34,23 +40,23 @@ class Downloadable extends \Magento\Backend\Block\Widget implements \Magento\Bac
      *
      * @var string
      */
-    protected $accordionBlockId = 'downloadableInfo';
+    protected $blockId = 'downloadableInfo';
 
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
+     * @param Context $context
+     * @param Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
+        Context $context,
+        Registry $registry,
         array $data = []
     ) {
         $this->_coreRegistry = $registry;
@@ -132,7 +138,7 @@ class Downloadable extends \Magento\Backend\Block\Widget implements \Magento\Bac
      */
     public function getGroupCode()
     {
-        return \Magento\Catalog\Block\Adminhtml\Product\Edit\Tabs::ADVANCED_TAB_GROUP_CODE;
+        return Tabs::ADVANCED_TAB_GROUP_CODE;
     }
 
     /**
@@ -142,6 +148,6 @@ class Downloadable extends \Magento\Backend\Block\Widget implements \Magento\Bac
      */
     public function getContentTabId()
     {
-        return 'tab_content_' . $this->accordionBlockId;
+        return 'tab_content_' . $this->blockId;
     }
 }
