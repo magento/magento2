@@ -1385,7 +1385,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
                 // 5. Media gallery phase
                 $mediaGalleryImages = [];
                 $mediaGalleryLabels = [];
-                $additionalImageIsDesabled = [];
+                $additionalImageIsDisabled = [];
                 if (!empty($rowData[self::COL_MEDIA_IMAGE])) {
                     $mediaGalleryImages =
                         explode($this->getMultipleValueSeparator(), $rowData[self::COL_MEDIA_IMAGE]);
@@ -1396,7 +1396,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
                         $mediaGalleryLabels = [];
                     }
                     if (isset($rowData['_media_is_disabled'])) {
-                        $additionalImageIsDesabled =
+                        $additionalImageIsDisabled =
                             array_flip(explode($this->getMultipleValueSeparator(), $rowData['_media_is_disabled']));
                     }
                     if (count($mediaGalleryLabels) > count($mediaGalleryImages)) {
