@@ -68,7 +68,6 @@ class TranslatedLists implements ListsInterface
     {
         $currentLocale = $this->localeResolver->getLocale();
         $locales = \ResourceBundle::getLocales('') ?: [];
-        array_push($locales, 'zh_CN');
         $languages = (new LanguageBundle())->get($currentLocale)['Languages'];
         $countries = (new RegionBundle())->get($currentLocale)['Countries'];
 

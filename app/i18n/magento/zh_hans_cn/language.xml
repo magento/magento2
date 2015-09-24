@@ -6,7 +6,7 @@
  */
 -->
 <language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../lib/internal/Magento/Framework/App/Language/package.xsd">
-    <code>zh_CN</code>
+    <code>zh_Hans_CN</code>
     <vendor>magento</vendor>
-    <package>zh_cn</package>
+    <package>zh_hans_cn</package>
 </language>
