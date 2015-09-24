@@ -167,15 +167,15 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
     {
         $priceFilter = $this->createRangeFilter('static');
         $query = $this->createFilterQuery($priceFilter);
-        $this->createAttributeMock('static', 'static', 'backend_table', 0);
+        $this->createAttributeMock('static', 'static', 'backend_table', 0, 'select');
         $this->request->expects($this->once())
             ->method('getQuery')
             ->willReturn($query);
         $this->select->expects($this->once())
             ->method('joinLeft')
             ->with(
-                ['4111c4a3daddb5c5dba31cdac705114b' => 'backend_table'],
-                'search_index.entity_id = 4111c4a3daddb5c5dba31cdac705114b.entity_id',
+                ['static_filter' => 'backend_table'],
+                'search_index.entity_id = static_filter.entity_id',
                 null
             )
             ->willReturnSelf();
@@ -204,7 +204,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
 
     public function testAddTermFilter()
     {
-        $this->createAttributeMock('color', null, null, 132, 0);
+        $this->createAttributeMock('color', null, null, 132, 'select', 0);
         $categoryIdsFilter = $this->createTermFilter('color');
         $query = $this->createFilterQuery($categoryIdsFilter);
         $this->request->expects($this->once())
@@ -226,9 +226,9 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
 
     public function testAddBoolQueryWithTermFiltersInside()
     {
-        $this->createAttributeMock('must1', null, null, 101, 0);
-        $this->createAttributeMock('should1', null, null, 102, 1);
-        $this->createAttributeMock('mustNot1', null, null, 103, 2);
+        $this->createAttributeMock('must1', null, null, 101, 'select', 0);
+        $this->createAttributeMock('should1', null, null, 102, 'select', 1);
+        $this->createAttributeMock('mustNot1', null, null, 103, 'select', 2);
 
         $query = $this->createBoolQuery(
             [
@@ -280,9 +280,9 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
 
     public function testAddBoolQueryWithTermAndPriceFiltersInside()
     {
-        $this->createAttributeMock('must1', null, null, 101, 0);
-        $this->createAttributeMock('should1', null, null, 102, 1);
-        $this->createAttributeMock('mustNot1', null, null, 103, 2);
+        $this->createAttributeMock('must1', null, null, 101, 'select', 0);
+        $this->createAttributeMock('should1', null, null, 102, 'select', 1);
+        $this->createAttributeMock('mustNot1', null, null, 103, 'select', 2);
         $query = $this->createBoolQuery(
             [
                 $this->createFilterQuery($this->createTermFilter('must1')),
@@ -342,9 +342,9 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
 
     public function testAddBoolFilterWithTermFiltersInside()
     {
-        $this->createAttributeMock('must1', null, null, 101, 0);
-        $this->createAttributeMock('should1', null, null, 102, 1);
-        $this->createAttributeMock('mustNot1', null, null, 103, 2);
+        $this->createAttributeMock('must1', null, null, 101, 'select', 0);
+        $this->createAttributeMock('should1', null, null, 102, 'select', 1);
+        $this->createAttributeMock('mustNot1', null, null, 103, 'select', 2);
         $query = $this->createFilterQuery(
             $this->createBoolFilter(
                 [
@@ -397,9 +397,9 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
 
     public function testAddBoolFilterWithBoolFiltersInside()
     {
-        $this->createAttributeMock('must1', null, null, 101, 0);
-        $this->createAttributeMock('should1', null, null, 102, 1);
-        $this->createAttributeMock('mustNot1', null, null, 103, 2);
+        $this->createAttributeMock('must1', null, null, 101, 'select', 0);
+        $this->createAttributeMock('should1', null, null, 102, 'select', 1);
+        $this->createAttributeMock('mustNot1', null, null, 103, 'select', 2);
         $query = $this->createFilterQuery(
             $this->createBoolFilter(
                 [
@@ -563,6 +563,7 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
      * @param string $backendType
      * @param string $backendTable
      * @param int $attributeId
+     * @param string $frontendInput
      * @param int $positionInCollection
      */
     private function createAttributeMock(
@@ -570,10 +571,11 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
         $backendType = null,
         $backendTable = null,
         $attributeId = 120,
+        $frontendInput = 'select',
         $positionInCollection = 0
     ) {
         $attribute = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Eav\Attribute')
-            ->setMethods(['getBackendType', 'getBackendTable', 'getId'])
+            ->setMethods(['getBackendType', 'getBackendTable', 'getId', 'getFrontendInput'])
             ->disableOriginalConstructor()
             ->getMock();
         $attribute->method('getId')
@@ -582,6 +584,8 @@ class TableMapperTest extends \PHPUnit_Framework_TestCase
             ->willReturn($backendType);
         $attribute->method('getBackendTable')
             ->willReturn($backendTable);
+        $attribute->method('getFrontendInput')
+            ->willReturn($frontendInput);
         $this->attributeCollection->expects($this->at($positionInCollection))
             ->method('getItemByColumnValue')
             ->with('attribute_code', $code)
