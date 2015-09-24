@@ -43,14 +43,14 @@ class DataProvider implements DataProviderInterface
     /**
      * Filesystem
      *
-     * @var ReadInterface
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
      */
     protected $rootDirectory;
 
     /**
      * Basic translate renderer
      *
-     * @var Translate
+     * @var \Magento\Framework\Phrase\Renderer\Translate
      */
     protected $translate;
 
