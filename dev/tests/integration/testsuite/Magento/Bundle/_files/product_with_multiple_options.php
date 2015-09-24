@@ -6,8 +6,26 @@
 
 require __DIR__ . '/../../../Magento/Catalog/_files/multiple_products.php';
 
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+$productIds = range(10, 12, 1);
+foreach ($productIds as $productId) {
+    /** @var \Magento\CatalogInventory\Model\Stock\Item $stockItem */
+    $stockItem = $objectManager->create('Magento\CatalogInventory\Model\Stock\Item');
+    $stockItem->load($productId, 'product_id');
+
+    if (!$stockItem->getProductId()) {
+        $stockItem->setProductId($productId);
+    }
+    $stockItem->setUseConfigManageStock(1);
+    $stockItem->setQty(1000);
+    $stockItem->setIsQtyDecimal(0);
+    $stockItem->setIsInStock(1);
+    $stockItem->save();
+}
+
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$product = $objectManager->create('Magento\Catalog\Model\Product');
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
     ->setId(3)
     ->setAttributeSetId(4)
