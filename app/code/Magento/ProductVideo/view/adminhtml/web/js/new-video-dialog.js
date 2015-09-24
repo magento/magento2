@@ -270,6 +270,7 @@ define([
          * @private
          */
         _loadRemotePreview: function(sourceUrl) {
+            this._blockActionButtons(true);
             var url = this.options.saveRemoteVideoUrl;
             var self = this;
             $.ajax({
@@ -279,6 +280,7 @@ define([
                 success: $.proxy(function(result) {
                     this._tempPreviewImageData = result;
                     this._getPreviewImage().attr('src', sourceUrl).show();
+                    this._blockActionButtons(false);
                 }, self)
             });
         },
@@ -429,9 +431,10 @@ define([
                 files: file,
                 url: url
             };
-
+            this._blockActionButtons(true);
             this._uploadFile(data, $.proxy(function(result) {
                 this._onImageLoaded(result, file, oldFile, callback);
+                this._blockActionButtons(false);
             }, this));
 
         },
@@ -561,6 +564,10 @@ define([
             this.toggleButtons();
         },
 
+        _blockActionButtons: function(status) {
+            $('.page-actions-buttons').find('button').attr('disabled', status);
+        },
+
         /**
          * Check form
          * @returns {*}
@@ -626,8 +633,8 @@ define([
             var inputFile       = $(this._videoPreviewInputSelector);
             var itemId          = $(this._itemIdSelector).val();
             itemId              = itemId.slice(1, itemId.length - 1);
-            var mediaFields     = $('input[name*="' + itemId + '"]');
-            var _inputSelector  = '[name*="[' + itemId + ']"';
+            var _inputSelector  = '[name*="[' + itemId + ']"]';
+            var mediaFields     = $('input' + _inputSelector);
             $.each(mediaFields, function(i, el) {
                 var elName      = el.name;
                 var start       = elName.indexOf(itemId) + itemId.length + 2;
@@ -635,7 +642,7 @@ define([
                 var _field      = $('#' + fieldName);
 
                 if (_field.length > 0) {
-                    var _tmp = _inputSelector.slice(0, _inputSelector.length - 1) + '[' + fieldName + ']"]';
+                    var _tmp = _inputSelector.slice(0, _inputSelector.length - 2) + '[' + fieldName + ']"]';
                     $(_tmp).val(_field.val());
                 }
             });
