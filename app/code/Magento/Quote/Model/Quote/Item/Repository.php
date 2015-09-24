@@ -75,7 +75,6 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
 
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function save(\Magento\Quote\Api\Data\CartItemInterface $cartItem)
     {
@@ -99,28 +98,22 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
                     );
                 }
                 $productType = $item->getProduct()->getTypeId();
-                $buyRequestData = $this->getBuyRequest($item->getProduct()->getTypeId(), $cartItem);
+                $buyRequestData = $this->getBuyRequest($productType, $cartItem);
                 if (is_object($buyRequestData)) {
                     /** update item product options */
                     $buyRequestData->setData('qty', $qty);
-                    /** @var  \Magento\Quote\Model\Quote\Item $item */
+                    /** @var  \Magento\Quote\Model\Quote\Item $cartItem */
                     $cartItem = $quote->updateItem($itemId, $buyRequestData);
                 } else {
                     /** update item qty */
-                    $cartItem = $quote->getItemById($itemId);
-                    if (!$cartItem) {
-                        throw new NoSuchEntityException(
-                            __('Cart %1 doesn\'t contain item  %2', $cartId, $itemId)
-                        );
-                    }
-                    $cartItem->setData('qty', $qty);
+                    $item->setData('qty', $qty);
                 }
             } else {
                 /** add item to shopping cart */
                 $product = $this->productRepository->get($cartItem->getSku());
                 $productType = $product->getTypeId();
                 /** @var  \Magento\Quote\Model\Quote\Item|string $cartItem */
-                $cartItem = $quote->addProduct($product, $this->getBuyRequest($product->getTypeId(), $cartItem));
+                $cartItem = $quote->addProduct($product, $this->getBuyRequest($productType, $cartItem));
                 if (is_string($cartItem)) {
                     throw new \Magento\Framework\Exception\LocalizedException(__($cartItem));
                 }
@@ -153,7 +146,7 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
         $params = (isset($this->cartItemProcessors[$productType]))
             ? $this->cartItemProcessors[$productType]->convertToBuyRequest($cartItem)
             : null;
-        return ($params === null) ? $cartItem->getQty() : $params->setQty($cartItem->getQty());
+        return ($params === null) ? $cartItem->getQty() : $params;
     }
 
     /**
