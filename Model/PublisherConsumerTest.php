@@ -12,6 +12,8 @@ use Magento\Framework\Amqp\PublisherInterface;
  */
 class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
 {
+    const MAX_NUMBER_OF_TRIALS = 3;
+
     /**
      * @var PublisherInterface
      */
@@ -110,7 +112,7 @@ class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
             $object->setName('Object name ' . $i)->setEntityId($i);
             $this->publisher->publish('demo.object.created', $object);
         }
-        for ($i = 0; $i < \Magento\MysqlMq\Model\Consumer::MAX_NUMBER_OF_TRIALS; $i++) {
+        for ($i = 0; $i < self::MAX_NUMBER_OF_TRIALS; $i++) {
             $this->consumeMessages('demoConsumerQueueOneWithException', null, 0);
         }
         $this->consumeMessages('demoConsumerQueueOne', null, 5);
@@ -121,7 +123,7 @@ class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
             $this->publisher->publish('demo.object.created', $object);
         }
         /** Try consume messages for MAX_NUMBER_OF_TRIALS and then consumer them without exception */
-        for ($i = 0; $i < \Magento\MysqlMq\Model\Consumer::MAX_NUMBER_OF_TRIALS + 1; $i++) {
+        for ($i = 0; $i < selfr::MAX_NUMBER_OF_TRIALS + 1; $i++) {
             $this->consumeMessages('demoConsumerQueueOneWithException', null, 0);
         }
         /** Make sure that messages are not accessible anymore after number of trials is exceeded */
