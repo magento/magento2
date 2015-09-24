@@ -193,7 +193,7 @@ class Labels extends \Magento\Shipping\Model\Shipping
         $request->setRecipientAddressStreet1($address->getStreetLine(1));
         $request->setRecipientAddressStreet2($address->getStreetLine(2));
         $request->setRecipientAddressCity($address->getCity());
-        $request->setRecipientAddressStateOrProvinceCode($address->getRegionCode());
+        $request->setRecipientAddressStateOrProvinceCode($recipientRegionCode ?: $address->getRegionCode());
         $request->setRecipientAddressRegionCode($recipientRegionCode);
         $request->setRecipientAddressPostalCode($address->getPostcode());
         $request->setRecipientAddressCountryCode($address->getCountryId());
