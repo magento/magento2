@@ -135,6 +135,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      * @param \Magento\Sales\Model\Order\Email\Sender\OrderSender $orderSender
      * @param \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository
+     * @param \Magento\Framework\Xml\Security $security
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -158,6 +159,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
         \Magento\Sales\Model\Order\Email\Sender\OrderSender $orderSender,
         \Magento\Sales\Api\TransactionRepositoryInterface $transactionRepository,
+        \Magento\Framework\Xml\Security $security,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -183,6 +185,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
             $dataHelper,
             $requestFactory,
             $responseFactory,
+            $security,
             $resource,
             $resourceCollection,
             $data
