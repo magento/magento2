@@ -5,6 +5,8 @@
  */
 namespace Magento\Downloadable\Test\Unit\Model\Quote\Item;
 
+use Magento\Downloadable\Model\Quote\Item\CartItemProcessor;
+
 class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
 {
     /**
