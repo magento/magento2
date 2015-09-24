@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Downloadable\Model\Quote\Item;
+namespace Magento\Downloadable\Test\Unit\Model\Quote\Item;
 
 class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
 {
