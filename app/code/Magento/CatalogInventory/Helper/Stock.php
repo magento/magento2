@@ -5,7 +5,6 @@
  */
 namespace Magento\CatalogInventory\Helper;
 
-use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -50,7 +49,6 @@ class Stock
      * @param ScopeConfigInterface $scopeConfig
      * @param StatusFactory $stockStatusFactory
      * @param StockRegistryProviderInterface $stockRegistryProvider
-     * @internal param ObjectManagerInterface $objectManager
      */
     public function __construct(
         StoreManagerInterface $storeManager,
