@@ -75,6 +75,7 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function save(\Magento\Quote\Api\Data\CartItemInterface $cartItem)
     {
@@ -132,7 +133,12 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
             throw new CouldNotSaveException(__('Could not save quote'));
         }
         $itemId = $cartItem->getId();
-        return $this->addProductOptions($productType, $quote->getItemById($itemId));
+        foreach ($quote->getAllItems() as $quoteItem) {
+            if ($itemId == $quoteItem->getId()) {
+                return $this->addProductOptions($productType, $quoteItem);
+            }
+        }
+        throw new CouldNotSaveException(__('Could not save quote'));
     }
 
     /**
