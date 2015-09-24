@@ -207,7 +207,7 @@ class Config extends Widget implements TabInterface
      */
     public function getTabLabel()
     {
-        return __('Associated Products');
+        return __('Configurations');
     }
 
     /**
@@ -217,7 +217,7 @@ class Config extends Widget implements TabInterface
      */
     public function getTabTitle()
     {
-        return __('Associated Products');
+        return __('Configurations');
     }
 
     /**
