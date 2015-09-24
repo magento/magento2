@@ -71,6 +71,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
+        $this->markTestSkipped('MAGETWO-43248');
         unset($this->model);
         $magentoObjectManagerFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER);
         $objectManager = $magentoObjectManagerFactory->create($_SERVER);
@@ -277,6 +278,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     public function testWakeUpWith()
     {
+        $this->markTestSkipped('MAGETWO-43248');
         $objectManagerMock = $this->getMock('Magento\Framework\App\ObjectManager', [], [], '', false);
         $objectManagerMock->expects($this->once())
             ->method('create')
