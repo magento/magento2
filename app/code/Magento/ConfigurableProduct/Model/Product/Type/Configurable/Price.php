@@ -23,11 +23,11 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
         if ($qty === null && $product->getCalculatedFinalPrice() !== null) {
             return $product->getCalculatedFinalPrice();
         }
-        //TODO: MAGETWO-23739 catalogrule price must get from simple product.
+
         if ($product->getCustomOption('simple_product')) {
-            $product->setSelectedConfigurableOption($product->getCustomOption('simple_product')->getProduct());
             /** @var \Magento\Catalog\Model\Product $selectedProduct */
             $selectedProduct= $product->getCustomOption('simple_product')->getProduct();
+            $product->setSelectedConfigurableOption($selectedProduct);
             $finalPrice = $selectedProduct->getPrice();
         } else {
             $finalPrice = $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue();
