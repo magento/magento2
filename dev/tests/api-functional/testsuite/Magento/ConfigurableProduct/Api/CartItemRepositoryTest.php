@@ -51,6 +51,88 @@ class CartItemRepositoryTest extends WebapiAbstract
         $response = $this->_webApiCall($serviceInfo, $this->getRequestData($cartId));
         $this->assertNotNull($response['item_id']);
         $this->assertEquals(Configurable::TYPE_CODE, $response['product_type']);
+
+        $quote->load('test_order_1', 'reserved_order_id');
+        $items = $quote->getAllItems();
+        $this->assertGreaterThan(0, count($items));
+
+        /** @var \Magento\Quote\Model\Resource\Quote\Item|null $item */
+        $item = null;
+        /** @var \Magento\Quote\Model\Resource\Quote\Item $quoteItem */
+        foreach ($items as $quoteItem) {
+            if ($quoteItem->getProductType() == Configurable::TYPE_CODE && !$quoteItem->getParentItemId()) {
+                $item = $quoteItem;
+                break;
+            }
+        }
+        $this->assertNotNull($item);
+        $this->assertEquals($item->getSku(), self::CONFIGURABLE_PRODUCT_SKU);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage You need to choose options for your item.
+     */
+    public function testAddProductWithIncorrectOptions()
+    {
+        /** @var \Magento\Quote\Model\Quote $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote->load('test_order_1', 'reserved_order_id');
+        $cartId = $quote->getId();
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+
+        $requestData = $this->getRequestData($cartId);
+        $requestData['cartItem']['product_option']['extension_attributes']
+        ['configurable_item_options'][0]['option_id'] = 1000;
+
+        $requestData['cartItem']['product_option']['extension_attributes']
+        ['configurable_item_options'][0]['option_value'] = 2000;
+
+        $this->_webApiCall($serviceInfo, $requestData);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
+     * @expectedException \Exception
+     * @expectedExceptionMessage Cart %1 doesn't contain item  %2
+     */
+    public function testUpdateIncorrectItem()
+    {
+        $qty = 1;
+        /** @var \Magento\Quote\Model\Quote  $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote->load('test_cart_with_configurable', 'reserved_order_id');
+        $cartId = $quote->getId();
+
+        $requestData = $this->getRequestData($cartId, 1);
+        $requestData['cartItem']['qty'] = $qty;
+        $requestData['cartItem']['item_id'] = 1000;
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/1000',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+        $this->_webApiCall($serviceInfo, $requestData);
     }
 
     /**
@@ -58,7 +140,7 @@ class CartItemRepositoryTest extends WebapiAbstract
      */
     public function testUpdate()
     {
-        $qty = 1;
+        $qty = 4;
         /** @var \Magento\Quote\Model\Quote  $quote */
         $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_cart_with_configurable', 'reserved_order_id');
@@ -81,7 +163,7 @@ class CartItemRepositoryTest extends WebapiAbstract
         $this->assertNotNull($item->getId());
         $this->assertEquals(Configurable::TYPE_CODE, $item->getProductType());
 
-        $requestData = $this->getRequestData($cartId);
+        $requestData = $this->getRequestData($cartId, 1);
         $requestData['cartItem']['qty'] = $qty;
         $requestData['cartItem']['item_id'] = $item->getId();
 
@@ -99,6 +181,64 @@ class CartItemRepositoryTest extends WebapiAbstract
         $response = $this->_webApiCall($serviceInfo, $requestData);
 
         $this->assertNotNull($response['item_id']);
+        $this->assertEquals(Configurable::TYPE_CODE, $response['product_type']);
+        $this->assertEquals($cartId, $response['quote_id']);
+        $this->assertEquals($qty, $response['qty']);
+        $this->assertEquals(
+            $response['product_option']['extension_attributes']['configurable_item_options'][0],
+            $requestData['cartItem']['product_option']['extension_attributes']['configurable_item_options'][0]
+        );
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/quote_with_configurable_product.php
+     */
+    public function testUpdateQty()
+    {
+        $qty = 1;
+        /** @var \Magento\Quote\Model\Quote  $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
+        $quote->load('test_cart_with_configurable', 'reserved_order_id');
+        $cartId = $quote->getId();
+
+        $items = $quote->getAllItems();
+        $this->assertGreaterThan(0, count($items));
+
+        /** @var \Magento\Quote\Model\Resource\Quote\Item|null $item */
+        $item = null;
+        /** @var \Magento\Quote\Model\Resource\Quote\Item $quoteItem */
+        foreach ($items as $quoteItem) {
+            if ($quoteItem->getProductType() == Configurable::TYPE_CODE) {
+                $item = $quoteItem;
+                break;
+            }
+        }
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/' . $item->getId(),
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+
+        $this->assertNotNull($item);
+        $this->assertNotNull($item->getId());
+        $this->assertEquals(Configurable::TYPE_CODE, $item->getProductType());
+
+        $requestData = $this->getRequestData($cartId);
+        $requestData['cartItem']['qty'] = $qty;
+        $requestData['cartItem']['item_id'] = $item->getId();
+        $requestData['cartItem']['product_option'] = null;
+
+        $response = $this->_webApiCall($serviceInfo, $requestData);
+
+        $this->assertNotNull($response['item_id']);
+        $this->assertEquals($item->getId(), $response['item_id']);
         $this->assertEquals(Configurable::TYPE_CODE, $response['product_type']);
         $this->assertEquals($cartId, $response['quote_id']);
         $this->assertEquals($qty, $response['qty']);
@@ -147,26 +287,33 @@ class CartItemRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @param int $cartId
+     * @param $cartId
+     * @param null $selectedOption
      * @return array
      */
-    protected function getRequestData($cartId)
+    protected function getRequestData($cartId, $selectedOption = null)
     {
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
         $product = $productRepository->get(self::CONFIGURABLE_PRODUCT_SKU);
 
         $configurableProductOptions = $product->getExtensionAttributes()->getConfigurableProductOptions();
+
+        $optionKey = 0;
+        if ($selectedOption && isset($options[$selectedOption])) {
+            $optionKey = $selectedOption;
+        }
+
         $attributeId = $configurableProductOptions[0]->getAttributeId();
         $options = $configurableProductOptions[0]->getOptions();
-        $optionId = $options[0]['value_index'];
+        $optionId = $options[$optionKey]['value_index'];
 
         return [
             'cartItem' => [
                 'sku' => self::CONFIGURABLE_PRODUCT_SKU,
                 'qty' => 1,
                 'quote_id' => $cartId,
-                'productOption' => [
+                'product_option' => [
                     'extension_attributes' => [
                         'configurable_item_options' => [
                             [

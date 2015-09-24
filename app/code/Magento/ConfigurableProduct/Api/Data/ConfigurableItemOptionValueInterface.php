@@ -5,11 +5,20 @@
  */
 namespace Magento\ConfigurableProduct\Api\Data;
 
+/**
+ * Interface ConfigurableItemOptionValueInterface
+ * @api
+ */
 interface ConfigurableItemOptionValueInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
+    /**#@+
+     * Constants defined for keys of array, makes typos less likely
+     */
     const OPTION_ID = 'option_id';
 
     const OPTION_VALUE = 'option_value';
+
+    /**#@-*/
 
     /**
      * Get option SKU

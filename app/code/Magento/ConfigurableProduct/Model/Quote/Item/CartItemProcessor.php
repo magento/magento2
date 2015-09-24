@@ -53,7 +53,7 @@ class CartItemProcessor implements CartItemProcessorInterface
      */
     public function convertToBuyRequest(CartItemInterface $cartItem)
     {
-        if ($cartItem->getProductOption()) {
+        if ($cartItem->getProductOption() && $cartItem->getProductOption()->getExtensionAttributes()) {
             /** @var \Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface $options */
             $options = $cartItem->getProductOption()->getExtensionAttributes()->getConfigurableItemOptions();
             if (is_array($options)) {
