@@ -46,9 +46,31 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
         $this->connection
             ->expects($this->atLeastOnce())
             ->method('query')
-            ->with('SHOW GRANTS FOR current_user()')
             ->willReturn($pdo);
-        $pdo->expects($this->once())->method('fetchAll')->willReturn([['GRANT ALL PRIVILEGES ON `name.*` TO']]);
+        $pdo->expects($this->once())
+            ->method('fetchAll')
+            ->willReturn(
+                [
+                    ['SELECT'],
+                    ['INSERT'],
+                    ['UPDATE'],
+                    ['DELETE'],
+                    ['CREATE'],
+                    ['DROP'],
+                    ['REFERENCES'],
+                    ['INDEX'],
+                    ['ALTER'],
+                    ['CREATE TEMPORARY TABLES'],
+                    ['LOCK TABLES'],
+                    ['EXECUTE'],
+                    ['CREATE VIEW'],
+                    ['SHOW VIEW'],
+                    ['CREATE ROUTINE'],
+                    ['ALTER ROUTINE'],
+                    ['EVENT'],
+                    ['TRIGGER'],
+                ]
+            );
         $this->assertEquals(true, $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password'));
     }
 
@@ -65,11 +87,10 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
             ->willReturn('5.6.0-0ubuntu0.12.04.1');
         $pdo = $this->getMockForAbstractClass('Zend_Db_Statement_Interface', [], '', false);
         $this->connection
-            ->expects($this->once())
+            ->expects($this->atLeastOnce())
             ->method('query')
-            ->with('SHOW GRANTS FOR current_user()')
             ->willReturn($pdo);
-        $pdo->expects($this->once())->method('fetchAll')->willReturn([['GRANT SELECT ON *.* TO']]);
+        $pdo->expects($this->atLeastOnce())->method('fetchAll')->willReturn([['SELECT']]);
         $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password');
     }
 
