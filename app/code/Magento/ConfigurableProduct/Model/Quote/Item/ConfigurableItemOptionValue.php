@@ -7,6 +7,7 @@ namespace Magento\ConfigurableProduct\Model\Quote\Item;
 
 use Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
+
 /**
  * Class ConfigurableItemOptionValue
  */
