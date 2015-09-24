@@ -35,6 +35,33 @@
             </field>
         </dataset>
 
+        <dataset name="product_with_custom_color_attribute">
+            <field name="sku" xsi:type="string">Simple Product %isolation%</field>
+            <field name="name" xsi:type="string">simple_product_%isolation%</field>
+            <field name="attribute_set_id" xsi:type="array">
+                <item name="dataset" xsi:type="string">custom_attribute_set_with_colors</item>
+            </field>
+            <field name="quantity_and_stock_status" xsi:type="array">
+                <item name="qty" xsi:type="string">25</item>
+                <item name="is_in_stock" xsi:type="string">In Stock</item>
+            </field>
+            <field name="weight" xsi:type="string">1</field>
+            <field name="price" xsi:type="array">
+                <item name="value" xsi:type="string">560</item>
+                <item name="dataset" xsi:type="string" />
+            </field>
+            <field name="category_ids" xsi:type="array">
+                <item name="dataset" xsi:type="string">default_subcategory</item>
+            </field>
+            <field name="website_ids" xsi:type="array">
+                <item name="0" xsi:type="string">Main Website</item>
+            </field>
+            <field name="checkout_data" xsi:type="array">
+                <item name="dataset" xsi:type="string">simple_order_default</item>
+            </field>
+            <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
+        </dataset>
+
         <dataset name="product_10_dollar">
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
