@@ -918,12 +918,8 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
         if (!$this->config->isDebugEnabled()) {
             return $this;
         }
-        if (!is_array($debugData)) {
-            if (is_object($debugData)) {
-                $debugData = $this->convertObjToArray($debugData);
-            } else {
-                $debugData = [$debugData];
-            }
+        if (is_object($debugData)) {
+            $debugData = $this->convertObjToArray($debugData);
         }
         parent::_debug((array)$debugData);
         return $this;
