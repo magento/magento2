@@ -2,6 +2,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+// jscs:disable jsDoc
 define([
     'uiComponent',
     'jquery',
@@ -33,42 +34,49 @@ define([
             this.gridExisting.columns = ko.observableArray();
             this.gridNew.columns = ko.observableArray();
             this.gridDeleted.columns = ko.observableArray();
+
             return this;
         },
         nextLabelText: $.mage.__('Generate Products'),
         variations: [],
         generateGrid: function (variations, getSectionValue) {
-            var productName = this.variationsComponent().getProductValue('name');
-            var productPrice = this.variationsComponent().getProductValue('price');
-            var productWeight = this.variationsComponent().getProductValue('weight');
-            var variationsKeys = [];
-            var gridExisting = [];
-            var gridNew = [];
-            var gridDeleted = [];
+            var productName = this.variationsComponent().getProductValue('name'),
+                productPrice = this.variationsComponent().getProductValue('price'),
+                productWeight = this.variationsComponent().getProductValue('weight'),
+                variationsKeys = [],
+                gridExisting = [],
+                gridNew = [],
+                gridDeleted = [];
             this.variations = [];
 
             _.each(variations, function (options) {
-                var images, sku, quantity, price;
-                var productId = this.variationsComponent().getProductIdByOptions(options);
+                var product, images, sku, quantity, price, variation,
+                    productId = this.variationsComponent().getProductIdByOptions(options);
+
                 if (productId) {
-                    var product = _.findWhere(this.variationsComponent().variations, {productId: productId});
+                    product = _.findWhere(this.variationsComponent().variations, {
+                        productId: productId
+                    });
                 }
                 images = getSectionValue('images', options);
                 sku = productName + _.reduce(options, function (memo, option) {
                     return memo + '-' + option.label;
                 }, '');
                 quantity = getSectionValue('quantity', options);
+
                 if (!quantity && productId) {
                     quantity = product.quantity;
                 }
                 price = getSectionValue('price', options);
+
                 if (!price) {
                     price = productId ? product.price : productPrice;
                 }
+
                 if (productId && !images.file) {
                     images = product.images;
                 }
-                var variation = {
+                variation = {
                     options: options,
                     images: images,
                     sku: sku,
@@ -78,6 +86,7 @@ define([
                     weight: productWeight,
                     editable: true
                 };
+
                 if (productId) {
                     variation.sku = product.sku;
                     variation.weight = product.weight;
@@ -99,7 +108,9 @@ define([
 
             _.each(_.omit(this.variationsComponent().productAttributesMap, variationsKeys), function (productId) {
                 gridDeleted.push(this.prepareRowForGrid(
-                    _.findWhere(this.variationsComponent().variations, {productId: productId})
+                    _.findWhere(this.variationsComponent().variations, {
+                        productId: productId
+                    })
                 ));
             }.bind(this));
 
@@ -108,9 +119,11 @@ define([
                 this.gridDeleted.columns(this.getColumnsName(this.variationsComponent().productAttributes));
             }
         },
-        prepareRowForGrid: function(variation) {
+        prepareRowForGrid: function (variation) {
             var row = [];
-            row.push(_.extend({images: []}, variation.images));
+            row.push(_.extend({
+                images: []
+            }, variation.images));
             row.push(variation.sku);
             row.push(variation.quantity);
             _.each(variation.options, function (option) {
@@ -120,10 +133,10 @@ define([
 
             return row;
         },
-        getGridTemplate: function() {
+        getGridTemplate: function () {
             return this.gridTemplate;
         },
-        getGridId: function() {
+        getGridId: function () {
             return _.uniqueId('grid_');
         },
         getColumnsName: function (attributes) {
@@ -144,11 +157,11 @@ define([
             this.gridDeleted([]);
             this.generateGrid(wizard.data.variations, wizard.data.sectionHelper);
         },
-        force: function (wizard) {
+        force: function () {
             this.variationsComponent().render(this.variations, this.attributes());
             $('[data-role=step-wizard-dialog]').trigger('closeModal');
         },
-        back: function (wizard) {
+        back: function () {
         }
     });
 });

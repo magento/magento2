@@ -12,47 +12,54 @@ use Magento\Store\Test\Fixture\Store;
 
 /**
  * Footer block
- * CmsIndex page footer block
+ * CmsIndex page Footer block
  */
 class Footer extends Block
 {
     /**
-     * Link selector
+     * Locator value for correspondent link.
      *
      * @var string
      */
     protected $linkSelector = '//*[contains(@class, "links")]//a[contains(text(), "%s")]';
 
     /**
-     * Variable selector
+     * Locator value for variable.
      *
      * @var string
      */
     protected $variableSelector = './/ul[contains(@class, "links")]/*[text()="%s"]';
 
     /**
-     * Store group dropdown selector
+     * Locator value for "Store group" dropdown.
      *
      * @var string
      */
     protected $storeGroupDropdown = '.switcher.store';
 
     /**
-     * Store Group switch selector
+     * Locator value for "Store group" switcher.
      *
      * @var string
      */
     protected $storeGroupSwitch = '[data-toggle="dropdown"]';
 
     /**
-     * Store group selector
+     * Locator value for correspondent Store group.
      *
      * @var string
      */
     protected $storeGroupSelector = './/a[contains(.,"%s")]';
 
     /**
-     * Click on link by name
+     * Locator value for "Advanced Search" link.
+     *
+     * @var string
+     */
+    protected $advancedSearchSelector = '[data-action="advanced-search"]';
+
+    /**
+     * Click on link by its title.
      *
      * @param string $linkName
      * @return void
@@ -68,7 +75,18 @@ class Footer extends Block
     }
 
     /**
-     * Check Variable visibility by html value
+     * Check is link is visible.
+     *
+     * @param string $linkName
+     * @return bool
+     */
+    public function isLinkVisible($linkName)
+    {
+        return $this->_rootElement->find(sprintf($this->linkSelector, $linkName), Locator::SELECTOR_XPATH)->isVisible();
+    }
+
+    /**
+     * Check Variable visibility by html value.
      *
      * @param string $htmlValue
      * @return bool
@@ -82,7 +100,7 @@ class Footer extends Block
     }
 
     /**
-     * Select store group
+     * Select Store group.
      *
      * @param Store $store
      * @return void
@@ -102,7 +120,7 @@ class Footer extends Block
     }
 
     /**
-     * Check if store visible in dropdown
+     * Check if correspondent "Store" is present in "Store" swither or not.
      *
      * @param Store $store
      * @return bool
@@ -118,12 +136,22 @@ class Footer extends Block
     }
 
     /**
-     * Check if store group switcher is visible
+     * Check if "Store" switcher is visible or not.
      *
      * @return bool
      */
     public function isStoreGroupSwitcherVisible()
     {
         return $this->_rootElement->find($this->storeGroupSwitch)->isVisible();
+    }
+
+    /**
+     * Open Advanced Search.
+     *
+     * @return void
+     */
+    public function openAdvancedSearch()
+    {
+        $this->_rootElement->find($this->advancedSearchSelector)->click();
     }
 }
