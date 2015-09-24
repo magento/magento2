@@ -141,7 +141,7 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
             new Downloadable.FileList(this.idName, null);
             <?php endif;?>
         }
-    }
+    };
 
     Downloadable.FileList = Class.create();
     Downloadable.FileList.prototype = {
@@ -193,7 +193,7 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
                 $(this.containerId + '-old').show();
             }.bind(this));
         }
-    }
+    };
 
     var alertAlreadyDisplayed = false;
 
@@ -207,6 +207,9 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
 });
 </script>
 
+<div id="<?php /* @escapeNotVerified */ echo $block->getId() ?>_content"
+    <?php /* @escapeNotVerified */ echo $block->getUiId('tab', 'content', $block->getId()) ?>
+>
 <div id="alert_messages_block"><?php echo $block->getMessageHtml() ?></div>
 <div>
     <label><?= __('Is this downloadable Product?'); ?> <input type="checkbox"/></label>
@@ -231,3 +234,4 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
         });
     </script>
 <?php endif; ?>
+</div>
