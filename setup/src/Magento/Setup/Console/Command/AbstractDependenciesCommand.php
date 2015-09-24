@@ -10,6 +10,10 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\DirSearch;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\ObjectManager\ObjectManager;
+use Magento\Framework\View\Design\Theme\ThemePackageList;
+use Magento\Framework\View\Design\Theme\ThemePackageFactory;
+use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -29,6 +33,24 @@ abstract class AbstractDependenciesCommand extends Command
      * Input key for output path of report file
      */
     const INPUT_KEY_OUTPUT = 'output';
+
+    /**
+     * Object Manager
+     *
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
+     * Constructor
+     *
+     * @param ObjectManagerProvider $objectManagerProvider
+     */
+    public function __construct(ObjectManagerProvider $objectManagerProvider)
+    {
+        $this->objectManager = $objectManagerProvider->get();
+        parent::__construct();
+    }
 
     /**
      * {@inheritdoc}
@@ -70,8 +92,13 @@ abstract class AbstractDependenciesCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $dirSearch = new DirSearch(new ComponentRegistrar(), new ReadFactory(new DriverPool()));
-            Files::setInstance(new Files(new ComponentRegistrar(), $dirSearch));
+            $componentRegistrar = new ComponentRegistrar();
+            $dirSearch = new DirSearch($componentRegistrar, new ReadFactory(new DriverPool()));
+            $themePackageList = new ThemePackageList(
+                $componentRegistrar,
+                new ThemePackageFactory($this->objectManager)
+            );
+            Files::setInstance(new Files($componentRegistrar, $dirSearch, $themePackageList));
             $this->buildReport($input->getOption(self::INPUT_KEY_OUTPUT));
             $output->writeln('<info>Report successfully processed.</info>');
         } catch (\Exception $e) {

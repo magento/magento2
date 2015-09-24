@@ -9,6 +9,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\ComponentRegistrarInterface;
+use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Module\Dependency\ServiceLocator;
 
 /**
@@ -26,10 +27,10 @@ class DependenciesShowFrameworkCommand extends AbstractDependenciesCommand
      *
      * @param ComponentRegistrarInterface $registrar
      */
-    public function __construct(ComponentRegistrarInterface $registrar)
+    public function __construct(ComponentRegistrarInterface $registrar, ObjectManagerProvider $objectManagerProvider)
     {
         $this->registrar = $registrar;
-        parent::__construct();
+        parent::__construct($objectManagerProvider);
     }
 
     /**

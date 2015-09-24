@@ -234,6 +234,7 @@ class Files
         if ($flags & self::INCLUDE_TEMPLATES) {
             return $this->getPhtmlFiles(false, false);
         }
+        return [];
     }
 
     /**
@@ -250,6 +251,7 @@ class Files
                 array_merge($this->getLibraryTestDirs(), $this->getLibraryRegistrationFiles())
             );
         }
+        return [];
     }
 
     /**
@@ -265,6 +267,7 @@ class Files
                 glob(BP . '/pub/*.php', GLOB_NOSORT)
             );
         }
+        return [];
     }
 
     /**
@@ -277,6 +280,7 @@ class Files
         if ($flags & self::INCLUDE_DEV_TOOLS) {
             return $this->getFilesSubset([BP . '/dev/tools/Magento'], '*.php', []);
         }
+        return [];
     }
 
     /**
