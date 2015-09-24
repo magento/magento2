@@ -5,21 +5,12 @@
  */
 namespace Magento\Developer\Test\Unit\Model\TemplateEngine\Plugin;
 
+use Magento\Developer\Model\TemplateEngine\Decorator\DebugHintsFactory;
 use Magento\Developer\Model\TemplateEngine\Plugin\DebugHints;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Store\Model\ScopeInterface;
 
 class DebugHintsTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var DebugHints
-     */
-    protected $model;
-
-    /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $objectManagerMock;
-
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -36,61 +27,76 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
     protected $devHelperMock;
 
     /**
-     * @var \Magento\Framework\View\TemplateEngineFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var DebugHintsFactory | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $subjectMock;
-
-    /**
-     * @var ObjectManagerHelper
-     */
-    protected $objectManagerHelper;
+    protected $debugHintsFactory;
 
     /**
      * @return void
      */
     protected function setUp()
     {
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+            ->getMockForAbstractClass();
 
-        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->devHelperMock = $this->getMock('Magento\Developer\Helper\Data', [], [], '', false);
-        $this->subjectMock = $this->getMock('Magento\Framework\View\TemplateEngineFactory', [], [], '', false);
+        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+            ->getMockForAbstractClass();
 
-        $this->model = $this->objectManagerHelper->getObject(
-            'Magento\Developer\Model\TemplateEngine\Plugin\DebugHints',
-            [
-                'objectManager' => $this->objectManagerMock,
-                'scopeConfig' => $this->scopeConfigMock,
-                'storeManager' => $this->storeManager,
-                'devHelper' => $this->devHelperMock
-            ]
-        );
+        $this->devHelperMock = $this->getMockBuilder('Magento\Developer\Helper\Data')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->debugHintsFactory = $this->getMockBuilder(
+            'Magento\Developer\Model\TemplateEngine\Decorator\DebugHintsFactory'
+        )
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**
+     * @param string $debugHintsPath
      * @param bool $showBlockHints
      * @return void
      * @dataProvider afterCreateActiveDataProvider
      */
-    public function testAfterCreateActive($showBlockHints)
+    public function testAfterCreateActive($debugHintsPath, $showBlockHints)
     {
         $this->devHelperMock->expects($this->once())
             ->method('isDevAllowed')
             ->willReturn(true);
-        $this->setupConfigFixture(true, $showBlockHints);
-        $engine = $this->getMock('Magento\Framework\View\TemplateEngineInterface');
-        $engineDecorated = $this->getMock('Magento\Framework\View\TemplateEngineInterface');
-        $this->objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with(
-                'Magento\Developer\Model\TemplateEngine\Decorator\DebugHints',
-                $this->identicalTo(['subject' => $engine, 'showBlockHints' => $showBlockHints])
-            )
-            ->willReturn($engineDecorated);
 
-        $this->assertEquals($engineDecorated, $this->model->afterCreate($this->subjectMock, $engine));
+        $this->setupConfigFixture($debugHintsPath, true, $showBlockHints);
+
+        $engine = $this->getMock('Magento\Framework\View\TemplateEngineInterface');
+
+        $debugHintsDecorator = $this->getMockBuilder(
+            'Magento\Developer\Model\TemplateEngine\Decorator\DebugHints'
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->debugHintsFactory->expects($this->once())
+            ->method('create')
+            ->with([
+                'subject' => $engine,
+                'showBlockHints' => $showBlockHints,
+            ])
+            ->willReturn($debugHintsDecorator);
+
+        $subjectMock = $this->getMockBuilder('Magento\Framework\View\TemplateEngineFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $debugHints = new DebugHints(
+            $this->scopeConfigMock,
+            $this->storeManager,
+            $this->devHelperMock,
+            $this->debugHintsFactory,
+            $debugHintsPath
+        );
+
+        $this->assertEquals($debugHintsDecorator, $debugHints->afterCreate($subjectMock, $engine));
     }
 
     /**
@@ -98,26 +104,44 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
      */
     public function afterCreateActiveDataProvider()
     {
-        return ['block hints disabled' => [false], 'block hints enabled' => [true]];
+        return [
+            ['dev/debug/template_hints_storefront', false],
+            ['dev/debug/template_hints_storefront', true],
+            ['dev/debug/template_hints_admin', false],
+            ['dev/debug/template_hints_admin', true],
+        ];
     }
 
     /**
+     * @param string $debugHintsPath
      * @param bool $isDevAllowed
      * @param bool $showTemplateHints
      * @return void
      * @dataProvider afterCreateInactiveDataProvider
      */
-    public function testAfterCreateInactive($isDevAllowed, $showTemplateHints)
+    public function testAfterCreateInactive($debugHintsPath, $isDevAllowed, $showTemplateHints)
     {
         $this->devHelperMock->expects($this->any())
             ->method('isDevAllowed')
             ->willReturn($isDevAllowed);
-        $this->setupConfigFixture($showTemplateHints, true);
-        $this->objectManagerMock->expects($this->never())
-            ->method('create');
+
+        $this->setupConfigFixture($debugHintsPath, $showTemplateHints, true);
+
         $engine = $this->getMock('Magento\Framework\View\TemplateEngineInterface');
 
-        $this->assertSame($engine, $this->model->afterCreate($this->subjectMock, $engine));
+        $subjectMock = $this->getMockBuilder('Magento\Framework\View\TemplateEngineFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $debugHints = new DebugHints(
+            $this->scopeConfigMock,
+            $this->storeManager,
+            $this->devHelperMock,
+            $this->debugHintsFactory,
+            $debugHintsPath
+        );
+
+        $this->assertSame($engine, $debugHints->afterCreate($subjectMock, $engine));
     }
 
     /**
@@ -126,20 +150,24 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
     public function afterCreateInactiveDataProvider()
     {
         return [
-            'dev disabled, template hints disabled' => [false, false],
-            'dev disabled, template hints enabled' => [false, true],
-            'dev enabled, template hints disabled' => [true, false]
+            ['dev/debug/template_hints_storefront', false, false],
+            ['dev/debug/template_hints_storefront', false, true],
+            ['dev/debug/template_hints_storefront', true, false],
+            ['dev/debug/template_hints_admin', false, false],
+            ['dev/debug/template_hints_admin', false, true],
+            ['dev/debug/template_hints_admin', true, false],
         ];
     }
 
     /**
      * Setup fixture values for store config
      *
+     * @param string $debugHintsPath
      * @param bool $showTemplateHints
      * @param bool $showBlockHints
      * @return void
      */
-    protected function setupConfigFixture($showTemplateHints, $showBlockHints)
+    protected function setupConfigFixture($debugHintsPath, $showTemplateHints, $showBlockHints)
     {
         $storeCode = 'default';
         $storeMock = $this->getMock('Magento\Store\Api\Data\StoreInterface');
@@ -154,14 +182,14 @@ class DebugHintsTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->willReturnMap([
                 [
-                    DebugHints::XML_PATH_DEBUG_TEMPLATE_HINTS,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    $debugHintsPath,
+                    ScopeInterface::SCOPE_STORE,
                     $storeCode,
                     $showTemplateHints,
                 ],
                 [
                     DebugHints::XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    ScopeInterface::SCOPE_STORE,
                     $storeCode,
                     $showBlockHints
                 ]
