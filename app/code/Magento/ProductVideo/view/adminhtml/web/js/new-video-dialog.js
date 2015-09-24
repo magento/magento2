@@ -641,9 +641,10 @@ define([
             });
             var imageData = this._getImage($('#file_name').val());
             var flagChecked     = $(this._videoDisableinputSelector).attr('checked') ? 1 : 0;
-            $('input' + _inputSelector + '[disabled]"]').val(flagChecked);
+            $('input[name*="' + itemId + '][disabled]"]').val(flagChecked);
             $(_inputSelector).siblings('.image-fade').css('visibility', flagChecked ? 'visible': 'hidden');
             imageData['disabled'] = flagChecked;
+
 
             if(this._tempPreviewImageData) {
                 this._onImageLoaded(this._tempPreviewImageData, null, imageData.file, $.proxy(this.close, this));
@@ -866,7 +867,7 @@ define([
                     $(field).val(container.find('input[name*="' + field.name + '"]').val());
                 });
 
-                var flagChecked = container.find('input[name*="disabled"]').val() == 'checked';
+                var flagChecked = container.find('input[name*="disabled"]').val() == 1;
                 $(self._videoDisableinputSelector).prop('checked', flagChecked);
 
                 var file = $('#file_name').val(container.find('input[name*="file"]').val());
