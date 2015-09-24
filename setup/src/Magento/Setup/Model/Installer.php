@@ -36,6 +36,7 @@ use Magento\Framework\App\State\CleanupFiles;
 use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Validator\DbValidator;
 use \Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
+use Magento\SampleData;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -205,6 +206,11 @@ class Installer
     private $dataSetupFactory;
 
     /**
+     * @var SampleData\Model\State
+     */
+    protected $sampleDataState;
+
+    /**
      * Constructor
      *
      * @param FilePermissions $filePermissions
@@ -225,6 +231,7 @@ class Installer
      * @param DbValidator $dbValidator
      * @param SetupFactory $setupFactory
      * @param DataSetupFactory $dataSetupFactory
+     * @param SampleData\Model\State $sampleDataState
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -246,7 +253,8 @@ class Installer
         CleanupFiles $cleanupFiles,
         DbValidator $dbValidator,
         SetupFactory $setupFactory,
-        DataSetupFactory $dataSetupFactory
+        DataSetupFactory $dataSetupFactory,
+        SampleData\Model\State $sampleDataState
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;
@@ -267,6 +275,7 @@ class Installer
         $this->dbValidator = $dbValidator;
         $this->setupFactory = $setupFactory;
         $this->dataSetupFactory = $dataSetupFactory;
+        $this->sampleDataState = $sampleDataState;
     }
 
     /**
@@ -296,7 +305,7 @@ class Installer
             ];
         }
         $script[] = ['Installing admin user...', 'installAdminUser', [$request]];
-        $script[] = ['Enabling caches:', 'cleanCaches', []];
+        $script[] = ['Caches clearing:', 'cleanCaches', []];
         $script[] = ['Disabling Maintenance Mode:', 'setMaintenanceMode', [0]];
         $script[] = ['Post installation file permissions check...', 'checkApplicationFilePermissions', []];
 
@@ -320,6 +329,9 @@ class Installer
 
         if ($this->progress->getCurrent() != $this->progress->getTotal()) {
             throw new \LogicException('Installation progress did not finish properly.');
+        }
+        if ($this->sampleDataState->hasError()) {
+            $this->log->log('Sample Data is installed with errors. See log file for details');
         }
     }
 
@@ -914,7 +926,7 @@ class Installer
     {
         $this->assertDeploymentConfigExists();
 
-        $this->clearCache();
+        $this->cleanCaches();
 
         $this->log->log('File system cleanup:');
         $messages = $this->cleanupFiles->clearCodeGeneratedClasses();
@@ -944,7 +956,7 @@ class Installer
         $this->log->log('Starting Magento uninstallation:');
 
         $this->cleanupDb();
-        $this->clearCache();
+        $this->cleanCaches();
 
         $this->log->log('File system cleanup:');
         $messages = $this->cleanupFiles->clearAllFiles();
@@ -955,18 +967,6 @@ class Installer
         $this->deleteDeploymentConfig();
 
         $this->log->logSuccess('Magento uninstallation complete.');
-    }
-
-    /**
-     * Clears cache
-     *
-     * @return void
-     */
-    private function clearCache()
-    {
-        $cache = $this->objectManagerProvider->get()->create('Magento\Framework\App\Cache');
-        $cache->clean();
-        $this->log->log('Cache cleared successfully');
     }
 
     /**
@@ -1001,6 +1001,7 @@ class Installer
         $cacheManager = $this->objectManagerProvider->get()->get('Magento\Framework\App\Cache\Manager');
         $types = $cacheManager->getAvailableTypes();
         $cacheManager->clean($types);
+        $this->log->log('Cache cleared successfully');
     }
 
     /**
