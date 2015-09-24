@@ -14,20 +14,20 @@ $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create
 $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     'Magento\Catalog\Model\Resource\Eav\Attribute'
 );
-$attribute->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'attribute_with_option');
+$attribute->loadByCode(\Magento\Catalog\Model\Product::ENTITY, 'select_attribute');
 
-/* Delete simple products per each option */
-/** @var $options \Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection */
-$options = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+/** @var $selectOptions \Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection */
+$selectOptions = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     'Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection'
 );
 $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
-$options->setAttributeFilter($attribute->getId());
 
-foreach ($options as $option) {
+$selectOptions->setAttributeFilter($attribute->getId());
+/* Delete simple products per each select(dropdown) option */
+foreach ($selectOptions as $option) {
     /** @var $product \Magento\Catalog\Model\Product */
     $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
     $product = $product->loadByAttribute('sku', 'simple_product_' . $option->getId());
@@ -35,7 +35,11 @@ foreach ($options as $option) {
         $product->delete();
     }
 }
+if ($attribute->getId()) {
+    $attribute->delete();
+}
 
+$attribute->loadByCode($installer->getEntityTypeId('catalog_product'), 'multiselect_attribute');
 if ($attribute->getId()) {
     $attribute->delete();
 }
