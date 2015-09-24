@@ -87,7 +87,10 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $productOptionMock->expects($this->exactly(2))->method('getExtensionAttributes')->willReturn($extAttributesMock);
+        $productOptionMock
+            ->expects($this->exactly(2))
+            ->method('getExtensionAttributes')
+            ->willReturn($extAttributesMock);
 
         $optionValueMock = $this->getMock('\Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface');
         $extAttributesMock->expects($this->once())
