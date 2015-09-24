@@ -2507,6 +2507,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function setTypeId($typeId)
     {
+        if ($typeId !== $this->_getData('type_id')) {
+            $this->_typeInstance = null;
+        }
         return $this->setData(self::TYPE_ID, $typeId);
     }
 

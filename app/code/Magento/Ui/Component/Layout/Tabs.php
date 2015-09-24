@@ -5,7 +5,6 @@
  */
 namespace Magento\Ui\Component\Layout;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
 use Magento\Ui\Component\Layout\Tabs\TabInterface;
@@ -16,7 +15,7 @@ use Magento\Framework\View\Element\UiComponent\LayoutInterface;
 /**
  * Class Tabs
  */
-class Tabs extends Generic implements LayoutInterface
+class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInterface
 {
     /**
      * @var string
