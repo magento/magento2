@@ -217,20 +217,13 @@ class Observer extends \Magento\Framework\Model\AbstractModel
         if ($this->_weeeData->isEnabled()) {
             $priceConfigObj = $observer->getData('configObj');
             try {
+                /** @var \Magento\Catalog\Model\Product $product */
                 $product = $this->_registry->registry('current_product');
-
                 $weeeAttributes = $this->_weeeData->getWeeeAttributesForBundle($product);
-
-                $calcPrice = 'finalPrice';
-                if ($this->_taxData->priceIncludesTax() &&
-                    $this->_taxData->displayPriceExcludingTax()
-                ) {
-                    $calcPrice = 'basePrice';
-                }
                 $priceConfig = $this->recurConfigAndInsertWeeePrice(
                     $priceConfigObj->getConfig(),
                     'prices',
-                    $calcPrice,
+                    $this->getWhichCalcPriceToUse($product->getStoreId()),
                     $weeeAttributes
                 );
                 $priceConfigObj->setConfig($priceConfig);
@@ -242,7 +235,7 @@ class Observer extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Recur through the config array and insert the weee price
+     * Recurse through the config array and insert the weee price
      *
      * @param  array $input
      * @param  string $searchKey
@@ -295,9 +288,11 @@ class Observer extends \Magento\Framework\Model\AbstractModel
                         ['amount' => (float)$weeeAttribute->getAmount()];
                     $weeeSum += (float)$weeeAttribute->getAmount();
                 }
-
                 $holder[$key]['weeePrice']['amount'] += (float)$weeeSum;
             }
+        } else {
+            //there were no Weee attributes for this option
+            unset($holder[$key]['weeePrice']);
         }
         return $holder;
     }
@@ -327,9 +322,10 @@ class Observer extends \Magento\Framework\Model\AbstractModel
             // only do processing on bundle product
             if ($product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
                 if (!array_key_exists('optionTemplate', $options)) {
+                    $calcPrice = $this->getWhichCalcPriceToUse($product->getStoreId());
                     $options['optionTemplate'] = '<%- data.label %>'
-                        . '<% if (data.finalPrice.value) { %>'
-                        . ' +<%- data.finalPrice.formatted %>'
+                        . '<% if (data.' . $calcPrice . '.value) { %>'
+                        . ' +<%- data.' . $calcPrice . '.formatted %>'
                         . '<% } %>';
                 }
 
@@ -339,7 +335,7 @@ class Observer extends \Magento\Framework\Model\AbstractModel
                             $options['optionTemplate'] .= sprintf(
                                 ' <%% if (data.weeePrice' . $weeeAttribute->getCode() . ') { %%>'
                                 . '  (' . $weeeAttribute->getName()
-                                . ':<%%= data.weeePrice' . $weeeAttribute->getCode()
+                                . ': <%%- data.weeePrice' . $weeeAttribute->getCode()
                                 . '.formatted %%>)'
                                 . '<%% } %%>'
                             );
@@ -350,7 +346,7 @@ class Observer extends \Magento\Framework\Model\AbstractModel
                 if ($this->_weeeData->geDisplayExlDescIncl($product->getStoreId())) {
                     $options['optionTemplate'] .= sprintf(
                         ' <%% if (data.weeePrice) { %%>'
-                        . '<%%= data.weeePrice.formatted %%>'
+                        . '<%%- data.weeePrice.formatted %%>'
                         . '<%% } %%>'
                     );
                 }
@@ -359,5 +355,23 @@ class Observer extends \Magento\Framework\Model\AbstractModel
         }
         $response->setAdditionalOptions($options);
         return $this;
+    }
+
+    /**
+     * Returns which product price to use as a basis for the Weee's final price
+     *
+     * @param  int|null $storeId
+     * @return string
+     */
+    protected function getWhichCalcPriceToUse($storeId = null)
+    {
+        $calcPrice = 'finalPrice';
+        if ($this->_weeeData->geDisplayExcl($storeId) ||
+            $this->_weeeData->geDisplayExlDescIncl($storeId) ||
+            ($this->_taxData->priceIncludesTax() && $this->_taxData->displayPriceExcludingTax())
+        ) {
+            $calcPrice = 'basePrice';
+        }
+        return $calcPrice;
     }
 }
