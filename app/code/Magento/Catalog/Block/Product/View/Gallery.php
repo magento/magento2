@@ -17,11 +17,6 @@ use Magento\Framework\Json\EncoderInterface;
 class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
 {
     /**
-     * @var \Magento\Framework\View\Asset\Repository
-     */
-    protected $_assetRepo;
-
-    /**
      * @var \Magento\Framework\Config\View
      */
     protected $configView;
@@ -34,13 +29,11 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
-        \Magento\Framework\View\Asset\Repository $assetRepo,
         EncoderInterface $jsonEncoder,
         array $data = []
     )
     {
         $this->jsonEncoder = $jsonEncoder;
-        $this->_assetRepo = $assetRepo;
         parent::__construct($context, $arrayUtils, $data);
     }
 
@@ -120,7 +113,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
         }
         if(empty($imagesItems)) {
             $imagesItems[] = [
-                'thumb' => $this->_imageHelper->getDefaultPlaceholderUrl('image'),
+                'thumb' => $this->_imageHelper->getDefaultPlaceholderUrl('thumbnail'),
                 'img' => $this->_imageHelper->getDefaultPlaceholderUrl('image'),
                 'original' => $this->_imageHelper->getDefaultPlaceholderUrl('image'),
                 'caption' => '',
