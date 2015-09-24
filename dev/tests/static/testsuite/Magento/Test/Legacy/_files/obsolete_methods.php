@@ -2460,4 +2460,5 @@ return [
         'Magento\ConfigurableProduct\Model\Product\VariationHandler::fillSimpleProductData'
     ],
     ['mergeBookmarkConfig', 'Magento\Ui\Model\Manager'],
+    ['getUrlInstance', 'Magento\Catalog\Model\Product\Url'],
 ];
