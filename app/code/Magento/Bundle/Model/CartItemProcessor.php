@@ -13,8 +13,8 @@ use Magento\Quote\Api\Data as QuoteApi;
 class CartItemProcessor implements CartItemProcessorInterface
 {
     /**
-    * @var \Magento\Framework\DataObject\Factory
-    */
+     * @var \Magento\Framework\DataObject\Factory
+     */
     protected $objectFactory;
 
     /**
@@ -61,9 +61,9 @@ class CartItemProcessor implements CartItemProcessorInterface
                 $requestData = [];
                 foreach ($options as $option) {
                     /** @var \Magento\Bundle\Api\Data\BundleOptionInterface $option */
-                    foreach($option->getOptionSelections() as $selection) {
+                    foreach ($option->getOptionSelections() as $selection) {
                         $requestData['bundle_option'][$option->getOptionId()][] = $selection;
-                        $requestData['bundle_option_qty'][$option->getOptionId()] =  $option->getOptionQty();
+                        $requestData['bundle_option_qty'][$option->getOptionId()] = $option->getOptionQty();
                     }
                 }
                 return $this->objectFactory->create($requestData);
@@ -74,6 +74,7 @@ class CartItemProcessor implements CartItemProcessorInterface
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function processProductOptions(CartItemInterface $cartItem)
     {

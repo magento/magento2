@@ -21,48 +21,48 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
     ->setPriceType(1)
     ->setPrice(10.0)
     ->setBundleOptionsData(
-    [
-        // Required "Drop-down" option
         [
-            'title' => 'Option 1',
-            'default_title' => 'Option 1',
-            'type' => 'select',
-            'required' => 1,
-            'delete' => '',
-        ],
-        // Required "Radio Buttons" option
-        [
-            'title' => 'Option 2',
-            'default_title' => 'Option 2',
-            'type' => 'radio',
-            'required' => 1,
-            'delete' => '',
-        ],
-        // Required "Checkbox" option
-        [
-            'title' => 'Option 3',
-            'default_title' => 'Option 3',
-            'type' => 'checkbox',
-            'required' => 1,
-            'delete' => '',
-        ],
-        // Required "Multiple Select" option
-        [
-            'title' => 'Option 4',
-            'default_title' => 'Option 4',
-            'type' => 'multi',
-            'required' => 1,
-            'delete' => '',
-        ],
-        // Non-required "Multiple Select" option
-        [
-            'title' => 'Option 5',
-            'default_title' => 'Option 5',
-            'type' => 'multi',
-            'required' => 0,
-            'delete' => '',
+            // Required "Drop-down" option
+            [
+                'title' => 'Option 1',
+                'default_title' => 'Option 1',
+                'type' => 'select',
+                'required' => 1,
+                'delete' => '',
+            ],
+            // Required "Radio Buttons" option
+            [
+                'title' => 'Option 2',
+                'default_title' => 'Option 2',
+                'type' => 'radio',
+                'required' => 1,
+                'delete' => '',
+            ],
+            // Required "Checkbox" option
+            [
+                'title' => 'Option 3',
+                'default_title' => 'Option 3',
+                'type' => 'checkbox',
+                'required' => 1,
+                'delete' => '',
+            ],
+            // Required "Multiple Select" option
+            [
+                'title' => 'Option 4',
+                'default_title' => 'Option 4',
+                'type' => 'multi',
+                'required' => 1,
+                'delete' => '',
+            ],
+            // Non-required "Multiple Select" option
+            [
+                'title' => 'Option 5',
+                'default_title' => 'Option 5',
+                'type' => 'multi',
+                'required' => 0,
+                'delete' => '',
+            ]
         ]
-    ]
     )->setBundleSelectionsData(
         [
             [
