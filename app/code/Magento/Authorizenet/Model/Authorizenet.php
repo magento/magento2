@@ -498,7 +498,7 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
         try {
             $responseBody = $client->request()->getBody();
             if (!$this->security->scan($responseBody)) {
-                $this->_logger->critical('Attempt loading of external XMl entities in response from Authorizenet.');
+                $this->_logger->critical('Attempt loading of external XML entities in response from Authorizenet.');
                 throw new \Exception();
             }
             $debugData['response'] = $responseBody;
