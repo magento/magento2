@@ -121,7 +121,7 @@ class CartItemRepositoryTest extends WebapiAbstract
                 ]
             ],
         ];
-        $response = $this->_webApiCall($serviceInfo, $requestData);
+        $this->_webApiCall($serviceInfo, $requestData);
     }
 
     /**
@@ -224,7 +224,7 @@ class CartItemRepositoryTest extends WebapiAbstract
                 ]
             ],
         ];
-        $response = $this->_webApiCall($serviceInfo, $requestData);
+        $this->_webApiCall($serviceInfo, $requestData);
     }
 
     /**
