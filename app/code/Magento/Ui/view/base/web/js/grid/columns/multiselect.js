@@ -19,6 +19,7 @@ define([
             allSelected: false,
             indetermine: false,
             selected: [],
+            disabled: [],
             excluded: [],
             actions: [{
                 value: 'selectAll',
@@ -58,6 +59,7 @@ define([
         initObservable: function () {
             this._super()
                 .observe([
+                    'disabled',
                     'menuVisible',
                     'selected',
                     'excluded',
@@ -216,7 +218,10 @@ define([
          * @returns {Multiselect} Chainable.
          */
         selectPage: function () {
-            var selected = _.union(this.selected(), this.getIds());
+            var selected = _.difference(
+                _.union(this.selected(), this.getIds()),
+                this.disabled()
+            );
 
             this.selected(selected);
 
