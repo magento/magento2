@@ -10,14 +10,8 @@ namespace Magento\Framework\Amqp;
 
 use Magento\Framework\Amqp\EnvelopeFactory;
 use Magento\Framework\Amqp\Config\Data as AmqpConfig;
-use Magento\Framework\Amqp\ConsumerInterface;
-use Magento\Framework\Amqp\EnvelopeInterface;
-use Magento\Framework\Amqp\QueueInterface;
-use Magento\Framework\Amqp\QueueRepository;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
-use Magento\Framework\Amqp\MessageEncoder;
-use Magento\Framework\Amqp\ConsumerConfigurationInterface;
 
 /**
  * A RabbitMQ Consumer to handle receiving a message.
@@ -98,7 +92,7 @@ class Consumer implements ConsumerInterface
      * @return void
      * @throws LocalizedException
      */
-    public function dispatchMessage(EnvelopeInterface $message)
+    private function dispatchMessage(EnvelopeInterface $message)
     {
         $properties = $message->getProperties();
         $topicName = $properties['topic_name'];

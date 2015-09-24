@@ -22,7 +22,7 @@ class MergerFactory
     /**
      * MergerFactory constructor.
      * @param ObjectManagerInterface $objectManager
-     * @param $mergers
+     * @param string[] $mergers
      */
     public function __construct(ObjectManagerInterface $objectManager, $mergers)
     {
