@@ -105,7 +105,7 @@ class Fromcart extends Action\Action implements IndexInterface
             $wishlist->save();
 
             $this->messageManager->addSuccessMessage(__(
-                "%1 has been moved to your wishlist.",
+                "%1 has been moved to your wish list.",
                 $this->escaper->escapeHtml($item->getProduct()->getName())
             ));
         } catch (LocalizedException $e) {
