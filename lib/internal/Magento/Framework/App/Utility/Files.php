@@ -211,39 +211,72 @@ class Files
 
             $files = array_merge($files, $this->getModuleFiles($flags));
             $files = array_merge($files, $this->getTestFiles($flags));
-
-            if ($flags & self::INCLUDE_DEV_TOOLS) {
-                $files = array_merge(
-                    $files,
-                    $this->getFilesSubset([BP . '/dev/tools/Magento'], '*.php', [])
-                );
-            }
-            if ($flags & self::INCLUDE_TEMPLATES) {
-                $files = array_merge($files, $this->getPhtmlFiles(false, false));
-            }
-            if ($flags & self::INCLUDE_LIBS) {
-                $files = array_merge(
-                    $files,
-                    $this->getFilesSubset(
-                        $this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY),
-                        '*.php',
-                        array_merge($this->getLibraryTestDirs(), $this->getLibraryRegistrationFiles())
-                    )
-                );
-            }
-            if ($flags & self::INCLUDE_PUB_CODE) {
-                $files = array_merge(
-                    $files,
-                    glob(BP . '/*.php', GLOB_NOSORT),
-                    glob(BP . '/pub/*.php', GLOB_NOSORT)
-                );
-            }
+            $files = array_merge($files, $this->getDevToolsFiles($flags));
+            $files = array_merge($files, $this->getTemplateFiles($flags));
+            $files = array_merge($files, $this->getLibraryFiles($flags));
+            $files = array_merge($files, $this->getPubFiles($flags));
             self::$_cache[$key] = $files;
         }
         if ($flags & self::INCLUDE_DATA_SET) {
             return self::composeDataSets(self::$_cache[$key]);
         }
         return self::$_cache[$key];
+    }
+
+    /**
+     * Return array with all template files
+     *
+     * @param $flags
+     * @return array
+     */
+    private function getTemplateFiles($flags)
+    {
+        if ($flags & self::INCLUDE_TEMPLATES) {
+            return $this->getPhtmlFiles(false, false);
+        }
+    }
+
+    /**
+     * Return array with all php files related to library
+     *
+     * @param $flags
+     * @return array
+     */
+    private function getLibraryFiles($flags){
+        if ($flags & self::INCLUDE_LIBS) {
+            return $this->getFilesSubset(
+                $this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY),
+                '*.php',
+                array_merge($this->getLibraryTestDirs(), $this->getLibraryRegistrationFiles())
+            );
+        }
+    }
+
+    /**
+     * Return array with all php files related to pub
+     *
+     * @param $flags
+     * @return array
+     */
+    private function getPubFiles($flags){
+        if ($flags & self::INCLUDE_PUB_CODE) {
+            return array_merge(
+                glob(BP . '/*.php', GLOB_NOSORT),
+                glob(BP . '/pub/*.php', GLOB_NOSORT)
+            );
+        }
+    }
+
+    /**
+     * Return array with all php files related to dev tools
+     *
+     * @param int $flags
+     * @return array
+     */
+    private function getDevToolsFiles($flags){
+        if ($flags & self::INCLUDE_DEV_TOOLS) {
+            return $this->getFilesSubset([BP . '/dev/tools/Magento'], '*.php', []);
+        }
     }
 
     /**
