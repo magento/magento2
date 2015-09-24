@@ -45,11 +45,6 @@ class BatchConsumer implements ConsumerInterface
     private $mergerFactory;
 
     /**
-     * @var EnvelopeFactory
-     */
-    private $envelopeFactory;
-
-    /**
      * @var int
      */
     private $interval;
@@ -63,7 +58,6 @@ class BatchConsumer implements ConsumerInterface
      * @param MessageEncoder $messageEncoder
      * @param QueueRepository $queueRepository
      * @param MergerFactory $mergerFactory
-     * @param EnvelopeFactory $envelopeFactory
      * @param Resource $resource
      * @param int $interval
      */
@@ -72,14 +66,12 @@ class BatchConsumer implements ConsumerInterface
         MessageEncoder $messageEncoder,
         QueueRepository $queueRepository,
         MergerFactory $mergerFactory,
-        EnvelopeFactory $envelopeFactory,
         Resource $resource,
         $interval = 5
     ) {
         $this->amqpConfig = $amqpConfig;
         $this->messageEncoder = $messageEncoder;
         $this->queueRepository = $queueRepository;
-        $this->envelopeFactory = $envelopeFactory;
         $this->mergerFactory = $mergerFactory;
         $this->interval = $interval;
         $this->resource = $resource;
@@ -119,7 +111,7 @@ class BatchConsumer implements ConsumerInterface
      * @return void
      * @throws LocalizedException
      */
-    public function dispatchMessage($messages)
+    private function dispatchMessage($messages)
     {
         $callback = $this->configuration->getCallback();
         foreach ($messages as $message) {
