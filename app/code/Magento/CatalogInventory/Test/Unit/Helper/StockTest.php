@@ -52,6 +52,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->statusFactoryMock = $this->getMockBuilder('Magento\CatalogInventory\Model\Resource\Stock\StatusFactory')
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
         $this->stock = new Stock(
             $this->storeManagerMock,
