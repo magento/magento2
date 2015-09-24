@@ -1449,7 +1449,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
                                         'attribute_id' => $this->getMediaGalleryAttributeId(),
                                         'label' => isset($mediaGalleryLabels[$position]) ? $mediaGalleryLabels[$position] : '',
                                         'position' => $position,
-                                        'disabled' => isset($additionalImageIsDesabled[$mediaImage]) ? '1' : '0',
+                                        'disabled' => isset($additionalImageIsDisabled[$mediaImage]) ? '1' : '0',
                                         'value' => $mediaImage,
                                     ];
                                 }
