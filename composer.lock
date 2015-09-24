@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e0a48d8c3c8b3c4282676fee9dc9abbc",
-    "content-hash": "5354ef6633dacbab5d7c144ca116624c",
+    "hash": "50cf8e86b5b9c99af7a0b7e7f4bcf3eb",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -2664,16 +2663,16 @@
         },
         {
             "name": "lusitanian/oauth",
-            "version": "v0.5.5",
+            "version": "v0.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Lusitanian/PHPoAuthLib.git",
-                "reference": "916cff8e02df5d52e67aaddd57aa618205dd93c2"
+                "reference": "74a5a62457568176d9c1af41a900dd3389b70414"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Lusitanian/PHPoAuthLib/zipball/916cff8e02df5d52e67aaddd57aa618205dd93c2",
-                "reference": "916cff8e02df5d52e67aaddd57aa618205dd93c2",
+                "url": "https://api.github.com/repos/Lusitanian/PHPoAuthLib/zipball/74a5a62457568176d9c1af41a900dd3389b70414",
+                "reference": "74a5a62457568176d9c1af41a900dd3389b70414",
                 "shasum": ""
             },
             "require": {
@@ -2727,7 +2726,7 @@
                 "oauth",
                 "security"
             ],
-            "time": "2015-09-20 00:14:11"
+            "time": "2015-09-24 00:18:45"
         },
         {
             "name": "pdepend/pdepend",
@@ -2770,24 +2769,21 @@
         },
         {
             "name": "phpmd/phpmd",
-            "version": "2.3.0",
+            "version": "2.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpmd/phpmd.git",
-                "reference": "246b254505951508bea08db5dde44322264f75fe"
+                "reference": "08b5bcd454a7148579b68931fc500d824afd3bb5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/246b254505951508bea08db5dde44322264f75fe",
-                "reference": "246b254505951508bea08db5dde44322264f75fe",
+                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/08b5bcd454a7148579b68931fc500d824afd3bb5",
+                "reference": "08b5bcd454a7148579b68931fc500d824afd3bb5",
                 "shasum": ""
             },
             "require": {
                 "pdepend/pdepend": "~2.0",
-                "php": ">=5.3.0",
-                "symfony/config": "^2.4",
-                "symfony/dependency-injection": "^2.4",
-                "symfony/filesystem": "^2.4"
+                "php": ">=5.3.0"
             },
             "require-dev": {
                 "phpunit/phpunit": "^4.0",
@@ -2834,7 +2830,7 @@
                 "phpmd",
                 "pmd"
             ],
-            "time": "2015-09-22 05:16:44"
+            "time": "2015-09-24 14:37:49"
         },
         {
             "name": "phpunit/php-code-coverage",
