@@ -39,28 +39,20 @@ class Consumer implements ConsumerInterface
     private $queueRepository;
 
     /**
-     * @var EnvelopeFactory
-     */
-    private $envelopeFactory;
-
-    /**
      * Initialize dependencies.
      *
      * @param AmqpConfig $amqpConfig
      * @param MessageEncoder $messageEncoder
      * @param QueueRepository $queueRepository
-     * @param EnvelopeFactory $envelopeFactory
      */
     public function __construct(
         AmqpConfig $amqpConfig,
         MessageEncoder $messageEncoder,
-        QueueRepository $queueRepository,
-        EnvelopeFactory $envelopeFactory
+        QueueRepository $queueRepository
     ) {
         $this->amqpConfig = $amqpConfig;
         $this->messageEncoder = $messageEncoder;
         $this->queueRepository = $queueRepository;
-        $this->envelopeFactory = $envelopeFactory;
     }
 
     /**
