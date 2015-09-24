@@ -45,7 +45,7 @@ class Queue implements QueueInterface
      *
      * @param QueueManagement $queueManagement
      * @param EnvelopeFactory $envelopeFactory
-     * @param $queueName
+     * @param string $queueName
      * @param int $interval
      * @param int $maxNumberOfTrials
      */
