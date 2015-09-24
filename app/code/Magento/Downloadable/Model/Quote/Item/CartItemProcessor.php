@@ -70,7 +70,6 @@ class CartItemProcessor implements CartItemProcessorInterface
             if (!empty($downloadableLinks)) {
                 return $this->objectFactory->create([
                     'links' => $downloadableLinks,
-                    'qty' => $cartItem->getQty(),
                 ]);
             }
         }

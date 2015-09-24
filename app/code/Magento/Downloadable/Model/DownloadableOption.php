@@ -8,6 +8,9 @@ namespace Magento\Downloadable\Model;
 use Magento\Downloadable\Api\Data\DownloadableOptionInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 
+/**
+ * @codeCoverageIgnore
+ */
 class DownloadableOption extends AbstractExtensibleModel implements DownloadableOptionInterface
 {
     /**
