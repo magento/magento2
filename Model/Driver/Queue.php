@@ -14,7 +14,7 @@ use Magento\Framework\Amqp\EnvelopeFactory;
  * Queue based on Amqp protocol
  */
 class Queue implements QueueInterface
-{
+{§
     /**
      * @var QueueManagement
      */
