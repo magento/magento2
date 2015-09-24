@@ -18,7 +18,7 @@ use Magento\Framework\View\Design\Theme\ThemePackageList;
  */
 class Files
 {
-    /**
+    /**@#+
      * File types offset flags
      */
     const INCLUDE_APP_CODE = 1;
@@ -27,7 +27,12 @@ class Files
     const INCLUDE_TEMPLATES = 8;
     const INCLUDE_LIBS = 16;
     const INCLUDE_PUB_CODE = 32;
-    const INCLUDE_DATA_SET = 64;
+    /**#@-*/
+
+    /**
+     * Return as DataSet offset flag
+     */
+    const AS_DATA_SET = 64;
 
 
     /**
@@ -180,7 +185,7 @@ class Files
     }
 
     /**
-     * Getter for BP global constant
+     * Get base path
      *
      * @return string
      */
@@ -203,7 +208,7 @@ class Files
                 | self::INCLUDE_TESTS
                 | self::INCLUDE_DEV_TOOLS
                 | self::INCLUDE_LIBS
-                | self::INCLUDE_DATA_SET;
+                | self::AS_DATA_SET;
         }
         $key = __METHOD__ . BP . $flags;
         if (!isset(self::$_cache[$key])) {
@@ -217,7 +222,7 @@ class Files
             $files = array_merge($files, $this->getPubFiles($flags));
             self::$_cache[$key] = $files;
         }
-        if ($flags & self::INCLUDE_DATA_SET) {
+        if ($flags & self::AS_DATA_SET) {
             return self::composeDataSets(self::$_cache[$key]);
         }
         return self::$_cache[$key];
@@ -1107,12 +1112,6 @@ class Files
         }
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
             $subFiles[] = $themeDir . '/';
-        }
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
-            $subFiles[] = $moduleDir . '/';
-        }
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libDir) {
-            $subFiles[] = $libDir . '/';
         }
 
         $subFiles = array_merge($subFiles, $this->getPaths());
