@@ -57,9 +57,9 @@ class Context
      */
     public function getContextByPath($path)
     {
-        if ($value = $this->getModuleName($path)) {
+        if ($value = $this->getComponentName(ComponentRegistrar::MODULE, $path)) {
             $type = self::CONTEXT_TYPE_MODULE;
-        } elseif ($value = $this->getThemeName($path)) {
+        } elseif ($value = $this->getComponentName(ComponentRegistrar::THEME, $path)) {
             $type = self::CONTEXT_TYPE_THEME;
         } elseif ($value = strstr($path, '/lib/web/')) {
             $type = self::CONTEXT_TYPE_LIB;
@@ -71,34 +71,18 @@ class Context
     }
 
     /**
-     * Try to get module name by path, return false if not a module
+     * Try to get component name by path, return false if not found
      *
+     * @param string $componentType
      * @param string $path
      * @return bool|string
      */
-    private function getModuleName($path)
+    private function getComponentName($componentType, $path)
     {
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
-            $moduleDir .= '/';
-            if (strpos($path, $moduleDir) !== false) {
-                return $moduleName;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Try to get theme name by path, return false if not a theme
-     *
-     * @param string $path
-     * @return bool|string
-     */
-    private function getThemeName($path)
-    {
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeName => $themeDir) {
-            $themeDir .= '/';
-            if (strpos($path, $themeDir) !== false) {
-                return $themeName;
+        foreach ($this->componentRegistrar->getPaths($componentType) as $componentName => $componentDir) {
+            $componentDir .= '/';
+            if (strpos($path, $componentDir) !== false) {
+                return $componentName;
             }
         }
         return false;

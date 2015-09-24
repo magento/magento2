@@ -17,7 +17,7 @@ class ObsoleteThemeLocalXmlTest extends \PHPUnit_Framework_TestCase
     {
         $componentRegistrar = new ComponentRegistrar();
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
-            $this->assertEmpty(glob($themeDir . "/local.xml"));
+            $this->assertEmpty(glob($themeDir . '/local.xml'));
         }
     }
 }
