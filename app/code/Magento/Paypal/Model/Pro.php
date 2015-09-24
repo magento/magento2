@@ -261,13 +261,11 @@ class Pro
             ->setAmount($amount);
 
         $order = $payment->getOrder();
-        if (!empty($order)) {
-            $orderIncrementId = $order->getIncrementId();
-            $api->setCurrencyCode($order->getBaseCurrencyCode())
-                ->setInvNum($orderIncrementId)
-                ->setCustref($orderIncrementId)
-                ->setPonum($order->getId());
-        }
+        $orderIncrementId = $order->getIncrementId();
+        $api->setCurrencyCode($order->getBaseCurrencyCode())
+            ->setInvNum($orderIncrementId)
+            ->setCustref($orderIncrementId)
+            ->setPonum($order->getId());
         // TODO: pass 'NOTE' to API
 
         $api->callDoCapture();
