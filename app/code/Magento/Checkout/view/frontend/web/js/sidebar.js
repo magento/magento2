@@ -8,9 +8,10 @@ define([
     "jquery",
     'Magento_Customer/js/model/authentication-popup',
     'Magento_Customer/js/customer-data',
+    'Magento_Ui/js/modal/alert',
     "jquery/ui",
     "mage/decorate"
-], function($, authenticationPopup, customerData){
+], function($, authenticationPopup, customerData, alert){
 
     $.widget('mage.sidebar', {
         options: {
@@ -169,7 +170,9 @@ define([
                     } else {
                         var msg = response.error_message;
                         if (msg) {
-                            window.alert($.mage.__(msg));
+                            alert({
+                                content: $.mage.__(msg)
+                            });
                         }
                     }
                 })
