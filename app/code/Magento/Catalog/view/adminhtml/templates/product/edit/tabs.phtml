@@ -64,7 +64,6 @@
                     <?php $_tabType = (!preg_match('/\s?ajax\s?/', $_tabClass) && $block->getTabUrl($_tab) != '#') ? 'link' : '' ?>
                     <?php $_tabHref = $block->getTabUrl($_tab) == '#' ? '#' . $block->getTabId($_tab) . '_content' : $block->getTabUrl($_tab) ?>
                     <li class="admin__page-nav-item <?php if ($block->getTabIsHidden($_tab)): ?> <?php echo "no-display"; ?> <?php endif; ?> " <?php /* @escapeNotVerified */ echo $block->getUiId('tab', 'item', $_tab->getId()) ?>>
-
                         <a href="<?php /* @escapeNotVerified */ echo $_tabHref ?>" id="<?php /* @escapeNotVerified */ echo $block->getTabId($_tab) ?>"
                            name="<?php /* @escapeNotVerified */ echo $block->getTabId($_tab, false) ?>"
                            title="<?php /* @escapeNotVerified */ echo $block->getTabTitle($_tab) ?>"
@@ -94,19 +93,22 @@
                                </span>
                             </span>
                         </a>
-
                         <div id="<?php /* @escapeNotVerified */ echo $block->getTabId($_tab) ?>_content" class="no-display"
                              data-tab-panel="<?= /* @escapeNotVerified */ $_tab->getTabId() ?>"
-                            <?php /* @escapeNotVerified */ echo $block->getUiId('tab', 'content', $_tab->getId()) ?>>
+                            <?php /* @escapeNotVerified */ echo $block->getUiId('tab', 'content', $_tab->getId()) ?>
+                        >
                             <?php /* @escapeNotVerified */ echo $block->getTabContent($_tab); ?>
                             <?php foreach ($tabs as $childTab): ?>
-                            <?php if ($childTab->getParentTab() === $_tab->getId()):?>
-                            <div id="<?php /* @escapeNotVerified */ echo $block->getTabId($childTab) ?>_content"
-                                <?php /* @escapeNotVerified */ echo $block->getUiId('tab', 'content', $childTab->getId()) ?>>
-                                <?php /* @escapeNotVerified */ echo $block->getTabContent($childTab); ?>
+                                <?php if ($childTab->getParentTab() === $_tab->getId()):?>
+                                <div id="<?php /* @escapeNotVerified */ echo $block->getTabId($childTab) ?>_content"
+                                    <?php /* @escapeNotVerified */ echo $block->getUiId('tab', 'content', $childTab->getId()) ?>
+                                >
+                                    <?= $block->decorateTab($childTab); ?>
+<!--                                    --><?php ///* @escapeNotVerified */ echo $block->getTabContent($childTab); ?>
+                                </div>
                                 <?php endif;?>
-                                <?php endforeach; ?>
-                            </div>
+                            <?php endforeach; ?>
+                        </div>
                     </li>
                 <?php endforeach; ?>
             </ul>
