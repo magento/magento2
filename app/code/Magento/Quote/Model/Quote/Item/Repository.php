@@ -102,7 +102,6 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
                 $buyRequestData = $this->getBuyRequest($productType, $cartItem);
                 if (is_object($buyRequestData)) {
                     /** update item product options */
-                    $buyRequestData->setData('qty', $qty);
                     /** @var  \Magento\Quote\Model\Quote\Item $cartItem */
                     $cartItem = $quote->updateItem($itemId, $buyRequestData);
                 } else {
@@ -147,7 +146,7 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
         $params = (isset($this->cartItemProcessors[$productType]))
             ? $this->cartItemProcessors[$productType]->convertToBuyRequest($cartItem)
             : null;
-        return ($params === null) ? $cartItem->getQty() : $params;
+        return ($params === null) ? $cartItem->getQty() : $params->setQty($cartItem->getQty());
     }
 
     /**

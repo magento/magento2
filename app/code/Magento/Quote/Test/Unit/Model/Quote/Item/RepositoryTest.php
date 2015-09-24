@@ -65,7 +65,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->dataMock = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
         $this->quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);
         $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
-        $methods = ['getId', 'getSku', 'setData', '__wakeUp', 'getProduct'];
+        $methods = ['getId', 'getSku', 'getQty', 'setData', '__wakeUp', 'getProduct', 'addProduct'];
         $this->quoteItemMock =
             $this->getMock('Magento\Quote\Model\Quote\Item', $methods, [], '', false);
 
@@ -305,19 +305,19 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             $this->itemDataFactoryMock,
             ['simple' => $cartItemProcessorMock]
         );
-        $requestMock = $this->getMock('\Magento\Framework\DataObject', ['setData'], [], '', false);
+        $requestMock = $this->getMock('\Magento\Framework\DataObject', ['setQty'], [], '', false);
         $cartItemProcessorMock->expects($this->once())->method('convertToBuyRequest')->willReturn($requestMock);
         $cartItemProcessorMock
             ->expects($this->once())
             ->method('processProductOptions')
             ->willReturn($this->quoteItemMock);
-        $requestMock->expects($this->once())->method('setData')->with('qty', 12);
+        $requestMock->expects($this->once())->method('setQty')->with(12)->willReturnSelf();
         $this->quoteMock
             ->expects($this->once())
             ->method('updateItem')
             ->with($itemId, $requestMock)
             ->willReturn($this->quoteItemMock);
-        $this->dataMock->expects($this->once())->method('getQty')->will($this->returnValue(12));
+        $this->dataMock->expects($this->any())->method('getQty')->will($this->returnValue(12));
         $this->dataMock->expects($this->once())->method('getItemId')->will($this->returnValue($itemId));
         $this->dataMock->expects($this->once())->method('getQuoteId')->willReturn($cartId);
         $this->quoteRepositoryMock->expects($this->once())
@@ -326,10 +326,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getItemById')->with($itemId)->will($this->returnValue($this->quoteItemMock));
         $this->quoteItemMock->expects($this->once())->method('getProduct')->willReturn($this->productMock);
         $this->productMock->expects($this->once())->method('getTypeId')->willReturn('simple');
-        $this->quoteItemMock->expects($this->never())->method('setData');
         $this->productRepositoryMock
             ->expects($this->never())->method('get');
-        $this->quoteItemMock->expects($this->never())->method('addProduct');
         $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
         $this->quoteMock
@@ -337,6 +335,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('getAllItems')
             ->willReturn([$this->quoteItemMock]);
         $this->quoteItemMock->expects($this->any())->method('getId')->willReturn($itemId);
+        $this->quoteItemMock->expects($this->any())->method('getQty')->willReturn(12);
         $this->assertEquals($this->quoteItemMock, $this->repository->save($this->dataMock));
     }
 
