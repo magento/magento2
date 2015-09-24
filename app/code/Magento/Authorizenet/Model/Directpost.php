@@ -130,7 +130,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      * @param \Magento\Authorizenet\Helper\Data $dataHelper
      * @param \Magento\Authorizenet\Model\Directpost\Request\Factory $requestFactory
      * @param \Magento\Authorizenet\Model\Directpost\Response\Factory $responseFactory
-     * @param \Magento\Framework\Xml\Security $security
+     * @param \Magento\Framework\Xml\Security $xmlSecurityHelper
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
@@ -154,7 +154,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
         \Magento\Authorizenet\Helper\Data $dataHelper,
         \Magento\Authorizenet\Model\Directpost\Request\Factory $requestFactory,
         \Magento\Authorizenet\Model\Directpost\Response\Factory $responseFactory,
-        \Magento\Framework\Xml\Security $security,
+        \Magento\Framework\Xml\Security $xmlSecurityHelper,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
@@ -185,7 +185,7 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
             $dataHelper,
             $requestFactory,
             $responseFactory,
-            $security,
+            $xmlSecurityHelper,
             $resource,
             $resourceCollection,
             $data
