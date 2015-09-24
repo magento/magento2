@@ -23,15 +23,14 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
         if ($qty === null && $product->getCalculatedFinalPrice() !== null) {
             return $product->getCalculatedFinalPrice();
         }
-
         if ($product->getCustomOption('simple_product')) {
-            /** @var \Magento\Catalog\Model\Product $selectedProduct */
-            $selectedProduct= $product->getCustomOption('simple_product')->getProduct();
-            $product->setSelectedConfigurableOption($selectedProduct);
-            $finalPrice = $selectedProduct->getPrice();
+            $simpleProduct = $product->getCustomOption('simple_product')->getProduct();
+            $product->setSelectedConfigurableOption($simpleProduct);
+            $priceInfo = $simpleProduct->getPriceInfo();
         } else {
-            $finalPrice = $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue();
+            $priceInfo = $product->getPriceInfo();
         }
+        $finalPrice = $priceInfo->getPrice('final_price')->getAmount()->getValue();
         $finalPrice = $this->_applyOptionsPrice($product, $qty, $finalPrice);
         $finalPrice = max(0, $finalPrice);
         $product->setFinalPrice($finalPrice);
