@@ -66,7 +66,6 @@ class CartItemRepositoryTest extends WebapiAbstract
             }
         }
         $this->assertNotNull($item);
-        $this->assertEquals($item->getSku(), self::CONFIGURABLE_PRODUCT_SKU);
     }
 
     /**
@@ -141,6 +140,9 @@ class CartItemRepositoryTest extends WebapiAbstract
     public function testUpdate()
     {
         $qty = 4;
+        $this->updateStockForItem(10, 100);
+        $this->updateStockForItem(20, 100);
+
         /** @var \Magento\Quote\Model\Quote  $quote */
         $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_cart_with_configurable', 'reserved_order_id');
@@ -188,6 +190,36 @@ class CartItemRepositoryTest extends WebapiAbstract
             $response['product_option']['extension_attributes']['configurable_item_options'][0],
             $requestData['cartItem']['product_option']['extension_attributes']['configurable_item_options'][0]
         );
+    }
+
+    /**
+     * @param int $itemId
+     * @param int $qty
+     */
+    protected function updateStockForItem($itemId, $qty)
+    {
+        /** @var \Magento\CatalogInventory\Model\Stock\Status $stockStatus */
+        $stockStatus = $this->objectManager->create('Magento\CatalogInventory\Model\Stock\Status');
+        $stockStatus->load($itemId, 'product_id');
+        if (!$stockStatus->getProductId()) {
+            $stockStatus->setProductId($itemId);
+        }
+        $stockStatus->setQty($qty);
+        $stockStatus->setStockStatus(1);
+        $stockStatus->save();
+
+        /** @var \Magento\CatalogInventory\Model\Stock\Item $stockItem */
+        $stockItem = $this->objectManager->create('Magento\CatalogInventory\Model\Stock\Item');
+        $stockItem->load(20, 'product_id');
+
+        if (!$stockItem->getProductId()) {
+            $stockItem->setProductId($itemId);
+        }
+        $stockItem->setUseConfigManageStock(1);
+        $stockItem->setQty($qty);
+        $stockItem->setIsQtyDecimal(0);
+        $stockItem->setIsInStock(1);
+        $stockItem->save();
     }
 
     /**
