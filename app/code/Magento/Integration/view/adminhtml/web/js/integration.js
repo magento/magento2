@@ -252,7 +252,9 @@ define([
                     popup.modal('openModal');
                 },
                 error: function (jqXHR, status, error) {
-                    alert($.mage.__('Sorry, something went wrong. Please try again later.'));
+                    alert({
+                        content: $.mage.__('Sorry, something went wrong. Please try again later.')
+                    });
                     window.console && console.log(status + ': ' + error + "\nResponse text:\n" + jqXHR.responseText);
                 },
                 complete: function () {
