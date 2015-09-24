@@ -5,11 +5,12 @@
  */
 namespace Magento\ConfigurableProduct\Model\Quote\Item;
 
+use Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface;
+use Magento\Framework\Model\AbstractExtensibleModel;
 /**
  * Class ConfigurableItemOptionValue
  */
-class ConfigurableItemOptionValue extends \Magento\Framework\Model\AbstractExtensibleModel
-    implements \Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface
+class ConfigurableItemOptionValue extends AbstractExtensibleModel implements ConfigurableItemOptionValueInterface
 {
     //@codeCoverageIgnoreStart
     /**

@@ -335,6 +335,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @see self::_getConditionSql for $condition
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addAttributeToFilter($attribute, $condition = null, $joinType = 'inner')
     {
