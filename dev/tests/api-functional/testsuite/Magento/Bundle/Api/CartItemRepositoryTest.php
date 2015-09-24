@@ -46,7 +46,9 @@ class CartItemRepositoryTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'GetList',
             ],
         ];
-        $response = $this->_webApiCall($serviceInfo, ['cartId' => $quoteId])[0];
+        $response = $this->_webApiCall($serviceInfo, ['cartId' => $quoteId]);
+        $this->assertEquals(1, count($response));
+        $response = $response[0];
         $bundleOption = $quote->getItemById($response['item_id'])->getBuyRequest()->getBundleOption();
         $bundleOptionQty = $quote->getItemById($response['item_id'])->getBuyRequest()->getBundleOptionQty();
         $actualOptions = $response['product_option']['extension_attributes']['bundle_options'];
@@ -123,5 +125,82 @@ class CartItemRepositoryTest extends WebapiAbstract
         $response = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertTrue($quote->hasProductId($productId));
         $this->assertEquals($buyRequest, $quote->getItemById($response['item_id'])->getBuyRequest()->getData());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_bundle_and_options.php
+     */
+    public function testUpdate()
+    {
+        /** @var \Magento\Quote\Model\Quote  $quote */
+        $quote = $this->objectManager->create('Magento\Quote\Model\Quote')->load(
+            'test_order_bundle',
+            'reserved_order_id'
+        );
+        $cartId = $quote->getId();
+        $cartItem = $quote->getAllVisibleItems()[0];
+        $itemSku = $cartItem->getSku();
+        $itemId = $cartItem->getId();
+
+        $product = $cartItem->getProduct();
+        /** @var $typeInstance \Magento\Bundle\Model\Product\Type */
+        $typeInstance = $product->getTypeInstance();
+        $typeInstance->setStoreFilter($product->getStoreId(), $product);
+        $optionCollection = $typeInstance->getOptionsCollection($product);
+        $bundleOptions = [];
+        /** @var $option \Magento\Bundle\Model\Option */
+        foreach ($optionCollection as $option) {
+            if (!$option->getRequired()) {
+                continue;
+            }
+            $selectionsCollection = $typeInstance->getSelectionsCollection([$option->getId()], $product);
+            $option = ['option_id' => $option->getId(), 'option_qty' => 1];
+            $option['option_selections'] = [$selectionsCollection->getLastItem()->getSelectionId()];
+            $bundleOptions[] = $option;
+        }
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . 'items/' . $itemId,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+        $requestData = [
+            "cartItem" => [
+                "sku" => $itemSku,
+                "qty" => 2,
+                "quote_id" => $cartId,
+                "product_option" => [
+                    "extension_attributes" => [
+                        "bundle_options" => $bundleOptions
+                    ]
+                ]
+            ]
+        ];
+        $this->_webApiCall($serviceInfo, $requestData);
+
+
+        $quoteUpdated = $this->objectManager->create('Magento\Quote\Model\Quote')->load(
+            'test_order_bundle',
+            'reserved_order_id'
+        );
+        $cartItems = $quoteUpdated->getAllVisibleItems();
+        $buyRequest = $cartItems[0]->getBuyRequest()->toArray();
+
+        $this->assertEquals(1, count($cartItems));
+        $this->assertEquals(count($buyRequest['bundle_option']), count($bundleOptions));
+        foreach ($bundleOptions as $option) {
+            $optionId = $option['option_id'];
+            $optionQty = $option['option_qty'];
+            $optionSelections = $option['option_selections'];
+            $this->assertArrayHasKey($optionId, $buyRequest['bundle_option']);
+            $this->assertEquals($optionQty, $buyRequest['bundle_option_qty'][$optionId]);
+            $this->assertEquals($optionSelections, $buyRequest['bundle_option'][$optionId]);
+        }
     }
 }

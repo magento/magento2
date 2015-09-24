@@ -25,11 +25,10 @@ foreach ($optionCollection as $option) {
     $selectionsCollection = $typeInstance->getSelectionsCollection([$option->getId()], $product);
     if ($option->isMultiSelection()) {
         $bundleOptions[$option->getId()] = array_column($selectionsCollection->toArray(), 'selection_id');
-        $bundleOptionsQty[$option->getId()] = 1;
     } else {
         $bundleOptions[$option->getId()] = $selectionsCollection->getFirstItem()->getSelectionId();
-        $bundleOptionsQty[$option->getId()] = 1;
     }
+    $bundleOptionsQty[$option->getId()] = 1;
 }
 
 $requestInfo = new \Magento\Framework\DataObject(

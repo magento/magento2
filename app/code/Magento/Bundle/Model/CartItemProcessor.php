@@ -55,7 +55,7 @@ class CartItemProcessor implements CartItemProcessorInterface
      */
     public function convertToBuyRequest(CartItemInterface $cartItem)
     {
-        if ($cartItem->getProductOption()) {
+        if ($cartItem->getProductOption() && $cartItem->getProductOption()->getExtensionAttributes()) {
             $options = $cartItem->getProductOption()->getExtensionAttributes()->getBundleOptions();
             if (is_array($options)) {
                 $requestData = [];
