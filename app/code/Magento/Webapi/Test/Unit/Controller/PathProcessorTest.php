@@ -19,6 +19,7 @@ class PathProcessorTest extends \PHPUnit_Framework_TestCase
     /** @var string */
     private $arbitraryStoreCode = 'myStoreCode';
 
+    /** @var string */
     private $endpointPath = '/V1/path/of/endpoint';
 
     public function setUp()
@@ -28,7 +29,7 @@ class PathProcessorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->storeManagerMock->expects($this->once())
             ->method('getStores')
-            ->willReturn([$this->arbitraryStoreCode => 'store object']);
+            ->willReturn([$this->arbitraryStoreCode => 'store object', Store::DEFAULT_CODE => 'default store object']);
         $this->model = new \Magento\Webapi\Controller\PathProcessor($this->storeManagerMock);
     }
 
@@ -55,6 +56,7 @@ class PathProcessorTest extends \PHPUnit_Framework_TestCase
             'All store code' => ['all', Store::ADMIN_CODE],
             'Default store code' => ['', Store::DEFAULT_CODE],
             'Arbitrary store code' => [$this->arbitraryStoreCode, $this->arbitraryStoreCode],
+            'Explicit default store code' => [Store::DEFAULT_CODE, Store::DEFAULT_CODE]
         ];
     }
 }
