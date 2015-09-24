@@ -8,6 +8,7 @@ namespace Magento\Framework\App\Utility;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\DirSearch;
+use Magento\Framework\View\Design\Theme\ThemePackageList;
 
 /**
  * A helper to gather specific kind of files in Magento application
@@ -56,6 +57,13 @@ class Files
     private $dirSearch;
 
     /**
+     * Theme list for registered themes
+     *
+     * @var ThemePackageList
+     */
+    private $themePackageList;
+
+    /**
      * Setter for an instance of self
      *
      * Also can unset the current instance, if no arguments are specified
@@ -102,11 +110,16 @@ class Files
      *
      * @param ComponentRegistrar $componentRegistrar
      * @param DirSearch $dirSearch
+     * @param ThemePackageList $themePackageList
      */
-    public function __construct(ComponentRegistrar $componentRegistrar, DirSearch $dirSearch)
-    {
+    public function __construct(
+        ComponentRegistrar $componentRegistrar,
+        DirSearch $dirSearch,
+        ThemePackageList $themePackageList
+    ) {
         $this->componentRegistrar = $componentRegistrar;
         $this->dirSearch = $dirSearch;
+        $this->themePackageList = $themePackageList;
     }
 
     /**
@@ -485,9 +498,9 @@ class Files
         }
         if ($params['include_design']) {
             $locationPaths = [];
-            foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
-                if (strpos($themeDir, $area)) {
-                    $locationPaths[] = $themeDir . "/{$namespace}_{$module}/{$location}";
+            foreach ($this->themePackageList->getThemes() as $theme) {
+                if ($theme->getArea() === $area) {
+                    $locationPaths[] = $theme->getPath() . "/{$namespace}_{$module}/{$location}";
                 }
             }
             $this->_accumulateFilesByPatterns(
@@ -618,10 +631,10 @@ class Files
             }
         }
         $themePaths = [];
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themePath) {
-            if (strpos($themePath, $area)) {
-                $themePaths [] = $themePath . "/web";
-                $themePaths [] = $themePath . "/{$module}/web";
+        foreach ($this->themePackageList->getThemes() as $theme) {
+            if ($theme->getArea() === $area) {
+                $themePaths[] = $theme->getPath() . "/web";
+                $themePaths[] = $theme->getPath() . "/{$module}/web";
             }
         }
         $files = self::getFiles(
@@ -664,10 +677,10 @@ class Files
             }
         }
         $themePaths = [];
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themePath) {
-            if (strpos($themePath, $area)) {
-                $themePaths [] = $themePath . "/web/template";
-                $themePaths [] = $themePath . "/{$module}/web/template";
+        foreach ($this->themePackageList->getThemes() as $theme) {
+            if ($theme->getArea() === $area) {
+                $themePaths[] = $theme->getPath() . "/web/template";
+                $themePaths[] = $theme->getPath() . "/{$module}/web/template";
             }
         }
         $files = self::getFiles(
@@ -708,12 +721,12 @@ class Files
 
         $themePaths = [];
         $themeLocalePath = [];
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themePath) {
-            if (strpos($themePath, $area)) {
-                $themePaths [] = $themePath . "/web";
-                $themePaths [] = $themePath . "/{$module}/web";
-                $themeLocalePath [] = $themePath . "/web/i18n/{$locale}";
-                $themeLocalePath [] = $themePath . "/{$module}/web/i18n/{$locale}";
+        foreach ($this->themePackageList->getThemes() as $theme) {
+            if ($theme->getArea() === $area) {
+                $themePaths[] = $theme->getPath() . "/web";
+                $themePaths[] = $theme->getPath() . "/{$module}/web";
+                $themeLocalePath[] = $theme->getPath() . "/web/i18n/{$locale}";
+                $themeLocalePath[] = $theme->getPath() . "/{$module}/web/i18n/{$locale}";
             }
         }
 
@@ -891,9 +904,9 @@ class Files
             $viewAreaPaths[] = $moduleDir . "/view/{$area}";
         }
         $themePaths = [];
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
-            if (strpos($themeDir, $area)) {
-                $themePaths[] = $themeDir;
+        foreach ($this->themePackageList->getThemes() as $theme) {
+            if ($theme->getArea() === $area) {
+                $themePaths[] = $theme->getPath();
             }
         }
         $paths = [
@@ -944,9 +957,9 @@ class Files
             );
 
             $themePaths = [];
-            foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
-                if (strpos($themeDir, $area)) {
-                    $themePaths[] = $themeDir . "/{$namespace}_{$module}/templates";
+            foreach ($this->themePackageList->getThemes() as $theme) {
+                if ($theme->getArea() === $area) {
+                    $themePaths[] = $theme->getPath();
                 }
             }
 
