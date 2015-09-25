@@ -6,14 +6,6 @@
 
 namespace Magento\Translation\Model\Js;
 
-use Magento\Framework\Component\DirSearch;
-use Magento\Framework\Phrase\Renderer\Translate;
-use Magento\Framework\Component\ComponentRegistrar;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\View\Design\Theme\ThemePackageList;
-
 /**
  * DataProvider for js translation
  *
@@ -44,9 +36,9 @@ class DataProvider implements DataProviderInterface
     /**
      * Filesystem
      *
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
+     * @var \Magento\Framework\Filesystem\File\ReadFactory
      */
-    protected $rootDirectory;
+    protected $fileReadFactory;
 
     /**
      * Basic translate renderer
@@ -58,28 +50,30 @@ class DataProvider implements DataProviderInterface
     /**
      * @param \Magento\Framework\App\State $appState
      * @param Config $config
-     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem\File\ReadFactory $fileReadFactory
      * @param \Magento\Framework\Phrase\Renderer\Translate $translate
+     * @param \Magento\Framework\Component\ComponentRegistrar $componentRegistrar
      * @param \Magento\Framework\Component\DirSearch $dirSearch
      * @param \Magento\Framework\View\Design\Theme\ThemePackageList $themePackageList
-     * @param \Magento\Framework\App\Utility\Files $filesUtility
+     * @param \Magento\Framework\App\Utility\Files|null $filesUtility
      */
     public function __construct(
         \Magento\Framework\App\State $appState,
         Config $config,
-        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\Filesystem\File\ReadFactory $fileReadFactory,
         \Magento\Framework\Phrase\Renderer\Translate $translate,
+        \Magento\Framework\Component\ComponentRegistrar $componentRegistrar,
         \Magento\Framework\Component\DirSearch $dirSearch,
         \Magento\Framework\View\Design\Theme\ThemePackageList $themePackageList,
         \Magento\Framework\App\Utility\Files $filesUtility = null
     ) {
         $this->appState = $appState;
         $this->config = $config;
-        $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
+        $this->fileReadFactory = $fileReadFactory;
         $this->translate = $translate;
         $this->filesUtility = (null !== $filesUtility) ?
             $filesUtility : new \Magento\Framework\App\Utility\Files(
-                new ComponentRegistrar(),
+                $componentRegistrar,
                 $dirSearch,
                 $themePackageList
             );
@@ -106,7 +100,9 @@ class DataProvider implements DataProviderInterface
 
         $dictionary = [];
         foreach ($files as $filePath) {
-            $content = $this->rootDirectory->readFile($this->rootDirectory->getRelativePath($filePath[0]));
+            /** @var \Magento\Framework\Filesystem\File\Read $read */
+            $read = $this->fileReadFactory->create($filePath[0], \Magento\Framework\Filesystem\DriverPool::FILE);
+            $content = $read->readAll();
             foreach ($this->getPhrases($content) as $phrase) {
                 $translatedPhrase = $this->translate->render([$phrase], []);
                 if ($phrase != $translatedPhrase) {
