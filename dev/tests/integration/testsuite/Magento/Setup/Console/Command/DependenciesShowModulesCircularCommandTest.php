@@ -54,12 +54,6 @@ class DependenciesShowModulesCircularCommandTest extends \PHPUnit_Framework_Test
 
         $this->command = new DependenciesShowModulesCircularCommand($objectManagerProvider);
         $this->commandTester = new CommandTester($this->command);
-        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
-        $paths = $reflection->getProperty('paths');
-        $paths->setAccessible(true);
-        $this->backupRegistrar = $paths->getValue();
-        $paths->setValue([ComponentRegistrar::MODULE => $modules]);
-        $paths->setAccessible(false);
     }
 
     public function tearDown()
@@ -67,11 +61,6 @@ class DependenciesShowModulesCircularCommandTest extends \PHPUnit_Framework_Test
         if (file_exists(__DIR__ . '/_files/output/circular.csv')) {
             unlink(__DIR__ . '/_files/output/circular.csv');
         }
-        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
-        $paths = $reflection->getProperty('paths');
-        $paths->setAccessible(true);
-        $paths->setValue($this->backupRegistrar);
-        $paths->setAccessible(false);
     }
 
     public function testExecute()

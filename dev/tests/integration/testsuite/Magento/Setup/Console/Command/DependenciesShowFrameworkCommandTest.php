@@ -57,14 +57,8 @@ class DependenciesShowFrameworkCommandTest extends \PHPUnit_Framework_TestCase
             ['Magento\Framework\Component\DirSearch', $dirSearchMock]
         ]));
 
-        $this->command = new DependenciesShowFrameworkCommand(new ComponentRegistrar(), $objectManagerProvider);
+        $this->command = new DependenciesShowFrameworkCommand($componentRegistrarMock, $objectManagerProvider);
         $this->commandTester = new CommandTester($this->command);
-        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
-        $paths = $reflection->getProperty('paths');
-        $paths->setAccessible(true);
-        $this->backupRegistrar = $paths->getValue();
-        $paths->setValue([ComponentRegistrar::MODULE => $modules]);
-        $paths->setAccessible(false);
     }
 
     public function tearDown()
@@ -72,11 +66,6 @@ class DependenciesShowFrameworkCommandTest extends \PHPUnit_Framework_TestCase
         if (file_exists(__DIR__ . '/_files/output/framework.csv')) {
             unlink(__DIR__ . '/_files/output/framework.csv');
         }
-        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
-        $paths = $reflection->getProperty('paths');
-        $paths->setAccessible(true);
-        $paths->setValue($this->backupRegistrar);
-        $paths->setAccessible(false);
     }
 
     public function testExecute()

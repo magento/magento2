@@ -54,14 +54,7 @@ class DependenciesShowModulesCommandTest extends \PHPUnit_Framework_TestCase
         ]));
 
         $this->command = new DependenciesShowModulesCommand($objectManagerProvider);
-
         $this->commandTester = new CommandTester($this->command);
-        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
-        $paths = $reflection->getProperty('paths');
-        $paths->setAccessible(true);
-        $this->backupRegistrar = $paths->getValue();
-        $paths->setValue([ComponentRegistrar::MODULE => $modules]);
-        $paths->setAccessible(false);
     }
 
     public function tearDown()
@@ -69,11 +62,6 @@ class DependenciesShowModulesCommandTest extends \PHPUnit_Framework_TestCase
         if (file_exists(__DIR__ . '/_files/output/modules.csv')) {
             unlink(__DIR__ . '/_files/output/modules.csv');
         }
-        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
-        $paths = $reflection->getProperty('paths');
-        $paths->setAccessible(true);
-        $paths->setValue($this->backupRegistrar);
-        $paths->setAccessible(false);
     }
 
     public function testExecute()
