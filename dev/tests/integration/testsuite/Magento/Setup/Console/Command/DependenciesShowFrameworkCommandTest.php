@@ -63,11 +63,7 @@ class DependenciesShowFrameworkCommandTest extends \PHPUnit_Framework_TestCase
         $paths = $reflection->getProperty('paths');
         $paths->setAccessible(true);
         $this->backupRegistrar = $paths->getValue();
-        $paths->setValue(
-            [
-                ComponentRegistrar::MODULE => $modules
-            ]
-        );
+        $paths->setValue([ComponentRegistrar::MODULE => $modules]);
         $paths->setAccessible(false);
     }
 

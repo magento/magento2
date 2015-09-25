@@ -3138,7 +3138,6 @@ return [
     ['Magento\Setup\Module\SetupModule'],
     ['Magento\Setup\Module\Setup\FileResolver'],
     ['Magento\Framework\Module\Updater'],
-    ['Magento\Setup\Module\SetupFactory'],
     ['Magento\Framework\Module\Updater\SetupFactory'],
     ['Magento\Log\Block\Adminhtml\Customer\Edit\Tab\View\Status'],
     ['Magento\Backend\Model\Config\Source\Yesno', 'Magento\Config\Model\Config\Source\Yesno'],
