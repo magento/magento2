@@ -51,7 +51,7 @@ class IdentifierTest extends \PHPUnit_Framework_TestCase
      * @param string|null $varyStringCookie
      * @param string|null $varyStringContext
      * @param string $expected
-     * @dataProvider dataProvider
+     * @dataProvider testGetValueDataProvider
      */
     public function testGetValue($uri, $varyStringCookie, $varyStringContext, $expected)
     {
@@ -69,7 +69,7 @@ class IdentifierTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function dataProvider()
+    public function testGetValueDataProvider()
     {
         $uri = 'http://domain.com/customer';
         $vary = 1;
