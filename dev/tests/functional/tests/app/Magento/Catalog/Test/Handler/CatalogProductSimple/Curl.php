@@ -48,7 +48,8 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             'No' => 0
         ],
         'product_has_weight' => [
-            'No' => 0
+            'Yes' => 1,
+            'No' => 0,
         ],
         'use_config_enable_qty_increments' => [
             'Yes' => 1,
@@ -247,10 +248,6 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         $fields = $prefix ? [$prefix => $fields] : $fields;
         if ($isCustomOptions) {
             $fields['affect_product_custom_options'] = 1;
-        }
-
-        if (isset($fields['product']['weight'])) {
-            unset($fields['product']['is_virtual']);
         }
 
         return $fields;

@@ -24,11 +24,6 @@ class WeightResolver
      */
     public function resolveProductHasWeight(\Magento\Catalog\Model\Product $product)
     {
-        if (!$product->hasData('product_has_weight')) {
-            throw new \LogicException(
-                __('Product don\'t have "%1" key. It must be fulfilled during product edit', 'product_has_weight')
-            );
-        }
         return (bool) ($product->getData('product_has_weight') == self::HAS_WEIGHT);
     }
 }
