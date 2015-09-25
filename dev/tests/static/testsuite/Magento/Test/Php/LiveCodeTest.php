@@ -223,7 +223,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
             | Files::INCLUDE_LIBS
             | Files::INCLUDE_TEMPLATES
             | Files::INCLUDE_TESTS
-            | Files::INCLUDE_DATA_SET
+            | Files::AS_DATA_SET
         );
         foreach ($collectedFiles as $file) {
             $file = array_pop($file);

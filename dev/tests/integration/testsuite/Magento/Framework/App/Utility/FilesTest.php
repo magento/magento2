@@ -34,7 +34,9 @@ class FilesTest extends \PHPUnit_Framework_TestCase
         $componentRegistrar = new ComponentRegistrar();
         $dirSearch = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Framework\Component\DirSearch');
-        $this->model = new Files($componentRegistrar, $dirSearch);
+        $themePackageList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Framework\View\Design\Theme\ThemePackageList');
+        $this->model = new Files($componentRegistrar, $dirSearch, $themePackageList);
         foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
             $this->moduleTests[] = '#' . $moduleDir . '/Test#';
         }
