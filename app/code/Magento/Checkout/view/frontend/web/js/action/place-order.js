@@ -19,7 +19,7 @@ define(
             var serviceUrl,
                 payload;
 
-            redirectOnSuccess = redirectOnSuccess === false ? false : true;
+            redirectOnSuccess = redirectOnSuccess !== false;
 
             /** Checkout for guest and registered customer. */
             if (!customer.isLoggedIn()) {

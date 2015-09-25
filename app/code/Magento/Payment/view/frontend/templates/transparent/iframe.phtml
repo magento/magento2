@@ -20,7 +20,7 @@ $params = $block->getParams();
             window.top.alert(<?php /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($params['error_msg']) ?>);
             var require = window.top.require;
             require(['jquery'], function($) {
-                $('#opc-review').trigger('hideAjaxLoader');
+                $('#checkout').trigger("processStop");
             });
         <?php elseif (isset($params['order_success'])): ?>
             window.top.location = "<?php /* @escapeNotVerified */ echo $params['order_success'] ?>";
