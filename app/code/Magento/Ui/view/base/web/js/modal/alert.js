@@ -20,7 +20,7 @@ define([
             },
             buttons: [{
                 text: $.mage.__('OK'),
-                class: 'action-secondary',
+                class: 'action-secondary action-accept',
                 click: function () {
                     this.closeModal(true);
                 }
@@ -28,7 +28,7 @@ define([
         },
         closeModal: function () {
             this.options.actions.always();
-            this.element.bind('confirmclosed', _.bind(this._remove, this));
+            this.element.bind('alertclosed', _.bind(this._remove, this));
 
             return this._super();
         }
