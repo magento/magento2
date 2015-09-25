@@ -27,7 +27,7 @@ class NonComposerComponentRegistration
      /**
      * The list of supported non-composer component paths
      *
-     * @var string array $pathList
+     * @var string[] $pathList
      */
     private static $pathList;
 
