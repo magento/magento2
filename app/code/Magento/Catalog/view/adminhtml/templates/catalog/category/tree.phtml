@@ -446,8 +446,15 @@
                 jQuery('[data-id="information-dialog-category"]').modal({
                     type: 'popup',
                     buttons: [{
+                        text: 'Cancel',
+                        class: 'action-tertiary',
+                        click: function () {
+                            reRenderTree();
+                            this.closeModal();
+                        }
+                    }, {
                         text: 'Ok',
-                        class: '',
+                        class: 'action-secondary',
                         click: function () {
                             (function ($) {
                                 $.ajax({
@@ -471,14 +478,6 @@
                                     location.reload();
                                 });
                             })(jQuery);
-                            this.closeModal();
-                        }
-
-                    }, {
-                        text: 'Cancel',
-                        class: '',
-                        click: function () {
-                            reRenderTree();
                             this.closeModal();
                         }
                     }]
