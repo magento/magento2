@@ -26,7 +26,7 @@ class CustomOptionProcessor implements CustomOptionProcessorInterface
     protected $extensionFactory;
 
     /**
-     * @var \Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFactory
+     * @var \Magento\Catalog\Model\CustomOptions\CustomOptionFactory
      */
     protected $customOptionFactory;
 
@@ -75,18 +75,8 @@ class CustomOptionProcessor implements CustomOptionProcessorInterface
     {
         $buyRequest = unserialize($cartItem->getOptionByCode('info_buyRequest')->getValue());
         $options = isset($buyRequest['options']) ? $buyRequest['options'] : [];
-        if (is_array($options) ) {
-            foreach ($options as $optionId => &$optionValue) {
-                /** @var \Magento\Catalog\Model\CustomOptions\CustomOption $option */
-                $option = $this->customOptionFactory->create();
-                $option->setOptionId($optionId);
-                if (is_array($optionValue)) {
-                    $optionValue = implode(',', $optionValue);
-                }
-                $option->setOptionValue($optionValue);
-                $optionValue = $option;
-            }
-
+        if (is_array($options)) {
+            $this->updateOptionsValues($options);
             $productOption = $cartItem->getProductOption()
                 ? $cartItem->getProductOption()
                 : $this->productOptionFactory->create();
@@ -101,5 +91,26 @@ class CustomOptionProcessor implements CustomOptionProcessorInterface
             $cartItem->setProductOption($productOption);
         }
         return $cartItem;
+    }
+
+    /**
+     * Update options values
+     *
+     * @param array $options
+     * @return array
+     */
+    protected function updateOptionsValues(array &$options)
+    {
+        foreach ($options as $optionId => &$optionValue) {
+            /** @var \Magento\Catalog\Model\CustomOptions\CustomOption $option */
+            $option = $this->customOptionFactory->create();
+            $option->setOptionId($optionId);
+            if (is_array($optionValue)) {
+                $optionValue = implode(',', $optionValue);
+            }
+            $option->setOptionValue($optionValue);
+            $optionValue = $option;
+        }
+        return $options;
     }
 }
