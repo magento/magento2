@@ -21,7 +21,10 @@ $quote->setCustomerIsGuest(
 )->setIsMultiShipping(
     false
 )->addProduct(
-    $product
+    $product,
+    new \Magento\Framework\DataObject([
+        'links' => array_keys($product->getDownloadableLinks())
+    ])
 );
 $quote->collectTotals();
 $quote->save();
