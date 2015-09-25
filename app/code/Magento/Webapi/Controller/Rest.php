@@ -277,6 +277,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     /**
      * @throws AuthorizationException
      * @throws \Magento\Framework\Webapi\Exception
+     * @return void
      */
     protected function validateRequest()
     {
