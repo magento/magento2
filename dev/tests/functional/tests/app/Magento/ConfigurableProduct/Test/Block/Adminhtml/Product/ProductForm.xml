@@ -12,7 +12,7 @@
         <strategy>css selector</strategy>
         <fields>
             <attributes_data>
-                <selector>#super_config-wrapper</selector>
+                <selector>#dt-super_config</selector>
             </attributes_data>
             <matrix>
                 <selector>#product-variations-matrix</selector>

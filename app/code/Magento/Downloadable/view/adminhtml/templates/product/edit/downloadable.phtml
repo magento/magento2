@@ -207,14 +207,14 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
 });
 </script>
 
-<div id="<?php /* @escapeNotVerified */ echo $block->getId() ?>_content"
+<div data-tab-type="tab_content_downloadableInfo" id="<?php /* @escapeNotVerified */ echo $block->getId() ?>_content"
     <?php /* @escapeNotVerified */ echo $block->getUiId('tab', 'content', $block->getId()) ?>
 >
 <div id="alert_messages_block"><?php echo $block->getMessageHtml() ?></div>
 <div>
     <label><?= __('Is this downloadable Product?'); ?> <input type="checkbox"/></label>
 </div>
-<div class="entry-edit">
+<div class="entry-edit" id="product_info_tabs_downloadable_items">
     <?php echo $block->getChildHtml() ?>
 </div>
 <div style="display:none">
