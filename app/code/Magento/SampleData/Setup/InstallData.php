@@ -1,9 +1,9 @@
 <?php
 /**
- * Copyright � 2015 Magento. All rights reserved.
+ * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\SalesSampleData\Setup;
+namespace Magento\SampleData\Setup;
 
 use Magento\Framework\Setup;
 
@@ -18,11 +18,20 @@ class InstallData implements Setup\InstallDataInterface
     protected $deploy;
 
     /**
-     * @param \Magento\SampleData\Helper\Deploy $deploy
+     * @var \Magento\SampleData\Model\State
      */
-    public function __construct(\Magento\SampleData\Helper\Deploy $deploy)
-    {
+    protected $state;
+
+    /**
+     * @param \Magento\SampleData\Helper\Deploy $deploy
+     * @param \Magento\SampleData\Model\State $state
+     */
+    public function __construct(
+        \Magento\SampleData\Helper\Deploy $deploy,
+        \Magento\SampleData\Model\State $state
+    ) {
         $this->deploy = $deploy;
+        $this->state = $state;
     }
 
     /**
@@ -31,5 +40,6 @@ class InstallData implements Setup\InstallDataInterface
     public function install(Setup\ModuleDataSetupInterface $setup, Setup\ModuleContextInterface $moduleContext)
     {
         $this->deploy->run();
+        $this->state->clearState();
     }
 }
