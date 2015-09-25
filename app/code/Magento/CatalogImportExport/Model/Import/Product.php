@@ -1443,23 +1443,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
                             $newImagePath = $uploadedGalleryFiles[$mediaImage];
                             $existingImages[$newImagePath][] = $rowSku;
                         }
-                        /*
-                        $rowData[self::COL_MEDIA_IMAGE][] = $uploadedGalleryFiles[$mediaImage];
-                        if (!empty($rowData[self::COL_MEDIA_IMAGE]) && is_array($rowData[self::COL_MEDIA_IMAGE])) {
-                            $position = array_search($mediaImage, $mediaGalleryImages);
-                            foreach ($rowData[self::COL_MEDIA_IMAGE] as $mediaImage) {
-                                if (!empty($mediaImage)) {
-                                    $mediaGallery[$rowSku][] = [
-                                        'attribute_id' => $this->getMediaGalleryAttributeId(),
-                                        'label' => isset($mediaGalleryLabels[$position]) ? $mediaGalleryLabels[$position] : '',
-                                        'position' => $position,
-                                        'disabled' => isset($additionalImageIsDisabled[$mediaImage]) ? '1' : '0',
-                                        'value' => $mediaImage,
-                                    ];
-                                }
-                            }
-                        }
-                        */
                     }
 
                     $rowData[self::COL_MEDIA_IMAGE][] = $uploadedGalleryFiles[$mediaImage];
