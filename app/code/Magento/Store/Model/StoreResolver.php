@@ -83,7 +83,7 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
         if ($storeCode) {
             try {
                 $store = $this->getRequestedStoreByCode($storeCode);
-            } catch(NoSuchEntityException $e) {
+            } catch (NoSuchEntityException $e) {
                 $store = $this->getDefaultStoreById($defaultStoreId);
             }
 
