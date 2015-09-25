@@ -36,8 +36,8 @@
         </dataset>
 
         <dataset name="product_with_custom_color_attribute">
-            <field name="sku" xsi:type="string">Simple Product %isolation%</field>
-            <field name="name" xsi:type="string">simple_product_%isolation%</field>
+            <field name="name" xsi:type="string">Simple Product %isolation%</field>
+            <field name="sku" xsi:type="string">simple_product_%isolation%</field>
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">custom_attribute_set_with_colors</item>
             </field>

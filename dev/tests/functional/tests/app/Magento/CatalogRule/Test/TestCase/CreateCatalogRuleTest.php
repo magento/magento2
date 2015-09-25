@@ -121,11 +121,11 @@ class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
                 break;
             case 'attribute':
                 /** @var \Magento\Catalog\Test\Fixture\CatalogProductAttribute[] $attrs */
-                $attrs = $productSimple->getDataFieldConfig('attribute_set_id')['source']
+                $attributes = $productSimple->getDataFieldConfig('attribute_set_id')['source']
                     ->getAttributeSet()->getDataFieldConfig('assigned_attributes')['source']->getAttributes();
 
-                $result['%attribute_name%'] = $attrs[0]->getFrontendLabel();
-                $result['%attribute_value%'] = $attrs[0]->getOptions()[0]['view'];
+                $result['%attribute_name%'] = $attributes[0]->getFrontendLabel();
+                $result['%attribute_value%'] = $attributes[0]->getOptions()[0]['view'];
                 break;
         }
 
