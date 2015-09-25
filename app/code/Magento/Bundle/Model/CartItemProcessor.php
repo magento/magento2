@@ -13,8 +13,8 @@ use Magento\Quote\Api\Data as QuoteApi;
 class CartItemProcessor implements CartItemProcessorInterface
 {
     /**
-    * @var \Magento\Framework\DataObject\Factory
-    */
+     * @var \Magento\Framework\DataObject\Factory
+     */
     protected $objectFactory;
 
     /**
@@ -55,15 +55,15 @@ class CartItemProcessor implements CartItemProcessorInterface
      */
     public function convertToBuyRequest(CartItemInterface $cartItem)
     {
-        if ($cartItem->getProductOption()) {
+        if ($cartItem->getProductOption() && $cartItem->getProductOption()->getExtensionAttributes()) {
             $options = $cartItem->getProductOption()->getExtensionAttributes()->getBundleOptions();
             if (is_array($options)) {
                 $requestData = [];
                 foreach ($options as $option) {
                     /** @var \Magento\Bundle\Api\Data\BundleOptionInterface $option */
-                    foreach($option->getOptionSelections() as $selection) {
+                    foreach ($option->getOptionSelections() as $selection) {
                         $requestData['bundle_option'][$option->getOptionId()][] = $selection;
-                        $requestData['bundle_option_qty'][$option->getOptionId()] =  $option->getOptionQty();
+                        $requestData['bundle_option_qty'][$option->getOptionId()] = $option->getOptionQty();
                     }
                 }
                 return $this->objectFactory->create($requestData);
@@ -74,6 +74,7 @@ class CartItemProcessor implements CartItemProcessorInterface
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function processProductOptions(CartItemInterface $cartItem)
     {

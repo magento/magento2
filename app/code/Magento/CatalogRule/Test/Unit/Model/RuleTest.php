@@ -8,6 +8,11 @@ namespace Magento\CatalogRule\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * Class RuleTest
+ * @package Magento\CatalogRule\Test\Unit\Model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class RuleTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\CatalogRule\Model\Rule */
@@ -201,6 +206,110 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test validateData action
+     *
+     * @dataProvider validateDataDataProvider
+     * @param array $data Data for the rule actions
+     * @param bool|array $expected True or an array of errors
+     *
+     * @return void
+     */
+    public function testValidateData($data, $expected)
+    {
+        $result = $this->rule->validateData(new \Magento\Framework\DataObject($data));
+        $this->assertEquals($result, $expected);
+    }
+
+    /**
+     * Data provider for testValidateData test
+     *
+     * @return array
+     */
+    public function validateDataDataProvider()
+    {
+        return [
+            [
+                [
+                    'simple_action' => 'by_fixed',
+                    'discount_amount' => '123',
+                    'sub_is_enable' => '0',
+                    'sub_simple_action' => 'by_percent',
+                    'sub_discount_amount' => '123',
+                ],
+                true
+            ],
+            [
+                [
+                    'simple_action' => 'by_percent',
+                    'discount_amount' => '9,99',
+                    'sub_is_enable' => '0',
+                ],
+                true
+            ],
+            [
+                [
+                    'simple_action' => 'by_fixed',
+                    'discount_amount' => '123',
+                    'sub_is_enable' => '1',
+                    'sub_simple_action' => 'by_percent',
+                    'sub_discount_amount' => '123',
+                ],
+                [
+                    'Percentage discount should be between 0 and 100.',
+                ]
+            ],
+            [
+                [
+                    'simple_action' => 'by_percent',
+                    'discount_amount' => '123.12',
+                    'sub_is_enable' => '1',
+                    'sub_simple_action' => 'to_percent',
+                    'sub_discount_amount' => '123.001',
+                ],
+                [
+                    'Percentage discount should be between 0 and 100.',
+                    'Percentage discount should be between 0 and 100.',
+                ]
+            ],
+            [
+                [
+                    'simple_action' => 'to_percent',
+                    'discount_amount' => '-12',
+                    'sub_is_enable' => '1',
+                    'sub_simple_action' => 'to_fixed',
+                    'sub_discount_amount' => '567.8901',
+                ],
+                [
+                    'Percentage discount should be between 0 and 100.',
+                ]
+            ],
+            [
+                [
+                    'simple_action' => 'to_fixed',
+                    'discount_amount' => '-1234567890',
+                    'sub_is_enable' => '1',
+                    'sub_simple_action' => 'by_fixed',
+                    'sub_discount_amount' => '-5',
+                ],
+                [
+                    'Discount value should be 0 or greater.',
+                    'Discount value should be 0 or greater.',
+                ]
+            ],
+            [
+                [
+                    'simple_action' => 'invalid action',
+                    'discount_amount' => '12',
+                    'sub_is_enable' => '0',
+                ],
+                [
+                    'Unknown action.',
+                ]
+            ],
+        ];
+    }
+
+    /**
      * Test after delete action
      *
      * @return void
@@ -228,9 +337,10 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test IsRuleBehaviorChanged action
+     * Test isRuleBehaviorChanged action
      *
-     * @dataProvider ruleData
+     * @dataProvider isRuleBehaviorChangedDataProvider
+     *
      * @param array $dataArray
      * @param array $originDataArray
      * @param bool $isObjectNew
@@ -258,11 +368,11 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Data provider for isRuleBehaviorChanged test
+     * Data provider for testIsRuleBehaviorChanged test
      *
      * @return array
      */
-    public function ruleData()
+    public function isRuleBehaviorChangedDataProvider()
     {
         return [
             [['new name', 'new description'], ['name', 'description'], false, false],
