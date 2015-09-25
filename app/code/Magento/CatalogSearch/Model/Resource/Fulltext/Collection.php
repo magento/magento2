@@ -113,7 +113,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         \Magento\Framework\Search\Request\Builder $requestBuilder,
         \Magento\Search\Model\SearchEngine $searchEngine,
         \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory,
-        $connection = null
+        $connection = null,
         $searchRequestName = 'catalog_view_container'
     ) {
         $this->_catalogSearchFulltext = $catalogSearchFulltext;
