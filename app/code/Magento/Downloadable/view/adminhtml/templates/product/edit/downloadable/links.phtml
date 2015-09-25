@@ -47,10 +47,10 @@
                             <?php if ($block->getCanReadPrice() !== false) : ?>
                                 <th class="col-price"><span><?php /* @escapeNotVerified */ echo __('Price') ?></span></th>
                             <?php endif; ?>
-                            <th class="col-limit"><span><?php /* @escapeNotVerified */ echo __('Max. Downloads') ?></span></th>
-                            <th class="col-option"><span><?php /* @escapeNotVerified */ echo __('Shareable') ?></span></th>
+                            <th class="col-file"><span><?php /* @escapeNotVerified */ echo __('Attach File or Enter Link') ?></span></th>
                             <th class="col-sample"><span><?php /* @escapeNotVerified */ echo __('Sample') ?></span></th>
-                            <th class="col-file"><span><?php /* @escapeNotVerified */ echo __('File') ?></span></th>
+                            <th class="col-share"><span><?php /* @escapeNotVerified */ echo __('Shareable') ?></span></th>
+                            <th class="col-limit"><span><?php /* @escapeNotVerified */ echo __('Max. Downloads') ?></span></th>
                             <th class="col-actions">&nbsp;</th>
                         </tr>
                     </thead>
@@ -84,90 +84,108 @@ require([
             'name="downloadable[link][<%- ' +
             'data.id' +
             ' %>][sort_order]" ' +
-            'value="<%- data.sort_order %>" class="input-text admin__control-text sort" />#</td>'+
+            'value="<%- data.sort_order %>" class="input-text admin__control-text sort" />' +
+                '<span class="draggable-handle" title="<?php /* @escapeNotVerified */ echo __('Sort Variations') ?>"></span>' +
+            '</td>'+
             '<td class="col-title">'+
                 '<input type="hidden" class="__delete__" name="downloadable[link][<%- data.id %>][is_delete]" value="" />'+
                 '<input type="hidden" name="downloadable[link][<%- data.id %>][link_id]" value="<%- data.link_id %>" />'+
                 '<input type="text" class="required-entry input-text admin__control-text" name="downloadable[link][<%- data.id %>][title]" value="<%- data.title %>" />'+
-                '<?php echo $_product->getStoreId() ? '<input type="checkbox" id="downloadable_link_<%- data.id %>_title" name="downloadable[link][<%- data.id %>][use_default_title]" value="1" /><label class="normal" for="downloadable_link_<%- data.id %>_title">Use Default Value</label>' : '' ?>'+
+                <?php if($_product->getStoreId()): ?>
+                    '<div class="admin__field admin__field-option">'+
+                    '<input type="checkbox" id="downloadable_link_<%- data.id %>_title" name="downloadable[link][<%- data.id %>][use_default_title]" value="1" class="admin__control-checkbox" />'+
+                    '<label for="downloadable_link_<%- data.id %>_title" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Use Default Value'); ?></span></label>'+
+                    '</div>' +
+                <?php endif; ?>
+                <?php if ($block->getCanReadPrice() == false) : ?>
+                    '<input type="hidden" id="downloadable_link_<%- data.id %>_price_value" class="link-prices" name="downloadable[link][<%- data.id %>][price]" value="0" />' +
+                    <?php if ($_product->getStoreId() && $block->getIsPriceWebsiteScope()) : ?>
+                    '<input type="hidden" id="downloadable_link_<%- data.id %>_price" name="downloadable[link][<%- data.id %>][use_default_price]" value="1" />' +
+                    <?php endif; ?>
+                <?php endif; ?>
             '</td>'+
             <?php if ($block->getCanReadPrice() !== false) : ?>
-            '<td class="input-price col-price">'+
-                '<input type="text" id="downloadable_link_<%- data.id %>_price_value" class="input-text admin__control-text validate-number link-prices<?php if ($block->getCanEditPrice() === false) : ?> disabled<?php endif; ?>" name="downloadable[link][<%- data.id %>][price]" value="<%- data.price %>"<?php if ($block->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?> /> ' +
-                '<label>[<?php /* @escapeNotVerified */ echo $block->getBaseCurrencyCode($_product->getStoreId()) ?>]</label>' +
-                <?php if ($_product->getStoreId() && $block->getIsPriceWebsiteScope()) : ?>
-                '<br /><input type="checkbox" id="downloadable_link_<%- data.id %>_price" name="downloadable[link][<%- data.id %>][use_default_price]" value="1"<?php if ($block->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?> /> <label for="downloadable_link_<%- data.id %>_price">Use Default Value</label>' +
-                <?php endif; ?>
-            '</td>' +
-            <?php else : ?>
-            '<input type="hidden" id="downloadable_link_<%- data.id %>_price_value" class="link-prices" name="downloadable[link][<%- data.id %>][price]" value="0" />' +
-            <?php if ($_product->getStoreId() && $block->getIsPriceWebsiteScope()) : ?>
-            '<input type="hidden" id="downloadable_link_<%- data.id %>_price" name="downloadable[link][<%- data.id %>][use_default_price]" value="1" />' +
+                '<td class="col-price">'+
+                    '<input type="text" id="downloadable_link_<%- data.id %>_price_value" class="input-text admin__control-text validate-number link-prices<?php if ($block->getCanEditPrice() === false) : ?> disabled<?php endif; ?>" name="downloadable[link][<%- data.id %>][price]" value="<%- data.price %>"<?php if ($block->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?> /> ' +
+                    '<div class="note">[<?php /* @escapeNotVerified */ echo $block->getBaseCurrencyCode($_product->getStoreId()) ?>]</div>' +
+                    <?php if ($_product->getStoreId() && $block->getIsPriceWebsiteScope()) : ?>
+                        '<div class="admin__field admin__field-option">'+
+                            '<input type="checkbox" id="downloadable_link_<%- data.id %>_price" name="downloadable[link][<%- data.id %>][use_default_price]" value="1"<?php if ($block->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?> class="admin__control-checkbox" />'+
+                            '<label for="downloadable_link_<%- data.id %>_price" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Use Default Value'); ?></span></label>' +
+                        '</div>' +
+                    <?php endif; ?>
+                '</td>' +
             <?php endif; ?>
-            <?php endif; ?>
-            '<td class="col-limit"><input type="text" id="downloadable_link_<%- data.id %>_downloads" name="downloadable[link][<%- data.id %>][number_of_downloads]" class="input-text admin__control-text downloads" value="<%- data.number_of_downloads %>" />'+
-            '<p><input type="checkbox" class="checkbox admin__control-checkbox" id="downloadable_link_<%- data.id %>_is_unlimited" name="downloadable[link][<%- data.id %>][is_unlimited]" value="1" <%- data.is_unlimited %> /> <label for="downloadable_link_<%- data.id %>_is_unlimited">Unlimited</label></p></td>'+
+            '<td class="col-file">'+
+                '<div class="admin__field admin__field-option">'+
+                    '<input type="radio" class="admin__control-radio validate-one-required-by-name" id="downloadable_link_<%- data.id %>_file_type" name="downloadable[link][<%- data.id %>][type]" value="file"<%- data.file_checked %> />' +
+                    '<label for="downloadable_link_<%- data.id %>_file_type" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('File'); ?></span></label>'+
+                    '<input type="hidden" class="validate-downloadable-file" id="downloadable_link_<%- data.id %>_file_save" name="downloadable[link][<%- data.id %>][file]" value="<%- data.file_save %>" />'+
+
+                    '<div id="downloadable_link_<%- data.id %>_file" class="admin__field-uploader">'+
+                        '<div id="downloadable_link_<%- data.id %>_file-old" class="file-row-info"></div>'+
+                        '<div id="downloadable_link_<%- data.id %>_file-new" class="file-row-info new-file"></div>'+
+                        '<div class="fileinput-button form-buttons">'+
+                            '<span><?php /* @escapeNotVerified */ echo __('Browse Files...') ?></span>' +
+                            '<input id="downloadable_link_<%- data.id %>_file" type="file" name="<?php /* @escapeNotVerified */ echo $block->getFileFieldName('links') ?>">' +
+                            '<script>' +
+                                'linksUploader("#downloadable_link_<%- data.id %>_file", "<?php /* @escapeNotVerified */ echo $block->getUploadUrl('links') ?>"); ' +
+                            '</scr'+'ipt>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>'+
+                '<div class="admin__field admin__field-option admin__field-file-url">'+
+                    '<input type="radio" class="admin__control-radio validate-one-required-by-name" id="downloadable_link_<%- data.id %>_url_type" name="downloadable[link][<%- data.id %>][type]" value="url"<%- data.url_checked %> />' +
+                    '<label for="downloadable_link_<%- data.id %>_url_type" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('URL'); ?></span></label>' +
+                    '<input type="text" class="validate-downloadable-url validate-url admin__control-text" name="downloadable[link][<%- data.id %>][link_url]" value="<%- data.link_url %>" placeholder="<?php /* @escapeNotVerified */ echo __('URL'); ?>" />'+
+                '</div>'+
+                '<div>'+
+                    '<span id="downloadable_link_<%- data.id %>_link_container"></span>'+
+                '</div>'+
+            '</td>'+
+            '<td class="col-sample">'+
+                '<div class="admin__field admin__field-option">'+
+                    '<input type="radio" class="admin__control-radio" id="downloadable_link_<%- data.id %>_sample_file_type" name="downloadable[link][<%- data.id %>][sample][type]" value="file"<%- data.sample_file_checked %> />' +
+                    '<label for="downloadable_link_<%- data.id %>_sample_file_type" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('File'); ?>:</span></label>'+
+                    '<input type="hidden" id="downloadable_link_<%- data.id %>_sample_file_save" name="downloadable[link][<%- data.id %>][sample][file]" value="<%- data.sample_file_save %>" class="validate-downloadable-file"/>'+
+                    '<div id="downloadable_link_<%- data.id %>_sample_file" class="admin__field-uploader">'+
+                        '<div id="downloadable_link_<%- data.id %>_sample_file-old" class="file-row-info"></div>'+
+                        '<div id="downloadable_link_<%- data.id %>_sample_file-new" class="file-row-info new-file"></div>'+
+                        '<div class="fileinput-button form-buttons">'+
+                        '<span><?php /* @escapeNotVerified */ echo __('Browse Files...') ?></span>' +
+                        '<input id="downloadable_link_<%- data.id %>_sample_file" type="file" name="<?php /* @escapeNotVerified */ echo $block->getFileFieldName('link_samples') ?>">' +
+                        '<script>'+
+                        'linksUploader("#downloadable_link_<%- data.id %>_sample_file", "<?php /* @escapeNotVerified */ echo $block->getUploadUrl('link_samples') ?>"); ' +
+                        '</scr'+'ipt>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>'+
+
+                '<div class="admin__field admin__field-option admin__field-file-url">'+
+                    '<input type="radio" class="admin__control-radio validate-one-required-by-name" id="downloadable_link_<%- data.id %>_sample_url_type" name="downloadable[link][<%- data.id %>][sample][type]" value="url"<%- data.sample_url_checked %> />' +
+                    '<label for="downloadable_link_<%- data.id %>_sample_url_type" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('URL'); ?></span></label>'+
+                    '<input type="text" class="validate-downloadable-url validate-url admin__control-text" name="downloadable[link][<%- data.id %>][sample][url]" value="<%- data.sample_url %>" placeholder="<?php /* @escapeNotVerified */ echo __('URL'); ?>" />'+
+                '</div>'+
+                '<div>'+
+                    '<span id="downloadable_link_<%- data.id %>_sample_container"></span>'+
+                '</div>'+
+            '</td>'+
             '<td class="col-share">'+
                 '<select id="downloadable_link _<%- data.id %>_shareable" class="admin__control-select" name="downloadable[link][<%- data.id %>][is_shareable]">'+
-                    '<option value="1">Yes</option>'+
-                    '<option value="0">No</option>'+
-                    '<option value="2" selected="selected">Use config</option>'+
+                    '<option value="1"><?php /* @escapeNotVerified */ echo __('Yes'); ?></option>'+
+                    '<option value="0"><?php /* @escapeNotVerified */ echo __('No'); ?></option>'+
+                    '<option value="2" selected="selected"><?php /* @escapeNotVerified */ echo __('Use config'); ?></option>'+
                 '</select>'+
             '</td>'+
-            '<td class="col-file">'+
-                '<div class="files">'+
-                    '<div class="row">'+
-                        '<label for="downloadable_link_<%- data.id %>_sample_file_type"><input type="radio" class="radio" id="downloadable_link_<%- data.id %>_sample_file_type" name="downloadable[link][<%- data.id %>][sample][type]" value="file"<%- data.sample_file_checked %> /> File:</label>'+
-                        '<input type="hidden" id="downloadable_link_<%- data.id %>_sample_file_save" name="downloadable[link][<%- data.id %>][sample][file]" value="<%- data.sample_file_save %>" class="validate-downloadable-file"/>'+
-                        '<div id="downloadable_link_<%- data.id %>_sample_file" class="uploader">'+
-                            '<div id="downloadable_link_<%- data.id %>_sample_file-old" class="file-row-info"></div>'+
-                            '<div id="downloadable_link_<%- data.id %>_sample_file-new" class="file-row-info"></div>'+
-                            '<div class="fileinput-button form-buttons">'+
-                                '<span><?php /* @escapeNotVerified */ echo __('Browse Files...') ?></span>' +
-                                '<input id="downloadable_link_<%- data.id %>_sample_file" type="file" name="<?php /* @escapeNotVerified */ echo $block->getFileFieldName('link_samples') ?>">' +
-                                '<script>' +
-                                    'linksUploader("#downloadable_link_<%- data.id %>_sample_file", "<?php /* @escapeNotVerified */ echo $block->getUploadUrl('link_samples') ?>"); ' +
-                                '</scr'+'ipt>'+
-                            '</div>'+
-                            '<div class="clear"></div>'+
-                        '</div>'+
-                    '</div>'+
-                    '<div class="row">'+
-                        '<label for="downloadable_link_<%- data.id %>_sample_url_type"><input type="radio" class="radio" id="downloadable_link_<%- data.id %>_sample_url_type" name="downloadable[link][<%- data.id %>][sample][type]" value="url"<%- data.sample_url_checked %> /> URL:</label><input type="text" class="input-text admin__control-text validate-downloadable-url validate-url" name="downloadable[link][<%- data.id %>][sample][url]" value="<%- data.sample_url %>" />'+
-                    '</div>'+
-                    '<div>'+
-                        '<span id="downloadable_link_<%- data.id %>_sample_container"></span>'+
-                    '</div>'+
-                '</div>'+
-            '</td>'+
-            '<td class="col-file">'+
-                '<div class="files">'+
-                    '<div class="row">'+
-                        '<label for="downloadable_link_<%- data.id %>_file_type"><input type="radio" class="radio validate-one-required-by-name" id="downloadable_link_<%- data.id %>_file_type" name="downloadable[link][<%- data.id %>][type]" value="file"<%- data.file_checked %> /> File:</label>'+
-                    '<input type="hidden" class="validate-downloadable-file" id="downloadable_link_<%- data.id %>_file_save" name="downloadable[link][<%- data.id %>][file]" value="<%- data.file_save %>" />'+
-                        '<div id="downloadable_link_<%- data.id %>_file" class="uploader">'+
-                            '<div id="downloadable_link_<%- data.id %>_file-old" class="file-row-info"></div>'+
-                            '<div id="downloadable_link_<%- data.id %>_file-new" class="file-row-info new-file"></div>'+
-                            '<div class="fileinput-button form-buttons">'+
-                                '<span><?php /* @escapeNotVerified */ echo __('Browse Files...') ?></span>' +
-                                '<input id="downloadable_link_<%- data.id %>_file" type="file" name="<?php /* @escapeNotVerified */ echo $block->getFileFieldName('links') ?>">' +
-                                '<script>' +
-                                    'linksUploader("#downloadable_link_<%- data.id %>_file", "<?php /* @escapeNotVerified */ echo $block->getUploadUrl('links') ?>"); ' +
-                                '</scr'+'ipt>'+
-                            '</div>'+
-                            '<div class="clear"></div>'+
-                        '</div>'+
-                    '</div>'+
-                    '<div class="row">'+
-                        '<label for="downloadable_link_<%- data.id %>_url_type"><input type="radio" class="radio validate-one-required-by-name" id="downloadable_link_<%- data.id %>_url_type" name="downloadable[link][<%- data.id %>][type]" value="url"<%- data.url_checked %> /> URL:</label><input type="text" class="validate-downloadable-url validate-url input-text admin__control-text" name="downloadable[link][<%- data.id %>][link_url]" value="<%- data.link_url %>" />'+
-                    '</div>'+
-                    '<div>'+
-                        '<span id="downloadable_link_<%- data.id %>_link_container"></span>'+
-                    '</div>'+
-                '</div>'+
+            '<td class="col-limit">' +
+                '<input type="text" id="downloadable_link_<%- data.id %>_downloads" name="downloadable[link][<%- data.id %>][number_of_downloads]" class="input-text admin__control-text downloads" value="<%- data.number_of_downloads %>" />'+
+                '<div class="admin__field admin__field-option">' +
+                    '<input type="checkbox" class="admin__control-checkbox" id="downloadable_link_<%- data.id %>_is_unlimited" name="downloadable[link][<%- data.id %>][is_unlimited]" value="1" <%- data.is_unlimited %> />' +
+                    '<label for="downloadable_link_<%- data.id %>_is_unlimited" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Unlimited'); ?></span></label>' +
+                '</div>' +
             '</td>'+
             '<td class="col-action">'+
-                '<button id="downloadable_link_<%- data.id %>_delete_button" type="button" class="action-delete"><span><?php /* @escapeNotVerified */ echo __('Delete'); ?></span></button>'+
+                '<button id="downloadable_link_<%- data.id %>_delete_button" type="button" class="action-delete" title="<?php /* @escapeNotVerified */ echo __('Delete'); ?>"><span><?php /* @escapeNotVerified */ echo __('Delete'); ?></span></button>'+
             '</td>'+
         '</tr>';
 
