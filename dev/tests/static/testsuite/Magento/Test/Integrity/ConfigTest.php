@@ -51,7 +51,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getConfigFilesPerModule()
     {
-        $configFiles = \Magento\Framework\App\Utility\Files::init()->getConfigFiles('config.xml', [], false);
         $data = [];
         $componentRegistrar = new \Magento\Framework\Component\ComponentRegistrar();
         $modulesPaths = $componentRegistrar->getPaths(\Magento\Framework\Component\ComponentRegistrar::MODULE);
