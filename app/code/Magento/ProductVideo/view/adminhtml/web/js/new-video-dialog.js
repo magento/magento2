@@ -441,7 +441,7 @@ define([
 
         _onImageLoaded: function(result, file, oldFile, callback) {
             var data = JSON.parse(result);
-            if(data.errorcode) {
+            if(data.errorcode || data.error) {
                 alert(data.error);
                 return;
             }
@@ -826,11 +826,8 @@ define([
          */
         saveImageRoles: function(imageData) {
             var data = imageData.file;
-            if(!data) {
-                throw new Error('You need use _getImae');
-            }
             var self = this;
-            if (data.length > 0) {
+            if (!data && data.length > 0) {
                 var containers = $('.image-placeholder').siblings('input');
                 $.each(containers, function (i, el) {
                     var start = el.name.indexOf('[') + 1;
@@ -865,13 +862,13 @@ define([
                 $('.video-edit').hide();
                 $('.mage-new-video-dialog').createVideoPlayer({reset : true}).createVideoPlayer('reset').updateInputFields({reset : true}).updateInputFields('reset');
             });
-            $(document).on('click', '#media_gallery_content .image', function() {
+            $(document).on('click', '#media_gallery_content .item.video-item', function() {
                 $('.video-create-button').hide();
                 $('.video-delete-button').show();
                 $('.video-edit').show();
                 $('.mage-new-video-dialog').createVideoPlayer({reset : true}).createVideoPlayer('reset');
             });
-            $(document).on('click', '#media_gallery_content .image:not(.removed)', function() {
+            $(document).on('click', '#media_gallery_content .item.video-item:not(.removed)', function() {
                 var formFields = $(self._videoFormSelector).find('.edited-data');
                 var container = $(this);
 
