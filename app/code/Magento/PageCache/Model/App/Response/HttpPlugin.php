@@ -11,6 +11,17 @@ namespace Magento\PageCache\Model\App\Response;
  */
 class HttpPlugin
 {
+    /** @var \Magento\Framework\Registry */
+    protected $registry;
+
+    /**
+     * @param \Magento\Framework\Registry $registry
+     */
+    public function __construct(\Magento\Framework\Registry $registry)
+    {
+        $this->registry = $registry;
+    }
+
     /**
      * Set proper value of X-Magento-Vary cookie.
      *
@@ -19,6 +30,8 @@ class HttpPlugin
      */
     public function beforeSendResponse(\Magento\Framework\App\Response\Http $subject)
     {
-        $subject->sendVary();
+        if ($this->registry->registry('use_page_cache_plugin')) {
+            $subject->sendVary();
+        }
     }
 }
