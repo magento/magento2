@@ -49,6 +49,8 @@ require(["jquery", "jquery/ui", "catalogGallery"], function ($) {
         PV: 'product-video', // [CONST]
         VID: 'video', // [CONST]
         VI: 'vimeo', // [CONST]
+        FTVC : 'fotorama__video-close',
+        FTAR : 'fotorama__arr',
         Base: 0, //on check for video is base this setting become true if there is any video with base role
         MobileMaxWidth: 767, //max mobile width, currently for playing video if it's base one, we don't need it autoplay if it's on mobile version
         GP: 'gallery-placeholder', //gallery placeholder class is needed to find and erase <script> tag
@@ -91,11 +93,11 @@ require(["jquery", "jquery/ui", "catalogGallery"], function ($) {
         },
 
         _createCloseVideo : function (fotorama, isBase) {
-            $(this.element).find('.fotorama__video-close').remove();
-            $(this.element).append('<div class="fotorama__video-close"></div>');
+            $(this.element).find('.'+this.FTVC).remove();
+            $(this.element).append('<div class="'+this.FTVC+'"></div>');
             $(this.element).css('position','relative');
 
-            var $closeVideo = $(this.element).find('.fotorama__video-close');
+            var $closeVideo = $(this.element).find('.'+this.FTVC);
 
             this._closeVideoSetEvents($closeVideo, fotorama);
             if (isBase && this.options.VideoData[fotorama.activeIndex].isBase && $(window).width() > this.MobileMaxWidth) {
@@ -104,19 +106,21 @@ require(["jquery", "jquery/ui", "catalogGallery"], function ($) {
         },
 
         _hideCloseVideo : function () {
-            $(this.element).find('.fotorama__video-close').css({
+            $(this.element).find('.'+this.FTVC).css({
                 opacity: 0,
                 transform: 'translate3d(95px, -95px, 0)',
                 display: 'none'
-            })
+            });
+            $('.'+this.FTAR).removeClass('hidden-video');
         },
 
         _showCloseVideo : function() {
-            $(this.element).find('.fotorama__video-close').css({
+            $(this.element).find('.'+this.FTVC).css({
                 opacity: 1,
                 transform: 'translate3d(0px, 0px, 0)',
                 display : 'block'
             });
+            $('.'+this.FTAR).addClass('hidden-video');
         },
 
         _closeVideoSetEvents : function ($closeVideo, fotorama) {
