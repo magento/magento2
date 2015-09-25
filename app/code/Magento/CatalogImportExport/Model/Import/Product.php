@@ -1430,6 +1430,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
                                 trim($mediaImage),
                                 true
                             );
+                            if ($uploadedGalleryFiles[$mediaImage] == ''){
+                                $uploadedGalleryFiles[$mediaImage] = $mediaImage;
+                            }
                         }
                     } elseif (!isset($existingImages[$imagePath])) {
                         if (!array_key_exists($mediaImage, $uploadedGalleryFiles)) {
@@ -1440,6 +1443,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
                             $newImagePath = $uploadedGalleryFiles[$mediaImage];
                             $existingImages[$newImagePath][] = $rowSku;
                         }
+                        /*
                         $rowData[self::COL_MEDIA_IMAGE][] = $uploadedGalleryFiles[$mediaImage];
                         if (!empty($rowData[self::COL_MEDIA_IMAGE]) && is_array($rowData[self::COL_MEDIA_IMAGE])) {
                             $position = array_search($mediaImage, $mediaGalleryImages);
@@ -1455,7 +1459,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
                                 }
                             }
                         }
+                        */
                     }
+
+                    $rowData[self::COL_MEDIA_IMAGE][] = $uploadedGalleryFiles[$mediaImage];
+
                     foreach ($this->_imagesArrayKeys as $imageCol) {
                         if (empty($rowData[$imageCol]) || ($imageCol == self::COL_MEDIA_IMAGE)) {
                             continue;
@@ -1467,6 +1475,21 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
                             unset($rowData[$imageCol]);
                         } elseif (isset($uploadedGalleryFiles[$rowData[$imageCol]])) {
                             $rowData[$imageCol] = $uploadedGalleryFiles[$rowData[$imageCol]];
+                        }
+                    }
+                }
+
+                if (!empty($rowData[self::COL_MEDIA_IMAGE]) && is_array($rowData[self::COL_MEDIA_IMAGE])) {
+                    $position = array_search($mediaImage, $mediaGalleryImages);
+                    foreach ($rowData[self::COL_MEDIA_IMAGE] as $mediaImage) {
+                        if (!empty($mediaImage)) {
+                            $mediaGallery[$rowSku][] = [
+                                'attribute_id' => $this->getMediaGalleryAttributeId(),
+                                'label' => isset($mediaGalleryLabels[$position]) ? $mediaGalleryLabels[$position] : '',
+                                'position' => $position,
+                                'disabled' => isset($additionalImageIsDisabled[$mediaImage]) ? '1' : '0',
+                                'value' => $mediaImage,
+                            ];
                         }
                     }
                 }
@@ -1837,7 +1860,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
             }
         }
         try {
-            $this->_connection->insertOnDuplicate($mediaValueTableName, $multiInsertData, ['value_id']);
+            $this->_connection->insertOnDuplicate(
+                $mediaValueTableName,
+                $multiInsertData,
+                ['value_id', 'store_id', 'entity_id', 'label', 'position', 'disabled']
+            );
         } catch (\Exception $e) {
             $this->_connection->delete(
                 $mediaGalleryTableName,
