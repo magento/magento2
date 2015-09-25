@@ -527,6 +527,21 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 unset($badClasses[array_search($badClass, $badClasses)]);
                 return true;
             }
+        }
+
+        $libraryDir = null;
+        if (isset($namespaceParts[1])) {
+            $libraryName = array_shift($namespaceParts) . '/' . array_shift($namespaceParts);
+            $libraryDir = $componentRegistrar->getPath(ComponentRegistrar::LIBRARY, strtolower($libraryName));
+        }
+
+        if ($libraryDir) {
+            $fullPath = $libraryDir . '/' . implode('/', $namespaceParts) .
+                str_replace('\\', '/', $badClass) . '.php';
+            if (file_exists($fullPath)) {
+                unset($badClasses[array_search($badClass, $badClasses)]);
+                return true;
+            }
         } else {
             // Remove usage of classes that do NOT using fully-qualified class names (possibly under same namespace)
             $directories = [
