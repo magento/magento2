@@ -1218,11 +1218,17 @@ class Files
 
         foreach ($directories as $dir) {
             $fullPath = $dir . $path;
-            $trimmedFullPath = $dir . explode('/', $path, 3)[2];
-            if ($this->classFileExistsCheckContent($fullPath, $namespace, $className)
-                || $this->classFileExistsCheckContent($trimmedFullPath, $namespace, $className)
-            ) {
+            if ($this->classFileExistsCheckContent($fullPath, $namespace, $className)) {
                 return true;
+            } else {
+                $classParts = explode('/', $path, 3);
+                if (count($classParts) >= 3) {
+                    // Check if it's PSR-4 class with trimmed vendor and package name parts
+                    $trimmedFullPath = $dir . $classParts[2];
+                    if ($this->classFileExistsCheckContent($trimmedFullPath, $namespace, $className)) {
+                        return true;
+                    }
+                }
             }
         }
         return false;
