@@ -133,13 +133,7 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->updatePackagesCacheMock = $this->getMock(
-            'Magento\Setup\Model\UpdatePackagesCache',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->updatePackagesCacheMock = $this->getMock('Magento\Setup\Model\UpdatePackagesCache', [], [], '', false );
 
         $objectManagerProvider->expects($this->any())
             ->method('get')
