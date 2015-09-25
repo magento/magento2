@@ -53,10 +53,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $configFiles = \Magento\Framework\App\Utility\Files::init()->getConfigFiles('config.xml', [], false);
         $data = [];
-        foreach ($configFiles as $configFile) {
-            preg_match('#/([^/]+?/[^/]+?)/etc/config\.xml$#', $configFile, $moduleName);
-            $moduleName = str_replace('/', '_', $moduleName[1]);
-            $data[$configFile] = $moduleName;
+        $componentRegistrar = new \Magento\Framework\Component\ComponentRegistrar();
+        $modulesPaths = $componentRegistrar->getPaths(\Magento\Framework\Component\ComponentRegistrar::MODULE);
+
+        foreach ($modulesPaths as $moduleName => $path) {
+            if (file_exists($configFile = $path . '/etc/config.xml')) {
+                $data[$configFile] = $moduleName;
+            }
         }
         return $data;
     }
