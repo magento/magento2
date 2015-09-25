@@ -37,14 +37,16 @@ define(
                     method: paymentData
                 };
             }
+            $('#checkout').trigger("processStart");
             return storage.put(
-                serviceUrl, JSON.stringify(payload)
+                serviceUrl, JSON.stringify(payload), false
             ).done(
                 function () {
                     $.mage.redirect(window.checkoutConfig.payment.paypalExpress.redirectUrl[quote.paymentMethod().method]);
                 }
             ).fail(
                 function (response) {
+                    $('#checkout').trigger("processStop");
                     errorProcessor.process(response, messageContainer);
                 }
             );

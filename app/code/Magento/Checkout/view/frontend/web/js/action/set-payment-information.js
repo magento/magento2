@@ -4,13 +4,14 @@
  */
 define(
     [
+        'jquery',
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/url-builder',
         'mage/storage',
         'Magento_Checkout/js/model/error-processor',
         'Magento_Customer/js/model/customer'
     ],
-    function (quote, urlBuilder, storage, errorProcessor, customer) {
+    function ($, quote, urlBuilder, storage, errorProcessor, customer) {
         'use strict';
 
         return function (messageContainer) {
@@ -39,14 +40,16 @@ define(
                     billingAddress: quote.billingAddress()
                 };
             }
+            $('#checkout').trigger("processStart");
             return storage.post(
-                serviceUrl, JSON.stringify(payload)
+                serviceUrl, JSON.stringify(payload), false
             ).done(
                 function () {
                     //do nothing
                 }
             ).fail(
                 function (response) {
+                    $('#checkout').trigger("processStop");
                     errorProcessor.process(response, messageContainer);
                 }
             );
