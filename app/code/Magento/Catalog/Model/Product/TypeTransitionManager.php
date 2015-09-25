@@ -28,6 +28,7 @@ class TypeTransitionManager
     protected $weightResolver;
 
     /**
+     * @param Edit\WeightResolver $weightResolver
      * @param array $compatibleTypes
      */
     public function __construct(

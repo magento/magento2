@@ -30,7 +30,6 @@ class Weight extends \Magento\Framework\Data\Form\Element\Text
      * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Catalog\Helper\Product $helper
      * @param \Magento\Framework\Locale\Format $localeFormat
      * @param array $data
      */
@@ -38,7 +37,6 @@ class Weight extends \Magento\Framework\Data\Form\Element\Text
         \Magento\Framework\Data\Form\Element\Factory $factoryElement,
         \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection,
         \Magento\Framework\Escaper $escaper,
-        \Magento\Catalog\Helper\Product $helper,
         \Magento\Framework\Locale\Format $localeFormat,
         array $data = []
     ) {

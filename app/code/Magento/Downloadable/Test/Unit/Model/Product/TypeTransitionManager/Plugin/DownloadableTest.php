@@ -30,6 +30,11 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    protected $weightResolver;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $subjectMock;
 
     protected function setUp()
@@ -37,18 +42,12 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
         $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->productMock = $this->getMock(
             'Magento\Catalog\Model\Product',
-            ['getTypeId', 'setTypeId', '__wakeup'],
+            ['getTypeId', 'setTypeId'],
             [],
             '',
             false
         );
-        $this->weightResolver = $this->getMock(
-            'Magento\Catalog\Model\Product\Edit\WeightResolver',
-            ['resolveProductHasWeight'],
-            [],
-            '',
-            false
-        );
+        $this->weightResolver = $this->getMock('Magento\Catalog\Model\Product\Edit\WeightResolver');
         $this->subjectMock = $this->getMock('Magento\Catalog\Model\Product\TypeTransitionManager', [], [], '', false);
         $this->closureMock = function () {
         };

@@ -366,6 +366,7 @@
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
+            <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">100</item>
                 <item name="dataset" xsi:type="string" />
@@ -386,6 +387,7 @@
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
             </field>
+            <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">10</item>
                 <item name="dataset" xsi:type="string" />
