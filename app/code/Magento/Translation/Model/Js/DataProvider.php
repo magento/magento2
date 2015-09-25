@@ -9,6 +9,7 @@ namespace Magento\Translation\Model\Js;
 /**
  * DataProvider for js translation
  *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProvider implements DataProviderInterface
 {

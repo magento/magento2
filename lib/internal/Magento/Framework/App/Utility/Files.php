@@ -15,6 +15,7 @@ use Magento\Framework\View\Design\Theme\ThemePackageList;
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.NPathComplexity)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  */
 class Files
 {
