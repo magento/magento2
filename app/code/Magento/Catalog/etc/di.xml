@@ -64,7 +64,6 @@
     </type>
     <type name="Magento\Catalog\Helper\Product">
         <arguments>
-            <argument name="typeSwitcherLabel" xsi:type="string">Virtual</argument>
             <argument name="catalogSession" xsi:type="object">Magento\Catalog\Model\Session\Proxy</argument>
             <argument name="reindexPriceIndexerData" xsi:type="array">
                 <item name="byDataResult" xsi:type="array">

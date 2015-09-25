@@ -7,8 +7,6 @@ namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Helper\Form;
 
 class WeightTest extends \PHPUnit_Framework_TestCase
 {
-    const VIRTUAL_FIELD_HTML_ID = 'weight_and_type_switcher';
-
     /**
      * @var \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight
      */
@@ -17,7 +15,7 @@ class WeightTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Data\Form\Element\Checkbox
      */
-    protected $_virtual;
+    protected $weightSwitcher;
 
     public function testSetForm()
     {
@@ -36,34 +34,18 @@ class WeightTest extends \PHPUnit_Framework_TestCase
 
         $form = new \Magento\Framework\Data\Form($factory, $collectionFactory, $formKey);
 
-        $helper = $this->getMock(
-            'Magento\Catalog\Helper\Product',
-            ['getTypeSwitcherControlLabel'],
-            [],
-            '',
-            false,
-            false
-        );
-        $helper->expects(
-            $this->any()
-        )->method(
-            'getTypeSwitcherControlLabel'
-        )->will(
-            $this->returnValue('Virtual / Downloadable')
-        );
-
-        $this->_virtual = $this->getMock(
-            'Magento\Framework\Data\Form\Element\Checkbox',
+        $this->weightSwitcher = $this->getMock(
+            'Magento\Framework\Data\Form\Element\Radios',
             ['setId', 'setName', 'setLabel', 'setForm'],
             [],
             '',
             false,
             false
         );
-        $this->_virtual->expects($this->any())->method('setId')->will($this->returnSelf());
-        $this->_virtual->expects($this->any())->method('setName')->will($this->returnSelf());
-        $this->_virtual->expects($this->any())->method('setLabel')->will($this->returnSelf());
-        $this->_virtual->expects(
+        $this->weightSwitcher->expects($this->any())->method('setId')->will($this->returnSelf());
+        $this->weightSwitcher->expects($this->any())->method('setName')->will($this->returnSelf());
+        $this->weightSwitcher->expects($this->any())->method('setLabel')->will($this->returnSelf());
+        $this->weightSwitcher->expects(
             $this->any()
         )->method(
             'setForm'
@@ -79,14 +61,14 @@ class WeightTest extends \PHPUnit_Framework_TestCase
         )->method(
             'create'
         )->with(
-            $this->equalTo('checkbox')
+            $this->equalTo('radios')
         )->will(
-            $this->returnValue($this->_virtual)
+            $this->returnValue($this->weightSwitcher)
         );
 
         $this->_model = $objectManager->getObject(
             'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight',
-            ['factoryElement' => $factory, 'factoryCollection' => $collectionFactory, 'helper' => $helper]
+            ['factoryElement' => $factory, 'factoryCollection' => $collectionFactory,]
         );
 
         $this->_model->setForm($form);
@@ -120,33 +102,17 @@ class WeightTest extends \PHPUnit_Framework_TestCase
             'groupSymbol' => '.',
         ]);
 
-        $helper = $this->getMock(
-            'Magento\Catalog\Helper\Product',
-            ['getTypeSwitcherControlLabel'],
-            [],
-            '',
-            false,
-            false
-        );
-        $helper->expects(
-            $this->any()
-        )->method(
-            'getTypeSwitcherControlLabel'
-        )->will(
-            $this->returnValue('Virtual / Downloadable')
-        );
-
-        $this->_virtual = $this->getMock(
-            'Magento\Framework\Data\Form\Element\Checkbox',
+        $this->weightSwitcher = $this->getMock(
+            'Magento\Framework\Data\Form\Element\Radios',
             ['setId', 'setName', 'setLabel'],
             [],
             '',
             false,
             false
         );
-        $this->_virtual->expects($this->any())->method('setId')->will($this->returnSelf());
-        $this->_virtual->expects($this->any())->method('setName')->will($this->returnSelf());
-        $this->_virtual->expects($this->any())->method('setLabel')->will($this->returnSelf());
+        $this->weightSwitcher->expects($this->any())->method('setId')->will($this->returnSelf());
+        $this->weightSwitcher->expects($this->any())->method('setName')->will($this->returnSelf());
+        $this->weightSwitcher->expects($this->any())->method('setLabel')->will($this->returnSelf());
 
         $factory = $this->getMock('Magento\Framework\Data\Form\Element\Factory', [], [], '', false);
         $factory->expects(
@@ -154,9 +120,9 @@ class WeightTest extends \PHPUnit_Framework_TestCase
         )->method(
             'create'
         )->with(
-            $this->equalTo('checkbox')
+            $this->equalTo('radios')
         )->will(
-            $this->returnValue($this->_virtual)
+            $this->returnValue($this->weightSwitcher)
         );
 
         $this->_model = $objectManager->getObject(
@@ -164,7 +130,6 @@ class WeightTest extends \PHPUnit_Framework_TestCase
             [
                 'factoryElement' => $factory,
                 'factoryCollection' => $collectionFactory,
-                'helper' => $helper,
                 'localeFormat' => $localeFormat
             ]
         );

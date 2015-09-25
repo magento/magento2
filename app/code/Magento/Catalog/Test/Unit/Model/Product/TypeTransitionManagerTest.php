@@ -19,32 +19,45 @@ class TypeTransitionManagerTest extends \PHPUnit_Framework_TestCase
      */
     protected $productMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $weightResolver;
+
     protected function setUp()
     {
+        $this->productMock = $this->getMock(
+            'Magento\Catalog\Model\Product',
+            ['getTypeId', 'setTypeId', 'setTypeInstance', '__wakeup'],
+            [],
+            '',
+            false
+        );
+        $this->weightResolver = $this->getMock(
+            'Magento\Catalog\Model\Product\Edit\WeightResolver',
+            ['resolveProductHasWeight'],
+            [],
+            '',
+            false
+        );
         $this->model = new TypeTransitionManager(
+            $this->weightResolver,
             [
                 'simple' => \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
                 'virtual' => \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL,
             ]
         );
-        $this->productMock = $this->getMock(
-            'Magento\Catalog\Model\Product',
-            ['hasIsVirtual', 'getTypeId', 'setTypeId', 'setTypeInstance', '__wakeup'],
-            [],
-            '',
-            false
-        );
     }
 
     /**
-     * @param bool $isVirtual
+     * @param bool $hasWeight
      * @param string $currentTypeId
      * @param string $expectedTypeId
      * @dataProvider processProductDataProvider
      */
-    public function testProcessProduct($isVirtual, $currentTypeId, $expectedTypeId)
+    public function testProcessProduct($hasWeight, $currentTypeId, $expectedTypeId)
     {
-        $this->productMock->expects($this->any())->method('hasIsVirtual')->will($this->returnValue($isVirtual));
+        $this->weightResolver->expects($this->any())->method('resolveProductHasWeight')->willReturn($hasWeight);
         $this->productMock->expects($this->once())->method('getTypeId')->will($this->returnValue($currentTypeId));
         $this->productMock->expects($this->once())->method('setTypeInstance')->with(null);
         $this->productMock->expects($this->once())->method('setTypeId')->with($expectedTypeId);
@@ -58,22 +71,22 @@ class TypeTransitionManagerTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                false,
+                true,
                 \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL,
                 \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
             ],
             [
-                false,
+                true,
                 \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
                 \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
             ],
             [
-                true,
+                false,
                 \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE,
                 \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
             ],
             [
-                true,
+                false,
                 \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL,
                 \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL
             ]

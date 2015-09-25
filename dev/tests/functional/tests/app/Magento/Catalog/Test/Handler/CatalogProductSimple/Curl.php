@@ -47,8 +47,8 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             'Yes' => 1,
             'No' => 0
         ],
-        'is_virtual' => [
-            'Yes' => 1
+        'product_has_weight' => [
+            'No' => 0
         ],
         'use_config_enable_qty_increments' => [
             'Yes' => 1,
