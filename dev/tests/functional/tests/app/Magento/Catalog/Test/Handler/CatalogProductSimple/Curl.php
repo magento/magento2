@@ -410,6 +410,9 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      */
     protected function createProduct(array $data, array $config)
     {
+        $config['create_url_params']['set'] = isset($data['product']['attribute_set_id'])
+            ? $data['product']['attribute_set_id']
+            : $config['create_url_params']['set'];
         $url = $this->getUrl($config);
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->addOption(CURLOPT_HEADER, 1);
