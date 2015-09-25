@@ -16,12 +16,12 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
     private $controller;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\SampleData\Model\SampleData
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Setup\SampleData\StateInterface
      */
-    private $sampleData;
+    private $sampleDataState;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\Lists
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Setup\Lists
      */
     private $lists;
 
@@ -40,9 +40,9 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
         $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
         $this->objectManager = $this->getMock('Magento\Framework\App\ObjectManager', [], [], '', false);
         $objectManagerProvider->expects($this->any())->method('get')->willReturn($this->objectManager);
-        $this->sampleData = $this->getMock(
-            'Magento\SampleData\Model\SampleData',
-            ['isInstalledSuccessfully', 'isInstallationError'],
+        $this->sampleDataState = $this->getMock(
+            'Magento\Framework\Setup\SampleData\StateInterface',
+            [],
             [],
             '',
             false
@@ -54,17 +54,18 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $expected
+     * @param $withSampleData
      *
      * @dataProvider indexActionDataProvider
      */
-    public function testIndexAction($expected)
+    public function testIndexAction($expected, $withSampleData)
     {
-        if ($expected['isSampledataEnabled']) {
+        if ($withSampleData) {
             $this->moduleList->expects($this->once())->method('has')->willReturn(true);
-            $this->objectManager->expects($this->once())->method('get')->willReturn($this->sampleData);
-            $this->sampleData->expects($this->once())->method('isInstalledSuccessfully')
+            $this->objectManager->expects($this->once())->method('get')->willReturn($this->sampleDataState);
+            $this->sampleDataState->expects($this->once())->method('isInstalled')
                 ->willReturn($expected['isSampleDataInstalled']);
-            $this->sampleData->expects($this->once())->method('isInstallationError')
+            $this->sampleDataState->expects($this->once())->method('hasError')
                 ->willReturn($expected['isSampleDataErrorInstallation']);
         } else {
             $this->moduleList->expects($this->once())->method('has')->willReturn(false);
@@ -95,23 +96,19 @@ class CustomizeYourStoreTest extends \PHPUnit_Framework_TestCase
         $currency = ['currency' => ['USD'=>'US Dollar', 'EUR' => 'Euro']];
         $language = ['language' => ['en_US'=>'English (USA)', 'en_UK' => 'English (UK)']];
         $sampleData = [
-            'isSampledataEnabled' => false,
             'isSampleDataInstalled' => false,
             'isSampleDataErrorInstallation' => false
         ];
-        $sampleDataTrue = array_merge($sampleData, ['isSampledataEnabled' => true]);
-        $sampleDataFalse = array_merge($sampleData, ['isSampledataEnabled' => false]);
 
         return [
-            'with_all_data' => [array_merge($timezones, $currency, $language, $sampleDataTrue)],
-            'no_currency_data' => [array_merge($timezones, ['currency' => null], $language, $sampleDataTrue)],
-            'no_timezone_data' => [array_merge(['timezone' => null], $currency, $language, $sampleDataTrue)],
-            'no_language_data' => [array_merge($timezones, $currency, ['language' => null], $sampleDataTrue)],
-            'empty_currency_data' => [array_merge($timezones, ['currency' => []], $language, $sampleDataTrue)],
-            'empty_timezone_data' => [array_merge(['timezone' => []], $currency, $language, $sampleDataTrue)],
-            'empty_language_data' => [array_merge($timezones, $currency, ['language' => []], $sampleDataTrue)],
-            'false_sample_data' => [array_merge($timezones, $currency, $language, $sampleDataFalse)],
-            'no_sample_data' => [array_merge($timezones, $currency, $language, $sampleData)],
+            'with_all_data' => [array_merge($timezones, $currency, $language, $sampleData), true],
+            'no_currency_data' => [array_merge($timezones, ['currency' => null], $language, $sampleData), true],
+            'no_timezone_data' => [array_merge(['timezone' => null], $currency, $language, $sampleData), true],
+            'no_language_data' => [array_merge($timezones, $currency, ['language' => null], $sampleData), true],
+            'empty_currency_data' => [array_merge($timezones, ['currency' => []], $language, $sampleData), true],
+            'empty_timezone_data' => [array_merge(['timezone' => []], $currency, $language, $sampleData), true],
+            'empty_language_data' => [array_merge($timezones, $currency, ['language' => []], $sampleData), true],
+            'no_sample_data' => [array_merge($timezones, $currency, $language, $sampleData), false],
         ];
     }
 
