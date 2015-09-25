@@ -339,13 +339,13 @@ class Tabs extends WigetTabs
 
     public function getAccordion($parentTab)
     {
-        /** @var Magento\Backend\Block\Widget\Accordion $accordion */
+        /** @var \Magento\Backend\Block\Widget\Accordion $accordion */
         $accordion = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Accordion')
             ->setId($this->accordionBlockId . $parentTab->getId());
         foreach ($this->_tabs as $childTab) {
             if ($childTab->getParentTab() === $parentTab->getId()) {
                 $accordion->addItem(
-                    $childTab->getUiId(),
+                    $childTab->getId(),
                     [
                         'title' => $childTab->getTabTitle(),
                         'content' => $this->getTabContent($childTab),
