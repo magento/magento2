@@ -12,6 +12,7 @@ define([
 
     $.widget('mage.systemMessageDialog', $.mage.modal, {
         options: {
+            modalClass: 'modal-system-messages',
             systemMessageTemplate:
                 '<% _.each(data.items, function(item) { %>' +
                     '<li class="message message-warning <% if (item.severity == 1) { %>error<% } else { %>warning<% } %>">' +
