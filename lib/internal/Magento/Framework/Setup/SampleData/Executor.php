@@ -9,11 +9,14 @@ class Executor
 {
     /**
      * @param \Psr\Log\LoggerInterface $logger
+     * @param StateInterface $state
      */
     public function __construct(
-        \Psr\Log\LoggerInterface $logger
+        \Psr\Log\LoggerInterface $logger,
+        StateInterface $state
     ) {
         $this->logger = $logger;
+        $this->state = $state;
     }
 
     /**
@@ -28,7 +31,8 @@ class Executor
         try {
             $installer->install();
         } catch (\Exception $e) {
-            $this->logger->error($e);
+            $this->state->setError();
+            $this->logger->error($e->getMessage());
         }
     }
 }
