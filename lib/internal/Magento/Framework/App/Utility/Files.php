@@ -502,7 +502,7 @@ class Files
         $cacheKey = md5(BP . '|' . $location . '|' . implode('|', $params));
 
         if (!isset(self::$_cache[__METHOD__][$cacheKey])) {
-            $this->populateLayoutXmlCache(__METHOD__, $params, $location, $cacheKey);
+            self::$_cache[__METHOD__][$cacheKey] = $this->collectLayoutXmlFiles($params, $location);
         }
 
         if ($asDataSet) {
@@ -512,96 +512,117 @@ class Files
     }
 
     /**
-     * Helper method for getLayoutXmlFiles() to find the layout xml file and cache it
+     * Collect layout files
      *
-     * @param string $method
      * @param string $params
      * @param string $location
-     * @param string $cacheKey
-     * @return void
+     * @return array
      */
-    private function populateLayoutXmlCache($method, $params, $location, $cacheKey)
+    private function collectLayoutXmlFiles($params, $location)
+    {
+        $files = [];
+        if ($params['include_code']) {
+            $files = array_merge($files, $this->collectModuleLayoutFiles($params, $location));
+        }
+        if ($params['include_design']) {
+            $files = array_merge($files, $this->collectThemeLayoutFiles($params, $location));
+        }
+        return $files;
+    }
+
+    /**
+     * Collect layout files from modules
+     *
+     * @param array $params
+     * @param string $location
+     * @return array
+     */
+    private function collectModuleLayoutFiles(array $params, $location)
     {
         $files = [];
         $area = $params['area'];
-        $namespace = $params['namespace'];
-        $module = $params['module'];
-        if ($params['include_code']) {
-            $locationPaths = [];
-            foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
-                $locationPaths[] = $moduleDir . "/view/{$area}/{$location}";
-            }
-            $this->_accumulateFilesByPatterns(
-                $locationPaths,
-                '*.xml',
-                $files,
-                $params['with_metainfo'] ? '_parseModuleLayout' : false
-            );
-        }
-        if ($params['include_design']) {
-            $locationPaths = [];
-            foreach ($this->themePackageList->getThemes() as $theme) {
-                if ($area == '*' || $theme->getArea() === $area) {
-                    $locationPaths[] = $theme->getPath() . "/{$namespace}_{$module}/{$location}";
+        $requiredModuleName = $params['namespace'] . '_' . $params['module'];
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
+            if ($requiredModuleName == '*_*' || $moduleName == $requiredModuleName) {
+                $moduleFiles = [];
+                $this->_accumulateFilesByPatterns(
+                    [$moduleDir . "/view/{$area}/{$location}"],
+                    '*.xml',
+                    $moduleFiles
+                );
+                if ($params['with_metainfo']) {
+                    foreach ($moduleFiles as $moduleFile) {
+                        $modulePath = str_replace(DIRECTORY_SEPARATOR, '/', preg_quote($moduleDir, '#'));
+                        $regex = '#^' . $modulePath . '/view/(?P<area>[a-z]+)/layout/(?P<path>.+)$#i';
+                        if (preg_match($regex, $moduleFile, $matches)) {
+                            $files[] = [
+                                $matches['area'],
+                                '',
+                                $moduleName,
+                                $matches['path'],
+                                $moduleFile,
+                            ];
+                        } else {
+                            throw new \UnexpectedValueException("Could not parse modular layout file '$moduleFile'");
+                        }
+                    }
+                } else {
+                    $files = array_merge($files, $moduleFiles);
                 }
             }
-            $this->_accumulateFilesByPatterns(
-                $locationPaths,
-                '*.xml',
-                $files,
-                $params['with_metainfo'] ? '_parseThemeLayout' : false
-            );
         }
-        self::$_cache[$method][$cacheKey] = $files;
+        return $files;
     }
 
     /**
-     * Parse meta-info of a layout file in module
+     * Collect layout files from themes
      *
-     * @param string $file
+     * @param array $params
+     * @param string $location
      * @return array
      */
-    protected function _parseModuleLayout($file)
+    private function collectThemeLayoutFiles(array $params, $location)
     {
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
-            if (preg_match(
-                '/^' . preg_quote("{$modulePath}/", '/') . 'view\/([a-z]+)\/layout\/(.+)$/i',
-                $file,
-                $matches
-            ) === 1
+        $files = [];
+        $area = $params['area'];
+        $requiredModuleName = $params['namespace'] . '_' . $params['module'];
+        $themePath = $params['theme_path'];
+        foreach ($this->themePackageList->getThemes() as $theme) {
+            $currentThemePath = str_replace(DIRECTORY_SEPARATOR, '/', $theme->getPath());
+            $currentThemeCode = $theme->getVendor() . '/' . $theme->getName();
+            if (($area == '*' || $theme->getArea() === $area)
+                && ($themePath == '*' || $themePath == '*/*' || $themePath == $currentThemeCode)
             ) {
-                list(, $area, $filePath) = $matches;
-                return [$area, '', $moduleName, $filePath, $file];
+                $themeFiles = [];
+                $this->_accumulateFilesByPatterns(
+                    [$currentThemePath . "/{$requiredModuleName}/{$location}"],
+                    '*.xml',
+                    $themeFiles
+                );
+
+                if ($params['with_metainfo']) {
+                    $regex = '#^' . $currentThemePath
+                        . '/(?P<module>[a-z\d]+_[a-z\d]+)/layout/(override/((base/)|(theme/[a-z\d_]+/[a-z\d_]+/)))?'
+                        . '(?P<path>.+)$#i';
+                    foreach ($themeFiles as $themeFile) {
+                        if (preg_match($regex, $themeFile, $matches)) {
+                            $files[] = [
+                                $theme->getArea(),
+                                $theme->getVendor() . '/' . $theme->getName(),
+                                $matches['module'],
+                                $matches['path'],
+                                $themeFile,
+                            ];
+                        } else {
+                            throw new \UnexpectedValueException("Could not parse theme layout file '$themeFile'");
+                        }
+                    }
+                } else {
+                    $files = array_merge($files, $themeFiles);
+                }
             }
         }
-        return [];
-    }
-
-    /**
-     * Parse meta-info of a layout file in theme
-     *
-     * @param string $file
-     * @return array
-     */
-    protected function _parseThemeLayout($file)
-    {
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themePath) {
-            $appDesign = preg_quote("{$themePath}/", '/');
-            $invariant = '/^' . $appDesign . '([a-z\d]+_[a-z\d]+)\/layout\/';
-
-            if (preg_match($invariant . 'override\/base\/(.+)$/i', $file, $matches)) {
-                list(, $area, $themeNS, $themeCode, $module, $filePath) = $matches;
-                return [$area, $themeNS . '/' . $themeCode, $module, $filePath];
-            }
-            if (preg_match($invariant . 'override\/theme\/[a-z\d_]+\/[a-z\d_]+\/(.+)$/i', $file, $matches)) {
-                list(, $area, $themeNS, $themeCode, $module, $filePath) = $matches;
-                return [$area, $themeNS . '/' . $themeCode, $module, $filePath];
-            }
-            preg_match($invariant . '(.+)$/i', $file, $matches);
-            list(, $area, $themeNS, $themeCode, $module, $filePath) = $matches;
-            return [$area, $themeNS . '/' . $themeCode, $module, $filePath, $file];
-        }
-        return [];
+        return $files;
     }
 
     /**
@@ -762,7 +783,7 @@ class Files
 
         $this->_accumulateFilesByPatterns($moduleWebPath, $filePattern, $result, '_parseModuleStatic');
         $this->_accumulateFilesByPatterns($moduleLocalePath, $filePattern, $result, '_parseModuleLocaleStatic');
-        $this->accumulateThemePaths($area, $module, $locale, $filePattern, $result);
+        $this->accumulateThemeStaticFiles($area, $module, $locale, $filePattern, $result);
         self::$_cache[$key] = $result;
         return $result;
     }
@@ -777,7 +798,7 @@ class Files
      * @param array $result
      * @return void
      */
-    private function accumulateThemePaths($area, $module, $locale, $filePattern, &$result)
+    private function accumulateThemeStaticFiles($area, $module, $locale, $filePattern, &$result)
     {
         foreach ($this->themePackageList->getThemes() as $themePackage) {
             $themeArea = $themePackage->getArea();
@@ -804,7 +825,7 @@ class Files
                             $file,
                         ];
                     } else {
-                        throw new \UnexpectedValueException("Could not parse path '$file'");
+                        throw new \UnexpectedValueException("Could not parse theme static file '$file'");
                     }
                 }
             }
@@ -952,32 +973,9 @@ class Files
     {
         $key = __METHOD__ . BP . '|' . (int)$withMetaInfo;
         if (!isset(self::$_cache[$key])) {
-            $area = '*';
             $result = [];
-            $moduleTemplatePaths = [];
-            foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
-                $moduleTemplatePaths[] = $moduleDir . "/view/{$area}/templates";
-            }
-            $this->_accumulateFilesByPatterns(
-                $moduleTemplatePaths,
-                '*.phtml',
-                $result,
-                $withMetaInfo ? '_parseModuleTemplate' : false
-            );
-
-            $themePaths = [];
-            foreach ($this->themePackageList->getThemes() as $theme) {
-                if ($area == '*' || $theme->getArea() === $area) {
-                    $themePaths[] = $theme->getPath();
-                }
-            }
-
-            $this->_accumulateFilesByPatterns(
-                $themePaths,
-                '*.phtml',
-                $result,
-                $withMetaInfo ? '_parseThemeTemplate' : false
-            );
+            $this->accumulateModuleTemplateFiles($withMetaInfo, $result);
+            $this->accumulateThemeTemplateFiles($withMetaInfo, $result);
             self::$_cache[$key] = $result;
         }
         if ($asDataSet) {
@@ -987,47 +985,80 @@ class Files
     }
 
     /**
-     * Parse meta-information from a modular template file
+     * Collect templates from themes
      *
-     * @param string $file
-     * @return array
+     * @param bool $withMetaInfo
+     * @param array $result
+     * @return void
      */
-    protected function _parseModuleTemplate($file)
+    private function accumulateThemeTemplateFiles($withMetaInfo, array &$result)
     {
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
-            if (preg_match(
-                '/^' . preg_quote("{$modulePath}/", '/') . 'view\/([a-z]+)\/templates\/(.+)$/i',
-                $file,
-                $matches
-            ) === 1
-            ) {
-                list(, $area, $filePath) = $matches;
-                return [$area, '', $moduleName, $filePath, $file];
+        foreach ($this->themePackageList->getThemes() as $theme) {
+            $files = [];
+            $this->_accumulateFilesByPatterns(
+                [$theme->getPath() . '/*_*/templates'],
+                '*.phtml',
+                $files
+            );
+            if ($withMetaInfo) {
+                $regex = '#^' . str_replace(DIRECTORY_SEPARATOR, '/', $theme->getPath())
+                    . '/(?P<module>[a-z\d]+_[a-z\d]+)/templates/(?P<path>.+)$#i';
+                foreach ($files as $file) {
+                    if (preg_match($regex, $file, $matches)) {
+                        $result[] = [
+                            $theme->getArea(),
+                            $theme->getVendor() . '/' . $theme->getName(),
+                            $matches['module'],
+                            $matches['path'],
+                            $file,
+                        ];
+                    } else {
+                        echo $regex . " - " . $file . "\n";
+                        throw new \UnexpectedValueException("Could not parse theme template file '$file'");
+                    }
+                }
+            } else {
+                $result = array_merge($result, $files);
             }
         }
-        return [];
     }
 
     /**
-     * Parse meta-information from a theme template file
+     * Collect templates from modules
      *
-     * @param string $file
-     * @return array
+     * @param bool $withMetaInfo
+     * @param array $result
+     * @return void
      */
-    protected function _parseThemeTemplate($file)
+    private function accumulateModuleTemplateFiles($withMetaInfo, array &$result)
     {
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themePath) {
-            $appDesign = preg_quote("{$themePath}/", '/');
-
-            preg_match(
-                '/^' . $appDesign . '([a-z\d]+_[a-z\d]+)\/templates\/(.+)$/i',
-                $file,
-                $matches
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
+            $files = [];
+            $this->_accumulateFilesByPatterns(
+                [$moduleDir . "/view/*/templates"],
+                '*.phtml',
+                $files
             );
-            list(, $area, $themeNS, $themeCode, $module, $filePath) = $matches;
-            return [$area, $themeNS . '/' . $themeCode, $module, $filePath, $file];
+            if ($withMetaInfo) {
+                $modulePath = str_replace(DIRECTORY_SEPARATOR, '/', preg_quote($moduleDir, '#'));
+                $regex = '#^' . $modulePath . '/view/(?P<area>[a-z]+)/templates/(?P<path>.+)$#i';
+                foreach ($files as $file) {
+                    if (preg_match($regex, $file, $matches)) {
+                        $result[] = [
+                            $matches['area'],
+                            '',
+                            $moduleName,
+                            $matches['path'],
+                            $file,
+                        ];
+                    } else {
+                        throw new \UnexpectedValueException("Could not parse module template file '$file'");
+                    }
+                }
+            } else {
+                $result = array_merge($result, $files);
+            }
         }
-        return [];
     }
 
     /**
