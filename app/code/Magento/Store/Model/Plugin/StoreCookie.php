@@ -67,11 +67,11 @@ class StoreCookie
         if ($storeCodeFromCookie) {
             try {
                 $this->storeRepository->getActiveStoreByCode($storeCodeFromCookie);
-            } catch(StoreIsInactiveException $e) {
+            } catch (StoreIsInactiveException $e) {
                 $this->storeCookieManager->deleteStoreCookie($defaultStore);
-            } catch(NoSuchEntityException $e) {
+            } catch (NoSuchEntityException $e) {
                 $this->storeCookieManager->deleteStoreCookie($defaultStore);
-            } catch(InvalidArgumentException $e) {
+            } catch (InvalidArgumentException $e) {
                 $this->storeCookieManager->deleteStoreCookie($defaultStore);
             }
         }
