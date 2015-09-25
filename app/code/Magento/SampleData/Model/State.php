@@ -12,6 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class State implements Setup\SampleData\StateInterface
 {
     const ERROR = 'error';
+    const INSTALLED = 'installed';
 
     /**
      * @var string
@@ -42,7 +43,7 @@ class State implements Setup\SampleData\StateInterface
         $stream = $this->getStream('r', $this->fileName);
         if (!$stream) {
             return $isError;
-        } elseif (trim(fread($stream, 400)) == self::ERROR) {
+        } elseif (strpos(trim(fread($stream, 400)), self::ERROR) !== false) {
             $isError = true;
         }
         $this->closeStream($stream);
@@ -56,6 +57,35 @@ class State implements Setup\SampleData\StateInterface
     {
         if (!$this->hasError()) {
             $this->writeStream(self::ERROR, $this->fileName);
+        }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isInstalled()
+    {
+        $isInstalled = false;
+        $stream = $this->getStream('r', $this->fileName);
+        if (!$stream) {
+            return $isInstalled;
+        } else {
+            $state = trim(fread($stream, 400));
+            if (strpos($state, self::ERROR) !== false || strpos($state, self::INSTALLED) !== false) {
+                $isInstalled = true;
+            }
+        }
+        $this->closeStream($stream);
+        return $isInstalled;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setInstalled()
+    {
+        if (!$this->isInstalled()) {
+            $this->writeStream(self::INSTALLED, $this->fileName);
         }
     }
 

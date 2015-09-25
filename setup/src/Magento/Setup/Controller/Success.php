@@ -38,9 +38,9 @@ class Success extends AbstractActionController
     public function indexAction()
     {
         if ($this->moduleList->has('Magento_SampleData')) {
-            /** @var \Magento\SampleData\Model\SampleData $sampleData */
-            $sampleData = $this->objectManagerProvider->get()->get('Magento\SampleData\Model\SampleData');
-            $isSampleDataErrorInstallation = $sampleData->isInstallationError();
+            /** @var \Magento\SampleData\Model\State $sampleData */
+            $sampleData = $this->objectManagerProvider->get()->get('Magento\SampleData\Model\State');
+            $isSampleDataErrorInstallation = $sampleData->hasError();
         } else {
             $isSampleDataErrorInstallation = false;
         }
