@@ -38,7 +38,7 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectFactoryMock = $this->getMock('\Magento\Framework\DataObject\Factory', ['create'], [], '', false);
         $this->productOptionExtensionMock = $this->getMock(
-            'Magento\Quote\Api\Data\ProductOptionExtensionFactory',
+            '\Magento\Quote\Api\Data\ProductOptionExtensionFactory',
             ['create'],
             [],
             '',
@@ -134,7 +134,7 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $cartItemMock->expects($this->once())->method('getProductType')->willReturn(TYPE::TYPE_BUNDLE);
+        $cartItemMock->expects($this->once())->method('getProductType')->willReturn(Type::TYPE_BUNDLE);
         $cartItemMock->expects($this->atLeastOnce())->method('getBuyRequest')->willReturn($buyRequestMock);
         $this->bundleOptionFactoryMock->expects($this->once())->method('create')->willReturn($bundleOptionMock);
         $bundleOptionMock->expects($this->once())->method('setOptionId')->with($optionId)->willReturnSelf();
@@ -153,7 +153,7 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
     public function testProcessProductOptionsInvalidType()
     {
         $cartItemMock = $this->getMock('\Magento\Quote\Model\Quote\Item', ['getProductType'], [], '', false);
-        $cartItemMock->expects($this->once())->method('getProductType')->willReturn(TYPE::TYPE_SIMPLE);
+        $cartItemMock->expects($this->once())->method('getProductType')->willReturn(Type::TYPE_SIMPLE);
         $this->assertSame($cartItemMock, $this->model->processProductOptions($cartItemMock));
     }
 }
