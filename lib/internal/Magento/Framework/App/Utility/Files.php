@@ -767,7 +767,7 @@ class Files
                 }
             }
         }
-        $themePaths = getThemePaths($area, $module, '/web/template');
+        $themePaths = $this->getThemePaths($area, $module, '/web/template');
         $files = self::getFiles(
             array_merge(
                 $themePaths,
