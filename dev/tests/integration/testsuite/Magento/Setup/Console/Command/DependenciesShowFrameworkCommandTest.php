@@ -27,8 +27,8 @@ class DependenciesShowFrameworkCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider',[] ,[], '', false);
-        $objectManager = $this->getMock('\Magento\Framework\App\ObjectManager',[] ,[], '', false);
+        $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
+        $objectManager = $this->getMock('\Magento\Framework\App\ObjectManager', [], [], '', false);
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
         $this->command = new DependenciesShowFrameworkCommand(new ComponentRegistrar(), $objectManagerProvider);
         $this->commandTester = new CommandTester($this->command);

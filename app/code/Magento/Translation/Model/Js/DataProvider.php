@@ -58,18 +58,19 @@ class DataProvider implements DataProviderInterface
     /**
      * @param \Magento\Framework\App\State $appState
      * @param Config $config
-     * @param Filesystem $filesystem
-     * @param Translate $translate
-     * @param DirSearch $dirSearch
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Framework\Phrase\Renderer\Translate $translate
+     * @param \Magento\Framework\Component\DirSearch $dirSearch
+     * @param \Magento\Framework\View\Design\Theme\ThemePackageList $themePackageList
      * @param \Magento\Framework\App\Utility\Files $filesUtility
      */
     public function __construct(
         \Magento\Framework\App\State $appState,
         Config $config,
-        Filesystem $filesystem,
-        Translate $translate,
-        DirSearch $dirSearch,
-        ThemePackageList $themePackageList,
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\Phrase\Renderer\Translate $translate,
+        \Magento\Framework\Component\DirSearch $dirSearch,
+        \Magento\Framework\View\Design\Theme\ThemePackageList $themePackageList,
         \Magento\Framework\App\Utility\Files $filesUtility = null
     ) {
         $this->appState = $appState;

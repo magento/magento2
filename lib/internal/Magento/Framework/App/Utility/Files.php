@@ -231,7 +231,7 @@ class Files
     /**
      * Return array with all template files
      *
-     * @param $flags
+     * @param int $flags
      * @return array
      */
     private function getTemplateFiles($flags)
@@ -245,10 +245,11 @@ class Files
     /**
      * Return array with all php files related to library
      *
-     * @param $flags
+     * @param int $flags
      * @return array
      */
-    private function getLibraryFiles($flags){
+    private function getLibraryFiles($flags)
+    {
         if ($flags & self::INCLUDE_LIBS) {
             return $this->getFilesSubset(
                 $this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY),
@@ -262,10 +263,11 @@ class Files
     /**
      * Return array with all php files related to pub
      *
-     * @param $flags
+     * @param int $flags
      * @return array
      */
-    private function getPubFiles($flags){
+    private function getPubFiles($flags)
+    {
         if ($flags & self::INCLUDE_PUB_CODE) {
             return array_merge(
                 glob(BP . '/*.php', GLOB_NOSORT),
@@ -281,7 +283,8 @@ class Files
      * @param int $flags
      * @return array
      */
-    private function getDevToolsFiles($flags){
+    private function getDevToolsFiles($flags)
+    {
         if ($flags & self::INCLUDE_DEV_TOOLS) {
             return $this->getFilesSubset([BP . '/dev/tools/Magento'], '*.php', []);
         }
