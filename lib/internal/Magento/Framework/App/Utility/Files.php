@@ -605,7 +605,7 @@ class Files
                 );
 
                 if ($params['with_metainfo']) {
-                    $files[] = $this->parseThemeFiles($themeFiles, $currentThemePath, $theme);
+                    $files = array_merge($this->parseThemeFiles($themeFiles, $currentThemePath, $theme));
                 } else {
                     $files = array_merge($files, $themeFiles);
                 }
