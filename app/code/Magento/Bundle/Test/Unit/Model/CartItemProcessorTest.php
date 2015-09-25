@@ -12,6 +12,11 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    protected $objectFactoryMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $productOptionExtensionMock;
 
     /**
@@ -31,6 +36,7 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->objectFactoryMock = $this->getMock('\Magento\Framework\DataObject\Factory', ['create'], [], '', false);
         $this->productOptionExtensionMock = $this->getMock(
             'Magento\Quote\Api\Data\ProductOptionExtensionFactory',
             ['create'],
@@ -54,7 +60,7 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->model = new \Magento\Bundle\Model\CartItemProcessor(
-            new \Magento\Framework\DataObject\Factory(),
+            $this->objectFactoryMock,
             $this->productOptionExtensionMock,
             $this->bundleOptionFactoryMock,
             $this->productOptionFactoryMock
@@ -70,6 +76,7 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
         $bundleOptionMock = $this->getMock('\Magento\Bundle\Model\BundleOption', [], [], '', false);
         $cartItemMock = $this->getMock('\Magento\Quote\Model\Quote\Item', [], [], '', false);
         $productOptionMock = $this->getMock('\Magento\Quote\Model\Quote\ProductOption', [], [], '', false);
+        $dataObjectMock = $this->getMock('\Magento\Framework\DataObject');
         $optionExtensionMock = $this->getMock(
             '\Magento\Quote\Api\Data\ProductOptionExtensionInterface',
             ['getBundleOptions'],
@@ -78,9 +85,9 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
             false
         );
         $requestDataMock = [
-                'bundle_option' => [$optionId => $optionSelections],
-                'bundle_option_qty' => [$optionId => $optionQty]
-            ];
+            'bundle_option' => [$optionId => $optionSelections],
+            'bundle_option_qty' => [$optionId => $optionQty]
+        ];
 
         $cartItemMock->expects($this->atLeastOnce())->method('getProductOption')->willReturn($productOptionMock);
         $productOptionMock->expects($this->atLeastOnce())->method('getExtensionAttributes')
@@ -90,8 +97,10 @@ class CartItemProcessorTest extends \PHPUnit_Framework_TestCase
         $bundleOptionMock->expects($this->once())->method('getOptionSelections')->willReturn($optionSelections);
         $bundleOptionMock->expects($this->once())->method('getOptionQty')->willReturn($optionQty);
         $bundleOptionMock->expects($this->atLeastOnce())->method('getOptionId')->willReturn($optionId);
+        $this->objectFactoryMock->expects($this->once())->method('create')->with($requestDataMock)
+            ->willReturn($dataObjectMock);
 
-        $this->assertEquals($requestDataMock, $this->model->convertToBuyRequest($cartItemMock)->toArray());
+        $this->assertEquals($dataObjectMock, $this->model->convertToBuyRequest($cartItemMock));
     }
 
     public function testConvertToBuyRequestInvalidData()
