@@ -159,7 +159,7 @@ class Bundle extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      */
     public function isHidden()
     {
-        return false;
+        return true;
     }
 
     /**
