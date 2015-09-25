@@ -541,7 +541,7 @@ class Files
         if ($params['include_design']) {
             $locationPaths = [];
             foreach ($this->themePackageList->getThemes() as $theme) {
-                if ($theme->getArea() === $area) {
+                if ($area == '*' || $theme->getArea() === $area) {
                     $locationPaths[] = $theme->getPath() . "/{$namespace}_{$module}/{$location}";
                 }
             }
@@ -674,7 +674,7 @@ class Files
         }
         $themePaths = [];
         foreach ($this->themePackageList->getThemes() as $theme) {
-            if ($theme->getArea() === $area) {
+            if ($area == '*' || $theme->getArea() === $area) {
                 $themePaths[] = $theme->getPath() . "/web";
                 $themePaths[] = $theme->getPath() . "/{$module}/web";
             }
@@ -720,7 +720,7 @@ class Files
         }
         $themePaths = [];
         foreach ($this->themePackageList->getThemes() as $theme) {
-            if ($theme->getArea() === $area) {
+            if ($area == '*' || $theme->getArea() === $area) {
                 $themePaths[] = $theme->getPath() . "/web/template";
                 $themePaths[] = $theme->getPath() . "/{$module}/web/template";
             }
@@ -751,7 +751,6 @@ class Files
         }
         $module = '*';
         $area = '*';
-        $themePath = '*/*';
         $locale = '*';
         $result = [];
         $moduleWebPath = [];
@@ -761,24 +760,55 @@ class Files
             $moduleLocalePath[] = $moduleDir . "/view/{$area}/web/i18n/{$locale}";
         }
 
-        $themePaths = [];
-        $themeLocalePath = [];
-        foreach ($this->themePackageList->getThemes() as $theme) {
-            if ($theme->getArea() === $area) {
-                $themePaths[] = $theme->getPath() . "/web";
-                $themePaths[] = $theme->getPath() . "/{$module}/web";
-                $themeLocalePath[] = $theme->getPath() . "/web/i18n/{$locale}";
-                $themeLocalePath[] = $theme->getPath() . "/{$module}/web/i18n/{$locale}";
-            }
-        }
-
         $this->_accumulateFilesByPatterns($moduleWebPath, $filePattern, $result, '_parseModuleStatic');
-
         $this->_accumulateFilesByPatterns($moduleLocalePath, $filePattern, $result, '_parseModuleLocaleStatic');
-        $this->_accumulateFilesByPatterns($themePaths, $filePattern, $result, '_parseThemeStatic');
-        $this->_accumulateFilesByPatterns($themeLocalePath, $filePattern, $result, '_parseThemeLocaleStatic');
+        $this->accumulateThemePaths($area, $module, $locale, $filePattern, $result);
         self::$_cache[$key] = $result;
         return $result;
+    }
+
+    /**
+     * Accumulate files from themes
+     *
+     * @param string $area
+     * @param string $module
+     * @param string $locale
+     * @param string $filePattern
+     * @param array $result
+     * @return void
+     */
+    private function accumulateThemePaths($area, $module, $locale, $filePattern, &$result)
+    {
+        foreach ($this->themePackageList->getThemes() as $themePackage) {
+            $themeArea = $themePackage->getArea();
+            if ($area == '*' || $area == $themeArea) {
+                $files = [];
+                $themePath = str_replace(DIRECTORY_SEPARATOR, '/', $themePackage->getPath());
+                $paths = [
+                    $themePath . "/web",
+                    $themePath . "/{$module}/web",
+                    $themePath . "/web/i18n/{$locale}",
+                    $themePath . "/{$module}/web/i18n/{$locale}"
+                ];
+                $this->_accumulateFilesByPatterns($paths, $filePattern, $files);
+                $regex = '#^' . $themePath .
+                    '/((?P<module>[a-z\d]+_[a-z\d]+)/)?web/(i18n/(?P<locale>[a-z_]+)/)?(?P<path>.+)$#i';
+                foreach ($files as $file) {
+                    if (preg_match($regex, $file, $matches)) {
+                        $result[] = [
+                            $themeArea,
+                            $themePackage->getVendor() . '/' . $themePackage->getName(),
+                            $matches['locale'],
+                            $matches['module'],
+                            $matches['path'],
+                            $file,
+                        ];
+                    } else {
+                        throw new \UnexpectedValueException("Could not parse path '$file'");
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -869,67 +899,6 @@ class Files
     }
 
     /**
-     * Parse meta-info of a static file in theme
-     *
-     * @param string $file
-     * @param string $path
-     * @return array
-     */
-    protected function _parseThemeStatic($file)
-    {
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themePath) {
-            $appDesign = preg_quote("{$themePath}/", '/');
-            if (preg_match(
-                '/^' . $appDesign . '([a-z\d]+_[a-z\d]+)\/web\/(.+)$/i',
-                $file,
-                $matches
-            )) {
-                list(, $area, $themeNS, $themeCode, $module, $filePath) = $matches;
-                return [$area, $themeNS . '/' . $themeCode, '', $module, $filePath, $file];
-            }
-
-            preg_match(
-                '/^' . $appDesign . '\/web\/(.+)$/i',
-                $file,
-                $matches
-            );
-            list(, $area, $themeNS, $themeCode, $filePath) = $matches;
-            return [$area, $themeNS . '/' . $themeCode, '', '', $filePath, $file];
-        }
-        return [];
-    }
-
-    /**
-     * Parse meta-info of a localized (translated) static file in theme
-     *
-     * @param string $file
-     * @return array
-     */
-    protected function _parseThemeLocaleStatic($file)
-    {
-        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themePath) {
-            $design = preg_quote("{$themePath}/", '/');
-            if (preg_match(
-                '/^' . $design . '([a-z\d]+_[a-z\d]+)\/web\/i18n\/([a-z_]+)\/(.+)$/i',
-                $file,
-                $matches
-            )) {
-                list(, $area, $themeNS, $themeCode, $module, $locale, $filePath) = $matches;
-                return [$area, $themeNS . '/' . $themeCode, $locale, $module, $filePath, $file];
-            }
-
-            preg_match(
-                '/^' . $design . '\/web\/i18n\/([a-z_]+)\/(.+)$/i',
-                $file,
-                $matches
-            );
-            list(, $area, $themeNS, $themeCode, $locale, $filePath) = $matches;
-            return [$area, $themeNS . '/' . $themeCode, $locale, '', $filePath, $file];
-        }
-        return [];
-    }
-
-    /**
      * Returns list of Javascript files in Magento by certain area
      *
      * @param string $area
@@ -947,7 +916,7 @@ class Files
         }
         $themePaths = [];
         foreach ($this->themePackageList->getThemes() as $theme) {
-            if ($theme->getArea() === $area) {
+            if ($area == '*' || $theme->getArea() === $area) {
                 $themePaths[] = $theme->getPath();
             }
         }
@@ -983,8 +952,6 @@ class Files
     {
         $key = __METHOD__ . BP . '|' . (int)$withMetaInfo;
         if (!isset(self::$_cache[$key])) {
-            $namespace = '*';
-            $module = '*';
             $area = '*';
             $result = [];
             $moduleTemplatePaths = [];
@@ -1000,7 +967,7 @@ class Files
 
             $themePaths = [];
             foreach ($this->themePackageList->getThemes() as $theme) {
-                if ($theme->getArea() === $area) {
+                if ($area == '*' || $theme->getArea() === $area) {
                     $themePaths[] = $theme->getPath();
                 }
             }
