@@ -604,25 +604,38 @@ class Files
                 );
 
                 if ($params['with_metainfo']) {
-                    $regex = '#^' . $currentThemePath
-                        . '/(?P<module>[a-z\d]+_[a-z\d]+)/layout/(override/((base/)|(theme/[a-z\d_]+/[a-z\d_]+/)))?'
-                        . '(?P<path>.+)$#i';
-                    foreach ($themeFiles as $themeFile) {
-                        if (preg_match($regex, $themeFile, $matches)) {
-                            $files[] = [
-                                $theme->getArea(),
-                                $theme->getVendor() . '/' . $theme->getName(),
-                                $matches['module'],
-                                $matches['path'],
-                                $themeFile,
-                            ];
-                        } else {
-                            throw new \UnexpectedValueException("Could not parse theme layout file '$themeFile'");
-                        }
-                    }
+                    $files[] = $this->parseThemeFiles($themeFiles, $currentThemePath, $theme);
                 } else {
                     $files = array_merge($files, $themeFiles);
                 }
+            }
+        }
+        return $files;
+    }
+
+    /**
+     * @param array $themeFiles
+     * @param string $currentThemePath
+     * @param ThemePackage $theme
+     * @return array
+     */
+    private function parseThemeFiles($themeFiles, $currentThemePath, $theme)
+    {
+        $files = [];
+        $regex = '#^' . $currentThemePath
+            . '/(?P<module>[a-z\d]+_[a-z\d]+)/layout/(override/((base/)|(theme/[a-z\d_]+/[a-z\d_]+/)))?'
+            . '(?P<path>.+)$#i';
+        foreach ($themeFiles as $themeFile) {
+            if (preg_match($regex, $themeFile, $matches)) {
+                $files[] = [
+                    $theme->getArea(),
+                    $theme->getVendor() . '/' . $theme->getName(),
+                    $matches['module'],
+                    $matches['path'],
+                    $themeFile,
+                ];
+            } else {
+                throw new \UnexpectedValueException("Could not parse theme layout file '$themeFile'");
             }
         }
         return $files;
@@ -696,13 +709,7 @@ class Files
                 }
             }
         }
-        $themePaths = [];
-        foreach ($this->themePackageList->getThemes() as $theme) {
-            if ($area == '*' || $theme->getArea() === $area) {
-                $themePaths[] = $theme->getPath() . "/web";
-                $themePaths[] = $theme->getPath() . "/{$module}/web";
-            }
-        }
+        $themePaths = $this->getThemePaths($area, $module, '/web');
         $files = self::getFiles(
             array_merge(
                 [
@@ -716,6 +723,24 @@ class Files
         $result = self::composeDataSets($files);
         self::$_cache[$key] = $result;
         return $result;
+    }
+
+    /**
+     * @param string $area
+     * @param string $module
+     * @param string $subFolder
+     * @return array
+     */
+    private function getThemePaths($area, $module, $subFolder)
+    {
+        $themePaths = [];
+        foreach ($this->themePackageList->getThemes() as $theme) {
+            if ($area == '*' || $theme->getArea() === $area) {
+                $themePaths[] = $theme->getPath() . $subFolder;
+                $themePaths[] = $theme->getPath() . "/{$module}" . $subFolder;
+            }
+        }
+        return $themePaths;
     }
 
     /**
@@ -742,13 +767,7 @@ class Files
                 }
             }
         }
-        $themePaths = [];
-        foreach ($this->themePackageList->getThemes() as $theme) {
-            if ($area == '*' || $theme->getArea() === $area) {
-                $themePaths[] = $theme->getPath() . "/web/template";
-                $themePaths[] = $theme->getPath() . "/{$module}/web/template";
-            }
-        }
+        $themePaths = getThemePaths($area, $module, '/web/template');
         $files = self::getFiles(
             array_merge(
                 $themePaths,
