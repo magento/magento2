@@ -24,7 +24,8 @@ class FilesTest extends \PHPUnit_Framework_TestCase
     {
         $this->componentRegistrar = new ComponentRegistrar();
         $this->dirSearch = $this->getMock('Magento\Framework\Component\DirSearch', [], [], '', false);
-        Files::setInstance(new Files($this->componentRegistrar, $this->dirSearch));
+        $themePackageList = $this->getMock('Magento\Framework\View\Design\Theme\ThemePackageList', [], [], '', false);
+        Files::setInstance(new Files($this->componentRegistrar, $this->dirSearch, $themePackageList));
     }
 
     protected function tearDown()

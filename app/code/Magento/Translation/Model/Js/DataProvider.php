@@ -12,6 +12,7 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\View\Design\Theme\ThemePackageList;
 
 /**
  * DataProvider for js translation
@@ -43,14 +44,14 @@ class DataProvider implements DataProviderInterface
     /**
      * Filesystem
      *
-     * @var ReadInterface
+     * @var \Magento\Framework\Filesystem\Directory\ReadInterface
      */
     protected $rootDirectory;
 
     /**
      * Basic translate renderer
      *
-     * @var Translate
+     * @var \Magento\Framework\Phrase\Renderer\Translate
      */
     protected $translate;
 
@@ -68,6 +69,7 @@ class DataProvider implements DataProviderInterface
         Filesystem $filesystem,
         Translate $translate,
         DirSearch $dirSearch,
+        ThemePackageList $themePackageList,
         \Magento\Framework\App\Utility\Files $filesUtility = null
     ) {
         $this->appState = $appState;
@@ -75,7 +77,11 @@ class DataProvider implements DataProviderInterface
         $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->translate = $translate;
         $this->filesUtility = (null !== $filesUtility) ?
-            $filesUtility : new \Magento\Framework\App\Utility\Files(new ComponentRegistrar(), $dirSearch);
+            $filesUtility : new \Magento\Framework\App\Utility\Files(
+                new ComponentRegistrar(),
+                $dirSearch,
+                $themePackageList
+            );
     }
 
     /**

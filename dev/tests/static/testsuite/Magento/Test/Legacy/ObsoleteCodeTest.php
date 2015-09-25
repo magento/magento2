@@ -157,7 +157,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
             Files::init()->getClassFiles(
                 Files::INCLUDE_TEMPLATES
                 | Files::INCLUDE_TESTS
-                | Files::INCLUDE_DATA_SET
+                | Files::AS_DATA_SET
             )
         );
     }
@@ -908,7 +908,6 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
             | Files::INCLUDE_TESTS
             | Files::INCLUDE_DEV_TOOLS
             | Files::INCLUDE_LIBS
-            | Files::INCLUDE_DATA_SET
         );
         $files = array_map('realpath', $files);
         $files = array_diff($files, $ignored);

@@ -25,7 +25,7 @@ class FixtureModelTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $fileParserMock = $this->getMock('\Magento\Framework\XML\Parser', ['load', 'xmlToArray'], [], '', false);
+        $fileParserMock = $this->getMock('\Magento\Framework\Xml\Parser', [], [], '', false);
 
         $this->model = new FixtureModel($reindexCommandMock, $fileParserMock);
     }
@@ -55,7 +55,7 @@ class FixtureModelTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $fileParserMock = $this->getMock('\Magento\Framework\XML\Parser', ['load', 'xmlToArray'], [], '', false);
+        $fileParserMock = $this->getMock('\Magento\Framework\Xml\Parser', ['load', 'xmlToArray'], [], '', false);
         $fileParserMock->expects($this->once())->method('xmlToArray')->willReturn(
             ['config' => [ 'profile' => ['some_key' => 'some_value']]]
         );

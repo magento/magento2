@@ -9,7 +9,9 @@ use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\DirSearch;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
-use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\ObjectManager\ObjectManager;
+use Magento\Framework\View\Design\Theme\ThemePackageList;
+use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -29,6 +31,24 @@ abstract class AbstractDependenciesCommand extends Command
      * Input key for output path of report file
      */
     const INPUT_KEY_OUTPUT = 'output';
+
+    /**
+     * Object Manager
+     *
+     * @var ObjectManager
+     */
+    private $objectManager;
+
+    /**
+     * Constructor
+     *
+     * @param ObjectManagerProvider $objectManagerProvider
+     */
+    public function __construct(ObjectManagerProvider $objectManagerProvider)
+    {
+        $this->objectManager = $objectManagerProvider->get();
+        parent::__construct();
+    }
 
     /**
      * {@inheritdoc}
@@ -70,8 +90,13 @@ abstract class AbstractDependenciesCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $dirSearch = new DirSearch(new ComponentRegistrar(), new ReadFactory(new DriverPool()));
-            Files::setInstance(new Files(new ComponentRegistrar(), $dirSearch));
+            /** @var \Magento\Framework\Component\ComponentRegistrar $componentRegistrar */
+            $componentRegistrar = $this->objectManager->get('Magento\Framework\Component\ComponentRegistrar');
+            /** @var \Magento\Framework\Component\DirSearch $dirSearch */
+            $dirSearch = $this->objectManager->get('Magento\Framework\Component\DirSearch');
+            /** @var \Magento\Framework\View\Design\Theme\ThemePackageList $themePackageList */
+            $themePackageList = $this->objectManager->get('Magento\Framework\View\Design\Theme\ThemePackageList');
+            Files::setInstance(new Files($componentRegistrar, $dirSearch, $themePackageList));
             $this->buildReport($input->getOption(self::INPUT_KEY_OUTPUT));
             $output->writeln('<info>Report successfully processed.</info>');
         } catch (\Exception $e) {

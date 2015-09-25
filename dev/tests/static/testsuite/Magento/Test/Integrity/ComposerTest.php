@@ -271,7 +271,7 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
     private function assertRequireInSync(\StdClass $json)
     {
         $name = $json->name;
-        if (self::$rootJson['name'] === 'magento/project-community-edition') {
+        if (preg_match('/magento\/project-*/', self::$rootJson['name']) == 1) {
             return;
         }
         if (isset($json->require)) {
