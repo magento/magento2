@@ -586,8 +586,13 @@ define([
         },
 
         createVideoItemIcons : function () {
-            $(this._imageWidgetSelector).find('.product-image.video-item').parent().addClass('video-item');
-            $(this._imageProductGalleryWrapperSelector).find('.product-image.video-item').parent().addClass('video-item');
+            var $imageWidget = $(this._imageWidgetSelector).find('.product-image.video-item'),
+            $productGalleryWrapper = $(this._imageProductGalleryWrapperSelector).find('.product-image.video-item');
+
+            $imageWidget.parent().addClass('video-item');
+            $productGalleryWrapper.parent().addClass('video-item');
+            $imageWidget.removeClass('video-item');
+            $productGalleryWrapper.removeClass('video-item');
         },
 
         /**
