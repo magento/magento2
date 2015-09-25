@@ -27,23 +27,43 @@ class DependenciesShowFrameworkCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider',[] ,[], '', false);
-        $objectManager = $this->getMock('\Magento\Framework\App\ObjectManager',[] ,[], '', false);
+        $modules = [
+            'Magento_A' => __DIR__ . '/_files/root/app/code/Magento/A',
+            'Magento_B' => __DIR__ . '/_files/root/app/code/Magento/B'
+        ];
+        $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
+        $objectManager = $this->getMock('\Magento\Framework\App\ObjectManager', [], [], '', false);
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
+
+        $themePackageListMock = $this->getMock(
+            'Magento\Framework\View\Design\Theme\ThemePackageList',
+            [],
+            [],
+            '',
+            false
+        );
+        $componentRegistrarMock = $this->getMock('Magento\Framework\Component\ComponentRegistrar', [], [], '', false);
+        $componentRegistrarMock->expects($this->any())->method('getPaths')->will($this->returnValue($modules));
+        $dirSearchMock = $this->getMock('Magento\Framework\Component\DirSearch', [], [], '', false);
+        $dirSearchMock->expects($this->once())->method('collectFiles')->willReturn(
+            [
+                __DIR__ . '/_files/root/app/code/Magento/A/etc/module.xml',
+                __DIR__ . '/_files/root/app/code/Magento/B/etc/module.xml'
+            ]
+        );
+        $objectManager->expects($this->any())->method('get')->will($this->returnValueMap([
+            ['Magento\Framework\View\Design\Theme\ThemePackageList', $themePackageListMock],
+            ['Magento\Framework\Component\ComponentRegistrar', $componentRegistrarMock],
+            ['Magento\Framework\Component\DirSearch', $dirSearchMock]
+        ]));
+
         $this->command = new DependenciesShowFrameworkCommand(new ComponentRegistrar(), $objectManagerProvider);
         $this->commandTester = new CommandTester($this->command);
         $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
         $paths = $reflection->getProperty('paths');
         $paths->setAccessible(true);
         $this->backupRegistrar = $paths->getValue();
-        $paths->setValue(
-            [
-                ComponentRegistrar::MODULE => [
-                    'Magento_A' => __DIR__ . '/_files/root/app/code/Magento/A',
-                    'Magento_B' => __DIR__ . '/_files/root/app/code/Magento/B'
-                ]
-            ]
-        );
+        $paths->setValue([ComponentRegistrar::MODULE => $modules]);
         $paths->setAccessible(false);
     }
 

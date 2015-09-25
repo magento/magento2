@@ -5,30 +5,13 @@
  */
 namespace Magento\Framework\View\Design\Theme;
 
-use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\View\Design\Theme\ThemePackage;
 
 /**
  * Factory for theme packages
  */
 class ThemePackageFactory
 {
-    /**
-     * Object manager
-     *
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
-     * Constructor
-     *
-     * @param ObjectManagerInterface $objectManager
-     */
-    public function __construct(ObjectManagerInterface $objectManager)
-    {
-        $this->objectManager = $objectManager;
-    }
-
     /**
      * Create an instance of ThemePackage
      *
@@ -39,9 +22,6 @@ class ThemePackageFactory
      */
     public function create($key, $path)
     {
-        return $this->objectManager->create(
-            'Magento\Framework\View\Design\Theme\ThemePackage',
-            ['key' => $key, 'path' => $path]
-        );
+        return new ThemePackage($key, $path);
     }
 }

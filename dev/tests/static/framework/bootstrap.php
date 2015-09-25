@@ -17,7 +17,7 @@ require __DIR__ . '/autoload.php';
 
 $componentRegistrar = new ComponentRegistrar();
 $dirSearch = new DirSearch($componentRegistrar, new ReadFactory(new DriverPool()));
-$themePackageList = new ThemePackageList($componentRegistrar, new ThemePackageFactory(Bootstrap::getObjectManager()));
+$themePackageList = new ThemePackageList($componentRegistrar, new ThemePackageFactory());
 \Magento\Framework\App\Utility\Files::setInstance(
     new Files($componentRegistrar, $dirSearch, $themePackageList)
 );
