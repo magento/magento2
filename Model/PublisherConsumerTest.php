@@ -82,7 +82,7 @@ class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
         /** There are total of 10 messages in the first queue, total expected consumption is 7, 3 then 0 */
         $this->consumeMessages('demoConsumerQueueOne', 7, 7);
         /** Consumer all messages which left in this queue */
-        $this->consumeMessages('demoConsumerQueueOne', null, 3);
+        $this->consumeMessages('demoConsumerQueueOne', 999, 3);
         $this->consumeMessages('demoConsumerQueueOne', 7, 0);
 
         /** Verify that messages were added correctly to second queue for update and create topics */
@@ -113,9 +113,9 @@ class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
             $this->publisher->publish('demo.object.created', $object);
         }
         for ($i = 0; $i < self::MAX_NUMBER_OF_TRIALS; $i++) {
-            $this->consumeMessages('demoConsumerQueueOneWithException', null, 0);
+            $this->consumeMessages('demoConsumerQueueOneWithException', 999, 0);
         }
-        $this->consumeMessages('demoConsumerQueueOne', null, 5);
+        $this->consumeMessages('demoConsumerQueueOne', 999, 0);
 
         /** Try consume messages for MAX_NUMBER_OF_TRIALS+1 and then consumer them without exception */
         for ($i = 0; $i < 5; $i++) {
@@ -123,11 +123,11 @@ class PublisherConsumerTest extends \PHPUnit_Framework_TestCase
             $this->publisher->publish('demo.object.created', $object);
         }
         /** Try consume messages for MAX_NUMBER_OF_TRIALS and then consumer them without exception */
-        for ($i = 0; $i < selfr::MAX_NUMBER_OF_TRIALS + 1; $i++) {
-            $this->consumeMessages('demoConsumerQueueOneWithException', null, 0);
+        for ($i = 0; $i < self::MAX_NUMBER_OF_TRIALS + 1; $i++) {
+            $this->consumeMessages('demoConsumerQueueOneWithException', 999, 0);
         }
         /** Make sure that messages are not accessible anymore after number of trials is exceeded */
-        $this->consumeMessages('demoConsumerQueueOne', null, 0);
+        $this->consumeMessages('demoConsumerQueueOne', 999, 0);
     }
 
     /**
