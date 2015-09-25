@@ -426,7 +426,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
             $files,
             $this->_prepareFiles(
                 'php',
-                Files::init()->getClassFiles(Files::INCLUDE_APP_CODE | Files::AS_DATA_SET),
+                Files::init()->getPhpFiles(Files::INCLUDE_APP_CODE | Files::AS_DATA_SET | Files::INCLUDE_NON_CLASSES),
                 true
             )
         );
@@ -488,7 +488,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         $pattern = '/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)\/Controller\/' .
             '(?<path>[\/\w]*).php/';
 
-        $files = Files::init()->getClassFiles(Files::INCLUDE_APP_CODE);
+        $files = Files::init()->getPhpFiles(Files::INCLUDE_APP_CODE | Files::INCLUDE_NON_CLASSES);
         foreach ($files as $file) {
             if (preg_match($pattern, $file, $matches)) {
                 $module = $matches['namespace'] . '\\' . $matches['module'];

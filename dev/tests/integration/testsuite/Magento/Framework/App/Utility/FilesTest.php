@@ -49,11 +49,13 @@ class FilesTest extends \PHPUnit_Framework_TestCase
     public function testGetPhpFilesExcludeTests()
     {
         $this->assertNoTestDirs(
-            $this->model->getClassFiles(
+            $this->model->getPhpFiles(
                 Files::INCLUDE_APP_CODE
                 | Files::INCLUDE_PUB_CODE
+                | Files::INCLUDE_DEV_TOOLS
                 | Files::INCLUDE_LIBS
                 | Files::INCLUDE_TEMPLATES
+                | Files::INCLUDE_NON_CLASSES
             )
         );
     }
@@ -65,16 +67,9 @@ class FilesTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetClassFilesExcludeTests()
+    public function testGetPhpFilesOnlyTests()
     {
-        $this->assertNoTestDirs(
-            $this->model->getClassFiles(Files::INCLUDE_APP_CODE | Files::INCLUDE_DEV_TOOLS | Files::INCLUDE_LIBS)
-        );
-    }
-
-    public function testGetClassFilesOnlyTests()
-    {
-        $classFiles = $this->model->getClassFiles(Files::INCLUDE_TESTS);
+        $classFiles = $this->model->getPhpFiles(Files::INCLUDE_TESTS);
 
         foreach ($this->moduleTests as $moduleTest) {
             $classFiles = preg_grep($moduleTest, $classFiles, PREG_GREP_INVERT);

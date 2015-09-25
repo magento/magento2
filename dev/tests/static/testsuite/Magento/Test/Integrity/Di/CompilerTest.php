@@ -201,7 +201,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $appPath = 'app\\code';
         $generationPathPath = str_replace('/', '\\', str_replace($basePath . '/', '', $this->_generationDir));
 
-        $files = Files::init()->getClassFiles(Files::INCLUDE_APP_CODE | Files::INCLUDE_LIBS);
+        $files = Files::init()->getPhpFiles(Files::INCLUDE_APP_CODE | Files::INCLUDE_LIBS);
 
         $patterns = [
             '/' . preg_quote($libPath) . '/',

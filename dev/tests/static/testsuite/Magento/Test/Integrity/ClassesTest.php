@@ -73,12 +73,13 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
 
                 $this->_assertClassesExist($classes, $file);
             },
-            Files::init()->getClassFiles(
+            Files::init()->getPhpFiles(
                 Files::INCLUDE_APP_CODE
                 | Files::INCLUDE_PUB_CODE
                 | Files::INCLUDE_LIBS
                 | Files::INCLUDE_TEMPLATES
                 | Files::AS_DATA_SET
+                | Files::INCLUDE_NON_CLASSES
             )
         );
     }
@@ -235,7 +236,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 $className = array_pop($classParts);
                 $this->_assertClassNamespace($file, $relativePath, $contents, $className);
             },
-            Files::init()->getClassFiles()
+            Files::init()->getPhpFiles()
         );
     }
 
@@ -400,7 +401,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 $badClasses = $this->removeSpecialCases($badClasses, $file, $contents, $namespacePath);
                 $this->_assertClassReferences($badClasses, $file);
             },
-            Files::init()->getClassFiles()
+            Files::init()->getPhpFiles()
         );
     }
 
