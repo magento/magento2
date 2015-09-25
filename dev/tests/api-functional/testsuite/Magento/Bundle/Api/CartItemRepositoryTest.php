@@ -175,6 +175,7 @@ class CartItemRepositoryTest extends WebapiAbstract
                 "sku" => $itemSku,
                 "qty" => 2,
                 "quote_id" => $cartId,
+                "item_id" => $itemId,
                 "product_option" => [
                     "extension_attributes" => [
                         "bundle_options" => $bundleOptions
