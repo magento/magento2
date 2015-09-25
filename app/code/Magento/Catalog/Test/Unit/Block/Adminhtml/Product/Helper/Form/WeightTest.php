@@ -13,38 +13,80 @@ class WeightTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\Checkbox
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $weightSwitcher;
 
-    public function testSetForm()
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $factory;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $collectionFactory;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $localeFormat;
+
+    protected function setUp()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        if (version_compare('5.5.28', phpversion(), '=')) {
+            $this->markTestSkipped('MAGETWO-43290: This test fails with Segmentation fault on PHP 5.5.28');
+        }
+        $this->weightSwitcher = $this->getMock(
+            'Magento\Framework\Data\Form\Element\Radios',
+            ['setId', 'setName', 'setLabel', 'setForm'],
+            [],
+            '',
+            false
+        );
+        $this->weightSwitcher->expects($this->any())->method('setId')->will($this->returnSelf());
+        $this->weightSwitcher->expects($this->any())->method('setName')->will($this->returnSelf());
+        $this->weightSwitcher->expects($this->any())->method('setLabel')->will($this->returnSelf());
 
-        $factory = $this->getMock('Magento\Framework\Data\Form\Element\Factory', [], [], '', false);
+        $this->factory = $this->getMock('Magento\Framework\Data\Form\Element\Factory', [], [], '', false);
+        $this->factory->expects(
+            $this->once()
+        )->method(
+            'create'
+        )->with(
+            $this->equalTo('radios')
+        )->will(
+            $this->returnValue($this->weightSwitcher)
+        );
+        $this->localeFormat = $this->getMock(
+            '\Magento\Framework\Locale\Format',
+            [],
+            [],
+            '',
+            false
+        );
 
-        $collectionFactory = $this->getMock(
+        $this->collectionFactory = $this->getMock(
             'Magento\Framework\Data\Form\Element\CollectionFactory',
             ['create'],
             [],
             '',
             false
         );
-        $formKey = $this->getMock('Magento\Framework\Data\Form\FormKey', [], [], '', false);
 
-        $form = new \Magento\Framework\Data\Form($factory, $collectionFactory, $formKey);
-
-        $this->weightSwitcher = $this->getMock(
-            'Magento\Framework\Data\Form\Element\Radios',
-            ['setId', 'setName', 'setLabel', 'setForm'],
-            [],
-            '',
-            false,
-            false
+        $this->_model = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
+            'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight',
+            [
+                'factoryElement' => $this->factory,
+                'factoryCollection' => $this->collectionFactory,
+                'localeFormat' => $this->localeFormat
+            ]
         );
-        $this->weightSwitcher->expects($this->any())->method('setId')->will($this->returnSelf());
-        $this->weightSwitcher->expects($this->any())->method('setName')->will($this->returnSelf());
-        $this->weightSwitcher->expects($this->any())->method('setLabel')->will($this->returnSelf());
+    }
+
+    public function testSetForm()
+    {
+        $form = $this->getMock('Magento\Framework\Data\Form', [], [], '', false);
         $this->weightSwitcher->expects(
             $this->any()
         )->method(
@@ -55,44 +97,12 @@ class WeightTest extends \PHPUnit_Framework_TestCase
             $this->returnSelf()
         );
 
-        $factory = $this->getMock('Magento\Framework\Data\Form\Element\Factory', [], [], '', false);
-        $factory->expects(
-            $this->once()
-        )->method(
-            'create'
-        )->with(
-            $this->equalTo('radios')
-        )->will(
-            $this->returnValue($this->weightSwitcher)
-        );
-
-        $this->_model = $objectManager->getObject(
-            'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight',
-            ['factoryElement' => $factory, 'factoryCollection' => $collectionFactory,]
-        );
-
-        $this->_model->setForm($form);
+       $this->_model->setForm($form);
     }
 
     public function testGetEscapedValue()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
-        $collectionFactory = $this->getMock(
-            'Magento\Framework\Data\Form\Element\CollectionFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
-        $localeFormat = $this->getMock(
-            '\Magento\Framework\Locale\Format',
-            [],
-            [],
-            '',
-            false
-        );
-        $localeFormat->expects(
+        $this->localeFormat->expects(
             $this->any()
         )->method(
             'getPriceFormat'
@@ -101,38 +111,6 @@ class WeightTest extends \PHPUnit_Framework_TestCase
             'decimalSymbol' => ',',
             'groupSymbol' => '.',
         ]);
-
-        $this->weightSwitcher = $this->getMock(
-            'Magento\Framework\Data\Form\Element\Radios',
-            ['setId', 'setName', 'setLabel'],
-            [],
-            '',
-            false,
-            false
-        );
-        $this->weightSwitcher->expects($this->any())->method('setId')->will($this->returnSelf());
-        $this->weightSwitcher->expects($this->any())->method('setName')->will($this->returnSelf());
-        $this->weightSwitcher->expects($this->any())->method('setLabel')->will($this->returnSelf());
-
-        $factory = $this->getMock('Magento\Framework\Data\Form\Element\Factory', [], [], '', false);
-        $factory->expects(
-            $this->once()
-        )->method(
-            'create'
-        )->with(
-            $this->equalTo('radios')
-        )->will(
-            $this->returnValue($this->weightSwitcher)
-        );
-
-        $this->_model = $objectManager->getObject(
-            'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight',
-            [
-                'factoryElement' => $factory,
-                'factoryCollection' => $collectionFactory,
-                'localeFormat' => $localeFormat
-            ]
-        );
 
         $this->_model->setValue('30000.4');
         $this->_model->setEntityAttribute(true);
