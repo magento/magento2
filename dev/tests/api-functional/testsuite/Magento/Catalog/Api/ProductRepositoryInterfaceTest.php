@@ -145,6 +145,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      */
     public function testCreateAllStoreCode($fixtureProduct)
     {
+        $this->_markTestAsRestOnly();
         $response = $this->saveProduct($fixtureProduct, 'all');
         $this->assertArrayHasKey(ProductInterface::SKU, $response);
 
@@ -153,9 +154,9 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             'Magento\Store\Model\StoreManagerInterface'
         );
 
-        foreach($storeManager->getStores(true) as $store) {
+        foreach ($storeManager->getStores(true) as $store) {
             $code = $store->getCode();
-            if($code === Store::ADMIN_CODE) {
+            if ($code === Store::ADMIN_CODE) {
                 continue;
             }
             $this->assertArrayHasKey(
@@ -174,6 +175,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
      */
     public function testDeleteAllStoreCode($fixtureProduct)
     {
+        $this->_markTestAsRestOnly();
         $sku = $fixtureProduct[ProductInterface::SKU];
         $this->saveProduct($fixtureProduct);
         $this->setExpectedException('Exception', 'Requested product doesn\'t exist');
