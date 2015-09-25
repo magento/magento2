@@ -16,6 +16,8 @@ define([
         options: {
             modalClass: 'prompt',
             promptField: '[data-role="promptField"]',
+            dataValue: '[data-value="modal-value"]',
+            value: '',
             actions: {
                 always: function(){},
                 confirm: function(){},
@@ -37,12 +39,16 @@ define([
         },
         _create: function() {
             this._super();
-            this.modal.find(this.options.modalContent).append('<input value="" data-role="promptField" type="text"/>');
+            this.modal.find(this.options.modalContent).append('<input data-role="promptField" data-value="modal-value" type="text"/>');
             this.modal.find(this.options.modalCloseBtn).off().on('click',  _.bind(this.closeModal, this, false));
             this.openModal();
         },
         _remove: function() {
             this.modal.remove();
+        },
+        openModal: function(){
+            this._super();
+            this.modal.find(this.options.dataValue).val(this.options.value);
         },
         closeModal: function(result) {
             var value;
