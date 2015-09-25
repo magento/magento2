@@ -4,11 +4,12 @@
  */
 define(
     [
+        'jquery',
         'Magento_Checkout/js/view/payment/default',
         'ko',
         'Magento_Paypal/js/model/iframe'
     ],
-    function (Component, ko, iframe) {
+    function ($, Component, ko, iframe) {
         'use strict';
 
         return Component.extend({
@@ -47,6 +48,13 @@ define(
                     // capture all click events
                     document.addEventListener('click', iframe.stopEventPropagation, true);
                 }
+            },
+            /**
+             * Hide loader when iframe is fully loaded.
+             * @returns {void}
+             */
+            iframeLoaded: function() {
+                $('#checkout').trigger("processStop");
             }
         });
     }
