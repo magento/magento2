@@ -2460,4 +2460,5 @@ return [
         'Magento\ConfigurableProduct\Model\Product\VariationHandler::fillSimpleProductData'
     ],
     ['mergeBookmarkConfig', 'Magento\Ui\Model\Manager'],
+    ['getTypeSwitcherControlLabel', 'Magento\Catalog\Helper\Product'],
 ];

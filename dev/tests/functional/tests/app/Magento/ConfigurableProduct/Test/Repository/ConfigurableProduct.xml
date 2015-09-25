@@ -161,7 +161,7 @@
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">120</item>
             </field>
-            <field name="is_virtual" xsi:type="string">No</field>
+            <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="weight" xsi:type="string">30</field>
             <field name="status" xsi:type="string">Product online</field>
             <field name="visibility" xsi:type="string">Catalog, Search</field>

@@ -13,7 +13,7 @@
             </field>
             <field name="name" xsi:type="string">Simple Product %isolation%</field>
             <field name="sku" xsi:type="string">sku_simple_product_%isolation%</field>
-            <field name="is_virtual" xsi:type="string">No</field>
+            <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="weight" xsi:type="string">1</field>
             <field name="quantity_and_stock_status" xsi:type="array">
                 <item name="qty" xsi:type="string">25</item>
@@ -41,7 +41,7 @@
             </field>
             <field name="name" xsi:type="string">product_10_dollar %isolation%</field>
             <field name="sku" xsi:type="string">sku_product_10_dollar_%isolation%</field>
-            <field name="is_virtual" xsi:type="string">No</field>
+            <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="weight" xsi:type="string">1</field>
             <field name="quantity_and_stock_status" xsi:type="array">
                 <item name="qty" xsi:type="string">1000</item>
@@ -69,7 +69,7 @@
             </field>
             <field name="name" xsi:type="string">product_20_dollar %isolation%</field>
             <field name="sku" xsi:type="string">sku_product_20_dollar_%isolation%</field>
-            <field name="is_virtual" xsi:type="string">No</field>
+            <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="weight" xsi:type="string">1</field>
             <field name="quantity_and_stock_status" xsi:type="array">
                 <item name="qty" xsi:type="string">1000</item>
@@ -91,7 +91,7 @@
         <dataset name="product_with_url_key">
             <field name="name" xsi:type="string">Simple Product %isolation%</field>
             <field name="sku" xsi:type="string">sku_simple_product_%isolation%</field>
-            <field name="is_virtual" xsi:type="string">No</field>
+            <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="weight" xsi:type="string">1</field>
             <field name="quantity_and_stock_status" xsi:type="array">
                 <item name="qty" xsi:type="string">25</item>
