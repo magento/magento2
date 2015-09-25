@@ -130,7 +130,7 @@ class StaticProperties
      */
     public static function backupStaticVariables()
     {
-        $classFiles = Files::init()->getClassFiles(
+        $classFiles = Files::init()->getPhpFiles(
             Files::INCLUDE_APP_CODE
             | Files::INCLUDE_LIBS
             | Files::INCLUDE_TESTS

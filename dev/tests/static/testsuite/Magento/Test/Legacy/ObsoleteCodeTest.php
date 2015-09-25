@@ -138,7 +138,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
             function ($file) {
                 $this->_testObsoletePaths($file);
             },
-            \Magento\Framework\App\Utility\Files::init()->getClassFiles()
+            \Magento\Framework\App\Utility\Files::init()->getPhpFiles()
         );
     }
 
@@ -154,7 +154,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
                     "Static Method of 'Mage' class is obsolete."
                 );
             },
-            Files::init()->getClassFiles(
+            Files::init()->getPhpFiles(
                 Files::INCLUDE_TEMPLATES
                 | Files::INCLUDE_TESTS
                 | Files::AS_DATA_SET
@@ -903,7 +903,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
         foreach ($blackList as $file) {
             $ignored[] = realpath($appPath . '/' . $file);
         }
-        $files = Files::init()->getClassFiles(
+        $files = Files::init()->getPhpFiles(
             Files::INCLUDE_APP_CODE
             | Files::INCLUDE_TESTS
             | Files::INCLUDE_DEV_TOOLS
