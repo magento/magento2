@@ -40,7 +40,7 @@ class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
      */
     public function __construct(\Magento\Framework\Module\Dir\Reader $moduleReader)
     {
-        $etcDir = $moduleReader->getModuleDir('etc', 'Magento_Payment');
+        $etcDir = $moduleReader->getModuleDir(\Magento\Framework\Module\Dir::MODULE_ETC_DIR, 'Magento_Payment');
         $this->_schema = $etcDir . '/' . self::MERGED_CONFIG_SCHEMA;
         $this->_perFileSchema = $etcDir . '/' . self::PER_FILE_VALIDATION_SCHEMA;
     }
