@@ -23,10 +23,29 @@ class AggregatedTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
+    /**
+     * @var array
+     */
+    protected static $registrarBackup;
+
     public static function setUpBeforeClass()
     {
+        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
+        $paths = $reflection->getProperty('paths');
+        $paths->setAccessible(true);
+        self::$registrarBackup = $paths->getValue();
+        $paths->setAccessible(false);
         require_once __DIR__ . '/../../_files/code/Magento/Other/registration.php';
         require_once __DIR__ . '/../../_files/code/Magento/Third/registration.php';
+    }
+
+    public static function tearDownAfterClass()
+    {
+        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
+        $paths = $reflection->getProperty('paths');
+        $paths->setAccessible(true);
+        $paths->setValue(self::$registrarBackup);
+        $paths->setAccessible(false);
     }
 
     protected function setUp()
