@@ -15,7 +15,7 @@ class FileResolverStub implements \Magento\Framework\Config\FileResolverInterfac
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $fileReadFactory = $objectManager->create('Magento\Framework\Filesystem\File\ReadFactory');
-        $paths = ['extension_attributes.xml'];
+        $paths = [realpath(__DIR__ . '/../_files/etc/') . '/extension_attributes.xml'];
         return new \Magento\Framework\Config\FileIterator($fileReadFactory, $paths);
     }
 }
