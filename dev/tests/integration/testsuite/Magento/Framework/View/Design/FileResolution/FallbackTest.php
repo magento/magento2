@@ -8,6 +8,7 @@ namespace Magento\Framework\View\Design\FileResolution;
 
 use Magento\Framework\App\Bootstrap as AppBootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -38,7 +39,7 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory */
         $this->themeFactory = Bootstrap::getObjectManager()
             ->get('Magento\Framework\View\Design\Theme\FlyweightFactory');
-        require_once __DIR__ . '/../../_files/fallback/app/code/ViewTest_Module/registration.php';
+        require __DIR__ . '/../../_files/fallback/app/code/ViewTest_Module/registration.php';
     }
 
     protected function tearDown()
@@ -79,11 +80,13 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTemplateFile($file, $themePath, $module, $expectedFilename)
     {
+        $compRegistrar = new ComponentRegistrar();
         $this->reinitializeEnvironment();
         /** @var \Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile $model */
         $model = Bootstrap::getObjectManager()
             ->create('Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile');
         $themeModel = $this->themeFactory->create($themePath);
+
 
         $actualFilename = $model->getFile('frontend', $themeModel, $file, $module);
         if ($expectedFilename) {
@@ -101,18 +104,18 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
     public function getTemplateFileDataProvider()
     {
         return [
-            'non-modular: no default inheritance' => [
-                'fixture_template.phtml', 'Vendor_ViewTest/standalone_theme', null,
-                null,
-            ],
-            'non-modular: inherit parent theme' => [
-                'fixture_template.phtml', 'Vendor_ViewTest/custom_theme', null,
-                '%s/frontend/Vendor/default/templates/fixture_template.phtml',
-            ],
-            'non-modular: inherit grandparent theme' => [
-                'fixture_template.phtml', 'Vendor_ViewTest/custom_theme2', null,
-                '%s/frontend/Vendor/default/templates/fixture_template.phtml',
-            ],
+//            'non-modular: no default inheritance' => [
+//                'fixture_template.phtml', 'Vendor_ViewTest/standalone_theme', null,
+//                null,
+//            ],
+//            'non-modular: inherit parent theme' => [
+//                'fixture_template.phtml', 'Vendor_ViewTest/custom_theme', null,
+//                '%s/frontend/Vendor/default/templates/fixture_template.phtml',
+//            ],
+//            'non-modular: inherit grandparent theme' => [
+//                'fixture_template.phtml', 'Vendor_ViewTest/custom_theme2', null,
+//                '%s/frontend/Vendor/default/templates/fixture_template.phtml',
+//            ],
             'modular: no default inheritance' => [
                 'fixture_template.phtml', 'Vendor_ViewTest/standalone_theme', 'ViewTest_Module',
                 null,
