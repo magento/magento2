@@ -6,7 +6,6 @@
         "magento/module-store": "1.0.0-beta",
         "magento/module-catalog": "1.0.0-beta",
         "magento/module-customer": "1.0.0-beta",
-        "magento/module-theme": "1.0.0-beta",
         "magento/framework": "1.0.0-beta"
     },
     "type": "magento2-module",
