@@ -205,8 +205,7 @@
                 "lib/web/jquery/jquery.tabs.js"
             ],
             "tinymce/tinymce": "lib/web/tiny_mce"
-        },
-        "magento-force": "override"
+        }
     },
     "config": {
         "use-include-path": true
