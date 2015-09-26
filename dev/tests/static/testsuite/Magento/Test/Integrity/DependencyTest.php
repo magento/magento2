@@ -136,6 +136,25 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     public static function setUpBeforeClass()
     {
+        // For internal development, the application will be running from app/code. And as part of
+        // build, the dependency test will be run and any issues will be caught and fixed. This test
+        // will be skipped if the magento application was installed through "composer create project"
+        // in which case it will be running from "vendor/magento" directory instead.
+        // In the future when there is time, this test case should be rewritten to accommodate
+        // different install configs i.e. through composer create project (from vendor/magento dir)
+        // or through git clone (from app/code)
+
+        // Check for installation type
+        $root = Files::init()->getPathToSource();
+        $rootJson = json_decode(file_get_contents($root . '/composer.json'), true);
+        if (preg_match('/magento\/project-*/', $rootJson['name']) == 1) {
+
+            // The Dependency test will be skipped for vendor/magento build
+            self::markTestSkipped(
+                "The build is running from vendor/magento. DependencyTest will be skipped."
+            );
+        }
+
         self::$_namespaces = implode('|', Files::init()->getNamespaces());
 
         self::_prepareListConfigXml();
