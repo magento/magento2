@@ -514,15 +514,16 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
     private function removeSpecialCasesNonFullyQualifiedClassNames($namespacePath, &$badClasses, $badClass)
     {
         $componentRegistrar = new ComponentRegistrar();
-        $namespaceParts = explode('/', $namespacePath, 3);
+        $namespaceParts = explode('/', $namespacePath);
         $moduleDir = null;
         if (isset($namespaceParts[1])) {
-            $moduleName = $namespaceParts[0] . '_' . $namespaceParts[1];
+            $moduleName = array_shift($namespaceParts) . '_' . array_shift($namespaceParts);
             $moduleDir = $componentRegistrar->getPath(ComponentRegistrar::MODULE, $moduleName);
         }
         if ($moduleDir) {
-            $fullPath = $moduleDir . '/' . (isset($namespaceParts[2]) ? $namespaceParts[2] . '/' : '') .
+            $fullPath = $moduleDir . '/' . implode('/', $namespaceParts) . '/' .
                 str_replace('\\', '/', $badClass) . '.php';
+
             if (file_exists($fullPath)) {
                 unset($badClasses[array_search($badClass, $badClasses)]);
                 return true;
@@ -536,7 +537,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
         }
 
         if ($libraryDir) {
-            $fullPath = $libraryDir . '/' . implode('/', $namespaceParts) .
+            $fullPath = $libraryDir . '/' . implode('/', $namespaceParts) . '/' .
                 str_replace('\\', '/', $badClass) . '.php';
             if (file_exists($fullPath)) {
                 unset($badClasses[array_search($badClass, $badClasses)]);
