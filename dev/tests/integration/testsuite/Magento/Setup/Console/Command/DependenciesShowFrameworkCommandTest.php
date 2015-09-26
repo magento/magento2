@@ -20,11 +20,6 @@ class DependenciesShowFrameworkCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $commandTester;
 
-    /**
-     * @var array
-     */
-    private $backupRegistrar;
-
     public function setUp()
     {
         $modules = [

@@ -105,10 +105,7 @@ class WordsFinder
         $basePathLen = strlen($basePath);
         foreach ($configFiles as $configFile) {
             $configFile = str_replace('\\', '/', realpath($configFile));
-            if (strncmp($basePath, $configFile, $basePathLen) === 0) {
-                // File is inside base dir
-                $this->_whitelist[$this->_getRelPath($configFile)] = [];
-            }
+            $this->_whitelist[$configFile] = [];
         }
 
         $this->_normalizeWhitelistPaths();
@@ -181,7 +178,7 @@ class WordsFinder
                     'A "path" must be defined for the whitelisted item'
                 );
             }
-            $path = (string)$path[0];
+            $path = $this->_baseDir . '/' . (string)$path[0];
 
             // Words
             $words = [];
@@ -233,8 +230,7 @@ class WordsFinder
             return [];
         }
 
-        $relPath = substr($file, strlen($this->_baseDir) + 1);
-        return self::_removeWhitelistedWords($relPath, $foundWords);
+        return self::_removeWhitelistedWords($file, $foundWords);
     }
 
     /**
