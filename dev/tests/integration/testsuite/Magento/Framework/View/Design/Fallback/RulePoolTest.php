@@ -36,10 +36,20 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
     /**
      * @var array
      */
+    protected static $registrarBackup;
+
+    /**
+     * @var array
+     */
     protected $defaultParams;
 
     public static function setUpBeforeClass()
     {
+        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
+        $paths = $reflection->getProperty('paths');
+        $paths->setAccessible(true);
+        self::$registrarBackup = $paths->getValue();
+        $paths->setAccessible(false);
         ComponentRegistrar::register(ComponentRegistrar::MODULE, self::MODULE, '/module/path');
         ComponentRegistrar::register(ComponentRegistrar::THEME, self::THEME_ONE, '/theme/one/path');
         ComponentRegistrar::register(ComponentRegistrar::THEME, self::THEME_TWO, '/theme/two/path');
@@ -65,6 +75,15 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
     {
         $this->model = null;
         $this->defaultParams = [];
+    }
+
+    public static function tearDownAfterClass()
+    {
+        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
+        $paths = $reflection->getProperty('paths');
+        $paths->setAccessible(true);
+        $paths->setValue(self::$registrarBackup);
+        $paths->setAccessible(false);
     }
 
     /**
