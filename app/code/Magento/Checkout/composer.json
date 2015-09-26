@@ -18,6 +18,7 @@
         "magento/module-gift-message": "1.0.0-beta",
         "magento/module-page-cache": "1.0.0-beta",
         "magento/module-sales-rule": "1.0.0-beta",
+        "magento/module-theme": "1.0.0-beta",
         "magento/module-msrp": "1.0.0-beta",
         "magento/framework": "1.0.0-beta",
         "magento/module-ui": "1.0.0-beta",
