@@ -23,12 +23,31 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
      */
     private $themeFactory;
 
+    /**
+     * @var array
+     */
+    private $registrarBackup;
+
     protected function setUp()
     {
+        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
+        $paths = $reflection->getProperty('paths');
+        $paths->setAccessible(true);
+        $this->registrarBackup = $paths->getValue();
+        $paths->setAccessible(false);
         /** @var \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory */
         $this->themeFactory = Bootstrap::getObjectManager()
             ->get('Magento\Framework\View\Design\Theme\FlyweightFactory');
         require_once __DIR__ . '/../../_files/fallback/app/code/ViewTest_Module/registration.php';
+    }
+
+    protected function tearDown()
+    {
+        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
+        $paths = $reflection->getProperty('paths');
+        $paths->setAccessible(true);
+        $paths->setValue($this->registrarBackup);
+        $paths->setAccessible(false);
     }
 
     /**
