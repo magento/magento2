@@ -79,10 +79,7 @@ class AssertBundlePriceType extends AbstractConstraint
         $checkoutCartView->open();
         $cartItem = $checkoutCartView->getCartBlock()->getCartItem($product);
         $specialPrice = 0;
-        if (isset($bundleData['group_price'])) {
-            $specialPrice =
-                $bundleData['group_price'][array_search($customerGroup, $bundleData['group_price'])]['price'] / 100;
-        }
+
 
         $optionPrice = [];
         $fillData = $product->getCheckoutData();

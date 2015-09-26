@@ -67,7 +67,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
         $attribute->expects($this->any())->method('getBackendTable')->will($this->returnValue('table'));
 
-        $attribute->expects($this->any())->method('getName')->will($this->returnValue('group_price'));
+        $attribute->expects($this->any())->method('getName')->will($this->returnValue('tear_price'));
 
         $this->_model->setAttribute($attribute);
 

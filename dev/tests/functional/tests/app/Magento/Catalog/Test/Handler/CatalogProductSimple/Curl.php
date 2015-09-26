@@ -204,9 +204,6 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         if (isset($fields['tier_price'])) {
             $fields['tier_price'] = $this->preparePriceData($fields['tier_price']);
         }
-        if (isset($fields['group_price'])) {
-            $fields['group_price'] = $this->preparePriceData($fields['group_price']);
-        }
         if (isset($fields['fpt'])) {
             $attributeLabel = $fixture->getDataFieldConfig('attribute_set_id')['source']
                 ->getAttributeSet()->getDataFieldConfig('assigned_attributes')['source']

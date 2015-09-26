@@ -517,44 +517,6 @@
             <field name="special_price" xsi:type="string">9</field>
         </dataset>
 
-        <dataset name="simple_with_group_price">
-            <field name="attribute_set_id" xsi:type="array">
-                <item name="dataset" xsi:type="string">default</item>
-            </field>
-            <field name="name" xsi:type="string">Simple Product %isolation%</field>
-            <field name="sku" xsi:type="string">sku_simple_product_%isolation%</field>
-            <field name="price" xsi:type="array">
-                <item name="value" xsi:type="string">100</item>
-            </field>
-            <field name="weight" xsi:type="string">1</field>
-            <field name="group_price" xsi:type="array">
-                <item name="dataset" xsi:type="string">not_logged_in_20</item>
-            </field>
-            <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
-        </dataset>
-
-        <dataset name="simple_with_group_price_and_category">
-            <field name="attribute_set_id" xsi:type="array">
-                <item name="dataset" xsi:type="string">default</item>
-            </field>
-            <field name="name" xsi:type="string">Simple Product %isolation%</field>
-            <field name="sku" xsi:type="string">sku_simple_product_%isolation%</field>
-            <field name="price" xsi:type="array">
-                <item name="value" xsi:type="string">100</item>
-            </field>
-            <field name="weight" xsi:type="string">1</field>
-            <field name="group_price" xsi:type="array">
-                <item name="dataset" xsi:type="string">general_90_99</item>
-            </field>
-            <field name="category_ids" xsi:type="array">
-                <item name="dataset" xsi:type="string">default_subcategory</item>
-            </field>
-            <field name="website_ids" xsi:type="array">
-                <item name="0" xsi:type="string">Main Website</item>
-            </field>
-            <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
-        </dataset>
-
         <dataset name="simple_with_tier_price">
             <field name="attribute_set_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default</item>
