@@ -101,8 +101,6 @@ class WordsFinder
         }
 
         // Add config files to whitelist, as they surely contain banned words
-        $basePath = $this->_baseDir . '/';
-        $basePathLen = strlen($basePath);
         foreach ($configFiles as $configFile) {
             $configFile = str_replace('\\', '/', realpath($configFile));
             $this->_whitelist[$configFile] = [];
