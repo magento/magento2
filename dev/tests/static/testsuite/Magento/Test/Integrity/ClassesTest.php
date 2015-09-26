@@ -531,6 +531,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
         }
 
         $libraryDir = null;
+        $namespaceParts = explode('/', $namespacePath);
         if (isset($namespaceParts[1])) {
             $libraryName = array_shift($namespaceParts) . '/' . array_shift($namespaceParts);
             $libraryDir = $componentRegistrar->getPath(ComponentRegistrar::LIBRARY, strtolower($libraryName));
