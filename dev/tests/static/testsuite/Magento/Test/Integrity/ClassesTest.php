@@ -531,6 +531,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
         }
 
         $libraryDir = null;
+        $namespaceParts = explode('/', $namespacePath);
         if (isset($namespaceParts[1])) {
             $libraryName = array_shift($namespaceParts) . '/' . array_shift($namespaceParts);
             $libraryDir = $componentRegistrar->getPath(ComponentRegistrar::LIBRARY, strtolower($libraryName));
@@ -544,35 +545,42 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 return true;
             }
         } else {
-            // Remove usage of classes that do NOT using fully-qualified class names (possibly under same namespace)
-            $directories = [
-                '/dev/tools/',
-                '/dev/tests/api-functional/framework/',
-                '/dev/tests/functional/',
-                '/dev/tests/integration/framework/',
-                '/dev/tests/integration/framework/tests/unit/testsuite/',
-                '/dev/tests/integration/testsuite/',
-                '/dev/tests/integration/testsuite/Magento/Test/Integrity/',
-                '/dev/tests/performance/framework/',
-                '/dev/tests/static/framework/',
-                '/dev/tests/static/testsuite/',
-                '/setup/src/',
-            ];
-            $pathToSource = Files::init()->getPathToSource();
-            $libraryPaths = $this->getLibraryPaths($componentRegistrar, $pathToSource);
-            $directories = array_merge($directories, $libraryPaths);
-            // Full list of directories where there may be namespace classes
-            foreach ($directories as $directory) {
-                $fullPath = $pathToSource . $directory . $namespacePath . '/'
-                    . str_replace(
-                        '\\',
-                        '/',
-                        $badClass
-                    ) . '.php';
-                if (file_exists($fullPath)) {
-                    unset($badClasses[array_search($badClass, $badClasses)]);
-                    return true;
-                }
+            return $this->removeSpecialCasesForAllOthers($componentRegistrar, $namespacePath, $badClass, $badClasses);
+        }
+    }
+
+    /**
+     * @param ComponentRegistrar $componentRegistrar
+     * @param string $namespacePath
+     * @param string $badClass
+     * @param array $badClasses
+     * @return bool
+     */
+    private function removeSpecialCasesForAllOthers($componentRegistrar, $namespacePath, $badClass, &$badClasses)
+    {
+        // Remove usage of classes that do NOT using fully-qualified class names (possibly under same namespace)
+        $directories = [
+            '/dev/tools/',
+            '/dev/tests/api-functional/framework/',
+            '/dev/tests/functional/',
+            '/dev/tests/integration/framework/',
+            '/dev/tests/integration/framework/tests/unit/testsuite/',
+            '/dev/tests/integration/testsuite/',
+            '/dev/tests/integration/testsuite/Magento/Test/Integrity/',
+            '/dev/tests/performance/framework/',
+            '/dev/tests/static/framework/',
+            '/dev/tests/static/testsuite/',
+            '/setup/src/',
+        ];
+        $pathToSource = Files::init()->getPathToSource();
+        $libraryPaths = $this->getLibraryPaths($componentRegistrar, $pathToSource);
+        $directories = array_merge($directories, $libraryPaths);
+        // Full list of directories where there may be namespace classes
+        foreach ($directories as $directory) {
+            $fullPath = $pathToSource . $directory . $namespacePath . '/' . str_replace('\\', '/', $badClass) . '.php';
+            if (file_exists($fullPath)) {
+                unset($badClasses[array_search($badClass, $badClasses)]);
+                return true;
             }
         }
     }
