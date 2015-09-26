@@ -11,6 +11,9 @@ namespace Magento\Framework\Css\PreProcessor\File\Collector;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * @magentoComponentsDir Magento/Framework/Css/PreProcessor/_files/code/Magento
+ */
 class AggregatedTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -22,31 +25,6 @@ class AggregatedTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
-
-    /**
-     * @var array
-     */
-    protected static $registrarBackup;
-
-    public static function setUpBeforeClass()
-    {
-        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
-        $paths = $reflection->getProperty('paths');
-        $paths->setAccessible(true);
-        self::$registrarBackup = $paths->getValue();
-        $paths->setAccessible(false);
-        require_once __DIR__ . '/../../_files/code/Magento/Other/registration.php';
-        require_once __DIR__ . '/../../_files/code/Magento/Third/registration.php';
-    }
-
-    public static function tearDownAfterClass()
-    {
-        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
-        $paths = $reflection->getProperty('paths');
-        $paths->setAccessible(true);
-        $paths->setValue(self::$registrarBackup);
-        $paths->setAccessible(false);
-    }
 
     protected function setUp()
     {
@@ -90,13 +68,13 @@ class AggregatedTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Framework/Css/PreProcessor/_files/themes.php
      * @magentoAppIsolation enabled
      * @magentoAppArea frontend
      * @param string $path
      * @param string $themeName
      * @param string[] $expectedFiles
      * @dataProvider getFilesDataProvider
+     * @magentoComponentsDir Magento/Framework/Css/PreProcessor/_files/design
      */
     public function testGetFiles($path, $themeName, array $expectedFiles)
     {

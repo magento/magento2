@@ -8,10 +8,9 @@
 
 namespace Magento\Backend\Block\Widget\Grid;
 
-use Magento\TestFramework\Component\ThemeRegistration;
-
 /**
  * @magentoAppArea adminhtml
+ * @magentoComponentsDir Magento/Backend/Block/_files/design
  */
 class MassactionTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,7 +30,6 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
 
         parent::setUp();
 
-        ThemeRegistration::registerThemesInDir(__DIR__ . '/../../_files/design');
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get('Magento\Framework\View\DesignInterface')->setDesignTheme('BackendTest/test_default');
         $this->_layout = $objectManager->create(
