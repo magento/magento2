@@ -8,7 +8,6 @@
         "magento/module-sales": "1.0.0-beta",
         "magento/module-backend": "1.0.0-beta",
         "magento/module-directory": "1.0.0-beta",
-        "magento/module-contact": "1.0.0-beta",
         "magento/module-customer": "1.0.0-beta",
         "magento/module-payment": "1.0.0-beta",
         "magento/module-tax": "1.0.0-beta",

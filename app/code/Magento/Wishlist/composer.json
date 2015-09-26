@@ -7,7 +7,6 @@
         "magento/module-customer": "1.0.0-beta",
         "magento/module-catalog": "1.0.0-beta",
         "magento/module-checkout": "1.0.0-beta",
-        "magento/module-theme": "1.0.0-beta",
         "magento/module-catalog-inventory": "1.0.0-beta",
         "magento/module-rss": "1.0.0-beta",
         "magento/module-backend": "1.0.0-beta",
