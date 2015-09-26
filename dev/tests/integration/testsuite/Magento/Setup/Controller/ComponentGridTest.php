@@ -84,7 +84,8 @@ class ComponentGridTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
-        $this->composerInformationMock = $this->getMock('Magento\Framework\Composer\ComposerInformation',
+        $this->composerInformationMock = $this->getMock(
+            'Magento\Framework\Composer\ComposerInformation',
             [],
             [],
             '',
