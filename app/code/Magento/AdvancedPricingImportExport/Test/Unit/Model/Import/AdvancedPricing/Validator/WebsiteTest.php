@@ -88,7 +88,6 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
     {
         $value = [
             AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
-            AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
         ];
         $allWebsitesValue = 'not tier|group price website value';
         $colTierPriceWebsite = false;
@@ -135,9 +134,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
             [
                 '$value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
-                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
                     AdvancedPricing::COL_TIER_PRICE => 'value',
-                    AdvancedPricing::COL_GROUP_PRICE => 'group value',
                 ],
                 '$allWebsites' => 'not tier|group price website value',
                 '$colTierPriceWebsite' => false,
@@ -146,9 +143,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
             [
                 '$value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
-                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
                     AdvancedPricing::COL_TIER_PRICE => 'tier value',
-                    AdvancedPricing::COL_GROUP_PRICE => 'value',
                 ],
                 '$allWebsites' => 'not tier|group price website value',
                 '$colTierPriceWebsite' => false,
@@ -157,9 +152,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
             [
                 '$value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
-                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
                     AdvancedPricing::COL_TIER_PRICE => 'value',
-                    AdvancedPricing::COL_GROUP_PRICE => ' group value',
                 ],
                 '$allWebsites' => 'not tier|group price website value',
                 '$colTierPriceWebsite' => 'value',
@@ -168,9 +161,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
             [
                 '$value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
-                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
                     AdvancedPricing::COL_TIER_PRICE => 'tier value',
-                    AdvancedPricing::COL_GROUP_PRICE => 'value',
                 ],
                 '$allWebsites' => 'not tier|group price website value',
                 '$colTierPriceWebsite' => 'value',
@@ -180,7 +171,6 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
             [
                 '$value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
-                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
                 ],
                 '$allWebsites' => 'tier value',
                 '$colTierPriceWebsite' => 'value',
@@ -189,7 +179,6 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
             [
                 '$value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
-                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
                 ],
                 '$allWebsites' => 'group value',
                 '$colTierPriceWebsite' => 'value',
@@ -198,7 +187,6 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
             [
                 '$value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => false,
-                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => 'group value',
                 ],
                 '$allWebsites' => 'not tier|group price website value',
                 '$colTierPriceWebsite' => 'value',
@@ -207,7 +195,6 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
             [
                 '$value' => [
                     AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
-                    AdvancedPricing::COL_GROUP_PRICE_WEBSITE => false,
                 ],
                 '$allWebsites' => 'not tier|group price website value',
                 '$colTierPriceWebsite' => 'value',

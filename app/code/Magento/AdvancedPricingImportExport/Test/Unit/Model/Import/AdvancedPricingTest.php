@@ -455,10 +455,6 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
             ->withConsecutive(
                 [
                     $listSku,
-                    AdvancedPricing::TABLE_GROUPED_PRICE
-                ],
-                [
-                    $listSku,
                     AdvancedPricing::TABLE_TIER_PRICE,
                 ]
             )
@@ -498,10 +494,9 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         $this->advancedPricing->expects($this->any())->method('validateRow')->willReturn(true);
         $expectedSkuList = ['sku value'];
         $this->advancedPricing
-            ->expects($this->exactly(2))
+            ->expects($this->once())
             ->method('deleteProductTierAndGroupPrices')
             ->withConsecutive(
-                [$expectedSkuList, AdvancedPricing::TABLE_GROUPED_PRICE],
                 [$expectedSkuList, AdvancedPricing::TABLE_TIER_PRICE]
             )->will($this->returnSelf());
 
