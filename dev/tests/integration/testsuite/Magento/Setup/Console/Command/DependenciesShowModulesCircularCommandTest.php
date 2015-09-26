@@ -20,11 +20,6 @@ class DependenciesShowModulesCircularCommandTest extends \PHPUnit_Framework_Test
      */
     private $commandTester;
 
-    /**
-     * @var array
-     */
-    private $backupRegistrar;
-
     public function setUp()
     {
         $modules = [
