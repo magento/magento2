@@ -1173,10 +1173,10 @@ class Files
     {
         $directories = [];
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $fullModuleDir) {
-            $directories[] = $fullModuleDir . '/';
+            $directories[] = $fullModuleDir;
         }
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryDir) {
-            $directories[] = $libraryDir . '/';
+            $directories[] = $libraryDir;
         }
         return $directories;
     }
@@ -1198,17 +1198,17 @@ class Files
         $namespace = implode('\\', $classParts);
         $path = implode('/', explode('\\', $class)) . '.php';
         $directories = [
-            '/dev/tools/',
-            '/dev/tests/api-functional/framework/',
-            '/dev/tests/integration/framework/',
-            '/dev/tests/integration/framework/tests/unit/testsuite/',
-            '/dev/tests/integration/testsuite/',
-            '/dev/tests/integration/testsuite/Magento/Test/Integrity/',
-            '/dev/tests/performance/framework/',
-            '/dev/tests/static/framework/',
-            '/dev/tests/static/testsuite/',
-            '/dev/tests/functional/tests/app/',
-            '/setup/src/'
+            '/dev/tools',
+            '/dev/tests/api-functional/framework',
+            '/dev/tests/integration/framework',
+            '/dev/tests/integration/framework/tests/unit/testsuite',
+            '/dev/tests/integration/testsuite',
+            '/dev/tests/integration/testsuite/Magento/Test/Integrity',
+            '/dev/tests/performance/framework',
+            '/dev/tests/static/framework',
+            '/dev/tests/static/testsuite',
+            '/dev/tests/functional/tests/app',
+            '/setup/src'
         ];
         foreach ($directories as $key => $dir) {
             $directories[$key] = BP . $dir;
@@ -1217,7 +1217,7 @@ class Files
         $directories = array_merge($directories, $this->getPaths());
 
         foreach ($directories as $dir) {
-            $fullPath = $dir . $path;
+            $fullPath = $dir . '/' . $path;
             if ($this->classFileExistsCheckContent($fullPath, $namespace, $className)) {
                 return true;
             } else {
