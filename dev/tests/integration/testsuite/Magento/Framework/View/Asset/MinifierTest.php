@@ -6,12 +6,13 @@
 namespace Magento\Framework\View\Asset;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\TestFramework\Component\ThemeRegistration;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\App\State as AppState;
 
 /**
  * Tests for minifier
+ *
+ * @magentoComponentsDir Magento/Framework/View/_files/static/theme
  */
 class MinifierTest extends \PHPUnit_Framework_TestCase
 {
@@ -41,7 +42,6 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
         $appState = $this->objectManager->get('Magento\TestFramework\App\State');
         $this->origMode = $appState->getMode();
         $appState->setMode(AppState::MODE_DEFAULT);
-        ThemeRegistration::registerThemesInDir(__DIR__ . '/../_files/static/theme');
         /** @var \Magento\Framework\Filesystem $filesystem */
         $filesystem = Bootstrap::getObjectManager()->get('Magento\Framework\Filesystem');
         $this->staticDir = $filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);

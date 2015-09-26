@@ -34,11 +34,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
-    public static function setUpBeforeClass()
-    {
-        require_once __DIR__ . '/_files/design/themes.php';
-    }
-
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
@@ -144,15 +139,15 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     /**
      * Test template directive to ensure that templates can be loaded from modules
      *
+     * @param string $area
+     * @param string $templateId
+     * @param string $expectedOutput
+     * @param bool $mockThemeFallback
+     *
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     * @magentoDataFixture Magento/Email/Model/_files/design/themes.php
+     * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
      * @dataProvider templateFallbackDataProvider
-     *
-     * @param $area
-     * @param $templateId
-     * @param $expectedOutput
-     * @param bool $mockThemeFallback
      */
     public function testTemplateFallback($area, $templateId, $expectedOutput, $mockThemeFallback = false)
     {
@@ -218,7 +213,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      * overridden in themes
      *
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     * @magentoDataFixture Magento/Email/Model/_files/design/themes.php
+     * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
      * @dataProvider templateDirectiveDataProvider
      *
@@ -348,7 +343,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      * textarea in backend, depending on whether template was loaded from filesystem or DB.
      *
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     * @magentoDataFixture Magento/Email/Model/_files/design/themes.php
+     * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
      * @dataProvider templateStylesVariableDataProvider
      *

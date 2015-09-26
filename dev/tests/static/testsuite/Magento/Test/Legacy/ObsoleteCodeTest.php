@@ -11,6 +11,8 @@
 namespace Magento\Test\Legacy;
 
 use Magento\Framework\App\Utility\Files;
+use Magento\Framework\App\Utility\AggregateInvoker;
+use Magento\TestFramework\Utility\ChangedFiles;
 
 class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
 {
@@ -112,7 +114,14 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
 
     public function testPhpFiles()
     {
-        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $invoker = new AggregateInvoker($this);
+        $changedFiles = ChangedFiles::getPhpFiles(__DIR__ . '/_files/changed_files*');
+        $blacklistFiles = $this->getBlacklistFiles();
+        foreach ($blacklistFiles as $blacklistFile) {
+            if (isset($changedFiles[$blacklistFile])) {
+                unset($changedFiles[$blacklistFile]);
+            }
+        }
         $invoker(
             function ($file) {
                 $content = file_get_contents($file);
@@ -127,24 +136,24 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
                 $this->_testObsoleteConstants($content);
                 $this->_testObsoletePropertySkipCalculate($content);
             },
-            \Magento\TestFramework\Utility\ChangedFiles::getPhpFiles(__DIR__ . '/_files/changed_files*')
+            $changedFiles
         );
     }
 
     public function testClassFiles()
     {
-        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $invoker = new AggregateInvoker($this);
         $invoker(
             function ($file) {
                 $this->_testObsoletePaths($file);
             },
-            \Magento\Framework\App\Utility\Files::init()->getPhpFiles()
+            Files::init()->getPhpFiles()
         );
     }
 
     public function testTemplateMageCalls()
     {
-        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $invoker = new AggregateInvoker($this);
         $invoker(
             function ($file) {
                 $content = file_get_contents($file);
@@ -164,7 +173,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
 
     public function testXmlFiles()
     {
-        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $invoker = new AggregateInvoker($this);
         $invoker(
             function ($file) {
                 $content = file_get_contents($file);
@@ -178,7 +187,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
 
     public function testJsFiles()
     {
-        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $invoker = new AggregateInvoker($this);
         $invoker(
             function ($file) {
                 $content = file_get_contents($file);
@@ -874,7 +883,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
 
     public function testMageMethodsObsolete()
     {
-        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $invoker = new AggregateInvoker($this);
         $invoker(
             /**
              * Check absence of obsolete Mage class usages
@@ -897,12 +906,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
      */
     public function mageObsoleteDataProvider()
     {
-        $blackList = include __DIR__ . '/_files/blacklist/obsolete_mage.php';
-        $ignored = [];
-        $appPath = Files::init()->getPathToSource();
-        foreach ($blackList as $file) {
-            $ignored[] = realpath($appPath . '/' . $file);
-        }
+        $ignored = $this->getBlacklistFiles();
         $files = Files::init()->getPhpFiles(
             Files::INCLUDE_APP_CODE
             | Files::INCLUDE_TESTS
@@ -912,5 +916,21 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
         $files = array_map('realpath', $files);
         $files = array_diff($files, $ignored);
         return Files::composeDataSets($files);
+    }
+
+    /**
+     * Reads list of blacklisted files
+     *
+     * @return array
+     */
+    private function getBlacklistFiles()
+    {
+        $blackList = include __DIR__ . '/_files/blacklist/obsolete_mage.php';
+        $ignored = [];
+        $appPath = Files::init()->getPathToSource();
+        foreach ($blackList as $file) {
+            $ignored = array_merge($ignored, glob($appPath . '/' . $file, GLOB_NOSORT));
+        }
+        return $ignored;
     }
 }

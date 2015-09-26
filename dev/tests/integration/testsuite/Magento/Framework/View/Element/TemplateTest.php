@@ -5,19 +5,12 @@
  */
 namespace Magento\Framework\View\Element;
 
-use Magento\Framework\Component\ComponentRegistrar;
-
 class TemplateTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\View\Element\Template
      */
     protected $_block;
-
-    /**
-     * @var array
-     */
-    protected $backupRegistrar;
 
     protected function setUp()
     {
@@ -29,30 +22,8 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         )->createBlock(
             'Magento\Framework\View\Element\Template',
             '',
-            ['context' => $context, 'data' => ['module_name' => 'Magento_View']]
+            ['context' => $context]
         );
-
-        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
-        $paths = $reflection->getProperty('paths');
-        $paths->setAccessible(true);
-        $this->backupRegistrar = $paths->getValue();
-        $paths->setAccessible(false);
-
-        // Register 'Magento_View'
-        ComponentRegistrar::register(
-            ComponentRegistrar::MODULE,
-            'Magento_View',
-            __DIR__ . '/_files'
-        );
-    }
-
-    protected function tearDown()
-    {
-        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
-        $paths = $reflection->getProperty('paths');
-        $paths->setAccessible(true);
-        $paths->setValue($this->backupRegistrar);
-        $paths->setAccessible(false);
     }
 
     public function testConstruct()

@@ -13,21 +13,10 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Factory Test
+ * @magentoComponentsDir Magento/Framework/View/_files/fallback
  */
 class RulePoolTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * Fake module name
-     */
-    const MODULE = 'Test_FrameworkViewFallback';
-
-    /**#@+
-     *  Fake theme paths
-     */
-    const THEME_ONE = 'frontend/FrameworkViewFallback/test-theme-one';
-    const THEME_TWO = 'frontend/FrameworkViewFallback/test-theme-two';
-    /**#@-*/
-
     /**
      * @var RulePool
      */
@@ -36,37 +25,20 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
     /**
      * @var array
      */
-    protected static $registrarBackup;
-
-    /**
-     * @var array
-     */
     protected $defaultParams;
-
-    public static function setUpBeforeClass()
-    {
-        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
-        $paths = $reflection->getProperty('paths');
-        $paths->setAccessible(true);
-        self::$registrarBackup = $paths->getValue();
-        $paths->setAccessible(false);
-        ComponentRegistrar::register(ComponentRegistrar::MODULE, self::MODULE, '/module/path');
-        ComponentRegistrar::register(ComponentRegistrar::THEME, self::THEME_ONE, '/theme/one/path');
-        ComponentRegistrar::register(ComponentRegistrar::THEME, self::THEME_TWO, '/theme/two/path');
-    }
 
     protected function setUp()
     {
         $this->model = Bootstrap::getObjectManager()->create('Magento\Framework\View\Design\Fallback\RulePool');
-        $parentTheme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
-        $parentTheme->expects($this->any())->method('getFullPath')->will($this->returnValue(self::THEME_TWO));
-        $theme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
-        $theme->expects($this->any())->method('getFullPath')->will($this->returnValue(self::THEME_ONE));
-        $theme->expects($this->any())->method('getParentTheme')->will($this->returnValue($parentTheme));
+        /** @var \Magento\Theme\Model\Resource\Theme\Collection $collection */
+        $collection = Bootstrap::getObjectManager()->create('Magento\Theme\Model\Resource\Theme\Collection');
+        /** @var \Magento\Theme\Model\Theme $theme */
+        $theme = $collection->getThemeByFullPath('frontend/Vendor_ViewTest/custom_theme');
+
         $this->defaultParams = [
             'area' => 'area',
             'theme' => $theme,
-            'module_name' => self::MODULE,
+            'module_name' => 'ViewTest_Module',
             'locale' => 'en_US',
         ];
     }
@@ -75,15 +47,6 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
     {
         $this->model = null;
         $this->defaultParams = [];
-    }
-
-    public static function tearDownAfterClass()
-    {
-        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
-        $paths = $reflection->getProperty('paths');
-        $paths->setAccessible(true);
-        $paths->setValue(self::$registrarBackup);
-        $paths->setAccessible(false);
     }
 
     /**
@@ -180,31 +143,38 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
         $filesystem = $objectManager->get('\Magento\Framework\Filesystem');
         $libPath = rtrim($filesystem->getDirectoryRead(DirectoryList::LIB_WEB)->getAbsolutePath(), '/');
 
+        $themeOnePath = BP . '/dev/tests/integration/testsuite/Magento/Framework/View/_files/fallback/design/frontend/'
+            . 'Vendor/custom_theme';
+        $themeTwoPath = BP . '/dev/tests/integration/testsuite/Magento/Framework/View/_files/fallback/design/frontend/'
+            . 'Vendor/default';
+        $modulePath = BP . '/dev/tests/integration/testsuite/Magento/Framework/View/_files/fallback/app/code/'
+            . 'ViewTest_Module';
+
         return [
             'locale' => [
                 \Magento\Framework\View\Design\Fallback\RulePool::TYPE_LOCALE_FILE,
                 [],
                 [
-                    '/theme/one/path',
-                    '/theme/two/path',
+                    $themeOnePath,
+                    $themeTwoPath,
                 ],
             ],
             'file, modular' => [
                 \Magento\Framework\View\Design\Fallback\RulePool::TYPE_FILE,
                 [],
                 [
-                    '/theme/one/path/Test_FrameworkViewFallback',
-                    '/theme/two/path/Test_FrameworkViewFallback',
-                    '/module/path/view/area',
-                    '/module/path/view/base',
+                    $themeOnePath . '/ViewTest_Module',
+                    $themeTwoPath . '/ViewTest_Module',
+                    $modulePath . '/view/area',
+                    $modulePath . '/view/base',
                 ],
             ],
             'file, non-modular' => [
                 \Magento\Framework\View\Design\Fallback\RulePool::TYPE_FILE,
                 ['namespace' => null, 'module_name' => null],
                 [
-                    '/theme/one/path',
-                    '/theme/two/path',
+                    $themeOnePath,
+                    $themeTwoPath,
                 ],
             ],
 
@@ -212,26 +182,26 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
                 \Magento\Framework\View\Design\Fallback\RulePool::TYPE_TEMPLATE_FILE,
                 [],
                 [
-                    '/theme/one/path/Test_FrameworkViewFallback/templates',
-                    '/theme/two/path/Test_FrameworkViewFallback/templates',
-                    '/module/path/view/area/templates',
-                    '/module/path/view/base/templates',
+                    $themeOnePath . '/ViewTest_Module/templates',
+                    $themeTwoPath . '/ViewTest_Module/templates',
+                    $modulePath . '/view/area/templates',
+                    $modulePath . '/view/base/templates',
                 ],
             ],
             'template, non-modular' => [
                 \Magento\Framework\View\Design\Fallback\RulePool::TYPE_TEMPLATE_FILE,
                 ['namespace' => null, 'module_name' => null],
                 [
-                    '/theme/one/path/templates',
-                    '/theme/two/path/templates',
+                    $themeOnePath . '/templates',
+                    $themeTwoPath . '/templates',
                 ],
             ],
             'template, non-modular-magento-core' => [
                 \Magento\Framework\View\Design\Fallback\RulePool::TYPE_TEMPLATE_FILE,
                 ['module_name' => 'Magento_Theme'],
                 [
-                    '/theme/one/path/Magento_Theme/templates',
-                    '/theme/two/path/Magento_Theme/templates',
+                    $themeOnePath . '/Magento_Theme/templates',
+                    $themeTwoPath . '/Magento_Theme/templates',
                     $coreModulePath . '/view/area/templates',
                     $coreModulePath . '/view/base/templates',
                 ],
@@ -241,34 +211,34 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
                 \Magento\Framework\View\Design\Fallback\RulePool::TYPE_STATIC_FILE,
                 [],
                 [
-                    '/theme/one/path/Test_FrameworkViewFallback/web/i18n/en_US',
-                    '/theme/one/path/Test_FrameworkViewFallback/web',
-                    '/theme/two/path/Test_FrameworkViewFallback/web/i18n/en_US',
-                    '/theme/two/path/Test_FrameworkViewFallback/web',
-                    '/module/path/view/area/web/i18n/en_US',
-                    '/module/path/view/base/web/i18n/en_US',
-                    '/module/path/view/area/web',
-                    '/module/path/view/base/web',
+                    $themeOnePath . '/ViewTest_Module/web/i18n/en_US',
+                    $themeOnePath . '/ViewTest_Module/web',
+                    $themeTwoPath . '/ViewTest_Module/web/i18n/en_US',
+                    $themeTwoPath . '/ViewTest_Module/web',
+                    $modulePath . '/view/area/web/i18n/en_US',
+                    $modulePath . '/view/base/web/i18n/en_US',
+                    $modulePath . '/view/area/web',
+                    $modulePath . '/view/base/web',
                 ],
             ],
             'view, modular non-localized' => [
                 \Magento\Framework\View\Design\Fallback\RulePool::TYPE_STATIC_FILE,
                 ['locale' => null],
                 [
-                    '/theme/one/path/Test_FrameworkViewFallback/web',
-                    '/theme/two/path/Test_FrameworkViewFallback/web',
-                    '/module/path/view/area/web',
-                    '/module/path/view/base/web',
+                    $themeOnePath . '/ViewTest_Module/web',
+                    $themeTwoPath . '/ViewTest_Module/web',
+                    $modulePath . '/view/area/web',
+                    $modulePath . '/view/base/web',
                 ],
             ],
             'view, non-modular localized' => [
                 \Magento\Framework\View\Design\Fallback\RulePool::TYPE_STATIC_FILE,
                 ['module_name' => null],
                 [
-                    '/theme/one/path/web/i18n/en_US',
-                    '/theme/one/path/web',
-                    '/theme/two/path/web/i18n/en_US',
-                    '/theme/two/path/web',
+                    $themeOnePath . '/web/i18n/en_US',
+                    $themeOnePath . '/web',
+                    $themeTwoPath . '/web/i18n/en_US',
+                    $themeTwoPath . '/web',
                     $libPath,
                 ],
             ],
@@ -276,8 +246,8 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
                 \Magento\Framework\View\Design\Fallback\RulePool::TYPE_STATIC_FILE,
                 ['module_name' => null, 'locale' => null],
                 [
-                    '/theme/one/path/web',
-                    '/theme/two/path/web',
+                    $themeOnePath . '/web',
+                    $themeTwoPath . '/web',
                     $libPath,
                 ],
             ],
@@ -286,9 +256,9 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
                 \Magento\Framework\View\Design\Fallback\RulePool::TYPE_EMAIL_TEMPLATE,
                 [],
                 [
-                    '/theme/one/path/Test_FrameworkViewFallback/email',
-                    '/theme/two/path/Test_FrameworkViewFallback/email',
-                    '/module/path/view/area/email',
+                    $themeOnePath . '/ViewTest_Module/email',
+                    $themeTwoPath . '/ViewTest_Module/email',
+                    $modulePath . '/view/area/email',
                 ],
             ],
         ];
