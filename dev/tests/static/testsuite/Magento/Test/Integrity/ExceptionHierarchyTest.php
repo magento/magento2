@@ -53,8 +53,46 @@ class ExceptionHierarchyTest extends \PHPUnit_Framework_TestCase
      */
     protected function convertPathToClassName($filePath)
     {
-        $className = str_replace('.php', "", substr($filePath, strpos($filePath, '/Magento')));
-        $className = implode("\\", explode("/", $className));
+        $componentRegistrar = new \Magento\Framework\Component\ComponentRegistrar();
+        $foundItems = null;
+        $moduleNamespace = null;
+        $foundItems = array_filter(
+            $componentRegistrar->getPaths(\Magento\Framework\Component\ComponentRegistrar::MODULE),
+            function($item) use ($filePath) {
+                if (strpos($filePath, $item . '/') !== FALSE) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        );
+        if ($foundItems) {
+            $moduleNamespace = str_replace('_', '\\', array_keys($foundItems)[0]);
+            $classPath = str_replace('/', '\\', str_replace(array_shift($foundItems), '', $filePath));
+        } else {
+            $foundItems = array_filter(
+                $componentRegistrar->getPaths(\Magento\Framework\Component\ComponentRegistrar::LIBRARY),
+                function($item) use ($filePath) {
+                    if (strpos($filePath, $item . '/') !== FALSE) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }
+            );
+            $namespaceParts = explode('/', array_keys($foundItems)[0]);
+            $namespaceParts = array_map(
+                function($item) {
+                    return ucfirst($item);
+                },
+                $namespaceParts
+            );
+            $moduleNamespace = implode('\\', $namespaceParts);
+            $classPath = str_replace('/', '\\', str_replace(array_shift($foundItems), '', $filePath));
+        }
+
+        $className = '\\' . $moduleNamespace . $classPath;
+        $className = str_replace('.php', '', $className);
         return $className;
     }
 
