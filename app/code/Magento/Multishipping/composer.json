@@ -9,6 +9,7 @@
         "magento/module-payment": "1.0.0-beta",
         "magento/module-tax": "1.0.0-beta",
         "magento/module-customer": "1.0.0-beta",
+        "magento/module-theme": "1.0.0-beta",
         "magento/module-quote": "1.0.0-beta",
         "magento/framework": "1.0.0-beta"
     },
