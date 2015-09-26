@@ -6,11 +6,15 @@
 
 namespace Magento\Framework\App\Language;
 
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\TestFramework\Helper\Bootstrap;
 
 class DictionaryTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
+
     /**
      * @var \Magento\Framework\App\Language\Dictionary
      */
@@ -28,20 +32,23 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManager = Bootstrap::getObjectManager();
-        $this->directoryFactory = $objectManager->create('Magento\Framework\Filesystem\Directory\ReadFactory');
-        $this->configFactory = $objectManager->create('Magento\Framework\App\Language\ConfigFactory');
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->directoryFactory = $this->objectManager->create('Magento\Framework\Filesystem\Directory\ReadFactory');
+        $this->configFactory = $this->objectManager->create('Magento\Framework\App\Language\ConfigFactory');
     }
 
     /**
-     * @param $componentRegistrar
-     * @param $languageCode
+     * @param string $languageCode
      * @param array $expectation
      * @dataProvider dictionaryDataProvider
+     * @magentoComponentsDir Magento/Framework/App/Language/_files
      */
-    public function testDictionaryGetter($componentRegistrar, $languageCode, $expectation)
+    public function testDictionaryGetter($languageCode, $expectation)
     {
-        $this->model = new Dictionary($this->directoryFactory, $componentRegistrar, $this->configFactory);
+        $this->model = $this->objectManager->create(
+            'Magento\Framework\App\Language\Dictionary',
+            ['directoryReadFactory' => $this->directoryFactory, 'configFactory' => $this->configFactory]
+        );
         $result = $this->model->getDictionary($languageCode);
         $this->assertSame($expectation, $result);
     }
@@ -63,14 +70,7 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
      */
     private function getDataMultipleInheritance()
     {
-        $componentRegistrar = new ComponentRegistrar();
-        ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'bar_en_gb', __DIR__ . '/_files/bar/en_gb');
-        ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'bar_en_us', __DIR__ . '/_files/bar/en_us');
-        ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'baz_en_gb', __DIR__ . '/_files/baz/en_gb');
-        ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'foo_en_au', __DIR__ . '/_files/foo/en_au');
-
         return [
-            'componentRegistrar' => $componentRegistrar,
             // Dictionary that will be requested
             'language_code' => 'en_AU',
             // Expected merged dictionary data
@@ -92,11 +92,7 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
      */
     private function getDataInheritanceWitSimilarCode()
     {
-        $componentRegistrar = new ComponentRegistrar();
-        ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'first_en_us', __DIR__ . '/_files/first/en_us');
-        ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'second_en_gb', __DIR__ . '/_files/second/en_gb');
         return [
-            'componentRegistrar' => $componentRegistrar,
             // Dictionary that will be requested
             'language_code' => 'ru_RU',
             // Expected merged dictionary data
@@ -113,12 +109,7 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
      */
     private function getDataCircularInheritance()
     {
-        $componentRegistrar = new ComponentRegistrar();
-        ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'my_ru_ru', __DIR__ . '/_files/my/ru_ru');
-        ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'theirs_ru_ru', __DIR__ . '/_files/theirs/ru_ru');
-
         return [
-            'componentRegistrar' => $componentRegistrar,
             // Dictionary that will be requested
             'language_code' => 'en_US',
             // Expected merged dictionary data

@@ -9,7 +9,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * @magentoDataFixture Magento/Theme/Model/_files/design/themes.php
+ * @magentoComponentsDir Magento/Theme/Model/_files/design
  */
 class DesignTest extends \PHPUnit_Framework_TestCase
 {
