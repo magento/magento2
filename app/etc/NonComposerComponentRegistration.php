@@ -45,6 +45,7 @@ class NonComposerComponentRegistration
         static::$pathList[] = dirname(__DIR__) . '/design/*/*/*/registration.php';
         static::$pathList[] = dirname(__DIR__) . '/i18n/*/*/registration.php';
         static::$pathList[] = dirname(dirname(__DIR__)) . '/lib/internal/*/*/registration.php';
+        static::$pathList[] = dirname(dirname(__DIR__)) . '/lib/internal/*/*/registration-ee.php';
     }
 
     /**
