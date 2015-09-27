@@ -69,7 +69,6 @@ class AssertBundlePriceType extends AbstractConstraint
         CheckoutCart $checkoutCartView,
         BundleProduct $originalProduct = null
     ) {
-        $customerGroup = 'NOT LOGGED IN';
         $bundleData = $product->getData();
         $this->productPriceType = $originalProduct !== null
             ? $originalProduct->getPriceType()
