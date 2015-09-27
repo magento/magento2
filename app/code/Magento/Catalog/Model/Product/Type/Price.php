@@ -81,6 +81,7 @@ class Price
     protected $config;
 
     /**
+     * Price constructor.
      * @param \Magento\CatalogRule\Model\Resource\RuleFactory $ruleFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -88,6 +89,7 @@ class Price
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param PriceCurrencyInterface $priceCurrency
      * @param GroupManagementInterface $groupManagement
+     * @param \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -174,6 +176,7 @@ class Price
      * @param Product $childProduct
      * @param float $childProductQty
      * @return float
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getChildFinalPrice($product, $productQty, $childProduct, $childProductQty)
