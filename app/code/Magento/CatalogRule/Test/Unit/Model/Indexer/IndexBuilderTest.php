@@ -195,4 +195,52 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             $this->productFactory
         );
     }
+
+    /**
+     * Test UpdateCatalogRuleGroupWebsiteData
+     *
+     * @covers \Magento\CatalogRule\Model\Indexer\IndexBuilder::updateCatalogRuleGroupWebsiteData
+     * @return void
+     */
+    public function testUpdateCatalogRuleGroupWebsiteData()
+    {
+        $groupPriceAttrMock = $this->getMock(
+            'Magento\Catalog\Model\Entity\Attribute',
+            ['getBackend'],
+            [],
+            '',
+            false
+        );
+        $backendModelMock = $this->getMock(
+            'Magento\Catalog\Model\Product\Attribute\Backend\Tierprice',
+            ['getResource'],
+            [],
+            '',
+            false
+        );
+        $resourceMock = $this->getMock(
+            'Magento\Catalog\Model\Resource\Product\Attribute\Backend\Tierprice',
+            ['getMainTable'],
+            [],
+            '',
+            false
+        );
+        $resourceMock->expects($this->any())
+            ->method('getMainTable')
+            ->will($this->returnValue('catalog_product_entity_tear_price'));
+        $backendModelMock->expects($this->any())
+            ->method('getResource')
+            ->will($this->returnValue($resourceMock));
+        $groupPriceAttrMock->expects($this->any())
+            ->method('getBackend')
+            ->will($this->returnValue($backendModelMock));
+        $this->eavConfig->expects($this->at(0))
+            ->method('getAttribute')
+            ->with(\Magento\Catalog\Model\Product::ENTITY, 'price')
+            ->will($this->returnValue($this->attribute));
+
+        $this->select->expects($this->once())->method('insertFromSelect')->with('catalogrule_group_website');
+
+        $this->indexBuilder->reindexByIds([1]);
+    }
 }
