@@ -34,7 +34,7 @@ class UrnResolver
                     ComponentRegistrar::MODULE,
                     $urnParts[3]
                 ) . '/' . $urnParts[4];
-            } else if ($urnParts[2] == 'framework') {
+            } else if (strpos($urnParts[2], 'framework') !== false) {
                 // urn:magento:framework:Module/etc/module.xsd
                 // 0: urn, 1: magento, 2: framework, 3: Module/etc/module.xsd
                 // libaryName -> magento/framework
