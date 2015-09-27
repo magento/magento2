@@ -40,8 +40,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             ];
 
             foreach ($fields as $filedInfo) {
-                $connection->dropColumn($setup->getTable($filedInfo['table']),
-                    $filedInfo['column']);
+                $connection->dropColumn($setup->getTable($filedInfo['table']), $filedInfo['column']);
             }
         }
 
