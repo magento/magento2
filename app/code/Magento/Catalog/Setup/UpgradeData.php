@@ -41,7 +41,7 @@ class UpgradeData implements UpgradeDataInterface
         $setup->startSetup();
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
             $categorySetupManager = $this->categorySetupFactory->create();
-            $categorySetupManager->removeAttribute('group_price');
+            $categorySetupManager->removeAttribute(\Magento\Catalog\Model\Product::ENTITY, 'group_price');
         }
         $setup->endSetup();
     }
