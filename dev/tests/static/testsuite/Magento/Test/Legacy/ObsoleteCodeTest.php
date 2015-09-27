@@ -73,7 +73,8 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
     protected static function _populateList(array &$list, array &$errors, $filePattern, $hasScope = true)
     {
         foreach (glob(__DIR__ . '/_files/' . $filePattern) as $file) {
-            foreach (self::_readList($file) as $row) {
+            $readList = include $file;
+            foreach ($readList as $row) {
                 list($item, $scope, $replacement, $isDeprecated) = self::_padRow($row, $hasScope);
                 $key = "{$item}|{$scope}";
                 if (isset($list[$key])) {
@@ -101,26 +102,13 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
         return [$item, '', $replacement, ''];
     }
 
-    /**
-     * Isolate including a file into a method to reduce scope
-     *
-     * @param string $file
-     * @return array
-     */
-    protected static function _readList($file)
-    {
-        return include $file;
-    }
-
     public function testPhpFiles()
     {
         $invoker = new AggregateInvoker($this);
         $changedFiles = ChangedFiles::getPhpFiles(__DIR__ . '/_files/changed_files*');
         $blacklistFiles = $this->getBlacklistFiles();
         foreach ($blacklistFiles as $blacklistFile) {
-            if (isset($changedFiles[$blacklistFile])) {
-                unset($changedFiles[$blacklistFile]);
-            }
+            unset($changedFiles[$blacklistFile]);
         }
         $invoker(
             function ($file) {
@@ -883,6 +871,17 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
 
     public function testMageMethodsObsolete()
     {
+        $ignored = $this->getBlacklistFiles();
+        $files = Files::init()->getPhpFiles(
+            Files::INCLUDE_APP_CODE
+            | Files::INCLUDE_TESTS
+            | Files::INCLUDE_DEV_TOOLS
+            | Files::INCLUDE_LIBS
+        );
+        $files = array_map('realpath', $files);
+        $files = array_diff($files, $ignored);
+        $files = Files::composeDataSets($files);
+
         $invoker = new AggregateInvoker($this);
         $invoker(
             /**
@@ -897,25 +896,8 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
                     '"Mage" class methods are obsolete'
                 );
             },
-            $this->mageObsoleteDataProvider()
+            $files
         );
-    }
-
-    /**
-     * @return array
-     */
-    public function mageObsoleteDataProvider()
-    {
-        $ignored = $this->getBlacklistFiles();
-        $files = Files::init()->getPhpFiles(
-            Files::INCLUDE_APP_CODE
-            | Files::INCLUDE_TESTS
-            | Files::INCLUDE_DEV_TOOLS
-            | Files::INCLUDE_LIBS
-        );
-        $files = array_map('realpath', $files);
-        $files = array_diff($files, $ignored);
-        return Files::composeDataSets($files);
     }
 
     /**
