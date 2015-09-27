@@ -39,6 +39,11 @@ class BasePriceTest extends \PHPUnit_Framework_TestCase
     protected $regularPriceMock;
 
     /**
+     * @var \Magento\Catalog\Pricing\Price\TierPrice|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $tearPriceMock;
+
+    /**
      * @var \Magento\Catalog\Pricing\Price\SpecialPrice|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $specialPriceMock;
@@ -57,6 +62,7 @@ class BasePriceTest extends \PHPUnit_Framework_TestCase
         $this->saleableItemMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $this->priceInfoMock = $this->getMock('Magento\Framework\Pricing\PriceInfo\Base', [], [], '', false);
         $this->regularPriceMock = $this->getMock('Magento\Catalog\Pricing\Price\RegularPrice', [], [], '', false);
+        $this->tearPriceMock = $this->getMock('Magento\Catalog\Pricing\Price\TierPrice', [], [], '', false);
         $this->specialPriceMock = $this->getMock('Magento\Catalog\Pricing\Price\SpecialPrice', [], [], '', false);
         $this->calculatorMock = $this->getMock('Magento\Framework\Pricing\Adjustment\Calculator', [], [], '', false);
 
@@ -65,6 +71,7 @@ class BasePriceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->priceInfoMock));
         $this->prices = [
             'regular_price' => $this->regularPriceMock,
+            'group_price' => $this->tearPriceMock,
             'special_price' => $this->specialPriceMock,
         ];
 
@@ -91,6 +98,9 @@ class BasePriceTest extends \PHPUnit_Framework_TestCase
         $this->regularPriceMock->expects($this->exactly(3))
             ->method('getValue')
             ->will($this->returnValue(100));
+        $this->tearPriceMock->expects($this->exactly(2))
+            ->method('getValue')
+            ->will($this->returnValue(99));
         $this->specialPriceMock->expects($this->any())
             ->method('getValue')
             ->will($this->returnValue($specialPriceValue));
