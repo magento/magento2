@@ -149,24 +149,6 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
                 '$colTierPriceWebsite' => false,
                 '$expectedResult' => false,
             ],
-            [
-                '$value' => [
-                    AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
-                    AdvancedPricing::COL_TIER_PRICE => 'value',
-                ],
-                '$allWebsites' => 'not tier|group price website value',
-                '$colTierPriceWebsite' => 'value',
-                '$expectedResult' => false,
-            ],
-            [
-                '$value' => [
-                    AdvancedPricing::COL_TIER_PRICE_WEBSITE => 'tier value',
-                    AdvancedPricing::COL_TIER_PRICE => 'tier value',
-                ],
-                '$allWebsites' => 'not tier|group price website value',
-                '$colTierPriceWebsite' => 'value',
-                '$expectedResult' => false,
-            ],
             // True cases.
             [
                 '$value' => [
