@@ -17,14 +17,31 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 class UpgradeData implements UpgradeDataInterface
 {
     /**
+     * Category setup factory
+     *
+     * @var CategorySetupFactory
+     */
+    private $categorySetupFactory;
+
+    /**
+     * Init
+     *
+     * @param CategorySetupFactory $categorySetupFactory
+     */
+    public function __construct(CategorySetupFactory $categorySetupFactory)
+    {
+        $this->categorySetupFactory = $categorySetupFactory;
+    }
+
+    /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
-
+            $categorySetupManager = $this->categorySetupFactory->create();
+            $categorySetupManager->removeAttribute('group_price');
         }
         $setup->endSetup();
     }
