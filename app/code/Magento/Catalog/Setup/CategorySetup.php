@@ -581,7 +581,6 @@ class CategorySetup extends EavSetup
                         'type' => 'decimal',
                         'label' => 'Group Price',
                         'input' => 'text',
-                        'backend' => 'Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice',
                         'required' => false,
                         'sort_order' => 2,
                         'global' => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_WEBSITE,
