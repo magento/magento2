@@ -149,6 +149,8 @@ class Configurable extends \Magento\Catalog\Model\Resource\Product\Indexer\Price
                 'parent_id',
                 'customer_group_id',
                 'website_id',
+                'MIN(price)',
+                'MAX(price)',
                 'MIN(tier_price)',
             ]
         )->group(
