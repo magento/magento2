@@ -168,7 +168,6 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->rules->expects($this->any())->method('getId')->will($this->returnValue(1));
         $this->rules->expects($this->any())->method('getWebsiteIds')->will($this->returnValue([1]));
-        $this->rules->expects($this->any())->method('getConditions')->will($this->returnValue($this->combine));
         $this->rules->expects($this->any())->method('getCustomerGroupIds')->will($this->returnValue([1]));
 
         $this->ruleCollectionFactory->expects($this->any())->method('create')->will($this->returnSelf());
@@ -180,7 +179,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
         $this->product->expects($this->any())->method('getId')->will($this->returnValue(1));
         $this->product->expects($this->any())->method('getWebsiteIds')->will($this->returnValue([1]));
 
-        $this->combine->expects($this->any())->method('validate')->will($this->returnValue(true));
+        $this->rules->expects($this->any())->method('validate')->with($this->product)->willReturn(true);
         $this->attribute->expects($this->any())->method('getBackend')->will($this->returnValue($this->backend));
         $this->productFactory->expects($this->any())->method('create')->will($this->returnValue($this->product));
 

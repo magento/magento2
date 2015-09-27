@@ -248,7 +248,7 @@ class IndexBuilder
             ]
         );
 
-        if (!$rule->getConditions()->validate($product)) {
+        if (!$rule->validate($product)) {
             $this->connection->delete(
                 $this->resource->getTableName('catalogrule_product_price'),
                 [$this->connection->quoteInto('product_id = ?', $productId)]
