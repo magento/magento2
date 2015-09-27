@@ -636,10 +636,7 @@ class IndexBuilder
             []
         );
         $select->columns([
-            'default_price' => $this->connection->getIfNullSql(
-                'gp.value',
-                $this->connection->getIfNullSql($tableAlias . '.value', 'pp_default.value')
-            ),
+            'default_price' =>$this->connection->getIfNullSql($tableAlias . '.value', 'pp_default.value'),
         ]);
 
         return $this->connection->query($select);
