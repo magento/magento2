@@ -107,7 +107,7 @@ abstract class AbstractGroupPrice extends Price
     /**
      * Retrieve resource instance
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Backend\GroupPrice
+     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Tierprice
      */
     abstract protected function _getResource();
 
