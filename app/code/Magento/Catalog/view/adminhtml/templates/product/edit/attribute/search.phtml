@@ -63,7 +63,7 @@
                         data: {attribute_id: ui.item.id, template_id: templateId, group: $(this).data('group')},
                         showLoader: true
                     }).done(function() {
-                        setTimeout(function() { //do defered
+                        setTimeout(function() { //do deferred
                             $('[data-form=edit-product]').trigger('changeAttributeSet', {id: templateId});
                         }, 10);
                     });

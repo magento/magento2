@@ -11,54 +11,47 @@ use Magento\Mtf\Client\Locator;
 
 /**
  * Class Search
- * Block for search field
+ * Block for "Search" section
  */
 class Search extends Block
 {
     /**
-     * Selector matches found - "Suggest Search"
+     * Locator value for matches found - "Suggest Search".
      *
      * @var string
      */
     protected $searchAutocomplete = './/div[@id="search_autocomplete"]//li[span[text()[normalize-space()="%s"]]]';
 
     /**
-     * Selector number of matches for a given row
+     * Locator value for given row matches amount.
      *
      * @var string
      */
     protected $searchItemAmount = '/span[contains(@class,"amount") and text()="%d"]';
 
     /**
-     * Search field
+     * Locator value for "Search" field.
      *
      * @var string
      */
     protected $searchInput = '#search';
 
     /**
-     * Search button
+     * Locator value for "Search" button.
      *
      * @var string
      */
     private $searchButton = '[title="Search"]';
 
     /**
-     * Search button
+     * Locator value for "Search" button placeholder.
      *
      * @var string
      */
     protected $placeholder = '//input[@id="search" and contains(@placeholder, "%s")]';
 
     /**
-     * Css selector advanced search button
-     *
-     * @var string
-     */
-    protected $advancedSearchSelector = '.action.advanced';
-
-    /**
-     * Search products by a keyword
+     * Perform search by a keyword.
      *
      * @param string $keyword
      * @return void
@@ -68,37 +61,34 @@ class Search extends Block
     public function search($keyword)
     {
         $this->fillSearch($keyword);
-        $this->_rootElement->find($this->searchButton, Locator::SELECTOR_CSS)->click();
+        $this->_rootElement->find($this->searchButton)->click();
     }
 
     /**
-     * Fills the search field
+     * Fill "Search" field with correspondent text.
      *
      * @param string $text
      * @return void
      */
     public function fillSearch($text)
     {
-        $this->_rootElement->find($this->searchInput, Locator::SELECTOR_CSS)->setValue($text);
+        $this->_rootElement->find($this->searchInput)->setValue($text);
     }
 
     /**
-     * Check that placeholder contains text
+     * Check if placeholder contains correspondent text or not.
      *
      * @param string $placeholderText
      * @return bool
      */
     public function isPlaceholderContains($placeholderText)
     {
-        $field = $this->_rootElement->find(
-            sprintf($this->placeholder, $placeholderText),
-            Locator::SELECTOR_XPATH
-        );
+        $field = $this->_rootElement->find(sprintf($this->placeholder, $placeholderText), Locator::SELECTOR_XPATH);
         return $field->isVisible();
     }
 
     /**
-     * Checking block visibility "Suggest Search"
+     * Check if "Suggest Search" block visible or not.
      *
      * @param string $text
      * @param int|null $amount
@@ -117,15 +107,5 @@ class Search extends Block
                 return $rootElement->find($searchAutocomplete, Locator::SELECTOR_XPATH)->isVisible() ? true : null;
             }
         );
-    }
-
-    /**
-     * Click advanced search button
-     *
-     * @return void
-     */
-    public function clickAdvancedSearchButton()
-    {
-        $this->_rootElement->find($this->advancedSearchSelector)->click();
     }
 }
