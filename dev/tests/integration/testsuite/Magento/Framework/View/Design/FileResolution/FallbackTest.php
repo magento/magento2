@@ -8,14 +8,10 @@ namespace Magento\Framework\View\Design\FileResolution;
 
 use Magento\Framework\App\Bootstrap as AppBootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Component\ComponentRegistrar;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Fallback Test
- *
- * @package Magento\View
- * @magentoDataFixture Magento/Framework/View/_files/fallback/themes_registration.php
+ * @magentoComponentsDir Magento/Framework/View/_files/fallback
  */
 class FallbackTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,31 +20,11 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
      */
     private $themeFactory;
 
-    /**
-     * @var array
-     */
-    private $registrarBackup;
-
     protected function setUp()
     {
-        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
-        $paths = $reflection->getProperty('paths');
-        $paths->setAccessible(true);
-        $this->registrarBackup = $paths->getValue();
-        $paths->setAccessible(false);
         /** @var \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory */
         $this->themeFactory = Bootstrap::getObjectManager()
             ->get('Magento\Framework\View\Design\Theme\FlyweightFactory');
-        require __DIR__ . '/../../_files/fallback/app/code/ViewTest_Module/registration.php';
-    }
-
-    protected function tearDown()
-    {
-        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
-        $paths = $reflection->getProperty('paths');
-        $paths->setAccessible(true);
-        $paths->setValue($this->registrarBackup);
-        $paths->setAccessible(false);
     }
 
     /**
@@ -80,7 +56,6 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTemplateFile($file, $themePath, $module, $expectedFilename)
     {
-        $compRegistrar = new ComponentRegistrar();
         $this->reinitializeEnvironment();
         /** @var \Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile $model */
         $model = Bootstrap::getObjectManager()
@@ -104,18 +79,18 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
     public function getTemplateFileDataProvider()
     {
         return [
-//            'non-modular: no default inheritance' => [
-//                'fixture_template.phtml', 'Vendor_ViewTest/standalone_theme', null,
-//                null,
-//            ],
-//            'non-modular: inherit parent theme' => [
-//                'fixture_template.phtml', 'Vendor_ViewTest/custom_theme', null,
-//                '%s/frontend/Vendor/default/templates/fixture_template.phtml',
-//            ],
-//            'non-modular: inherit grandparent theme' => [
-//                'fixture_template.phtml', 'Vendor_ViewTest/custom_theme2', null,
-//                '%s/frontend/Vendor/default/templates/fixture_template.phtml',
-//            ],
+            'non-modular: no default inheritance' => [
+                'fixture_template.phtml', 'Vendor_ViewTest/standalone_theme', null,
+                null,
+            ],
+            'non-modular: inherit parent theme' => [
+                'fixture_template.phtml', 'Vendor_ViewTest/custom_theme', null,
+                '%s/frontend/Vendor/default/templates/fixture_template.phtml',
+            ],
+            'non-modular: inherit grandparent theme' => [
+                'fixture_template.phtml', 'Vendor_ViewTest/custom_theme2', null,
+                '%s/frontend/Vendor/default/templates/fixture_template.phtml',
+            ],
             'modular: no default inheritance' => [
                 'fixture_template.phtml', 'Vendor_ViewTest/standalone_theme', 'ViewTest_Module',
                 null,
@@ -277,7 +252,7 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
      * Test for the email template files fallback according to the themes inheritance
      *
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
-     * @magentoDataFixture Magento/Email/Model/_files/design/themes.php
+     * @magentoComponentsDir Magento/Email/Model/_files/design
      *
      * @param string $file
      * @param string $themePath

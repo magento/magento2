@@ -5,7 +5,6 @@
  */
 namespace Magento\Setup\Console\Command;
 
-use Magento\Framework\Component\ComponentRegistrar;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class DependenciesShowFrameworkCommandTest extends \PHPUnit_Framework_TestCase
@@ -75,8 +74,8 @@ class DependenciesShowFrameworkCommandTest extends \PHPUnit_Framework_TestCase
             $fileContents
         );
         $this->assertContains('"Dependencies for each module:",' . PHP_EOL, $fileContents);
-        $this->assertContains('"Magento\A",1' . PHP_EOL . '" -- Magento\Framework",1' . PHP_EOL, $fileContents);
-        $this->assertContains('"Magento\B",1' . PHP_EOL . '" -- Magento\Framework",1' . PHP_EOL, $fileContents);
+        $this->assertContains('"Magento\A",1' . PHP_EOL . '" -- Magento\Framework",3' . PHP_EOL, $fileContents);
+        $this->assertContains('"Magento\B",1' . PHP_EOL . '" -- Magento\Framework",3' . PHP_EOL, $fileContents);
 
     }
 }

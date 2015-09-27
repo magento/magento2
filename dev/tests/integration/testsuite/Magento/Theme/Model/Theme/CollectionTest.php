@@ -13,7 +13,7 @@ use Magento\Framework\App\Area;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
- * @magentoDataFixture Magento/Theme/Model/_files/design/themes.php
+ * @magentoComponentsDir Magento/Theme/Model/_files/design
  */
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {

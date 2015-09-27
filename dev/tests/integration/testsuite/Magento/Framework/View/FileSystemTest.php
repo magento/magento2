@@ -5,11 +5,9 @@
  */
 namespace Magento\Framework\View;
 
-use Magento\Framework\Component\ComponentRegistrar;
-
 /**
  * Tests for the view layer fallback mechanism
- * @magentoDataFixture Magento/Theme/Model/_files/design/themes.php
+ * @magentoComponentsDir Magento/Theme/Model/_files/design
  */
 class FileSystemTest extends \PHPUnit_Framework_TestCase
 {
@@ -46,12 +44,11 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
         $this->_testExpectedVersusActualFilename($expected, $actual);
     }
 
+    /**
+     * @magentoComponentsDir Magento/Framework/View/_files/Fixture_Module
+     */
     public function testGetViewFile()
     {
-        $componentRegistrar = new ComponentRegistrar();
-        if ($componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Fixture_Module') === null) {
-            ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Fixture_Module', __DIR__);
-        }
         $expected = '%s/frontend/Vendor/custom_theme/Fixture_Module/web/fixture_script.js';
         $params = ['theme' => 'Vendor_FrameworkThemeTest/custom_theme'];
         $actual = $this->_model->getStaticFileName('Fixture_Module::fixture_script.js', $params);
