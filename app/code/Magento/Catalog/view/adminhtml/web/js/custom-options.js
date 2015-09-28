@@ -132,6 +132,9 @@ define([
                         },
                         buttons: [{
                             text: $.mage.__('Import'),
+                            attr: {
+                                id: 'import-custom-options-apply-button'
+                            },
                             'class': 'action-primary action-import import-custom-options-apply-button',
                             click: function (event, massActionTrigger) {
                                 var request = [];
