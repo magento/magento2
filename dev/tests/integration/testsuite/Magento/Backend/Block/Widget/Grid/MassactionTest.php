@@ -11,6 +11,7 @@ namespace Magento\Backend\Block\Widget\Grid;
 /**
  * @magentoAppArea adminhtml
  * @magentoComponentsDir Magento/Backend/Block/_files/design
+ * @magentoDbIsolation enabled
  */
 class MassactionTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,6 +32,11 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\Theme\Model\Theme\Registration $registration */
+        $registration = $objectManager->get(
+            'Magento\Theme\Model\Theme\Registration'
+        );
+        $registration->register();
         $objectManager->get('Magento\Framework\View\DesignInterface')->setDesignTheme('BackendTest/test_default');
         $this->_layout = $objectManager->create(
             'Magento\Framework\View\LayoutInterface',

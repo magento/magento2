@@ -10,6 +10,7 @@ use Magento\Store\Model\ScopeInterface;
 
 /**
  * @magentoComponentsDir Magento/Theme/Model/_files/design
+ * @magentoDbIsolation enabled
  */
 class DesignTest extends \PHPUnit_Framework_TestCase
 {
@@ -53,6 +54,11 @@ class DesignTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\Theme\Model\Theme\Registration $registration */
+        $registration = $objectManager->get(
+            'Magento\Theme\Model\Theme\Registration'
+        );
+        $registration->register();
         $this->_model = $objectManager->create('Magento\\Framework\View\DesignInterface');
         $this->_viewFileSystem = $objectManager->create('Magento\Framework\View\FileSystem');
         $this->_viewConfig = $objectManager->create('Magento\Framework\View\ConfigInterface');

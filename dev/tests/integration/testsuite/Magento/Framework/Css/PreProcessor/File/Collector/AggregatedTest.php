@@ -13,6 +13,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * @magentoComponentsDir Magento/Framework/Css/PreProcessor/_files/code/Magento
+ * @magentoDbIsolation enabled
  */
 class AggregatedTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,6 +39,11 @@ class AggregatedTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\Theme\Model\Theme\Registration $registration */
+        $registration = $this->objectManager->get(
+            'Magento\Theme\Model\Theme\Registration'
+        );
+        $registration->register();
         $this->objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
 
         /** @var \Magento\Framework\Filesystem $filesystem */

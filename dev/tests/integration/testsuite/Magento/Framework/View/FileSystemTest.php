@@ -5,9 +5,12 @@
  */
 namespace Magento\Framework\View;
 
+use \Magento\TestFramework\Helper\Bootstrap;
+
 /**
  * Tests for the view layer fallback mechanism
  * @magentoComponentsDir Magento/Theme/Model/_files/design
+ * @magentoDbIsolation enabled
  */
 class FileSystemTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,12 +21,18 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var \Magento\Theme\Model\Theme\Registration $registration */
+        $registration = $objectManager->get(
+            'Magento\Theme\Model\Theme\Registration'
+        );
+        $registration->register();
+        $objectManager->get('Magento\Framework\App\State')
             ->setAreaCode('frontend');
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $this->_model = $objectManager->create(
             'Magento\Framework\View\FileSystem'
         );
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $objectManager->get(
             'Magento\Framework\View\DesignInterface'
         )->setDesignTheme(
             'Test_FrameworkThemeTest/default'
