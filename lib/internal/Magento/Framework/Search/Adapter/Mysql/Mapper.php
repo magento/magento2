@@ -126,12 +126,6 @@ class Mapper
             $queryContainer
         );
 
-        $filtersCount = $queryContainer->getFiltersCount();
-        if ($filtersCount > 1) {
-            $select->group('entity_id');
-            $select->having('COUNT(DISTINCT search_index.attribute_id) = ' . $filtersCount);
-        }
-
         $select = $this->addMatchQueries(
             $request,
             $queryContainer->getDerivedQueries(),
@@ -274,11 +268,6 @@ class Mapper
         foreach ($subQueryList as $subQuery) {
             $select = $this->processQuery($scoreBuilder, $subQuery, $select, $conditionType, $queryContainer);
         }
-        $filters = $queryContainer->getFilters();
-        if ($filters) {
-            $select->where('(' . implode(' OR ', $filters) . ')');
-            $queryContainer->clearFilters();
-        }
         return $select;
     }
 
@@ -312,7 +301,7 @@ class Mapper
                 $scoreBuilder->endQuery($query->getBoost());
                 break;
             case FilterQuery::REFERENCE_FILTER:
-                $filterCondition = $this->filterBuilder->build($query->getReference(), $conditionType, $queryContainer);
+                $filterCondition = $this->filterBuilder->build($query->getReference(), $conditionType);
                 if ($filterCondition) {
                     $select->where($filterCondition);
                 }

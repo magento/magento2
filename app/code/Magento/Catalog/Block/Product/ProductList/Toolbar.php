@@ -376,7 +376,7 @@ class Toolbar extends \Magento\Framework\View\Element\Template
     {
         $urlParams = [];
         $urlParams['_current'] = true;
-        $urlParams['_escape'] = true;
+        $urlParams['_escape'] = false;
         $urlParams['_use_rewrite'] = true;
         $urlParams['_query'] = $params;
         return $this->getUrl('*/*/*', $urlParams);
