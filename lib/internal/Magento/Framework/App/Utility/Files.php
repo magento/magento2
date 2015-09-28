@@ -215,7 +215,7 @@ class Files
                 $libraryExcludeDirs[] = str_replace('\\', '/', '#' . $libraryDir . '/Test#');
                 $libraryExcludeDirs[] = str_replace('\\', '/', '#' . $libraryDir) . '/[\\w]+/Test#';
                 if (!($flags & self::INCLUDE_NON_CLASSES)) {
-                    $libraryExcludeDirs[] = str_replace('\\', '/', '#' . $libraryDir . '/registration.php#');
+                    $libraryExcludeDirs[] = str_replace('\\', '/', '#' . $libraryDir . '/registration#');
                 }
             }
             return $this->getFilesSubset(
