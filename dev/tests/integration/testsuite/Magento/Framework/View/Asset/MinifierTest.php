@@ -13,6 +13,7 @@ use Magento\Framework\App\State as AppState;
  * Tests for minifier
  *
  * @magentoComponentsDir Magento/Framework/View/_files/static/theme
+ * @magentoDbIsolation enabled
  */
 class MinifierTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,6 +39,11 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->objectManager = Bootstrap::getInstance()->getObjectManager();
+        /** @var \Magento\Theme\Model\Theme\Registration $registration */
+        $registration = $this->objectManager->get(
+            'Magento\Theme\Model\Theme\Registration'
+        );
+        $registration->register();
         /** @var \Magento\TestFramework\App\State $appState */
         $appState = $this->objectManager->get('Magento\TestFramework\App\State');
         $this->origMode = $appState->getMode();

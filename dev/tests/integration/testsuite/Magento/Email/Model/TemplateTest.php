@@ -147,6 +147,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @dataProvider templateFallbackDataProvider
      */
     public function testTemplateFallback($area, $templateId, $expectedOutput, $mockThemeFallback = false)
@@ -215,6 +216,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @dataProvider templateDirectiveDataProvider
      *
      * @param string $area
@@ -345,6 +347,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @dataProvider templateStylesVariableDataProvider
      *
      * @param string $area
@@ -458,6 +461,11 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $themes = [BackendFrontNameResolver::AREA_CODE => 'Vendor_EmailTest/custom_theme'];
         $design = $this->objectManager->create('Magento\Theme\Model\View\Design', ['themes' => $themes]);
         $this->objectManager->addSharedInstance($design, 'Magento\Theme\Model\View\Design');
+        /** @var \Magento\Theme\Model\Theme\Registration $registration */
+        $registration = $this->objectManager->get(
+            'Magento\Theme\Model\Theme\Registration'
+        );
+        $registration->register();
 
         // The Vendor_EmailTest/custom_theme adminhtml theme is set in the
         // dev/tests/integration/testsuite/Magento/Email/Model/_files/design/themes.php file, as it must be set
@@ -483,6 +491,12 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUpThemeFallback($area)
     {
+        /** @var \Magento\Theme\Model\Theme\Registration $registration */
+        $registration = $this->objectManager->get(
+            'Magento\Theme\Model\Theme\Registration'
+        );
+        $registration->register();
+
         // It is important to test from both areas, as emails will get sent from both, so we need to ensure that the
         // inline CSS files get loaded properly from both areas.
         Bootstrap::getInstance()->loadArea($area);
