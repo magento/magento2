@@ -36,7 +36,7 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
         if ($applyTaxAfterDiscount) {
             $deltaRoundingType = self::KEY_TAX_BEFORE_DISCOUNT_DELTA_ROUNDING;
         }
-        $rowTax = $this->roundAmount($rowTaxExact, $rate, true, $deltaRoundingType, $round);
+        $rowTax = $this->roundAmount($rowTaxExact, $rate, true, $deltaRoundingType, $round, $item);
         $rowTotal = $rowTotalInclTax - $rowTax;
         $price = $rowTotal / $quantity;
         if ($round) {
@@ -58,7 +58,8 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
                 $rate,
                 true,
                 self::KEY_REGULAR_DELTA_ROUNDING,
-                $round
+                $round,
+                $item
             );
             // Set discount tax compensation
             $discountTaxCompensationAmount = $rowTax - $rowTaxAfterDiscount;
@@ -67,7 +68,6 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
 
         // Calculate applied taxes
         /** @var  \Magento\Tax\Api\Data\AppliedTaxInterface[] $appliedTaxes */
-        $appliedTaxes = [];
         $appliedRates = $this->calculationTool->getAppliedRates($taxRateRequest);
         $appliedTaxes = $this->getAppliedTaxes($rowTax, $rate, $appliedRates);
 
@@ -115,7 +115,7 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
             if ($applyTaxAfterDiscount) {
                 $deltaRoundingType = self::KEY_TAX_BEFORE_DISCOUNT_DELTA_ROUNDING;
             }
-            $rowTaxPerRate = $this->roundAmount($rowTaxPerRate, $taxId, false, $deltaRoundingType, $round);
+            $rowTaxPerRate = $this->roundAmount($rowTaxPerRate, $taxId, false, $deltaRoundingType, $round, $item);
             $rowTaxAfterDiscount = $rowTaxPerRate;
 
             //Handle discount
@@ -133,7 +133,8 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
                     $taxId,
                     false,
                     self::KEY_REGULAR_DELTA_ROUNDING,
-                    $round
+                    $round,
+                    $item
                 );
             }
             $appliedTaxes[$taxId] = $this->getAppliedTax(
@@ -181,6 +182,7 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
         $rate = null,
         $direction = null,
         $type = self::KEY_REGULAR_DELTA_ROUNDING,
-        $round = true
+        $round = true,
+        $item = null
     );
 }
