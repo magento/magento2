@@ -55,7 +55,7 @@ class Radios extends AbstractElement
     protected function _optionToHtml($option, $selected)
     {
         $html = '<div class="admin__field admin__field-option">';
-        $html .= '<input type="radio"' . $this->serialize(['name', 'class', 'style']);
+        $html .= '<input type="radio"' . $this->getRadioButtonAttributes($option);
         if (is_array($option)) {
             $html .= 'value="' . $this->_escape(
                 $option['value']
@@ -87,5 +87,29 @@ class Radios extends AbstractElement
         }
         $html .= '</div>';
         return $html;
+    }
+
+    /**
+     * @return array
+     */
+    public function getHtmlAttributes()
+    {
+        return array_merge(parent::getHtmlAttributes(), ['name']);
+    }
+
+    /**
+     * @param array $option
+     * @return string
+     */
+    protected function getRadioButtonAttributes($option)
+    {
+        $html = '';
+        foreach ($this->getHtmlAttributes() as $attribute) {
+            if ($value = $this->getDataUsingMethod($attribute, $option['value'])) {
+                $html .= ' ' . $attribute . '="' . $value . '" ';
+            }
+        }
+        return $html;
+
     }
 }
