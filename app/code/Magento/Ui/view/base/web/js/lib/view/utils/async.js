@@ -86,14 +86,13 @@ define([
                 data.ctx = ctx;
             } else {
                 data.component = ctx;
+                data.ctx = '*';
             }
         } else {
             data = _.isString(selector) ?
                 parseSelector(selector) :
                 selector;
         }
-
-        data.ctx = data.ctx || '*';
 
         return data;
     }
@@ -127,7 +126,8 @@ define([
      */
     function setRootListener(data, component) {
         boundedNodes.get(component, function (root) {
-            if (!$(root).is(data.ctx)) {
+            var ctx = data.ctx || '*'
+            if (!$(root).is(data.ctx || '*')) {
                 return;
             }
 
@@ -182,9 +182,11 @@ define([
             domObserver.get(data.selector, data.fn, data.ctx);
         }
     };
+
     /*eslint-enable no-unused-vars*/
 
     _.extend($.async, {
+
         /*eslint-disable no-unused-vars*/
         /**
          * Returns collection of elements found by provided selector data.
@@ -215,6 +217,7 @@ define([
                 $(data.selector, nodes).toArray() :
                 nodes;
         },
+
         /*eslint-enable no-unused-vars*/
 
         /**
