@@ -37,6 +37,12 @@
                         <argument name="class" xsi:type="string">ajax</argument>
                     </arguments>
                 </block>
+                <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Inventory" name="product_tabs.advanced-inventory" as="advanced-inventory">
+                    <arguments>
+                        <argument name="label" xsi:type="string" translate="true">Advanced Inventory</argument>
+                        <argument name="group_code" xsi:type="string">advanced</argument>
+                    </arguments>
+                </block>
                 <block class="Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Alerts" name="product_tabs.product-alerts" as="product-alerts">
                     <arguments>
                         <argument name="label" xsi:type="string" translate="true">Product Alerts</argument>

@@ -70,25 +70,33 @@ class QuoteAdapter implements OrderAdapterInterface
     /**
      * Returns billing address
      *
-     * @return AddressAdapterInterface
+     * @return AddressAdapterInterface|null
      */
     public function getBillingAddress()
     {
-        return $this->addressAdapterFactory->create(
-            ['address' => $this->quote->getBillingAddress()]
-        );
+        if ($this->quote->getBillingAddress()) {
+            return $this->addressAdapterFactory->create(
+                ['address' => $this->quote->getBillingAddress()]
+            );
+        }
+
+        return null;
     }
 
     /**
      * Returns shipping address
      *
-     * @return AddressAdapterInterface
+     * @return AddressAdapterInterface|null
      */
     public function getShippingAddress()
     {
-        return $this->addressAdapterFactory->create(
-            ['address' => $this->quote->getShippingAddress()]
-        );
+        if ($this->quote->getShippingAddress()) {
+            return $this->addressAdapterFactory->create(
+                ['address' => $this->quote->getShippingAddress()]
+            );
+        }
+
+        return null;
     }
 
     /**

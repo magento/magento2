@@ -201,26 +201,6 @@ class Config extends Widget implements TabInterface
     }
 
     /**
-     * Retrieve Grid child HTML
-     *
-     * @return string
-     */
-    public function getGridHtml()
-    {
-        return $this->getChildHtml('grid');
-    }
-
-    /**
-     * Retrieve Grid JavaScript object name
-     *
-     * @return string
-     */
-    public function getGridJsObject()
-    {
-        return $this->getChildBlock('grid')->getJsObjectName();
-    }
-
-    /**
      * Retrieve Tab label
      *
      * @return \Magento\Framework\Phrase
@@ -300,5 +280,13 @@ class Config extends Widget implements TabInterface
     public function getNoImageUrl()
     {
         return $this->image->getDefaultPlaceholderUrl('thumbnail');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isConfigurableProduct()
+    {
+        return $this->getProduct()->getTypeId() === Configurable::TYPE_CODE || $this->getRequest()->has('attributes');
     }
 }
