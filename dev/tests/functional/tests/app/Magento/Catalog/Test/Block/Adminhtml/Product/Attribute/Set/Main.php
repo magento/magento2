@@ -123,7 +123,10 @@ class Main extends Block
     public function addAttributeSetGroup($groupName)
     {
         $this->_rootElement->find($this->addGroupButton)->click();
-        $this->browser->setAlertText($groupName);
-        $this->browser->acceptAlert();
+        $element = $this->browser->find('.prompt._show[data-role=modal]');
+        /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
+        $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $element]);
+        $modal->setAlertText($groupName);
+        $modal->acceptAlert();
     }
 }
