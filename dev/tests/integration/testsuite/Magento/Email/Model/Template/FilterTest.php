@@ -93,6 +93,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @dataProvider layoutDirectiveDataProvider
      *
      * @param string $area
@@ -101,6 +102,11 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     public function testLayoutDirective($area, $directiveParams, $expectedOutput)
     {
+        /** @var \Magento\Theme\Model\Theme\Registration $registration */
+        $registration = $this->objectManager->get(
+            'Magento\Theme\Model\Theme\Registration'
+        );
+        $registration->register();
         $this->model = $this->objectManager->create('Magento\Email\Model\Template\Filter');
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea($area);
         /** @var $layout \Magento\Framework\View\LayoutInterface */
@@ -200,6 +206,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @dataProvider cssDirectiveDataProvider
      *
      * @param int $templateType
@@ -208,6 +215,11 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     public function testCssDirective($templateType, $directiveParams, $expectedOutput)
     {
+        /** @var \Magento\Theme\Model\Theme\Registration $registration */
+        $registration = $this->objectManager->get(
+            'Magento\Theme\Model\Theme\Registration'
+        );
+        $registration->register();
         $this->setUpDesignParams();
         $this->model->setStoreId('fixturestore')
             ->setPlainTemplateMode($templateType == TemplateTypesInterface::TYPE_TEXT);
@@ -272,6 +284,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @dataProvider inlinecssDirectiveDataProvider
      *
      * @param string $templateText
@@ -287,6 +300,11 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $plainTemplateMode = false,
         $isChildTemplateMode = false
     ) {
+        /** @var \Magento\Theme\Model\Theme\Registration $registration */
+        $registration = $this->objectManager->get(
+            'Magento\Theme\Model\Theme\Registration'
+        );
+        $registration->register();
         $this->setUpDesignParams();
 
         $this->model->setPlainTemplateMode($plainTemplateMode);
@@ -352,12 +370,18 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
      * @magentoComponentsDir Magento/Email/Model/_files/design
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @dataProvider inlinecssDirectiveThrowsExceptionWhenMissingParameterDataProvider
      *
      * @param string $templateText
      */
     public function testInlinecssDirectiveThrowsExceptionWhenMissingParameter($templateText)
     {
+        /** @var \Magento\Theme\Model\Theme\Registration $registration */
+        $registration = $this->objectManager->get(
+            'Magento\Theme\Model\Theme\Registration'
+        );
+        $registration->register();
         $this->setUpDesignParams();
 
         $this->model->filter($templateText);

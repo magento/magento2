@@ -14,6 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * Factory Test
  * @magentoComponentsDir Magento/Framework/View/_files/fallback
+ * @magentoDbIsolation enabled
  */
 class RulePoolTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,9 +30,15 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->model = Bootstrap::getObjectManager()->create('Magento\Framework\View\Design\Fallback\RulePool');
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var \Magento\Theme\Model\Theme\Registration $registration */
+        $registration = $objectManager->get(
+            'Magento\Theme\Model\Theme\Registration'
+        );
+        $registration->register();
+        $this->model = $objectManager->create('Magento\Framework\View\Design\Fallback\RulePool');
         /** @var \Magento\Theme\Model\Resource\Theme\Collection $collection */
-        $collection = Bootstrap::getObjectManager()->create('Magento\Theme\Model\Resource\Theme\Collection');
+        $collection = $objectManager->create('Magento\Theme\Model\Resource\Theme\Collection');
         /** @var \Magento\Theme\Model\Theme $theme */
         $theme = $collection->getThemeByFullPath('frontend/Vendor_ViewTest/custom_theme');
 

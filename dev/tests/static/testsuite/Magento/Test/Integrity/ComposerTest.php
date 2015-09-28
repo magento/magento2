@@ -170,7 +170,7 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
                 break;
             case 'magento2-library':
                 $this->assertDependsOnPhp($json->require);
-                $this->assertRegExp('/^magento\/framework$/', $json->name);
+                $this->assertRegExp('/^magento\/framework*/', $json->name);
                 $this->assertRequireInSync($json);
                 break;
             case 'project':
