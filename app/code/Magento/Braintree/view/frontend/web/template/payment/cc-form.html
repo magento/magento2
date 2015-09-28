@@ -62,9 +62,6 @@
                 <div>&nbsp;</div>
                 <!-- /ko -->
                 <div class="field type required" data-bind="visible: isCcFormShown">
-                    <label data-bind="attr: {for: getCode() + '_cc_type'}" class="label">
-                        <span><!-- ko i18n: 'Credit Card Type'--><!-- /ko --></span>
-                    </label>
                     <div class="control">
                         <!-- ko if: (!isCcDetectionEnabled())-->
                         <select name="payment[cc_type]" class="select"
