@@ -39,11 +39,12 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
                                 '<div class="no-display" id="[[idName]]-template-progress">' +
                                 '<%- data.percent %>% <%- data.uploaded %> / <%- data.total %>' +
                                 '</div>';
-
+    
     var fileListTemplate = '<span class="file-info">' +
                                 '<span class="file-info-name"><%= data.name %></span>' +
                                 ' ' +
                                 '<span class="file-info-size">(<%- data.size %>)</span>' +
+                            '</span>';
     jQuery('[data-action=change-type-product]').on('change', function () {
         jQuery(document).trigger('typeSwitcher');
     });
@@ -218,8 +219,11 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
     <?php /* @escapeNotVerified */ echo $block->getUiId('tab', 'content', $block->getId()) ?>
 >
 <div id="alert_messages_block"><?php echo $block->getMessageHtml() ?></div>
-<div>
-    <label><?= __('Is this downloadable Product?'); ?> <input data-action="change-type-product" type="checkbox"/></label>
+<div class="admin__field admin__field-option admin__field-is-downloaodable">
+    <input type="checkbox" data-action="change-type-product"  class="admin__control-checkbox" name="product[product_has_weight]" id="is-downloaodable">
+    <label class="admin__field-label" for="is-downloaodable">
+        <span><?= __('Is this downloadable Product?'); ?></span>
+    </label>
 </div>
 <div class="entry-edit" id="product_info_tabs_downloadable_items">
     <?php echo $block->getChildHtml() ?>
