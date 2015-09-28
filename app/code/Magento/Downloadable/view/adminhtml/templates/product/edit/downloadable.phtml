@@ -44,7 +44,9 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
                                 '<span class="file-info-name"><%= data.name %></span>' +
                                 ' ' +
                                 '<span class="file-info-size">(<%- data.size %>)</span>' +
-                            '</span>';
+    jQuery('[data-action=change-type-product]').on('change', function () {
+        jQuery(document).trigger('typeSwitcher');
+    });
 
     window.Downloadable = {
         uploaderObj : $H({}),
@@ -212,7 +214,7 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
 >
 <div id="alert_messages_block"><?php echo $block->getMessageHtml() ?></div>
 <div>
-    <label><?= __('Is this downloadable Product?'); ?> <input type="checkbox"/></label>
+    <label><?= __('Is this downloadable Product?'); ?> <input data-action="change-type-product" type="checkbox"/></label>
 </div>
 <div class="entry-edit" id="product_info_tabs_downloadable_items">
     <?php echo $block->getChildHtml() ?>
