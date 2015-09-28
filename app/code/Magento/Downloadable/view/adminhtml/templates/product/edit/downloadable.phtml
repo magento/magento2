@@ -38,15 +38,39 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
                             '</div>' +
                                 '<div class="no-display" id="[[idName]]-template-progress">' +
                                 '<%- data.percent %>% <%- data.uploaded %> / <%- data.total %>' +
-                                '</div>';
+                                '</div>',
     
-    var fileListTemplate = '<span class="file-info">' +
+    fileListTemplate = '<span class="file-info">' +
                                 '<span class="file-info-name"><%= data.name %></span>' +
                                 ' ' +
                                 '<span class="file-info-size">(<%- data.size %>)</span>' +
-                            '</span>';
-    jQuery('[data-action=change-type-product]').on('change', function () {
-        jQuery(document).trigger('typeSwitcher');
+                            '</span>',
+    downloadableCheckbox = $('[data-action=change-type-product]'),
+    toggleTab = function (showTab) {
+        showTab = showTab === undefined ? <?= $block->isDownloadable() ? 'true' : 'false' ?> : showTab;
+        console.log('toggleTab');
+        console.log(showTab);
+        if ($('[data-tab=<?= $block->getTabId()?>]').data('collapsible')) {
+            $('[data-tab=<?= $block->getTabId()?>]').collapsible(showTab ? 'activate' : 'deactivate');
+        } else {
+            $('[data-tab=<?= $block->getTabId()?>]').on('collapsiblecreated', function() {
+                $(this).collapsible(showTab ? 'activate' : 'deactivate');
+            });
+        }
+    };
+
+    downloadableCheckbox.on('change', function () {
+        if ($(this).is(':checked')) {
+            toggleTab(true);
+        }
+        $(document).trigger('typeSwitcherOut');
+    });
+
+    $(document).on('typeSwitcher', function (event, data) {
+        downloadableCheckbox.attr('checked', !data.hasWeight);
+        if (!data.hasWeight) {
+            toggleTab(true);
+        }
     });
 
     window.Downloadable = {
@@ -205,11 +229,6 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
     window.alertAlreadyDisplayed = alertAlreadyDisplayed;
 
     registry.set('downloadable', Downloadable);
-
-    $('[data-tab=<?= $block->getTabId()?>]')
-        .on('collapsiblecreated', function() {
-            $(this).collapsible('<?= $block->isDownloadable() ? 'activate' : 'deactivate' ?>');
-        });
 //]]>
 
 });
@@ -220,7 +239,8 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
 >
 <div id="alert_messages_block"><?php echo $block->getMessageHtml() ?></div>
 <div class="admin__field admin__field-option admin__field-is-downloaodable">
-    <input type="checkbox" data-action="change-type-product"  class="admin__control-checkbox" name="product[product_has_weight]" id="is-downloaodable">
+    <input type="checkbox" data-action="change-type-product"  class="admin__control-checkbox"
+           name="product[product_has_weight]" id="is-downloaodable" <?= $block->isDownloadable() ? 'checked="checked"' : ''?> />
     <label class="admin__field-label" for="is-downloaodable">
         <span><?= __('Is this downloadable Product?'); ?></span>
     </label>

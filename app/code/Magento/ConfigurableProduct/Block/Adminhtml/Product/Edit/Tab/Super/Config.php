@@ -289,4 +289,13 @@ class Config extends Widget implements TabInterface
     {
         return $this->getProduct()->getTypeId() === Configurable::TYPE_CODE || $this->getRequest()->has('attributes');
     }
+
+    /**
+     * @return $this
+     */
+    protected function _prepareLayout()
+    {
+        $this->setData('opened', $this->isConfigurableProduct());
+        return parent::_prepareLayout();
+    }
 }

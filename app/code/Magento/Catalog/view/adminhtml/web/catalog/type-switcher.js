@@ -60,14 +60,17 @@ define([
                 this.notifyProductWeightIsChanged();
             }.bind(this));
 
-            $(document).on('typeSwitcher', function () {
+            $(document).on('typeSwitcherOut', function () {
                 $('input:not(:checked)', this.$weight_switcher).trigger('click');
             }.bind(this));
 
-            $('input', this.$weight_switcher).on('change click', this.changeType.bind(this)).trigger('change');
+            $('input', this.$weight_switcher).on('change', this.changeType.bind(this)).trigger('change');
         },
 
         changeType: function() {
+            $(document).trigger('typeSwitcher', {
+                hasWeight: this.productHasWeight()
+            });
             if (!this.productHasWeight()) {
                 this.$type.val(this.baseType.virtual).trigger('change');
                 if (this.$type.val() != 'bundle') { // @TODO move this check to Magento_Bundle after refactoring as widget

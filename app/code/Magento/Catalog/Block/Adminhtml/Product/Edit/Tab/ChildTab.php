@@ -46,4 +46,12 @@ class ChildTab extends \Magento\Backend\Block\Template
     {
         return $this->tab->getTabId();
     }
+
+    /**
+     * @return bool
+     */
+    public function isTabOpened()
+    {
+        return (bool)$this->tab->getData('opened');
+    }
 }
