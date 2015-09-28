@@ -10,7 +10,7 @@
 namespace Magento\Framework\Config;
 
 use Magento\Framework\Config\Reader\Xsd\Reader;
-use Magento\Framework\Config\Reader\Xsd\MediaTypeDataExtractorPool;
+use Magento\Framework\Config\Reader\Xsd\Media\TypeDataExtractorPool;
 
 class View extends \Magento\Framework\Config\AbstractXml
 {
@@ -19,6 +19,9 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     protected $xsdReader;
 
+    /*
+     * @var \Magento\Framework\Config\Reader\Xsd\Media\TypeDataExtractorPool
+     */
     protected $extractorPool;
 
     /*
@@ -26,11 +29,17 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     protected $xpath;
 
+    /**
+     * @param array $configFiles
+     * @param array $xpath
+     * @param Reader $xsdReader
+     * @param TypeDataExtractorPool $extractorPool
+     */
     public function __construct(
         $configFiles,
         $xpath = [],
         Reader $xsdReader,
-        MediaTypeDataExtractorPool $extractorPool
+        TypeDataExtractorPool $extractorPool
     ) {
         $this->xsdReader = $xsdReader;
         $this->xpath = $xpath;
@@ -60,10 +69,7 @@ class View extends \Magento\Framework\Config\AbstractXml
     {
         $result = [];
         /** @var $varsNode \DOMElement */
-        foreach (
-            $dom->childNodes->item(0)/*root*/
-            ->childNodes as $childNode
-        ) {
+        foreach ($dom->childNodes->item(0)->childNodes as $childNode) {
             switch ($childNode->tagName) {
                 case 'vars':
                     $moduleName = $childNode->getAttribute('module');
@@ -81,14 +87,9 @@ class View extends \Magento\Framework\Config\AbstractXml
                         $result[$childNode->tagName][$itemType][] = $itemNode->nodeValue;
                     }
                     break;
-                case 'images':
+                default:
                     $imagesNodesArray = $this->extractorPool->nodeProcessor($childNode->tagName)->process($childNode);
                     $result = array_merge($result, $imagesNodesArray);
-                    break;
-                case 'videos':
-                    $videosNodesArray = $this->extractorPool->nodeProcessor($childNode->tagName)->process($childNode);
-                    $result = array_merge($result, $videosNodesArray);
-                    break;
             }
         }
         return $result;

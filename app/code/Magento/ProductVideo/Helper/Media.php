@@ -38,7 +38,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Media type
      */
-    const MEDIA_TYPE = "videos";
+    const MEDIA_TYPE = 'videos';
 
     /**
      * @var ConfigInterface
@@ -103,8 +103,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         );
         if (isset($videoAttributes[self::NODE_CONFIG_PLAY_IF_BASE])) {
             return $videoAttributes[self::NODE_CONFIG_PLAY_IF_BASE];
-        } else {
-            return null;
         }
     }
 
@@ -122,8 +120,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         );
         if (isset($videoAttributes[self::NODE_CONFIG_SHOW_RELATED])) {
             return $videoAttributes[self::NODE_CONFIG_SHOW_RELATED];
-        } else {
-            return null;
         }
     }
 
@@ -141,8 +137,6 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         );
         if (isset($videoAttributes[self::NODE_CONFIG_VIDEO_AUTO_RESTART])) {
             return $videoAttributes[self::NODE_CONFIG_VIDEO_AUTO_RESTART];
-        } else {
-            return null;
         }
     }
 }

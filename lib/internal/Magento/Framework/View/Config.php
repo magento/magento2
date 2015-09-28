@@ -128,7 +128,7 @@ class Config implements \Magento\Framework\View\ConfigInterface
             );
         }
 
-        $config = $this->viewFactory->createView($configFiles);
+        $config = $this->viewFactory->create($configFiles);
 
         $this->viewConfigs[$key] = $config;
         return $config;

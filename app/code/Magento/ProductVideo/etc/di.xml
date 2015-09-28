@@ -33,7 +33,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Config\Reader\Xsd\MediaTypeDataExtractorPool">
+    <type name="Magento\Framework\Config\Reader\Xsd\Media\TypeDataExtractorPool">
         <arguments>
             <argument name="extractors" xsi:type="array">
                 <item name="videos" xsi:type="string">Magento\ProductVideo\Model\VideoExtractor</item>
