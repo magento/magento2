@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Config\Reader\Xsd;
+namespace Magento\Framework\Config\Reader\Xsd\Media;
 
 use Magento\Framework\ObjectManagerInterface;
 
 
-class MediaTypeDataExtractorPool
+class TypeDataExtractorPool
 {
     /**
      * Object manager
@@ -25,12 +25,12 @@ class MediaTypeDataExtractorPool
     protected $extractors = [];
 
     /**
-     * @param @param \Magento\Framework\Config\Reader\Xsd\MediaTypeDataExtractorInterface[] $extractors
      * @param ObjectManagerInterface $objectManager
+     * @param @param \Magento\Framework\Config\Reader\Xsd\MediaTypeDataExtractorInterface[] $extractors
      */
     public function __construct(
-        array $extractors,
-        ObjectManagerInterface $objectManager
+        ObjectManagerInterface $objectManager,
+        array $extractors
     ) {
         $this->extractors = $extractors;
         $this->objectManager = $objectManager;

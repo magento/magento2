@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Swatches\Model;
+namespace Magento\Catalog\Model;
 
 
-class ImageExtractor implements \Magento\Framework\Config\Reader\Xsd\MediaTypeDataExtractorInterface
+class ImageExtractor implements \Magento\Framework\Config\Reader\Xsd\Media\TypeDataExtractorInterface
 {
     /**
      * Extract configuration data of images from the DOM structure

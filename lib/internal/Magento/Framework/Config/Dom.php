@@ -266,10 +266,9 @@ class Dom
     ) {
         libxml_use_internal_errors(true);
         try {
-            if(file_exists($schemaSource)){
+            if (file_exists($schemaSource)) {
                 $result = $dom->schemaValidate($schemaSource);
-            }
-            else{
+            } else {
                 $result = $dom->schemaValidateSource($schemaSource);
             }
             $errors = [];

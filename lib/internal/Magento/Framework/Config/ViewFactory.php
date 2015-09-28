@@ -38,7 +38,7 @@ class ViewFactory
      * @param array $arguments
      * @return \Magento\Framework\Config\View
      */
-    public function createView(array $arguments)
+    public function create(array $arguments)
     {
         return $this->objectManager->create(self::CLASS_NAME, ["configFiles" => $arguments]);
     }

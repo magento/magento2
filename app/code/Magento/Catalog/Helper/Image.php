@@ -14,6 +14,7 @@ use Magento\Framework\App\Helper\AbstractHelper;
  */
 class Image extends AbstractHelper
 {
+    const MEDIA_TYPE = 'images';
     /**
      * Current model
      *
@@ -172,7 +173,7 @@ class Image extends AbstractHelper
 
         $this->attributes = array_merge(
             $attributes,
-            $this->getConfigView()->getMediaAttributes('Magento_Catalog', 'images', $imageId)
+            $this->getConfigView()->getMediaAttributes('Magento_Catalog', self::MEDIA_TYPE, $imageId)
         );
 
         $this->setProduct($product);
