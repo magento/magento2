@@ -67,7 +67,7 @@ require([
         var sampleTemplate = '<tr>'+
             '<td class="col-sort" data-role="draggable-handle">' +
                 '<input data-container="link-order" type="hidden" name="downloadable[sample][<%- data.id %>][sort_order]" value="<%- data.sort_order %>" class="sort" />' +
-                '<span class="draggable-handle" title="<?php $block->escapeHtml(__('Sort Variations')); ?>"></span>' +
+                '<span class="draggable-handle" title="<?= $block->escapeHtml(__('Sort Variations')) ?>"></span>' +
             '</td>'+
             '<td class="col-title">'+
                 '<input type="hidden" class="__delete__" name="downloadable[sample][<%- data.id %>][is_delete]" value="" />'+
@@ -109,7 +109,7 @@ require([
                 '</div>'+
             '</td>'+
             '<td class="col-actions">'+
-                '<button type="button" class="action-delete" title="<?php $block->escapeHtml(__('Delete'); ?></span></button>'+
+                '<button type="button" class="action-delete" title="<?= $block->escapeHtml(__('Delete')); ?>"><span><?php /* @escapeNotVerified */ echo __('Delete'); ?></span></button>'+
             '</td>'+
         '</tr>';
         sampleItems = {
