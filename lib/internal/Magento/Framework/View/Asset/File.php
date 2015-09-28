@@ -6,8 +6,6 @@
 
 namespace Magento\Framework\View\Asset;
 
-use Magento\Framework\View\Asset\ConfigInterface as AssetConfigInterface;
-
 /**
  * A locally available static view file asset that can be referred with a file path
  *
