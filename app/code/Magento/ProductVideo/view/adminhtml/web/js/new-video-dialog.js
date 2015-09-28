@@ -270,7 +270,7 @@ define([
          * @private
          */
         _loadRemotePreview: function(sourceUrl) {
-            this._blockActionButtons(true);
+            this._blockActionButtons(true, true);
             var url = this.options.saveRemoteVideoUrl;
             var self = this;
             $.ajax({
@@ -280,7 +280,7 @@ define([
                 success: $.proxy(function(result) {
                     this._tempPreviewImageData = result;
                     this._getPreviewImage().attr('src', sourceUrl).show();
-                    this._blockActionButtons(false);
+                    this._blockActionButtons(false, true);
                 }, self)
             });
         },
@@ -431,7 +431,7 @@ define([
                 files: file,
                 url: url
             };
-            this._blockActionButtons(true);
+            this._blockActionButtons(true, true);
             this._uploadFile(data, $.proxy(function(result) {
                 this._onImageLoaded(result, file, oldFile, callback);
                 this._blockActionButtons(false);
@@ -546,6 +546,7 @@ define([
                     widget._onGetVideoInformationEditClick();
                     var modalTitleElement = $('.modal-title');
                     if(!file) {
+                        widget._blockActionButtons(true);
                         roles.prop('checked', $('.image.item:not(.removed)').length < 1);
                         modalTitleElement.text($.mage.__('New Video'));
                         widget._isEditPage = false;
@@ -565,7 +566,7 @@ define([
         },
 
         _blockActionButtons: function(status) {
-            $('.page-actions-buttons').find('button').attr('disabled', status);
+            $('.page-actions-buttons').find('button.video-create-button').attr('disabled', status);
         },
 
         /**
