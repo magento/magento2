@@ -21,7 +21,7 @@ class Topmenu extends Template implements IdentityInterface
      *
      * @var array
      */
-    protected $identities = [];
+    protected $identities = ['catalog_top_menu'];
 
     /**
      * Top menu data tree
