@@ -175,6 +175,7 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
      * @param null|bool $direction
      * @param string $type
      * @param bool $round
+     * @param QuoteDetailsItemInterface $item
      * @return float
      */
     abstract protected function roundAmount(
