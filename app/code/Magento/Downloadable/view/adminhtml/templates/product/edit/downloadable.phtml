@@ -10,7 +10,7 @@
 
 <?php
 /**
- * @see \Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable
+ * @var $block \Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable
  */
 ?>
 <script>
@@ -141,7 +141,7 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
             new Downloadable.FileList(this.idName, null);
             <?php endif;?>
         }
-    }
+    };
 
     Downloadable.FileList = Class.create();
     Downloadable.FileList.prototype = {
@@ -193,7 +193,7 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
                 $(this.containerId + '-old').show();
             }.bind(this));
         }
-    }
+    };
 
     var alertAlreadyDisplayed = false;
 
@@ -207,25 +207,31 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
 });
 </script>
 
+<div data-tab-type="tab_content_downloadableInfo" id="<?php /* @escapeNotVerified */ echo $block->getId() ?>_content"
+    <?php /* @escapeNotVerified */ echo $block->getUiId('tab', 'content', $block->getId()) ?>
+>
 <div id="alert_messages_block"><?php echo $block->getMessageHtml() ?></div>
-
-<div class="entry-edit">
-<?php echo $block->getChildHtml('accordion') ?>
+<div>
+    <label><?= __('Is this downloadable Product?'); ?> <input type="checkbox"/></label>
+</div>
+<div class="entry-edit" id="product_info_tabs_downloadable_items">
+    <?php echo $block->getChildHtml() ?>
 </div>
 <div style="display:none">
     <div id="custom-advice-container"></div>
 </div>
 <?php if ($block->isReadonly()): ?>
-<script>
-require(['prototype'], function(){
+    <script>
+        require(['prototype'], function(){
 
-$(<?= /* @escapeNotVerified */  $block->getContentTabId(); ?>).select('input', 'select', 'textarea', 'button').each(function (item){
-    item.disabled = true;
-    if (item.tagName.toLowerCase() == 'button') {
-        item.addClassName('disabled');
-    }
-});
+        $(<?= /* @escapeNotVerified */  $block->getContentTabId(); ?>).select('input', 'select', 'textarea', 'button').each(function (item){
+            item.disabled = true;
+            if (item.tagName.toLowerCase() == 'button') {
+                item.addClassName('disabled');
+            }
+        });
 
-});
-</script>
+        });
+    </script>
 <?php endif; ?>
+</div>

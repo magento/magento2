@@ -42,6 +42,7 @@
                 <table class="admin__control-table">
                     <thead>
                         <tr>
+                            <th class="col-sort"><span><?php /* @escapeNotVerified */ echo __('Sort Order') ?></span></th>
                             <th class="col-title _required"><span><?php /* @escapeNotVerified */ echo __('Title') ?></span></th>
                             <?php if ($block->getCanReadPrice() !== false) : ?>
                                 <th class="col-price"><span><?php /* @escapeNotVerified */ echo __('Price') ?></span></th>
@@ -50,7 +51,6 @@
                             <th class="col-option"><span><?php /* @escapeNotVerified */ echo __('Shareable') ?></span></th>
                             <th class="col-sample"><span><?php /* @escapeNotVerified */ echo __('Sample') ?></span></th>
                             <th class="col-file"><span><?php /* @escapeNotVerified */ echo __('File') ?></span></th>
-                            <th class="col-sort"><span><?php /* @escapeNotVerified */ echo __('Sort Order') ?></span></th>
                             <th class="col-actions">&nbsp;</th>
                         </tr>
                     </thead>
@@ -80,6 +80,11 @@ require([
 ], function(jQuery, registry, mageTemplate){
     registry.get('downloadable', function (Downloadable) {
         var linkTemplate = '<tr>'+
+            '<td class="col-sort" data-role="draggable-handle"><input data-container="link-order" type="hidden" ' +
+            'name="downloadable[link][<%- ' +
+            'data.id' +
+            ' %>][sort_order]" ' +
+            'value="<%- data.sort_order %>" class="input-text admin__control-text sort" />#</td>'+
             '<td class="col-title">'+
                 '<input type="hidden" class="__delete__" name="downloadable[link][<%- data.id %>][is_delete]" value="" />'+
                 '<input type="hidden" name="downloadable[link][<%- data.id %>][link_id]" value="<%- data.link_id %>" />'+
@@ -161,7 +166,6 @@ require([
                     '</div>'+
                 '</div>'+
             '</td>'+
-            '<td class="col-sort"><input type="text" name="downloadable[link][<%- data.id %>][sort_order]" value="<%- data.sort_order %>" class="input-text admin__control-text sort" /></td>'+
             '<td class="col-action">'+
                 '<button id="downloadable_link_<%- data.id %>_delete_button" type="button" class="action-delete"><span><?php /* @escapeNotVerified */ echo __('Delete'); ?></span></button>'+
             '</td>'+
@@ -181,6 +185,7 @@ require([
                     data.link_type = 'file';
                     data.sample_type = 'none';
                     data.number_of_downloads = '<?php /* @escapeNotVerified */ echo $block->getConfigMaxDownloads() ?>';
+                    data.sort_order = this.itemCount + 1;
                 }
 
                 data.id = this.itemCount;
@@ -196,10 +201,9 @@ require([
                     data.sample_file_checked = ' checked="checked"';
                 }
 
-                Element.insert(this.tbody, {
-                    'bottom': this.template({
-                        data: data
-                    })
+
+                var rowElement = Element.insert(this.tbody, {
+                    'bottom': this.template({data: data})
                 });
 
                 scopeTitle = $('downloadable_link_'+data.id+'_title');
@@ -296,6 +300,20 @@ require([
                 this.togglePriceFields();
                 this.bindRemoveButtons();
             },
+            sorting: function () {
+                var list = jQuery(this.tbody);
+                list.sortable({
+                    axis: 'y',
+                    handle: '[data-role=draggable-handle]',
+                    items: 'tr',
+                    update: function (event, data) {
+                        list.find('[data-container=link-order]').each(function (i, el) {
+                            jQuery(el).val(i + 1);
+                        });
+                    },
+                    tolerance: 'pointer'
+                });
+            },
             remove : function(event){
                 var element = $(Event.findElement(event, 'tr'));
                 alertAlreadyDisplayed = false;
@@ -332,8 +350,9 @@ require([
                     elm.disabled = flag;
                 });
             }
-        }
+        };
 
+        linkItems.sorting();
         linkItems.bindRemoveButtons();
 
         linksUploader = function (id, url) {
