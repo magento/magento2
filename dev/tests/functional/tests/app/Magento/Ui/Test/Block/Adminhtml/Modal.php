@@ -40,7 +40,7 @@ class Modal extends Block
      *
      * @var string
      */
-    protected  $inputFieldSelector = '[data-role="promptField"]';
+    protected $inputFieldSelector = '[data-role="promptField"]';
 
     /**
      * Press OK on an alert, confirm, prompt a dialog
