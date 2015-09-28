@@ -95,6 +95,11 @@ class Session extends \Magento\Framework\Session\SessionManager
     protected $groupManagement;
 
     /**
+     * @var \Magento\Framework\App\Response\Http
+     */
+    protected $response;
+
+    /**
      * @param \Magento\Framework\App\Request\Http $request
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\Session\Config\ConfigInterface $sessionConfig
@@ -115,6 +120,7 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param CustomerRepositoryInterface $customerRepository
      * @param GroupManagementInterface $groupManagement
+     * @param \Magento\Framework\App\Response\Http $response
      * @throws \Magento\Framework\Exception\SessionException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -138,7 +144,8 @@ class Session extends \Magento\Framework\Session\SessionManager
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\App\Http\Context $httpContext,
         CustomerRepositoryInterface $customerRepository,
-        GroupManagementInterface $groupManagement
+        GroupManagementInterface $groupManagement,
+        \Magento\Framework\App\Response\Http $response
     ) {
         $this->_coreUrl = $coreUrl;
         $this->_customerUrl = $customerUrl;
@@ -162,6 +169,7 @@ class Session extends \Magento\Framework\Session\SessionManager
             $appState
         );
         $this->groupManagement = $groupManagement;
+        $this->response = $response;
         $this->_eventManager->dispatch('customer_session_init', ['customer_session' => $this]);
     }
 
@@ -460,18 +468,17 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * Authenticate controller action by login customer
      *
-     * @param   ActionInterface $action
      * @param   bool|null $loginUrl
      * @return  bool
      */
-    public function authenticate(ActionInterface $action, $loginUrl = null)
+    public function authenticate($loginUrl = null)
     {
         if ($this->isLoggedIn()) {
             return true;
         }
         $this->setBeforeAuthUrl($this->_createUrl()->getUrl('*/*/*', ['_current' => true]));
         if (isset($loginUrl)) {
-            $action->getResponse()->setRedirect($loginUrl);
+            $this->response->setRedirect($loginUrl);
         } else {
             $arguments = $this->_customerUrl->getLoginUrlParams();
             if ($this->_session->getCookieShouldBeReceived() && $this->_createUrl()->getUseSession()) {
@@ -481,7 +488,7 @@ class Session extends \Magento\Framework\Session\SessionManager
                     ]
                 ];
             }
-            $action->getResponse()->setRedirect(
+            $this->response->setRedirect(
                 $this->_createUrl()->getUrl(\Magento\Customer\Model\Url::ROUTE_ACCOUNT_LOGIN, $arguments)
             );
         }

@@ -40,8 +40,8 @@ class PostHelper extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getPostData($url, array $data = [])
     {
-        if (!isset($data[\Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED])) {
-            $data[\Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED] = $this->urlHelper->getEncodedUrl();
+        if (!isset($data[\Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED])) {
+            $data[\Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED] = $this->urlHelper->getEncodedUrl();
         }
         return json_encode(['action' => $url, 'data' => $data]);
     }

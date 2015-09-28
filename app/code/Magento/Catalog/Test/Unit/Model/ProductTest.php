@@ -1407,4 +1407,19 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->productTypeInstanceMock->expects($this->never())->method('priceFactory');
         $this->assertEquals($finalPrice, $this->model->getFinalPrice($qty));
     }
+
+    public function testGetTypeId()
+    {
+        $productType = $this->getMockBuilder('Magento\Catalog\Model\Product\Type\Virtual')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->productTypeInstanceMock->expects($this->exactly(2))->method('factory')->will(
+            $this->returnValue($productType)
+        );
+
+        $this->model->getTypeInstance();
+        $this->model->setTypeId('typeId');
+        $this->model->getTypeInstance();
+    }
 }

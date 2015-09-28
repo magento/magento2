@@ -85,6 +85,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      *
      * @param bool $value
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setIsStoreFilterWithAdmin($value)
     {

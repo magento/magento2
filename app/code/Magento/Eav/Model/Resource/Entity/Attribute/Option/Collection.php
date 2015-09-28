@@ -38,6 +38,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param mixed $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -73,6 +74,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      *
      * @param int $setId
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setAttributeFilter($setId)
     {
@@ -132,6 +134,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      *
      * @param int|array $optionId
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setIdFilter($optionId)
     {

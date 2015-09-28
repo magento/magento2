@@ -42,6 +42,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param mixed $connection
      * @param AbstractDb $resource
+     * @codeCoverageIgnore
      */
     public function __construct(
         EntityFactory $entityFactory,
@@ -60,6 +61,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * Initialize collection model
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -85,6 +87,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      * Set order by fieldset sort order
      *
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setSortOrder()
     {
@@ -110,6 +113,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      *
      * @param int $storeId
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setStoreId($storeId)
     {

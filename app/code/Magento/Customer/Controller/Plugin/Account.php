@@ -50,7 +50,7 @@ class Account
         $pattern = '/^(' . implode('|', $this->allowedActions) . ')$/i';
 
         if (!preg_match($pattern, $action)) {
-            if (!$this->session->authenticate($subject)) {
+            if (!$this->session->authenticate()) {
                 $subject->getActionFlag()->set('', ActionInterface::FLAG_NO_DISPATCH, true);
             }
         } else {

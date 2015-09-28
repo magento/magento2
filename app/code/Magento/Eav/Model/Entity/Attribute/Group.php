@@ -27,6 +27,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Resource initialization
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -37,6 +38,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Checks if current attribute group exists
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function itemExists()
     {
@@ -47,6 +49,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Delete groups
      *
      * @return $this
+     * @codeCoverageIgnore
      */
     public function deleteGroups()
     {

@@ -16,14 +16,14 @@ use Magento\Framework\App\RequestInterface;
 class PurgeCache
 {
     /**
-     * @var Uri
+     * @var UriFactory
      */
-    protected $uri;
+    protected $uriFactory;
 
     /**
-     * @var Socket
+     * @var SocketFactory
      */
-    protected $socketAdapter;
+    protected $socketAdapterFactory;
 
     /**
      * @var InvalidateLogger
@@ -45,21 +45,21 @@ class PurgeCache
     /**
      * Constructor
      *
-     * @param Uri $uri
-     * @param Socket $socketAdapter
+     * @param UriFactory $uriFactory
+     * @param SocketFactory $socketAdapterFactory
      * @param InvalidateLogger $logger
      * @param Reader $configReader
      * @param RequestInterface $request
      */
     public function __construct(
-        Uri $uri,
-        Socket $socketAdapter,
+        UriFactory $uriFactory,
+        SocketFactory $socketAdapterFactory,
         InvalidateLogger $logger,
         DeploymentConfig $config,
         RequestInterface $request
     ) {
-        $this->uri = $uri;
-        $this->socketAdapter = $socketAdapter;
+        $this->uriFactory = $uriFactory;
+        $this->socketAdapterFactory = $socketAdapterFactory;
         $this->logger = $logger;
         $this->config = $config;
         $this->request = $request;
@@ -74,24 +74,26 @@ class PurgeCache
      */
     public function sendPurgeRequest($tagsPattern)
     {
+        $uri = $this->uriFactory->create();
+        $socketAdapter = $this->socketAdapterFactory->create();
         $servers = $this->config->get(ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS)
             ?: [['host' => $this->request->getHttpHost()]];
         $headers = ['X-Magento-Tags-Pattern' => $tagsPattern];
-        $this->socketAdapter->setOptions(['timeout' => 10]);
+        $socketAdapter->setOptions(['timeout' => 10]);
         foreach ($servers as $server) {
             $port = isset($server['port']) ? $server['port'] : self::DEFAULT_PORT;
-            $this->uri->setScheme('http')
+            $uri->setScheme('http')
                 ->setHost($server['host'])
                 ->setPort($port);
             try {
-                $this->socketAdapter->connect($server['host'], $port);
-                $this->socketAdapter->write(
+                $socketAdapter->connect($server['host'], $port);
+                $socketAdapter->write(
                     'PURGE',
-                    $this->uri,
+                    $uri,
                     '1.1',
                     $headers
                 );
-                $this->socketAdapter->close();
+                $socketAdapter->close();
             } catch (Exception $e) {
                 $this->logger->critical($e->getMessage(), compact('server', 'tagsPattern'));
             }

@@ -15,6 +15,7 @@ class AgreementsValidator implements \Magento\Checkout\Api\AgreementsValidatorIn
 
     /**
      * @param AgreementsProviderInterface[] $list
+     * @codeCoverageIgnore
      */
     public function __construct($list = null)
     {

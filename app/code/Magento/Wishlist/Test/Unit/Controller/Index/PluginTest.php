@@ -90,7 +90,6 @@ class PluginTest extends \PHPUnit_Framework_TestCase
         $this->customerSession
             ->expects($this->once())
             ->method('authenticate')
-            ->with($indexController)
             ->willReturn(false);
 
         $this->redirector
