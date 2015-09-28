@@ -48,6 +48,7 @@ class Registration extends \Magento\Framework\View\Element\Template
      * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param \Magento\Sales\Model\Order\Address\Validator $addressValidator
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         Template\Context $context,
@@ -72,6 +73,7 @@ class Registration extends \Magento\Framework\View\Element\Template
      * Retrieve current email address
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getEmailAddress()
     {
@@ -82,6 +84,7 @@ class Registration extends \Magento\Framework\View\Element\Template
      * Retrieve account creation url
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getCreateAccountUrl()
     {

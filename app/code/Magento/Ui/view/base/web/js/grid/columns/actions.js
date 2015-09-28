@@ -2,6 +2,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'underscore',
     'mageUtils',
@@ -35,7 +36,7 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe('actions opened');
+                .observe('actions');
 
             return this;
         },
@@ -146,13 +147,7 @@ define([
          */
         applyAction: function (actionIndex, rowIndex) {
             var action = this.getAction(rowIndex, actionIndex),
-                callback;
-
-            if (!action.href && !action.callback) {
-                return this;
-            }
-
-            callback = this._getCallback(action);
+                callback = this._getCallback(action);
 
             action.confirm ?
                 this._confirm(action, callback) :
@@ -249,37 +244,16 @@ define([
         },
 
         /**
-         * Opens or closes specific actions list.
+         * Checks if specified action requires a handler function.
          *
-         * @param {Number} rowIndex - Index of a row,
-         *      where actions are displayed.
-         * @returns {ActionsColumn} Chainable.
+         * @param {String} actionIndex - Actions' identifier.
+         * @param {Number} rowIndex - Index of a row.
+         * @returns {Boolean}
          */
-        toggleList: function (rowIndex) {
-            var state = false;
+        isHandlerRequired: function (actionIndex, rowIndex) {
+            var action = this.getAction(rowIndex, actionIndex);
 
-            if (rowIndex !== this.opened()) {
-                state = rowIndex;
-            }
-
-            this.opened(state);
-
-            return this;
-        },
-
-        /**
-         * Closes actions list.
-         *
-         * @param {Number} rowIndex - Index of a row,
-         *      where actions are displayed.
-         * @returns {ActionsColumn}
-         */
-        closeList: function (rowIndex) {
-            if (this.opened() === rowIndex) {
-                this.opened(false);
-            }
-
-            return this;
+            return _.isObject(action.callback) || action.confirm || !action.href;
         }
     });
 });
