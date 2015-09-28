@@ -45,4 +45,13 @@ class AssociatedProducts extends \Magento\Backend\Block\Catalog\Product\Tab\Cont
     {
         return true;
     }
+
+    /**
+     * @return $this
+     */
+    protected function _prepareLayout()
+    {
+        $this->setData('opened', true);
+        return $this;
+    }
 }
