@@ -129,15 +129,18 @@ class Dom
         /* Update matched node attributes and value */
         if ($matchedNode) {
             //different node type
-            if ($this->_typeAttributeName && $node->hasAttribute(
-                $this->_typeAttributeName
-            ) && $matchedNode->hasAttribute(
-                $this->_typeAttributeName
-            ) && $node->getAttribute(
-                $this->_typeAttributeName
-            ) !== $matchedNode->getAttribute(
-                $this->_typeAttributeName
-            )
+            if ($this->_typeAttributeName
+                && $node->hasAttribute(
+                    $this->_typeAttributeName
+                )
+                && $matchedNode->hasAttribute(
+                    $this->_typeAttributeName
+                )
+                && $node->getAttribute(
+                    $this->_typeAttributeName
+                ) !== $matchedNode->getAttribute(
+                    $this->_typeAttributeName
+                )
             ) {
                 $parentMatchedNode = $this->_getMatchedNode($parentPath);
                 $newNode = $this->_dom->importNode($node, true);
@@ -225,7 +228,8 @@ class Dom
      * Getter for node by path
      *
      * @param string $nodePath
-     * @throws \Magento\Framework\Exception\LocalizedException An exception is possible if original document contains multiple nodes for identifier
+     * @throws \Magento\Framework\Exception\LocalizedException An exception is possible if original document contains
+     *     multiple nodes for identifier
      * @return \DOMElement|null
      */
     protected function _getMatchedNode($nodePath)
@@ -250,19 +254,24 @@ class Dom
      * Validate dom document
      *
      * @param \DOMDocument $dom
-     * @param string $schemaFileName
+     * @param string $schemaSource
      * @param string $errorFormat
      * @return array of errors
      * @throws \Exception
      */
     public static function validateDomDocument(
         \DOMDocument $dom,
-        $schemaFileName,
+        $schemaSource,
         $errorFormat = self::ERROR_FORMAT_DEFAULT
     ) {
         libxml_use_internal_errors(true);
         try {
-            $result = $dom->schemaValidate($schemaFileName);
+            if(file_exists($schemaSource)){
+                $result = $dom->schemaValidate($schemaSource);
+            }
+            else{
+                $result = $dom->schemaValidateSource($schemaSource);
+            }
             $errors = [];
             if (!$result) {
                 $validationErrors = libxml_get_errors();

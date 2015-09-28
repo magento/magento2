@@ -29,4 +29,30 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Config\View">
+        <arguments>
+            <argument name="xpath" xsi:type="array">
+                <item name="image" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="path" xsi:type="string">/view/images</item>
+                        <item name="id" xsi:type="string">module</item>
+                    </item>
+                    <item name="1" xsi:type="array">
+                        <item name="path" xsi:type="string">/view/images/image</item>
+                        <item name="id" xsi:type="array">
+                            <item name="id1" xsi:type="string">id</item>
+                            <item name="id2" xsi:type="string">type</item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Config\Reader\Xsd\MediaTypeDataExtractorPool">
+        <arguments>
+            <argument name="extractors" xsi:type="array">
+                <item name="images" xsi:type="string">Magento\Swatches\Model\ImageExtractor</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

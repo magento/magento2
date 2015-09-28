@@ -112,7 +112,7 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
      */
     public function getImageAttribute($imageId, $attributeName, $default = null)
     {
-        $attributes = $this->getConfigView()->getImageAttributes('Magento_Catalog', $imageId);
+        $attributes = $this->getConfigView()->getMediaAttributes('Magento_Catalog', 'images', $imageId);
         return isset($attributes[$attributeName]) ? $attributes[$attributeName] : $default;
     }
 

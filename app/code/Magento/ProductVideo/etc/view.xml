@@ -5,8 +5,8 @@
 * See COPYING.txt for license details.
 */
 -->
-<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Config/etc/view.xsd">
-    <media module="Magento_ProductVideo">
+<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="view.xsd">
+    <videos module="Magento_ProductVideo">
         <video id="play_if_base" type="play_if_base">
             <play_if_base>1</play_if_base>
         </video>
@@ -16,5 +16,5 @@
         <video id="video_auto_restart" type="video_auto_restart">
             <video_auto_restart>0</video_auto_restart>
         </video>
-    </media>
+    </videos>
 </view>

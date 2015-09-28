@@ -172,7 +172,7 @@ class Image extends AbstractHelper
 
         $this->attributes = array_merge(
             $attributes,
-            $this->getConfigView()->getImageAttributes('Magento_Catalog', $imageId)
+            $this->getConfigView()->getMediaAttributes('Magento_Catalog', 'images', $imageId)
         );
 
         $this->setProduct($product);

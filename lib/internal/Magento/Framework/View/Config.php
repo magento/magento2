@@ -63,6 +63,13 @@ class Config implements \Magento\Framework\View\ConfigInterface
     protected $fileIteratorFactory;
 
     /**
+     * File view factory
+     *
+     * @var \Magento\Framework\Config\ViewFactory
+     */
+    protected $viewFactory;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader
@@ -78,6 +85,7 @@ class Config implements \Magento\Framework\View\ConfigInterface
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\View\FileSystem $viewFileSystem,
         \Magento\Framework\Config\FileIteratorFactory $fileIteratorFactory,
+        \Magento\Framework\Config\ViewFactory $viewFactory,
         $filename = self::CONFIG_FILE_NAME
     ) {
         $this->moduleReader = $moduleReader;
@@ -86,6 +94,7 @@ class Config implements \Magento\Framework\View\ConfigInterface
         $this->viewFileSystem = $viewFileSystem;
         $this->filename = $filename;
         $this->fileIteratorFactory = $fileIteratorFactory;
+        $this->viewFactory = $viewFactory;
     }
 
     /**
@@ -118,7 +127,8 @@ class Config implements \Magento\Framework\View\ConfigInterface
                 $this->rootDirectory->getRelativePath($themeConfigFile)
             );
         }
-        $config = new \Magento\Framework\Config\View($configFiles);
+
+        $config = $this->viewFactory->createView($configFiles);
 
         $this->viewConfigs[$key] = $config;
         return $config;
