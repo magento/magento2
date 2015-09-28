@@ -8,6 +8,7 @@ namespace Magento\Catalog\Model\CustomOptions;
 class CustomOption extends \Magento\Framework\Model\AbstractExtensibleModel
     implements \Magento\Catalog\Api\Data\CustomOptionInterface
 {
+    //@codeCoverageIgnoreStart
     /**
      * @inheritDoc
      */

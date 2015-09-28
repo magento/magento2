@@ -7,8 +7,9 @@ namespace Magento\Catalog\Model\CustomOptions;
 
 use Magento\Framework\DataObject;
 use Magento\Quote\Api\Data\CartItemInterface;
+use Magento\Quote\Model\Quote\Item\CartItemProcessorInterface;
 
-class CustomOptionProcessor implements CustomOptionProcessorInterface
+class CustomOptionProcessor implements CartItemProcessorInterface
 {
     /**
      * @var \Magento\Framework\DataObject\Factory
@@ -56,10 +57,10 @@ class CustomOptionProcessor implements CustomOptionProcessorInterface
         $buyRequest = $this->objectFactory->create();
         if ($cartItem->getProductOption()) {
             /** @var \Magento\Catalog\Api\Data\CustomOptionInterface[] $options */
-            $options = $cartItem->getProductOption()->getExtensionAttributes()->getCustomOptions();
-            if (is_array($options)) {
+            $extensionAttributes= $cartItem->getProductOption()->getExtensionAttributes();
+            if ($extensionAttributes && is_array($extensionAttributes->getCustomOptions())) {
                 $requestData = [];
-                foreach ($options as $option) {
+                foreach ($extensionAttributes->getCustomOptions() as $option) {
                     $requestData['options'][$option->getOptionId()] = $option->getOptionValue();
                 }
                 $buyRequest->setData($requestData);
@@ -71,7 +72,7 @@ class CustomOptionProcessor implements CustomOptionProcessorInterface
     /**
      * @inheritDoc
      */
-    public function processCustomOptions(CartItemInterface $cartItem)
+    public function processOptions(CartItemInterface $cartItem)
     {
         $buyRequest = unserialize($cartItem->getOptionByCode('info_buyRequest')->getValue());
         $options = isset($buyRequest['options']) ? $buyRequest['options'] : [];
@@ -97,7 +98,7 @@ class CustomOptionProcessor implements CustomOptionProcessorInterface
      * Update options values
      *
      * @param array $options
-     * @return array
+     * @return null
      */
     protected function updateOptionsValues(array &$options)
     {
@@ -111,6 +112,5 @@ class CustomOptionProcessor implements CustomOptionProcessorInterface
             $option->setOptionValue($optionValue);
             $optionValue = $option;
         }
-        return $options;
     }
 }

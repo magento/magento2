@@ -10,7 +10,6 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Catalog\Model\CustomOptions\CustomOptionProcessorInterface;
 
 class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
 {
@@ -42,7 +41,7 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Quote\Api\Data\CartItemInterfaceFactory $itemDataFactory
-     * @param CartItemProcessorInterface|CustomOptionProcessorInterface[] $cartItemProcessors
+     * @param CartItemProcessorInterface[] $cartItemProcessors
      */
     public function __construct(
         \Magento\Quote\Model\QuoteRepository $quoteRepository,
@@ -188,7 +187,7 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
     protected function applyCustomOptions(\Magento\Quote\Api\Data\CartItemInterface $cartItem)
     {
         if (isset($this->cartItemProcessors['custom_options'])) {
-            $this->cartItemProcessors['custom_options']->processCustomOptions($cartItem);
+            $this->cartItemProcessors['custom_options']->processOptions($cartItem);
         }
         return $cartItem;
     }
@@ -203,7 +202,7 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
         \Magento\Quote\Api\Data\CartItemInterface $cartItem
     ) {
         $cartItem = (isset($this->cartItemProcessors[$productType]))
-            ? $this->cartItemProcessors[$productType]->processProductOptions($cartItem)
+            ? $this->cartItemProcessors[$productType]->processOptions($cartItem)
             : $cartItem;
         return $cartItem;
     }
