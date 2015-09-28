@@ -44,7 +44,7 @@ abstract class AbstractSimpleObject
      * @param mixed $value
      * @return $this
      */
-    protected function setData($key, $value)
+    public function setData($key, $value)
     {
         $this->_data[$key] = $value;
         return $this;

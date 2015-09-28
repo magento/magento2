@@ -27,6 +27,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -41,6 +42,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link
 
     /**
      * @return string
+     * @codeCoverageIgnore
      */
     public function getHref()
     {

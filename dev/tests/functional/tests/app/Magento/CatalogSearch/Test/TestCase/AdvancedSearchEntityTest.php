@@ -78,7 +78,7 @@ class AdvancedSearchEntityTest extends Injectable
         AdvancedSearch $searchPage
     ) {
         $cmsIndex->open();
-        $cmsIndex->getSearchBlock()->clickAdvancedSearchButton();
+        $cmsIndex->getFooterBlock()->openAdvancedSearch();
         $searchForm = $searchPage->getForm();
         $searchForm->fill($productSearch);
         $searchForm->submit();

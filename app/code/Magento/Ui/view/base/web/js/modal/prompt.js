@@ -16,51 +16,51 @@ define([
         options: {
             modalClass: 'prompt',
             promptField: '[data-role="promptField"]',
-            dataValue: '[data-value="modal-value"]',
             value: '',
             actions: {
-                always: function(){},
-                confirm: function(){},
-                cancel: function(){}
+                always: function () {},
+                confirm: function () {},
+                cancel: function () {}
             },
             buttons: [{
                 text: $.mage.__('Cancel'),
-                class: 'action-tertiary',
-                click: function(){
+                class: 'action-tertiary action-dismiss',
+                click: function () {
                     this.closeModal();
                 }
             }, {
                 text: $.mage.__('OK'),
-                class: 'action-secondary',
-                click: function() {
+                class: 'action-secondary action-accept',
+                click: function () {
                     this.closeModal(true);
                 }
             }]
         },
-        _create: function() {
+        _create: function () {
+            this.options.focus = this.options.promptField;
             this._super();
-            this.modal.find(this.options.modalContent).append('<input data-role="promptField" data-value="modal-value" type="text"/>');
+            this.modal.find(this.options.modalContent).append('<input data-role="promptField" type="text"/>');
             this.modal.find(this.options.modalCloseBtn).off().on('click',  _.bind(this.closeModal, this, false));
             this.openModal();
         },
-        _remove: function() {
+        _remove: function () {
             this.modal.remove();
         },
-        openModal: function(){
+        openModal: function () {
             this._super();
-            this.modal.find(this.options.dataValue).val(this.options.value);
+            this.modal.find(this.options.promptField).val(this.options.value);
         },
-        closeModal: function(result) {
+        closeModal: function (result) {
             var value;
 
             if (result) {
-                value =  this.modal.find(this.options.promptField).val();
+                value = this.modal.find(this.options.promptField).val();
                 this.options.actions.confirm(value);
             } else {
                 this.options.actions.cancel();
             }
             this.options.actions.always();
-            this.element.bind('confirmclosed', _.bind(this._remove, this));
+            this.element.bind('promptclosed', _.bind(this._remove, this));
 
             return this._super();
         }
