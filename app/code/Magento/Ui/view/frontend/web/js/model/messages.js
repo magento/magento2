@@ -55,11 +55,11 @@ define([
         },
 
         addSuccessMessage: function (message) {
-            return this.add(message, this.successMessages)
+            return this.add(message, this.successMessages);
         },
 
         addErrorMessage: function (message) {
-            return this.add(message, this.errorMessages)
+            return this.add(message, this.errorMessages);
         },
 
         getErrorMessages: function () {
@@ -71,7 +71,7 @@ define([
         },
 
         hasMessages: function() {
-            return (this.errorMessages().length > 0) || (this.successMessages().length > 0);
+            return (this.errorMessages().length > 0 || this.successMessages().length > 0);
         },
 
         clear: function () {
