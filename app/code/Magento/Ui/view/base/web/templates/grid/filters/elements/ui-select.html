@@ -20,7 +20,7 @@
                     focusout: onFocusOut,
                     keydown: keydownSwitcher
                 },
-                outerClick: outerClick">
+                outerClick: outerClick.bind($data)">
     <!-- ko ifnot: chipsEnabled -->
     <div
         class="action-select admin__action-multiselect"
