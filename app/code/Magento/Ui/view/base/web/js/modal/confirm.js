@@ -22,13 +22,13 @@ define([
             },
             buttons: [{
                 text: $.mage.__('Cancel'),
-                class: 'action-tertiary',
+                class: 'action-tertiary action-dismiss',
                 click: function(){
                     this.closeModal();
                 }
             }, {
                 text: $.mage.__('OK'),
-                class: 'action-secondary',
+                class: 'action-secondary action-accept',
                 click: function() {
                     this.closeModal(true);
                 }

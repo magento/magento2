@@ -89,5 +89,6 @@ class DeleteTaxRuleEntityTest extends Injectable
         $this->taxRuleIndexPage->open();
         $this->taxRuleIndexPage->getTaxRuleGrid()->searchAndOpen(['code' => $taxRule->getCode()]);
         $this->taxRuleNewPage->getFormPageActions()->delete();
+        $this->taxRuleNewPage->getModalBlock()->acceptAlert();
     }
 }

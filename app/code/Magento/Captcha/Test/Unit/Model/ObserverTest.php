@@ -234,7 +234,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             'set'
         )->with(
             '',
-            \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH,
+            \Magento\Framework\App\ActionInterface::FLAG_NO_DISPATCH,
             true
         );
 
@@ -322,7 +322,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             'set'
         )->with(
             '',
-            \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH,
+            \Magento\Framework\App\ActionInterface::FLAG_NO_DISPATCH,
             true
         );
 
@@ -404,7 +404,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             'set'
         )->with(
             '',
-            \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH,
+            \Magento\Framework\App\ActionInterface::FLAG_NO_DISPATCH,
             true
         );
 

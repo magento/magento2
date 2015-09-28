@@ -20,6 +20,7 @@ class GuestShippingInformationManagement implements \Magento\Checkout\Api\GuestS
     /**
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
      * @param \Magento\Checkout\Api\ShippingInformationManagementInterface $shippingInformationManagement
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory,

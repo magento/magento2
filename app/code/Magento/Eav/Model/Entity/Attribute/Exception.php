@@ -32,6 +32,7 @@ class Exception extends \Magento\Framework\Exception\LocalizedException
      *
      * @param string $attribute
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setAttributeCode($attribute)
     {
@@ -44,6 +45,7 @@ class Exception extends \Magento\Framework\Exception\LocalizedException
      *
      * @param string $part
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setPart($part)
     {
@@ -55,6 +57,7 @@ class Exception extends \Magento\Framework\Exception\LocalizedException
      * Retrieve Eav entity attribute
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getAttributeCode()
     {
@@ -65,6 +68,7 @@ class Exception extends \Magento\Framework\Exception\LocalizedException
      * Retrieve Eav entity attribute part
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getPart()
     {

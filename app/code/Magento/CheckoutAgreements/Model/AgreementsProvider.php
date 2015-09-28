@@ -36,6 +36,7 @@ class AgreementsProvider implements AgreementsProviderInterface
      * @param Resource\Agreement\CollectionFactory $agreementCollectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory $agreementCollectionFactory,

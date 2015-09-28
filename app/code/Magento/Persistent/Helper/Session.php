@@ -85,6 +85,7 @@ class Session extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Persistent\Model\Session $sessionModel
      * @return \Magento\Persistent\Model\Session
+     * @codeCoverageIgnore
      */
     public function setSession($sessionModel)
     {
@@ -131,6 +132,7 @@ class Session extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param bool $checked
      * @return void
+     * @codeCoverageIgnore
      */
     public function setRememberMeChecked($checked = true)
     {

@@ -90,14 +90,13 @@ class Configurable extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *   group => array(ids)
      * )
      *
-     * @param int $parentId
+     * @param int|array $parentId
      * @param bool $required
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getChildrenIds($parentId, $required = true)
     {
-        $childrenIds = [];
         $select = $this->getConnection()->select()->from(
             ['l' => $this->getMainTable()],
             ['product_id', 'parent_id']
@@ -106,7 +105,7 @@ class Configurable extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'e.entity_id = l.product_id AND e.required_options = 0',
             []
         )->where(
-            'parent_id = ?',
+            'parent_id IN (?)',
             $parentId
         );
 

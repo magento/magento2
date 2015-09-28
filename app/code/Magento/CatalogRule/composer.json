@@ -9,9 +9,11 @@
         "magento/module-customer": "1.0.0-beta",
         "magento/module-backend": "1.0.0-beta",
         "magento/module-eav": "1.0.0-beta",
-        "magento/module-import-export": "1.0.0-beta",
         "magento/framework": "1.0.0-beta",
         "magento/magento-composer-installer": "*"
+    },
+    "suggest": {
+        "magento/module-import-export": "1.0.0-beta"
     },
     "type": "magento2-module",
     "version": "1.0.0-beta",

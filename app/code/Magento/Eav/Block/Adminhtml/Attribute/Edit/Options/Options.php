@@ -267,6 +267,7 @@ class Options extends \Magento\Backend\Block\Template
      * Retrieve attribute object from registry
      *
      * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @codeCoverageIgnore
      */
     protected function getAttributeObject()
     {

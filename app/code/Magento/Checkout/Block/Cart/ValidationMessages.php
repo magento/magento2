@@ -27,6 +27,7 @@ class ValidationMessages extends \Magento\Framework\View\Element\Messages
      * @param \Magento\Checkout\Helper\Cart $cartHelper
      * @param \Magento\Framework\Locale\CurrencyInterface $currency
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,

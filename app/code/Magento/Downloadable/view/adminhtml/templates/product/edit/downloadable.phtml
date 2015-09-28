@@ -18,9 +18,10 @@ require([
     'jquery',
     'Magento_Ui/js/lib/registry/registry',
     'mage/template',
+    'Magento_Ui/js/modal/alert',
     'mage/mage',
     'prototype'
-], function (jQuery, registry, mageTemplate) {
+], function (jQuery, registry, mageTemplate, alert) {
 
 //<![CDATA[>
 var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
@@ -62,7 +63,9 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
                 try {
                     console.log(e);
                 } catch (e2) {
-                    alert(e.name + '\n' + e.message);
+                    alert({
+                        content: e.name + '\n' + e.message
+                    });
                 }
             }
         },
@@ -73,7 +76,9 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
                 try {
                     console.log(e);
                 } catch (e2) {
-                    alert(e.name + '\n' + e.message);
+                    alert({
+                        content: e.name + '\n' + e.message
+                    });
                 }
             }
         },
@@ -91,7 +96,9 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
                 try {
                     console.log(e);
                 } catch (e2) {
-                    alert(e.name + '\n' + e.message);
+                    alert({
+                        content: e.name + '\n' + e.message
+                    });
                 }
             }
         }

@@ -11,11 +11,12 @@
 <script>
 require([
     "jquery",
+    'Magento_Ui/js/modal/alert',
     "jquery/ui",
     "jquery/editableMultiselect/js/jquery.multiselect",
     "mage/mage",
     'Magento_Ui/js/modal/modal'
-], function($){
+], function($, alert){
 
     $.widget("adminhtml.dialogRates", $.mage.modal, {
         options: {
@@ -91,14 +92,20 @@ require([
 
                     } else {
                         if (result.error_message)
-                            alert(result.error_message);
+                            alert({
+                                content: result.error_message
+                            });
                         else
-                            alert('<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>');
+                            alert({
+                                content: '<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>'
+                            });
                     }
                 },
                 error: function () {
                     $('body').trigger('processStop');
-                    alert('<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>');
+                    alert({
+                        content: '<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>'
+                    });
                 },
                 dataType: "json"
             });
@@ -177,14 +184,20 @@ require([
                                     select.find('option').eq(index).remove();
                                 } else {
                                     if (result.error_message)
-                                        alert(result.error_message);
+                                        alert({
+                                            content: result.error_message
+                                        });
                                     else
-                                        alert('<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>');
+                                        alert({
+                                            content: '<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>'
+                                        });
                                 }
                             },
                             error: function () {
                                 $('body').trigger('processStop');
-                                alert('<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>');
+                                alert({
+                                    content: '<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>'
+                                });
                             }
                         };
                         $.ajax(ajaxOptions);
@@ -253,14 +266,20 @@ require([
                                     taxRateForm.dialogRates('closeModal');
                                 } else {
                                     if (result.error_message)
-                                        alert(result.error_message);
+                                        alert({
+                                            content: result.error_message
+                                        });
                                     else
-                                        alert('<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>');
+                                        alert({
+                                            content: '<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>'
+                                        });
                                 }
                             },
                             error: function () {
                                 $('body').trigger('processStop');
-                                alert('<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>');
+                                alert({
+                                    content: '<?php /* @escapeNotVerified */ echo __('An error occurred'); ?>'
+                                });
                             }
                         };
                         $.ajax(ajaxOptions);
