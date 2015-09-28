@@ -250,7 +250,10 @@ class DataGrid extends Grid
             ->find(sprintf($this->massActionToggleList, $actionType), Locator::SELECTOR_XPATH)
             ->click();
         if ($acceptAlert) {
-            $this->browser->find($this->actionButton)->click();
+            $element = $this->browser->find('._show[data-role=modal]');
+            /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
+            $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $element]);
+            $modal->acceptAlert();
         }
     }
 
