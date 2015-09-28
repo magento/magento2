@@ -7,6 +7,9 @@ namespace Magento\Customer\Block\Widget;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
+/**
+ * @magentoAppArea frontend
+ */
 class GenderTest extends \PHPUnit_Framework_TestCase
 {
     /** @var Gender */
