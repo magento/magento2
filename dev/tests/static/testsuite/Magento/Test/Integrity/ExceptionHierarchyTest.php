@@ -58,8 +58,8 @@ class ExceptionHierarchyTest extends \PHPUnit_Framework_TestCase
         $moduleNamespace = null;
         $foundItems = array_filter(
             $componentRegistrar->getPaths(\Magento\Framework\Component\ComponentRegistrar::MODULE),
-            function($item) use ($filePath) {
-                if (strpos($filePath, $item . '/') !== FALSE) {
+            function ($item) use ($filePath) {
+                if (strpos($filePath, $item . '/') !== false) {
                     return true;
                 } else {
                     return false;
@@ -72,8 +72,8 @@ class ExceptionHierarchyTest extends \PHPUnit_Framework_TestCase
         } else {
             $foundItems = array_filter(
                 $componentRegistrar->getPaths(\Magento\Framework\Component\ComponentRegistrar::LIBRARY),
-                function($item) use ($filePath) {
-                    if (strpos($filePath, $item . '/') !== FALSE) {
+                function ($item) use ($filePath) {
+                    if (strpos($filePath, $item . '/') !== false) {
                         return true;
                     } else {
                         return false;
@@ -82,7 +82,7 @@ class ExceptionHierarchyTest extends \PHPUnit_Framework_TestCase
             );
             $namespaceParts = explode('/', array_keys($foundItems)[0]);
             $namespaceParts = array_map(
-                function($item) {
+                function ($item) {
                     return ucfirst($item);
                 },
                 $namespaceParts
