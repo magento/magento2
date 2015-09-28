@@ -23,7 +23,8 @@ define([
             },
             modules: {
                 storage: '${ $.storageConfig.provider }'
-            }
+            },
+            componentType: 'container'
         },
 
         /**

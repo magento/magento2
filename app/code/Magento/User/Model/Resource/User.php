@@ -522,8 +522,8 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Increment failures count along with updating lock expire and first failure dates
      *
      * @param ModelUser $user
-     * @param int|false $setLockExpires
-     * @param int|false $setFirstFailure
+     * @param int|bool $setLockExpires
+     * @param int|bool $setFirstFailure
      * @return void
      */
     public function updateFailure($user, $setLockExpires = false, $setFirstFailure = false)

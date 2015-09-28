@@ -12,7 +12,7 @@ use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 /**
  * Steps:
  * 1. Log in to backend.
- * 2. Navigate throught menu to the page.
+ * 2. Navigate through menu to the page.
  * 3. Perform asserts.
  *
  * @ZephyrId MAGETWO-34874
