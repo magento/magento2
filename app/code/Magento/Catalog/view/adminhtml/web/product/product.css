@@ -87,6 +87,10 @@
     user-select: none;
 }
 
+.admin__scope-old .image .actions [class^="action-"] {
+    z-index: 10;
+}
+
 .admin__scope-old .image .actions [class^="action-"],
 .admin__scope-old .image .image-label,
 .admin__scope-old .image[data-image-hidden] .actions [class^="action-"],
@@ -308,26 +312,27 @@
 /*
     Tier Price Table
 -------------------------------------- */
+
+.admin__scope-old .tiers_table td {
+    vertical-align: top;
+}
+
 .admin__scope-old .tiers_table .col-qty {
     text-align: left;
     width: 150px;
 }
 
 .admin__scope-old .tiers_table .col-qty > input[type="text"] {
-    width: 40%;
+    width: 60px;
     margin-right: 5px;
 }
 
-.admin__scope-old .tiers_table .col-qty > .nobr {
-    width: 50%;
-    float: right;
-    margin-top: 6px;
-    text-overflow: ellipsis;
-    overflow: hidden;
+.admin__scope-old .tiers_table .col-qty span {
+    font-size: 1rem;
 }
 
-.admin__scope-old .tiers_table .col-price {
-    width: 16%;
+.admin__scope-old .tiers_table .col-price .input-text {
+    width: 90px;
 }
 
 .admin__scope-old .new-variation-set {

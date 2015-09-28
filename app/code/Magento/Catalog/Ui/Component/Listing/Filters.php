@@ -8,21 +8,21 @@ namespace Magento\Catalog\Ui\Component\Listing;
 class Filters extends \Magento\Ui\Component\Filters
 {
     /**
-     * @var AttributeRepository
+     * @var \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface
      */
     protected $attributeRepository;
 
     /**
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
      * @param \Magento\Catalog\Ui\Component\FilterFactory $filterFactory
-     * @param AttributeRepository $attributeRepository
+     * @param \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface $attributeRepository
      * @param array $components
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\UiComponent\ContextInterface $context,
         \Magento\Catalog\Ui\Component\FilterFactory $filterFactory,
-        \Magento\Catalog\Ui\Component\Listing\AttributeRepository $attributeRepository,
+        \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface $attributeRepository,
         array $components = [],
         array $data = []
     ) {
