@@ -42,7 +42,7 @@ require([
         <script id="ie-deferred-loader" defer="defer" src=""></script>
         <![endif]-->
             <script>
-define("tree-panel", ["jquery", "extjs/ext-tree-checkbox", "prototype"], function(jQuery){
+define("tree-panel", ["jquery", 'Magento_Ui/js/modal/prompt', "extjs/ext-tree-checkbox", "prototype"], function(jQuery, prompt){
 
             //<![CDATA[
             var allowDragAndDrop = <?php /* @escapeNotVerified */ echo($block->getIsReadOnly() ? 'false' : 'true'); ?>;
@@ -238,31 +238,37 @@ define("tree-panel", ["jquery", "extjs/ext-tree-checkbox", "prototype"], functio
                     },
 
                     addGroup : function() {
-                        var group_name = prompt("<?php /* @escapeNotVerified */ echo __('Please enter a new group name.') ?>","");
-                        if (!group_name) {
-                            return;
-                        }
-                        group_name = group_name.strip();
-                        if( group_name == '' ) {
-                            this.addGroup();
-                        } else if( group_name != false && group_name != null && group_name != '' ) {
+                        var self = this;
 
-                            if (!editSet.validateGroupName(group_name, 0)) {
-                                return;
+                        prompt({
+                            content: "<?php /* @escapeNotVerified */ echo __('Please enter a new group name.') ?>",
+                            value: '',
+                            actions: {
+                                confirm: function (group_name) {
+                                    group_name = group_name.strip();
+                                    if( group_name == '' ) {
+                                        self.addGroup();
+                                    } else if( group_name != false && group_name != null && group_name != '' ) {
+
+                                        if (!editSet.validateGroupName(group_name, 0)) {
+                                            return;
+                                        }
+
+                                        var newNode = new Ext.tree.TreeNode({
+                                            text : group_name.escapeHTML(),
+                                            cls : 'folder',
+                                            allowDrop : true,
+                                            allowDrag : true
+                                        });
+                                        TreePanels.root.appendChild(newNode);
+                                        newNode.addListener('beforemove', editSet.groupBeforeMove);
+                                        newNode.addListener('beforeinsert', editSet.groupBeforeInsert);
+                                        newNode.addListener('beforeappend', editSet.groupBeforeInsert);
+                                        newNode.addListener('click', editSet.register);
+                                    }
+                                }
                             }
-
-                            var newNode = new Ext.tree.TreeNode({
-                                    text : group_name.escapeHTML(),
-                                    cls : 'folder',
-                                    allowDrop : true,
-                                    allowDrag : true
-                                });
-                            TreePanels.root.appendChild(newNode);
-                            newNode.addListener('beforemove', editSet.groupBeforeMove);
-                            newNode.addListener('beforeinsert', editSet.groupBeforeInsert);
-                            newNode.addListener('beforeappend', editSet.groupBeforeInsert);
-                            newNode.addListener('click', editSet.register);
-                        }
+                        });
                     },
 
                     editGroup : function(obj) {
