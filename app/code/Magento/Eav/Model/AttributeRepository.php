@@ -54,6 +54,7 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
      * @param \Magento\Eav\Api\Data\AttributeSearchResultsInterfaceFactory $searchResultsFactory
      * @param Entity\AttributeFactory $attributeFactory
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Eav\Model\Config $eavConfig,

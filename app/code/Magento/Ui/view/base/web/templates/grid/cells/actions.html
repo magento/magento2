@@ -14,7 +14,9 @@
             attr: {
                 href: $data.href
             },
-            click: $parent.applyAction.bind($parent, index, rowIndex),
+            click: $parent.isHandlerRequired(index, rowIndex) ?
+                $parent.applyAction.bind($parent, index, rowIndex) :
+                false,
             text: $data.label"></a>
         <!-- /ko -->
     <!-- /ko -->
@@ -22,19 +24,17 @@
     <!-- ko if: isMultiple(row._rowIndex) -->
     <div
         class="action-select-wrap"
-        data-bind="
-            css : {
-                '_active' : opened() === row._rowIndex
-            },
-            outerClick: closeList.bind($data, row._rowIndex)">
-        <button class="action-select" data-bind="click: toggleList.bind($data, row._rowIndex)">
+        data-bind="collapsible">
+        <button class="action-select" data-bind="toggleCollapsible">
             <span data-bind="i18n: 'Select'"></span>
         </button>
         <ul
             class="action-menu"
-            data-bind="
-                css: {'_active': opened() === row._rowIndex}">
-            <!-- ko foreach: getVisibleActions(row._rowIndex) -->
+            data-bind="css: {
+            '_active': $collapsible.opened
+            },
+            foreach: getVisibleActions(row._rowIndex)"
+            >
             <li>
                 <a
                     class="action-menu-item"
@@ -42,10 +42,11 @@
                         attr: {
                             href: $data.href
                         },
-                        click: $parent.applyAction.bind($parent, index, rowIndex),
+                        click: $parent.isHandlerRequired(index, rowIndex) ?
+                            $parent.applyAction.bind($parent, index, rowIndex) :
+                            false,
                         text: $data.label"></a>
             </li>
-            <!-- /ko -->
         </ul>
     </div>
     <!-- /ko -->

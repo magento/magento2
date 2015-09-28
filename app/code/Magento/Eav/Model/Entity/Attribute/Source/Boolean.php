@@ -21,6 +21,7 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 
     /**
      * @param \Magento\Eav\Model\Resource\Entity\AttributeFactory $eavAttrEntity
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Eav\Model\Resource\Entity\AttributeFactory $eavAttrEntity

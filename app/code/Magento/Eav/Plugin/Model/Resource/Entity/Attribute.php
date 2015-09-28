@@ -21,6 +21,7 @@ class Attribute
     /**
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\App\CacheInterface $cache,
