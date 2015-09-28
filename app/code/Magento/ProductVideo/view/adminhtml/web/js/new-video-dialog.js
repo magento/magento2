@@ -828,7 +828,7 @@ define([
         saveImageRoles: function(imageData) {
             var data = imageData.file;
             var self = this;
-            if (!data && data.length > 0) {
+            if (data && data.length > 0) {
                 var containers = $('.image-placeholder').siblings('input');
                 $.each(containers, function (i, el) {
                     var start = el.name.indexOf('[') + 1;
