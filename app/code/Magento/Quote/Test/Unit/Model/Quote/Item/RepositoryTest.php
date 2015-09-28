@@ -309,7 +309,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $cartItemProcessorMock->expects($this->once())->method('convertToBuyRequest')->willReturn($requestMock);
         $cartItemProcessorMock
             ->expects($this->once())
-            ->method('processProductOptions')
+            ->method('processOptions')
             ->willReturn($this->quoteItemMock);
         $requestMock->expects($this->once())->method('setQty')->with(12)->willReturnSelf();
         $this->quoteMock

@@ -5,7 +5,11 @@
  */
 namespace Magento\Catalog\Api\Data;
 
-interface CustomOptionInterface
+/**
+ * Interface CustomOptionInterface
+ * @api
+ */
+interface CustomOptionInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
     /**#@+
      * Constants
@@ -17,7 +21,7 @@ interface CustomOptionInterface
     /**
      * Get option id
      *
-     * @return string|null
+     * @return string
      */
     public function getOptionId();
 
@@ -32,7 +36,7 @@ interface CustomOptionInterface
     /**
      * Get option value
      *
-     * @return string|null
+     * @return string
      */
     public function getOptionValue();
 
