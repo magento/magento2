@@ -193,7 +193,7 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
         $this->assertObjectHasAttribute('autoload', $json, $error);
         $this->assertObjectHasAttribute('files', $json->autoload, $error);
         $this->assertStringStartsWith("registration", $json->autoload->files[0], $error);
-        $this->assertFileExists("$dir/registration*.php");
+        $this->assertFileExists("$dir/registration.php");
     }
 
     /**
