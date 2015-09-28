@@ -89,46 +89,6 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testReEncryptDatabasesValues()
-    {
-        $safe = true;
-        $paths = ['path1', 'path2'];
-        $table = ['item1', 'item2'];
-        $values = [
-            'key1' => 'value1',
-            'key2' => 'value2'
-        ];
-        $this->resourceMock->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->adapterMock);
-        $this->adapterMock->expects($this->once())->method('beginTransaction');
-        $this->structureMock->expects($this->once())->method('getFieldPathsByAttribute')->willReturn($paths);
-        $this->resourceMock->expects($this->atLeastOnce())->method('getTableName')->willReturn($table);
-        $this->adapterMock->expects($this->any())->method('select')->willReturn($this->selectMock);
-        $this->adapterMock->expects($this->any())->method('fetchPairs')->willReturn($values);
-        $this->selectMock->expects($this->any())->method('from')->willReturnSelf();
-        $this->selectMock->expects($this->atLeastOnce())->method('where')->willReturnSelf();
-        $this->selectMock->expects($this->any())->method('update')->willReturnSelf();
-
-        $this->model->reEncryptDatabaseValues($safe);
-    }
-
-    public function testReEncryptDatabasesValuesException()
-    {
-        $safe = true;
-        $e = new \Exception;
-
-        $this->adapterMock->expects($this->once())->method('beginTransaction');
-        $this->structureMock->expects($this->once())->method('getFieldPathsByAttribute')->willThrowException($e);
-        $this->resourceMock->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->adapterMock);
-        $this->adapterMock->expects($this->any())->method('rollBack');
-
-        try {
-            $this->model->reEncryptDatabaseValues($safe);
-        } catch (\Exception $exception) {
-            return;
-        }
-        $this->fail('An Expected exception was not signaled');
-    }
-
     public function testChangeEncryptionKey()
     {
         $paths = ['path1', 'path2'];
