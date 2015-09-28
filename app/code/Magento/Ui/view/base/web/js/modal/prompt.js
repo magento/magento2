@@ -37,6 +37,7 @@ define([
             }]
         },
         _create: function () {
+            this.options.focus = this.options.promptField;
             this._super();
             this.modal.find(this.options.modalContent).append('<input data-role="promptField" type="text"/>');
             this.modal.find(this.options.modalCloseBtn).off().on('click',  _.bind(this.closeModal, this, false));
