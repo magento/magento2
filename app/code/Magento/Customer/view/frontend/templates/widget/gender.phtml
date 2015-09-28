@@ -14,7 +14,7 @@
             <?php $options = $block->getGenderOptions(); ?>
             <?php $value = $block->getGender();?>
             <?php foreach ($options as $option):?>
-                <option value="<?php /* @escapeNotVerified */ echo $option->getValue() ?>"<?php if ($option->getValue() == $value) echo ' selected="selected"' ?>><?php /* @escapeNotVerified */ echo $option->getLabel() ?></option>
+                <option value="<?php /* @escapeNotVerified */ echo $option->getValue() ?>"<?php if ($option->getValue() == $value) echo ' selected="selected"' ?>><?php /* @escapeNotVerified */ echo __($option->getLabel()) ?></option>
             <?php endforeach;?>
         </select>
     </div>
