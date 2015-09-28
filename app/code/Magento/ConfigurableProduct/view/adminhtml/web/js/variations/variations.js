@@ -338,7 +338,9 @@ define([
                                 parentElement.find('[name$="[image]"]').val(data.result.file);
                                 parentElement.find('[data-toggle=dropdown]').dropdown().show();
                             } else {
-                                alert($.mage.__('We don\'t recognize or support this file extension type.'));
+                                alert({
+                                    content: $.mage.__('We don\'t recognize or support this file extension type.')
+                                });
                             }
                         },
                         start: function (event) {
