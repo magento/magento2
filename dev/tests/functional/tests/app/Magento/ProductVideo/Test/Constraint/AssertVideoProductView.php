@@ -6,37 +6,35 @@
 
 namespace Magento\ProductVideo\Test\Constraint;
 
-
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Catalog\Test\Page\Product\CatalogProductView;
 
 /**
- * Assert that video is displayed on front end
+ * Assert that video is displayed on product page.
  */
 class AssertVideoProductView extends AbstractConstraint
 {
-
     /**
-     * Assert that video is displayed on front end
+     * Assert that video is displayed on product page on Store front.
      *
      * @param BrowserInterface $browser
+     * @param CatalogProductView $catalogProductView
      * @param InjectableFixture $product
-     * @return void
      */
     public function processAssert(
         BrowserInterface $browser,
-        InjectableFixture $product
+        CatalogProductView $catalogProductView,
+        InjectableFixture $initialProduct
     ) {
-        //Open product view page
-        $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
-        $image = $browser->find('.fotorama__img');
+        $browser->open($_ENV['app_frontend_url'] . $initialProduct->getUrlKey() . '.html');
+        $catalogProductView->getViewBlock()->isGalleryVisible();
         \PHPUnit_Framework_Assert::assertTrue(
-            $image->isVisible(),
-            'Product video is not displayed on product view when it should'
-            );
+            $catalogProductView->getViewBlock()->isGalleryVisible(),
+            'Product video is not displayed on product view when it should.'
+        );
     }
-
 
     /**
      * Returns a string representation of the object.
