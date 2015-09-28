@@ -21,11 +21,18 @@ class Config extends Tab
     protected $createConfigurationsButton = '[data-action=open-steps-wizard]';
 
     /**
+     * Selector for trigger show/hide "Variations" tab.
+     *
+     * @var string
+     */
+    protected $variationsTabTrigger = '[data-tab=super_config] [data-role=trigger]';
+
+    /**
      * Selector for content "Variations" tab.
      *
      * @var string
      */
-    protected $variationsTabContent = '#dt-super_config';
+    protected $variationsTabContent = '#super_config-content';
 
     /**
      * Selector for button "Generate Products".
@@ -109,9 +116,8 @@ class Config extends Tab
     public function showContent()
     {
         $content = $this->_rootElement->find($this->variationsTabContent);
-        $content->click();
         if (!$content->isVisible()) {
-            $this->_rootElement->find($this->variationsTabContent)->click();
+            $this->_rootElement->find($this->variationsTabTrigger)->click();
             $this->waitForElementVisible($this->variationsTabContent);
         }
     }
