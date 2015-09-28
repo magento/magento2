@@ -7,9 +7,10 @@
 
 <div
     class="selectmenu"
-    data-bind="css: {_active: opened}, outerClick: close">
+    data-bind="collapsible"
+    data-role="toolbar-collapsible-menu">
     <div
-        data-bind="click: open"
+        data-bind="openCollapsible"
         class="selectmenu-value">
         <input
             data-bind="value: _value, attr: {id: index}"
@@ -18,11 +19,13 @@
     <button
         class="selectmenu-toggle"
         type="button"
-        data-bind="click: toggleOpened, css: {_active: opened}"
+        data-bind="toggleCollapsible, css: {_active: $collapsible.opened}"
         aria-haspopup="true">
         <span data-bind="i18n: 'Select'"></span>
     </button>
-    <div class="selectmenu-items" data-bind="css: {_active: opened}, outerClick: $data.discardAll.bind($data)">
+    <div class="selectmenu-items" data-bind="css: {_active: $collapsible.opened},
+        outerClick: discardAll.bind($data)"
+         data-role="toolbar-collapsible-menu">
         <ul>
             <!-- ko foreach: optionsArray -->
             <li data-bind="css: { _edit: $parent.isEditing(value)}">
