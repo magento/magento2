@@ -74,9 +74,13 @@ class CustomOptionProcessor implements CartItemProcessorInterface
      */
     public function processOptions(CartItemInterface $cartItem)
     {
-        $buyRequest = unserialize($cartItem->getOptionByCode('info_buyRequest')->getValue());
-        $options = isset($buyRequest['options']) ? $buyRequest['options'] : [];
-        if (is_array($options)) {
+        $buyRequest = !empty($cartItem->getOptionByCode('info_buyRequest'))
+            ? unserialize($cartItem->getOptionByCode('info_buyRequest')->getValue())
+            : null;
+        $options = is_array($buyRequest) && isset($buyRequest['options'])
+            ? $buyRequest['options']
+            : [];
+        if (is_array($options) && $buyRequest) {
             $this->updateOptionsValues($options);
             $productOption = $cartItem->getProductOption()
                 ? $cartItem->getProductOption()
