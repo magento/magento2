@@ -12,6 +12,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * @magentoComponentsDir Magento/Framework/View/_files/fallback
+ * @magentoDbIsolation enabled
  */
 class FallbackTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,8 +23,14 @@ class FallbackTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var \Magento\Theme\Model\Theme\Registration $registration */
+        $registration = $objectManager->get(
+            'Magento\Theme\Model\Theme\Registration'
+        );
+        $registration->register();
         /** @var \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory */
-        $this->themeFactory = Bootstrap::getObjectManager()
+        $this->themeFactory = $objectManager
             ->get('Magento\Framework\View\Design\Theme\FlyweightFactory');
     }
 

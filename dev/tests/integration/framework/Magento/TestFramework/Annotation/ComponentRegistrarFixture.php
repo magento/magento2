@@ -43,21 +43,6 @@ class ComponentRegistrarFixture
     private $origComponents = null;
 
     /**
-     * @var array
-     */
-    private $fixtureThemes = [];
-
-    /**
-     * @var \Magento\Theme\Model\Theme\Registration
-     */
-    private $registration;
-
-    /**
-     * @var ComponentRegistrar
-     */
-    private $componentRegistrar;
-
-    /**
      * Constructor
      *
      * @param string $fixtureBaseDir
@@ -65,7 +50,6 @@ class ComponentRegistrarFixture
     public function __construct($fixtureBaseDir)
     {
         $this->fixtureBaseDir = $fixtureBaseDir;
-        $this->componentRegistrar = new ComponentRegistrar();
     }
 
     /**
@@ -92,6 +76,11 @@ class ComponentRegistrarFixture
         $this->restoreComponents();
     }
 
+    /**
+     * Register fixture components
+     *
+     * @param \PHPUnit_Framework_TestCase $test
+     */
     private function registerComponents(\PHPUnit_Framework_TestCase $test)
     {
         $annotations = $test->getAnnotations();
@@ -131,63 +120,20 @@ class ComponentRegistrarFixture
                 require $registrationFile->getRealPath();
             }
         }
-        $currentThemes = array_keys($this->componentRegistrar->getPaths(ComponentRegistrar::THEME));
-        $origThemes = array_keys($this->origComponents[ComponentRegistrar::THEME]);
-        $this->fixtureThemes = array_diff($currentThemes, $origThemes);
-        $this->registerThemes();
     }
 
+    /**
+     * Restore registered components list to the original
+     */
     private function restoreComponents()
     {
         if (null !== $this->origComponents) {
-            $this->unregisterFixtureThemes();
             $reflection = new \ReflectionClass(self::REGISTRAR_CLASS);
             $paths = $reflection->getProperty(self::PATHS_FIELD);
             $paths->setAccessible(true);
             $paths->setValue($this->origComponents);
             $paths->setAccessible(false);
             $this->origComponents = null;
-            $this->fixtureThemes = [];
         }
-    }
-
-    /**
-     * Initiate themes registration in the collection in case any fixture themes are registered
-     *
-     * @return void
-     */
-    private function registerThemes()
-    {
-        if ($this->fixtureThemes) {
-            $this->getThemeRegistration()->register();
-        }
-    }
-
-    /**
-     * Unregister fixture themes
-     *
-     * @return void
-     */
-    private function unregisterFixtureThemes()
-    {
-        foreach ($this->fixtureThemes as $themeName) {
-            $theme = $this->registration->getThemeFromDb($themeName);
-            $theme->delete();
-        }
-    }
-
-    /**
-     * Get themes registration model
-     *
-     * @return \Magento\Theme\Model\Theme\Registration
-     */
-    private function getThemeRegistration()
-    {
-        if ($this->registration == null) {
-            $this->registration = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Theme\Model\Theme\Registration'
-            );
-        }
-        return $this->registration;
     }
 }

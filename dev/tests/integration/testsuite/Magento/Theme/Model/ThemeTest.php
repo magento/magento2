@@ -65,12 +65,19 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoComponentsDir Magento/Theme/Model/_files/design
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @magentoAppArea frontend
      */
     public function testGetInheritedThemes()
     {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\Theme\Model\Theme\Registration $registration */
+        $registration = $objectManager->get(
+            'Magento\Theme\Model\Theme\Registration'
+        );
+        $registration->register();
         /** @var \Magento\Framework\View\Design\Theme\FlyweightFactory $themeFactory */
-        $themeFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $themeFactory = $objectManager->get(
             'Magento\Framework\View\Design\Theme\FlyweightFactory'
         );
         $theme = $themeFactory->create('Vendor_FrameworkThemeTest/custom_theme');
