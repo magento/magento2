@@ -6,8 +6,8 @@ define([
     'underscore',
     'mageUtils',
     'uiLayout',
-    'Magento_Ui/js/lib/collapsible'
-], function (_, utils, layout, Collapsible) {
+    'uiComponent'
+], function (_, utils, layout, Component) {
     'use strict';
 
     /**
@@ -34,9 +34,10 @@ define([
         return utils.mapRecursive(data, utils.removeEmptyValues.bind(utils));
     }
 
-    return Collapsible.extend({
+    return Component.extend({
         defaults: {
             template: 'ui/grid/filters/filters',
+            stickyTmpl: 'ui/grid/sticky/filters',
             applied: {
                 placeholder: true
             },
@@ -254,7 +255,7 @@ define([
                 column: column
             }, true, true);
         },
-    
+
         /**
          * Returns instance of a filter found by provided index.
          *
@@ -287,15 +288,6 @@ define([
             return this.elems.filter(function (filter) {
                 return !filter.isRange;
             });
-        },
-
-        /**
-         * Tells wether filters pannel should be opened.
-         *
-         * @returns {Boolean}
-         */
-        isOpened: function () {
-            return this.opened() && this.hasVisible();
         },
 
         /**

@@ -62,7 +62,6 @@ define([
             this._super()
                 .observe([
                     'disabled',
-                    'menuVisible',
                     'selected',
                     'excluded',
                     'excludeMode',
@@ -72,28 +71,6 @@ define([
                     'totalRecords',
                     'rows'
                 ]);
-
-            return this;
-        },
-
-        /**
-         * Toggles menu with a list of select actions.
-         *
-         * @returns {Multiselect} Chainable.
-         */
-        toggleMenu: function () {
-            this.menuVisible(!this.menuVisible());
-
-            return this;
-        },
-
-        /**
-         * Hides menu with a list of select actions.
-         *
-         * @returns {Multiselect} Chainable.
-         */
-        hideMenu: function () {
-            this.menuVisible(false);
 
             return this;
         },

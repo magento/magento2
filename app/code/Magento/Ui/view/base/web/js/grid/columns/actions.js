@@ -2,6 +2,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'underscore',
     'mageUtils',
@@ -37,7 +38,7 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe('actions opened');
+                .observe('actions');
 
             return this;
         },
@@ -255,40 +256,6 @@ define([
             var action = this.getAction(rowIndex, actionIndex);
 
             return _.isObject(action.callback) || action.confirm || !action.href;
-        },
-
-        /**
-         * Opens or closes specific actions list.
-         *
-         * @param {Number} rowIndex - Index of a row,
-         *      where actions are displayed.
-         * @returns {ActionsColumn} Chainable.
-         */
-        toggleList: function (rowIndex) {
-            var state = false;
-
-            if (rowIndex !== this.opened()) {
-                state = rowIndex;
-            }
-
-            this.opened(state);
-
-            return this;
-        },
-
-        /**
-         * Closes actions list.
-         *
-         * @param {Number} rowIndex - Index of a row,
-         *      where actions are displayed.
-         * @returns {ActionsColumn}
-         */
-        closeList: function (rowIndex) {
-            if (this.opened() === rowIndex) {
-                this.opened(false);
-            }
-
-            return this;
         }
     });
 });
