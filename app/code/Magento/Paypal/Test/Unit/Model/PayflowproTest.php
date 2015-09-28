@@ -27,7 +27,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
-    protected $_helper;
+    protected $helper;
 
     /**
      * @var \Magento\Payment\Model\Method\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -109,8 +109,8 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
         $clientFactory = $this->getMock('Magento\Framework\HTTP\ZendClientFactory', ['create'], [], '', false);
         $clientFactory->expects($this->any())->method('create')->will($this->returnValue($client));
 
-        $this->_helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->payflowpro = $this->_helper->getObject(
+        $this->helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->payflowpro = $this->helper->getObject(
             'Magento\Paypal\Model\Payflowpro',
             [
                 'configFactory' => $configFactoryMock,
@@ -130,7 +130,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
      */
     public function testCanVoid($amountPaid, $paymentType, $expected)
     {
-        $payment = $this->_helper->getObject($paymentType);
+        $payment = $this->helper->getObject($paymentType);
         $payment->setAmountPaid($amountPaid);
         $this->payflowpro->setInfoInstance($payment);
         $this->assertEquals($expected, $this->payflowpro->canVoid());
@@ -162,12 +162,12 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
      */
     public function testFetchTransactionInfoForBN()
     {
-        $response = $this->_getGatewayResponseObject();
+        $response = $this->getGatewayResponseObject();
 
         $this->gatewayMock->expects($this->once())
             ->method('postRequest')
             ->willReturn($response);
-        $this->_initStoreMock();
+        $this->initStoreMock();
         $this->configMock->expects($this->once())->method('getBuildNotationCode')
             ->will($this->returnValue('BNCODE'));
         $payment = $this->getMock('Magento\Payment\Model\Info', ['setTransactionId', '__wakeup'], [], '', false);
@@ -182,7 +182,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetTransStatus($response, $paymentExpected)
     {
-        $payment = $this->_helper->getObject('Magento\Payment\Model\Info');
+        $payment = $this->helper->getObject('Magento\Payment\Model\Info');
         $this->payflowpro->setTransStatus($payment, $response);
         $this->assertEquals($paymentExpected->getData(), $payment->getData());
     }
@@ -252,8 +252,8 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
      */
     public function testCaptureWithBuildPlaceRequest()
     {
-        $paymentMock = $this->_getPaymentMock();
-        $orderMock = $this->_getOrderMock();
+        $paymentMock = $this->getPaymentMock();
+        $orderMock = $this->getOrderMock();
 
         // test case to build basic request
         $paymentMock->expects(static::once())
@@ -268,7 +268,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
             ->method('getOrder')
             ->willReturn($orderMock);
 
-        $response = $this->_execGatewayRequest();
+        $response = $this->execGatewayRequest();
         $amount = 23.03;
         $this->payflowpro->capture($paymentMock, $amount);
         static::assertEquals($response['pnref'], $paymentMock->getTransactionId());
@@ -280,14 +280,14 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
      */
     public function testAuthorize()
     {
-        $paymentMock = $this->_getPaymentMock();
-        $orderMock = $this->_getOrderMock();
+        $paymentMock = $this->getPaymentMock();
+        $orderMock = $this->getOrderMock();
 
         $paymentMock->expects(static::once())
             ->method('getOrder')
             ->willReturn($orderMock);
 
-        $response = $this->_execGatewayRequest();
+        $response = $this->execGatewayRequest();
         $amount = 43.20;
         $this->payflowpro->authorize($paymentMock, $amount);
         static::assertEquals($response['pnref'], $paymentMock->getTransactionId());
@@ -327,7 +327,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
      * Create mock object for store model
      * @return void
      */
-    protected function _initStoreMock()
+    protected function initStoreMock()
     {
         $storeId = 27;
         $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
@@ -346,7 +346,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
      * Create response object for Payflowpro gateway
      * @return \Magento\Framework\DataObject
      */
-    protected function _getGatewayResponseObject()
+    protected function getGatewayResponseObject()
     {
         return new \Magento\Framework\DataObject(
             [
@@ -365,10 +365,10 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
      * Call payflow gateway request and return response object
      * @return \Magento\Framework\DataObject
      */
-    protected function _execGatewayRequest()
+    protected function execGatewayRequest()
     {
-        $this->_initStoreMock();
-        $response = $this->_getGatewayResponseObject();
+        $this->initStoreMock();
+        $response = $this->getGatewayResponseObject();
         $this->gatewayMock->expects(static::once())
             ->method('postRequest')
             ->with(
@@ -383,7 +383,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
      * Create mock object for payment model
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _getPaymentMock()
+    protected function getPaymentMock()
     {
         $paymentMock = $this->getMockBuilder('Magento\Payment\Model\Info')
             ->disableOriginalConstructor()
@@ -418,7 +418,7 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
      * Create mock object for order model
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _getOrderMock()
+    protected function getOrderMock()
     {
         $orderData = [
             'currency' => 'USD',
