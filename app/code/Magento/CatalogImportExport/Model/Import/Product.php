@@ -1430,7 +1430,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
                                 trim($mediaImage),
                                 true
                             );
-                            if ($uploadedGalleryFiles[$mediaImage] == ''){
+                            if ($uploadedGalleryFiles[$mediaImage] == '') {
                                 $uploadedGalleryFiles[$mediaImage] = $mediaImage;
                             }
                         }
