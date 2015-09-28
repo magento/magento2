@@ -14,6 +14,32 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Config\View">
+        <arguments>
+            <argument name="xpath" xsi:type="array">
+                <item name="video" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="path" xsi:type="string">/view/videos</item>
+                        <item name="id" xsi:type="string">module</item>
+                    </item>
+                    <item name="1" xsi:type="array">
+                        <item name="path" xsi:type="string">/view/videos/video</item>
+                        <item name="id" xsi:type="array">
+                            <item name="id1" xsi:type="string">id</item>
+                            <item name="id2" xsi:type="string">type</item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Config\Reader\Xsd\MediaTypeDataExtractorPool">
+        <arguments>
+            <argument name="extractors" xsi:type="array">
+                <item name="videos" xsi:type="string">Magento\ProductVideo\Model\VideoExtractor</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Model\Product\Attribute\Backend\Media">
         <plugin name="external_video_media_entry_processor" type="Magento\ProductVideo\Model\Plugin\ExternalVideoEntryProcessor" />
     </type>

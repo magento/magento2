@@ -36,6 +36,11 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     const NODE_CONFIG_VIDEO_AUTO_RESTART = 'video_auto_restart';
 
     /**
+     * Media type
+     */
+    const MEDIA_TYPE = "videos";
+
+    /**
      * @var ConfigInterface
      */
     protected $viewConfig;
@@ -91,10 +96,16 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getPlayIfBaseAttribute()
     {
-        return $this->cachedVideoConfig->getVideoAttributeValue(
+        $videoAttributes = $this->cachedVideoConfig->getMediaAttributes(
             self::MODULE_NAME,
+            self::MEDIA_TYPE,
             self::NODE_CONFIG_PLAY_IF_BASE
         );
+        if (isset($videoAttributes[self::NODE_CONFIG_PLAY_IF_BASE])) {
+            return $videoAttributes[self::NODE_CONFIG_PLAY_IF_BASE];
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -104,10 +115,16 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getShowRelatedAttribute()
     {
-        return $this->cachedVideoConfig->getVideoAttributeValue(
+        $videoAttributes = $this->cachedVideoConfig->getMediaAttributes(
             self::MODULE_NAME,
+            self::MEDIA_TYPE,
             self::NODE_CONFIG_SHOW_RELATED
         );
+        if (isset($videoAttributes[self::NODE_CONFIG_SHOW_RELATED])) {
+            return $videoAttributes[self::NODE_CONFIG_SHOW_RELATED];
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -117,9 +134,15 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getVideoAutoRestartAttribute()
     {
-        return $this->cachedVideoConfig->getVideoAttributeValue(
+        $videoAttributes = $this->cachedVideoConfig->getMediaAttributes(
             self::MODULE_NAME,
+            self::MEDIA_TYPE,
             self::NODE_CONFIG_VIDEO_AUTO_RESTART
         );
+        if (isset($videoAttributes[self::NODE_CONFIG_VIDEO_AUTO_RESTART])) {
+            return $videoAttributes[self::NODE_CONFIG_VIDEO_AUTO_RESTART];
+        } else {
+            return null;
+        }
     }
 }

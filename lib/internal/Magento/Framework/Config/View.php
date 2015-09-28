@@ -9,16 +9,44 @@
  */
 namespace Magento\Framework\Config;
 
+use Magento\Framework\Config\Reader\Xsd\Reader;
+use Magento\Framework\Config\Reader\Xsd\MediaTypeDataExtractorPool;
+
 class View extends \Magento\Framework\Config\AbstractXml
 {
+    /*
+     * @var \Magento\Framework\Config\Reader\Xsd\Reader
+     */
+    protected $xsdReader;
+
+    protected $extractorPool;
+
+    /*
+     * @var array
+     */
+    protected $xpath;
+
+    public function __construct(
+        $configFiles,
+        $xpath = [],
+        Reader $xsdReader,
+        MediaTypeDataExtractorPool $extractorPool
+    ) {
+        $this->xsdReader = $xsdReader;
+        $this->xpath = $xpath;
+        $this->extractorPool = $extractorPool;
+        parent::__construct($configFiles);
+    }
+
     /**
-     * Path to view.xsd
+     * Merged file view.xsd
      *
      * @return string
      */
     public function getSchemaFile()
     {
-        return __DIR__ . '/etc/view.xsd';
+        $configXsd = $this->xsdReader->read();
+        return $configXsd;
     }
 
     /**
@@ -32,7 +60,10 @@ class View extends \Magento\Framework\Config\AbstractXml
     {
         $result = [];
         /** @var $varsNode \DOMElement */
-        foreach ($dom->childNodes->item(0)/*root*/->childNodes as $childNode) {
+        foreach (
+            $dom->childNodes->item(0)/*root*/
+            ->childNodes as $childNode
+        ) {
             switch ($childNode->tagName) {
                 case 'vars':
                     $moduleName = $childNode->getAttribute('module');
@@ -43,43 +74,20 @@ class View extends \Magento\Framework\Config\AbstractXml
                         $result[$childNode->tagName][$moduleName][$varName] = $varValue;
                     }
                     break;
-                break;
-                case 'media':
-                    $moduleName = $childNode->getAttribute('module');
-                    /** @var \DOMElement $node */
-                    foreach ($childNode->getElementsByTagName('image') as $node) {
-                        $imageId = $node->getAttribute('id');
-                        $result[$childNode->tagName][$moduleName]['images'][$imageId]['type']
-                            = $node->getAttribute('type');
-                        foreach ($node->childNodes as $attribute) {
-                            if ($attribute->nodeType != XML_ELEMENT_NODE) {
-                                continue;
-                            }
-                            $nodeValue = $attribute->nodeValue;
-                            $result[$childNode->tagName][$moduleName]['images'][$imageId][$attribute->tagName]
-                                = $nodeValue;
-                        }
-                    }
-                    foreach ($childNode->getElementsByTagName('video') as $node) {
-                        $imageId = $node->getAttribute('id');
-                        $result[$childNode->tagName][$moduleName]['videos'][$imageId]['type']
-                            = $node->getAttribute('type');
-                        foreach ($node->childNodes as $attribute) {
-                            if ($attribute->nodeType != XML_ELEMENT_NODE) {
-                                continue;
-                            }
-                            $nodeValue = $attribute->nodeValue;
-                            $result[$childNode->tagName][$moduleName]['videos'][$imageId][$attribute->tagName]
-                                = $nodeValue;
-                        }
-                    }
-                    break;
                 case 'exclude':
                     /** @var $itemNode \DOMElement */
                     foreach ($childNode->getElementsByTagName('item') as $itemNode) {
                         $itemType = $itemNode->getAttribute('type');
                         $result[$childNode->tagName][$itemType][] = $itemNode->nodeValue;
                     }
+                    break;
+                case 'images':
+                    $imagesNodesArray = $this->extractorPool->nodeProcessor($childNode->tagName)->process($childNode);
+                    $result = array_merge($result, $imagesNodesArray);
+                    break;
+                case 'videos':
+                    $videosNodesArray = $this->extractorPool->nodeProcessor($childNode->tagName)->process($childNode);
+                    $result = array_merge($result, $videosNodesArray);
                     break;
             }
         }
@@ -112,52 +120,29 @@ class View extends \Magento\Framework\Config\AbstractXml
     }
 
     /**
-     * Retrieve a list videos attributes in scope of specified module
-     *
-     * @param string $module
-     * @param string $var
-     * @return mixed
-     */
-    public function getVideoAttributeValue($module, $var)
-    {
-        return isset($this->_data['media'][$module]['videos'][$var][$var])
-            ? $this->_data['media'][$module]['videos'][$var][$var]
-            : false;
-    }
-
-    /**
-     * Retrieve a list images attributes in scope of specified module
-     *
-     * @param string $module
-     * @return array
-     */
-    public function getImages($module)
-    {
-        return isset($this->_data['media'][$module]['images']) ? $this->_data['media'][$module]['images'] : [];
-    }
-
-    /**
      * Retrieve a list media attributes in scope of specified module
      *
      * @param string $module
+     * @param string $mediaType
      * @return array
      */
-    public function getMedia($module)
+    public function getMediaEntities($module, $mediaType)
     {
-        return isset($this->_data['media'][$module]) ? $this->_data['media'][$module] : [];
+        return isset($this->_data[$mediaType][$module]) ? $this->_data[$mediaType][$module] : [];
     }
 
     /**
-     * Retrieve array of image attributes
+     * Retrieve array of media attributes
      *
-     * @param string $module
-     * @param string $imageId
+     * @param $module
+     * @param $mediaType
+     * @param $mediaId
      * @return array
      */
-    public function getImageAttributes($module, $imageId)
+    public function getMediaAttributes($module, $mediaType, $mediaId)
     {
-        return isset($this->_data['media'][$module]['images'][$imageId])
-            ? $this->_data['media'][$module]['images'][$imageId]
+        return isset($this->_data[$mediaType][$module][$mediaId])
+            ? $this->_data[$mediaType][$module][$mediaId]
             : [];
     }
 
@@ -179,7 +164,7 @@ class View extends \Magento\Framework\Config\AbstractXml
     protected function _getInitialXml()
     {
         return '<?xml version="1.0" encoding="UTF-8"?>' .
-               '<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"></view>';
+        '<view xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"></view>';
     }
 
     /**
@@ -189,14 +174,35 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     protected function _getIdAttributes()
     {
-        return [
+        $idAttributes = $this->addIdAttributes($this->xpath);
+        return $idAttributes;
+    }
+
+    /**
+     * Add attributes for module identification
+     *
+     * @param $xpath
+     * @return array
+     */
+    protected function addIdAttributes($xpath)
+    {
+        $idAttributes = [
             '/view/vars' => 'module',
             '/view/vars/var' => 'name',
             '/view/exclude/item' => ['type', 'item'],
-            '/view/media' => 'module',
-            '/view/media/image' => ['id', 'type'],
-            '/view/media/video' => ['id', 'type'],
         ];
+        if (is_array($xpath)) {
+            foreach ($xpath as $attribute) {
+                if (is_array($attribute)) {
+                    foreach ($attribute as $newAttribute) {
+                        if (isset($newAttribute['path']) && isset($newAttribute['id'])) {
+                            $idAttributes[$newAttribute['path']] = $newAttribute['id'];
+                        }
+                    }
+                }
+            }
+        }
+        return $idAttributes;
     }
 
     /**

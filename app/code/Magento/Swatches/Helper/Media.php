@@ -254,7 +254,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
             ]);
             $imageConfig = array_merge(
                 $imageConfig,
-                $config->getImages('Magento_Catalog')
+                $config->getMediaEntities('Magento_Catalog', 'images')
             );
         }
         return $imageConfig;
