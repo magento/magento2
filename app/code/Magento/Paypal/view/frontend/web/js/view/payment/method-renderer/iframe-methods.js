@@ -4,12 +4,12 @@
  */
 define(
     [
-        'jquery',
         'Magento_Checkout/js/view/payment/default',
         'ko',
-        'Magento_Paypal/js/model/iframe'
+        'Magento_Paypal/js/model/iframe',
+        'Magento_Checkout/js/model/full-screen-loader'
     ],
-    function ($, Component, ko, iframe) {
+    function (Component, ko, iframe, fullScreenLoader) {
         'use strict';
 
         return Component.extend({
@@ -54,7 +54,7 @@ define(
              * @returns {void}
              */
             iframeLoaded: function() {
-                $('#checkout').trigger("processStop");
+                fullScreenLoader.stopLoader();
             }
         });
     }
