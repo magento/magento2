@@ -82,7 +82,7 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
         $url = $_ENV['app_frontend_url'] . 'rest/V1/customers/' . $order->getCustomerId()->getId() . '/carts';
         $data = '{"customerId": "' . $order->getCustomerId()->getId() . '"}';
         $this->webapiTransport->write($url, $data);
-        $response = json_decode($this->webapiTransport->read());
+        $response = json_decode($this->webapiTransport->read(), true);
         $this->webapiTransport->close();
         if (!is_numeric($response)) {
             $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
@@ -115,7 +115,7 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
                 $data['cartItem']['product_option'] = $this->$methodName($product);
             }
             $this->webapiTransport->write($url, $data);
-            $response = (array)json_decode($this->webapiTransport->read());
+            $response = (array)json_decode($this->webapiTransport->read(), true);
             $this->webapiTransport->close();
             if (isset($response['message'])) {
                 $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
@@ -142,7 +142,7 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
             'couponCode' => $order->getCouponCode()->getCouponCode()
         ];
         $this->webapiTransport->write($url, $data, WebapiDecorator::PUT);
-        $response = json_decode($this->webapiTransport->read());
+        $response = json_decode($this->webapiTransport->read(), true);
         $this->webapiTransport->close();
         if ($response !== true) {
             $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
@@ -180,7 +180,7 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
         }
         $data = ["address" => $address];
         $this->webapiTransport->write($url, $data);
-        $response = json_decode($this->webapiTransport->read());
+        $response = json_decode($this->webapiTransport->read(), true);
         $this->webapiTransport->close();
         if (!is_numeric($response)) {
             $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
@@ -207,7 +207,7 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
             "methodCode" => $method
         ];
         $this->webapiTransport->write($url, $data, WebapiDecorator::PUT);
-        $response = json_decode($this->webapiTransport->read());
+        $response = json_decode($this->webapiTransport->read(), true);
         $this->webapiTransport->close();
         if ($response !== true) {
             $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
@@ -230,7 +230,7 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
             "method" => $order->getPaymentAuthExpiration()
         ];
         $this->webapiTransport->write($url, $data, WebapiDecorator::PUT);
-        $response = json_decode($this->webapiTransport->read());
+        $response = json_decode($this->webapiTransport->read(), true);
         $this->webapiTransport->close();
         if (!is_numeric($response)) {
             $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
@@ -249,7 +249,7 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
         $url = $this->url . '/order';
         $data = ["cartId" => $this->quote];
         $this->webapiTransport->write($url, $data, WebapiDecorator::PUT);
-        $response = json_decode($this->webapiTransport->read());
+        $response = json_decode($this->webapiTransport->read(), true);
         $this->webapiTransport->close();
         if (!is_numeric($response)) {
             $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);

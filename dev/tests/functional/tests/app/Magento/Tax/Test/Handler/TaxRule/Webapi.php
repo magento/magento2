@@ -57,7 +57,7 @@ class Webapi extends AbstractWebapi implements TaxRuleInterface
 
         $url = $_ENV['app_frontend_url'] . 'rest/V1/taxRules';
         $this->webapiTransport->write($url, $data);
-        $response = json_decode($this->webapiTransport->read());
+        $response = json_decode($this->webapiTransport->read(), true);
         $this->webapiTransport->close();
 
         if (empty($response['id'])) {
