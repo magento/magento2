@@ -3179,7 +3179,6 @@ return [
     ['Magento\Framework\Module\Exception'],
     ['Magento\Framework\Data\Argument\MissingOptionalValueException'],
     ['Magento\Framework\Session\SaveHandlerException'],
-    ['Magento\Framework\ForeignKey\Exception'],
     ['Magento\CatalogInventory\Exception'],
     ['Magento\CatalogRule\CatalogRuleException'],
     ['Magento\Payment\Exception'],
