@@ -191,7 +191,7 @@
         <var name="gallery:transition:duration">500</var> <!-- Sets transition duration in ms -->
         <var name="gallery:navigation:carousel">true</var> <!-- Display navigation thumbs as carousel (true/false) -->
 
-        <var name="gallery:fullscreen:navigation">thumbs</var> <!-- Fullscreen navigation style (false/thumbs/dots) -->
+        <var name="gallery:fullscreen:nav">thumbs</var> <!-- Fullscreen navigation style (false/thumbs/dots) -->
         <var name="gallery:fullscreen:loop">false</var> <!-- Fullscreen navigation loop (true/false) -->
         <var name="gallery:fullscreen:keyboard">true</var> <!-- Turn on/off keyboard arrows navigation (true/false/null) -->
         <var name="gallery:fullscreen:arrows">null</var> <!-- Turn on/off arrows on the sides preview (true/false/null) -->
