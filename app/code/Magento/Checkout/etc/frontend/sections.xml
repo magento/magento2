@@ -57,4 +57,12 @@
         <section name="cart"/>
         <section name="checkout-data"/>
     </action>
+    <action name="rest/*/V1/guest-carts/*/set-payment-information">
+        <section name="cart"/>
+        <section name="checkout-data"/>
+    </action>
+    <action name="rest/*/V1/carts/mine/set-payment-information">
+        <section name="cart"/>
+        <section name="checkout-data"/>
+    </action>
 </config>

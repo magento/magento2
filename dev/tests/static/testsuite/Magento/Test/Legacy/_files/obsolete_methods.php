@@ -2460,4 +2460,8 @@ return [
         'Magento\ConfigurableProduct\Model\Product\VariationHandler::fillSimpleProductData'
     ],
     ['mergeBookmarkConfig', 'Magento\Ui\Model\Manager'],
+    ['getTitle', 'Magento\Quote\Api\Data\PaymentInterface'],
+    ['setTitle', 'Magento\Quote\Api\Data\PaymentInterface'],
+    ['getTitle', 'Magento\Quote\Model\Quote\Payment'],
+    ['setTitle', 'Magento\Quote\Model\Quote\Payment'],
 ];
