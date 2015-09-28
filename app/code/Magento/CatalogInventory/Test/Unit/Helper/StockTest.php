@@ -173,28 +173,6 @@ class StockTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function testAddStockStatusToSelect()
-    {
-        $selectMock = $this->getMockBuilder('Magento\Framework\DB\Select')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $websiteMock = $this->getMockBuilder('Magento\Store\Model\Website')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $stockStatusMock = $this->getMockBuilder('Magento\CatalogInventory\Model\Resource\Stock\Status')
-            ->disableOriginalConstructor()
-            ->setMethods(['addStockStatusToSelect'])
-            ->getMock();
-        $stockStatusMock->expects($this->once())
-            ->method('addStockStatusToSelect')
-            ->with($selectMock, $websiteMock);
-        $this->statusFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($stockStatusMock);
-
-        $this->assertNull($this->stock->addStockStatusToSelect($selectMock, $websiteMock));
-    }
-
     public function testAddIsInStockFilterToCollection()
     {
         $collectionMock = $this->getMockBuilder('Magento\Catalog\Model\Resource\Product\Collection')

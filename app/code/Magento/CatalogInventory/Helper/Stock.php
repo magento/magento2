@@ -9,6 +9,9 @@ use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\CatalogInventory\Model\Resource\Stock\StatusFactory;
+use Magento\CatalogInventory\Model\Resource\Stock\Status;
+use Magento\Catalog\Model\Resource\Collection\AbstractCollection;
+use Magento\Catalog\Model\Product;
 
 /**
  * Class Stock
@@ -30,7 +33,7 @@ class Stock
     protected $scopeConfig;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Resource\Stock\Status
+     * @var Status
      */
     protected $stockStatusResource;
 
@@ -65,11 +68,11 @@ class Stock
     /**
      * Assign stock status information to product
      *
-     * @param \Magento\Catalog\Model\Product $product
+     * @param Product $product
      * @param int $stockStatus
      * @return void
      */
-    public function assignStatusToProduct(\Magento\Catalog\Model\Product $product, $stockStatus = null)
+    public function assignStatusToProduct(Product $product, $stockStatus = null)
     {
         if ($stockStatus === null) {
             $websiteId = $product->getStore()->getWebsiteId();
@@ -82,13 +85,11 @@ class Stock
     /**
      * Add stock status information to products
      *
-     * @param \Magento\Catalog\Model\Resource\Collection\AbstractCollection $productCollection
+     * @param AbstractCollection $productCollection
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function addStockStatusToProducts(
-        \Magento\Catalog\Model\Resource\Collection\AbstractCollection $productCollection
-    ) {
+    public function addStockStatusToProducts(AbstractCollection $productCollection)
+    {
         $websiteId = $this->storeManager->getStore($productCollection->getStoreId())->getWebsiteId();
         foreach ($productCollection as $product) {
             $productId = $product->getId();
@@ -131,19 +132,6 @@ class Stock
     }
 
     /**
-     * Add stock status to prepare index select
-     *
-     * @param \Magento\Framework\DB\Select $select
-     * @param \Magento\Store\Model\Website $website
-     * @return void
-     */
-    public function addStockStatusToSelect(\Magento\Framework\DB\Select $select, \Magento\Store\Model\Website $website)
-    {
-        $resource = $this->getStockStatusResource();
-        $resource->addStockStatusToSelect($select, $website);
-    }
-
-    /**
      * Add only is in stock products filter to product collection
      *
      * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
@@ -156,7 +144,7 @@ class Stock
     }
 
     /**
-     * @return \Magento\CatalogInventory\Model\Resource\Stock\Status
+     * @return Status
      */
     protected function getStockStatusResource()
     {
