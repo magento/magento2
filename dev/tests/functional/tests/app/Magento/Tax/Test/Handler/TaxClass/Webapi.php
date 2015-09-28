@@ -28,7 +28,7 @@ class Webapi extends AbstractWebapi implements TaxClassInterface
 
         $url = $_ENV['app_frontend_url'] . 'rest/V1/taxClasses';
         $this->webapiTransport->write($url, $data);
-        $response = json_decode($this->webapiTransport->read());
+        $response = json_decode($this->webapiTransport->read(), true);
         $this->webapiTransport->close();
 
         if (!is_numeric($response)) {
