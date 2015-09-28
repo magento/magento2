@@ -181,7 +181,7 @@ class UnitBaseCalculatorTest extends \PHPUnit_Framework_TestCase
         $mockItem->expects($this->once())
             ->method('getDiscountAmount')
             ->will($this->returnValue(1));
-        $mockItem->expects($this->once())
+        $mockItem->expects($this->atLeastOnce())
             ->method('getCode')
             ->will($this->returnValue(self::CODE));
         $mockItem->expects($this->once())
