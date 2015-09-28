@@ -54,8 +54,8 @@ class Radios extends AbstractElement
      */
     protected function _optionToHtml($option, $selected)
     {
-        $html = '<div class="admin__field admin__field-option">';
-        $html .= '<input type="radio"' . $this->getRadioButtonAttributes($option);
+        $html = '<div class="admin__field admin__field-option">' .
+            '<input type="radio"' . $this->getRadioButtonAttributes($option);
         if (is_array($option)) {
             $html .= 'value="' . $this->_escape(
                 $option['value']
