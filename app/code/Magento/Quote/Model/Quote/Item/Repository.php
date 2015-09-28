@@ -155,8 +155,8 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
     /**
      * Add to buy request custom options
      *
-     * @param \Magento\Framework\DataObject|float $params
      * @param \Magento\Quote\Api\Data\CartItemInterface $cartItem
+     * @param \Magento\Framework\DataObject|float $params
      * @return \Magento\Framework\DataObject|float
      */
     protected function addCustomOptionsToBuyRequest(
