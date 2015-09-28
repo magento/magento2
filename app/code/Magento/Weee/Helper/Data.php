@@ -293,6 +293,35 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Returns applied weee tax amount
+     *
+     * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
+     * @return array
+     */
+    public function getAppliedAmount($item)
+    {
+        if ($item instanceof \Magento\Quote\Model\Quote\Item\AbstractItem) {
+            if ($item->getHasChildren() && $item->isChildrenCalculated()) {
+                $result = 0;
+                foreach ($item->getChildren() as $child) {
+                    $childData = $this->getAppliedAmount($child);
+                    if (!empty($childData)) {
+                        $result += $childData;
+                    }
+                }
+                return $result;
+            }
+        }
+
+        // if order item data is old enough then weee_tax_applied might not be valid
+        $data = $item->getWeeeTaxAppliedAmount();
+        if (empty($data)) {
+            return 0;
+        }
+        return $data;
+    }
+
+    /**
      * Returns applied weee taxes
      *
      * @param \Magento\Quote\Model\Quote\Item\AbstractItem $item
@@ -738,7 +767,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param  \Magento\Catalog\Model\Product $product
      * @return array
      */
-    public function getWeeAttributesForBundle($product)
+    public function getWeeeAttributesForBundle($product)
     {
         if ($product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
             $typeInstance = $product->getTypeInstance();
@@ -757,7 +786,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                     $product->getStore()->getWebsiteId()
                 );
                 foreach ($weeAttributes as $weeAttribute) {
-                    $insertedWeeCodesArray[$weeAttribute->getCode()]=$weeAttribute;
+                    $insertedWeeCodesArray[$selectionItem->getId()][$weeAttribute->getCode()]=$weeAttribute;
                 }
             }
             return $insertedWeeCodesArray;

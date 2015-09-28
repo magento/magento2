@@ -7,10 +7,6 @@
 -->
 <mapping strict="0">
     <fields>
-        <display>
-            <selector>[name="associated_product_ids[]"]</selector>
-            <input>checkbox</input>
-        </display>
         <name>
             <selector>[name$="[name]"]</selector>
         </name>

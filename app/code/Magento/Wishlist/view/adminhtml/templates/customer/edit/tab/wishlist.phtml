@@ -22,13 +22,13 @@ wishlistControl = {
         if (!urlParams) {
             urlParams = '';
         }
-        var url = <?php echo $block->getJsObjectName() ?>.url + '?ajax=true' + urlParams;
+        var url = <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.url + '?ajax=true' + urlParams;
         new Ajax.Updater(
-            <?php echo $block->getJsObjectName() ?>.containerId,
+            <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.containerId,
             url,
             {
                 parameters: {form_key: FORM_KEY},
-                onComplete: <?php echo $block->getJsObjectName() ?>.initGrid.bind(<?php echo $block->getJsObjectName() ?>),
+                onComplete: <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.initGrid.bind(<?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>),
                 evalScripts:true
             }
         );
@@ -48,7 +48,7 @@ wishlistControl = {
     },
 
     removeItem: function (itemId) {
-        if(!confirm('<?php echo __('Are you sure you want to remove this item?') ?>')) {
+        if(!confirm('<?php /* @escapeNotVerified */ echo __('Are you sure you want to remove this item?') ?>')) {
             return false;
         }
         this.reload('&delete=' + itemId);
@@ -59,8 +59,8 @@ wishlistControl = {
 productConfigure.addListType(
     'wishlist',
     {
-        urlFetch: '<?php echo $block->getUrl('customer/wishlist_product_composite_wishlist/configure') ?>',
-        urlConfirm: '<?php echo $block->getUrl('customer/wishlist_product_composite_wishlist/update') ?>'
+        urlFetch: '<?php /* @escapeNotVerified */ echo $block->getUrl('customer/wishlist_product_composite_wishlist/configure') ?>',
+        urlConfirm: '<?php /* @escapeNotVerified */ echo $block->getUrl('customer/wishlist_product_composite_wishlist/update') ?>'
     }
 );
 //-->

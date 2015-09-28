@@ -15,12 +15,12 @@ require(['prototype'], function(){
 window.changeDiagramsPeriod = function(periodObj) {
     periodParam = periodObj.value ? 'period/' + periodObj.value + '/' : '';
 <?php foreach ($block->getChildBlock('diagrams')->getTabsIds() as $tabId): ?>
-    ajaxBlockParam = 'block/tab_<?php echo $tabId ?>/';
+    ajaxBlockParam = 'block/tab_<?php /* @escapeNotVerified */ echo $tabId ?>/';
     ajaxBlockUrl = '<?php echo $block->getUrl('adminhtml/*/ajaxBlock', ['_current' => true, 'block' => '', 'period' => '']) ?>' + ajaxBlockParam + periodParam;
     new Ajax.Request(ajaxBlockUrl, {
         parameters: {isAjax: 'true', form_key: FORM_KEY},
         onSuccess: function(transport) {
-            tabContentElementId = '<?php echo $block->getChildBlock('diagrams')->getId() ?>_<?php echo $tabId ?>_content';
+            tabContentElementId = '<?php /* @escapeNotVerified */ echo $block->getChildBlock('diagrams')->getId() ?>_<?php /* @escapeNotVerified */ echo $tabId ?>_content';
             try {
                 if (transport.responseText.isJSON()) {
                     var response = transport.responseText.evalJSON()
@@ -86,15 +86,15 @@ window.changeDiagramsPeriod = function(periodObj) {
     <div class="dashboard-secondary col-m-4 col-m-pull-8">
         <?php echo $block->getChildHtml('sales') ?>
         <div class="dashboard-item">
-            <div class="dashboard-item-title"><?php echo __('Last Orders') ?></div>
+            <div class="dashboard-item-title"><?php /* @escapeNotVerified */ echo __('Last Orders') ?></div>
             <?php echo $block->getChildHtml('lastOrders'); ?>
         </div>
         <div class="dashboard-item">
-            <div class="dashboard-item-title"><?php echo __('Last Search Terms') ?></div>
+            <div class="dashboard-item-title"><?php /* @escapeNotVerified */ echo __('Last Search Terms') ?></div>
             <?php echo $block->getChildHtml('lastSearches'); ?>
         </div>
         <div class="dashboard-item">
-            <div class="dashboard-item-title"><?php echo __('Top Search Terms') ?></div>
+            <div class="dashboard-item-title"><?php /* @escapeNotVerified */ echo __('Top Search Terms') ?></div>
             <?php echo $block->getChildHtml('topSearches'); ?>
         </div>
     </div>

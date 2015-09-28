@@ -17,7 +17,7 @@
 <table>
     <tbody>
         <tr>
-            <td><?php echo nl2br($block->getInstructions()) ?></td>
+            <td><?php /* @escapeNotVerified */ echo nl2br($block->getInstructions()) ?></td>
         </tr>
     </tbody>
 </table>

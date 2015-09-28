@@ -195,6 +195,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement
      * @param UrlInterface $urlBuilder
+     * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -310,6 +311,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * Is autocomplete enabled for storefront
      *
      * @return string
+     * @codeCoverageIgnore
      */
     private function isAutocompleteEnabled()
     {
@@ -429,6 +431,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * Retrieve customer registration URL
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getRegisterUrl()
     {
@@ -439,6 +442,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * Retrieve checkout URL
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getCheckoutUrl()
     {
@@ -449,6 +453,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * Retrieve checkout URL
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function pageNotFoundUrl()
     {
@@ -479,6 +484,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * Retrieve store code
      *
      * @return string
+     * @codeCoverageIgnore
      */
     private function getStoreCode()
     {
@@ -489,6 +495,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * Check if guest checkout is allowed
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     private function isGuestCheckoutAllowed()
     {
@@ -499,6 +506,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * Check if customer is logged in
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     private function isCustomerLoggedIn()
     {
@@ -509,6 +517,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * Check if customer must be logged in to proceed with checkout
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     private function isCustomerLoginRequired()
     {
@@ -519,6 +528,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * Return forgot password URL
      *
      * @return string
+     * @codeCoverageIgnore
      */
     private function getForgotPasswordUrl()
     {
@@ -529,6 +539,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * Return base static url.
      *
      * @return string
+     * @codeCoverageIgnore
      */
     protected function getStaticBaseUrl()
     {

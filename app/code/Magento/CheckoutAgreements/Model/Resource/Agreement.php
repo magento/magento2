@@ -19,6 +19,7 @@ class Agreement extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param string $connectionName
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
@@ -33,6 +34,7 @@ class Agreement extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Model initialization
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {

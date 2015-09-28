@@ -38,5 +38,11 @@ class CustomerGrid extends DataGrid
             'selector' => '.admin__data-grid-filters select[name*=group_id]',
             'input' => 'select',
         ],
+        'entity_id_from' => [
+            'selector' => '[name="filters[entity_id][from]"]',
+        ],
+        'entity_id_to' => [
+            'selector' => '[name="filters[entity_id][to]"]',
+        ],
     ];
 }

@@ -17,6 +17,7 @@ class Helper extends \Magento\Framework\DB\Helper
      *
      * @param \Magento\Framework\App\Resource $resource
      * @param string $modulePrefix
+     * @codeCoverageIgnore
      */
     public function __construct(\Magento\Framework\App\Resource $resource, $modulePrefix = 'Magento_Eav')
     {

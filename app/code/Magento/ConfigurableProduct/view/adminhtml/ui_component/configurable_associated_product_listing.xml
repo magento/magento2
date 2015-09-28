@@ -41,8 +41,8 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="columnsProvider" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.product_columns</item>
-                    <item name="links" xsi:type="array">
-                        <item name="applied" xsi:type="string">not-save-filter</item>
+                    <item name="params" xsi:type="array">
+                        <item name="filters_modifier" xsi:type="array" />
                     </item>
                     <item name="childDefaults" xsi:type="array">
                         <item name="provider" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.listing_top.listing_filters</item>
@@ -52,18 +52,6 @@
                     </item>
                 </item>
             </argument>
-            <filterSelect name="attribute_set_id">
-                <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Catalog\Model\Product\AttributeSet\Options</argument>
-                </argument>
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataScope" xsi:type="string">attribute_set_id</item>
-                        <item name="caption" xsi:type="string" translate="true">Select...</item>
-                        <item name="label" xsi:type="string" translate="true">Attribute Set</item>
-                    </item>
-                </argument>
-            </filterSelect>
             <filterSelect name="status">
                 <argument name="optionsProvider" xsi:type="configurableObject">
                     <argument name="class" xsi:type="string">Magento\Catalog\Model\Product\Attribute\Source\Status</argument>
@@ -85,12 +73,12 @@
             </argument>
         </paging>
     </container>
-    <columns name="product_columns" class="Magento\Catalog\Ui\Component\Listing\Columns">
+    <columns name="product_columns" class="Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="childDefaults" xsi:type="array">
                     <item name="fieldAction" xsi:type="array">
-                        <item name="provider" xsi:type="string">configurableVariations</item>
+                        <item name="provider" xsi:type="string">configurableProductGrid</item>
                         <item name="target" xsi:type="string">selectProduct</item>
                         <item name="params" xsi:type="array">
                             <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
@@ -110,6 +98,7 @@
         <column name="entity_id">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">ID</item>
                     <item name="sortOrder" xsi:type="number">10</item>
@@ -124,6 +113,7 @@
                     <item name="sortable" xsi:type="boolean">false</item>
                     <item name="altField" xsi:type="string">name</item>
                     <item name="has_preview" xsi:type="string">1</item>
+                    <item name="align" xsi:type="string">left</item>
                     <item name="label" xsi:type="string" translate="true">Thumbnail</item>
                     <item name="sortOrder" xsi:type="number">20</item>
                 </item>

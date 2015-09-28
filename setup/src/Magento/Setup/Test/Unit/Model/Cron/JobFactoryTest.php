@@ -37,6 +37,8 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
         $upgradeCommand = $this->getMock('Magento\Setup\Console\Command\UpgradeCommand', [], [], '', false);
         $moduleUninstaller = $this->getMock('Magento\Setup\Model\ModuleUninstaller', [], [], '', false);
         $moduleRegistryUninstaller = $this->getMock('Magento\Setup\Model\ModuleRegistryUninstaller', [], [], '', false);
+        $moduleEnabler = $this->getMock('Magento\Setup\Console\Command\ModuleEnableCommand', [], [], '', false);
+        $moduleDisabler = $this->getMock('Magento\Setup\Console\Command\ModuleDisableCommand', [], [], '', false);
 
         $updater = $this->getMock('Magento\Setup\Model\Updater', [], [], '', false);
 
@@ -47,6 +49,8 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
             ['Magento\Setup\Model\ObjectManagerProvider', $objectManagerProvider],
             ['Magento\Setup\Model\ModuleUninstaller', $moduleUninstaller],
             ['Magento\Setup\Model\ModuleRegistryUninstaller', $moduleRegistryUninstaller],
+            ['Magento\Setup\Console\Command\ModuleDisableCommand', $moduleDisabler],
+            ['Magento\Setup\Console\Command\ModuleEnableCommand', $moduleEnabler]
         ];
 
         $serviceManager->expects($this->atLeastOnce())
@@ -63,10 +67,24 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testRollback()
     {
-        $this->objectManager->expects($this->once())
+        $valueMap = [
+            [
+                'Magento\Framework\App\State\CleanupFiles',
+                $this->getMock('Magento\Framework\App\State\CleanupFiles', [], [], '', false)
+            ],
+            [
+                'Magento\Framework\App\Cache',
+                $this->getMock('Magento\Framework\App\Cache', [], [], '', false)
+            ],
+            [
+                'Magento\Framework\Setup\BackupRollbackFactory',
+                $this->getMock('Magento\Framework\Setup\BackupRollbackFactory', [], [], '', false)
+            ],
+        ];
+        $this->objectManager->expects($this->any())
             ->method('get')
-            ->with('Magento\Framework\Setup\BackupRollbackFactory')
-            ->willReturn($this->getMock('Magento\Framework\Setup\BackupRollbackFactory', [], [], '', false));
+            ->will($this->returnValueMap($valueMap));
+
         $this->assertInstanceOf(
             'Magento\Setup\Model\Cron\AbstractJob',
             $this->jobFactory->create('setup:rollback', [])
@@ -110,7 +128,44 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->jobFactory->create('unknown', []);
     }
+
+    public function testModuleDisable()
+    {
+        $valueMap = [
+            [
+                'Magento\Framework\Module\PackageInfoFactory',
+                $this->getMock('Magento\Framework\Module\PackageInfoFactory', [], [], '', false)
+            ],
+        ];
+        $this->objectManager->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap($valueMap));
+
+        $this->assertInstanceOf(
+            'Magento\Setup\Model\Cron\AbstractJob',
+            $this->jobFactory->create('setup:module:disable', [])
+        );
+    }
+
+    public function testModuleEnable()
+    {
+        $valueMap = [
+            [
+                'Magento\Framework\Module\PackageInfoFactory',
+                $this->getMock('Magento\Framework\Module\PackageInfoFactory', [], [], '', false)
+            ],
+        ];
+        $this->objectManager->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap($valueMap));
+
+        $this->assertInstanceOf(
+            'Magento\Setup\Model\Cron\AbstractJob',
+            $this->jobFactory->create('setup:module:enable', [])
+        );
+    }
 }
+
 
 // functions to override native php functions
 namespace Magento\Setup\Model\Cron;

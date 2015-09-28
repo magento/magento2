@@ -726,17 +726,21 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      */
     protected function processPaymentFraudStatus(\Magento\Sales\Model\Order\Payment $payment)
     {
-        $fraudDetailsResponse = $payment->getMethodInstance()
-            ->fetchTransactionFraudDetails($this->getResponse()->getXTransId());
-        $fraudData = $fraudDetailsResponse->getData();
+        try {
+            $fraudDetailsResponse = $payment->getMethodInstance()
+                ->fetchTransactionFraudDetails($this->getResponse()->getXTransId());
+            $fraudData = $fraudDetailsResponse->getData();
 
-        if (empty($fraudData)) {
-            $payment->setIsFraudDetected(false);
-            return $this;
+            if (empty($fraudData)) {
+                $payment->setIsFraudDetected(false);
+                return $this;
+            }
+
+            $payment->setIsFraudDetected(true);
+            $payment->setAdditionalInformation('fraud_details', $fraudData);
+        } catch (\Exception $e) {
+            //this request is optional
         }
-
-        $payment->setIsFraudDetected(true);
-        $payment->setAdditionalInformation('fraud_details', $fraudData);
 
         return $this;
     }
@@ -749,23 +753,27 @@ class Directpost extends \Magento\Authorizenet\Model\Authorizenet implements Tra
      */
     protected function addStatusComment(\Magento\Sales\Model\Order\Payment $payment)
     {
-        $transactionId = $this->getResponse()->getXTransId();
-        $data = $payment->getMethodInstance()->getTransactionDetails($transactionId);
-        $transactionStatus = (string)$data->transaction->transactionStatus;
-        $fdsFilterAction = (string)$data->transaction->FDSFilterAction;
+        try {
+            $transactionId = $this->getResponse()->getXTransId();
+            $data = $payment->getMethodInstance()->getTransactionDetails($transactionId);
+            $transactionStatus = (string)$data->transaction->transactionStatus;
+            $fdsFilterAction = (string)$data->transaction->FDSFilterAction;
 
-        if ($payment->getIsTransactionPending()) {
-            $message = 'Amount of %1 is pending approval on the gateway.<br/>'
-                . 'Transaction "%2" status is "%3".<br/>'
-                . 'Transaction FDS Filter Action is "%4"';
-            $message = __(
-                $message,
-                $payment->getOrder()->getBaseCurrency()->formatTxt($this->getResponse()->getXAmount()),
-                $transactionId,
-                $this->dataHelper->getTransactionStatusLabel($transactionStatus),
-                $this->dataHelper->getFdsFilterActionLabel($fdsFilterAction)
-            );
-            $payment->getOrder()->addStatusHistoryComment($message);
+            if ($payment->getIsTransactionPending()) {
+                $message = 'Amount of %1 is pending approval on the gateway.<br/>'
+                    . 'Transaction "%2" status is "%3".<br/>'
+                    . 'Transaction FDS Filter Action is "%4"';
+                $message = __(
+                    $message,
+                    $payment->getOrder()->getBaseCurrency()->formatTxt($this->getResponse()->getXAmount()),
+                    $transactionId,
+                    $this->dataHelper->getTransactionStatusLabel($transactionStatus),
+                    $this->dataHelper->getFdsFilterActionLabel($fdsFilterAction)
+                );
+                $payment->getOrder()->addStatusHistoryComment($message);
+            }
+        } catch (\Exception $e) {
+            //this request is optional
         }
         return $this;
     }

@@ -10,6 +10,6 @@
  * @var $block \Magento\Paypal\Block\Payflow\Advanced\Form
  */
 ?>
-<fieldset id="payment_form_<?php echo $block->getMethodCode() ?>" style="display:none" class="fieldset payflowadvanced items redirect">
-    <div><?php echo __('You will be required to enter your payment details after you place an order.') ?></div>
+<fieldset id="payment_form_<?php /* @escapeNotVerified */ echo $block->getMethodCode() ?>" style="display:none" class="fieldset payflowadvanced items redirect">
+    <div><?php /* @escapeNotVerified */ echo __('You will be required to enter your payment details after you place an order.') ?></div>
 </fieldset>

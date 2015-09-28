@@ -147,12 +147,20 @@
                     <!-- wrapper and .action-menu to show actions                                  -->
                     <div class="action-select-wrap" ng-class="{'_active' : isActiveActionsCell(component)}">
                         <button class="action-select"
-                                ng-show="component.update || component.uninstall"
+                            ng-show="component.update || component.uninstall || !component.disable || !component.update"
                             ng-click="toggleActiveActionsCell(component)"
                             ng-blur="closeActiveActionsCell(component)">
                             <span>Select</span>
                         </button>
                         <ul class="action-menu" ng-class="{'_active' : isActiveActionsCell(component)}">
+                            <li ng-class="{'hide': !component.disable}"
+                                ng-mousedown="enableDisable('enable', component)">
+                                <a class="action-menu-item">Enable</a>
+                            </li>
+                            <li ng-class="{'hide': !component.enable}"
+                                ng-mousedown="enableDisable('disable', component)">
+                                <a class="action-menu-item">Disable</a>
+                            </li>
                             <li ng-class="{'hide': !component.update}"
                                 ng-mousedown="update(component)">
                                 <a class="action-menu-item">Update</a>

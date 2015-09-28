@@ -9,8 +9,8 @@
 ?>
 <?php if ($block->getRatingSummary()->getCount()): ?>
     <div class="rating-box">
-        <div class="rating" style="width:<?php echo ceil($block->getRatingSummary()->getSum() / ($block->getRatingSummary()->getCount())) ?>%;"></div>
+        <div class="rating" style="width:<?php /* @escapeNotVerified */ echo ceil($block->getRatingSummary()->getSum() / ($block->getRatingSummary()->getCount())) ?>%;"></div>
     </div>
 <?php else: ?>
-    <?php echo __("Rating isn't Available") ?>
+    <?php /* @escapeNotVerified */ echo __("Rating isn't Available") ?>
 <?php endif; ?>

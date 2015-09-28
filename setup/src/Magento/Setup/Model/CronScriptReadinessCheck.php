@@ -39,6 +39,12 @@ class CronScriptReadinessCheck
     const UPDATER_KEY_FILE_PERMISSIONS_VERIFIED = 'file_permissions_verified';
 
     /**
+     * Error message for dependant checks
+     */
+    const OTHER_CHECKS_WILL_FAIL_MSG =
+        '<br/>Other checks will fail as a result (PHP version, PHP settings, and PHP extensions)';
+
+    /**
      * @var Filesystem
      */
     private $filesystem;
@@ -96,10 +102,9 @@ class CronScriptReadinessCheck
                     return ['success' => false, 'error' => 'Internal Error'];
             }
         } catch (\Magento\Framework\Exception\FileSystemException $e) {
-            $error = 'Cron Job has not been configured yet';
+            $error = 'Cron job has not been configured yet';
             if ($type == self::SETUP) {
-                $error .= '<br/>PHP Version, PHP Settings and PHP Extensions Check' .
-                    ' will fail because they depend on this check';
+                $error .= self::OTHER_CHECKS_WILL_FAIL_MSG;
             }
             return [
                 'success' => false,
@@ -115,10 +120,9 @@ class CronScriptReadinessCheck
             }
             return ['success' => false, 'error' => $jsonData[ReadinessCheck::KEY_READINESS_CHECKS]['error']];
         }
-        $error = 'Cron Job has not been configured yet';
+        $error = 'Cron job has not been configured yet';
         if ($type == self::SETUP) {
-            $error .= '<br/>PHP Version, PHP Settings and PHP Extensions Check' .
-                ' will fail because they depend on this check';
+            $error .= self::OTHER_CHECKS_WILL_FAIL_MSG;
         }
         return [
             'success' => false,
@@ -144,13 +148,13 @@ class CronScriptReadinessCheck
             }
             return [
                 'success' => true,
-                'notice' => 'It is recommended to schedule Cron to run every 1 minute'
+                'notice' => 'We recommend you schedule cron to run every 1 minute'
             ];
         }
         return [
             'success' => true,
-            'notice' => 'Unable to determine Cron time interval. ' .
-                'It is recommended to schedule Cron to run every 1 minute'
+            'notice' => 'Unable to determine cron time interval. ' .
+                'We recommend you schedule cron to run every 1 minute'
         ];
     }
 }

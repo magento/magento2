@@ -23,6 +23,7 @@ class EstimatePost extends \Magento\Checkout\Controller\Cart
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param CustomerCart $cart
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @codeCoverageIgnore
      */
     public function __construct(
         Framework\App\Action\Context $context,

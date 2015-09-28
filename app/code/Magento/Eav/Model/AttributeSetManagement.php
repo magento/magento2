@@ -26,6 +26,7 @@ class AttributeSetManagement implements AttributeSetManagementInterface
     /**
      * @param Config $eavConfig
      * @param AttributeSetRepositoryInterface $repository
+     * @codeCoverageIgnore
      */
     public function __construct(
         EavConfig $eavConfig,

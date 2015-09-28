@@ -24,8 +24,8 @@
     <div class="readiness-check-content">
         <h3 class="readiness-check-title">Store in maintenance mode</h3>
         <p>
-            Your store will be in maintenance mode until you complete the {{type}}
-            and maintenance mode is automatically lifted.
+            Your store is in maintenance mode and will automatically
+            return online after the {{type}}.
         </p>
     </div>
 </div>
@@ -50,8 +50,7 @@
     ng-show="maintenanceCalled == maintenanceStatus"
     >
     <div ng-repeat="package in packages">
-        <div>{{package.name}} is ready to be
-            {{successPageAction}}{{package.version ? ' to ' + package.version : ''}}. </div>
+        <div>We're ready to {{type}} {{package.name}}{{package.version ? ' to ' + package.version : ''}}. </div>
     </div>
     <br/>
     <button

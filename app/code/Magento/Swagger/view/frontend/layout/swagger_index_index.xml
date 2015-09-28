@@ -37,9 +37,8 @@
     </head>
     <body>
         <!--Remove Magento page content-->
-        <remove name="page.wrapper"/>
-        <remove name="after.body.start"/>
-        <remove name="page.bottom"/>
+        <referenceContainer name="page.wrapper" remove="true"/>
+        <referenceBlock name="requirejs-config" remove="true"/>
         <referenceContainer name="root">
             <block name="swaggerUiContent" class="Magento\Framework\View\Element\Template" template="Magento_Swagger::swagger-ui/index.phtml"/>
         </referenceContainer>

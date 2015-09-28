@@ -6,6 +6,7 @@
 namespace Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator;
 
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing;
+use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 
 class GroupPrice extends \Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractPrice
 {
@@ -38,14 +39,41 @@ class GroupPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valid
     }
 
     /**
-     * Call parent init()
-     *
-     * @return $this
+     * {@inheritdoc}
      */
-    public function init()
+    public function init($context)
     {
         foreach ($this->groupRepository->getList($this->searchCriteriaBuilder->create())->getItems() as $group) {
             $this->customerGroups[$group->getCode()] = $group->getId();
+        }
+        $this->context = $context;
+    }
+
+    /**
+     * @param string $attribute
+     * @return void
+     */
+    protected function addDecimalError($attribute)
+    {
+        $this->_addMessages(
+            [
+                sprintf(
+                    $this->context->retrieveMessageTemplate(
+                        RowValidatorInterface::ERROR_INVALID_ATTRIBUTE_DECIMAL
+                    ),
+                    $attribute
+                )
+            ]
+        );
+    }
+
+    /**
+     * @return void
+     */
+    protected function initCustomerGroups()
+    {
+        if (!$this->customerGroups) {
+            $this->init($this->context);
         }
     }
 
@@ -58,22 +86,27 @@ class GroupPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valid
     public function isValid($value)
     {
         $this->_clearMessages();
-        if (!$this->customerGroups) {
-            $this->init();
+        $this->initCustomerGroups();
+        if (!$this->isValidValueAndLength($value)) {
+            return true;
         }
-        if ($this->isValidValueAndLength($value)) {
-            if (!isset($value[AdvancedPricing::COL_GROUP_PRICE_WEBSITE])
-                || !isset($value[AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP])
-                || $this->hasEmptyColumns($value)) {
-                $this->_addMessages([self::ERROR_GROUP_PRICE_DATA_INCOMPLETE]);
-                return false;
-            } elseif (
-                $value[AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP] == AdvancedPricing::VALUE_ALL_GROUPS
-                || !isset($this->customerGroups[$value[AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP]])
-            ) {
-                $this->_addMessages([self::ERROR_INVALID_GROUP_PRICE_GROUP]);
-                return false;
-            }
+        if (!isset($value[AdvancedPricing::COL_GROUP_PRICE_WEBSITE])
+            || !isset($value[AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP])
+            || $this->hasEmptyColumns($value)) {
+            $this->_addMessages([self::ERROR_GROUP_PRICE_DATA_INCOMPLETE]);
+            return false;
+        } elseif (
+            $value[AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP] == AdvancedPricing::VALUE_ALL_GROUPS
+            || !isset($this->customerGroups[$value[AdvancedPricing::COL_GROUP_PRICE_CUSTOMER_GROUP]])
+        ) {
+            $this->_addMessages([self::ERROR_INVALID_GROUP_PRICE_GROUP]);
+            return false;
+        }
+        if (!is_numeric($value[AdvancedPricing::COL_GROUP_PRICE])
+            || $value[AdvancedPricing::COL_GROUP_PRICE] < 0
+        ) {
+            $this->addDecimalError(AdvancedPricing::COL_GROUP_PRICE);
+            return false;
         }
         return true;
     }
@@ -86,7 +119,7 @@ class GroupPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valid
     public function getCustomerGroups()
     {
         if (!$this->customerGroups) {
-            $this->init();
+            $this->init($this->context);
         }
         return $this->customerGroups;
     }

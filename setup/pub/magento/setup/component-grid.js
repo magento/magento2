@@ -83,6 +83,8 @@ angular.module('component-grid', ['ngStorage'])
 
                 if ($scope.isAvailableUpdatePackage(component.name)) {
                     return indicators.info[type];
+                } else if(component.disable === true) {
+                    return indicators.off[type];
                 }
                 return indicators.on[type];
             };
@@ -113,6 +115,23 @@ angular.module('component-grid', ['ngStorage'])
                 $localStorage.componentType = component.type;
                 $localStorage.moduleName = component.moduleName;
                 $state.go('root.readiness-check-uninstall');
+            };
+
+            $scope.enableDisable = function(type, component) {
+                if (component.type.indexOf('module') >= 0 ) {
+                    $localStorage.packages = [
+                        {
+                            name: component.moduleName
+                        }
+                    ];
+                    if ($localStorage.titles[type].indexOf(component.moduleName) < 0 ) {
+                        $localStorage.titles[type] = type.charAt(0).toUpperCase() + type.slice(1) + ' '
+                            + component.moduleName;
+                    }
+                    $localStorage.componentType = component.type;
+                    $localStorage.moduleName = component.moduleName;
+                    $state.go('root.readiness-check-'+type);
+                }
             };
 
             $scope.convertDate = function(date) {

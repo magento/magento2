@@ -12,8 +12,8 @@
 <div id="system_messages_list" title="<?php echo $block->escapeHtml($block->getPopupTitle()); ?>">
     <ul class="message-system-list">
         <?php foreach ($block->getUnreadMessages() as $message): ?>
-            <li class="message message-warning <?php echo $block->getItemClass($message);?>">
-                <?php echo $message->getText();?>
+            <li class="message message-warning <?php /* @escapeNotVerified */ echo $block->getItemClass($message);?>">
+                <?php /* @escapeNotVerified */ echo $message->getText();?>
             </li>
         <?php endforeach;?>
     </ul>

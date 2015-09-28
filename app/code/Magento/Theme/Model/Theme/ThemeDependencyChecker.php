@@ -70,7 +70,7 @@ class ThemeDependencyChecker
             return $this->checkChildTheme($themePaths);
         }
 
-        return false;
+        return [];
     }
 
     /**

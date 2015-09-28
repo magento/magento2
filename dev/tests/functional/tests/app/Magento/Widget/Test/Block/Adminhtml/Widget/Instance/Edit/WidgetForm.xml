@@ -32,13 +32,13 @@
         </fields>
     </frontend_properties>
     <widget_options>
-        <class>\Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\WidgetOptions</class>
+        <class>\Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\Parameters</class>
         <selector>#widget_instace_tabs_properties_section</selector>
         <strategy>css selector</strategy>
     </widget_options>
-    <layout_updates>
-        <class>\Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\LayoutUpdates</class>
+    <widget_instance>
+        <class>\Magento\Widget\Test\Block\Adminhtml\Widget\Instance\Edit\Tab\WidgetInstance</class>
         <selector>#widget_instace_tabs_main_section</selector>
         <strategy>css selector</strategy>
-    </layout_updates>
+    </widget_instance>
 </tabs>

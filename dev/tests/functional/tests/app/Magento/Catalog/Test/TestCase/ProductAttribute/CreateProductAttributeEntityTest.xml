@@ -141,7 +141,6 @@
             <data name="productAttribute/data/frontend_input" xsi:type="string">Price</data>
             <data name="productAttribute/data/is_required" xsi:type="string">No</data>
             <data name="productAttribute/data/attribute_code" xsi:type="string">attr_price_%isolation%</data>
-            <data name="productAttribute/data/default_value_text" xsi:type="string">1000</data>
             <data name="productAttribute/data/is_unique" xsi:type="string">No</data>
             <data name="productAttribute/data/manage_frontend_label" xsi:type="string">Price_StoreView</data>
             <data name="productAttribute/data/is_searchable" xsi:type="string">Yes</data>

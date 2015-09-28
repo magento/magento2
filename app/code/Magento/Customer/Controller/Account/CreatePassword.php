@@ -7,14 +7,26 @@
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Controller\AccountInterface;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
 
-class CreatePassword extends \Magento\Customer\Controller\Account
+class CreatePassword extends Action implements AccountInterface
 {
     /** @var AccountManagementInterface */
     protected $accountManagement;
+
+    /**
+     * @var Session
+     */
+    protected $session;
+
+    /**
+     * @var PageFactory
+     */
+    protected $resultPageFactory;
 
     /**
      * @param Context $context
@@ -28,8 +40,10 @@ class CreatePassword extends \Magento\Customer\Controller\Account
         PageFactory $resultPageFactory,
         AccountManagementInterface $accountManagement
     ) {
+        $this->session = $customerSession;
+        $this->resultPageFactory = $resultPageFactory;
         $this->accountManagement = $accountManagement;
-        parent::__construct($context, $customerSession, $resultPageFactory);
+        parent::__construct($context);
     }
 
     /**

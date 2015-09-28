@@ -12,19 +12,15 @@ use Magento\Widget\Test\Page\Adminhtml\WidgetInstanceIndex;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for Delete Widget Entity
- *
- * Test Flow:
- *
  * Preconditions:
- * 1. Create Widget
+ * 1. Create Widget.
  *
  * Steps:
- * 1. Login to backend
- * 2. Open Content > Frontend Apps
- * 3. Open Widget from preconditions
- * 4. Delete
- * 5. Perform all asserts
+ * 1. Login to backend.
+ * 2. Open Content > Frontend Apps.
+ * 3. Open Widget from preconditions.
+ * 4. Delete.
+ * 5. Perform all asserts.
  *
  * @group Widget_(PS)
  * @ZephyrId MAGETWO-28459
@@ -37,21 +33,21 @@ class DeleteWidgetEntityTest extends Injectable
     /* end tags */
 
     /**
-     * WidgetInstanceIndex page
+     * WidgetInstanceIndex page.
      *
      * @var WidgetInstanceIndex
      */
     protected $widgetInstanceIndex;
 
     /**
-     * WidgetInstanceEdit page
+     * WidgetInstanceEdit page.
      *
      * @var WidgetInstanceEdit
      */
     protected $widgetInstanceEdit;
 
     /**
-     * Injection data
+     * Injection data.
      *
      * @param WidgetInstanceIndex $widgetInstanceIndex
      * @param WidgetInstanceEdit $widgetInstanceEdit
@@ -66,7 +62,7 @@ class DeleteWidgetEntityTest extends Injectable
     }
 
     /**
-     * Delete Widget Entity test
+     * Delete Widget Entity test.
      *
      * @param Widget $widget
      * @return void

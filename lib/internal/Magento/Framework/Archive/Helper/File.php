@@ -12,6 +12,7 @@
 namespace Magento\Framework\Archive\Helper;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem\DriverInterface;
 
 class File
 {
@@ -90,7 +91,7 @@ class File
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function open($mode = 'w+', $chmod = 0666)
+    public function open($mode = 'w+', $chmod = DriverInterface::WRITEABLE_FILE_MODE)
     {
         $this->_isInWriteMode = $this->_isWritableMode($mode);
 
