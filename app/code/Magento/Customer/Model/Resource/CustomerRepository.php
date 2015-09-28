@@ -340,8 +340,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
 
         $isEmailAddress = \Zend_Validate::is(
             $customer->getEmail(),
-            'EmailAddress',
-            ['allow' => ['allow' => \Zend_Validate_Hostname::ALLOW_ALL, 'tld' => false]]
+            'EmailAddress'
         );
 
         if (!$isEmailAddress) {
