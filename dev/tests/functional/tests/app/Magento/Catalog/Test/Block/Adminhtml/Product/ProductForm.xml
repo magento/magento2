@@ -113,6 +113,9 @@
                 <use_config_manage_stock>
                     <input>checkbox</input>
                 </use_config_manage_stock>
+                <is_in_stock>
+                    <input>select</input>
+                </is_in_stock>
             </stock_data>
         </fields>
     </advanced-inventory>

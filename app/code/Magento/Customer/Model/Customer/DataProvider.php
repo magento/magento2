@@ -122,17 +122,15 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         /** @var Customer $customer */
         foreach ($items as $customer) {
             $result['customer'] = $customer->getData();
+            unset($result['address']);
 
-            $addresses = [];
             /** @var Address $address */
             foreach ($customer->getAddresses() as $address) {
                 $addressId = $address->getId();
                 $address->load($addressId);
-                $addresses[$addressId] = $address->getData();
-                $this->prepareAddressData($addressId, $addresses, $result['customer']);
+                $result['address'][$addressId] = $address->getData();
+                $this->prepareAddressData($addressId, $result['address'], $result['customer']);
             }
-            $result['address'] = $addresses;
-
             $this->loadedData[$customer->getId()] = $result;
         }
 

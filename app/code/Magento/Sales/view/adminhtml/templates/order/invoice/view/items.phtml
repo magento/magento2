@@ -11,13 +11,13 @@
     <table class="data-table admin__table-primary order-invoice-tables">
         <thead>
             <tr class="headings">
-                <th class="col-product"><span><?php echo __('Product') ?></span></th>
-                <th class="col-price"><span><?php echo __('Price') ?></span></th>
-                <th class="col-qty"><span><?php echo __('Qty') ?></span></th>
-                <th class="col-subtotal"><span><?php echo __('Subtotal') ?></span></th>
-                <th class="col-tax"><span><?php echo __('Tax Amount') ?></span></th>
-                <th class="col-discount"><span><?php echo __('Discount Amount') ?></span></th>
-                <th class="col-total last"><span><?php echo __('Row Total') ?></span></th>
+                <th class="col-product"><span><?php /* @escapeNotVerified */ echo __('Product') ?></span></th>
+                <th class="col-price"><span><?php /* @escapeNotVerified */ echo __('Price') ?></span></th>
+                <th class="col-qty"><span><?php /* @escapeNotVerified */ echo __('Qty') ?></span></th>
+                <th class="col-subtotal"><span><?php /* @escapeNotVerified */ echo __('Subtotal') ?></span></th>
+                <th class="col-tax"><span><?php /* @escapeNotVerified */ echo __('Tax Amount') ?></span></th>
+                <th class="col-discount"><span><?php /* @escapeNotVerified */ echo __('Discount Amount') ?></span></th>
+                <th class="col-total last"><span><?php /* @escapeNotVerified */ echo __('Row Total') ?></span></th>
             </tr>
         </thead>
         <?php $_items = $block->getInvoice()->getAllItems() ?>
@@ -27,7 +27,7 @@
         } else {
             $i++;
         } ?>
-            <tbody class="<?php echo $i%2 ? 'even' : 'odd' ?>">
+            <tbody class="<?php /* @escapeNotVerified */ echo $i%2 ? 'even' : 'odd' ?>">
                 <?php echo $block->getItemHtml($_item) ?>
                 <?php echo $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
             </tbody>

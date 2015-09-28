@@ -5,19 +5,21 @@
  */
 
 // @codingStandardsIgnoreFile
-
+/**
+ * @var $block \Magento\OfflinePayments\Block\Form\Checkmo
+ */
 ?>
 <?php if ($block->getMethod()->getMailingAddress() || $block->getMethod()->getPayableTo()): ?>
-    <dl class="items check payable" id="payment_form_<?php echo $block->getMethodCode() ?>" style="display:none;">
+    <dl class="items check payable" id="payment_form_<?php echo $block->escapeHtml($block->getMethodCode()) ?>" style="display:none;">
         <?php if ($block->getMethod()->getPayableTo()): ?>
-            <dt class="title"><?php echo __('Make Check payable to:') ?></dt>
+            <dt class="title"><?php echo $block->escapeHtml(__('Make Check payable to:')) ?></dt>
             <dd class="content"><?php echo $block->escapeHtml($block->getMethod()->getPayableTo()) ?></dd>
         <?php endif; ?>
         <?php if ($block->getMethod()->getMailingAddress()): ?>
-            <dt class="title"><?php echo __('Send Check to:') ?></dt>
+            <dt class="title"><?php echo $block->escapeHtml(__('Send Check to:')) ?></dt>
             <dd class="content">
                 <address class="checkmo mailing address">
-                    <?php echo nl2br($block->escapeHtml($block->getMethod()->getMailingAddress())) ?>
+                    <?php /* @noEscape */ echo nl2br($block->escapeHtml($block->getMethod()->getMailingAddress())) ?>
                 </address>
             </dd>
         <?php endif; ?>

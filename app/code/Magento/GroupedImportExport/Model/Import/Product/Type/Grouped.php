@@ -69,6 +69,9 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
                 'relation' => []
             ];
             foreach ($bunch as $rowNum => $rowData) {
+                if ($this->_type != $rowData[Product::COL_TYPE]) {
+                    continue;
+                }
                 $associatedSkusQty = isset($rowData['associated_skus']) ? $rowData['associated_skus'] : null;
                 if (!$this->_entityModel->isRowAllowedToImport($rowData, $rowNum) || empty($associatedSkusQty)) {
                     continue;
@@ -96,9 +99,6 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
                     }
                     $productId = $productData['entity_id'];
 
-                    if ($this->_type != $rowData[Product::COL_TYPE]) {
-                        continue;
-                    }
                     $linksData['product_ids'][$productId] = true;
                     $linksData['relation'][] = ['parent_id' => $productId, 'child_id' => $linkedProductId];
                     $qty = empty($associatedSkuAndQty[1]) ? 0 : trim($associatedSkuAndQty[1]);

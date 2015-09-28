@@ -12,6 +12,7 @@
 namespace Magento\Framework\Archive;
 
 use Magento\Framework\Archive\Helper\File;
+use Magento\Framework\Filesystem\DriverInterface;
 
 class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento\Framework\Archive\ArchiveInterface
 {
@@ -378,7 +379,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
 
     /**
      * Read TAR string from file, and unpacked it.
-     * Create files and directories information about discribed
+     * Create files and directories information about described
      * in the string.
      *
      * @param string $destination path to file is unpacked
@@ -403,7 +404,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
 
             if (in_array($header['type'], ["0", chr(0), ''])) {
                 if (!file_exists($dirname)) {
-                    $mkdirResult = @mkdir($dirname, 0777, true);
+                    $mkdirResult = @mkdir($dirname, DriverInterface::WRITEABLE_DIRECTORY_MODE, true);
 
                     if (false === $mkdirResult) {
                         throw new \Magento\Framework\Exception\LocalizedException(

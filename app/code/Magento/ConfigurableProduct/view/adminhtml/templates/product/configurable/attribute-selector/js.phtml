@@ -4,12 +4,14 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /** @var $block \Magento\ConfigurableProduct\Block\Product\Configurable\AttributeSelector */
 ?>
 <script>
 require(["jquery","mage/mage","mage/backend/suggest"], function($){
     var options = <?php
-        echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getSuggestWidgetOptions())
+        /* @escapeNotVerified */ echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getSuggestWidgetOptions())
     ?>;
     $('#configurable-attribute-selector')
         .mage('suggest', options)

@@ -15,7 +15,7 @@ define(
         'Magento_Checkout/js/model/resource-url-manager',
         'Magento_Checkout/js/model/payment-service',
         'Magento_Checkout/js/model/error-processor',
-        'Magento_Ui/js/model/messageList',
+        'Magento_SalesRule/js/model/payment/discount-messages',
         'mage/storage',
         'Magento_Checkout/js/action/get-totals',
         'mage/translate',
@@ -28,7 +28,7 @@ define(
         urlManager,
         paymentService,
         errorProcessor,
-        messageList,
+        messageContainer,
         storage,
         getTotalsAction,
         $t,
@@ -55,13 +55,13 @@ define(
                                 paymentMethodList()
                             );
                         });
-                        messageList.addSuccessMessage({'message': message});
+                        messageContainer.addSuccessMessage({'message': message});
                     }
                 }
             ).fail(
                 function (response) {
                     isLoading(false);
-                    errorProcessor.process(response);
+                    errorProcessor.process(response, messageContainer);
                 }
             );
         };

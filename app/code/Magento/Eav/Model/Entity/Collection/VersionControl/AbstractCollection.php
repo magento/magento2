@@ -28,6 +28,7 @@ abstract class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\A
      * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
      * @param mixed $connection
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -72,6 +73,7 @@ abstract class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\A
 
     /**
      * @inheritdoc
+     * @codeCoverageIgnore
      */
     protected function beforeAddLoadedItem(\Magento\Framework\DataObject $item)
     {

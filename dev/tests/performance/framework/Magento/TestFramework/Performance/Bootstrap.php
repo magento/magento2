@@ -9,6 +9,8 @@
  */
 namespace Magento\TestFramework\Performance;
 
+use Magento\Framework\Filesystem\DriverInterface;
+
 class Bootstrap
 {
     /**
@@ -64,7 +66,7 @@ class Bootstrap
                 );
             }
         }
-        mkdir($reportDir, 0777, true);
+        mkdir($reportDir, DriverInterface::WRITEABLE_DIRECTORY_MODE, true);
     }
 
     /**

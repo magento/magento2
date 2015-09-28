@@ -320,10 +320,12 @@
                 </item>
             </argument>
         </column>
-        <actionsColumn name="actions" class="Magento\Sales\Ui\Component\Listing\Column\OrderShipmentActions">
+        <actionsColumn name="actions" class="Magento\Sales\Ui\Component\Listing\Column\ViewAction">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="indexField" xsi:type="string">entity_id</item>
+                    <item name="viewUrlPath" xsi:type="string">sales/shipment/view</item>
+                    <item name="urlEntityParamName" xsi:type="string">shipment_id</item>
                 </item>
             </argument>
         </actionsColumn>

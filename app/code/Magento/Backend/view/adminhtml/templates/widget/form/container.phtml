@@ -8,9 +8,9 @@
 
 /** @var $block \Magento\Backend\Block\Widget\Form\Container */
  ?>
-<?php echo $block->getFormInitScripts() ?>
+<?php /* @escapeNotVerified */ echo $block->getFormInitScripts() ?>
 <?php if ($block->getButtonsHtml('header')): ?>
-    <div class="page-form-actions" <?php echo $block->getUiId('content-header') ?>><?php echo $block->getButtonsHtml('header') ?></div>
+    <div class="page-form-actions" <?php /* @escapeNotVerified */ echo $block->getUiId('content-header') ?>><?php echo $block->getButtonsHtml('header') ?></div>
 <?php endif; ?>
 <?php echo $block->getFormHtml() ?>
 <?php if ($block->hasFooterButtons()): ?>
@@ -27,7 +27,7 @@ require([
 
     $('#edit_form').form()
         .validation({
-            validationUrl: '<?php echo $block->getValidationUrl() ?>',
+            validationUrl: '<?php /* @escapeNotVerified */ echo $block->getValidationUrl() ?>',
             highlight: function(element) {
                 var detailsElement = $(element).closest('details');
                 if (detailsElement.length && detailsElement.is('.details')) {
@@ -42,4 +42,4 @@ require([
 
 });
 </script>
-<?php echo $block->getFormScripts() ?>
+<?php /* @escapeNotVerified */ echo $block->getFormScripts() ?>

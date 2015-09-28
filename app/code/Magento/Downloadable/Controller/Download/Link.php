@@ -66,7 +66,7 @@ class Link extends \Magento\Downloadable\Controller\Download
                     $notice = __('Please sign in to download your product.');
                 }
                 $this->messageManager->addNotice($notice);
-                $session->authenticate($this);
+                $session->authenticate();
                 $session->setBeforeAuthUrl(
                     $this->_objectManager->create(
                         'Magento\Framework\UrlInterface'

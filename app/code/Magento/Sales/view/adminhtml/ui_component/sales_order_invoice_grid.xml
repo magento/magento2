@@ -327,10 +327,12 @@
                 </item>
             </argument>
         </column>
-        <actionsColumn name="actions" class="Magento\Sales\Ui\Component\Listing\Column\OrderInvoiceActions">
+        <actionsColumn name="actions" class="Magento\Sales\Ui\Component\Listing\Column\ViewAction">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="indexField" xsi:type="string">increment_id</item>
+                    <item name="viewUrlPath" xsi:type="string">sales/invoice/view</item>
+                    <item name="urlEntityParamName" xsi:type="string">invoice_id</item>
                 </item>
             </argument>
         </actionsColumn>

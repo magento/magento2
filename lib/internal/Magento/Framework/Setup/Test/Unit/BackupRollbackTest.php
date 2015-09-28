@@ -83,7 +83,7 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnValueMap([
                 ['Magento\Framework\App\State', $this->getMock('Magento\Framework\App\State', [], [], '', false)],
-                ['Magento\Framework\App\ObjectManager\ConfigLoader', $configLoader],
+                ['Magento\Framework\ObjectManager\ConfigLoaderInterface', $configLoader],
             ]));
         $this->objectManager->expects($this->any())
             ->method('create')
@@ -107,7 +107,7 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
         $this->filesystem->expects($this->once())
             ->method('create');
         $this->file->expects($this->once())->method('isExists')->with($this->path . '/backups')->willReturn(false);
-        $this->file->expects($this->once())->method('createDirectory')->with($this->path . '/backups', 0777);
+        $this->file->expects($this->once())->method('createDirectory')->with($this->path . '/backups', 0770);
         $this->model->codeBackup(time());
     }
 
@@ -158,7 +158,7 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
         $this->filesystem->expects($this->once())
             ->method('create');
         $this->file->expects($this->once())->method('isExists')->with($this->path . '/backups')->willReturn(false);
-        $this->file->expects($this->once())->method('createDirectory')->with($this->path . '/backups', 0777);
+        $this->file->expects($this->once())->method('createDirectory')->with($this->path . '/backups', 0770);
         $this->model->codeBackup(time(), Factory::TYPE_MEDIA);
     }
 
