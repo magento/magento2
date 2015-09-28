@@ -97,21 +97,12 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
     protected $_productOptionValue;
 
     /**
-     * Product option factory
-     *
-     * @var \Magento\Catalog\Model\Product\Option\Type\Factory
-     */
-    protected $_optionFactory;
-
-    /**
-     * @var \Magento\Framework\Stdlib\StringUtils
-     */
-    protected $string;
-
-    /**
      * @var Option\Validator\Pool
      */
     protected $validatorPool;
+
+    /** @var Option\Type\DefaultType[] */
+    protected $optionValidationPool;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -119,11 +110,10 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
      * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param Option\Value $productOptionValue
-     * @param Option\Type\Factory $optionFactory
-     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param Option\Validator\Pool $validatorPool
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\Model\Resource\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param Option\Type\DefaultType[] $optionValidationPool
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -133,17 +123,15 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
         \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
         \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         Option\Value $productOptionValue,
-        \Magento\Catalog\Model\Product\Option\Type\Factory $optionFactory,
-        \Magento\Framework\Stdlib\StringUtils $string,
         Option\Validator\Pool $validatorPool,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        array $optionValidationPool = [],
         array $data = []
     ) {
         $this->_productOptionValue = $productOptionValue;
-        $this->_optionFactory = $optionFactory;
         $this->validatorPool = $validatorPool;
-        $this->string = $string;
+        $this->optionValidationPool = $optionValidationPool;
         parent::__construct(
             $context,
             $registry,
@@ -323,10 +311,8 @@ class Option extends \Magento\Framework\Model\AbstractExtensibleModel
     public function groupFactory($type)
     {
         $group = $this->getGroupByType($type);
-        if (!empty($group)) {
-            return $this->_optionFactory->create(
-                'Magento\Catalog\Model\Product\Option\Type\\' . $this->string->upperCaseWords($group)
-            );
+        if (!empty($this->optionValidationPool[$group])) {
+            return $this->optionValidationPool[$group];
         }
         throw new LocalizedException(__('The option type to get group instance is incorrect.'));
     }

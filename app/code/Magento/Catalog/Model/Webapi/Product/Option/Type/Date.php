@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Model\Product\Option\Type;
+namespace Magento\Catalog\Model\Webapi\Product\Option\Type;
+
+use Magento\Framework\Stdlib\DateTime;
 
 /**
- * Catalog product option date type
- *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * Catalog product option date validator
  */
 class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 {
@@ -48,65 +48,31 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 
         $option = $this->getOption();
         $value = $this->getUserValue();
+        $dateTime = \DateTime::createFromFormat(DateTime::DATETIME_PHP_FORMAT, $value);
 
         $dateValid = true;
-        if ($this->_dateExists()) {
-            if ($this->useCalendar()) {
-                $dateValid = isset($value['date']) && preg_match('/^\d{1,4}.+\d{1,4}.+\d{1,4}$/', $value['date']);
-            } else {
-                $dateValid = isset(
-                    $value['day']
-                ) && isset(
-                    $value['month']
-                ) && isset(
-                    $value['year']
-                ) && $value['day'] > 0 && $value['month'] > 0 && $value['year'] > 0;
-            }
+        if ($dateTime) {
+            $dateValid = $dateTime->format(DateTime::DATETIME_PHP_FORMAT) == $value;
         }
 
-        $timeValid = true;
-        if ($this->_timeExists()) {
-            $timeValid = isset(
-                $value['hour']
-            ) && isset(
-                $value['minute']
-            ) && is_numeric(
-                $value['hour']
-            ) && is_numeric(
-                $value['minute']
-            );
-        }
-
-        $isValid = $dateValid && $timeValid;
-
-        if ($isValid) {
+        if ($dateValid) {
             $this->setUserValue(
                 [
-                    'date' => isset($value['date']) ? $value['date'] : '',
-                    'year' => isset($value['year']) ? intval($value['year']) : 0,
-                    'month' => isset($value['month']) ? intval($value['month']) : 0,
-                    'day' => isset($value['day']) ? intval($value['day']) : 0,
-                    'hour' => isset($value['hour']) ? intval($value['hour']) : 0,
-                    'minute' => isset($value['minute']) ? intval($value['minute']) : 0,
-                    'day_part' => isset($value['day_part']) ? $value['day_part'] : '',
-                    'date_internal' => isset($value['date_internal']) ? $value['date_internal'] : '',
+                    'date' => $value,
+                    'year' => $dateTime->format('Y'),
+                    'month' => $dateTime->format('n'),
+                    'day' => $dateTime->format('j'),
+                    'hour' => $dateTime->format('G'),
+                    'minute' => intval($dateTime->format('i')),
+                    'day_part' => $dateTime->format('a'),
+                    'date_internal' => '',
                 ]
             );
-        } elseif (!$isValid && $option->getIsRequire() && !$this->getSkipCheckRequiredOption()) {
+        } elseif (!$dateValid && $option->getIsRequire() && !$this->getSkipCheckRequiredOption()) {
             $this->setIsValid(false);
-            if (!$dateValid) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Please specify date required option(s).')
-                );
-            } elseif (!$timeValid) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Please specify time required option(s).')
-                );
-            } else {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Please specify product\'s required option(s).')
-                );
-            }
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('Please specify product\'s required option(s).')
+            );
         } else {
             $this->setUserValue(null);
             return $this;
@@ -330,7 +296,7 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         if (!isset($requestOptions[$this->getOption()->getId()])) {
             $requestOptions[$this->getOption()->getId()] = [];
         }
-        $requestOptions[$this->getOption()->getId()]['date_internal'] = $internalValue;
+        $requestOptions[$this->getOption()->getId()] = ['date_internal' => $internalValue];
         $this->getRequest()->setOptions($requestOptions);
     }
 
