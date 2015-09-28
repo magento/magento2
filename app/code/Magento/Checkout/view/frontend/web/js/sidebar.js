@@ -9,9 +9,10 @@ define([
     'Magento_Customer/js/model/authentication-popup',
     'Magento_Customer/js/customer-data',
     'Magento_Ui/js/modal/alert',
+    'Magento_Ui/js/modal/confirm',
     "jquery/ui",
     "mage/decorate"
-], function($, authenticationPopup, customerData, alert){
+], function($, authenticationPopup, customerData, alert, confirm){
 
     $.widget('mage.sidebar', {
         options: {
@@ -47,9 +48,14 @@ define([
             }, this);
             events['click ' + this.options.button.remove] =  function(event) {
                 event.stopPropagation();
-                if (confirm(self.options.confirmMessage)) {
-                    self._removeItem($(event.target));
-                }
+                confirm({
+                    content: self.options.confirmMessage,
+                    actions: {
+                        confirm: function () {
+                            self._removeItem($(event.target))
+                        }
+                    }
+                });
             };
             events['keyup ' + this.options.item.qty] = function(event) {
                 self._showItemButton($(event.target));

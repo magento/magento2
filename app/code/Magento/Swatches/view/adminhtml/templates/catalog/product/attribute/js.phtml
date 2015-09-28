@@ -8,7 +8,12 @@
 
 ?>
 <script>
-require(["jquery", "collapsable", "prototype"], function(jQuery){
+require([
+    "jquery",
+    "Magento_Ui/js/modal/alert",
+    "collapsable",
+    "prototype"
+], function(jQuery, alert){
 
 function toggleApplyVisibility(select) {
     if ($(select).value == 1) {
@@ -324,7 +329,9 @@ function saveAttributeInNewSet(promptMessage)
     var rules = ['required-entry', 'validate-no-html-tags'];
     for (var i = 0; i < rules.length; i++) {
         if (!jQuery.validator.methods[rules[i]](newAttributeSetName)) {
-            alert(jQuery.validator.messages[rules[i]]);
+            alert({
+                content: jQuery.validator.messages[rules[i]]
+            });
             return;
         }
     }

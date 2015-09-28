@@ -21,9 +21,10 @@ require([
     "jquery",
     "tinymce",
     'Magento_Ui/js/modal/confirm',
+    'Magento_Ui/js/modal/alert',
     "loadingPopup",
     "mage/backend/floating-header"
-], function(jQuery, tinyMCE, confirm){
+], function(jQuery, tinyMCE, confirm, alert){
 
 //<![CDATA[
     function categoryReset(url,useAjax){
@@ -87,7 +88,9 @@ require([
                         });
                         $categoryContainer.html('');
                     } catch (e) {
-                        alert(e.message);
+                        alert({
+                            content: e.message
+                        });
                     }
                     $categoryContainer.html(data.content).trigger('contentUpdated');
                     setTimeout(function() {
@@ -104,7 +107,9 @@ require([
                                 window.refreshTreeArea();
                             }
                         } catch (e) {
-                            alert(e.message);
+                            alert({
+                                content: e.message
+                            });
                         };
                     }, 25);
                 }

@@ -4,10 +4,11 @@
  */
 define([
     "jquery",
+    'Magento_Ui/js/modal/confirm',
     "mage/translate",
     "prototype",
     "Magento_Catalog/catalog/product/composite/configure"
-], function(jQuery){
+], function(jQuery, confirm){
 
 window.AdminOrder = new Class.create();
 
@@ -704,11 +705,18 @@ AdminOrder.prototype = {
     },
 
     clearShoppingCart : function(confirmMessage){
-        if (confirm(confirmMessage)) {
-            this.collectElementsValue = false;
-            order.sidebarApplyChanges({'sidebar[empty_customer_cart]': 1});
-            this.collectElementsValue = true;
-        }
+        var self = this;
+
+        confirm({
+            content: confirmMessage,
+            actions: {
+                confirm: function() {
+                    self.collectElementsValue = false;
+                    order.sidebarApplyChanges({'sidebar[empty_customer_cart]': 1});
+                    self.collectElementsValue = true;
+                }
+            }
+        });
     },
 
     sidebarApplyChanges : function(auxiliaryParams) {
