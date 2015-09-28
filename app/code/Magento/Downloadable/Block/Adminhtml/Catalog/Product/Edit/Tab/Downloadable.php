@@ -150,4 +150,12 @@ class Downloadable extends Widget implements TabInterface
     {
         return 'tab_content_' . $this->blockId;
     }
+
+    /**
+     * @return bool
+     */
+    public function isDownloadable()
+    {
+        return $this->getProduct()->getTypeId() == \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE;
+    }
 }

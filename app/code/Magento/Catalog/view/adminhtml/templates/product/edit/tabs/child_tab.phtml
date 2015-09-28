@@ -1,0 +1,28 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\ChildTab */
+?>
+<div class="fieldset-wrapper admin__collapsible-block-wrapper" data-tab="<?= $block->getTabId()?>"
+     id="<?= $block->getTabId() ?>-wrapper" data-mage-init='{"collapsible":{
+                    "active": false,
+                    "openedState": "_show",
+                    "closedState": "_hide",
+                    "animate": 200,
+                    "collapsible": true
+                    }}'
+    >
+    <div class="fieldset-wrapper-title" data-role="title">
+        <strong class="admin__collapsible-title" data-role="trigger" >
+            <span><?= $block->getTitle()?></span>
+        </strong>
+    </div>
+    <div class="fieldset-wrapper-content" data-role="content" id="<?= $block->getTabId()?>-content">
+        <?= $block->getContent()?>
+    </div>
+</div>
