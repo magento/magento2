@@ -6,41 +6,38 @@
 
 namespace Magento\ProductVideo\Test\Constraint;
 
-
-use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
+use Magento\Mtf\Constraint\AbstractConstraint;
+use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 
 /**
- * Assert that video is displayed on front end
+ * Assert that video is absent on category page.
  */
 class AssertNoVideoCategoryView extends AbstractConstraint
 {
 
     /**
-     * Assert that video is not displayed on front end
+     * Assert that video is absent on category page on Store front.
      *
      * @param CmsIndex $cmsIndex
-     * @param BrowserInterface $browser
-     * @param InjectableFixture $product
+     * @param CatalogCategoryView $catalogCategoryView
+     * @param InjectableFixture $initialProduct
      * @return void
      */
     public function processAssert(
         CmsIndex $cmsIndex,
-        BrowserInterface $browser,
-        InjectableFixture $product
+        CatalogCategoryView $catalogCategoryView,
+        InjectableFixture $initialProduct
     ) {
         $cmsIndex->open();
-        $cmsIndex->getTopmenu()->selectCategoryByName($product->getCategoryIds()[0]);
-        $photo = $browser->find('.product-image-photo');
-        $src = $photo->getAttribute('src');
+        $cmsIndex->getTopmenu()->selectCategoryByName($initialProduct->getCategoryIds()[0]);
+        $src = $catalogCategoryView->getListProductBlock()->getProductItem($initialProduct)->getBaseImageSource();
         \PHPUnit_Framework_Assert::assertTrue(
             strpos($src, '/placeholder/') !== false,
-            'Product image is displayed on category view when it should not'
+            'Product image is displayed on category view when it should not.'
         );
     }
-
 
     /**
      * Returns a string representation of the object.
