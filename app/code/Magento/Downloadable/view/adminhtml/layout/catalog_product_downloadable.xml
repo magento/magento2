@@ -13,8 +13,8 @@
                 <argument name="excluded_panel" xsi:type="string">product_info_tabs_downloadable_items_content</argument>
             </arguments>
             <block name="downloadable_items" class="Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable">
-                <block class="Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Samples" />
                 <block name="catalog.product.edit.tab.downloadable.links" class="Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Links" />
+                <block class="Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Samples" />
             </block>
             <action method="addTab">
                 <argument name="name" xsi:type="string">downloadable_items</argument>
