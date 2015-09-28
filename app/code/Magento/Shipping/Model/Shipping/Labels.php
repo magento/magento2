@@ -151,8 +151,8 @@ class Labels extends \Magento\Shipping\Model\Shipping
         $request->setOrderShipment($orderShipment);
         $address = $order->getShippingAddress();
 
-        $this->_setShipperDetails($request, $admin, $storeInfo, $shipmentStoreId, $shipperRegionCode, $originStreet1);
-        $this->_setRecipientDetails($request, $address);
+        $this->setShipperDetails($request, $admin, $storeInfo, $shipmentStoreId, $shipperRegionCode, $originStreet1);
+        $this->setRecipientDetails($request, $address);
 
         $request->setShippingMethod($shippingMethod->getMethod());
         $request->setPackageWeight($order->getWeight());
@@ -173,7 +173,7 @@ class Labels extends \Magento\Shipping\Model\Shipping
      * @param $originStreet
      * @return void
      */
-    protected function _setShipperDetails(
+    protected function setShipperDetails(
         Request $request,
         User $storeAdmin,
         DataObject $store,
@@ -226,7 +226,7 @@ class Labels extends \Magento\Shipping\Model\Shipping
      * @param \Magento\Sales\Model\Order\Address $address
      * @return void
      */
-    protected function _setRecipientDetails(Request $request, Address $address)
+    protected function setRecipientDetails(Request $request, Address $address)
     {
         $recipientRegionCode = $this->_regionFactory->create()->load($address->getRegionId())->getCode();
 

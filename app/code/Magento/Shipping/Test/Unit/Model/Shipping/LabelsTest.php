@@ -20,30 +20,30 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Shipping\Model\Shipping\Labels
      */
-    protected $_labels;
+    protected $labels;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_request;
+    protected $request;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_scopeConfig;
+    protected $scopeConfig;
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_region;
+    protected $region;
 
     protected function setUp()
     {
-        $this->_request = $this->getMockBuilder('Magento\Shipping\Model\Shipment\Request')
+        $this->request = $this->getMockBuilder('Magento\Shipping\Model\Shipment\Request')
             ->disableOriginalConstructor()
             ->getMock();
         $requestFactory = $this->getMockBuilder('Magento\Shipping\Model\Shipment\RequestFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $requestFactory->expects(static::any())->method('create')->willReturn($this->_request);
+        $requestFactory->expects(static::any())->method('create')->willReturn($this->request);
 
         $carrier = $this->getMockBuilder('Magento\Shipping\Model\Carrier\AbstractCarrier')
             ->disableOriginalConstructor()
@@ -55,21 +55,21 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $carrierFactory->expects(static::any())->method('create')->willReturn($carrier);
 
-        $storeManager = $this->_getStoreManager();
-        $authSession = $this->_getAuthSession();
-        $regionFactory = $this->_getRegionFactory();
+        $storeManager = $this->getStoreManager();
+        $authSession = $this->getAuthSession();
+        $regionFactory = $this->getRegionFactory();
 
-        $this->_scopeConfig = $this->getMockBuilder('\Magento\Framework\App\Config')
+        $this->scopeConfig = $this->getMockBuilder('\Magento\Framework\App\Config')
             ->disableOriginalConstructor()
             ->setMethods(['getValue'])
             ->getMock();
 
         $objectManagerHelper = new ObjectManager($this);
-        $this->_labels = $objectManagerHelper->getObject('Magento\Shipping\Model\Shipping\Labels', [
+        $this->labels = $objectManagerHelper->getObject('Magento\Shipping\Model\Shipping\Labels', [
             'shipmentRequestFactory' => $requestFactory,
             'carrierFactory' => $carrierFactory,
             'storeManager' => $storeManager,
-            'scopeConfig' => $this->_scopeConfig,
+            'scopeConfig' => $this->scopeConfig,
             'authSession' => $authSession,
             'regionFactory' => $regionFactory
         ]);
@@ -97,7 +97,7 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
             ->with(true)
             ->willReturn($shippingMethod);
 
-        $address = $this->_getRecipientAddress();
+        $address = $this->getRecipientAddress();
 
         $order->expects(static::once())
             ->method('getShippingAddress')
@@ -114,7 +114,7 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
         $shipment->expects(static::once())->method('getStoreId')->willReturn($storeId);
         $shipment->expects(static::once())->method('getPackages')->willReturn('');
 
-        $this->_scopeConfig->expects(static::any())
+        $this->scopeConfig->expects(static::any())
             ->method('getValue')
             ->willReturnMap([
                 [Shipment::XML_PATH_STORE_REGION_ID, ScopeInterface::SCOPE_STORE, $storeId, 'CA'],
@@ -128,20 +128,20 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
                 [Shipment::XML_PATH_STORE_ADDRESS2, ScopeInterface::SCOPE_STORE, $storeId, '1st Park Avenue'],
             ]);
 
-        $this->_region->expects(static::once())
+        $this->region->expects(static::once())
             ->method('load')
             ->willReturnSelf();
-        $this->_region->expects(static::once())
+        $this->region->expects(static::once())
             ->method('getCode')
             ->willReturn('CO');
 
-        $this->_labels->requestToShipment($shipment);
+        $this->labels->requestToShipment($shipment);
     }
 
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _getAuthSession()
+    protected function getAuthSession()
     {
         $user = $this->getMockBuilder('Magento\User\Model\User')
             ->disableOriginalConstructor()
@@ -171,7 +171,7 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _getStoreManager()
+    protected function getStoreManager()
     {
         $store = $this->getMockBuilder('Magento\Store\Model\Store')
             ->disableOriginalConstructor()
@@ -191,9 +191,9 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _getRegionFactory()
+    protected function getRegionFactory()
     {
-        $this->_region = $this->getMockBuilder('Magento\Directory\Model\Region')
+        $this->region = $this->getMockBuilder('Magento\Directory\Model\Region')
             ->disableOriginalConstructor()
             ->setMethods(['load', 'getCode'])
             ->getMock();
@@ -201,14 +201,14 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $regionFactory->expects(static::any())->method('create')->willReturn($this->_region);
+        $regionFactory->expects(static::any())->method('create')->willReturn($this->region);
         return $regionFactory;
     }
 
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _getRecipientAddress()
+    protected function getRecipientAddress()
     {
         $address = $this->getMockBuilder('Magento\Sales\Model\Order\Address')
             ->disableOriginalConstructor()
