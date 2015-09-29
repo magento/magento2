@@ -1365,11 +1365,12 @@ class Files
     {
         $patterns = [];
         foreach (glob($globPattern) as $list) {
-            $patterns = array_merge($patterns, file($list, FILE_IGNORE_NEW_LINES));
+            $patterns = array_merge($patterns, file($list, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
         }
 
         // Expand glob patterns
         $result = [];
+        $incorrectPatterns = [];
         foreach ($patterns as $pattern) {
             if (0 === strpos($pattern, '#')) {
                 continue;
@@ -1393,7 +1394,9 @@ class Files
                         $files = array_merge($files, $this->dirSearch->collectFiles($type, $pathPattern));
                     } else {
                         $componentDir = $this->componentRegistrar->getPath($type, $componentName);
-                        $files = array_merge($files, glob($componentDir . '/' . $pathPattern, GLOB_BRACE));
+                        if (!empty($componentDir)) {
+                            $files = array_merge($files, glob($componentDir . '/' . $pathPattern, GLOB_BRACE));
+                        }
                     }
                 }
             } elseif (count($patternParts) == 1) {
@@ -1409,9 +1412,12 @@ class Files
                 );
             }
             if (empty($files)) {
-                throw new \Exception("The glob() pattern '{$pattern}' didn't return any result.");
+                $incorrectPatterns[] = $pattern;
             }
             $result = array_merge($result, $files);
+        }
+        if (!empty($incorrectPatterns)) {
+            throw new \Exception("The following patterns didn't return any result:\n" . join("\n", $incorrectPatterns));
         }
         return $result;
     }
