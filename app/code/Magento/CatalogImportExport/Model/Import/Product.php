@@ -1458,8 +1458,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
                                 );
                                 $mediaGallery[$rowSku][] = [
                                     'attribute_id' => $this->getMediaGalleryAttributeId(),
-                                    'label' =>
-                                        isset($mediaGalleryLabels[$position]) ? $imageLable : '',
+                                    'label' => isset($mediaGalleryLabels[$position]) ? $imageLable : '',
                                     'position' => $position + 1,
                                     'disabled' => isset($additionalImageIsDisabled[$mediaImage]) ? '1' : '0',
                                     'value' => $mediaImage,
