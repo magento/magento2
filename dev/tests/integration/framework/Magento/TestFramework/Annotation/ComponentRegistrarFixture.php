@@ -6,7 +6,6 @@
 
 namespace Magento\TestFramework\Annotation;
 
-use Magento\Framework\Component\ComponentRegistrar;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use RegexIterator;
