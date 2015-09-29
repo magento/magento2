@@ -438,7 +438,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     /**
      * Retrieve entity type
      *
-     * @return string
+     * @return \Magento\Eav\Model\Entity\Type
      * @codeCoverageIgnore
      */
     public function getEntityType()
