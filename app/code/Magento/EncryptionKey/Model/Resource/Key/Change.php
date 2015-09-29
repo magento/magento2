@@ -9,6 +9,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Math\Random;
 
 /**
  * Encryption key changer resource model
@@ -45,11 +46,19 @@ class Change extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $writer;
 
     /**
+     * Random number generator
+     *
+     * @var Random
+     */
+    protected $random;
+
+    /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Config\Model\Config\Structure $structure
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\App\DeploymentConfig\Writer $writer
+     * @param Random $random
      * @param string $connectionName
      */
     public function __construct(
@@ -58,6 +67,7 @@ class Change extends \Magento\Framework\Model\Resource\Db\AbstractDb
         \Magento\Config\Model\Config\Structure $structure,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\App\DeploymentConfig\Writer $writer,
+        Random $random,
         $connectionName = null
     ) {
         $this->encryptor = clone $encryptor;
@@ -65,6 +75,7 @@ class Change extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $this->directory = $filesystem->getDirectoryWrite(DirectoryList::CONFIG);
         $this->structure = $structure;
         $this->writer = $writer;
+        $this->random = $random;
     }
 
     /**
@@ -121,7 +132,9 @@ class Change extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
 
         if (null === $key) {
-            $key = md5(time());
+            $key = md5(
+                $this->random->getRandomString(\Magento\Setup\Model\ConfigGenerator::STORE_KEY_RANDOM_STRING_SIZE)
+            );
         }
         $this->encryptor->setNewKey($key);
 
