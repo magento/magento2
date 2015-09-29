@@ -9,7 +9,8 @@ define([
 
     return Component.extend({
         defaults: {
-            template: 'ui/grid/filters/chips'
+            template: 'ui/grid/filters/chips',
+            stickyTmpl: 'ui/grid/sticky/chips'
         },
 
         /**

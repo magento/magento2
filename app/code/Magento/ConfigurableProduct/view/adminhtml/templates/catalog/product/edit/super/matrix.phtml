@@ -12,6 +12,7 @@
 $variations = $block->getVariations();
 $productMatrix = [];
 $attributes = [];
+$fullAttributes = [];
 if ($variations) {
     $usedProductAttributes = $block->getUsedAttributes();
     $productByUsedAttributes = $block->getAssociatedProducts();
@@ -36,6 +37,17 @@ if ($variations) {
                         'position' => $attribute->getPosition(),
                         'chosen' => [],
                     ];
+                    foreach ($attribute->getOptions() as $option) {
+                        if (!empty($option->getValue())) {
+                            $attributes[$attribute->getAttributeId()]['options'][$option->getValue()] = [
+                                'attribute_code' => $attribute->getAttributeCode(),
+                                'attribute_label' => $attribute->getStoreLabel(0),
+                                'id' => $option->getValue(),
+                                'label' => $option->getLabel(),
+                                'value' => $option->getValue(),
+                            ];
+                        }
+                    }
                 }
                 $optionId = $variation[$attribute->getId()]['value'];
                 $variationOption = [
@@ -320,16 +332,13 @@ if ($variations) {
                 "components": {
                     "configurableVariations": {
                         "component": "Magento_ConfigurableProduct/js/variations/variations",
-                        "variations": <?= /* @escapeNotVerified */  $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($productMatrix) ?>,
-                        "productAttributes": <?= /* @escapeNotVerified */  $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($attributes) ?>,
-                        "productUrl": "<?= /* @escapeNotVerified */  $block->getUrl('catalog/product/edit', ['id' => '%id%']) ?>",
-                        "associatedProductsFilter": "configurable_associated_product_listing.configurable_associated_product_listing.listing_top.listing_filters",
-                        "associatedProductsProvider": "configurable_associated_product_listing.data_source"
-
+                        "variations": <?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($productMatrix) ?>,
+                        "productAttributes": <?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($attributes) ?>,
+                        "productUrl": "<?= /* @noEscape */ $block->getUrl('catalog/product/edit', ['id' => '%id%']) ?>",
+                        "configurableProductGrid": "configurableProductGrid"
                     }
                 }
             }
         }
     }
-
 </script>
