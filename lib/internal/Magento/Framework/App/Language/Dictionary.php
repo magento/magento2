@@ -111,21 +111,25 @@ class Dictionary
      * @param Config $languageConfig
      * @param array $result
      * @param int $level
-     * @return void
+     * @param array $visitedPacks
      */
-    private function collectInheritedPacks($languageConfig, &$result, $level = 0)
+    private function collectInheritedPacks($languageConfig, &$result, $level = 0, array &$visitedPacks = [])
     {
         $packKey = implode('|', [$languageConfig->getVendor(), $languageConfig->getPackage()]);
-        if (!isset($result[$packKey])) {
+        if (!isset($visitedPacks[$packKey]) &&
+            (!isset($result[$packKey]) || $result[$packKey]['inheritance_level'] < $level)
+        ) {
+            $visitedPacks[$packKey] = true;
             $result[$packKey] = [
                 'inheritance_level' => $level,
                 'sort_order'        => $languageConfig->getSortOrder(),
                 'language'          => $languageConfig,
+                'key'               => $packKey,
             ];
             foreach ($languageConfig->getUses() as $reuse) {
                 if (isset($this->packList[$reuse['vendor']][$reuse['package']])) {
                     $parentLanguageConfig = $this->packList[$reuse['vendor']][$reuse['package']];
-                    $this->collectInheritedPacks($parentLanguageConfig, $result, $level + 1);
+                    $this->collectInheritedPacks($parentLanguageConfig, $result, $level + 1, $visitedPacks);
                 }
             }
         }
@@ -153,7 +157,7 @@ class Dictionary
         } elseif ($current['sort_order'] < $next['sort_order']) {
             return -1;
         }
-        return 0;
+        return strcmp($current['key'], $next['key']);
     }
 
     /**
