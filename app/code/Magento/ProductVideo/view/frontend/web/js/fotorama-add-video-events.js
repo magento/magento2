@@ -49,6 +49,8 @@ require(["jquery", "jquery/ui", "catalogGallery"], function ($) {
         PV: 'product-video', // [CONST]
         VID: 'video', // [CONST]
         VI: 'vimeo', // [CONST]
+        FTVC : 'fotorama__video-close',
+        FTAR : 'fotorama__arr',
         Base: 0, //on check for video is base this setting become true if there is any video with base role
         MobileMaxWidth: 767, //max mobile width, currently for playing video if it's base one, we don't need it autoplay if it's on mobile version
         GP: 'gallery-placeholder', //gallery placeholder class is needed to find and erase <script> tag
@@ -90,6 +92,44 @@ require(["jquery", "jquery/ui", "catalogGallery"], function ($) {
             return videoData;
         },
 
+        _createCloseVideo : function (fotorama, isBase) {
+            $(this.element).find('.'+this.FTVC).remove();
+            $(this.element).append('<div class="'+this.FTVC+'"></div>');
+            $(this.element).css('position','relative');
+
+            var $closeVideo = $(this.element).find('.'+this.FTVC);
+
+            this._closeVideoSetEvents($closeVideo, fotorama);
+            if (isBase && this.options.VideoData[fotorama.activeIndex].isBase && $(window).width() > this.MobileMaxWidth) {
+                this._showCloseVideo();
+            }
+        },
+
+        _hideCloseVideo : function () {
+            $(this.element).find('.'+this.FTVC).css({
+                opacity: 0,
+                transform: 'translate3d(95px, -95px, 0)',
+                display: 'none'
+            });
+            $('.'+this.FTAR).removeClass('hidden-video');
+        },
+
+        _showCloseVideo : function() {
+            $(this.element).find('.'+this.FTVC).css({
+                opacity: 1,
+                transform: 'translate3d(0px, 0px, 0)',
+                display : 'block'
+            });
+            $('.'+this.FTAR).addClass('hidden-video');
+        },
+
+        _closeVideoSetEvents : function ($closeVideo, fotorama) {
+            $closeVideo.on('click', $.proxy(function(){
+                this._unloadVideoPlayer(fotorama.activeFrame.$stageFrame.parent(), fotorama, true);
+                this._hideCloseVideo();
+            }, this));
+        },
+
         _checkForVideoExist: function () { //if there is no video data, we don't want to load anything
             if (!this.options.VideoData) return false;
             if (!this.options.VideoSettings) return false;
@@ -119,6 +159,7 @@ require(["jquery", "jquery/ui", "catalogGallery"], function ($) {
             for (var VideoItem in AllVideoData) {
                 if (AllVideoData[VideoItem].mediaType === this.VID && AllVideoData[VideoItem].isBase && this.options.VideoSettings[0].playIfBase) this.Base = true;
             }
+            this._createCloseVideo($(this.element).data('fotorama'), this.Base);
         },
 
         _loadVimeoJSFramework: function () { // load external framework in order for Vimeo player to work
@@ -156,7 +197,7 @@ require(["jquery", "jquery/ui", "catalogGallery"], function ($) {
         },
 
         _startPrepareForPlayer: function (e, fotorama) {
-            this._unloadVideoPlayer(fotorama.activeFrame.$stageFrame.parent(), fotorama);
+            this._unloadVideoPlayer(fotorama.activeFrame.$stageFrame.parent(), fotorama, false);
             //we need to fire 3 events at once, because we need to check previous frame, current frame, and next frame
             this._checkForVideo(e, fotorama, -1);
             this._checkForVideo(e, fotorama, 0);
@@ -188,11 +229,14 @@ require(["jquery", "jquery/ui", "catalogGallery"], function ($) {
         },
 
         _setVideoEvent: function ($image, PV, fotorama, number) {
+            var self = this;
+
             $image.find('.magnify-lens').remove();
             $image.on('click', function () {
                 if ($(this).hasClass('video-unplayed') && $(this).find('iframe').length === 0) {
                     $(this).removeClass('video-unplayed');
                     $(this).find('.' + PV).productVideoLoader();
+                    self._showCloseVideo();
                 }
             });
             this._handleBaseVideo(fotorama, number); //check for video is it base and handle it if it's base
@@ -216,15 +260,18 @@ require(["jquery", "jquery/ui", "catalogGallery"], function ($) {
             }
         },
 
-        _unloadVideoPlayer: function ($wrapper, $current) {
+        _unloadVideoPlayer: function ($wrapper, $current, close) {
+            var self = this;
+
             $wrapper.find('.' + this.PV).each(function () {
                 var $item = $(this).parent();
-                if ($(this).find('iframe').length > 0 && $current.activeFrame.$stageFrame.index() != $item.index()) {
+                if (($(this).find('iframe').length > 0 && $current.activeFrame.$stageFrame.index() != $item.index() && !close) || ($(this).find('iframe').length > 0 && $current.activeFrame.$stageFrame.index() == $item.index() && close)) {
                     $(this).find('iframe').remove();
                     var cloneVideoDiv = $(this).clone();
                     $(this).remove();
                     $item.append(cloneVideoDiv);
                     $item.addClass('video-unplayed');
+                    self._hideCloseVideo();
                 }
             });
         }
