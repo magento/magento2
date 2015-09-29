@@ -10,6 +10,7 @@ define([
     'mage/backend/tree-suggest',
     'mage/backend/validation'
 ], function ($) {
+    'use strict';
 
     $.widget('mage.productGallery',
         $.mage.productGallery,
@@ -23,7 +24,7 @@ define([
                 $(this.element).on('click', this.showModal.bind(this));
             },
 
-            showModal: function(e)
+            showModal: function()
             {
                 $('#new-video').modal('openModal');
                 $('.video_image_role').prop('disabled', false);
