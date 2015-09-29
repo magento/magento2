@@ -2,8 +2,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-/*jshint browser:true jquery:true*/
-/*global FORM_KEY*/
+/*jshint browser:true $:true*/
 define([
     'jquery',
     'jquery/ui',
@@ -127,15 +126,23 @@ define([
 
         _previewImage: null,
 
-        clickedElement : '',
+        clickedElement: '',
 
         _images: {},
 
-        _imageTypes: ['.jpeg', '.pjpeg', '.jpeg', '.jpg', '.pjpeg', '.png', '.gif'],
+        _imageTypes: [
+            '.jpeg',
+            '.pjpeg',
+            '.jpeg',
+            '.jpg',
+            '.pjpeg',
+            '.png',
+            '.gif'
+        ],
 
         _imageWidgetSelector: '#media_gallery_content',
 
-        _imageProductGalleryWrapperSelector : '#image-container',
+        _imageProductGalleryWrapperSelector: '#image-container',
 
         _videoPreviewInputSelector: '#new_video_screenshot',
 
@@ -177,7 +184,11 @@ define([
 
         _videoPlayerSelector: '.mage-new-video-dialog',
 
-        _bind: function() {
+        /**
+         * Bind events
+         * @private
+         */
+        _bind: function () {
             var events = {
                 'setImage': '_onSetImage'
             };
@@ -307,29 +318,31 @@ define([
         },
         /**
          * Remove ".tmp"
-         *
-         * @param name
+         * @param {String} name
          * @returns {*}
          * @private
          */
         __prepareFilename: function(name) {
-            if(!name) {
+            var tmppost = '.tmp';
+
+            if (!name) {
                 return name;
             }
-            var tmppost = '.tmp';
-            if(name.endsWith(tmppost)) {
+
+            if (name.endsWith(tmppost)) {
                 name = name.slice(0, name.length - tmppost.length);
             }
+
             return name;
         },
 
         /**
-         *  set image data
-         * @param file
-         * @param imageData
+         * Set image data
+         * @param {String} file
+         * @param {Object} imageData
          * @private
          */
-        _setImage: function(file, imageData) {
+        _setImage: function (file, imageData) {
             file = this.__prepareFilename(file);
             this._images[file] = imageData;
             $(this._imageWidgetSelector).trigger('addItem', imageData);
@@ -340,12 +353,13 @@ define([
         /**
          * Get image data
          *
-         * @param file
+         * @param {String} file
          * @returns {*}
          * @private
          */
-        _getImage: function(file) {
+        _getImage: function (file) {
             file = this.__prepareFilename(file);
+
             return this._images[file];
         },
 
@@ -357,32 +371,43 @@ define([
          * @private
          */
         _replaceImage: function(oldFile, newFile, imageData) {
-            var tmpOldFile = oldFile;
-            var tmpNewFile = newFile;
+            var tmpNewFile = newFile,
+                tmpOldFile = oldFile,
+                newImageId,
+                fc,
+                suff,
+                searchsuff,
+                key,
+                oldValIdElem;
             oldFile = this.__prepareFilename(oldFile);
             newFile = this.__prepareFilename(newFile);
-            if(newFile == oldFile) {
+
+            if (newFile === oldFile) {
                 this._images[newFile] = imageData;
                 this.saveImageRoles(imageData);
-                return;
+
+                return null;
             }
+
             this._removeImage(oldFile);
             this._setImage(newFile, imageData);
-            if(oldFile && imageData.old_file) {
-                var oldImageId = this.findElementId(tmpOldFile);
-                var newImageId = this.findElementId(tmpNewFile);
-                var fc = $(this._itemIdSelector).val();
 
-                var suff = 'product[media_gallery][images]' + fc;
+            if (oldFile && imageData.oldFile) {
+                newImageId = this.findElementId(tmpNewFile);
+                fc = $(this._itemIdSelector).val();
 
-                var searchsuff = 'input[name="' + suff + '[value_id]"]';
-                var key = $(searchsuff).val();
-                if(!key) {
-                    return;
+                suff = 'product[media_gallery][images]' + fc;
+
+                searchsuff = 'input[name="' + suff + '[value_id]"]';
+                key = $(searchsuff).val();
+
+                if (!key) {
+                    return null;
                 }
-                var old_val_id_elem = document.createElement('input');
-                $('form[data-form="edit-product"]').append(old_val_id_elem);
-                $(old_val_id_elem).attr({
+
+                oldValIdElem = document.createElement('input');
+                $('form[data-form="edit-product"]').append(oldValIdElem);
+                $(oldValIdElem).attr({
                     type: 'hidden',
                     name: 'product[media_gallery][images][' + newImageId + '][save_data_from]'
                 }).val(key);
@@ -391,41 +416,40 @@ define([
 
         /**
          * Remove image data
-         * @param file
+         * @param {String} file
          * @private
          */
-        _removeImage: function(file) {
+        _removeImage: function (file) {
             var imageData = this._getImage(file);
-            if(!imageData) {
-                return;
+
+            if (!imageData) {
+                return null;
             }
+
             $(this._imageWidgetSelector).trigger('removeItem', imageData);
             this.element.trigger('removeImage', imageData);
             delete this._images[file];
         },
 
         /**
-         * Fired when preview change
-         *
-         * @param event
-         * @param imageData
+         * Fired when image setted
+         * @param {Event} event
+         * @param {Object} imageData
          * @private
          */
-        _onSetImage: function(event, imageData) {
+        _onSetImage: function (event, imageData) {
             this.saveImageRoles(imageData);
         },
 
         /**
          *
          * Wrap _uploadFile
-         *
-         * @param file
-         * @param oldFile
-         * @param callback
+         * @param {String} file
+         * @param {String} oldFile
+         * @param {Function} callback
          * @private
          */
         _uploadImage: function(file, oldFile, callback) {
-            var self        = this;
             var url         = this.options.saveVideoUrl;
             var data = {
                 files: file,
@@ -450,7 +474,7 @@ define([
             });
             data['disabled'] = $(this._videoDisableinputSelector).attr('checked') ? 1 : 0;
             data['media_type'] = 'external-video';
-            data.old_file = oldFile;
+            data.oldFile = oldFile;
             
             oldFile  ?
                 this._replaceImage(oldFile, data.file, data):
@@ -460,34 +484,34 @@ define([
 
         /**
          * File uploader
-         * @returns {*}
          * @private
          */
         _uploadFile: function(data, callback) {
-            var fu = $(this._videoPreviewInputSelector);
-            var tmp_input   = document.createElement('input');
-            $(tmp_input).attr({
+            var fu = $(this._videoPreviewInputSelector),
+                tmpInput   = document.createElement('input'),
+                fileUploader = null;
+            $(tmpInput).attr({
                 'name': fu.attr('name'),
                 'value': fu.val(),
                 'type': 'file',
                 'data-ui-ud': fu.attr('data-ui-ud')
             }).css('display', 'none');
             fu.parent().append(tmp_input);
-            var fileUploader = $(tmp_input).fileupload();
+            fileUploader = $(tmpInput).fileupload();
             fileUploader.fileupload('send', data).success(function(result, textStatus, jqXHR) {
-                tmp_input.remove();
+                tmpInput.remove();
                 callback.call(null, result, textStatus, jqXHR);
             });
         },
 
         /**
          * Update style
-         * @param url
+         * @param {String} url
          * @private
          */
         _addVideoClass: function(url) {
-            var class_video = 'video-item';
-            $('img[src="' + url + '"]').addClass(class_video);
+            var classVideo = 'video-item';
+            $('img[src="' + url + '"]').addClass(classVideo);
         },
 
         /**
@@ -495,11 +519,17 @@ define([
          * @private
          */
         _create: function () {
-            var imgs = $(this._imageWidgetSelector).data('images') || [];
-            for(var i = 0; i < imgs.length; i++) {
-                var tmp = imgs[i];
+            var imgs = $(this._imageWidgetSelector).data('images') || [],
+                widget,
+                uploader,
+                tmp,
+                i;
+
+            for (i = 0; i < imgs.length; i++) {
+                tmp = imgs[i];
                 this._images[tmp.file] = tmp;
-                if(tmp.media_type == 'external-video') {
+
+                if (tmp.media_type === 'external-video') {
                     tmp.subclass = 'video-item';
                     this._addVideoClass(tmp.url);
                 }
@@ -545,12 +575,12 @@ define([
                     var file = $('#file_name').val();
                     widget._onGetVideoInformationEditClick();
                     var modalTitleElement = $('.modal-title');
-                    if(!file) {
+                    if (!file) {
                         widget._blockActionButtons(true);
                         roles.prop('checked', $('.image.item:not(.removed)').length < 1);
                         modalTitleElement.text($.mage.__('New Video'));
                         widget._isEditPage = false;
-                        return;
+                        return null;
                     }
                     modalTitleElement.text($.mage.__('Edit Video'));
                     widget._isEditPage = true;
@@ -751,7 +781,7 @@ define([
          */
         _onPreview: function(error, src, local) {
             var img = this._getPreviewImage();
-            if(error) {
+            if (error) {
                 return;
             }
 
@@ -759,7 +789,7 @@ define([
                 img.attr({'src': src}).show();
             };
 
-            if(!local) {
+            if (!local) {
                 renderImage(src);
             } else {
                 this._readPreviewLocal(src, renderImage);
@@ -772,15 +802,17 @@ define([
          * @returns {null}
          * @private
          */
-        _getPreviewImage: function() {
-            if(!this._previewImage) {
+        _getPreviewImage: function () {
+
+            if (!this._previewImage) {
                 this._previewImage = $(document.createElement('img')).css({
-                    'width' : '100%',
+                    'width': '100%',
                     'display': 'none',
                     'src': ''
                 });
                 $(this._previewImage).insertAfter(this._videoPreviewImagePointer);
             }
+
             return this._previewImage;
         },
 
@@ -813,17 +845,20 @@ define([
 
         /**
          * Find element by fileName
+         * @param {String} file
          */
         findElementId: function (file) {
             var elem = $('.image.item').find('input[value="' + file + '"]');
-            if(!elem) {
+            if (!elem) {
                 return null;
             }
+
             return $(elem).attr('name').replace('product[media_gallery][images][', '').replace('][file]', '');
         },
 
         /**
-         * @param imageData
+         * Save image roles
+         * @param {Object} imageData
          */
         saveImageRoles: function(imageData) {
             var data = imageData.file;
@@ -840,13 +875,22 @@ define([
             }
         },
 
-        _changeRole: function(imageType, isEnabled, imageData) {
+        /**
+         * Change image role
+         * @param {String} imageType - role name
+         * @param {bool} isEnabled - role active status
+         * @param {Object} imageData - image data object
+         * @private
+         */
+        _changeRole: function (imageType, isEnabled, imageData) {
             var needCheked = true;
-            if(!isEnabled) {
+  
+            if (!isEnabled) {
                 needCheked = $('input[name="product[' + imageType + ']"]').val() == imageData.file;
             }
-            if(!needCheked) {
-                return;
+
+            if (!needCheked) {
+                return null;
             }
 
             $(this._imageWidgetSelector).trigger('setImageType', {
