@@ -21,8 +21,14 @@ define([
                 '<% }); %>'
         },
 
+        _create: function() {
+            this.options.title = $('#message-system-all').attr('title');
+            this._super();
+        },
+
         openModal: function (severity) {
             var superMethod = $.proxy(this._super, this);
+            //this.modal.options
 
             $.ajax({
                 url: this.options.ajaxUrl,
