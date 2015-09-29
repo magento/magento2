@@ -5,7 +5,8 @@
 
 define([
 	"jquery",
-    "Magento_Sales/order/create/scripts"
+    "Magento_Sales/order/create/scripts",
+    'domReady!'
 ], function(jQuery){
 	var $el = jQuery('#edit_form'),
 		config,
