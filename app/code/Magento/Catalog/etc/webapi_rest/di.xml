@@ -6,20 +6,11 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Catalog\Model\Product\Option\Type\Date" type="Magento\Catalog\Model\Webapi\Product\Option\Type\Date" />
     <type name="Magento\Catalog\Helper\Product\ConfigurationPool">
         <arguments>
             <argument name="instancesByType" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\Catalog\Helper\Product\Configuration</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Catalog\Model\Product\Option">
-        <arguments>
-            <argument name="optionValidationPool" xsi:type="array">
-                <item name="date" xsi:type="object">Magento\Catalog\Model\Webapi\Product\Option\Type\Date</item>
-                <item name="file" xsi:type="object">Magento\Catalog\Model\Product\Option\Type\File</item>
-                <item name="select" xsi:type="object">Magento\Catalog\Model\Product\Option\Type\Select</item>
-                <item name="text" xsi:type="object">Magento\Catalog\Model\Product\Option\Type\Text</item>
             </argument>
         </arguments>
     </type>
