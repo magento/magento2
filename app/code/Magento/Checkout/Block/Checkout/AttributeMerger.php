@@ -336,9 +336,8 @@ class AttributeMerger
      */
     protected function getFieldOptions($attributeCode, array $attributeConfig)
     {
-        return isset($attributeConfig['options'])
-            ? (($attributeCode == 'country_id') ? $this->orderCountryOptions($attributeConfig['options']) : [])
-            : [];
+        $options = isset($attributeConfig['options']) ? $attributeConfig['options'] : [];
+        return ($attributeCode == 'country_id') ? $this->orderCountryOptions($options) : $options;
     }
 
     /**
