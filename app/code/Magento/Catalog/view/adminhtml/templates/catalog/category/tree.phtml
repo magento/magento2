@@ -444,8 +444,8 @@
                 pd.splice(pd.length - 1, 1);
 
                 jQuery('[data-id="information-dialog-category"]').modal({
-                    type: 'popup',
-                    modalClass: 'modal-system-messages',
+                    modalClass: 'modal-system-messages confirm',
+                    title:  jQuery.mage.__('Warning message'),
                     buttons: [{
                         text: 'Cancel',
                         class: 'action-tertiary',
