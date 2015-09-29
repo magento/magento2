@@ -24,11 +24,11 @@ class InstallData implements Setup\InstallDataInterface
 
     /**
      * @param \Magento\SampleData\Helper\Deploy $deploy
-     * @param \Magento\SampleData\Model\State $state
+     * @param Setup\SampleData\StateInterface $state
      */
     public function __construct(
         \Magento\SampleData\Helper\Deploy $deploy,
-        \Magento\SampleData\Model\State $state
+        Setup\SampleData\StateInterface $state
     ) {
         $this->deploy = $deploy;
         $this->state = $state;

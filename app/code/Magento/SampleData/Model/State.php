@@ -66,6 +66,7 @@ class State implements Setup\SampleData\StateInterface
     public function isInstalled()
     {
         $isInstalled = false;
+        /**@var $stream \Magento\Framework\Filesystem\File\WriteInterface */
         $stream = $this->getStream('r', $this->fileName);
         if (!$stream) {
             return $isInstalled;
@@ -90,10 +91,7 @@ class State implements Setup\SampleData\StateInterface
     }
 
     /**
-     * Clear Sample Data state
-     *
-     * @return void
-     *
+     * @inheritdoc
      */
     public function clearState()
     {
@@ -120,7 +118,11 @@ class State implements Setup\SampleData\StateInterface
      */
     protected function getStream($mode = 'r')
     {
-        $stream = @fopen($this->getFilePath(), $mode);
+        $stream = false;
+        $directoryWrite = $this->filesystem->getDirectoryWrite();
+        if ($directoryWrite->isExist($this->getFilePath())) {
+            $stream = $directoryWrite->openFile($this->getFilePath(), $mode);
+        }
         return $stream;
     }
 

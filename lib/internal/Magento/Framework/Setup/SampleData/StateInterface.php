@@ -38,4 +38,11 @@ interface StateInterface
      */
     public function isInstalled();
 
+    /**
+     * Clear Sample Data state
+     *
+     * @return void
+     */
+    public function clearState();
+
 }
