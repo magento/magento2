@@ -21,6 +21,7 @@ define([
     }
 
     return {
+
         /**
          * Retrieves requested region.
          * Creates region if it was not created yet
