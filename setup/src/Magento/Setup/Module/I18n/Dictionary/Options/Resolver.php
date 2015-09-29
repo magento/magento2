@@ -59,19 +59,9 @@ class Resolver implements ResolverInterface
             if ($this->withContext) {
                 $directory = rtrim($this->directory, '\\/');
                 $this->directory = ($directory == '.' || $directory == '..') ? BP : $directory;
-                $moduleDirs = [];
-                foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
-                    if (strstr($moduleDir, $this->directory)) {
-                        $moduleDirs[] = $moduleDir . '/';
-                    }
-                }
+                $moduleDirs = $this->getComponentDirectories(ComponentRegistrar::MODULE);
+                $themeDirs = $this->getComponentDirectories(ComponentRegistrar::THEME);
 
-                $themeDirs = [];
-                foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
-                    if (strstr($themeDir, $this->directory)) {
-                        $themeDirs[] = $themeDir . '/';
-                    }
-                }
                 $this->options = [
                     [
                         'type' => 'php',
@@ -132,5 +122,22 @@ class Resolver implements ResolverInterface
                 }
             }
         }
+    }
+
+    /**
+     * Get the given type component directories
+     *
+     * @param string $componentType
+     * @return array
+     */
+    private function getComponentDirectories($componentType)
+    {
+        $dirs = [];
+        foreach ($this->componentRegistrar->getPaths($componentType) as $componentDir) {
+            if (strstr($componentDir, $this->directory)) {
+                $dirs[] = $componentDir . '/';
+            }
+        }
+        return $dirs;
     }
 }
