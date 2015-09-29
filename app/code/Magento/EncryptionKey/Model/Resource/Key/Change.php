@@ -5,7 +5,6 @@
  */
 namespace Magento\EncryptionKey\Model\Resource\Key;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
@@ -24,12 +23,6 @@ class Change extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected $encryptor;
 
-    /**
-     * Filesystem directory write interface
-     *
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
-     */
-    protected $directory;
 
     /**
      * System configuration structure
@@ -54,7 +47,6 @@ class Change extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
     /**
      * @param \Magento\Framework\Model\Resource\Db\Context $context
-     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Config\Model\Config\Structure $structure
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\App\DeploymentConfig\Writer $writer
@@ -63,7 +55,6 @@ class Change extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function __construct(
         \Magento\Framework\Model\Resource\Db\Context $context,
-        \Magento\Framework\Filesystem $filesystem,
         \Magento\Config\Model\Config\Structure $structure,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\App\DeploymentConfig\Writer $writer,
@@ -72,7 +63,6 @@ class Change extends \Magento\Framework\Model\Resource\Db\AbstractDb
     ) {
         $this->encryptor = clone $encryptor;
         parent::__construct($context, $connectionName);
-        $this->directory = $filesystem->getDirectoryWrite(DirectoryList::CONFIG);
         $this->structure = $structure;
         $this->writer = $writer;
         $this->random = $random;
