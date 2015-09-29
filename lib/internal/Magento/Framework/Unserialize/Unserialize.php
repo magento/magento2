@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework;
+namespace Magento\Framework\Unserialize;
 
 class Unserialize
 {
@@ -12,9 +12,10 @@ class Unserialize
      * @param string $string
      * @return bool|mixed
      */
-    public static function unserialize($string)
+    public function unserialize($string)
     {
         if (preg_match('/o:\d+:"[a-z0-9_]+":\d+:{.*?}/i', $string)) {
+            trigger_error('String contains serialized object', E_USER_NOTICE);
             return false;
         }
         return unserialize($string);
