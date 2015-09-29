@@ -7,6 +7,7 @@ namespace Magento\Tax\Model;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Tax\Helper\Data as TaxHelper;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class TaxConfigProvider implements ConfigProviderInterface
 {
@@ -21,13 +22,23 @@ class TaxConfigProvider implements ConfigProviderInterface
     protected $taxConfig;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
      * @param TaxHelper $taxHelper
      * @param Config $taxConfig
+     * @param ScopeConfigInterface $scopeConfig
      */
-    public function __construct(TaxHelper $taxHelper, Config $taxConfig)
-    {
+    public function __construct(
+        TaxHelper $taxHelper,
+        Config $taxConfig,
+        ScopeConfigInterface $scopeConfig
+    ) {
         $this->taxHelper = $taxHelper;
         $this->taxConfig = $taxConfig;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -44,6 +55,7 @@ class TaxConfigProvider implements ConfigProviderInterface
             'includeTaxInGrandTotal' => $this->isTaxDisplayedInGrandTotal(),
             'isFullTaxSummaryDisplayed' => $this->isFullTaxSummaryDisplayed(),
             'isZeroTaxDisplayed' => $this->taxConfig->displayCartZeroTax(),
+            'reloadOnBillingAddress' => $this->reloadOnBillingAddress(),
         ];
     }
 
@@ -133,5 +145,15 @@ class TaxConfigProvider implements ConfigProviderInterface
     public function isTaxDisplayedInGrandTotal()
     {
         return $this->taxConfig->displayCartTaxWithGrandTotal();
+    }
+
+    /**
+     * Reload totals(taxes) on billing address update
+     *
+     * @return bool
+     */
+    protected function reloadOnBillingAddress()
+    {
+        return 'billing' == $this->scopeConfig->getValue(Config::CONFIG_XML_PATH_BASED_ON);
     }
 }

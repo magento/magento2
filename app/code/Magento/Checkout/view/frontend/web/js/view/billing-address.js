@@ -16,6 +16,9 @@ define(
         'Magento_Checkout/js/checkout-data',
         'Magento_Checkout/js/model/checkout-data-resolver',
         'Magento_Customer/js/customer-data',
+        'Magento_Checkout/js/action/set-payment-information',
+        'Magento_Checkout/js/action/get-totals',
+        'Magento_Ui/js/model/messageList',
         'mage/translate'
     ],
     function (
@@ -29,6 +32,9 @@ define(
         checkoutData,
         checkoutDataResolver,
         customerData,
+        setPaymentInfoAction,
+        getTotalsAction,
+        globalMessageList,
         $t
     ) {
         'use strict';
@@ -132,6 +138,10 @@ define(
                         checkoutData.setSelectedBillingAddress(newBillingAddress.getKey());
                         checkoutData.setNewCustomerBillingAddress(addressData);
                     }
+                }
+                if (window.checkoutConfig.reloadOnBillingAddress) {
+                    setPaymentInfoAction(globalMessageList);
+                    getTotalsAction([]);
                 }
             },
 
