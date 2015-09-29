@@ -21,6 +21,11 @@ class Load extends \Magento\Framework\App\Action\Action
     protected $resultJsonFactory;
 
     /**
+     * @var Identifier
+     */
+    protected $sectionIdentifier;
+
+    /**
      * @var SectionPoolInterface
      */
     protected $sectionPool;
@@ -28,15 +33,18 @@ class Load extends \Magento\Framework\App\Action\Action
     /**
      * @param Context $context
      * @param JsonFactory $resultJsonFactory
+     * @param \Magento\Customer\CustomerData\Section\Identifier $sectionIdentifier
      * @param SectionPoolInterface $sectionPool
      */
     public function __construct(
         Context $context,
         JsonFactory $resultJsonFactory,
+        \Magento\Customer\CustomerData\Section\Identifier $sectionIdentifier,
         SectionPoolInterface $sectionPool
     ) {
         parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
+        $this->sectionIdentifier = $sectionIdentifier;
         $this->sectionPool = $sectionPool;
     }
 
@@ -51,7 +59,11 @@ class Load extends \Magento\Framework\App\Action\Action
             $sectionNames = $this->getRequest()->getParam('sections');
             $sectionNames = $sectionNames ? array_unique(\explode(',', $sectionNames)) : null;
 
-            $response = $this->sectionPool->getSectionsData($sectionNames);
+            $updateSectionId = $this->getRequest()->getParam('update_section_id');
+            if ('false' == $updateSectionId) {
+                $updateSectionId = false;
+            }
+            $response = $this->sectionPool->getSectionsData($sectionNames, (bool)$updateSectionId);
         } catch (\Exception $e) {
             $resultJson->setStatusHeader(
                 \Zend\Http\Response::STATUS_CODE_400,
