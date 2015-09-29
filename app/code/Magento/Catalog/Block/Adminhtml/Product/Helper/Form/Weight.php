@@ -73,20 +73,20 @@ class Weight extends \Magento\Framework\Data\Form\Element\Text
         if ($this->getDisabled()) {
             $this->weightSwitcher->setDisabled($this->getDisabled());
         }
-        return '<div class="admin__fieldset weight-switcher" data-role="weight-switcher">' .
-            '<div class="admin__field-control">' .
-                $this->weightSwitcher->getLabelHtml() .
+        return '<div class="admin__field-control weight-switcher">' .
+            '<div class="admin__control-switcher" data-role="weight-switcher">' .
+            $this->weightSwitcher->getLabelHtml() .
                 '<div class="admin__field-control-group">' .
-                    $this->weightSwitcher->getElementHtml() .
+                $this->weightSwitcher->getElementHtml() .
                 '</div>' .
-                '<div class="admin__control-addon">' .
-                parent::getElementHtml() .
-                    '<label class="admin__addon-suffix" for="' .
-                    $this->getHtmlId() .
-                    '"><span>' .
-                    __('lbs') .
-                    '</span></label>' .
-                '</div>' .
+            '</div>' .
+            '<div class="admin__control-addon">' .
+            parent::getElementHtml() .
+                '<label class="admin__addon-suffix" for="' .
+                $this->getHtmlId() .
+                '"><span>' .
+                __('lbs') .
+                '</span></label>' .
             '</div>' .
         '</div>';
     }
