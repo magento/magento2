@@ -46,6 +46,8 @@ define([
             title: '',
             modalClass: '',
             focus: '',
+            autoOpen: false,
+            clickableOverlay: true,
             popupTpl: popupTpl,
             slideTpl: slideTpl,
             customTpl: customTpl,
@@ -112,7 +114,8 @@ define([
             _.bindAll(
                 this,
                 'keyEventSwitcher',
-                '_tabSwitcher'
+                '_tabSwitcher',
+                'closeModal'
             );
 
             this.options.transitionEvent = transitionEvent;
@@ -127,6 +130,7 @@ define([
                 'openModal': this.openModal,
                 'closeModal': this.closeModal
             });
+            this.options.autoOpen ? this.openModal() : false;
         },
 
         /**
@@ -374,8 +378,7 @@ define([
          * Creates overlay, append it to wrapper, set previous click event on overlay.
          */
         _createOverlay: function () {
-            var that = this,
-                events;
+            var events;
 
             this.overlay = $('.' + this.options.overlayClass);
 
@@ -386,13 +389,8 @@ define([
                     .appendTo(this.modalWrapper);
             }
             events = $._data(this.overlay.get(0), 'events');
-
-            if (events) {
-                this.prevOverlayHandler = events.click[0].handler;
-            }
-            this.overlay.unbind().on('click', function () {
-                that.closeModal();
-            });
+            events ? this.prevOverlayHandler = events.click[0].handler : false;
+            this.options.clickableOverlay ? this.overlay.unbind().on('click', this.closeModal) : false;
         },
 
         /**
