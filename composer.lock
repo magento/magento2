@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e0a48d8c3c8b3c4282676fee9dc9abbc",
-    "content-hash": "5354ef6633dacbab5d7c144ca116624c",
+    "hash": "8e72782050eee5944ccc3611efce9904",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -2770,16 +2769,16 @@
         },
         {
             "name": "phpmd/phpmd",
-            "version": "2.3.0",
+            "version": "2.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpmd/phpmd.git",
-                "reference": "246b254505951508bea08db5dde44322264f75fe"
+                "reference": "241bc5f8d140419a8d981ec11063e009b05fd4c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/246b254505951508bea08db5dde44322264f75fe",
-                "reference": "246b254505951508bea08db5dde44322264f75fe",
+                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/241bc5f8d140419a8d981ec11063e009b05fd4c5",
+                "reference": "241bc5f8d140419a8d981ec11063e009b05fd4c5",
                 "shasum": ""
             },
             "require": {
@@ -2834,7 +2833,7 @@
                 "phpmd",
                 "pmd"
             ],
-            "time": "2015-09-22 05:16:44"
+            "time": "2015-09-22 09:31:11"
         },
         {
             "name": "phpunit/php-code-coverage",

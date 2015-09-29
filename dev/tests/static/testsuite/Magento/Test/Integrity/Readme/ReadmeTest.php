@@ -25,16 +25,16 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
     /** @var array */
     private $scanList = [];
 
-    /**
-     * @var string Path to project root
-     */
-    private $root;
-
     protected function setUp()
     {
-        $this->root = Files::init()->getPathToSource();
-        $this->blacklist = $this->getBlacklistFromFile();
-        $this->scanList = $this->getScanListFromFile();
+        $this->blacklist = Files::init()->readLists(__DIR__ . DIRECTORY_SEPARATOR . self::BLACKLIST_FILES_PATTERN);
+        array_walk($this->blacklist, function (&$item) {
+            $item = rtrim($item, '/');
+        });
+        $this->scanList = Files::init()->readLists(__DIR__ . '/' . self::SCAN_LIST_FILE);
+        array_walk($this->scanList, function (&$item) {
+            $item = rtrim($item, '/');
+        });
     }
 
     public function testReadmeFiles()
@@ -60,44 +60,14 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
      */
     private function getDirectories()
     {
-        $root = $this->root;
         $directories = [];
-        foreach ($this->scanList as $pattern) {
-            foreach (glob("{$root}/{$pattern}", GLOB_ONLYDIR) as $dir) {
-                if (!$this->isInBlacklist($dir)) {
-                    $directories[][$dir] = $dir;
-                }
+        foreach ($this->scanList as $dir) {
+            if (!$this->isInBlacklist($dir)) {
+                $directories[][$dir] = $dir;
             }
         }
 
         return $directories;
-    }
-
-    /**
-     * @return array
-     */
-    private function getBlacklistFromFile()
-    {
-        $blacklist = [];
-        foreach (glob(__DIR__ . DIRECTORY_SEPARATOR . self::BLACKLIST_FILES_PATTERN) as $file) {
-            foreach (file($file) as $path) {
-                $blacklist[] = $this->root . trim(($path[0] === '/' ? $path : '/' . $path));
-            }
-        }
-        return $blacklist;
-    }
-
-    /**
-     * @return array
-     */
-    private function getScanListFromFile()
-    {
-        $patterns = [];
-        $filename = __DIR__ . DIRECTORY_SEPARATOR . self::SCAN_LIST_FILE;
-        foreach (file($filename) as $pattern) {
-            $patterns[] = trim($pattern);
-        }
-        return $patterns;
     }
 
     /**

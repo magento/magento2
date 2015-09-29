@@ -54,10 +54,10 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
      */
     public static function getWhitelist($fileTypes = ['php'])
     {
-        $directoriesToCheck = file(__DIR__ . '/_files/whitelist/common.txt', FILE_IGNORE_NEW_LINES);
+        $directoriesToCheck = Files::init()->readLists(__DIR__ . '/_files/whitelist/common.txt');
 
         $changedFiles = array_filter(
-            Utility\Files::readLists(__DIR__ . '/_files/changed_files*'),
+            Utility\Files::init()->readLists(__DIR__ . '/_files/changed_files*'),
             function ($path) use ($directoriesToCheck) {
                 foreach ($directoriesToCheck as $directory) {
                     if (strpos($path, BP . '/' . $directory) === 0) {
@@ -217,7 +217,16 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         $analyser = new \SebastianBergmann\PHPDCD\Analyser();
         $declared = [];
         $called = [];
-        foreach (Files::init()->getPhpFiles() as $file) {
+        $collectedFiles = Files::init()->getPhpFiles(
+            Files::INCLUDE_APP_CODE
+            | Files::INCLUDE_PUB_CODE
+            | Files::INCLUDE_LIBS
+            | Files::INCLUDE_TEMPLATES
+            | Files::INCLUDE_TESTS
+            | Files::AS_DATA_SET
+            | Files::INCLUDE_NON_CLASSES
+        );
+        foreach ($collectedFiles as $file) {
             $file = array_pop($file);
             $analyser->analyseFile($file);
             foreach ($analyser->getFunctionDeclarations() as $function => $declaration) {
