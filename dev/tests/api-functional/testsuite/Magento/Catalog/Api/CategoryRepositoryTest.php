@@ -75,34 +75,26 @@ class CategoryRepositoryTest extends WebapiAbstract
         ];
         return $this->_webApiCall($serviceInfo, ['categoryId' => $id]);
     }
-    /**
-     * @return array
-     */
-    public function categoryCreationProvider()
-    {
-        return [
-            [
-                $this->getSimpleCategoryData(
-                    [
-                        'name' => 'Test Category Name',
-                    ]
-                ),
-            ]
-        ];
-    }
 
     /**
      * Test for create category process
      *
      * @magentoApiDataFixture Magento/Catalog/Model/Category/_files/service_category_create.php
-     * @dataProvider categoryCreationProvider
      */
-    public function testCreate($category)
+    public function testCreate()
     {
-        $category = $this->createCategory($category);
-        $this->assertGreaterThan(0, $category['id']);
+        $categoryData = $this->getSimpleCategoryData(['name' => 'Test Category Name']);
+        $result = $this->createCategory($categoryData);
+        $this->assertGreaterThan(0, $result['id']);
+        foreach (['name', 'parent_id', 'available_sort_by'] as $fieldName) {
+            $this->assertEquals(
+                $categoryData[$fieldName],
+                $result[$fieldName],
+                sprintf('"%s" field value is invalid', $fieldName)
+            );
+        }
         // delete category to clean up auto-generated url rewrites
-        $this->deleteCategory($category['id']);
+        $this->deleteCategory($result['id']);
     }
 
     /**
@@ -193,6 +185,7 @@ class CategoryRepositoryTest extends WebapiAbstract
                 ? $categoryData['name'] : uniqid('Category-', true),
             'is_active' => '1',
             'include_in_menu' => "1",
+            'available_sort_by' => ['position', 'name'],
             'custom_attributes' => [
                 ['attribute_code' => 'url_key', 'value' => ''],
                 ['attribute_code' => 'description', 'value' => 'Custom description'],
