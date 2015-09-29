@@ -74,7 +74,7 @@ class CustomOptionProcessor implements CartItemProcessorInterface
      */
     public function processOptions(CartItemInterface $cartItem)
     {
-
+        $options = $this->getOptions($cartItem);
         if (is_array($options)) {
             $this->updateOptionsValues($options);
             $productOption = $cartItem->getProductOption()
