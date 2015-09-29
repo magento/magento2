@@ -33,6 +33,7 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
      * @param Context $context
      * @param ForwardFactory $resultForwardFactory
      * @param Download $download
+     * @param Unserialize $unserialize
      */
     public function __construct(
         Context $context,
