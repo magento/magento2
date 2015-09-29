@@ -94,7 +94,7 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
     {
         return __(
             'Shipping Incl. Tax (%1)',
-            $this->escapeHtml($this->_checkoutSession->getQuote()->getShippingAddress()->getShippingDescription())
+            $this->escapeHtml($this->getQuote()->getShippingAddress()->getShippingDescription())
         );
     }
 
@@ -107,7 +107,20 @@ class Shipping extends \Magento\Checkout\Block\Total\DefaultTotal
     {
         return __(
             'Shipping Excl. Tax (%1)',
-            $this->escapeHtml($this->_checkoutSession->getQuote()->getShippingAddress()->getShippingDescription())
+            $this->escapeHtml($this->getQuote()->getShippingAddress()->getShippingDescription())
         );
+    }
+
+    /**
+     * Determine shipping visibility based on selected method.
+     *
+     * @return bool
+     */
+    public function displayShipping()
+    {
+        if (!$this->getQuote()->getShippingAddress()->getShippingMethod()) {
+            return false;
+        }
+        return true;
     }
 }
