@@ -5,10 +5,11 @@
 define([
     "jquery",
     'Magento_Ui/js/modal/confirm',
+    'Magento_Ui/js/modal/alert',
     "mage/translate",
     "prototype",
     "Magento_Catalog/catalog/product/composite/configure"
-], function(jQuery, confirm){
+], function(jQuery, confirm, alert){
 
 window.AdminOrder = new Class.create();
 
@@ -952,7 +953,9 @@ AdminOrder.prototype = {
                 name = messages[i].id.split("_");
                 if(name.length < 2) continue;
                 if (element.name.indexOf("[" + name[1] + "]") != -1 && messages[i].value != "") {
-                    alert("First, clean the Message field in Gift Message form");
+                    alert({
+                        content: "First, clean the Message field in Gift Message form"
+                    });
                     element.checked = true;
                 }
             }
@@ -999,7 +1002,9 @@ AdminOrder.prototype = {
 
     loadAreaResponseHandler : function (response) {
         if (response.error) {
-            alert(response.message);
+            alert({
+                content: response.message
+            });
         }
         if (response.ajaxExpired && response.ajaxRedirect) {
             setLocation(response.ajaxRedirect);
@@ -1264,7 +1269,9 @@ AdminOrder.prototype = {
                     message = parameters.vatValidationFailedMessage;
                 }
                 if (null === groupActionRequired) {
-                    alert(message);
+                    alert({
+                        content: message
+                    });
                 }
                 else {
                     this.processCustomerGroupChange(
@@ -1307,7 +1314,9 @@ AdminOrder.prototype = {
                 this.accountGroupChange();
             }
         } else if (action === 'inform') {
-            alert(message + '\n' + groupMessage);
+            alert({
+                content: message + '\n' + groupMessage
+            });
         }
     }
 };
