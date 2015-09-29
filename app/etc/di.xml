@@ -1055,4 +1055,11 @@
     </type>
     <type name="Magento\Framework\Api\Search\SearchCriteriaBuilder" shared="false"/>
     <type name="Magento\Framework\Api\Search\FilterGroupBuilder" shared="false"/>
+    <type name="Magento\Framework\Config\Reader\Xsd\Reader">
+        <arguments>
+            <argument name="fileName" xsi:type="string">view.xsd</argument>
+            <argument name="defaultScope" xsi:type="string">global</argument>
+            <argument name="searchPattern" xsi:type="string">/*/*/etc/</argument>
+        </arguments>
+    </type>
 </config>

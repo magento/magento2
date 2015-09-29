@@ -518,7 +518,7 @@
     <type name="Magento\Framework\Config\Reader\Xsd\Media\TypeDataExtractorPool">
         <arguments>
             <argument name="extractors" xsi:type="array">
-                <item name="images" xsi:type="string">Magento\Catalog\Model\ImageExtractor</item>
+                <item name="images" xsi:type="object">Magento\Catalog\Model\ImageExtractor</item>
             </argument>
         </arguments>
     </type>
