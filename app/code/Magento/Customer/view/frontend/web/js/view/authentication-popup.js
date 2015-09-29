@@ -39,7 +39,10 @@ define(
 
             /** Init popup login window */
             setModalElement: function (element) {
-                authenticationPopup.createPopUp(element);
+                // create pop up if it doesn't exist
+                if (authenticationPopup.modalWindow == null) {
+                    authenticationPopup.createPopUp(element)
+                }
             },
 
             /** Is login form enabled for current customer */
