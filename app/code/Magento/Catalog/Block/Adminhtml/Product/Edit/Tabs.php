@@ -73,8 +73,6 @@ class Tabs extends WigetTabs
      */
     protected $_translateInline;
 
-    private $accordionBlockId = 'tabs-accordion-info';
-
     /**
      * @param Context $context
      * @param EncoderInterface $jsonEncoder

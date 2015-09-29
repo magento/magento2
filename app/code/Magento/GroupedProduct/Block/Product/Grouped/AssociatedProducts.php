@@ -43,7 +43,7 @@ class AssociatedProducts extends \Magento\Backend\Block\Catalog\Product\Tab\Cont
      */
     public function isHidden()
     {
-        return true;
+        return false;
     }
 
     /**
