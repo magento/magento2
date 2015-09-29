@@ -26,6 +26,11 @@ class BundleTest extends \PHPUnit_Framework_TestCase
     protected $resource;
 
     /**
+     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $select;
+
+    /**
      * @var \Magento\CatalogImportExport\Model\Import\Product|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entityModel;
@@ -55,6 +60,52 @@ class BundleTest extends \PHPUnit_Framework_TestCase
      */
     protected $setCollection;
 
+    /**
+     *
+     * @return void
+     */
+    protected function initFetchAllCalls()
+    {
+        $fetchAllForInitAttributes = [
+            [
+                'attribute_set_name' => '1',
+                'attribute_id' => '1',
+            ],
+            [
+                'attribute_set_name' => '2',
+                'attribute_id' => '2',
+            ],
+        ];
+
+        $fetchAllForOtherCalls = [[
+            'selection_id' => '1',
+            'option_id' => '1',
+            'parent_product_id' => '1',
+            'product_id' => '1',
+            'position' => '1',
+            'is_default' => '1'
+        ]];
+
+        $this->connection
+            ->method('fetchAll')
+            ->with($this->select)
+            ->will($this->onConsecutiveCalls(
+                $fetchAllForInitAttributes,
+                $fetchAllForOtherCalls,
+                $fetchAllForInitAttributes,
+                $fetchAllForOtherCalls,
+                $fetchAllForInitAttributes,
+                $fetchAllForOtherCalls,
+                $fetchAllForInitAttributes,
+                $fetchAllForOtherCalls,
+                $fetchAllForInitAttributes,
+                $fetchAllForInitAttributes,
+                $fetchAllForInitAttributes,
+                $fetchAllForInitAttributes,
+                $fetchAllForInitAttributes
+            ));
+    }
+
     protected function setUp()
     {
         $this->entityModel = $this->getMock(
@@ -71,17 +122,18 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
-        $select->expects($this->any())->method('from')->will($this->returnSelf());
-        $select->expects($this->any())->method('where')->will($this->returnSelf());
-        $select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
+        $this->select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
+        $this->select->expects($this->any())->method('from')->will($this->returnSelf());
+        $this->select->expects($this->any())->method('where')->will($this->returnSelf());
+        $this->select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
+        $this->select->expects($this->any())->method('getConnection')->willReturn($this->connection);
+
         $adapter = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
         $adapter->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
-        $select->expects($this->any())->method('getAdapter')->willReturn($adapter);
-        $this->connection->expects($this->any())->method('select')->will($this->returnValue($select));
-        $this->connection->expects($this->any())->method('fetchPairs')->will($this->returnValue([
-            '1' => '1', '2' => '2'
-        ]));
+        $this->select->expects($this->any())->method('getAdapter')->willReturn($adapter);
+
+        $this->connection->expects($this->any())->method('select')->will($this->returnValue($this->select));
+        $this->initFetchAllCalls();
         $this->connection->expects($this->any())->method('insertOnDuplicate')->willReturnSelf();
         $this->connection->expects($this->any())->method('delete')->willReturnSelf();
         $this->connection->expects($this->any())->method('quoteInto')->willReturn('');
@@ -168,17 +220,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             $allowImport
         ));
 
-        $adapter = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
-        $adapter->expects($this->any())->method('quoteInto')->will($this->returnValue('query'));
-
-        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
-        $select->expects($this->any())->method('getAdapter')->willReturn($adapter);
-        $select->expects($this->any())->method('from')->will($this->returnSelf());
-        $select->expects($this->any())->method('where')->will($this->returnSelf());
-        $select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
-        $this->connection->expects($this->any())->method('select')->will($this->returnValue($select));
-
-        $this->connection->expects($this->any())->method('fetchAssoc')->with($select)->will($this->returnValue([
+        $this->connection->expects($this->any())->method('fetchAssoc')->with($this->select)->will($this->returnValue([
             '1' => [
                 'option_id' => '1',
                 'parent_id' => '1',
@@ -223,15 +265,6 @@ class BundleTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ]));
-        $this->connection->expects($this->any())->method('fetchAll')->with($select)->will($this->returnValue([[
-            'selection_id' => '1',
-            'option_id' => '1',
-            'parent_product_id' => '1',
-            'product_id' => '1',
-            'position' => '1',
-            'is_default' => '1'
-        ]]));
-
         $this->bundle->saveData();
     }
 
