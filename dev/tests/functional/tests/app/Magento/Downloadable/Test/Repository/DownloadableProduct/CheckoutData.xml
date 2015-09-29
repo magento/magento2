@@ -38,7 +38,6 @@
                 <item name="price" xsi:type="string">22.43</item>
                 <item name="subtotal" xsi:type="string">22.43</item>
             </field>
-            <field name="qty" xsi:type="string">1</field>
         </dataset>
 
         <dataset name="downloadable_with_two_bought_links">
@@ -58,7 +57,6 @@
                 <item name="price" xsi:type="string">23</item>
                 <item name="subtotal" xsi:type="string">23</item>
             </field>
-            <field name="qty" xsi:type="string">1</field>
         </dataset>
 
         <dataset name="downloadable_update_mini_shopping_cart">
@@ -74,7 +72,6 @@
                 <item name="price" xsi:type="string">23</item>
                 <item name="subtotal" xsi:type="string">23</item>
             </field>
-            <field name="qty" xsi:type="string">1</field>
         </dataset>
 
         <dataset name="downloadable_one_custom_option_and_downloadable_link">
@@ -92,7 +89,6 @@
                     </item>
                 </item>
             </field>
-            <field name="qty" xsi:type="string">1</field>
         </dataset>
 
         <dataset name="downloadable_one_dollar_product_with_separated_link">
@@ -108,7 +104,6 @@
                 <item name="price" xsi:type="string">3</item>
                 <item name="subtotal" xsi:type="string">3</item>
             </field>
-            <field name="qty" xsi:type="string">1</field>
         </dataset>
     </repository>
 </config>

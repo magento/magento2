@@ -106,7 +106,7 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
             $data = [
                 'cartItem' => [
                     'sku' => $product->getSku(),
-                    'qty' => $product->getCheckoutData()['qty'],
+                    'qty' => isset($product->getCheckoutData()['qty']) ? $product->getCheckoutData()['qty'] : 1,
                     'quote_id' => $this->quote
                 ]
             ];
