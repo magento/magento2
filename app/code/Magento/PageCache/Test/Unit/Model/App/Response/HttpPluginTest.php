@@ -13,32 +13,26 @@ use Magento\PageCache\Model\App\Response\HttpPlugin;
 class HttpPluginTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @param bool $usePageCache
+     * @param \Magento\Framework\App\Response\FileInterface $responseInstanceClass
      * @param int $sendVaryCalled
      *
      * @dataProvider beforeSendResponseDataProvider
      */
-    public function testBeforeSendResponse($usePageCache, $sendVaryCalled)
+    public function testBeforeSendResponse($responseInstanceClass, $sendVaryCalled)
     {
         /** @var \Magento\Framework\App\Response\Http | \PHPUnit_Framework_MockObject_MockObject $responseMock */
-        $responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
+        $responseMock = $this->getMock($responseInstanceClass, [], [], '', false);
         $responseMock->expects($this->exactly($sendVaryCalled))
             ->method('sendVary');
-        /** @var \Magento\Framework\Registry | \PHPUnit_Framework_MockObject_MockObject $registryMock */
-        $registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
-        $registryMock->expects($this->once())
-            ->method('registry')
-            ->with('use_page_cache_plugin')
-            ->willReturn($usePageCache);
-        $plugin = new HttpPlugin($registryMock);
+        $plugin = new HttpPlugin();
         $plugin->beforeSendResponse($responseMock);
     }
 
     public function beforeSendResponseDataProvider()
     {
         return [
-            [true, 1],
-            [false, 0]
+            ['Magento\Framework\App\Response\Http', 1],
+            ['Magento\MediaStorage\Model\File\Storage\Response', 0]
         ];
     }
 }
