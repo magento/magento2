@@ -192,6 +192,7 @@ define([
             var events = {
                 'setImage': '_onSetImage'
             };
+
             this._on(events);
 
             this._videoUrlWidget = $(this._videoUrlSelector).videoData();
@@ -730,7 +731,7 @@ define([
         },
 
         _readPreviewLocal: function(file, callback) {
-            if(!window.FileReader) {
+            if (!window.FileReader) {
                 return;
             }
             var fr = new FileReader;
@@ -781,6 +782,7 @@ define([
          */
         _onPreview: function(error, src, local) {
             var img = this._getPreviewImage();
+
             if (error) {
                 return;
             }
@@ -849,6 +851,7 @@ define([
          */
         findElementId: function (file) {
             var elem = $('.image.item').find('input[value="' + file + '"]');
+
             if (!elem) {
                 return null;
             }
@@ -884,7 +887,7 @@ define([
          */
         _changeRole: function (imageType, isEnabled, imageData) {
             var needCheked = true;
-  
+
             if (!isEnabled) {
                 needCheked = $('input[name="product[' + imageType + ']"]').val() == imageData.file;
             }
@@ -899,7 +902,7 @@ define([
             });
         },
 
-        toggleButtons: function() {
+        toggleButtons: function () {
             var self = this;
             $('.video-placeholder, .add-video-button-container > button').click(function() {
                 $('.video-create-button').show();
@@ -914,28 +917,30 @@ define([
                 $('.mage-new-video-dialog').createVideoPlayer({reset : true}).createVideoPlayer('reset');
             });
             $(document).on('click', '#media_gallery_content .item.video-item:not(.removed)', function() {
-                var formFields = $(self._videoFormSelector).find('.edited-data');
-                var container = $(this);
+                var flagChecked,
+                    file,
+                    formFields = $(self._videoFormSelector).find('.edited-data'),
+                    container = $(this);
 
                 $.each(formFields, function (i, field) {
                     $(field).val(container.find('input[name*="' + field.name + '"]').val());
                 });
 
-                var flagChecked = container.find('input[name*="disabled"]').val() == 1;
+                flagChecked = container.find('input[name*="disabled"]').val() == 1;
                 $(self._videoDisableinputSelector).prop('checked', flagChecked);
 
-                var file = $('#file_name').val(container.find('input[name*="file"]').val());
+                file = $('#file_name').val(container.find('input[name*="file"]').val());
 
                 $.each($('.video_image_role'), function(){
                     $(this).prop('checked', false).prop('disabled', false);
                 });
 
-                $.each($('.image-placeholder').siblings('input:hidden'), function() {
+                $.each($('.video-placeholder').siblings('input:hidden'), function() {
                     if ($(this).val() == file.val()) {
                         var start = this.name.indexOf('[') + 1;
                         var end = this.name.length - 1;
                         var imageRole = this.name.substring(start, end);
-                        $(self._videoFormSelector + ' input[value="' + imageRole + '"]').prop('checked', true);
+                        $('#new_video_form input[value="' + imageRole + '"]').prop('checked', true);
                     }
                 });
             });
