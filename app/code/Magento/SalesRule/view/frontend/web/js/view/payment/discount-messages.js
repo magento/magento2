@@ -9,6 +9,7 @@ define([
     'use strict';
 
     return Component.extend({
+
         /**
          * TODO: MAGETWO-43367
          */

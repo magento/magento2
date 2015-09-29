@@ -9,6 +9,7 @@ define([
     'use strict';
 
     return Class.extend({
+
         /**
          * TODO: MAGETWO-43367
          */
@@ -92,7 +93,7 @@ define([
          * TODO: MAGETWO-43367
          */
         hasMessages: function () {
-            return (this.errorMessages().length > 0 || this.successMessages().length > 0);
+            return this.errorMessages().length > 0 || this.successMessages().length > 0;
         },
 
         /**
