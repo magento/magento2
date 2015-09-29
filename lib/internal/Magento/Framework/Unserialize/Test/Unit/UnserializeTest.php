@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\Unserialize\Test\Unit;
 
-use Magento\Framework\Unserialize\Unserialize;
-
 /**
  * @package Magento\Framework
  */
