@@ -12,7 +12,7 @@ use Magento\Framework\View\Element\Template;
 use Magento\Weee\Model\Tax;
 
 /**
- * Weee Tax Price Adjustment
+ * Weee Price Adjustment that handles Weee specific amount and its display
  */
 class Adjustment extends AbstractAdjustment
 {
@@ -105,7 +105,7 @@ class Adjustment extends AbstractAdjustment
      */
     public function showInclDescr()
     {
-        return $this->isDisplayFpt() && $this->getWeeeTaxAmount() && $this->typeOfDisplay(Tax::DISPLAY_INCL_DESCR);
+        return $this->isWeeeShown() && $this->getWeeeTaxAmount() && $this->typeOfDisplay(Tax::DISPLAY_INCL_DESCR);
     }
 
     /**
@@ -115,7 +115,7 @@ class Adjustment extends AbstractAdjustment
      */
     public function showExclDescrIncl()
     {
-        return $this->isDisplayFpt() && $this->getWeeeTaxAmount() && $this->typeOfDisplay(Tax::DISPLAY_EXCL_DESCR_INCL);
+        return $this->isWeeeShown() && $this->getWeeeTaxAmount() && $this->typeOfDisplay(Tax::DISPLAY_EXCL_DESCR_INCL);
     }
 
     /**
@@ -125,7 +125,7 @@ class Adjustment extends AbstractAdjustment
      */
     public function getWeeeTaxAttributes()
     {
-        return $this->isDisplayFpt() ? $this->getWeeeAttributesForDisplay() : [];
+        return $this->isWeeeShown() ? $this->getWeeeAttributesForDisplay() : [];
     }
 
     /**
@@ -174,13 +174,13 @@ class Adjustment extends AbstractAdjustment
     }
 
     /**
-     * Define if the FPT should be displayed
+     * Returns whether Weee should be displayed
      *
      * @return bool
      */
-    protected function isDisplayFpt()
+    protected function isWeeeShown()
     {
-        $isDisplayFpt = $this->typeOfDisplay([Tax::DISPLAY_INCL_DESCR, Tax::DISPLAY_EXCL_DESCR_INCL]);
-        return $isDisplayFpt;
+        $isWeeeShown = $this->typeOfDisplay([Tax::DISPLAY_INCL_DESCR, Tax::DISPLAY_EXCL_DESCR_INCL]);
+        return $isWeeeShown;
     }
 }
