@@ -6,22 +6,25 @@
 /*global alert*/
 define(
     ['jquery'],
-    function($) {
+    function ($) {
         'use strict';
+
         var containerId = '#checkout';
+
         return {
+
             /**
              * Start full page loader action
              */
-            startLoader: function() {
-                $(containerId).trigger("processStart");
+            startLoader: function () {
+                $(containerId).trigger('processStart');
             },
 
             /**
              * Stop full page loader action
              */
-            stopLoader: function() {
-                $(containerId).trigger("processStop");
+            stopLoader: function () {
+                $(containerId).trigger('processStop');
             }
         };
     }
