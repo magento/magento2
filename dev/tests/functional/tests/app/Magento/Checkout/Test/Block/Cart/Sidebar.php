@@ -58,18 +58,11 @@ class Sidebar extends Block
     protected $counterQty = '.minicart-wrapper .counter.qty';
 
     /**
-     * Count product in cart block.
+     * Locator value for Mini Shopping Cart wrapper.
      *
      * @var string
      */
-    protected $counterNumberBlock = '//*[@class="counter-number" and normalize-space(text()) != ""]';
-
-    /**
-     * Count product in cart wrapper.
-     *
-     * @var string
-     */
-    protected $counterNumberWrapper = '/ancestor::*[@class="minicart-wrapper"]';
+    protected $counterNumberWrapper = '.minicart-wrapper';
 
     /**
      * Loading masc.
@@ -157,10 +150,10 @@ class Sidebar extends Block
     public function waitInit()
     {
         $browser = $this->browser;
-        $selector = $this->counterNumberBlock . $this->counterNumberWrapper;
+        $selector = $this->counterNumberWrapper;
         $browser->waitUntil(
             function () use ($browser, $selector) {
-                $counterQty = $browser->find($selector, Locator::SELECTOR_XPATH);
+                $counterQty = $browser->find($selector);
                 return $counterQty->isVisible() ? true : null;
             }
         );
