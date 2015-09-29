@@ -16,7 +16,7 @@ class HttpPluginTest extends \PHPUnit_Framework_TestCase
      * @param bool $usePageCache
      * @param int $sendVaryCalled
      *
-     * @dataProvider testBeforeSendResponseDataProvider
+     * @dataProvider beforeSendResponseDataProvider
      */
     public function testBeforeSendResponse($usePageCache, $sendVaryCalled)
     {
@@ -34,7 +34,7 @@ class HttpPluginTest extends \PHPUnit_Framework_TestCase
         $plugin->beforeSendResponse($responseMock);
     }
 
-    public function testBeforeSendResponseDataProvider()
+    public function beforeSendResponseDataProvider()
     {
         return [
             [true, 1],
