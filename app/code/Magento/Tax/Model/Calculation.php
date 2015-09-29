@@ -528,6 +528,7 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
                 && $basedOn == 'shipping'
             ) {
                 if ($customerId) {
+                    //fallback to default address for registered customer
                     try {
                         $defaultBilling = $this->customerAccountManagement->getDefaultBillingAddress($customerId);
                     } catch (NoSuchEntityException $e) {
@@ -546,7 +547,14 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
                         $basedOn = 'default';
                     }
                 } else {
-                    $basedOn = 'default';
+                    //fallback for guest
+                    if ($basedOn == 'billing' && $shippingAddress->getCountryId()) {
+                        $billingAddress = $shippingAddress;
+                    } elseif ($basedOn == 'shipping' && $billingAddress->getCountryId()) {
+                        $shippingAddress = $billingAddress;
+                    } else {
+                        $basedOn = 'default';
+                    }
                 }
             }
         }
