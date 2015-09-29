@@ -11,10 +11,11 @@
 define([
     'jquery',
     'mage/template',
+    'Magento_Ui/js/modal/alert',
     'jquery/ui',
     'mage/validation',
     'mage/translate'
-], function ($, mageTemplate) {
+], function ($, mageTemplate, alert) {
     'use strict';
 
     // Base widget, handle ajax events and first section(Checkout Method) in one page checkout accordion
@@ -156,7 +157,9 @@ define([
 
                     this.element.find(this.options.checkout.registerCustomerPasswordSelector).show();
                 } else {
-                    alert($.mage.__('Please create an account or check out as a guest.'));
+                    alert({
+                        content: $.mage.__('Please create an account or check out as a guest.')
+                    });
 
                     return false;
                 }
@@ -202,9 +205,13 @@ define([
 
                                 $(this.options.countrySelector).trigger('change');
 
-                                alert(msg);
+                                alert({
+                                    content: msg
+                                });
                             } else {
-                                alert(response.error);
+                                alert({
+                                    content: response.error
+                                });
                             }
 
                             return;
@@ -427,7 +434,9 @@ define([
             var methods = this.element.find('[name="shipping_method"]');
 
             if (methods.length === 0) {
-                alert($.mage.__('We can\'t ship to this address. Please choose another address or edit the current one.'));
+                alert({
+                    content: $.mage.__('We can\'t ship to this address. Please choose another address or edit the current one.')
+                });
 
                 return false;
             }
@@ -436,7 +445,9 @@ define([
                 return true;
             }
 
-            alert($.mage.__('Please specify a shipping method.'));
+            alert({
+                content: $.mage.__('Please specify a shipping method.')
+            });
 
             return false;
         }
@@ -551,7 +562,9 @@ define([
             var methods = this.element.find('[name^="payment["]');
 
             if (methods.length === 0) {
-                alert($.mage.__('We can\'t complete your order because you don\'t have a payment method set up.'));
+                alert({
+                    content: $.mage.__('We can\'t complete your order because you don\'t have a payment method set up.')
+                });
 
                 return false;
             }
@@ -562,7 +575,9 @@ define([
                 return true;
             }
 
-            alert($.mage.__('Please choose a payment method.'));
+            alert({
+                content: $.mage.__('Please choose a payment method.')
+            });
 
             return false;
         },

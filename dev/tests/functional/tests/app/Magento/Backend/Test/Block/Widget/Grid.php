@@ -340,7 +340,10 @@ abstract class Grid extends Block
     {
         $this->_rootElement->find($this->massactionSubmit, Locator::SELECTOR_CSS)->click();
         if ($acceptAlert) {
-            $this->browser->acceptAlert();
+            $element = $this->browser->find('.confirm._show[data-role=modal]');
+            /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
+            $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $element]);
+            $modal->acceptAlert();
         }
     }
 
