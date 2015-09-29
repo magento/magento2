@@ -42,26 +42,20 @@ define([
     }
 
     /**
-     * Removes all non-element nodes from provided array
-     * and appends to it descendant elements.
+     * Extracts node identifier. If ID is not specified,
+     * then it will be created for the provided node.
      *
-     * @param {Array} nodes
-     * @returns {Array}
+     * @param {HTMLElement} node
+     * @returns {Number}
      */
-    function formNodesList(nodes) {
-        var result = [],
-            children;
+    function getNodeId(node) {
+        var id = node._observeId;
 
-        _.toArray(nodes)
-            .filter(isElementNode)
-            .forEach(function (node) {
-                result.push(node);
+        if (!id) {
+            id = node._observeId = counter++;
+        }
 
-                children = extractChildren(node);
-                result   = result.concat(children);
-            });
-
-        return result;
+        return id;
     }
 
     /**
@@ -71,7 +65,15 @@ define([
      * @param {Object} data
      */
     function trigger(node, data) {
+        var id = getNodeId(node),
+            ids = data.invoked;
+
+        if (_.contains(ids, id)) {
+            return;
+        }
+
         data.callback(node);
+        data.invoked.push(id);
     }
 
     /**
@@ -81,12 +83,8 @@ define([
      * @returns {Object}
      */
     function createNodeData(node) {
-        var id      = node._observeId,
-            nodes   = watchers.nodes;
-
-        if (!id) {
-            id = node._observeId = counter++;
-        }
+        var nodes   = watchers.nodes,
+            id      = getNodeId(node);
 
         nodes[id] = nodes[id] || {};
 
@@ -137,10 +135,6 @@ define([
     function addSelectorListener(selector, data) {
         var storage = watchers.selectors;
 
-        if (typeof selector !== 'string') {
-            return;
-        }
-
         (storage[selector] = storage[selector] || []).push(data);
     }
 
@@ -187,51 +181,67 @@ define([
     }
 
     /**
-     * Extarcts nodes that matches specfied selector.
-     * If selector is an object, then it will be parsed as
-     * one of the possible array like values.
+     * Removes all non-element nodes from provided array
+     * and appends to it descendant elements.
      *
-     * @param {(jQueryObject|HTMLElement|Array|String)} selector
-     * @param {HTMLElement} [ctx=document.body] - Context that will be used to search for elements.
-     * @returns {Array} An array of available elements.
+     * @param {Array} nodes
+     * @returns {Array}
      */
-    function getNodes(selector, ctx) {
-        var nodes = [];
+    function formNodesList(nodes) {
+        var result = [],
+            children;
 
-        if (typeof selector === 'object') {
-            if (typeof selector.jquery === 'string' || !selector.tagName) {
-                nodes = _.toArray(selector);
-            } else if (selector.tagName) {
-                nodes = [selector];
-            }
-        } else if (typeof selector === 'string') {
-            nodes = $(selector, ctx).toArray();
-        }
+        nodes = _.toArray(nodes).filter(isElementNode);
 
-        return nodes;
+        nodes.forEach(function (node) {
+            result.push(node);
+
+            children = extractChildren(node);
+            result   = result.concat(children);
+        });
+
+        return result;
     }
 
     /**
-     * Processes removed and added element nodes
-     * specified in mutation record.
+     * Collects all removed and added nodes from
+     * mutation records into separate arrays
+     * while removing duplicates between both types of changes.
      *
-     * @param {MutationRecord} mutation
+     * @param {Array} mutations - An array of mutation records.
+     * @returns {Object} Object with 'removed' and 'added' nodes arrays.
      */
-    function handleMutation(mutation) {
-        var addedNodes = mutation.addedNodes,
-            removedNodes = mutation.removedNodes;
+    function formChangesLists(mutations) {
+        var removed = [],
+            added = [];
 
-        if (addedNodes.length) {
-            formNodesList(addedNodes).forEach(processAdded);
-        }
+        mutations.forEach(function (record) {
+            removed = removed.concat(_.toArray(record.removedNodes));
+            added   = added.concat(_.toArray(record.addedNodes));
+        });
 
-        if (removedNodes.length) {
-            formNodesList(removedNodes).forEach(processRemoved);
-        }
+        removed = removed.filter(function (node) {
+            var addIndex = added.indexOf(node),
+                wasAdded = !!~addIndex;
+
+            if (wasAdded) {
+                added.splice(addIndex, 1);
+            }
+
+            return !wasAdded;
+        });
+
+        return {
+            removed: formNodesList(removed),
+            added: formNodesList(added)
+        };
     }
 
     globalObserver = new MutationObserver(function (mutations) {
-        mutations.forEach(handleMutation);
+        var changes = formChangesLists(mutations);
+
+        changes.removed.forEach(processRemoved);
+        changes.added.forEach(processAdded);
     });
 
     globalObserver.observe(document.body, {
@@ -240,6 +250,7 @@ define([
     });
 
     return {
+
         /**
          * Adds listener for the appearance of nodes that matches provided
          * selector and which are inside of the provided context. Callback will be
@@ -250,15 +261,19 @@ define([
          * @param {HTMLElement} [ctx=document.body] - Context inside of which to search for the node.
          */
         get: function (selector, callback, ctx) {
-            var data;
+            var data,
+                nodes;
 
             data = {
                 ctx: ctx || document.body,
+                type: 'add',
                 callback: callback,
-                type: 'add'
+                invoked: []
             };
 
-            getNodes(selector, data.ctx).forEach(function (node) {
+            nodes = $(selector, data.ctx).toArray();
+
+            nodes.forEach(function (node) {
                 trigger(node, data);
             });
 
@@ -273,21 +288,29 @@ define([
          * @param {HTMLElement} [ctx=document.body] - Context inside of which to search for the node.
          */
         remove: function (selector, callback, ctx) {
-            var data;
+            var nodes = [],
+                data;
 
             data = {
                 ctx: ctx || document.body,
+                type: 'remove',
                 callback: callback,
-                type: 'remove'
+                invoked: []
             };
 
-            getNodes(selector, data.ctx).forEach(function (node) {
-                addRemovalListener(node, data);
-            });
+            if (typeof selector === 'object') {
+                nodes = !_.isUndefined(selector.length) ?
+                    _.toArray(selector) :
+                    [selector];
+            } else if (_.isString(selector)) {
+                nodes = $(selector, ctx).toArray();
 
-            if (typeof selector === 'string') {
                 addSelectorListener(selector, data);
             }
+
+            nodes.forEach(function (node) {
+                addRemovalListener(node, data);
+            });
         },
 
         /**
