@@ -4,11 +4,12 @@
  */
 
 define([
+    'ko',
     'underscore',
     'Magento_Ui/js/lib/spinner',
     'uiLayout',
     'uiComponent'
-], function (_, loader, layout, Component) {
+], function (ko, _, loader, layout, Component) {
     'use strict';
 
     return Component.extend({
@@ -36,18 +37,13 @@ define([
                 name: '${ $.name }_resize',
                 columnsProvider: '${ $.name }',
                 component: 'Magento_Ui/js/grid/resize',
-                provider: '${ $.provider }',
-                classResize: 'shadow-div',
-                divsAttrParams: {
-                    'data-cl-elem': 'shadow-div'
-                },
                 enabled: false
             },
             imports: {
                 rows: '${ $.provider }:data.items'
             },
             listens: {
-                elems: 'setPositions',
+                elems: 'setPositions updateVisible',
                 '${ $.provider }:reload': 'showLoader',
                 '${ $.provider }:reloaded': 'hideLoader'
             },
@@ -63,6 +59,8 @@ define([
          * @returns {Listing} Chainable.
          */
         initialize: function () {
+            _.bindAll(this, 'updateVisible');
+
             this._super();
 
             if (this.resizeConfig.enabled) {
@@ -87,8 +85,9 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe({
-                    rows: []
+                .track({
+                    rows: [],
+                    visibleColumns: []
                 });
 
             return this;
@@ -106,7 +105,7 @@ define([
         },
 
         /**
-         * Creates resize widget instance.
+         * Inititalizes resize component.
          *
          * @returns {Listing} Chainable.
          */
@@ -132,13 +131,17 @@ define([
          *
          * @returns {Listing} Chainable.
          */
-        initElement: function () {
+        initElement: function (element) {
             var currentCount = this.elems().length,
                 totalCount = this.initChildCount;
 
             if (totalCount === currentCount) {
                 this.initPositions();
             }
+
+            element.on('visible', this.updateVisible);
+
+            this.updateVisible();
 
             return this._super();
         },
@@ -213,6 +216,45 @@ define([
         },
 
         /**
+         *
+         * @returns {Array}
+         */
+        getVisible: function () {
+            var observable = ko.getObservable(this, 'visibleColumns');
+
+            return observable || this.visibleColumns;
+        },
+
+        /**
+         * Returns total number of displayed columns in grid.
+         *
+         * @returns {Number}
+         */
+        countVisible: function () {
+            return this.visibleColumns.length;
+        },
+
+        /**
+         * Updates array of visible columns.
+         *
+         * @returns {Listing} Chainable.
+         */
+        updateVisible: function () {
+            this.visibleColumns = this.elems.filter('visible');
+
+            return this;
+        },
+
+        /**
+         * Checks if grid has data.
+         *
+         * @returns {Boolean}
+         */
+        hasData: function () {
+            return !!this.rows.length;
+        },
+
+        /**
          * Hides loader.
          */
         hideLoader: function () {
@@ -224,24 +266,6 @@ define([
          */
         showLoader: function () {
             loader.get(this.name).show();
-        },
-
-        /**
-         * Returns total number of displayed columns in grid.
-         *
-         * @returns {Number}
-         */
-        countVisible: function () {
-            return this.elems.filter('visible').length;
-        },
-
-        /**
-         * Checks if grid has data.
-         *
-         * @returns {Boolean}
-         */
-        hasData: function () {
-            return !!this.rows().length;
         }
     });
 });

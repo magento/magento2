@@ -3,8 +3,9 @@
  * See COPYING.txt for license details.
  */
 define([
+    'underscore',
     'uiComponent'
-], function (Component) {
+], function (_, Component) {
     'use strict';
 
     return Component.extend({
@@ -18,9 +19,9 @@ define([
          *
          * @returns {Boolean}
          */
-        hasData: function () {
+        hasPreviews: function () {
             return this.elems().some(function (elem) {
-                return !!elem.previews().length;
+                return !!elem.previews.length;
             });
         },
 
@@ -30,7 +31,7 @@ define([
          * @returns {Chips} Chainable.
          */
         clear: function () {
-            this.elems.each('clear');
+            _.invoke(this.elems(), 'clear');
 
             return this;
         }

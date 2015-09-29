@@ -51,11 +51,8 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe([
-                    'inputValue',
-                    'value'
-                ])
-                .observe({
+                .track('inputValue value')
+                .track({
                     previews: []
                 });
 
@@ -79,7 +76,7 @@ define([
          * @returns {Search} Chainable.
          */
         clear: function () {
-            this.value('');
+            this.value = '';
 
             return this;
         },
@@ -90,7 +87,7 @@ define([
          * @returns {Search} Chainable.
          */
         cancel: function () {
-            this.inputValue(this.value());
+            this.inputValue = this.value;
 
             return this;
         },
@@ -103,10 +100,9 @@ define([
          * @returns {Search} Chainable.
          */
         apply: function (value) {
-            value = value || this.inputValue();
+            value = value || this.inputValue;
 
-            this.value(value);
-            this.inputValue(value);
+            this.value = this.inputValue = value;
 
             return this;
         },
@@ -123,11 +119,11 @@ define([
                 preview.push({
                     elem: this,
                     label: this.label,
-                    preview: this.value()
+                    preview: this.value
                 });
             }
 
-            this.previews(preview);
+            this.previews = preview;
 
             return this;
         }

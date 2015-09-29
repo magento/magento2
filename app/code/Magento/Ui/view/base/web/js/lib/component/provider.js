@@ -9,35 +9,52 @@ define([
 ], function (ko, _, utils) {
     'use strict';
 
-     /**
-     * Wrapper for ko.observable and ko.observableArray.
-     * Assignes one or another ko property to obj[key]
+    /**
+     * Creates observable property using knockouts'
+     * 'observableArray' or 'observable' methods,
+     * depending on a type of 'value' parameter.
      *
-     * @param {Object} obj - object to store property to
-     * @param {String} key - key
-     * @param {*} value - initial value of observable
+     * @param {Object} obj - Object to whom property belongs.
+     * @param {String} key - Key of the property.
+     * @param {*} value - Initial value.
      */
-    function observe(obj, key, value) {
+    function observable(obj, key, value) {
         var method = Array.isArray(value) ? 'observableArray' : 'observable';
 
         if (_.isFunction(obj[key]) && !ko.isObservable(obj[key])) {
             return;
         }
 
-        if (ko.isObservable(obj[key])) {
-            if (ko.isObservable(value)) {
-                value = value();
-            }
+        if (ko.isObservable(value)) {
+            value = value();
+        }
 
-            obj[key](value);
+        ko.isObservable(obj[key]) ?
+            obj[key](value) :
+            obj[key] = ko[method](value);
+    }
 
+    /**
+     * Creates observable propery using 'track' method.
+     *
+     * @param {Object} obj - Object to whom property belongs.
+     * @param {String} key - Key of the property.
+     * @param {*} value - Initial value.
+     */
+    function accessor(obj, key, value) {
+        if (_.isFunction(obj[key]) || ko.isObservable(obj[key])) {
             return;
         }
 
-        obj[key] = ko[method](value);
+        obj[key] = value;
+
+        if (!ko.es5.isTracked(obj, key)) {
+            ko.track(obj, [key]);
+        }
     }
 
     return {
+
         /**
          * Returns value of the nested property.
          *
@@ -101,29 +118,70 @@ define([
         },
 
         /**
-         * If 2 params passed, path is considered as key.
-         * Else, path is considered as object.
-         * Assignes props to this based on incoming params
+         * Creates observable properties for the current object.
          *
-         * @param {(Object|String)} path
+         * If 'useTrack' flag is set to 'true' then each property will be
+         * created with a ES5 get/set accessor descriptors, instead of
+         * making them an observable functions.
+         * See 'knockout-es5' library for more information.
+         *
+         * @param {Boolean} [useAccessors=false] - Whether to create an
+         *      observable function or to use property accesessors.
+         * @param {(Object|String|Array)} properties - List of observable properties.
+         * @returns {Component} Chainable.
+         *
+         * @example Sample declaration and equivalent knockout methods.
+         *      this.key = 'value';
+         *      this.array = ['value'];
+         *
+         *      this.observe(['key', 'array']);
+         *      =>
+         *          this.key = ko.observable('value');
+         *          this.array = ko.observableArray(['value']);
+         *
+         * @example Another syntaxes of the previous example.
+         *      this.observe({
+         *          key: 'value',
+         *          array: ['value']
+         *      });
+         */
+        observe: function (useAccessors, properties) {
+            var model = this,
+                trackMethod;
+
+            if (typeof useAccessors !== 'boolean') {
+                properties   = useAccessors;
+                useAccessors = false;
+            }
+
+            trackMethod = useAccessors ? accessor : observable;
+
+            if (_.isString(properties)) {
+                properties = properties.split(' ');
+            }
+
+            if (Array.isArray(properties)) {
+                properties.forEach(function (key) {
+                    trackMethod(model, key, model[key]);
+                });
+            } else if (typeof properties === 'object') {
+                _.each(properties, function (value, key) {
+                    trackMethod(model, key, value);
+                });
+            }
+
+            return this;
+        },
+
+        /**
+         * Delegates call to 'observe' method but
+         * with a predefined 'useAccessors' flag.
+         *
+         * @param {(String|Array|Object)} properties - List of observable properties.
          * @returns {Component} Chainable.
          */
-        observe: function (path) {
-            var type = typeof path;
-
-            if (type === 'string') {
-                path = path.split(' ');
-            }
-
-            if (Array.isArray(path)) {
-                path.forEach(function (key) {
-                    observe(this, key, this[key]);
-                }, this);
-            } else if (type === 'object') {
-                _.each(path, function (value, key) {
-                    observe(this, key, value);
-                }, this);
-            }
+        track: function (properties) {
+            this.observe(true, properties);
 
             return this;
         },
