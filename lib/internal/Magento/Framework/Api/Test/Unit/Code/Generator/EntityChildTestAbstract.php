@@ -126,7 +126,7 @@ abstract class EntityChildTestAbstract extends \PHPUnit_Framework_TestCase
     protected function mockDefinedClassesCall()
     {
         $this->definedClassesMock->expects($this->at(0))
-            ->method('classLoadable')
+            ->method('isClassLoadable')
             ->with($this->getSourceClassName())
             ->willReturn(true);
     }
