@@ -120,7 +120,7 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe({
+                .track({
                     active: [],
                     previews: []
                 });
@@ -137,27 +137,6 @@ define([
             layout([this.chipsConfig]);
 
             this.chips('insertChild', this.name);
-
-            return this;
-        },
-
-        /**
-         * Creates instance of a filter associated with the provided column.
-         *
-         * @param {Column} column - Column component for which to create a filter.
-         * @returns {Filters} Chainable.
-         */
-        initFilter: function (column) {
-            var index = column.index,
-                filter;
-
-            if (!column.filter || this.getFilter(index)) {
-                return this;
-            }
-
-            filter = this.buildFilter(column);
-
-            layout([filter]);
 
             return this;
         },
@@ -184,7 +163,7 @@ define([
         clear: function (filter) {
             filter ?
                 filter.clear() :
-                this.active.each('clear');
+                _.invoke(this.active, 'clear');
 
             this.apply();
 
@@ -232,6 +211,27 @@ define([
         },
 
         /**
+         * Creates instance of a filter associated with the provided column.
+         *
+         * @param {Column} column - Column component for which to create a filter.
+         * @returns {Filters} Chainable.
+         */
+        addFilter: function (column) {
+            var index = column.index,
+                filter;
+
+            if (!column.filter || this.hasFilter(index)) {
+                return this;
+            }
+
+            filter = this.buildFilter(column);
+
+            layout([filter]);
+
+            return this;
+        },
+
+        /**
          * Creates filter component configuration associated with the provided column.
          *
          * @param {Column} column - Column component whith a basic filter declaration.
@@ -266,6 +266,16 @@ define([
             return this.elems.findWhere({
                 index: index
             });
+        },
+
+        /**
+         * Checks if collection contains a specfied filter.
+         *
+         * @param {String} index - Index of a filter.
+         * @returns {Boolean}
+         */
+        hasFilter: function (index) {
+            return !!this.getFilter(index);
         },
 
         /**
@@ -307,7 +317,7 @@ define([
          * @returns {Boolean}
          */
         isFilterActive: function (filter) {
-            return this.active.contains(filter);
+            return _.contains(this.active, filter);
         },
 
         /**
@@ -326,7 +336,7 @@ define([
          * @returns {Filters} Chainable.
          */
         updateActive: function () {
-            this.active(this.elems.filter('hasData'));
+            this.active = this.elems.filter('hasData');
 
             return this;
         },
@@ -340,7 +350,7 @@ define([
         updatePreviews: function (filters) {
             var previews = filters.map(extractPreview);
 
-            this.previews(_.compact(previews));
+            this.previews = _.compact(previews);
 
             return this;
         },
@@ -351,7 +361,7 @@ define([
          * @param {Array} columns - Current columns list.
          */
         onColumnsUpdate: function (columns) {
-            columns.forEach(this.initFilter, this);
+            columns.forEach(this.addFilter, this);
         }
     });
 });

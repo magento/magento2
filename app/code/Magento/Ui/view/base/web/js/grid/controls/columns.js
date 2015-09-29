@@ -16,11 +16,8 @@ define([
             minVisible: 1,
             maxVisible: 30,
             viewportSize: 18,
-            columnsData: {
-                container: 'elems'
-            },
             imports: {
-                addColumns: '${ $.columnsData.provider }:${ $.columnsData.container }'
+                addColumns: '${ $.columnsData.provider }:elems'
             },
             templates: {
                 headerMsg: $t('${ $.visible } out of ${ $.total } visible')
@@ -44,7 +41,7 @@ define([
          * @returns {Columns} Chainable.
          */
         cancel: function () {
-            this.elems.each('applyState', 'saved', 'visible');
+            this.elems.each('applyState', '', 'visible');
 
             return this;
         },
@@ -86,7 +83,7 @@ define([
         isDisabled: function (elem) {
             var visible = this.countVisible();
 
-            return elem.visible() ?
+            return elem.visible ?
                     visible === this.minVisible :
                     visible === this.maxVisible;
         },

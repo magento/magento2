@@ -19,21 +19,21 @@
         <div class="admin__action-dropdown-menu-header">
             <span data-bind="text: getHeaderMessage()"></span>
         </div>
-        <div class="admin__action-dropdown-menu-content" data-bind="foreach: elems">
-            <div class="admin__field-option">
+        <div class="admin__action-dropdown-menu-content">
+            <div class="admin__field-option" data-bind="repeat: {foreach: elems, item: '$col'}">
                 <input
                     class="admin__control-checkbox"
                     type="checkbox"
                     data-bind="
                         attr: {
-                                id: ++ko.bindingHandlers['uniqueName'].currentIndex + '_uid'
+                            id: ++ko.bindingHandlers['uniqueName'].currentIndex + '_uid'
                         },
-                        disable: $parent.isDisabled($data),
-                        checked: visible"/>
+                        disable: isDisabled($col()),
+                        checked: $col().visible"/>
                 <label
                     class="admin__field-label"
                     data-bind="
-                        text: label,
+                        text: $col().label,
                         attr: {
                             for: ko.bindingHandlers['uniqueName'].currentIndex + '_uid'
                         }"></label>

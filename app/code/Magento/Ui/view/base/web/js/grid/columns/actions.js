@@ -19,10 +19,13 @@ define([
             draggable: false,
             actions: [],
             rows: [],
+            rowsProvider: '${ $.parentName }',
+            fieldClass: {
+                'data-grid-actions-cell': true
+            },
             templates: {
                 actions: {}
             },
-            rowsProvider: '${ $.parentName }',
             imports: {
                 rows: '${ $.rowsProvider }:rows'
             },
@@ -38,7 +41,7 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe('actions');
+                .track('actions');
 
             return this;
         },
@@ -52,7 +55,7 @@ define([
          * @returns {Array|Object}
          */
         getAction: function (rowIndex, actionIndex) {
-            var rowActions = this.actions()[rowIndex];
+            var rowActions = this.actions[rowIndex];
 
             return rowActions && actionIndex ?
                 rowActions[actionIndex] :
@@ -95,10 +98,7 @@ define([
          * @returns {ActionsColumn} Chainable.
          */
         updateActions: function () {
-            var rows = this.rows,
-                actions = rows.map(this._formatActions, this);
-
-            this.actions(actions);
+            this.actions = this.rows.map(this._formatActions, this);
 
             return this;
         },
@@ -156,6 +156,34 @@ define([
                 callback();
 
             return this;
+        },
+
+        /**
+         * Creates handler for the provided action if it's required.
+         *
+         * @param {Object} action - Action object.
+         * @returns {Function|Undefined}
+         */
+        getActionHandler: function (action) {
+            var index = action.index,
+                rowIndex = action.rowIndex;
+
+            if (this.isHandlerRequired(index, rowIndex)) {
+                return this.applyAction.bind(this, index, rowIndex);
+            }
+        },
+
+        /**
+         * Checks if specified action requires a handler function.
+         *
+         * @param {String} actionIndex - Actions' identifier.
+         * @param {Number} rowIndex - Index of a row.
+         * @returns {Boolean}
+         */
+        isHandlerRequired: function (actionIndex, rowIndex) {
+            var action = this.getAction(rowIndex, actionIndex);
+
+            return _.isObject(action.callback) || action.confirm || !action.href;
         },
 
         /**
@@ -246,16 +274,13 @@ define([
         },
 
         /**
-         * Checks if specified action requires a handler function.
+         * Overrides base method, because this component
+         * can't have global field action.
          *
-         * @param {String} actionIndex - Actions' identifier.
-         * @param {Number} rowIndex - Index of a row.
-         * @returns {Boolean}
+         * @returns {Boolean} False.
          */
-        isHandlerRequired: function (actionIndex, rowIndex) {
-            var action = this.getAction(rowIndex, actionIndex);
-
-            return _.isObject(action.callback) || action.confirm || !action.href;
+        hasFieldAction: function () {
+            return false;
         }
     });
 });

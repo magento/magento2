@@ -28,11 +28,10 @@ define([
         /**
          * Formats incoming date based on the 'dateFormat' property.
          *
-         * @param {String} date - Date to be formatted.
          * @returns {String} Formatted date.
          */
-        getLabel: function (date) {
-            date = moment(date);
+        getLabel: function () {
+            var date = moment(this._super());
 
             date = date.isValid() ?
                 date.format(this.dateFormat) :

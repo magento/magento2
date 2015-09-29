@@ -531,7 +531,7 @@ define([
                 nextElemData = this.hasColumn(nextElemModel, false, true);
 
             if (nextElemData) {
-                if (nextElemModel.visible()) {
+                if (nextElemModel.visible) {
                     return nextElemData;
                 }
 

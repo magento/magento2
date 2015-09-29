@@ -8,27 +8,27 @@ define([
     'use strict';
 
     return Column.extend({
+
+        /*eslint-disable eqeqeq*/
         /**
          * Retrieves label associated with a provided value.
          *
-         * @param {Array} values - Values of the option.
          * @returns {String}
          */
-        getLabel: function (values) {
+        getLabel: function () {
             var options = this.options || [],
-                labels = [];
+                label = '',
+                value = this._super();
 
-            values = values || [];
+            options.some(function (item) {
+                label = item.label;
 
-            /*eslint-disable eqeqeq*/
-            options.forEach(function (item) {
-                if(values.indexOf(item.value) > -1) {
-                    labels.push(item.label);
-                }
+                return item.value == value;
             });
-            /*eslint-enable eqeqeq*/
 
-            return labels.join(', ');
+            return label;
         }
+
+        /*eslint-enable eqeqeq*/
     });
 });
