@@ -10,26 +10,40 @@ define([
     'mage/backend/tree-suggest',
     'mage/backend/validation'
 ], function ($) {
+    'use strict';
 
     $.widget('mage.productGallery',
         $.mage.productGallery,
         {
-            _create: function() {
+
+            /**
+             * Fired when windget initialization start
+             * @private
+             */
+            _create: function () {
                 this._bind();
             },
 
-            _bind: function()
-            {
+            /**
+             * Bind events
+             * @private
+             */
+            _bind: function () {
                 $(this.element).on('click', this.showModal.bind(this));
             },
 
-            showModal: function(e)
-            {
+            /**
+             * Fired on trigger "openModal"
+             */
+            showModal: function () {
+                var videoimgRoleInput = $('.video_image_role');
+
                 $('#new-video').modal('openModal');
-                $('.video_image_role').prop('disabled', false);
+                videoimgRoleInput.prop('disabled', false);
                 $('#new_video_form')[0].reset();
+
                 if ($('.image.item').length < 1) {
-                    $('.video_image_role').prop('checked', true);
+                    videoimgRoleInput.prop('checked', true);
                 }
             }
         }
