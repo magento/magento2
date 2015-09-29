@@ -10,11 +10,11 @@
            <% if(data.responsive){ %><%= data.responsiveClass %><% } %>
            <% if(data.innerScroll){ %><%= data.innerScrollClass %><% } %>"
     data-role="modal"
-    data-type="<%= data.type %>">
+    data-type="<%= data.type %>"
+    tabindex="0">
     <div data-role="focusable-start" tabindex="0"></div>
     <div class="modal-inner-wrap"
-         data-role="focusable-scope"
-         tabindex="0">
+         data-role="focusable-scope">
         <header class="modal-header">
             <% if(data.title){ %>
             <h1 class="modal-title"

@@ -81,7 +81,6 @@ define([
                 }
             }]
         },
-        previosFocused: null,
         keyEventHandlers: {
 
             /**
@@ -89,20 +88,9 @@ define([
              * set focus to elements
              */
             tabKey: function () {
-                if (document.activeElement === this.modal.find(this.options.focusableStart)[0]) {
+                if (document.activeElement === this.modal[0]) {
                     this._setFocus('start');
                 }
-
-                if (document.activeElement === this.modal.find(this.options.focusableScope)[0] &&
-                    this.previosFocused === this.modal.find(this.options.modalCloseBtn)[0]) {
-                    this._setFocus('start');
-                }
-
-                if (document.activeElement === this.modal.find(this.options.focusableEnd)[0]) {
-                    this._setFocus('end');
-                }
-
-                this.previosFocused = document.activeElement;
             },
 
             /**
@@ -123,7 +111,8 @@ define([
         _create: function () {
             _.bindAll(
                 this,
-                'keyEventSwitcher'
+                'keyEventSwitcher',
+                '_tabSwitcher'
             );
 
             this.options.transitionEvent = transitionEvent;
@@ -250,17 +239,33 @@ define([
         },
 
         /**
-         * Set keyup listener when modal is opened.
+         * Set events listener when modal is opened.
          */
         _setKeyListener: function () {
-            this.modal.bind('keyup', this.keyEventSwitcher);
+            this.modal.find(this.options.focusableStart).bind('focusin', this._tabSwitcher);
+            this.modal.find(this.options.focusableEnd).bind('focusin', this._tabSwitcher);
+            this.modal.bind('keydown', this.keyEventSwitcher);
         },
 
         /**
-         * Remove keyup listener when modal is closed.
+         * Remove events listener when modal is closed.
          */
         _removeKeyListener: function () {
-            this.modal.unbind('keyup', this.keyEventSwitcher);
+            this.modal.find(this.options.focusableStart).bind('focusin', this._tabSwitcher);
+            this.modal.find(this.options.focusableEnd).bind('focusin', this._tabSwitcher);
+            this.modal.unbind('keydown', this.keyEventSwitcher);
+        },
+
+        /**
+         * Switcher for focus event.
+         * @param {Object} e - event
+         */
+        _tabSwitcher: function(e){
+            if ($(e.target).is(this.options.focusableStart)) {
+                this._setFocus('start');
+            } else if ($(e.target).is(this.options.focusableEnd)) {
+                this._setFocus('end');
+            }
         },
 
         /**
@@ -272,7 +277,6 @@ define([
 
             this._removeKeyListener();
             this.options.isOpen = false;
-            this.previosFocused = null;
             this.modal.one(this.options.transitionEvent, function () {
                 that._close();
             });
