@@ -27,7 +27,7 @@
         <arguments>
             <argument name="publishers" xsi:type="array">
                 <item name="mysql" xsi:type="array">
-                    <item name="type" xsi:type="object">Magento\Amqp\Model\Publisher</item>
+                    <item name="type" xsi:type="object">Magento\Framework\Amqp\Publisher</item>
                     <item name="connectionName" xsi:type="string">db</item>
                 </item>
             </argument>
@@ -37,7 +37,7 @@
         <arguments>
             <argument name="consumers" xsi:type="array">
                 <item name="mysql" xsi:type="array">
-                    <item name="type" xsi:type="string">Magento\Amqp\Model\Consumer</item>
+                    <item name="type" xsi:type="string">Magento\Framework\Amqp\Consumer</item>
                     <item name="connectionName" xsi:type="string">db</item>
                 </item>
             </argument>
