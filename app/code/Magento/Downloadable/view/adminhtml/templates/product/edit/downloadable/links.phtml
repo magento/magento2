@@ -15,7 +15,7 @@
 ?>
 <?php $_product = $block->getProduct()?>
 <?php $block->getConfigJson() ?>
-<fieldset class="admin__fieldset downloadable-form">
+<fieldset class="admin__fieldset downloadable-form" data-ui-id="downloadable-links">
 
     <div class="admin__field" <?php echo !$block->isSingleStoreMode() ? ' data-config-scope="' . __('[STORE VIEW]') . '"' : ''; ?>>
         <label class="admin__field-label" for="downloadable_links_title"><span><?php /* @escapeNotVerified */ echo __('Title')?></span></label>
