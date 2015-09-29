@@ -123,7 +123,7 @@ class UnitBaseCalculator extends AbstractCalculator
             $unitTaxAfterDiscount = $unitTaxPerRate;
 
             //Handle discount
-            if ($discountAmount && $applyTaxAfterDiscount) {
+            if ($applyTaxAfterDiscount) {
                 //TODO: handle originalDiscountAmount
                 $unitDiscountAmount = $discountAmount / $quantity;
                 $taxableAmount = max($price - $unitDiscountAmount, 0);
