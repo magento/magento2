@@ -17,6 +17,10 @@ use Magento\Framework\Amqp\QueueRepository;
 use Magento\Framework\App\Resource;
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Class BatchConsumer
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class BatchConsumer implements ConsumerInterface
 {
     /**
