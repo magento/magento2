@@ -504,7 +504,7 @@ define([
                     this._addVideoClass(tmp.url);
                 }
             }
-
+            $('.gallery.ui-sortable').on('openDialog', $.proxy(this._onOpenDialog, this));
             this._bind();
             this.createVideoItemIcons();
             var widget = this;
@@ -855,6 +855,39 @@ define([
             });
         },
 
+        _onOpenDialog: function(e, imageData) {
+            if (imageData.media_type == 'external-video') {
+
+                $('.video-create-button').hide();
+                $('.video-delete-button').show();
+                $('.video-edit').show();
+                $('.mage-new-video-dialog').createVideoPlayer({reset : true}).createVideoPlayer('reset');
+
+                var formFields = $(this._videoFormSelector).find('.edited-data');
+                var container = $(this);
+
+                $.each(formFields, function (i, field) {
+                    $(field).val(imageData[field.name]);
+                });
+
+                var flagChecked = imageData.disabled == 1;
+                $(this._videoDisableinputSelector).prop('checked', flagChecked);
+
+                var file = $('#file_name').val(imageData.file);
+
+                $.each($('.video_image_role'), function(){
+                    $(this).prop('checked', false).prop('disabled', false);
+                });
+
+                $.each($('.image-placeholder').siblings('input:hidden'), function() {
+                    if ($(this).val() == file.val()) {
+                        var imageRole = imageData[this.name];
+                        $(this._videoFormSelector + ' input[value="' + imageRole + '"]').prop('checked', true);
+                    }
+                });
+
+            }
+        },
         toggleButtons: function() {
             var self = this;
             $('.video-placeholder, .add-video-button-container > button').click(function() {
