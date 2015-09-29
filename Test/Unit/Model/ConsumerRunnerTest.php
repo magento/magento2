@@ -24,7 +24,7 @@ class ConsumerRunnerTest extends \PHPUnit_Framework_TestCase
     private $consumerRunner;
 
     /**
-     * @var \Magento\FrameworkEe\Amqp\ConsumerFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Amqp\ConsumerFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $consumerFactoryMock;
 
@@ -34,7 +34,7 @@ class ConsumerRunnerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->consumerFactoryMock = $this->getMockBuilder('Magento\FrameworkEe\Amqp\ConsumerFactory')
+        $this->consumerFactoryMock = $this->getMockBuilder('Magento\Amqp\ConsumerFactory')
             ->disableOriginalConstructor()
             ->getMock();
         $this->consumerRunner = $this->objectManager->getObject(
@@ -51,8 +51,8 @@ class ConsumerRunnerTest extends \PHPUnit_Framework_TestCase
      */
     public function testMagicMethod()
     {
-        /** @var \Magento\FrameworkEe\Amqp\ConsumerInterface|\PHPUnit_Framework_MockObject_MockObject $consumerMock */
-        $consumerMock = $this->getMockBuilder('Magento\FrameworkEe\Amqp\ConsumerInterface')->getMock();
+        /** @var \Magento\Amqp\ConsumerInterface|\PHPUnit_Framework_MockObject_MockObject $consumerMock */
+        $consumerMock = $this->getMockBuilder('Magento\Amqp\ConsumerInterface')->getMock();
         $consumerMock->expects($this->once())->method('process');
         $consumerName = 'someConsumerName';
         $this->consumerFactoryMock

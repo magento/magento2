@@ -5,7 +5,7 @@
  */
 namespace Magento\Amqp\Model;
 
-use Magento\FrameworkEe\Amqp\ConsumerFactory;
+use Magento\Amqp\ConsumerFactory;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
