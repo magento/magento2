@@ -79,7 +79,7 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
         }
 
         try {
-            $info = unserialize($option->getValue());
+            $info = Unserialize::unserialize($option->getValue());
             if ($this->getRequest()->getParam('key') != $info['secret_key']) {
                 return $resultForward->forward('noroute');
             }
