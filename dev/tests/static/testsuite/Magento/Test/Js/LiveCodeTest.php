@@ -64,8 +64,8 @@ class LiveCodeTest extends \PHPUnit_Framework_TestCase
         }
         self::$_reportFile = $reportDir . '/js_report.txt';
         @unlink(self::$_reportFile);
-        $whiteList = Files::readLists(__DIR__ . '/_files/whitelist/*.txt');
-        $blackList = Files::readLists(__DIR__ . '/_files/blacklist/*.txt');
+        $whiteList = Files::readLists(__DIR__ . '/_files/jshint/whitelist/*.txt');
+        $blackList = Files::readLists(__DIR__ . '/_files/jshint/blacklist/*.txt');
         foreach ($blackList as $listFiles) {
             self::$_blackListJsFiles = array_merge(self::$_blackListJsFiles, self::_scanJsFile($listFiles));
         }
