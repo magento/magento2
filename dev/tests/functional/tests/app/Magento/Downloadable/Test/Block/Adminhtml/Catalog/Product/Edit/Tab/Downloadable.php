@@ -30,7 +30,7 @@ class Downloadable extends Tab
      *
      * @var string
      */
-    protected $downloadableBlock = 'dl [data-tab-type="tab_content_downloadableInfo"]';
+    protected $downloadableBlock = '[data-tab-type="tab_content_downloadableInfo"]';
 
     /**
      * Get Downloadable block
