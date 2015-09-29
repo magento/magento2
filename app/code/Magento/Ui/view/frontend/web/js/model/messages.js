@@ -9,6 +9,9 @@ define([
     'use strict';
 
     return Class.extend({
+        /**
+         * TODO: MAGETWO-43367
+         */
         initialize: function () {
             this._super()
                 .initObservable();
@@ -16,6 +19,9 @@ define([
             return this;
         },
 
+        /**
+         * TODO: MAGETWO-43367
+         */
         initObservable: function () {
             this.errorMessages = ko.observableArray([]);
             this.successMessages = ko.observableArray([]);
@@ -54,26 +60,44 @@ define([
             return true;
         },
 
+        /**
+         * TODO: MAGETWO-43367
+         */
         addSuccessMessage: function (message) {
             return this.add(message, this.successMessages);
         },
 
+        /**
+         * TODO: MAGETWO-43367
+         */
         addErrorMessage: function (message) {
             return this.add(message, this.errorMessages);
         },
 
+        /**
+         * TODO: MAGETWO-43367
+         */
         getErrorMessages: function () {
             return this.errorMessages;
         },
 
+        /**
+         * TODO: MAGETWO-43367
+         */
         getSuccessMessages: function () {
             return this.successMessages;
         },
 
-        hasMessages: function() {
+        /**
+         * TODO: MAGETWO-43367
+         */
+        hasMessages: function () {
             return (this.errorMessages().length > 0 || this.successMessages().length > 0);
         },
 
+        /**
+         * TODO: MAGETWO-43367
+         */
         clear: function () {
             this.errorMessages.removeAll();
             this.successMessages.removeAll();
