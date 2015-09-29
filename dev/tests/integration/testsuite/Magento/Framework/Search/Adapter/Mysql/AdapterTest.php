@@ -360,7 +360,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDbIsolation disabled
+     * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @magentoConfigFixture current_store catalog/search/engine mysql
      * @magentoConfigFixture current_store catalog/search/search_type 2

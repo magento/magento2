@@ -8,6 +8,7 @@ namespace Magento\CatalogSearch\Model\Layer\Filter;
 /**
  * Test class for \Magento\CatalogSearch\Model\Layer\Filter\Attribute.
  *
+ * @magentoDbIsolation enabled
  * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/_files/attribute_with_option.php
  */
 class AttributeTest extends \PHPUnit_Framework_TestCase

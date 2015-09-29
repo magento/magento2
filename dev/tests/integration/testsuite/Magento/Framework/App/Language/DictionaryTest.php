@@ -114,7 +114,7 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
             'language_code' => 'en_US',
             // Expected merged dictionary data
             'expectation' => [
-                'one' => '1',
+                'one' => '1.0',
                 'two' => '2',
                 'three' => '3',
                 'four' => '4',
