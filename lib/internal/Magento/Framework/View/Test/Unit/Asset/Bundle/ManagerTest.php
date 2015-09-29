@@ -9,7 +9,7 @@ use Magento\Framework\View\Asset\Bundle\Manager;
 
 class ManagerTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var  \Magento\Framework\View\Asset\Bundle\Manager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Manager|\PHPUnit_Framework_MockObject_MockObject */
     protected $manager;
 
     /** @var  \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
@@ -91,55 +91,73 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testAddAssetWithExcludedFile()
     {
+        $dirRead = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $context = $this->getMockBuilder('Magento\Framework\View\Asset\File\FallbackContext')
-                ->disableOriginalConstructor()
-                ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $configView = $this->getMockBuilder('Magento\Framework\Config\View')
-                ->disableOriginalConstructor()
-                ->getMock();
+            ->setMockClassName('configView')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->asset->expects($this->atLeastOnce())
-            ->method('getContentType')
-            ->willReturn('js');
-        $this->asset->expects($this->once())
-            ->method('getSourceFile')
-            ->willReturn('/source/file');
-        $this->asset->expects($this->once())
-            ->method('getModule')
-            ->willReturn('');
-        $this->asset->expects($this->atLeastOnce())
-            ->method('getFilePath')
-            ->willReturn('file/path.js');
         $this->asset->expects($this->atLeastOnce())
             ->method('getContext')
             ->willReturn($context);
-        $this->bundleConfig
-            ->expects($this->atLeastOnce())
+        $this->asset->expects($this->atLeastOnce())
+            ->method('getContentType')
+            ->willReturn('js');
+        $this->asset->expects($this->atLeastOnce())
+            ->method('getModule')
+            ->willReturn('Lib');
+        $this->asset->expects($this->atLeastOnce())
+            ->method('getSourceFile')
+            ->willReturn('source/file.min.js');
+        $this->filesystem->expects($this->once())
+            ->method('getDirectoryRead')
+            ->with(\Magento\Framework\App\Filesystem\DirectoryList::APP)
+            ->willReturn($dirRead);
+        $this->bundleConfig->expects($this->atLeastOnce())
             ->method('getConfig')
             ->with($context)
             ->willReturn($configView);
         $configView->expects($this->once())
             ->method('getExcludedFiles')
-            ->willReturn(['Lib:' . ':file/path.js']);
+            ->willReturn(['Lib:' . ':source/file.min.js']);
 
         $this->assertFalse($this->manager->addAsset($this->asset));
     }
 
     public function testAddAssetWithExcludedDirectory()
     {
+        $dirRead = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $context = $this->getMockBuilder('Magento\Framework\View\Asset\File\FallbackContext')
-                ->disableOriginalConstructor()
-                ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $configView = $this->getMockBuilder('Magento\Framework\Config\View')
-                ->disableOriginalConstructor()
-                ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
+        $this->filesystem->expects($this->once())
+            ->method('getDirectoryRead')
+            ->with(\Magento\Framework\App\Filesystem\DirectoryList::APP)
+            ->willReturn($dirRead);
+        $dirRead->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with('/path/to/file.js')
+            ->willReturn(true);
+        $this->asset->expects($this->atLeastOnce())
+            ->method('getSourceFile')
+            ->willReturn('/path/to/source/file.min.js');
         $this->asset->expects($this->atLeastOnce())
             ->method('getContentType')
             ->willReturn('js');
         $this->asset->expects($this->once())
-            ->method('getSourceFile')
-            ->willReturn('/source/file');
+            ->method('getPath')
+            ->willReturn('/path/to/file.js');
         $this->asset->expects($this->atLeastOnce())
             ->method('getModule')
             ->willReturn('');
@@ -149,8 +167,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
         $this->asset->expects($this->atLeastOnce())
             ->method('getContext')
             ->willReturn($context);
-        $this->bundleConfig
-            ->expects($this->atLeastOnce())
+        $this->bundleConfig->expects($this->atLeastOnce())
             ->method('getConfig')
             ->with($context)
             ->willReturn($configView);
@@ -166,6 +183,9 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testAddAsset()
     {
+        $dirRead = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $context = $this->getMockBuilder('Magento\Framework\View\Asset\File\FallbackContext')
             ->disableOriginalConstructor()
             ->getMock();
@@ -173,20 +193,23 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->filesystem->expects($this->once())
+            ->method('getDirectoryRead')
+            ->with(\Magento\Framework\App\Filesystem\DirectoryList::APP)
+            ->willReturn($dirRead);
+        $this->asset->expects($this->atLeastOnce())
+            ->method('getSourceFile')
+            ->willReturn('/path/to/source/file.min.js');
         $this->asset->expects($this->atLeastOnce())
             ->method('getContentType')
             ->willReturn('js');
         $this->asset->expects($this->once())
-            ->method('getSourceFile')
-            ->willReturn('/source/file');
-        $this->asset->expects($this->atLeastOnce())
-            ->method('getFilePath')
-            ->willReturn('file/path.js');
+            ->method('getPath')
+            ->willReturn('/path/to/file.js');
         $this->asset->expects($this->atLeastOnce())
             ->method('getContext')
             ->willReturn($context);
-        $this->bundleConfig
-            ->expects($this->atLeastOnce())
+        $this->bundleConfig->expects($this->atLeastOnce())
             ->method('getConfig')
             ->with($context)
             ->willReturn($configView);
