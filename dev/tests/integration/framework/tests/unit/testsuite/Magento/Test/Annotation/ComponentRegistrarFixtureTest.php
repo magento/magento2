@@ -6,7 +6,6 @@
 
 namespace Magento\Test\Annotation;
 
-
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\TestFramework\Annotation\ComponentRegistrarFixture;
 
