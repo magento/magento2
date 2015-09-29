@@ -15,6 +15,9 @@ module.exports = function (grunt) {
     [
         taskDir + '/mage-minify',
         taskDir + '/deploy',
+        taskDir + '/black-list-generator',
+        taskDir + '/clean-black-list',
+        taskDir + '/static',
         'time-grunt'
     ].forEach(function (task) {
         require(task)(grunt);
