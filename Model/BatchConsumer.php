@@ -167,6 +167,8 @@ class BatchConsumer implements ConsumerInterface
             $this->dispatchMessage($mergedMessages);
             $this->acknowledgeAll($queue, $messages);
             $this->resource->getConnection()->commit();
+        } catch (\Magento\Framework\Amqp\ConnectionLostException $e) {
+            $this->resource->getConnection()->rollBack();
         } catch (\Exception $e) {
             $this->resource->getConnection()->rollBack();
             $this->rejectAll($queue, $messages);
