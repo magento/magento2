@@ -20,7 +20,7 @@ require([
     'mage/template',
     'mage/mage',
     'prototype'
-], function ($, registry, mageTemplate) {
+], function (jQuery, registry, mageTemplate) {
 
 //<![CDATA[>
 var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
@@ -45,28 +45,26 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
                                 ' ' +
                                 '<span class="file-info-size">(<%- data.size %>)</span>' +
                             '</span>',
-    downloadableCheckbox = $('[data-action=change-type-product]'),
+    downloadableCheckbox = jQuery('[data-action=change-type-product]'),
     toggleTab = function (showTab) {
         showTab = showTab === undefined ? <?= $block->isDownloadable() ? 'true' : 'false' ?> : showTab;
-        console.log('toggleTab');
-        console.log(showTab);
-        if ($('[data-tab=<?= $block->getTabId()?>]').data('collapsible')) {
-            $('[data-tab=<?= $block->getTabId()?>]').collapsible(showTab ? 'activate' : 'deactivate');
+        if (jQuery('[data-tab=<?= $block->getTabId()?>]').data('collapsible')) {
+            jQuery('[data-tab=<?= $block->getTabId()?>]').collapsible(showTab ? 'activate' : 'deactivate');
         } else {
-            $('[data-tab=<?= $block->getTabId()?>]').on('collapsiblecreated', function() {
-                $(this).collapsible(showTab ? 'activate' : 'deactivate');
+            jQuery('[data-tab=<?= $block->getTabId()?>]').on('collapsiblecreated', function() {
+                jQuery(this).collapsible(showTab ? 'activate' : 'deactivate');
             });
         }
     };
 
     downloadableCheckbox.on('change', function () {
-        if ($(this).is(':checked')) {
+        if (jQuery(this).is(':checked')) {
             toggleTab(true);
         }
-        $(document).trigger('typeSwitcherOut');
+        jQuery(document).trigger('typeSwitcherOut');
     });
 
-    $(document).on('typeSwitcher', function (event, data) {
+    jQuery(document).on('typeSwitcher', function (event, data) {
         downloadableCheckbox.attr('checked', !data.hasWeight);
         if (!data.hasWeight) {
             toggleTab(true);
@@ -155,8 +153,9 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
                     })
                 }
             );
-            if ($(this.idName+'_save')) {
-                $(this.idName+'_save').value = this.fileValue.toJSON
+            var elementSave = $(this.idName+'_save');
+            if (elementSave) {
+                elementSave.value = this.fileValue.toJSON
                    ? this.fileValue.toJSON()
                    : Object.toJSON(this.fileValue);
             }
