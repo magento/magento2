@@ -74,13 +74,8 @@ class CustomOptionProcessor implements CartItemProcessorInterface
      */
     public function processOptions(CartItemInterface $cartItem)
     {
-        $buyRequest = !empty($cartItem->getOptionByCode('info_buyRequest'))
-            ? unserialize($cartItem->getOptionByCode('info_buyRequest')->getValue())
-            : null;
-        $options = is_array($buyRequest) && isset($buyRequest['options'])
-            ? $buyRequest['options']
-            : [];
-        if (is_array($options) && $buyRequest) {
+
+        if (is_array($options)) {
             $this->updateOptionsValues($options);
             $productOption = $cartItem->getProductOption()
                 ? $cartItem->getProductOption()
@@ -96,6 +91,22 @@ class CustomOptionProcessor implements CartItemProcessorInterface
             $cartItem->setProductOption($productOption);
         }
         return $cartItem;
+    }
+
+    /**
+     * Receive custom option from buy request
+     *
+     * @param CartItemInterface $cartItem
+     * @return array
+     */
+    protected function getOptions(CartItemInterface $cartItem)
+    {
+        $buyRequest = !empty($cartItem->getOptionByCode('info_buyRequest'))
+            ? unserialize($cartItem->getOptionByCode('info_buyRequest')->getValue())
+            : null;
+        return is_array($buyRequest) && isset($buyRequest['options'])
+            ? $buyRequest['options']
+            : [];
     }
 
     /**
