@@ -27,14 +27,8 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->blacklist = Files::init()->readLists(__DIR__ . DIRECTORY_SEPARATOR . self::BLACKLIST_FILES_PATTERN);
-        array_walk($this->blacklist, function (&$item) {
-            $item = rtrim($item, '/');
-        });
-        $this->scanList = Files::init()->readLists(__DIR__ . '/' . self::SCAN_LIST_FILE);
-        array_walk($this->scanList, function (&$item) {
-            $item = rtrim($item, '/');
-        });
+        $this->blacklist = $this->getPaths(__DIR__ . '/' . self::BLACKLIST_FILES_PATTERN);
+        $this->scanList = $this->getPaths(__DIR__ . '/' . self::SCAN_LIST_FILE);
     }
 
     public function testReadmeFiles()
@@ -77,5 +71,23 @@ class ReadmeTest extends \PHPUnit_Framework_TestCase
     private function isInBlacklist($path)
     {
         return in_array($path, $this->blacklist);
+    }
+
+    /**
+     * Get paths basing on the file with patterns
+     *
+     * @param string $patternsFile
+     * @return array
+     */
+    private function getPaths($patternsFile)
+    {
+        $result = [];
+        $files = Files::init()->readLists($patternsFile);
+        foreach ($files as $file) {
+            if (is_dir($file)) {
+                $result[] = rtrim($file, '/');
+            }
+        }
+        return $result;
     }
 }
