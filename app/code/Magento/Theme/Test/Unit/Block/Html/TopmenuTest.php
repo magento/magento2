@@ -11,6 +11,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\Data\TreeFactory;
 use Magento\Framework\Data\Tree\NodeFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class TopmenuTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,6 +40,11 @@ class TopmenuTest extends \PHPUnit_Framework_TestCase
      */
     protected $category;
 
+    /**
+     * @var ObjectManager
+     */
+    protected $objectManager;
+
     // @codingStandardsIgnoreStart
 
     /** @var string  */
@@ -53,16 +59,25 @@ HTML;
 
     // @codingStandardsIgnoreEnd
 
+    /**
+     * @return void
+     */
     public function setUp()
     {
-        $isCurrentItem = $this->getName() == 'testGetHtmlWithSelectedCategory' ? true : false;
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
-        $this->context = $objectManager->getObject('Magento\Framework\View\Element\Template\Context');
+        $this->context = $this->objectManager->getObject('Magento\Framework\View\Element\Template\Context');
 
         $this->nodeFactory = $this->getMock('Magento\Framework\Data\Tree\NodeFactory', [], [], '', false);
         $this->treeFactory = $this->getMock('Magento\Framework\Data\TreeFactory', [], [], '', false);
+    }
 
+    /**
+     * @return void
+     */
+    protected function settingsForGetHtmlTest()
+    {
+        $isCurrentItem = $this->getName() == 'testGetHtmlWithSelectedCategory' ? true : false;
         $tree = $this->getMock('Magento\Framework\Data\Tree', [], [], '', false);
 
         $container = $this->getMock('Magento\Catalog\Model\Resource\Category\Tree', [], [], '', false);
@@ -76,12 +91,10 @@ HTML;
         for ($i = 0; $i < 10; $i++) {
             $id = "category-node-$i";
             $categoryNode = $this->getMock('Magento\Framework\Data\Tree\Node', ['getId', 'hasChildren'], [], '', false);
-            $categoryNode
-                ->expects($this->once())
+            $categoryNode->expects($this->once())
                 ->method('getId')
                 ->willReturn($id);
-            $categoryNode
-                ->expects($this->atLeastOnce())
+            $categoryNode->expects($this->atLeastOnce())
                 ->method('hasChildren')
                 ->willReturn(false);
             $categoryNode->setData(
@@ -97,45 +110,77 @@ HTML;
             $children->add($categoryNode);
         }
 
-        $children
-            ->expects($this->once())
+        $children->expects($this->once())
             ->method('count')
             ->willReturn(10);
 
         $node = $this->getMock('Magento\Framework\Data\Tree\Node', ['getChildren'], [], '', false);
-        $node
-            ->expects($this->once())
+        $node->expects($this->once())
             ->method('getChildren')
             ->willReturn($children);
-        $node
-            ->expects($this->any())
+        $node->expects($this->any())
             ->method('__call')
             ->with('getLevel', [])
             ->willReturn(null);
 
-        $this->nodeFactory
-            ->expects($this->once())
+        $this->nodeFactory->expects($this->once())
             ->method('create')
             ->willReturn($node);
 
-        $this->treeFactory
-            ->expects($this->once())
+        $this->treeFactory->expects($this->once())
             ->method('create')
             ->willReturn($tree);
     }
 
+    /**
+     * @return Topmenu
+     */
     protected function getTopmenu()
     {
-        return new Topmenu($this->context, $this->nodeFactory, $this->treeFactory);
+        return $this->objectManager->getObject(
+            'Magento\Theme\Block\Html\Topmenu',
+            [
+                'context' => $this->context,
+                'nodeFactory' => $this->nodeFactory,
+                'treeFactory' => $this->treeFactory
+            ]
+        );
     }
 
+    /**
+     * @return void
+     */
     public function testGetHtmlWithoutSelectedCategory()
     {
+        $this->settingsForGetHtmlTest();
         $this->assertEquals($this->htmlWithoutCategory, $this->getTopmenu()->getHtml());
     }
 
+    /**
+     * @return void
+     */
     public function testGetHtmlWithSelectedCategory()
     {
+        $this->settingsForGetHtmlTest();
         $this->assertEquals($this->htmlWithCategory, $this->getTopmenu()->getHtml());
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetIdentitiesDefault()
+    {
+        $this->assertEquals(['catalog_top_menu'], $this->getTopmenu()->getIdentities());
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetAndSetIdentities()
+    {
+        $identity = 'test';
+        $topMenu = $this->getTopmenu();
+        $topMenu->addIdentity($identity);
+        $this->assertEquals(['catalog_top_menu', $identity], $topMenu->getIdentities());
     }
 }
