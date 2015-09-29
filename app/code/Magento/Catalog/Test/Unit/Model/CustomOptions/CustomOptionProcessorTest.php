@@ -104,7 +104,7 @@ class CustomOptionProcessorTest extends \PHPUnit_Framework_TestCase
         $this->productOption->expects($this->once())
             ->method('getExtensionAttributes')
             ->willReturn($this->extensibleAttribute);
-        $this->extensibleAttribute->expects($this->once())
+        $this->extensibleAttribute->expects($this->atLeastOnce())
             ->method('getCustomOptions')
             ->willReturn([$this->customOption]);
         $this->customOption->expects($this->once())
@@ -132,7 +132,7 @@ class CustomOptionProcessorTest extends \PHPUnit_Framework_TestCase
         $quoteItemOption = $this->getMockBuilder('Magento\Quote\Model\Quote\Item\Option')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->cartItem->expects($this->once())
+        $this->cartItem->expects($this->atLeastOnce())
             ->method('getOptionByCode')
             ->with('info_buyRequest')
             ->willReturn($quoteItemOption);
@@ -170,6 +170,6 @@ class CustomOptionProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('setProductOption')
             ->with($this->productOption);
 
-        $this->assertSame($this->cartItem, $this->processor->processCustomOptions($this->cartItem));
+        $this->assertSame($this->cartItem, $this->processor->processOptions($this->cartItem));
     }
 }
