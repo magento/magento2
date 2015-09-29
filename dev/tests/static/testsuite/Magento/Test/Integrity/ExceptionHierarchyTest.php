@@ -83,7 +83,7 @@ class ExceptionHierarchyTest extends \PHPUnit_Framework_TestCase
             $namespaceParts = explode('/', array_keys($foundItems)[0]);
             $namespaceParts = array_map(
                 function ($item) {
-                    return ucfirst($item);
+                    return str_replace(' ', '', ucwords(str_replace('-', ' ', $item)));
                 },
                 $namespaceParts
             );
