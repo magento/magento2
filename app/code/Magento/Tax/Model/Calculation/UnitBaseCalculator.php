@@ -42,18 +42,23 @@ class UnitBaseCalculator extends AbstractCalculator
         $storeRate = $storeRate = $this->calculationTool->getStoreRate($taxRateRequest, $this->storeId);
 
         // Calculate $priceInclTax
+        $applyTaxAfterDiscount = $this->config->applyTaxAfterDiscount($this->storeId);
         $priceInclTax = $this->calculationTool->round($item->getUnitPrice());
         if (!$this->isSameRateAsStore($rate, $storeRate)) {
             $priceInclTax = $this->calculatePriceInclTax($priceInclTax, $storeRate, $rate);
         }
-        $uniTax = $this->calculationTool->calcTaxAmount($priceInclTax, $rate, true, true);
+        $uniTax = $this->calculationTool->calcTaxAmount($priceInclTax, $rate, true, false);
+        $deltaRoundingType = self::KEY_REGULAR_DELTA_ROUNDING;
+        if ($applyTaxAfterDiscount) {
+            $deltaRoundingType = self::KEY_TAX_BEFORE_DISCOUNT_DELTA_ROUNDING;
+        }
+        $uniTax = $this->roundAmount($uniTax, $rate, true, $deltaRoundingType, $round, $item);
         $price = $priceInclTax - $uniTax;
 
         //Handle discount
         $discountTaxCompensationAmount = 0;
-        $applyTaxAfterDiscount = $this->config->applyTaxAfterDiscount($this->storeId);
         $discountAmount = $item->getDiscountAmount();
-        if ($discountAmount && $applyTaxAfterDiscount) {
+        if ($applyTaxAfterDiscount) {
             //TODO: handle originalDiscountAmount
             $unitDiscountAmount = $discountAmount / $quantity;
             $taxableAmount = max($priceInclTax - $unitDiscountAmount, 0);
@@ -61,7 +66,15 @@ class UnitBaseCalculator extends AbstractCalculator
                 $taxableAmount,
                 $rate,
                 true,
-                true
+                false
+            );
+            $unitTaxAfterDiscount = $this->roundAmount(
+                $unitTaxAfterDiscount,
+                $rate,
+                true,
+                self::KEY_REGULAR_DELTA_ROUNDING,
+                $round,
+                $item
             );
 
             // Set discount tax compensation

@@ -18,7 +18,7 @@ class UnitBaseCalculatorTest extends \PHPUnit_Framework_TestCase
 
     const CODE = 'CODE';
     const TYPE = 'TYPE';
-    const ROW_TAX = 44.954135954136;
+    const ROW_TAX = 44.954136954136;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $taxDetailsItemDataObjectFactoryMock;
