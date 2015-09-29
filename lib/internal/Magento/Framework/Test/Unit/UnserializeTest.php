@@ -16,7 +16,8 @@ class UnserializeTest extends \PHPUnit_Framework_TestCase
     public function testUnserialize()
     {
         $array = ['foo' => 'bar', 1, 4];
-        $this->assertFalse(Unserialize::unserialize('O:7:"Object2":1:{s:12:"Object2var";i:123;}'));
+        $serialized = 'a:2:{i:0;s:3:"foo";i:1;O:6:"Object":1:{s:11:"Objectvar";i:123;}}';
+        $this->assertFalse(Unserialize::unserialize($serialized));
         $this->assertEquals($array, Unserialize::unserialize(serialize($array)));
     }
 }

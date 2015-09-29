@@ -14,7 +14,7 @@ class Unserialize
      */
     public static function unserialize($string)
     {
-        if (preg_match('/^o:\d+:"[a-z0-9_]+":\d+:{.*?}$/i', $string)) {
+        if (preg_match('/o:\d+:"[a-z0-9_]+":\d+:{.*?}/i', $string)) {
             return false;
         }
         return unserialize($string);
