@@ -84,6 +84,7 @@ define([
     }
 
     wrapper.extend(ko, {
+
         /**
          * Extends kncokouts' 'applyBindings'
          * to track nodes associated with model.
@@ -132,6 +133,7 @@ define([
     });
 
     return {
+
         /**
          * Returns root nodes associated with a model. If callback is provided,
          * will iterate through all of the present nodes triggering callback

@@ -212,7 +212,7 @@ define([
                 return this;
             }
 
-            if (Object.hasOwnProperty(model, 'dragover')) {
+            if (!Object.hasOwnProperty(model, 'dragover')) {
                 model.track('dragover');
             }
 

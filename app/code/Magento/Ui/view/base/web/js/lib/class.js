@@ -57,6 +57,7 @@ define([
     }
 
     Class = createConstructor({
+
         /**
          * Entry point to the initialization of consturctors' instance.
          *
