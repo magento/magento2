@@ -112,6 +112,7 @@ class Dictionary
      * @param array $result
      * @param int $level
      * @param array $visitedPacks
+     * @return void
      */
     private function collectInheritedPacks($languageConfig, &$result, $level = 0, array &$visitedPacks = [])
     {

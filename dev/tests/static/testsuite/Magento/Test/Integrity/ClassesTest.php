@@ -533,7 +533,10 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
         $libraryDir = null;
         $namespaceParts = explode('/', $namespacePath);
         if (isset($namespaceParts[1])) {
-            $libraryName = array_shift($namespaceParts) . '/' . array_shift($namespaceParts);
+            $vendor = array_shift($namespaceParts);
+            $lib = array_shift($namespaceParts);
+            $lib = strtolower(preg_replace('/(.)([A-Z])/', "$1-$2", $lib));
+            $libraryName = $vendor . '/' . $lib;
             $libraryDir = $componentRegistrar->getPath(ComponentRegistrar::LIBRARY, strtolower($libraryName));
         }
 
