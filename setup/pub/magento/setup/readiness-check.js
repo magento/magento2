@@ -289,7 +289,7 @@ angular.module('readiness-check', [])
                         item.fail();
                     });
             }
-            return $http.get(item.url, {timeout: 3000})
+            return $http.get(item.url, {timeout: 60000})
                 .success(function(data) { item.process(data) })
                 .error(function(data, status) {
                     item.fail();
