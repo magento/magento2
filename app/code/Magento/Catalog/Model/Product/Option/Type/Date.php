@@ -13,6 +13,11 @@ namespace Magento\Catalog\Model\Product\Option\Type;
 class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 {
     /**
+     * @var string
+     */
+    protected $_formattedOptionValue = null;
+
+    /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
     protected $_localeDate;
@@ -181,28 +186,31 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
      */
     public function getFormattedOptionValue($optionValue)
     {
-        if ($this->getOption()->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE) {
-            $result = $this->_localeDate->formatDateTime(
-                new \DateTime($optionValue),
-                \IntlDateFormatter::MEDIUM,
-                \IntlDateFormatter::NONE
-            );
-        } elseif ($this->getOption()->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE_TIME) {
-            $result = $this->_localeDate->formatDateTime(
-                new \DateTime($optionValue),
-                \IntlDateFormatter::SHORT,
-                \IntlDateFormatter::SHORT
-            );
-        } elseif ($this->getOption()->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_TIME) {
-            $result = $this->_localeDate->formatDateTime(
-                new \DateTime($optionValue),
-                \IntlDateFormatter::NONE,
-                \IntlDateFormatter::SHORT
-            );
-        } else {
-            $result = $optionValue;
+        if ($this->_formattedOptionValue === null) {
+            if ($this->getOption()->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE) {
+                $result = $this->_localeDate->formatDateTime(
+                    new \DateTime($optionValue),
+                    \IntlDateFormatter::MEDIUM,
+                    \IntlDateFormatter::NONE
+                );
+            } elseif ($this->getOption()->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_DATE_TIME) {
+                $result = $this->_localeDate->formatDateTime(
+                    new \DateTime($optionValue),
+                    \IntlDateFormatter::SHORT,
+                    \IntlDateFormatter::SHORT
+                );
+            } elseif ($this->getOption()->getType() == \Magento\Catalog\Model\Product\Option::OPTION_TYPE_TIME) {
+                $result = $this->_localeDate->formatDateTime(
+                    new \DateTime($optionValue),
+                    \IntlDateFormatter::NONE,
+                    \IntlDateFormatter::SHORT
+                );
+            } else {
+                $result = $optionValue;
+            }
+            $this->_formattedOptionValue = $result;
         }
-        return $result;
+        return $this->_formattedOptionValue;
     }
 
     /**

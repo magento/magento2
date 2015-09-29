@@ -497,14 +497,4 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Product\Option">
-        <arguments>
-            <argument name="optionValidationPool" xsi:type="array">
-                <item name="date" xsi:type="object">Magento\Catalog\Model\Product\Option\Type\Date</item>
-                <item name="file" xsi:type="object">Magento\Catalog\Model\Product\Option\Type\File</item>
-                <item name="select" xsi:type="object">Magento\Catalog\Model\Product\Option\Type\Select</item>
-                <item name="text" xsi:type="object">Magento\Catalog\Model\Product\Option\Type\Text</item>
-            </argument>
-        </arguments>
-    </type>
 </config>
