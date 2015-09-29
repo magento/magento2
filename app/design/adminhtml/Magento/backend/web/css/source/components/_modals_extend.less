@@ -21,67 +21,165 @@
 @modal-action-close__font-size: 2rem;
 @modal-action-close__active__font-size: 1.8rem;
 @modal-action-close__hover__color: darken(@color-brownie-vanilla, 10%);
-
-//
+@modal-popup-footer-button__margin: 2rem;
+@modal-popup-footer-button__padding: 1.4rem;
+@modal-popup-footer-button__font-size: 1.5rem;
 
 .modal-popup,
 .modal-slide {
-  .action-close {
-    color: @modal-action-close__color;
-    position: absolute;
-    right: 0;
-    top: 0;
-    &:active {
-      transform: none;
-      &:before {
-        font-size: @modal-action-close__active__font-size;
-      }
+    .action-close {
+        color: @modal-action-close__color;
+        position: absolute;
+        right: 0;
+        top: 0;
+        z-index: 1;
+        &:active {
+            transform: none;
+            &:before {
+                font-size: @modal-action-close__active__font-size;
+            }
+        }
+        &:hover {
+            &:before {
+                color: @modal-action-close__hover__color;
+            }
+        }
+        &:before {
+            font-size: @modal-action-close__font-size;
+        }
     }
-    &:hover {
-      &:before {
-        color: @modal-action-close__hover__color;
-      }
-    }
-    &:before {
-      font-size: @modal-action-close__font-size;
-    }
-  }
 }
 
 .modal-popup {
-  .modal-title {
-    font-size: @modal-popup-title__font-size;
-    margin-right: @modal-popup-title__font-size + @modal-popup__padding + 1rem;
-  }
-  .action-close {
-    padding: @modal-popup__padding;
-    &:active {
-      padding-top: @modal-popup__padding + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 2;
-      padding-right: @modal-popup__padding + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 2;
+    &.confirm {
+        .modal-inner-wrap {
+            left: 50%;
+            margin-left: -(@modal-popup-confirm__width / 2);
+            width: @modal-popup-confirm__width;
+        }
     }
-  }
+    &.modal-system-messages {
+        .modal-inner-wrap {
+            background: @color-lazy-sun;
+        }
+    }
+    &._image-box {
+        .modal-inner-wrap {
+            margin: 5rem auto;
+            max-width: @modal-popup-image-box__max-width;
+            position: static;
+        }
+        .thumbnail-preview {
+            padding-bottom: @indent__l;
+            text-align: center;
+            .thumbnail-preview-image-block {
+                border: 1px solid @modal-popup-image-box__border-color;
+                margin: 0 auto @indent__base;
+                max-width: @modal-popup-image-box-preview__max-width;
+                padding: @indent__base;
+            }
+            .thumbnail-preview-image {
+                max-height: @modal-popup-image-box-preview-image__max-height;
+            }
+        }
+    }
+    .modal-title {
+        font-size: @modal-popup-title__font-size;
+        margin-right: @modal-popup-title__font-size + @modal-popup__padding + 1rem;
+    }
+    .modal-title + .action-close {
+        padding: @modal-popup__padding;
+        &:active{
+            padding-top: @modal-popup__padding + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 3;
+            padding-right: @modal-popup__padding + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 3;
+        }
+    }
+    .action-close {
+        padding: @modal-popup__padding / 2.5;
+        &:active {
+            padding-top: @modal-popup__padding / 3 + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 2;
+            padding-right: @modal-popup__padding / 3 + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 2;
+        }
+    }
+    .modal-footer {
+        text-align: right;
+        padding-top: 0;
+        button {
+            font-size: @modal-popup-footer-button__font-size;
+            margin-left: @modal-popup-footer-button__margin;
+            padding-bottom: @modal-popup-footer-button__padding;
+            padding-top: @modal-popup-footer-button__padding;
+        }
+    }
 }
 
 .modal-slide {
-  .modal-title {
-    font-size: @modal-slide-title__font-size;
-    margin-right: @modal-slide-title__font-size + @modal-slide__padding + 1rem;
-  }
-  .action-close {
-    padding: @modal-slide-header__padding-vertical @modal-slide__padding;
-    &:active {
-      padding-top: @modal-slide-header__padding-vertical + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 2;
-      padding-right: @modal-slide__padding + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 2;
+    .modal-title {
+        font-size: @modal-slide-title__font-size;
+        margin-right: @modal-slide-title__font-size + @modal-slide__padding + 1rem;
     }
-  }
-  .page-main-actions {
-    margin-top: @modal-slide-header__padding-vertical;
-    margin-bottom: @modal-slide-header__padding-vertical - @page-main-actions__padding;
-  }
+
+    .action-close {
+        padding: @modal-slide-header__padding-vertical @modal-slide__padding;
+        &:active {
+            padding-top: @modal-slide-header__padding-vertical + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 2;
+            padding-right: @modal-slide__padding + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 2;
+        }
+    }
+    .page-main-actions {
+        margin-top: @modal-slide-header__padding-vertical;
+        margin-bottom: @modal-slide-header__padding-vertical - @page-main-actions__padding;
+    }
+
+    .magento_message {
+        padding: 0 @popup__padding__horizontal @popup__padding__vertical;
+        position: relative;
+    }
+
+    .main-col,
+    .magento_message {
+        .insert-title-inner {
+            &:extend(.abs-clearfix all);
+            border-bottom: 1px solid @color-gray68;
+            margin: 0 0 @indent__base;
+            padding-bottom: @indent__xs;
+        }
+        .insert-actions {
+            float: right;
+        }
+        .title {
+            font-size: @font-size__l;
+            padding-top: @indent__xs;
+        }
+    }
+
+    .main-col,
+    .side-col {
+        float: left;
+        padding-bottom: 0;
+        &:after {
+            display: none;
+        }
+    }
+
+    .side-col {
+        width: 20%;
+    }
+
+    .main-col {
+        padding-right: 0;
+        width: 80%;
+    }
+
+    .content-footer {
+        .form-buttons {
+            float: right;
+        }
+    }
 }
 
 .modal-title {
-  font-weight: @font-weight__regular;
-  margin-bottom: 0;
-  min-height: 1em;
+    font-weight: @font-weight__regular;
+    margin-bottom: 0;
+    min-height: 1em;
 }

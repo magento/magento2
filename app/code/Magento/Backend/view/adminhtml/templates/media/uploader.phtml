@@ -31,9 +31,10 @@
 require([
     "jquery",
     'mage/template',
+    'Magento_Ui/js/modal/alert',
     "mage/translate",
     "jquery/file-uploader"
-], function ($, mageTemplate) {
+], function ($, mageTemplate, alert) {
 
     $('#fileupload').fileupload({
         dataType: 'json',
@@ -75,7 +76,9 @@ require([
                 $('#' + data.fileId)
                     .delay(2000)
                     .hide('highlight');
-                alert($.mage.__('We don\'t recognize or support this file extension type.'));
+                alert({
+                   content: $.mage.__('We don\'t recognize or support this file extension type.')
+                });
             }
             $('#' + data.fileId).remove();
         },

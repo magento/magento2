@@ -115,8 +115,9 @@
 <script>
 require([
     "jquery",
+    "Magento_Ui/js/modal/alert",
     "prototype"
-], function(jQuery){
+], function(jQuery, alert){
 
 //<![CDATA[
 var sendEmailCheckbox = $('send_email');
@@ -145,7 +146,9 @@ window.toggleCreateLabelCheckbox = function() {
 }
 window.submitShipment = function(btn) {
     if (!validQtyItems()) {
-        alert('<?php /* @escapeNotVerified */ echo __('Invalid value(s) for Qty to Ship') ?>');
+        alert({
+            content: '<?php /* @escapeNotVerified */ echo __('Invalid value(s) for Qty to Ship') ?>'
+        });
         return;
     }
     var checkbox = $(btn).up('.order-totals').select('#create_shipping_label')[0];
