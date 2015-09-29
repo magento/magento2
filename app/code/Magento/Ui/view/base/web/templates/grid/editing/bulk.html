@@ -8,7 +8,8 @@
     class="data-grid-bulk-edit-panel data-grid-editable-row"
     data-bind="
         visible: active,
-        foreach: fields">
+        foreach: fields"
+        data-role="data-grid-bulk-row">
     <td
         data-bind="
             visible: $parent.getColumn(index).visible,
