@@ -90,4 +90,15 @@ class GridTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->response, $this->controller->execute());
     }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Invalid parameter "index"
+     */
+    public function testExecuteWithException()
+    {
+        $this->request->expects($this->once())->method('getParam')->with('index')->willReturn('<index"');
+
+        $this->controller->execute();
+    }
 }

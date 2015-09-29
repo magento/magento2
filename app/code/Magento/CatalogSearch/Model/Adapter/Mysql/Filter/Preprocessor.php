@@ -97,29 +97,26 @@ class Preprocessor implements PreprocessorInterface
      */
     private function processQueryWithField(FilterInterface $filter, $isNegation, $query)
     {
-        $currentStoreId = $this->scopeResolver->getScope()->getId();
-        $select = null;
         /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $attribute */
         $attribute = $this->config->getAttribute(Product::ENTITY, $filter->getField());
-        $table = $attribute->getBackendTable();
         if ($filter->getField() === 'price') {
-            $filterQuery = str_replace(
+            $resultQuery = str_replace(
                 $this->connection->quoteIdentifier('price'),
                 $this->connection->quoteIdentifier('price_index.min_price'),
                 $query
             );
-            return $filterQuery;
         } elseif ($filter->getField() === 'category_ids') {
             return 'category_ids_index.category_id = ' . $filter->getValue();
         } elseif ($attribute->isStatic()) {
             $alias = $this->tableMapper->getMappingAlias($filter);
-            $filterQuery = str_replace(
+            $resultQuery = str_replace(
                 $this->connection->quoteIdentifier($attribute->getAttributeCode()),
                 $this->connection->quoteIdentifier($alias . '.' . $attribute->getAttributeCode()),
                 $query
             );
-            return $filterQuery;
-        } elseif ($filter->getType() === FilterInterface::TYPE_TERM) {
+        } elseif ($filter->getType() === FilterInterface::TYPE_TERM
+            && in_array($attribute->getFrontendInput(), ['select', 'multiselect'], true)
+        ) {
             $alias = $this->tableMapper->getMappingAlias($filter);
             if (is_array($filter->getValue())) {
                 $value = sprintf(
@@ -130,15 +127,17 @@ class Preprocessor implements PreprocessorInterface
             } else {
                 $value = ($isNegation ? '!' : '') . '= ' . $filter->getValue();
             }
-            $filterQuery = sprintf(
+            $resultQuery = sprintf(
                 '%1$s.value %2$s',
                 $alias,
                 $value
             );
-            return $filterQuery;
         } else {
+            $table = $attribute->getBackendTable();
             $select = $this->connection->select();
             $ifNullCondition = $this->connection->getIfNullSql('current_store.value', 'main_table.value');
+
+            $currentStoreId = $this->scopeResolver->getScope()->getId();
 
             $select->from(['main_table' => $table], 'entity_id')
                 ->joinLeft(
@@ -154,10 +153,12 @@ class Preprocessor implements PreprocessorInterface
                 )
                 ->where('main_table.store_id = ?', Store::DEFAULT_STORE_ID)
                 ->having($query);
+
+            $resultQuery = 'search_index.entity_id IN (
+                select entity_id from  ' . $this->conditionManager->wrapBrackets($select) . ' as filter
+            )';
         }
 
-        return 'search_index.entity_id IN (
-            select entity_id from  ' . $this->conditionManager->wrapBrackets($select) . ' as filter
-            )';
+        return $resultQuery;
     }
 }
