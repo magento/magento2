@@ -4,33 +4,26 @@
  */
 
 (function() {
+    'use strict';
     var checkInterval = setInterval(function() {
         var checkoutContainer = document.getElementById('checkoutSteps'),
-            childNodes,
-            contentLoaded = false;
+            steps,
+            loaderContainer;
 
         //Return if checkout steps container not loaded
         if (!checkoutContainer) {
             return;
         }
-        childNodes = checkoutContainer.childNodes;
 
-        //Find checkout steps in page body
-        for (var i = 0; i <= childNodes.length; i++) {
-            if (typeof childNodes[i] != "undefined"
-                && childNodes[i].nodeName == 'LI'
-            ) {
-                contentLoaded = true;
-                break;
-            }
-        }
+        //Checkout steps
+        steps = checkoutContainer.getElementsByTagName("li");
 
         //Remove loader and clear update interval if content loaded
-        if (contentLoaded) {
+        if (steps && steps.length > 0) {
             clearInterval(checkInterval);
-            var element = document.getElementById('checkout-loader');
-            if (element && element.parentNode) {
-                element.parentNode.removeChild(element);
+            loaderContainer = document.getElementById('checkout-loader');
+            if (loaderContainer && loaderContainer.parentNode) {
+                loaderContainer.parentNode.removeChild(loaderContainer);
             }
         }
 
