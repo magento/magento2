@@ -9,7 +9,7 @@
 namespace Magento\Dhl\Model;
 
 use Magento\Catalog\Model\Product\Type;
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Module\Dir;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
@@ -178,11 +178,9 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     protected $mathDivision;
 
     /**
-     * Modules directory with read permissions
-     *
-     * @var \Magento\Framework\Filesystem\Directory\Read
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory
      */
-    protected $modulesDirectory;
+    protected $readFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
@@ -216,7 +214,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\Math\Division $mathDivision
-     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
      * @param array $data
@@ -244,12 +242,12 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\Math\Division $mathDivision,
-        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,
         array $data = []
     ) {
-        $this->modulesDirectory = $filesystem->getDirectoryRead(DirectoryList::MODULES);
+        $this->readFactory = $readFactory;
         $this->_carrierHelper = $carrierHelper;
         $this->_coreDate = $coreDate;
         $this->_storeManager = $storeManager;
@@ -1251,9 +1249,9 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     protected function getCountryParams($countryCode)
     {
         if (empty($this->_countryParams)) {
-            $etcPath = $this->_configReader->getModuleDir('etc', 'Magento_Dhl');
-            $countriesXmlPath = $this->modulesDirectory->getRelativePath($etcPath . '/countries.xml');
-            $countriesXml = $this->modulesDirectory->readFile($countriesXmlPath);
+            $etcPath = $this->_configReader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_Dhl');
+            $directoryRead = $this->readFactory->create($etcPath);
+            $countriesXml = $directoryRead->readFile('countries.xml');
             $this->_countryParams = $this->_xmlElFactory->create(['data' => $countriesXml]);
         }
         if (isset($this->_countryParams->{$countryCode})) {

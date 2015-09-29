@@ -17,19 +17,9 @@ class Validator
     public static function validateXml(\DOMDocument $dom, $schemaFileName)
     {
         libxml_use_internal_errors(true);
-        $result = $dom->schemaValidate($schemaFileName);
-        $errors = [];
-        if (!$result) {
-            $validationErrors = libxml_get_errors();
-            if (count($validationErrors)) {
-                foreach ($validationErrors as $error) {
-                    $errors[] = "{$error->message} Line: {$error->line}\n";
-                }
-            } else {
-                $errors[] = 'Unknown validation error';
-            }
-        }
+        $errors = \Magento\Framework\Config\Dom::validateDomDocument($dom, $schemaFileName);
         libxml_use_internal_errors(false);
+
         return $errors;
     }
 }

@@ -16,13 +16,9 @@ class ViewConfigFilesTest extends \PHPUnit_Framework_TestCase
     public function testViewConfigFile($file)
     {
         $domConfig = new \Magento\Framework\Config\Dom($file);
-        /** @var \Magento\Framework\Filesystem $filesystem */
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Filesystem'
-        );
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
         $result = $domConfig->validate(
-            $filesystem->getDirectoryRead(DirectoryList::LIB_INTERNAL)
-                ->getAbsolutePath('Magento/Framework/Config/etc/view.xsd'),
+            $urnResolver->getRealPath('urn:magento:framework:Config/etc/view.xsd'),
             $errors
         );
         $message = "Invalid XML-file: {$file}\n";

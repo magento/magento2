@@ -62,6 +62,9 @@ class Config implements \Magento\Framework\View\ConfigInterface
      */
     protected $fileIteratorFactory;
 
+    /** @var \Magento\Framework\Config\ViewFactory */
+    protected $viewConfigFactory;
+
     /**
      * Constructor
      *
@@ -70,6 +73,7 @@ class Config implements \Magento\Framework\View\ConfigInterface
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
      * @param \Magento\Framework\Config\FileIteratorFactory $fileIteratorFactory
+     * @param \Magento\Framework\Config\ViewFactory $viewConfigFactory
      * @param string $filename
      */
     public function __construct(
@@ -78,14 +82,16 @@ class Config implements \Magento\Framework\View\ConfigInterface
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\View\FileSystem $viewFileSystem,
         \Magento\Framework\Config\FileIteratorFactory $fileIteratorFactory,
+        \Magento\Framework\Config\ViewFactory $viewConfigFactory,
         $filename = self::CONFIG_FILE_NAME
     ) {
         $this->moduleReader = $moduleReader;
         $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->assetRepo = $assetRepo;
         $this->viewFileSystem = $viewFileSystem;
-        $this->filename = $filename;
         $this->fileIteratorFactory = $fileIteratorFactory;
+        $this->viewConfigFactory = $viewConfigFactory;
+        $this->filename = $filename;
     }
 
     /**
@@ -118,7 +124,7 @@ class Config implements \Magento\Framework\View\ConfigInterface
                 $this->rootDirectory->getRelativePath($themeConfigFile)
             );
         }
-        $config = new \Magento\Framework\Config\View($configFiles);
+        $config = $this->viewConfigFactory->create($configFiles);
 
         $this->viewConfigs[$key] = $config;
         return $config;

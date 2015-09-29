@@ -25,13 +25,29 @@ class ChangedFiles
     {
         $fileHelper = \Magento\Framework\App\Utility\Files::init();
         if (isset($_ENV['INCREMENTAL_BUILD'])) {
-            $phpFiles = Files::readLists($changedFilesList);
+            $phpFiles = Files::init()->readLists($changedFilesList);
             if (!empty($phpFiles)) {
                 $phpFiles = \Magento\Framework\App\Utility\Files::composeDataSets($phpFiles);
-                $phpFiles = array_intersect_key($phpFiles, $fileHelper->getPhpFiles());
+                $phpFiles = array_intersect_key($phpFiles, $fileHelper->getPhpFiles(
+                    Files::INCLUDE_APP_CODE
+                    | Files::INCLUDE_PUB_CODE
+                    | Files::INCLUDE_LIBS
+                    | Files::INCLUDE_TEMPLATES
+                    | Files::INCLUDE_TESTS
+                    | Files::AS_DATA_SET
+                    | Files::INCLUDE_NON_CLASSES
+                ));
             }
         } else {
-            $phpFiles = $fileHelper->getPhpFiles();
+            $phpFiles = $fileHelper->getPhpFiles(
+                Files::INCLUDE_APP_CODE
+                | Files::INCLUDE_PUB_CODE
+                | Files::INCLUDE_LIBS
+                | Files::INCLUDE_TEMPLATES
+                | Files::INCLUDE_TESTS
+                | Files::AS_DATA_SET
+                | Files::INCLUDE_NON_CLASSES
+            );
         }
 
         return $phpFiles;

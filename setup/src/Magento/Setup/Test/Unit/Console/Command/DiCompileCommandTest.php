@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
 
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Console\Command\DiCompileCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
@@ -33,6 +34,9 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
 
     /** @var  \Magento\Framework\App\Filesystem\DirectoryList | \PHPUnit_Framework_MockObject_MockObject*/
     private $directoryList;
+
+    /** @var  \Magento\Framework\Component\ComponentRegistrar|\PHPUnit_Framework_MockObject_MockObject */
+    private $componentRegistrar;
 
     public function setUp()
     {
@@ -73,7 +77,8 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
             $this->manager,
             $objectManagerProvider,
             $this->filesystem,
-            $this->fileDriver
+            $this->fileDriver,
+            $this->componentRegistrar
         );
     }
 
