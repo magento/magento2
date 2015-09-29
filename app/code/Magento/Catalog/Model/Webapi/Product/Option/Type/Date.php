@@ -56,8 +56,9 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         $dateTime = \DateTime::createFromFormat(DateTime::DATETIME_PHP_FORMAT, $value);
 
         $dateValid = true;
-        if ($dateTime) {
-            $dateValid = $dateTime->format(DateTime::DATETIME_PHP_FORMAT) == $value;
+        $lastErrors = \DateTime::getLastErrors();
+        if (!($dateTime && $lastErrors['error_count'] == 0)) {
+            $dateValid = false;
         }
 
         if ($dateValid && $dateTime) {
@@ -65,9 +66,9 @@ class Date extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                 [
                     'date' => $value,
                     'year' => $dateTime->format('Y'),
-                    'month' => $dateTime->format('n'),
-                    'day' => $dateTime->format('j'),
-                    'hour' => $dateTime->format('G'),
+                    'month' => $dateTime->format('m'),
+                    'day' => $dateTime->format('d'),
+                    'hour' => $dateTime->format('H'),
                     'minute' => intval($dateTime->format('i')),
                     'day_part' => $dateTime->format('a'),
                     'date_internal' => '',
