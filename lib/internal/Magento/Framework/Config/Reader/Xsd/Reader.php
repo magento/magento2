@@ -31,6 +31,11 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
      */
     protected $iteratorFactory;
 
+    /*
+     * @var string
+     */
+    protected $searchPattern;
+
     /**
      * @param Filesystem $filesystem
      * @param FileIteratorFactory $iteratorFactory
@@ -40,13 +45,15 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
     public function __construct(
         Filesystem $filesystem,
         FileIteratorFactory $iteratorFactory,
-        $fileName = 'view.xsd',
-        $defaultScope = 'global'
+        $fileName,
+        $defaultScope,
+        $searchPattern
     ) {
         $this->directoryRead = $filesystem->getDirectoryRead(DirectoryList::MODULES);
         $this->iteratorFactory = $iteratorFactory;
         $this->fileName = $fileName;
         $this->defaultScope = $defaultScope;
+        $this->searchPattern = $searchPattern;
     }
 
     /**
@@ -59,7 +66,7 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
     {
         $iterator = $this->iteratorFactory->create(
             $this->directoryRead,
-            $this->directoryRead->search('/*/*/etc/' . $filename)
+            $this->directoryRead->search($this->searchPattern . $filename)
         );
         return $iterator;
     }

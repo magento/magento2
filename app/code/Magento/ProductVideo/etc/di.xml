@@ -36,7 +36,7 @@
     <type name="Magento\Framework\Config\Reader\Xsd\Media\TypeDataExtractorPool">
         <arguments>
             <argument name="extractors" xsi:type="array">
-                <item name="videos" xsi:type="string">Magento\ProductVideo\Model\VideoExtractor</item>
+                <item name="videos" xsi:type="object">Magento\ProductVideo\Model\VideoExtractor</item>
             </argument>
         </arguments>
     </type>

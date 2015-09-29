@@ -6,7 +6,7 @@
 namespace Magento\Framework\Config\Reader\Xsd\Media;
 
 use Magento\Framework\ObjectManagerInterface;
-
+use Magento\Framework\Config\Reader\Xsd\Media\TypeDataExtractorInterface;
 
 class TypeDataExtractorPool
 {
@@ -26,13 +26,19 @@ class TypeDataExtractorPool
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param @param \Magento\Framework\Config\Reader\Xsd\MediaTypeDataExtractorInterface[] $extractors
+     * @param @param \Magento\Framework\Config\Reader\Xsd\Media\TypeDataExtractorInterface[] $extractors
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         array $extractors
     ) {
-        $this->extractors = $extractors;
+        //$this->extractors = $extractors;
+        foreach ($extractors as $key => $extractorItem) {
+            if (!($extractorItem instanceof TypeDataExtractorInterface)) {
+                throw new \InvalidArgumentException('Passed wrong parameters type');
+            }
+            $this->extractors[$key] = $extractorItem;
+        }
         $this->objectManager = $objectManager;
     }
 
@@ -44,7 +50,8 @@ class TypeDataExtractorPool
      */
     public function nodeProcessor($tagName)
     {
-        return $this->objectManager->create($this->extractors[$tagName]);
+        //return $this->objectManager->create($this->extractors[$tagName]);
+        return $this->extractors[$tagName];
     }
 
 }
