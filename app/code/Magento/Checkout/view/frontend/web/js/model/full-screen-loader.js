@@ -7,6 +7,7 @@
 define(
     ['jquery'],
     function($) {
+        'use strict';
         var containerId = '#checkout';
         return {
             /**
