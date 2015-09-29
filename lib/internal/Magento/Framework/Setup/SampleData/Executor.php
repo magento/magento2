@@ -33,7 +33,7 @@ class Executor
             $this->state->setInstalled();
         } catch (\Exception $e) {
             $this->state->setError();
-            $this->logger->error($e->getMessage());
+            $this->logger->error('Sample Data error: ' . $e->getMessage());
         }
     }
 }
