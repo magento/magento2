@@ -14,7 +14,11 @@ use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreIsInactiveException;
 use Magento\Store\Model\StoreResolver;
+use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Switch current store view.
+ */
 class SwitchAction extends Action
 {
     /**
@@ -33,21 +37,31 @@ class SwitchAction extends Action
     protected $storeRepository;
 
     /**
+     * @var StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
+     * Initialize dependencies.
+     *
      * @param ActionContext $context
      * @param StoreCookieManagerInterface $storeCookieManager
      * @param HttpContext $httpContext
      * @param StoreRepositoryInterface $storeRepository
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         ActionContext $context,
         StoreCookieManagerInterface $storeCookieManager,
         HttpContext $httpContext,
-        StoreRepositoryInterface $storeRepository
+        StoreRepositoryInterface $storeRepository,
+        StoreManagerInterface $storeManager
     ) {
         parent::__construct($context);
         $this->storeCookieManager = $storeCookieManager;
         $this->httpContext = $httpContext;
         $this->storeRepository = $storeRepository;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -64,7 +78,7 @@ class SwitchAction extends Action
             $store = $this->storeRepository->getActiveStoreByCode($storeCode);
         } catch (StoreIsInactiveException $e) {
             $error = __('Requested store is inactive');
-        } catch (\InvalidArgumentException $e) { // TODO: MAGETWO-39826 Need to replace on NoSuchEntityException
+        } catch (\InvalidArgumentException $e) {
             $error = __('Requested store is not found');
         }
 
@@ -74,11 +88,12 @@ class SwitchAction extends Action
             return;
         }
 
-        if ($store->getWebsite()->getDefaultStore()->getId() == $store->getId()) {
+        $defaultStoreView = $this->storeManager->getDefaultStoreView();
+        if ($defaultStoreView->getId() == $store->getId()) {
             $this->storeCookieManager->deleteStoreCookie($store);
         } else {
+            $this->httpContext->setValue(Store::ENTITY, $store->getCode(), $defaultStoreView->getCode());
             $this->storeCookieManager->setStoreCookie($store);
-            $this->httpContext->setValue(Store::ENTITY, $store->getCode(), Store::DEFAULT_CODE);
         }
 
         $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl());
