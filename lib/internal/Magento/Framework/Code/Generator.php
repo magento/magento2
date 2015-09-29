@@ -113,6 +113,7 @@ class Generator
      * Include file only if the class is not already defined in memory
      *
      * @param string $fileName
+     * @param $className
      * @return void
      */
     public function tryToIncludeFile($fileName, $className)
