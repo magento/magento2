@@ -37,12 +37,20 @@ define([
             buttons: [{
                 text: $.mage.__('Cancel'),
                 class: 'action-tertiary action-dismiss',
+
+                /**
+                 * Click handler.
+                 */
                 click: function () {
                     this.closeModal();
                 }
             }, {
                 text: $.mage.__('OK'),
                 class: 'action-secondary action-accept',
+
+                /**
+                 * Click handler.
+                 */
                 click: function () {
                     this.closeModal(true);
                 }
@@ -55,7 +63,11 @@ define([
         _create: function () {
             this.options.focus = this.options.promptField;
             this._super();
-            this.modal.find(this.options.modalContent).append('<input data-role="promptField" type="text"/>');
+            this.modal.find(this.options.modalContent).append(
+                '<div class="prompt-message">' +
+                    '<input data-role="promptField" class="admin__control-text" type="text"/>' +
+                '</div>'
+            );
             this.modal.find(this.options.modalCloseBtn).off().on('click',  _.bind(this.closeModal, this, false));
             this.openModal();
         },
