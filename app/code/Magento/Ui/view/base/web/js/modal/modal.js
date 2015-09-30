@@ -255,8 +255,8 @@ define([
          * Remove events listener when modal is closed.
          */
         _removeKeyListener: function () {
-            this.modal.find(this.options.focusableStart).bind('focusin', this._tabSwitcher);
-            this.modal.find(this.options.focusableEnd).bind('focusin', this._tabSwitcher);
+            this.modal.find(this.options.focusableStart).unbind('focusin', this._tabSwitcher);
+            this.modal.find(this.options.focusableEnd).unbind('focusin', this._tabSwitcher);
             this.modal.unbind('keydown', this.keyEventSwitcher);
         },
 
@@ -265,9 +265,11 @@ define([
          * @param {Object} e - event
          */
         _tabSwitcher: function(e){
-            if ($(e.target).is(this.options.focusableStart)) {
+            var target = $(e.target);
+
+            if (target.is(this.options.focusableStart)) {
                 this._setFocus('start');
-            } else if ($(e.target).is(this.options.focusableEnd)) {
+            } else if (target.is(this.options.focusableEnd)) {
                 this._setFocus('end');
             }
         },
