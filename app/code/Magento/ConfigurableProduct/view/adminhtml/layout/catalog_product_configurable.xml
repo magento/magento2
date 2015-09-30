@@ -10,4 +10,11 @@
         <css src="Magento_ConfigurableProduct::css/configurable-product.css"/>
     </head>
     <update handle="catalog_product_superconfig_config"/>
+    <body>
+        <referenceBlock name="product_tabs">
+            <action method="removeTab">
+                <argument name="name" xsi:type="string">advanced-pricing</argument>
+            </action>
+        </referenceBlock>
+    </body>
 </page>
