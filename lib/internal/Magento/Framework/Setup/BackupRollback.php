@@ -227,7 +227,7 @@ class BackupRollback
      */
     public function dbRollback($rollbackFile)
     {
-        if (preg_match('/[0-9]_(db).(gz)$/', $rollbackFile) !== 1) {
+        if (preg_match('/[0-9]_(db)(.*?).(gz)$/', $rollbackFile) !== 1) {
             throw new LocalizedException(new Phrase('Invalid rollback file.'));
         }
         if (!$this->file->isExists($this->backupsDir . '/' . $rollbackFile)) {
