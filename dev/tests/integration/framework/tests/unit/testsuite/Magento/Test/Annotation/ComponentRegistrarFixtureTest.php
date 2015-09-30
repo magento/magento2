@@ -49,7 +49,8 @@ class ComponentRegistrarFixtureTest extends \PHPUnit_Framework_TestCase
 
     private function assertFixturesRegistered()
     {
-        $this->assertSame(__DIR__ . '/_files/components/b',
+        $this->assertSame(
+            __DIR__ . '/_files/components/b',
             $this->componentRegistrar->getPath(ComponentRegistrar::LIBRARY, self::LIBRARY_NAME)
         );
         $this->assertSame(
