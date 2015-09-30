@@ -286,6 +286,15 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                     $newDependencies = $rule->getDependencyInfo($module, $fileType, $file, $contents);
                     $dependencies = array_merge($dependencies, $newDependencies);
                 }
+                $whitelist = ['Magento\Framework\Amqp', 'Magento\Framework\ForeignKey'];
+                foreach ($dependencies as $key => $dependency) {
+                    foreach ($whitelist as $namespace) {
+                        if (strpos($dependency['source'], $namespace) !== false) {
+                            $dependency['module'] = $namespace;
+                            $dependencies[$key] = $dependency;
+                        }
+                    }
+                }
 
                 // Collect dependencies
                 $undeclaredDependency = $this->_collectDependencies($module, $dependencies);
@@ -629,6 +638,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
             return $moduleName;
         } elseif (strpos($jsonName, 'magento/magento') !== false || strpos($jsonName, 'magento/framework') !== false) {
             $moduleName = str_replace('/', "\t", $jsonName);
+            $moduleName = str_replace('framework-', "Framework\t", $moduleName);
             $moduleName = str_replace('-', ' ', $moduleName);
             $moduleName = ucwords($moduleName);
             $moduleName = str_replace("\t", '\\', $moduleName);
