@@ -149,7 +149,6 @@ class Encryptor implements EncryptorInterface
      * @param string $password
      * @param string $hash
      * @return bool
-     * @deprecated
      */
     public function validateHash($password, $hash)
     {
