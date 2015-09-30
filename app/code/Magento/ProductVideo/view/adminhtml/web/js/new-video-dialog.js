@@ -881,11 +881,12 @@ define([
 
                 $.each($('.image-placeholder').siblings('input:hidden'), function() {
                     if ($(this).val() == file.val()) {
-                        var imageRole = imageData[this.name];
-                        $(this._videoFormSelector + ' input[value="' + imageRole + '"]').prop('checked', true);
+                        var start = this.name.indexOf('[') + 1;
+                        var end = this.name.length - 1;
+                        var imageRole = this.name.substring(start, end);
+                        $('#new_video_form input[value="' + imageRole + '"]').prop('checked', true);
                     }
                 });
-
             }
         },
         toggleButtons: function() {
