@@ -6,6 +6,7 @@
 
 /**
  * Admin product edit tabs
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit;
 
