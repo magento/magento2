@@ -124,6 +124,11 @@ class Transparent extends Payflowpro implements TransparentInterface
 
         $order = $payment->getOrder();
         if (!empty($order)) {
+            $orderIncrementId = $order->getIncrementId();
+            $request->setCustref($orderIncrementId)
+                ->setInvnum($orderIncrementId)
+                ->setPonum($order->getId())
+                ->setComment1($orderIncrementId);
             $request = $this->fillCustomerContacts($order, $request);
         }
 

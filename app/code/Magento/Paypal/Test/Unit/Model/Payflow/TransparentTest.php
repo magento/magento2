@@ -119,7 +119,10 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
     protected function initializationAuthorizeMock()
     {
         $this->orderMock = $this->getMockBuilder('Magento\Framework\DataObject')
-            ->setMethods(['getCustomerId', 'getBillingAddress', 'getShippingAddress', 'getCustomerEmail'])
+            ->setMethods([
+                'getCustomerId', 'getBillingAddress', 'getShippingAddress', 'getCustomerEmail',
+                'getId', 'getIncrementId'
+            ])
             ->disableOriginalConstructor()
             ->getMock();
         $this->addressBillingMock = $this->getMockBuilder('Magento\Framework\DataObject')
@@ -163,6 +166,12 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
         $this->orderMock->expects($this->once())
             ->method('getBillingAddress')
             ->willReturn($this->addressBillingMock);
+        $this->orderMock->expects(static::once())
+            ->method('getId')
+            ->willReturn(1);
+        $this->orderMock->expects(static::once())
+            ->method('getIncrementId')
+            ->willReturn('0000001');
         $this->orderMock->expects($this->once())
             ->method('getShippingAddress')
             ->willReturn($this->addressShippingMock);
