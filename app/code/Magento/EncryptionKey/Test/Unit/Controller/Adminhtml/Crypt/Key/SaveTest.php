@@ -69,8 +69,9 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testExecute()
+    public function testExecuteNonRandomAndWithCryptKey()
     {
+        $expectedMessage = 'The encryption key has been changed.';
         $key = 1;
         $newKey = 'RSASHA9000VERYSECURESUPERMANKEY';
         $this->requestMock
@@ -85,14 +86,14 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->willReturn($key);
         $this->encryptMock->expects($this->once())->method('validateKey');
         $this->changeMock->expects($this->once())->method('changeEncryptionKey')->willReturn($newKey);
-        $this->managerMock->expects($this->once())->method('addSuccessMessage');
+        $this->managerMock->expects($this->once())->method('addSuccessMessage')->with($expectedMessage);
         $this->cacheMock->expects($this->once())->method('clean');
         $this->responseMock->expects($this->once())->method('setRedirect');
 
         $this->model->execute();
     }
 
-    public function testExecuteThrowsException()
+    public function testExecuteNonRandomAndWithoutCryptKey()
     {
         $key = null;
         $this->requestMock
@@ -110,7 +111,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->model->execute();
     }
 
-    public function testExecuteNoKey()
+    public function testExecuteRandom()
     {
         $newKey = 'RSASHA9000VERYSECURESUPERMANKEY';
         $this->requestMock
