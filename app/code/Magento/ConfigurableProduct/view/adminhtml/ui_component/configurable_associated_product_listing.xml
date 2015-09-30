@@ -40,17 +40,6 @@
         <filters name="listing_filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-<<<<<<< HEAD
-                    <item name="columnsProvider" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.product_columns</item>
-                    <item name="links" xsi:type="array">
-                        <item name="applied" xsi:type="string">not-save-filter</item>
-                    </item>
-                    <item name="childDefaults" xsi:type="array">
-                        <item name="provider" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.listing_top.listing_filters</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.product_columns.${ $.index }:visible</item>
-                        </item>
-=======
                     <item name="params" xsi:type="array">
                         <item name="filters_modifier" xsi:type="array" />
                     </item>
@@ -58,19 +47,12 @@
                     <item name="dataScope" xsi:type="string">filters</item>
                     <item name="childDefaults" xsi:type="array">
                         <item name="provider" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.listing_top.listing_filters</item>
->>>>>>> magento2/develop
                     </item>
                 </item>
                 <item name="observers" xsi:type="array">
                     <item name="filters" xsi:type="object">Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Filters</item>
                 </item>
             </argument>
-<<<<<<< HEAD
-            <filterSelect name="attribute_set_id">
-                <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Catalog\Model\Product\AttributeSet\Options</argument>
-                </argument>
-=======
             <filterInput name="entity_id">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
@@ -81,16 +63,12 @@
                 </argument>
             </filterInput>
             <filterInput name="name">
->>>>>>> magento2/develop
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="dataScope" xsi:type="string">name</item>
                         <item name="label" xsi:type="string" translate="true">Name</item>
                     </item>
                 </argument>
-<<<<<<< HEAD
-            </filterSelect>
-=======
             </filterInput>
             <filterInput name="sku">
                 <argument name="data" xsi:type="array">
@@ -129,7 +107,6 @@
                     </argument>
                 </filterInput>
             </filterRange>
->>>>>>> magento2/develop
             <filterSelect name="status">
                 <argument name="optionsProvider" xsi:type="configurableObject">
                     <argument name="class" xsi:type="string">Magento\Catalog\Model\Product\Attribute\Source\Status</argument>
@@ -147,8 +124,6 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="selectProvider" xsi:type="string">configurable_associated_product_listing.configurable_associated_product_listing.product_columns.ids</item>
-<<<<<<< HEAD
-=======
                     <item name="displayArea" xsi:type="string">bottom</item>
                     <item name="options" xsi:type="array">
                         <item name="20" xsi:type="array">
@@ -172,7 +147,6 @@
                             <item name="label" xsi:type="string" translate="true">200</item>
                         </item>
                     </item>
->>>>>>> magento2/develop
                 </item>
             </argument>
         </paging>
@@ -188,10 +162,7 @@
                             <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>
                         </item>
                     </item>
-<<<<<<< HEAD
-=======
                     <item name="controlVisibility" xsi:type="boolean">true</item>
->>>>>>> magento2/develop
                 </item>
             </item>
         </argument>
@@ -228,7 +199,6 @@
         <column name="name">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
                     <item name="add_field" xsi:type="boolean">true</item>
                     <item name="label" xsi:type="string" translate="true">Name</item>
                     <item name="sortOrder" xsi:type="number">30</item>
@@ -247,7 +217,6 @@
         <column name="price" class="Magento\Catalog\Ui\Component\Listing\Columns\Price">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">textRange</item>
                     <item name="add_field" xsi:type="boolean">true</item>
                     <item name="label" xsi:type="string" translate="true">Price</item>
                     <item name="sortOrder" xsi:type="number">70</item>
