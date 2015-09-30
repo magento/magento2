@@ -48,18 +48,38 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
     downloadableCheckbox = jQuery('[data-action=change-type-product]'),
     toggleTab = function (showTab) {
         showTab = showTab === undefined ? <?= $block->isDownloadable() ? 'true' : 'false' ?> : showTab;
-        if (jQuery('[data-tab=<?= $block->getTabId()?>]').data('collapsible')) {
-            jQuery('[data-tab=<?= $block->getTabId()?>]').collapsible(showTab ? 'activate' : 'deactivate');
+        var tab = jQuery('[data-tab=<?= $block->getTabId()?>]');
+        if (tab.data('collapsible')) {
+            tab.collapsible(showTab ? 'activate' : 'deactivate');
         } else {
-            jQuery('[data-tab=<?= $block->getTabId()?>]').on('collapsiblecreated', function() {
+            tab.on('collapsiblecreated', function() {
                 jQuery(this).collapsible(showTab ? 'activate' : 'deactivate');
             });
         }
     };
 
+    var configurableBlock = (new function(attributeTitle, attributeTab) {
+        this.ref = jQuery(attributeTitle);
+        this.new = '<?= __('Configurations cannot be created for a standard product with downloadable files.'
+             . 'To create configurations, first remove all downloadable files.');?>';
+        this.old = this.ref.text();
+        this.change = function (change) {
+            if (change) {
+                this.ref.text(this.new);
+                jQuery(attributeTab).collapsible('deactivate');
+            } else {
+                this.ref.text(this.old);
+            }
+        }
+    }('[data-role="product-create-configuration-info"]', '[data-tab="super_config"]'));
+
+
     downloadableCheckbox.on('change', function () {
         if (jQuery(this).is(':checked')) {
             toggleTab(true);
+            configurableBlock.change(true);
+        } else {
+            configurableBlock.change(false);
         }
         jQuery(document).trigger('typeSwitcherOut');
     });
