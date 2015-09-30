@@ -64,34 +64,15 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->loader = new Loader($this->converter, $this->parser, $this->registry, $this->driver);
     }
 
-    public function testLoadOrderedModulesByRegistrar()
+    /**
+     * @param $paths
+     * @dataProvider testLoadDataProvider
+     */
+    public function testLoad($paths)
     {
-        $this->setupLoad();
         $this->registry->expects($this->once())
             ->method('getPaths')
-            ->willReturn(['/path/to/a', '/path/to/b', '/path/to/c', '/path/to/d', '/path/to/e']);
-        $result = $this->loader->load();
-        $this->assertSame(['a', 'e', 'c', 'd', 'b'], array_keys($result));
-        foreach ($this->loadFixture as $name => $fixture) {
-            $this->assertSame($fixture, $result[$name]);
-        }
-    }
-
-    public function testLoadUnorderedModulesByRegistrar()
-    {
-        $this->setupLoad();
-        $this->registry->expects($this->once())
-            ->method('getPaths')
-            ->willReturn(['/path/to/b', '/path/to/a', '/path/to/c', '/path/to/e', '/path/to/d']);
-        $result = $this->loader->load();
-        $this->assertSame(['a', 'e', 'c', 'd', 'b'], array_keys($result));
-        foreach ($this->loadFixture as $name => $fixture) {
-            $this->assertSame($fixture, $result[$name]);
-        }
-    }
-
-    private function setupLoad()
-    {
+            ->willReturn($paths);
         $this->loadFixture = [
             'a' => ['name' => 'a', 'sequence' => []],    // a is on its own
             'b' => ['name' => 'b', 'sequence' => ['d']], // b is after d
@@ -114,6 +95,28 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->parser->expects($this->atLeastOnce())->method('loadXML')
             ->with(self::$sampleXml);
         $this->parser->expects($this->atLeastOnce())->method('getDom');
+        $result = $this->loader->load();
+        $this->assertSame(['a', 'e', 'c', 'd', 'b'], array_keys($result));
+        foreach ($this->loadFixture as $name => $fixture) {
+            $this->assertSame($fixture, $result[$name]);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function testLoadDataProvider()
+    {
+        return [
+            'Ordered modules list returned by registrar' =>
+                [[
+                    '/path/to/a', '/path/to/b', '/path/to/c', '/path/to/d', '/path/to/e'
+                ]],
+            'UnOrdered modules list returned by registrar' =>
+                [[
+                    '/path/to/b', '/path/to/a', '/path/to/c', '/path/to/e', '/path/to/d'
+                ]],
+        ];
     }
 
     public function testLoadExclude()
