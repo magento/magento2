@@ -18,6 +18,8 @@ use Magento\Framework\App\ObjectManagerFactory;
 
 /**
  * Deployment configuration options needed for Setup application
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigOptionsList implements ConfigOptionsListInterface
 {
