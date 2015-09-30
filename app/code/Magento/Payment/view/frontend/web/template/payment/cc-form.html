@@ -11,14 +11,14 @@
         <span><!-- ko i18n: 'Credit Card Information'--><!-- /ko --></span>
     </legend><br />
     <!-- /ko -->
-    <div class="field type required">
-        <label data-bind="attr: {for: getCode() + '_cc_type'}" class="label">
-            <span><!-- ko i18n: 'Credit Card Type'--><!-- /ko --></span>
-        </label>
+    <div class="field type">
         <div class="control">
             <ul class="credit-card-types">
                 <!-- ko foreach: {data: getCcAvailableTypesValues(), as: 'item'} -->
-                <li class="item" data-bind="css: {_active: $parent.selectedCardType() == item.value} ">
+                <li class="item" data-bind="css: {
+                                                 _active: $parent.selectedCardType() == item.value,
+                                                 _inactive: $parent.selectedCardType() != null && $parent.selectedCardType() != item.value
+                                                 } ">
                     <!--ko if: $parent.getIcons(item.value) -->
                     <img data-bind="attr: {
                         'src': $parent.getIcons(item.value).url,
