@@ -16,7 +16,7 @@ return [
         '<?xml version="1.0"?><config><resource name="testinvalidname1" /></config>',
         [
             "Element 'resource', attribute 'name': [facet 'pattern'] The value 'testinvalidname1' is not accepted" .
-            " by the pattern '[A-Za-z_]+'.",
+            " by the pattern '[A-Za-z_0-9]+'.",
             "Element 'resource', attribute 'name': 'testinvalidname1' is not a valid value of the atomic " .
             "type 'nameIdentifier'.",
             "Element 'resource', attribute 'name': Warning: No precomputed value available, the value was either " .
@@ -27,7 +27,7 @@ return [
         '<?xml version="1.0"?><config><resource name="test_name" extends="test1"/></config>',
         [
             "Element 'resource', attribute 'extends': [facet 'pattern'] The value 'test1' is not accepted " .
-            "by the pattern '[A-Za-z_]+'.",
+            "by the pattern '[A-Za-z_0-9]+'.",
             "Element 'resource', attribute 'extends': 'test1' is not a valid value of the atomic type 'nameIdentifier'."
         ],
     ],
@@ -35,7 +35,7 @@ return [
         '<?xml version="1.0"?><config><resource name="test_name" connection="test1"/></config>',
         [
             "Element 'resource', attribute 'connection': [facet 'pattern'] The value 'test1' is not accepted " .
-            "by the pattern '[A-Za-z_]+'.",
+            "by the pattern '[A-Za-z_0-9]+'.",
             "Element 'resource', attribute 'connection': 'test1' is not a valid value of the atomic" .
             " type 'nameIdentifier'."
         ],
