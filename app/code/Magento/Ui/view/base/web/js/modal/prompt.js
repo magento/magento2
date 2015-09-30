@@ -36,7 +36,7 @@ define([
             },
             buttons: [{
                 text: $.mage.__('Cancel'),
-                class: 'action-tertiary action-dismiss',
+                class: 'action-secondary action-dismiss',
 
                 /**
                  * Click handler.
@@ -46,7 +46,7 @@ define([
                 }
             }, {
                 text: $.mage.__('OK'),
-                class: 'action-secondary action-accept',
+                class: 'action-primary action-accept',
 
                 /**
                  * Click handler.
