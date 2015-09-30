@@ -32,7 +32,27 @@ class AssertAttributeSearchableByLabel extends AbstractConstraint
         InjectableFixture $product,
         CatalogsearchResult $catalogSearchResult
     ) {
+        $searchValue = $this->getSearchValue($attribute);
+
         $cmsIndex->open();
+        $cmsIndex->getSearchBlock()->search($searchValue);
+
+        $isVisible = $catalogSearchResult->getListProductBlock()->getProductItem($product)->isVisible();
+        while (!$isVisible && $catalogSearchResult->getBottomToolbar()->nextPage()) {
+            $isVisible = $catalogSearchResult->getListProductBlock()->getProductItem($product)->isVisible();
+        }
+
+        \PHPUnit_Framework_Assert::assertTrue($isVisible, 'Product attribute is not searchable on Frontend.');
+    }
+
+    /**
+     * Get search value for product attribute.
+     *
+     * @param CatalogProductAttribute $attribute
+     * @return string
+     */
+    protected function getSearchValue(CatalogProductAttribute $attribute)
+    {
         $searchValue = '';
 
         switch ($attribute->getFrontendInput()) {
@@ -58,14 +78,7 @@ class AssertAttributeSearchableByLabel extends AbstractConstraint
                 break;
         }
 
-        $cmsIndex->getSearchBlock()->search($searchValue);
-
-        $isVisible = $catalogSearchResult->getListProductBlock()->getProductItem($product)->isVisible();
-        while (!$isVisible && $catalogSearchResult->getBottomToolbar()->nextPage()) {
-            $isVisible = $catalogSearchResult->getListProductBlock()->getProductItem($product)->isVisible();
-        }
-
-        \PHPUnit_Framework_Assert::assertTrue($isVisible, 'Product attribute is not searchable on Frontend.');
+        return $searchValue;
     }
 
     /**
