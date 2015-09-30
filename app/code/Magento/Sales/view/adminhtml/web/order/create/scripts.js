@@ -41,7 +41,6 @@ define([
                 this.dataArea = new OrderFormArea('data', $(this.getAreaId('data')), this);
                 this.itemsArea = Object.extend(new OrderFormArea('items', $(this.getAreaId('items')), this), {
                     addControlButton: function(button){
-                        console.log(this.node)
                         var controlButtonArea = $(this.node).select('.actions')[0];
                         if (typeof controlButtonArea != 'undefined') {
                             var buttons = controlButtonArea.childElements();
@@ -74,7 +73,6 @@ define([
                 this.itemsArea.onLoad = this.itemsArea.onLoad.wrap(function(proceed) {
                     proceed();
                     if ($(searchAreaId) && !$(searchAreaId).visible()) {
-                        console.log(searchButton)
                         this.addControlButton(searchButton);
                     }
                 });
