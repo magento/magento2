@@ -431,7 +431,7 @@ abstract class AbstractType
         foreach ($this->_getProductAttributes($rowData) as $attrCode => $attrParams) {
             if (!$attrParams['is_static']) {
                 if (isset($rowData[$attrCode]) && strlen($rowData[$attrCode])) {
-                    $resultAttrs[$attrCode] = 'select' == $attrParams['type']
+                    $resultAttrs[$attrCode] = in_array($attrParams['type'], ['select', 'boolean'])
                         ? $attrParams['options'][strtolower($rowData[$attrCode])]
                         : $rowData[$attrCode];
                     if ('multiselect' == $attrParams['type']) {
