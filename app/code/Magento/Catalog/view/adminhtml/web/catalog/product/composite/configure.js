@@ -44,6 +44,7 @@ define([
         initialize: function() {
             var self = this;
 
+            this._initWindowElements();
             this.dialog = jQuery('#product_composite_configure').modal({
                 title: jQuery.mage.__('Configure Product'),
                 type: 'slide',
@@ -55,7 +56,6 @@ define([
                     }
                 }]
             });
-            this._initWindowElements();
         },
 
         /**
