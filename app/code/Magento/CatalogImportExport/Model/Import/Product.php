@@ -1451,14 +1451,14 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity i
                         $position = array_search($mediaImage, $mediaGalleryImages);
                         foreach ($rowData[self::COL_MEDIA_IMAGE] as $mediaImage) {
                             if (!empty($mediaImage)) {
-                                $imageLable = str_replace(
+                                $imageLabel = str_replace(
                                     '&comma;',
                                     self::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
                                     $mediaGalleryLabels[$position]
                                 );
                                 $mediaGallery[$rowSku][] = [
                                     'attribute_id' => $this->getMediaGalleryAttributeId(),
-                                    'label' => isset($mediaGalleryLabels[$position]) ? $imageLable : '',
+                                    'label' => isset($mediaGalleryLabels[$position]) ? $imageLabel : '',
                                     'position' => $position + 1,
                                     'disabled' => isset($additionalImageIsDisabled[$mediaImage]) ? '1' : '0',
                                     'value' => $mediaImage,
