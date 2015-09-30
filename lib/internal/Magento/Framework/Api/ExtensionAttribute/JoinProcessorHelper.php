@@ -77,7 +77,7 @@ class JoinProcessorHelper
     }
 
     /**
-     * returns config data values
+     * Returns config data values
      *
      * @return array|mixed|null
      */
@@ -87,7 +87,7 @@ class JoinProcessorHelper
     }
 
     /**
-     * joinDataInterface getter
+     * JoinDataInterface getter
      *
      * @return JoinDataInterface
      */
