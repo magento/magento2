@@ -134,11 +134,9 @@ define(
                 });
                 if (steps().length > activeIndex + 1) {
                     var code = steps()[activeIndex + 1].code;
-                    var bodyElem = $.browser.safari || $.browser.chrome ? $("body") : $("html");
                     steps()[activeIndex + 1].isVisible(true);
-                    bodyElem.animate({scrollTop: $('#' + code).offset().top}, 0, function () {
-                        window.location = window.checkoutConfig.checkoutUrl + "#" + code;
-                    });
+                    window.location = window.checkoutConfig.checkoutUrl + "#" + code;
+                    document.body.scrollTop = document.documentElement.scrollTop = 0;
                 }
             }
         };
