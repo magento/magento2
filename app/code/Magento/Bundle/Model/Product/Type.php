@@ -883,6 +883,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                 ->addFilterByRequiredOptions()
                 ->setSelectionIdsFilter($selectionIds);
 
+            if (count($usedSelections->getItems()) !== count($selectionIds)) {
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    __('The options you selected are not available.')
+                );
+            }
+
             if (!$this->_catalogData->isPriceGlobal() && $storeId) {
                 $websiteId = $this->_storeManager->getStore($storeId)
                     ->getWebsiteId();

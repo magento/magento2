@@ -6,11 +6,11 @@ define([
     'underscore',
     'mageUtils',
     'mage/translate',
-    'Magento_Ui/js/lib/collapsible'
-], function (_, utils, $t, Collapsible) {
+    'uiComponent'
+], function (_, utils, $t, Component) {
     'use strict';
 
-    return Collapsible.extend({
+    return Component.extend({
         defaults: {
             template: 'ui/grid/controls/columns',
             minVisible: 1,
