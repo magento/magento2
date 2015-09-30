@@ -40,6 +40,11 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
     const OPTION_VALUE = 'option_test_value';
 
     /**
+     * Option Value Test Value
+     */
+    const SECRET_KEY = 'secret_key';
+
+    /**
      * @var \Magento\Quote\Model\Quote\Item\Option|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $itemOptionMock;
@@ -90,15 +95,22 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
 
         $this->unserializeMock = $this->getMockBuilder('Magento\Framework\Unserialize\Unserialize')
             ->disableOriginalConstructor()
-            ->setMethods(['downloadFile'])
+            ->setMethods(['unserialize'])
             ->getMock();
 
         $requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
             ->disableOriginalConstructor()
             ->setMethods(['getParam'])
             ->getMock();
-        $requestMock->expects($this->once())->method('getParam')->willReturn(self::OPTION_ID);
-
+        $requestMock->expects($this->any())->method('getParam')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['id', null, self::OPTION_ID],
+                        ['key', null, self::SECRET_KEY],
+                    ]
+                )
+            );
         $this->itemOptionMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item\Option')
             ->disableOriginalConstructor()
             ->setMethods(['load', 'getId', 'getCode', 'getProductId', 'getValue'])
@@ -159,36 +171,37 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
         $this->itemOptionMock->expects($this->once())
             ->method('getId')
             ->willReturn($itemOptionValues[self::OPTION_ID]);
-        $this->itemOptionMock->expects($this->once())
+        $this->itemOptionMock->expects($this->any())
             ->method('getCode')
             ->willReturn($itemOptionValues[self::OPTION_CODE]);
-        $this->itemOptionMock->expects($this->once())
+        $this->itemOptionMock->expects($this->any())
             ->method('getProductId')
             ->willReturn($itemOptionValues[self::OPTION_PRODUCT_ID]);
-        $this->itemOptionMock->expects($this->once())
+        $this->itemOptionMock->expects($this->any())
             ->method('getValue')
             ->willReturn($itemOptionValues[self::OPTION_VALUE]);
 
-        $this->productOptionMock->expects($this->once())
+        $this->productOptionMock->expects($this->any())
             ->method('getId')
             ->willReturn($productOptionValues[self::OPTION_ID]);
-        $this->productOptionMock->expects($this->once())
-            ->method('getId')
+        $this->productOptionMock->expects($this->any())
+            ->method('getProductId')
             ->willReturn($productOptionValues[self::OPTION_PRODUCT_ID]);
-        $this->productOptionMock->expects($this->once())
-            ->method('getId')
+        $this->productOptionMock->expects($this->any())
+            ->method('getType')
             ->willReturn($productOptionValues[self::OPTION_TYPE]);
 
         if ($noRouteOccurs) {
             $this->resultForwardMock->expects($this->once())->method('forward')->with('noroute')->willReturn(true);
         } else {
+            $unserializeResult = [self::SECRET_KEY => self::SECRET_KEY];
             $this->unserializeMock->expects($this->once())
                 ->method('unserialize')
                 ->with($itemOptionValues[self::OPTION_VALUE])
-                ->willReturn($itemOptionValues[self::OPTION_VALUE] . 'unserialized');
+                ->willReturn($unserializeResult);
             $this->downloadMock->expects($this->once())
                 ->method('downloadFile')
-                ->with($itemOptionValues[self::OPTION_VALUE] . 'unserialized')
+                ->with($unserializeResult)
                 ->willReturn(true);
         }
 
