@@ -6,6 +6,6 @@
 
 \Magento\Framework\Component\ComponentRegistrar::register(
     \Magento\Framework\Component\ComponentRegistrar::LIBRARY,
-    'magento/amqp',
+    'magento/framework-amqp',
     __DIR__
 );
