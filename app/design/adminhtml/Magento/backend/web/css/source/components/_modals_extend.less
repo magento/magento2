@@ -25,6 +25,8 @@
 @modal-popup-footer-button__padding: 1.4rem;
 @modal-popup-footer-button__font-size: 1.5rem;
 @modal-popup-footer-button__color: @color-brownie;
+@modal-popup-colored__background: @color-lazy-sun;
+@modal-popup-colorless__background: @color-white;
 @modal-prompt-message__padding: 2rem;
 
 //
@@ -58,7 +60,7 @@
     &.prompt {
         .prompt-message {
             padding: @modal-prompt-message__padding 0;
-            input[type="text"] {
+            input {
                 width: 100%;
             }
         }
@@ -67,13 +69,13 @@
     &.prompt {
         .modal-inner-wrap {
             .message {
-                background: @color-white;
+                background: @modal-popup-colorless__background;
             }
         }
     }
     &.modal-system-messages {
         .modal-inner-wrap {
-            background: @color-lazy-sun;
+            background: @modal-popup-colored__background;
         }
     }
     &._image-box {
