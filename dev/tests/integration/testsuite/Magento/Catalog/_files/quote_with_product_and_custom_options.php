@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 require __DIR__ . '/product_simple.php';
-require __DIR__ . '/../../../Magento/Checkout/_files/quote_with_address_saved.php';
+require __DIR__ . '/../../../Magento/Checkout/_files/active_quote.php';
 
 function getOptionValue(\Magento\Catalog\Api\Data\ProductCustomOptionInterface $option)
 {

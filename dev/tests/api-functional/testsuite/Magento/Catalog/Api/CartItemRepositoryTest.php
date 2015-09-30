@@ -27,11 +27,15 @@ class CartItemRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      */
-    public function testAddProductWithCustomOptions()
+    public function testAddProductToCartWithCustomOptions()
     {
+        $productRepository = $this->objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        /** @var \Magento\Catalog\Api\Data\ProductInterface $product */
+        $product = $productRepository->get(self::SIMPLE_PRODUCT_SKU);
+
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test_order_1', 'reserved_order_id');
@@ -48,16 +52,28 @@ class CartItemRepositoryTest extends WebapiAbstract
                 'operation' => self::SERVICE_NAME . 'Save',
             ],
         ];
-
         $response = $this->_webApiCall($serviceInfo, $this->getRequestData($cartId));
-        $this->assertNotNull($response);
-        $this->assertArrayHasKey('product_option', $response);
-        $this->assertArrayHasKey('extension_attributes', $response['product_option']);
-        $this->assertArrayHasKey('custom_options', $response['product_option']['extension_attributes']);
-        $this->assertGreaterThan(3, count($response['product_option']['extension_attributes']['custom_options']));
-        $option = reset($response['product_option']['extension_attributes']['custom_options']);
-        $this->assertArrayHasKey('option_id', $option);
-        $this->assertArrayHasKey('option_value', $option);
+        $this->assertTrue($quote->hasProductId($product->getId()));
+        $this->assertEquals(1, count($quote->getAllItems()));
+        /** @var \Magento\Quote\Api\Data\CartItemInterface $item */
+        $item = $quote->getAllItems()[0];
+        $this->assertEquals(
+            [
+                'item_id' => $item->getItemId(),
+                'sku' => $item->getSku(),
+                'qty' => $item->getQty(),
+                'name' => $item->getName(),
+                
+                'product_type' => $item->getProductType(),
+                'quote_id' => $item->getQuoteId(),
+                'product_option' => [
+                    'extension_attributes' => [
+                        'custom_options' => $this->getOptions(),
+                    ],
+                ],
+            ],
+            $response
+        );
     }
 
     /**
@@ -97,11 +113,11 @@ class CartItemRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @param $cartId
-     * @param null $selectedOption
+     * Receive product options with values
+     *
      * @return array
      */
-    protected function getRequestData($cartId, $selectedOption = null)
+    protected function getOptions()
     {
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = $this->objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
@@ -115,6 +131,15 @@ class CartItemRepositoryTest extends WebapiAbstract
             ];
         }
 
+        return $options;
+    }
+
+    /**
+     * @param $cartId
+     * @return array
+     */
+    protected function getRequestData($cartId)
+    {
         return [
             'cartItem' => [
                 'sku' => self::SIMPLE_PRODUCT_SKU,
@@ -122,7 +147,7 @@ class CartItemRepositoryTest extends WebapiAbstract
                 'quote_id' => $cartId,
                 'product_option' => [
                     'extension_attributes' => [
-                        'custom_options' => $options,
+                        'custom_options' => $this->getOptions(),
                     ],
                 ],
             ],
