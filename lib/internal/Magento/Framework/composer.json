@@ -17,6 +17,7 @@
         "ext-curl": "*",
         "ext-iconv": "*",
         "ext-gd": "*",
+        "ext-openssl": "*",
         "lib-libxml": "*",
         "ext-xsl": "*",
         "magento/magento-composer-installer": "*"

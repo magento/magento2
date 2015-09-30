@@ -122,9 +122,9 @@ class Change extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
 
         if (null === $key) {
-            $key = md5(
-                $this->random->getRandomString(\Magento\Setup\Model\ConfigGenerator::STORE_KEY_RANDOM_STRING_SIZE)
-            );
+            $key = md5($this->random->getRandomString(
+                \Magento\Framework\Config\ConfigOptionsListConstants::STORE_KEY_RANDOM_STRING_SIZE
+            ));
         }
         $this->encryptor->setNewKey($key);
 
