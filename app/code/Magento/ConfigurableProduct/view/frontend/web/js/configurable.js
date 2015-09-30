@@ -375,13 +375,18 @@ define([
             var prices = {},
                 elements = _.toArray(this.options.settings);
 
+            var hasProductPrice = false;
             _.each(elements, function(element) {
                 var selected = element.options[element.selectedIndex],
-                    config = selected && selected.config;
+                    config = selected && selected.config,
+                    priceValue = {};
 
-                prices[element.attributeId] = config && config.allowedProducts.length === 1
-                    ? this._calculatePrice(config)
-                    : {};
+                if (config && config.allowedProducts.length === 1 && !hasProductPrice) {
+                    priceValue = this._calculatePrice(config);
+                    hasProductPrice = true;
+                }
+
+                prices[element.attributeId] = priceValue;
             }, this);
 
             return prices;
