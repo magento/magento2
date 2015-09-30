@@ -505,12 +505,25 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
 
         $libraryDir = null;
         $namespaceParts = explode('/', $namespacePath);
-        if (isset($namespaceParts[1])) {
+        if (isset($namespaceParts[1]) && $namespaceParts[1]) {
             $vendor = array_shift($namespaceParts);
             $lib = array_shift($namespaceParts);
-            $lib = strtolower(preg_replace('/(.)([A-Z])/', "$1-$2", $lib));
-            $libraryName = $vendor . '/' . $lib;
-            $libraryDir = $componentRegistrar->getPath(ComponentRegistrar::LIBRARY, strtolower($libraryName));
+            if ($lib == 'framework') {
+                $subLib = $namespaceParts[0];
+                $subLib = strtolower(preg_replace('/(.)([A-Z])/', "$1-$2", $subLib));
+                $libraryName = $vendor . '/' . $lib . '-' . $subLib;
+                $libraryDir = $componentRegistrar->getPath(ComponentRegistrar::LIBRARY, strtolower($libraryName));
+                if ($libraryDir) {
+                    array_shift($namespaceParts);
+                } else {
+                    $libraryName = $vendor . '/' . $lib;
+                    $libraryDir = $componentRegistrar->getPath(ComponentRegistrar::LIBRARY, strtolower($libraryName));
+                }
+            } else {
+                $lib = strtolower(preg_replace('/(.)([A-Z])/', "$1-$2", $lib));
+                $libraryName = $vendor . '/' . $lib;
+                $libraryDir = $componentRegistrar->getPath(ComponentRegistrar::LIBRARY, strtolower($libraryName));
+            }
         }
 
         if ($libraryDir) {
