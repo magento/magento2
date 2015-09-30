@@ -24,6 +24,9 @@
 @modal-popup-footer-button__margin: 2rem;
 @modal-popup-footer-button__padding: 1.4rem;
 @modal-popup-footer-button__font-size: 1.5rem;
+@modal-popup-footer-button__color: @color-brownie;
+@modal-prompt-message__padding: 2rem;
+//
 
 .modal-popup,
 .modal-slide {
@@ -51,11 +54,20 @@
 }
 
 .modal-popup {
-    &.confirm {
+    &.prompt {
+        .prompt-message {
+            padding: @modal-prompt-message__padding 0;
+            input[type="text"] {
+                width: 100%;
+            }
+        }
+    }
+    &.confirm,
+    &.prompt {
         .modal-inner-wrap {
-            left: 50%;
-            margin-left: -(@modal-popup-confirm__width / 2);
-            width: @modal-popup-confirm__width;
+            .message {
+                background: @color-white;
+            }
         }
     }
     &.modal-system-messages {
@@ -83,32 +95,31 @@
             }
         }
     }
+
     .modal-title {
         font-size: @modal-popup-title__font-size;
         margin-right: @modal-popup-title__font-size + @modal-popup__padding + 1rem;
     }
-    .modal-title + .action-close {
-        padding: @modal-popup__padding;
+
+    .action-close {
+        padding: @modal-popup__padding @modal-popup__padding 0 0;
         &:active{
             padding-top: @modal-popup__padding + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 3;
             padding-right: @modal-popup__padding + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 3;
         }
     }
-    .action-close {
-        padding: @modal-popup__padding / 2.5;
-        &:active {
-            padding-top: @modal-popup__padding / 3 + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 2;
-            padding-right: @modal-popup__padding / 3 + (@modal-action-close__font-size - @modal-action-close__active__font-size) / 2;
-        }
-    }
+
     .modal-footer {
         text-align: right;
         padding-top: 0;
-        button {
-            font-size: @modal-popup-footer-button__font-size;
-            margin-left: @modal-popup-footer-button__margin;
-            padding-bottom: @modal-popup-footer-button__padding;
-            padding-top: @modal-popup-footer-button__padding;
+
+        .action-primary {
+            &:extend(.abs-action-secondary all);
+            &:extend(.abs-action-l all);
+        }
+        .action-secondary {
+            &:extend(.abs-action-tertiary all);
+            &:extend(.abs-action-l all);
         }
     }
 }
