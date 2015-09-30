@@ -62,9 +62,8 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
-        $this->tansactionMock = $this->getMockBuilder(
-            'Magento\Framework\Model\Resource\Db\TransactionManagerInterface'
-            )->disableOriginalConstructor()
+        $this->tansactionMock = $this->getMockBuilder('Magento\Framework\Model\Resource\Db\TransactionManagerInterface')
+            ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
         $this->objRelationMock = $this->getMockBuilder('Magento\Framework\Model\Resource\Db\ObjectRelationProcessor')
