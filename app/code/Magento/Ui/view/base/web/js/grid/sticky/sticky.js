@@ -89,7 +89,7 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe(['visible']);
+                .track('visible');
 
             return this;
         },
@@ -237,7 +237,7 @@ define([
                 this.checkPos();
             }
 
-            if (this.visible()) {
+            if (this.visible) {
                 this.checkTableElemsWidth();
 
                 if (this.flags.originalWidthChanged) {
@@ -554,7 +554,7 @@ define([
          * @returns {Object} Chainable.
          */
         toggleContainerVisibility: function () {
-            this.visible(!this.visible());
+            this.visible = !this.visible;
 
             return this;
         },
@@ -565,7 +565,7 @@ define([
          * @returns {Boolean} whether the visibility of the sticky header was toggled.
          */
         checkPos: function () {
-            var isSticky = this.visible(),
+            var isSticky = this.visible,
                 mustBeSticky = this.getMustBeSticky(),
                 needChange = isSticky !== mustBeSticky;
 
