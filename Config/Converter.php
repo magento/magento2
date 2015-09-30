@@ -27,6 +27,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     const CONSUMER_NAME = 'name';
     const CONSUMER_QUEUE = 'queue';
     const CONSUMER_CONNECTION = 'connection';
+    const CONSUMER_EXECUTOR = 'executor';
     const CONSUMER_CLASS = 'class';
     const CONSUMER_METHOD = 'method';
     const CONSUMER_MAX_MESSAGES = 'max_messages';
@@ -35,6 +36,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     const BIND_QUEUE = 'queue';
     const BIND_EXCHANGE = 'exchange';
     const BIND_TOPIC = 'topic';
+
+    /**
+     * Map which allows optimized search of queues corresponding to the specified exchange and topic pair.
+     */
+    const EXCHANGE_TOPIC_TO_QUEUES_MAP = 'exchange_topic_to_queues_map';
 
     const ENV_QUEUE = 'queue';
     const ENV_TOPICS = 'topics';
@@ -80,7 +86,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             self::PUBLISHERS => $publishers,
             self::TOPICS => $topics,
             self::CONSUMERS => $consumers,
-            self::BINDS => $binds
+            self::BINDS => $binds,
+            self::EXCHANGE_TOPIC_TO_QUEUES_MAP => $this->buildExchangeTopicToQueuesMap($binds, $topics)
         ];
     }
 
@@ -139,13 +146,16 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         foreach ($config->getElementsByTagName('consumer') as $consumerNode) {
             $consumerName = $consumerNode->attributes->getNamedItem('name')->nodeValue;
             $maxMessages = $consumerNode->attributes->getNamedItem('max_messages');
+            $connections = $consumerNode->attributes->getNamedItem('connection');
+            $executor = $consumerNode->attributes->getNamedItem('executor');
             $output[$consumerName] = [
                 self::CONSUMER_NAME => $consumerName,
                 self::CONSUMER_QUEUE => $consumerNode->attributes->getNamedItem('queue')->nodeValue,
-                self::CONSUMER_CONNECTION => $consumerNode->attributes->getNamedItem('connection')->nodeValue,
+                self::CONSUMER_CONNECTION => $connections ? $connections->nodeValue : null,
                 self::CONSUMER_CLASS => $consumerNode->attributes->getNamedItem('class')->nodeValue,
                 self::CONSUMER_METHOD => $consumerNode->attributes->getNamedItem('method')->nodeValue,
                 self::CONSUMER_MAX_MESSAGES => $maxMessages ? $maxMessages->nodeValue : null,
+                self::CONSUMER_EXECUTOR => $executor ? $executor->nodeValue : null,
             ];
         }
         return $output;
@@ -169,6 +179,65 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             ];
         }
         return $output;
+    }
+
+    /**
+     * Build map which allows optimized search of queues corresponding to the specified exchange and topic pair.
+     *
+     * @param array $binds
+     * @param array $topics
+     * @return array
+     */
+    protected function buildExchangeTopicToQueuesMap($binds, $topics)
+    {
+        $output = [];
+        $wildcardKeys = [];
+        foreach ($binds as $bind) {
+            $key = $bind[self::BIND_EXCHANGE] . '--' . $bind[self::BIND_TOPIC];
+            if (strpos($key, '*') !== false || strpos($key, '#') !== false) {
+                $wildcardKeys[] = $key;
+            }
+            $output[$key][] = $bind[self::BIND_QUEUE];
+        }
+
+        foreach (array_unique($wildcardKeys) as $wildcardKey) {
+            $keySplit = explode('--', $wildcardKey);
+            $exchangePrefix = $keySplit[0];
+            $key = $keySplit[1];
+            $pattern = $this->buildWildcardPattern($key);
+            foreach (array_keys($topics) as $topic) {
+                if (preg_match($pattern, $topic)) {
+                    $fullTopic = $exchangePrefix . '--' . $topic;
+                    if (isset($output[$fullTopic])) {
+                        $output[$fullTopic] = array_merge($output[$fullTopic], $output[$wildcardKey]);
+                    } else {
+                        $output[$fullTopic] = $output[$wildcardKey];
+                    }
+                }
+            }
+            unset($output[$wildcardKey]);
+        }
+        return $output;
+    }
+
+    /**
+     * Construct perl regexp pattern for matching topic names from wildcard key.
+     *
+     * @param string $wildcardKey
+     * @return string
+     */
+    protected function buildWildcardPattern($wildcardKey)
+    {
+        $pattern = '/^' . str_replace('.', '\.', $wildcardKey);
+        $pattern = str_replace('#', '.+', $pattern);
+        $pattern = str_replace('*', '[^\.]+', $pattern);
+        if (strpos($wildcardKey, '#') == strlen($wildcardKey)) {
+            $pattern .= '/';
+        } else {
+            $pattern .= '$/';
+        }
+
+        return $pattern;
     }
 
     /**
