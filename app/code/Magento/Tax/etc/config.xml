@@ -51,7 +51,6 @@
                 <zero_tax>0</zero_tax>
             </sales_display>
             <notification>
-                <!-- M1: http://merch.docs.magento.com/ce/user_guide/Magento_Community_Edition_User_Guide.html#tax/warning-messages.html -->
                 <info_url>http://docs.magento.com/m2/ce/user_guide/tax/warning-messages.html</info_url>
             </notification>
         </tax>
