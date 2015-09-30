@@ -29,7 +29,7 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
     private $typeProcessor;
 
     /** @var ExtensionAttributesFactory */
-    private $extAttribFactory;
+    private $extensionAttributesFactory;
 
     /** @var JoinProcessorHelper */
     private $joinProcessorHelper;
@@ -38,33 +38,33 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
      * Initialize dependencies.
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param ExtensionAttributesFactory $extAttribFactory
      * @param TypeProcessor $typeProcessor
+     * @param ExtensionAttributesFactory $extensionAttributesFactory
      * @param JoinProcessorHelper $joinProcessorHelper
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
         TypeProcessor $typeProcessor,
-        ExtensionAttributesFactory $extAttribFactory,
+        ExtensionAttributesFactory $extensionAttributesFactory,
         JoinProcessorHelper $joinProcessorHelper
     ) {
         $this->objectManager = $objectManager;
         $this->typeProcessor = $typeProcessor;
-        $this->extAttribFactory = $extAttribFactory;
+        $this->extensionAttributesFactory = $extensionAttributesFactory;
         $this->joinProcessorHelper = $joinProcessorHelper;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function process(DbCollection $collection, $extensibleClass = null)
+    public function process(DbCollection $collection, $extensibleEntityClass = null)
     {
-        $extensibleClass = $extensibleClass ?: $collection->getItemObjectClass();
-        $joinDirectives = $this->getJoinDirectivesForType($extensibleClass);
+        $extensibleEntityClass = $extensibleEntityClass ?: $collection->getItemObjectClass();
+        $joinDirectives = $this->getJoinDirectivesForType($extensibleEntityClass);
 
         foreach ($joinDirectives as $attributeCode => $directive) {
             /** @var JoinDataInterface $joinData */
-            $joinData = $this->joinProcessorHelper->getJoinDataInterfaceFactory()->create();
+            $joinData = $this->joinProcessorHelper->getJoinDataInterface();
             $joinData->setAttributeCode($attributeCode)
                 ->setReferenceTable($directive[Converter::JOIN_REFERENCE_TABLE])
                 ->setReferenceTableAlias($this->getReferenceTableAlias($attributeCode))
@@ -91,14 +91,14 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
     /**
      * {@inheritdoc}
      */
-    public function extractExtensionAttributes($extensibleClass, array $data)
+    public function extractExtensionAttributes($extensibleEntityClass, array $data)
     {
-        if (!$this->isExtensibleAttributesImplemented($extensibleClass)) {
+        if (!$this->isExtensibleAttributesImplemented($extensibleEntityClass)) {
             /* do nothing as there are no extension attributes */
             return $data;
         }
 
-        $joinDirectives = $this->getJoinDirectivesForType($extensibleClass);
+        $joinDirectives = $this->getJoinDirectivesForType($extensibleEntityClass);
         $extensionData = [];
         foreach ($joinDirectives as $attributeCode => $directive) {
             $this->populateAttributeCodeWithDirective(
@@ -106,11 +106,11 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
                 $directive,
                 $data,
                 $extensionData,
-                $extensibleClass
+                $extensibleEntityClass
             );
         }
         if (!empty($extensionData)) {
-            $extensionAttributes = $this->extAttribFactory->create($extensibleClass, $extensionData);
+            $extensionAttributes = $this->extensionAttributesFactory->create($extensibleEntityClass, $extensionData);
             $data[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY] = $extensionAttributes;
         }
         return $data;
@@ -123,7 +123,7 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
      * @param array $directive
      * @param array &$data
      * @param array &$extensionData
-     * @param string $extensibleClass
+     * @param string $extensibleEntityClass
      * @return void
      */
     private function populateAttributeCodeWithDirective(
@@ -131,16 +131,14 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
         $directive,
         &$data,
         &$extensionData,
-        $extensibleClass
+        $extensibleEntityClass
     ) {
-        /** @var JoinDataInterface $joinData */
-        $joinData = $this->joinProcessorHelper->getJoinDataInterfaceFactory()->create();
         $attributeType = $directive[Converter::DATA_TYPE];
         $selectFields = $this->joinProcessorHelper
             ->getSelectFieldsMap($attributeCode, $directive[Converter::JOIN_FIELDS]);
 
         foreach ($selectFields as $selectField) {
-            $internalAlias = $selectField[$joinData::SELECT_FIELD_INTERNAL_ALIAS];
+            $internalAlias = $selectField[JoinDataInterface::SELECT_FIELD_INTERNAL_ALIAS];
             if (isset($data[$internalAlias])) {
                 if ($this->typeProcessor->isArrayType($attributeType)) {
                     throw new \LogicException(
@@ -148,7 +146,7 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
                             'Join directives cannot be processed for attribute (%s) of extensible entity (%s),'
                             . ' which has an Array type (%s).',
                             $attributeCode,
-                            $this->extAttribFactory->getExtensibleInterfaceName($extensibleClass),
+                            $this->extensionAttributesFactory->getExtensibleInterfaceName($extensibleEntityClass),
                             $attributeType
                         )
                     );
@@ -160,7 +158,7 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
                     if (!isset($extensionData['data'][$attributeCode])) {
                         $extensionData['data'][$attributeCode] = $this->objectManager->create($attributeType);
                     }
-                    $setterName = $selectField[$joinData::SELECT_FIELD_SETTER];
+                    $setterName = $selectField[JoinDataInterface::SELECT_FIELD_SETTER];
                     $extensionData['data'][$attributeCode]->$setterName($data[$internalAlias]);
                     unset($data[$internalAlias]);
                 }
@@ -173,19 +171,19 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
      *
      * Array returned has all of the \Magento\Framework\Api\ExtensionAttribute\Config\Converter JOIN* fields set.
      *
-     * @param string $extensibleClass
+     * @param string $extensibleEntityClass
      * @return array
      */
-    private function getJoinDirectivesForType($extensibleClass)
+    private function getJoinDirectivesForType($extensibleEntityClass)
     {
-        $extensibleIntf = $this->extAttribFactory->getExtensibleInterfaceName($extensibleClass);
-        $extensibleIntf = ltrim($extensibleIntf, '\\');
+        $extensibleInterfaceName = $this->extensionAttributesFactory->getExtensibleInterfaceName($extensibleEntityClass);
+        $extensibleInterfaceName = ltrim($extensibleInterfaceName, '\\');
         $config = $this->joinProcessorHelper->getConfig()->get();
-        if (!isset($config[$extensibleIntf])) {
+        if (!isset($config[$extensibleInterfaceName])) {
             return [];
         }
 
-        $typeAttributesConfig = $config[$extensibleIntf];
+        $typeAttributesConfig = $config[$extensibleInterfaceName];
         $joinDirectives = [];
         foreach ($typeAttributesConfig as $attributeCode => $attributeConfig) {
             if (isset($attributeConfig[Converter::JOIN_DIRECTIVE])) {
@@ -206,7 +204,7 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
     private function isExtensibleAttributesImplemented($typeName)
     {
         try {
-            $this->extAttribFactory->getExtensibleInterfaceName($typeName);
+            $this->extensionAttributesFactory->getExtensibleInterfaceName($typeName);
             return true;
         } catch (\LogicException $e) {
             return false;

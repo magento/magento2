@@ -19,20 +19,20 @@ class JoinProcessorHelper
     private $config;
 
     /** @var JoinDataInterfaceFactory */
-    private $joinDataIntfFactory;
+    private $joinDataInterfaceFactory;
 
     /**
      * Initialize dependencies.
      *
      * @param Config $config
-     * @param JoinDataInterfaceFactory $joinDataIntfFactory
+     * @param JoinDataInterfaceFactory $joinDataInterfaceFactory
      */
     public function __construct(
         Config $config,
-        JoinDataInterfaceFactory $joinDataIntfFactory
+        JoinDataInterfaceFactory $joinDataInterfaceFactory
     ) {
         $this->config = $config;
-        $this->joinDataIntfFactory = $joinDataIntfFactory;
+        $this->joinDataInterfaceFactory = $joinDataInterfaceFactory;
     }
 
     /**
@@ -87,12 +87,12 @@ class JoinProcessorHelper
     }
 
     /**
-     * joinDataIntFactory getter
+     * joinDataInterface getter
      *
-     * @return JoinDataInterfaceFactory
+     * @return JoinDataInterface
      */
-    public function getJoinDataInterfaceFactory()
+    public function getJoinDataInterface()
     {
-        return $this->joinDataIntfFactory;
+        return $this->joinDataInterfaceFactory->create();
     }
 }
