@@ -12,7 +12,7 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Stock resource model
  */
-class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
+class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb implements QtyCounterInterface
 {
     /**
      * @var StockConfigurationInterface
@@ -134,14 +134,9 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
     }
 
     /**
-     * Correct particular stock products qty based on operator
-     *
-     * @param array $items
-     * @param int $websiteId
-     * @param string $operator +/-
-     * @return $this
+     * {@inheritdoc}
      */
-    public function correctItemsQty(array $items, $websiteId, $operator = '-')
+    public function correctItemsQty(array $items, $websiteId, $operator)
     {
         if (empty($items)) {
             return $this;
@@ -161,8 +156,6 @@ class Stock extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $connection->beginTransaction();
         $connection->update($this->getTable('cataloginventory_stock_item'), ['qty' => $value], $where);
         $connection->commit();
-
-        return $this;
     }
 
     /**

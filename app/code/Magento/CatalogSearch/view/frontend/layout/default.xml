@@ -15,6 +15,9 @@
                 <arguments>
                     <argument name="label" xsi:type="string">Advanced Search</argument>
                     <argument name="path" xsi:type="string">catalogsearch/advanced</argument>
+                    <argument name="attributes" xsi:type="array">
+                        <item name="data-action" xsi:type="string">advanced-search</item>
+                    </argument>
                 </arguments>
             </block>
         </referenceBlock>
