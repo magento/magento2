@@ -98,7 +98,7 @@
                                 <?php /* @escapeNotVerified */ echo $block->getUiId('tab', 'content', $_tab->getId()) ?>
                             >
                                 <?php /* @escapeNotVerified */ echo $block->getTabContent($_tab); ?>
-                                <?= $block->getAccordion($_tab); ?>
+                                <?= /* @noEscape */ $block->getAccordion($_tab); ?>
                             </div>
                         </li>
                     <?php endforeach; ?>

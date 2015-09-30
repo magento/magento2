@@ -47,8 +47,8 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
                             '</span>',
     downloadableCheckbox = jQuery('[data-action=change-type-product]'),
     toggleTab = function (showTab) {
-        showTab = showTab === undefined ? <?= $block->isDownloadable() ? 'true' : 'false' ?> : showTab;
-        var tab = jQuery('[data-tab=<?= $block->getTabId()?>]');
+        showTab = showTab === undefined ? <?= /* @noEscape */ $block->isDownloadable() ? 'true' : 'false' ?> : showTab;
+        var tab = jQuery('[data-tab=<?= /* @noEscape */ $block->getTabId()?>]');
         if (tab.data('collapsible')) {
             tab.collapsible(showTab ? 'activate' : 'deactivate');
         } else {
@@ -60,7 +60,7 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
 
     var configurableBlock = (new function(attributeTitle, attributeTab) {
         this.ref = jQuery(attributeTitle);
-        this.new = '<?= __('Configurations cannot be created for a standard product with downloadable files.'
+        this.new = '<?= /* @noEscape */ __('Configurations cannot be created for a standard product with downloadable files.'
              . 'To create configurations, first remove all downloadable files.');?>';
         this.old = this.ref.text();
         this.change = function (change) {
@@ -261,7 +261,7 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
     <input type="checkbox" data-action="change-type-product"  class="admin__control-checkbox"
            name="product[product_has_weight]" id="is-downloaodable" <?= $block->isDownloadable() ? 'checked="checked"' : ''?> />
     <label class="admin__field-label" for="is-downloaodable">
-        <span><?= __('Is this downloadable Product?'); ?></span>
+        <span><?= /* @noEscape */ __('Is this downloadable Product?'); ?></span>
     </label>
 </div>
 <div class="entry-edit" id="product_info_tabs_downloadable_items">

@@ -144,7 +144,7 @@ $currencySymbol = $block->getCurrencySymbol();
                                 </td>
                                 <td class="col-price" data-column="price">
                                     <!-- ko ifnot: variation.editable -->
-                                        <!-- ko text: '<?= $currencySymbol?>' + variation.price --><!--/ko-->
+                                        <!-- ko text: '<?= /* @noEscape */ $currencySymbol?>' + variation.price --><!--/ko-->
                                     <!-- /ko -->
                                     <!-- ko if: variation.editable -->
                                         <div class="addon">
