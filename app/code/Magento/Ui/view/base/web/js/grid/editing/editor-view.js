@@ -25,11 +25,13 @@ define([
                 '<!-- /ko -->',
             rowTmpl:
                 '<!-- ko with: _editor -->' +
-                    '<!-- ko scope: formRecordName($index(), true) -->' +
-                        '<!-- ko template: rowTmpl --><!-- /ko -->' +
-                    '<!-- /ko -->' +
-                    '<!-- ko if: isActive($index(), true) && isSingleEditing() -->' +
-                        '<!-- ko template: rowButtonsTmpl --><!-- /ko -->' +
+                    '<!-- ko if: isActive($row()._rowIndex, true) -->' +
+                        '<!-- ko scope: formRecordName($row()._rowIndex, true) -->' +
+                            '<!-- ko template: rowTmpl --><!-- /ko -->' +
+                        '<!-- /ko -->' +
+                        '<!-- ko if: isSingleEditing() -->' +
+                            '<!-- ko template: rowButtonsTmpl --><!-- /ko -->' +
+                        '<!-- /ko -->' +
                     '<!-- /ko -->' +
                '<!-- /ko -->'
         },
@@ -134,7 +136,7 @@ define([
 
             return {
                 visible: ko.computed(function () {
-                    return !model.isActive(ctx.$index(), true);
+                    return !model.isActive(ctx.$row()._rowIndex, true);
                 })
             };
         },

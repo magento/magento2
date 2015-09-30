@@ -342,6 +342,15 @@ define([
         },
 
         /**
+         * Returns number of applied filters.
+         *
+         * @returns {Number}
+         */
+        countActive: function () {
+            return this.active.length;
+        },
+
+        /**
          * Extract previews of a specified filters.
          *
          * @param {Array} filters - Filters to be processed.

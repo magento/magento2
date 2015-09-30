@@ -115,7 +115,7 @@ define([
         updatePreview: function () {
             var preview = [];
 
-            if (this.value()) {
+            if (this.value) {
                 preview.push({
                     elem: this,
                     label: this.label,
