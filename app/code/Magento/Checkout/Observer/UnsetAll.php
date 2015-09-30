@@ -15,6 +15,7 @@ class UnsetAll
 
     /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @codeCoverageIgnore
      */
     public function __construct(\Magento\Checkout\Model\Session $checkoutSession)
     {
@@ -23,6 +24,7 @@ class UnsetAll
 
     /**
      * @return void
+     * @codeCoverageIgnore
      */
     public function invoke()
     {

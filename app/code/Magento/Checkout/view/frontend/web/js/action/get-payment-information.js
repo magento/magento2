@@ -16,7 +16,7 @@ define(
     function ($, quote, urlBuilder, storage, errorProcessor, customer, methodConverter, paymentService) {
         'use strict';
 
-        return function (deferred) {
+        return function (deferred, messageContainer) {
             var serviceUrl;
 
             deferred = deferred || $.Deferred();
@@ -41,7 +41,7 @@ define(
                 }
             ).fail(
                 function (response) {
-                    errorProcessor.process(response);
+                    errorProcessor.process(response, messageContainer);
                     deferred.reject();
                 }
             );

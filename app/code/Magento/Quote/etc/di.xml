@@ -38,10 +38,11 @@
     <preference for="Magento\Quote\Api\GuestBillingAddressManagementInterface" type="Magento\Quote\Model\GuestCart\GuestBillingAddressManagement" />
     <preference for="Magento\Quote\Api\GuestCartTotalManagementInterface" type="\Magento\Quote\Model\GuestCart\GuestCartTotalManagement" />
     <preference for="Magento\Quote\Api\Data\EstimateAddressInterface" type="Magento\Quote\Model\EstimateAddress" />
+    <preference for="Magento\Quote\Api\Data\ProductOptionInterface" type="\Magento\Quote\Model\Quote\ProductOption" />
     <type name="Magento\Webapi\Controller\Rest\ParamsOverrider">
         <arguments>
             <argument name="paramOverriders" xsi:type="array">
-                <item name="%cart_id%" xsi:type="object">Magento\Quote\Model\Webapi\ParamOverriderCartId</item>
+                <item name="%cart_id%" xsi:type="object">Magento\Quote\Model\Webapi\ParamOverriderCartId\Proxy</item>
             </argument>
         </arguments>
     </type>

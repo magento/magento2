@@ -61,6 +61,7 @@ class Cart extends \Magento\Framework\DataObject implements SectionSourceInterfa
      * @param ItemPoolInterface $itemPoolInterface
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,

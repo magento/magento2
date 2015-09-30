@@ -6,6 +6,8 @@
         "magento/framework": "1.0.0-beta",
         "magento/module-developer": "1.0.0-beta",
         "magento/module-store": "1.0.0-beta",
+        "magento/module-theme": "1.0.0-beta",
+        "magento/module-require-js": "1.0.0-beta",
         "magento/magento-composer-installer": "*"
     },
     "type": "magento2-module",

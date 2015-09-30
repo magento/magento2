@@ -55,6 +55,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
      * @param \Magento\Eav\Model\Adminhtml\System\Config\Source\InputtypeFactory $inputTypeFactory
      * @param \Magento\Eav\Block\Adminhtml\Attribute\PropertyLocker $propertyLocker
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -78,6 +79,7 @@ abstract class AbstractMain extends \Magento\Backend\Block\Widget\Form\Generic
      *
      * @param Attribute $attribute
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setAttributeObject($attribute)
     {

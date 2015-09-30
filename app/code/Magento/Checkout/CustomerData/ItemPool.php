@@ -42,6 +42,7 @@ class ItemPool implements ItemPoolInterface
      * @param ObjectManagerInterface $objectManager
      * @param string $defaultItemId
      * @param array $itemMap
+     * @codeCoverageIgnore
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -55,6 +56,7 @@ class ItemPool implements ItemPoolInterface
 
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getItemData(Item $item)
     {

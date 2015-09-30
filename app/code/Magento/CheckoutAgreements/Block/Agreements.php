@@ -19,6 +19,7 @@ class Agreements extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory $agreementCollectionFactory
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
