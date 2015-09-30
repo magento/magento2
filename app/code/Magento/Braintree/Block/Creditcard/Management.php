@@ -258,7 +258,7 @@ class Management extends \Magento\Framework\View\Element\Template
      */
     public function getEditUrl($token)
     {
-        return $this->getUrl('braintree/creditcard/edit', ['token' => $token]);
+        return $this->getUrl('braintree/creditcard/edit', ['token' => $token, '_secure' => true]);
     }
 
     /**
@@ -269,7 +269,7 @@ class Management extends \Magento\Framework\View\Element\Template
      */
     public function getDeleteUrl($token)
     {
-        return $this->getUrl('braintree/creditcard/delete', ['token' => $token]);
+        return $this->getUrl('braintree/creditcard/delete', ['token' => $token, '_secure' => true]);
     }
 
     /**
@@ -279,7 +279,7 @@ class Management extends \Magento\Framework\View\Element\Template
      */
     public function getAddUrl()
     {
-        return $this->getUrl('braintree/creditcard/newcard');
+        return $this->getUrl('braintree/creditcard/newcard', ['_secure' => true]);
     }
 
     /**
@@ -289,7 +289,7 @@ class Management extends \Magento\Framework\View\Element\Template
      */
     public function getDeleteConfirmUrl()
     {
-        return $this->getUrl('braintree/creditcard/deleteconfirm');
+        return $this->getUrl('braintree/creditcard/deleteconfirm', ['_secure' => true]);
     }
 
     /**
@@ -299,7 +299,7 @@ class Management extends \Magento\Framework\View\Element\Template
      */
     public function getAjaxSaveUrl()
     {
-        return $this->getUrl('braintree/creditcard/ajaxsave');
+        return $this->getUrl('braintree/creditcard/ajaxsave', ['_secure' => true]);
     }
 
     /**
@@ -309,7 +309,7 @@ class Management extends \Magento\Framework\View\Element\Template
      */
     public function getFormAction()
     {
-        return $this->getUrl('braintree/creditcard/save');
+        return $this->getUrl('braintree/creditcard/save', ['_secure' => true]);
     }
 
     /**
@@ -319,7 +319,7 @@ class Management extends \Magento\Framework\View\Element\Template
      */
     public function getBackUrl()
     {
-        return $this->getUrl('braintree/creditcard/index');
+        return $this->getUrl('braintree/creditcard/index', ['_secure' => true]);
     }
 
     /**
