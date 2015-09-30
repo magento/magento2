@@ -56,26 +56,30 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
     {
         $directoriesToCheck = Files::init()->readLists(__DIR__ . '/_files/whitelist/common.txt');
 
+        $changedFiles = [];
+        foreach (glob(__DIR__ . '/_files/changed_files*') as $listFile) {
+            $changedFiles = array_merge($changedFiles, file($listFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
+        }
         $changedFiles = array_filter(
-            Utility\Files::init()->readLists(__DIR__ . '/_files/changed_files*'),
-            function ($path) use ($directoriesToCheck) {
+            $changedFiles,
+            function ($path) use ($directoriesToCheck, $fileTypes) {
+                $path = BP . '/' . $path;
+                if (!file_exists($path)) {
+                    return false;
+                }
+                $path = realpath($path);
                 foreach ($directoriesToCheck as $directory) {
-                    if (strpos($path, BP . '/' . $directory) === 0) {
+                    $directory = realpath($directory);
+                    if (strpos($path, $directory) === 0) {
+                        if (!empty($fileTypes)) {
+                            return in_array(pathinfo($path, PATHINFO_EXTENSION), $fileTypes);
+                        }
                         return true;
                     }
                 }
                 return false;
             }
         );
-
-        if (!empty($fileTypes)) {
-            $changedFiles = array_filter(
-                $changedFiles,
-                function ($path) use ($fileTypes) {
-                    return in_array(pathinfo($path, PATHINFO_EXTENSION), $fileTypes);
-                }
-            );
-        }
 
         return $changedFiles;
     }

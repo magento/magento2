@@ -25,7 +25,16 @@ class ChangedFiles
     {
         $fileHelper = \Magento\Framework\App\Utility\Files::init();
         if (isset($_ENV['INCREMENTAL_BUILD'])) {
-            $phpFiles = Files::init()->readLists($changedFilesList);
+            $phpFiles = [];
+            foreach (glob($changedFilesList) as $listFile) {
+                $phpFiles = array_merge($phpFiles, file($listFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
+            }
+            array_walk(
+                $phpFiles,
+                function (&$file) {
+                    $file = BP . '/' . $file;
+                }
+            );
             if (!empty($phpFiles)) {
                 $phpFiles = \Magento\Framework\App\Utility\Files::composeDataSets($phpFiles);
                 $phpFiles = array_intersect_key($phpFiles, $fileHelper->getPhpFiles(
