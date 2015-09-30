@@ -12,6 +12,7 @@ use Magento\CatalogInventory\Model\Resource\Stock\StatusFactory;
 
 /**
  * Class Stock
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Stock
 {
