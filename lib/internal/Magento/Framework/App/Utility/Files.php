@@ -1404,7 +1404,7 @@ class Files
                  * Note that glob() for directories will be returned as is,
                  * but passing directory is supported by the tools (phpcpd, phpmd, phpcs)
                  */
-                $files = glob(self::init()->getPathToSource() . '/' . $pattern, GLOB_BRACE);
+                $files = glob($this->getPathToSource() . '/' . $pattern, GLOB_BRACE);
             } else {
                 throw new \UnexpectedValueException(
                     "Incorrect pattern record '$pattern'. Supported formats: "

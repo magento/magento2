@@ -11,7 +11,6 @@ use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\View\Design\Theme\ThemePackageList;
 use Magento\Framework\View\Design\Theme\ThemePackageFactory;
-use Magento\TestFramework\Helper\Bootstrap;
 
 require __DIR__ . '/autoload.php';
 
