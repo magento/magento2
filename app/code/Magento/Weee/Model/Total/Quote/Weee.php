@@ -277,8 +277,6 @@ class Weee extends AbstractTotal
         $total->setBaseSubtotalInclTax(
             $total->getBaseSubtotalInclTax() + $this->priceCurrency->round($baseRowValueInclTax)
         );
-        $total->setBaseTotalAmount($this->getCode(), $this->weeeBaseTotalExclTax);
-        $total->setTotalAmount($this->getCode(), $this->weeeTotalExclTax);
         return $this;
     }
 
