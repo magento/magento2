@@ -3,6 +3,9 @@
  * See COPYING.txt for license details.
  */
 
+/* eslint-disable no-undef */
+// jscs:disable jsDoc
+
 define([
     'jquery',
     'mage/template',
