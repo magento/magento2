@@ -22,9 +22,8 @@
 
 .fotorama-rotate (@deg) {
     -webkit-transform: rotate(@deg);
-    -moz-transform: 	 rotate(@deg);
-    -ms-transform: 		 rotate(@deg);
-    -o-transform: 		 rotate(@deg);
+    -ms-transform: rotate(@deg);
+    transform: rotate(@deg);
 }
 
 .translateX(@value) {
@@ -47,9 +46,7 @@
 
 .fotorama-arrow-gradient(@d){
     background-image: -webkit-linear-gradient(@d, rgba(255, 255, 255, .7), rgba(255, 255, 255, 0));
-    background-image: -moz-linear-gradient(@d, rgba(255, 255, 255, .7), rgba(255, 255, 255, 0));
     background-image: -ms-linear-gradient(@d, rgba(255, 255, 255, .7), rgba(255, 255, 255, 0));
-    background-image: -o-linear-gradient(@d, rgba(255, 255, 255, .7), rgba(255, 255, 255, 0));
     background-image: linear-gradient(@d, rgba(255, 255, 255, .7), rgba(255, 255, 255, 0));
 }
 
@@ -74,7 +71,7 @@
         height: 50px;
         display: block;
         margin-left: 20px;
-        z-index:1000;
+        z-index: 1000;
     }
     .fotorama__zoom-out {
         top: 51px;
@@ -440,7 +437,6 @@
     &:extend(.fotorama-focus);
     &:extend(.fotorama-inline-block);
     &:extend(.fotorama-no-tap);
-    cursor: pointer;
     position: relative;
 }
 
@@ -1005,7 +1001,7 @@
             width: 100%;
         }
     }
-    .fotorama_horisontal_ratio {
+    .fotorama_horizontal_ratio {
         .fotorama__img {
             .translateX(-50%);
             height: 100%;
@@ -1123,7 +1119,7 @@
     }
 }
 
-.fotorama__nav-wrap--horisontal {
+.fotorama__nav-wrap--horizontal {
     .fotorama__thumb__arr--left,
     .fotorama__thumb__arr--right {
         bottom: 0;
@@ -1131,6 +1127,7 @@
         top: 0;
         width: @fotorama-thumb-arrow;
         z-index: @z-index-10;
+        cursor: pointer;
         .fotorama__thumb__arr {
             width: 100%;
             .fotorama-abs-center();
@@ -1159,6 +1156,7 @@
         left: 0;
         position: absolute;
         right: 0;
+        cursor: pointer;
         z-index: @z-index-10;
         .fotorama__thumb__arr {
             .fotorama-rotate(90deg);
