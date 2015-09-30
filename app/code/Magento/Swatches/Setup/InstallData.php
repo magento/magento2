@@ -10,6 +10,7 @@ use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Eav\Setup\EavSetupFactory;
+use Magento\Eav\Setup\EavSetup;
 
 /**
  * Class InstallData
@@ -60,8 +61,7 @@ class InstallData implements InstallDataInterface
                 'required' => false,
                 'sort_order' => 3,
                 'global' => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE,
-                'used_in_product_listing' => true,
-                'group' => 'Images',
+                'used_in_product_listing' => true
             ]
         );
     }
