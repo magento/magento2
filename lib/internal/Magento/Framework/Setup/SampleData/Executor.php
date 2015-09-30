@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright � 2015 Magento. All rights reserved.
+ * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Setup\SampleData;
@@ -33,7 +33,7 @@ class Executor
             $this->state->setInstalled();
         } catch (\Exception $e) {
             $this->state->setError();
-            $this->logger->error($e->getMessage());
+            $this->logger->error('Sample Data error: ' . $e->getMessage());
         }
     }
 }

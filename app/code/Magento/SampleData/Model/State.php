@@ -29,6 +29,9 @@ class State implements Setup\SampleData\StateInterface
      */
     protected $filesystem;
 
+    /**
+     * @param Filesystem $filesystem
+     */
     public function __construct(Filesystem $filesystem)
     {
         $this->filesystem = $filesystem;
@@ -130,6 +133,7 @@ class State implements Setup\SampleData\StateInterface
     /**
      * @param string $data
      * @throws \Exception
+     * @return void
      */
     protected function writeStream($data)
     {
@@ -137,7 +141,7 @@ class State implements Setup\SampleData\StateInterface
         if ($stream === false) {
             throw new \Exception(
                 'Please, ensure that file ' . $this->fileName
-                    . ' inside var directory exists and is writable'
+                . ' inside var directory exists and is writable'
             );
         }
         $stream->write($data);
