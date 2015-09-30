@@ -1,0 +1,32 @@
+{
+    "name": "magento/framework-amqp",
+    "description": "N/A",
+    "type": "magento2-library",
+    "version": "1.0.0-beta",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "require": {
+        "php": "~5.5.0|~5.6.0|~7.0.0",
+        "ext-spl": "*",
+        "ext-dom": "*",
+        "ext-simplexml": "*",
+        "ext-mcrypt": "*",
+        "ext-hash": "*",
+        "ext-curl": "*",
+        "ext-iconv": "*",
+        "ext-gd": "*",
+        "lib-libxml": "*",
+        "ext-xsl": "*"
+    },
+    "suggest": {
+        "ext-imagick": "Use Image Magick >=3.0.0 as an optional alternative image processing library"
+    },
+    "autoload": {
+        "psr-4": {
+            "Magento\\Framework\\Amqp\\": ""
+        },
+        "files": [ "registration.php" ]
+    }
+}

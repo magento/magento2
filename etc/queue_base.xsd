@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:complexType name="publisherType">
+        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="xs:string" name="connection" use="required"/>
+        <xs:attribute type="xs:string" name="exchange" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="topicType">
+        <xs:attribute type="xs:string" name="name" use="required"/>
+        <xs:attribute type="xs:string" name="schema" use="required"/>
+        <xs:attribute type="xs:string" name="publisher" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="consumerType">
+        <xs:attribute type="consumerNameType" name="name" use="required"/>
+        <xs:attribute type="xs:string" name="queue" use="required"/>
+        <xs:attribute type="xs:string" name="connection" use="required"/>
+        <xs:attribute type="xs:string" name="class" use="required"/>
+        <xs:attribute type="xs:string" name="method" use="required"/>
+        <xs:attribute type="xs:integer" name="max_messages" use="optional"/>
+    </xs:complexType>
+    <xs:simpleType name="consumerNameType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-z]([a-zA-Z])+"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="bindType">
+        <xs:attribute type="xs:string" name="queue" use="required"/>
+        <xs:attribute type="xs:string" name="exchange" use="required"/>
+        <xs:attribute type="xs:string" name="topic" use="required"/>
+    </xs:complexType>
+</xs:schema>
