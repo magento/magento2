@@ -51,6 +51,13 @@ class Main extends Block
     protected $noteBlock = '.attribute-set .title';
 
     /**
+     * Selector for prompt.
+     *
+     * @var string
+     */
+    protected $promptModal = '.prompt._show[data-role=modal]';
+
+    /**
      * Move Attribute to Attribute Group
      *
      * @param array $attributeData
@@ -123,7 +130,7 @@ class Main extends Block
     public function addAttributeSetGroup($groupName)
     {
         $this->_rootElement->find($this->addGroupButton)->click();
-        $element = $this->browser->find('.prompt._show[data-role=modal]');
+        $element = $this->browser->find($this->promptModal);
         /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
         $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $element]);
         $modal->setAlertText($groupName);
