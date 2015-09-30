@@ -1048,6 +1048,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Server\Reflection" shared="false" />
+    <type name="Magento\Framework\Reflection\DataObjectProcessor">
+        <arguments>
+            <argument name="extensionAttributesProcessor" xsi:type="object">Magento\Framework\Reflection\ExtensionAttributesProcessor\Proxy</argument>
+            <argument name="customAttributesProcessor" xsi:type="object">Magento\Framework\Reflection\CustomAttributesProcessor\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Url\Decoder">
         <arguments>
             <argument name="urlBuilder" xsi:type="object">Magento\Framework\UrlInterface</argument>

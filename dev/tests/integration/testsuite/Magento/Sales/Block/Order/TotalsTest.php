@@ -5,6 +5,9 @@
  */
 namespace Magento\Sales\Block\Order;
 
+/**
+ * @magentoAppArea frontend
+ */
 class TotalsTest extends \PHPUnit_Framework_TestCase
 {
     public function testToHtmlChildrenInitialized()

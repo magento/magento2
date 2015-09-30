@@ -16,6 +16,9 @@
                 <label>Website Payments Pro Hosted Solution and Express Checkout</label>
             </group>
             <field id="pphs_enable">
+                <requires>
+                    <group id="pphs_required_settings_pphs"/>
+                </requires>
                 <frontend_class>paypal-enabler</frontend_class>
             </field>
         </group>
