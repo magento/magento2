@@ -79,7 +79,8 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe('active fields errorsCount hasChanges');
+                .track('errorsCount hasChanges')
+                .observe('active fields');
 
             return this;
         },
@@ -291,7 +292,7 @@ define([
         countErrors: function () {
             var errorsCount = this.elems.filter('error').length;
 
-            this.errorsCount(errorsCount);
+            this.errorsCount = errorsCount;
 
             return errorsCount;
         },
@@ -335,7 +336,7 @@ define([
         updateState: function () {
             var diff = this.checkChanges();
 
-            this.hasChanges(!diff.equal);
+            this.hasChanges = !diff.equal;
 
             return this;
         },

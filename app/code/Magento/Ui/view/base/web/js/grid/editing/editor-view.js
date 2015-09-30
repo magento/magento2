@@ -26,10 +26,10 @@ define([
             rowTmpl:
                 '<!-- ko with: _editor -->' +
                     '<!-- ko if: isActive($row()._rowIndex, true) -->' +
-                        '<!-- ko scope: formRecordName($row()._rowIndex, true) -->' +
+                        '<!-- ko with: getRecord($row()._rowIndex, true) -->' +
                             '<!-- ko template: rowTmpl --><!-- /ko -->' +
                         '<!-- /ko -->' +
-                        '<!-- ko if: isSingleEditing() -->' +
+                        '<!-- ko if: isSingleEditing -->' +
                             '<!-- ko template: rowButtonsTmpl --><!-- /ko -->' +
                         '<!-- /ko -->' +
                     '<!-- /ko -->' +
@@ -114,13 +114,17 @@ define([
          * @returns {View} Chainable.
          */
         initRow: function (row) {
+            var $editingRow;
+
             $(row).extendCtx({
                     _editor: this.model
                 }).bindings(this.rowBindings);
 
-            $(this.rowTmpl)
+            $editingRow = $(this.rowTmpl)
                 .insertBefore(row)
                 .applyBindings(row);
+
+            ko.utils.domNodeDisposal.addDisposeCallback(row, this.removeEditingRow.bind(this, $editingRow));
 
             return this;
         },
@@ -136,7 +140,10 @@ define([
 
             return {
                 visible: ko.computed(function () {
-                    return !model.isActive(ctx.$row()._rowIndex, true);
+                    var record = ctx.$row(),
+                        index = record && record._rowIndex;
+
+                    return !model.isActive(index, true);
                 })
             };
         },
@@ -156,6 +163,15 @@ define([
                     })
                 }
             };
+        },
+
+        /**
+         * Removes specified array of nodes.
+         *
+         * @param {ArrayLike} row
+         */
+        removeEditingRow: function (row) {
+            _.toArray(row).forEach(ko.removeNode);
         }
     });
 });

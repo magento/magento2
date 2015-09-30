@@ -16,21 +16,14 @@
             </tr>
         </thead>
         <tbody>
+            <!-- ko repeat: {foreach: rows, item: '$row'} -->
             <tr class="data-row"
                 data-bind="
-                    repeat: {
-                        foreach: rows,
-                        item: '$row'
-                    }"
-                data-repeat-bind="
                     css: {
                         '_odd-row': !!($index % 2)
                     }
                 ">
-                <!-- ko fastForEach: {
-                        data: getVisible(),
-                        as: '$col'
-                    } -->
+                <!-- ko fastForEach: {data: getVisible(), as: '$col'} -->
                 <td data-bind="
                         css: $col.getFieldClass(),
                         click: $col.getFieldHandler($row()),
@@ -39,6 +32,7 @@
                 </td>
                 <!-- /ko -->
             </tr>
+            <!-- /ko -->
 
             <!-- ko ifnot: hasData() -->
                 <tr class="data-grid-tr-no-data">
