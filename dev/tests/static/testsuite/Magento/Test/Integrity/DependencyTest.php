@@ -132,6 +132,13 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     protected static $_rulesInstances = [];
 
     /**
+     * White list for libraries
+     *
+     * @var array
+     */
+    private static $whiteList = [];
+
+    /**
      * Sets up data
      */
     public static function setUpBeforeClass()
@@ -164,9 +171,31 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         self::_prepareMapLayoutBlocks();
         self::_prepareMapLayoutHandles();
 
+        self::getLibraryWhiteLists();
+
         self::_initDependencies();
         self::_initThemes();
         self::_initRules();
+    }
+
+    /**
+     * Initialize library white list
+     */
+    private static function getLibraryWhiteLists()
+    {
+        $listofLibraries = [];
+        $componentRegistrar = new ComponentRegistrar();
+        foreach($componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $library)
+        {
+            $library = str_replace('\\', '/',$library);
+            if (strpos($library, 'Framework/')){
+                $partOfLibraryPath = explode('/', $library);
+
+                $temp = implode('/', array_slice(($partOfLibraryPath),-3));
+                $listofLibraries[] = $temp;
+            }
+        }
+        self::$whitelist = $listofLibraries;
     }
 
     /**
@@ -286,9 +315,8 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                     $newDependencies = $rule->getDependencyInfo($module, $fileType, $file, $contents);
                     $dependencies = array_merge($dependencies, $newDependencies);
                 }
-                $whitelist = ['Magento\Framework\Amqp', 'Magento\Framework\ForeignKey'];
                 foreach ($dependencies as $key => $dependency) {
-                    foreach ($whitelist as $namespace) {
+                    foreach (self::$whitelist as $namespace) {
                         if (strpos($dependency['source'], $namespace) !== false) {
                             $dependency['module'] = $namespace;
                             $dependencies[$key] = $dependency;
