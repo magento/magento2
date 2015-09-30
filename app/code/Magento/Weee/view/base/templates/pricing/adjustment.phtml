@@ -19,16 +19,16 @@ $closeBrace = ')';
     <?php foreach ($block->getWeeeTaxAttributes() as $weeeTaxAttribute): ?>
         <span class="weee"
               data-price-type="weee"
-              data-label="<?php echo $block->renderWeeeTaxAttributeName($weeeTaxAttribute); ?>"><?php echo $block->renderWeeeTaxAttribute($weeeTaxAttribute); ?></span>
+              data-label="<?php /* @escapeNotVerified */ echo $block->renderWeeeTaxAttributeName($weeeTaxAttribute); ?>"><?php /* @escapeNotVerified */ echo $block->renderWeeeTaxAttribute($weeeTaxAttribute); ?></span>
     <?php endforeach; ?>
 <?php elseif ($block->showExclDescrIncl()): // excl. + weee + final ?>
     <?php foreach ($block->getWeeeTaxAttributes() as $weeeTaxAttribute): ?>
         <span class="weee"
               data-price-type="weee"
-              data-label="<?php echo $block->renderWeeeTaxAttributeName($weeeTaxAttribute); ?>"><?php echo $block->renderWeeeTaxAttribute($weeeTaxAttribute); ?></span>
+              data-label="<?php /* @escapeNotVerified */ echo $block->renderWeeeTaxAttributeName($weeeTaxAttribute); ?>"><?php /* @escapeNotVerified */ echo $block->renderWeeeTaxAttribute($weeeTaxAttribute); ?></span>
     <?php endforeach; ?>
     <span class="price-final_price"
           data-price-type="weeePrice"
-          data-price-amount="<?php echo $block->getRawFinalAmount(); ?>"
-          data-label="<?php echo __('Final Price'); ?>"><?php echo $block->getFinalAmount(); ?></span>
+          data-price-amount="<?php /* @escapeNotVerified */ echo $block->getRawFinalAmount(); ?>"
+          data-label="<?php /* @escapeNotVerified */ echo __('Final Price'); ?>"><?php /* @escapeNotVerified */ echo $block->getFinalAmount(); ?></span>
 <?php endif; ?>

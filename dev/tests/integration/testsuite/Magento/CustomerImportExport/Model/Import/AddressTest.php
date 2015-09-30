@@ -110,11 +110,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         // check message templates
         $this->assertAttributeInternalType(
             'array',
-            '_messageTemplates',
+            'errorMessageTemplates',
             $this->_entityAdapter,
             'Templates must be an array.'
         );
-        $this->assertAttributeNotEmpty('_messageTemplates', $this->_entityAdapter, 'Templates must not be empty');
+        $this->assertAttributeNotEmpty('errorMessageTemplates', $this->_entityAdapter, 'Templates must not be empty');
 
         // check attributes
         $this->assertAttributeInternalType(
@@ -398,7 +398,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->_entityAdapter->setSource(
             \Magento\ImportExport\Model\Import\Adapter::findAdapterFor($sourceFile, $directoryWrite)
-        )->isDataValid();
+        )
+            ->validateData()
+            ->hasToBeTerminated();
         $this->assertFalse($result, 'Validation result must be false.');
 
         // import data
@@ -492,8 +494,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $directoryWrite = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $result = $this->_entityAdapter->setSource(
             \Magento\ImportExport\Model\Import\Adapter::findAdapterFor($sourceFile, $directoryWrite)
-        )->isDataValid();
-        $this->assertTrue($result, 'Validation result must be true.');
+        )->validateData()->hasToBeTerminated();
+        $this->assertTrue(!$result, 'Validation result must be true.');
 
         // import data
         $this->_entityAdapter->importData();

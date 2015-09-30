@@ -90,10 +90,6 @@ class InstallSchema implements InstallSchemaInterface
                 'option_id',
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
-            ->setOption(
-                'type',
-                'InnoDB'
-            )
             ->setComment('Magento Swatches table');
 
         if (!$setup->getConnection()->tableColumnExists($setup->getTable('catalog_eav_attribute'), 'additional_data')) {

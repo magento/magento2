@@ -9,7 +9,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Data\Helper\PostHelper;
 use Magento\Framework\Registry;
-use Magento\Framework\UrlInterface\Proxy as UrlInterface;
+use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
@@ -69,9 +69,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('getStore')
             ->willReturn($this->store);
 
-        $this->urlBuilder = $this->getMockBuilder('Magento\Framework\UrlInterface\Proxy')
+        $this->urlBuilder = $this->getMockBuilder('Magento\Framework\UrlInterface')
             ->disableOriginalConstructor()
-            ->setMethods(['getUrl'])
             ->getMock();
 
         $this->context = $this->getMockBuilder('Magento\Framework\App\Helper\Context')

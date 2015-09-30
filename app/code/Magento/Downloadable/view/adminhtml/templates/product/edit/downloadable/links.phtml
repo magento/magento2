@@ -18,22 +18,22 @@
 <fieldset class="admin__fieldset downloadable-form">
 
     <div class="admin__field" <?php echo !$block->isSingleStoreMode() ? ' data-config-scope="' . __('[STORE VIEW]') . '"' : ''; ?>>
-        <label class="admin__field-label" for="downloadable_links_title"><span><?php echo __('Title')?></span></label>
+        <label class="admin__field-label" for="downloadable_links_title"><span><?php /* @escapeNotVerified */ echo __('Title')?></span></label>
         <div class="admin__field-control">
-            <input type="text" class="admin__control-text" id="downloadable_links_title" name="product[links_title]" value="<?php echo $block->getLinksTitle() ?>" <?php echo($_product->getStoreId() && $block->getUsedDefault()) ? 'disabled="disabled"' : '' ?>>
+            <input type="text" class="admin__control-text" id="downloadable_links_title" name="product[links_title]" value="<?php /* @escapeNotVerified */ echo $block->getLinksTitle() ?>" <?php echo($_product->getStoreId() && $block->getUsedDefault()) ? 'disabled="disabled"' : '' ?>>
             <?php if ($_product->getStoreId()): ?>
                 <div class="admin__field admin__field-option">
                     <input id="link_title_default" class="admin__control-checkbox" type="checkbox" name="use_default[]" value="links_title" onclick="toggleValueElements(this, this.parentNode.parentNode)" <?php echo $block->getUsedDefault() ? 'checked="checked"' : '' ?> />
-                    <label class="admin__field-label" for="link_title_default"><span><?php echo __('Use Default Value'); ?></span></label>
+                    <label class="admin__field-label" for="link_title_default"><span><?php /* @escapeNotVerified */ echo __('Use Default Value'); ?></span></label>
                 </div>
             <?php endif; ?>
         </div>
     </div>
 
     <div class="admin__field" <?php echo !$block->isSingleStoreMode() ? ' data-config-scope="' . __('[GLOBAL]') . '"' : ''; ?>>
-        <label class="admin__field-label" for="downloadable_link_purchase_type"><span><?php echo __('Links can be purchased separately')?></span></label>
+        <label class="admin__field-label" for="downloadable_link_purchase_type"><span><?php /* @escapeNotVerified */ echo __('Links can be purchased separately')?></span></label>
         <div class="admin__field-control">
-            <?php echo $block->getPurchasedSeparatelySelect()?>
+            <?php /* @escapeNotVerified */ echo $block->getPurchasedSeparatelySelect()?>
         </div>
     </div>
     <div class="admin__field admin__field-wide">
@@ -42,15 +42,15 @@
                 <table class="admin__control-table">
                     <thead>
                         <tr>
-                            <th class="col-title _required"><span><?php echo __('Title') ?></span></th>
+                            <th class="col-title _required"><span><?php /* @escapeNotVerified */ echo __('Title') ?></span></th>
                             <?php if ($block->getCanReadPrice() !== false) : ?>
-                                <th class="col-price"><span><?php echo __('Price') ?></span></th>
+                                <th class="col-price"><span><?php /* @escapeNotVerified */ echo __('Price') ?></span></th>
                             <?php endif; ?>
-                            <th class="col-limit"><span><?php echo __('Max. Downloads') ?></span></th>
-                            <th class="col-option"><span><?php echo __('Shareable') ?></span></th>
-                            <th class="col-sample"><span><?php echo __('Sample') ?></span></th>
-                            <th class="col-file"><span><?php echo __('File') ?></span></th>
-                            <th class="col-sort"><span><?php echo __('Sort Order') ?></span></th>
+                            <th class="col-limit"><span><?php /* @escapeNotVerified */ echo __('Max. Downloads') ?></span></th>
+                            <th class="col-option"><span><?php /* @escapeNotVerified */ echo __('Shareable') ?></span></th>
+                            <th class="col-sample"><span><?php /* @escapeNotVerified */ echo __('Sample') ?></span></th>
+                            <th class="col-file"><span><?php /* @escapeNotVerified */ echo __('File') ?></span></th>
+                            <th class="col-sort"><span><?php /* @escapeNotVerified */ echo __('Sort Order') ?></span></th>
                             <th class="col-actions">&nbsp;</th>
                         </tr>
                     </thead>
@@ -64,7 +64,7 @@
                 </table>
             </div>
             <div class="admin__field-note">
-                <span><?php echo __('Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with \'_\'.')?></span>
+                <span><?php /* @escapeNotVerified */ echo __('Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with \'_\'.')?></span>
             </div>
         </div>
     </div>
@@ -89,7 +89,7 @@ require([
             <?php if ($block->getCanReadPrice() !== false) : ?>
             '<td class="input-price col-price">'+
                 '<input type="text" id="downloadable_link_<%- data.id %>_price_value" class="input-text admin__control-text validate-number link-prices<?php if ($block->getCanEditPrice() === false) : ?> disabled<?php endif; ?>" name="downloadable[link][<%- data.id %>][price]" value="<%- data.price %>"<?php if ($block->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?> /> ' +
-                '<label>[<?php echo $block->getBaseCurrencyCode($_product->getStoreId()) ?>]</label>' +
+                '<label>[<?php /* @escapeNotVerified */ echo $block->getBaseCurrencyCode($_product->getStoreId()) ?>]</label>' +
                 <?php if ($_product->getStoreId() && $block->getIsPriceWebsiteScope()) : ?>
                 '<br /><input type="checkbox" id="downloadable_link_<%- data.id %>_price" name="downloadable[link][<%- data.id %>][use_default_price]" value="1"<?php if ($block->getCanEditPrice() === false) : ?> disabled="disabled"<?php endif; ?> /> <label for="downloadable_link_<%- data.id %>_price">Use Default Value</label>' +
                 <?php endif; ?>
@@ -118,10 +118,10 @@ require([
                             '<div id="downloadable_link_<%- data.id %>_sample_file-old" class="file-row-info"></div>'+
                             '<div id="downloadable_link_<%- data.id %>_sample_file-new" class="file-row-info"></div>'+
                             '<div class="fileinput-button form-buttons">'+
-                                '<span><?php echo __('Browse Files...') ?></span>' +
-                                '<input id="downloadable_link_<%- data.id %>_sample_file" type="file" name="<?php echo $block->getFileFieldName('link_samples') ?>">' +
+                                '<span><?php /* @escapeNotVerified */ echo __('Browse Files...') ?></span>' +
+                                '<input id="downloadable_link_<%- data.id %>_sample_file" type="file" name="<?php /* @escapeNotVerified */ echo $block->getFileFieldName('link_samples') ?>">' +
                                 '<script>' +
-                                    'linksUploader("#downloadable_link_<%- data.id %>_sample_file", "<?php echo $block->getUploadUrl('link_samples') ?>"); ' +
+                                    'linksUploader("#downloadable_link_<%- data.id %>_sample_file", "<?php /* @escapeNotVerified */ echo $block->getUploadUrl('link_samples') ?>"); ' +
                                 '</scr'+'ipt>'+
                             '</div>'+
                             '<div class="clear"></div>'+
@@ -144,10 +144,10 @@ require([
                             '<div id="downloadable_link_<%- data.id %>_file-old" class="file-row-info"></div>'+
                             '<div id="downloadable_link_<%- data.id %>_file-new" class="file-row-info new-file"></div>'+
                             '<div class="fileinput-button form-buttons">'+
-                                '<span><?php echo __('Browse Files...') ?></span>' +
-                                '<input id="downloadable_link_<%- data.id %>_file" type="file" name="<?php echo $block->getFileFieldName('links') ?>">' +
+                                '<span><?php /* @escapeNotVerified */ echo __('Browse Files...') ?></span>' +
+                                '<input id="downloadable_link_<%- data.id %>_file" type="file" name="<?php /* @escapeNotVerified */ echo $block->getFileFieldName('links') ?>">' +
                                 '<script>' +
-                                    'linksUploader("#downloadable_link_<%- data.id %>_file", "<?php echo $block->getUploadUrl('links') ?>"); ' +
+                                    'linksUploader("#downloadable_link_<%- data.id %>_file", "<?php /* @escapeNotVerified */ echo $block->getUploadUrl('links') ?>"); ' +
                                 '</scr'+'ipt>'+
                             '</div>'+
                             '<div class="clear"></div>'+
@@ -163,7 +163,7 @@ require([
             '</td>'+
             '<td class="col-sort"><input type="text" name="downloadable[link][<%- data.id %>][sort_order]" value="<%- data.sort_order %>" class="input-text admin__control-text sort" /></td>'+
             '<td class="col-action">'+
-                '<button id="downloadable_link_<%- data.id %>_delete_button" type="button" class="action-delete"><span><?php echo __('Delete'); ?></span></button>'+
+                '<button id="downloadable_link_<%- data.id %>_delete_button" type="button" class="action-delete"><span><?php /* @escapeNotVerified */ echo __('Delete'); ?></span></button>'+
             '</td>'+
         '</tr>';
 
@@ -180,7 +180,7 @@ require([
                     data.link_id  = 0;
                     data.link_type = 'file';
                     data.sample_type = 'none';
-                    data.number_of_downloads = '<?php echo $block->getConfigMaxDownloads() ?>';
+                    data.number_of_downloads = '<?php /* @escapeNotVerified */ echo $block->getConfigMaxDownloads() ?>';
                 }
 
                 data.id = this.itemCount;
@@ -272,7 +272,7 @@ require([
                     'downloadable[link]['+data.id+'][sample]',
                     data.sample_file_save,
                     'downloadable_link_'+data.id+'_sample_file',
-                    <?php echo $block->getConfigJson('link_samples') ?>
+                    <?php /* @escapeNotVerified */ echo $block->getConfigJson('link_samples') ?>
                 );
                 // link file
                 new Downloadable.FileUploader(
@@ -282,7 +282,7 @@ require([
                     'downloadable[link]['+data.id+']',
                     data.file_save,
                     'downloadable_link_'+data.id+'_file',
-                    <?php echo $block->getConfigJson() ?>
+                    <?php /* @escapeNotVerified */ echo $block->getConfigJson() ?>
                 );
 
                 linkFile = $('downloadable_link_'+data.id+'_file_type');
@@ -413,7 +413,7 @@ require([
         }
 
         <?php foreach ($block->getLinkData() as $item): ?>
-            linkItems.add(<?php echo $item->toJson()?>);
+            linkItems.add(<?php /* @escapeNotVerified */ echo $item->toJson()?>);
         <?php endforeach; ?>
 
     });

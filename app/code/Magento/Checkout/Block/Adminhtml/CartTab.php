@@ -14,6 +14,7 @@ use Magento\Ui\Component\Layout\Tabs\TabWrapper;
  * Class CartTab
  *
  * @package Magento\Checkout\Block\Adminhtml
+ * @codeCoverageIgnore
  */
 class CartTab extends TabWrapper
 {

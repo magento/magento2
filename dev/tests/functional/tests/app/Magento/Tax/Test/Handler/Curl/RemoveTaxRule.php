@@ -26,7 +26,7 @@ class RemoveTaxRule extends Curl
     /**
      * @var string
      */
-    protected $_taxRuleGridUrl;
+    protected $taxRuleGridUrl;
 
     /**
      * Entry point for handler
@@ -38,8 +38,8 @@ class RemoveTaxRule extends Curl
      */
     public function persist(FixtureInterface $fixture = null)
     {
-        $this->_taxRuleGridUrl = $_ENV['app_backend_url'] . 'tax/rule/index/';
-        $curl = $this->_getCurl($this->_taxRuleGridUrl);
+        $this->taxRuleGridUrl = $_ENV['app_backend_url'] . 'tax/rule/index/';
+        $curl = $this->_getCurl($this->taxRuleGridUrl);
         $response = $curl->read();
         $this->_removeTaxRules($response);
         $curl->close();
@@ -52,10 +52,10 @@ class RemoveTaxRule extends Curl
      * @param string $url
      * @return BackendDecorator
      */
-    protected function _getCurl($url)
+    protected function getCurl($url)
     {
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
-        $curl->write(CurlInterface::POST, $url, '1.0');
+        $curl->write($url, [], CurlInterface::GET);
         return $curl;
     }
 
@@ -65,7 +65,7 @@ class RemoveTaxRule extends Curl
      * @param string $data
      * @return mixed
      */
-    protected function _removeTaxRules($data)
+    protected function removeTaxRules($data)
     {
         preg_match_all("!tax\/rule\/edit\/rule\/([\d]+)!", $data, $result);
         if (!isset($result[1]) || empty($result[1])) {
@@ -76,10 +76,10 @@ class RemoveTaxRule extends Curl
             break;
         }
 
-        $curl = $this->_getCurl($this->_taxRuleGridUrl);
+        $curl = $this->getCurl($this->taxRuleGridUrl);
         $response = $curl->read();
         $curl->close();
-        return $this->_removeTaxRules($response);
+        return $this->removeTaxRules($response);
     }
 
     /**
@@ -87,12 +87,12 @@ class RemoveTaxRule extends Curl
      *
      * @param int $taxRuleId
      */
-    protected function _deleteTaxRuleRequest($taxRuleId)
+    protected function deleteTaxRuleRequest($taxRuleId)
     {
         $url = $_ENV['app_backend_url'] . 'tax/rule/delete/rule/' . (int) $taxRuleId;
-        $curl = $this->_getCurl($url);
+        $curl = $this->getCurl($url);
         $response = $curl->read();
-        $this->_checkMessage($response, $taxRuleId);
+        $this->checkMessage($response, $taxRuleId);
         $curl->close();
     }
 
@@ -103,7 +103,7 @@ class RemoveTaxRule extends Curl
      * @param int $taxRuleId
      * @throws \RuntimeException
      */
-    protected function _checkMessage($data, $taxRuleId)
+    protected function checkMessage($data, $taxRuleId)
     {
         preg_match_all('!(' . static::TAX_RULE_REMOVE_MESSAGE . ')!', $data, $result);
         if (!isset($result[1]) || empty($result[1])) {

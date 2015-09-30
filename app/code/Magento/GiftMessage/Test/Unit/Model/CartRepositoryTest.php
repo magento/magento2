@@ -180,6 +180,7 @@ class CartRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('setMessage')
             ->with($this->quoteMock, 'quote', $this->messageMock)
             ->will($this->returnValue($this->giftMessageManagerMock));
+        $this->messageMock->expects($this->once())->method('getMessage')->willReturn('message');
 
         $this->assertTrue($this->cartRepository->save($this->cartId, $this->messageMock));
     }

@@ -6,6 +6,7 @@
 namespace Magento\MediaStorage\Model\File\Storage;
 
 use Magento\Framework\App\Response\Http;
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 
@@ -26,6 +27,7 @@ class Response extends Http implements \Magento\Framework\App\Response\FileInter
     /**
      * Constructor
      *
+     * @param HttpRequest $request
      * @param CookieManagerInterface $cookieManager
      * @param CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\App\Http\Context $context
@@ -33,13 +35,14 @@ class Response extends Http implements \Magento\Framework\App\Response\FileInter
      * @param \Magento\Framework\File\Transfer\Adapter\Http $transferAdapter
      */
     public function __construct(
+        HttpRequest $request,
         CookieManagerInterface $cookieManager,
         CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Framework\App\Http\Context $context,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\File\Transfer\Adapter\Http $transferAdapter
     ) {
-        parent::__construct($cookieManager, $cookieMetadataFactory, $context, $dateTime);
+        parent::__construct($request, $cookieManager, $cookieMetadataFactory, $context, $dateTime);
         $this->_transferAdapter = $transferAdapter;
     }
 

@@ -15,7 +15,7 @@
         </div>
         <?php endif;?>
     </div>
-    <iframe name="preview_iframe" id="preview_iframe" frameborder="0" title="<?php echo __('Preview') ?>" width="100%"></iframe>
+    <iframe name="preview_iframe" id="preview_iframe" frameborder="0" title="<?php /* @escapeNotVerified */ echo __('Preview') ?>" width="100%"></iframe>
     <?php echo $block->getChildHtml('preview_form'); ?>
 </div>
 

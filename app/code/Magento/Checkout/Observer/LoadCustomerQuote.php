@@ -21,6 +21,7 @@ class LoadCustomerQuote
     /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,

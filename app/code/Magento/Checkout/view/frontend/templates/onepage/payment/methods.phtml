@@ -25,24 +25,24 @@
 ?>
 <?php if (empty($methods)): ?>
     <dt class="item-title">
-        <?php echo __('No Payment Methods') ?>
+        <?php /* @escapeNotVerified */ echo __('No Payment Methods') ?>
     </dt>
 <?php else:
     foreach ($methods as $_method):
         $_code = $_method->getCode();
 ?>
-    <dt class="item-title <?php echo $_code ?>">
+    <dt class="item-title <?php /* @escapeNotVerified */ echo $_code ?>">
     <?php if (!$oneMethod): ?>
-        <input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" title="<?php echo $block->escapeHtml($_method->getTitle()) ?>" <?php if ($block->getSelectedMethodCode() == $_code): ?> checked="checked"<?php endif; ?> class="radio" />
+        <input id="p_method_<?php /* @escapeNotVerified */ echo $_code ?>" value="<?php /* @escapeNotVerified */ echo $_code ?>" type="radio" name="payment[method]" title="<?php echo $block->escapeHtml($_method->getTitle()) ?>" <?php if ($block->getSelectedMethodCode() == $_code): ?> checked="checked"<?php endif; ?> class="radio" />
     <?php else: ?>
-        <input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" checked="checked" class="radio no-display" />
+        <input id="p_method_<?php /* @escapeNotVerified */ echo $_code ?>" value="<?php /* @escapeNotVerified */ echo $_code ?>" type="radio" name="payment[method]" checked="checked" class="radio no-display" />
         <?php $oneMethod = $_code; ?>
     <?php endif; ?>
-        <label for="p_method_<?php echo $_code ?>"><?php echo $block->escapeHtml($block->getMethodTitle($_method)) ?> <?php echo $block->getMethodLabelAfterHtml($_method) ?></label>
+        <label for="p_method_<?php /* @escapeNotVerified */ echo $_code ?>"><?php echo $block->escapeHtml($block->getMethodTitle($_method)) ?> <?php echo $block->getMethodLabelAfterHtml($_method) ?></label>
     </dt>
     <?php if ($html = $block->getPaymentMethodFormHtml($_method)): ?>
-    <dd class="item-content <?php echo $_code ?>">
-        <?php echo $html; ?>
+    <dd class="item-content <?php /* @escapeNotVerified */ echo $_code ?>">
+        <?php /* @escapeNotVerified */ echo $html; ?>
     </dd>
     <?php endif; ?>
 <?php endforeach;

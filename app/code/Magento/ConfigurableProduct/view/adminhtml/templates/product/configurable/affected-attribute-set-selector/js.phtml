@@ -33,9 +33,9 @@
 
         $form
             .dialog({
-                title: '<?php echo __('Choose Affected Product Template'); ?>',
+                title: '<?php /* @escapeNotVerified */ echo __('Choose Affected Product Template'); ?>',
                 autoOpen: false,
-                id: '<?php echo $block->getJsId() ?>',
+                id: '<?php /* @escapeNotVerified */ echo $block->getJsId() ?>',
                 width: '75%',
                 modal: true,
                 resizable: false,
@@ -55,8 +55,8 @@
                     $(this).closest('.ui-dialog').removeClass('ui-dialog-active');
                 },
                 buttons: [{
-                    text: '<?php echo __('Confirm'); ?>',
-                    id: '<?php echo $block->getJsId('confirm-button') ?>',
+                    text: '<?php /* @escapeNotVerified */ echo __('Confirm'); ?>',
+                    id: '<?php /* @escapeNotVerified */ echo $block->getJsId('confirm-button') ?>',
                     'class': 'action-primary',
                     click: function() {
                         if ($form.find('input[name=affected-attribute-set]:checked').val() == 'current') {
@@ -74,12 +74,12 @@
 
                         $.ajax({
                             type: 'POST',
-                            url: '<?php echo $block->getAttributeSetCreationUrl()?>',
+                            url: '<?php /* @escapeNotVerified */ echo $block->getAttributeSetCreationUrl()?>',
                             data: {
                                 gotoEdit: 1,
                                 attribute_set_name: $form.find('input[name=new-attribute-set-name]').val(),
                                 skeleton_set: $('#attribute_set_id').val(),
-                                form_key: '<?php echo $block->getFormKey()?>',
+                                form_key: '<?php /* @escapeNotVerified */ echo $block->getFormKey()?>',
                                 return_session_messages_only: 1
                             },
                             dataType: 'json',
@@ -99,8 +99,8 @@
                         return false;
                     }
                 },{
-                    text: '<?php echo __('Cancel'); ?>',
-                    id: '<?php echo $block->getJsId('close-button') ?>',
+                    text: '<?php /* @escapeNotVerified */ echo __('Cancel'); ?>',
+                    id: '<?php /* @escapeNotVerified */ echo $block->getJsId('close-button') ?>',
                     'class': 'action-close',
                     click: function() {
                         $form.dialog('close');

@@ -73,6 +73,7 @@ return [
     ['DEFAULT_THEME_NAME', 'Magento\Core\Model\Design\Package'],
     ['DEFAULT_STORE_ID', 'Magento\Catalog\Model\AbstractModel', 'Magento\Store\Model\Store::DEFAULT_STORE_ID'],
     ['DEFAULT_VALUE_TABLE_PREFIX'],
+    ['DIRECTORY_PERMISSION', 'Magento\Framework\Code\Generator\Io'],
     ['DIVIDE_EPSILON', 'Magento\Core\Helper\Data'],
     ['ENTITY_PRODUCT', 'Magento\Review\Model\Review'],
     ['EXCEPTION_CODE_IS_GROUPED_PRODUCT'],
@@ -167,7 +168,6 @@ return [
     [
         'XML_PATH_DEBUG_TEMPLATE_HINTS',
         'Magento\Framework\View\Element\Template',
-        'Magento\Core\Model\TemplateEngine\Plugin::XML_PATH_DEBUG_TEMPLATE_HINTS',
     ],
     [
         'XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS',
@@ -935,5 +935,4 @@ return [
         'Magento\Setup\Model\ConfigOptionsList',
         'Magento\Framework\Config\ConfigOptionsListConstants::KEY_MODULES'
     ],
-    ['CONFIG_PATH_RESOURCE_DEFAULT_SETUP', 'Magento\Framework\Config\ConfigOptionsListConstants'],
 ];

@@ -70,6 +70,6 @@ class Grid extends DataGrid
      */
     public function updateAttributes(array $items = [])
     {
-        $this->massaction($items, 'Update Attributes');
+        $this->massaction($items, 'Update attributes');
     }
 }

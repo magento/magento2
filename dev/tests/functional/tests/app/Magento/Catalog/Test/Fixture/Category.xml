@@ -30,6 +30,8 @@
         <field name="default_product_listing_config" is_required="0" group="display_setting" />
         <field name="default_sort_by" is_required="0" group="display_setting" />
         <field name="meta_title" is_required="" group="general_information" />
+        <field name="meta_keywords" is_required="" group="general_information" />
+        <field name="meta_description" is_required="" group="general_information" />
         <field name="id" group="null" />
         <field name="name" group="general_information" />
         <field name="is_active" group="general_information" />

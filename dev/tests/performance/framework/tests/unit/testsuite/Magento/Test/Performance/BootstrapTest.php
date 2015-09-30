@@ -93,7 +93,7 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
         $bootstrap = new \Magento\TestFramework\Performance\Bootstrap($this->appBootstrap, $fixtureDir);
 
         $reportDir = $fixtureDir . '/tmp/subdirectory/report';
-        mkdir($reportDir, 0777, true);
+        mkdir($reportDir, 0770, true);
         $reportFile = $reportDir . '/a.jtl';
         touch($reportFile);
 

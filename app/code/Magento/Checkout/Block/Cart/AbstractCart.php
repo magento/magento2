@@ -49,6 +49,7 @@ class AbstractCart extends \Magento\Framework\View\Element\Template
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -114,6 +115,7 @@ class AbstractCart extends \Magento\Framework\View\Element\Template
      * Get all cart items
      *
      * @return array
+     * @codeCoverageIgnore
      */
     public function getItems()
     {
@@ -134,6 +136,7 @@ class AbstractCart extends \Magento\Framework\View\Element\Template
 
     /**
      * @return array
+     * @codeCoverageIgnore
      */
     public function getTotals()
     {

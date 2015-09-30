@@ -16,5 +16,5 @@
 $_item = $block->getItem();
 ?>
 <span class="cart-price">
-    <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_item->getRowTotal()) ?>
+    <?php /* @escapeNotVerified */ echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_item->getRowTotal()) ?>
 </span>

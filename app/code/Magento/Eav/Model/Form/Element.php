@@ -43,6 +43,7 @@ class Element extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -60,6 +61,7 @@ class Element extends \Magento\Framework\Model\AbstractModel
      * Initialize resource model
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -70,6 +72,7 @@ class Element extends \Magento\Framework\Model\AbstractModel
      * Retrieve resource instance wrapper
      *
      * @return \Magento\Eav\Model\Resource\Form\Element
+     * @codeCoverageIgnore
      */
     protected function _getResource()
     {
@@ -80,6 +83,7 @@ class Element extends \Magento\Framework\Model\AbstractModel
      * Retrieve resource collection instance wrapper
      *
      * @return \Magento\Eav\Model\Resource\Form\Element\Collection
+     * @codeCoverageIgnore
      */
     public function getCollection()
     {

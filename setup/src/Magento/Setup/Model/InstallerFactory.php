@@ -61,7 +61,6 @@ class InstallerFactory
             $this->serviceLocator->get('Magento\Setup\Module\ConnectionFactory'),
             $this->serviceLocator->get('Magento\Framework\App\MaintenanceMode'),
             $this->serviceLocator->get('Magento\Framework\Filesystem'),
-            $this->serviceLocator->get('Magento\Setup\Model\SampleData'),
             $this->serviceLocator->get('Magento\Setup\Model\ObjectManagerProvider'),
             new \Magento\Framework\Model\Resource\Db\Context(
                 $this->getResource(),
@@ -70,7 +69,9 @@ class InstallerFactory
             ),
             $this->serviceLocator->get('Magento\Setup\Model\ConfigModel'),
             $this->serviceLocator->get('Magento\Framework\App\State\CleanupFiles'),
-            $this->serviceLocator->get('Magento\Setup\Validator\DbValidator')
+            $this->serviceLocator->get('Magento\Setup\Validator\DbValidator'),
+            $this->serviceLocator->get('Magento\Setup\Module\SetupFactory'),
+            $this->serviceLocator->get('Magento\Setup\Module\DataSetupFactory')
         );
     }
 

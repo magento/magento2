@@ -21,6 +21,7 @@ class Validator extends \Zend_Validate_InArray
 
     /**
      * @param \Magento\Eav\Helper\Data $eavData
+     * @codeCoverageIgnore
      */
     public function __construct(\Magento\Eav\Helper\Data $eavData)
     {

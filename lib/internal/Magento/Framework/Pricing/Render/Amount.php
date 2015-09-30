@@ -207,9 +207,11 @@ class Amount extends Template implements AmountRenderInterface
         $data = $this->getData();
         $adjustments = [];
         foreach ($adjustmentRenders as $adjustmentRender) {
-            $html = $adjustmentRender->render($this, $data);
-            if (trim($html)) {
-                $adjustments[$adjustmentRender->getAdjustmentCode()] = $html;
+            if ($this->getAmount()->getAdjustmentAmount($adjustmentRender->getAdjustmentCode()) !== false) {
+                $html = $adjustmentRender->render($this, $data);
+                if (trim($html)) {
+                    $adjustments[$adjustmentRender->getAdjustmentCode()] = $html;
+                }
             }
         }
         return $adjustments;

@@ -80,7 +80,13 @@ class SimpleProductsFixtureTest extends \PHPUnit_Framework_TestCase
         $valueMap = [
             [
                 'Magento\ImportExport\Model\Import',
-                ['data' => ['entity' => 'catalog_product', 'behavior' => 'append']],
+                [
+                    'data' => [
+                        'entity' => 'catalog_product',
+                        'behavior' => 'append',
+                        'validation_strategy' => 'validation-stop-on-errors'
+                    ]
+                ],
                 $importMock
             ],
             ['Magento\Store\Model\StoreManager', [], $storeManagerMock]

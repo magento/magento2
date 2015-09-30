@@ -8,7 +8,7 @@
 require(['jquery', "prototype"], function(jQuery){
 
 //<![CDATA[
-var couponTypeSpecific = '<?php echo \Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC ?>',
+var couponTypeSpecific = '<?php /* @escapeNotVerified */ echo \Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC ?>',
     tmpButtonsActionsStorage = [];
 
 function disableEnableCouponsTabContent(disable) {

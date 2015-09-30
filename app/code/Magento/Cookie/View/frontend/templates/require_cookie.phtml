@@ -8,7 +8,7 @@
 <script type="text/x-magento-init">
     {
         "body": {
-            "requireCookie": <?php echo $block->getScriptOptions(); ?>
+            "requireCookie": <?php /* @escapeNotVerified */ echo $block->getScriptOptions(); ?>
         }
     }
 </script>

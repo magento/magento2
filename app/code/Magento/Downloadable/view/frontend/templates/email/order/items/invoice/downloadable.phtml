@@ -13,30 +13,30 @@
 <tr>
     <td class="item-info has-extra">
         <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
-        <p class="sku"><?= __('SKU'); ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
+        <p class="sku"><?= /* @escapeNotVerified */  __('SKU'); ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
         <?php if ($block->getItemOptions()): ?>
         <dl>
             <?php foreach ($block->getItemOptions() as $option): ?>
-            <dt><strong><em><?= $option['label'] ?></em></strong></dt>
-            <dd><?= $option['value'] ?></dd>
+            <dt><strong><em><?= /* @escapeNotVerified */  $option['label'] ?></em></strong></dt>
+            <dd><?= /* @escapeNotVerified */  $option['value'] ?></dd>
             <?php endforeach; ?>
         </dl>
         <?php endif; ?>
         <?php if ($links = $block->getLinks()->getPurchasedItems()): ?>
         <dl>
-            <dt><strong><em><?= $block->getLinksTitle() ?></em></strong></dt>
+            <dt><strong><em><?= /* @escapeNotVerified */  $block->getLinksTitle() ?></em></strong></dt>
             <?php foreach ($links as $link): ?>
                 <dd>
                     <?= $block->escapeHtml($link->getLinkTitle()) ?>&nbsp;
-                    (<a href="<?= $block->getPurchasedLinkUrl($link) ?>"><?= __('download') ?></a>)
+                    (<a href="<?= /* @escapeNotVerified */  $block->getPurchasedLinkUrl($link) ?>"><?= /* @escapeNotVerified */  __('download') ?></a>)
                 </dd>
             <?php endforeach; ?>
         </dl>
         <?php endif; ?>
         <?= $block->escapeHtml($_item->getDescription()) ?>
     </td>
-    <td class="item-qty"><?= $_item->getQty() * 1 ?></td>
+    <td class="item-qty"><?= /* @escapeNotVerified */  $_item->getQty() * 1 ?></td>
     <td class="item-price">
-        <?= $block->getItemPrice($_item) ?>
+        <?= /* @escapeNotVerified */  $block->getItemPrice($_item) ?>
     </td>
 </tr>

@@ -12,27 +12,27 @@
 <div class="entry-edit fieldset-wrapper">
 
     <div class="fieldset-wrapper-title">
-        <span class="title"><?php echo __('Sales Statistics') ?></span>
+        <span class="title"><?php /* @escapeNotVerified */ echo __('Sales Statistics') ?></span>
     </div>
 
     <table class="data-table">
         <thead>
         <tr>
             <?php if (!$singleStoreMode): ?>
-            <th><?php echo __('Web Site') ?></th>
-            <th><?php echo __('Store') ?></th>
-            <th><?php echo __('Store View') ?></th>
+            <th><?php /* @escapeNotVerified */ echo __('Web Site') ?></th>
+            <th><?php /* @escapeNotVerified */ echo __('Store') ?></th>
+            <th><?php /* @escapeNotVerified */ echo __('Store View') ?></th>
             <?php endif; ?>
-            <th><?php echo __('Lifetime Sales') ?></th>
-            <th class="last"><?php echo __('Average Sale') ?></th>
+            <th><?php /* @escapeNotVerified */ echo __('Lifetime Sales') ?></th>
+            <th class="last"><?php /* @escapeNotVerified */ echo __('Average Sale') ?></th>
         </tr>
         </thead>
         <?php if (!$singleStoreMode): ?>
         <tfoot>
         <tr>
-            <td colspan="3"><strong><?php echo __('All Store Views') ?></strong></td>
-            <td class="emph"><strong><?php echo $block->formatCurrency($block->getTotals()->getBaseLifetime()) ?></strong></td>
-            <td class="emph last"><strong><?php echo $block->formatCurrency($block->getTotals()->getAvgsale()) ?></strong></td>
+            <td colspan="3"><strong><?php /* @escapeNotVerified */ echo __('All Store Views') ?></strong></td>
+            <td class="emph"><strong><?php /* @escapeNotVerified */ echo $block->formatCurrency($block->getTotals()->getBaseLifetime()) ?></strong></td>
+            <td class="emph last"><strong><?php /* @escapeNotVerified */ echo $block->formatCurrency($block->getTotals()->getAvgsale()) ?></strong></td>
         </tr>
         </tfoot>
         <?php endif; ?>
@@ -46,24 +46,24 @@
                 <?php foreach ($_stores as $_row): ?>
                     <?php if (!$singleStoreMode): ?>
                         <?php if ($_row->getStoreId() == 0): ?>
-                        <td colspan="3"><?php echo $_row->getStoreName() ?></td>
+                        <td colspan="3"><?php /* @escapeNotVerified */ echo $_row->getStoreName() ?></td>
                             <?php else: ?>
                     <tr<?php echo($_i++ % 2 ? ' class="even"' : '') ?>>
                             <?php if (!$_websiteRow): ?>
-                                <td rowspan="<?php echo $block->getWebsiteCount($_websiteId) ?>"><?php echo $_row->getWebsiteName() ?></td>
+                                <td rowspan="<?php /* @escapeNotVerified */ echo $block->getWebsiteCount($_websiteId) ?>"><?php /* @escapeNotVerified */ echo $_row->getWebsiteName() ?></td>
                                 <?php $_websiteRow = true; ?>
                                 <?php endif; ?>
                             <?php if (!$_groupRow): ?>
-                                <td rowspan="<?php echo count($_stores) ?>"><?php echo $_row->getGroupName() ?></td>
+                                <td rowspan="<?php echo count($_stores) ?>"><?php /* @escapeNotVerified */ echo $_row->getGroupName() ?></td>
                                 <?php $_groupRow = true; ?>
                                 <?php endif; ?>
-                            <td><?php echo $_row->getStoreName() ?></td>
+                            <td><?php /* @escapeNotVerified */ echo $_row->getStoreName() ?></td>
                             <?php endif; ?>
                         <?php else: ?>
                     <tr>
                         <?php endif; ?>
-                    <td><?php echo $block->formatCurrency($_row->getLifetime(), $_row->getWebsiteId()) ?></td>
-                    <td><?php echo $block->formatCurrency($_row->getAvgsale(), $_row->getWebsiteId()) ?></td>
+                    <td><?php /* @escapeNotVerified */ echo $block->formatCurrency($_row->getLifetime(), $_row->getWebsiteId()) ?></td>
+                    <td><?php /* @escapeNotVerified */ echo $block->formatCurrency($_row->getAvgsale(), $_row->getWebsiteId()) ?></td>
                     </tr>
                     <?php endforeach; ?>
                 <?php endforeach; ?>
@@ -71,7 +71,7 @@
         </tbody>
         <?php else: ?>
         <tbody>
-        <tr class="hidden"><td colspan="<?php echo !$singleStoreMode ? '5' : '2'; ?>"></td></tr>
+        <tr class="hidden"><td colspan="<?php /* @escapeNotVerified */ echo !$singleStoreMode ? '5' : '2'; ?>"></td></tr>
         </tbody>
         <?php endif; ?>
     </table>

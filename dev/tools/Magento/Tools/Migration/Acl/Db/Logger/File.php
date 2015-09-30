@@ -6,6 +6,7 @@
 namespace Magento\Tools\Migration\Acl\Db\Logger;
 
 use InvalidArgumentException;
+use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Db migration logger. Output result put to file
@@ -27,7 +28,7 @@ class File extends \Magento\Tools\Migration\Acl\Db\AbstractLogger
     {
         $logDir = realpath(__DIR__ . '/../../') . '/log/';
         if (false == is_dir($logDir)) {
-            mkdir($logDir, 0777, true);
+            mkdir($logDir, DriverInterface::WRITEABLE_DIRECTORY_MODE, true);
         }
         if (false == is_writeable($logDir)) {
             throw new InvalidArgumentException('Directory ' . dirname($logDir) . ' is not writeable');

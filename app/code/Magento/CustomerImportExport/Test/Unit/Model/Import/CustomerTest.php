@@ -91,8 +91,17 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
                     '_saveCustomerEntities',
                     '_saveCustomerAttributes',
                     '_deleteCustomerEntities',
+                    'getErrorAggregator',
                 ])
             ->getMock();
+
+        $errorAggregator = $this->getMock(
+            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator',
+            ['hasToBeTerminated'],
+            [],
+            '',
+            false
+        );
 
         $availableBehaviors = new \ReflectionProperty($modelMock, '_availableBehaviors');
         $availableBehaviors->setAccessible(true);
@@ -144,6 +153,10 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $modelMock->expects($this->any())
             ->method('_deleteCustomerEntities')
             ->will($this->returnCallback([$this, 'validateDeleteCustomerEntities']));
+
+        $modelMock->expects($this->any())
+            ->method('getErrorAggregator')
+            ->will($this->returnValue($errorAggregator));
 
         return $modelMock;
     }
