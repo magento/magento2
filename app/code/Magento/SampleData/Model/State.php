@@ -17,7 +17,7 @@ class State implements Setup\SampleData\StateInterface
     /**
      * @var string
      */
-    protected $fileName = 'sample-data-state.flag';
+    protected $fileName = '.sample-data-state.flag';
 
     /**
      * @var string|null
@@ -40,10 +40,10 @@ class State implements Setup\SampleData\StateInterface
     public function hasError()
     {
         $isError = false;
-        $stream = $this->getStream('r', $this->fileName);
+        $stream = $this->openStream('r');
         if (!$stream) {
             return $isError;
-        } elseif (strpos(trim(fread($stream, 400)), self::ERROR) !== false) {
+        } elseif (strpos(trim($stream->read(400)), self::ERROR) !== false) {
             $isError = true;
         }
         $this->closeStream($stream);
@@ -56,7 +56,7 @@ class State implements Setup\SampleData\StateInterface
     public function setError()
     {
         if (!$this->hasError()) {
-            $this->writeStream(self::ERROR, $this->fileName);
+            $this->writeStream(self::ERROR);
         }
     }
 
@@ -67,11 +67,11 @@ class State implements Setup\SampleData\StateInterface
     {
         $isInstalled = false;
         /**@var $stream \Magento\Framework\Filesystem\File\WriteInterface */
-        $stream = $this->getStream('r', $this->fileName);
+        $stream = $this->openStream('r');
         if (!$stream) {
             return $isInstalled;
         } else {
-            $state = trim(fread($stream, 400));
+            $state = trim($stream->read(400));
             if (strpos($state, self::ERROR) !== false || strpos($state, self::INSTALLED) !== false) {
                 $isInstalled = true;
             }
@@ -86,7 +86,7 @@ class State implements Setup\SampleData\StateInterface
     public function setInstalled()
     {
         if (!$this->isInstalled()) {
-            $this->writeStream(self::INSTALLED, $this->fileName);
+            $this->writeStream(self::INSTALLED);
         }
     }
 
@@ -95,35 +95,36 @@ class State implements Setup\SampleData\StateInterface
      */
     public function clearState()
     {
-        $this->writeStream('', $this->fileName);
-    }
-
-    /**
-     * @return null|string
-     */
-    protected function getFilePath()
-    {
-        if (!isset($this->filePath)) {
-            $directory = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR)->getAbsolutePath();
-            $this->filePath = $directory . $this->fileName;
+        if ($this->openStream('w')) {
+            $this->writeStream('');
         }
-        return $this->filePath;
     }
 
     /**
-     * Get file resource to write sample data installation state
-     *
-     * @param string $mode
-     * @return resource|false
+     * @return Filesystem\File\WriteInterface
      */
-    protected function getStream($mode = 'r')
+    protected function getStream()
     {
-        $stream = false;
-        $directoryWrite = $this->filesystem->getDirectoryWrite();
-        if ($directoryWrite->isExist($this->getFilePath())) {
-            $stream = $directoryWrite->openFile($this->getFilePath(), $mode);
+        if (!$stream = $this->openStream('w')) {
+            $stream = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR)->openFile($this->fileName);
         }
         return $stream;
+    }
+
+    /**
+     * @param string $mode
+     * @return bool|Filesystem\File\WriteInterface
+     */
+    protected function openStream($mode = 'w')
+    {
+        $fileName = $this->fileName;
+        $stream = false;
+        $directoryWrite = $this->filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        if ($directoryWrite->isExist($fileName)) {
+            $stream = $directoryWrite->openFile($fileName, $mode);
+        }
+        return $stream;
+
     }
 
     /**
@@ -132,27 +133,27 @@ class State implements Setup\SampleData\StateInterface
      */
     protected function writeStream($data)
     {
-        $stream = $this->getStream('w');
+        $stream = $this->getStream();
         if ($stream === false) {
             throw new \Exception(
-                'Please, ensure that file var/' . $this->getFilePath()
-                    . ' inside Sample data directory exists and is writable'
+                'Please, ensure that file ' . $this->fileName
+                    . ' inside var directory exists and is writable'
             );
         }
-        fwrite($stream, $data);
+        $stream->write($data);
         $this->closeStream($stream);
     }
 
     /**
      * Closing file stream
      *
-     * @param resource|false $handle
+     * @param Filesystem\File\WriteInterface $stream
      * @return void
      */
-    protected function closeStream($handle)
+    protected function closeStream($stream)
     {
-        if ($handle) {
-            fclose($handle);
+        if ($stream) {
+            $stream->close();
         }
     }
 }
