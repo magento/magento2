@@ -16,6 +16,8 @@ $_product = $block->getProduct();
 $block->getConfigJson();
 ?>
 <fieldset class="admin__fieldset downloadable-form" data-ui-id="downloadable-samples">
+    <legend class="admin__legend"><span><?php /* @escapeNotVerified */ echo __('Samples')?></span></legend><br>
+    <p class="note"><?php /* @escapeNotVerified */ echo __('Add product preview files here.')?></p>
     <div class="admin__field"<?php echo !$block->isSingleStoreMode() ? ' data-config-scope="' . __('[STORE VIEW]') . '"' : ''; ?>>
         <label class="admin__field-label" for="downloadable_samples_title"><span><?= /* @noEscape */ __('Title')?></span></label>
         <div class="admin__field-control">
