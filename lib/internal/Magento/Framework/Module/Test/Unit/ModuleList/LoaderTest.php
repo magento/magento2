@@ -42,6 +42,11 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
      */
     private $loader;
 
+    /**
+     * @var array
+     */
+    private $loadFixture;
+
     protected function setUp()
     {
         $this->converter = $this->getMock('Magento\Framework\Module\Declaration\Converter\Dom', [], [], '', false);
@@ -59,9 +64,35 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $this->loader = new Loader($this->converter, $this->parser, $this->registry, $this->driver);
     }
 
-    public function testLoad()
+    public function testLoadOrderedModulesByRegistrar()
     {
-        $fixtures = [
+        $this->setupLoad();
+        $this->registry->expects($this->once())
+            ->method('getPaths')
+            ->willReturn(['/path/to/a', '/path/to/b', '/path/to/c', '/path/to/d', '/path/to/e']);
+        $result = $this->loader->load();
+        $this->assertSame(['a', 'e', 'c', 'd', 'b'], array_keys($result));
+        foreach ($this->loadFixture as $name => $fixture) {
+            $this->assertSame($fixture, $result[$name]);
+        }
+    }
+
+    public function testLoadUnorderedModulesByRegistrar()
+    {
+        $this->setupLoad();
+        $this->registry->expects($this->once())
+            ->method('getPaths')
+            ->willReturn(['/path/to/b', '/path/to/a', '/path/to/c', '/path/to/e', '/path/to/d']);
+        $result = $this->loader->load();
+        $this->assertSame(['a', 'e', 'c', 'd', 'b'], array_keys($result));
+        foreach ($this->loadFixture as $name => $fixture) {
+            $this->assertSame($fixture, $result[$name]);
+        }
+    }
+
+    private function setupLoad()
+    {
+        $this->loadFixture = [
             'a' => ['name' => 'a', 'sequence' => []],    // a is on its own
             'b' => ['name' => 'b', 'sequence' => ['d']], // b is after d
             'c' => ['name' => 'c', 'sequence' => ['e']], // c is after e
@@ -69,9 +100,6 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             'e' => ['name' => 'e', 'sequence' => ['a']], // e is after a
             // so expected sequence is a -> e -> c -> d -> b
         ];
-        $this->registry->expects($this->once())
-            ->method('getPaths')
-            ->willReturn(['/path/to/a', '/path/to/b', '/path/to/c', '/path/to/d', '/path/to/e']);
         $this->driver->expects($this->exactly(5))->method('fileGetContents')->will($this->returnValueMap([
             ['/path/to/a/etc/module.xml', null, null, self::$sampleXml],
             ['/path/to/b/etc/module.xml', null, null, self::$sampleXml],
@@ -80,17 +108,12 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             ['/path/to/e/etc/module.xml', null, null, self::$sampleXml],
         ]));
         $index = 0;
-        foreach ($fixtures as $name => $fixture) {
+        foreach ($this->loadFixture as $name => $fixture) {
             $this->converter->expects($this->at($index++))->method('convert')->willReturn([$name => $fixture]);
         }
         $this->parser->expects($this->atLeastOnce())->method('loadXML')
             ->with(self::$sampleXml);
         $this->parser->expects($this->atLeastOnce())->method('getDom');
-        $result = $this->loader->load();
-        $this->assertSame(['a', 'e', 'c', 'd', 'b'], array_keys($result));
-        foreach ($fixtures as $name => $fixture) {
-            $this->assertSame($fixture, $result[$name]);
-        }
     }
 
     public function testLoadExclude()
