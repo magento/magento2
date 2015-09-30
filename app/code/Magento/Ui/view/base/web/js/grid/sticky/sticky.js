@@ -365,12 +365,21 @@ define([
         },
 
         /**
+         * Get original bulk row height, if is visible
+         *
+         * @returns {Number}.
+         */
+        getBulkRowHeight: function () {
+            return this.listingNode.find(this.bulkRowSelector).filter(':visible').height();
+        },
+
+        /**
          * Get top Y coord of the sticky header
          *
          * @returns {Number}.
          */
         getListingTopYCoord: function () {
-            var bulkRowHeight = (this.listingNode.find(this.bulkRowSelector) || {}).height();
+            var bulkRowHeight = this.getBulkRowHeight();
 
             return this.listingNode.find('tbody').offset().top -
                 this.containerNode.height() -
@@ -387,8 +396,8 @@ define([
             var stickyTopCondition = this.getListingTopYCoord() - this.getOtherStickyElementsSize(),
                 stickyBottomCondition = this.listingNode.offset().top +
                     this.listingNode.height() -
-                    $(window).scrollTop() -
-                    (this.listingNode.find(this.bulkRowSelector) || {}).height() -
+                    $(window).scrollTop() +
+                    this.getBulkRowHeight() -
                     this.getOtherStickyElementsSize();
 
             return stickyTopCondition < 0 && stickyBottomCondition > 0;
@@ -449,9 +458,12 @@ define([
          */
         resizeBulk: function () {
             var bulk = this.containerNode.find(this.bulkRowHeaderSelector)[0];
-            if (bulk){
+
+            if (bulk) {
                 $(bulk).innerWidth(this.getListingWidth());
             }
+
+            return this;
         },
 
         /**
