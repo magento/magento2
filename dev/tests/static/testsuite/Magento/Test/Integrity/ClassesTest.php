@@ -214,9 +214,8 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                     "",
                     $file
                 );
-                // exceptions made for the files from the blacklist
-                self::_setNamespaceBlackList();
-                if (in_array($relativePath, self::$_namespaceBlacklist)) {
+                // exceptions made for fixture files from tests
+                if (strpos($relativePath, '/_files/') !== false) {
                     return;
                 }
 
@@ -238,32 +237,6 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
             },
             Files::init()->getPhpFiles()
         );
-    }
-
-    protected function _setNamespaceBlackList()
-    {
-        if (!isset(self::$_namespaceBlacklist)) {
-            $blackList = [];
-            foreach (glob(__DIR__ . '/_files/blacklist/namespace.txt') as $list) {
-                $fileList = file($list, FILE_IGNORE_NEW_LINES);
-                foreach ($fileList as $currentFile) {
-                    $absolutePath = \Magento\Framework\App\Utility\Files::init()->getPathToSource() .
-                        '/' .
-                        $currentFile;
-                    if (is_dir($absolutePath)) {
-                        $recursiveFiles = \Magento\Framework\App\Utility\Files::getFiles(
-                            [$absolutePath],
-                            '*.php',
-                            true
-                        );
-                        $blackList = array_merge($blackList, $recursiveFiles);
-                    } else {
-                        array_push($blackList, $currentFile);
-                    }
-                }
-            }
-            self::$_namespaceBlacklist = $blackList;
-        }
     }
 
     /**

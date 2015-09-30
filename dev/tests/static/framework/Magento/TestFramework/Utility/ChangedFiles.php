@@ -25,7 +25,7 @@ class ChangedFiles
     {
         $fileHelper = \Magento\Framework\App\Utility\Files::init();
         if (isset($_ENV['INCREMENTAL_BUILD'])) {
-            $phpFiles = Files::readLists($changedFilesList);
+            $phpFiles = Files::init()->readLists($changedFilesList);
             if (!empty($phpFiles)) {
                 $phpFiles = \Magento\Framework\App\Utility\Files::composeDataSets($phpFiles);
                 $phpFiles = array_intersect_key($phpFiles, $fileHelper->getPhpFiles(
