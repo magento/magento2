@@ -58,10 +58,10 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
         }
     };
 
-    var configurableBlock = (new function(attributeTitle, attributeTab) {
+    var configurationSectionMessageHandler = (new function(attributeTitle, attributeTab) {
         this.ref = jQuery(attributeTitle);
         this.new = '<?= /* @noEscape */ __('Configurations cannot be created for a standard product with downloadable files.'
-             . 'To create configurations, first remove all downloadable files.');?>';
+             . ' To create configurations, first remove all downloadable files.');?>';
         this.old = this.ref.text();
         this.change = function (change) {
             if (change) {
@@ -77,9 +77,9 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
     downloadableCheckbox.on('change', function () {
         if (jQuery(this).is(':checked')) {
             toggleTab(true);
-            configurableBlock.change(true);
+            configurationSectionMessageHandler.change(true);
         } else {
-            configurableBlock.change(false);
+            configurationSectionMessageHandler.change(false);
         }
         jQuery(document).trigger('typeSwitcherOut');
     });
