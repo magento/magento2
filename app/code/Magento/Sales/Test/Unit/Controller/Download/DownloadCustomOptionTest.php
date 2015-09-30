@@ -212,7 +212,8 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
         $this->objectMock->execute();
     }
 
-    public function executeDataProvider() {
+    public function executeDataProvider()
+    {
         return [
             [ //Good
                 [

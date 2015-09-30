@@ -15,7 +15,7 @@ class Unserialize
     public function unserialize($string)
     {
         if (preg_match('/o:\d+:"[a-z0-9_]+":\d+:{.*?}/i', $string)) {
-            trigger_error('String contains serialized object', E_USER_NOTICE);
+            trigger_error('String contains serialized object');
             return false;
         }
         return unserialize($string);
