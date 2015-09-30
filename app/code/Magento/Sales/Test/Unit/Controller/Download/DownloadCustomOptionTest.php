@@ -72,7 +72,7 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Sales\Controller\Download\DownloadCustomOption
      */
-    protected $object;
+    protected $objectMock;
 
     public function setUp()
     {
@@ -149,15 +149,19 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
         $contextMock->expects($this->once())->method('getObjectManager')->willReturn($objectManagerMock);
         $contextMock->expects($this->once())->method('getRequest')->willReturn($requestMock);
 
-        $this->object = $objectManagerHelper->getObject(
-            'Magento\Sales\Controller\Download\DownloadCustomOption',
-            [
-                'context'              => $contextMock,
-                'resultForwardFactory' => $resultForwardFactoryMock,
-                'download'             => $this->downloadMock,
-                'unserialize'          => $this->unserializeMock
-            ]
-        );
+
+        $this->objectMock = $this->getMockBuilder('Magento\Sales\Controller\Download\DownloadCustomOption')
+            ->setMethods('endExecute')
+            ->setConstructorArgs(
+                [
+                    'context'              => $contextMock,
+                    'resultForwardFactory' => $resultForwardFactoryMock,
+                    'download'             => $this->downloadMock,
+                    'unserialize'          => $this->unserializeMock
+                ]
+            )
+            ->getMock();
+        $this->objectMock->expects($this->once())->method('endExecute')->willReturn(true);
     }
 
     /**
@@ -205,7 +209,7 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
                 ->willReturn(true);
         }
 
-        $this->object->execute();
+        $this->objectMock->execute();
     }
 
     public function executeDataProvider() {
