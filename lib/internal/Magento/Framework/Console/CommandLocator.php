@@ -17,8 +17,10 @@ class CommandLocator
 
     /**
      * @param string $commandListClass
+     * @return void
      */
-    public static function register($commandListClass) {
+    public static function register($commandListClass)
+    {
         self::$commands[] = $commandListClass;
     }
 

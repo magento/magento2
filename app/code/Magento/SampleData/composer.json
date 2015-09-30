@@ -1,7 +1,6 @@
 {
     "name": "magento/module-sample-data",
     "description": "Sample Data fixtures",
-    "version": "1.0.0-beta",
     "require": {
         "magento/framework": "~1.0.0-beta",
         "magento/magento-composer-installer": "*"
@@ -10,6 +9,11 @@
         "magento/sample-data-media": "Sample Data version:~0.42.0-beta2"
     },
     "type": "magento2-module",
+    "version": "1.0.0-beta",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
     "extra": {
         "map": [
             [
