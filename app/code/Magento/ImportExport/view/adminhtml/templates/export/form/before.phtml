@@ -41,7 +41,7 @@ require(['prototype'], function(){
          */
         getFilter: function() {
             if ($('entity') && $F('entity')) {
-                var url    = "<?php echo $block->getUrl('*/*/getFilter') ?>";
+                var url    = "<?php /* @escapeNotVerified */ echo $block->getUrl('*/*/getFilter') ?>";
                 var entity = $F('entity');
                 if (entity != this.previousGridEntity) {
                     this.previousGridEntity = entity;

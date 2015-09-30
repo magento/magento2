@@ -17,13 +17,13 @@
 <div id="checkout-review-table-wrapper" class="order-review-wrapper table-wrapper">
     <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): $colspan = $rowspan = 2; else: $colspan = $rowspan = 1; endif; ?>
     <table class="data table table-order-review items" id="checkout-review-table">
-        <caption class="table-caption"><?php echo __('Order Review'); ?></caption>
+        <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Order Review'); ?></caption>
         <thead>
             <tr>
-                <th class="col item" scope="col"><?php echo __('Product Name') ?></th>
-                <th class="col price" scope="col"><?php echo __('Price') ?></th>
-                <th class="col qty" scope="col"><?php echo __('Qty') ?></th>
-                <th class="col subtotal" scope="col"><?php echo __('Subtotal') ?></th>
+                <th class="col item" scope="col"><?php /* @escapeNotVerified */ echo __('Product Name') ?></th>
+                <th class="col price" scope="col"><?php /* @escapeNotVerified */ echo __('Price') ?></th>
+                <th class="col qty" scope="col"><?php /* @escapeNotVerified */ echo __('Qty') ?></th>
+                <th class="col subtotal" scope="col"><?php /* @escapeNotVerified */ echo __('Subtotal') ?></th>
             </tr>
         </thead>
         <tbody>
@@ -43,12 +43,12 @@
         <div class="primary"><?php echo $block->getChildHtml('button') ?></div>
         <div class="secondary">
             <span id="checkout-review-edit-label">
-                <?php echo __('Forgot an Item?') ?>
+                <?php /* @escapeNotVerified */ echo __('Forgot an Item?') ?>
             </span>
-            <a href="<?php echo $block->getUrl('checkout/cart') ?>"
+            <a href="<?php /* @escapeNotVerified */ echo $block->getUrl('checkout/cart') ?>"
                aria-describedby="checkout-review-edit-label"
                class="action edit">
-                <span><?php echo __('Edit Your Cart') ?></span>
+                <span><?php /* @escapeNotVerified */ echo __('Edit Your Cart') ?></span>
             </a>
         </div>
     </div>

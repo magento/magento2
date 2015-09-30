@@ -20,7 +20,23 @@ define(
                 if(!window.checkoutConfig.getIncludeWeeeFlag) {
                     return rowTotalExclTax + parseFloat(item.weee_tax_applied_amount);
                 }
-                return rowTotalExclTax
+                return rowTotalExclTax;
+            },
+
+            getRowDisplayPriceExclTax: function(item) {
+                var rowTotalExclTax = parseFloat(item.row_total);
+                return rowTotalExclTax + this.getRowWeeeTaxExclTax(item);
+            },
+
+            getRowWeeeTaxExclTax: function(item) {
+                var totalWeeeTaxExclTaxApplied = 0;
+                if (item.weee_tax_applied) {
+                    var weeeTaxAppliedAmounts = JSON.parse(item.weee_tax_applied);
+                    weeeTaxAppliedAmounts.forEach(function (weeeTaxAppliedAmount) {
+                        totalWeeeTaxExclTaxApplied += parseFloat(Math.max(weeeTaxAppliedAmount.row_amount, 0));
+                    });
+                }
+                return totalWeeeTaxExclTaxApplied;
             }
 
         });

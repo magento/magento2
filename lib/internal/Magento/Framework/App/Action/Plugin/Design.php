@@ -23,7 +23,7 @@ class Design
     /**
      * Initialize design
      *
-     * @param \Magento\Framework\App\Action\Action $subject
+     * @param \Magento\Framework\App\ActionInterface $subject
      * @param callable $proceed
      * @param \Magento\Framework\App\RequestInterface $request
      *
@@ -31,7 +31,7 @@ class Design
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundDispatch(
-        \Magento\Framework\App\Action\Action $subject,
+        \Magento\Framework\App\ActionInterface $subject,
         \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request
     ) {

@@ -35,6 +35,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param \Magento\Checkout\Helper\Cart $cartHelper
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
@@ -55,6 +56,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     /**
      * Prepare Quote Item Product URLs
      *
+     * @codeCoverageIgnore
      * @return void
      */
     protected function _construct()
@@ -106,6 +108,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * @codeCoverageIgnore
      * @return bool
      */
     public function hasError()
@@ -114,6 +117,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * @codeCoverageIgnore
      * @return int
      */
     public function getItemsSummaryQty()
@@ -122,6 +126,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * @codeCoverageIgnore
      * @return bool
      */
     public function isWishlistActive()
@@ -140,6 +145,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * @codeCoverageIgnore
      * @return string
      */
     public function getCheckoutUrl()
@@ -165,6 +171,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
 
     /**
      * @return bool
+     * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getIsVirtual()
@@ -218,6 +225,7 @@ class Cart extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
+     * @codeCoverageIgnore
      * @return int
      */
     public function getItemsCount()

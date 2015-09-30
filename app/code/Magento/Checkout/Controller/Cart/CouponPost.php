@@ -30,6 +30,7 @@ class CouponPost extends \Magento\Checkout\Controller\Cart
      * @param \Magento\Checkout\Model\Cart $cart
      * @param \Magento\SalesRule\Model\CouponFactory $couponFactory
      * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,

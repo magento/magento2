@@ -405,10 +405,24 @@
                 </item>
             </argument>
         </column>
+<<<<<<< HEAD
         <actionsColumn name="actions" class="Magento\Sales\Ui\Component\Listing\Column\OrderActions">
+=======
+        <column name="actions" class="Magento\Sales\Ui\Component\Listing\Column\ViewAction">
+>>>>>>> magento2/develop
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="indexField" xsi:type="string">entity_id</item>
+<<<<<<< HEAD
+=======
+                    <item name="align" xsi:type="string">left</item>
+                    <item name="label" xsi:type="string" translate="true">Action</item>
+                    <item name="data_type" xsi:type="string">actions</item>
+                    <item name="filterable" xsi:type="boolean">false</item>
+                    <item name="sortable" xsi:type="boolean">false</item>
+                    <item name="viewUrlPath" xsi:type="string">sales/order/view</item>
+                    <item name="urlEntityParamName" xsi:type="string">order_id</item>
+>>>>>>> magento2/develop
                 </item>
             </argument>
         </actionsColumn>

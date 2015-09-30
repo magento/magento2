@@ -8,37 +8,22 @@ namespace Magento\Widget\Test\Fixture\Widget;
 
 use Magento\Store\Test\Fixture\Store;
 use Magento\Mtf\Fixture\FixtureFactory;
-use Magento\Mtf\Fixture\FixtureInterface;
+use Magento\Mtf\Fixture\DataSource;
 
 /**
- * Prepare Store
+ * Prepare Store.
  */
-class StoreIds implements FixtureInterface
+class StoreIds extends DataSource
 {
     /**
-     * Data set configuration settings
-     *
-     * @var array
-     */
-    protected $params = [];
-
-    /**
-     * Resource data
-     *
-     * @var array
-     */
-    protected $data = [];
-
-    /**
-     * Return stores
+     * Return stores.
      *
      * @var Store
      */
     protected $stores = [];
 
     /**
-     * Constructor
-     *
+     * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param array $params
      * @param array $data
@@ -63,40 +48,7 @@ class StoreIds implements FixtureInterface
     }
 
     /**
-     * Persist Store
-     *
-     * @return void
-     */
-    public function persist()
-    {
-        //
-    }
-
-    /**
-     * Return prepared data
-     *
-     * @param string|null $key
-     * @return string
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function getData($key = null)
-    {
-        return $this->data;
-    }
-
-    /**
-     * Return data set configuration settings
-     *
-     * @return array
-     */
-    public function getDataConfig()
-    {
-        return $this->params;
-    }
-
-    /**
-     * Return stores
+     * Return stores.
      *
      * @return Store
      */

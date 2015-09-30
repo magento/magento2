@@ -16,7 +16,7 @@
     if ($block->getHelpLink()):
 ?>
 <div class="paypal-payment-notice">
-    <?php echo __('Not sure what PayPal payment method to use? Click <a href="%1" target="_blank">here</a> to learn more.', $block->getHelpLink()); ?>
+    <?php /* @escapeNotVerified */ echo __('Not sure what PayPal payment method to use? Click <a href="%1" target="_blank">here</a> to learn more.', $block->getHelpLink()); ?>
 </div>
 <?php
     endif;

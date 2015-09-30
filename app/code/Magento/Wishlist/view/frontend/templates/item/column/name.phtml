@@ -11,7 +11,7 @@ $item = $block->getItem();
 $product = $item->getProduct();
 ?>
 <strong class="product-item-name">
-    <a href="<?php echo $block->getProductUrl($item) ?>" title="<?php echo $block->escapeHtml($product->getName()) ?>" class="product-item-link">
+    <a href="<?php /* @escapeNotVerified */ echo $block->getProductUrl($item) ?>" title="<?php echo $block->escapeHtml($product->getName()) ?>" class="product-item-link">
         <?php echo $block->escapeHtml($product->getName()) ?>
     </a>
 </strong>

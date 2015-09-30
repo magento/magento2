@@ -31,6 +31,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * @param \Magento\Checkout\Block\Checkout\AttributeMerger $merger
      * @param \Magento\Directory\Model\Resource\Country\Collection $countryCollection
      * @param \Magento\Directory\Model\Resource\Region\Collection $regionCollection
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Checkout\Block\Checkout\AttributeMerger $merger,
@@ -46,6 +47,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * Show City in Shipping Estimation
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     protected function isCityActive()
     {
@@ -56,6 +58,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
      * Show State in Shipping Estimation
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     protected function isStateActive()
     {

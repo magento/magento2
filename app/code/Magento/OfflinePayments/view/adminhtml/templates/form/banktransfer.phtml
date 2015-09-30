@@ -5,13 +5,17 @@
  */
 
 // @codingStandardsIgnoreFile
-
+/**
+ * @var $block \Magento\OfflinePayments\Block\Form\Banktransfer
+ */
+$instructions = $block->getInstructions();
 ?>
-<?php if ($instructions = $block->getInstructions()): ?>
-    <ul class="form-list checkout-agreements" id="payment_form_<?php echo $block->getMethodCode() ?>" style="display:none;">
+<?php if ($instructions): ?>
+    <?php $methodCode = $block->escapeHtml($block->getMethodCode());?>
+    <ul class="form-list checkout-agreements" id="payment_form_<?php /* @noEscape */ echo $methodCode ?>" style="display:none;">
         <li>
-            <div class="<?php echo $block->getMethodCode() ?>-instructions-content agreement-content">
-                <?php echo nl2br($instructions) ?>
+            <div class="<?php /* @noEscape */ echo $methodCode ?>-instructions-content checkout-agreement-item-content">
+                <?php /* @noEscape */ echo nl2br($block->escapeHtml($instructions)) ?>
             </div>
         </li>
     </ul>

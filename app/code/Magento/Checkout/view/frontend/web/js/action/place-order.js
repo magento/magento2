@@ -14,7 +14,7 @@ define(
     function (quote, urlBuilder, storage, url, errorProcessor, customer) {
         'use strict';
 
-        return function (paymentData, redirectOnSuccess) {
+        return function (paymentData, redirectOnSuccess, messageContainer) {
             var serviceUrl,
                 payload;
 
@@ -49,7 +49,7 @@ define(
                 }
             ).fail(
                 function (response) {
-                    errorProcessor.process(response);
+                    errorProcessor.process(response, messageContainer);
                 }
             );
         };

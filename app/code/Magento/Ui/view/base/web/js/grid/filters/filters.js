@@ -6,8 +6,8 @@ define([
     'underscore',
     'mageUtils',
     'uiLayout',
-    'Magento_Ui/js/lib/collapsible'
-], function (_, utils, layout, Collapsible) {
+    'uiComponent'
+], function (_, utils, layout, Component) {
     'use strict';
 
     /**
@@ -34,9 +34,10 @@ define([
         return utils.mapRecursive(data, utils.removeEmptyValues.bind(utils));
     }
 
-    return Collapsible.extend({
+    return Component.extend({
         defaults: {
             template: 'ui/grid/filters/filters',
+            stickyTmpl: 'ui/grid/sticky/filters',
             applied: {
                 placeholder: true
             },

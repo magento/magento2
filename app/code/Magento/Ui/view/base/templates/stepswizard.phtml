@@ -8,16 +8,16 @@
 
 /** @var $block \Magento\Ui\Block\Component\StepsWizard */
 ?>
-    <div data-role="steps-wizard-main" class="steps-wizard" data-bind="scope: '<?= $block->getComponentName()?>'">
+    <div data-role="steps-wizard-main" class="steps-wizard" data-bind="scope: '<?= /* @escapeNotVerified */  $block->getComponentName()?>'">
         <div data-role="messages" class="messages"></div>
 
         <div data-role="steps-wizard-controls" class="steps-wizard-navigation">
             <ul class="nav-bar">
                 <?php foreach ($block->getSteps() as $step) { ?>
-                    <li data-role="collapsible" data-bind="css: { 'active': selectedStep() == '<?= $step->getComponentName() ?>'}">
-                        <a href="#<?= $step->getComponentName() ?>"
+                    <li data-role="collapsible" data-bind="css: { 'active': selectedStep() == '<?= /* @escapeNotVerified */  $step->getComponentName() ?>'}">
+                        <a href="#<?= /* @escapeNotVerified */  $step->getComponentName() ?>"
                            data-bind="click: showSpecificStep">
-                            <?= $step->getCaption() ?>
+                            <?= /* @escapeNotVerified */  $step->getCaption() ?>
                         </a>
                     </li>
                 <?php } ?>
@@ -26,20 +26,20 @@
                 <div class="action-wrap action-wrap-next" data-role="step-wizard-next">
                     <button type="button"
                             class="action-default action-primary action-next-step" data-bind="click: next">
-                        <span><?= __('Next') ?></span>
+                        <span><?= /* @escapeNotVerified */  __('Next') ?></span>
                     </button>
                 </div>
                 <div class="action-wrap action-wrap-prev" data-role="step-wizard-prev">
                     <button type="button"
                             class="action-default action-back-step"
                             data-bind="click: back, css: { 'disabled': disabled}">
-                        <span><?= __('Back') ?></span>
+                        <span><?= /* @escapeNotVerified */  __('Back') ?></span>
                     </button>
                 </div>
                 <div class="action-wrap" data-role="closeBtn">
                     <button type="button"
                             class="action-cancel action-tertiary" data-bind="click: close">
-                        <span><?= __('Cancel') ?></span>
+                        <span><?= /* @escapeNotVerified */  __('Cancel') ?></span>
                     </button>
                 </div>
             </div>
@@ -47,9 +47,9 @@
         <div data-role="steps-wizard-tab">
             <?php foreach ($block->getSteps() as $step) { ?>
             <div data-bind="visible: selectedStep() == $element.id"
-                 class="content" id="<?=$step->getComponentName() ?>"
+                 class="content" id="<?= /* @escapeNotVerified */ $step->getComponentName() ?>"
                  data-role="content">
-                <?= $step->getContent() ?>
+                <?= /* @escapeNotVerified */  $step->getContent() ?>
             </div>
             <?php } ?>
         </div>
@@ -60,10 +60,10 @@
         "*": {
             "Magento_Ui/js/core/app": {
                 "components": {
-                        "<?= $block->getComponentName()?>": {
+                        "<?= /* @escapeNotVerified */  $block->getComponentName()?>": {
                             "component": "Magento_Ui/js/lib/step-wizard",
-                            "initData": <?= $this->helper("Magento\Framework\Json\Helper\Data")->jsonEncode($block->getInitData()) ?>,
-                            "stepsNames": <?= $this->helper("Magento\Framework\Json\Helper\Data")->jsonEncode($block->getStepComponents()) ?>
+                            "initData": <?= /* @escapeNotVerified */  $this->helper("Magento\Framework\Json\Helper\Data")->jsonEncode($block->getInitData()) ?>,
+                            "stepsNames": <?= /* @escapeNotVerified */  $this->helper("Magento\Framework\Json\Helper\Data")->jsonEncode($block->getStepComponents()) ?>
                         }
                     }
                 }

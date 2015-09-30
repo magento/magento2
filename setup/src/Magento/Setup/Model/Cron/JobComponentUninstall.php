@@ -89,7 +89,7 @@ class JobComponentUninstall extends AbstractJob
         $this->themeUninstall = $themeUninstall;
         $this->objectManager = $objectManagerProvider->get();
         $this->updater = $updater;
-        parent::__construct($output, $status, $name, $params);
+        parent::__construct($output, $status, $objectManagerProvider, $name, $params);
     }
 
     /**
@@ -101,6 +101,7 @@ class JobComponentUninstall extends AbstractJob
     public function execute()
     {
         if (!isset($this->params['components']) || !is_array($this->params['components'])) {
+            $this->status->toggleUpdateError(true);
             throw new \RunTimeException('Job parameter format is incorrect');
         }
         $components = $this->params['components'];
@@ -110,6 +111,7 @@ class JobComponentUninstall extends AbstractJob
         $this->cleanUp();
         $errorMessage = $this->updater->createUpdaterTask($components, Updater::TASK_TYPE_UNINSTALL);
         if ($errorMessage) {
+            $this->status->toggleUpdateError(true);
             throw new \RuntimeException($errorMessage);
         }
     }
@@ -124,6 +126,7 @@ class JobComponentUninstall extends AbstractJob
     private function executeComponent(array $component)
     {
         if (!isset($component[self::COMPONENT_NAME])) {
+            $this->status->toggleUpdateError(true);
             throw new \RuntimeException('Job parameter format is incorrect');
         }
 
@@ -132,6 +135,7 @@ class JobComponentUninstall extends AbstractJob
         if (isset($installedPackages[$componentName]['type'])) {
             $type = $installedPackages[$componentName]['type'];
         } else {
+            $this->status->toggleUpdateError(true);
             throw new \RuntimeException('Component type not set');
         }
 
@@ -141,6 +145,7 @@ class JobComponentUninstall extends AbstractJob
             self::COMPONENT_LANGUAGE,
             self::COMPONENT
         ])) {
+            $this->status->toggleUpdateError(true);
             throw new \RuntimeException('Unknown component type');
         }
 

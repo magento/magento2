@@ -12,35 +12,35 @@ $item = $block->getItem();
 $product = $item->getProduct();
 ?>
 <?php foreach ($block->getChildNames() as $childName): ?>
-    <?php echo $block->getLayout()->renderElement($childName, false); ?>
+    <?php /* @escapeNotVerified */ echo $block->getLayout()->renderElement($childName, false); ?>
 <?php endforeach;?>
 <div class="box-tocart">
     <fieldset class="fieldset">
     <?php if ($item->canHaveQty() && $product->isVisibleInSiteVisibility()): ?>
         <div class="field qty">
-            <label class="label" for="qty[<?php echo $item->getId() ?>]"><span><?php echo __('Qty') ?></span></label>
+            <label class="label" for="qty[<?php /* @escapeNotVerified */ echo $item->getId() ?>]"><span><?php /* @escapeNotVerified */ echo __('Qty') ?></span></label>
             <div class="control">
-                <input type="number" data-role="qty" id="qty[<?php echo $item->getId() ?>]" class="input-text qty" data-validate="{'required-number':true,'validate-greater-than-zero':true}"
-               name="qty[<?php echo $item->getId() ?>]" value="<?php echo $block->getAddToCartQty($item) * 1 ?>">
+                <input type="number" data-role="qty" id="qty[<?php /* @escapeNotVerified */ echo $item->getId() ?>]" class="input-text qty" data-validate="{'required-number':true,'validate-greater-than-zero':true}"
+               name="qty[<?php /* @escapeNotVerified */ echo $item->getId() ?>]" value="<?php /* @escapeNotVerified */ echo $block->getAddToCartQty($item) * 1 ?>">
             </div>
         </div>
     <?php endif; ?>
     <?php if ($product->isSaleable()): ?>
     <div class="product-item-actions">
         <div class="actions-primary">
-            <button type="button" data-role="tocart" data-post='<?php echo $block->getItemAddToCartParams($item)?>' title="<?php echo __('Add to Cart') ?>" data-item-id="<?php echo $item->getId()?>" class="action tocart primary">
-                <span><?php echo __('Add to Cart') ?></span>
+            <button type="button" data-role="tocart" data-post='<?php /* @escapeNotVerified */ echo $block->getItemAddToCartParams($item)?>' title="<?php /* @escapeNotVerified */ echo __('Add to Cart') ?>" data-item-id="<?php /* @escapeNotVerified */ echo $item->getId()?>" class="action tocart primary">
+                <span><?php /* @escapeNotVerified */ echo __('Add to Cart') ?></span>
             </button>
         </div>
     </div>
     <?php else: ?>
         <?php if ($product->getIsSalable()): ?>
-            <p class="available stock" title="<?php echo __('Availability') ?>">
-                <span><?php echo __('In stock') ?></span>
+            <p class="available stock" title="<?php /* @escapeNotVerified */ echo __('Availability') ?>">
+                <span><?php /* @escapeNotVerified */ echo __('In stock') ?></span>
             </p>
         <?php else: ?>
-            <p class="unavailable stock" title="<?php echo __('Availability') ?>">
-                <span><?php echo __('Out of stock') ?></span>
+            <p class="unavailable stock" title="<?php /* @escapeNotVerified */ echo __('Availability') ?>">
+                <span><?php /* @escapeNotVerified */ echo __('Out of stock') ?></span>
             </p>
         <?php endif; ?>
     <?php endif; ?>

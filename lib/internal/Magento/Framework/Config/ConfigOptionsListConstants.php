@@ -22,6 +22,14 @@ class ConfigOptionsListConstants
     const CONFIG_PATH_DB_CONNECTIONS = 'db/connection';
     const CONFIG_PATH_DB_PREFIX = 'db/table_prefix';
     const CONFIG_PATH_X_FRAME_OPT = 'x-frame-options';
+    const CONFIG_PATH_CACHE_HOSTS = 'http_cache_hosts';
+    const CONFIG_PATH_BACKEND = 'backend';
+    const CONFIG_PATH_INSTALL = 'install';
+    const CONFIG_PATH_CRYPT = 'crypt';
+    const CONFIG_PATH_SESSION = 'session';
+    const CONFIG_PATH_DB = 'db';
+    const CONFIG_PATH_RESOURCE = 'resource';
+    const CONFIG_PATH_CACHE_TYPES = 'cache_types';
     /**#@-*/
 
     /**#@+
@@ -40,6 +48,7 @@ class ConfigOptionsListConstants
     const INPUT_KEY_DB_ENGINE = 'db-engine';
     const INPUT_KEY_RESOURCE = 'resource';
     const INPUT_KEY_SKIP_DB_VALIDATION = 'skip-db-validation';
+    const INPUT_KEY_CACHE_HOSTS = 'http-cache-hosts';
     /**#@-*/
 
     /**#@+

@@ -17,15 +17,15 @@
 ?>
 <?php if ($block->getTotals()): ?>
     <?php $_colspan = 3; ?>
-    <?php echo $block->renderTotals(null, $_colspan); ?>
-    <?php echo $block->renderTotals('footer', $_colspan); ?>
+    <?php /* @escapeNotVerified */ echo $block->renderTotals(null, $_colspan); ?>
+    <?php /* @escapeNotVerified */ echo $block->renderTotals('footer', $_colspan); ?>
     <?php if ($block->needDisplayBaseGrandtotal()):?>
     <tr class="totals charge">
-        <th class="mark" colspan="<?php echo $_colspan; ?>" scope="row">
-            <?php echo __('Your credit card will be charged for') ?>
+        <th class="mark" colspan="<?php /* @escapeNotVerified */ echo $_colspan; ?>" scope="row">
+            <?php /* @escapeNotVerified */ echo __('Your credit card will be charged for') ?>
         </th>
         <td class="amount" data-th="<?php echo $block->escapeHtml(__('Your credit card will be charged for')); ?>">
-            <?php echo $block->displayBaseGrandtotal() ?>
+            <?php /* @escapeNotVerified */ echo $block->displayBaseGrandtotal() ?>
         </td>
     </tr>
     <?php endif?>
