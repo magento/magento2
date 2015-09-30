@@ -2460,4 +2460,6 @@ return [
         'Magento\ConfigurableProduct\Model\Product\VariationHandler::fillSimpleProductData'
     ],
     ['mergeBookmarkConfig', 'Magento\Ui\Model\Manager'],
+    ['addStockStatusToSelect', 'Magento\CatalogInventory\Helper\Stock'],
+    ['getUrlInstance', 'Magento\Catalog\Model\Product\Url'],
 ];

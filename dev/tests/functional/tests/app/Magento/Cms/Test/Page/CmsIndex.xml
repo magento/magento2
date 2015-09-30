@@ -14,7 +14,6 @@
         <block name="linksBlock" class="Magento\Theme\Test\Block\Links" locator=".header .links" strategy="css selector" />
         <block name="storeSwitcherBlock" class="Magento\Store\Test\Block\Switcher" locator="[data-ui-id='language-switcher']" strategy="css selector" />
         <block name="cartSidebarBlock" class="Magento\Checkout\Test\Block\Cart\Sidebar" locator="[data-block='minicart']" strategy="css selector" />
-        <block name="compareProductsBlock" class="Magento\Catalog\Test\Block\Product\Compare\Sidebar" locator=".sidebar.sidebar-additional" strategy="css selector" />
         <block name="currencyBlock" class="Magento\Directory\Test\Block\Currency\Switcher" locator=".switcher.currency" strategy="css selector" />
         <block name="cmsPageBlock" class="Magento\Cms\Test\Block\Page" locator=".page-main" strategy="css selector" />
         <block name="widgetView" class="Magento\Widget\Test\Block\WidgetView" locator=".widget" strategy="css selector" />
