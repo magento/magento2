@@ -37,7 +37,7 @@
         "zendframework/zend-serializer": "~2.4.6",
         "zendframework/zend-log": "~2.4.6",
         "zendframework/zend-http": "~2.4.6",
-        "magento/zendframework1": "1.12.13",
+        "magento/zendframework1": "1.12.16",
         "composer/composer": "1.0.0-alpha10",
         "monolog/monolog": "1.16.0",
         "oyejorge/less.php": "1.7.0.3",
