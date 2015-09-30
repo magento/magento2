@@ -88,7 +88,7 @@
         {
             "*": {
                 "Magento_Swatches/js/text": {
-                    "attributesData": <?php echo json_encode($values); ?>,
+                    "attributesData": <?php /* @escapeNotVerified */ echo json_encode($values); ?>,
                     "isSortable":  <?php echo (int)(!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) ?>,
                     "isReadOnly": <?php echo (int)$block->getReadOnly(); ?>
                 }
