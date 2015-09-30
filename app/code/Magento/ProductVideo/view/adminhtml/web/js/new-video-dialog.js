@@ -5,13 +5,14 @@
 /*jshint browser:true $:true*/
 define([
     'jquery',
+    'Magento_Ui/js/modal/alert',
     'jquery/ui',
     'Magento_Ui/js/modal/modal',
     'mage/translate',
     'mage/backend/tree-suggest',
     'mage/backend/validation',
     'Magento_ProductVideo/js/get-video-information'
-], function ($) {
+], function ($, alert) {
     'use strict';
 
     $.widget('mage.createVideoPlayer', {
@@ -475,8 +476,9 @@ define([
             var data = JSON.parse(result);
 
             if (data.errorcode || data.error) {
-                alert(data.error);
-
+                alert({
+                    content: data.error
+                });
                 return;
             }
             $.each($(this._videoFormSelector).serializeArray(), function (i, field) {
