@@ -97,7 +97,7 @@ class WeightTest extends \PHPUnit_Framework_TestCase
             $this->returnSelf()
         );
 
-       $this->_model->setForm($form);
+        $this->_model->setForm($form);
     }
 
     public function testGetEscapedValue()

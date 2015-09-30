@@ -23,7 +23,7 @@ class Matrix extends \Magento\Backend\Block\Template
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable
@@ -58,7 +58,6 @@ class Matrix extends \Magento\Backend\Block\Template
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurableType
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\Locale\CurrencyInterface $localeCurrency
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix $variationMatrix
      * @param ProductRepositoryInterface $productRepository
@@ -69,7 +68,6 @@ class Matrix extends \Magento\Backend\Block\Template
         \Magento\Backend\Block\Template\Context $context,
         \Magento\ConfigurableProduct\Model\Product\Type\Configurable $configurableType,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\Locale\CurrencyInterface $localeCurrency,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix $variationMatrix,
         ProductRepositoryInterface $productRepository,
@@ -80,7 +78,6 @@ class Matrix extends \Magento\Backend\Block\Template
         $this->_configurableType = $configurableType;
         $this->_coreRegistry = $coreRegistry;
         $this->stockRegistry = $stockRegistry;
-        parent::__construct($context, $data);
         $this->variationMatrix = $variationMatrix;
         $this->productRepository = $productRepository;
         $this->image = $image;
@@ -266,6 +263,7 @@ class Matrix extends \Magento\Backend\Block\Template
 
     /**
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @return void
      * TODO: move to class
      */
     protected function prepareVariations()
@@ -284,7 +282,7 @@ class Matrix extends \Magento\Backend\Block\Template
                 $key = implode('-', $attributeValues);
                 if (isset($productByUsedAttributes[$key])) {
                     $product = $productByUsedAttributes[$key];
-                    $price = $originPrice = $product->getPrice();
+                    $price = $product->getPrice();
                     $variationOptions = [];
                     foreach ($usedProductAttributes as $attribute) {
                         if (!isset($attributes[$attribute->getAttributeId()])) {

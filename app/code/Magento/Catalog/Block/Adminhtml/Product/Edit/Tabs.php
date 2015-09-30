@@ -336,7 +336,7 @@ class Tabs extends WigetTabs
     }
 
     /**
-     * @param $parentTab
+     * @param string $parentTab
      * @return string
      */
     public function getAccordion($parentTab)
