@@ -16,6 +16,17 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
     protected $attributeRepository;
 
     /**
+     * @var array
+     */
+    protected $filterMap = [
+        'default' => 'text',
+        'select' => 'select',
+        'boolean' => 'select',
+        'multiselect' => 'select',
+        'date' => 'dateRange',
+    ];
+
+    /**
      * @param \Magento\Framework\View\Element\UiComponent\ContextInterface $context
      * @param \Magento\Catalog\Ui\Component\ColumnFactory $columnFactory
      * @param \Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface $attributeRepository
@@ -43,11 +54,25 @@ class Columns extends \Magento\Ui\Component\Listing\Columns
         foreach ($this->attributeRepository->getList() as $attribute) {
             if (!isset($this->components[$attribute->getAttributeCode()])) {
                 $config['sortOrder'] = ++$columnSortOrder;
+                if ($attribute->getIsFilterableInGrid()) {
+                    $config['filter'] = $this->getFilterType($attribute->getFrontendInput());
+                }
                 $column = $this->columnFactory->create($attribute, $this->getContext(), $config);
                 $column->prepare();
                 $this->addComponent($attribute->getAttributeCode(), $column);
             }
         }
         parent::prepare();
+    }
+
+    /**
+     * Retrieve filter type by $frontendInput
+     *
+     * @param string $frontendInput
+     * @return string
+     */
+    protected function getFilterType($frontendInput)
+    {
+        return isset($this->filterMap[$frontendInput]) ? $this->filterMap[$frontendInput] : $this->filterMap['default'];
     }
 }

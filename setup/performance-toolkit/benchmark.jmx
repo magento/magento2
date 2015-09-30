@@ -447,7 +447,7 @@ if (1 == Integer.parseInt(vars.get(&quot;simple_products_counter&quot;))) {
 
 // Create product map
 Map productMap = new HashMap();
-productMap.put(&quot;id&quot;, vars.get(&quot;simple_product_id&quot;)); 
+productMap.put(&quot;id&quot;, vars.get(&quot;simple_product_id&quot;));
 productMap.put(&quot;title&quot;, vars.get(&quot;simple_product_title&quot;));
 productMap.put(&quot;url_key&quot;, vars.get(&quot;simple_products_url_key&quot;));
 
@@ -797,7 +797,7 @@ productList.add(productMap);                 </stringProp>
         </hashTree>
         <BeanShellSampler guiclass="BeanShellSamplerGui" testclass="BeanShellSampler" testname="Admin - Prepare Customers search Data" enabled="true">
           <stringProp name="BeanShellSampler.query">import org.apache.jmeter.protocol.http.util.Base64Encoder;
-String searchData = &quot;customer_since[locale]=en_US&amp;website_id=1&quot;; 
+String searchData = &quot;customer_since[locale]=en_US&amp;website_id=1&quot;;
 vars.put(&quot;searchData&quot;, new String(Base64Encoder.encode(searchData)));</stringProp>
           <stringProp name="BeanShellSampler.filename"></stringProp>
           <stringProp name="BeanShellSampler.parameters"></stringProp>
@@ -2433,11 +2433,11 @@ vars.put(&quot;category_name&quot;, props.get(&quot;category_name&quot;));</stri
               </elementProp>
               <elementProp name="Content-Type" elementType="Header">
                 <stringProp name="Header.name">Content-Type</stringProp>
-                <stringProp name="Header.value">application/json; charset=UTF-8&#xd;</stringProp>
+                <stringProp name="Header.value">application/json; charset=UTF-8</stringProp>
               </elementProp>
               <elementProp name="X-Requested-With" elementType="Header">
                 <stringProp name="Header.name">X-Requested-With</stringProp>
-                <stringProp name="Header.value">XMLHttpRequest&#xd;</stringProp>
+                <stringProp name="Header.value">XMLHttpRequest</stringProp>
               </elementProp>
               <elementProp name="Accept" elementType="Header">
                 <stringProp name="Header.name">Accept</stringProp>
@@ -2623,7 +2623,7 @@ print(emailsCount);
 if (emailsCount &lt; 1) {
     log.error(&quot;You have to increase customers qty for running &apos;Customer Checkout&apos; thread.&quot;);
     System.out.println(&quot;You have to increase customers qty for running &apos;Customer Checkout&apos; thread.&quot;);
-    SampleResult.setStopTest(true);    
+    SampleResult.setStopTest(true);
 } else {
     emails = props.get(&quot;customer_emails_list&quot;);
     email = emails.get(emailsCount - 1);
@@ -3297,11 +3297,11 @@ if (emailsCount &lt; 1) {
               </elementProp>
               <elementProp name="Content-Type" elementType="Header">
                 <stringProp name="Header.name">Content-Type</stringProp>
-                <stringProp name="Header.value">application/json; charset=UTF-8&#xd;</stringProp>
+                <stringProp name="Header.value">application/json; charset=UTF-8</stringProp>
               </elementProp>
               <elementProp name="X-Requested-With" elementType="Header">
                 <stringProp name="Header.name">X-Requested-With</stringProp>
-                <stringProp name="Header.value">XMLHttpRequest&#xd;</stringProp>
+                <stringProp name="Header.value">XMLHttpRequest</stringProp>
               </elementProp>
               <elementProp name="Accept" elementType="Header">
                 <stringProp name="Header.name">Accept</stringProp>

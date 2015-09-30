@@ -3852,4 +3852,6 @@ return [
     ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Grid\Renderer\Inventory'],
     ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Grid\Renderer\Checkbox'],
     ['Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Grid\Filter\Inventory'],
+    ['Magento\Catalog\Ui\Component\Listing\Filters'],
+    ['Magento\Customer\Ui\Component\Listing\Filters'],
 ];
