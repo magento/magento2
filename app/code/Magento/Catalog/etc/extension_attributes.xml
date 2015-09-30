@@ -9,4 +9,7 @@
     <extension_attributes for="Magento\Quote\Api\Data\ProductOptionInterface">
         <attribute code="custom_options" type="\Magento\Catalog\Api\Data\CustomOptionInterface[]" />
     </extension_attributes>
+    <extension_attributes for="Magento\Catalog\Api\Data\ProductOptionInterface">
+        <attribute code="custom_options" type="\Magento\Catalog\Api\Data\CustomOptionInterface[]" />
+    </extension_attributes>
 </config>
