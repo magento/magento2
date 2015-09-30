@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Framework\Setup\SampleData;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -30,6 +33,11 @@ class FixtureManager
         $this->_string = $string;
     }
 
+    /**
+     * @param string $fileId
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function getFixture($fileId)
     {
         list($moduleName, $filePath) = \Magento\Framework\View\Asset\Repository::extractModule(

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright Â© 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SampleData\Test\Unit\Model;
@@ -81,6 +81,6 @@ class StateTest extends \PHPUnit_Framework_TestCase
         $this->filesystem->expects($this->once())->method('getDirectoryWrite')->willReturn($this->writeInterface);
         $this->writeInterface->expects($this->once())->method('getAbsolutePath')->willReturn($this->absolutePath);
 
-        $this->state->clearState();    }
-
+        $this->state->clearState();
+    }
 }
