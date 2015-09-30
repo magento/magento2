@@ -178,7 +178,7 @@ class Generator
     protected function tryToLoadSourceClass($className, $generator)
     {
         $sourceClassName = $generator->getSourceClassName();
-        if (!$this->definedClasses->isClassLoadableFromDisc($sourceClassName)) {
+        if (!$this->definedClasses->isClassLoadable($sourceClassName)) {
             if ($this->generateClass($sourceClassName) !== self::GENERATION_SUCCESS) {
                 throw new \Magento\Framework\Exception\LocalizedException(
                     new \Magento\Framework\Phrase(
