@@ -136,7 +136,7 @@ define([
             }
 
             alert({
-                content:$.mage.__('Please choose a payment method.')
+                content: $.mage.__('Please choose a payment method.')
             });
 
             return false;

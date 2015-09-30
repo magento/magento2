@@ -159,7 +159,7 @@ define([
             var msg = response.error_messages;
             if (typeof (msg) === 'object') {
                 alert({
-                    content:msg.join("\n")
+                    content: msg.join("\n")
                 });
             }
             if (msg) {

@@ -67,8 +67,10 @@ define([
                 alert({
                     content: $.mage.__('We can\'t ship to this address. Please enter another address or edit this one.')
                 });
+
                 return false;
             }
+
             if (methods.filter(':checked').length) {
                 return true;
             }
