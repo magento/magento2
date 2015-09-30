@@ -18,8 +18,9 @@ use Magento\Framework\Api\ExtensionAttributesFactory;
  */
 class JoinProcessorTest extends \PHPUnit_Framework_TestCase
 {
-
-    /** @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessor */
+    /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessor
+     */
     private $joinProcessor;
 
     /**
@@ -42,8 +43,10 @@ class JoinProcessorTest extends \PHPUnit_Framework_TestCase
      */
     private $appResource;
 
-    /** @var ExtensionAttributesFactory|\PHPUnit_Framework_MockObject_MockObject */
-    private $extAttribFactory;
+    /**
+     * @var ExtensionAttributesFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $extensionAttributesFactory;
 
     /**
      * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorHelper
@@ -62,7 +65,7 @@ class JoinProcessorTest extends \PHPUnit_Framework_TestCase
         $this->typeProcessor = $this->getMockBuilder('Magento\Framework\Reflection\TypeProcessor')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->extAttribFactory = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttributesFactory')
+        $this->extensionAttributesFactory = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttributesFactory')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -75,7 +78,7 @@ class JoinProcessorTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Api\ExtensionAttribute\JoinProcessorHelper',
             [
                 'config' => $this->config,
-                'joinDataIntfFactory' => $this->extensionAttributeJoinDataFactory
+                'joinDataInterfaceFactory' => $this->extensionAttributeJoinDataFactory
             ]
         );
 
