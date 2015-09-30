@@ -19,6 +19,9 @@ class HttpPlugin
      */
     public function beforeSendResponse(\Magento\Framework\App\Response\Http $subject)
     {
+        if ($subject instanceof \Magento\MediaStorage\Model\File\Storage\Response) {
+            return;
+        }
         $subject->sendVary();
     }
 }
