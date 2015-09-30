@@ -12,6 +12,13 @@
 //  ---------------------------------------------
 
 .downloadable-form {
+    .admin__legend {
+        font-size: 1.8rem;
+        + .note {
+            margin-bottom: @indent__l;
+        }
+    }
+
     .admin__control-table {
         th {
             padding-bottom: 1.3rem;
@@ -56,10 +63,19 @@
 
     .draggable-handle {
         &:extend(.abs-draggable-handle all);
-        margin-top: @indent__xs;
+        margin-top: .3rem;
+    }
+
+    &.admin__fieldset { // ToDo UI: remove with .admin__scope-old        
+        .draggable-handle {
+            background: none;
+            height: inherit;
+            line-height: inherit;
+        }
     }
     
     .action-delete {
+        margin-top: .4rem;
         padding: 0;
         &:before {
             color: @color-gray60;
