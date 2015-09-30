@@ -33,8 +33,13 @@ define([
                 $('.gallery.ui-sortable').on('openDialog', $.proxy(this._onOpenDialog, this));
             },
 
-            _onOpenDialog: function(e, imageData)  {
-                if(imageData.media_type != 'external-video') {
+            /**
+             * Open dialog for external video
+             * @private
+             */
+            _onOpenDialog: function (e, imageData) {
+
+                if (imageData.media_type !== 'external-video') {
                     return;
                 }
                 this.showModal();
@@ -43,8 +48,8 @@ define([
             /**
              * Fired on trigger "openModal"
              */
-            showModal: function(imageData)
-            {
+            showModal: function () {
+
                 $('#new-video').modal('openModal');
             }
         }
