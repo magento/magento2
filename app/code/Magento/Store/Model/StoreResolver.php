@@ -81,7 +81,11 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
 
         $storeCode = $this->request->getParam(self::PARAM_NAME, $this->storeCookieManager->getStoreCodeFromCookie());
         if ($storeCode) {
-            $store = $this->getRequestedStoreByCode($storeCode);
+            try {
+                $store = $this->getRequestedStoreByCode($storeCode);
+            } catch (NoSuchEntityException $e) {
+                $store = $this->getDefaultStoreById($defaultStoreId);
+            }
 
             if (!in_array($store->getId(), $stores)) {
                 throw new NoSuchEntityException(__('Requested scope cannot be loaded'));
