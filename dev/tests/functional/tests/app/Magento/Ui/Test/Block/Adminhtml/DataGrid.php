@@ -122,6 +122,13 @@ class DataGrid extends Grid
     protected $noRecords = '[class$=no-data]';
 
     /**
+     * Selector for alert.
+     *
+     * @var string
+     */
+    protected $alertModal = '._show[data-role=modal]';
+
+    /**
      * Clear all applied Filters.
      *
      * @return void
@@ -250,7 +257,7 @@ class DataGrid extends Grid
             ->find(sprintf($this->massActionToggleList, $actionType), Locator::SELECTOR_XPATH)
             ->click();
         if ($acceptAlert) {
-            $element = $this->browser->find('._show[data-role=modal]');
+            $element = $this->browser->find($this->alertModal);
             /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
             $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $element]);
             $modal->acceptAlert();
