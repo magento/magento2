@@ -129,7 +129,8 @@ class Repository implements \Magento\Quote\Api\CartItemRepositoryInterface
         $itemId = $cartItem->getId();
         foreach ($quote->getAllItems() as $quoteItem) {
             if ($itemId == $quoteItem->getId()) {
-                return $this->addProductOptions($productType, $quoteItem);
+                $cartItem = $this->addProductOptions($productType, $quoteItem);
+                return $this->applyCustomOptions($cartItem);
             }
         }
         throw new CouldNotSaveException(__('Could not save quote'));
