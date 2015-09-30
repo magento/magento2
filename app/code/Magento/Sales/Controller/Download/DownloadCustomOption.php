@@ -53,7 +53,6 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
      * @return void|\Magento\Framework\Controller\Result\Forward
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function execute()
     {
@@ -103,6 +102,7 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
      * Ends execution process
      *
      * @return void
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     protected function endExecute() {
         exit(0);
