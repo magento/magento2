@@ -1,0 +1,20 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+/* @var Magento\ProductVideo\Block\Adminhtml\Product\Edit\NewVideo $block */
+?>
+<div id="<?php /* @escapeNotVerified */ echo $block->getNameInLayout();?>" style="display:none">
+    <?php /* @escapeNotVerified */ echo $block->getFormHtml();?>
+    <script>
+        require(["jquery","mage/mage"],function($) {
+            $(function(){
+                $('#new-video').mage(
+                    'newVideoDialog',
+                    <?php /* @escapeNotVerified */ echo $block->getWidgetOptions();?>
+                );
+            });
+        });
+    </script>
+</div>
