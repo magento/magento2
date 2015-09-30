@@ -2343,6 +2343,22 @@ class Item extends AbstractModel implements OrderItemInterface
 
     /**
      * {@inheritdoc}
+     */
+    public function getProductOption()
+    {
+        return $this->getData(self::KEY_PRODUCT_OPTION);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setProductOption(\Magento\Catalog\Api\Data\ProductOptionInterface $productOption)
+    {
+        return $this->setData(self::KEY_PRODUCT_OPTION, $productOption);
+    }
+
+    /**
+     * {@inheritdoc}
      *
      * @return \Magento\Sales\Api\Data\OrderItemExtensionInterface|null
      */
