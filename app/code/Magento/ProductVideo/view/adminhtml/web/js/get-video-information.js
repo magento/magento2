@@ -5,9 +5,10 @@
 /*jshint browser:true jquery:true*/
 require([
         'jquery',
+        'Magento_Ui/js/modal/alert',
         'jquery/ui'
     ],
-    function ($) {
+    function ($, alert) {
         'use strict';
 
         var videoRegister = {
@@ -426,7 +427,9 @@ require([
                 this._videoInformation = null;
                 this.element.trigger(this._ERROR_UPDATE_INFORMATION_TRIGGER, error);
                 this.element.val('');
-                alert('Error: "' + error + '"');
+                alert({
+                    content: 'Error: "' + error + '"'
+                });
             },
 
             /**
