@@ -17,8 +17,8 @@ require([
             /**
              * Checks, if api is already registered
              *
-             * @param api
-             * @returns {boolean}
+             * @param {String} api
+             * @returns {bool}
              */
             isRegistered: function (api) {
                 return this._register[api] !== undefined;
@@ -27,8 +27,8 @@ require([
             /**
              * Checks, if api is loaded
              *
-             * @param api
-             * @returns {boolean}
+             * @param {String} api
+             * @returns {bool}
              */
             isLoaded: function (api) {
                 return this._register[api] !== undefined && this._register[api] === true;
@@ -143,7 +143,8 @@ require([
              * @private
              */
             _create: function () {
-                var self = this;
+                var self = this,
+                YT = window.YT || null;
 
                 this._initialize();
 
@@ -171,6 +172,13 @@ require([
                             videoId: self._code,
                             playerVars: self._params,
                             events: {
+
+                                /**
+                                 * @private
+                                 */
+                                'onReady': function onPlayerReady() {
+                                    self._player.getDuration();
+                                },
 
                                 /**
                                  * State change flag init
@@ -332,7 +340,8 @@ require([
                 var url = this.element.val(),
                     videoInfo,
                     type,
-                    id;
+                    id,
+                    googleapisUrl;
 
                 if (!url) {
                     //this._onRequestError("Video url is undefined");
@@ -382,8 +391,7 @@ require([
                  */
                 function _onVimeoLoaded(data) {
                     var tmp = data[0],
-                        respData,
-                        url;
+                        respData;
 
                     if (data.length < 1) {
                         this._onRequestError('Video not found');
@@ -410,11 +418,11 @@ require([
                 id = videoInfo.id;
 
                 if (type === 'youtube') {
-                    url = 'https://www.googleapis.com/youtube/v3/videos?id=' +
+                    googleapisUrl = 'https://www.googleapis.com/youtube/v3/videos?id=' +
                         id +
                         '&part=snippet,contentDetails,statistics,status&key=' +
                         this.options.youtubeKey;
-                    $.get(url, $.proxy(_onYouTubeLoaded, this));
+                    $.get(googleapisUrl, $.proxy(_onYouTubeLoaded, this));
                 } else if (type === 'vimeo') {
                     $.get('http://vimeo.com/api/v2/video/' + id + '.json', $.proxy(_onVimeoLoaded, this));
                 }
@@ -437,9 +445,9 @@ require([
              */
             _formatYoutubeDuration: function (duration) {
                 var match = duration.match(/PT(\d+H)?(\d+M)?(\d+S)?/),
-                    hours = parseInt(match[1]) || 0,
-                    minutes = parseInt(match[2]) || 0,
-                    seconds = parseInt(match[3]) || 0;
+                    hours = parseInt(match[1], 10) || 0,
+                    minutes = parseInt(match[2], 10) || 0,
+                    seconds = parseInt(match[3], 10) || 0;
 
                 return this._formatVimeoDuration(hours * 3600 + minutes * 60 + seconds);
             },
