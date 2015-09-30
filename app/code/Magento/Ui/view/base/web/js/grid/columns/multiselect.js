@@ -441,7 +441,7 @@ define([
         },
 
         /**
-         * Overrides base method, cause this component
+         * Overrides base method, because this component
          * can't have global field action.
          *
          * @returns {Boolean} False.
