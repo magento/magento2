@@ -12,33 +12,33 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  */
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \Magento\Framework\Session\Config
-     */
+    /** @var \Magento\Framework\Session\Config */
     protected $_model;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $_cacheLimiter = 'private_no_expire';
 
-    /**
-     * @var \Magento\TestFramework\ObjectManager
-     */
+    /** @var \Magento\TestFramework\ObjectManager */
     protected $_objectManager;
 
-    /**
-     * @var string Default value for session.save_path setting
-     */
+    /** @var string Default value for session.save_path setting */
     protected $defaultSavePath;
 
-    /**
-     * @var \Magento\Framework\App\DeploymentConfig | \PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \Magento\Framework\App\DeploymentConfig | \PHPUnit_Framework_MockObject_MockObject */
     protected $deploymentConfigMock;
+
+    /**
+     * Initial PHP setting for session.save_handler
+     *
+     * @var string
+     */
+    private $initSaveHandler;
 
     protected function setUp()
     {
+        $this->initSaveHandler = ini_get('session.save_handler');
+        $this->iniSet('session.save_handler', 'files');
+
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $sessionManager \Magento\Framework\Session\SessionManager */
         $sessionManager = $this->_objectManager->create('Magento\Framework\Session\SessionManager');
@@ -70,6 +70,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
+        $this->iniSet('session.save_handler', $this->initSaveHandler);
         $this->_objectManager->removeSharedInstance('Magento\Framework\Session\Config');
     }
 
