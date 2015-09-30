@@ -444,18 +444,18 @@
                 pd.splice(pd.length - 1, 1);
 
                 jQuery('[data-id="information-dialog-category"]').modal({
-                    modalClass: 'modal-system-messages confirm',
+                    modalClass: 'confirm',
                     title:  jQuery.mage.__('Warning message'),
                     buttons: [{
                         text: 'Cancel',
-                        class: 'action-tertiary',
+                        class: 'action-secondary',
                         click: function () {
                             reRenderTree();
                             this.closeModal();
                         }
                     }, {
                         text: 'Ok',
-                        class: 'action-secondary',
+                        class: 'action-primary',
                         click: function () {
                             (function ($) {
                                 $.ajax({
