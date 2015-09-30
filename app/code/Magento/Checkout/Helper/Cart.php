@@ -41,6 +41,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Checkout\Model\Cart $checkoutCart
      * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -56,6 +57,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      * Retrieve cart instance
      *
      * @return \Magento\Checkout\Model\Cart
+     * @codeCoverageIgnore
      */
     public function getCart()
     {
@@ -134,6 +136,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      * Retrieve shopping cart url
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getCartUrl()
     {
@@ -144,6 +147,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      * Retrieve current quote instance
      *
      * @return \Magento\Quote\Model\Quote
+     * @codeCoverageIgnore
      */
     public function getQuote()
     {
@@ -154,6 +158,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      * Get shopping cart items count
      *
      * @return int
+     * @codeCoverageIgnore
      */
     public function getItemsCount()
     {
@@ -164,6 +169,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      * Get shopping cart summary qty
      *
      * @return int|float
+     * @codeCoverageIgnore
      */
     public function getItemsQty()
     {
@@ -174,6 +180,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      * Get shopping cart items summary (include config settings)
      *
      * @return int|float
+     * @codeCoverageIgnore
      */
     public function getSummaryCount()
     {
@@ -185,6 +192,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      *
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @codeCoverageIgnore
      */
     public function getIsVirtualQuote()
     {
@@ -197,6 +205,7 @@ class Cart extends \Magento\Framework\Url\Helper\Data
      * @param int|string|\Magento\Store\Model\Store $store
      * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
+     * @codeCoverageIgnore
      */
     public function getShouldRedirectToCart($store = null)
     {

@@ -37,9 +37,16 @@
                     display: block;
                 }
             }
-            .action {
-                &.primary {
-                    &:extend(.abs-button-l all);
+        }
+
+        .payment-method-content {
+            > .actions-toolbar {
+                > .primary {
+                    .action {
+                        &.primary {
+                            &:extend(.abs-button-l all);
+                        }
+                    }
                 }
             }
         }
