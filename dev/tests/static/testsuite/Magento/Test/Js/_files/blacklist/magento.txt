@@ -475,9 +475,6 @@ app/code/Magento/Ui/view/base/web/js/lib/view/utils/async.js
 app/code/Magento/Ui/view/base/web/js/lib/view/utils/bindings.js
 app/code/Magento/Ui/view/base/web/js/lib/view/utils/dom-observer.js
 app/code/Magento/Ui/view/base/web/js/lib/view/utils/raf.js
-app/code/Magento/Ui/view/base/web/js/modal/alert.js
-app/code/Magento/Ui/view/base/web/js/modal/confirm.js
-app/code/Magento/Ui/view/base/web/js/modal/modal.js
 app/code/Magento/Ui/view/base/web/js/modal/modalToggle.js
 app/code/Magento/Ui/view/frontend/web/js/model/messageList.js
 app/code/Magento/Ui/view/frontend/web/js/model/messages.js
