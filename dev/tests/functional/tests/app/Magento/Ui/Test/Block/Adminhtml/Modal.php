@@ -7,7 +7,6 @@
 namespace Magento\Ui\Test\Block\Adminhtml;
 
 use Magento\Mtf\Block\Block;
-use Magento\Mtf\Client\Locator;
 
 /**
  * Alert, confirm, prompt block.
@@ -43,7 +42,7 @@ class Modal extends Block
     protected $inputFieldSelector = '[data-role="promptField"]';
 
     /**
-     * Press OK on an alert, confirm, prompt a dialog
+     * Press OK on an alert, confirm, prompt a dialog.
      *
      * @return void
      */
@@ -53,7 +52,7 @@ class Modal extends Block
     }
 
     /**
-     * Press Cancel on an alert, confirm, prompt a dialog
+     * Press Cancel on an alert, confirm, prompt a dialog.
      *
      * @return void
      */
@@ -63,7 +62,7 @@ class Modal extends Block
     }
 
     /**
-     * Press Close on an alert, confirm, prompt a dialog
+     * Press Close on an alert, confirm, prompt a dialog.
      *
      * @return void
      */
@@ -73,7 +72,7 @@ class Modal extends Block
     }
 
     /**
-     * Get the alert dialog text
+     * Get the alert dialog text.
      *
      * @return string
      */
@@ -83,7 +82,7 @@ class Modal extends Block
     }
 
     /**
-     * Set the text to a prompt popup
+     * Set the text to a prompt popup.
      *
      * @param string $text
      * @return void
