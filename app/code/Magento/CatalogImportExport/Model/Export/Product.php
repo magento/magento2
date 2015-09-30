@@ -1044,12 +1044,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 $additionalImageIsDisabled = [];
                 foreach ($multiRawData['mediaGalery'][$productId] as $mediaItem) {
                     $additionalImages[] = $mediaItem['_media_image'];
-                    $additionalImageLabels[] =
-                        str_replace(
-                            ImportProduct::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR,
-                            '&comma;',
-                            $mediaItem['_media_label']
-                        );
+                    $additionalImageLabels[] = $mediaItem['_media_label'];
 
                     if ($mediaItem['_media_is_disabled'] == true) {
                         $additionalImageIsDisabled[] = $mediaItem['_media_image'];
