@@ -34,6 +34,7 @@ class SampleDataResetCommand extends Command
     /**
      * @param Dependency $sampleDataDependency
      * @param \Magento\Framework\Module\Resource $moduleResource
+     * @param \Magento\Framework\Module\PackageInfo $packageInfo
      */
     public function __construct(
         Dependency $sampleDataDependency,

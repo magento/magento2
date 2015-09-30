@@ -46,6 +46,7 @@ class SampleDataDeployCommandTest extends \PHPUnit_Framework_TestCase
         $application = $this->getMock('Composer\Console\Application', [], [], '', false);
         $application->expects($this->atLeastOnce())->method('run')->with($arrayInput, $this->anything())
             ->willReturnCallback(function ($input, $output) {
+                $input->getFirstArgument();
                 $output->writeln('./composer.json has been updated');
             });
 

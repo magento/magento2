@@ -53,6 +53,8 @@ class Dependency
 
     /**
      * Retrieve list of sample data packages from suggests
+     *
+     * @return array
      */
     public function getSampleDataPackages()
     {
