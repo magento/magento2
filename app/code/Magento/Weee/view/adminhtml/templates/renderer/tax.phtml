@@ -50,7 +50,8 @@ $data = ['fptAttribute' => [
     <script data-role="row-template" type="text/x-magento-template">
         <tr id="<?php echo $block->getElement()->getHtmlId() ?>_weee_tax_row_<%- data.index %>" data-role="fpt-item-row">
             <td class="col-website" <?php if (!$block->isMultiWebsites()): ?>style="display: none"<?php endif; ?>>
-                <select name="<?php /* @escapeNotVerified */ echo $block->getElement()->getName() ?>[<%- data.index %>][website_id]"
+                <select id="<?php /* @escapeNotVerified */ echo $block->getElement()->getName() ?>_weee_tax_row_<%- data.index %>_website"
+                        name="<?php /* @escapeNotVerified */ echo $block->getElement()->getName() ?>[<%- data.index %>][website_id]"
                         class="<?php /* @escapeNotVerified */ echo $block->getElement()->getClass() ?> website required-entry" data-role="select-website">
                     <?php foreach ($block->getWebsites() as $_websiteId => $_info): ?>
                     <option value="<?php /* @escapeNotVerified */ echo $_websiteId ?>"><?php /* @escapeNotVerified */ echo $_info['name'] ?><?php if (!empty($_info['currency'])): ?>[<?php /* @escapeNotVerified */ echo $_info['currency'] ?>]<?php endif; ?></option>

@@ -34,6 +34,9 @@
                 <item name="displayArea" xsi:type="string">dataGridFilters</item>
                 <item name="dataScope" xsi:type="string">filters</item>
             </item>
+            <item name="observers" xsi:type="array">
+                <item name="column" xsi:type="string">column</item>
+            </item>
         </argument>
     </filters>
     <filterSearch class="Magento\Ui\Component\Filters\Type\Search">
