@@ -211,6 +211,8 @@ class Webapi extends AbstractWebapi implements SalesRuleInterface
      * @param string $prefix [optional]
      * @param int $indent [optional]
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function convertCondition(array $condition, $prefix = '', $indent = 1)
     {
@@ -233,7 +235,7 @@ class Webapi extends AbstractWebapi implements SalesRuleInterface
                     : null,
                 'value' => $condition[$key]['value'],
                 'conditions' => empty($childCondition) ? null : $childCondition
-            ], [&$this, 'filterCondition']);
+            ], [$this, 'filterCondition']);
 
             $indent += 1;
             $key = "{$prefix}{$indent}";

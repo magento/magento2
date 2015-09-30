@@ -173,7 +173,7 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
         }
         unset($address['default_billing']);
         unset($address['default_shipping']);
-        foreach ($this->mappingData as $key => $field) {
+        foreach (array_values($this->mappingData) as $key) {
             if (isset($address[$key])) {
                 $address[$key] = $this->mappingData[$key][$address[$key]];
             }
