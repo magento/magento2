@@ -149,14 +149,7 @@ class ConfigOptionsListTest extends \PHPUnit_Framework_TestCase
         $this->dbValidator->expects($this->once())->method('checkDatabaseTablePrefix')->willReturn($configDataMock);
         $this->dbValidator->expects($this->once())->method('checkDatabaseConnection')->willReturn($configDataMock);
     }
-
-    public function testDefaultSessionHandler()
-    {
-        $expectedSessionHandler = ini_get('session.save_handler') ?: ConfigOptionsListConstants::SESSION_SAVE_FILES;
-        $options = $this->object->getOptions();
-        $this->assertSame($expectedSessionHandler, $options[1]->getDefault());
-    }
-
+    
     /**
      * @param string $hosts
      * @param bool $expectedError

@@ -69,7 +69,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 $this->validSaveHandlers,
                 ConfigOptionsListConstants::CONFIG_PATH_SESSION_SAVE,
                 'Session save handler',
-                ini_get('session.save_handler') ?: ConfigOptionsListConstants::SESSION_SAVE_FILES
+                ConfigOptionsListConstants::SESSION_SAVE_FILES
             ),
             new SelectConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_DEFINITION_FORMAT,
