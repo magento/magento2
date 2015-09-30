@@ -77,13 +77,13 @@ class JoinProcessorHelper
     }
 
     /**
-     * config getter
+     * returns config data values
      *
-     * @return Config
+     * @return array|mixed|null
      */
-    public function getConfig()
+    public function getConfigData()
     {
-        return $this->config;
+        return $this->config->get();
     }
 
     /**

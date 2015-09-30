@@ -176,9 +176,10 @@ class JoinProcessor implements \Magento\Framework\Api\ExtensionAttribute\JoinPro
      */
     private function getJoinDirectivesForType($extensibleEntityClass)
     {
-        $extensibleInterfaceName = $this->extensionAttributesFactory->getExtensibleInterfaceName($extensibleEntityClass);
+        $extensibleInterfaceName = $this->extensionAttributesFactory
+            ->getExtensibleInterfaceName($extensibleEntityClass);
         $extensibleInterfaceName = ltrim($extensibleInterfaceName, '\\');
-        $config = $this->joinProcessorHelper->getConfig()->get();
+        $config = $this->joinProcessorHelper->getConfigData();
         if (!isset($config[$extensibleInterfaceName])) {
             return [];
         }
