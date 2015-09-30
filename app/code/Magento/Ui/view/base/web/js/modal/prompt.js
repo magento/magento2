@@ -65,11 +65,19 @@ define([
             this._super();
             this.modal.find(this.options.modalContent).append(
                 '<div class="prompt-message">' +
-                    '<input data-role="promptField" class="admin__control-text" type="text"/>' +
+                    '<input data-role="promptField" id="prompt-field" class="admin__control-text" type="text"/>' +
                 '</div>'
             );
             this.modal.find(this.options.modalCloseBtn).off().on('click',  _.bind(this.closeModal, this, false));
             this.openModal();
+        },
+
+        /**
+         * Compile template and append to wrapper.
+         */
+        _renderModal: function () {
+            this._super();
+            this.element.wrap('<label for="prompt-field"></label>');
         },
 
         /**
