@@ -13,10 +13,9 @@ define(
     function (quote, urlBuilder, storage, errorProcessor, customer) {
         'use strict';
 
-        return function (messageContainer) {
+        return function (messageContainer, paymentData) {
             var serviceUrl,
-                payload,
-                paymentData = quote.paymentMethod();
+                payload;
 
             /**
              * Checkout for guest and registered customer.
