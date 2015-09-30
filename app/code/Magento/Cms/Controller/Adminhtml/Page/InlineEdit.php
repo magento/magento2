@@ -63,7 +63,8 @@ class InlineEdit extends \Magento\Backend\App\Action
             try {
                 $pageData = $this->dataProcessor->filter($postItems[$pageId]);
                 $this->validatePost($pageData, $page, $error, $messages);
-                $page->setData(array_merge($page->getData(), $pageData));
+                $extendedPageData = $page->getData();
+                $this->setCmsPageData($page, $extendedPageData, $pageData);
                 $this->pageRepository->save($page);
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $messages[] = $this->getErrorWithPageId($page, $e->getMessage());
@@ -115,5 +116,18 @@ class InlineEdit extends \Magento\Backend\App\Action
     protected function getErrorWithPageId(PageInterface $page, $errorText)
     {
         return '[Page ID: ' . $page->getId() . '] ' . $errorText;
+    }
+
+    /**
+     * Set cms page data
+     *
+     * @param \Magento\Cms\Model\Page $page
+     * @param array $extendedPageData
+     * @param array $pageData
+     * @return void
+     */
+    public function setCmsPageData(\Magento\Cms\Model\Page $page, array $extendedPageData, array $pageData)
+    {
+        $page->setData(array_merge($page->getData(), $extendedPageData, $pageData));
     }
 }
