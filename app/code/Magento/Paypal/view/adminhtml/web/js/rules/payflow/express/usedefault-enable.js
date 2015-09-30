@@ -5,8 +5,10 @@
 define([
     'Magento_Paypal/js/rules/payflow/express/disable'
 ], function (disableExpress) {
-    "use strict";
+    'use strict';
+
     return function ($target, $owner, data) {
+
         $target.find('input[id="' + $target.find(data.enableExpress).attr('id') + '_inherit"]').prop('checked', true);
         disableExpress($target, $owner, data);
         $target.find(data.enableExpress).change();
