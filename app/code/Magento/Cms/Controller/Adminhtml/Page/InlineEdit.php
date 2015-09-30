@@ -10,6 +10,11 @@ use Magento\Cms\Api\PageRepositoryInterface as PageRepository;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Cms\Api\Data\PageInterface;
 
+/**
+ * Cms page grid inline edit controller
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class InlineEdit extends \Magento\Backend\App\Action
 {
     /** @var PostDataProcessor */
