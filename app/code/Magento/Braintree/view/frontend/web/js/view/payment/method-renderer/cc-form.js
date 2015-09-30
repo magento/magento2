@@ -349,6 +349,10 @@ define(
                         }
                     });
                 }
+            },
+
+            getCssClass: function () {
+                return  (this.isCcDetectionEnabled()) ? 'field type detection' : 'field type required';
             }
         });
     }

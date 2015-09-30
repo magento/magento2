@@ -230,6 +230,15 @@ class UpgradeData implements UpgradeDataInterface
 
         if (version_compare($context->getVersion(), '2.0.5', '<')) {
             $this->upgradeHash($setup);
+            $entityAttributes = [
+                'customer_address' => [
+                    'fax' => [
+                        'is_visible' => false,
+                        'is_system' => false,
+                    ],
+                ],
+            ];
+            $this->upgradeAttributes($entityAttributes, $customerSetup);
         }
 
         $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
