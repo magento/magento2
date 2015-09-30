@@ -53,11 +53,8 @@ class Random
                 $str .= $chars[$rand]; // random character in $chars
             }
             fclose($fp);
-        } else {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase("Please make sure you have 'openssl' extension installed")
-            );
         }
+
         return $str;
     }
 
@@ -88,10 +85,6 @@ class Random
             $hex = bin2hex($bytes); // hex() doubles the length of the string
             $offset = abs(hexdec($hex) % $range); // random integer from 0 to $range
             fclose($fp);
-        } else {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                new \Magento\Framework\Phrase("Please make sure you have 'openssl' extension installed")
-            );
         }
 
         return $min + $offset; // random integer from $min to $max

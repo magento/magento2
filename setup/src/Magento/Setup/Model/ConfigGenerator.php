@@ -21,11 +21,6 @@ use Magento\Framework\App\ObjectManagerFactory;
 class ConfigGenerator
 {
     /**
-     * Size of random string generated for store's encryption key
-     */
-    const STORE_KEY_RANDOM_STRING_SIZE = 32;
-
-    /**
      * Maps configuration parameters to array keys in deployment config file
      *
      * @var array
@@ -103,7 +98,7 @@ class ConfigGenerator
             if ($currentKey === null) {
                 $configData->set(
                     ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY,
-                    md5($this->random->getRandomString(self::STORE_KEY_RANDOM_STRING_SIZE))
+                    md5($this->random->getRandomString(ConfigOptionsListConstants::STORE_KEY_RANDOM_STRING_SIZE))
                 );
             }
         }
