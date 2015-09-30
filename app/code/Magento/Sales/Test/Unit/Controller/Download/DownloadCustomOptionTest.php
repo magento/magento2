@@ -6,8 +6,6 @@
 
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-
 /**
  * Class DownloadCustomOptionTest
  * @package Magento\Sales\Controller\Adminhtml\Order
@@ -70,23 +68,21 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
     protected $downloadMock;
 
     /**
-     * @var \Magento\Sales\Controller\Download\DownloadCustomOption
+     * @var \Magento\Sales\Controller\Download\DownloadCustomOption|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectMock;
 
     public function setUp()
     {
-        $objectManagerHelper = new ObjectManagerHelper($this);
-
         $resultForwardFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\ForwardFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $resultForwardMock = $this->getMockBuilder('\Magento\Framework\Controller\Result\Forward')
+        $this->resultForwardMock = $this->getMockBuilder('\Magento\Framework\Controller\Result\Forward')
             ->disableOriginalConstructor()
             ->setMethods(['forward'])
             ->getMock();
-        $resultForwardFactoryMock->expects($this->any())->method('create')->willReturn($resultForwardMock);
+        $resultForwardFactoryMock->expects($this->any())->method('create')->willReturn($this->resultForwardMock);
 
         $this->downloadMock = $this->getMockBuilder('Magento\Sales\Model\Download')
             ->disableOriginalConstructor()
@@ -111,17 +107,16 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
                     ]
                 )
             );
+
         $this->itemOptionMock = $this->getMockBuilder('Magento\Quote\Model\Quote\Item\Option')
             ->disableOriginalConstructor()
             ->setMethods(['load', 'getId', 'getCode', 'getProductId', 'getValue'])
             ->getMock();
-        $this->itemOptionMock->expects($this->once())->method('load')->willReturnSelf();
 
         $this->productOptionMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Option')
             ->disableOriginalConstructor()
             ->setMethods(['load', 'getId', 'getProductId', 'getType'])
             ->getMock();
-        $this->productOptionMock->expects($this->once())->method('load')->willReturnSelf();
 
         $objectManagerMock = $this->getMockBuilder('Magento\Sales\Model\Download')
             ->disableOriginalConstructor()
@@ -149,9 +144,8 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
         $contextMock->expects($this->once())->method('getObjectManager')->willReturn($objectManagerMock);
         $contextMock->expects($this->once())->method('getRequest')->willReturn($requestMock);
 
-
         $this->objectMock = $this->getMockBuilder('Magento\Sales\Controller\Download\DownloadCustomOption')
-            ->setMethods('endExecute')
+            ->setMethods(['endExecute'])
             ->setConstructorArgs(
                 [
                     'context'              => $contextMock,
@@ -161,7 +155,6 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
                 ]
             )
             ->getMock();
-        $this->objectMock->expects($this->once())->method('endExecute')->willReturn(true);
     }
 
     /**
@@ -172,49 +165,56 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute($itemOptionValues, $productOptionValues, $noRouteOccurs)
     {
-        $this->itemOptionMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($itemOptionValues[self::OPTION_ID]);
-        $this->itemOptionMock->expects($this->any())
-            ->method('getCode')
-            ->willReturn($itemOptionValues[self::OPTION_CODE]);
-        $this->itemOptionMock->expects($this->any())
-            ->method('getProductId')
-            ->willReturn($itemOptionValues[self::OPTION_PRODUCT_ID]);
-        $this->itemOptionMock->expects($this->any())
-            ->method('getValue')
-            ->willReturn($itemOptionValues[self::OPTION_VALUE]);
-
-        $this->productOptionMock->expects($this->any())
-            ->method('getId')
-            ->willReturn($productOptionValues[self::OPTION_ID]);
-        $this->productOptionMock->expects($this->any())
-            ->method('getProductId')
-            ->willReturn($productOptionValues[self::OPTION_PRODUCT_ID]);
-        $this->productOptionMock->expects($this->any())
-            ->method('getType')
-            ->willReturn($productOptionValues[self::OPTION_TYPE]);
-
+        if (!empty($itemOptionValues)) {
+            $this->itemOptionMock->expects($this->once())->method('load')->willReturnSelf();
+            $this->itemOptionMock->expects($this->once())
+                ->method('getId')
+                ->willReturn($itemOptionValues[self::OPTION_ID]);
+            $this->itemOptionMock->expects($this->any())
+                ->method('getCode')
+                ->willReturn($itemOptionValues[self::OPTION_CODE]);
+            $this->itemOptionMock->expects($this->any())
+                ->method('getProductId')
+                ->willReturn($itemOptionValues[self::OPTION_PRODUCT_ID]);
+            $this->itemOptionMock->expects($this->any())
+                ->method('getValue')
+                ->willReturn($itemOptionValues[self::OPTION_VALUE]);
+        }
+        if (!empty($productOptionValues)) {
+            $this->productOptionMock->expects($this->once())->method('load')->willReturnSelf();
+            $this->productOptionMock->expects($this->any())
+                ->method('getId')
+                ->willReturn($productOptionValues[self::OPTION_ID]);
+            $this->productOptionMock->expects($this->any())
+                ->method('getProductId')
+                ->willReturn($productOptionValues[self::OPTION_PRODUCT_ID]);
+            $this->productOptionMock->expects($this->any())
+                ->method('getType')
+                ->willReturn($productOptionValues[self::OPTION_TYPE]);
+        }
         if ($noRouteOccurs) {
             $this->resultForwardMock->expects($this->once())->method('forward')->with('noroute')->willReturn(true);
         } else {
             $unserializeResult = [self::SECRET_KEY => self::SECRET_KEY];
+
             $this->unserializeMock->expects($this->once())
                 ->method('unserialize')
                 ->with($itemOptionValues[self::OPTION_VALUE])
                 ->willReturn($unserializeResult);
+
             $this->downloadMock->expects($this->once())
                 ->method('downloadFile')
                 ->with($unserializeResult)
                 ->willReturn(true);
-        }
 
+            $this->objectMock->expects($this->once())->method('endExecute')->willReturn(true);
+        }
         $this->objectMock->execute();
     }
 
     public function executeDataProvider() {
         return [
-            [
+            [ //Good
                 [
                     self::OPTION_ID => self::OPTION_ID,
                     self::OPTION_CODE => self::OPTION_CODE,
@@ -228,7 +228,106 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
                 ],
                 false
             ],
-
+            [ //No Option ID
+                [
+                    self::OPTION_ID => false,
+                    self::OPTION_CODE => self::OPTION_CODE,
+                    self::OPTION_PRODUCT_ID => self::OPTION_PRODUCT_ID,
+                    self::OPTION_VALUE => self::OPTION_VALUE
+                ],
+                [],
+                true
+            ],
+            [ //No Product Option
+                [
+                    self::OPTION_ID => self::OPTION_ID,
+                    self::OPTION_CODE => self::OPTION_CODE,
+                    self::OPTION_PRODUCT_ID => self::OPTION_PRODUCT_ID,
+                    self::OPTION_VALUE => self::OPTION_VALUE
+                ],
+                [],
+                true
+            ],
+            [ //No Product Option ID
+                [
+                    self::OPTION_ID => self::OPTION_ID,
+                    self::OPTION_CODE => self::OPTION_CODE,
+                    self::OPTION_PRODUCT_ID => self::OPTION_PRODUCT_ID,
+                    self::OPTION_VALUE => self::OPTION_VALUE
+                ],
+                [
+                    self::OPTION_ID => null,
+                    self::OPTION_PRODUCT_ID => self::OPTION_PRODUCT_ID,
+                    self::OPTION_TYPE => self::OPTION_TYPE,
+                ],
+                true
+            ],
+            [ //Not Matching Product IDs in Inventory Option
+                [
+                    self::OPTION_ID => self::OPTION_ID,
+                    self::OPTION_CODE => self::OPTION_CODE,
+                    self::OPTION_PRODUCT_ID => 'bad_test_product_ID',
+                    self::OPTION_VALUE => self::OPTION_VALUE
+                ],
+                [
+                    self::OPTION_ID => self::OPTION_ID,
+                    self::OPTION_PRODUCT_ID => self::OPTION_PRODUCT_ID,
+                    self::OPTION_TYPE => self::OPTION_TYPE,
+                ],
+                true
+            ],
+            [ //Not Matching Product IDs in Product Option
+                [
+                    self::OPTION_ID => self::OPTION_ID,
+                    self::OPTION_CODE => self::OPTION_CODE,
+                    self::OPTION_PRODUCT_ID => self::OPTION_PRODUCT_ID,
+                    self::OPTION_VALUE => self::OPTION_VALUE
+                ],
+                [
+                    self::OPTION_ID => self::OPTION_ID,
+                    self::OPTION_PRODUCT_ID => 'bad_test_product_ID',
+                    self::OPTION_TYPE => self::OPTION_TYPE,
+                ],
+                true
+            ],
+            [ //Incorrect Option Type
+                [
+                    self::OPTION_ID => self::OPTION_ID,
+                    self::OPTION_CODE => self::OPTION_CODE,
+                    self::OPTION_PRODUCT_ID => self::OPTION_PRODUCT_ID,
+                    self::OPTION_VALUE => self::OPTION_VALUE
+                ],
+                [
+                    self::OPTION_ID => self::OPTION_ID,
+                    self::OPTION_PRODUCT_ID => self::OPTION_PRODUCT_ID,
+                    self::OPTION_TYPE => 'bad_test_option_type',
+                ],
+                true
+            ],
         ];
+    }
+
+
+    public function testExecuteBadSecretKey()
+    {
+        $this->itemOptionMock->expects($this->once())->method('load')->willReturnSelf();
+        $this->itemOptionMock->expects($this->once())->method('getId')->willReturn(self::OPTION_ID);
+        $this->itemOptionMock->expects($this->any())->method('getCode')->willReturn(self::OPTION_CODE);
+        $this->itemOptionMock->expects($this->any())->method('getProductId')->willReturn(self::OPTION_PRODUCT_ID);
+        $this->itemOptionMock->expects($this->any())->method('getValue')->willReturn(self::OPTION_VALUE);
+
+        $this->productOptionMock->expects($this->once())->method('load')->willReturnSelf();
+        $this->productOptionMock->expects($this->any())->method('getId')->willReturn(self::OPTION_ID);
+        $this->productOptionMock->expects($this->any())->method('getProductId')->willReturn(self::OPTION_PRODUCT_ID);
+        $this->productOptionMock->expects($this->any())->method('getType')->willReturn(self::OPTION_TYPE);
+
+        $this->unserializeMock->expects($this->once())
+            ->method('unserialize')
+            ->with(self::OPTION_VALUE)
+            ->willReturn([self::SECRET_KEY => 'bad_test_secret_key']);
+
+        $this->resultForwardMock->expects($this->once())->method('forward')->with('noroute')->willReturn(true);
+
+        $this->objectMock->execute();
     }
 }
