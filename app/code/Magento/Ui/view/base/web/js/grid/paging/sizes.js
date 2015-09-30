@@ -38,7 +38,7 @@ define([
                     label: 200
                 }
             },
-            statefull: {
+            links: {
                 options: '${ $.storageConfig.path }.options',
                 value: '${ $.storageConfig.path }.value'
             },
