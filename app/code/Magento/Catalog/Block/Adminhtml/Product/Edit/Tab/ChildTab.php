@@ -42,6 +42,9 @@ class ChildTab extends \Magento\Backend\Block\Template
         return $this->tab->toHtml();
     }
 
+    /**
+     * @return string
+     */
     public function getTabId()
     {
         return $this->tab->getTabId();

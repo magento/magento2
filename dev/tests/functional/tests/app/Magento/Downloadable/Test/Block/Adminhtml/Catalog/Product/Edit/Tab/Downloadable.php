@@ -54,6 +54,7 @@ class Downloadable extends Tab
      *
      * @param array|null $fields
      * @param SimpleElement|null $element
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return array
      */
     public function getDataFormTab($fields = null, SimpleElement $element = null)
@@ -78,6 +79,7 @@ class Downloadable extends Tab
      *
      * @param array $fields
      * @param SimpleElement|null $element
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return $this
      */
     public function fillFormTab(array $fields, SimpleElement $element = null)
