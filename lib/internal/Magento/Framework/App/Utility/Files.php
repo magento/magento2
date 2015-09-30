@@ -1361,28 +1361,63 @@ class Files
      * @return array
      * @throws \Exception if any of the patterns don't return any result
      */
-    public static function readLists($globPattern)
+    public function readLists($globPattern)
     {
         $patterns = [];
         foreach (glob($globPattern) as $list) {
-            $patterns = array_merge($patterns, file($list, FILE_IGNORE_NEW_LINES));
+            $patterns = array_merge($patterns, file($list, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
         }
 
         // Expand glob patterns
         $result = [];
+        $incorrectPatterns = [];
         foreach ($patterns as $pattern) {
             if (0 === strpos($pattern, '#')) {
                 continue;
             }
-            /**
-             * Note that glob() for directories will be returned as is,
-             * but passing directory is supported by the tools (phpcpd, phpmd, phpcs)
-             */
-            $files = glob(self::init()->getPathToSource() . '/' . $pattern, GLOB_BRACE);
+            $patternParts = explode(' ', $pattern);
+            $files = [];
+            if (count($patternParts) == 3) {
+                list($componentType, $componentName, $pathPattern) = $patternParts;
+                if ($componentType == '*') {
+                    $componentTypes = [
+                        ComponentRegistrar::MODULE,
+                        ComponentRegistrar::LIBRARY,
+                        ComponentRegistrar::THEME,
+                        ComponentRegistrar::LANGUAGE,
+                    ];
+                } else {
+                    $componentTypes = [$componentType];
+                }
+                foreach ($componentTypes as $type) {
+                    if ($componentName == '*') {
+                        $files = array_merge($files, $this->dirSearch->collectFiles($type, $pathPattern));
+                    } else {
+                        $componentDir = $this->componentRegistrar->getPath($type, $componentName);
+                        if (!empty($componentDir)) {
+                            $files = array_merge($files, glob($componentDir . '/' . $pathPattern, GLOB_BRACE));
+                        }
+                    }
+                }
+            } elseif (count($patternParts) == 1) {
+                /**
+                 * Note that glob() for directories will be returned as is,
+                 * but passing directory is supported by the tools (phpcpd, phpmd, phpcs)
+                 */
+                $files = glob($this->getPathToSource() . '/' . $pattern, GLOB_BRACE);
+            } else {
+                throw new \UnexpectedValueException(
+                    "Incorrect pattern record '$pattern'. Supported formats: "
+                    . "'<componentType> <componentName> <glob_pattern>' or '<glob_pattern>'"
+                );
+            }
             if (empty($files)) {
-                continue;
+                $incorrectPatterns[] = $pattern;
             }
             $result = array_merge($result, $files);
+        }
+        if (!empty($incorrectPatterns)) {
+            throw new \Exception("The following patterns didn't return any result:\n" . join("\n", $incorrectPatterns));
         }
         return $result;
     }

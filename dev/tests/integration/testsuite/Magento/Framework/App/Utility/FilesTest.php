@@ -122,4 +122,26 @@ class FilesTest extends \PHPUnit_Framework_TestCase
             $this->assertEmpty(preg_grep($libTest, $files));
         }
     }
+
+    /**
+     * @magentoComponentsDir Magento/Framework/App/Utility/_files/fixtures
+     */
+    public function testReadLists()
+    {
+        $fixtureDir = str_replace('\\', '/', __DIR__) . '/_files/fixtures/';
+        $expected = [
+            $fixtureDir . 'language/One.php',
+            $fixtureDir . 'language/registration.php',
+            $fixtureDir . 'library/One.php',
+            $fixtureDir . 'module/One.php',
+            $fixtureDir . 'module/registration.php',
+            $fixtureDir . 'theme/One.php',
+        ];
+        $actual = $this->model->readLists(__DIR__ . '/_files/patterns/paths*.txt');
+        sort($actual);
+        foreach ($actual as &$file) {
+            $file = str_replace('\\', '/', $file);
+        }
+        $this->assertSame($expected, $actual);
+    }
 }

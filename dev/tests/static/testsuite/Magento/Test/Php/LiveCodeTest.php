@@ -54,10 +54,10 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
      */
     public static function getWhitelist($fileTypes = ['php'])
     {
-        $directoriesToCheck = file(__DIR__ . '/_files/whitelist/common.txt', FILE_IGNORE_NEW_LINES);
+        $directoriesToCheck = Files::init()->readLists(__DIR__ . '/_files/whitelist/common.txt');
 
         $changedFiles = array_filter(
-            Utility\Files::readLists(__DIR__ . '/_files/changed_files*'),
+            Utility\Files::init()->readLists(__DIR__ . '/_files/changed_files*'),
             function ($path) use ($directoriesToCheck) {
                 foreach ($directoriesToCheck as $directory) {
                     if (strpos($path, BP . '/' . $directory) === 0) {
