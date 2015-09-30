@@ -59,17 +59,23 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
     };
 
     var configurationSectionMessageHandler = (new function(attributeTitle, attributeTab) {
-        this.ref = jQuery(attributeTitle);
+        this.title = jQuery(attributeTitle);
+        this.buttons = jQuery('button', attributeTab);
         this.new = '<?= /* @noEscape */ __('Configurations cannot be created for a standard product with downloadable files.'
              . ' To create configurations, first remove all downloadable files.');?>';
-        this.old = this.ref.text();
+        this.old = this.title.text();
         this.change = function (change) {
             if (change) {
-                this.ref.text(this.new);
-                jQuery(attributeTab).collapsible('deactivate');
+                this.title.text(this.new);
+                this.buttons.hide();
             } else {
-                this.ref.text(this.old);
+                this.title.text(this.old);
+                this.buttons.show();
             }
+        };
+        if (downloadableCheckbox.is(':checked')) {
+            this.title.text(this.new);
+            this.buttons.hide();
         }
     }('[data-role="product-create-configuration-info"]', '[data-tab="super_config"]'));
 
