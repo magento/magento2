@@ -6,6 +6,10 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\Amqp\PublisherInterface" type="Magento\Framework\Amqp\PublisherProxy"/>
+    <preference for="Magento\Framework\Amqp\EnvelopeInterface" type="Magento\Framework\Amqp\Envelope"/>
+
+
     <type name="Magento\Framework\Console\CommandList">
         <arguments>
             <argument name="commands" xsi:type="array">

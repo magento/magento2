@@ -40,7 +40,7 @@ class StartConsumerCommandTest extends \PHPUnit_Framework_TestCase
         $this->command = $this->objectManager->getObject('Magento\Amqp\Console\StartConsumerCommand');
 
         $this->assertEquals(StartConsumerCommand::COMMAND_QUEUE_CONSUMERS_START, $this->command->getName());
-        $this->assertEquals('Start AMQP consumer.', $this->command->getDescription());
+        $this->assertEquals('Start AMQP consumer', $this->command->getDescription());
         /** Exception will be thrown if argument is not declared */
         $this->command->getDefinition()->getArgument(StartConsumerCommand::ARGUMENT_CONSUMER);
         $this->command->getDefinition()->getOption(StartConsumerCommand::OPTION_NUMBER_OF_MESSAGES);
