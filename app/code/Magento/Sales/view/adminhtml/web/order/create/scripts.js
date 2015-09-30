@@ -4,10 +4,12 @@
  */
 define([
     "jquery",
+    'Magento_Ui/js/modal/confirm',
+    'Magento_Ui/js/modal/alert',
     "mage/translate",
     "prototype",
     "Magento_Catalog/catalog/product/composite/configure"
-], function(jQuery){
+], function(jQuery, confirm, alert){
 
     window.AdminOrder = new Class.create();
 
@@ -34,7 +36,7 @@ define([
             this.isOnlyVirtualProduct = false;
             this.excludedPaymentMethods = [];
             this.summarizePrice = true;
-            Event.observe(window, 'load',  (function(){
+            Event.observe(window, 'load', (function(){
                 this.dataArea = new OrderFormArea('data', $(this.getAreaId('data')), this);
                 this.itemsArea = Object.extend(new OrderFormArea('items', $(this.getAreaId('items')), this), {
                     addControlButton: function(button){
@@ -704,11 +706,18 @@ define([
         },
 
         clearShoppingCart : function(confirmMessage){
-            if (confirm(confirmMessage)) {
-                this.collectElementsValue = false;
-                order.sidebarApplyChanges({'sidebar[empty_customer_cart]': 1});
-                this.collectElementsValue = true;
-            }
+            var self = this;
+
+            confirm({
+                content: confirmMessage,
+                actions: {
+                    confirm: function() {
+                        self.collectElementsValue = false;
+                        order.sidebarApplyChanges({'sidebar[empty_customer_cart]': 1});
+                        self.collectElementsValue = true;
+                    }
+                }
+            });
         },
 
         sidebarApplyChanges : function(auxiliaryParams) {
@@ -944,7 +953,9 @@ define([
                     name = messages[i].id.split("_");
                     if(name.length < 2) continue;
                     if (element.name.indexOf("[" + name[1] + "]") != -1 && messages[i].value != "") {
-                        alert("First, clean the Message field in Gift Message form");
+                        alert({
+                            content: "First, clean the Message field in Gift Message form"
+                        });
                         element.checked = true;
                     }
                 }
@@ -991,7 +1002,9 @@ define([
 
         loadAreaResponseHandler : function (response) {
             if (response.error) {
-                alert(response.message);
+                alert({
+                    content: response.message
+                });
             }
             if (response.ajaxExpired && response.ajaxRedirect) {
                 setLocation(response.ajaxRedirect);
@@ -1256,7 +1269,9 @@ define([
                         message = parameters.vatValidationFailedMessage;
                     }
                     if (null === groupActionRequired) {
-                        alert(message);
+                        alert({
+                            content: message
+                        });
                     }
                     else {
                         this.processCustomerGroupChange(
@@ -1299,7 +1314,9 @@ define([
                     this.accountGroupChange();
                 }
             } else if (action === 'inform') {
-                alert(message + '\n' + groupMessage);
+                alert({
+                    content: message + '\n' + groupMessage
+                });
             }
         }
     };
