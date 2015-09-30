@@ -58,6 +58,8 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testViewAction($categoryId, array $expectedHandles, array $expectedContent)
     {
+        $this->markTestSkipped('MAGETWO-43487');
+
         $this->dispatch("catalog/category/view/id/{$categoryId}");
 
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
