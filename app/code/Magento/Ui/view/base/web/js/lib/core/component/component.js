@@ -64,8 +64,11 @@ define([
          * @returns {Component} Chainable.
          */
         initProperties: function () {
+            if (!this.source) {
+                this.source = registry.get(this.provider);
+            }
+
             _.extend(this, {
-                source: registry.get(this.provider),
                 containers: [],
                 _elems: []
             });
@@ -159,7 +162,9 @@ define([
             var regions = this.regions = this.regions || {};
 
             if (!regions[name]) {
-                this.observe.call(regions, name, []);
+                regions[name] = [];
+
+                this.observe.call(regions, name);
             }
 
             return regions[name];
