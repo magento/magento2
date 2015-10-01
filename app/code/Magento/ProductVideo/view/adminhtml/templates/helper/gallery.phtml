@@ -9,8 +9,13 @@ $elementName = $block->getElement()->getName() . '[images]';
 ?>
 <div class="row">
     <div class="add-video-button-container">
-        <button id="add_video_button" title="Add Video" data-role="add-video-button" type="button"
-                class="action-secondary" data-mage-init='{"openVideoModal" : {}}' data-ui-id="widget-button-1">
+        <button id="add_video_button"
+                title="<?php echo $block->escapeHtml(__('Add Video'));?>"
+                data-role="add-video-button"
+                type="button"
+                class="action-secondary"
+                data-mage-init='{"openVideoModal" : {}}'
+                data-ui-id="widget-button-1">
             <span><?php /* @escapeNotVerified */ echo __('Add video') ?></span>
         </button>
     </div>
