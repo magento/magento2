@@ -12,15 +12,7 @@
                 <xs:element name="vars" maxOccurs="unbounded">
                     <xs:complexType>
                         <xs:sequence>
-                            <xs:element name="var" maxOccurs="unbounded">
-                                <xs:complexType>
-                                    <xs:simpleContent>
-                                        <xs:extension base="xs:string">
-                                            <xs:attribute name="name" type="xs:string" use="required"/>
-                                        </xs:extension>
-                                    </xs:simpleContent>
-                                </xs:complexType>
-                            </xs:element>
+                            <xs:element name="var" type="varType" maxOccurs="unbounded"/>
                         </xs:sequence>
                         <xs:attribute name="module" type="xs:string" use="required"/>
                     </xs:complexType>
@@ -38,6 +30,13 @@
             <xs:field xpath="@module"/>
         </xs:unique>
     </xs:element>
+    <xs:complexType name="varType" mixed="true">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="var" type="varType"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="value" type="xs:string"/>
+    </xs:complexType>
     <xs:complexType name="imagesType">
         <xs:sequence>
             <xs:element name="image" maxOccurs="unbounded">

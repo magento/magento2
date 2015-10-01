@@ -694,7 +694,8 @@ define(["jquery", "jquery/ui"], function ($) {
          * @private
          */
         _ProductMediaCallback: function ($this, response) {
-            var $main = ($('body.catalog-product-view').size() > 0)
+            var isProductViewExist = $('body.catalog-product-view').size() > 0,
+                $main = isProductViewExist
                     ? $this.parents('.column.main')
                     : $this.parents('.product-item-info'),
                 $widget = this,
@@ -703,24 +704,38 @@ define(["jquery", "jquery/ui"], function ($) {
                     return e.hasOwnProperty('large') && e.hasOwnProperty('medium') && e.hasOwnProperty('small');
                 };
 
-            if ($widget._ObjectLength(response) > 0) {
-                if (support(response)) {
-                    images.push({large: response.large, medium: response.medium, small: response.small});
-                    if (response.hasOwnProperty('gallery')) {
-                        $.each(response.gallery, function () {
-                            if (!support(this) || response.large == this.large) {
-                                return;
-                            }
-                            images.push({large: this.large, medium: this.medium, small: this.small});
-                        });
-                    }
-                }
+            if ($widget._ObjectLength(response) < 1) {
+                return;
+            }
 
-                if ($('body.catalog-product-view').size() > 0) {
-                    $main.find('[data-role=media-gallery]').gallery('option', 'images', images);
-                } else {
-                    $main.find('.product-image-photo').attr('src', images.shift().medium);
+            if (support(response)) {
+                images.push({
+                    large: response.large,
+                    img: response.medium,
+                    thumb: response.small
+                });
+
+                if (response.hasOwnProperty('gallery')) {
+                    $.each(response.gallery, function () {
+                        if (!support(this) || response.large == this.large) {
+                            return;
+                        }
+                        images.push({
+                            large: this.large,
+                            img: this.medium,
+                            thumb: this.small
+                        });
+                    });
                 }
+            }
+
+            if (isProductViewExist) {
+                $main
+                    .find('[data-gallery-role=gallery-placeholder]')
+                    .data('gallery')
+                    .updateData(images);
+            } else {
+                $main.find('.product-image-photo').attr('src', images.shift().medium);
             }
         },
 
