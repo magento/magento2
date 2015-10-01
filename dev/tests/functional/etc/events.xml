@@ -8,7 +8,12 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="events.xsd">
     <preset name="base">
         <observer class="Magento\Mtf\System\Observer\WebapiResponse">
-            <tag name="webapi_failed"/>
+            <tag name="webapi_failed" />
+        </observer>
+    </preset>
+    <preset name="coverage" extends="base">
+        <observer class="Magento\Mtf\System\Observer\Log">
+            <tag name="execution" />
         </observer>
     </preset>
 </config>
