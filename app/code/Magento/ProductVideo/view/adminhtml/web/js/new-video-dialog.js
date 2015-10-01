@@ -124,8 +124,9 @@ define([
         options: {
             reset: false,
             DOM: {
-                urlField: '',
+                urlField: 'input[name="video_url"]',
                 titleField: 'input[name="video_title"]',
+                fileField: '#file_name',
                 descriptionField: 'textarea[name="video_description"]',
                 thumbnailLocation: '.field-new_video_screenshot_preview .admin__field-control'
             },
@@ -161,6 +162,8 @@ define([
          * Reset
          */
         reset: function () {
+            $(this.options.DOM.fileField).val('');
+            $(this.options.DOM.urlField).val('');
             $(this.options.DOM.titleField).val('');
             $(this.options.DOM.descriptionField).val('');
         }
@@ -918,6 +921,7 @@ define([
                     'src': ''
                 });
                 $(this._previewImage).insertAfter(this._videoPreviewImagePointer);
+                $(this._previewImage).attr('data-role', 'video_preview_image')
             }
 
             return this._previewImage;
