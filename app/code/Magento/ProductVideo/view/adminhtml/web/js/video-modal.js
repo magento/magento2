@@ -10,29 +10,46 @@ define([
     'mage/backend/tree-suggest',
     'mage/backend/validation'
 ], function ($) {
+    'use strict';
 
     $.widget('mage.productGallery',
-
         $.mage.productGallery,
         {
-            _create: function() {
+
+            /**
+             * Fired when windget initialization start
+             * @private
+             */
+            _create: function () {
                 this._bind();
             },
 
-            _bind: function() {
+            /**
+             * Bind events
+             * @private
+             */
+            _bind: function () {
                 $(this.element).on('click', this.showModal.bind(this));
                 $('.gallery.ui-sortable').on('openDialog', $.proxy(this._onOpenDialog, this));
             },
 
-            _onOpenDialog: function(e, imageData)  {
-                if(imageData.media_type != 'external-video') {
+            /**
+             * Open dialog for external video
+             * @private
+             */
+            _onOpenDialog: function (e, imageData) {
+
+                if (imageData['media_type'] !== 'external-video') {
                     return;
                 }
                 this.showModal();
             },
 
-            showModal: function(imageData)
-            {
+            /**
+             * Fired on trigger "openModal"
+             */
+            showModal: function () {
+
                 $('#new-video').modal('openModal');
             }
         }
