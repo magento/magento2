@@ -154,7 +154,7 @@ class Curl extends Conditions implements SalesRuleInterface
             throw new \Exception('Cannot find Sales Rule id');
         }
 
-        return ['id' => $matches[1]];
+        return ['rule_id' => $matches[1]];
     }
 
     /**
