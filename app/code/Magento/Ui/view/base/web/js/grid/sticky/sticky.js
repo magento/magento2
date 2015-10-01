@@ -58,6 +58,7 @@ define([
                 'initListingNode',
                 'initToolbarNode',
                 'initContainerNode',
+                'initColumns',
                 'initStickyListingNode',
                 'initStickyToolbarNode',
                 'initLeftDataGridCap',
@@ -104,7 +105,7 @@ define([
                 return;
             }
             this.listingNode = $(node);
-            this.columns = this.listingNode.find(this.columnSelector);
+            $.async(this.columnSelector, node, this.initColumns);
         },
 
         /**
@@ -153,6 +154,14 @@ define([
             $.async(this.rightDataGridCapSelector,
                 node,
                 this.initRightDataGridCap);
+        },
+
+        /**
+         * Init columns (each time when amount of columns is changed)
+         *
+         */
+        initColumns: function () {
+            this.columns = this.listingNode.find(this.columnSelector);
         },
 
         /**
