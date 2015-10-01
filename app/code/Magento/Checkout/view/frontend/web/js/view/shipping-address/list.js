@@ -8,7 +8,7 @@ define([
     'ko',
     'mageUtils',
     'uiComponent',
-    'Magento_Ui/js/core/renderer/layout',
+    'uiLayout',
     'Magento_Customer/js/model/address-list'
 ], function (_, ko, utils, Component, layout, addressList) {
     'use strict';

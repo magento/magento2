@@ -142,7 +142,7 @@ define([
         /**
          * Triggers event and executes all attached callbacks
          * @param  {String} name
-         * @return {Object} reference to this
+         * @returns {Boolean}
          */
         trigger: function (name) {
             var handlers,

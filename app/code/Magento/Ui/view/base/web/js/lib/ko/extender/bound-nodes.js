@@ -7,7 +7,7 @@ define([
     'ko',
     'underscore',
     'mage/utils/wrapper',
-    'Magento_Ui/js/lib/events',
+    'uiEvents',
     'es6-collections'
 ], function (ko, _, wrapper, Events) {
     'use strict';

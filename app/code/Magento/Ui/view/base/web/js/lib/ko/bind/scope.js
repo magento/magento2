@@ -5,7 +5,7 @@
 /** Creates scope binding and registers in to ko.bindingHandlers object */
 define([
     'ko',
-    'Magento_Ui/js/lib/registry/registry',
+    'uiRegistry',
     'jquery',
     'mage/translate'
 ], function (ko, registry, $) {

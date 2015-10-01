@@ -34,6 +34,7 @@ define([
         var constr = consturctor;
 
         if (!constr) {
+
             /**
              * Default constructor function.
              */

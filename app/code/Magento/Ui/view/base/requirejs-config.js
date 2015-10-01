@@ -9,10 +9,12 @@ var config = {
     },
     map: {
         '*': {
-            uiComponent: 'Magento_Ui/js/lib/component/main',
-            uiRegistry: 'Magento_Ui/js/lib/registry/registry',
-            uiLayout: 'Magento_Ui/js/core/renderer/layout',
-            uiClass: 'Magento_Ui/js/lib/class'
+            uiComponent:    'Magento_Ui/js/lib/core/component/component',
+            uiClass:        'Magento_Ui/js/lib/core/class',
+            uiModel:        'Magento_Ui/js/lib/core/model/model',
+            uiEvents:       'Magento_Ui/js/lib/core/events',
+            uiRegistry:     'Magento_Ui/js/lib/registry/registry',
+            uiLayout:       'Magento_Ui/js/core/renderer/layout'
         }
     }
 };

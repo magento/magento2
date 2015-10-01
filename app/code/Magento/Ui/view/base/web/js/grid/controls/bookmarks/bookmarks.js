@@ -61,8 +61,8 @@ define([
          */
         initialize: function () {
             utils.limit(this, 'checkState', 5);
-            utils.limit(this, 'saveSate', 2000);
-            utils.limit(this, '_defaultPolyfill', 2000);
+            utils.limit(this, 'saveState', 2000);
+            utils.limit(this, '_defaultPolyfill', 3000);
 
             this._super()
                 .restore()
@@ -567,8 +567,8 @@ define([
          * Listener of the activeIndex property.
          */
         onStateChange: function () {
-            this.saveState()
-                .checkState();
+            this.checkState();
+            this.saveState();
 
             if (!this.defaultDefined) {
                 this._defaultPolyfill();
