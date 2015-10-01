@@ -930,11 +930,11 @@
               </elementProp>
               <elementProp name="Content-Type" elementType="Header">
                 <stringProp name="Header.name">Content-Type</stringProp>
-                <stringProp name="Header.value">application/json; charset=UTF-8&#xd;</stringProp>
+                <stringProp name="Header.value">application/json; charset=UTF-8</stringProp>
               </elementProp>
               <elementProp name="X-Requested-With" elementType="Header">
                 <stringProp name="Header.name">X-Requested-With</stringProp>
-                <stringProp name="Header.value">XMLHttpRequest&#xd;</stringProp>
+                <stringProp name="Header.value">XMLHttpRequest</stringProp>
               </elementProp>
               <elementProp name="Accept" elementType="Header">
                 <stringProp name="Header.name">Accept</stringProp>
@@ -996,7 +996,7 @@
               </elementProp>
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">Content-Type</stringProp>
-                <stringProp name="Header.value">application/json; charset=UTF-8 </stringProp>
+                <stringProp name="Header.value">application/json; charset=UTF-8</stringProp>
               </elementProp>
               <elementProp name="" elementType="Header">
                 <stringProp name="Header.name">Accept</stringProp>
