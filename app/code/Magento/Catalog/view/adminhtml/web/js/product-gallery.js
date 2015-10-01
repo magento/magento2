@@ -52,21 +52,26 @@ define([
                 setPosition: '_setPosition',
                 resort: '_resort',
                 'mouseup [data-role=delete-button]': function (event) {
+                    var $imageContainer;
+
                     event.preventDefault();
-                    var $imageContainer = $(event.currentTarget).closest(this.options.imageSelector);
+                    $imageContainer = $(event.currentTarget).closest(this.options.imageSelector);
                     this.element.find('[data-role=dialog]').trigger('close');
                     this.element.trigger('removeItem', $imageContainer.data('imageData'));
                 },
                 'mouseup [data-role=make-base-button]': function (event) {
+                    var $imageContainer,
+                        imageData;
+
                     event.preventDefault();
                     event.stopImmediatePropagation();
-                    var $imageContainer = $(event.currentTarget).closest(this.options.imageSelector);
-                    var imageData = $imageContainer.data('imageData');
+                    $imageContainer = $(event.currentTarget).closest(this.options.imageSelector);
+                    imageData = $imageContainer.data('imageData');
                     this.setBase(imageData);
                 }
             };
-            this._on(events);
 
+            this._on(events);
             this.element.sortable({
                 distance: 8,
                 items: this.options.imageSelector,
@@ -90,7 +95,7 @@ define([
                     return el;
                 }),
                 function (el) {
-                    return el.value == baseImage.value;
+                    return el.value === baseImage.value;
                 }
             );
             var isImageOpened = this.findElement(imageData).hasClass('active');
@@ -117,7 +122,7 @@ define([
          */
         findElement: function (data) {
             return this.element.find(this.options.imageSelector).filter(function () {
-                return $(this).data('imageData').file == data.file;
+                return $(this).data('imageData').file === data.file;
             }).first();
         },
 
@@ -128,31 +133,38 @@ define([
          * @private
          */
         _addItem: function (event, imageData) {
-            var count = this.element.find(this.options.imageSelector).length;
+            var count = this.element.find(this.options.imageSelector).length,
+                element;
+
             imageData = $.extend({
                 file_id: Math.random().toString(33).substr(2, 18),
                 disabled: 0,
                 position: count + 1
             }, imageData);
 
-            var element = this.imgTmpl({
+            element = this.imgTmpl({
                 data: imageData
             });
 
             element = $(element).data('imageData', imageData);
+            if(imageData.subclass) {
+                element.addClass(imageData.subclass);
+            }
             if (count === 0) {
                 element.prependTo(this.element);
             } else {
                 element.insertAfter(this.element.find(this.options.imageSelector + ':last'));
             }
 
-            if (!this.options.initialized && this.options.images.length === 0 ||
-                this.options.initialized && this.element.find(this.options.imageSelector + ':not(.removed)').length == 1
+            if (!this.options.initialized &&
+                this.options.images.length === 0 ||
+                this.options.initialized &&
+                this.element.find(this.options.imageSelector + ':not(.removed)').length === 1
             ) {
                 this.setBase(imageData);
             }
             $.each(this.options.types, $.proxy(function (index, image) {
-                if (imageData.file == image.value) {
+                if (imageData.file === image.value) {
                     this.element.trigger('setImageType', {
                         type: image.code,
                         imageData: imageData
@@ -269,6 +281,8 @@ define([
             events['mouseup ' + this.options.imageSelector] = function (event) {
                 if (!$(event.currentTarget).is('.ui-sortable-helper')) {
                     $(event.currentTarget).addClass('active');
+                    var itemId = $(event.currentTarget).find('input')[0].name.match(/\[([^\]]*)\]/g)[2];
+                    $('#item_id').val(itemId);
                     this._showDialog($(event.currentTarget).data('imageData'));
                 }
             };
@@ -311,6 +325,12 @@ define([
          */
         _showDialog: function (imageData) {
             var $imageContainer = this.findElement(imageData);
+
+            if ($imageContainer.find('input[name*="media_type"]').val() == 'external-video') {
+                $('#new-video').modal('openModal');
+                return;
+            }
+
             var dialogElement = $imageContainer.data('dialog');
 
             if ($imageContainer.is('.removed') || (dialogElement && dialogElement.is(':visible'))) {
