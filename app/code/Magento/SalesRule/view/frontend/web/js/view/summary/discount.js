@@ -16,7 +16,7 @@ define(
             },
             totals: quote.getTotals(),
             isDisplayed: function() {
-                return this.isFullMode() && this.getPureValue() != 0;
+                return this.getPureValue() != 0;
             },
             getCouponCode: function() {
                 if (!this.totals()) {
