@@ -25,6 +25,7 @@ interface MethodInterface
      *
      * @return string
      * @api
+     * @deprecated
      */
     public function getFormBlockType();
 
@@ -200,6 +201,7 @@ interface MethodInterface
      *
      * @return string
      * @api
+     * @deprecated
      */
     public function getInfoBlockType();
 
@@ -209,6 +211,7 @@ interface MethodInterface
      * @return InfoInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      * @api
+     * @deprecated
      */
     public function getInfoInstance();
 
@@ -218,6 +221,7 @@ interface MethodInterface
      * @param InfoInterface $info
      * @return void
      * @api
+     * @deprecated
      */
     public function setInfoInstance(InfoInterface $info);
 
@@ -331,6 +335,7 @@ interface MethodInterface
      * @param array|\Magento\Framework\DataObject $data
      * @return $this
      * @api
+     * @deprecated
      */
     public function assignData($data);
 
@@ -360,6 +365,7 @@ interface MethodInterface
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @api
+     * @deprecated
      */
     public function initialize($paymentAction, $stateObject);
 
