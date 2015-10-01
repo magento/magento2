@@ -208,14 +208,14 @@ define([
 
         /**
          * Set focus to element.
-         * @param {string} position - can be "start" and "end"
+         * @param {String} position - can be "start" and "end"
          *      positions.
          *      If position is "end" - sets focus to first
          *      focusable element in modal window scope.
          *      If position is "start" - sets focus to last
          *      focusable element in modal window scope
          *
-         *  @param {string} type - can be "opened" or false
+         *  @param {String} type - can be "opened" or false
          *      If type is "opened" - looks to "this.options.focus"
          *      property and sets focus
          */

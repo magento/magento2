@@ -20,7 +20,7 @@ define([
             expect(element.trigger('openModal')).toBe(element);
             expect(element.trigger('closeModal')).toBe(element);
         });
-        it('Integration: modal created on page', function(){
+        it('Integration: modal created on page', function () {
             expect(confirm.length).toEqual(1);
         });
     });
