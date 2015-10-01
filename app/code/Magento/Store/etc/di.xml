@@ -277,6 +277,7 @@
     </type>
     <type name="Magento\Framework\App\FrontController">
         <plugin name="install" type="Magento\Framework\Module\Plugin\DbStatusValidator" sortOrder="40"/>
+        <plugin name="storeCookieValidate" type="Magento\Store\Model\Plugin\StoreCookie" sortOrder="10"/>
     </type>
     <type name="Magento\Framework\Module\Plugin\DbStatusValidator">
         <arguments>
