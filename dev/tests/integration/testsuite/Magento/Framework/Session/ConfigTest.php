@@ -27,18 +27,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\DeploymentConfig | \PHPUnit_Framework_MockObject_MockObject */
     protected $deploymentConfigMock;
 
-    /**
-     * Initial PHP setting for session.save_handler
-     *
-     * @var string
-     */
-    private $initSaveHandler;
-
     protected function setUp()
     {
-        $this->initSaveHandler = ini_get('session.save_handler');
-        $this->iniSet('session.save_handler', 'files');
-
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var $sessionManager \Magento\Framework\Session\SessionManager */
         $sessionManager = $this->_objectManager->create('Magento\Framework\Session\SessionManager');
@@ -48,7 +38,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->deploymentConfigMock = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $this->deploymentConfigMock->expects($this->at(0))
             ->method('get')
-            ->with(Config::PARAM_SESSION_SAVE_METHOD, 'files')
+            ->with($this->equalTo(Config::PARAM_SESSION_SAVE_METHOD), $this->anything())
             ->will($this->returnValue('files'));
         $this->deploymentConfigMock->expects($this->at(1))
             ->method('get')
@@ -67,13 +57,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->get('Magento\Framework\Filesystem\DirectoryList')
             ->getPath(DirectoryList::SESSION);
     }
-
-    protected function tearDown()
-    {
-        $this->iniSet('session.save_handler', $this->initSaveHandler);
-        $this->_objectManager->removeSharedInstance('Magento\Framework\Session\Config');
-    }
-
+    
     /**
      * @magentoAppIsolation enabled
      */
