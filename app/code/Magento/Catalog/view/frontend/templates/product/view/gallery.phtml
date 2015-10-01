@@ -34,20 +34,19 @@
                     "height": <?php /* @escapeNotVerified */ echo $block->getImageAttribute('product_page_image_medium', 'height')
                         ?: $block->getImageAttribute('product_page_image_medium', 'width'); ?>,
                     "transitionduration": <?php /* @escapeNotVerified */  echo $block->getVar("gallery/transition/duration"); ?>,
-                    "transition": <?php /* @escapeNotVerified */  echo $block->getVar("gallery/transition/effect"); ?>,
-                    "navarrows": <?php /* @escapeNotVerified */  echo $block->getVar("gallery/navarrows"); ?>,
-                    "navtype": <?php /* @escapeNotVerified */  echo $block->getVar("gallery/navtype"); ?>,
-                    "navdir": <?php /* @escapeNotVerified */  echo $block->getVar("gallery/navdir"); ?>,
-
+                    "transition": "<?php /* @escapeNotVerified */  echo $block->getVar("gallery/transition/effect"); ?>",
+                    "navarrows": "<?php /* @escapeNotVerified */  echo $block->getVar("gallery/navarrows"); ?>",
+                    "navtype": "<?php /* @escapeNotVerified */  echo $block->getVar("gallery/navtype"); ?>",
+                    "navdir": "<?php /* @escapeNotVerified */  echo $block->getVar("gallery/navdir"); ?>"
                 },
                 "fullscreen": {
-                    "nav": "<?php/* @escapeNotVerified */  echo $block->getVar("gallery/fullscreen/navigation"); ?>",
-                    "loop": <?php/* @escapeNotVerified */  echo $block->getVar("gallery/fullscreen/loop"); ?>,
-                    "navdir": "<?php/* @escapeNotVerified */  echo $block->getVar("gallery/fullscreen/navdir"); ?>",
-                    "arrows": <?php/* @escapeNotVerified */  echo $block->getVar("gallery/fullscreen/arrows"); ?>,
-                    "showCaption": <?php/* @escapeNotVerified */  echo $block->getVar("gallery/fullscreen/caption"); ?>,
-                    "transitionduration": <?php/* @escapeNotVerified */  echo $block->getVar("gallery/fullscreen/transition/duration"); ?>,
-                    "transition": "<?php/* @escapeNotVerified */  echo $block->getVar("gallery/fullscreen/transition/effect"); ?>"
+                    "nav": "<?php /* @escapeNotVerified */  echo $block->getVar("gallery/fullscreen/navigation"); ?>",
+                    "loop": <?php /* @escapeNotVerified */  echo $block->getVar("gallery/fullscreen/loop"); ?>,
+                    "navdir": "<?php /* @escapeNotVerified */  echo $block->getVar("gallery/fullscreen/navdir"); ?>",
+                    "arrows": <?php /* @escapeNotVerified */  echo $block->getVar("gallery/fullscreen/arrows"); ?>,
+                    "showCaption": <?php /* @escapeNotVerified */  echo $block->getVar("gallery/fullscreen/caption"); ?>,
+                    "transitionduration": <?php /* @escapeNotVerified */  echo $block->getVar("gallery/fullscreen/transition/duration"); ?>,
+                    "transition": "<?php /* @escapeNotVerified */  echo $block->getVar("gallery/fullscreen/transition/effect"); ?>"
                 }
                 "breakpoints": <?php /* @escapeNotVerified */ echo $block->getBreakpoints(); ?>
             }
