@@ -127,7 +127,7 @@ define([
                         type: 'slide',
                         opened: function () {
                             $(document).off().on('click', '#productGrid_massaction-form button', function () {
-                                $('.import-custom-options-apply-button').trigger('click', 'massActionTrigger');
+                                $('. import-custom-options-apply-button').trigger('click', 'massActionTrigger');
                             });
                         },
                         buttons: [{
@@ -146,7 +146,18 @@ define([
                                 if (request.length === 0) {
                                     if (!massActionTrigger) {
                                         alert({
-                                            content: $.mage.__('Please select items.')
+                                            content: $.mage.__('Please select items.'),
+                                            buttons: [{
+                                                text: $.mage.__('OK'),
+                                                class: 'action-primary action-accept',
+
+                                                /**
+                                                 * Click handler.
+                                                 */
+                                                click: function () {
+                                                    this.closeModal(true);
+                                                }
+                                            }]
                                         });
                                     }
 
