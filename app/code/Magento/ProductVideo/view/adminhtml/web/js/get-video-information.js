@@ -36,8 +36,8 @@ require([
 
             /**
              * Register new video api
-             * @param api
-             * @param loaded
+             * @param {String} api
+             * @param {bool} loaded
              */
             register: function (api, loaded) {
                 loaded = loaded || false;
@@ -46,6 +46,10 @@ require([
         };
 
         $.widget('mage.productVideoLoader', {
+
+            /**
+             * @private
+             */
             _create: function () {
                 switch (this.element.data('type')) {
                     case 'youtube':
@@ -401,12 +405,12 @@ require([
                     tmp = data[0];
                     respData = {
                         duration: this._formatVimeoDuration(tmp.duration),
-                        channel: tmp.user_name,
-                        channelId: tmp.user_url,
-                        uploaded: tmp.upload_date,
+                        channel: tmp['user_name'],
+                        channelId: tmp['user_url'],
+                        uploaded: tmp['upload_date'],
                         title: tmp.title,
                         description: tmp.description.replace(/(&nbsp;|<([^>]+)>)/ig, ''),
-                        thumbnail: tmp.thumbnail_large,
+                        thumbnail: tmp['thumbnail_large'],
                         videoId: videoInfo.id,
                         videoProvider: videoInfo.type
                     };
