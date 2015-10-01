@@ -330,6 +330,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $productData['media_gallery_entries'] = [
             [
                 'position' => 1,
+                'media_type' => 'image',
                 'disabled' => true,
                 'label' => 'tiny1',
                 'types' => [],
@@ -341,6 +342,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             ],
             [
                 'position' => 2,
+                'media_type' => 'image',
                 'disabled' => false,
                 'label' => 'tiny2',
                 'types' => ['image', 'small_image'],
@@ -363,6 +365,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             [
                 'label' => 'tiny1',
                 'position' => 1,
+                'media_type' => 'image',
                 'disabled' => true,
                 'types' => [],
                 'file' => '/t/i/' . $filename1,
@@ -370,6 +373,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
             [
                 'label' => 'tiny2',
                 'position' => 2,
+                'media_type' => 'image',
                 'disabled' => false,
                 'types' => ['image', 'small_image'],
                 'file' => '/t/i/' . $filename2,
@@ -380,6 +384,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $response['media_gallery_entries'] = [
             [
                 'id' => $id,
+                'media_type' => 'image',
                 'label' => 'tiny1_new_label',
                 'position' => 1,
                 'disabled' => false,
@@ -391,15 +396,14 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $mediaGalleryEntries = $response['media_gallery_entries'];
         $this->assertEquals(1, count($mediaGalleryEntries));
         unset($mediaGalleryEntries[0]['id']);
-        $expectedValue = [
-            [
-                'label' => 'tiny1_new_label',
-                'position' => 1,
-                'disabled' => false,
-                'types' => ['image', 'small_image'],
-                'file' => '/t/i/' . $filename1,
-            ]
-        ];
+        $expectedValue = [[
+            'label' => 'tiny1_new_label',
+            'media_type' => 'image',
+            'position' => 1,
+            'disabled' => false,
+            'types' => ['image', 'small_image'],
+            'file' => '/t/i/' . $filename1,
+        ]];
         $this->assertEquals($expectedValue, $mediaGalleryEntries);
         //don't set the media_gallery_entries field, existing entry should not be touched
         unset($response['media_gallery_entries']);
