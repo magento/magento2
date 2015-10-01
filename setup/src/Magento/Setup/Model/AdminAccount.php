@@ -9,7 +9,7 @@ namespace Magento\Setup\Model;
 use Magento\Authorization\Model\Acl\Role\Group;
 use Magento\Authorization\Model\Acl\Role\User;
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Framework\Math\Random;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Setup\Module\Setup;
 
 class AdminAccount
@@ -39,23 +39,24 @@ class AdminAccount
     private $data;
 
     /**
-     * Random Generator
-     *
-     * @var \Magento\Framework\Math\Random
+     * @var EncryptorInterface
      */
-    private $random;
+    private $encryptor;
 
     /**
      * Default Constructor
      *
      * @param Setup $setup
-     * @param Random $random
+     * @param EncryptorInterface $encryptor
      * @param array $data
      */
-    public function __construct(Setup $setup, Random $random, array $data)
-    {
+    public function __construct(
+        Setup $setup,
+        EncryptorInterface $encryptor,
+        array $data
+    ) {
         $this->setup  = $setup;
-        $this->random = $random;
+        $this->encryptor = $encryptor;
         $this->data = $data;
     }
 
@@ -66,8 +67,7 @@ class AdminAccount
      */
     protected function generatePassword()
     {
-        $salt = $this->random->getRandomString(32);
-        return md5($salt . $this->data[self::KEY_PASSWORD]) . ':' . $salt;
+        return $this->encryptor->getHash($this->data[self::KEY_PASSWORD], true);
     }
 
     /**
