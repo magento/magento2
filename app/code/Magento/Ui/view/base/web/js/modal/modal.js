@@ -231,14 +231,12 @@ define([
                 } else {
                     this.modal.find(this.options.focusableScope).focus();
                 }
-            } else {
-                if (position === 'end') {
-                    this.modal.find(this.options.modalCloseBtn).focus();
-                } else if (position === 'start') {
-                    infelicity = 2; //Constant for find last focusable element
-                    focusableElements = this.modal.find(':focusable');
-                    focusableElements.eq(focusableElements.length - infelicity).focus();
-                }
+            } else if (position === 'end') {
+                this.modal.find(this.options.modalCloseBtn).focus();
+            } else if (position === 'start') {
+                infelicity = 2; //Constant for find last focusable element
+                focusableElements = this.modal.find(':focusable');
+                focusableElements.eq(focusableElements.length - infelicity).focus();
             }
         },
 
@@ -264,7 +262,7 @@ define([
          * Switcher for focus event.
          * @param {Object} e - event
          */
-        _tabSwitcher: function(e){
+        _tabSwitcher: function (e) {
             var target = $(e.target);
 
             if (target.is(this.options.focusableStart)) {
