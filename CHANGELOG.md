@@ -1,3 +1,30 @@
+1.0.0-beta4
+=============
+* Fixed bugs:
+    * Fixed an issue with Paypal WebAPI exception error when placing order within PayPal Payments Pro
+    * Fixed an issue with wrong links on multi website store
+    * Fixed an issue where unable to set a date limit on a promotion for 2016 onwards
+    * Fixed an issue with saving promotions
+    * Fixed an issue with option to pay with Paypal account for Payments Pro when configured on website level
+    * Fixed an issue with search results after filtering
+    * Fixed an issue with catalog product import
+    * Fixed an issue with configurable product special price
+    * Fixed an issue where unable to change type for color and size swatches
+    * Fixed an issue with selected filters on layered navigation
+    * Fixed an issue with related products block
+    * Fixed an issue with product alert for out of stock
+    * Fixed an issue with product selection in Products->Catalog results in no products selected
+    * Fixed an issue where unable to remove item from Minicart
+    * Fixed an issue where unable to deploy to production without downtime
+    * Fixed an issue with minicart inconsistent behavior between http and https
+    * Fixed an issue with CMS page preview on frontend
+* Search improvements:    
+    * Improve Catalog Performance. Quick Search
+* GitHub issues and requests:
+    * [#1705](https://github.com/magento/magento2/issues/1705) -- Remove item from Minicart does not work
+    * [#1704](https://github.com/magento/magento2/issues/1704) -- Minicart inconsistant behavior between http and https
+      
+
 1.0.0-beta3
 =============
 * Fixed bugs:
