@@ -170,10 +170,8 @@ class ItemRepository implements OrderItemRepositoryInterface
      */
     public function save(OrderItemInterface $entity)
     {
-        // TODO:
-
-//        $request = $this->getBuyRequest($entity);
-//        $entity->setProductOption($request->toArray());
+        $request = $this->getBuyRequest($entity);
+        $entity->setProductOptions(serialize($request->toArray()));
 
         $this->metadata->getMapper()->save($entity);
         $this->registry[$entity->getEntityId()] = $entity;
@@ -244,19 +242,23 @@ class ItemRepository implements OrderItemRepositoryInterface
      */
     protected function getBuyRequest(OrderItemInterface $entity)
     {
-        $request = $this->objectFactory->create(['qty' => $entity->getQty()]);
+        $request = $this->objectFactory->create(['qty' => $entity->getQtyOrdered()]);
 
         $productType = $entity->getProductType();
         if (isset($this->processorPool[$productType])) {
-            $requestUpdate = $this->processorPool[$productType]
-                ->convertToBuyRequest($entity->getProductOption());
-            $request->addData($requestUpdate->getData());
+            $productOption = $entity->getProductOption();
+            if ($productOption) {
+                $requestUpdate = $this->processorPool[$productType]->convertToBuyRequest($productOption);
+                $request->addData($requestUpdate->getData());
+            }
         }
 
         if (isset($this->processorPool['custom_options'])) {
-            $requestUpdate = $this->processorPool['custom_options']
-                ->convertToBuyRequest($entity->getProductOption());
-            $request->addData($requestUpdate->getData());
+            $productOption = $entity->getProductOption();
+            if ($productOption) {
+                $requestUpdate = $this->processorPool['custom_options']->convertToBuyRequest($productOption);
+                $request->addData($requestUpdate->getData());
+            }
         }
 
         return $request;
