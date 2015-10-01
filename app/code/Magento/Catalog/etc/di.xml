@@ -511,7 +511,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Config\Reader\Xsd\Media\TypeDataExtractorPool">
+    <type name="Magento\Framework\View\Xsd\Media\TypeDataExtractorPool">
         <arguments>
             <argument name="extractors" xsi:type="array">
                 <item name="images" xsi:type="object">Magento\Catalog\Model\ImageExtractor</item>

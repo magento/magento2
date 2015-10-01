@@ -5,29 +5,36 @@
  */
 namespace Magento\ProductVideo\Model;
 
-class VideoExtractor implements \Magento\Framework\Config\Reader\Xsd\Media\TypeDataExtractorInterface
+use Magento\ProductVideo\Helper\Media;
+
+class VideoExtractor implements \Magento\Framework\View\Xsd\Media\TypeDataExtractorInterface
 {
+    /**
+     * Media Entry type code
+     */
+    const MEDIA_TYPE_CODE = 'image';
+
     /**
      * Extract configuration data of videos from the DOM structure
      *
      * @param \DOMElement $mediaNode
-     * @param $mediaParentTag
+     * @param string $mediaParentTag
      * @return array
      */
     public function process(\DOMElement $mediaNode, $mediaParentTag)
     {
         $result = [];
         $moduleNameVideo = $mediaNode->getAttribute('module');
-        foreach ($mediaNode->getElementsByTagName('video') as $node) {
+        foreach ($mediaNode->getElementsByTagName(self::MEDIA_TYPE_CODE) as $node) {
             $videoId = $node->getAttribute('id');
-            $result[$mediaParentTag][$moduleNameVideo]['videos'][$videoId]['type']
+            $result[$mediaParentTag][$moduleNameVideo][Media::MEDIA_TYPE_CONFIG_NODE][$videoId]['type']
                 = $node->getAttribute('type');
             foreach ($node->childNodes as $attribute) {
                 if ($attribute->nodeType != XML_ELEMENT_NODE) {
                     continue;
                 }
                 $nodeValue = $attribute->nodeValue;
-                $result[$mediaParentTag][$moduleNameVideo]['videos'][$videoId][$attribute->tagName]
+                $result[$mediaParentTag][$moduleNameVideo][Media::MEDIA_TYPE_CONFIG_NODE][$videoId][$attribute->tagName]
                     = $nodeValue;
             }
         }

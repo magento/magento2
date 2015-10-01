@@ -14,7 +14,11 @@ use Magento\Framework\App\Helper\AbstractHelper;
  */
 class Image extends AbstractHelper
 {
+    /**
+     * Media config node
+     */
     const MEDIA_TYPE_CONFIG_NODE = 'images';
+
     /**
      * Current model
      *
@@ -426,13 +430,14 @@ class Image extends AbstractHelper
 
     /**
      * Get Placeholder
+     *
      * @param null|string $placeholder
      * @return string
      */
     public function getPlaceholder($placeholder = null)
     {
         if (!$this->_placeholder) {
-            $placeholder = $placeholder?: $this->_getModel()->getDestinationSubdir();
+            $placeholder = $placeholder ? : $this->_getModel()->getDestinationSubdir();
             $this->_placeholder = 'Magento_Catalog::images/product/placeholder/' . $placeholder . '.jpg';
         }
         return $this->_placeholder;
@@ -811,7 +816,7 @@ class Image extends AbstractHelper
      */
     public function getHeight()
     {
-        return $this->getAttribute('height') ?: $this->getAttribute('width');
+        return $this->getAttribute('height') ? : $this->getAttribute('width');
     }
 
     /**

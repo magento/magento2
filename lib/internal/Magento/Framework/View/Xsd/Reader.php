@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Config\Reader\Xsd;
+namespace Magento\Framework\View\Xsd;
 
 use Magento\Framework\Filesystem;
 use Magento\Framework\Config\FileIteratorFactory;
@@ -37,23 +37,32 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
     protected $searchPattern;
 
     /**
+     * @var string
+     */
+    protected $searchFilesPattern;
+
+    /**
      * @param Filesystem $filesystem
      * @param FileIteratorFactory $iteratorFactory
      * @param string $fileName
      * @param string $defaultScope
+     * @param string $searchPattern
+     * @param string $searchFilesPattern
      */
     public function __construct(
         Filesystem $filesystem,
         FileIteratorFactory $iteratorFactory,
         $fileName,
         $defaultScope,
-        $searchPattern
+        $searchPattern,
+        $searchFilesPattern
     ) {
         $this->directoryRead = $filesystem->getDirectoryRead(DirectoryList::MODULES);
         $this->iteratorFactory = $iteratorFactory;
         $this->fileName = $fileName;
         $this->defaultScope = $defaultScope;
         $this->searchPattern = $searchPattern;
+        $this->searchFilesPattern = $searchFilesPattern;
     }
 
     /**
@@ -101,7 +110,7 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
     public function readXsdFiles($fileList, $baseXsd = null)
     {
         $baseXsd = new \DOMDocument();
-        $baseXsd->load(__DIR__ . '/../../etc/' . $this->fileName);
+        $baseXsd->load(__DIR__ . $this->searchFilesPattern . $this->fileName);
         $configMerge = null;
         foreach ($fileList as $key => $content) {
             try {
@@ -161,7 +170,7 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
      */
     protected function createDomInstance($source)
     {
-        $domInstance = new \DOMDocument("1.0", 'UTF-8');
+        $domInstance = new \DOMDocument('1.0', 'UTF-8');
         $domInstance->formatOutput = true;
         $domInstance->loadXML($source);
         $domInstance->preserveWhiteSpace = true;
@@ -231,5 +240,4 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
 
         return $domParent;
     }
-
 }
