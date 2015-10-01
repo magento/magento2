@@ -396,6 +396,11 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      */
     const PARENT_ITEM = 'parent_item';
 
+    /**
+     * Product Option
+     */
+    const KEY_PRODUCT_OPTION = 'product_option';
+
 
     /**
      * Gets the additional data for the order item.
@@ -852,21 +857,6 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * @return int|null Product ID.
      */
     public function getProductId();
-
-    /**
-     * Gets the product options for the order item.
-     *
-     * @return string[] Array of product options.
-     */
-    public function getProductOptions();
-
-    /**
-     * Sets the product options for the order item.
-     *
-     * @param string[] $productOptions
-     * @return $this
-     */
-    public function setProductOptions(array $productOptions = null);
 
     /**
      * Gets the product type for the order item.
@@ -1806,6 +1796,21 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      * @return $this
      */
     public function setBaseWeeeTaxRowDisposition($baseWeeeTaxRowDisposition);
+
+    /**
+     * Returns product option
+     *
+     * @return \Magento\Catalog\Api\Data\ProductOptionInterface|null
+     */
+    public function getProductOption();
+
+    /**
+     * Sets product option
+     *
+     * @param \Magento\Catalog\Api\Data\ProductOptionInterface $productOption
+     * @return $this
+     */
+    public function setProductOption(\Magento\Catalog\Api\Data\ProductOptionInterface $productOption);
 
     /**
      * Retrieve existing extension attributes object or create a new one.
