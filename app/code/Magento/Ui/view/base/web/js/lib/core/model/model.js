@@ -5,9 +5,16 @@
 define([
     'ko',
     'underscore',
-    'mageUtils'
-], function (ko, _, utils) {
+    'mageUtils',
+    'uiRegistry',
+    'uiEvents',
+    'uiClass',
+    './links',
+    './storage'
+], function (ko, _, utils, registry, Events, Class, links) {
     'use strict';
+
+    var Model;
 
     /**
      * Creates observable property using knockouts'
@@ -53,7 +60,78 @@ define([
         }
     }
 
-    return {
+    Model = {
+        defaults: {
+            storageConfig: {
+                provider: 'localStorage',
+                namespace: '${ $.name }',
+                path: '${ $.storageConfig.provider }:${ $.storageConfig.namespace }'
+            },
+            maps: {
+                exports: {},
+                imports: {}
+            },
+            modules: {
+                storage: '${ $.storageConfig.provider }'
+            }
+        },
+
+        /**
+         * Initializes model instance.
+         *
+         * @returns {Model} Chainable.
+         */
+        initialize: function () {
+            this._super()
+                .initObservable()
+                .initModules()
+                .setListeners(this.listens)
+                .initLinks();
+
+            return this;
+        },
+
+        /**
+         * Initializes observable properties.
+         *
+         * @returns {Model} Chainable.
+         */
+        initObservable: function () {
+            return this;
+        },
+
+        /**
+         * Parses 'modules' object and creates
+         * async wrappers on specified components.
+         *
+         * @returns {Component} Chainable.
+         */
+        initModules: function () {
+            var modules = this.modules || {};
+
+            _.each(modules, function (component, property) {
+                this[property] = registry.async(component);
+            }, this);
+
+            return this;
+        },
+
+        /**
+         * Initializes links between properties.
+         *
+         * @returns {Component} Chainbale.
+         */
+        initLinks: function () {
+            this.setLinks(this.links, 'imports')
+                .setLinks(this.links, 'exports');
+
+            _.each({
+                exports: this.exports,
+                imports: this.imports
+            }, this.setLinks, this);
+
+            return this;
+        },
 
         /**
          * Returns value of the nested property.
@@ -71,7 +149,7 @@ define([
          *
          * @param {String} path - Path to property.
          * @param {*} value - New value of the property.
-         * @returns {Component} Chainable.
+         * @returns {Model} Chainable.
          */
         set: function (path, value) {
             var data = utils.nested(this, path),
@@ -82,7 +160,7 @@ define([
 
                 utils.nested(this, path, value);
 
-                this._notify(diffs);
+                this._notifyChanges(diffs);
             } else {
                 utils.nested(this, path, value);
             }
@@ -94,7 +172,7 @@ define([
          * Removes nested property from the object.
          *
          * @param {String} path - Path to the property.
-         * @returns {Component} Chainable.
+         * @returns {Model} Chainable.
          */
         remove: function (path) {
             var data,
@@ -111,7 +189,7 @@ define([
 
                 utils.nestedRemove(this, path);
 
-                this._notify(diffs);
+                this._notifyChanges(diffs);
             }
 
             return this;
@@ -128,7 +206,7 @@ define([
          * @param {Boolean} [useAccessors=false] - Whether to create an
          *      observable function or to use property accesessors.
          * @param {(Object|String|Array)} properties - List of observable properties.
-         * @returns {Component} Chainable.
+         * @returns {Model} Chainable.
          *
          * @example Sample declaration and equivalent knockout methods.
          *      this.key = 'value';
@@ -178,7 +256,7 @@ define([
          * with a predefined 'useAccessors' flag.
          *
          * @param {(String|Array|Object)} properties - List of observable properties.
-         * @returns {Component} Chainable.
+         * @returns {Model} Chainable.
          */
         track: function (properties) {
             this.observe(true, properties);
@@ -187,9 +265,12 @@ define([
         },
 
         /**
+         * Invokes subscribers for the provided changes.
          *
+         * @param {Object} diffs - Object with changes descriptions.
+         * @returns {Model} Chainable.
          */
-        _notify: function (diffs) {
+        _notifyChanges: function (diffs) {
             diffs.changes.forEach(function (change) {
                 this.trigger(change.path, change.value, change);
             }, this);
@@ -199,6 +280,8 @@ define([
 
                 this.trigger(name, value, changes);
             }, this);
+
+            return this;
         },
 
         /**
@@ -220,7 +303,7 @@ define([
          *
          * @param {String} property
          * @param {*} [data=this[property]]
-         * @returns {Component} Chainable.
+         * @returns {Model} Chainable.
          */
         store: function (property, data) {
             var ns = this.storageConfig.namespace,
@@ -237,7 +320,7 @@ define([
          * Removes stored property.
          *
          * @param {String} property - Property to be removed from storage.
-         * @returns {Component} Chainable.
+         * @returns {Model} Chainable.
          */
         removeStored: function (property) {
             var ns = this.storageConfig.namespace,
@@ -248,4 +331,8 @@ define([
             return this;
         }
     };
+
+    _.extend(Model, Events, links);
+
+    return Class.extend(Model);
 });

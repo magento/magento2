@@ -336,9 +336,10 @@ define([
             }.bind(this));
 
             this.productsFilter(function (filter) {
-                filter.setData({
+                filter.set('filters', _.extend({
                     'filters_modifier': filterData['filters_modifier']
-                }, true).apply();
+                }, filterData.filters))
+                    .apply();
             });
         }
     });

@@ -110,6 +110,27 @@ define([
         },
 
         /**
+         * Destroys current instance along with all of its' children.
+         * Overrides base method to clear data when this method is called.
+         */
+        destroy: function () {
+            this._super();
+            this._clearData();
+        },
+
+        /**
+         * Clears all data associated with component.
+         * @private
+         *
+         * @returns {Component} Chainable.
+         */
+        _clearData: function () {
+            this.source('remove', this.dataScope);
+
+            return this;
+        },
+
+        /**
          * Formats incoming previews array via parsePreview function.
          *
          * @param  {Array} previews

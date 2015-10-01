@@ -384,11 +384,8 @@ app/code/Magento/Ui/view/base/web/js/core/renderer/layout.js
 app/code/Magento/Ui/view/base/web/js/core/renderer/types.js
 app/code/Magento/Ui/view/base/web/js/form/adapter.js
 app/code/Magento/Ui/view/base/web/js/form/client.js
-app/code/Magento/Ui/view/base/web/js/form/components/area.js
 app/code/Magento/Ui/view/base/web/js/form/components/collection.js
-app/code/Magento/Ui/view/base/web/js/form/components/collection/item.js
 app/code/Magento/Ui/view/base/web/js/form/components/html.js
-app/code/Magento/Ui/view/base/web/js/form/components/tab_group.js
 app/code/Magento/Ui/view/base/web/js/form/components/tab.js
 app/code/Magento/Ui/view/base/web/js/form/element/abstract.js
 app/code/Magento/Ui/view/base/web/js/form/element/helpers/options.js
@@ -403,8 +400,7 @@ app/code/Magento/Ui/view/base/web/js/grid/controls/bookmarks/storage.js
 app/code/Magento/Ui/view/base/web/js/grid/export.js
 app/code/Magento/Ui/view/base/web/js/grid/resize.js
 app/code/Magento/Ui/view/base/web/js/grid/sticky/sticky.js
-app/code/Magento/Ui/view/base/web/js/lib/component/links.js
-app/code/Magento/Ui/view/base/web/js/lib/component/traversal.js
+app/code/Magento/Ui/view/base/web/js/lib/core/model/links.js
 app/code/Magento/Ui/view/base/web/js/lib/events.js
 app/code/Magento/Ui/view/base/web/js/lib/key-codes.js
 app/code/Magento/Ui/view/base/web/js/lib/ko/bind/datepicker.js
@@ -417,7 +413,6 @@ app/code/Magento/Ui/view/base/web/js/lib/ko/extender/observable_array.js
 app/code/Magento/Ui/view/base/web/js/lib/loader.js
 app/code/Magento/Ui/view/base/web/js/lib/spinner.js
 app/code/Magento/Ui/view/base/web/js/lib/step-wizard.js
-app/code/Magento/Ui/view/base/web/js/lib/storage.js
 app/code/Magento/Ui/view/base/web/js/lib/validation/rules.js
 app/code/Magento/Ui/view/base/web/js/lib/validation/utils.js
 app/code/Magento/Ui/view/base/web/js/lib/validation/validator.js
@@ -491,7 +486,7 @@ dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/grid/controls/bookmarks/v
 dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/grid/controls/columns.test.js
 dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/grid/editing/bulk.test.js
 dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/grid/filters/filters.test.js
-dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/grid/filters/group.test.js
+dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/grid/filters/range.test.js
 dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/grid/paging/paging.test.js
 dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/grid/resize.test.js
 dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/grid/search/search.test.js

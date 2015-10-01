@@ -8,7 +8,7 @@ define([
     'ko',
     'mageUtils',
     'uiComponent',
-    'Magento_Ui/js/core/renderer/layout',
+    'uiLayout',
     'Magento_Checkout/js/model/quote'
 ], function ($, ko, utils, Component, layout, quote) {
     'use strict';
