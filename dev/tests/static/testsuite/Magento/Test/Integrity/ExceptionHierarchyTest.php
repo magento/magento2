@@ -80,7 +80,9 @@ class ExceptionHierarchyTest extends \PHPUnit_Framework_TestCase
                     }
                 }
             );
-            $namespaceParts = explode('/', array_keys($foundItems)[0]);
+            $libName = array_keys($foundItems)[0];
+            $libName = str_replace('framework-', 'framework/', $libName);
+            $namespaceParts = explode('/', $libName);
             $namespaceParts = array_map(
                 function ($item) {
                     return str_replace(' ', '', ucwords(str_replace('-', ' ', $item)));
