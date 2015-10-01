@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order;
+namespace Magento\Sales\Test\Unit\Controller\Download;
 
 /**
  * Class DownloadCustomOptionTest
