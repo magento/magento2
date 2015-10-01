@@ -1,35 +1,38 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright Â© 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
-
 
 class ImageExtractor implements \Magento\Framework\Config\Reader\Xsd\Media\TypeDataExtractorInterface
 {
     /**
      * Extract configuration data of images from the DOM structure
      *
-     * @param \DOMElement $childNode
+     * @param \DOMElement $mediaNode
+     * @param $mediaParentTag
      * @return array
      */
-    public function process(\DOMElement $childNode)
+    public function process(\DOMElement $mediaNode, $mediaParentTag)
     {
         $result = [];
-        $moduleName = $childNode->getAttribute('module');
         /** @var \DOMElement $node */
-        foreach ($childNode->getElementsByTagName('image') as $node) {
+        $moduleNameImage = $mediaNode->getAttribute('module');
+        foreach ($mediaNode->getElementsByTagName('image') as $node) {
             $imageId = $node->getAttribute('id');
-            $result[$childNode->tagName][$moduleName][$imageId]['type'] = $node->getAttribute('type');
+            $result[$mediaParentTag][$moduleNameImage]['images'][$imageId]['type']
+                = $node->getAttribute('type');
             foreach ($node->childNodes as $attribute) {
                 if ($attribute->nodeType != XML_ELEMENT_NODE) {
                     continue;
                 }
                 $nodeValue = $attribute->nodeValue;
-                $result[$childNode->tagName][$moduleName][$imageId][$attribute->tagName] = $nodeValue;
+                $result[$mediaParentTag][$moduleNameImage]['images'][$imageId][$attribute->tagName]
+                    = $nodeValue;
             }
         }
+
         return $result;
     }
 }
