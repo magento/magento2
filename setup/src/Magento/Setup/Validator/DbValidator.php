@@ -62,6 +62,7 @@ class DbValidator
      */
     public function checkDatabaseConnection($dbName, $dbHost, $dbUser, $dbPass = '')
     {
+        // establish connection to information_schema view to retrieve information about user and table privileges
         $connection = $this->connectionFactory->create([
             ConfigOptionsListConstants::KEY_NAME => 'information_schema',
             ConfigOptionsListConstants::KEY_HOST => $dbHost,
@@ -122,8 +123,8 @@ class DbValidator
         ];
 
         // check global privileges
-        $userPrivilegesQuery = "SELECT PRIVILEGE_TYPE FROM USER_PRIVILEGES " .
-            "WHERE REPLACE(GRANTEE, '\'', '') = current_user()";
+        $userPrivilegesQuery = "SELECT PRIVILEGE_TYPE FROM USER_PRIVILEGES "
+            . "WHERE REPLACE(GRANTEE, '\'', '') = current_user()";
         $grantInfo = $connection->query($userPrivilegesQuery)->fetchAll(\PDO::FETCH_NUM);
         if (empty(array_diff($requiredPrivileges, $this->parseGrantInfo($grantInfo)))) {
             return true;
