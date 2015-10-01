@@ -11,11 +11,6 @@
             <argument name="coreFileStorageDb" xsi:type="object">Magento\MediaStorage\Helper\File\Storage\Database\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Helper\Product">
-        <arguments>
-            <argument name="typeSwitcherLabel" xsi:type="string">Virtual / Downloadable</argument>
-        </arguments>
-    </type>
     <type name="Magento\Catalog\Model\Product\CartConfiguration">
         <plugin name="Downloadable" type="Magento\Downloadable\Model\Product\CartConfiguration\Plugin\Downloadable" />
     </type>
