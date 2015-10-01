@@ -10,6 +10,7 @@ use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Model\Updater;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Setup\Model\Cron\Queue;
 
 /**
  * Job to remove a component. Run by Setup Cron Task
@@ -61,6 +62,11 @@ class JobComponentUninstall extends AbstractJob
     private $themeUninstall;
 
     /**
+     * @var Queue
+     */
+    private $queue;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Composer\ComposerInformation $composerInformation
@@ -68,6 +74,7 @@ class JobComponentUninstall extends AbstractJob
      * @param Helper\ThemeUninstall $themeUninstall
      * @param ObjectManagerProvider $objectManagerProvider
      * @param OutputInterface $output
+     * @param Queue $queue
      * @param Status $status
      * @param Updater $updater
      * @param string $name
@@ -79,6 +86,7 @@ class JobComponentUninstall extends AbstractJob
         Helper\ThemeUninstall $themeUninstall,
         ObjectManagerProvider $objectManagerProvider,
         OutputInterface $output,
+        Queue $queue,
         Status $status,
         Updater $updater,
         $name,
@@ -89,6 +97,7 @@ class JobComponentUninstall extends AbstractJob
         $this->themeUninstall = $themeUninstall;
         $this->objectManager = $objectManagerProvider->get();
         $this->updater = $updater;
+        $this->queue = $queue;
         parent::__construct($output, $status, $objectManagerProvider, $name, $params);
     }
 
@@ -108,7 +117,9 @@ class JobComponentUninstall extends AbstractJob
         foreach ($components as $component) {
             $this->executeComponent($component);
         }
-        $this->cleanUp();
+        $this->queue->addJobs(
+            [['name' => JobFactory::JOB_STATIC_REGENERATE, 'params' => []]]
+        );
         $errorMessage = $this->updater->createUpdaterTask($components, Updater::TASK_TYPE_UNINSTALL);
         if ($errorMessage) {
             $this->status->toggleUpdateError(true);
@@ -162,24 +173,5 @@ class JobComponentUninstall extends AbstractJob
                 $this->themeUninstall->uninstall($this->output, $componentName);
                 break;
         }
-    }
-
-    /**
-     * Perform cleanup
-     *
-     * @return void
-     */
-    private function cleanUp()
-    {
-        $this->output->writeln('Cleaning cache');
-        /** @var \Magento\Framework\App\Cache $cache */
-        $cache = $this->objectManager->get('Magento\Framework\App\Cache');
-        $cache->clean();
-        /** @var \Magento\Framework\App\State\CleanupFiles $cleanupFiles */
-        $cleanupFiles = $this->objectManager->get('Magento\Framework\App\State\CleanupFiles');
-        $this->output->writeln('Cleaning generated files');
-        $cleanupFiles->clearCodeGeneratedClasses();
-        $this->output->writeln('Cleaning static view files');
-        $cleanupFiles->clearMaterializedViewFiles();
     }
 }
