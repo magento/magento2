@@ -5,10 +5,12 @@
  */
 namespace Magento\Catalog\Model\CustomOptions;
 
-class CustomOption extends \Magento\Framework\Model\AbstractExtensibleModel
-    implements \Magento\Catalog\Api\Data\CustomOptionInterface
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Catalog\Api\Data\CustomOptionInterface;
+
+//@codeCoverageIgnoreStart
+class CustomOption extends AbstractExtensibleModel implements CustomOptionInterface
 {
-    //@codeCoverageIgnoreStart
     /**
      * @inheritDoc
      */
@@ -57,5 +59,4 @@ class CustomOption extends \Magento\Framework\Model\AbstractExtensibleModel
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
-
 }
