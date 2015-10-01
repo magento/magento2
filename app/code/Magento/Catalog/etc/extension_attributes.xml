@@ -12,7 +12,6 @@
     <extension_attributes for="Magento\Catalog\Api\Data\ProductOptionInterface">
         <attribute code="custom_options" type="\Magento\Catalog\Api\Data\CustomOptionInterface[]" />
     </extension_attributes>
-</config>
     <extension_attributes for="Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface">
         <attribute code="video_content" type="Magento\Framework\Api\Data\VideoContentInterface" />
     </extension_attributes>
