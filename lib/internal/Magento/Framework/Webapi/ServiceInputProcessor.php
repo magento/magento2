@@ -20,13 +20,14 @@ use Magento\Framework\Phrase;
 use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Reflection\MethodReflection;
 use Zend\Code\Reflection\ParameterReflection;
+use Magento\Framework\Webapi\ServicePayloadConverterInterface;
 
 /**
  * Deserialize arguments from API requests.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ServiceInputProcessor
+class ServiceInputProcessor implements ServicePayloadConverterInterface
 {
     const CACHE_ID_PREFIX = 'service_method_params_';
 
@@ -237,32 +238,32 @@ class ServiceInputProcessor
     /**
      * Convert data from array to Data Object representation if type is Data Object or array of Data Objects.
      *
-     * @param mixed $value
+     * @param mixed $data
      * @param string $type Convert given value to the this type
      * @return mixed
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function convertValue($value, $type)
+    public function convertValue($data, $type)
     {
         $isArrayType = $this->typeProcessor->isArrayType($type);
-        if ($isArrayType && isset($value['item'])) {
-            $value = $this->_removeSoapItemNode($value);
+        if ($isArrayType && isset($data['item'])) {
+            $data = $this->_removeSoapItemNode($data);
         }
         if ($this->typeProcessor->isTypeSimple($type) || $this->typeProcessor->isTypeAny($type)) {
-            $result = $this->typeProcessor->processSimpleAndAnyType($value, $type);
+            $result = $this->typeProcessor->processSimpleAndAnyType($data, $type);
         } else {
             /** Complex type or array of complex types */
             if ($isArrayType) {
                 // Initializing the result for array type else it will return null for empty array
-                $result = is_array($value) ? [] : null;
+                $result = is_array($data) ? [] : null;
                 $itemType = $this->typeProcessor->getArrayItemType($type);
-                if (is_array($value)) {
-                    foreach ($value as $key => $item) {
+                if (is_array($data)) {
+                    foreach ($data as $key => $item) {
                         $result[$key] = $this->_createFromArray($itemType, $item);
                     }
                 }
             } else {
-                $result = $this->_createFromArray($type, $value);
+                $result = $this->_createFromArray($type, $data);
             }
         }
         return $result;
