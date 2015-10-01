@@ -8,6 +8,7 @@ namespace Magento\Tax\Model;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Tax\Helper\Data as TaxHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Checkout\Model\Session as CheckoutSession;
 
 class TaxConfigProvider implements ConfigProviderInterface
 {
@@ -27,17 +28,25 @@ class TaxConfigProvider implements ConfigProviderInterface
     protected $scopeConfig;
 
     /**
+     * @var CheckoutSession
+     */
+    protected $checkoutSession;
+
+    /**
      * @param TaxHelper $taxHelper
      * @param Config $taxConfig
+     * @param CheckoutSession $checkoutSession
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         TaxHelper $taxHelper,
         Config $taxConfig,
+        CheckoutSession $checkoutSession,
         ScopeConfigInterface $scopeConfig
     ) {
         $this->taxHelper = $taxHelper;
         $this->taxConfig = $taxConfig;
+        $this->checkoutSession = $checkoutSession;
         $this->scopeConfig = $scopeConfig;
     }
 
@@ -154,6 +163,8 @@ class TaxConfigProvider implements ConfigProviderInterface
      */
     protected function reloadOnBillingAddress()
     {
-        return 'billing' == $this->scopeConfig->getValue(Config::CONFIG_XML_PATH_BASED_ON);
+        $quote = $this->checkoutSession->getQuote();
+        return 'billing' == $this->scopeConfig->getValue(Config::CONFIG_XML_PATH_BASED_ON)
+            || $quote->isVirtual();
     }
 }

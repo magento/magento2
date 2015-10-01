@@ -17,7 +17,6 @@ define(
         'Magento_Checkout/js/model/checkout-data-resolver',
         'Magento_Customer/js/customer-data',
         'Magento_Checkout/js/action/set-payment-information',
-        'Magento_Checkout/js/action/get-totals',
         'Magento_Ui/js/model/messageList',
         'mage/translate'
     ],
@@ -33,7 +32,6 @@ define(
         checkoutDataResolver,
         customerData,
         setPaymentInfoAction,
-        getTotalsAction,
         globalMessageList,
         $t
     ) {
@@ -141,7 +139,6 @@ define(
                 }
                 if (window.checkoutConfig.reloadOnBillingAddress) {
                     setPaymentInfoAction(globalMessageList);
-                    getTotalsAction([]);
                 }
             },
 
