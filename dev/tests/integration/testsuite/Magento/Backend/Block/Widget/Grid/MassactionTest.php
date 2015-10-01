@@ -33,9 +33,7 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Theme\Model\Theme\Registration $registration */
-        $registration = $objectManager->get(
-            'Magento\Theme\Model\Theme\Registration'
-        );
+        $registration = $objectManager->get('Magento\Theme\Model\Theme\Registration');
         $registration->register();
         $objectManager->get('Magento\Framework\View\DesignInterface')->setDesignTheme('BackendTest/test_default');
         $this->_layout = $objectManager->create(

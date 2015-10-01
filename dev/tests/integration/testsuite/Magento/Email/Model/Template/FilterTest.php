@@ -103,9 +103,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     public function testLayoutDirective($area, $directiveParams, $expectedOutput)
     {
         /** @var \Magento\Theme\Model\Theme\Registration $registration */
-        $registration = $this->objectManager->get(
-            'Magento\Theme\Model\Theme\Registration'
-        );
+        $registration = $this->objectManager->get('Magento\Theme\Model\Theme\Registration');
         $registration->register();
         $this->model = $this->objectManager->create('Magento\Email\Model\Template\Filter');
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea($area);
