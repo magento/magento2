@@ -6,16 +6,15 @@
 namespace Magento\Downloadable\Model;
 
 use Magento\Catalog\Api\Data\ProductOptionExtensionFactory;
+use Magento\Catalog\Api\Data\ProductOptionInterface;
 use Magento\Catalog\Model\ProductOptionFactory;
-use Magento\Downloadable\Model\DownloadableOption;
+use Magento\Catalog\Model\ProductOptionProcessorInterface;
 use Magento\Downloadable\Model\DownloadableOptionFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
-use Magento\Sales\Api\Data\OrderItemInterface;
-use Magento\Sales\Model\Order\Item\ProcessorInterface;
 
-class ProductOptionProcessor implements ProcessorInterface
+class ProductOptionProcessor implements ProductOptionProcessorInterface
 {
     /**
      * @var DataObjectFactory
@@ -66,12 +65,12 @@ class ProductOptionProcessor implements ProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function convertToBuyRequest(OrderItemInterface $orderItem)
+    public function convertToBuyRequest(ProductOptionInterface $productOption)
     {
         /** @var DataObject $request */
         $request = $this->objectFactory->create();
 
-        $links = $this->getDownloadableLinks($orderItem);
+        $links = $this->getDownloadableLinks($productOption);
         if (!empty($links)) {
             $request->addData(['links' => $links]);
         }
@@ -82,17 +81,16 @@ class ProductOptionProcessor implements ProcessorInterface
     /**
      * Retrieve downloadable links option
      *
-     * @param OrderItemInterface $orderItem
+     * @param ProductOptionInterface $productOption
      * @return array
      */
-    protected function getDownloadableLinks(OrderItemInterface $orderItem)
+    protected function getDownloadableLinks(ProductOptionInterface $productOption)
     {
-        if ($orderItem->getProductOption()
-            && $orderItem->getProductOption()->getExtensionAttributes()
-            && $orderItem->getProductOption()->getExtensionAttributes()->getDownloadableOption()
+        if ($productOption
+            && $productOption->getExtensionAttributes()
+            && $productOption->getExtensionAttributes()->getDownloadableOption()
         ) {
-            return $orderItem->getProductOption()
-                ->getExtensionAttributes()
+            return $productOption->getExtensionAttributes()
                 ->getDownloadableOption()
                 ->getDownloadableLinks();
         }
@@ -102,47 +100,22 @@ class ProductOptionProcessor implements ProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function processOptions(OrderItemInterface $orderItem)
+    public function convertToProductOption(DataObject $request)
     {
         /** @var DownloadableOption $downloadableOption */
         $downloadableOption = $this->downloadableOptionFactory->create();
-        $links = $orderItem->getBuyRequest()->getLinks();
+
+        $links = $request->getLinks();
         if (!empty($links) && is_array($links)) {
             $this->dataObjectHelper->populateWithArray(
                 $downloadableOption,
                 ['downloadable_links' => $links],
                 'Magento\Downloadable\Api\Data\DownloadableOptionInterface'
             );
+
+            return ['downloadable_option' => $downloadableOption];
         }
 
-        $this->setDownloadableOption($orderItem, $downloadableOption);
-
-        return $orderItem;
-    }
-
-    /**
-     * Set downloadable option
-     *
-     * @param OrderItemInterface $orderItem
-     * @param DownloadableOption $downloadableOption
-     * @return $this
-     */
-    protected function setDownloadableOption(OrderItemInterface $orderItem, DownloadableOption $downloadableOption)
-    {
-        if (!$orderItem->getProductOption()) {
-            $productOption = $this->productOptionFactory->create();
-            $orderItem->setProductOption($productOption);
-        }
-
-        if (!$orderItem->getProductOption()->getExtensionAttributes()) {
-            $extensionAttributes = $this->extensionFactory->create();
-            $orderItem->getProductOption()->setExtensionAttributes($extensionAttributes);
-        }
-
-        $orderItem->getProductOption()
-            ->getExtensionAttributes()
-            ->setDownloadableOption($downloadableOption);
-
-        return $this;
+        return [];
     }
 }

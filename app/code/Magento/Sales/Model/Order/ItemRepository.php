@@ -5,51 +5,81 @@
  */
 namespace Magento\Sales\Model\Order;
 
+use Magento\Catalog\Api\Data\ProductOptionExtensionFactory;
+use Magento\Catalog\Model\ProductOptionFactory;
+use Magento\Catalog\Model\ProductOptionProcessorInterface;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\DataObject;
+use Magento\Framework\DataObject\Factory as DataObjectFactory;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Sales\Api\Data\OrderItemSearchResultInterface;
+use Magento\Sales\Api\Data\OrderItemSearchResultInterfaceFactory;
+use Magento\Sales\Api\OrderItemRepositoryInterface;
+use Magento\Sales\Model\Resource\Metadata;
+
 /**
- * Repository class for @see \Magento\Sales\Api\Data\OrderItemInterface
+ * Repository class for @see OrderItemInterface
  */
-class ItemRepository implements \Magento\Sales\Api\OrderItemRepositoryInterface
+class ItemRepository implements OrderItemRepositoryInterface
 {
     /**
-     * @var \Magento\Framework\DataObject\Factory
+     * @var DataObjectFactory
      */
     protected $objectFactory;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Metadata
+     * @var Metadata
      */
     protected $metadata;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderItemSearchResultInterfaceFactory
+     * @var OrderItemSearchResultInterfaceFactory
      */
     protected $searchResultFactory;
 
     /**
-     * @var \Magento\Sales\Model\Order\Item\ProcessorInterface[]
+     * @var ProductOptionFactory
+     */
+    protected $productOptionFactory;
+
+    /**
+     * @var ProductOptionExtensionFactory
+     */
+    protected $extensionFactory;
+
+    /**
+     * @var ProductOptionProcessorInterface[]
      */
     protected $processorPool;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderItemInterface[]
+     * @var OrderItemInterface[]
      */
     protected $registry = [];
 
     /**
-     * @param \Magento\Framework\DataObject\Factory $objectFactory
-     * @param \Magento\Sales\Model\Resource\Metadata $metadata
-     * @param \Magento\Sales\Api\Data\OrderItemSearchResultInterfaceFactory $searchResultFactory
+     * @param DataObjectFactory $objectFactory
+     * @param Metadata $metadata
+     * @param OrderItemSearchResultInterfaceFactory $searchResultFactory
+     * @param ProductOptionFactory $productOptionFactory
+     * @param ProductOptionExtensionFactory $extensionFactory
      * @param array $processorPool
      */
     public function __construct(
-        \Magento\Framework\DataObject\Factory $objectFactory,
-        \Magento\Sales\Model\Resource\Metadata $metadata,
-        \Magento\Sales\Api\Data\OrderItemSearchResultInterfaceFactory $searchResultFactory,
+        DataObjectFactory $objectFactory,
+        Metadata $metadata,
+        OrderItemSearchResultInterfaceFactory $searchResultFactory,
+        ProductOptionFactory $productOptionFactory,
+        ProductOptionExtensionFactory $extensionFactory,
         array $processorPool = []
     ) {
         $this->objectFactory = $objectFactory;
         $this->metadata = $metadata;
         $this->searchResultFactory = $searchResultFactory;
+        $this->productOptionFactory = $productOptionFactory;
+        $this->extensionFactory = $extensionFactory;
         $this->processorPool = $processorPool;
     }
 
@@ -57,24 +87,24 @@ class ItemRepository implements \Magento\Sales\Api\OrderItemRepositoryInterface
      * load entity
      *
      * @param int $id
-     * @return \Magento\Sales\Api\Data\OrderItemInterface
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return OrderItemInterface
+     * @throws InputException
+     * @throws NoSuchEntityException
      */
     public function get($id)
     {
         if (!$id) {
-            throw new \Magento\Framework\Exception\InputException(__('ID required'));
+            throw new InputException(__('ID required'));
         }
         if (!isset($this->registry[$id])) {
-            /** @var \Magento\Sales\Api\Data\OrderItemInterface $orderItem */
+            /** @var OrderItemInterface $orderItem */
             $orderItem = $this->metadata->getNewInstance();
             $this->metadata->getMapper()->load($orderItem, $id);
             if (!$orderItem->getItemId()) {
-                throw new \Magento\Framework\Exception\NoSuchEntityException(__('Requested entity doesn\'t exist'));
+                throw new NoSuchEntityException(__('Requested entity doesn\'t exist'));
             }
 
-            $this->addProductOptions($orderItem);
+            $this->addProductOption($orderItem);
             $this->registry[$id] = $orderItem;
         }
         return $this->registry[$id];
@@ -83,12 +113,12 @@ class ItemRepository implements \Magento\Sales\Api\OrderItemRepositoryInterface
     /**
      * Find entities by criteria
      *
-     * @param \Magento\Framework\Api\SearchCriteria  $criteria
-     * @return \Magento\Sales\Api\Data\OrderItemInterface[]
+     * @param SearchCriteria  $criteria
+     * @return OrderItemInterface[]
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $criteria)
+    public function getList(SearchCriteria $criteria)
     {
-        /** @var \Magento\Sales\Api\Data\OrderItemSearchResultInterface $searchResult */
+        /** @var OrderItemSearchResultInterface $searchResult */
         $searchResult = $this->searchResultFactory->create();
         $searchResult->setSearchCriteria($criteria);
 
@@ -99,8 +129,9 @@ class ItemRepository implements \Magento\Sales\Api\OrderItemRepositoryInterface
             }
         }
 
-        foreach ($searchResult->getItems() as $item) {
-            $this->addProductOptions($item);
+        /** @var OrderItemInterface $orderItem */
+        foreach ($searchResult->getItems() as $orderItem) {
+            $this->addProductOption($orderItem);
         }
 
         return $searchResult;
@@ -109,10 +140,10 @@ class ItemRepository implements \Magento\Sales\Api\OrderItemRepositoryInterface
     /**
      * Register entity to delete
      *
-     * @param \Magento\Sales\Api\Data\OrderItemInterface $entity
+     * @param OrderItemInterface $entity
      * @return bool
      */
-    public function delete(\Magento\Sales\Api\Data\OrderItemInterface $entity)
+    public function delete(OrderItemInterface $entity)
     {
         $this->metadata->getMapper()->delete($entity);
         unset($this->registry[$entity->getEntityId()]);
@@ -134,15 +165,15 @@ class ItemRepository implements \Magento\Sales\Api\OrderItemRepositoryInterface
     /**
      * Perform persist operations for one entity
      *
-     * @param \Magento\Sales\Api\Data\OrderItemInterface $entity
-     * @return \Magento\Sales\Api\Data\OrderItemInterface
+     * @param OrderItemInterface $entity
+     * @return OrderItemInterface
      */
-    public function save(\Magento\Sales\Api\Data\OrderItemInterface $entity)
+    public function save(OrderItemInterface $entity)
     {
         // TODO:
 
-        $request = $this->getBuyRequest($entity);
-        $entity->setProductOptions($request->toArray());
+//        $request = $this->getBuyRequest($entity);
+//        $entity->setProductOption($request->toArray());
 
         $this->metadata->getMapper()->save($entity);
         $this->registry[$entity->getEntityId()] = $entity;
@@ -150,21 +181,57 @@ class ItemRepository implements \Magento\Sales\Api\OrderItemRepositoryInterface
     }
 
     /**
-     * Add buy request to order item's product options
+     * Add product option data
      *
-     * @param \Magento\Sales\Api\Data\OrderItemInterface $orderItem
+     * @param OrderItemInterface $orderItem
      * @return $this
      */
-    protected function addProductOptions(\Magento\Sales\Api\Data\OrderItemInterface $orderItem)
+    protected function addProductOption(OrderItemInterface $orderItem)
     {
+        /** @var DataObject $request */
+        $request = $orderItem->getBuyRequest();
+
         $productType = $orderItem->getProductType();
         if (isset($this->processorPool[$productType])) {
-            $this->processorPool[$productType]->processOptions($orderItem);
+            $data = $this->processorPool[$productType]->convertToProductOption($request);
+            if ($data) {
+                $this->setProductOption($orderItem, $data);
+            }
         }
 
         if (isset($this->processorPool['custom_options'])) {
-            $this->processorPool['custom_options']->processOptions($orderItem);
+            $data = $this->processorPool['custom_options']->convertToProductOption($request);
+            if ($data) {
+                $this->setProductOption($orderItem, $data);
+            }
         }
+
+        return $this;
+    }
+
+    /**
+     * Set product options data
+     *
+     * @param OrderItemInterface $orderItem
+     * @param array $data
+     * @return $this
+     */
+    protected function setProductOption(OrderItemInterface $orderItem, array $data)
+    {
+        if (!$orderItem->getProductOption()) {
+            $orderItem->setProductOption(
+                $this->productOptionFactory->create()
+            );
+        }
+
+        if (!$orderItem->getProductOption()->getExtensionAttributes()) {
+            $orderItem->getProductOption()->setExtensionAttributes(
+                $this->extensionFactory->create()
+            );
+        }
+
+        $orderItem->getProductOption()->getExtensionAttributes()
+            ->setData(key($data), current($data));
 
         return $this;
     }
@@ -172,21 +239,23 @@ class ItemRepository implements \Magento\Sales\Api\OrderItemRepositoryInterface
     /**
      * Retrieve order item's buy request
      *
-     * @param \Magento\Sales\Api\Data\OrderItemInterface $entity
-     * @return \Magento\Framework\DataObject
+     * @param OrderItemInterface $entity
+     * @return DataObject
      */
-    protected function getBuyRequest(\Magento\Sales\Api\Data\OrderItemInterface $entity)
+    protected function getBuyRequest(OrderItemInterface $entity)
     {
         $request = $this->objectFactory->create(['qty' => $entity->getQty()]);
 
         $productType = $entity->getProductType();
         if (isset($this->processorPool[$productType])) {
-            $requestUpdate = $this->processorPool[$productType]->convertToBuyRequest($entity);
+            $requestUpdate = $this->processorPool[$productType]
+                ->convertToBuyRequest($entity->getProductOption());
             $request->addData($requestUpdate->getData());
         }
 
         if (isset($this->processorPool['custom_options'])) {
-            $requestUpdate = $this->processorPool['custom_options']->convertToBuyRequest($entity);
+            $requestUpdate = $this->processorPool['custom_options']
+                ->convertToBuyRequest($entity->getProductOption());
             $request->addData($requestUpdate->getData());
         }
 
