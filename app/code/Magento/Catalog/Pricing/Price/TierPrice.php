@@ -160,6 +160,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
     protected function filterTierPrices(array $priceList)
     {
         $qtyCache = [];
+        $allCustomersGroupId = $this->groupManagement->getAllCustomersGroup()->getId();
         foreach ($priceList as $priceKey => &$price) {
             if (isset($price['price_qty']) && $price['price_qty'] == 1) {
                 unset($priceList[$priceKey]);
@@ -167,7 +168,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
             }
             /* filter price by customer group */
             if ($price['cust_group'] != $this->customerGroup &&
-                $price['cust_group'] != $this->groupManagement->getAllCustomersGroup()->getId()) {
+                $price['cust_group'] != $allCustomersGroupId) {
                 unset($priceList[$priceKey]);
                 continue;
             }
@@ -227,11 +228,11 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
      */
     protected function canApplyTierPrice(array $currentTierPrice, $prevPriceGroup, $prevQty)
     {
-        $custGroupAllId = $this->groupManagement->getAllCustomersGroup()->getId();
+        $custGroupAllId = (int)$this->groupManagement->getAllCustomersGroup()->getId();
         // Tier price can be applied, if:
         // tier price is for current customer group or is for all groups
-        if ($currentTierPrice['cust_group'] !== $this->customerGroup
-            && $currentTierPrice['cust_group'] !== $custGroupAllId
+        if ((int)$currentTierPrice['cust_group'] !== $this->customerGroup
+            && (int)$currentTierPrice['cust_group'] !== $custGroupAllId
         ) {
             return false;
         }
