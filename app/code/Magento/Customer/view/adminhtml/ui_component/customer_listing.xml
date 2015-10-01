@@ -336,6 +336,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
+                    <item name="filter" xsi:type="string">dateRange</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="label" xsi:type="string" translate="true">Last Logged In</item>
@@ -384,8 +385,9 @@
                 <item name="config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                     <item name="visible" xsi:type="boolean">false</item>
+                    <item name="filter" xsi:type="string">dateRange</item>
                     <item name="dataType" xsi:type="string">date</item>
-                    <item name="label" xsi:type="string" translate="true">Date Of Birth</item>
+                    <item name="label" xsi:type="string" translate="true">Date of Birth</item>
                     <item name="sortOrder" xsi:type="number">170</item>
                 </item>
             </argument>
@@ -393,6 +395,7 @@
         <column name="taxvat">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
                     <item name="editor" xsi:type="string">text</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="label" xsi:type="string" translate="true">Tax VAT Number</item>
@@ -404,6 +407,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="filter" xsi:type="string">select</item>
                     <item name="editor" xsi:type="string">select</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="dataType" xsi:type="string">select</item>
@@ -424,6 +428,7 @@
         <column name="billing_city">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
                     <item name="editor" xsi:type="string">text</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="label" xsi:type="string" translate="true">City</item>
@@ -434,6 +439,7 @@
         <column name="billing_fax">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
                     <item name="editor" xsi:type="string">text</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="label" xsi:type="string" translate="true">Fax</item>
@@ -444,6 +450,7 @@
         <column name="billing_vat_id">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
                     <item name="editor" xsi:type="string">text</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="label" xsi:type="string" translate="true">VAT Number</item>
@@ -454,6 +461,7 @@
         <column name="billing_company">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
                     <item name="editor" xsi:type="string">text</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="label" xsi:type="string" translate="true">Company</item>
@@ -464,6 +472,7 @@
         <column name="billing_firstname">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
                     <item name="editor" xsi:type="string">text</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="label" xsi:type="string" translate="true">Billing Firstname</item>
@@ -474,6 +483,7 @@
         <column name="billing_lastname">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
                     <item name="editor" xsi:type="string">text</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="label" xsi:type="string" translate="true">Billing Lastname</item>
