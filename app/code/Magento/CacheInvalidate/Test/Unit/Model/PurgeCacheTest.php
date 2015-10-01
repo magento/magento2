@@ -5,13 +5,12 @@
  */
 namespace Magento\CacheInvalidate\Test\Unit\Model;
 
+use \Zend\Uri\UriFactory;
+
 class PurgeCacheTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\CacheInvalidate\Model\PurgeCache */
+    /** @var \Magento\CacheInvalidate\Model\PurgeCache */
     protected $model;
-
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Zend\Uri\Uri */
-    protected $uriMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Zend\Http\Client\Adapter\Socket */
     protected $socketAdapterMock;
@@ -19,130 +18,148 @@ class PurgeCacheTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Cache\InvalidateLogger */
     protected $loggerMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\DeploymentConfig\Reader */
-    protected $configReaderMock;
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\DeploymentConfig */
+    protected $configMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\RequestInterface */
     protected $requestMock;
 
-    /**
-     * Set up all mocks and data for test
-     */
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\UrlInterface */
+    protected $urlBuilderMock;
+
     public function setUp()
     {
-        $this->uriFactoryMock = $this->getMock('Magento\CacheInvalidate\Model\UriFactory', [], [], '', false);
-        $this->uriMock = $this->getMock('\Zend\Uri\Uri', [], [], '', false);
-        $this->socketFactoryMock = $this->getMock('Magento\CacheInvalidate\Model\SocketFactory', [], [], '', false);
+        $socketFactoryMock = $this->getMock('Magento\CacheInvalidate\Model\SocketFactory', [], [], '', false);
         $this->socketAdapterMock = $this->getMock('\Zend\Http\Client\Adapter\Socket', [], [], '', false);
-        $this->configMock = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $this->loggerMock = $this->getMock('Magento\Framework\Cache\InvalidateLogger', [], [], '', false);
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->socketAdapterMock->expects($this->once())
             ->method('setOptions')
             ->with(['timeout' => 10]);
-        $this->uriFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($this->uriMock);
-        $this->socketFactoryMock->expects($this->once())
+        $socketFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->socketAdapterMock);
-        $this->model = new \Magento\CacheInvalidate\Model\PurgeCache(
-            $this->uriFactoryMock,
-            $this->socketFactoryMock,
-            $this->loggerMock,
-            $this->configMock,
-            $this->requestMock
+
+        $this->configMock = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $this->loggerMock = $this->getMock('Magento\Framework\Cache\InvalidateLogger', [], [], '', false);
+        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
+        $this->urlBuilderMock = $this->getMockBuilder('Magento\Framework\UrlInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->model = $objectManager->getObject(
+            'Magento\CacheInvalidate\Model\PurgeCache',
+            [
+                'urlBuilder' => $this->urlBuilderMock,
+                'socketAdapterFactory' => $socketFactoryMock,
+                'logger' => $this->loggerMock,
+                'config' => $this->configMock,
+                'request' => $this->requestMock,
+            ]
         );
     }
 
-    public function testSendPurgeRequestEmptyConfig()
-    {
-        $this->socketAdapterMock->expects($this->once())
-            ->method('write')
-            ->with('PURGE', $this->uriMock, '1.1', $this->equalTo(['X-Magento-Tags-Pattern' => 'tags']));
-        $this->socketAdapterMock->expects($this->once())
-            ->method('close');
+    /**
+     * @param int $getHttpHostCallCtr
+     * @param string $httpHost
+     * @param int $getUrlCallCtr
+     * @param string $url
+     * @param string[] $hostConfig
+     * @dataProvider sendPurgeRequestDataProvider
+     */
+    public function testSendPurgeRequest(
+        $getHttpHostCallCtr,
+        $httpHost,
+        $getUrlCallCtr,
+        $url,
+        $hostConfig = null
+    ) {
         $this->configMock->expects($this->once())
             ->method('get')
-            ->willReturn('');
-        $this->requestMock->expects($this->any())
+            ->willReturn($hostConfig);
+        $this->requestMock->expects($this->exactly($getHttpHostCallCtr))
             ->method('getHttpHost')
-            ->willReturn('127.0.0.1');
-        $this->uriMock->expects($this->once())
-            ->method('setScheme')
-            ->with('http')
-            ->willReturnSelf();
-        $this->uriMock->expects($this->once())
-            ->method('setHost')
-            ->with('127.0.0.1')
-            ->willReturnSelf();
-        $this->uriMock->expects($this->once())
-            ->method('setPort')
-            ->with(\Magento\CacheInvalidate\Model\PurgeCache::DEFAULT_PORT);
-        $this->model->sendPurgeRequest('tags');
+            ->willReturn($httpHost);
+        $this->urlBuilderMock->expects($this->exactly($getUrlCallCtr))
+            ->method('getUrl')
+            ->with('*')
+            ->willReturn($url);
+
+        if (null === $hostConfig) {
+            $uri = null;
+            if ($getHttpHostCallCtr > 0) {
+                $uri = UriFactory::factory('')->setHost($httpHost)
+                    ->setPort(\Magento\CacheInvalidate\Model\PurgeCache::DEFAULT_PORT)
+                    ->setScheme('http');
+            }
+            if ($getUrlCallCtr > 0) {
+                $uri = UriFactory::factory($url);
+            }
+            $this->socketAdapterMock->expects($this->once())
+                ->method('connect')
+                ->with($uri->getHost(), $uri->getPort());
+            $this->socketAdapterMock->expects($this->once())
+                ->method('write')
+                ->with('PURGE', $uri, '1.1', ['X-Magento-Tags-Pattern' => 'tags']);
+            $this->socketAdapterMock->expects($this->once())
+                ->method('close');
+        } else {
+            $i = 1;
+            foreach ($hostConfig as $host) {
+                $port = isset($host['port']) ? $host['port'] : \Magento\CacheInvalidate\Model\PurgeCache::DEFAULT_PORT;
+                $uri = UriFactory::factory('')->setHost($host['host'])
+                    ->setPort($port)
+                    ->setScheme('http');
+                $this->socketAdapterMock->expects($this->at($i++))
+                    ->method('connect')
+                    ->with($uri->getHost(), $uri->getPort());
+                $this->socketAdapterMock->expects($this->at($i++))
+                    ->method('write')
+                    ->with('PURGE', $uri, '1.1', ['X-Magento-Tags-Pattern' => 'tags']);
+                $i++;
+            }
+            $this->socketAdapterMock->expects($this->exactly(count($hostConfig)))
+                ->method('close');
+        }
+        $this->loggerMock->expects($this->once())
+            ->method('execute');
+
+        $this->assertTrue($this->model->sendPurgeRequest('tags'));
     }
 
-    public function testSendPurgeRequestOneServer()
+    public function sendPurgeRequestDataProvider()
     {
-        $this->socketAdapterMock->expects($this->once())
-            ->method('write')
-            ->with('PURGE', $this->uriMock, '1.1', $this->equalTo(['X-Magento-Tags-Pattern' => 'tags']));
-        $this->socketAdapterMock->expects($this->once())
-            ->method('close');
-        $this->configMock->expects($this->once())
-            ->method('get')
-            ->willReturn([['host' => '127.0.0.2', 'port' => 1234]]);
-        $this->uriMock->expects($this->once())
-            ->method('setScheme')
-            ->with('http')
-            ->willReturnSelf();
-        $this->uriMock->expects($this->once())
-            ->method('setHost')
-            ->with('127.0.0.2')
-            ->willReturnSelf();
-        $this->uriMock->expects($this->once())
-            ->method('setPort')
-            ->with(1234);
-        $this->model->sendPurgeRequest('tags');
-    }
-
-    public function testSendPurgeRequestMultipleServers()
-    {
-        $this->socketAdapterMock->expects($this->exactly(2))
-            ->method('write')
-            ->with('PURGE', $this->uriMock, '1.1', $this->equalTo(['X-Magento-Tags-Pattern' => 'tags']));
-        $this->socketAdapterMock->expects($this->exactly(2))
-            ->method('close');
-        $this->configMock->expects($this->once())
-            ->method('get')
-            ->willReturn(
+        return [
+            'http host' => [1, '127.0.0.1', 0, '',],
+            'url' => [1, '', 1, 'http://host',],
+            'config' => [
+                0,
+                '',
+                0,
+                '',
                 [
                     ['host' => '127.0.0.1', 'port' => 8080],
-                    ['host' => '127.0.0.2', 'port' => 1234]
+                    ['host' => '127.0.0.2', 'port' => 1234],
+                    ['host' => 'host']
                 ]
-            );
-        $this->uriMock->expects($this->at(0))
-            ->method('setScheme')
-            ->with('http')
-            ->willReturnSelf();
-        $this->uriMock->expects($this->at(1))
-            ->method('setHost')
-            ->with('127.0.0.1')
-            ->willReturnSelf();
-        $this->uriMock->expects($this->at(2))
-            ->method('setPort')
-            ->with(8080);
-        $this->uriMock->expects($this->at(3))
-            ->method('setScheme')
-            ->with('http')
-            ->willReturnSelf();
-        $this->uriMock->expects($this->at(4))
-            ->method('setHost')
-            ->with('127.0.0.2')
-            ->willReturnSelf();
-        $this->uriMock->expects($this->at(5))
-            ->method('setPort')
-            ->with(1234);
-        $this->model->sendPurgeRequest('tags');
+            ]
+        ];
+    }
+
+    public function testSendPurgeRequestWithException()
+    {
+        $this->configMock->expects($this->once())
+            ->method('get')
+            ->willReturn(null);
+        $this->requestMock->expects($this->once())
+            ->method('getHttpHost')
+            ->willReturn('httpHost');
+        $this->socketAdapterMock->method('connect')
+            ->willThrowException(new \Zend\Http\Client\Adapter\Exception\RuntimeException());
+        $this->loggerMock->expects($this->never())
+            ->method('execute');
+        $this->loggerMock->expects($this->once())
+            ->method('critical');
+
+        $this->assertFalse($this->model->sendPurgeRequest('tags'));
     }
 }

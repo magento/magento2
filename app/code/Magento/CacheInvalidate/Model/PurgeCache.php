@@ -5,20 +5,19 @@
  */
 namespace Magento\CacheInvalidate\Model;
 
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Zend\Uri\Uri;
-use Zend\Http\Client\Adapter\Socket;
 use Magento\Framework\Cache\InvalidateLogger;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\App\RequestInterface;
+use Zend\Uri\UriFactory;
 
 class PurgeCache
 {
     /**
-     * @var UriFactory
+     * @var \Magento\Framework\UrlInterface
      */
-    protected $uriFactory;
+    protected $urlBuilder;
 
     /**
      * @var SocketFactory
@@ -45,20 +44,20 @@ class PurgeCache
     /**
      * Constructor
      *
-     * @param UriFactory $uriFactory
+     * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param SocketFactory $socketAdapterFactory
      * @param InvalidateLogger $logger
-     * @param Reader $configReader
+     * @param DeploymentConfig $config
      * @param RequestInterface $request
      */
     public function __construct(
-        UriFactory $uriFactory,
+        \Magento\Framework\UrlInterface $urlBuilder,
         SocketFactory $socketAdapterFactory,
         InvalidateLogger $logger,
         DeploymentConfig $config,
         RequestInterface $request
     ) {
-        $this->uriFactory = $uriFactory;
+        $this->urlBuilder = $urlBuilder;
         $this->socketAdapterFactory = $socketAdapterFactory;
         $this->logger = $logger;
         $this->config = $config;
@@ -70,35 +69,55 @@ class PurgeCache
      * to invalidate cache by tags pattern
      *
      * @param string $tagsPattern
-     * @return void
+     * @return bool Return true if successful; otherwise return false
      */
     public function sendPurgeRequest($tagsPattern)
     {
-        $uri = $this->uriFactory->create();
         $socketAdapter = $this->socketAdapterFactory->create();
-        $servers = $this->config->get(ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS)
-            ?: [['host' => $this->request->getHttpHost()]];
+        $servers = $this->getServers();
         $headers = ['X-Magento-Tags-Pattern' => $tagsPattern];
         $socketAdapter->setOptions(['timeout' => 10]);
         foreach ($servers as $server) {
-            $port = isset($server['port']) ? $server['port'] : self::DEFAULT_PORT;
-            $uri->setScheme('http')
-                ->setHost($server['host'])
-                ->setPort($port);
             try {
-                $socketAdapter->connect($server['host'], $port);
+                $socketAdapter->connect($server->getHost(), $server->getPort());
                 $socketAdapter->write(
                     'PURGE',
-                    $uri,
+                    $server,
                     '1.1',
                     $headers
                 );
                 $socketAdapter->close();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $this->logger->critical($e->getMessage(), compact('server', 'tagsPattern'));
+                return false;
             }
         }
 
         $this->logger->execute(compact('servers', 'tagsPattern'));
+        return true;
+    }
+
+    /**
+     * Get cache servers' uris
+     *
+     * @return Uri[]
+     */
+    private function getServers()
+    {
+        $servers = [];
+        $configedHosts = $this->config->get(ConfigOptionsListConstants::CONFIG_PATH_CACHE_HOSTS);
+        if (null == $configedHosts) {
+            $httpHost = $this->request->getHttpHost();
+            $servers[] = $httpHost ?
+                UriFactory::factory('')->setHost($httpHost)->setPort(self::DEFAULT_PORT)->setScheme('http') :
+                UriFactory::factory($this->urlBuilder->getUrl('*'));
+        } else {
+            foreach ($configedHosts as $host) {
+                $servers[] = UriFactory::factory('')->setHost($host['host'])
+                    ->setPort(isset($host['port']) ? $host['port'] : self::DEFAULT_PORT)
+                    ->setScheme('http');
+            }
+        }
+        return $servers;
     }
 }
