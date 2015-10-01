@@ -1042,7 +1042,7 @@ define([
                     $(field).val(imageData[field.name]);
                 });
 
-                flagChecked = imageData.disabled === 1;
+                flagChecked = imageData.disabled > 0;
                 $(this._videoDisableinputSelector).prop('checked', flagChecked);
 
                 file = $('#file_name').val(imageData.file);
@@ -1098,8 +1098,8 @@ define([
                     $(field).val(container.find('input[name*="' + field.name + '"]').val());
                 });
 
-                flagChecked = container.find('input[name*="disabled"]').val() === 1;
-                $(self._videoDisableinputSelector).prop('checked', flagChecked);
+                flagChecked = container.find('input[name*="disabled"]').val() > 0;
+                $(self._videoDisableinputSelector).attr('checked', flagChecked);
 
                 file = $('#file_name').val(container.find('input[name*="file"]').val());
 
@@ -1107,7 +1107,7 @@ define([
                     $(this).prop('checked', false).prop('disabled', false);
                 });
 
-                $.each($('.video-placeholder').siblings('input:hidden'), function () {
+                $.each($('.image-placeholder').siblings('input:hidden'), function () {
                     var start, end, imageRole;
 
                     if ($(this).val() !== file.val()) {
@@ -1117,7 +1117,7 @@ define([
                     start = this.name.indexOf('[') + 1;
                     end = this.name.length - 1;
                     imageRole = this.name.substring(start, end);
-                    $('#new_video_form input[value="' + imageRole + '"]').prop('checked', true);
+                    $('input[value="' + imageRole + '"]').prop('checked', true);
                 });
             });
         }
