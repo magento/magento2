@@ -6,14 +6,19 @@
  */
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:element name="view">
-        <xs:complexType>
-            <xs:choice maxOccurs="unbounded">
-                <xs:element name="videos" minOccurs="0" type="videosType"/>
-            </xs:choice>
+    <xs:redefine schemaLocation="../../../../../lib/internal/Magento/Framework/Config/etc/view.xsd">
+        <xs:complexType name="mediaType" mixed="true">
+            <xs:complexContent>
+                <xs:extension base="mediaType">
+                    <xs:sequence>
+                        <xs:element name="videos" type="videoType" minOccurs="1"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
         </xs:complexType>
-    </xs:element>
-    <xs:complexType name="videosType">
+    </xs:redefine>
+
+    <xs:complexType name="videoType">
         <xs:sequence>
             <xs:element name="video" minOccurs="0" maxOccurs="unbounded">
                 <xs:complexType>

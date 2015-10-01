@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright Â© 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Config\Reader\Xsd\Media;
@@ -32,7 +32,6 @@ class TypeDataExtractorPool
         ObjectManagerInterface $objectManager,
         array $extractors
     ) {
-        //$this->extractors = $extractors;
         foreach ($extractors as $key => $extractorItem) {
             if (!($extractorItem instanceof TypeDataExtractorInterface)) {
                 throw new \InvalidArgumentException('Passed wrong parameters type');
@@ -50,7 +49,6 @@ class TypeDataExtractorPool
      */
     public function nodeProcessor($tagName)
     {
-        //return $this->objectManager->create($this->extractors[$tagName]);
         return $this->extractors[$tagName];
     }
 

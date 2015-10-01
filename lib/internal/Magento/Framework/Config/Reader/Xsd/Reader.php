@@ -11,12 +11,12 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 class Reader implements \Magento\Framework\Config\ReaderInterface
 {
-    /*
+    /**
      * @var string
      */
     protected $defaultScope;
 
-    /*
+    /**
      * @var string
      */
     protected $fileName;
@@ -31,7 +31,7 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
      */
     protected $iteratorFactory;
 
-    /*
+    /**
      * @var string
      */
     protected $searchPattern;
@@ -117,6 +117,7 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
                 );
             }
         }
+
         return $configMerge;
     }
 
@@ -127,22 +128,55 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
      * @param $child
      * @return string
      */
-    function mergeXsd($parent, $child)
+    protected function mergeXsd($parent, $child)
     {
         $domParent = new \DOMDocument("1.0", 'UTF-8');
         $domParent->formatOutput = true;
         $domParent->loadXML($parent);
+        $domParent->preserveWhiteSpace = true;
 
         $domChild = new \DOMDocument("1.0", 'UTF-8');
         $domChild->formatOutput = true;
         $domChild->loadXML($child);
 
-        $res1 = $domParent->getElementsByTagName('choice')->item(0);
-        $items2 = $domChild->getElementsByTagName('element')->item(1);
-        $item1 = $domParent->importNode($items2, true);
-        $res1->appendChild($item1);
         $domChild = $domChild->documentElement;
-        $delete = $domChild->getElementsByTagName('element')->item(0);
+        $domParentElement = $domParent->getElementsByTagName('complexType');
+        if ($domParentElement instanceof \DOMNodeList) {
+            foreach ($domParentElement as $child) {
+                if ($child->getAttribute('name') === 'mediaType') {
+                    if ($child instanceof \DOMElement && $child->hasChildNodes()) {
+                        foreach ($child->childNodes as $findElement) {
+                            if ($findElement instanceof \DOMElement) {
+                                $domParentNode = $findElement;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        $domChildElement = $domChild->getElementsByTagName('extension');
+        if ($domChildElement instanceof \DOMNodeList) {
+            foreach ($domChildElement as $child) {
+                if ($child->getAttribute('base') === 'mediaType') {
+                    if ($child instanceof \DOMElement && $child->hasChildNodes()) {
+                        foreach ($child->childNodes as $sequence) {
+                            if ($sequence instanceof \DOMElement && $sequence->hasChildNodes()) {
+                                foreach ($sequence->childNodes as $findElement) {
+                                    if ($findElement instanceof \DOMElement) {
+                                        $importedNodes = $domParent->importNode($findElement, true);
+                                        $domParentNode->appendChild($importedNodes);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        $delete = $domChild->getElementsByTagName('redefine')->item(0);
         $domChild->removeChild($delete);
 
         foreach ($domChild->childNodes as $node) {

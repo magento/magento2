@@ -54,7 +54,9 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     public function getSchemaFile()
     {
+        //return __DIR__ . '/etc/test.xsd';
         $configXsd = $this->xsdReader->read();
+        //echo $configXsd; exit();
         return $configXsd;
     }
 
@@ -87,9 +89,18 @@ class View extends \Magento\Framework\Config\AbstractXml
                         $result[$childNode->tagName][$itemType][] = $itemNode->nodeValue;
                     }
                     break;
-                default:
-                    $imagesNodesArray = $this->extractorPool->nodeProcessor($childNode->tagName)->process($childNode);
-                    $result = array_merge($result, $imagesNodesArray);
+                case 'media':
+                    foreach ($childNode->childNodes as $mediaNode) {
+                        if ($mediaNode instanceof \DOMElement) {
+                            $mediaNodesArray =
+                                $this->extractorPool->nodeProcessor($mediaNode->tagName)->process(
+                                    $mediaNode,
+                                    $childNode->tagName
+                                );
+                            $result = array_merge($result, $mediaNodesArray);
+                        }
+                    }
+                    break;
             }
         }
         return $result;
@@ -129,7 +140,7 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     public function getMediaEntities($module, $mediaType)
     {
-        return isset($this->_data[$mediaType][$module]) ? $this->_data[$mediaType][$module] : [];
+        return isset($this->_data['media'][$module][$mediaType]) ? $this->_data['media'][$module][$mediaType] : [];
     }
 
     /**
@@ -142,8 +153,8 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     public function getMediaAttributes($module, $mediaType, $mediaId)
     {
-        return isset($this->_data[$mediaType][$module][$mediaId])
-            ? $this->_data[$mediaType][$module][$mediaId]
+        return isset($this->_data['media'][$module][$mediaType][$mediaId])
+            ? $this->_data['media'][$module][$mediaType][$mediaId]
             : [];
     }
 
@@ -191,18 +202,22 @@ class View extends \Magento\Framework\Config\AbstractXml
             '/view/vars' => 'module',
             '/view/vars/var' => 'name',
             '/view/exclude/item' => ['type', 'item'],
+            '/view/media/videos' => 'module',
+            '/view/media/videos/video' => ['type', 'item'],
+            '/view/media/images' => 'module',
+            '/view/media/images/image' => ['type', 'item'],
         ];
-        if (is_array($xpath)) {
-            foreach ($xpath as $attribute) {
-                if (is_array($attribute)) {
-                    foreach ($attribute as $newAttribute) {
-                        if (isset($newAttribute['path']) && isset($newAttribute['id'])) {
-                            $idAttributes[$newAttribute['path']] = $newAttribute['id'];
-                        }
+        /*foreach ($xpath as $attribute) {
+            if (is_array($attribute)) {
+                foreach ($attribute as $key => $id) {
+                    if (count($id) > 1) {
+                        $idAttributes[$key] = array_values($id);
+                    } else {
+                        $idAttributes[$key] = array_shift($id);
                     }
                 }
             }
-        }
+        }*/
         return $idAttributes;
     }
 
