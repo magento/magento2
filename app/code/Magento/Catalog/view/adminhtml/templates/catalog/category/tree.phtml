@@ -225,7 +225,7 @@ function reRenderTree(switcherParams) {
                 parameters:params,
                 method:'post',
                 onComplete:function (transport) {
-                    var response = eval('(' + transport.responseText + ')');
+                    var response = JSON.parse(transport.responseText);
                     if (!response['parameters']) {
                         return false;
                     }
