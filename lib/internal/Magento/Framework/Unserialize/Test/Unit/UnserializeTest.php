@@ -25,7 +25,8 @@ class UnserializeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException PHPUnit_Framework_Error_Notice
+     * @expectedException Exception
+     * @expectedExceptionMessage String contains serialized object
      */
     public function testUnserializeObject()
     {
