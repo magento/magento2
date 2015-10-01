@@ -289,6 +289,7 @@ angular.module('readiness-check', [])
                         item.fail();
                     });
             }
+            // setting 1 minute timeout to prevent system from timing out
             return $http.get(item.url, {timeout: 60000})
                 .success(function(data) { item.process(data) })
                 .error(function(data, status) {
