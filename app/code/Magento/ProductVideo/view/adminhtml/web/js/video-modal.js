@@ -39,7 +39,7 @@ define([
              */
             _onOpenDialog: function (e, imageData) {
 
-                if (imageData.media_type !== 'external-video') {
+                if (imageData['media_type'] !== 'external-video') {
                     return;
                 }
                 this.showModal();

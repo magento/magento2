@@ -65,6 +65,10 @@ require([
                         throw {
                             name: 'Video Error',
                             message: 'Unknown video type',
+
+                            /**
+                             * Return string
+                             */
                             toString: function () {
                                 return this.name + ': ' + this.message;
                             }
