@@ -104,7 +104,8 @@ class DownloadCustomOption extends \Magento\Framework\App\Action\Action
      * @return void
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
-    protected function endExecute() {
+    protected function endExecute()
+    {
         exit(0);
     }
 }
