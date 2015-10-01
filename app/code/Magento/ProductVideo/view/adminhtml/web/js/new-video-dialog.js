@@ -39,6 +39,10 @@ define([
                 }
             }
         },
+
+        /**
+         * @private
+         */
         _init: function () {
             if (this.options.reset) {
                 this.reset();
@@ -49,6 +53,10 @@ define([
             this.element.on('reset', $.proxy(this.reset, this));
 
         },
+
+        /**
+         * @returns {Boolean}
+         */
         update: function () {
             var checkVideoID = $(this.options.container).find('.' + this.options.videoClass).data('code');
 
@@ -63,6 +71,10 @@ define([
             }
 
         },
+
+        /**
+         * @private
+         */
         _doUpdate: function () {
             this.reset();
             $(this.options.container).append('<div class="' +
@@ -96,6 +108,10 @@ define([
             $('.' + this.options.videoClass).productVideoLoader();
 
         },
+
+        /**
+         * Reset
+         */
         reset: function () {
             $(this.options.container).find('.' + this.options.videoClass).remove();
             $(this.options.metaData.DOM.wrapper).hide();
@@ -120,6 +136,10 @@ define([
                 thumbnail: ''
             }
         },
+
+        /**
+         * @private
+         */
         _init: function () {
             if (this.options.reset) {
                 this.reset();
@@ -127,11 +147,19 @@ define([
                 this.update();
             }
         },
+
+        /**
+         * Update
+         */
         update: function () {
             this.reset();
             $(this.options.DOM.titleField).val(this.options.data.title);
             $(this.options.DOM.descriptionField).val(this.options.data.description);
         },
+
+        /**
+         * Reset
+         */
         reset: function () {
             $(this.options.DOM.titleField).val('');
             $(this.options.DOM.descriptionField).val('');
@@ -258,8 +286,8 @@ define([
 
         /**
          * Fired when successfully received information about the video.
-         * @param e
-         * @param data
+         * @param {Object} e
+         * @param {Object} data
          * @private
          */
         _onGetVideoInformationSuccess: function (e, data) {
@@ -300,12 +328,12 @@ define([
 
         /**
          * Load preview from youtube/vimeo
-         * @param sourceUrl
+         * @param {String} sourceUrl
          * @private
          */
         _loadRemotePreview: function (sourceUrl) {
-            var url = this.options.saveRemoteVideoUrl;
-            var self = this;
+            var url = this.options.saveRemoteVideoUrl,
+            self = this;
 
             this._blockActionButtons(true, true);
             $.ajax({
@@ -322,8 +350,8 @@ define([
 
         /**
          * Fired when receiving information about the video ended with error
-         * @param e
-         * @param data
+         * @param {Object} e
+         * @param {Object} data
          * @private
          */
         _onGetVideoInformationError: function (e, data) {
@@ -378,9 +406,9 @@ define([
 
         /**
          * Replace image (update)
-         * @param oldFile
-         * @param newFile
-         * @param imageData
+         * @param {String} oldFile
+         * @param {String} newFile
+         * @param {Object} imageData
          * @private
          */
         _replaceImage: function (oldFile, newFile, imageData) {
@@ -463,8 +491,8 @@ define([
          * @private
          */
         _uploadImage: function (file, oldFile, callback) {
-            var url         = this.options.saveVideoUrl;
-            var data = {
+            var url         = this.options.saveVideoUrl,
+            data = {
                 files: file,
                 url: url
             };
@@ -477,6 +505,13 @@ define([
 
         },
 
+        /**
+         * @param {String} result
+         * @param {String} file
+         * @param {String} oldFile
+         * @param {Function} callback
+         * @private
+         */
         _onImageLoaded: function (result, file, oldFile, callback) {
             var data = JSON.parse(result);
 
@@ -484,12 +519,13 @@ define([
                 alert({
                     content: data.error
                 });
+
                 return;
             }
             $.each($(this._videoFormSelector).serializeArray(), function (i, field) {
                 data[field.name] = field.value;
             });
-            data['disabled'] = $(this._videoDisableinputSelector).attr('checked') ? 1 : 0;
+            data.disabled = $(this._videoDisableinputSelector).attr('checked') ? 1 : 0;
             data['media_type'] = 'external-video';
             data.oldFile = oldFile;
 
@@ -721,7 +757,7 @@ define([
             _inputSelector  = '[name*="[' + itemId + ']"]';
             mediaFields     = $('input' + _inputSelector);
             $.each(mediaFields, function (i, el) {
-                elName      = el.name,
+                var elName      = el.name,
                 start       = elName.indexOf(itemId) + itemId.length + 2,
                 fieldName   = elName.substring(start, el.name.length - 1),
                 _field      = $('#' + fieldName),
@@ -840,7 +876,7 @@ define([
          * Change Preview
          * @param {String} error
          * @param {String} src
-         * @param {bool} local
+         * @param {Boolean} local
          * @private
          */
         _onPreview: function (error, src, local) {
