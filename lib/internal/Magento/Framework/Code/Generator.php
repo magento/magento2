@@ -89,7 +89,7 @@ class Generator
             }
         }
 
-        if ($skipReason = $this->validate($resultEntityType, $sourceClassName, $className)) {
+        if ($skipReason = $this->shouldSkipGeneration($resultEntityType, $sourceClassName, $className)) {
             return $skipReason;
         }
 
@@ -198,7 +198,7 @@ class Generator
      * @param string $resultClass
      * @return string|bool
      */
-    protected function validate($resultEntityType, $sourceClassName, $resultClass)
+    protected function shouldSkipGeneration($resultEntityType, $sourceClassName, $resultClass)
     {
         if (!$resultEntityType || !$sourceClassName) {
             return self::GENERATION_ERROR;
