@@ -9,27 +9,27 @@ require __DIR__ . '/../../../Magento/Checkout/_files/active_quote.php';
 function getOptionValue(\Magento\Catalog\Api\Data\ProductCustomOptionInterface $option)
 {
     $returnValue = null;
-        switch ($option->getType()) {
-            case 'field' :
-                $returnValue = 'Test value';
-                break;
-            case 'date_time' :
-                $returnValue = [
-                    'year' => '2015',
-                    'month' => '9',
-                    'day' => '9',
-                    'hour' => '2',
-                    'minute' => '2',
-                    'day_part' => 'am',
-                    'date_internal' => '',
-                ];
-                break;
-            case 'drop_down' :
-                $returnValue = '3-1-select';
-                break;
-            case 'radio' :
-                $returnValue = '4-1-radio';
-                break;
+    switch ($option->getType()) {
+        case 'field':
+            $returnValue = 'Test value';
+            break;
+        case 'date_time':
+            $returnValue = [
+                'year' => '2015',
+                'month' => '9',
+                'day' => '9',
+                'hour' => '2',
+                'minute' => '2',
+                'day_part' => 'am',
+                'date_internal' => '',
+            ];
+            break;
+        case 'drop_down':
+            $returnValue = '3-1-select';
+            break;
+        case 'radio':
+            $returnValue = '4-1-radio';
+            break;
     }
     return $returnValue;
 }
