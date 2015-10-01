@@ -253,7 +253,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
             'saveProductPrices',
             'getCustomerGroupId',
             'getWebSiteId',
-            'deleteProductTierAndGroupPrices',
+            'deleteProductTierPrices',
             'getBehavior',
             'saveAndReplaceAdvancedPrices',
             'processCountExistingPrices',
@@ -451,7 +451,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
 
         $this->advancedPricing
             ->expects($this->any())
-            ->method('deleteProductTierAndGroupPrices')
+            ->method('deleteProductTierPrices')
             ->withConsecutive(
                 [
                     $listSku,
@@ -495,7 +495,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         $expectedSkuList = ['sku value'];
         $this->advancedPricing
             ->expects($this->once())
-            ->method('deleteProductTierAndGroupPrices')
+            ->method('deleteProductTierPrices')
             ->withConsecutive(
                 [$expectedSkuList, AdvancedPricing::TABLE_TIER_PRICE]
             )->will($this->returnSelf());

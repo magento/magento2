@@ -262,7 +262,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                 if (!$this->_passTierPrice) {
                     $exportData = array_merge(
                         $exportData,
-                        $this->getTierAndGroupPrices($productIds, ImportAdvancedPricing::TABLE_TIER_PRICE)
+                        $this->getTierPrices($productIds, ImportAdvancedPricing::TABLE_TIER_PRICE)
                     );
                 }
             }
@@ -323,7 +323,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function getTierAndGroupPrices(array $listSku, $table)
+    protected function getTierPrices(array $listSku, $table)
     {
         if (isset($this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP])) {
             $exportFilter = $this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP];

@@ -314,7 +314,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             }
         }
         if ($listSku) {
-            $this->deleteProductTierAndGroupPrices(array_unique($listSku), self::TABLE_TIER_PRICE);
+            $this->deleteProductTierPrices(array_unique($listSku), self::TABLE_TIER_PRICE);
             $this->setUpdatedAt($listSku);
         }
         return $this;
@@ -374,7 +374,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             if (\Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE == $behavior) {
                 if ($listSku) {
                     $this->processCountNewPrices($tierPrices);
-                    if ($this->deleteProductTierAndGroupPrices(array_unique($listSku), self::TABLE_TIER_PRICE)) {
+                    if ($this->deleteProductTierPrices(array_unique($listSku), self::TABLE_TIER_PRICE)) {
                         $this->saveProductPrices($tierPrices, self::TABLE_TIER_PRICE);
                         $this->setUpdatedAt($listSku);
                     }
@@ -428,7 +428,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param string $tableName
      * @return bool
      */
-    protected function deleteProductTierAndGroupPrices(array $listSku, $tableName)
+    protected function deleteProductTierPrices(array $listSku, $tableName)
     {
         if ($tableName && $listSku) {
             if (!$this->_cachedSkuToDelete) {

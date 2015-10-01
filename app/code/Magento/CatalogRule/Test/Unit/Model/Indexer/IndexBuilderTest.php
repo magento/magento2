@@ -204,7 +204,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateCatalogRuleGroupWebsiteData()
     {
-        $groupPriceAttrMock = $this->getMock(
+        $priceAttrMock = $this->getMock(
             'Magento\Catalog\Model\Entity\Attribute',
             ['getBackend'],
             [],
@@ -231,7 +231,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
         $backendModelMock->expects($this->any())
             ->method('getResource')
             ->will($this->returnValue($resourceMock));
-        $groupPriceAttrMock->expects($this->any())
+        $priceAttrMock->expects($this->any())
             ->method('getBackend')
             ->will($this->returnValue($backendModelMock));
         $this->eavConfig->expects($this->at(0))

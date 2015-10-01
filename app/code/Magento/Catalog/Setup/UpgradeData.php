@@ -40,6 +40,32 @@ class UpgradeData implements UpgradeDataInterface
     {
         $setup->startSetup();
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
+            $select = $setup->getConnection()->select()
+                ->from(
+                    $setup->getTable('catalog_product_entity_group_price'),
+                    [
+                        'value_id',
+                        'entity_id',
+                        'all_groups',
+                        'customer_group_id',
+                        new \Zend_Db_Expr('1'),
+                        'value',
+                        'website_id'
+                    ]
+                );
+            $setup->getConnection()->insertFromSelect(
+                $setup->getTable('catalog_product_entity_group_price'),
+                $select,
+                [
+                    'value_id',
+                    'entity_id',
+                    'all_groups',
+                    'customer_group_id',
+                    'qty',
+                    'value',
+                    'website_id'
+                ]
+            );
             $categorySetupManager = $this->categorySetupFactory->create();
             $categorySetupManager->removeAttribute(\Magento\Catalog\Model\Product::ENTITY, 'group_price');
         }

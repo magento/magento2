@@ -71,7 +71,7 @@ class BasePriceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->priceInfoMock));
         $this->prices = [
             'regular_price' => $this->regularPriceMock,
-            'group_price' => $this->tearPriceMock,
+            'tear_price' => $this->tearPriceMock,
             'special_price' => $this->specialPriceMock,
         ];
 
