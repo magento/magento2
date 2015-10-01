@@ -66,9 +66,6 @@ class Phrase implements JsonSerializable
      */
     public function __construct($text, array $arguments = [])
     {
-        if (!$text) {
-            throw new \InvalidArgumentException(sprintf('Phrase cannot be empty.'));
-        }
         $this->text = (string)$text;
         $this->arguments = $arguments;
     }

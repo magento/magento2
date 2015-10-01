@@ -19,8 +19,6 @@ class Fs extends AbstractRollback
      * @throws \Magento\Framework\Exception\LocalizedException
      *
      * @see AbstractRollback::run()
-     *
-     * @codeCoverageIgnore
      */
     public function run()
     {
@@ -56,7 +54,7 @@ class Fs extends AbstractRollback
         new \Magento\Framework\Archive\Gz();
         new \Magento\Framework\Archive\Helper\File('');
         new \Magento\Framework\Archive\Helper\File\Gz('');
-        new \Magento\Framework\Exception\LocalizedException(new \Magento\Framework\Phrase('Exception'));
+        new \Magento\Framework\Exception\LocalizedException(new \Magento\Framework\Phrase('LocalizedException'));
 
         $fsHelper->rm($this->_snapshot->getRootDir(), $this->_snapshot->getIgnorePaths());
         $archiver->unpack($snapshotPath, $this->_snapshot->getRootDir());

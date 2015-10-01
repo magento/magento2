@@ -145,12 +145,4 @@ class PhraseTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertInstanceOf('Magento\Framework\Phrase\Renderer\Placeholder', Phrase::getRenderer());
     }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testExceptionWhenPhraseIsEmpty()
-    {
-        new Phrase('');
-    }
 }
