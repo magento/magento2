@@ -70,6 +70,17 @@ class DiCompileCommandTest extends \PHPUnit_Framework_TestCase
         $this->fileDriver = $this->getMockBuilder('Magento\Framework\Filesystem\Driver\File')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->componentRegistrar = $this->getMock(
+            '\Magento\Framework\Component\ComponentRegistrar',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->componentRegistrar->expects($this->any())->method('getPaths')->willReturnMap([
+            [ComponentRegistrar::MODULE, ['/path/to/module/one', '/path/to/module/two']],
+            [ComponentRegistrar::LIBRARY, ['/path/to/library/one', '/path/to/library/two']],
+        ]);
 
         $this->command = new DiCompileCommand(
             $this->deploymentConfig,
