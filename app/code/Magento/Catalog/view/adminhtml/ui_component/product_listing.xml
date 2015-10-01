@@ -65,12 +65,6 @@
                         <item name="provider" xsi:type="string">product_listing.product_listing.listing_top.bookmarks</item>
                         <item name="namespace" xsi:type="string">current.filters</item>
                     </item>
-                    <item name="childDefaults" xsi:type="array">
-                        <item name="provider" xsi:type="string">product_listing.product_listing.listing_top.listing_filters</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">product_listing.product_listing.product_columns.${ $.index }:visible</item>
-                        </item>
-                    </item>
                 </item>
             </argument>
             <filterSelect name="store_id">
@@ -79,12 +73,10 @@
                 </argument>
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
+                        <item name="provider" xsi:type="string">product_listing.product_listing.listing_top.listing_filters</item>
                         <item name="dataScope" xsi:type="string">store_id</item>
                         <item name="caption" xsi:type="string" translate="true">Select...</item>
                         <item name="label" xsi:type="string" translate="true">Store View</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string"></item>
-                        </item>
                     </item>
                 </argument>
             </filterSelect>
@@ -191,6 +183,7 @@
         <column name="entity_id">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">ID</item>
                     <item name="sortOrder" xsi:type="number">10</item>
