@@ -185,7 +185,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     {
         $listofLibraries = [];
         $componentRegistrar = new ComponentRegistrar();
-        foreach($componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $library) {
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $library) {
             $library = str_replace('\\', '/', $library);
             if (strpos($library, 'Framework/')) {
                 $partOfLibraryPath = explode('/', $library);
