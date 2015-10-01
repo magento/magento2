@@ -7,11 +7,11 @@
 
 <div
     class="admin__action-dropdown-wrap admin__data-grid-action-export"
-    data-bind="css: {_active: opened, _disabled: !collapsible}, outerClick: close">
+    data-bind="collapsible">
     <button
         class="admin__action-dropdown"
         type="button"
-        data-bind="click: toggleOpened"
+        data-bind="toggleCollapsible"
         data-toggle="dropdown"
         aria-haspopup="true">
         <span class="admin__action-dropdown-text" data-bind="i18n: 'Export'"></span>
@@ -41,7 +41,7 @@
         <div class="admin__action-dropdown-footer-main-actions">
             <button
                 class="action-tertiary"
-                data-bind="click: close"
+                data-bind="closeCollapsible"
                 type="button">
                 <span data-bind="i18n: 'Cancel'"></span>
             </button>

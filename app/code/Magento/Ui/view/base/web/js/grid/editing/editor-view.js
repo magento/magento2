@@ -96,8 +96,10 @@ define([
          * @returns {View} Chainable.
          */
         initBulk: function (table) {
+            var tableBody = $('tbody', table)[0];
+
             $(this.bulkTmpl)
-                .prependTo('tbody', table)
+                .prependTo(tableBody)
                 .applyBindings(this.model);
 
             return this;
