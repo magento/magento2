@@ -26,7 +26,7 @@ class TypeDataExtractorPool
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param @param \Magento\Framework\Config\Reader\Xsd\Media\TypeDataExtractorInterface[] $extractors
+     * @param \Magento\Framework\Config\Reader\Xsd\Media\TypeDataExtractorInterface[] $extractors
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -44,7 +44,7 @@ class TypeDataExtractorPool
     /**
      * Get node processor from corresponding module
      *
-     * @param $tagName
+     * @param string $tagName
      * @return mixed
      */
     public function nodeProcessor($tagName)

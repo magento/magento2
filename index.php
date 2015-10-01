@@ -32,7 +32,7 @@ try {
 HTML;
     exit(1);
 }
-libxml_use_internal_errors(true);
+
 $bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $_SERVER);
 /** @var \Magento\Framework\App\Http $app */
 $app = $bootstrap->createApplication('Magento\Framework\App\Http');

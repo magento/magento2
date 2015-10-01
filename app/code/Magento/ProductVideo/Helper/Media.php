@@ -38,7 +38,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Media type
      */
-    const MEDIA_TYPE = 'videos';
+    const MEDIA_TYPE_CONFIG_NODE = 'videos';
 
     /**
      * @var ConfigInterface
@@ -98,7 +98,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $videoAttributes = $this->cachedVideoConfig->getMediaAttributes(
             self::MODULE_NAME,
-            self::MEDIA_TYPE,
+            self::MEDIA_TYPE_CONFIG_NODE,
             self::NODE_CONFIG_PLAY_IF_BASE
         );
         if (isset($videoAttributes[self::NODE_CONFIG_PLAY_IF_BASE])) {
@@ -115,7 +115,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $videoAttributes = $this->cachedVideoConfig->getMediaAttributes(
             self::MODULE_NAME,
-            self::MEDIA_TYPE,
+            self::MEDIA_TYPE_CONFIG_NODE,
             self::NODE_CONFIG_SHOW_RELATED
         );
         if (isset($videoAttributes[self::NODE_CONFIG_SHOW_RELATED])) {
@@ -132,7 +132,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $videoAttributes = $this->cachedVideoConfig->getMediaAttributes(
             self::MODULE_NAME,
-            self::MEDIA_TYPE,
+            self::MEDIA_TYPE_CONFIG_NODE,
             self::NODE_CONFIG_VIDEO_AUTO_RESTART
         );
         if (isset($videoAttributes[self::NODE_CONFIG_VIDEO_AUTO_RESTART])) {

@@ -77,6 +77,7 @@ class Config implements \Magento\Framework\View\ConfigInterface
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
      * @param \Magento\Framework\Config\FileIteratorFactory $fileIteratorFactory
+     * @param \Magento\Framework\Config\ViewFactory $viewFactory
      * @param string $filename
      */
     public function __construct(
