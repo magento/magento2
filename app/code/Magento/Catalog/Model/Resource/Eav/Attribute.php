@@ -20,9 +20,9 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
  * @method \Magento\Catalog\Model\Resource\Eav\Attribute getFrontendInputRenderer()
  * @method string setFrontendInputRenderer(string $value)
  * @method int setIsGlobal(int $value)
- * @method \Magento\Catalog\Model\Resource\Eav\Attribute getSearchWeight()
+ * @method int getSearchWeight()
  * @method int setSearchWeight(int $value)
- * @method \Magento\Catalog\Model\Resource\Eav\Attribute getIsUsedForPriceRules()
+ * @method bool getIsUsedForPriceRules()
  * @method int setIsUsedForPriceRules(int $value)
  * @method \Magento\Eav\Api\Data\AttributeExtensionInterface getExtensionAttributes()
  *

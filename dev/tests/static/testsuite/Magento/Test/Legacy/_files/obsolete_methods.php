@@ -2469,4 +2469,6 @@ return [
     ['getScopeDirectory', 'Magento\Framework\View\File\Collector\Theme'],
     ['getScopeDirectory', 'Magento\Framework\View\File\Collector\ThemeModular'],
     ['_getConfigFilesList', 'Magento\Framework\App\Utility\Files'],
+    ['addStockStatusToSelect', 'Magento\CatalogInventory\Helper\Stock'],
+    ['getUrlInstance', 'Magento\Catalog\Model\Product\Url'],
 ];
