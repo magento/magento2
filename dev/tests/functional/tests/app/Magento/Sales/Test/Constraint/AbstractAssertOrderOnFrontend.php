@@ -11,22 +11,22 @@ use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\ObjectManager;
+use Magento\Mtf\System\Event\EventManagerInterface;
 
 /**
- * Abstract Class AbstractAssertOrderOnFrontend
- * Abstract class for frontend asserts
+ * Abstract class for frontend asserts.
  */
 abstract class AbstractAssertOrderOnFrontend extends AbstractConstraint
 {
     /**
-     * Cms index page
+     * Cms index page.
      *
      * @var CmsIndex
      */
     protected $cmsIndex;
 
     /**
-     * Customer account index page
+     * Customer account index page.
      *
      * @var CustomerAccountIndex
      */
@@ -35,21 +35,23 @@ abstract class AbstractAssertOrderOnFrontend extends AbstractConstraint
     /**
      * @constructor
      * @param ObjectManager $objectManager
+     * @param EventManagerInterface $eventManager
      * @param CmsIndex $cmsIndex
      * @param CustomerAccountIndex $customerAccountIndex
      */
     public function __construct(
         ObjectManager $objectManager,
+        EventManagerInterface $eventManager,
         CmsIndex $cmsIndex,
         CustomerAccountIndex $customerAccountIndex
     ) {
-        parent::__construct($objectManager);
+        parent::__construct($objectManager, $eventManager);
         $this->cmsIndex = $cmsIndex;
         $this->customerAccountIndex = $customerAccountIndex;
     }
 
     /**
-     * Login customer and open Order page
+     * Login customer and open Order page.
      *
      * @param Customer $customer
      * @return void
