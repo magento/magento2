@@ -25,7 +25,7 @@ define([
             },
             buttons: [{
                 text: $.mage.__('OK'),
-                class: 'action-secondary action-accept',
+                class: 'action-primary action-accept',
 
                 /**
                  * Click handler.
