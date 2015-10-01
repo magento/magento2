@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Test\Unit\Model\CustomOption;
+namespace Magento\Catalog\Test\Unit\Model\CustomOptions;
 
 use Magento\Catalog\Model\CustomOptions\CustomOptionProcessor;
 
