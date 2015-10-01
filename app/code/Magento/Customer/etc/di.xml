@@ -308,4 +308,11 @@
             <argument name="resourceModel" xsi:type="string">Magento\Customer\Model\Resource\Visitor</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="upgradeHashAlgorithmCommand" xsi:type="object">Magento\Customer\Console\Command\UpgradeHashAlgorithmCommand</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

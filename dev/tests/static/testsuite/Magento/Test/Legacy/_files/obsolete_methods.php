@@ -2469,6 +2469,11 @@ return [
     ['getScopeDirectory', 'Magento\Framework\View\File\Collector\Theme'],
     ['getScopeDirectory', 'Magento\Framework\View\File\Collector\ThemeModular'],
     ['_getConfigFilesList', 'Magento\Framework\App\Utility\Files'],
+    ['getTitle', 'Magento\Quote\Api\Data\PaymentInterface'],
+    ['setTitle', 'Magento\Quote\Api\Data\PaymentInterface'],
+    ['getTitle', 'Magento\Quote\Model\Quote\Payment'],
+    ['setTitle', 'Magento\Quote\Model\Quote\Payment'],
+    ['getTypeSwitcherControlLabel', 'Magento\Catalog\Helper\Product'],
     ['addStockStatusToSelect', 'Magento\CatalogInventory\Helper\Stock'],
     ['getUrlInstance', 'Magento\Catalog\Model\Product\Url'],
 ];
