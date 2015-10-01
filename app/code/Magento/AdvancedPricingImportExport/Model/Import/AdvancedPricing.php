@@ -42,6 +42,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
 
     const VALIDATOR_WEBSITE = 'validator_website';
 
+    const VALIDATOR_TEAR_PRICE = 'validator_tear_price';
+
     /**
      * Validation failure message template definitions
      *
@@ -181,7 +183,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver,
         ImportProduct $importProduct,
         AdvancedPricing\Validator $validator,
-        AdvancedPricing\Validator\Website $websiteValidator
+        AdvancedPricing\Validator\Website $websiteValidator,
+        AdvancedPricing\Validator\TierPrice $tierPriceValidator
     ) {
         $this->_localeDate = $localeDate;
         $this->jsonHelper = $jsonHelper;
@@ -197,6 +200,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         $this->_validators[self::VALIDATOR_MAIN] = $validator->init($this);
         $this->_oldSkus = $this->retrieveOldSkus();
         $this->_validators[self::VALIDATOR_WEBSITE] = $websiteValidator;
+        $this->_validators[self::VALIDATOR_TEAR_PRICE] = $tierPriceValidator;
         $this->errorAggregator = $errorAggregator;
         $this->_catalogProductEntity = $this->_resourceFactory->create()->getTable('catalog_product_entity');
 
@@ -422,7 +426,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     }
 
     /**
-     * Deletes tier prices and group prices.
+     * Deletes tier prices prices.
      *
      * @param array $listSku
      * @param string $tableName
@@ -495,7 +499,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      */
     protected function getCustomerGroupId($customerGroup)
     {
-        $customerGroups = $this->_getValidator(self::VALIDATOR_GROUP_PRICE)->getCustomerGroups();
+        $customerGroups = $this->_getValidator(self::VALIDATOR_TEAR_PRICE)->getCustomerGroups();
         return $customerGroup == self::VALUE_ALL_GROUPS ? 0 : $customerGroups[$customerGroup];
     }
 
