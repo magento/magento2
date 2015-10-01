@@ -500,10 +500,10 @@
         <arguments>
             <argument name="xpath" xsi:type="array">
                 <item name="image" xsi:type="array">
-                    <item name="/view/images" xsi:type="array">
+                    <item name="/view/media/images" xsi:type="array">
                         <item name="id" xsi:type="string">module</item>
                     </item>
-                    <item name="/view/images/image" xsi:type="array">
+                    <item name="/view/media/images/image" xsi:type="array">
                         <item name="id1" xsi:type="string">id</item>
                         <item name="id2" xsi:type="string">type</item>
                     </item>
