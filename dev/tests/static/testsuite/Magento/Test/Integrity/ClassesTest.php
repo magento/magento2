@@ -504,7 +504,28 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
             }
         }
 
+        $fullPath = $this->getLibraryDirByPath($namespacePath, $badClass);
+
+        if ($fullPath && file_exists($fullPath)) {
+            unset($badClasses[array_search($badClass, $badClasses)]);
+            return true;
+        } else {
+            return $this->removeSpecialCasesForAllOthers($componentRegistrar, $namespacePath, $badClass, $badClasses);
+        }
+    }
+
+    /**
+     * Get path to the file in the library based on namespace path
+     *
+     * @param string $namespacePath
+     * @param string $badClass
+     * @return null|string
+     */
+    protected function getLibraryDirByPath($namespacePath, $badClass)
+    {
         $libraryDir = null;
+        $fullPath = null;
+        $componentRegistrar = new ComponentRegistrar();
         $namespaceParts = explode('/', $namespacePath);
         if (isset($namespaceParts[1]) && $namespaceParts[1]) {
             $vendor = array_shift($namespaceParts);
@@ -526,17 +547,11 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 $libraryDir = $componentRegistrar->getPath(ComponentRegistrar::LIBRARY, strtolower($libraryName));
             }
         }
-
         if ($libraryDir) {
             $fullPath = $libraryDir . '/' . implode('/', $namespaceParts) . '/' .
                 str_replace('\\', '/', $badClass) . '.php';
-            if (file_exists($fullPath)) {
-                unset($badClasses[array_search($badClass, $badClasses)]);
-                return true;
-            }
-        } else {
-            return $this->removeSpecialCasesForAllOthers($componentRegistrar, $namespacePath, $badClass, $badClasses);
         }
+        return $fullPath;
     }
 
     /**
