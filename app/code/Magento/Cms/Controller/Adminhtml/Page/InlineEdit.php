@@ -129,10 +129,11 @@ class InlineEdit extends \Magento\Backend\App\Action
      * @param \Magento\Cms\Model\Page $page
      * @param array $extendedPageData
      * @param array $pageData
-     * @return void
+     * @return $this
      */
     public function setCmsPageData(\Magento\Cms\Model\Page $page, array $extendedPageData, array $pageData)
     {
         $page->setData(array_merge($page->getData(), $extendedPageData, $pageData));
+        return $this;
     }
 }

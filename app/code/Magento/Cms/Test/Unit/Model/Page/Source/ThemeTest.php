@@ -28,9 +28,9 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->themeListMock = $this->getMockBuilder('Magento\Framework\View\Design\Theme\Label\ListInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->themeListMock = $this->getMockForAbstractClass(
+            'Magento\Framework\View\Design\Theme\Label\ListInterface'
+        );
 
         $this->theme = $this->objectManagerHelper->getObject(
             'Magento\Cms\Model\Page\Source\Theme',
