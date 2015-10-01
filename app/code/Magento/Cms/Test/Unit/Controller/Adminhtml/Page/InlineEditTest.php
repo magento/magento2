@@ -100,8 +100,11 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
         $this->request->expects($this->at(0))
             ->method('getParam')
-            ->with('items', [])
-            ->willReturn($postData);
+            ->willReturnMap(
+                [
+                    ['items', [], $postData]
+                ]
+            );
         $this->pageRepository->expects($this->once())
             ->method('getById')
             ->with(1)
@@ -164,7 +167,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ])
             ->willReturnSelf();
 
-        $this->controller->execute();
+        $this->assertSame($this->resultJson, $this->controller->execute());
     }
 
     public function testExecuteWithRuntimeException()
@@ -185,7 +188,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ])
             ->willReturnSelf();
 
-        $this->controller->execute();
+        $this->assertSame($this->resultJson, $this->controller->execute());
     }
 
     public function testExecuteWithException()
@@ -206,7 +209,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ])
             ->willReturnSelf();
 
-        $this->controller->execute();
+        $this->assertSame($this->resultJson, $this->controller->execute());
     }
 
     public function testExecuteWithoutData()
@@ -220,8 +223,11 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->willReturn([]);
         $this->request->expects($this->at(1))
             ->method('getParam')
-            ->with('isAjax', null)
-            ->willReturn(true);
+            ->willReturnMap(
+                [
+                    ['isAjax', null, true]
+                ]
+            );
         $this->resultJson->expects($this->once())
             ->method('setData')
             ->with([
@@ -232,7 +238,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ])
             ->willReturnSelf();
 
-        $this->controller->execute();
+        $this->assertSame($this->resultJson, $this->controller->execute());
     }
 
     public function testSetCmsPageData()
