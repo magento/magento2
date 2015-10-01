@@ -83,7 +83,6 @@ use Magento\Customer\Api\Data\RegionInterfaceFactory;
  * @method float getShippingInclTax()
  * @method Address setShippingInclTax(float $value)
  * @method float getBaseShippingInclTax()
- * @method \Magento\SalesRule\Model\Rule[] getCartFixedRules()
  * @method int[] getAppliedRuleIds()
  * @method Address setBaseShippingInclTax(float $value)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -222,6 +221,11 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
      * @var Address\CustomAttributeListInterface
      */
     protected $attributeList;
+
+    /**
+     * @var array
+     */
+    protected $cartFixedRules;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -1696,5 +1700,23 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     protected function getCustomAttributesCodes()
     {
         return array_keys($this->attributeList->getAttributes());
+    }
+
+    /**
+     * @param array $rules
+     * @return $this
+     */
+    public function setCartFixedRules(array $rules = [])
+    {
+        $this->cartFixedRules = $rules;
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCartFixedRules()
+    {
+        return $this->cartFixedRules;
     }
 }
