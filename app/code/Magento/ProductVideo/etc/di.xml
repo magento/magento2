@@ -18,10 +18,10 @@
         <arguments>
             <argument name="xpath" xsi:type="array">
                 <item name="video" xsi:type="array">
-                    <item name="/view/videos" xsi:type="array">
+                    <item name="/view/media/videos" xsi:type="array">
                         <item name="id" xsi:type="string">module</item>
                     </item>
-                    <item name="/view/videos/video" xsi:type="array">
+                    <item name="/view/media/videos/video" xsi:type="array">
                         <item name="id1" xsi:type="string">id</item>
                         <item name="id2" xsi:type="string">type</item>
                     </item>

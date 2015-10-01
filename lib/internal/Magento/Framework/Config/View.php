@@ -54,9 +54,7 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     public function getSchemaFile()
     {
-        //return __DIR__ . '/etc/test.xsd';
         $configXsd = $this->xsdReader->read();
-        //echo $configXsd; exit();
         return $configXsd;
     }
 
@@ -202,12 +200,8 @@ class View extends \Magento\Framework\Config\AbstractXml
             '/view/vars' => 'module',
             '/view/vars/var' => 'name',
             '/view/exclude/item' => ['type', 'item'],
-            '/view/media/videos' => 'module',
-            '/view/media/videos/video' => ['type', 'item'],
-            '/view/media/images' => 'module',
-            '/view/media/images/image' => ['type', 'item'],
         ];
-        /*foreach ($xpath as $attribute) {
+        foreach ($xpath as $attribute) {
             if (is_array($attribute)) {
                 foreach ($attribute as $key => $id) {
                     if (count($id) > 1) {
@@ -217,7 +211,7 @@ class View extends \Magento\Framework\Config\AbstractXml
                     }
                 }
             }
-        }*/
+        }
         return $idAttributes;
     }
 
