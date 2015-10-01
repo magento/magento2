@@ -160,7 +160,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
         $this->cmsPage->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn('1');
-        $this->cmsPage->expects($this->once())
+        $this->cmsPage->expects($this->atLeastOnce())
             ->method('getData')
             ->willReturn([
                 'layout' => '1column',
