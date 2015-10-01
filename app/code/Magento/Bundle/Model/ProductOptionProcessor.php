@@ -8,14 +8,14 @@ namespace Magento\Bundle\Model;
 use Magento\Bundle\Api\Data\BundleOptionInterface;
 use Magento\Bundle\Api\Data\BundleOptionInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductOptionExtensionFactory;
+use Magento\Catalog\Api\Data\ProductOptionInterface;
 use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Catalog\Model\ProductOptionFactory;
+use Magento\Catalog\Model\ProductOptionProcessorInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
-use Magento\Sales\Api\Data\OrderItemInterface;
-use Magento\Sales\Model\Order\Item\ProcessorInterface;
 
-class ProductOptionProcessor implements ProcessorInterface
+class ProductOptionProcessor implements ProductOptionProcessorInterface
 {
     /**
      * @var DataObjectFactory
@@ -58,13 +58,13 @@ class ProductOptionProcessor implements ProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function convertToBuyRequest(OrderItemInterface $orderItem)
+    public function convertToBuyRequest(ProductOptionInterface $productOption)
     {
         /** @var DataObject $request */
         $request = $this->objectFactory->create();
 
-        $bundleOptions = $this->getBundleOptions($orderItem);
-        if (!empty($bundleOptions)) {
+        $bundleOptions = $this->getBundleOptions($productOption);
+        if (!empty($bundleOptions) && is_array($bundleOptions)) {
             $requestData = [];
             foreach ($bundleOptions as $option) {
                 /** @var BundleOptionInterface $option */
@@ -82,17 +82,16 @@ class ProductOptionProcessor implements ProcessorInterface
     /**
      * Retrieve bundle options
      *
-     * @param OrderItemInterface $orderItem
+     * @param ProductOptionInterface $productOption
      * @return array
      */
-    protected function getBundleOptions(OrderItemInterface $orderItem)
+    protected function getBundleOptions(ProductOptionInterface $productOption)
     {
-        if ($orderItem->getProductOption()
-            && $orderItem->getProductOption()->getExtensionAttributes()
-            && $orderItem->getProductOption()->getExtensionAttributes()->getBundleOptions()
+        if ($productOption
+            && $productOption->getExtensionAttributes()
+            && $productOption->getExtensionAttributes()->getBundleOptions()
         ) {
-            return $orderItem->getProductOption()
-                ->getExtensionAttributes()
+            return $productOption->getExtensionAttributes()
                 ->getBundleOptions();
         }
         return [];
@@ -101,59 +100,31 @@ class ProductOptionProcessor implements ProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function processOptions(OrderItemInterface $orderItem)
+    public function convertToProductOption(DataObject $request)
     {
-        if ($orderItem->getProductType() !== ProductType::TYPE_BUNDLE) {
-            return $orderItem;
-        }
+        $bundleOptions = $request->getBundleOption();
+        $bundleOptionsQty = $request->getBundleOptionQty();
 
-        $bundleOptions = $orderItem->getBuyRequest()->getBundleOption();
-        $bundleOptionsQty = $orderItem->getBuyRequest()->getBundleOptionQty();
+        if (!empty($bundleOptions) && is_array($bundleOptions)) {
+            $data = [];
+            foreach ($bundleOptions as $optionId => $optionSelections) {
+                if (empty($optionSelections)) {
+                    continue;
+                }
+                $optionSelections = is_array($optionSelections) ? $optionSelections : [$optionSelections];
+                $optionQty = isset($bundleOptionsQty[$optionId]) ? $bundleOptionsQty[$optionId] : 1;
 
-        $productOptions = [];
-        foreach ($bundleOptions as $optionId => $optionSelections) {
-            if (empty($optionSelections)) {
-                continue;
+                /** @var BundleOptionInterface $productOption */
+                $productOption = $this->bundleOptionFactory->create();
+                $productOption->setOptionId($optionId);
+                $productOption->setOptionSelections($optionSelections);
+                $productOption->setOptionQty($optionQty);
+                $data[] = $productOption;
             }
-            $optionSelections = is_array($optionSelections) ? $optionSelections : [$optionSelections];
-            $optionQty = isset($bundleOptionsQty[$optionId]) ? $bundleOptionsQty[$optionId] : 1;
 
-            /** @var BundleOptionInterface $productOption */
-            $productOption = $this->bundleOptionFactory->create();
-            $productOption->setOptionId($optionId);
-            $productOption->setOptionSelections($optionSelections);
-            $productOption->setOptionQty($optionQty);
-            $productOptions[] = $productOption;
+            return ['bundle_options' => $data];
         }
 
-        $this->setBundleOptions($orderItem, $productOptions);
-
-        return $orderItem;
-    }
-
-    /**
-     * Set bundle options
-     *
-     * @param OrderItemInterface $orderItem
-     * @param BundleOptionInterface[] $bundleOptions
-     * @return $this
-     */
-    protected function setBundleOptions(OrderItemInterface $orderItem, array $bundleOptions)
-    {
-        if (!$orderItem->getProductOption()) {
-            $productOption = $this->productOptionFactory->create();
-            $orderItem->setProductOption($productOption);
-        }
-
-        if (!$orderItem->getProductOption()->getExtensionAttributes()) {
-            $extensionAttributes = $this->extensionFactory->create();
-            $orderItem->getProductOption()->setExtensionAttributes($extensionAttributes);
-        }
-
-        $orderItem->getProductOption()
-            ->getExtensionAttributes()
-            ->setBundleOptions($bundleOptions);
-
-        return $this;
+        return [];
     }
 }

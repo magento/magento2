@@ -6,15 +6,15 @@
 namespace Magento\ConfigurableProduct\Model;
 
 use Magento\Catalog\Api\Data\ProductOptionExtensionFactory;
+use Magento\Catalog\Api\Data\ProductOptionInterface;
 use Magento\Catalog\Model\ProductOptionFactory;
+use Magento\Catalog\Model\ProductOptionProcessorInterface;
 use Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface;
 use Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValueFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
-use Magento\Sales\Api\Data\OrderItemInterface;
-use Magento\Sales\Model\Order\Item\ProcessorInterface;
 
-class ProductOptionProcessor implements ProcessorInterface
+class ProductOptionProcessor implements ProductOptionProcessorInterface
 {
     /**
      * @var DataObjectFactory
@@ -57,12 +57,12 @@ class ProductOptionProcessor implements ProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function convertToBuyRequest(OrderItemInterface $orderItem)
+    public function convertToBuyRequest(ProductOptionInterface $productOption)
     {
         /** @var DataObject $request */
         $request = $this->objectFactory->create();
 
-        $options = $this->getConfigurableItemOptions($orderItem);
+        $options = $this->getConfigurableItemOptions($productOption);
         if (!empty($options)) {
             $requestData = [];
             foreach ($options as $option) {
@@ -78,17 +78,16 @@ class ProductOptionProcessor implements ProcessorInterface
     /**
      * Retrieve configurable item options
      *
-     * @param OrderItemInterface $orderItem
+     * @param ProductOptionInterface $productOption
      * @return array
      */
-    protected function getConfigurableItemOptions(OrderItemInterface $orderItem)
+    protected function getConfigurableItemOptions(ProductOptionInterface $productOption)
     {
-        if ($orderItem->getProductOption()
-            && $orderItem->getProductOption()->getExtensionAttributes()
-            && $orderItem->getProductOption()->getExtensionAttributes()->getConfigurableItemOptions()
+        if ($productOption
+            && $productOption->getExtensionAttributes()
+            && $productOption->getExtensionAttributes()->getConfigurableItemOptions()
         ) {
-            return $orderItem->getProductOption()
-                ->getExtensionAttributes()
+            return $productOption->getExtensionAttributes()
                 ->getConfigurableItemOptions();
         }
         return [];
@@ -97,48 +96,22 @@ class ProductOptionProcessor implements ProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function processOptions(OrderItemInterface $orderItem)
+    public function convertToProductOption(DataObject $request)
     {
-        $superAttribute = $orderItem->getBuyRequest()->getSuperAttribute();
+        $superAttribute = $request->getSuperAttribute();
         if (!empty($superAttribute) && is_array($superAttribute)) {
-            $configurableItemOptions = [];
+            $data = [];
             foreach ($superAttribute as $optionId => $optionValue) {
                 /** @var ConfigurableItemOptionValueInterface $option */
                 $option = $this->itemOptionValueFactory->create();
                 $option->setOptionId($optionId);
                 $option->setOptionValue($optionValue);
-                $configurableItemOptions[] = $option;
+                $data[] = $option;
             }
 
-            $this->setConfigurableItemOptions($orderItem, $configurableItemOptions);
+            return ['configurable_item_options' => $data];
         }
 
-        return $orderItem;
-    }
-
-    /**
-     * Set configurable item options
-     *
-     * @param OrderItemInterface $orderItem
-     * @param ConfigurableItemOptionValueInterface[] $configurableItemOptions
-     * @return $this
-     */
-    protected function setConfigurableItemOptions(OrderItemInterface $orderItem, array $configurableItemOptions)
-    {
-        if (!$orderItem->getProductOption()) {
-            $productOption = $this->productOptionFactory->create();
-            $orderItem->setProductOption($productOption);
-        }
-
-        if (!$orderItem->getProductOption()->getExtensionAttributes()) {
-            $extensionAttributes = $this->extensionFactory->create();
-            $orderItem->getProductOption()->setExtensionAttributes($extensionAttributes);
-        }
-
-        $orderItem->getProductOption()
-            ->getExtensionAttributes()
-            ->setConfigurableItemOptions($configurableItemOptions);
-
-        return $this;
+        return [];
     }
 }

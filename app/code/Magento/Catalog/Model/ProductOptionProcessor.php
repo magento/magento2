@@ -6,15 +6,14 @@
 namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\Data\ProductOptionExtensionFactory;
+use Magento\Catalog\Api\Data\ProductOptionInterface;
 use Magento\Catalog\Model\CustomOptions\CustomOption;
 use Magento\Catalog\Model\CustomOptions\CustomOptionFactory;
 use Magento\Catalog\Model\ProductOptionFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
-use Magento\Sales\Api\Data\OrderItemInterface;
-use Magento\Sales\Model\Order\Item\ProcessorInterface;
 
-class ProductOptionProcessor implements ProcessorInterface
+class ProductOptionProcessor implements ProductOptionProcessorInterface
 {
     /**
      * @var DataObjectFactory
@@ -38,7 +37,7 @@ class ProductOptionProcessor implements ProcessorInterface
 
     /**
      * @param DataObjectFactory $objectFactory
-     * @param \Magento\Catalog\Model\ProductOptionFactory $productOptionFactory
+     * @param ProductOptionFactory $productOptionFactory
      * @param ProductOptionExtensionFactory $extensionFactory
      * @param CustomOptionFactory $customOptionFactory
      */
@@ -57,12 +56,12 @@ class ProductOptionProcessor implements ProcessorInterface
     /**
      * @inheritDoc
      */
-    public function convertToBuyRequest(OrderItemInterface $orderItem)
+    public function convertToBuyRequest(ProductOptionInterface $productOption)
     {
         /** @var DataObject $request */
         $request = $this->objectFactory->create();
 
-        $options = $this->getCustomOptions($orderItem);
+        $options = $this->getCustomOptions($productOption);
         if (!empty($options)) {
             $requestData = [];
             foreach ($options as $option) {
@@ -77,17 +76,16 @@ class ProductOptionProcessor implements ProcessorInterface
     /**
      * Retrieve custom options
      *
-     * @param OrderItemInterface $orderItem
+     * @param ProductOptionInterface $productOption
      * @return array
      */
-    protected function getCustomOptions(OrderItemInterface $orderItem)
+    protected function getCustomOptions(ProductOptionInterface $productOption)
     {
-        if ($orderItem->getProductOption()
-            && $orderItem->getProductOption()->getExtensionAttributes()
-            && $orderItem->getProductOption()->getExtensionAttributes()->getCustomOptions()
+        if ($productOption
+            && $productOption->getExtensionAttributes()
+            && $productOption->getExtensionAttributes()->getCustomOptions()
         ) {
-            return $orderItem->getProductOption()
-                ->getExtensionAttributes()
+            return $productOption->getExtensionAttributes()
                 ->getCustomOptions();
         }
         return [];
@@ -96,11 +94,11 @@ class ProductOptionProcessor implements ProcessorInterface
     /**
      * @inheritDoc
      */
-    public function processOptions(OrderItemInterface $orderItem)
+    public function convertToProductOption(DataObject $request)
     {
-        $options = $orderItem->getBuyRequest()->getOptions();
+        $options = $request->getOptions();
         if (!empty($options) && is_array($options)) {
-            $customOptions = [];
+            $data = [];
             foreach ($options as $optionId => $optionValue) {
                 if (is_array($optionValue)) {
                     $optionValue = implode(',', $optionValue);
@@ -109,38 +107,12 @@ class ProductOptionProcessor implements ProcessorInterface
                 /** @var CustomOption $option */
                 $option = $this->customOptionFactory->create();
                 $option->setOptionId($optionId)->setOptionValue($optionValue);
-                $customOptions[] = $option;
+                $data[] = $option;
             }
 
-            $this->setCustomOptions($orderItem, $customOptions);
+            return ['custom_options' => $data];
         }
 
-        return $orderItem;
-    }
-
-    /**
-     * Set custom options
-     *
-     * @param OrderItemInterface $orderItem
-     * @param CustomOption[] $customOptions
-     * @return $this
-     */
-    protected function setCustomOptions(OrderItemInterface $orderItem, array $customOptions)
-    {
-        if (!$orderItem->getProductOption()) {
-            $productOption = $this->productOptionFactory->create();
-            $orderItem->setProductOption($productOption);
-        }
-
-        if (!$orderItem->getProductOption()->getExtensionAttributes()) {
-            $extensionAttributes = $this->extensionFactory->create();
-            $orderItem->getProductOption()->setExtensionAttributes($extensionAttributes);
-        }
-
-        $orderItem->getProductOption()
-            ->getExtensionAttributes()
-            ->setCustomOptions($customOptions);
-
-        return $this;
+        return [];
     }
 }
