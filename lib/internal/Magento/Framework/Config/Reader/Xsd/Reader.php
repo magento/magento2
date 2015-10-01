@@ -77,6 +77,7 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
      * @param null $scope
      * @return array|\Magento\Framework\Config\FileIterator
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function read($scope = null)
     {
@@ -130,61 +131,105 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
      */
     protected function mergeXsd($parent, $child)
     {
-        $domParent = new \DOMDocument("1.0", 'UTF-8');
-        $domParent->formatOutput = true;
-        $domParent->loadXML($parent);
-        $domParent->preserveWhiteSpace = true;
-
-        $domChild = new \DOMDocument("1.0", 'UTF-8');
-        $domChild->formatOutput = true;
-        $domChild->loadXML($child);
-
+        $domParent = $this->createDomInstance($parent);
+        $domChild = $this->createDomInstance($child);
         $domChild = $domChild->documentElement;
+
         $domParentElement = $domParent->getElementsByTagName('complexType');
-        if ($domParentElement instanceof \DOMNodeList) {
-            foreach ($domParentElement as $child) {
-                if ($child->getAttribute('name') === 'mediaType') {
-                    if ($child instanceof \DOMElement && $child->hasChildNodes()) {
-                        foreach ($child->childNodes as $findElement) {
-                            if ($findElement instanceof \DOMElement) {
-                                $domParentNode = $findElement;
-                                break;
-                            }
-                        }
-                    }
-                }
+        $parentDomElements = $this->findDomElement($domParentElement, 'name');
+        foreach ($parentDomElements->childNodes as $findElement) {
+            if ($findElement instanceof \DOMElement) {
+                $domParentNode = $findElement;
+                break;
             }
         }
-
         $domChildElement = $domChild->getElementsByTagName('extension');
-        if ($domChildElement instanceof \DOMNodeList) {
-            foreach ($domChildElement as $child) {
-                if ($child->getAttribute('base') === 'mediaType') {
-                    if ($child instanceof \DOMElement && $child->hasChildNodes()) {
-                        foreach ($child->childNodes as $sequence) {
-                            if ($sequence instanceof \DOMElement && $sequence->hasChildNodes()) {
-                                foreach ($sequence->childNodes as $findElement) {
-                                    if ($findElement instanceof \DOMElement) {
-                                        $importedNodes = $domParent->importNode($findElement, true);
-                                        $domParentNode->appendChild($importedNodes);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
+        $childDomElements = $this->findDomElement($domChildElement, 'base');
+        $domParent = $this->addHeadChildIntoParent($childDomElements, $domParent, $domParentNode);
         $delete = $domChild->getElementsByTagName('redefine')->item(0);
         $domChild->removeChild($delete);
+        $domParent = $this->addBodyChildIntoParent($domChild, $domParent);
 
+        return $domParent->saveXML();
+    }
+
+    /**
+     * Create DOM instance
+     *
+     * @param string $source
+     * @return \DOMDocument
+     */
+    protected function createDomInstance($source)
+    {
+        $domInstance = new \DOMDocument("1.0", 'UTF-8');
+        $domInstance->formatOutput = true;
+        $domInstance->loadXML($source);
+        $domInstance->preserveWhiteSpace = true;
+
+        return $domInstance;
+    }
+
+    /**
+     * Find searched element in DOM
+     *
+     * @param \DOMNodeList $domParentElement
+     * @param string $attribute
+     * @return mixed
+     */
+    protected function findDomElement(\DOMNodeList $domParentElement, $attribute)
+    {
+        foreach ($domParentElement as $child) {
+            if ($child->getAttribute($attribute) === 'mediaType'
+                && $child instanceof \DOMElement
+                && $child->hasChildNodes()
+            ) {
+                return $child;
+            }
+        }
+    }
+
+    /**
+     * Add into parent head elements from child
+     *
+     * @param \DOMElement $childDomElements
+     * @param \DOMDocument $domParent
+     * @param \DOMElement $domParentNode
+     * @return \DOMDocument
+     */
+    protected function addHeadChildIntoParent(
+        \DOMElement $childDomElements,
+        \DOMDocument $domParent,
+        \DOMElement $domParentNode
+    ) {
+        foreach ($childDomElements->childNodes as $sequence) {
+            if ($sequence instanceof \DOMElement && $sequence->hasChildNodes()) {
+                foreach ($sequence->childNodes as $findElement) {
+                    if ($findElement instanceof \DOMElement) {
+                        $importedNodes = $domParent->importNode($findElement, true);
+                        $domParentNode->appendChild($importedNodes);
+                    }
+                }
+            }
+        }
+
+        return $domParent;
+    }
+
+    /**
+     * Add into parent body elements from child
+     *
+     * @param \DOMElement $domChild
+     * @param \DOMDocument $domParent
+     * @return \DOMDocument
+     */
+    protected function addBodyChildIntoParent(\DOMElement $domChild, \DOMDocument $domParent)
+    {
         foreach ($domChild->childNodes as $node) {
             $importNode = $domParent->importNode($node, true);
             $domParent->documentElement->appendChild($importNode);
         }
 
-        return $domParent->saveXML();
+        return $domParent;
     }
 
 }
