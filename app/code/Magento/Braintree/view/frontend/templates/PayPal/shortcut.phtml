@@ -16,6 +16,7 @@ $widgetName = $isMiniCart ? 'braintreePayPalMinicart' : 'braintreePayPal';
 
 $config = [
     $widgetName => [
+        'url' => $block->getButtonDataUrl(),
         'isMiniCart' => $isMiniCart,
         'formAction' => $block->escapeUrl($block->getReviewPageUrl()),
         'clientToken' => $block->escapeHtml($block->getClientToken()),

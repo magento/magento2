@@ -25,11 +25,13 @@ define([
                 customerData.get('cart')
                     .subscribe(function () {
                         if (this.isClick) {
-                            actionGetData.request().done(button.update.bind(button));
+                            actionGetData.request(config.url)
+                                .done(button.update.bind(button));
                         }
                     }.bind(this));
 
-                $('#product_addtocart_form').submit();
+                $(config.containerId).parents('form')
+                    .submit();
             },
 
             afterClickAction: function () {
@@ -83,12 +85,14 @@ define([
                 this.isClick = true;
                 event.preventDefault();
                 event.stopPropagation();
-                actionGetData.request().done(button.update.bind(button));
+                actionGetData.request(config.url).done(button.update.bind(button));
             }
         };
 
         $(config.containerId).on('click', button.click.bind(button));
 
-        actionGetData.when().promise().done(button.update.bind(button));
+        actionGetData.when(config.url)
+            .promise()
+            .done(button.update.bind(button));
     };
 });

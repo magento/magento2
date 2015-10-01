@@ -102,6 +102,14 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
     }
 
     /**
+     * @return string
+     */
+    public function getButtonDataUrl()
+    {
+        return $this->_urlBuilder->getUrl('braintree/paypal/getbuttondata', ['_secure' => true]);
+    }
+
+    /**
      * Get shortcut alias
      *
      * @return string
