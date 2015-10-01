@@ -63,7 +63,7 @@ class CustomOptionProcessorTest extends \PHPUnit_Framework_TestCase
         $this->customOptionFactory = $this->getMockBuilder('Magento\Catalog\Model\CustomOptions\CustomOptionFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
-            ->getMockForAbstractClass();
+            ->getMock();
         $this->cartItem = $this->getMockBuilder('Magento\Quote\Api\Data\CartItemInterface')
             ->disableOriginalConstructor()
             ->setMethods(['getOptionByCode', 'getProductOption', 'setProductOption'])
