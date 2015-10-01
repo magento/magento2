@@ -7,6 +7,7 @@ namespace Magento\Widget\Controller\Adminhtml\Widget;
 
 /**
  * @magentoAppArea adminhtml
+ * @magentoAppIsolation enabled
  */
 class InstanceTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
@@ -30,18 +31,27 @@ class InstanceTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         $this->getRequest()->setParam('theme_id', $theme->getId());
     }
 
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testEditAction()
     {
         $this->dispatch('backend/admin/widget_instance/edit');
         $this->assertContains('<option value="cms_page_link" selected="selected">', $this->getResponse()->getBody());
     }
 
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testBlocksAction()
     {
         $this->dispatch('backend/admin/widget_instance/blocks');
         $this->assertStringStartsWith('<select name="block" id=""', $this->getResponse()->getBody());
     }
 
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testTemplateAction()
     {
         $this->dispatch('backend/admin/widget_instance/template');
