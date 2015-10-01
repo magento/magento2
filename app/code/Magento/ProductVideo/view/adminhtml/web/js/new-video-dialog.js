@@ -752,6 +752,7 @@ define([
             if (!this.isValid()) {
                 return;
             }
+            imageData = this.imageData;
             inputFile       = $(this._videoPreviewInputSelector);
             itemId          = $(this._itemIdSelector).val();
             itemId              = itemId.slice(1, itemId.length - 1);
@@ -767,9 +768,9 @@ define([
                 if (_field.length > 0) {
                     _tmp = _inputSelector.slice(0, _inputSelector.length - 2) + '[' + fieldName + ']"]';
                     $(_tmp).val(_field.val());
+                    imageData[fieldName] = _field.val();
                 }
             });
-            imageData = this._getImage($('#file_name').val());
             flagChecked     = $(this._videoDisableinputSelector).attr('checked') ? 1 : 0;
             $('input[name*="' + itemId + '][disabled]"]').val(flagChecked);
             $(_inputSelector).siblings('.image-fade').css('visibility', flagChecked ? 'visible' : 'hidden');
@@ -940,7 +941,7 @@ define([
          */
         _onClose: function () {
             var newVideoForm;
-
+            this.imageData = null;
             if (this._previewImage) {
                 this._previewImage.remove();
                 this._previewImage = null;
@@ -1028,7 +1029,7 @@ define([
             var formFields, flagChecked, file;
 
             if (imageData['media_type'] === 'external-video') {
-
+                this.imageData = imageData;
                 $('.video-create-button').hide();
                 $('.video-delete-button').show();
                 $('.video-edit').show();
@@ -1062,6 +1063,7 @@ define([
                     }
                 });
             }
+
         },
 
         /**
