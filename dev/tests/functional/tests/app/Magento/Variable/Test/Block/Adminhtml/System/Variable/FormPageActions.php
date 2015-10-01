@@ -33,7 +33,7 @@ class FormPageActions extends AbstractFormPageActions
      *
      * @var string
      */
-    protected  $storeView = './/*/a[contains(text(),"%s")]';
+    protected $storeView = './/*/a[contains(text(),"%s")]';
 
     /**
      * Selector for confirm.
