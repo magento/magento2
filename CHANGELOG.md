@@ -18,6 +18,7 @@
     * Fixed an issue where unable to deploy to production without downtime
     * Fixed an issue with minicart inconsistent behavior between http and https
     * Fixed an issue with CMS page preview on frontend
+    * Fixed an issue where discounts is not showing in the order summary at the shipping section in the checkout
 * Search improvements:    
     * Improve Catalog Performance. Quick Search
 * GitHub issues and requests:
