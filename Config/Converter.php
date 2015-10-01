@@ -22,6 +22,17 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     const TOPIC_NAME = 'name';
     const TOPIC_PUBLISHER = 'publisher';
     const TOPIC_SCHEMA = 'schema';
+    const TOPIC_SCHEMA_TYPE = 'schema_type';
+    const TOPIC_SCHEMA_VALUE = 'schema_value';
+    const TOPIC_SCHEMA_METHOD_NAME = 'schema_method';
+
+    const TOPIC_SCHEMA_TYPE_OBJECT = 'object';
+    const TOPIC_SCHEMA_TYPE_METHOD = 'method_arguments';
+
+    const SCHEMA_METHOD_PARAM_NAME = 'param_name';
+    const SCHEMA_METHOD_PARAM_POSITION = 'param_position';
+    const SCHEMA_METHOD_PARAM_TYPE = 'param_type';
+    const SCHEMA_METHOD_PARAM_IS_REQUIRED = 'is_required';
 
     const CONSUMERS = 'consumers';
     const CONSUMER_NAME = 'name';
@@ -105,7 +116,12 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $topicName = $topicNode->attributes->getNamedItem('name')->nodeValue;
             $output[$topicName] = [
                 self::TOPIC_NAME => $topicName,
-                self::TOPIC_SCHEMA => $topicNode->attributes->getNamedItem('schema')->nodeValue,
+                self::TOPIC_SCHEMA => [
+                    // TODO: Identify schema type
+                    self::TOPIC_SCHEMA_TYPE => self::TOPIC_SCHEMA_TYPE_OBJECT,
+                    // TODO: Populate object type
+                    self::TOPIC_SCHEMA_VALUE => $topicNode->attributes->getNamedItem('schema')->nodeValue
+                ],
                 self::TOPIC_PUBLISHER => $topicNode->attributes->getNamedItem('publisher')->nodeValue
             ];
         }
