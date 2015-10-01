@@ -19,6 +19,7 @@ use Magento\Quote\Model\Quote;
  * Class RequestSecureToken
  *
  * @package Magento\Paypal\Controller\Transparent
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RequestSecureToken extends \Magento\Framework\App\Action\Action
 {
