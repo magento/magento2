@@ -327,7 +327,7 @@ namespace Magento\Setup\Model;
 
 function ini_get($param)
 {
-    if($param === 'xdebug.max_nesting_level') {
+    if ($param === 'xdebug.max_nesting_level') {
         return 100;
     } elseif ($param === 'always_populate_raw_post_data') {
         return -1;
