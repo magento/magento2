@@ -11,5 +11,11 @@
     "version": "1.0.0-beta",
     "license": [
         "proprietary"
-    ]
+    ],
+    "autoload": {
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "Magento\\MysqlMq\\": ""
+        }
+    }
 }
