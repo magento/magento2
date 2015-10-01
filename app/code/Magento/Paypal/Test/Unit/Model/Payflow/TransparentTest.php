@@ -273,6 +273,9 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
      */
     public function testAuthorizeException()
     {
+        $this->initializationAuthorizeMock();
+        $this->buildRequestData();
+
         $this->gatewayMock->expects($this->once())
             ->method('postRequest')
             ->willThrowException(new \Exception());
@@ -330,6 +333,9 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
         $origResultExactlyCall,
         $origResult
     ) {
+        $this->initializationAuthorizeMock();
+        $this->buildRequestData();
+
         $this->responseMock->expects($this->exactly($resultCodeExactlyCall))
             ->method('getResultCode')
             ->willReturn($resultCode);
