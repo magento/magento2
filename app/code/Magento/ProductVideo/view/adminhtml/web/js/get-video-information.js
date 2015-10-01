@@ -151,8 +151,7 @@ require([
              * @private
              */
             _create: function () {
-                var self = this,
-                YT = window.YT || null;
+                var self = this;
 
                 this._initialize();
 
@@ -174,7 +173,7 @@ require([
                         }
                         self._params.rel = 0;
 
-                        self._player = new YT.Player(self.element.children(':first')[0], {
+                        self._player = new window.YT.Player(self.element.children(':first')[0], {
                             height: self._height,
                             width: self._width,
                             videoId: self._code,
