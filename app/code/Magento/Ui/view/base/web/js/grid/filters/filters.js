@@ -61,9 +61,10 @@ define([
                         template: 'ui/grid/filters/elements/input'
                     },
                     select: {
-                        component: 'Magento_Ui/js/form/element/ui-select',
-                        template: 'ui/grid/filters/elements/ui-select',
-                        options: '${ JSON.stringify($.$data.column.options) }'
+                        component: 'Magento_Ui/js/form/element/select',
+                        template: 'ui/grid/filters/elements/select',
+                        options: '${ JSON.stringify($.$data.column.options) }',
+                        caption: ' '
                     },
                     dateRange: {
                         component: 'Magento_Ui/js/grid/filters/range',

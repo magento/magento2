@@ -5,12 +5,10 @@
 
 define([
     'underscore',
-    'ko',
     './abstract',
     'Magento_Ui/js/lib/key-codes',
-    'mage/translate',
-    'uiLayout'
-], function (_, ko, Abstract, keyCodes, $t, layout) {
+    'mage/translate'
+], function (_, Abstract, keyCodes, $t) {
     'use strict';
 
     /**
@@ -52,20 +50,10 @@ define([
                 defaultPlaceholder: $t('Select...'),
                 lotPlaceholders: $t('Selected')
             },
-            optionsConfig: {
-                name: '${ $.name }_options',
-                component: 'Magento_Ui/js/form/element/helpers/options'
-            },
             hoverElIndex: null,
             listens: {
                 listVisible: 'cleanHoveredElement',
                 filterInputValue: 'filterOptionsList'
-            },
-            imports: {
-                options: '${ $.optionsConfig.name }:options'
-            },
-            modules: {
-                optionsProvider: '${ $.optionsConfig.name }'
             }
         },
 
@@ -130,18 +118,6 @@ define([
                           'filterInputValue',
                           'filterOptionsFocus'
             ]);
-
-            return this;
-        },
-
-        /**
-         * Initializes optionsProvider
-         *
-         * @returns {Object} Chainable.
-         */
-        initOptions: function () {
-            this.optionsConfig.options = this.options();
-            layout([this.optionsConfig]);
 
             return this;
         },
