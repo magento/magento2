@@ -11,7 +11,6 @@
         "magento/module-backend": "1.0.0-beta",
         "magento/module-eav": "1.0.0-beta",
         "magento/module-customer": "1.0.0-beta",
-        "magento/module-directory": "1.0.0-beta",
         "magento/framework": "1.0.0-beta",
         "magento/module-media-storage": "1.0.0-beta",
         "magento/module-quote": "1.0.0-beta",
