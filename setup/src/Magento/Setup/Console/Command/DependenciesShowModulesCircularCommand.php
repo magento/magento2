@@ -44,6 +44,7 @@ class DependenciesShowModulesCircularCommand extends AbstractDependenciesCommand
     {
         $filesForParse = Files::init()->getComposerFiles(ComponentRegistrar::MODULE, false);
 
+        asort($filesForParse);
         ServiceLocator::getCircularDependenciesReportBuilder()->build(
             [
                 'parse' => ['files_for_parse' => $filesForParse],
