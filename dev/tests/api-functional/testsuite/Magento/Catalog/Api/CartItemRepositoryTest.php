@@ -164,16 +164,16 @@ class CartItemRepositoryTest extends WebapiAbstract
     {
         $returnValue = null;
         switch ($option->getType()) {
-            case 'field' :
+            case 'field':
                 $returnValue = 'Test value';
                 break;
-            case 'date_time' :
+            case 'date_time':
                 $returnValue = '2015-09-09 07:16:00';
                 break;
-            case 'drop_down' :
+            case 'drop_down':
                 $returnValue = '3-1-select';
                 break;
-            case 'radio' :
+            case 'radio':
                 $returnValue = '4-1-radio';
                 break;
         }
