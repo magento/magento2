@@ -93,15 +93,11 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
                 'identifier' => 'no-route'
             ]
         ];
-
-        $this->request->expects($this->at(1))
-            ->method('getParam')
-            ->with('isAjax')
-            ->willReturn(true);
-        $this->request->expects($this->at(0))
+        $this->request->expects($this->any())
             ->method('getParam')
             ->willReturnMap(
                 [
+                    ['isAjax', null, true],
                     ['items', [], $postData]
                 ]
             );
@@ -217,14 +213,11 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
         $this->jsonFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->resultJson);
-        $this->request->expects($this->at(0))
-            ->method('getParam')
-            ->with('items', [])
-            ->willReturn([]);
-        $this->request->expects($this->at(1))
+        $this->request->expects($this->any())
             ->method('getParam')
             ->willReturnMap(
                 [
+                    ['items', [], []],
                     ['isAjax', null, true]
                 ]
             );
