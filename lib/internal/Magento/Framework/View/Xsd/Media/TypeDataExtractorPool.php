@@ -3,10 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Framework\Config\Reader\Xsd\Media;
+namespace Magento\Framework\View\Xsd\Media;
 
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Config\Reader\Xsd\Media\TypeDataExtractorInterface;
 
 class TypeDataExtractorPool
 {
@@ -26,7 +25,7 @@ class TypeDataExtractorPool
 
     /**
      * @param ObjectManagerInterface $objectManager
-     * @param \Magento\Framework\Config\Reader\Xsd\Media\TypeDataExtractorInterface[] $extractors
+     * @param \Magento\Framework\View\Xsd\Media\TypeDataExtractorInterface[] $extractors
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
@@ -45,11 +44,12 @@ class TypeDataExtractorPool
      * Get node processor from corresponding module
      *
      * @param string $tagName
-     * @return mixed
+     * @return object
      */
     public function nodeProcessor($tagName)
     {
-        return $this->extractors[$tagName];
+        if (isset($this->extractors[$tagName])) {
+            return $this->extractors[$tagName];
+        }
     }
-
 }

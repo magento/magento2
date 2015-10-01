@@ -7,6 +7,7 @@ namespace Magento\Swatches\Helper;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Area;
+use Magento\Catalog\Helper\Image;
 
 /**
  * Helper to move images from tmp to catalog directory
@@ -254,7 +255,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
             ]);
             $imageConfig = array_merge(
                 $imageConfig,
-                $config->getMediaEntities('Magento_Catalog', 'images')
+                $config->getMediaEntities('Magento_Catalog', Image::MEDIA_TYPE_CONFIG_NODE)
             );
         }
         return $imageConfig;

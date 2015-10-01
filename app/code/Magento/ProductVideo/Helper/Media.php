@@ -36,7 +36,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     const NODE_CONFIG_VIDEO_AUTO_RESTART = 'video_auto_restart';
 
     /**
-     * Media type
+     * Media config node
      */
     const MEDIA_TYPE_CONFIG_NODE = 'videos';
 

@@ -9,18 +9,18 @@
  */
 namespace Magento\Framework\Config;
 
-use Magento\Framework\Config\Reader\Xsd\Reader;
-use Magento\Framework\Config\Reader\Xsd\Media\TypeDataExtractorPool;
+use Magento\Framework\View\Xsd\Reader;
+use Magento\Framework\View\Xsd\Media\TypeDataExtractorPool;
 
 class View extends \Magento\Framework\Config\AbstractXml
 {
     /**
-     * @var \Magento\Framework\Config\Reader\Xsd\Reader
+     * @var \Magento\Framework\View\Xsd\Reader
      */
     protected $xsdReader;
 
     /**
-     * @var \Magento\Framework\Config\Reader\Xsd\Media\TypeDataExtractorPool
+     * @var \Magento\Framework\View\Xsd\Media\TypeDataExtractorPool
      */
     protected $extractorPool;
 
@@ -37,9 +37,9 @@ class View extends \Magento\Framework\Config\AbstractXml
      */
     public function __construct(
         $configFiles,
-        $xpath = [],
         Reader $xsdReader,
-        TypeDataExtractorPool $extractorPool
+        TypeDataExtractorPool $extractorPool,
+        $xpath = []
     ) {
         $this->xsdReader = $xsdReader;
         $this->xpath = $xpath;

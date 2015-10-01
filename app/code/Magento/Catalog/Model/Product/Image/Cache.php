@@ -64,7 +64,7 @@ class Cache
                     'area' => Area::AREA_FRONTEND,
                     'themeModel' => $theme,
                 ]);
-                $images = $config->getMediaEntities('Magento_Catalog', ImageHelper::MEDIA_TYPE);
+                $images = $config->getMediaEntities('Magento_Catalog', ImageHelper::MEDIA_TYPE_CONFIG_NODE);
                 foreach ($images as $imageId => $imageData) {
                     $this->data[$theme->getCode() . $imageId] = array_merge(['id' => $imageId], $imageData);
                 }
