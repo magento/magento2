@@ -14,8 +14,12 @@ class Unhold extends \Magento\Sales\Controller\Adminhtml\Order
      */
     public function execute()
     {
-        $order = $this->_initOrder();
         $resultRedirect = $this->resultRedirectFactory->create();
+        if(!$this->isValidPostRequest()) {
+            $this->messageManager->addError(__('Can\'t unhold order.'));
+            return $resultRedirect->setPath('sales/*/');
+        }
+        $order = $this->_initOrder();
         if ($order) {
             try {
                 if (!$order->canUnhold()) {
