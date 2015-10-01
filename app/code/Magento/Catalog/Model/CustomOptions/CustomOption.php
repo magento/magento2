@@ -8,7 +8,6 @@ namespace Magento\Catalog\Model\CustomOptions;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Catalog\Api\Data\CustomOptionInterface;
 
-
 //@codeCoverageIgnoreStart
 class CustomOption extends AbstractExtensibleModel implements CustomOptionInterface
 {
