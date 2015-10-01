@@ -185,17 +185,16 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     {
         $listofLibraries = [];
         $componentRegistrar = new ComponentRegistrar();
-        foreach($componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $library)
-        {
-            $library = str_replace('\\', '/',$library);
-            if (strpos($library, 'Framework/')){
+        foreach($componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $library) {
+            $library = str_replace('\\', '/', $library);
+            if (strpos($library, 'Framework/')) {
                 $partOfLibraryPath = explode('/', $library);
 
-                $temp = implode('/', array_slice(($partOfLibraryPath),-3));
+                $temp = implode('/', array_slice(($partOfLibraryPath), -3));
                 $listofLibraries[] = $temp;
             }
         }
-        self::$whitelist = $listofLibraries;
+        self::$whiteList = $listofLibraries;
     }
 
     /**
@@ -316,7 +315,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                     $dependencies = array_merge($dependencies, $newDependencies);
                 }
                 foreach ($dependencies as $key => $dependency) {
-                    foreach (self::$whitelist as $namespace) {
+                    foreach (self::$whiteList as $namespace) {
                         if (strpos($dependency['source'], $namespace) !== false) {
                             $dependency['module'] = $namespace;
                             $dependencies[$key] = $dependency;
