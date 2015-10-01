@@ -47,11 +47,6 @@ define(
                 return {
                     'method': this.item.method,
                     'po_number': null,
-                    'cc_owner': null,
-                    'cc_number': null,
-                    'cc_type': null,
-                    'cc_exp_year': null,
-                    'cc_exp_month': null,
                     'additional_data': {
                         'payment_method_nonce': this.paymentMethodNonce()
                     }
