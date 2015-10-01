@@ -11,10 +11,10 @@ use Magento\Eav\Model\Config;
 use Magento\Framework\App\Resource;
 use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
 use Magento\Framework\Search\Request\BucketInterface;
-use Magento\Store\Model\Store;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -62,11 +62,16 @@ class DataProvider implements DataProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getDataSet(BucketInterface $bucket, array $dimensions)
-    {
+    public function getDataSet(
+        BucketInterface $bucket,
+        array $dimensions,
+        Table $entityIdsTable
+    ) {
         $currentScope = $dimensions['scope']->getValue();
 
         $attribute = $this->eavConfig->getAttribute(Product::ENTITY, $bucket->getField());
+
+        $select = $this->getSelect();
 
         if ($attribute->getAttributeCode() == 'price') {
             /** @var \Magento\Store\Model\Store $store */
@@ -75,7 +80,6 @@ class DataProvider implements DataProviderInterface
                 throw new \RuntimeException('Illegal scope resolved');
             }
             $table = $this->resource->getTableName('catalog_product_index_price');
-            $select = $this->getSelect();
             $select->from(['main_table' => $table], null)
                 ->columns([BucketInterface::FIELD_VALUE => 'main_table.min_price'])
                 ->where('main_table.customer_group_id = ?', $this->customerSession->getCustomerGroupId())
@@ -83,7 +87,6 @@ class DataProvider implements DataProviderInterface
         } else {
             $currentScopeId = $this->scopeResolver->getScope($currentScope)
                 ->getId();
-            $select = $this->getSelect();
             $table = $this->resource->getTableName(
                 'catalog_product_index_eav' . ($attribute->getBackendType() == 'decimal' ? '_decimal' : '')
             );
@@ -91,6 +94,12 @@ class DataProvider implements DataProviderInterface
                 ->where('main_table.attribute_id = ?', $attribute->getAttributeId())
                 ->where('main_table.store_id = ? ', $currentScopeId);
         }
+
+        $select->joinInner(
+            ['entities' => $entityIdsTable->getName()],
+            'main_table.entity_id  = entities.entity_id',
+            []
+        );
 
         return $select;
     }
