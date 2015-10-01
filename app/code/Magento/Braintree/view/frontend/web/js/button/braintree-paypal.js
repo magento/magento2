@@ -13,26 +13,11 @@ define([
     return function (config) {
 
         var button = {
-            isEmpty: false,
-
             isClick: false,
 
             isAfterClick: false,
 
             isRendered: false,
-
-            afterCartUpdateAction: function () {
-                customerData.get('cart')
-                    .subscribe(function () {
-                        if (this.isClick) {
-                            actionGetData.request(config.url)
-                                .done(button.update.bind(button));
-                        }
-                    }.bind(this));
-
-                $(config.containerId).parents('form')
-                    .submit();
-            },
 
             afterClickAction: function () {
                 var paypalButton = config.containerId + ' .paypal-button';
@@ -41,30 +26,23 @@ define([
                 domObserver.get(paypalButton, function (event) {
                     domObserver.off(paypalButton);
                     if (this.isRendered) {
+                        this.isRendered = false;
                         return;
                     }
                     $('body').trigger('processStop');
-                    this.isRendered = false;
                     this.isAfterClick = true;
                     $(paypalButton).click();
                 }.bind(this));
             },
 
             update: function (response) {
-                this.isEmpty = response.isEmpty;
-
                 config.options.amount = response.isEmpty ? 1 : response.amount;
                 config.options.currency = response.isEmpty ? 'USD' : response.currency;
 
-                if (this.isEmpty && this.isClick) {
-                    this.afterCartUpdateAction();
-                } else if (this.isClick && !this.isEmpty) {
+                if (this.isClick) {
                     this.isRendered = true;
                     this.afterClickAction();
                 }
-
-                this.isRendered = false;
-
                 builder.setClientToken(config.clientToken)
                     .setOptions(config.options)
                     .setName('paypal')
@@ -75,21 +53,39 @@ define([
                     .build();
             },
 
-            click: function (event) {
-                if (!this.isEmpty && this.isAfterClick) {
-                    this.isClick = false;
-                    this.isAfterClick = false;
-                    return;
-                }
-
+            mousedown: function (event) {
                 this.isClick = true;
                 event.preventDefault();
                 event.stopPropagation();
-                actionGetData.request(config.url).done(button.update.bind(button));
+
+                $(config.containerId).parents('form:first')
+                    .find('.action.primary:first')
+                    .click();
+            },
+
+            click: function (event) {
+
+                if (this.isAfterClick) {
+                    this.isAfterClick = false;
+                    this.isClick = false;
+                    return;
+                }
+
+                event.preventDefault();
+                event.stopPropagation();
             }
         };
 
+        $(config.containerId).on('mousedown', button.mousedown.bind(button));
         $(config.containerId).on('click', button.click.bind(button));
+
+        customerData.get('cart')
+            .subscribe(function () {
+                if (this.isClick) {
+                    actionGetData.request(config.url)
+                        .done(this.update.bind(this));
+                }
+            }.bind(button));
 
         actionGetData.when(config.url)
             .promise()
