@@ -185,12 +185,12 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     {
         $listofLibraries = [];
         $componentRegistrar = new ComponentRegistrar();
-        foreach($componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $library) {
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $library) {
             $library = str_replace('\\', '/', $library);
             if (strpos($library, 'Framework/')) {
                 $partOfLibraryPath = explode('/', $library);
 
-                $temp = implode('/', array_slice(($partOfLibraryPath), -3));
+                $temp = implode('\\', array_slice(($partOfLibraryPath), -3));
                 $listofLibraries[] = $temp;
             }
         }
@@ -307,21 +307,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                 $module = $foundModuleName;
                 $contents = $this->_getCleanedFileContents($fileType, $file);
 
-                // Apply rules
-                $dependencies = [];
-                foreach (self::$_rulesInstances as $rule) {
-                    /** @var \Magento\TestFramework\Dependency\RuleInterface $rule */
-                    $newDependencies = $rule->getDependencyInfo($module, $fileType, $file, $contents);
-                    $dependencies = array_merge($dependencies, $newDependencies);
-                }
-                foreach ($dependencies as $key => $dependency) {
-                    foreach (self::$whiteList as $namespace) {
-                        if (strpos($dependency['source'], $namespace) !== false) {
-                            $dependency['module'] = $namespace;
-                            $dependencies[$key] = $dependency;
-                        }
-                    }
-                }
+                $dependencies = $this->getDependenciesFromFiles($module, $fileType, $file, $contents);
 
                 // Collect dependencies
                 $undeclaredDependency = $this->_collectDependencies($module, $dependencies);
@@ -341,6 +327,35 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
             },
             $this->getAllFiles()
         );
+    }
+
+    /**
+     * Retrieve dependencies from files
+     *
+     * @param $module
+     * @param $fileType
+     * @param $file
+     * @param $contents
+     * @return string[]
+     */
+    protected function getDependenciesFromFiles($module, $fileType, $file, $contents)
+    {
+        // Apply rules
+        $dependencies = [];
+        foreach (self::$_rulesInstances as $rule) {
+            /** @var \Magento\TestFramework\Dependency\RuleInterface $rule */
+            $newDependencies = $rule->getDependencyInfo($module, $fileType, $file, $contents);
+            $dependencies = array_merge($dependencies, $newDependencies);
+        }
+        foreach ($dependencies as $key => $dependency) {
+            foreach (self::$whiteList as $namespace) {
+                if (strpos($dependency['source'], $namespace) !== false) {
+                    $dependency['module'] = $namespace;
+                    $dependencies[$key] = $dependency;
+                }
+            }
+        }
+        return $dependencies;
     }
 
     /**

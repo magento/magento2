@@ -15,5 +15,12 @@
     "license": [
         "OSL-3.0",
         "AFL-3.0"
-    ]
+    ],
+    "autoload": {
+        "files": [ "registration.php" ],
+        "psr-4": {
+            "Magento\\CatalogRuleConfigurable\\": ""
+        }
+    }
+
 }
