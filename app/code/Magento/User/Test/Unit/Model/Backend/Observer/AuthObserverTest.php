@@ -151,7 +151,7 @@ class AuthObserverTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\User\Model\User|\PHPUnit_Framework_MockObject_MockObject $userMock */
         $userMock = $this->getMockBuilder('Magento\User\Model\User')
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getLockExpires', 'getPassword'])
+            ->setMethods(['getId', 'getLockExpires', 'getPassword', 'save'])
             ->getMock();
 
         $eventObserverMock->expects($this->atLeastOnce())->method('getEvent')->willReturn($eventMock);
@@ -180,8 +180,7 @@ class AuthObserverTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->messageInterfaceMock);
         $this->messageInterfaceMock->expects($this->once())->method('setIdentifier')->willReturnSelf();
         $this->authSessionMock->expects($this->once())->method('setPciAdminUserIsPasswordExpired');
-        $this->encryptorMock->expects($this->once())->method('isValidHashByVersion')->willReturn(true);
-        $userMock->expects($this->once())->method('getPassword')->willReturn($userPassword);
+        $this->encryptorMock->expects($this->once())->method('validateHashVersion')->willReturn(false);
 
         $this->model->adminAuthenticate($eventObserverMock);
     }
