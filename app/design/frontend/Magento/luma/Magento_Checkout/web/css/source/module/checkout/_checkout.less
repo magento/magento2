@@ -27,6 +27,13 @@
 
 & when (@media-common = true) {
 
+    .checkout-index-index,
+    .checkout-onepage-success {
+        .page-title-wrapper {
+            &:extend(.abs-visually-hidden all);
+        }
+    }
+
     .checkout-container {
         &:extend(.abs-add-clearfix all);
         .lib-css(margin, 0 0 @checkout-wrapper__margin);
