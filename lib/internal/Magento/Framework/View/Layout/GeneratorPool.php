@@ -115,6 +115,9 @@ class GeneratorPool
             $this->helper->scheduleElement($scheduledStructure, $structure, key($scheduledStructure->getStructure()));
         }
         $scheduledStructure->flushPaths();
+        foreach ($scheduledStructure->getListToSort() as $elementToSort) {
+            $this->reorderElements($structure, $elementToSort);
+        }
         foreach ($scheduledStructure->getListToMove() as $elementToMove) {
             $this->moveElementInStructure($scheduledStructure, $structure, $elementToMove);
         }
@@ -130,6 +133,23 @@ class GeneratorPool
             }
         }
         return $this;
+    }
+
+    /**
+     * Reorder a child of a specified element
+     *
+     * @param Data\Structure $structure
+     * @param array $element
+     * @return void
+     */
+    protected function reorderElements(Data\Structure $structure, array $element)
+    {
+        $structure->reorderChildElement(
+            $element[ScheduledStructure::ELEMENT_PARENT_NAME],
+            $element[ScheduledStructure::ELEMENT_NAME],
+            $element[ScheduledStructure::ELEMENT_OFFSET_OR_SIBLING],
+            $element[ScheduledStructure::ELEMENT_IS_AFTER]
+        );
     }
 
     /**
