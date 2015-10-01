@@ -345,6 +345,7 @@ require([
              */
             _onRequestHandler: function () {
                 var url = this.element.val(),
+                    self = this,
                     videoInfo,
                     type,
                     id,
@@ -431,7 +432,15 @@ require([
                         this.options.youtubeKey;
                     $.get(googleapisUrl, $.proxy(_onYouTubeLoaded, this));
                 } else if (type === 'vimeo') {
-                    $.get('http://vimeo.com/api/v2/video/' + id + '.json', $.proxy(_onVimeoLoaded, this));
+                    $.ajax({
+                        url: 'http://vimeo.com/api/v2/video/' + id + '.json',
+                        dataType: 'json',
+                        method: 'GET',
+                        success: $.proxy(_onVimeoLoaded, self),
+                        error: function() {
+                            self._onRequestError('Video not found');
+                        }
+                    });
                 }
             },
 
