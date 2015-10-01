@@ -9,6 +9,7 @@ define([
     'use strict';
 
     return {
+
         /**
          * Hide weight switcher
          */
