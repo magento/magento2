@@ -5,6 +5,9 @@
  */
 namespace Magento\Theme\Block\Html;
 
+/**
+ * @magentoAppArea frontend
+ */
 class BreadcrumbsTest extends \PHPUnit_Framework_TestCase
 {
     /**
