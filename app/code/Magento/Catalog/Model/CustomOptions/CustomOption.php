@@ -4,11 +4,10 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\CustomOptions;
-
+//@codeCoverageIgnoreStart
 class CustomOption extends \Magento\Framework\Model\AbstractExtensibleModel
     implements \Magento\Catalog\Api\Data\CustomOptionInterface
 {
-    //@codeCoverageIgnoreStart
     /**
      * @inheritDoc
      */
@@ -57,5 +56,4 @@ class CustomOption extends \Magento\Framework\Model\AbstractExtensibleModel
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
-
 }

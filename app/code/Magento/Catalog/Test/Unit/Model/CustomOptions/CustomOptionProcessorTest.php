@@ -70,7 +70,7 @@ class CustomOptionProcessorTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $this->extensibleAttribute = $this->getMockBuilder('Magento\Quote\Api\Data\ProductOptionExtensionInterface')
             ->disableOriginalConstructor()
-            ->setMethods(['setCustomOptions',  'getCustomOptions'])
+            ->setMethods(['setCustomOptions', 'getCustomOptions'])
             ->getMockForAbstractClass();
         $this->productOption = $this->getMockBuilder('Magento\Quote\Model\Quote\ProductOption')
             ->disableOriginalConstructor()
