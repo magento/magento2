@@ -37,7 +37,7 @@ define([
             visibleClass: '_resize-visible',
             cellContentElement: 'div.data-grid-cell-content',
             minColumnWidth: 40,
-            mozillaHackIterator: 0,
+            layoutFixedPolyfillIterator: 0,
             windowResize: false,
             resizable: false,
             resizeConfig: {
@@ -96,7 +96,7 @@ define([
             //TODO - Must be deleted when Firefox fixed problem with table-layout: fixed
             //ticket to Firefox: https://bugs.webkit.org/show_bug.cgi?id=90068
             if (navigator.userAgent.search(/Firefox/) > -1) {
-                this._mozillaHack();
+                this._layoutFixedPolyfill();
             }
 
             $(table).addClass(this.fixedLayoutClass);
@@ -238,14 +238,14 @@ define([
         /**
          * Hack for mozilla firefox
          */
-        _mozillaHack: function () {
+        _layoutFixedPolyfill: function () {
             var self = this;
 
             setTimeout(function () {
-                if (self.mozillaHackIterator < 10) {
+                if (self.layoutFixedPolyfillIterator < 10) {
                     $(window).resize();
-                    self.mozillaHackIterator++;
-                    self._mozillaHack();
+                    self.layoutFixedPolyfillIterator++;
+                    self._layoutFixedPolyfill();
                 } else {
                     return false;
                 }
