@@ -1,0 +1,215 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+namespace Magento\Catalog\Setup;
+
+use Magento\Framework\Setup\UpgradeSchemaInterface;
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media;
+use Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter;
+
+/**
+ * Upgrade the Catalog module DB scheme
+ */
+class UpgradeSchema implements UpgradeSchemaInterface
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
+    {
+        $setup->startSetup();
+
+        /** Add support video media attribute */
+        if (version_compare($context->getVersion(), '2.0.0.1') < 0) {
+            $this->createValueToEntityTable($setup);
+            /**
+             * Add media type property to the Gallery entry table
+             */
+            $setup->getConnection()->addColumn(
+                $setup->getTable(Media::GALLERY_TABLE),
+                'media_type',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                    'length' => 32,
+                    'nullable' => false,
+                    'default' => ImageEntryConverter::MEDIA_TYPE_CODE,
+                    'comment' => 'Media entry type'
+                ]
+            );
+            $setup->getConnection()->addColumn(
+                $setup->getTable(Media::GALLERY_TABLE),
+                'disabled',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                    'unsigned' => true,
+                    'nullable' => false,
+                    'default' => 0,
+                    'comment' => 'Visibility status'
+                ]
+            );
+
+            /**
+             * Drop entity Id columns
+             */
+            $setup->getConnection()->dropColumn($setup->getTable(Media::GALLERY_TABLE), 'entity_id');
+
+            /**
+             * Drop primary index
+             */
+            $setup->getConnection()->dropForeignKey(
+                $setup->getTable(Media::GALLERY_VALUE_TABLE),
+                $setup->getFkName(
+                    Media::GALLERY_VALUE_TABLE,
+                    'value_id',
+                    Media::GALLERY_TABLE,
+                    'value_id'
+                )
+            );
+            $setup->getConnection()->dropForeignKey(
+                $setup->getTable(Media::GALLERY_VALUE_TABLE),
+                $setup->getFkName(
+                    Media::GALLERY_VALUE_TABLE,
+                    'store_id',
+                    'store',
+                    'store_id'
+                )
+            );
+            $setup->getConnection()->dropIndex($setup->getTable(Media::GALLERY_VALUE_TABLE), 'primary');
+            $setup->getConnection()->addColumn(
+                $setup->getTable(Media::GALLERY_VALUE_TABLE),
+                'record_id',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                    'primary' => true,
+                    'auto_increment' => true,
+                    'unsigned' => true,
+                    'nullable' => false,
+                    'comment' => 'Record Id'
+                ]
+            );
+
+            /**
+             * Add index 'value_id'
+             */
+            $setup->getConnection()->addIndex(
+                $setup->getTable(Media::GALLERY_VALUE_TABLE),
+                $setup->getConnection()->getIndexName(
+                    $setup->getTable(Media::GALLERY_VALUE_TABLE),
+                    'value_id',
+                    'index'
+                ),
+                'value_id'
+            );
+            $this->addForeignKeys($setup);
+        }
+
+        $setup->endSetup();
+    }
+
+    /**
+     *
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    protected function createValueToEntityTable(SchemaSetupInterface $setup)
+    {
+        /**
+         * Create table 'catalog_product_entity_media_gallery_value_to_entity'
+         */
+        $table = $setup->getConnection()
+            ->newTable($setup->getTable(Media::GALLERY_VALUE_TO_ENTITY_TABLE))
+            ->addColumn(
+                'value_id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                ['unsigned' => true, 'nullable' => false],
+                'Value media Entry ID'
+            )
+            ->addColumn(
+                'entity_id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                ['unsigned' => true, 'nullable' => false],
+                'Product entity ID'
+            )
+            ->addIndex(
+                $setup->getIdxName(
+                    Media::GALLERY_VALUE_TO_ENTITY_TABLE,
+                    ['value_id', 'entity_id'],
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                ),
+                ['value_id', 'entity_id'],
+                ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
+            )
+            ->addForeignKey(
+                $setup->getFkName(
+                    Media::GALLERY_VALUE_TO_ENTITY_TABLE,
+                    'value_id',
+                    Media::GALLERY_TABLE,
+                    'value_id'
+                ),
+                'value_id',
+                $setup->getTable(Media::GALLERY_TABLE),
+                'value_id',
+                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            )
+            ->addForeignKey(
+                $setup->getFkName(
+                    Media::GALLERY_VALUE_TO_ENTITY_TABLE,
+                    'entity_id',
+                    'catalog_product_entity',
+                    'entity_id'
+                ),
+                'entity_id',
+                $setup->getTable('catalog_product_entity'),
+                'entity_id',
+                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+            )
+            ->setComment('Link Media value to Product entity table');
+        $setup->getConnection()->createTable($table);
+    }
+
+    /**
+     *
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    protected function addForeignKeys(SchemaSetupInterface $setup)
+    {
+        /**
+         * Add foreign keys again
+         */
+        $setup->getConnection()->addForeignKey(
+            $setup->getFkName(
+                Media::GALLERY_VALUE_TABLE,
+                'value_id',
+                Media::GALLERY_TABLE,
+                'value_id'
+            ),
+            $setup->getTable(Media::GALLERY_VALUE_TABLE),
+            'value_id',
+            $setup->getTable(Media::GALLERY_TABLE),
+            'value_id',
+            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+        );
+
+        $setup->getConnection()->addForeignKey(
+            $setup->getFkName(
+                Media::GALLERY_VALUE_TABLE,
+                'store_id',
+                $setup->getTable('store'),
+                'store_id'
+            ),
+            $setup->getTable(Media::GALLERY_VALUE_TABLE),
+            'store_id',
+            $setup->getTable('store'),
+            'store_id',
+            \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+        );
+    }
+}
