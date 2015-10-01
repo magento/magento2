@@ -118,21 +118,23 @@ class Deployer
                     /** @var \Magento\Theme\Model\View\Design $design */
                     $design = $this->objectManager->create('Magento\Theme\Model\View\Design');
                     $design->setDesignTheme($themePath, $area);
+                    $assetRepo = $this->objectManager->create(
+                        'Magento\Framework\View\Asset\Repository',
+                        [
+                            'design' => $design,
+                        ]
+                    );
                     $fileManager = $this->objectManager->create(
                         'Magento\RequireJs\Model\FileManager',
                         [
                             'config' => $this->objectManager->create(
                                 'Magento\Framework\RequireJs\Config',
                                 [
-                                    'assetRepo' => $this->objectManager->create(
-                                        'Magento\Framework\View\Asset\Repository',
-                                        [
-                                            'design' => $design,
-                                        ]
-                                    ),
+                                    'assetRepo' => $assetRepo,
                                     'design' => $design,
                                 ]
                             ),
+                            'assetRepo' => $assetRepo,
                         ]
                     );
                     $fileManager->createRequireJsConfigAsset();
@@ -161,6 +163,7 @@ class Deployer
                             null
                         );
                     }
+                    $fileManager->clearBundleJsPool();
                     $this->bundleManager->flush();
                     $this->output->writeln("\nSuccessful: {$this->count} files; errors: {$this->errorCount}\n---\n");
                 }
