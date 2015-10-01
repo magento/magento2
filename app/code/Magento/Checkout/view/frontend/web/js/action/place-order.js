@@ -9,16 +9,17 @@ define(
         'mage/storage',
         'mage/url',
         'Magento_Checkout/js/model/error-processor',
-        'Magento_Customer/js/model/customer'
+        'Magento_Customer/js/model/customer',
+        'Magento_Checkout/js/model/full-screen-loader'
     ],
-    function (quote, urlBuilder, storage, url, errorProcessor, customer) {
+    function (quote, urlBuilder, storage, url, errorProcessor, customer, fullScreenLoader) {
         'use strict';
 
         return function (paymentData, redirectOnSuccess, messageContainer) {
             var serviceUrl,
                 payload;
 
-            redirectOnSuccess = redirectOnSuccess === false ? false : true;
+            redirectOnSuccess = redirectOnSuccess !== false;
 
             /** Checkout for guest and registered customer. */
             if (!customer.isLoggedIn()) {
@@ -39,8 +40,10 @@ define(
                     billingAddress: quote.billingAddress()
                 };
             }
+
+            fullScreenLoader.startLoader();
             return storage.post(
-                serviceUrl, JSON.stringify(payload)
+                serviceUrl, JSON.stringify(payload), false
             ).done(
                 function () {
                     if (redirectOnSuccess) {
@@ -50,6 +53,7 @@ define(
             ).fail(
                 function (response) {
                     errorProcessor.process(response, messageContainer);
+                    fullScreenLoader.stopLoader();
                 }
             );
         };

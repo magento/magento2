@@ -1054,6 +1054,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                     ImageContentInterface::TYPE => 'image/jpeg',
                     ImageContentInterface::BASE64_ENCODED_DATA => 'encoded_content',
                 ],
+                'media_type' => 'media_type',
             ],
         ];
 
@@ -1116,6 +1117,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                     'label' => 'label_text',
                     'position' => 10,
                     'disabled' => false,
+                    'media_type' => 'media_type',
                 ]
             );
 
