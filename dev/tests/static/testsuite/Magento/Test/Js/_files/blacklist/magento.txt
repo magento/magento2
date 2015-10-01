@@ -77,6 +77,7 @@ app/code/Magento/Checkout/view/frontend/web/js/action/set-shipping-information.j
 app/code/Magento/Checkout/view/frontend/web/js/checkout-data.js
 app/code/Magento/Checkout/view/frontend/web/js/discount-codes.js
 app/code/Magento/Checkout/view/frontend/web/js/model/address-converter.js
+app/code/Magento/Checkout/view/frontend/web/js/model/authentication-messages.js
 app/code/Magento/Checkout/view/frontend/web/js/model/cart/estimate-service.js
 app/code/Magento/Checkout/view/frontend/web/js/model/cart/totals-processor/default.js
 app/code/Magento/Checkout/view/frontend/web/js/model/checkout-data-resolver.js
@@ -101,7 +102,6 @@ app/code/Magento/Checkout/view/frontend/web/js/model/shipping-save-processor.js
 app/code/Magento/Checkout/view/frontend/web/js/model/shipping-save-processor/default.js
 app/code/Magento/Checkout/view/frontend/web/js/model/shipping-service.js
 app/code/Magento/Checkout/view/frontend/web/js/model/sidebar.js
-app/code/Magento/Checkout/view/frontend/web/js/model/step-loader.js
 app/code/Magento/Checkout/view/frontend/web/js/model/step-navigator.js
 app/code/Magento/Checkout/view/frontend/web/js/model/totals.js
 app/code/Magento/Checkout/view/frontend/web/js/model/url-builder.js
@@ -118,6 +118,7 @@ app/code/Magento/Checkout/view/frontend/web/js/proceed-to-checkout.js
 app/code/Magento/Checkout/view/frontend/web/js/region-updater.js
 app/code/Magento/Checkout/view/frontend/web/js/shopping-cart.js
 app/code/Magento/Checkout/view/frontend/web/js/sidebar.js
+app/code/Magento/Checkout/view/frontend/web/js/view/authentication-messages.js
 app/code/Magento/Checkout/view/frontend/web/js/view/authentication.js
 app/code/Magento/Checkout/view/frontend/web/js/view/beforePlaceOrder.js
 app/code/Magento/Checkout/view/frontend/web/js/view/billing-address.js
@@ -161,7 +162,10 @@ app/code/Magento/Cms/view/adminhtml/requirejs-config.js
 app/code/Magento/Cms/view/adminhtml/web/js/folder-tree.js
 app/code/Magento/ConfigurableProduct/view/adminhtml/requirejs-config.js
 app/code/Magento/ConfigurableProduct/view/adminhtml/web/catalog/product/attribute.js
+app/code/Magento/ConfigurableProduct/view/adminhtml/web/js/advanced-pricing-handler.js
 app/code/Magento/ConfigurableProduct/view/adminhtml/web/js/configurable.js
+app/code/Magento/ConfigurableProduct/view/adminhtml/web/js/options/price-type-handler.js
+app/code/Magento/ConfigurableProduct/view/adminhtml/web/js/variations/product-grid.js
 app/code/Magento/ConfigurableProduct/view/adminhtml/web/js/variations/steps/attributes_values.js
 app/code/Magento/ConfigurableProduct/view/adminhtml/web/js/variations/steps/bulk.js
 app/code/Magento/ConfigurableProduct/view/adminhtml/web/js/variations/steps/select_attributes.js
@@ -315,7 +319,9 @@ app/code/Magento/Sales/view/frontend/web/js/view/last-ordered-items.js
 app/code/Magento/Sales/view/frontend/web/orders-returns.js
 app/code/Magento/SalesRule/view/frontend/web/js/action/cancel-coupon.js
 app/code/Magento/SalesRule/view/frontend/web/js/action/set-coupon-code.js
+app/code/Magento/SalesRule/view/frontend/web/js/model/payment/discount-messages.js
 app/code/Magento/SalesRule/view/frontend/web/js/view/cart/totals/discount.js
+app/code/Magento/SalesRule/view/frontend/web/js/view/payment/discount-messages.js
 app/code/Magento/SalesRule/view/frontend/web/js/view/payment/discount.js
 app/code/Magento/SalesRule/view/frontend/web/js/view/summary/discount.js
 app/code/Magento/Search/view/frontend/requirejs-config.js
@@ -418,13 +424,13 @@ app/code/Magento/Ui/view/base/web/js/grid/export.js
 app/code/Magento/Ui/view/base/web/js/grid/filters/chips.js
 app/code/Magento/Ui/view/base/web/js/grid/filters/filters.js
 app/code/Magento/Ui/view/base/web/js/grid/filters/group.js
-app/code/Magento/Ui/view/base/web/js/grid/listing.js
 app/code/Magento/Ui/view/base/web/js/grid/massactions.js
 app/code/Magento/Ui/view/base/web/js/grid/paging/paging.js
 app/code/Magento/Ui/view/base/web/js/grid/paging/sizes.js
 app/code/Magento/Ui/view/base/web/js/grid/provider.js
 app/code/Magento/Ui/view/base/web/js/grid/resize.js
 app/code/Magento/Ui/view/base/web/js/grid/search/search.js
+app/code/Magento/Ui/view/base/web/js/grid/sticky/sticky.js
 app/code/Magento/Ui/view/base/web/js/grid/tree-massactions.js
 app/code/Magento/Ui/view/base/web/js/lib/class.js
 app/code/Magento/Ui/view/base/web/js/lib/collapsible.js
@@ -438,6 +444,7 @@ app/code/Magento/Ui/view/base/web/js/lib/events.js
 app/code/Magento/Ui/view/base/web/js/lib/key-codes.js
 app/code/Magento/Ui/view/base/web/js/lib/ko/bind/after-render.js
 app/code/Magento/Ui/view/base/web/js/lib/ko/bind/class.js
+app/code/Magento/Ui/view/base/web/js/lib/ko/bind/collapsible.js
 app/code/Magento/Ui/view/base/web/js/lib/ko/bind/datepicker.js
 app/code/Magento/Ui/view/base/web/js/lib/ko/bind/fadeVisible.js
 app/code/Magento/Ui/view/base/web/js/lib/ko/bind/i18n.js
@@ -466,11 +473,13 @@ app/code/Magento/Ui/view/base/web/js/lib/validation/validator.js
 app/code/Magento/Ui/view/base/web/js/lib/view/utils/async.js
 app/code/Magento/Ui/view/base/web/js/lib/view/utils/bindings.js
 app/code/Magento/Ui/view/base/web/js/lib/view/utils/dom-observer.js
+app/code/Magento/Ui/view/base/web/js/lib/view/utils/raf.js
 app/code/Magento/Ui/view/base/web/js/modal/alert.js
 app/code/Magento/Ui/view/base/web/js/modal/confirm.js
 app/code/Magento/Ui/view/base/web/js/modal/modal.js
 app/code/Magento/Ui/view/base/web/js/modal/modalToggle.js
 app/code/Magento/Ui/view/frontend/web/js/model/messageList.js
+app/code/Magento/Ui/view/frontend/web/js/model/messages.js
 app/code/Magento/Ui/view/frontend/web/js/view/messages.js
 app/code/Magento/Ups/view/frontend/web/js/model/shipping-rates-validation-rules.js
 app/code/Magento/Ups/view/frontend/web/js/model/shipping-rates-validator.js
@@ -532,10 +541,13 @@ dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/grid/controls/bookmarks/b
 dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/grid/controls/bookmarks/storage.test.js
 dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/grid/controls/bookmarks/view.test.js
 dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/grid/controls/columns.test.js
+dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/grid/editing/bulk.test.js
 dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/grid/filters/filters.test.js
 dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/grid/filters/group.test.js
 dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/grid/paging/paging.test.js
 dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/grid/resize.test.js
+dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/grid/search/search.test.js
+dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/grid/sticky/sticky.test.js
 dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/grid/tree-massactions.test.js
 dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/lib/component/core.test.js
 dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/lib/component/links.test.js

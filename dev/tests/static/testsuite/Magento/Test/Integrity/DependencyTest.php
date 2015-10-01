@@ -132,6 +132,13 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     protected static $_rulesInstances = [];
 
     /**
+     * White list for libraries
+     *
+     * @var array
+     */
+    private static $whiteList = [];
+
+    /**
      * Sets up data
      */
     public static function setUpBeforeClass()
@@ -164,9 +171,30 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         self::_prepareMapLayoutBlocks();
         self::_prepareMapLayoutHandles();
 
+        self::getLibraryWhiteLists();
+
         self::_initDependencies();
         self::_initThemes();
         self::_initRules();
+    }
+
+    /**
+     * Initialize library white list
+     */
+    private static function getLibraryWhiteLists()
+    {
+        $listofLibraries = [];
+        $componentRegistrar = new ComponentRegistrar();
+        foreach($componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $library) {
+            $library = str_replace('\\', '/', $library);
+            if (strpos($library, 'Framework/')) {
+                $partOfLibraryPath = explode('/', $library);
+
+                $temp = implode('/', array_slice(($partOfLibraryPath), -3));
+                $listofLibraries[] = $temp;
+            }
+        }
+        self::$whiteList = $listofLibraries;
     }
 
     /**
@@ -285,6 +313,14 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
                     /** @var \Magento\TestFramework\Dependency\RuleInterface $rule */
                     $newDependencies = $rule->getDependencyInfo($module, $fileType, $file, $contents);
                     $dependencies = array_merge($dependencies, $newDependencies);
+                }
+                foreach ($dependencies as $key => $dependency) {
+                    foreach (self::$whiteList as $namespace) {
+                        if (strpos($dependency['source'], $namespace) !== false) {
+                            $dependency['module'] = $namespace;
+                            $dependencies[$key] = $dependency;
+                        }
+                    }
                 }
 
                 // Collect dependencies
@@ -629,6 +665,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
             return $moduleName;
         } elseif (strpos($jsonName, 'magento/magento') !== false || strpos($jsonName, 'magento/framework') !== false) {
             $moduleName = str_replace('/', "\t", $jsonName);
+            $moduleName = str_replace('framework-', "Framework\t", $moduleName);
             $moduleName = str_replace('-', ' ', $moduleName);
             $moduleName = ucwords($moduleName);
             $moduleName = str_replace("\t", '\\', $moduleName);

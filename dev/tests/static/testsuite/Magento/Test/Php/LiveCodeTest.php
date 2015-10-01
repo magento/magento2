@@ -60,10 +60,15 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         foreach (glob(__DIR__ . '/_files/changed_files*') as $listFile) {
             $changedFiles = array_merge($changedFiles, file($listFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
         }
+        array_walk(
+            $changedFiles,
+            function (&$file) {
+                $file = BP . '/' . $file;
+            }
+        );
         $changedFiles = array_filter(
             $changedFiles,
             function ($path) use ($directoriesToCheck, $fileTypes) {
-                $path = BP . '/' . $path;
                 if (!file_exists($path)) {
                     return false;
                 }

@@ -8,6 +8,7 @@ namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Component\ComponentRegistrar;
@@ -45,6 +46,9 @@ class DiCompileCommand extends Command
     /** @var array */
     private $excludedPathsList;
 
+    /** @var DriverInterface */
+    private $fileDriver;
+
     /**
      * @var ComponentRegistrar
      */
@@ -58,6 +62,7 @@ class DiCompileCommand extends Command
      * @param Manager $taskManager
      * @param ObjectManagerProvider $objectManagerProvider
      * @param Filesystem $filesystem
+     * @param DriverInterface $fileDriver
      * @param \Magento\Framework\Component\ComponentRegistrar $componentRegistrar
      */
     public function __construct(
@@ -66,6 +71,7 @@ class DiCompileCommand extends Command
         Manager $taskManager,
         ObjectManagerProvider $objectManagerProvider,
         Filesystem $filesystem,
+        DriverInterface $fileDriver,
         ComponentRegistrar $componentRegistrar
     ) {
         $this->deploymentConfig = $deploymentConfig;
@@ -73,6 +79,7 @@ class DiCompileCommand extends Command
         $this->objectManager    = $objectManagerProvider->get();
         $this->taskManager      = $taskManager;
         $this->filesystem       = $filesystem;
+        $this->fileDriver       = $fileDriver;
         $this->componentRegistrar  = $componentRegistrar;
         parent::__construct();
     }
@@ -90,17 +97,49 @@ class DiCompileCommand extends Command
     }
 
     /**
+     * Checks that application is installed and DI resources are cleared
+     *
+     * @return string[]
+     */
+    private function checkEnvironment()
+    {
+        $messages = [];
+        if (!$this->deploymentConfig->isAvailable()) {
+            $messages[] = 'You cannot run this command because the Magento application is not installed.';
+        }
+
+        /**
+         * By the time the command is able to execute, the Object Management configuration is already contaminated
+         * by old config info, and it's too late to just clear the files in code.
+         *
+         * TODO: reconfigure OM in runtime so DI resources can be cleared after command launches
+         *
+         */
+        $path = $this->directoryList->getPath(DirectoryList::DI);
+        if ($this->fileDriver->isExists($path)) {
+            $messages[] = "DI configuration must be cleared before running compiler. Please delete '$path'.";
+        }
+
+        return $messages;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $errors = $this->checkEnvironment();
+        if ($errors) {
+            foreach ($errors as $line) {
+                $output->writeln($line);
+            }
+            return;
+        }
+
         $modulePaths = $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE);
         $libraryPaths = $this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
         $generationPath = $this->directoryList->getPath(DirectoryList::GENERATION);
-        if (!$this->deploymentConfig->isAvailable()) {
-            $output->writeln('You cannot run this command because the Magento application is not installed.');
-            return;
-        }
+
         $this->objectManager->get('Magento\Framework\App\Cache')->clean();
         $compiledPathsList = [
             'application' => $modulePaths,

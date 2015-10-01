@@ -168,7 +168,6 @@ return [
     [
         'XML_PATH_DEBUG_TEMPLATE_HINTS',
         'Magento\Framework\View\Element\Template',
-        'Magento\Core\Model\TemplateEngine\Plugin::XML_PATH_DEBUG_TEMPLATE_HINTS',
     ],
     [
         'XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS',

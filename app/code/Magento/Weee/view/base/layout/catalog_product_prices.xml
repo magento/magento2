@@ -11,6 +11,10 @@
             <argument name="default" xsi:type="array">
                 <item name="adjustments" xsi:type="array">
                     <item name="default" xsi:type="array">
+                        <item name="tax" xsi:type="array">
+                            <item name="adjustment_render_class" xsi:type="string">Magento\Weee\Pricing\Render\TaxAdjustment</item>
+                            <item name="adjustment_render_template" xsi:type="string">Magento_Tax::pricing/adjustment.phtml</item>
+                        </item>
                         <item name="weee" xsi:type="array">
                             <item name="adjustment_render_class" xsi:type="string">Magento\Weee\Pricing\Render\Adjustment</item>
                             <item name="adjustment_render_template" xsi:type="string">Magento_Weee::pricing/adjustment.phtml</item>
