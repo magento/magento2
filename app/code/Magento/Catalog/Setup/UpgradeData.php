@@ -54,8 +54,8 @@ class UpgradeData implements UpgradeDataInterface
                     ]
                 );
             $setup->getConnection()->insertFromSelect(
-                $setup->getTable('catalog_product_entity_group_price'),
                 $select,
+                $setup->getTable('catalog_product_entity_group_price'),
                 [
                     'value_id',
                     'entity_id',
