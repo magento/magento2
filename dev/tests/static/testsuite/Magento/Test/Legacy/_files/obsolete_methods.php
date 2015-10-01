@@ -2464,6 +2464,7 @@ return [
     ['setTitle', 'Magento\Quote\Api\Data\PaymentInterface'],
     ['getTitle', 'Magento\Quote\Model\Quote\Payment'],
     ['setTitle', 'Magento\Quote\Model\Quote\Payment'],
+    ['getTypeSwitcherControlLabel', 'Magento\Catalog\Helper\Product'],
     ['addStockStatusToSelect', 'Magento\CatalogInventory\Helper\Stock'],
     ['getUrlInstance', 'Magento\Catalog\Model\Product\Url'],
 ];
