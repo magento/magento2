@@ -222,5 +222,4 @@ class RequestSecureTokenTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($jsonMock, $this->controller->execute());
     }
-
 }
