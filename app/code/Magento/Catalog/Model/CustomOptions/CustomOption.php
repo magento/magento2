@@ -4,9 +4,13 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\CustomOptions;
+
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Catalog\Api\Data\CustomOptionInterface;
+
+
 //@codeCoverageIgnoreStart
-class CustomOption extends \Magento\Framework\Model\AbstractExtensibleModel
-    implements \Magento\Catalog\Api\Data\CustomOptionInterface
+class CustomOption extends AbstractExtensibleModel implements CustomOptionInterface
 {
     /**
      * @inheritDoc
