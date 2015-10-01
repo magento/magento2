@@ -130,10 +130,9 @@ class AuthObserver
         $this->_checkExpiredPassword($latestPassword);
 
         // upgrade admin password
-        $isValidHash = $this->encryptor->isValidHashByVersion(
+        $isValidHash = $this->encryptor->isValidHash(
             $password,
-            $user->getPassword(),
-            Encryptor::HASH_VERSION_LATEST
+            $user->getPassword()
         );
         if (!$isValidHash) {
             $this->userFactory->create()
