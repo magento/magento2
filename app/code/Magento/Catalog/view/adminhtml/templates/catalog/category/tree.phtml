@@ -225,8 +225,13 @@ function reRenderTree(switcherParams) {
                 parameters:params,
                 method:'post',
                 onComplete:function (transport) {
-                    var response = JSON.parse(transport.responseText);
-                    if (!response['parameters']) {
+                    var response;
+
+                    try {
+                        response = JSON.parse(transport.responseText);
+                    }
+
+                    if (!response || !response['parameters']) {
                         return false;
                     }
 
