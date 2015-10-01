@@ -97,7 +97,7 @@ class ErrorProcessor
      */
     public function maskException(\Exception $exception)
     {
-        $isDevMode = true; //$this->_appState->getMode() === State::MODE_DEVELOPER;
+        $isDevMode = $this->_appState->getMode() === State::MODE_DEVELOPER;
         $stackTrace = $isDevMode ? $exception->getTraceAsString() : null;
 
         if ($exception instanceof WebapiException) {
