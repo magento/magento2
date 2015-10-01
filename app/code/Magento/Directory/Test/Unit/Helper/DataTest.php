@@ -259,4 +259,31 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $this->_object->getCountryCollection($store);
     }
+
+    /**
+     * @param string $topCountriesValue
+     * @param array $expectedResult
+     * @dataProvider topCountriesDataProvider
+     */
+    public function testGetTopCountryCodesReturnsParsedConfigurationValue($topCountriesValue, $expectedResult)
+    {
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')->with(\Magento\Directory\Helper\Data::XML_PATH_TOP_COUNTRIES)
+            ->willReturn($topCountriesValue);
+
+        $this->assertEquals($expectedResult, $this->_object->getTopCountryCodes());
+    }
+
+    /**
+     * @return array
+     */
+    public function topCountriesDataProvider()
+    {
+        return [
+            [null, []],
+            ['', []],
+            ['US', ['US']],
+            ['US,RU', ['US', 'RU']],
+        ];
+    }
 }
