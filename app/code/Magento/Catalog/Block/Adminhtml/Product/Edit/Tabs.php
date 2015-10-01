@@ -4,10 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Admin product edit tabs
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 namespace Magento\Catalog\Block\Adminhtml\Product\Edit;
 
 use Magento\Backend\Block\Template\Context;
@@ -22,6 +18,10 @@ use Magento\Framework\Module\Manager;
 use Magento\Framework\Registry;
 use Magento\Framework\Translate\InlineInterface;
 
+/**
+ * Admin product edit tabs
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Tabs extends WigetTabs
 {
     const BASIC_TAB_GROUP_CODE = 'basic';
