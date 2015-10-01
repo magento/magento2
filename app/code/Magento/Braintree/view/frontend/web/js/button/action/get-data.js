@@ -3,16 +3,18 @@
  * See COPYING.txt for license details.
  */
 define(['jquery'], function ($) {
-
-    var when = $.when($.get('braintree/paypal/getbuttondata', {isAjax: true}));
+    var when;
 
     return {
-        when: function () {
+        when: function (url) {
+            if (!when) {
+                when = $.when($.get(url, {isAjax: true}));
+            }
             return when;
         },
 
-        request: function () {
-            return $.get('braintree/paypal/getbuttondata', {isAjax: true});
+        request: function (url) {
+            return $.get(url, {isAjax: true});
         }
     };
 });
