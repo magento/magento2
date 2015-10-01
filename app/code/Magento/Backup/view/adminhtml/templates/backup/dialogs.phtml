@@ -62,7 +62,9 @@
             <div class="popup-content">
                 <div class="backup-messages" style="display: none;"><div class="messages"></div></div>
                 <div class="messages">
-                    <div class="message message-warning"><?php /* @escapeNotVerified */ echo __('Please specify backup creation option.')?></div>
+                    <div class="message message-warning">
+                        <?php /* @escapeNotVerified */ echo __('This may take a few moments.')?>
+                        <?php /* @escapeNotVerified */ echo __('Be sure your store is in maintenance mode during backup.')?></div>
                 </div>
                 <form action="" method="post" id="backup-form" class="form-inline">
                     <fieldset class="admin__fieldset form-list question">
