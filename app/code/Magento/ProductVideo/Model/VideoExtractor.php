@@ -19,15 +19,15 @@ class VideoExtractor implements \Magento\Framework\Config\Reader\Xsd\Media\TypeD
         $result = [];
         $moduleNameVideo = $mediaNode->getAttribute('module');
         foreach ($mediaNode->getElementsByTagName('video') as $node) {
-            $imageId = $node->getAttribute('id');
-            $result[$mediaParentTag][$moduleNameVideo]['videos'][$imageId]['type']
+            $videoId = $node->getAttribute('id');
+            $result[$mediaParentTag][$moduleNameVideo]['videos'][$videoId]['type']
                 = $node->getAttribute('type');
             foreach ($node->childNodes as $attribute) {
                 if ($attribute->nodeType != XML_ELEMENT_NODE) {
                     continue;
                 }
                 $nodeValue = $attribute->nodeValue;
-                $result[$mediaParentTag][$moduleNameVideo]['videos'][$imageId][$attribute->tagName]
+                $result[$mediaParentTag][$moduleNameVideo]['videos'][$videoId][$attribute->tagName]
                     = $nodeValue;
             }
         }

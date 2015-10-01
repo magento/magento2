@@ -59,7 +59,7 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
     /**
      * Get list of xsd files
      *
-     * @param $filename
+     * @param string $filename
      * @return \Magento\Framework\Config\FileIterator
      */
     public function getListXsdFiles($filename)
@@ -124,8 +124,8 @@ class Reader implements \Magento\Framework\Config\ReaderInterface
     /**
      * Merge xsd files
      *
-     * @param $parent
-     * @param $child
+     * @param string $parent
+     * @param string $child
      * @return string
      */
     protected function mergeXsd($parent, $child)

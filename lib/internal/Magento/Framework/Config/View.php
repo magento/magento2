@@ -14,17 +14,17 @@ use Magento\Framework\Config\Reader\Xsd\Media\TypeDataExtractorPool;
 
 class View extends \Magento\Framework\Config\AbstractXml
 {
-    /*
+    /**
      * @var \Magento\Framework\Config\Reader\Xsd\Reader
      */
     protected $xsdReader;
 
-    /*
+    /**
      * @var \Magento\Framework\Config\Reader\Xsd\Media\TypeDataExtractorPool
      */
     protected $extractorPool;
 
-    /*
+    /**
      * @var array
      */
     protected $xpath;
@@ -144,9 +144,9 @@ class View extends \Magento\Framework\Config\AbstractXml
     /**
      * Retrieve array of media attributes
      *
-     * @param $module
-     * @param $mediaType
-     * @param $mediaId
+     * @param string $module
+     * @param string $mediaType
+     * @param string $mediaId
      * @return array
      */
     public function getMediaAttributes($module, $mediaType, $mediaId)
@@ -191,7 +191,7 @@ class View extends \Magento\Framework\Config\AbstractXml
     /**
      * Add attributes for module identification
      *
-     * @param $xpath
+     * @param array $xpath
      * @return array
      */
     protected function addIdAttributes($xpath)
