@@ -105,6 +105,11 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
     protected $_debugReplacePrivateDataKeys = ['merchantAuthentication', 'x_login'];
 
     /**
+     * @var \Magento\Framework\Xml\Security
+     */
+    protected $xmlSecurityHelper;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -117,6 +122,7 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
      * @param \Magento\Authorizenet\Helper\Data $dataHelper
      * @param \Magento\Authorizenet\Model\Request\Factory $requestFactory
      * @param \Magento\Authorizenet\Model\Response\Factory $responseFactory
+     * @param \Magento\Framework\Xml\Security $xmlSecurityHelper
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -135,6 +141,7 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
         \Magento\Authorizenet\Helper\Data $dataHelper,
         \Magento\Authorizenet\Model\Request\Factory $requestFactory,
         \Magento\Authorizenet\Model\Response\Factory $responseFactory,
+        \Magento\Framework\Xml\Security $xmlSecurityHelper,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -142,6 +149,7 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
         $this->dataHelper = $dataHelper;
         $this->requestFactory = $requestFactory;
         $this->responseFactory = $responseFactory;
+        $this->xmlSecurityHelper = $xmlSecurityHelper;
 
         parent::__construct(
             $context,
@@ -489,6 +497,10 @@ abstract class Authorizenet extends \Magento\Payment\Model\Method\Cc
 
         try {
             $responseBody = $client->request()->getBody();
+            if (!$this->xmlSecurityHelper->scan($responseBody)) {
+                $this->_logger->critical('Attempt loading of external XML entities in response from Authorizenet.');
+                throw new \Exception();
+            }
             $debugData['response'] = $responseBody;
             libxml_use_internal_errors(true);
             $responseXmlDocument = new \Magento\Framework\Simplexml\Element($responseBody);
