@@ -350,11 +350,9 @@ define([
 
         /**
          * Fired when receiving information about the video ended with error
-         * @param {Object} e
-         * @param {Object} data
          * @private
          */
-        _onGetVideoInformationError: function (e, data) {
+        _onGetVideoInformationError: function () {
         },
 
         /**
