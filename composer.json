@@ -11,13 +11,5 @@
     "version": "1.0.0-beta",
     "license": [
         "proprietary"
-    ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/MysqlMq"
-            ]
-        ]
-    }
+    ]
 }
