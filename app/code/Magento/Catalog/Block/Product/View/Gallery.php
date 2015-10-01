@@ -111,6 +111,16 @@ class Gallery extends \Magento\Catalog\Block\Product\View\AbstractView
                 'isMain' => $this->isMainImage($image),
             ];
         }
+        if(empty($imagesItems)) {
+            $imagesItems[] = [
+                'thumb' => $this->_imageHelper->getDefaultPlaceholderUrl('thumbnail'),
+                'img' => $this->_imageHelper->getDefaultPlaceholderUrl('image'),
+                'original' => $this->_imageHelper->getDefaultPlaceholderUrl('image'),
+                'caption' => '',
+                'position' => '0',
+                'isMain' => true,
+            ];
+        }
         return json_encode($imagesItems);
     }
 
