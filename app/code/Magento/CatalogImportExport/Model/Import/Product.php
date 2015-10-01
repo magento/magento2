@@ -1286,12 +1286,18 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (!$productMediaGalleryTableName) {
             $productMediaGalleryTableName = $resource->getTable('catalog_product_entity_media_gallery');
         }
-        $allMedia = $this->_connection->fetchAll($this->_connection->select()
-            ->from(
-                $productMediaGalleryTableName,
-                ['entity_id', 'value']
-            )->where('value IN (?)', $allImagesFromBunch)
+        $select = $this->_connection->select()->from(
+            ['mg' => $resource->getTable('catalog_product_entity_media_gallery')],
+            ['value' => 'mg.value']
+        )->joinLeft(
+            ['mgvte' => $resource->getTable('catalog_product_entity_media_gallery_value_to_entity')],
+            '(mg.value_id = mgvte.value_id)',
+            ['entity_id' => 'mgvte.entity_id']
+        )->where(
+            'mg.value IN(?)',
+            $allImagesFromBunch
         );
+        $allMedia = $this->_connection->fetchAll($select);
         $result = array();
         foreach ($allMedia as $image) {
             $result[$image['value']] = [];
@@ -1814,29 +1820,33 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         if (empty($mediaGalleryData)) {
             return $this;
         }
-
         static $mediaGalleryTableName = null;
         static $mediaValueTableName = null;
+        static $mediaEntityToValueTableName = null;
         static $productId = null;
-
         if (!$mediaGalleryTableName) {
             $mediaGalleryTableName = $this->_resourceFactory->create()->getTable(
                 'catalog_product_entity_media_gallery'
             );
         }
-
         if (!$mediaValueTableName) {
             $mediaValueTableName = $this->_resourceFactory->create()->getTable(
                 'catalog_product_entity_media_gallery_value'
             );
         }
+        if (!$mediaEntityToValueTableName) {
+            $mediaEntityToValueTableName = $this->_resourceFactory->create()->getTable(
+                'catalog_product_entity_media_gallery_value_to_entity'
+            );
+        }
         $productIds = [];
+        $imageNames = [];
         $multiInsertData = [];
+        $valueToProductId = [];
         foreach ($mediaGalleryData as $productSku => $mediaGalleryRows) {
             $productId = $this->skuProcessor->getNewSku($productSku)['entity_id'];
             $productIds[] = $productId;
             $insertedGalleryImgs = [];
-
             if (\Magento\ImportExport\Model\Import::BEHAVIOR_APPEND != $this->getBehavior()) {
                 $this->_connection->delete(
                     $mediaGalleryTableName,
@@ -1847,31 +1857,28 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 if (!in_array($insertValue['value'], $insertedGalleryImgs)) {
                     $valueArr = [
                         'attribute_id' => $insertValue['attribute_id'],
-                        'entity_id' => $productId,
                         'value' => $insertValue['value'],
                     ];
+                    $valueToProductId[$insertValue['value']] = $productId;
+                    $imageNames = $insertValue['value'];
                     $multiInsertData[] = $valueArr;
                     $insertedGalleryImgs[] = $insertValue['value'];
                 }
             }
         }
-        $this->_connection->insertOnDuplicate($mediaGalleryTableName, $multiInsertData, ['entity_id']);
+        $this->_connection->insertOnDuplicate($mediaGalleryTableName, $multiInsertData, []);
         $multiInsertData = [];
+        $dataForSkinnyTable = [];
         $newMediaValues = $this->_connection->fetchAssoc(
-            $this->_connection->select()->from(
-                $mediaGalleryTableName,
-                ['value_id', 'value', 'entity_id']
-            )->where(
-                'entity_id IN (?)',
-                $productIds
-            )
+            $this->_connection->select()->from($mediaGalleryTableName, ['value_id', 'value'])
+                ->where('value IN (?)', $imageNames)
         );
         foreach ($mediaGalleryData as $productSku => $mediaGalleryRows) {
             foreach ($mediaGalleryRows as $insertValue) {
                 foreach ($newMediaValues as $value_id => $values) {
                     if ($values['value'] == $insertValue['value']) {
                         $insertValue['value_id'] = $value_id;
-                        $insertValue['entity_id'] = $values['entity_id'];
+                        $insertValue['entity_id'] = $valueToProductId[$values['value']];
                         unset($newMediaValues[$value_id]);
                         break;
                     }
@@ -1886,18 +1893,22 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                         'disabled' => $insertValue['disabled'],
                     ];
                     $multiInsertData[] = $valueArr;
+                    $dataForSkinnyTable[] = [
+                        'value_id' => $insertValue['value_id'],
+                        'entity_id' => $insertValue['entity_id'],
+                    ];
                 }
             }
         }
         try {
             $this->_connection->insertOnDuplicate($mediaValueTableName, $multiInsertData, ['value_id']);
+            $this->_connection->insertOnDuplicate($mediaEntityToValueTableName, $dataForSkinnyTable, ['value_id']);
         } catch (\Exception $e) {
             $this->_connection->delete(
                 $mediaGalleryTableName,
                 $this->_connection->quoteInto('value_id IN (?)', $newMediaValues)
             );
         }
-
         return $this;
     }
 
