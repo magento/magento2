@@ -5,58 +5,29 @@
  */
 namespace Magento\Sales\Model\Observer;
 
+use Magento\Framework\Event\ObserverInterface;
+
 /**
  * Sales emails sending observer.
  *
  * Performs handling of cron jobs related to sending emails to customers
  * after creation/modification of Order, Invoice, Shipment or Creditmemo.
  */
-class SendEmails
+class SendEmails implements ObserverInterface
 {
-    /**
-     * Email sender model.
-     *
-     * @var \Magento\Sales\Model\Order\Email\Sender
-     */
-    protected $emailSender;
-
-    /**
-     * Entity resource model.
-     *
-     * @var \Magento\Sales\Model\Resource\EntityAbstract
-     */
-    protected $entityResource;
-
-    /**
-     * Entity collection model.
-     *
-     * @var \Magento\Sales\Model\Resource\Collection\AbstractCollection
-     */
-    protected $entityCollection;
-
     /**
      * Global configuration storage.
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \Magento\Sales\Model\EmailSenderHandler
      */
-    protected $globalConfig;
+    protected $emailSenderHandler;
 
     /**
-     * @param \Magento\Sales\Model\Order\Email\Sender $emailSender
-     * @param \Magento\Sales\Model\Resource\EntityAbstract $entityResource
-     * @param \Magento\Sales\Model\Resource\Collection\AbstractCollection $entityCollection
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
+     * @param \Magento\Sales\Model\EmailSenderHandler $emailSenderHandler
      */
-    public function __construct(
-        \Magento\Sales\Model\Order\Email\Sender $emailSender,
-        \Magento\Sales\Model\Resource\EntityAbstract $entityResource,
-        \Magento\Sales\Model\Resource\Collection\AbstractCollection $entityCollection,
-        \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
-    ) {
-        $this->emailSender = $emailSender;
-        $this->entityResource = $entityResource;
-        $this->entityCollection = $entityCollection;
-        $this->globalConfig = $globalConfig;
+    public function __construct(\Magento\Sales\Model\EmailSenderHandler $emailSenderHandler)
+    {
+        $this->emailSenderHandler = $emailSenderHandler;
     }
 
     /**
@@ -70,22 +41,12 @@ class SendEmails
      * Works only if asynchronous email sending is enabled
      * in global settings.
      *
+     * @param \Magento\Framework\Event\Observer $observer
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute()
+    public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        if ($this->globalConfig->getValue('sales_email/general/async_sending')) {
-            $this->entityCollection->addFieldToFilter('send_email', ['eq' => 1]);
-            $this->entityCollection->addFieldToFilter('email_sent', ['null' => true]);
-
-            /** @var \Magento\Sales\Model\AbstractModel $item */
-            foreach ($this->entityCollection->getItems() as $item) {
-                if ($this->emailSender->send($item, true)) {
-                    $this->entityResource->save(
-                        $item->setEmailSent(true)
-                    );
-                }
-            }
-        }
+        $this->emailSenderHandler->sendEmails();
     }
 }

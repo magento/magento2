@@ -10,34 +10,34 @@
         <observer name="sales_vat_request_params_order_comment" instance="Magento\Sales\Model\Observer\Frontend\Quote\AddVatRequestParamsOrderComment" method="execute" />
     </event>
     <event name="sales_order_process_relation">
-        <observer name="sales_grid_order_sync_insert" instance="Magento\Sales\Model\Observer\Order\IndexGrid" method="syncInsert" />
+        <observer name="sales_grid_order_sync_insert" instance="SalesOrderIndexGridSyncInsert" method="execute" />
     </event>
     <event name="sales_order_invoice_process_relation">
-        <observer name="sales_grid_order_invoice_sync_insert" instance="Magento\Sales\Model\Observer\Order\Invoice\IndexGrid" method="syncInsert" />
+        <observer name="sales_grid_order_invoice_sync_insert" instance="SalesInvoiceIndexGridSyncInsert" method="execute" />
     </event>
     <event name="sales_order_shipment_process_relation">
-        <observer name="sales_grid_order_shipment_sync_insert" instance="Magento\Sales\Model\Observer\Order\Shipment\IndexGrid" method="syncInsert" />
+        <observer name="sales_grid_order_shipment_sync_insert" instance="SalesShipmentIndexGridSyncInsert" method="execute" />
     </event>
     <event name="sales_order_creditmemo_process_relation">
-        <observer name="sales_grid_order_creditmemo_sync_insert" instance="Magento\Sales\Model\Observer\Order\Creditmemo\IndexGrid" method="syncInsert" />
+        <observer name="sales_grid_order_creditmemo_sync_insert" instance="SalesCreditmemoIndexGridSyncInsert" method="execute" />
     </event>
     <event name="sales_order_delete_after">
-        <observer name="sales_grid_order_sync_remove" instance="Magento\Sales\Model\Observer\Order\IndexGrid" method="syncRemove" />
+        <observer name="sales_grid_order_sync_remove" instance="SalesOrderIndexGridSyncRemove" method="execute" />
     </event>
     <event name="sales_order_invoice_delete_after">
-        <observer name="sales_grid_order_invoice_sync_remove" instance="Magento\Sales\Model\Observer\Order\Invoice\IndexGrid" method="syncRemove" />
+        <observer name="sales_grid_order_invoice_sync_remove" instance="SalesInvoiceIndexGridSyncRemove" method="execute" />
     </event>
     <event name="sales_order_shipment_delete_after">
-        <observer name="sales_grid_order_shipment_sync_remove" instance="Magento\Sales\Model\Observer\Order\Shipment\IndexGrid" method="syncRemove" />
+        <observer name="sales_grid_order_shipment_sync_remove" instance="SalesShipmentIndexGridSyncRemove" method="execute" />
     </event>
     <event name="sales_order_creditmemo_delete_after">
-        <observer name="sales_grid_order_creditmemo_sync_remove" instance="Magento\Sales\Model\Observer\Order\Creditmemo\IndexGrid" method="syncRemove" />
+        <observer name="sales_grid_order_creditmemo_sync_remove" instance="SalesCreditmemoIndexGridSyncRemove" method="execute" />
     </event>
     <event name="config_data_dev_grid_async_indexing_disabled">
-        <observer name="sales_grid_order_async_insert" instance="Magento\Sales\Model\Observer\Order\IndexGrid" method="asyncInsert" />
-        <observer name="sales_grid_order_invoice_async_insert" instance="Magento\Sales\Model\Observer\Order\Invoice\IndexGrid" method="asyncInsert" />
-        <observer name="sales_grid_order_shipment_async_insert" instance="Magento\Sales\Model\Observer\Order\Shipment\IndexGrid" method="asyncInsert" />
-        <observer name="sales_grid_order_creditmemo_async_insert" instance="Magento\Sales\Model\Observer\Order\Creditmemo\IndexGrid" method="asyncInsert" />
+        <observer name="sales_grid_order_async_insert" instance="SalesOrderIndexGridAsyncInsert" method="execute" />
+        <observer name="sales_grid_order_invoice_async_insert" instance="SalesInvoiceIndexGridAsyncInsert" method="execute" />
+        <observer name="sales_grid_order_shipment_async_insert" instance="SalesShipmentIndexGridAsyncInsert" method="execute" />
+        <observer name="sales_grid_order_creditmemo_async_insert" instance="SalesCreditmemoIndexGridAsyncInsert" method="execute" />
     </event>
     <event name="config_data_sales_email_general_async_sending_disabled">
         <observer name="sales_send_order_emails" instance="Magento\Sales\Model\Observer\Order\SendEmails" method="execute" />
@@ -46,6 +46,6 @@
         <observer name="sales_send_order_creditmemo_emails" instance="Magento\Sales\Model\Observer\Order\Creditmemo\SendEmails" method="execute" />
     </event>
     <event name="store_add">
-        <observer name="magento_sequence" instance="Magento\SalesSequence\Model\Observer" method="execute" />
+        <observer name="magento_sequence" instance="Magento\SalesSequence\Observer\SequenceCreatorObserver" method="execute" />
     </event>
 </config>
