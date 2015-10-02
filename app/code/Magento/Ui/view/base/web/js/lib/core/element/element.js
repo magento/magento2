@@ -63,6 +63,7 @@ define([
     Module = _.extend({
         defaults: {
             template: '',
+            registerNodes: true,
             storageConfig: {
                 provider: 'localStorage',
                 namespace: '${ $.name }',
@@ -102,7 +103,7 @@ define([
         },
 
         /**
-         * Initializes statefull properties,
+         * Initializes statefull properties
          * based on the keys of 'statefull' object.
          *
          * @returns {Element} Chainable.
@@ -123,7 +124,7 @@ define([
 
         /**
          * Parses 'modules' object and creates
-         * async wrappers on specified components.
+         * async wrappers for specified components.
          *
          * @returns {Element} Chainable.
          */
@@ -156,7 +157,7 @@ define([
         },
 
         /**
-         * Makes specified property to be statefull.
+         * Makes specified property to be stored automatically.
          *
          * @param {String} key - Name of the property
          *      that will be stored.
@@ -242,6 +243,39 @@ define([
 
                 this._notifyChanges(diffs);
             }
+
+            return this;
+        },
+
+        /**
+         * Destroys current instance along with all of its' children.
+         */
+        destroy: function () {
+            this._dropHandlers()
+                ._clearRefs();
+        },
+
+        /**
+         * Removes events listeners.
+         * @private
+         *
+         * @returns {Element} Chainable.
+         */
+        _dropHandlers: function () {
+            this.off();
+
+            return this;
+        },
+
+        /**
+         * Removes all references to current instance and
+         * calls 'destroy' method on all of its' children.
+         * @private
+         *
+         * @returns {Element} Chainable.
+         */
+        _clearRefs: function () {
+            registry.remove(this.name);
 
             return this;
         },
@@ -336,7 +370,9 @@ define([
         },
 
         /**
+         * Extracts all stored data and sets it to element.
          *
+         * @returns {Element} Chainable.
          */
         restore: function () {
             var ns = this.storageConfig.namespace,
