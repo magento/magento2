@@ -148,6 +148,13 @@ class View extends AbstractConfigureBlock
     protected $mediaGallery = '[data-gallery-role="gallery"] img';
 
     /**
+     * Locator for page with ajax loading state.
+     *
+     * @var string
+     */
+    protected $ajaxLoading = 'body.ajax-loading';
+
+    /**
      * Get block price.
      *
      * @return Price
@@ -399,6 +406,16 @@ class View extends AbstractConfigureBlock
     public function selectTab($name)
     {
         $this->_rootElement->find(sprintf($this->tabSelector, $name), Locator::SELECTOR_XPATH)->click();
+    }
+
+    /**
+     * Wait loading block.
+     *
+     * @return void
+     */
+    public function waitLoader()
+    {
+        $this->waitForElementNotVisible($this->ajaxLoading);
     }
 
     /**
