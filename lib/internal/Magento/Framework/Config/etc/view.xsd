@@ -39,7 +39,7 @@
         </xs:unique>
     </xs:element>
     <xs:complexType name="mediaType" mixed="true">
-        <xs:sequence />
+        <xs:all />
     </xs:complexType>
     <xs:complexType name="excludeType">
         <xs:sequence>
