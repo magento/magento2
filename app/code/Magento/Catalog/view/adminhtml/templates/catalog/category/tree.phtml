@@ -229,6 +229,8 @@ function reRenderTree(switcherParams) {
 
                     try {
                         response = JSON.parse(transport.responseText);
+                    } catch {
+                        console.warn('error when parse response');
                     }
 
                     if (!response || !response['parameters']) {

@@ -82,6 +82,8 @@ function generateCouponCodes(idPrefix, generateUrl, grid) {
             if (transport && transport.responseText) {
                 try {
                     response = JSON.parse(transport.responseText);
+                } catch {
+                    console.warn('error when parse response');
                 }
             }
             if (couponCodesGrid) {
