@@ -28,28 +28,28 @@
         <job name="aggregate_sales_report_bestsellers_data" instance="Magento\Sales\Model\Observer\AggregateSalesReportBestsellersData" method="execute">
             <schedule>0 0 * * *</schedule>
         </job>
-        <job name="sales_grid_order_async_insert" instance="Magento\Sales\Model\Observer\Order\IndexGrid" method="asyncInsert">
+        <job name="sales_grid_order_async_insert" instance="SalesOrderIndexGridAsyncInsertCron" method="execute">
             <schedule>*/1 * * * *</schedule>
         </job>
-        <job name="sales_grid_order_invoice_async_insert" instance="Magento\Sales\Model\Observer\Order\Invoice\IndexGrid" method="asyncInsert">
+        <job name="sales_grid_order_invoice_async_insert" instance="SalesInvoiceIndexGridAsyncInsertCron" method="execute">
             <schedule>*/1 * * * *</schedule>
         </job>
-        <job name="sales_grid_order_shipment_async_insert" instance="Magento\Sales\Model\Observer\Order\Shipment\IndexGrid" method="asyncInsert">
+        <job name="sales_grid_order_shipment_async_insert" instance="SalesShipmentIndexGridAsyncInsertCron" method="execute">
             <schedule>*/1 * * * *</schedule>
         </job>
-        <job name="sales_grid_order_creditmemo_async_insert" instance="Magento\Sales\Model\Observer\Order\Creditmemo\IndexGrid" method="asyncInsert">
+        <job name="sales_grid_order_creditmemo_async_insert" instance="SalesCreditmemoIndexGridAsyncInsertCron" method="execute">
             <schedule>*/1 * * * *</schedule>
         </job>
-        <job name="sales_send_order_emails" instance="Magento\Sales\Model\Observer\Order\SendEmails" method="execute">
+        <job name="sales_send_order_emails" instance="SalesOrderSendEmailsCron" method="execute">
             <schedule>*/1 * * * *</schedule>
         </job>
-        <job name="sales_send_order_invoice_emails" instance="Magento\Sales\Model\Observer\Order\Invoice\SendEmails" method="execute">
+        <job name="sales_send_order_invoice_emails" instance="SalesInvoiceSendEmailsCron" method="execute">
             <schedule>*/1 * * * *</schedule>
         </job>
-        <job name="sales_send_order_shipment_emails" instance="Magento\Sales\Model\Observer\Order\Shipment\SendEmails" method="execute">
+        <job name="sales_send_order_shipment_emails" instance="SalesShipmentSendEmailsCron" method="execute">
             <schedule>*/1 * * * *</schedule>
         </job>
-        <job name="sales_send_order_creditmemo_emails" instance="Magento\Sales\Model\Observer\Order\Creditmemo\SendEmails" method="execute">
+        <job name="sales_send_order_creditmemo_emails" instance="SalesCreditmemoSendEmailsCron" method="execute">
             <schedule>*/1 * * * *</schedule>
         </job>
     </group>

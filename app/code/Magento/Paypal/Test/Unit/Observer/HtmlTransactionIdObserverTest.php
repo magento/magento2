@@ -101,6 +101,6 @@ class HtmlTransactionIdObserverTest extends \PHPUnit_Framework_TestCase
         $transactionMock->expects($this->once())
             ->method('setData')->with('html_txn_id', 'test');
 
-        $this->_model->invoke($observerMock);
+        $this->_model->execute($observerMock);
     }
 }
