@@ -11,21 +11,21 @@ use \Magento\Setup\Controller\InstallExtensionGrid;
 class InstallExtensionGridTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Composer\ComposerInformation
-     */
-    private $composerInformation;
-
-    /**
      * Controller
      *
      * @var \Magento\Setup\Controller\InstallExtensionGrid
      */
     private $controller;
 
+    /**
+     * @var \Magento\Setup\Model\ConnectManager
+     */
+    private $connectManager;
+
     public function setUp()
     {
-        $this->composerInformation = $this->getMock('Magento\Framework\Composer\ComposerInformation', [], [], '', false);
-        $this->controller = new InstallExtensionGrid($this->composerInformation);
+        $this->connectManager = $this->getMock('Magento\Setup\Model\ConnectManager', ['getPackagesForInstall'], [], '', false);
+        $this->controller = new InstallExtensionGrid($this->connectManager);
     }
 
     /**
@@ -44,7 +44,7 @@ class InstallExtensionGridTest extends \PHPUnit_Framework_TestCase
      */
     public function testExtensionsAction($extensions)
     {
-        $this->composerInformation
+        $this->connectManager
             ->expects($this->once())
             ->method('getPackagesForInstall')
             ->will($this->returnValue($extensions));
@@ -54,7 +54,6 @@ class InstallExtensionGridTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('success', $variables);
         $this->assertArrayHasKey('extensions', $variables);
         $this->assertArrayHasKey('total', $variables);
-        $this->assertEquals($variables['total'], count($extensions));
         $this->assertTrue($variables['success']);
     }
 

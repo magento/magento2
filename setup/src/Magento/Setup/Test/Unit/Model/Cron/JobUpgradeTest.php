@@ -16,8 +16,13 @@ class JobUpgradeTest extends \PHPUnit_Framework_TestCase
         $command->expects($this->once())->method('run');
         $status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
         $output = $this->getMockForAbstractClass('Symfony\Component\Console\Output\OutputInterface', [], '', false);
+        $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface', [], '', false);
+        $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', ['get'], [], '', false);
+        $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
+
         $jobUpgrade = new JobUpgrade(
             $command,
+            $objectManagerProvider,
             $output,
             $queue,
             $status,
