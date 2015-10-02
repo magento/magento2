@@ -55,12 +55,9 @@ class ObserverImplementationTest extends \PHPUnit_Framework_TestCase
         'Magento\Sales\Model\Observer\Order\IndexGrid',
         'Magento\Sales\Model\Observer\Order\Invoice\IndexGrid',
         'Magento\Sales\Model\Observer\Order\Shipment\IndexGrid',
-        'Magento\VersionsCms\Model\Backend\Observer',
         'Magento\Sales\Model\Observer\Frontend\Quote\RestoreCustomerGroupId',
         'Magento\User\Model\Backend\Observer\AuthObserver',
         'Magento\User\Model\Backend\Observer\PasswordObserver',
-        'Magento\VersionsCms\Model\Backend\Observer',
-        'Magento\VersionsCms\Model\Backend\PrepareFormObserver',
     ];
 
     public static function setUpBeforeClass()
