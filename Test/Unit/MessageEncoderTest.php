@@ -65,7 +65,7 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
     {
         $this->encoder->decode('customer.created', 'Some message');
     }
-    
+
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage Message with topic "customer.created" must be an instance of "Magento\Customer\Api\Data
@@ -82,7 +82,7 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
             ->method('convertValue')
             ->willThrowException(new LocalizedException(new Phrase('')));
 
-    $this->encoder->encode('customer.created', $object);
+        $this->encoder->encode('customer.created', $object);
     }
 
     /**
