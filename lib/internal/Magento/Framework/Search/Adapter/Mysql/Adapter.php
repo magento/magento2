@@ -72,6 +72,11 @@ class Adapter implements AdapterInterface
      */
     public function query(RequestInterface $request)
     {
+        /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql $con */
+        $con = $this->resource->getConnection();
+        $con->setProfiler([
+            'enabled' => true
+        ]);
         $query = $this->mapper->buildQuery($request);
         $temporaryStorage = $this->temporaryStorageFactory->create();
         $table = $temporaryStorage->storeDocumentsFromSelect($query);
@@ -83,6 +88,7 @@ class Adapter implements AdapterInterface
             'documents' => $documents,
             'aggregations' => $aggregations,
         ];
+        var_dump($con->getProfiler()->getTotalElapsedSecs());
         return $this->responseFactory->create($response);
     }
 
