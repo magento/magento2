@@ -155,7 +155,6 @@ class InstallData implements InstallDataInterface
             'minimal_price',
             'cost',
             'tier_price',
-            'group_price',
             'weight',
         ];
 

@@ -57,20 +57,20 @@ class DeleteCompareProductsTest extends AbstractCompareProductsTest
      *
      * @param string $products
      * @param string $removeProductIndex
-     * @param string $requireCustomerLogin
+     * @param string $isCustomerLoggedIn
      * @param CatalogProductCompare $catalogProductCompare
      * @return array
      */
     public function test(
         $products,
         $removeProductIndex,
-        $requireCustomerLogin,
+        $isCustomerLoggedIn,
         CatalogProductCompare $catalogProductCompare
     ) {
         //Steps
         $this->catalogProductCompare = $catalogProductCompare;
         $this->cmsIndex->open();
-        if ($requireCustomerLogin == 'Yes') {
+        if ($isCustomerLoggedIn == 'Yes') {
             $this->loginCustomer();
         }
         $this->products = $this->createProducts($products);
