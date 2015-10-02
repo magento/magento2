@@ -55,10 +55,6 @@ interface OrderItemInterface extends \Magento\Framework\Api\ExtensibleDataInterf
      */
     const PRODUCT_TYPE = 'product_type';
     /*
-     * Product options.
-     */
-    const PRODUCT_OPTIONS = 'product_options';
-    /*
      * Weight.
      */
     const WEIGHT = 'weight';
