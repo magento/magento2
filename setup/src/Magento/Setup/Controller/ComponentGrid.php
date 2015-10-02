@@ -66,8 +66,7 @@ class ComponentGrid extends AbstractActionController
         $objectManager = $objectManagerProvider->get();
         $this->enabledModuleList = $objectManager->get('Magento\Framework\Module\ModuleList');
         $this->fullModuleList = $objectManager->get('Magento\Framework\Module\FullModuleList');
-        $this->packageInfo = $objectManagerProvider->get()
-            ->get('Magento\Framework\Module\PackageInfoFactory')->create();
+        $this->packageInfo = $objectManager->get('Magento\Framework\Module\PackageInfoFactory')->create();
         $this->updatePackagesCache = $updatePackagesCache;
     }
 
