@@ -437,7 +437,7 @@ require([
                         dataType: 'json',
                         method: 'GET',
                         success: $.proxy(_onVimeoLoaded, self),
-                        error: function() {
+                        error: function () {
                             self._onRequestError('Video not found');
                         }
                     });
