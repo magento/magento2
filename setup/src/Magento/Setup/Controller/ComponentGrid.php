@@ -65,8 +65,8 @@ class ComponentGrid extends AbstractActionController
     public function __construct(
         ComposerInformation $composerInformation,
         ObjectManagerProvider $objectManagerProvider,
-        ConnectManager $connectManager,
-        UpdatePackagesCache $updatePackagesCache
+        UpdatePackagesCache $updatePackagesCache,
+        ConnectManager $connectManager
     ) {
         $this->composerInformation = $composerInformation;
         $objectManager = $objectManagerProvider->get();
