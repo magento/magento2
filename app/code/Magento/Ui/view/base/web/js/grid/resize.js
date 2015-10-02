@@ -242,7 +242,7 @@ define([
             var self = this;
 
             setTimeout(function () {
-                if (self.layoutFixedPolyfillIterator < 10) {
+                if (self.layoutFixedPolyfillIterator < 20) {
                     $(window).resize();
                     self.layoutFixedPolyfillIterator++;
                     self._layoutFixedPolyfill();
