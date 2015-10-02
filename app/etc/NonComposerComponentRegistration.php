@@ -66,6 +66,7 @@ class NonComposerComponentRegistration
      * components are registered within the framework.
      *
      * @return void
+     * @throws Exception
      */
     public function register()
     {
