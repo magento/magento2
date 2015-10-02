@@ -125,7 +125,7 @@ define([
          * @returns {Component} Chainable.
          */
         _clearData: function () {
-            this.source('remove', this.dataScope);
+            this.source.remove(this.dataScope);
 
             return this;
         },

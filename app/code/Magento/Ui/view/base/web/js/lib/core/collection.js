@@ -62,7 +62,7 @@ define([
          * @returns {Collection} Chainable.
          */
         initProperties: function () {
-            if (!this.source) {
+            if (!_.isFunction(this.source)) {
                 this.source = registry.get(this.provider);
             }
 

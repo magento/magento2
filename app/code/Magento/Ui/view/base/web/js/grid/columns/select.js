@@ -3,8 +3,9 @@
  * See COPYING.txt for license details.
  */
 define([
+    'underscore',
     './column'
-], function (Column) {
+], function (_, Column) {
     'use strict';
 
     return Column.extend({
@@ -17,16 +18,24 @@ define([
          */
         getLabel: function () {
             var options = this.options || [],
-                label = '',
-                value = this._super();
+                values = this._super(),
+                label = [];
 
-            options.some(function (item) {
-                label = item.label;
+            if (!Array.isArray(values)) {
+                values = [values];
+            }
 
-                return item.value == value;
+            values = values.map(function (value) {
+                return value + '';
             });
 
-            return label;
+            options.forEach(function (item) {
+                if (_.contains(values, item.value + '')) {
+                    label.push(item.label);
+                }
+            });
+
+            return label.join(', ');
         }
 
         /*eslint-enable eqeqeq*/
