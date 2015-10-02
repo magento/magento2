@@ -247,6 +247,7 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
     {
         $isArrayType = $this->typeProcessor->isArrayType($type);
         if ($isArrayType && isset($data['item'])) {
+            // TODO: Make sure this is not applied in scope fo reflection lib
             $data = $this->_removeSoapItemNode($data);
         }
         if ($this->typeProcessor->isTypeSimple($type) || $this->typeProcessor->isTypeAny($type)) {
@@ -303,8 +304,9 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
      * @param string $serviceMethodName
      * @return array
      */
-    protected function getMethodParams($serviceClassName, $serviceMethodName)
+    public function getMethodParams($serviceClassName, $serviceMethodName)
     {
+        // TODO: Move thid method to Reflection
         $cacheId = self::CACHE_ID_PREFIX . hash('md5', $serviceClassName . $serviceMethodName);
         $params = $this->cache->load($cacheId);
         if ($params !== false) {
