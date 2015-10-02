@@ -943,6 +943,7 @@ define([
             var newVideoForm;
 
             this.imageData = null;
+
             if (this._previewImage) {
                 this._previewImage.remove();
                 this._previewImage = null;
