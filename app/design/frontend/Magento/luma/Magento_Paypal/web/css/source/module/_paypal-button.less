@@ -32,6 +32,11 @@
             display: block;
             margin: @indent__s auto @indent__xs;
         }
+        .cart-summary & {
+            + .paypal {
+                margin-top: @indent__m;
+            }
+        }
     }
 
     .paypal-button-widget {
