@@ -13,6 +13,7 @@
     <preference for="Magento\Bundle\Api\ProductOptionRepositoryInterface" type="Magento\Bundle\Model\OptionRepository" />
     <preference for="Magento\Bundle\Api\ProductOptionManagementInterface" type="Magento\Bundle\Model\OptionManagement" />
     <preference for="Magento\Bundle\Api\Data\OptionInterface" type="Magento\Bundle\Model\Option" />
+    <preference for="Magento\Bundle\Api\Data\BundleOptionInterface" type="Magento\Bundle\Model\BundleOption" />
     <type name="Magento\Bundle\Model\Source\Option\Type">
         <arguments>
             <argument name="options" xsi:type="array">
@@ -101,5 +102,12 @@
     </type>
     <type name="Magento\Quote\Model\Quote\Item\ToOrderItem">
         <plugin name="append_bundle_data_to_order" type="Magento\Bundle\Model\Plugin\QuoteItem"/>
+    </type>
+    <type name="Magento\Quote\Model\Quote\Item\Repository">
+        <arguments>
+            <argument name="cartItemProcessors" xsi:type="array">
+                <item name="bundle" xsi:type="object">\Magento\Bundle\Model\CartItemProcessor</item>
+            </argument>
+        </arguments>
     </type>
 </config>

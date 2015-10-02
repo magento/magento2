@@ -4,6 +4,7 @@
  */
 /*jshint browser:true jquery:true*/
 /*global FORM_KEY*/
+// jscs:disable jsDoc
 define([
     'uiComponent',
     'jquery',
@@ -25,8 +26,8 @@ define([
             attributes: [],
             sections: {},
             images: null,
-            price: "",
-            quantity: "",
+            price: '',
+            quantity: '',
             notificationMessage: {
                 text: null,
                 error: null
@@ -34,6 +35,7 @@ define([
         },
         initObservable: function () {
             this._super().observe('countVariations attributes sections');
+
             return this;
         },
         initialize: function () {
@@ -67,13 +69,15 @@ define([
                 this.quantity = self.quantity;
             };
             this.makeImages = function (images, typePreview) {
+                var preview;
+
                 if (!images) {
                     this.images = [];
                     this.preview = self.noImage;
                     this.file = null;
                 } else {
                     this.images = images;
-                    var preview = _.find(this.images, function (image) {
+                    preview = _.find(this.images, function (image) {
                         return _.contains(image.galleryTypes, typePreview);
                     });
 
@@ -87,25 +91,27 @@ define([
                 }
             };
             this.images = new this.makeImages();
-            _.each(this.sections(), function(section) {
-                section.type.subscribe(function(newValue) {
-                   this.setWizardNotifyMessageDependOnSectionType()
+            _.each(this.sections(), function (section) {
+                section.type.subscribe(function () {
+                    this.setWizardNotifyMessageDependOnSectionType();
                 }.bind(this));
             }, this);
         },
         types: ['each', 'single', 'none'],
-        setWizardNotifyMessageDependOnSectionType: function() {
+        setWizardNotifyMessageDependOnSectionType: function () {
             var flag = false;
 
-            _.each(this.sections(), function(section) {
+            _.each(this.sections(), function (section) {
                 if (section.type() !== 'none') {
                     flag = true;
                 }
             }, this);
 
             if (flag) {
-                this.wizard.setNotificationMessage($.mage.__('Choose this option to delete and replace extension data '+
-                    'for all past configurations.'));
+                this.wizard.setNotificationMessage(
+                    $.mage.__('Choose this option to delete and replace extension data ' +
+                    'for all past configurations.')
+                );
             } else {
                 this.wizard.cleanNotificationMessage();
             }
@@ -113,7 +119,8 @@ define([
         render: function (wizard) {
             this.wizard = wizard;
             this.attributes(wizard.data.attributes());
-            if (this.mode == 'edit') {
+
+            if (this.mode === 'edit') {
                 this.setWizardNotifyMessageDependOnSectionType();
             }
             //fill option section data
@@ -130,35 +137,39 @@ define([
             this.initCountVariations();
             this.bindGalleries();
         },
-        initCountVariations: function() {
-            var variations = this.generateVariation(this.attributes());
-            var newVariations = _.map(variations, function(options) {
-                return this.variationsComponent().getVariationKey(options)
-            }.bind(this));
-            var existingVariations = _.keys(this.variationsComponent().productAttributesMap);
+        initCountVariations: function () {
+            var variations = this.generateVariation(this.attributes()),
+                newVariations = _.map(variations, function (options) {
+                    return this.variationsComponent().getVariationKey(options);
+                }.bind(this)),
+                existingVariations = _.keys(this.variationsComponent().productAttributesMap);
             this.countVariations(_.difference(newVariations, existingVariations).length);
-        } ,
+        },
+
         /**
          * @param attributes example [['b1', 'b2'],['a1', 'a2', 'a3'],['c1', 'c2', 'c3'],['d1']]
          * @returns {*} example [['b1','a1','c1','d1'],['b1','a1','c2','d1']...]
          */
         generateVariation: function (attributes) {
-            return _.reduce(attributes, function(matrix, attribute) {
+            return _.reduce(attributes, function (matrix, attribute) {
                 var tmp = [];
-                _.each(matrix, function(variations){
-                    _.each(attribute.chosen, function(option){
+                _.each(matrix, function (variations) {
+                    _.each(attribute.chosen, function (option) {
                         option.attribute_code = attribute.code;
                         option.attribute_label = attribute.label;
                         tmp.push(_.union(variations, [option]));
                     });
                 });
+
                 if (!tmp.length) {
-                    return _.map(attribute.chosen, function(option){
+                    return _.map(attribute.chosen, function (option) {
                         option.attribute_code = attribute.code;
                         option.attribute_label = attribute.label;
+
                         return [option];
                     });
                 }
+
                 return tmp;
             }, []);
         },
@@ -170,18 +181,20 @@ define([
                             return chosen.id == option.id;
                         });
                     }).sections()[section];
+
                 case 'single':
                     return this.sections()[section].value();
+
                 case 'none':
                     return this[section];
             }
         },
         getImageProperty: function (node) {
-            var types = node.find('[data-role=gallery]').productGallery('option').types;
-            var images = _.map(node.find('[data-role=image]'), function (image) {
+            var types = node.find('[data-role=gallery]').productGallery('option').types,
+                images = _.map(node.find('[data-role=image]'), function (image) {
                 var imageData = $(image).data('imageData');
                 imageData.galleryTypes = _.pluck(_.filter(types, function (type) {
-                    return type.value == imageData.file;
+                    return type.value === imageData.file;
                 }), 'code');
 
                 return imageData;
@@ -197,18 +210,20 @@ define([
                     if (this.sections().images.attribute()) {
                         this.sections().images.attribute().chosen.each(function (option) {
                             option.sections().images = new this.makeImages(
-                                this.getImageProperty($('[data-role=step-gallery-option-'+option.id+']')),
+                                this.getImageProperty($('[data-role=step-gallery-option-' + option.id + ']')),
                                 'thumbnail'
                             );
                         }, this);
                     }
                     break;
+
                 case 'single':
                     this.sections().images.value(new this.makeImages(
                         this.getImageProperty($('[data-role=step-gallery-single]')),
                         'thumbnail'
                     ));
                     break;
+
                 default:
                     this.sections().images.value(new this.makeImages());
                     break;
@@ -223,6 +238,7 @@ define([
             wizard.data.variations = this.generateVariation(this.attributes());
         },
         validate: function () {
+            var formValid;
             _.each(this.sections(), function (section) {
                 switch (section.type()) {
                     case 'each':
@@ -230,6 +246,7 @@ define([
                             throw new Error($.mage.__('Please, select attribute for the section ' + section.label));
                         }
                         break;
+
                     case 'single':
                         if (!section.value()) {
                             throw new Error($.mage.__('Please fill in the values for the section ' + section.label));
@@ -237,23 +254,25 @@ define([
                         break;
                 }
             }, this);
-            var formValid = true;
-            _.each($('[data-role=attributes-values-form]'), function(form) {
+            formValid = true;
+            _.each($('[data-role=attributes-values-form]'), function (form) {
                 formValid = $(form).valid() && formValid;
             });
+
             if (!formValid) {
                 throw new Error($.mage.__('Please, fill correct values'));
             }
         },
-        validateImage: function() {
+        validateImage: function () {
             switch (this.sections().images.type()) {
                 case 'each':
-                    _.each(this.sections()['images'].attribute().chosen, function(option) {
+                    _.each(this.sections()['images'].attribute().chosen, function (option) {
                         if (!option.sections().images.images.length) {
                             throw new Error($.mage.__('Please, select image(s) for your attribute'));
                         }
                     });
                     break;
+
                 case 'single':
                     if (this.sections().images.value().file == null) {
                         throw new Error($.mage.__('Please choose image(s)'));
