@@ -61,12 +61,12 @@
 <script>
 require([
     "jquery",
+    "Magento_Catalog/catalog/type-switcher",
     "underscore",
     "mage/mage",
-    "Magento_Catalog/catalog/type-switcher",
     "mage/backend/tabs",
     "domReady!"
-], function($){
+], function($, TypeSwitcher){
     var $form = $('[data-form=edit-product]');
     $form.data('typeSwitcher', new TypeSwitcher(<?php /* @escapeNotVerified */ echo $block->getTypeSwitcherData();?>).bindAll());
 
@@ -233,7 +233,7 @@ require([
     $form.on('changeAttributeSet', function(event, data) {
         if (data.label) {
             $('#product-template-suggest-container .action-toggle>span').text(data.label);
-            $('[data-id=affected-attribute-set-selector] [data-id=current-attribute-set] [data-role=name-container]').text(data.label);
+            $('[data-role=affected-attribute-set-selector] [data-role=name-container]').text(data.label);
         }
         $('#product-template-suggest').suggest('option', "currentlySelected", data.id).val('');
 
