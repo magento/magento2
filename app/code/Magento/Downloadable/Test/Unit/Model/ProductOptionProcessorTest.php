@@ -54,6 +54,7 @@ class ProductOptionProcessorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->dataObjectFactory = $this->getMockBuilder('Magento\Framework\DataObject\Factory')
+            ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataObjectFactory->expects($this->any())
