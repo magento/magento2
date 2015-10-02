@@ -9,6 +9,10 @@ namespace Magento\Framework\View\Test\Unit;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
+/**
+ * Class ConfigTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\View\Config */
@@ -61,7 +65,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ['create'],
             [],
             '',
-            false);
+            false
+        );
         $this->viewMock = $this->getMock('Magento\Framework\Config\View', [], [], '', false);
         $this->viewFactoryMock->expects($this->any())
             ->method('create')

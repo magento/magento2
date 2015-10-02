@@ -20,10 +20,6 @@ class ViewConfigFilesTest extends \PHPUnit_Framework_TestCase
         );
         $mergeXsd = $reader->read();
         $domConfig = new \Magento\Framework\Config\Dom($file);
-        /** @var \Magento\Framework\Filesystem $filesystem */
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Filesystem'
-        );
         $result = $domConfig->validate(
             $mergeXsd,
             $errors
