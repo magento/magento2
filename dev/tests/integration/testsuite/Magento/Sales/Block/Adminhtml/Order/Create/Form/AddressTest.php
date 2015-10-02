@@ -99,7 +99,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 "region_id": false,
                 "postcode": false,
                 "telephone": false,
-                "fax": false,
                 "vat_id": false
             },
             {
@@ -113,7 +112,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 "region_id": false,
                 "postcode": false,
                 "telephone": false,
-                "fax": false,
                 "vat_id": false
             },
             {
@@ -127,7 +125,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 "region_id": false,
                 "postcode": false,
                 "telephone": false,
-                "fax": false,
                 "vat_id": false
             }
         ]';
