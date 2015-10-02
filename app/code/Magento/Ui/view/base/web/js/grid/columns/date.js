@@ -15,14 +15,16 @@ define([
         },
 
         /**
-         * Initializes components' static properties.
+         * Overrides base method to normalize date format.
          *
          * @returns {DateColumn} Chainable.
          */
-        initProperties: function () {
+        initConfig: function () {
+            this._super();
+
             this.dateFormat = utils.normalizeDate(this.dateFormat);
 
-            return this._super();
+            return this;
         },
 
         /**

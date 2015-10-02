@@ -140,8 +140,9 @@ define([
         },
 
         /**
-         * Triggers event and executes all attached callbacks
-         * @param  {String} name
+         * Triggers event and executes all attached callbacks.
+         *
+         * @param {String} name - Name of the event to be triggered.
          * @returns {Boolean}
          */
         trigger: function (name) {

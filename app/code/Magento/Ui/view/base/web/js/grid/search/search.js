@@ -7,25 +7,25 @@ define([
     'uiLayout',
     'mage/translate',
     'mageUtils',
-    'uiComponent'
-], function (_, layout, $t, utils, Component) {
+    'uiElement'
+], function (_, layout, $t, utils, Element) {
     'use strict';
 
-    return Component.extend({
+    return Element.extend({
         defaults: {
             template: 'ui/grid/search/search',
             placeholder: $t('Search by keyword'),
             label: $t('Keyword'),
             value: '',
+            statefull: {
+                value: true
+            },
             imports: {
                 inputValue: 'value',
                 updatePreview: 'value'
             },
             exports: {
                 value: '${ $.provider }:params.search'
-            },
-            links: {
-                value: '${ $.storageConfig.path }'
             },
             modules: {
                 chips: '${ $.chipsProvider }'

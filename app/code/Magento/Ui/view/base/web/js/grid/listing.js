@@ -8,18 +8,15 @@ define([
     'underscore',
     'Magento_Ui/js/lib/spinner',
     'uiLayout',
-    'uiComponent'
-], function (ko, _, loader, layout, Component) {
+    'uiCollection'
+], function (ko, _, loader, layout, Collection) {
     'use strict';
 
-    return Component.extend({
+    return Collection.extend({
         defaults: {
             template: 'ui/grid/listing',
             stickyTmpl: 'ui/grid/sticky/listing',
             positions: false,
-            storageConfig: {
-                positions: '${ $.storageConfig.path }.positions'
-            },
             dndConfig: {
                 name: '${ $.name }_dnd',
                 component: 'Magento_Ui/js/grid/dnd',
@@ -141,8 +138,6 @@ define([
 
             element.on('visible', this.updateVisible);
 
-            this.updateVisible();
-
             return this._super();
         },
 
@@ -152,14 +147,9 @@ define([
          * @returns {Listing} Chainable.
          */
         initPositions: function () {
-            var link = {
-                positions: this.storageConfig.positions
-            };
-
             this.on('positions', this.applyPositions.bind(this));
 
-            this.setLinks(link, 'imports')
-                .setLinks(link, 'exports');
+            this.setStatefull('positions');
 
             return this;
         },

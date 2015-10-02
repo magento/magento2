@@ -6,11 +6,11 @@ define([
     'ko',
     'underscore',
     'mageUtils',
-    'uiComponent'
-], function (ko, _, utils, Component) {
+    'uiElement'
+], function (ko, _, utils, Element) {
     'use strict';
 
-    return Component.extend({
+    return Element.extend({
         defaults: {
             template: 'ui/grid/paging/sizes',
             value: 20,
@@ -38,9 +38,9 @@ define([
                     label: 200
                 }
             },
-            links: {
-                options: '${ $.storageConfig.path }.options',
-                value: '${ $.storageConfig.path }.value'
+            statefull: {
+                options: true,
+                value: true
             },
             listens: {
                 value: 'onValueChange',

@@ -3,11 +3,11 @@
  * See COPYING.txt for license details.
  */
 define([
-    'uiComponent'
-], function (Component) {
+    'uiCollection'
+], function (Collection) {
     'use strict';
 
-    return Component.extend({
+    return Collection.extend({
         defaults: {
             uniqueProp:     'active',
             active:         false,

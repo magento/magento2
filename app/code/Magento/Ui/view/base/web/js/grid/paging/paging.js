@@ -8,11 +8,11 @@ define([
     'underscore',
     'mageUtils',
     'uiLayout',
-    'uiComponent'
-], function (ko, _, utils, layout, Component) {
+    'uiElement'
+], function (ko, _, utils, layout, Element) {
     'use strict';
 
-    return Component.extend({
+    return Element.extend({
         defaults: {
             template: 'ui/grid/paging/paging',
             totalTmpl: 'ui/grid/paging-total',

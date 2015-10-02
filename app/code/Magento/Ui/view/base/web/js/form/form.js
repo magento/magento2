@@ -4,10 +4,10 @@
  */
 define([
     'underscore',
-    'uiComponent',
+    'uiCollection',
     'Magento_Ui/js/lib/spinner',
     './adapter'
-], function (_, Component, loader, adapter) {
+], function (_, Collection, loader, adapter) {
     'use strict';
 
     function collectData(selector) {
@@ -23,7 +23,7 @@ define([
         return result;
     }
 
-    return Component.extend({
+    return Collection.extend({
         initialize: function () {
             this._super()
                 .initAdapter()

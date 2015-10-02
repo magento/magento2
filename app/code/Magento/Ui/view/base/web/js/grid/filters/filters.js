@@ -6,8 +6,8 @@ define([
     'underscore',
     'mageUtils',
     'uiLayout',
-    'uiComponent'
-], function (_, utils, layout, Component) {
+    'uiCollection'
+], function (_, utils, layout, Collection) {
     'use strict';
 
     /**
@@ -34,7 +34,7 @@ define([
         return utils.mapRecursive(data, utils.removeEmptyValues.bind(utils));
     }
 
-    return Component.extend({
+    return Collection.extend({
         defaults: {
             template: 'ui/grid/filters/filters',
             stickyTmpl: 'ui/grid/sticky/filters',
@@ -85,8 +85,8 @@ define([
                 active: 'updatePreviews',
                 applied: 'cancel updateActive'
             },
-            links: {
-                applied: '${ $.storageConfig.path }'
+            statefull: {
+                applied: true
             },
             exports: {
                 applied: '${ $.provider }:params.filters'

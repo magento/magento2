@@ -7,11 +7,11 @@ define([
     'underscore',
     'mageUtils',
     'uiLayout',
-    'uiComponent'
-], function (_, utils, layout, Component) {
+    'uiCollection'
+], function (_, utils, layout, Collection) {
     'use strict';
 
-    return Component.extend({
+    return Collection.extend({
         defaults: {
             active: true,
             hasChanges: false,

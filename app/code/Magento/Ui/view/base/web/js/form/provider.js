@@ -4,12 +4,12 @@
  */
 define([
     'underscore',
-    'uiComponent',
+    'uiElement',
     './client'
-], function (_, Component, Client) {
+], function (_, Element, Client) {
     'use strict';
 
-    return Component.extend({
+    return Element.extend({
         initialize: function () {
             this._super()
                 .initClient();

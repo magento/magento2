@@ -3,11 +3,11 @@
  * See COPYING.txt for license details.
  */
 /*global define*/
-define(['uiModel', 'underscore', 'mage/url'],
-    function (uiModel, _, url) {
+define(['uiElement', 'underscore', 'mage/url'],
+    function (uiElement, _, url) {
         'use strict';
 
-        var provider = uiModel();
+        var provider = uiElement();
 
         return function (itemId) {
             var model = {

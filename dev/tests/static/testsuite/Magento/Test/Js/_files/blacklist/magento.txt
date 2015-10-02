@@ -400,8 +400,7 @@ app/code/Magento/Ui/view/base/web/js/grid/controls/bookmarks/storage.js
 app/code/Magento/Ui/view/base/web/js/grid/export.js
 app/code/Magento/Ui/view/base/web/js/grid/resize.js
 app/code/Magento/Ui/view/base/web/js/grid/sticky/sticky.js
-app/code/Magento/Ui/view/base/web/js/lib/core/model/links.js
-app/code/Magento/Ui/view/base/web/js/lib/events.js
+app/code/Magento/Ui/view/base/web/js/lib/core/element/links.js
 app/code/Magento/Ui/view/base/web/js/lib/key-codes.js
 app/code/Magento/Ui/view/base/web/js/lib/ko/bind/datepicker.js
 app/code/Magento/Ui/view/base/web/js/lib/ko/bind/fadeVisible.js
@@ -410,7 +409,6 @@ app/code/Magento/Ui/view/base/web/js/lib/ko/bind/keyboard.js
 app/code/Magento/Ui/view/base/web/js/lib/ko/bind/mage-init.js
 app/code/Magento/Ui/view/base/web/js/lib/ko/bind/optgroup.js
 app/code/Magento/Ui/view/base/web/js/lib/ko/extender/observable_array.js
-app/code/Magento/Ui/view/base/web/js/lib/loader.js
 app/code/Magento/Ui/view/base/web/js/lib/spinner.js
 app/code/Magento/Ui/view/base/web/js/lib/step-wizard.js
 app/code/Magento/Ui/view/base/web/js/lib/validation/rules.js

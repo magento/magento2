@@ -6,11 +6,11 @@ define([
     'underscore',
     'uiRegistry',
     'mageUtils',
-    'uiComponent'
-], function (_, registry, utils, Component) {
+    'uiElement'
+], function (_, registry, utils, Element) {
     'use strict';
 
-    return Component.extend({
+    return Element.extend({
         defaults: {
             headerTmpl: 'ui/grid/columns/text',
             bodyTmpl: 'ui/grid/cells/text',
@@ -24,9 +24,9 @@ define([
             ignoreTmpls: {
                 fieldAction: true
             },
-            links: {
-                visible: '${ $.storageConfig.path }.visible',
-                sorting: '${ $.storageConfig.path }.sorting'
+            statefull: {
+                visible: true,
+                sorting: true
             },
             imports: {
                 exportSorting: 'sorting'

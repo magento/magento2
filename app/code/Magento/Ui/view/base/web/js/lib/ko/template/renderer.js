@@ -3,7 +3,7 @@
  * See COPYING.txt for license details.
  */
 define([
-    '../loader',
+    './loader',
     'jquery',
     'underscore'
 ], function (loader, $, _) {
