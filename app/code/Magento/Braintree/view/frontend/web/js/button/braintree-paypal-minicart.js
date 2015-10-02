@@ -8,6 +8,7 @@ define([
     'Magento_Ui/js/lib/view/utils/dom-observer',
     'mage/apply/main'
 ], function ($, builder, domObserver, mage) {
+    'use strict';
 
     return function (config) {
         var $container = $(config.containerId);
