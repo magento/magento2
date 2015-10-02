@@ -53,7 +53,6 @@ class PathProcessor
             $this->storeManager->setCurrentStore($storeCode);
             $path = '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
         } else {
-            $this->storeManager->setCurrentStore(\Magento\Store\Model\Store::DEFAULT_CODE);
             $path = '/' . implode('/', $pathParts);
         }
         return $path;

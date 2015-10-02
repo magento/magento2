@@ -8,24 +8,37 @@ namespace Magento\Paypal\Test\Unit\Model\Hostedpro;
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     */
+    protected $helper;
+
+    /**
      * @var \Magento\Paypal\Model\Hostedpro\Request
      */
     protected $_model;
 
     protected $localeResolverMock;
 
+    /**
+     * @var \Magento\Tax\Helper\Data
+     */
+    protected $taxData;
+
     protected function setUp()
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->localeResolverMock = $this->getMockBuilder('Magento\Framework\Locale\Resolver')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->_model = $helper->getObject(
+        $this->taxData = $this->helper->getObject('Magento\Tax\Helper\Data');
+
+        $this->_model = $this->helper->getObject(
             'Magento\Paypal\Model\Hostedpro\Request',
             [
-                'localeResolver' => $this->localeResolverMock
+                'localeResolver' => $this->localeResolverMock,
+                'taxData' => $this->taxData
             ]
         );
     }
@@ -133,5 +146,131 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->_model, $this->_model->setPaymentMethod($paymentMethodMock));
         $this->assertEquals('US', $this->_model->getData('lc'));
         $this->assertEquals($expectedData, $this->_model->getData());
+    }
+
+    /**
+     * @covers \Magento\Paypal\Model\Hostedpro\Request::setOrder
+     */
+    public function testSetOrder()
+    {
+        $expectation = [
+            'invoice' => '#000001',
+            'address_override' => 'true',
+            'currency_code' => 'USD',
+            'buyer_email' => 'buyer@email.com',
+        ];
+
+        $order = $this->getMockBuilder('Magento\Sales\Model\Order')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $order->expects(static::once())
+            ->method('getIncrementId')
+            ->willReturn($expectation['invoice']);
+
+        $order->expects(static::once())
+            ->method('getBaseCurrencyCode')
+            ->willReturn($expectation['currency_code']);
+
+        $order->expects(static::once())
+            ->method('getCustomerEmail')
+            ->willReturn($expectation['buyer_email']);
+
+        $this->_model->setOrder($order);
+        static::assertEquals($expectation, $this->_model->getData());
+    }
+
+    /**
+     * @covers \Magento\Paypal\Model\Hostedpro\Request::setAmount
+     */
+    public function testSetAmountWithoutTax()
+    {
+        $expectation = [
+            'subtotal' => 12.04,
+            'tax' => 2.03,
+            'shipping' => 5.05
+        ];
+        $amount = array_sum($expectation);
+
+        static::assertFalse($this->taxData->priceIncludesTax());
+
+        $payment = $this->getMockBuilder('Magento\Sales\Model\Order\Payment')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $order = $this->getMockBuilder('Magento\Sales\Model\Order')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $payment->expects(static::once())
+            ->method('getBaseAmountAuthorized')
+            ->willReturn($amount);
+
+        $order->expects(static::once())
+            ->method('getPayment')
+            ->willReturn($payment);
+
+        $order->expects(static::atLeastOnce())
+            ->method('getBaseTaxAmount')
+            ->willReturn($expectation['tax']);
+
+        $order->expects(static::atLeastOnce())
+            ->method('getBaseShippingAmount')
+            ->willReturn($expectation['shipping']);
+
+        $this->_model->setAmount($order);
+
+        static::assertEquals($expectation, $this->_model->getData());
+    }
+
+    public function testSetAmountWithIncludedTax()
+    {
+        /** @var \Magento\Tax\Model\Config  $config */
+        $config = $this->helper->getObject('Magento\Tax\Model\Config');
+        $config->setPriceIncludesTax(true);
+
+        $this->taxData = $this->helper->getObject(
+            'Magento\Tax\Helper\Data',
+            [
+                'taxConfig' => $config
+            ]
+        );
+
+        $this->_model = $this->helper->getObject(
+            'Magento\Paypal\Model\Hostedpro\Request',
+            [
+                'localeResolver' => $this->localeResolverMock,
+                'taxData' => $this->taxData
+            ]
+        );
+
+        static::assertTrue($this->taxData->getConfig()->priceIncludesTax());
+
+        $amount = 19.65;
+
+        $expectation = [
+            'amount' => $amount,
+            'subtotal' => $amount
+        ];
+
+        $payment = $this->getMockBuilder('Magento\Sales\Model\Order\Payment')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $order = $this->getMockBuilder('Magento\Sales\Model\Order')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $payment->expects(static::once())
+            ->method('getBaseAmountAuthorized')
+            ->willReturn($amount);
+
+        $order->expects(static::once())
+            ->method('getPayment')
+            ->willReturn($payment);
+
+        $this->_model->setAmount($order);
+
+        static::assertEquals($expectation, $this->_model->getData());
     }
 }
