@@ -2,6 +2,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'underscore',
     'uiRegistry',
@@ -16,6 +17,8 @@ define([
     return Collapsible.extend({
         defaults: {
             template: 'ui/grid/actions',
+            stickyTmpl: 'ui/grid/sticky/actions',
+            componentType: 'massaction',
             selectProvider: '',
             actions: [],
             noItemsMsg: $t('You haven\'t selected any items!'),

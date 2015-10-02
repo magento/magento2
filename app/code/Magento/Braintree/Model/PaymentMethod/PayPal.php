@@ -290,8 +290,8 @@ class PayPal extends \Magento\Braintree\Model\PaymentMethod
         try {
             if ($payment->getCcTransId()) {
                 $result = $this->braintreeTransaction->submitForSettlement($payment->getCcTransId(), $amount);
-                $this->_debug($payment->getCcTransId().' - '.$amount);
-                $this->_debug($result);
+                $this->_debug([$payment->getCcTransId().' - '.$amount]);
+                $this->_debug($this->_convertObjToArray($result));
                 if ($result->success) {
                     $payment->setIsTransactionClosed(0)
                         ->setShouldCloseParentTransaction(false);

@@ -70,8 +70,13 @@ define([
                 if (typeof unwrappedArray.length === 'undefined') { // Coerce single value into array
                     unwrappedArray = [unwrappedArray];
                 }
+
                 // Filter out any entries marked as destroyed
                 filteredArray = ko.utils.arrayFilter(unwrappedArray, function (item) {
+                    if (item && !item.label) {
+                        return false;
+                    }
+
                     return includeDestroyed || item === undefined || item === null || !ko.utils.unwrapObservable(item._destroy);
                 });
                 filteredArray.map(recursivePathBuilder, null);
@@ -217,8 +222,8 @@ define([
                 // IE6 doesn't like us to assign selection to OPTION nodes before they're added to the document.
                 // That's why we first added them without selection. Now it's time to set the selection.
                 if (previousSelectedValues.length) {
-                    var isSelected = ko.utils.arrayIndexOf(previousSelectedValues, ko.selectExtensions.readValue(newOptions[0])) >= 0;
-                    ko.utils.setOptionNodeSelectionState(newOptions[0], isSelected);
+                    var isSelected = ko.utils.arrayIndexOf(previousSelectedValues, ko.selectExtensions.readValue(newOptions.value)) >= 0;
+                    ko.utils.setOptionNodeSelectionState(newOptions.value, isSelected);
 
                     // If this option was changed from being selected during a single-item update, notify the change
                     if (itemUpdate && !isSelected) {
