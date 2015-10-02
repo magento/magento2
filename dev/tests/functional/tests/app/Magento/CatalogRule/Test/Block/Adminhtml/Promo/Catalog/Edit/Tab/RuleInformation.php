@@ -7,9 +7,7 @@
 namespace Magento\CatalogRule\Test\Block\Adminhtml\Promo\Catalog\Edit\Tab;
 
 use Magento\Customer\Test\Fixture\CustomerGroup;
-use Magento\Mtf\Factory\Factory;
 use Magento\Backend\Test\Block\Widget\Tab;
-use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Rule Information tab.
