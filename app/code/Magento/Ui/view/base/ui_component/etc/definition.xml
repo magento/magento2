@@ -212,7 +212,7 @@
     <image class="Magento\Ui\Component\Form\Element\DataType\Media">
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/media</item>
                 <item name="config" xsi:type="array">
                     <item name="template" xsi:type="string">ui/form/field</item>
                     <item name="elementTmpl" xsi:type="string">ui/form/element/media</item>
@@ -220,6 +220,17 @@
             </item>
         </argument>
     </image>
+    <file class="Magento\Ui\Component\Form\Element\DataType\Media">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/media</item>
+                <item name="config" xsi:type="array">
+                    <item name="template" xsi:type="string">ui/form/field</item>
+                    <item name="elementTmpl" xsi:type="string">ui/form/element/media</item>
+                </item>
+            </item>
+        </argument>
+    </file>
     <date class="Magento\Ui\Component\Form\Element\DataType\Date">
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
