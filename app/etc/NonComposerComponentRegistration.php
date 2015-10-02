@@ -100,13 +100,16 @@ EOD;
                 foreach ($files as $file) {
                     $fileContent = file_get_contents($file);
                     $matches = [];
-                    preg_match($pattern, $fileContent, $matches);
-                    $path = $matches['path'];
-                    if ($matches['path'] == '__DIR__') {
-                        $path = dirname($file);
+                    if (preg_match($pattern, $fileContent, $matches)) {
+                        $path = $matches['path'];
+                        if ($matches['path'] == '__DIR__') {
+                            $path = dirname($file);
+                        }
+                        $content .= "ComponentRegistrar::register(" .
+                            $matches['type'] . ', ' . $matches['alias'] . ", '" . $path . "');\n";
+                    } else {
+                        throw new \Exception('Component cannot be registered with the ' . $file);
                     }
-                    $content .= "ComponentRegistrar::register(" .
-                        $matches['type'] . ', ' . $matches['alias'] . ", '" . $path . "');\n";
                 }
             }
             file_put_contents($staticList, $content);
