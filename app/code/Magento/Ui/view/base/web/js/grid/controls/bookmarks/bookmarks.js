@@ -7,8 +7,8 @@ define([
     'mageUtils',
     'mage/translate',
     'uiLayout',
-    'uiComponent'
-], function (_, utils, $t, layout, Component) {
+    'uiCollection'
+], function (_, utils, $t, layout, Collection) {
     'use strict';
 
     /**
@@ -27,7 +27,7 @@ define([
         return path.join('.');
     }
 
-    return Component.extend({
+    return Collection.extend({
         defaults: {
             template: 'ui/grid/controls/bookmarks/bookmarks',
             viewTmpl: 'ui/grid/controls/bookmarks/view',

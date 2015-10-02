@@ -5,7 +5,7 @@
 define([
     'jquery',
     'mageUtils',
-    'Magento_Ui/js/lib/core/model/storage',
+    'Magento_Ui/js/lib/core/storage',
     'uiClass'
 ], function ($, utils, storage, Class) {
     'use strict';

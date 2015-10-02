@@ -5,7 +5,7 @@
 define([
     'ko',
     './observable_source',
-    '../../renderer/renderer'
+    './renderer'
 ], function (ko, Source, Renderer) {
     'use strict';
 

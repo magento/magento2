@@ -10,11 +10,11 @@ define([
     'uiEvents',
     'uiClass',
     './links',
-    './storage'
+    '../storage'
 ], function (ko, _, utils, registry, Events, Class, links) {
     'use strict';
 
-    var Model;
+    var Module;
 
     /**
      * Creates observable property using knockouts'
@@ -60,16 +60,17 @@ define([
         }
     }
 
-    Model = {
+    Module = _.extend({
         defaults: {
+            template: '',
             storageConfig: {
                 provider: 'localStorage',
                 namespace: '${ $.name }',
                 path: '${ $.storageConfig.provider }:${ $.storageConfig.namespace }'
             },
             maps: {
-                exports: {},
-                imports: {}
+                imports: {},
+                exports: {}
             },
             modules: {
                 storage: '${ $.storageConfig.provider }'
@@ -79,13 +80,13 @@ define([
         /**
          * Initializes model instance.
          *
-         * @returns {Model} Chainable.
+         * @returns {Element} Chainable.
          */
         initialize: function () {
             this._super()
                 .initObservable()
                 .initModules()
-                .setListeners(this.listens)
+                .initStatefull()
                 .initLinks();
 
             return this;
@@ -94,9 +95,29 @@ define([
         /**
          * Initializes observable properties.
          *
-         * @returns {Model} Chainable.
+         * @returns {Element} Chainable.
          */
         initObservable: function () {
+            return this;
+        },
+
+        /**
+         * Initializes statefull properties,
+         * based on the keys of 'statefull' object.
+         *
+         * @returns {Element} Chainable.
+         */
+        initStatefull: function () {
+            var statefull = this.statefull || {};
+
+            _.each(statefull, function (path, key) {
+                if (!path) {
+                    return;
+                }
+
+                this.setStatefull(key, path);
+            }, this);
+
             return this;
         },
 
@@ -104,7 +125,7 @@ define([
          * Parses 'modules' object and creates
          * async wrappers on specified components.
          *
-         * @returns {Component} Chainable.
+         * @returns {Element} Chainable.
          */
         initModules: function () {
             var modules = this.modules || {};
@@ -119,10 +140,11 @@ define([
         /**
          * Initializes links between properties.
          *
-         * @returns {Component} Chainbale.
+         * @returns {Element} Chainbale.
          */
         initLinks: function () {
-            this.setLinks(this.links, 'imports')
+            this.setListeners(this.listens)
+                .setLinks(this.links, 'imports')
                 .setLinks(this.links, 'exports');
 
             _.each({
@@ -131,6 +153,35 @@ define([
             }, this.setLinks, this);
 
             return this;
+        },
+
+        /**
+         * Makes specified property to be statefull.
+         *
+         * @param {String} key - Name of the property
+         *      that will be stored.
+         * @param {String} [path=key] - Path to the property in storage.
+         * @returns {Element} Chainable.
+         */
+        setStatefull: function (key, path) {
+            var link = {};
+
+            path        = !_.isString(path) || !path ? key : path;
+            link[key]   = this.storageConfig.path + '.' + path;
+
+            this.setLinks(link, 'imports')
+                .setLinks(link, 'exports');
+
+            return this;
+        },
+
+        /**
+         * Returns path to elements' template.
+         *
+         * @returns {String}
+         */
+        getTemplate: function () {
+            return this.template;
         },
 
         /**
@@ -149,10 +200,10 @@ define([
          *
          * @param {String} path - Path to property.
          * @param {*} value - New value of the property.
-         * @returns {Model} Chainable.
+         * @returns {Element} Chainable.
          */
         set: function (path, value) {
-            var data = utils.nested(this, path),
+            var data = this.get(path),
                 diffs;
 
             if (!_.isFunction(data)) {
@@ -172,7 +223,7 @@ define([
          * Removes nested property from the object.
          *
          * @param {String} path - Path to the property.
-         * @returns {Model} Chainable.
+         * @returns {Element} Chainable.
          */
         remove: function (path) {
             var data,
@@ -206,7 +257,7 @@ define([
          * @param {Boolean} [useAccessors=false] - Whether to create an
          *      observable function or to use property accesessors.
          * @param {(Object|String|Array)} properties - List of observable properties.
-         * @returns {Model} Chainable.
+         * @returns {Element} Chainable.
          *
          * @example Sample declaration and equivalent knockout methods.
          *      this.key = 'value';
@@ -256,7 +307,7 @@ define([
          * with a predefined 'useAccessors' flag.
          *
          * @param {(String|Array|Object)} properties - List of observable properties.
-         * @returns {Model} Chainable.
+         * @returns {Element} Chainable.
          */
         track: function (properties) {
             this.observe(true, properties);
@@ -268,7 +319,7 @@ define([
          * Invokes subscribers for the provided changes.
          *
          * @param {Object} diffs - Object with changes descriptions.
-         * @returns {Model} Chainable.
+         * @returns {Element} Chainable.
          */
         _notifyChanges: function (diffs) {
             diffs.changes.forEach(function (change) {
@@ -303,13 +354,15 @@ define([
          *
          * @param {String} property
          * @param {*} [data=this[property]]
-         * @returns {Model} Chainable.
+         * @returns {Element} Chainable.
          */
         store: function (property, data) {
             var ns = this.storageConfig.namespace,
                 path = utils.fullPath(ns, property);
 
-            data = data || this.get(property);
+            if (arguments.length < 2) {
+                data = this.get(property);
+            }
 
             this.storage('set', path, data);
 
@@ -317,10 +370,31 @@ define([
         },
 
         /**
+         * Extracts specified property from storage.
+         *
+         * @param {String} [property] - Name of the property
+         *      to be extracted. If not specified then all of the
+         *      stored will be returned.
+         * @returns {*}
+         */
+        getStored: function (property) {
+            var ns = this.storageConfig.namespace,
+                path = utils.fullPath(ns, property),
+                storage = this.storage(),
+                data;
+
+            if (storage) {
+                data = storage.get(path);
+            }
+
+            return data;
+        },
+
+        /**
          * Removes stored property.
          *
          * @param {String} property - Property to be removed from storage.
-         * @returns {Model} Chainable.
+         * @returns {Element} Chainable.
          */
         removeStored: function (property) {
             var ns = this.storageConfig.namespace,
@@ -330,9 +404,7 @@ define([
 
             return this;
         }
-    };
+    }, Events, links);
 
-    _.extend(Model, Events, links);
-
-    return Class.extend(Model);
+    return Class.extend(Module);
 });

@@ -7,13 +7,13 @@ define([
     'jquery',
     'underscore',
     'mageUtils',
-    'uiComponent',
+    'uiElement',
     'Magento_Ui/js/modal/alert',
     'mage/translate'
-], function ($, _, utils, Component, alert, $t) {
+], function ($, _, utils, Element, alert, $t) {
     'use strict';
 
-    return Component.extend({
+    return Element.extend({
         defaults: {
             listens: {
                 params: 'reload'

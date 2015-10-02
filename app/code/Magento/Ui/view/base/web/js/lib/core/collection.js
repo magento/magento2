@@ -6,9 +6,8 @@ define([
     'underscore',
     'mageUtils',
     'uiRegistry',
-    'uiModel',
-    'Magento_Ui/js/lib/ko/initialize'
-], function (_, utils, registry, Model) {
+    'uiElement'
+], function (_, utils, registry, Element) {
     'use strict';
 
     /**
@@ -21,7 +20,7 @@ define([
         return container.filter(utils.isObject);
     }
 
-    return Model.extend({
+    return Element.extend({
         defaults: {
             template: 'ui/collection',
             componentType: 'container',
@@ -34,7 +33,7 @@ define([
         /**
          * Initializes component.
          *
-         * @returns {Component} Chainable.
+         * @returns {Collection} Chainable.
          */
         initialize: function () {
             this._super()
@@ -61,7 +60,7 @@ define([
         /**
          * Defines various properties.
          *
-         * @returns {Component} Chainable.
+         * @returns {Collection} Chainable.
          */
         initProperties: function () {
             if (!this.source) {
@@ -79,7 +78,7 @@ define([
         /**
          * Initializes listeners of the unique property.
          *
-         * @returns {Component} Chainable.
+         * @returns {Collection} Chainable.
          */
         initUnique: function () {
             var update = this.onUniqueUpdate.bind(this),
@@ -98,7 +97,7 @@ define([
          * Called when current element was injected to another component.
          *
          * @param {Object} parent - Instance of a 'parent' component.
-         * @returns {Component} Chainable.
+         * @returns {Collection} Chainable.
          */
         initContainer: function (parent) {
             this.containers.push(parent);
@@ -110,27 +109,21 @@ define([
          * Called when another element was added to current component.
          *
          * @param {Object} elem - Instance of an element that was added.
-         * @returns {Component} Chainable.
+         * @returns {Collection} Chainable.
          */
         initElement: function (elem) {
-            elem.initContainer(this);
+            if (_.isFunction(elem.initContainer)) {
+                elem.initContainer(this);
+            }
 
             return this;
-        },
-
-        /**
-         * Returns path to components' template.
-         * @returns {String}
-         */
-        getTemplate: function () {
-            return this.template;
         },
 
         /**
          * Updates property specified in uniqueNs
          * if components' unique property is set to 'true'.
          *
-         * @returns {Component} Chainable.
+         * @returns {Collection} Chainable.
          */
         setUnique: function () {
             var property = this.uniqueProp;
@@ -176,7 +169,7 @@ define([
          *
          * @param {Array} items - New regions' data.
          * @param {String} name - Name of the region.
-         * @returns {Component} Chainable.
+         * @returns {Collection} Chainable.
          */
         updateRegion: function (items, name) {
             if (name) {
@@ -192,7 +185,7 @@ define([
          *
          * @param {(String|Array)} elems - Name of the component to insert.
          * @param {Number} [position=-1] - Position at which to insert elements.
-         * @returns {Component} Chainable.
+         * @returns {Collection} Chainable.
          */
         insertChild: function (elems, position) {
             var container   = this._elems,
@@ -228,7 +221,7 @@ define([
          * Removes specified element from the 'elems' array.
          *
          * @param {Object} elem - Element to be removed.
-         * @returns {Component} Chainable.
+         * @returns {Collection} Chainable.
          */
         removeChild: function (elem) {
             utils.remove(this._elems, elem);
@@ -249,7 +242,7 @@ define([
          * Removes events listeners.
          * @private
          *
-         * @returns {Component} Chainable.
+         * @returns {Collection} Chainable.
          */
         _dropHandlers: function () {
             this.off();
@@ -264,7 +257,7 @@ define([
          * calls 'destroy' method on all of its' children.
          * @private
          *
-         * @returns {Component} Chainable.
+         * @returns {Collection} Chainable.
          */
         _clearRefs: function () {
             registry.remove(this.name);
@@ -300,7 +293,7 @@ define([
          * Performs elemets grouping by theirs 'displayArea' property.
          * @private
          *
-         * @returns {Component} Chainable.
+         * @returns {Collection} Chainable.
          */
         _update: function () {
             var _elems = compact(this._elems),

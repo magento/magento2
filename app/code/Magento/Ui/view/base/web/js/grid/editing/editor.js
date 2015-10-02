@@ -8,11 +8,11 @@ define([
     'mageUtils',
     'uiLayout',
     'mage/translate',
-    'uiComponent'
-], function (_, utils, layout, $t, Component) {
+    'uiCollection'
+], function (_, utils, layout, $t, Collection) {
     'use strict';
 
-    return Component.extend({
+    return Collection.extend({
         defaults: {
             rowButtonsTmpl: 'ui/grid/editing/row-buttons',
             headerButtonsTmpl: 'ui/grid/editing/header-buttons',

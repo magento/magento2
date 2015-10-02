@@ -3,11 +3,11 @@
  * See COPYING.txt for license details.
  */
 define([
-    'Magento_Ui/js/lib/core/model/links'
+    'Magento_Ui/js/lib/core/element/links'
 ], function (links) {
     'use strict';
 
-    describe('Magento_Ui/js/lib/core/model/links', function () {
+    describe('Magento_Ui/js/lib/core/element/links', function () {
         var linksObj,
             returnedValue;
 

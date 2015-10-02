@@ -6,11 +6,11 @@ define([
     'underscore',
     'mageUtils',
     'mage/translate',
-    'uiComponent'
-], function (_, utils, $t, Component) {
+    'uiCollection'
+], function (_, utils, $t, Collection) {
     'use strict';
 
-    return Component.extend({
+    return Collection.extend({
         defaults: {
             template: 'ui/grid/controls/columns',
             minVisible: 1,

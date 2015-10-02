@@ -23,8 +23,7 @@ define([
     './bind/collapsible',
     './bind/autoselect',
     './extender/observable_array',
-    './extender/bound-nodes',
-    './extender/observable_array'
+    './extender/bound-nodes'
 ], function (ko, templateEngine) {
     'use strict';
 
