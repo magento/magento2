@@ -165,8 +165,8 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'nullable' => false,
                 'default' => 0,
                 'comment' => 'Visibility status'
-            ])
-        ;
+            ]
+        );
 
         /**
          * Drop entity Id columns
