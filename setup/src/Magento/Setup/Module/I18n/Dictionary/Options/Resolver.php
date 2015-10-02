@@ -58,7 +58,7 @@ class Resolver implements ResolverInterface
         if (null === $this->options) {
             if ($this->withContext) {
                 $directory = rtrim($this->directory, '\\/');
-                $this->directory = ($directory == '.' || $directory == '..') ? BP : $directory;
+                $this->directory = ($directory == '.' || $directory == '..') ? BP : realpath($directory);
                 $moduleDirs = $this->getComponentDirectories(ComponentRegistrar::MODULE);
                 $themeDirs = $this->getComponentDirectories(ComponentRegistrar::THEME);
 
