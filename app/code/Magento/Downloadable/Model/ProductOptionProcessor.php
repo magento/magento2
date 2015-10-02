@@ -5,9 +5,7 @@
  */
 namespace Magento\Downloadable\Model;
 
-use Magento\Catalog\Api\Data\ProductOptionExtensionFactory;
 use Magento\Catalog\Api\Data\ProductOptionInterface;
-use Magento\Catalog\Model\ProductOptionFactory;
 use Magento\Catalog\Model\ProductOptionProcessorInterface;
 use Magento\Downloadable\Model\DownloadableOptionFactory;
 use Magento\Framework\Api\DataObjectHelper;
@@ -27,16 +25,6 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
     protected $dataObjectHelper;
 
     /**
-     * @var ProductOptionFactory
-     */
-    protected $productOptionFactory;
-
-    /**
-     * @var ProductOptionExtensionFactory
-     */
-    protected $extensionFactory;
-
-    /**
      * @var DownloadableOptionFactory
      */
     protected $downloadableOptionFactory;
@@ -44,21 +32,15 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
     /**
      * @param DataObjectFactory $objectFactory
      * @param DataObjectHelper $dataObjectHelper
-     * @param ProductOptionFactory $productOptionFactory
-     * @param ProductOptionExtensionFactory $extensionFactory
      * @param DownloadableOptionFactory $downloadableOptionFactory
      */
     public function __construct(
         DataObjectFactory $objectFactory,
         DataObjectHelper $dataObjectHelper,
-        ProductOptionFactory $productOptionFactory,
-        ProductOptionExtensionFactory $extensionFactory,
         DownloadableOptionFactory $downloadableOptionFactory
     ) {
         $this->objectFactory = $objectFactory;
         $this->dataObjectHelper = $dataObjectHelper;
-        $this->productOptionFactory = $productOptionFactory;
-        $this->extensionFactory = $extensionFactory;
         $this->downloadableOptionFactory = $downloadableOptionFactory;
     }
 

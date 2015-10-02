@@ -7,10 +7,8 @@ namespace Magento\Bundle\Model;
 
 use Magento\Bundle\Api\Data\BundleOptionInterface;
 use Magento\Bundle\Api\Data\BundleOptionInterfaceFactory;
-use Magento\Catalog\Api\Data\ProductOptionExtensionFactory;
 use Magento\Catalog\Api\Data\ProductOptionInterface;
 use Magento\Catalog\Model\Product\Type as ProductType;
-use Magento\Catalog\Model\ProductOptionFactory;
 use Magento\Catalog\Model\ProductOptionProcessorInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\DataObject\Factory as DataObjectFactory;
@@ -23,36 +21,20 @@ class ProductOptionProcessor implements ProductOptionProcessorInterface
     protected $objectFactory;
 
     /**
-     * @var ProductOptionFactory
-     */
-    protected $productOptionFactory;
-
-    /**
-     * @var ProductOptionExtensionFactory
-     */
-    protected $extensionFactory;
-
-    /**
      * @var BundleOptionInterfaceFactory
      */
     protected $bundleOptionFactory;
 
     /**
      * @param DataObjectFactory $objectFactory
-     * @param ProductOptionFactory $productOptionFactory
-     * @param ProductOptionExtensionFactory $extensionFactory
      * @param BundleOptionInterfaceFactory $bundleOptionFactory
      */
     public function __construct(
         DataObjectFactory $objectFactory,
-        ProductOptionFactory $productOptionFactory,
-        ProductOptionExtensionFactory $extensionFactory,
         BundleOptionInterfaceFactory $bundleOptionFactory
     ) {
         $this->objectFactory = $objectFactory;
-        $this->extensionFactory = $extensionFactory;
         $this->bundleOptionFactory = $bundleOptionFactory;
-        $this->productOptionFactory = $productOptionFactory;
     }
 
     /**
