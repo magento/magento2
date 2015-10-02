@@ -131,7 +131,7 @@ class MessageEncoder
             /** Convert message according to the data interface associated with the message topic */
             $messageDataType = $topicSchema[QueueConfigConverter::TOPIC_SCHEMA_VALUE];
             try {
-                $convertedMessage = $this->convertValue($message, $messageDataType, $direction);
+                $convertedMessage = $this->getConverter($direction)->convertValue($message, $messageDataType);
             } catch (LocalizedException $e) {
                 throw new LocalizedException(
                     new Phrase(
@@ -153,20 +153,14 @@ class MessageEncoder
                     /** Encode parameters according to their positions in method signature */
                     $paramPosition = $methodParameterMeta[QueueConfigConverter::SCHEMA_METHOD_PARAM_POSITION];
                     if (isset($message[$paramPosition])) {
-                        $convertedMessage[$paramName] = $this->convertValue(
-                            $message[$paramPosition],
-                            $paramType,
-                            $direction
-                        );
+                        $convertedMessage[$paramName] = $this->getConverter($direction)
+                            ->convertValue($message[$paramPosition], $paramType);
                     }
                 } else {
                     /** Encode parameters according to their names in method signature */
                     if (isset($message[$paramName])) {
-                        $convertedMessage[$paramName] = $this->convertValue(
-                            $message[$paramName],
-                            $paramType,
-                            $direction
-                        );
+                        $convertedMessage[$paramName] = $this->getConverter($direction)
+                            ->convertValue($message[$paramName], $paramType);
                     }
                 }
 
@@ -190,32 +184,6 @@ class MessageEncoder
         }
         return $convertedMessage;
     }
-
-    /**
-     * Convert provided value into an value of specified target data type.
-     *
-     * @param mixed $value
-     * @param string $type
-     * @param string $direction
-     * @return mixed
-     * @throws LocalizedException
-     */
-    protected function convertValue($value, $type, $direction)
-    {
-        if ($direction == self::DIRECTION_ENCODE) {
-            if (!is_array($value)) {
-                $isMessageValid = $value instanceof $type;
-            } else {
-                $messageItemDataType = substr($type, 0, -2);
-                $isMessageValid = empty($value) || (reset($value) instanceof $messageItemDataType);
-            }
-            if (!$isMessageValid) {
-                throw new LocalizedException(new Phrase('Message format is invalid'));
-            }
-        }
-        return $this->getConverter($direction)->convertValue($value, $type);
-    }
-
 
     /**
      * Get value converter based on conversion direction.

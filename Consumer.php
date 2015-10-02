@@ -12,6 +12,7 @@ use Magento\Framework\Amqp\EnvelopeFactory;
 use Magento\Framework\Amqp\Config\Data as AmqpConfig;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
+use Magento\Framework\Amqp\Config\Converter as AmqpConfigConverter;
 
 /**
  * A RabbitMQ Consumer to handle receiving a message.
@@ -93,7 +94,11 @@ class Consumer implements ConsumerInterface
         $decodedMessage = $this->messageEncoder->decode($topicName, $message->getBody());
 
         if (isset($decodedMessage)) {
-            call_user_func($callback, $decodedMessage);
+            if ($this->amqpConfig->getMessageSchemaType($topicName) == AmqpConfigConverter::TOPIC_SCHEMA_TYPE_METHOD) {
+                call_user_func_array($callback, $decodedMessage);
+            } else {
+                call_user_func($callback, $decodedMessage);
+            }
         }
     }
 

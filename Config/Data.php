@@ -125,4 +125,15 @@ class Data extends \Magento\Framework\Config\Data
 
         return $this->_data[Converter::CONSUMERS][$consumer][Converter::CONSUMER_CONNECTION];
     }
+
+    /**
+     * Identify which option is used to define message schema: data interface or service method params
+     *
+     * @param string $topic
+     * @return string
+     */
+    public function getMessageSchemaType($topic)
+    {
+        return $this->_data[Converter::TOPICS][$topic][COnverter::TOPIC_SCHEMA][Converter::TOPIC_SCHEMA_TYPE];
+    }
 }

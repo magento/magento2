@@ -59,6 +59,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     const ENV_CONSUMER_CONNECTION = 'connection';
     const ENV_CONSUMER_MAX_MESSAGES = 'max_messages';
 
+    const SERVICE_METHOD_NAME_PATTERN = '/^([a-zA-Z\\\\]+)::([a-zA-Z]+)$/';
+
     /**
      * @var \Magento\Framework\App\DeploymentConfig
      */
@@ -70,13 +72,22 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     private $queueConfig;
 
     /**
+     * @var \Magento\Framework\Webapi\ServiceInputProcessor
+     */
+    private $serviceInputProcessor;
+
+    /**
      * Initialize dependencies
      *
      * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
+     * @param \Magento\Framework\Webapi\ServiceInputProcessor $serviceInputProcessor
      */
-    public function __construct(\Magento\Framework\App\DeploymentConfig $deploymentConfig)
-    {
+    public function __construct(
+        \Magento\Framework\App\DeploymentConfig $deploymentConfig,
+        \Magento\Framework\Webapi\ServiceInputProcessor $serviceInputProcessor
+    ) {
         $this->deploymentConfig = $deploymentConfig;
+        $this->serviceInputProcessor = $serviceInputProcessor;
     }
 
     /**
@@ -114,18 +125,71 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         /** @var $topicNode \DOMNode */
         foreach ($config->getElementsByTagName('topic') as $topicNode) {
             $topicName = $topicNode->attributes->getNamedItem('name')->nodeValue;
+            $schemaId = $topicNode->attributes->getNamedItem('schema')->nodeValue;
+            $schemaType = $this->identifySchemaType($schemaId);
+            $schemaValue = ($schemaType == self::TOPIC_SCHEMA_TYPE_METHOD)
+                ? $this->getSchemaDefinedByMethod($schemaId, $topicName)
+                : $schemaId;
             $output[$topicName] = [
                 self::TOPIC_NAME => $topicName,
                 self::TOPIC_SCHEMA => [
-                    // TODO: Identify schema type
-                    self::TOPIC_SCHEMA_TYPE => self::TOPIC_SCHEMA_TYPE_OBJECT,
-                    // TODO: Populate object type
-                    self::TOPIC_SCHEMA_VALUE => $topicNode->attributes->getNamedItem('schema')->nodeValue
+                    self::TOPIC_SCHEMA_TYPE => $schemaType,
+                    self::TOPIC_SCHEMA_VALUE => $schemaValue
                 ],
                 self::TOPIC_PUBLISHER => $topicNode->attributes->getNamedItem('publisher')->nodeValue
             ];
+            if ($schemaType == self::TOPIC_SCHEMA_TYPE_METHOD) {
+                $output[$topicName][self::TOPIC_SCHEMA][self::TOPIC_SCHEMA_METHOD_NAME] = $schemaId;
+            }
         }
         return $output;
+    }
+
+    /**
+     * Get message schema defined by service method signature.
+     *
+     * @param string $schemaId
+     * @param string $topic
+     * @return array
+     */
+    protected function getSchemaDefinedByMethod($schemaId, $topic)
+    {
+        if (!preg_match(self::SERVICE_METHOD_NAME_PATTERN, $schemaId, $matches)) {
+            throw new \LogicException(
+                sprintf(
+                    'Message schema definition for topic "%s" should reference existing service method. Given "%s"',
+                    $topic,
+                    $schemaId
+                )
+            );
+        }
+        $serviceClass = $matches[1];
+        $serviceMethod = $matches[2];
+        $result = [];
+        $paramsMeta = $this->serviceInputProcessor->getMethodParams($serviceClass, $serviceMethod);
+        foreach ($paramsMeta as $paramPosition => $paramMeta) {
+            $result[] = [
+                // TODO: Introduce constants for param meta
+                self::SCHEMA_METHOD_PARAM_NAME => $paramMeta['name'],
+                self::SCHEMA_METHOD_PARAM_POSITION => $paramPosition,
+                self::SCHEMA_METHOD_PARAM_IS_REQUIRED => !$paramMeta['isDefaultValueAvailable'],
+                self::SCHEMA_METHOD_PARAM_TYPE => $paramMeta['type'],
+            ];
+        }
+        return $result;
+    }
+
+    /**
+     * Identify which option is used to define message schema: data interface or service method params
+     *
+     * @param string $schemaId
+     * @return string
+     */
+    protected function identifySchemaType($schemaId)
+    {
+        return preg_match(self::SERVICE_METHOD_NAME_PATTERN, $schemaId)
+            ? self::TOPIC_SCHEMA_TYPE_METHOD
+            : self::TOPIC_SCHEMA_TYPE_OBJECT;
     }
 
     /**
