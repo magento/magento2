@@ -49,17 +49,17 @@ class AbstractAdapterTest extends \PHPUnit_Framework_TestCase
 
     public function testAddPhrase()
     {
-        $testPhrase = 'test phrase';
-        $testLine = 2;
+        $phrase = 'test phrase';
+        $line = 2;
         $expected = [
             [
-                'phrase' => 'test phrase',
-                'file' => NULL,
-                'line' => 2,
-                'quote' => '',
+                'phrase' => $phrase,
+                'file' => null,
+                'line' => $line,
+                'quote' => ''
             ]
         ];
-        $this->_adapterReflection->invoke($this->_adapterMock, $testPhrase, $testLine);
+        $this->_adapterReflection->invoke($this->_adapterMock, $phrase, $line);
         $actual = $this->_adapterMock->getPhrases();
         $this->assertEquals($expected, $actual);
 
