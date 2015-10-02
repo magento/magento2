@@ -80,5 +80,6 @@ class DeleteProductUrlRewriteEntityTest extends Injectable
         $filter = ['request_path' => $productRedirect->getRequestPath()];
         $this->urlRewriteIndex->getUrlRedirectGrid()->searchAndOpen($filter);
         $this->urlRewriteEdit->getPageMainActions()->delete();
+        $this->urlRewriteEdit->getModalBlock()->acceptAlert();
     }
 }

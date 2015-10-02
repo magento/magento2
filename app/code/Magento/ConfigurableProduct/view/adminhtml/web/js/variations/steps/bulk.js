@@ -12,9 +12,10 @@ define([
     'underscore',
     'Magento_Ui/js/lib/collapsible',
     'mage/template',
+    'Magento_Ui/js/modal/alert',
     'jquery/file-uploader',
     'mage/translate'
-], function (Component, $, ko, _, Collapsible, mageTemplate) {
+], function (Component, $, ko, _, Collapsible, mageTemplate, alert) {
     'use strict';
 
     return Component.extend({
@@ -365,7 +366,9 @@ define([
                                 $('#' + data.fileId)
                                     .delay(2000)
                                     .hide('highlight');
-                                alert($.mage.__('We don\'t recognize or support this file extension type.'));
+                                alert({
+                                    content: $.mage.__('We don\'t recognize or support this file extension type.')
+                                });
                             }
                             $('#' + data.fileId).remove();
                         },

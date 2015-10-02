@@ -93,19 +93,18 @@
                     }
                 },{
                     text: '<?php /* @escapeNotVerified */ echo __('Cancel'); ?>',
+                    id: '<?php /* @escapeNotVerified */ echo $block->getJsId('close-button') ?>',
                     'class': 'action-close',
                     click: function() {
-                        $form.modal('closeModal');
+                        $form.dialog('close');
                     }
                 }]
             })
             .find('input[name=affected-attribute-set]').on('change', function() {
-                var affectedAttributeSet = $(this).val();
-                newAttributeSetContainer[affectedAttributeSet == 'new' ? 'show' : 'hide']();
-                existingAttributeSetContainer[affectedAttributeSet == 'existing' ? 'show' : 'hide']();
+                $('#affected-attribute-set-new-name-container')[$(this).val() == 'new' ? 'show' : 'hide']();
                 resetValidation();
-                if (affectedAttributeSet == 'new') {
-                    newAttributeSetContainer.find('input[name=new-attribute-set-name]').focus();
+                if ($(this).val() == 'new') {
+                    $form.find('input[name=new-attribute-set-name]').focus();
                 }
             });
     });
