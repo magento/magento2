@@ -134,13 +134,4 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($this->address->validateMinimumAmount());
     }
-
-    /**
-     * @expectedException \PHPUnit_Framework_Error
-     * @expectedExceptionMessage Argument 1 passed to
-     */
-    public function testSetCartFixedRulesGetsOnlyArrays()
-    {
-        $this->address->setCartFixedRules('string');
-    }
 }
