@@ -90,14 +90,7 @@ class Store extends AbstractExtensibleModel implements
 
     /**#@-*/
 
-    /**#@+
-     * Code constants
-     */
-    const DEFAULT_CODE = 'default';
-
     const ADMIN_CODE = 'admin';
-
-    /**#@-*/
 
     /**
      * Cache tag

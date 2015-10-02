@@ -51,8 +51,8 @@ define(
                 selectedCardToken: configBraintree ? configBraintree.selectedCardToken : '',
                 storedCards: configBraintree ? configBraintree.storedCards : {},
                 availableCardTypes: configBraintree ? configBraintree.availableCardTypes : {},
-                creditCardExpMonth: configBraintree ? configBraintree.creditCardExpMonth : null,
-                creditCardExpYear: configBraintree ? configBraintree.creditCardExpYear : null
+                creditCardExpMonth: null,
+                creditCardExpYear: null
             },
             initVars: function() {
                     this.ajaxGenerateNonceUrl = configBraintree ? configBraintree.ajaxGenerateNonceUrl : '';
@@ -349,6 +349,10 @@ define(
                         }
                     });
                 }
+            },
+
+            getCssClass: function () {
+                return  (this.isCcDetectionEnabled()) ? 'field type detection' : 'field type required';
             }
         });
     }
