@@ -71,28 +71,47 @@ class NonComposerComponentRegistration
     {
         $files = [];
         $staticList = __DIR__ . '/paths.php';
+        $pattern
+            = "/register\\(\\s*(?<type>[\\w\\:\\\\]*),\\s*(?<alias>[\\w\\'\\_\\/]*),\\s*(?<path>[\\w\\_]*)\\s*\\)/mu";
         if (file_exists($staticList)) {
-            $files = include $staticList;
+            include $staticList;
         } else {
+            $content = '';
             foreach (static::$pathList as $path) {
                 // Sorting is disabled intentionally for performance improvement
                 $files = array_merge($files, glob($path, GLOB_NOSORT));
                 if ($files === false) {
                     throw new \RuntimeException('glob() returned error while searching in \'' . $path . '\'');
                 }
-            }
 
-            $content = "<?php\n " .
-                "/**\n" .
-                "* Paths to registration files\n" .
-                "*/\n" .
-                "return [\n\t'" .
-                implode("',\n\t'", $files) .
-                "'\n];\n";
+                $content = <<<EOD
+<?php
+/**
+* Copyright © 2015 Magento. All rights reserved.
+* See COPYING.txt for license details.
+*/
+
+use \Magento\Framework\Component\ComponentRegistrar;
+
+/**
+* Paths to registration files
+*/
+
+EOD;
+
+                foreach ($files as $file) {
+                    $fileContent = file_get_contents($file);
+                    $matches = [];
+                    preg_match($pattern, $fileContent, $matches);
+                    $path = $matches['path'];
+                    if ($matches['path'] == '__DIR__') {
+                        $path = dirname($file);
+                    }
+                    $content .= "ComponentRegistrar::register(" .
+                        $matches['type'] . ', ' . $matches['alias'] . ", '" . $path . "');\n";
+                }
+            }
             file_put_contents($staticList, $content);
-        }
-        foreach ($files as $file) {
-            include $file;
         }
     }
 }
